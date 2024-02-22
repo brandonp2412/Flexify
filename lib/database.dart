@@ -18,7 +18,8 @@ class GymSets extends Table {
 }
 
 class Plans extends Table {
-  TextColumn get workouts => text()();
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get exercises => text()();
   TextColumn get days => text()();
 }
 

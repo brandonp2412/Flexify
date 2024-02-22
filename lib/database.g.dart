@@ -8,11 +8,20 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $PlansTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _workoutsMeta =
-      const VerificationMeta('workouts');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> workouts = GeneratedColumn<String>(
-      'workouts', aliasedName, false,
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _exercisesMeta =
+      const VerificationMeta('exercises');
+  @override
+  late final GeneratedColumn<String> exercises = GeneratedColumn<String>(
+      'exercises', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _daysMeta = const VerificationMeta('days');
   @override
@@ -20,7 +29,7 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
       'days', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [workouts, days];
+  List<GeneratedColumn> get $columns => [id, exercises, days];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -31,11 +40,14 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('workouts')) {
-      context.handle(_workoutsMeta,
-          workouts.isAcceptableOrUnknown(data['workouts']!, _workoutsMeta));
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('exercises')) {
+      context.handle(_exercisesMeta,
+          exercises.isAcceptableOrUnknown(data['exercises']!, _exercisesMeta));
     } else if (isInserting) {
-      context.missing(_workoutsMeta);
+      context.missing(_exercisesMeta);
     }
     if (data.containsKey('days')) {
       context.handle(
@@ -47,13 +59,15 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Plan map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Plan(
-      workouts: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}workouts'])!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      exercises: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}exercises'])!,
       days: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}days'])!,
     );
@@ -66,20 +80,23 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
 }
 
 class Plan extends DataClass implements Insertable<Plan> {
-  final String workouts;
+  final int id;
+  final String exercises;
   final String days;
-  const Plan({required this.workouts, required this.days});
+  const Plan({required this.id, required this.exercises, required this.days});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['workouts'] = Variable<String>(workouts);
+    map['id'] = Variable<int>(id);
+    map['exercises'] = Variable<String>(exercises);
     map['days'] = Variable<String>(days);
     return map;
   }
 
   PlansCompanion toCompanion(bool nullToAbsent) {
     return PlansCompanion(
-      workouts: Value(workouts),
+      id: Value(id),
+      exercises: Value(exercises),
       days: Value(days),
     );
   }
@@ -88,7 +105,8 @@ class Plan extends DataClass implements Insertable<Plan> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Plan(
-      workouts: serializer.fromJson<String>(json['workouts']),
+      id: serializer.fromJson<int>(json['id']),
+      exercises: serializer.fromJson<String>(json['exercises']),
       days: serializer.fromJson<String>(json['days']),
     );
   }
@@ -96,81 +114,85 @@ class Plan extends DataClass implements Insertable<Plan> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'workouts': serializer.toJson<String>(workouts),
+      'id': serializer.toJson<int>(id),
+      'exercises': serializer.toJson<String>(exercises),
       'days': serializer.toJson<String>(days),
     };
   }
 
-  Plan copyWith({String? workouts, String? days}) => Plan(
-        workouts: workouts ?? this.workouts,
+  Plan copyWith({int? id, String? exercises, String? days}) => Plan(
+        id: id ?? this.id,
+        exercises: exercises ?? this.exercises,
         days: days ?? this.days,
       );
   @override
   String toString() {
     return (StringBuffer('Plan(')
-          ..write('workouts: $workouts, ')
+          ..write('id: $id, ')
+          ..write('exercises: $exercises, ')
           ..write('days: $days')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(workouts, days);
+  int get hashCode => Object.hash(id, exercises, days);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Plan &&
-          other.workouts == this.workouts &&
+          other.id == this.id &&
+          other.exercises == this.exercises &&
           other.days == this.days);
 }
 
 class PlansCompanion extends UpdateCompanion<Plan> {
-  final Value<String> workouts;
+  final Value<int> id;
+  final Value<String> exercises;
   final Value<String> days;
-  final Value<int> rowid;
   const PlansCompanion({
-    this.workouts = const Value.absent(),
+    this.id = const Value.absent(),
+    this.exercises = const Value.absent(),
     this.days = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   PlansCompanion.insert({
-    required String workouts,
+    this.id = const Value.absent(),
+    required String exercises,
     required String days,
-    this.rowid = const Value.absent(),
-  })  : workouts = Value(workouts),
+  })  : exercises = Value(exercises),
         days = Value(days);
   static Insertable<Plan> custom({
-    Expression<String>? workouts,
+    Expression<int>? id,
+    Expression<String>? exercises,
     Expression<String>? days,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (workouts != null) 'workouts': workouts,
+      if (id != null) 'id': id,
+      if (exercises != null) 'exercises': exercises,
       if (days != null) 'days': days,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
   PlansCompanion copyWith(
-      {Value<String>? workouts, Value<String>? days, Value<int>? rowid}) {
+      {Value<int>? id, Value<String>? exercises, Value<String>? days}) {
     return PlansCompanion(
-      workouts: workouts ?? this.workouts,
+      id: id ?? this.id,
+      exercises: exercises ?? this.exercises,
       days: days ?? this.days,
-      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (workouts.present) {
-      map['workouts'] = Variable<String>(workouts.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (exercises.present) {
+      map['exercises'] = Variable<String>(exercises.value);
     }
     if (days.present) {
       map['days'] = Variable<String>(days.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -178,9 +200,9 @@ class PlansCompanion extends UpdateCompanion<Plan> {
   @override
   String toString() {
     return (StringBuffer('PlansCompanion(')
-          ..write('workouts: $workouts, ')
-          ..write('days: $days, ')
-          ..write('rowid: $rowid')
+          ..write('id: $id, ')
+          ..write('exercises: $exercises, ')
+          ..write('days: $days')
           ..write(')'))
         .toString();
   }
