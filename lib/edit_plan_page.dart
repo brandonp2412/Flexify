@@ -146,7 +146,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
                     decoration: const InputDecoration(
                         hintText: "Search...", border: InputBorder.none),
                   )
-                : const Text('Edit Plan'),
+                : Text(
+                    "Edit ${widget.plan.days.value.replaceAll(",", ", ").toLowerCase()}"),
             actions: actions),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

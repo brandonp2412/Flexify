@@ -42,7 +42,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Start Plan'),
+        title: Text(
+            "Start ${widget.plan.days.replaceAll(',', ', ').toLowerCase()}"),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
