@@ -79,26 +79,26 @@ class _StartPlanPageState extends State<StartPlanPage> {
             },
           ),
           const SizedBox(height: 20),
-          FloatingActionButton(
-            onPressed: () {
-              final reps = int.parse(_repsController.text);
-              final weight = int.parse(_weightController.text);
-              final unit = _unitController.text;
-              final exercise = exercises[_selectedExerciseIndex];
-
-              final gymSet = GymSetsCompanion.insert(
-                name: exercise,
-                reps: reps,
-                weight: weight,
-                unit: unit,
-                created: DateTime.now(),
-              );
-
-              database.into(database.gymSets).insert(gymSet);
-            },
-            child: const Icon(Icons.save),
-          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final reps = int.parse(_repsController.text);
+          final weight = int.parse(_weightController.text);
+          final unit = _unitController.text;
+          final exercise = exercises[_selectedExerciseIndex];
+
+          final gymSet = GymSetsCompanion.insert(
+            name: exercise,
+            reps: reps,
+            weight: weight,
+            unit: unit,
+            created: DateTime.now(),
+          );
+
+          database.into(database.gymSets).insert(gymSet);
+        },
+        child: const Icon(Icons.save),
       ),
     );
   }
