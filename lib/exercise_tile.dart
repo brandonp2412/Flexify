@@ -40,6 +40,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: widget.onTap,
       title: Row(children: [
         Radio(
           value: widget.isSelected,
