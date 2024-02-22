@@ -1,3 +1,4 @@
+import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
@@ -26,6 +27,7 @@ class _PlansPageState extends State<PlansPage> {
 
   @override
   Widget build(BuildContext context) {
+    final weekday = weekdays[DateTime.now().weekday - 1];
     return StreamBuilder<List<Plan>>(
       stream: stream,
       builder: (context, snapshot) {
@@ -33,16 +35,22 @@ class _PlansPageState extends State<PlansPage> {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
+              final plan = snapshot.data![index];
+              final active = plan.days.contains(weekday);
               return ListTile(
-                title: Text(snapshot.data![index].days.split(',').join(', ')),
-                subtitle:
-                    Text(snapshot.data![index].exercises.split(',').join(', ')),
+                title: Text(
+                  plan.days.split(',').join(', '),
+                  style: TextStyle(
+                    fontWeight: active ? FontWeight.bold : null,
+                    decoration: active ? TextDecoration.underline : null,
+                  ),
+                ),
+                subtitle: Text(plan.exercises.split(',').join(', ')),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            StartPlanPage(plan: snapshot.data![index])),
+                        builder: (context) => StartPlanPage(plan: plan)),
                   );
                 },
                 onLongPress: () {
