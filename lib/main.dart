@@ -1,6 +1,5 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
-import 'package:flexify/edit_plan_page.dart';
+import 'package:flexify/graphs_page.dart';
 import 'package:flutter/material.dart';
 
 import 'plans_page.dart';
@@ -37,15 +36,26 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int currentIndex = 0;
+  late TabController tabController;
 
-  void pressedFab() {}
-
-  void tappedNav(int index) {
-    setState(() {
-      currentIndex = index;
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+    tabController.animation!.addListener(() {
+      setState(() {
+        currentIndex = tabController.index;
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,10 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
       length: 2,
       child: Builder(
         builder: (BuildContext context) {
-          final TabController tabController = DefaultTabController.of(context);
           return SafeArea(
             child: Scaffold(
               appBar: TabBar(
+                controller: tabController,
                 tabs: const [
                   Tab(
                     icon: Icon(Icons.event),
@@ -74,26 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 controller: tabController,
                 children: const [
                   PlansPage(),
-                  Icon(Icons.insights),
+                  GraphsPage(),
                 ],
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  // Access the index of the current tab
-                  final int currentIndex = tabController.index;
-                  // Now you can do logic based on the current tab index
-                  print("Current tab index: $currentIndex");
-                  // Implement your logic here based on the current tab index
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EditPlanPage(
-                            plan: PlansCompanion(
-                                days: Value(''), exercises: Value('')))),
-                  );
-                },
-                tooltip: 'Increment',
-                child: const Icon(Icons.add),
               ),
             ),
           );
