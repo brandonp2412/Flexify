@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       home: const MyHomePage(title: 'Flexify'),
     );
   }
@@ -78,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage>
                     text: "Graphs",
                   )
                 ],
-                indicatorColor: Theme.of(context).colorScheme.inversePrimary,
               ),
               body: TabBarView(
                 controller: tabController,
