@@ -58,23 +58,30 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               minY: 0,
               maxY: maxes.reduce((a, b) => a! > b! ? a : b)! + 5,
               lineTouchData: LineTouchData(
-                  enabled: true,
-                  touchTooltipData: LineTouchTooltipData(
-                    tooltipBgColor: Colors.white,
-                    getTooltipItems: (touchedSpots) {
-                      final created =
-                          createds.elementAt(touchedSpots.first.spotIndex)!;
-                      final max =
-                          maxes.elementAt(touchedSpots.first.spotIndex)!;
-                      String formattedDate =
-                          DateFormat('dd/MM/yyyy').format(created);
-                      var text = "$max $formattedDate";
-                      if (touchedSpots.first.spotIndex == maxes.length - 1 ||
-                          touchedSpots.first.spotIndex == 0)
-                        text = formattedDate;
-                      return [LineTooltipItem(text, const TextStyle())];
-                    },
-                  )),
+                enabled: true,
+                touchTooltipData: LineTouchTooltipData(
+                  tooltipBgColor: Theme.of(context).primaryColor,
+                  getTooltipItems: (touchedSpots) {
+                    final created =
+                        createds.elementAt(touchedSpots.first.spotIndex)!;
+                    final max = maxes.elementAt(touchedSpots.first.spotIndex)!;
+                    String formattedDate =
+                        DateFormat('dd/MM/yyyy').format(created);
+                    var text = "$max $formattedDate";
+                    if (touchedSpots.first.spotIndex == maxes.length - 1 ||
+                        touchedSpots.first.spotIndex == 0) text = formattedDate;
+                    return [
+                      LineTooltipItem(
+                          text,
+                          TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.black
+                                  : Colors.white))
+                    ];
+                  },
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: maxes
@@ -85,7 +92,9 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                           FlSpot(entry.key.toDouble(), entry.value ?? 0))
                       .toList(),
                   isCurved: false,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? const ColorScheme.dark().primary
+                      : const ColorScheme.light().primary,
                   barWidth: 3,
                   isStrokeCapRound: true,
                 ),
