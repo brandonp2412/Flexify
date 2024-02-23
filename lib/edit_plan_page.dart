@@ -133,68 +133,66 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ];
     }
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-            title: showSearch
-                ? TextField(
-                    focusNode: searchNode,
-                    controller: searchController,
-                    onChanged: (value) => setState(() {
-                      search = value;
-                    }),
-                    decoration: const InputDecoration(
-                        hintText: "Search...", border: InputBorder.none),
-                  )
-                : Text(
-                    "Edit ${widget.plan.days.value.replaceAll(",", ", ").toLowerCase()}"),
-            actions: actions),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: material.Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: getChildren(),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+          title: showSearch
+              ? TextField(
+                  focusNode: searchNode,
+                  controller: searchController,
+                  onChanged: (value) => setState(() {
+                    search = value;
+                  }),
+                  decoration: const InputDecoration(
+                      hintText: "Search...", border: InputBorder.none),
+                )
+              : Text(
+                  "Edit ${widget.plan.days.value.replaceAll(",", ", ").toLowerCase()}"),
+          actions: actions),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: material.Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: getChildren(),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            final days = [];
-            for (int i = 0; i < daySwitches.length; i++) {
-              if (daySwitches[i]) days.add(weekdays[i]);
-            }
-            if (days.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Select days first')),
-              );
-              return;
-            }
-
-            if (exerciseSelections.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Select exercises first')),
-              );
-              return;
-            }
-
-            var newPlan = widget.plan.copyWith(
-              days: Value(days.join(',')),
-              exercises: Value(exerciseSelections
-                  .where((element) => element.isNotEmpty)
-                  .join(',')),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final days = [];
+          for (int i = 0; i < daySwitches.length; i++) {
+            if (daySwitches[i]) days.add(weekdays[i]);
+          }
+          if (days.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Select days first')),
             );
+            return;
+          }
 
-            if (widget.plan.id.present)
-              await database.update(database.plans).replace(newPlan);
-            else {
-              final id = await database.into(database.plans).insert(newPlan);
-              newPlan = newPlan.copyWith(id: Value(id));
-            }
+          if (exerciseSelections.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Select exercises first')),
+            );
+            return;
+          }
 
-            if (!mounted) return;
-            Navigator.pop(context);
-          },
-          child: const Icon(Icons.check),
-        ),
+          var newPlan = widget.plan.copyWith(
+            days: Value(days.join(',')),
+            exercises: Value(exerciseSelections
+                .where((element) => element.isNotEmpty)
+                .join(',')),
+          );
+
+          if (widget.plan.id.present)
+            await database.update(database.plans).replace(newPlan);
+          else {
+            final id = await database.into(database.plans).insert(newPlan);
+            newPlan = newPlan.copyWith(id: Value(id));
+          }
+
+          if (!mounted) return;
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.check),
       ),
     );
   }
