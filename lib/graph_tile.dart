@@ -1,3 +1,4 @@
+import 'package:flexify/view_graph.dart';
 import 'package:flutter/material.dart';
 
 class GraphTile extends StatelessWidget {
@@ -9,6 +10,15 @@ class GraphTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(gymSetName),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ViewGraph(
+                    name: gymSetName,
+                  )),
+        );
+      },
     );
   }
 }
