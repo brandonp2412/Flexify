@@ -1,4 +1,4 @@
-import 'package:flexify/view_graph.dart';
+import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 
 class GraphTile extends StatelessWidget {
@@ -14,7 +14,7 @@ class GraphTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ViewGraph(
+              builder: (context) => ViewGraphPage(
                     name: gymSetName,
                   )),
         );

@@ -4,15 +4,15 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/main.dart';
 import 'package:intl/intl.dart';
 
-class ViewGraph extends StatefulWidget {
+class ViewGraphPage extends StatefulWidget {
   final String name;
-  const ViewGraph({Key? key, required this.name}) : super(key: key);
+  const ViewGraphPage({Key? key, required this.name}) : super(key: key);
 
   @override
-  createState() => _ViewGraphState();
+  createState() => _ViewGraphPageState();
 }
 
-class _ViewGraphState extends State<ViewGraph> {
+class _ViewGraphPageState extends State<ViewGraphPage> {
   late Stream<List<TypedResult>> stream;
 
   @override
