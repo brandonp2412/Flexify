@@ -191,6 +191,11 @@ class TimerService : Service() {
                 "Timer Channel",
                 NotificationManager.IMPORTANCE_LOW
             )
+            channel.setSound(null, null)
+            channel.setBypassDnd(true)
+            channel.enableVibration(false)
+            channel.description = "Ongoing progress of rest timers."
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(channel)
         }
 
