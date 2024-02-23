@@ -25,7 +25,8 @@ class _GraphsPageState extends State<GraphsPage> {
   void initState() {
     super.initState();
     stream = (database.gymSets.selectOnly(distinct: true)
-          ..addColumns([database.gymSets.name]))
+          ..addColumns([database.gymSets.name, database.gymSets.weight.max()])
+          ..groupBy([database.gymSets.name]))
         .watch();
   }
 
@@ -58,8 +59,13 @@ class _GraphsPageState extends State<GraphsPage> {
           return ListView.builder(
             itemCount: gymSets.length,
             itemBuilder: (context, index) {
-              final name = gymSets[index].read(database.gymSets.name)!;
-              return GraphTile(gymSetName: name);
+              final gymSet = gymSets[index];
+              final name = gymSet.read(database.gymSets.name)!;
+              final weight = gymSet.read(database.gymSets.weight.max())!;
+              return GraphTile(
+                gymSetName: name,
+                weight: weight,
+              );
             },
           );
         },
