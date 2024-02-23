@@ -83,7 +83,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 20),
           StreamBuilder(
             stream: stream,
             builder: (context, snapshot) {
