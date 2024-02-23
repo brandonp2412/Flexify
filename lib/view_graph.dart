@@ -55,7 +55,7 @@ class _ViewGraphState extends State<ViewGraph> {
 
           return LineChart(
             LineChartData(
-              minY: maxes.reduce((a, b) => a! < b! ? a : b)! - 5,
+              minY: 0,
               maxY: maxes.reduce((a, b) => a! > b! ? a : b)! + 5,
               lineTouchData: LineTouchData(
                   enabled: true,
@@ -67,11 +67,12 @@ class _ViewGraphState extends State<ViewGraph> {
                       final max =
                           maxes.elementAt(touchedSpots.first.spotIndex)!;
                       String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(created);
-                      return [
-                        LineTooltipItem(
-                            "$max $formattedDate", const TextStyle())
-                      ];
+                          DateFormat('dd/MM/yyyy').format(created);
+                      var text = "$max $formattedDate";
+                      if (touchedSpots.first.spotIndex == maxes.length - 1 ||
+                          touchedSpots.first.spotIndex == 0)
+                        text = formattedDate;
+                      return [LineTooltipItem(text, const TextStyle())];
                     },
                   )),
               lineBarsData: [
