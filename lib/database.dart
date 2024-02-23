@@ -11,6 +11,7 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 part 'database.g.dart';
 
 class GymSets extends Table {
+  IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   RealColumn get reps => real()();
   RealColumn get weight => real()();

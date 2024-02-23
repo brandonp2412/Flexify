@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseTile extends StatelessWidget {
@@ -18,6 +20,27 @@ class ExerciseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
+      onLongPress: () async {
+        if (progress == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No $exercise yet')),
+          );
+          return;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Deleting last $exercise')),
+        );
+        final gymSet = await (database.select(database.gymSets)
+              ..where((r) => database.gymSets.name.equals(exercise))
+              ..orderBy([
+                (u) => OrderingTerm(
+                    expression: u.created, mode: OrderingMode.desc),
+              ])
+              ..limit(1))
+            .getSingle();
+        await database.gymSets.deleteOne(gymSet);
+      },
       title: Row(children: [
         Radio(
           value: isSelected,

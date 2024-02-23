@@ -8,7 +8,6 @@
             "name": "flexify",
             "request": "launch",
             "type": "dart",
-            "deviceId": "emulator-5554"
         },
         {
             "name": "flexify (profile mode)",

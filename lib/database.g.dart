@@ -213,6 +213,15 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $GymSetsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -240,7 +249,7 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       'created', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [name, reps, weight, unit, created];
+  List<GeneratedColumn> get $columns => [id, name, reps, weight, unit, created];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -251,6 +260,9 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
@@ -285,11 +297,13 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   GymSet map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GymSet(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       reps: attachedDatabase.typeMapping
@@ -310,13 +324,15 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
 }
 
 class GymSet extends DataClass implements Insertable<GymSet> {
+  final int id;
   final String name;
   final double reps;
   final double weight;
   final String unit;
   final DateTime created;
   const GymSet(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.reps,
       required this.weight,
       required this.unit,
@@ -324,6 +340,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['reps'] = Variable<double>(reps);
     map['weight'] = Variable<double>(weight);
@@ -334,6 +351,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
 
   GymSetsCompanion toCompanion(bool nullToAbsent) {
     return GymSetsCompanion(
+      id: Value(id),
       name: Value(name),
       reps: Value(reps),
       weight: Value(weight),
@@ -346,6 +364,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GymSet(
+      id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       reps: serializer.fromJson<double>(json['reps']),
       weight: serializer.fromJson<double>(json['weight']),
@@ -357,6 +376,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'reps': serializer.toJson<double>(reps),
       'weight': serializer.toJson<double>(weight),
@@ -366,12 +386,14 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   }
 
   GymSet copyWith(
-          {String? name,
+          {int? id,
+          String? name,
           double? reps,
           double? weight,
           String? unit,
           DateTime? created}) =>
       GymSet(
+        id: id ?? this.id,
         name: name ?? this.name,
         reps: reps ?? this.reps,
         weight: weight ?? this.weight,
@@ -381,6 +403,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   @override
   String toString() {
     return (StringBuffer('GymSet(')
+          ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('reps: $reps, ')
           ..write('weight: $weight, ')
@@ -391,11 +414,12 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   }
 
   @override
-  int get hashCode => Object.hash(name, reps, weight, unit, created);
+  int get hashCode => Object.hash(id, name, reps, weight, unit, created);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is GymSet &&
+          other.id == this.id &&
           other.name == this.name &&
           other.reps == this.reps &&
           other.weight == this.weight &&
@@ -404,70 +428,73 @@ class GymSet extends DataClass implements Insertable<GymSet> {
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
+  final Value<int> id;
   final Value<String> name;
   final Value<double> reps;
   final Value<double> weight;
   final Value<String> unit;
   final Value<DateTime> created;
-  final Value<int> rowid;
   const GymSetsCompanion({
+    this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.reps = const Value.absent(),
     this.weight = const Value.absent(),
     this.unit = const Value.absent(),
     this.created = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   GymSetsCompanion.insert({
+    this.id = const Value.absent(),
     required String name,
     required double reps,
     required double weight,
     required String unit,
     required DateTime created,
-    this.rowid = const Value.absent(),
   })  : name = Value(name),
         reps = Value(reps),
         weight = Value(weight),
         unit = Value(unit),
         created = Value(created);
   static Insertable<GymSet> custom({
+    Expression<int>? id,
     Expression<String>? name,
     Expression<double>? reps,
     Expression<double>? weight,
     Expression<String>? unit,
     Expression<DateTime>? created,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (reps != null) 'reps': reps,
       if (weight != null) 'weight': weight,
       if (unit != null) 'unit': unit,
       if (created != null) 'created': created,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
   GymSetsCompanion copyWith(
-      {Value<String>? name,
+      {Value<int>? id,
+      Value<String>? name,
       Value<double>? reps,
       Value<double>? weight,
       Value<String>? unit,
-      Value<DateTime>? created,
-      Value<int>? rowid}) {
+      Value<DateTime>? created}) {
     return GymSetsCompanion(
+      id: id ?? this.id,
       name: name ?? this.name,
       reps: reps ?? this.reps,
       weight: weight ?? this.weight,
       unit: unit ?? this.unit,
       created: created ?? this.created,
-      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
@@ -483,21 +510,18 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (created.present) {
       map['created'] = Variable<DateTime>(created.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('GymSetsCompanion(')
+          ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('reps: $reps, ')
           ..write('weight: $weight, ')
           ..write('unit: $unit, ')
-          ..write('created: $created, ')
-          ..write('rowid: $rowid')
+          ..write('created: $created')
           ..write(')'))
         .toString();
   }
