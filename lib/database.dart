@@ -12,8 +12,8 @@ part 'database.g.dart';
 
 class GymSets extends Table {
   TextColumn get name => text()();
-  IntColumn get reps => integer()();
-  IntColumn get weight => integer()();
+  RealColumn get reps => real()();
+  RealColumn get weight => real()();
   TextColumn get unit => text()();
   DateTimeColumn get created => dateTime()();
 }

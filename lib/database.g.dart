@@ -220,14 +220,14 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _repsMeta = const VerificationMeta('reps');
   @override
-  late final GeneratedColumn<int> reps = GeneratedColumn<int>(
+  late final GeneratedColumn<double> reps = GeneratedColumn<double>(
       'reps', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _weightMeta = const VerificationMeta('weight');
   @override
-  late final GeneratedColumn<int> weight = GeneratedColumn<int>(
+  late final GeneratedColumn<double> weight = GeneratedColumn<double>(
       'weight', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _unitMeta = const VerificationMeta('unit');
   @override
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
@@ -293,9 +293,9 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       reps: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}reps'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}reps'])!,
       weight: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}weight'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
       unit: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
       created: attachedDatabase.typeMapping
@@ -311,8 +311,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
 
 class GymSet extends DataClass implements Insertable<GymSet> {
   final String name;
-  final int reps;
-  final int weight;
+  final double reps;
+  final double weight;
   final String unit;
   final DateTime created;
   const GymSet(
@@ -325,8 +325,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['name'] = Variable<String>(name);
-    map['reps'] = Variable<int>(reps);
-    map['weight'] = Variable<int>(weight);
+    map['reps'] = Variable<double>(reps);
+    map['weight'] = Variable<double>(weight);
     map['unit'] = Variable<String>(unit);
     map['created'] = Variable<DateTime>(created);
     return map;
@@ -347,8 +347,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GymSet(
       name: serializer.fromJson<String>(json['name']),
-      reps: serializer.fromJson<int>(json['reps']),
-      weight: serializer.fromJson<int>(json['weight']),
+      reps: serializer.fromJson<double>(json['reps']),
+      weight: serializer.fromJson<double>(json['weight']),
       unit: serializer.fromJson<String>(json['unit']),
       created: serializer.fromJson<DateTime>(json['created']),
     );
@@ -358,8 +358,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'name': serializer.toJson<String>(name),
-      'reps': serializer.toJson<int>(reps),
-      'weight': serializer.toJson<int>(weight),
+      'reps': serializer.toJson<double>(reps),
+      'weight': serializer.toJson<double>(weight),
       'unit': serializer.toJson<String>(unit),
       'created': serializer.toJson<DateTime>(created),
     };
@@ -367,8 +367,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
 
   GymSet copyWith(
           {String? name,
-          int? reps,
-          int? weight,
+          double? reps,
+          double? weight,
           String? unit,
           DateTime? created}) =>
       GymSet(
@@ -405,8 +405,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<String> name;
-  final Value<int> reps;
-  final Value<int> weight;
+  final Value<double> reps;
+  final Value<double> weight;
   final Value<String> unit;
   final Value<DateTime> created;
   final Value<int> rowid;
@@ -420,8 +420,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   });
   GymSetsCompanion.insert({
     required String name,
-    required int reps,
-    required int weight,
+    required double reps,
+    required double weight,
     required String unit,
     required DateTime created,
     this.rowid = const Value.absent(),
@@ -432,8 +432,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
         created = Value(created);
   static Insertable<GymSet> custom({
     Expression<String>? name,
-    Expression<int>? reps,
-    Expression<int>? weight,
+    Expression<double>? reps,
+    Expression<double>? weight,
     Expression<String>? unit,
     Expression<DateTime>? created,
     Expression<int>? rowid,
@@ -450,8 +450,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
 
   GymSetsCompanion copyWith(
       {Value<String>? name,
-      Value<int>? reps,
-      Value<int>? weight,
+      Value<double>? reps,
+      Value<double>? weight,
       Value<String>? unit,
       Value<DateTime>? created,
       Value<int>? rowid}) {
@@ -472,10 +472,10 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       map['name'] = Variable<String>(name.value);
     }
     if (reps.present) {
-      map['reps'] = Variable<int>(reps.value);
+      map['reps'] = Variable<double>(reps.value);
     }
     if (weight.present) {
-      map['weight'] = Variable<int>(weight.value);
+      map['weight'] = Variable<double>(weight.value);
     }
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);

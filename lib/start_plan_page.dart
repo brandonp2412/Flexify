@@ -118,8 +118,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final reps = int.parse(_repsController.text);
-          final weight = int.parse(_weightController.text);
+          final reps = double.parse(_repsController.text);
+          final weight = double.parse(_weightController.text);
           final unit = _selectedUnit;
           final exercise = exercises[_selectedExerciseIndex];
 
