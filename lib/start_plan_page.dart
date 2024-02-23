@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class StartPlanPage extends StatefulWidget {
 class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController _repsController;
   late TextEditingController _weightController;
-  late Stream<List<TypedResult>> stream;
+  late Stream<List<drift.TypedResult>> stream;
 
   int _selectedExerciseIndex = 0;
   String _selectedUnit = 'kg';
@@ -55,65 +55,78 @@ class _StartPlanPageState extends State<StartPlanPage> {
         title: Text(
             "Start ${widget.plan.days.replaceAll(',', ', ').toLowerCase()}"),
       ),
-      body: ListView(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
-        children: [
-          TextField(
-            controller: _repsController,
-            decoration: const InputDecoration(labelText: 'Reps'),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: _weightController,
-            decoration: const InputDecoration(labelText: 'Weight'),
-            keyboardType: TextInputType.number,
-          ),
-          DropdownButtonFormField<String>(
-            value: _selectedUnit,
-            onChanged: (newValue) {
-              setState(() {
-                _selectedUnit = newValue!;
-              });
-            },
-            items: <String>['kg', 'lb']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-          StreamBuilder(
-            stream: stream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const SizedBox();
+        child: Column(
+          children: [
+            TextField(
+              controller: _repsController,
+              decoration: const InputDecoration(labelText: 'Reps'),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: _weightController,
+              decoration: const InputDecoration(labelText: 'Weight'),
+              keyboardType: TextInputType.number,
+            ),
+            DropdownButtonFormField<String>(
+              value: _selectedUnit,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedUnit = newValue!;
+                });
+              },
+              items: <String>['kg', 'lb']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: stream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox();
 
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: exercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = exercises[index];
-                  final gymSet = snapshot.data?.where((element) =>
-                      element.read(database.gymSets.name) == exercise);
-                  var count = 0;
-                  if (gymSet != null && gymSet.isNotEmpty)
-                    count = gymSet.first.read(database.gymSets.name.count())!;
-                  return ExerciseTile(
-                    exercise: exercise,
-                    isSelected: index == _selectedExerciseIndex,
-                    progress: count / 5,
-                    onTap: () {
-                      setState(() {
-                        _selectedExerciseIndex = index;
-                      });
-                    },
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: exercises.length,
+                          itemBuilder: (context, index) {
+                            final exercise = exercises[index];
+                            final gymSet = snapshot.data?.where((element) =>
+                                element.read(database.gymSets.name) ==
+                                exercise);
+                            var count = 0;
+                            if (gymSet != null && gymSet.isNotEmpty)
+                              count = gymSet.first
+                                  .read(database.gymSets.name.count())!;
+                            return ExerciseTile(
+                              exercise: exercise,
+                              isSelected: index == _selectedExerciseIndex,
+                              progress: count / 5,
+                              onTap: () {
+                                setState(() {
+                                  _selectedExerciseIndex = index;
+                                });
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   );
                 },
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-        ],
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
