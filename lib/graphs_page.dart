@@ -20,6 +20,7 @@ class GraphsPage extends StatefulWidget {
 
 class _GraphsPageState extends State<GraphsPage> {
   late Stream<List<TypedResult>> stream;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -49,6 +50,18 @@ class _GraphsPageState extends State<GraphsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: TextField(
+          controller: searchController,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.search),
+            hintText: 'Search',
+          ),
+          onChanged: (value) {
+            setState(() {});
+          },
+        ),
+      ),
       body: StreamBuilder<List<TypedResult>>(
         stream: stream,
         builder: (context, snapshot) {
@@ -56,10 +69,16 @@ class _GraphsPageState extends State<GraphsPage> {
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
           final gymSets = snapshot.data!;
 
+          final filteredGymSets = gymSets.where((gymSet) {
+            final name = gymSet.read(database.gymSets.name)!.toLowerCase();
+            final searchText = searchController.text.toLowerCase();
+            return name.contains(searchText);
+          }).toList();
+
           return ListView.builder(
-            itemCount: gymSets.length,
+            itemCount: filteredGymSets.length,
             itemBuilder: (context, index) {
-              final gymSet = gymSets[index];
+              final gymSet = filteredGymSets[index];
               final name = gymSet.read(database.gymSets.name)!;
               final weight = gymSet.read(database.gymSets.weight.max())!;
               return GraphTile(
