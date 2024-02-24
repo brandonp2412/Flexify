@@ -9,15 +9,11 @@ class PlanTile extends StatelessWidget {
     super.key,
     required this.plan,
     required this.active,
-    required this.plans,
-    required this.mounted,
     required this.index,
   });
 
   final Plan plan;
   final bool active;
-  final List<Plan> plans;
-  final bool mounted;
   final int index;
 
   @override
@@ -51,8 +47,8 @@ class PlanTile extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditPlanPage(
-                              plan: plans[index].toCompanion(false))),
+                          builder: (context) =>
+                              EditPlanPage(plan: plan.toCompanion(false))),
                     );
                   },
                 ),
@@ -77,12 +73,11 @@ class PlanTile extends StatelessWidget {
                             TextButton(
                               child: const Text('Delete'),
                               onPressed: () async {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                                 await database
                                     .delete(database.plans)
-                                    .delete(plans[index]);
-                                if (!mounted) return;
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
+                                    .delete(plan);
                               },
                             ),
                           ],
