@@ -6,6 +6,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,22 +30,6 @@ class _GraphsPageState extends State<GraphsPage> {
           ..addColumns([database.gymSets.name, database.gymSets.weight.max()])
           ..groupBy([database.gymSets.name]))
         .watch();
-  }
-
-  DateTime parseDate(String dateString) {
-    List<String> formats = [
-      'yyyy-MM-ddTHH:mm',
-      'yyyy-MM-ddTHH:mm:ss.SSS',
-      'yyyy-MM-ddTHH:mm:ss'
-    ];
-
-    for (String format in formats) {
-      try {
-        return DateFormat(format).parseStrict(dateString.replaceAll('Z', ''));
-      } catch (_) {}
-    }
-
-    throw FormatException('Invalid date format: $dateString');
   }
 
   @override
