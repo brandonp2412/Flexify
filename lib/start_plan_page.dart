@@ -51,14 +51,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   void getLast() async {
     final planExercises = widget.plan.exercises.split(',');
-    final today = DateTime.now();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
     final last = await (database.gymSets.select()
-          ..where((tbl) =>
-              database.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where((tbl) =>
-              database.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..where((tbl) => database.gymSets.name.isIn(planExercises))
           ..orderBy([
             (u) => drift.OrderingTerm(
@@ -84,14 +77,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
     final planExercises = widget.plan.exercises.split(',');
     final exercise = planExercises.elementAt(index);
-    final today = DateTime.now();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
     final last = await (database.gymSets.select()
-          ..where((tbl) =>
-              database.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where((tbl) =>
-              database.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..where((tbl) => database.gymSets.name.equals(exercise))
           ..orderBy([
             (u) => drift.OrderingTerm(
