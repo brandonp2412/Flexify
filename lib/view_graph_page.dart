@@ -22,7 +22,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           ..addColumns([
             database.gymSets.weight.max(),
             database.gymSets.name,
-            database.gymSets.created
+            database.gymSets.created,
+            database.gymSets.reps
           ])
           ..where(database.gymSets.name.equals(widget.name))
           ..orderBy([
@@ -44,6 +45,10 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
           final plans = snapshot.data!;
+          final reps = plans
+              .map((row) => row.read(database.gymSets.reps))
+              .toList()
+              .reversed;
           final createds = plans
               .map((row) => row.read(database.gymSets.created))
               .toList()
@@ -53,52 +58,64 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               .toList()
               .reversed;
 
-          return LineChart(
-            LineChartData(
-              minY: 0,
-              maxY: maxes.reduce((a, b) => a! > b! ? a : b)! + 5,
-              lineTouchData: LineTouchData(
-                enabled: true,
-                touchTooltipData: LineTouchTooltipData(
-                  tooltipBgColor: Theme.of(context).primaryColor,
-                  getTooltipItems: (touchedSpots) {
-                    final created =
-                        createds.elementAt(touchedSpots.first.spotIndex)!;
-                    final max = maxes.elementAt(touchedSpots.first.spotIndex)!;
-                    String formattedDate =
-                        DateFormat('dd/MM/yyyy').format(created);
-                    var text = "$max $formattedDate";
-                    if (touchedSpots.first.spotIndex == maxes.length - 1 ||
-                        touchedSpots.first.spotIndex == 0) text = formattedDate;
-                    return [
-                      LineTooltipItem(
-                          text,
-                          TextStyle(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.black
-                                  : Colors.white))
-                    ];
-                  },
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 400),
+              child: LineChart(
+                LineChartData(
+                  titlesData: const FlTitlesData(
+                      topTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false))),
+                  minY: maxes.reduce((a, b) => a! < b! ? a : b)! - 10,
+                  maxY: maxes.reduce((a, b) => a! > b! ? a : b)! + 10,
+                  lineTouchData: LineTouchData(
+                    enabled: true,
+                    touchTooltipData: LineTouchTooltipData(
+                      tooltipBgColor: Theme.of(context).primaryColor,
+                      getTooltipItems: (touchedSpots) {
+                        final created =
+                            createds.elementAt(touchedSpots.first.spotIndex)!;
+                        final max =
+                            maxes.elementAt(touchedSpots.first.spotIndex)!;
+                        final rep =
+                            reps.elementAt(touchedSpots.first.spotIndex)!;
+                        String formattedDate =
+                            DateFormat('dd/MM/yyyy').format(created);
+                        var text = "$rep x $max $formattedDate";
+                        return [
+                          LineTooltipItem(
+                              text,
+                              TextStyle(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.black
+                                      : Colors.white))
+                        ];
+                      },
+                    ),
+                  ),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: maxes
+                          .toList()
+                          .asMap()
+                          .entries
+                          .map((entry) =>
+                              FlSpot(entry.key.toDouble(), entry.value ?? 0))
+                          .toList(),
+                      isCurved: false,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? const ColorScheme.dark().primary
+                          : const ColorScheme.light().primary,
+                      barWidth: 3,
+                      isStrokeCapRound: true,
+                    ),
+                  ],
                 ),
               ),
-              lineBarsData: [
-                LineChartBarData(
-                  spots: maxes
-                      .toList()
-                      .asMap()
-                      .entries
-                      .map((entry) =>
-                          FlSpot(entry.key.toDouble(), entry.value ?? 0))
-                      .toList(),
-                  isCurved: false,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? const ColorScheme.dark().primary
-                      : const ColorScheme.light().primary,
-                  barWidth: 3,
-                  isStrokeCapRound: true,
-                ),
-              ],
             ),
           );
         },
