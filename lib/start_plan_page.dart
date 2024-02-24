@@ -27,8 +27,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   void initState() {
     super.initState();
-    repsController = TextEditingController(text: "10");
-    weightController = TextEditingController(text: "20");
+    repsController = TextEditingController();
+    weightController = TextEditingController();
 
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
@@ -51,8 +51,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   void getLast() async {
     final planExercises = widget.plan.exercises.split(',');
-    final last = await (database.gymSets.select()
+    final today = DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+    var last = await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.isIn(planExercises))
+          ..where((tbl) =>
+              database.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where((tbl) =>
+              database.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
@@ -61,6 +68,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .getSingleOrNull();
     weightNode.requestFocus();
     selectWeight();
+    last ??= await (database.gymSets.select()
+          ..where((tbl) => database.gymSets.name.equals(planExercises[0]))
+          ..orderBy([
+            (u) => drift.OrderingTerm(
+                expression: u.created, mode: drift.OrderingMode.desc),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+    repsController.text = "0";
+    weightController.text = "0";
+    selectWeight();
+    setState(() {});
     if (last == null) return;
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
@@ -129,80 +148,83 @@ class _StartPlanPageState extends State<StartPlanPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: weightController,
-              focusNode: weightNode,
-              decoration: const InputDecoration(labelText: 'Weight (kg)'),
-              keyboardType: TextInputType.number,
-              onTap: () {
-                selectWeight();
-              },
-              onSubmitted: (value) {
-                repsNode.requestFocus();
-                repsController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: repsController.text.length,
-                );
-              },
-            ),
-            TextField(
-              controller: repsController,
-              focusNode: repsNode,
-              decoration: const InputDecoration(labelText: 'Reps'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (value) {
-                save();
-              },
-              onTap: () {
-                repsController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: repsController.text.length,
-                );
-              },
-            ),
-            Expanded(
-              child: StreamBuilder(
-                stream: stream,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const SizedBox();
+        child: repsController.text.isNotEmpty
+            ? Column(
+                children: [
+                  TextField(
+                    controller: weightController,
+                    focusNode: weightNode,
+                    decoration: const InputDecoration(labelText: 'Weight (kg)'),
+                    keyboardType: TextInputType.number,
+                    onTap: () {
+                      selectWeight();
+                    },
+                    onSubmitted: (value) {
+                      repsNode.requestFocus();
+                      repsController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: repsController.text.length,
+                      );
+                    },
+                  ),
+                  TextField(
+                    controller: repsController,
+                    focusNode: repsNode,
+                    decoration: const InputDecoration(labelText: 'Reps'),
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (value) {
+                      save();
+                    },
+                    onTap: () {
+                      repsController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: repsController.text.length,
+                      );
+                    },
+                  ),
+                  Expanded(
+                    child: StreamBuilder(
+                      stream: stream,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return const SizedBox();
 
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: planExercises.length,
-                          itemBuilder: (context, index) {
-                            final exercise = planExercises[index];
-                            final gymSet = snapshot.data?.where((element) =>
-                                element.read(database.gymSets.name) ==
-                                exercise);
-                            var count = 0;
-                            if (gymSet != null && gymSet.isNotEmpty)
-                              count = gymSet.first
-                                  .read(database.gymSets.name.count())!;
-                            return ExerciseTile(
-                              exercise: exercise,
-                              isSelected: index == selectedIndex,
-                              count: count,
-                              onTap: () {
-                                select(index);
-                              },
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: planExercises.length,
+                                itemBuilder: (context, index) {
+                                  final exercise = planExercises[index];
+                                  final gymSet = snapshot.data?.where(
+                                      (element) =>
+                                          element.read(database.gymSets.name) ==
+                                          exercise);
+                                  var count = 0;
+                                  if (gymSet != null && gymSet.isNotEmpty)
+                                    count = gymSet.first
+                                        .read(database.gymSets.name.count())!;
+                                  return ExerciseTile(
+                                    exercise: exercise,
+                                    isSelected: index == selectedIndex,
+                                    count: count,
+                                    onTap: () {
+                                      select(index);
+                                    },
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+                  ),
+                ],
+              )
+            : const SizedBox(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: save,
