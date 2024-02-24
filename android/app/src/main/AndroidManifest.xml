@@ -42,7 +42,9 @@
             android:value="2" />
 
         <activity android:name=".StopAlarm" />
-        <activity android:name=".TimerDone" />
+        <activity
+            android:name=".TimerDone"
+            android:theme="@style/FullscreenTheme" />
         <service android:name=".TimerService" />
     </application>
 </manifest>
