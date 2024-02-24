@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -134,7 +135,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     database.into(database.gymSets).insert(gymSet);
     const platform = MethodChannel('com.flexify/android');
-    platform.invokeMethod('timer', [210000, exercise]);
+    //                                           3s     3m30s
+    platform.invokeMethod('timer', [kDebugMode ? 3000 : 210000, exercise]);
   }
 
   @override
