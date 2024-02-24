@@ -16,18 +16,19 @@ class StartPlanPage extends StatefulWidget {
 }
 
 class _StartPlanPageState extends State<StartPlanPage> {
-  late TextEditingController _repsController;
-  late TextEditingController _weightController;
+  late TextEditingController repsController;
+  late TextEditingController weightController;
   late Stream<List<drift.TypedResult>> stream;
 
   int _selectedExerciseIndex = 0;
-  String _selectedUnit = 'kg';
+  final repsNode = FocusNode();
+  final weightNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _repsController = TextEditingController(text: "10");
-    _weightController = TextEditingController(text: "20");
+    repsController = TextEditingController(text: "10");
+    weightController = TextEditingController(text: "20");
 
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
@@ -42,9 +43,27 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   @override
   void dispose() {
-    _repsController.dispose();
-    _weightController.dispose();
+    repsController.dispose();
+    weightController.dispose();
     super.dispose();
+  }
+
+  void save() async {
+    final reps = double.parse(repsController.text);
+    final weight = double.parse(weightController.text);
+    final exercise = widget.plan.exercises.split(',')[_selectedExerciseIndex];
+
+    final gymSet = GymSetsCompanion.insert(
+      name: exercise,
+      reps: reps,
+      weight: weight,
+      unit: 'kg',
+      created: DateTime.now(),
+    );
+
+    database.into(database.gymSets).insert(gymSet);
+    const platform = MethodChannel('com.flexify/android');
+    platform.invokeMethod('timer', [210000, exercise]);
   }
 
   @override
@@ -61,29 +80,38 @@ class _StartPlanPageState extends State<StartPlanPage> {
         child: Column(
           children: [
             TextField(
-              controller: _repsController,
-              decoration: const InputDecoration(labelText: 'Reps'),
+              controller: weightController,
+              focusNode: weightNode,
+              decoration: const InputDecoration(labelText: 'Weight (kg)'),
               keyboardType: TextInputType.number,
+              onTap: () {
+                weightController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: weightController.text.length,
+                );
+              },
+              onSubmitted: (value) {
+                repsNode.requestFocus();
+                repsController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: repsController.text.length,
+                );
+              },
             ),
             TextField(
-              controller: _weightController,
-              decoration: const InputDecoration(labelText: 'Weight'),
+              controller: repsController,
+              focusNode: repsNode,
+              decoration: const InputDecoration(labelText: 'Reps'),
               keyboardType: TextInputType.number,
-            ),
-            DropdownButtonFormField<String>(
-              value: _selectedUnit,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedUnit = newValue!;
-                });
+              onSubmitted: (value) {
+                save();
               },
-              items: <String>['kg', 'lb']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+              onTap: () {
+                repsController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: repsController.text.length,
                 );
-              }).toList(),
+              },
             ),
             Expanded(
               child: StreamBuilder(
@@ -96,7 +124,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       children: [
                         ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: exercises.length,
                           itemBuilder: (context, index) {
                             final exercise = exercises[index];
@@ -130,24 +158,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final reps = double.parse(_repsController.text);
-          final weight = double.parse(_weightController.text);
-          final unit = _selectedUnit;
-          final exercise = exercises[_selectedExerciseIndex];
-
-          final gymSet = GymSetsCompanion.insert(
-            name: exercise,
-            reps: reps,
-            weight: weight,
-            unit: unit,
-            created: DateTime.now(),
-          );
-
-          database.into(database.gymSets).insert(gymSet);
-          const platform = MethodChannel('com.flexify/android');
-          platform.invokeMethod('timer', [210000, exercise]);
-        },
+        onPressed: save,
         child: const Icon(Icons.save),
       ),
     );
