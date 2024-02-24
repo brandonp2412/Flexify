@@ -122,7 +122,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
     }
 
     var title = widget.plan.days.value.replaceAll(",", ", ");
-    title = title[0].toUpperCase() + title.substring(1).toLowerCase();
+    if (title.isNotEmpty)
+      title = title[0].toUpperCase() + title.substring(1).toLowerCase();
+    else
+      title = "Add new plan";
 
     return Scaffold(
       appBar: AppBar(
