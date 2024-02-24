@@ -49,6 +49,7 @@ class TimerService : Service() {
                 updateNotification(secondsLeft)
                 mediaPlayer?.stop()
                 vibrator?.cancel()
+                startTimer()
             }
         }
 
@@ -79,7 +80,12 @@ class TimerService : Service() {
         startForeground(ONGOING_ID, getProgress(secondsLeft).build())
         battery()
         Log.d("TimerService", "onStartCommand seconds=$secondsLeft")
+        startTimer();
+        return START_STICKY
+    }
 
+    private fun startTimer() {
+        timerRunnable?.let { timerHandler.removeCallbacks(it) }
         timerRunnable = object : Runnable {
             override fun run() {
                 if (secondsLeft > 0) {
@@ -94,7 +100,6 @@ class TimerService : Service() {
             }
         }
         timerHandler.postDelayed(timerRunnable!!, 1000)
-        return START_STICKY
     }
 
     override fun onDestroy() {
