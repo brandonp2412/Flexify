@@ -150,8 +150,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: repsController.text.isNotEmpty
-            ? Column(
+        child: repsController.text.isEmpty
+            ? const SizedBox()
+            : Column(
                 children: [
                   TextField(
                     controller: weightController,
@@ -225,8 +226,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     ),
                   ),
                 ],
-              )
-            : const SizedBox(),
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: save,
