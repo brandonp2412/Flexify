@@ -53,8 +53,9 @@ class _GraphsPageState extends State<GraphsPage> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: SearchBar(
+              hintText: "Search...",
               controller: searchController,
               padding: MaterialStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -66,14 +67,92 @@ class _GraphsPageState extends State<GraphsPage> {
               trailing: searchController.text.isNotEmpty
                   ? [
                       IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         onPressed: () {
                           searchController.clear();
                           setState(() {});
                         },
                       )
                     ]
-                  : [],
+                  : [
+                      PopupMenuButton(
+                        icon: const Icon(Icons.more_vert),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: ListTile(
+                              leading: const Icon(Icons.upload),
+                              title: const Text('Upload csv'),
+                              onTap: () async {
+                                Navigator.pop(context);
+                                final result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.any,
+                                );
+                                if (result == null) return;
+
+                                final file = File(result.files.single.path!);
+                                final input = file.openRead();
+                                final fields = await input
+                                    .transform(utf8.decoder)
+                                    .transform(
+                                        const CsvToListConverter(eol: "\n"))
+                                    .skip(1)
+                                    .toList();
+                                final gymSets = fields.map(
+                                  (row) => GymSetsCompanion(
+                                    name: drift.Value(row[1]),
+                                    reps: drift.Value(double.parse(row[2])),
+                                    weight: drift.Value(double.parse(row[3])),
+                                    created: drift.Value(parseDate(row[4])),
+                                    unit: drift.Value(row[5]),
+                                  ),
+                                );
+                                await database.batch(
+                                  (batch) => batch.insertAll(
+                                      database.gymSets, gymSets),
+                                );
+                              },
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: ListTile(
+                              leading: const Icon(Icons.delete),
+                              title: const Text('Delete all records'),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Confirm Delete'),
+                                      content: const Text(
+                                          'Are you sure you want to delete all records? This action is not reversible.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Cancel'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text('Delete'),
+                                          onPressed: () async {
+                                            Navigator.of(context).pop();
+                                            await database
+                                                .delete(database.gymSets)
+                                                .go();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
             ),
           ),
           StreamBuilder<List<drift.TypedResult>>(
@@ -107,89 +186,6 @@ class _GraphsPageState extends State<GraphsPage> {
             },
           )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Wrap(
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.upload),
-                    title: const Text('Upload csv'),
-                    onTap: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        type: FileType.any,
-                      );
-                      if (result == null) return;
-
-                      final file = File(result.files.single.path!);
-                      final input = file.openRead();
-                      final fields = await input
-                          .transform(utf8.decoder)
-                          .transform(const CsvToListConverter(eol: "\n"))
-                          .skip(1)
-                          .toList();
-                      final gymSets = fields.map(
-                        (row) => GymSetsCompanion(
-                          name: drift.Value(row[1]),
-                          reps: drift.Value(double.parse(row[2])),
-                          weight: drift.Value(double.parse(row[3])),
-                          created: drift.Value(parseDate(row[4])),
-                          unit: drift.Value(row[5]),
-                        ),
-                      );
-                      await database.batch(
-                        (batch) => batch.insertAll(database.gymSets, gymSets),
-                      );
-                      if (!mounted) return;
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Imported sets')),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: const Text('Delete all records'),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Confirm Delete'),
-                            content: const Text(
-                                'Are you sure you want to delete all records? This action is not reversible.'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: const Text('Delete'),
-                                onPressed: () async {
-                                  await database.delete(database.gymSets).go();
-                                  if (!mounted) return;
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        tooltip: 'More options',
-        child: const Icon(Icons.more_vert),
       ),
     );
   }
