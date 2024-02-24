@@ -121,6 +121,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ];
     }
 
+    var title = widget.plan.days.value.replaceAll(",", ", ");
+    title = title[0].toUpperCase() + title.substring(1).toLowerCase();
+
     return Scaffold(
       appBar: AppBar(
           title: showSearch
@@ -133,8 +136,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   decoration: const InputDecoration(
                       hintText: "Search...", border: InputBorder.none),
                 )
-              : Text(
-                  "Edit ${widget.plan.days.value.replaceAll(",", ", ").toLowerCase()}"),
+              : Text(title),
           actions: actions),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

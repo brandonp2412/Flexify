@@ -141,12 +141,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   @override
   Widget build(BuildContext context) {
+    var title = widget.plan.days.replaceAll(",", ", ");
+    title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     final planExercises = widget.plan.exercises.split(',');
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            "Start ${widget.plan.days.replaceAll(',', ', ').toLowerCase()}"),
+        title: Text(title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
