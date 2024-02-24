@@ -34,34 +34,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   dispose() {
+    searchNode.dispose();
+    searchController.dispose();
     super.dispose();
-  }
-
-  Future<bool?> _showConfirmationDialog(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to delete this plan?'),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Yes'),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('No'),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void toggleSearch() {
@@ -75,9 +50,22 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> actions = [
-      IconButton(onPressed: toggleSearch, icon: const Icon(Icons.search))
-    ];
+    List<Widget> actions = [];
+
+    if (search == '')
+      actions.add(
+          IconButton(onPressed: toggleSearch, icon: const Icon(Icons.search)));
+    else
+      actions.add(IconButton(
+          onPressed: () {
+            searchController.clear();
+            searchNode.unfocus();
+            setState(() {
+              search = '';
+              showSearch = false;
+            });
+          },
+          icon: const Icon(Icons.clear)));
 
     List<Widget> getChildren() {
       final List<Widget> children = [];
