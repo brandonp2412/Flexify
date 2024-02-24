@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
@@ -19,7 +19,7 @@ class GraphsPage extends StatefulWidget {
 }
 
 class _GraphsPageState extends State<GraphsPage> {
-  late Stream<List<TypedResult>> stream;
+  late Stream<List<drift.TypedResult>> stream;
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -50,44 +50,63 @@ class _GraphsPageState extends State<GraphsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: searchController,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.search),
-            hintText: 'Search',
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: SearchBar(
+              controller: searchController,
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(horizontal: 16.0),
+              ),
+              onChanged: (_) {
+                setState(() {});
+              },
+              leading: const Icon(Icons.search),
+              trailing: searchController.text.isNotEmpty
+                  ? [
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          searchController.clear();
+                          setState(() {});
+                        },
+                      )
+                    ]
+                  : [],
+            ),
           ),
-          onChanged: (value) {
-            setState(() {});
-          },
-        ),
-      ),
-      body: StreamBuilder<List<TypedResult>>(
-        stream: stream,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return const SizedBox();
-          if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
-          final gymSets = snapshot.data!;
+          StreamBuilder<List<drift.TypedResult>>(
+            stream: stream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const SizedBox();
+              if (snapshot.hasError)
+                return ErrorWidget(snapshot.error.toString());
+              final gymSets = snapshot.data!;
 
-          final filteredGymSets = gymSets.where((gymSet) {
-            final name = gymSet.read(database.gymSets.name)!.toLowerCase();
-            final searchText = searchController.text.toLowerCase();
-            return name.contains(searchText);
-          }).toList();
+              final filteredGymSets = gymSets.where((gymSet) {
+                final name = gymSet.read(database.gymSets.name)!.toLowerCase();
+                final searchText = searchController.text.toLowerCase();
+                return name.contains(searchText);
+              }).toList();
 
-          return ListView.builder(
-            itemCount: filteredGymSets.length,
-            itemBuilder: (context, index) {
-              final gymSet = filteredGymSets[index];
-              final name = gymSet.read(database.gymSets.name)!;
-              final weight = gymSet.read(database.gymSets.weight.max())!;
-              return GraphTile(
-                gymSetName: name,
-                weight: weight,
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: filteredGymSets.length,
+                  itemBuilder: (context, index) {
+                    final gymSet = filteredGymSets[index];
+                    final name = gymSet.read(database.gymSets.name)!;
+                    final weight = gymSet.read(database.gymSets.weight.max())!;
+                    return GraphTile(
+                      gymSetName: name,
+                      weight: weight,
+                    );
+                  },
+                ),
               );
             },
-          );
-        },
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -114,11 +133,11 @@ class _GraphsPageState extends State<GraphsPage> {
                           .toList();
                       final gymSets = fields.map(
                         (row) => GymSetsCompanion(
-                          name: Value(row[1]),
-                          reps: Value(double.parse(row[2])),
-                          weight: Value(double.parse(row[3])),
-                          created: Value(parseDate(row[4])),
-                          unit: Value(row[5]),
+                          name: drift.Value(row[1]),
+                          reps: drift.Value(double.parse(row[2])),
+                          weight: drift.Value(double.parse(row[3])),
+                          created: drift.Value(parseDate(row[4])),
+                          unit: drift.Value(row[5]),
                         ),
                       );
                       await database.batch(
