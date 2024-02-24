@@ -31,6 +31,13 @@ class MainActivity: FlutterActivity() {
         context.startForegroundService(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        val intent = Intent(TimerService.STOP_BROADCAST)
+        intent.putExtra("check", true);
+        sendBroadcast(intent);
+    }
+
     companion object {
         const val FLUTTER_CHANNEL = "com.flexify/android"
     }

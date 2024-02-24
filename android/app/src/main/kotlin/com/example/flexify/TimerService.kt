@@ -35,6 +35,8 @@ class TimerService : Service() {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Log.d("TimerService", "Received stop broadcast intent")
+                val check = intent?.getBooleanExtra("check", false);
+                if (check == true && mediaPlayer?.isPlaying != true) return;
                 stopSelf()
             }
         }
@@ -237,9 +239,11 @@ class TimerService : Service() {
         val fullPending = PendingIntent.getActivity(
             applicationContext, 0, fullIntent, PendingIntent.FLAG_MUTABLE
         )
-        val finishIntent = Intent(applicationContext, StopAlarm::class.java)
-        val finishPending = PendingIntent.getActivity(
-            applicationContext, 0, finishIntent,
+        val contentIntent = Intent(this, MainActivity::class.java)
+        val contentPending = PendingIntent.getActivity(
+            this,
+            0,
+            contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val stopBroadcast = Intent(STOP_BROADCAST)
@@ -268,8 +272,7 @@ class TimerService : Service() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setContentIntent(finishPending)
-            .setFullScreenIntent(fullPending, true)
+            .setContentIntent(contentPending)
             .setAutoCancel(true)
             .setDeleteIntent(pendingStop)
             .addAction(R.drawable.ic_baseline_stop_24, "Add 1 min", addPending)
