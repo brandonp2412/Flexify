@@ -24,15 +24,13 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      home: const MyHomePage(title: 'Flexify'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -66,28 +64,28 @@ class _MyHomePageState extends State<MyHomePage>
       length: 2,
       child: Builder(
         builder: (BuildContext context) {
-          return SafeArea(
-            child: Scaffold(
-              appBar: TabBar(
-                controller: tabController,
-                tabs: const [
-                  Tab(
-                    icon: Icon(Icons.event),
-                    text: "Plans",
-                  ),
-                  Tab(
-                    icon: Icon(Icons.insights),
-                    text: "Graphs",
-                  )
-                ],
-              ),
-              body: TabBarView(
+          return Scaffold(
+            body: SafeArea(
+              child: TabBarView(
                 controller: tabController,
                 children: const [
                   PlansPage(),
                   GraphsPage(),
                 ],
               ),
+            ),
+            bottomNavigationBar: TabBar(
+              controller: tabController,
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.event),
+                  text: "Plans",
+                ),
+                Tab(
+                  icon: Icon(Icons.insights),
+                  text: "Graphs",
+                )
+              ],
             ),
           );
         },
