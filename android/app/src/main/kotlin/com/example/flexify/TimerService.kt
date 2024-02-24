@@ -141,13 +141,12 @@ class TimerService : Service() {
     }
 
     private fun getProgress(timeLeftInSeconds: Int): NotificationCompat.Builder {
-        val notificationText = formatTime(timeLeftInSeconds)
-        val notificationChannelId = "timer_channel"
-        val notificationIntent = Intent(this, MainActivity::class.java)
+        val channelId = "timer_channel"
+        val contentIntent = Intent(this, MainActivity::class.java)
         val contentPending = PendingIntent.getActivity(
             this,
             0,
-            notificationIntent,
+            contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val stopBroadcast = Intent(STOP_BROADCAST)
@@ -169,9 +168,9 @@ class TimerService : Service() {
                 PendingIntent.FLAG_MUTABLE
             )
 
-        val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setContentTitle(currentDescription)
-            .setContentText(notificationText)
+            .setContentText(formatTime(timeLeftInSeconds))
             .setSmallIcon(R.drawable.baseline_timer_24)
             .setProgress(secondsTotal, timeLeftInSeconds, false)
             .setContentIntent(contentPending)
@@ -187,7 +186,7 @@ class TimerService : Service() {
         val notificationManager = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                notificationChannelId,
+                channelId,
                 "Timer Channel",
                 NotificationManager.IMPORTANCE_LOW
             )
@@ -240,7 +239,8 @@ class TimerService : Service() {
         )
         val finishIntent = Intent(applicationContext, StopAlarm::class.java)
         val finishPending = PendingIntent.getActivity(
-            applicationContext, 0, finishIntent, PendingIntent.FLAG_IMMUTABLE
+            applicationContext, 0, finishIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val stopBroadcast = Intent(STOP_BROADCAST)
         stopBroadcast.setPackage(applicationContext.packageName)
@@ -250,6 +250,15 @@ class TimerService : Service() {
                 0,
                 stopBroadcast,
                 PendingIntent.FLAG_IMMUTABLE
+            )
+        val addBroadcast =
+            Intent(ADD_BROADCAST).apply { setPackage(applicationContext.packageName) }
+        val addPending =
+            PendingIntent.getBroadcast(
+                applicationContext,
+                0,
+                addBroadcast,
+                PendingIntent.FLAG_MUTABLE
             )
 
         val builder = NotificationCompat.Builder(this, channelId)
@@ -263,6 +272,7 @@ class TimerService : Service() {
             .setFullScreenIntent(fullPending, true)
             .setAutoCancel(true)
             .setDeleteIntent(pendingStop)
+            .addAction(R.drawable.ic_baseline_stop_24, "Add 1 min", addPending)
 
         if (ActivityCompat.checkSelfPermission(
                 this,
