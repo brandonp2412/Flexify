@@ -20,7 +20,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController weightController;
   late Stream<List<drift.TypedResult>> stream;
 
-  int _selectedExerciseIndex = 0;
+  int selectedIndex = 0;
   final repsNode = FocusNode();
   final weightNode = FocusNode();
 
@@ -39,6 +39,72 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..groupBy([database.gymSets.name]))
         .watch();
+    getLast();
+  }
+
+  void selectWeight() {
+    weightController.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: weightController.text.length,
+    );
+  }
+
+  void getLast() async {
+    final planExercises = widget.plan.exercises.split(',');
+    final today = DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+    final last = await (database.gymSets.select()
+          ..where((tbl) =>
+              database.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where((tbl) =>
+              database.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where((tbl) => database.gymSets.name.isIn(planExercises))
+          ..orderBy([
+            (u) => drift.OrderingTerm(
+                expression: u.created, mode: drift.OrderingMode.desc),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+    weightNode.requestFocus();
+    selectWeight();
+    if (last == null) return;
+    repsController.text = last.reps.toString();
+    weightController.text = last.weight.toString();
+    selectWeight();
+    final index = planExercises.indexOf(last.name);
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  void select(int index) async {
+    setState(() {
+      selectedIndex = index;
+    });
+    final planExercises = widget.plan.exercises.split(',');
+    final exercise = planExercises.elementAt(index);
+    final today = DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+    final last = await (database.gymSets.select()
+          ..where((tbl) =>
+              database.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where((tbl) =>
+              database.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where((tbl) => database.gymSets.name.equals(exercise))
+          ..orderBy([
+            (u) => drift.OrderingTerm(
+                expression: u.created, mode: drift.OrderingMode.desc),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+    weightNode.requestFocus();
+    selectWeight();
+    if (last == null) return;
+    repsController.text = last.reps.toString();
+    weightController.text = last.weight.toString();
+    selectWeight();
   }
 
   @override
@@ -51,7 +117,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   void save() async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
-    final exercise = widget.plan.exercises.split(',')[_selectedExerciseIndex];
+    final exercise = widget.plan.exercises.split(',')[selectedIndex];
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -68,7 +134,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    final exercises = widget.plan.exercises.split(',');
+    final planExercises = widget.plan.exercises.split(',');
 
     return Scaffold(
       appBar: AppBar(
@@ -85,10 +151,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               decoration: const InputDecoration(labelText: 'Weight (kg)'),
               keyboardType: TextInputType.number,
               onTap: () {
-                weightController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: weightController.text.length,
-                );
+                selectWeight();
               },
               onSubmitted: (value) {
                 repsNode.requestFocus();
@@ -125,9 +188,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: exercises.length,
+                          itemCount: planExercises.length,
                           itemBuilder: (context, index) {
-                            final exercise = exercises[index];
+                            final exercise = planExercises[index];
                             final gymSet = snapshot.data?.where((element) =>
                                 element.read(database.gymSets.name) ==
                                 exercise);
@@ -137,12 +200,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
                                   .read(database.gymSets.name.count())!;
                             return ExerciseTile(
                               exercise: exercise,
-                              isSelected: index == _selectedExerciseIndex,
-                              progress: count / 5,
+                              isSelected: index == selectedIndex,
+                              count: count,
                               onTap: () {
-                                setState(() {
-                                  _selectedExerciseIndex = index;
-                                });
+                                select(index);
                               },
                             );
                           },

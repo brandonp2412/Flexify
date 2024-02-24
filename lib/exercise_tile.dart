@@ -6,14 +6,14 @@ class ExerciseTile extends StatelessWidget {
   final String exercise;
   final bool isSelected;
   final VoidCallback onTap;
-  final double progress;
+  final int count;
 
   const ExerciseTile({
     Key? key,
     required this.exercise,
     required this.isSelected,
     required this.onTap,
-    required this.progress,
+    required this.count,
   }) : super(key: key);
 
   @override
@@ -21,16 +21,7 @@ class ExerciseTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       onLongPress: () async {
-        if (progress == 0) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('No $exercise yet')),
-          );
-          return;
-        }
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Deleting last $exercise')),
-        );
+        if (count == 0) return;
         final gymSet = await (database.select(database.gymSets)
               ..where((r) => database.gymSets.name.equals(exercise))
               ..orderBy([
@@ -49,11 +40,11 @@ class ExerciseTile extends StatelessWidget {
             onTap();
           },
         ),
-        Text(exercise),
+        Text("$exercise ($count)"),
       ]),
       subtitle: SizedBox(
         child: LinearProgressIndicator(
-          value: progress,
+          value: count / 5,
         ),
       ),
     );
