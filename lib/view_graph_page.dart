@@ -57,6 +57,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               .map((row) => row.read(database.gymSets.weight.max()))
               .toList()
               .reversed;
+          final min = maxes.reduce((a, b) => a! < b! ? a : b)!;
+          final max = maxes.reduce((a, b) => a! > b! ? a : b)!;
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -69,8 +71,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                           AxisTitles(sideTitles: SideTitles(showTitles: false)),
                       bottomTitles: AxisTitles(
                           sideTitles: SideTitles(showTitles: false))),
-                  minY: maxes.reduce((a, b) => a! < b! ? a : b)! - 10,
-                  maxY: maxes.reduce((a, b) => a! > b! ? a : b)! + 10,
+                  minY: (min - min * 0.25).floorToDouble(),
+                  maxY: (max + max * 0.25).ceilToDouble(),
                   lineTouchData: LineTouchData(
                     enabled: true,
                     touchTooltipData: LineTouchTooltipData(
