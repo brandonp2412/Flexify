@@ -31,13 +31,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController = TextEditingController();
     weightController = TextEditingController();
 
-    final today = DateTime.now();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+    final today = DateTime.now().toLocal();
     stream = (database.selectOnly(database.gymSets)
           ..addColumns([database.gymSets.name.count(), database.gymSets.name])
-          ..where(database.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where(database.gymSets.created.isBiggerOrEqualValue(today))
           ..groupBy([database.gymSets.name]))
         .watch();
     getLast();
@@ -201,13 +198,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
                                 itemCount: planExercises.length,
                                 itemBuilder: (context, index) {
                                   final exercise = planExercises[index];
-                                  final gymSet = snapshot.data?.where(
+                                  final gymSets = snapshot.data?.where(
                                       (element) =>
                                           element.read(database.gymSets.name) ==
                                           exercise);
                                   var count = 0;
-                                  if (gymSet != null && gymSet.isNotEmpty)
-                                    count = gymSet.first
+                                  if (gymSets != null && gymSets.isNotEmpty)
+                                    count = gymSets.first
                                         .read(database.gymSets.name.count())!;
                                   return ExerciseTile(
                                     exercise: exercise,
