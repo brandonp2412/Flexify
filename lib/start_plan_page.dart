@@ -38,6 +38,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..addColumns([database.gymSets.name.count(), database.gymSets.name])
           ..where(database.gymSets.created.isBiggerOrEqualValue(startOfToday))
           ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where(database.gymSets.name.isIn(widget.plan.exercises.split(',')))
           ..groupBy([database.gymSets.name]))
         .watch();
     getLast();
