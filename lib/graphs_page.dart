@@ -8,6 +8,10 @@ import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'graph_tile.dart';
 
@@ -164,8 +168,8 @@ class _GraphsPageState extends State<GraphsPage> {
           final gymSets = fields.map(
             (row) => GymSetsCompanion(
               name: drift.Value(row[1]),
-              reps: drift.Value(double.parse(row[2])),
-              weight: drift.Value(double.parse(row[3])),
+              reps: drift.Value(row[2]),
+              weight: drift.Value(row[3]),
               created: drift.Value(parseDate(row[4])),
               unit: drift.Value(row[5]),
             ),
@@ -185,12 +189,10 @@ class _GraphsPageState extends State<GraphsPage> {
         title: const Text('Export to CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final result = await FilePicker.platform.getDirectoryPath();
-          if (result == null) return;
 
           final gymSets = await database.gymSets.select().get();
           final List<List<dynamic>> csvData = [
-            ['id', 'name', 'reps', 'weight', 'unit', 'created']
+            ['id', 'name', 'reps', 'weight', 'created', 'unit']
           ];
           for (var gymSet in gymSets) {
             csvData.add([
@@ -198,21 +200,54 @@ class _GraphsPageState extends State<GraphsPage> {
               gymSet.name,
               gymSet.reps,
               gymSet.weight,
-              gymSet.unit,
               gymSet.created.toIso8601String(),
+              gymSet.unit,
             ]);
           }
 
+          final result = await FilePicker.platform.getDirectoryPath();
+          if (result == null) return;
+
+          final permission = await Permission.manageExternalStorage.request();
+          if (!permission.isGranted) return;
           final file = File("$result/gym_sets.csv");
-          String csv = const ListToCsvConverter().convert(csvData);
-          await file.writeAsString(csv);
-          if (!mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Exported to CSV.'), showCloseIcon: true),
-          );
+          await file.writeAsString(const ListToCsvConverter().convert(csvData));
+          postNotification(file);
         },
       ),
+    );
+  }
+
+  void postNotification(File file) async {
+    final permission = await Permission.notification.request();
+    if (!permission.isGranted) return;
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const android =
+        AndroidInitializationSettings('@drawable/baseline_arrow_downward_24');
+    const initializationSettings = InitializationSettings(android: android);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'downloads',
+      'Downloads',
+    );
+    const platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Exported gym_sets.csv',
+      null,
+      platformChannelSpecifics,
+      payload: file.path,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (details) async {
+        final file = File(details.payload!);
+        await OpenFile.open(file.parent.path);
+      },
     );
   }
 }

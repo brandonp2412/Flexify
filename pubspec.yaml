@@ -43,6 +43,9 @@ dependencies:
   csv: ^5.1.1
   intl: ^0.19.0
   fl_chart: ^0.66.2
+  flutter_local_notifications: ^16.3.2
+  open_file: ^3.3.2
+  permission_handler: ^11.3.0
 
 dev_dependencies:
   flutter_test:

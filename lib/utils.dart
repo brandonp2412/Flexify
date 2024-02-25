@@ -9,7 +9,7 @@ DateTime parseDate(String dateString) {
 
   for (String format in formats) {
     try {
-      return DateFormat(format).parseStrict(dateString.replaceAll('Z', ''));
+      return DateFormat(format).parse(dateString.replaceAll('Z', ''));
     } catch (_) {}
   }
 
