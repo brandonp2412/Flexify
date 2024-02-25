@@ -8,6 +8,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
@@ -163,18 +164,8 @@ class _PlansPageState extends State<PlansPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final result = await FilePicker.platform.pickFiles(
-            type: FileType.any,
-          );
-          if (result == null) return;
-
-          final file = File(result.files.single.path!);
-          final input = file.openRead();
-          final fields = await input
-              .transform(utf8.decoder)
-              .transform(const CsvToListConverter(eol: "\r\n"))
-              .skip(1)
-              .toList();
+          final fields = await readCsv();
+          if (fields.isEmpty) return;
           final plans = fields.map(
             (row) => PlansCompanion(
               days: drift.Value(row[1]),

@@ -153,18 +153,8 @@ class _GraphsPageState extends State<GraphsPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final result = await FilePicker.platform.pickFiles(
-            type: FileType.any,
-          );
-          if (result == null) return;
-
-          final file = File(result.files.single.path!);
-          final input = file.openRead();
-          final fields = await input
-              .transform(utf8.decoder)
-              .transform(const CsvToListConverter(eol: "\n"))
-              .skip(1)
-              .toList();
+          final fields = await readCsv();
+          if (fields.isEmpty) return;
           final gymSets = fields.map(
             (row) => GymSetsCompanion(
               name: drift.Value(row[1]),
