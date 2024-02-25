@@ -113,7 +113,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.delete),
-        title: const Text('Delete all records'),
+        title: const Text('Delete all'),
         onTap: () {
           Navigator.of(context).pop();
           showDialog(
@@ -186,7 +186,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.download),
-        title: const Text('Export to CSV'),
+        title: const Text('Download CSV'),
         onTap: () async {
           Navigator.pop(context);
 
@@ -236,7 +236,7 @@ class _GraphsPageState extends State<GraphsPage> {
 
     await flutterLocalNotificationsPlugin.show(
       0,
-      'Exported gym_sets.csv',
+      'Downloaded gym_sets.csv',
       null,
       platformChannelSpecifics,
       payload: file.path,
