@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 DateTime parseDate(String dateString) {
   List<String> formats = [
@@ -22,27 +23,29 @@ DateTime parseDate(String dateString) {
   throw FormatException('Invalid date format: $dateString');
 }
 
-Future<List<List<dynamic>>> readCsv() async {
+Future<List<List<dynamic>>> readCsv(String eol) async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.any,
   );
   if (result == null) return Future.value(<List<dynamic>>[]);
 
   final file = File(result.files.single.path!);
-  final input = file.openRead();
-
-  final firstLine = await input
-      .transform(utf8.decoder)
-      .transform(const LineSplitter())
-      .take(1)
-      .single;
-
-  final eol = firstLine.endsWith('\r') ? '\r\n' : '\n';
-
-  final input2 = file.openRead();
-  return input2
+  return file
+      .openRead()
       .transform(utf8.decoder)
       .transform(CsvToListConverter(eol: eol))
       .skip(1)
       .toList();
+}
+
+Future<File> writeCsv(List<List<dynamic>> csvData, String fileName) async {
+  final result = await FilePicker.platform.getDirectoryPath();
+  if (result == null) return Future.value(File(""));
+
+  final permission = await Permission.manageExternalStorage.request();
+  if (!permission.isGranted) return Future.value(File(""));
+  final file = File("$result/$fileName");
+  await file
+      .writeAsString(const ListToCsvConverter(eol: "\n").convert(csvData));
+  return file;
 }

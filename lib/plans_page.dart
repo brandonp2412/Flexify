@@ -164,7 +164,7 @@ class _PlansPageState extends State<PlansPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final fields = await readCsv();
+          final fields = await readCsv("\r\n");
           if (fields.isEmpty) return;
           final plans = fields.map(
             (row) => PlansCompanion(
@@ -196,13 +196,7 @@ class _PlansPageState extends State<PlansPage> {
             csvData.add([plan.id, plan.days, plan.exercises]);
           }
 
-          final result = await FilePicker.platform.getDirectoryPath();
-          if (result == null) return;
-
-          final permission = await Permission.manageExternalStorage.request();
-          if (!permission.isGranted) return;
-          final file = File("$result/plans.csv");
-          await file.writeAsString(const ListToCsvConverter().convert(csvData));
+          final file = await writeCsv(csvData, "plans.csv");
           postNotification(file);
         },
       ),

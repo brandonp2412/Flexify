@@ -153,7 +153,7 @@ class _GraphsPageState extends State<GraphsPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final fields = await readCsv();
+          final fields = await readCsv("\n");
           if (fields.isEmpty) return;
           final gymSets = fields.map(
             (row) => GymSetsCompanion(
@@ -195,13 +195,7 @@ class _GraphsPageState extends State<GraphsPage> {
             ]);
           }
 
-          final result = await FilePicker.platform.getDirectoryPath();
-          if (result == null) return;
-
-          final permission = await Permission.manageExternalStorage.request();
-          if (!permission.isGranted) return;
-          final file = File("$result/gym_sets.csv");
-          await file.writeAsString(const ListToCsvConverter().convert(csvData));
+          final file = await writeCsv(csvData, "gym_sets.csv");
           postNotification(file);
         },
       ),
