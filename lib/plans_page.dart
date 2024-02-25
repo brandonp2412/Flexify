@@ -24,13 +24,26 @@ class PlansPage extends StatefulWidget {
 }
 
 class _PlansPageState extends State<PlansPage> {
-  late Stream<List<Plan>> stream;
+  late Stream<List<Plan>> planStream;
+  late Stream<List<drift.TypedResult>> countStream;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    stream = database.select(database.plans).watch();
+    planStream = database.select(database.plans).watch();
+    final today = DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+    countStream = (database.selectOnly(database.gymSets)
+          ..addColumns([
+            database.gymSets.name.count(),
+            database.gymSets.name,
+          ])
+          ..where(database.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..groupBy([database.gymSets.name]))
+        .watch();
   }
 
   @override
@@ -74,7 +87,7 @@ class _PlansPageState extends State<PlansPage> {
             ),
           ),
           StreamBuilder<List<Plan>>(
-            stream: stream,
+            stream: planStream,
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const SizedBox();
               if (snapshot.hasError)
@@ -96,7 +109,12 @@ class _PlansPageState extends State<PlansPage> {
                   itemBuilder: (context, index) {
                     final plan = filtered[index];
                     final active = plan.days.contains(weekday);
-                    return PlanTile(plan: plan, active: active, index: index);
+                    return PlanTile(
+                      plan: plan,
+                      active: active,
+                      index: index,
+                      countStream: countStream,
+                    );
                   },
                 ),
               );

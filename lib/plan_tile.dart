@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
@@ -10,11 +11,13 @@ class PlanTile extends StatelessWidget {
     required this.plan,
     required this.active,
     required this.index,
+    required this.countStream,
   });
 
   final Plan plan;
   final bool active;
   final int index;
+  final Stream<List<TypedResult>> countStream;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,11 @@ class PlanTile extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => StartPlanPage(plan: plan)),
+          MaterialPageRoute(
+              builder: (context) => StartPlanPage(
+                    plan: plan,
+                    countStream: countStream,
+                  )),
         );
       },
       onLongPress: () {
@@ -47,8 +54,9 @@ class PlanTile extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              EditPlanPage(plan: plan.toCompanion(false))),
+                          builder: (context) => EditPlanPage(
+                                plan: plan.toCompanion(false),
+                              )),
                     );
                   },
                 ),

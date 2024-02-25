@@ -9,8 +9,10 @@ import 'exercise_tile.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
+  final Stream<List<drift.TypedResult>> countStream;
 
-  const StartPlanPage({Key? key, required this.plan}) : super(key: key);
+  const StartPlanPage({Key? key, required this.plan, required this.countStream})
+      : super(key: key);
 
   @override
   createState() => _StartPlanPageState();
@@ -19,7 +21,6 @@ class StartPlanPage extends StatefulWidget {
 class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController repsController;
   late TextEditingController weightController;
-  late Stream<List<drift.TypedResult>> stream;
 
   int selectedIndex = 0;
   final repsNode = FocusNode();
@@ -30,17 +31,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     super.initState();
     repsController = TextEditingController();
     weightController = TextEditingController();
-
-    final today = DateTime.now();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    stream = (database.selectOnly(database.gymSets)
-          ..addColumns([database.gymSets.name.count(), database.gymSets.name])
-          ..where(database.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
-          ..where(database.gymSets.name.isIn(widget.plan.exercises.split(',')))
-          ..groupBy([database.gymSets.name]))
-        .watch();
     getLast();
   }
 
@@ -152,11 +142,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: repsController.text.isEmpty
-            ? const SizedBox()
-            : Column(
-                children: [
-                  TextField(
+        child: Column(
+          children: [
+            weightController.text.isNotEmpty
+                ? TextField(
                     controller: weightController,
                     focusNode: weightNode,
                     decoration: const InputDecoration(labelText: 'Weight (kg)'),
@@ -171,8 +160,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
                         extentOffset: repsController.text.length,
                       );
                     },
-                  ),
-                  TextField(
+                  )
+                : const SizedBox(),
+            repsController.text.isNotEmpty
+                ? TextField(
                     controller: repsController,
                     focusNode: repsNode,
                     decoration: const InputDecoration(labelText: 'Reps'),
@@ -186,54 +177,57 @@ class _StartPlanPageState extends State<StartPlanPage> {
                         extentOffset: repsController.text.length,
                       );
                     },
-                  ),
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: stream,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) return const SizedBox();
+                  )
+                : const SizedBox(),
+            Expanded(
+              child: StreamBuilder(
+                stream: widget.countStream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox();
 
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: planExercises.length,
-                                itemBuilder: (context, index) {
-                                  final exercise = planExercises[index];
-                                  final gymSets = snapshot.data?.where(
-                                      (element) =>
-                                          element.read(database.gymSets.name) ==
-                                          exercise);
-                                  var count = 0;
-                                  if (gymSets != null && gymSets.isNotEmpty)
-                                    count = gymSets.first
-                                        .read(database.gymSets.name.count())!;
-                                  return ExerciseTile(
-                                    exercise: exercise,
-                                    isSelected: index == selectedIndex,
-                                    count: count,
-                                    onTap: () {
-                                      select(index);
-                                    },
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                            ],
-                          ),
-                        );
-                      },
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        exerciseList(planExercises, snapshot),
+                        const SizedBox(height: 20),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: save,
         child: const Icon(Icons.save),
       ),
+    );
+  }
+
+  ListView exerciseList(List<String> planExercises,
+      AsyncSnapshot<List<drift.TypedResult>> snapshot) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: planExercises.length,
+      itemBuilder: (context, index) {
+        final exercise = planExercises[index];
+        final gymSets = snapshot.data?.where(
+            (element) => element.read(database.gymSets.name) == exercise);
+        var count = 0;
+        if (gymSets != null && gymSets.isNotEmpty)
+          count = gymSets.first.read(database.gymSets.name.count())!;
+        return ExerciseTile(
+          exercise: exercise,
+          isSelected: index == selectedIndex,
+          count: count,
+          onTap: () {
+            select(index);
+          },
+        );
+      },
     );
   }
 }
