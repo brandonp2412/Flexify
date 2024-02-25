@@ -76,7 +76,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                   lineTouchData: LineTouchData(
                     enabled: true,
                     touchTooltipData: LineTouchTooltipData(
-                      tooltipBgColor: Theme.of(context).primaryColor,
+                      tooltipBgColor: Theme.of(context).colorScheme.background,
                       getTooltipItems: (touchedSpots) {
                         final created =
                             createds.elementAt(touchedSpots.first.spotIndex)!;
@@ -91,10 +91,10 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                           LineTooltipItem(
                               text,
                               TextStyle(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.black
-                                      : Colors.white))
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color))
                         ];
                       },
                     ),
