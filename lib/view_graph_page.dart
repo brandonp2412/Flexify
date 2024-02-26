@@ -38,7 +38,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("${widget.name} graph")),
+      appBar: AppBar(title: Text(widget.name)),
       body: StreamBuilder<List<TypedResult>>(
         stream: stream,
         builder: (context, snapshot) {
