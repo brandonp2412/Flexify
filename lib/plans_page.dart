@@ -47,12 +47,17 @@ class _PlansPageState extends State<PlansPage> {
   @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
-    return Navigator(
-        key: navigatorKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
-              builder: (context) => plansPage(weekday, context),
-              settings: settings,
-            ));
+    return NavigatorPopHandler(
+      onPop: () {
+        navigatorKey.currentState!.pop();
+      },
+      child: Navigator(
+          key: navigatorKey,
+          onGenerateRoute: (settings) => MaterialPageRoute(
+                builder: (context) => plansPage(weekday, context),
+                settings: settings,
+              )),
+    );
   }
 
   Scaffold plansPage(String weekday, BuildContext context) {
