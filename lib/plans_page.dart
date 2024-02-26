@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:file_picker/file_picker.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
@@ -27,6 +24,7 @@ class _PlansPageState extends State<PlansPage> {
   late Stream<List<Plan>> planStream;
   late Stream<List<drift.TypedResult>> countStream;
   TextEditingController searchController = TextEditingController();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -49,6 +47,15 @@ class _PlansPageState extends State<PlansPage> {
   @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
+    return Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+              builder: (context) => plansPage(weekday, context),
+              settings: settings,
+            ));
+  }
+
+  Scaffold plansPage(String weekday, BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
@@ -114,6 +121,7 @@ class _PlansPageState extends State<PlansPage> {
                       active: active,
                       index: index,
                       countStream: countStream,
+                      navigatorKey: navigatorKey,
                     );
                   },
                 ),

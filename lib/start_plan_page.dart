@@ -58,8 +58,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
-    weightNode.requestFocus();
-    selectWeight();
     last ??= await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.equals(planExercises[0]))
           ..orderBy([

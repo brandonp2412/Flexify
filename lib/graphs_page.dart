@@ -1,16 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'graph_tile.dart';
@@ -25,6 +21,7 @@ class GraphsPage extends StatefulWidget {
 class _GraphsPageState extends State<GraphsPage> {
   late Stream<List<drift.TypedResult>> stream;
   TextEditingController searchController = TextEditingController();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -37,6 +34,14 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => graphsPage(), settings: settings),
+    );
+  }
+
+  Scaffold graphsPage() {
     return Scaffold(
       body: Column(
         children: [

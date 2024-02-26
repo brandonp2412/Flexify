@@ -12,12 +12,14 @@ class PlanTile extends StatelessWidget {
     required this.active,
     required this.index,
     required this.countStream,
+    required this.navigatorKey,
   });
 
   final Plan plan;
   final bool active;
   final int index;
   final Stream<List<TypedResult>> countStream;
+  final GlobalKey<NavigatorState> navigatorKey;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,7 @@ class PlanTile extends StatelessWidget {
       ),
       subtitle: Text(plan.exercises.split(',').join(', ')),
       onTap: () {
-        Navigator.push(
-          context,
+        navigatorKey.currentState!.push(
           MaterialPageRoute(
               builder: (context) => StartPlanPage(
                     plan: plan,
