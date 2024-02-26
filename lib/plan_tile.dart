@@ -65,6 +65,7 @@ class PlanTile extends StatelessWidget {
                   leading: const Icon(Icons.delete),
                   title: const Text('Delete'),
                   onTap: () {
+                    Navigator.of(context).pop();
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -82,7 +83,6 @@ class PlanTile extends StatelessWidget {
                             TextButton(
                               child: const Text('Delete'),
                               onPressed: () async {
-                                Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                                 await database
                                     .delete(database.plans)
