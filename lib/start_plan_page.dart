@@ -68,12 +68,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .getSingleOrNull();
     repsController.text = "0";
     weightController.text = "0";
-    selectWeight();
     setState(() {});
     if (last == null) return;
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
-    selectWeight();
     final index = planExercises.indexOf(last.name);
     setState(() {
       selectedIndex = index;
@@ -94,12 +92,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
-    weightNode.requestFocus();
-    selectWeight();
     if (last == null) return;
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
-    selectWeight();
   }
 
   @override
