@@ -1,4 +1,4 @@
-package com.flexify
+package com.presley.flexify
 
 import android.content.Intent
 import android.os.Build
@@ -39,6 +39,6 @@ class MainActivity: FlutterActivity() {
     }
 
     companion object {
-        const val FLUTTER_CHANNEL = "com.flexify/android"
+        const val FLUTTER_CHANNEL = "com.presley.flexify/android"
     }
 }

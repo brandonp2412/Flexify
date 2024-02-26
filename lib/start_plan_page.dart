@@ -118,7 +118,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
 
     database.into(database.gymSets).insert(gymSet);
-    const platform = MethodChannel('com.flexify/android');
+    const platform = MethodChannel('com.presley.flexify/android');
     //                                           3s     3m30s
     platform.invokeMethod('timer', [kDebugMode ? 3000 : 210000, exercise]);
   }

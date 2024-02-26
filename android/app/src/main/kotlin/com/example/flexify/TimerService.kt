@@ -1,4 +1,4 @@
-package com.flexify
+package com.presley.flexify
 
 import android.Manifest
 import android.annotation.SuppressLint
