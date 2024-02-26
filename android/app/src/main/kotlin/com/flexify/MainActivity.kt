@@ -1,4 +1,4 @@
-package com.example.flexify
+package com.flexify
 
 import android.content.Intent
 import android.os.Build
