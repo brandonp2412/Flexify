@@ -163,7 +163,7 @@ class _GraphsPageState extends State<GraphsPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final fields = await readCsv("\n");
+          final fields = await readCsv();
           if (fields.isEmpty) return;
           final gymSets = fields.map(
             (row) => GymSetsCompanion(

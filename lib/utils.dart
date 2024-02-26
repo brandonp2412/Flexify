@@ -23,19 +23,25 @@ DateTime parseDate(String dateString) {
   throw FormatException('Invalid date format: $dateString');
 }
 
-Future<List<List<dynamic>>> readCsv(String eol) async {
+Future<List<List<dynamic>>> readCsv() async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.any,
   );
   if (result == null) return Future.value(<List<dynamic>>[]);
 
   final file = File(result.files.single.path!);
-  return file
+  List<List<dynamic>> csvData = [];
+
+  await file
       .openRead()
       .transform(utf8.decoder)
-      .transform(CsvToListConverter(eol: eol))
+      .transform(const LineSplitter())
       .skip(1)
-      .toList();
+      .listen((line) {
+    csvData.addAll(const CsvToListConverter().convert(line));
+  }).asFuture();
+
+  return csvData;
 }
 
 Future<File> writeCsv(List<List<dynamic>> csvData, String fileName) async {

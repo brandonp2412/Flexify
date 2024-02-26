@@ -195,7 +195,7 @@ class _PlansPageState extends State<PlansPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final fields = await readCsv("\n");
+          final fields = await readCsv();
           if (fields.isEmpty) return;
           final plans = fields.map(
             (row) => PlansCompanion(
