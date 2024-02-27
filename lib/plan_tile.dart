@@ -9,14 +9,14 @@ class PlanTile extends StatelessWidget {
   const PlanTile({
     super.key,
     required this.plan,
-    required this.active,
+    required this.weekday,
     required this.index,
     required this.countStream,
     required this.navigatorKey,
   });
 
   final Plan plan;
-  final bool active;
+  final String weekday;
   final int index;
   final Stream<List<TypedResult>> countStream;
   final GlobalKey<NavigatorState> navigatorKey;
@@ -24,13 +24,28 @@ class PlanTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        plan.days.split(',').join(', '),
-        style: TextStyle(
-          fontWeight: active ? FontWeight.bold : null,
-          decoration: active ? TextDecoration.underline : null,
-        ),
-      ),
+      title: plan.days.split(',').length == 7
+          ? const Text("Daily")
+          : RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: plan.days.split(',').expand((day) {
+                  return [
+                    TextSpan(
+                      text: day.trim(),
+                      style: TextStyle(
+                        fontWeight:
+                            weekday == day.trim() ? FontWeight.bold : null,
+                        decoration: weekday == day.trim()
+                            ? TextDecoration.underline
+                            : null,
+                      ),
+                    ),
+                    const TextSpan(text: ', '),
+                  ];
+                }).toList(),
+              ),
+            ),
       subtitle: Text(plan.exercises.split(',').join(', ')),
       onTap: () {
         navigatorKey.currentState!.push(

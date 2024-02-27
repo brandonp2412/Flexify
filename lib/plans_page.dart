@@ -120,10 +120,9 @@ class _PlansPageState extends State<PlansPage> {
                   itemCount: filtered.length,
                   itemBuilder: (context, index) {
                     final plan = filtered[index];
-                    final active = plan.days.contains(weekday);
                     return PlanTile(
                       plan: plan,
-                      active: active,
+                      weekday: weekday,
                       index: index,
                       countStream: countStream,
                       navigatorKey: navigatorKey,
