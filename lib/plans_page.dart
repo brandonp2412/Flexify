@@ -6,6 +6,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/enter_weight_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
@@ -90,6 +91,7 @@ class _PlansPageState extends State<PlansPage> {
                       PopupMenuButton(
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
+                          enterWeight(context),
                           exportCsv(context),
                           uploadCsv(context),
                           deleteAll(context),
@@ -146,6 +148,22 @@ class _PlansPageState extends State<PlansPage> {
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> enterWeight(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.scale),
+        title: const Text('Weight'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const EnterWeightPage()),
+          );
+        },
       ),
     );
   }
