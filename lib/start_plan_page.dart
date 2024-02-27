@@ -4,6 +4,7 @@ import 'package:flexify/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'exercise_tile.dart';
 
@@ -118,6 +119,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
 
     database.into(database.gymSets).insert(gymSet);
+    final permission = await Permission.notification.request();
+    if (!permission.isGranted) return;
     const platform = MethodChannel('com.presley.flexify/android');
     //                                           3s     3m30s
     platform.invokeMethod('timer', [kDebugMode ? 3000 : 210000, exercise]);
