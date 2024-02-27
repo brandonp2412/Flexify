@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/main.dart';
-import 'package:intl/intl.dart';
 
 class GraphData {
   final String created;
@@ -33,7 +32,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   final oneRepMax = database.gymSets.weight /
       (const drift.Variable(1.0278) -
           const drift.Variable(0.0278) * database.gymSets.reps);
-  Metric metric = Metric.oneRepMax;
+  Metric metric = Metric.bestWeight;
 
   @override
   void initState() {
