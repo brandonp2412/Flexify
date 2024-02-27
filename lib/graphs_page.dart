@@ -235,13 +235,5 @@ class _GraphsPageState extends State<GraphsPage> {
       platformChannelSpecifics,
       payload: file.path,
     );
-
-    flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) async {
-        final file = File(details.payload!);
-        await OpenFile.open(file.parent.path);
-      },
-    );
   }
 }

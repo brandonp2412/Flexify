@@ -9,7 +9,6 @@ import 'package:flexify/utils.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'plan_tile.dart';
@@ -273,14 +272,6 @@ class _PlansPageState extends State<PlansPage> {
       null,
       platformChannelSpecifics,
       payload: file.path,
-    );
-
-    flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) async {
-        final file = File(details.payload!);
-        await OpenFile.open(file.parent.path);
-      },
     );
   }
 }
