@@ -1,3 +1,9 @@
+enum Metric {
+  oneRepMax,
+  volume,
+  bestWeight,
+}
+
 const weekdays = [
   'Monday',
   'Tuesday',
