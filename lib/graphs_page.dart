@@ -39,11 +39,12 @@ class _GraphsPageState extends State<GraphsPage> {
       builder: (context, value, child) {
         if (value.selectedExercise?.isNotEmpty == true)
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            navigatorKey.currentState!.push(
+            navigatorKey.currentState!.pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (context) => ViewGraphPage(
                         name: value.selectedExercise!,
                       )),
+              (route) => false,
             );
           });
 
