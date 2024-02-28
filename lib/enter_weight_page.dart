@@ -2,6 +2,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:provider/provider.dart';
 
 class EnterWeightPage extends StatefulWidget {
   const EnterWeightPage({super.key});
@@ -68,6 +69,8 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 unit: _unit,
                 weight: _weight));
             Navigator.pop(context);
+            Provider.of<ExerciseSelectionModel>(context, listen: false)
+                .selectExercise('Weight');
           }
         },
         child: const Icon(Icons.save),
