@@ -218,15 +218,22 @@ class _PlansPageState extends State<PlansPage> {
           List<List<dynamic>> rows =
               const CsvToListConverter(eol: "\n").convert(csv);
           if (rows.isEmpty) return;
-          final plans = rows.map(
-            (row) => PlansCompanion(
-              days: drift.Value(row[1]),
-              exercises: drift.Value(row[2]),
-            ),
-          );
-          await database.batch(
-            (batch) => batch.insertAll(database.plans, plans),
-          );
+          try {
+            final plans = rows.map(
+              (row) => PlansCompanion(
+                days: drift.Value(row[1]),
+                exercises: drift.Value(row[2]),
+              ),
+            );
+            await database.batch(
+              (batch) => batch.insertAll(database.plans, plans),
+            );
+          } catch (e) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed to upload csv.')),
+            );
+          }
         },
       ),
     );

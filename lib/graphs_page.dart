@@ -188,18 +188,25 @@ class _GraphsPageState extends State<GraphsPage> {
           List<List<dynamic>> rows =
               const CsvToListConverter(eol: "\n").convert(csv);
           if (rows.isEmpty) return;
-          final gymSets = rows.map(
-            (row) => GymSetsCompanion(
-              name: drift.Value(row[1]),
-              reps: drift.Value(row[2]),
-              weight: drift.Value(row[3]),
-              created: drift.Value(parseDate(row[4])),
-              unit: drift.Value(row[5]),
-            ),
-          );
-          await database.batch(
-            (batch) => batch.insertAll(database.gymSets, gymSets),
-          );
+          try {
+            final gymSets = rows.map(
+              (row) => GymSetsCompanion(
+                name: drift.Value(row[1]),
+                reps: drift.Value(row[2]),
+                weight: drift.Value(row[3]),
+                created: drift.Value(parseDate(row[4])),
+                unit: drift.Value(row[5]),
+              ),
+            );
+            await database.batch(
+              (batch) => batch.insertAll(database.gymSets, gymSets),
+            );
+          } catch (e) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed to upload csv.')),
+            );
+          }
         },
       ),
     );
