@@ -120,14 +120,14 @@ class MainActivity : FlutterActivity() {
                     }
 
                     val notification = NotificationCompat.Builder(context, "downloads")
-                        .setContentTitle(uri.path)
+                        .setContentTitle(uri.path?.split(":")?.get(1) + "/" + file.name)
                         .setContentText("Tap to open.")
                         .setSmallIcon(R.drawable.baseline_arrow_downward_24)
                         .setContentIntent(contentIntent)
                         .setAutoCancel(true)
                         .build()
 
-                    notificationManager.notify(savedFilename.hashCode(), notification)
+                    notificationManager.notify(file.name.hashCode(), notification)
                 }
             }
         }
