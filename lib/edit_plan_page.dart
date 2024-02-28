@@ -142,7 +142,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               : Text(title),
           actions: actions),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: material.Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: getChildren(),

@@ -153,7 +153,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
             weightController.text.isNotEmpty
