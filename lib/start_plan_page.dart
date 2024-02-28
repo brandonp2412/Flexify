@@ -70,6 +70,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .getSingleOrNull();
     repsController.text = "0";
     weightController.text = "0";
+    if (!mounted) return;
+    Provider.of<ExerciseSelectionModel>(context, listen: false)
+        .selectExercise(planExercises[0]);
     setState(() {});
     if (last == null) return;
     repsController.text = last.reps.toString();
@@ -78,6 +81,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
+    Provider.of<ExerciseSelectionModel>(context, listen: false)
+        .selectExercise(planExercises[index]);
   }
 
   void select(int index) async {

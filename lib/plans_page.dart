@@ -50,6 +50,7 @@ class _PlansPageState extends State<PlansPage> {
     final weekday = weekdays[DateTime.now().weekday - 1];
     return NavigatorPopHandler(
       onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
         Provider.of<ExerciseSelectionModel>(context, listen: false)
             .selectExercise("");
         navigatorKey.currentState!.pop();
