@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
@@ -8,6 +9,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +97,7 @@ class _PlansPageState extends State<PlansPage> {
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
                           enterWeight(context),
-                          exportCsv(context),
+                          downloadCsv(context),
                           uploadCsv(context),
                           deleteAll(context),
                         ],
@@ -215,9 +217,12 @@ class _PlansPageState extends State<PlansPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          final fields = await readCsv();
-          if (fields.isEmpty) return;
-          final plans = fields.map(
+          const platform = MethodChannel('com.presley.flexify/android');
+          String csv = await platform.invokeMethod('read');
+          List<List<dynamic>> rows =
+              const CsvToListConverter(eol: "\n").convert(csv);
+          if (rows.isEmpty) return;
+          final plans = rows.map(
             (row) => PlansCompanion(
               days: drift.Value(row[1]),
               exercises: drift.Value(row[2]),
@@ -231,7 +236,7 @@ class _PlansPageState extends State<PlansPage> {
     );
   }
 
-  PopupMenuItem<dynamic> exportCsv(BuildContext context) {
+  PopupMenuItem<dynamic> downloadCsv(BuildContext context) {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.download),
@@ -247,35 +252,13 @@ class _PlansPageState extends State<PlansPage> {
             csvData.add([plan.id, plan.days, plan.exercises]);
           }
 
-          final file = await writeCsv(csvData, "plans.csv");
-          postNotification(file);
+          final permission = await Permission.notification.request();
+          if (!permission.isGranted) return;
+          final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
+          const platform = MethodChannel('com.presley.flexify/android');
+          platform.invokeMethod('save', ['gym_sets.csv', csv]);
         },
       ),
-    );
-  }
-
-  void postNotification(File file) async {
-    final permission = await Permission.notification.request();
-    if (!permission.isGranted) return;
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const android =
-        AndroidInitializationSettings('@drawable/baseline_arrow_downward_24');
-    const initializationSettings = InitializationSettings(android: android);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'downloads',
-      'Downloads',
-    );
-    const platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Downloaded plans.csv',
-      null,
-      platformChannelSpecifics,
-      payload: file.path,
     );
   }
 }
