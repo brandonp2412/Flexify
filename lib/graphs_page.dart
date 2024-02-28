@@ -4,9 +4,11 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 import 'graph_tile.dart';
 
@@ -33,15 +35,29 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigatorPopHandler(
-      onPop: () {
-        navigatorKey.currentState!.pop();
+    return Consumer<ExerciseSelectionModel>(
+      builder: (context, value, child) {
+        if (value.selectedExercise?.isNotEmpty == true)
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            navigatorKey.currentState!.push(
+              MaterialPageRoute(
+                  builder: (context) => ViewGraphPage(
+                        name: value.selectedExercise!,
+                      )),
+            );
+          });
+
+        return NavigatorPopHandler(
+          onPop: () {
+            navigatorKey.currentState!.pop();
+          },
+          child: Navigator(
+            key: navigatorKey,
+            onGenerateRoute: (settings) => MaterialPageRoute(
+                builder: (context) => graphsPage(), settings: settings),
+          ),
+        );
       },
-      child: Navigator(
-        key: navigatorKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => graphsPage(), settings: settings),
-      ),
     );
   }
 

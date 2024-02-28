@@ -1,14 +1,27 @@
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'plans_page.dart';
 
 late AppDatabase database;
 
+class ExerciseSelectionModel extends ChangeNotifier {
+  String? selectedExercise;
+
+  void selectExercise(String exercise) {
+    selectedExercise = exercise;
+    notifyListeners();
+  }
+}
+
 void main() {
   database = AppDatabase();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ExerciseSelectionModel(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

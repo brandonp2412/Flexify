@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/main.dart';
+import 'package:provider/provider.dart';
 
 class GraphData {
   final String created;
@@ -60,7 +61,17 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.name)),
+      appBar: AppBar(
+        title: Text(widget.name),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Provider.of<ExerciseSelectionModel>(context, listen: false)
+                .selectExercise("");
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: StreamBuilder<List<drift.TypedResult>>(
         stream: stream,
         builder: (context, snapshot) {

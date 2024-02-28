@@ -10,6 +10,7 @@ import 'package:flexify/enter_weight_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 import 'plan_tile.dart';
 
@@ -49,6 +50,8 @@ class _PlansPageState extends State<PlansPage> {
     final weekday = weekdays[DateTime.now().weekday - 1];
     return NavigatorPopHandler(
       onPop: () {
+        Provider.of<ExerciseSelectionModel>(context, listen: false)
+            .selectExercise("");
         navigatorKey.currentState!.pop();
       },
       child: Navigator(

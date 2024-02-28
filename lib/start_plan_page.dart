@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 import 'exercise_tile.dart';
 
@@ -85,6 +86,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
     final planExercises = widget.plan.exercises.split(',');
     final exercise = planExercises.elementAt(index);
+    Provider.of<ExerciseSelectionModel>(context, listen: false)
+        .selectExercise(exercise);
     final last = await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.equals(exercise))
           ..orderBy([
@@ -135,6 +138,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Provider.of<ExerciseSelectionModel>(context, listen: false)
+                .selectExercise("");
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
