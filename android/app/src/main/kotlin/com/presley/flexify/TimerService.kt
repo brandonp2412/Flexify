@@ -240,10 +240,6 @@ class TimerService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val fullIntent = Intent(applicationContext, TimerDone::class.java)
-        val fullPending = PendingIntent.getActivity(
-            applicationContext, 0, fullIntent, PendingIntent.FLAG_MUTABLE
-        )
         val contentIntent = Intent(this, MainActivity::class.java)
         val contentPending = PendingIntent.getActivity(
             this,
