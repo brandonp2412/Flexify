@@ -50,6 +50,8 @@ class _GraphsPageState extends State<GraphsPage> {
 
         return NavigatorPopHandler(
           onPop: () {
+            Provider.of<ExerciseSelectionModel>(context, listen: false)
+                .selectExercise("");
             navigatorKey.currentState!.pop();
           },
           child: Navigator(
