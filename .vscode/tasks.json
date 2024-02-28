@@ -6,6 +6,12 @@
 			"type": "shell",
 			"command": "dart run build_runner watch",
 			"isBackground": true,
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			},
 			"problemMatcher": {
 				"owner": "dart",
 				"fileLocation": [
