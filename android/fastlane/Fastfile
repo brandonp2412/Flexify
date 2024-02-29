@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
@@ -21,17 +6,21 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
   desc "Deploy a new version to the Google Play"
   lane :deploy do
+    pubspec_path = "../../pubspec.yaml"
+    pubspec_yaml = File.open(pubspec_path, "r")
+    pubspec_content = pubspec_yaml.read
+    pubspec_yaml.close
+    version_match = pubspec_content.match(/version: .*?(\d+\.\d+\.\d+)\+(\d+)/)
+    new_build_number = version_match[2].to_i + 1
+    new_pubspec_content = pubspec_content.gsub(/version: .*?(\d+\.\d+\.\d+)\+(\d+)/, "version: #{version_match[1]}+#{new_build_number}")
+    File.open(pubspec_path, "w") { |file| file.write(new_pubspec_content) }
+
+    git_add(path: pubspec_path)
+    commit_version_bump(
+       message: "Bump build number to #{new_build_number}"
+    )
     gradle(task: "clean assembleRelease")
     upload_to_play_store
   end
