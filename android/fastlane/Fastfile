@@ -26,7 +26,8 @@ platform :android do
       version_code: new_build_number, 
       track: 'production',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
-      skip_upload_images: true
+      skip_upload_images: true,
+      skip_upload_screenshots: true
     )
   end
 end
