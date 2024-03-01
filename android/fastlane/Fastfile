@@ -8,8 +8,6 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "bundle", build_type: 'Release')
-
     pubspec_yaml = File.open("../../pubspec.yaml", "r")
     pubspec_content = pubspec_yaml.read
     pubspec_yaml.close
@@ -17,6 +15,9 @@ platform :android do
     new_build_number = version_match[2].to_i + 1
     new_pubspec_content = pubspec_content.gsub(/version: .*?(\d+\.\d+\.\d+)\+(\d+)/, "version: #{version_match[1]}+#{new_build_number}")
     File.open("../../pubspec.yaml", "w") { |file| file.write(new_pubspec_content) }
+
+    gradle(task: "bundle", build_type: 'Release')
+
     git_commit(
       path: "../pubspec.yaml",
       message: "Bump build number to #{new_build_number}"
