@@ -21,31 +21,31 @@ class PlanTile extends StatelessWidget {
   final Stream<List<TypedResult>> countStream;
   final GlobalKey<NavigatorState> navigatorKey;
 
+  get children {
+    List<InlineSpan> result = [];
+
+    final split = plan.days.split(',');
+    for (int index = 0; index < split.length; index++) {
+      final day = split[index];
+      result.add(TextSpan(
+        text: day.trim(),
+        style: TextStyle(
+          fontWeight: weekday == day.trim() ? FontWeight.bold : null,
+          decoration: weekday == day.trim() ? TextDecoration.underline : null,
+        ),
+      ));
+      if (index < plan.days.split(',').length - 1)
+        result.add(const TextSpan(text: ", "));
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: plan.days.split(',').length == 7
           ? const Text("Daily")
-          : RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: plan.days.split(',').expand((day) {
-                  return [
-                    TextSpan(
-                      text: day.trim(),
-                      style: TextStyle(
-                        fontWeight:
-                            weekday == day.trim() ? FontWeight.bold : null,
-                        decoration: weekday == day.trim()
-                            ? TextDecoration.underline
-                            : null,
-                      ),
-                    ),
-                    const TextSpan(text: ', '),
-                  ];
-                }).toList(),
-              ),
-            ),
+          : RichText(text: TextSpan(children: children)),
       subtitle: Text(plan.exercises.split(',').join(', ')),
       onTap: () {
         navigatorKey.currentState!.push(
