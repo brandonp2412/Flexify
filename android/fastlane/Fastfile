@@ -16,7 +16,7 @@ platform :android do
     new_pubspec_content = pubspec_content.gsub(/version: .*?(\d+\.\d+\.\d+)\+(\d+)/, "version: #{version_match[1]}+#{new_build_number}")
     File.open("../../pubspec.yaml", "w") { |file| file.write(new_pubspec_content) }
 
-    gradle(task: "bundle", build_type: 'Release')
+    gradle(task: "bundle", build_type: 'Release', options: "--quiet")
 
     git_commit(
       path: "../pubspec.yaml",
