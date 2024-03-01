@@ -1,5 +1,4 @@
 default_platform(:android)
-skip_docs
 
 platform :android do
   desc "Runs all the tests"
