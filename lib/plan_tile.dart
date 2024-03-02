@@ -13,6 +13,7 @@ class PlanTile extends StatelessWidget {
     required this.index,
     required this.countStream,
     required this.navigatorKey,
+    required this.refresh,
   });
 
   final Plan plan;
@@ -20,6 +21,7 @@ class PlanTile extends StatelessWidget {
   final int index;
   final Stream<List<TypedResult>> countStream;
   final GlobalKey<NavigatorState> navigatorKey;
+  final Function refresh;
 
   get children {
     List<InlineSpan> result = [];
@@ -47,6 +49,8 @@ class PlanTile extends StatelessWidget {
           ? const Text("Daily")
           : RichText(text: TextSpan(children: children)),
       subtitle: Text(plan.exercises.split(',').join(', ')),
+      trailing: ReorderableDragStartListener(
+          index: index, child: const Icon(Icons.drag_handle)),
       onTap: () {
         navigatorKey.currentState!.push(
           MaterialPageRoute(
@@ -65,15 +69,16 @@ class PlanTile extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.edit),
                   title: const Text('Edit'),
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(context);
-                    Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => EditPlanPage(
                                 plan: plan.toCompanion(false),
                               )),
                     );
+                    refresh();
                   },
                 ),
                 ListTile(
@@ -102,6 +107,7 @@ class PlanTile extends StatelessWidget {
                                 await database
                                     .delete(database.plans)
                                     .delete(plan);
+                                refresh();
                               },
                             ),
                           ],

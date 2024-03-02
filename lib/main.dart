@@ -18,6 +18,7 @@ class ExerciseSelectionModel extends ChangeNotifier {
 
 void main() {
   database = AppDatabase();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(ChangeNotifierProvider(
     create: (context) => ExerciseSelectionModel(),
     child: const MyApp(),

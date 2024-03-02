@@ -20,7 +20,7 @@ class PlansPage extends StatefulWidget {
 }
 
 class _PlansPageState extends State<PlansPage> {
-  late Stream<List<Plan>> planStream;
+  List<Plan>? plans;
   late Stream<List<drift.TypedResult>> countStream;
   TextEditingController searchController = TextEditingController();
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -28,7 +28,7 @@ class _PlansPageState extends State<PlansPage> {
   @override
   void initState() {
     super.initState();
-    planStream = database.select(database.plans).watch();
+    updatePlans();
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
@@ -41,6 +41,15 @@ class _PlansPageState extends State<PlansPage> {
           ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..groupBy([database.gymSets.name]))
         .watch();
+  }
+
+  void updatePlans() async {
+    plans = await (database.select(database.plans)
+          ..orderBy([
+            (u) => drift.OrderingTerm(expression: u.sequence),
+          ]))
+        .get();
+    setState(() {});
   }
 
   @override
@@ -59,6 +68,53 @@ class _PlansPageState extends State<PlansPage> {
                 builder: (context) => plansPage(weekday, context),
                 settings: settings,
               )),
+    );
+  }
+
+  Widget get plansWidget {
+    final weekday = weekdays[DateTime.now().weekday - 1];
+    if (plans == null) return const SizedBox();
+    final filtered = plans!
+        .where((element) =>
+            element.days.toLowerCase().contains(searchController.text) ||
+            element.exercises.toLowerCase().contains(searchController.text))
+        .toList();
+
+    return Expanded(
+      child: ReorderableListView.builder(
+        itemCount: filtered.length,
+        itemBuilder: (context, index) {
+          final plan = filtered[index];
+          return PlanTile(
+            key: Key(plan.id.toString()),
+            plan: plan,
+            weekday: weekday,
+            index: index,
+            countStream: countStream,
+            navigatorKey: navigatorKey,
+            refresh: updatePlans,
+          );
+        },
+        onReorder: (int oldIndex, int newIndex) {
+          if (oldIndex < newIndex) {
+            newIndex--;
+          }
+
+          final temp = plans![oldIndex];
+          plans!.removeAt(oldIndex);
+          plans!.insert(newIndex, temp);
+          setState(() {});
+
+          database.transaction(() async {
+            for (int i = 0; i < plans!.length; i++) {
+              final plan = plans![i];
+              final updatedPlan =
+                  plan.toCompanion(false).copyWith(sequence: drift.Value(i));
+              await database.update(database.plans).replace(updatedPlan);
+            }
+          });
+        },
+      ),
     );
   }
 
@@ -101,51 +157,19 @@ class _PlansPageState extends State<PlansPage> {
                     ],
             ),
           ),
-          StreamBuilder<List<Plan>>(
-            stream: planStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const SizedBox();
-              if (snapshot.hasError)
-                return ErrorWidget(snapshot.error.toString());
-              final plans = snapshot.data!;
-              final filtered = plans
-                  .where((element) =>
-                      element.days
-                          .toLowerCase()
-                          .contains(searchController.text) ||
-                      element.exercises
-                          .toLowerCase()
-                          .contains(searchController.text))
-                  .toList();
-
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) {
-                    final plan = filtered[index];
-                    return PlanTile(
-                      plan: plan,
-                      weekday: weekday,
-                      index: index,
-                      countStream: countStream,
-                      navigatorKey: navigatorKey,
-                    );
-                  },
-                ),
-              );
-            },
-          )
+          plansWidget
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const EditPlanPage(
                     plan: PlansCompanion(
                         days: drift.Value(''), exercises: drift.Value('')))),
           );
+          updatePlans();
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),

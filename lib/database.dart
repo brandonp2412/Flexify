@@ -21,6 +21,7 @@ class GymSets extends Table {
 
 class Plans extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get sequence => integer().nullable()();
   TextColumn get exercises => text()();
   TextColumn get days => text()();
 }
@@ -30,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -42,6 +43,9 @@ class AppDatabase extends _$AppDatabase {
         if (from < 2) {
           await m.createIndex(Index('GymSets',
               "CREATE INDEX gym_sets_name_created ON gym_sets(name, created);"));
+        }
+        if (from < 3) {
+          await m.addColumn(plans, plans.sequence);
         }
       },
     );

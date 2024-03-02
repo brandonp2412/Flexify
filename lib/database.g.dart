@@ -17,6 +17,12 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _sequenceMeta =
+      const VerificationMeta('sequence');
+  @override
+  late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
+      'sequence', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _exercisesMeta =
       const VerificationMeta('exercises');
   @override
@@ -29,7 +35,7 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
       'days', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, exercises, days];
+  List<GeneratedColumn> get $columns => [id, sequence, exercises, days];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -42,6 +48,10 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('sequence')) {
+      context.handle(_sequenceMeta,
+          sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta));
     }
     if (data.containsKey('exercises')) {
       context.handle(_exercisesMeta,
@@ -66,6 +76,8 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
     return Plan(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      sequence: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sequence']),
       exercises: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}exercises'])!,
       days: attachedDatabase.typeMapping
@@ -81,13 +93,21 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
 
 class Plan extends DataClass implements Insertable<Plan> {
   final int id;
+  final int? sequence;
   final String exercises;
   final String days;
-  const Plan({required this.id, required this.exercises, required this.days});
+  const Plan(
+      {required this.id,
+      this.sequence,
+      required this.exercises,
+      required this.days});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    if (!nullToAbsent || sequence != null) {
+      map['sequence'] = Variable<int>(sequence);
+    }
     map['exercises'] = Variable<String>(exercises);
     map['days'] = Variable<String>(days);
     return map;
@@ -96,6 +116,9 @@ class Plan extends DataClass implements Insertable<Plan> {
   PlansCompanion toCompanion(bool nullToAbsent) {
     return PlansCompanion(
       id: Value(id),
+      sequence: sequence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sequence),
       exercises: Value(exercises),
       days: Value(days),
     );
@@ -106,6 +129,7 @@ class Plan extends DataClass implements Insertable<Plan> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Plan(
       id: serializer.fromJson<int>(json['id']),
+      sequence: serializer.fromJson<int?>(json['sequence']),
       exercises: serializer.fromJson<String>(json['exercises']),
       days: serializer.fromJson<String>(json['days']),
     );
@@ -115,13 +139,20 @@ class Plan extends DataClass implements Insertable<Plan> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'sequence': serializer.toJson<int?>(sequence),
       'exercises': serializer.toJson<String>(exercises),
       'days': serializer.toJson<String>(days),
     };
   }
 
-  Plan copyWith({int? id, String? exercises, String? days}) => Plan(
+  Plan copyWith(
+          {int? id,
+          Value<int?> sequence = const Value.absent(),
+          String? exercises,
+          String? days}) =>
+      Plan(
         id: id ?? this.id,
+        sequence: sequence.present ? sequence.value : this.sequence,
         exercises: exercises ?? this.exercises,
         days: days ?? this.days,
       );
@@ -129,6 +160,7 @@ class Plan extends DataClass implements Insertable<Plan> {
   String toString() {
     return (StringBuffer('Plan(')
           ..write('id: $id, ')
+          ..write('sequence: $sequence, ')
           ..write('exercises: $exercises, ')
           ..write('days: $days')
           ..write(')'))
@@ -136,47 +168,57 @@ class Plan extends DataClass implements Insertable<Plan> {
   }
 
   @override
-  int get hashCode => Object.hash(id, exercises, days);
+  int get hashCode => Object.hash(id, sequence, exercises, days);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Plan &&
           other.id == this.id &&
+          other.sequence == this.sequence &&
           other.exercises == this.exercises &&
           other.days == this.days);
 }
 
 class PlansCompanion extends UpdateCompanion<Plan> {
   final Value<int> id;
+  final Value<int?> sequence;
   final Value<String> exercises;
   final Value<String> days;
   const PlansCompanion({
     this.id = const Value.absent(),
+    this.sequence = const Value.absent(),
     this.exercises = const Value.absent(),
     this.days = const Value.absent(),
   });
   PlansCompanion.insert({
     this.id = const Value.absent(),
+    this.sequence = const Value.absent(),
     required String exercises,
     required String days,
   })  : exercises = Value(exercises),
         days = Value(days);
   static Insertable<Plan> custom({
     Expression<int>? id,
+    Expression<int>? sequence,
     Expression<String>? exercises,
     Expression<String>? days,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (sequence != null) 'sequence': sequence,
       if (exercises != null) 'exercises': exercises,
       if (days != null) 'days': days,
     });
   }
 
   PlansCompanion copyWith(
-      {Value<int>? id, Value<String>? exercises, Value<String>? days}) {
+      {Value<int>? id,
+      Value<int?>? sequence,
+      Value<String>? exercises,
+      Value<String>? days}) {
     return PlansCompanion(
       id: id ?? this.id,
+      sequence: sequence ?? this.sequence,
       exercises: exercises ?? this.exercises,
       days: days ?? this.days,
     );
@@ -187,6 +229,9 @@ class PlansCompanion extends UpdateCompanion<Plan> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (sequence.present) {
+      map['sequence'] = Variable<int>(sequence.value);
     }
     if (exercises.present) {
       map['exercises'] = Variable<String>(exercises.value);
@@ -201,6 +246,7 @@ class PlansCompanion extends UpdateCompanion<Plan> {
   String toString() {
     return (StringBuffer('PlansCompanion(')
           ..write('id: $id, ')
+          ..write('sequence: $sequence, ')
           ..write('exercises: $exercises, ')
           ..write('days: $days')
           ..write(')'))
