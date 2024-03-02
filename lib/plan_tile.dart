@@ -37,7 +37,9 @@ class PlanTile extends StatelessWidget {
                   weekday == day.trim() ? TextDecoration.underline : null,
             ),
       ));
-      if (index < split.length - 1) result.add(const TextSpan(text: ", "));
+      if (index < split.length - 1)
+        result.add(
+            TextSpan(text: ", ", style: Theme.of(context).textTheme.bodyLarge));
     }
     return result;
   }
