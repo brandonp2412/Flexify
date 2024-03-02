@@ -23,7 +23,7 @@ class PlanTile extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final Function refresh;
 
-  get children {
+  List<InlineSpan> getChildren(BuildContext context) {
     List<InlineSpan> result = [];
 
     final split = plan.days.split(',');
@@ -31,10 +31,11 @@ class PlanTile extends StatelessWidget {
       final day = split[index];
       result.add(TextSpan(
         text: day.trim(),
-        style: TextStyle(
-          fontWeight: weekday == day.trim() ? FontWeight.bold : null,
-          decoration: weekday == day.trim() ? TextDecoration.underline : null,
-        ),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: weekday == day.trim() ? FontWeight.bold : null,
+              decoration:
+                  weekday == day.trim() ? TextDecoration.underline : null,
+            ),
       ));
       if (index < plan.days.split(',').length - 1)
         result.add(const TextSpan(text: ", "));
@@ -47,7 +48,7 @@ class PlanTile extends StatelessWidget {
     return ListTile(
       title: plan.days.split(',').length == 7
           ? const Text("Daily")
-          : RichText(text: TextSpan(children: children)),
+          : RichText(text: TextSpan(children: getChildren(context))),
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: ReorderableDragStartListener(
           index: index, child: const Icon(Icons.drag_handle)),
