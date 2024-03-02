@@ -92,6 +92,10 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               value: metric,
               items: const [
                 DropdownMenuItem(
+                  value: Metric.bestWeight,
+                  child: Text("Best weight"),
+                ),
+                DropdownMenuItem(
                   value: Metric.oneRepMax,
                   child: Text("One rep max (estimate)"),
                 ),
@@ -99,10 +103,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                   value: Metric.volume,
                   child: Text("Volume"),
                 ),
-                DropdownMenuItem(
-                  value: Metric.bestWeight,
-                  child: Text("Best weight"),
-                )
               ],
               onChanged: (value) {
                 setState(() {
