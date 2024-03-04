@@ -12,6 +12,11 @@ Flexify is a Flutter project designed to help users track their gym progress con
 
 - **Automatic Rest Timers**: Flexify includes automatic rest timers to help you optimize your workout sessions. Stay on track and make the most out of your gym time.
 
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="600">
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" height="600">
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" height="600">
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" height="600">
+
 ## Getting Started
 
 To get started with Flexify, follow these steps:
