@@ -126,7 +126,7 @@ class _GraphsPageState extends State<GraphsPage> {
                     final name = gymSet.read(database.gymSets.name)!;
                     final weight = gymSet.read(database.gymSets.weight.max())!;
                     return GraphTile(
-                      gymSetName: name,
+                      name: name,
                       weight: weight,
                     );
                   },

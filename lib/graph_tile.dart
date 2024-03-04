@@ -1,27 +1,99 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/edit_graph_page.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 
 class GraphTile extends StatelessWidget {
-  final String gymSetName;
+  final String name;
   final double weight;
 
-  const GraphTile({Key? key, required this.gymSetName, required this.weight})
+  const GraphTile({Key? key, required this.name, required this.weight})
       : super(key: key);
+
+  Future<int> getCount() async {
+    final result = await (database.gymSets.selectOnly()
+          ..addColumns([database.gymSets.name.count()])
+          ..where(database.gymSets.name.equals(name)))
+        .getSingle();
+    return result.read(database.gymSets.name.count()) ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(gymSetName),
-      subtitle: Text(weight.toString()),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ViewGraphPage(
-                    name: gymSetName,
-                  )),
-        );
-      },
-    );
+        title: Text(name),
+        subtitle: Text(weight.toString()),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewGraphPage(
+                      name: name,
+                    )),
+          );
+        },
+        onLongPress: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: const Text('Edit'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditGraphPage(
+                                  name: name,
+                                )),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: const Text('Delete'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Confirm Delete'),
+                            content: FutureBuilder(
+                              future: getCount(),
+                              builder: (context, snapshot) => Text(
+                                  'Are you sure you want to delete all ${snapshot.data} records of $name ?'),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text('Delete'),
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+                                  (database.delete(database.gymSets)
+                                        ..where((tbl) => tbl.name.equals(name)))
+                                      .go();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        });
   }
 }
