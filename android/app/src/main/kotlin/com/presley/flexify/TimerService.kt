@@ -195,7 +195,7 @@ class TimerService : Service() {
             val channel = NotificationChannel(
                 channelId,
                 "Timer Channel",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.setSound(null, null)
             channel.setBypassDnd(true)
