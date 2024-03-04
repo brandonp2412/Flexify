@@ -1,25 +1,29 @@
 $pubspecContent = Get-Content "pubspec.yaml" -Raw 
 
 if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
-    $version = $matches[1]
+    $versionParts = $matches[1] -split '\.'
     $buildNumber = [int]$matches[2]
+
+    $minorVersion = [int]$versionParts[2] + 1
     $newBuildNumber = $buildNumber + 1
-    $newVersion = "version: $version+$newBuildNumber"
+
+    $flutterVersion = "$($versionParts[0]).$($versionParts[1]).$minorVersion+$newBuildNumber"
+    $version = "$($versionParts[0]).$($versionParts[1]).$minorVersion"
     $lastCommit = git log -1 --pretty=%B
 
-    $pubspecContent = $pubspecContent -replace 'version: (\d+\.\d+\.\d+)\+(\d+)', $newVersion
+    $pubspecContent = $pubspecContent -replace 'version: (\d+\.\d+\.\d+)\+(\d+)', "version: $flutterVersion"
     Set-Content -Path "pubspec.yaml" -Value $pubspecContent
 
     git add "pubspec.yaml"
-    git commit -m "Bump build number to $newBuildNumber"
+    git commit -m "Bump version to $version"
 
+    Set-Location android
     flutter build appbundle
-    cd android
     fastlane supply --skip-upload_screenshots true --skip-upload-images true --aab ..\build\app\outputs\bundle\release\app-release.aab
-    git push
-
     flutter build apk
     gh release create "$version" --notes "$lastCommit" ..\build\app\outputs\flutter-apk\app-release.apk
-} else {
+    git push
+}
+else {
     Write-Host "Failed to update version in pubspec.yaml."
 }
