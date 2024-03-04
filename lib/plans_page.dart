@@ -219,6 +219,7 @@ class _PlansPageState extends State<PlansPage> {
                     onPressed: () async {
                       Navigator.of(context).pop();
                       await database.delete(database.plans).go();
+                      updatePlans();
                     },
                   ),
                 ],
@@ -252,6 +253,7 @@ class _PlansPageState extends State<PlansPage> {
             await database.batch(
               (batch) => batch.insertAll(database.plans, plans),
             );
+            updatePlans();
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
