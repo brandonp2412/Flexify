@@ -12,8 +12,13 @@ import 'exercise_tile.dart';
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
   final Stream<List<drift.TypedResult>> countStream;
+  final Function onReorder;
 
-  const StartPlanPage({Key? key, required this.plan, required this.countStream})
+  const StartPlanPage(
+      {Key? key,
+      required this.plan,
+      required this.countStream,
+      required this.onReorder})
       : super(key: key);
 
   @override
@@ -23,6 +28,7 @@ class StartPlanPage extends StatefulWidget {
 class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController repsController;
   late TextEditingController weightController;
+  late List<String> planExercises;
 
   int selectedIndex = 0;
   final repsNode = FocusNode();
@@ -33,6 +39,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     super.initState();
     repsController = TextEditingController();
     weightController = TextEditingController();
+    planExercises = widget.plan.exercises.split(',');
     getLast();
   }
 
@@ -44,7 +51,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   }
 
   void getLast() async {
-    final planExercises = widget.plan.exercises.split(',');
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
@@ -89,7 +95,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    final planExercises = widget.plan.exercises.split(',');
     final exercise = planExercises.elementAt(index);
     Provider.of<ExerciseSelectionModel>(context, listen: false)
         .selectExercise(exercise);
@@ -116,7 +121,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   void save() async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
-    final exercise = widget.plan.exercises.split(',')[selectedIndex];
+    final exercise = planExercises[selectedIndex];
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -138,7 +143,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    final planExercises = widget.plan.exercises.split(',');
 
     return Scaffold(
       appBar: AppBar(
@@ -173,7 +177,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       );
                     },
                   )
-                : const SizedBox(),
+                : const SizedBox(
+                    height: 64,
+                  ),
             repsController.text.isNotEmpty
                 ? TextField(
                     controller: repsController,
@@ -190,7 +196,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       );
                     },
                   )
-                : const SizedBox(),
+                : const SizedBox(
+                    height: 64,
+                  ),
             Expanded(
               child: StreamBuilder(
                 stream: widget.countStream,
@@ -218,9 +226,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
   }
 
-  ListView exerciseList(List<String> planExercises,
+  exerciseList(List<String> planExercises,
       AsyncSnapshot<List<drift.TypedResult>> snapshot) {
-    return ListView.builder(
+    return ReorderableListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: planExercises.length,
@@ -232,13 +240,29 @@ class _StartPlanPageState extends State<StartPlanPage> {
         if (gymSets != null && gymSets.isNotEmpty)
           count = gymSets.first.read(database.gymSets.name.count())!;
         return ExerciseTile(
+          index: index,
           exercise: exercise,
           isSelected: index == selectedIndex,
           count: count,
           onTap: () {
             select(index);
           },
+          key: Key(exercise),
         );
+      },
+      onReorder: (int oldIndex, int newIndex) async {
+        if (oldIndex < newIndex) {
+          newIndex--;
+        }
+
+        final temp = planExercises[oldIndex];
+        planExercises.removeAt(oldIndex);
+        planExercises.insert(newIndex, temp);
+        setState(() {});
+
+        final plan = widget.plan.copyWith(exercises: planExercises.join(','));
+        await database.update(database.plans).replace(plan);
+        widget.onReorder();
       },
     );
   }

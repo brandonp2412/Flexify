@@ -7,6 +7,7 @@ class ExerciseTile extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final int count;
+  final int index;
 
   const ExerciseTile({
     Key? key,
@@ -14,14 +15,13 @@ class ExerciseTile extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.count,
+    required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPressStart: (details) async {
-        if (count == 0) return;
-
         final position = RelativeRect.fromLTRB(
           details.globalPosition.dx,
           details.globalPosition.dy,
@@ -40,6 +40,13 @@ class ExerciseTile extends StatelessWidget {
                 title: const Text("Delete"),
                 onTap: () async {
                   Navigator.pop(context);
+                  if (count == 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No exercises to undo')),
+                    );
+                    return;
+                  }
+
                   final gymSet = await (database.select(database.gymSets)
                         ..where((r) => database.gymSets.name.equals(exercise))
                         ..orderBy([
@@ -57,6 +64,8 @@ class ExerciseTile extends StatelessWidget {
       },
       child: ListTile(
         onTap: onTap,
+        trailing: ReorderableDragStartListener(
+            index: index, child: const Icon(Icons.drag_handle)),
         title: Row(children: [
           Radio(
             value: isSelected,
