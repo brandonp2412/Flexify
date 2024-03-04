@@ -15,7 +15,7 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
 
     flutter build appbundle
     cd android
-    fastlane supply --aab ..\build\app\outputs\bundle\release\app-release.aab
+    fastlane supply --skip-upload_screenshots true --skip-upload-images true --aab ..\build\app\outputs\bundle\release\app-release.aab
     git push
 
     flutter build apk
