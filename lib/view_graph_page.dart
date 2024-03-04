@@ -1,10 +1,8 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/database.dart';
-import 'package:flexify/gym_set_tile.dart';
-import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/main.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GraphData {
@@ -32,7 +30,6 @@ class ViewGraphPage extends StatefulWidget {
 
 class _ViewGraphPageState extends State<ViewGraphPage> {
   late Stream<List<drift.TypedResult>> graphStream;
-  late Stream<List<GymSet>> listStream;
 
   final oneRepMax = database.gymSets.weight /
       (const drift.Variable(1.0278) -
@@ -59,14 +56,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           ])
           ..limit(10)
           ..groupBy([database.gymSets.created.date]))
-        .watch();
-    listStream = (database.select(database.gymSets)
-          ..orderBy([
-            (u) => drift.OrderingTerm(
-                expression: u.created, mode: drift.OrderingMode.desc),
-          ])
-          ..where((tbl) => tbl.name.equals(widget.name))
-          ..limit(10))
         .watch();
   }
 
@@ -114,15 +103,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               height: 24.0,
             ),
             graphBuilder(),
-            StreamBuilder<List<GymSet>>(
-                stream: listStream,
-                builder: (context, snapshot) => Expanded(
-                      child: ListView.builder(
-                        itemCount: snapshot.data?.length ?? 0,
-                        itemBuilder: (context, index) =>
-                            GymSetTile(gymSet: snapshot.data![index]),
-                      ),
-                    ))
           ],
         ),
       ),
