@@ -203,9 +203,10 @@ class MainActivity : FlutterActivity() {
 
     override fun onResume() {
         super.onResume()
-        val intent = Intent(TimerService.STOP_BROADCAST)
-        intent.putExtra("check", true);
-        sendBroadcast(intent);
+        if (timerService?.running != true) {
+            val intent = Intent(TimerService.STOP_BROADCAST)
+            sendBroadcast(intent);
+        }
     }
 
     companion object {
