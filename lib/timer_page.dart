@@ -75,8 +75,11 @@ class _TimerPageState extends State<TimerPage> {
                   onPressed: () {
                     android.invokeMethod('add');
                     setState(() {
-                      duration += 61;
-                      elapsed = 1;
+                      if (duration == 0)
+                        duration += 61; // Immediately show progress at first.
+                      else
+                        duration += 60;
+                      if (elapsed == 0 || elapsed > duration) elapsed = 1;
                     });
                   },
                   child: const Text('+1 min'),
