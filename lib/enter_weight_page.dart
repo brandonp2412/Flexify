@@ -69,7 +69,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 unit: _unit,
                 weight: _weight));
             Navigator.pop(context);
-            Provider.of<ExerciseSelectionModel>(context, listen: false)
+            Provider.of<AppState>(context, listen: false)
                 .selectExercise('Weight');
           }
         },

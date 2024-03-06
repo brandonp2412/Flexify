@@ -9,11 +9,19 @@ import 'plans_page.dart';
 late AppDatabase database;
 late MethodChannel android;
 
-class ExerciseSelectionModel extends ChangeNotifier {
+class AppState extends ChangeNotifier {
   String? selectedExercise;
+  int? secondsLeft;
+  int? secondsTotal;
 
   void selectExercise(String exercise) {
     selectedExercise = exercise;
+    notifyListeners();
+  }
+
+  void updateSeconds(int left, int total) {
+    secondsLeft = left;
+    secondsTotal = total;
     notifyListeners();
   }
 }
@@ -23,7 +31,7 @@ void main() {
   android = const MethodChannel("com.presley.flexify/android");
   WidgetsFlutterBinding.ensureInitialized();
   runApp(ChangeNotifierProvider(
-    create: (context) => ExerciseSelectionModel(),
+    create: (context) => AppState(),
     child: const MyApp(),
   ));
 }
@@ -77,11 +85,30 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    android.setMethodCallHandler((call) async {
+      if (call.method == 'tick') {
+        int left = call.arguments[0];
+        int total = call.arguments[1];
+        Provider.of<AppState>(context, listen: false)
+            .updateSeconds(left, total);
+      }
+    });
+
     return DefaultTabController(
       length: 2,
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
+            bottomSheet: Consumer<AppState>(builder: (context, value, child) {
+              final elapsed =
+                  (value.secondsTotal ?? 0) - (value.secondsLeft ?? 0);
+              final duration = value.secondsTotal ?? 0;
+              return Visibility(
+                visible: duration > 0,
+                child: LinearProgressIndicator(
+                    value: duration == 0 ? 0 : elapsed / duration),
+              );
+            }),
             body: SafeArea(
               child: TabBarView(
                 controller: tabController,

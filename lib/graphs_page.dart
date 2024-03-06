@@ -37,7 +37,7 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ExerciseSelectionModel>(
+    return Consumer<AppState>(
       builder: (context, value, child) {
         if (value.selectedExercise?.isNotEmpty == true)
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -52,8 +52,7 @@ class _GraphsPageState extends State<GraphsPage> {
         return NavigatorPopHandler(
           onPop: () {
             if (navigatorKey.currentState!.canPop() == false) return;
-            Provider.of<ExerciseSelectionModel>(context, listen: false)
-                .selectExercise("");
+            Provider.of<AppState>(context, listen: false).selectExercise("");
             navigatorKey.currentState!.pop();
           },
           child: Navigator(

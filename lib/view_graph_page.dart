@@ -67,8 +67,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Provider.of<ExerciseSelectionModel>(context, listen: false)
-                .selectExercise("");
+            Provider.of<AppState>(context, listen: false).selectExercise("");
             Navigator.pop(context);
           },
         ),

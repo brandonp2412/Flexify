@@ -1,9 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +29,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late List<String> planExercises;
 
   int selectedIndex = 0;
+  bool timerRunning = false;
   final repsNode = FocusNode();
   final weightNode = FocusNode();
 
@@ -41,6 +40,27 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController = TextEditingController();
     planExercises = widget.plan.exercises.split(',');
     getLast();
+    Provider.of<AppState>(context, listen: false).addListener(updateRunning);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Provider.of<AppState>(context, listen: false).removeListener(updateRunning);
+    repsController.dispose();
+    weightController.dispose();
+    repsNode.dispose();
+    weightNode.dispose();
+  }
+
+  void updateRunning() {
+    final appState = Provider.of<AppState>(context, listen: false);
+    setState(() {
+      if (appState.secondsLeft == null)
+        timerRunning = false;
+      else
+        timerRunning = appState.secondsLeft! > 0;
+    });
   }
 
   void selectWeight() {
@@ -77,7 +97,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController.text = "0";
     weightController.text = "0";
     if (!mounted) return;
-    Provider.of<ExerciseSelectionModel>(context, listen: false)
+    Provider.of<AppState>(context, listen: false)
         .selectExercise(planExercises[0]);
     setState(() {});
     if (last == null) return;
@@ -87,7 +107,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    Provider.of<ExerciseSelectionModel>(context, listen: false)
+    Provider.of<AppState>(context, listen: false)
         .selectExercise(planExercises[index]);
   }
 
@@ -96,8 +116,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       selectedIndex = index;
     });
     final exercise = planExercises.elementAt(index);
-    Provider.of<ExerciseSelectionModel>(context, listen: false)
-        .selectExercise(exercise);
+    Provider.of<AppState>(context, listen: false).selectExercise(exercise);
     final last = await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.equals(exercise))
           ..orderBy([
@@ -109,13 +128,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (last == null) return;
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
-  }
-
-  @override
-  void dispose() {
-    repsController.dispose();
-    weightController.dispose();
-    super.dispose();
   }
 
   void save() async {
@@ -136,6 +148,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (!permission.isGranted) return;
     //                                           3s     3m30s
     android.invokeMethod('timer', [210000, exercise]);
+
+    if (!mounted) return;
+    final appState = Provider.of<AppState>(context, listen: false);
+    appState.updateSeconds(210000, 210000);
+    setState(() {
+      timerRunning = true;
+    });
   }
 
   @override
@@ -149,8 +168,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Provider.of<ExerciseSelectionModel>(context, listen: false)
-                .selectExercise("");
+            Provider.of<AppState>(context, listen: false).selectExercise("");
             Navigator.pop(context);
           },
         ),
@@ -218,9 +236,46 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: save,
-        child: const Icon(Icons.save),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: timerRunning
+                ? FloatingActionButton(
+                    onPressed: () {
+                      android.invokeMethod('stop');
+                      setState(() {
+                        timerRunning = false;
+                      });
+                    },
+                    child: const Icon(Icons.stop),
+                  )
+                : FloatingActionButton(
+                    onPressed: save,
+                    tooltip: "Save this set",
+                    child: const Icon(Icons.save),
+                  ),
+          ),
+          Positioned(
+            left: 32.0,
+            bottom: 0,
+            child: Visibility(
+              visible: timerRunning,
+              child: FloatingActionButton(
+                tooltip: "Add 1 min",
+                onPressed: () {
+                  android.invokeMethod('add');
+                  final appState =
+                      Provider.of<AppState>(context, listen: false);
+                  appState.updateSeconds((appState.secondsLeft ?? 0) + 60,
+                      (appState.secondsTotal ?? 0) + 60);
+                },
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

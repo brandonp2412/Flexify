@@ -7,7 +7,6 @@ import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -59,8 +58,7 @@ class _PlansPageState extends State<PlansPage> {
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
-        Provider.of<ExerciseSelectionModel>(context, listen: false)
-            .selectExercise("");
+        Provider.of<AppState>(context, listen: false).selectExercise("");
         navigatorKey.currentState!.pop();
       },
       child: Navigator(
