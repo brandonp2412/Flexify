@@ -124,7 +124,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (title.isNotEmpty)
       title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     else
-      title = "Add new plan";
+      title = "Add plan";
 
     return Scaffold(
       appBar: AppBar(
