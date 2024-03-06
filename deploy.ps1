@@ -9,7 +9,7 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
 
     $flutterVersion = "$($versionParts[0]).$($versionParts[1]).$minorVersion+$newBuildNumber"
     $version = "$($versionParts[0]).$($versionParts[1]).$minorVersion"
-    $lastCommit = git log -1 --pretty=%B
+    $lastCommit = git log -1 --pretty=%B | Select-Object -First 1
 
     $pubspecContent = $pubspecContent -replace 'version: (\d+\.\d+\.\d+)\+(\d+)', "version: $flutterVersion"
     Set-Content -Path "pubspec.yaml" -Value $pubspecContent
