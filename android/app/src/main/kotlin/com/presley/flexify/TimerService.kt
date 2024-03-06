@@ -24,19 +24,42 @@ import androidx.core.app.NotificationManagerCompat
 class TimerService : Service() {
 
     private lateinit var timerHandler: Handler
+
     private var timerRunnable: Runnable? = null
-    private var secondsLeft: Int = 0
-    private var secondsTotal: Int = 0
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
+    private val binder = LocalBinder()
     private var currentDescription = ""
+
+    var secondsLeft: Int = 0
+    var secondsTotal: Int = 0
+    var running = false
+
+    override fun onBind(intent: Intent): IBinder? {
+        return binder
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): TimerService = this@TimerService
+    }
 
     private val stopReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Log.d("TimerService", "Received stop broadcast intent")
-                val check = intent?.getBooleanExtra("check", false);
-                if (check == true && mediaPlayer?.isPlaying != true) return;
+                running = false
+                secondsLeft = 0
+                secondsTotal = 0
+                timerHandler.removeCallbacks(timerRunnable!!)
+                mediaPlayer?.stop()
+                vibrator?.cancel()
+                val tickIntent = Intent(MainActivity.TICK_BROADCAST)
+                tickIntent.putExtra("secondsLeft", 0)
+                tickIntent.putExtra("secondsTotal", 0)
+                sendBroadcast(tickIntent)
+                val notificationManager = NotificationManagerCompat.from(this@TimerService)
+                notificationManager.cancel(ONGOING_ID)
+                stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }
         }
@@ -44,8 +67,14 @@ class TimerService : Service() {
     private val addReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                secondsLeft += 60
-                secondsTotal += 60
+                Log.d("TimerService", "Received add broadcast intent")
+                if (running) {
+                    secondsLeft += 60
+                    secondsTotal += 60
+                } else {
+                    secondsLeft = 60
+                    secondsTotal = 60
+                }
                 updateNotification(secondsLeft)
                 mediaPlayer?.stop()
                 vibrator?.cancel()
@@ -80,7 +109,8 @@ class TimerService : Service() {
         startForeground(ONGOING_ID, getProgress(secondsLeft).build())
         battery()
         Log.d("TimerService", "onStartCommand seconds=$secondsLeft")
-        startTimer();
+        startTimer()
+        running = true
         return START_STICKY
     }
 
@@ -88,7 +118,10 @@ class TimerService : Service() {
         timerRunnable?.let { timerHandler.removeCallbacks(it) }
         timerRunnable = object : Runnable {
             override fun run() {
+                val intent = Intent(MainActivity.TICK_BROADCAST)
                 if (secondsLeft > 0) {
+                    intent.putExtra("secondsLeft", secondsLeft - 1)
+                    intent.putExtra("secondsTotal", secondsTotal)
                     secondsLeft--
                     updateNotification(secondsLeft)
                     timerHandler.postDelayed(this, 1000)
@@ -96,7 +129,13 @@ class TimerService : Service() {
                     vibrate()
                     playSound()
                     notifyFinished()
+                    running = false
+                    secondsLeft = 0
+                    secondsTotal = 0
+                    intent.putExtra("secondsLeft", 0)
+                    intent.putExtra("secondsTotal", 0)
                 }
+                sendBroadcast(intent)
             }
         }
         timerHandler.postDelayed(timerRunnable!!, 1000)
@@ -110,10 +149,6 @@ class TimerService : Service() {
         mediaPlayer?.stop()
         mediaPlayer?.release()
         vibrator?.cancel()
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
     }
 
     @SuppressLint("BatteryLife")

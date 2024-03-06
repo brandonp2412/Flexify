@@ -134,9 +134,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     final permission = await Permission.notification.request();
     if (!permission.isGranted) return;
-    const platform = MethodChannel('com.presley.flexify/android');
     //                                           3s     3m30s
-    platform.invokeMethod('timer', [kDebugMode ? 3000 : 210000, exercise]);
+    android.invokeMethod('timer', [210000, exercise]);
   }
 
   @override

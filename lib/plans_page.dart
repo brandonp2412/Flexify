@@ -5,6 +5,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -149,6 +150,7 @@ class _PlansPageState extends State<PlansPage> {
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
                           enterWeight(context),
+                          timer(context),
                           downloadCsv(context),
                           uploadCsv(context),
                           deleteAll(context),
@@ -173,6 +175,22 @@ class _PlansPageState extends State<PlansPage> {
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> timer(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.timer),
+        title: const Text('Timer'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TimerPage()),
+          );
+        },
       ),
     );
   }
@@ -238,8 +256,7 @@ class _PlansPageState extends State<PlansPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          const platform = MethodChannel('com.presley.flexify/android');
-          String csv = await platform.invokeMethod('read');
+          String csv = await android.invokeMethod('read');
           List<List<dynamic>> rows =
               const CsvToListConverter(eol: "\n").convert(csv);
           if (rows.isEmpty) return;
@@ -284,8 +301,7 @@ class _PlansPageState extends State<PlansPage> {
           final permission = await Permission.notification.request();
           if (!permission.isGranted) return;
           final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
-          const platform = MethodChannel('com.presley.flexify/android');
-          platform.invokeMethod('save', ['plans.csv', csv]);
+          android.invokeMethod('save', ['plans.csv', csv]);
         },
       ),
     );

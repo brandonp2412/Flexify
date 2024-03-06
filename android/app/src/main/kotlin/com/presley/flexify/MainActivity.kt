@@ -3,9 +3,14 @@ package com.presley.flexify
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.os.Build
+import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -22,6 +27,20 @@ class MainActivity : FlutterActivity() {
     private var savedContent: String? = null
     private var channel: MethodChannel? = null
     private var resultChannel: MethodChannel.Result? = null
+    private var timerBound = false
+    private var timerService: TimerService? = null
+
+    private val timerConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            val binder = service as TimerService.LocalBinder
+            timerService = binder.getService()
+            timerBound = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            timerBound = false
+        }
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -46,16 +65,65 @@ class MainActivity : FlutterActivity() {
                     read()
                 }
 
+                "getProgress" -> {
+                    if (timerBound && timerService?.running == true)
+                        result.success(
+                            intArrayOf(
+                                timerService?.secondsLeft!!,
+                                timerService?.secondsTotal!!
+                            )
+                        )
+                    else result.success(intArrayOf(0, 0))
+                }
+
+                "add" -> {
+                    if (timerService?.running == true) {
+                        val intent = Intent(TimerService.ADD_BROADCAST)
+                        sendBroadcast(intent)
+                    } else {
+                        timer(1000 * 60, "Rest timer")
+                    }
+                }
+
+                "stop" -> {
+                    val intent = Intent(TimerService.STOP_BROADCAST)
+                    sendBroadcast(intent)
+                }
+
                 else -> {
                     result.notImplemented()
                 }
             }
         }
+        applicationContext.registerReceiver(
+            tickReceiver, IntentFilter(TICK_BROADCAST),
+            RECEIVER_VISIBLE_TO_INSTANT_APPS
+        )
+    }
+
+    private val tickReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val secondsLeft = intent.getIntExtra("secondsLeft", 0)
+                val secondsTotal = intent.getIntExtra("secondsTotal", 1)
+                channel?.invokeMethod("tick", intArrayOf(secondsLeft, secondsTotal))
+            }
+        }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        applicationContext.unregisterReceiver(tickReceiver)
     }
 
     private fun timer(milliseconds: Int, description: String) {
         Log.d("MainActivity", "Queue $description for $milliseconds delay")
-        val intent = Intent(context, TimerService::class.java)
+        val intent = Intent(context, TimerService::class.java).also { intent ->
+            bindService(
+                intent,
+                timerConnection,
+                Context.BIND_AUTO_CREATE
+            )
+        }
         intent.putExtra("milliseconds", milliseconds)
         intent.putExtra("description", description)
         context.startForegroundService(intent)
@@ -144,5 +212,6 @@ class MainActivity : FlutterActivity() {
         const val FLUTTER_CHANNEL = "com.presley.flexify/android"
         const val READ_REQUEST_CODE = 42
         const val WRITE_REQUEST_CODE = 43
+        const val TICK_BROADCAST = "tick-event"
     }
 }

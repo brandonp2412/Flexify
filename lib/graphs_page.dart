@@ -183,8 +183,7 @@ class _GraphsPageState extends State<GraphsPage> {
         title: const Text('Upload CSV'),
         onTap: () async {
           Navigator.pop(context);
-          const platform = MethodChannel('com.presley.flexify/android');
-          String csv = await platform.invokeMethod('read');
+          String csv = await android.invokeMethod('read');
           List<List<dynamic>> rows =
               const CsvToListConverter(eol: "\n").convert(csv);
           if (rows.isEmpty) return;
@@ -238,8 +237,7 @@ class _GraphsPageState extends State<GraphsPage> {
           final permission = await Permission.notification.request();
           if (!permission.isGranted) return;
           final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
-          const platform = MethodChannel('com.presley.flexify/android');
-          platform.invokeMethod('save', ['gym_sets.csv', csv]);
+          android.invokeMethod('save', ['gym_sets.csv', csv]);
         },
       ),
     );

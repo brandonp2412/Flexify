@@ -2,8 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
 class EditPlanPage extends StatefulWidget {
   final PlansCompanion plan;
@@ -70,7 +70,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
     List<Widget> getChildren() {
       final List<Widget> children = [];
 
-      print("getChildren search=$search");
       if (search == '')
         children.add(
             Text('Days', style: Theme.of(context).textTheme.headlineSmall));

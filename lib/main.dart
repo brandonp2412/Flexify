@@ -1,11 +1,13 @@
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'plans_page.dart';
 
 late AppDatabase database;
+late MethodChannel android;
 
 class ExerciseSelectionModel extends ChangeNotifier {
   String? selectedExercise;
@@ -18,6 +20,7 @@ class ExerciseSelectionModel extends ChangeNotifier {
 
 void main() {
   database = AppDatabase();
+  android = const MethodChannel("com.presley.flexify/android");
   WidgetsFlutterBinding.ensureInitialized();
   runApp(ChangeNotifierProvider(
     create: (context) => ExerciseSelectionModel(),
