@@ -7,7 +7,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +23,7 @@ class GraphsPage extends StatefulWidget {
 class _GraphsPageState extends State<GraphsPage> {
   late Stream<List<drift.TypedResult>> stream;
   TextEditingController searchController = TextEditingController();
+  String selectedExercise = "";
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -41,6 +41,11 @@ class _GraphsPageState extends State<GraphsPage> {
       builder: (context, value, child) {
         if (value.selectedExercise?.isNotEmpty == true)
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (selectedExercise == value.selectedExercise) return;
+            setState(() {
+              selectedExercise = value.selectedExercise ?? "";
+            });
+
             if (navigatorKey.currentState!.canPop())
               navigatorKey.currentState!.pop();
             navigatorKey.currentState!.push(MaterialPageRoute(

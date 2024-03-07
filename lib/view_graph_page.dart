@@ -28,13 +28,17 @@ class ViewGraphPage extends StatefulWidget {
   createState() => _ViewGraphPageState();
 }
 
-class _ViewGraphPageState extends State<ViewGraphPage> {
+class _ViewGraphPageState extends State<ViewGraphPage>
+    with AutomaticKeepAliveClientMixin {
   late Stream<List<drift.TypedResult>> graphStream;
+  Metric metric = Metric.bestWeight;
+
+  @override
+  bool wantKeepAlive = true;
 
   final oneRepMax = database.gymSets.weight /
       (const drift.Variable(1.0278) -
           const drift.Variable(0.0278) * database.gymSets.reps);
-  Metric metric = Metric.bestWeight;
 
   @override
   void initState() {
@@ -61,6 +65,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),

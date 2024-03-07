@@ -45,12 +45,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   @override
   void dispose() {
-    super.dispose();
     Provider.of<AppState>(context, listen: false).removeListener(updateRunning);
     repsController.dispose();
     weightController.dispose();
     repsNode.dispose();
     weightNode.dispose();
+    super.dispose();
   }
 
   void updateRunning() {

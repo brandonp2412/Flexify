@@ -111,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage>
             }),
             body: SafeArea(
               child: TabBarView(
+                clipBehavior: Clip.antiAlias,
                 controller: tabController,
                 children: const [
                   PlansPage(),
