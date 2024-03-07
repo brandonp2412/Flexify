@@ -115,16 +115,19 @@ class TimerService : Service() {
     }
 
     private fun startTimer() {
+        val startTime = System.currentTimeMillis()
         timerRunnable?.let { timerHandler.removeCallbacks(it) }
         timerRunnable = object : Runnable {
             override fun run() {
+                val millisElapsed = System.currentTimeMillis() - startTime
+                val secondsElapsed = (millisElapsed / 1000).toInt()
                 val intent = Intent(MainActivity.TICK_BROADCAST)
-                if (secondsLeft > 0) {
+                if (secondsElapsed < secondsTotal) {
+                    secondsLeft = secondsTotal - secondsElapsed
                     intent.putExtra("secondsLeft", secondsLeft - 1)
                     intent.putExtra("secondsTotal", secondsTotal)
-                    secondsLeft--
                     updateNotification(secondsLeft)
-                    timerHandler.postDelayed(this, 1000)
+                    timerHandler.postDelayed(this, 1000 - millisElapsed % 1000)
                 } else {
                     vibrate()
                     playSound()
