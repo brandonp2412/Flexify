@@ -50,7 +50,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     super.dispose();
   }
 
-
   void selectWeight() {
     weightController.selection = TextSelection(
       baseOffset: 0,
@@ -135,24 +134,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final permission = await Permission.notification.request();
     if (!permission.isGranted) return;
     //                                           3s     3m30s
-    android.invokeMethod('timer', [210000, exercise]);
+    const duration = Duration(minutes: 3, seconds: 30);
+    android.invokeMethod('timer', [duration.inMilliseconds, exercise]);
 
     if (!mounted) return;
     final appState = Provider.of<AppState>(context, listen: false);
-    appState.updateSeconds(210000, 210000);
-  }
-
-  bool isTimerRunning(BuildContext context) {
-    final secondsLeft = context.watch<AppState>().secondsLeft;
-    if (secondsLeft == null) return false;
-    return secondsLeft > 0;
+    appState.updateTimer(appState.timer.increaseTimerDuration(duration));
   }
 
   @override
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    final timerRunning = isTimerRunning(context);
+    final timerRunning = context.watch<AppState>().timer.isRunning();
 
     return Scaffold(
       appBar: AppBar(
@@ -255,10 +249,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 tooltip: "Add 1 min",
                 onPressed: () {
                   android.invokeMethod('add');
-                  final appState =
-                      Provider.of<AppState>(context, listen: false);
-                  appState.updateSeconds((appState.secondsLeft ?? 0) + 60,
-                      (appState.secondsTotal ?? 0) + 60);
+                  final appState = Provider.of<AppState>(
+                    context,
+                    listen: false,
+                  );
+                  appState.updateTimer(
+                    appState.timer.increaseTimerDuration(
+                      const Duration(minutes: 2),
+                    ),
+                  );
                 },
                 child: const Icon(Icons.add),
               ),

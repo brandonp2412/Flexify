@@ -104,9 +104,7 @@ class MainActivity : FlutterActivity() {
     private val tickReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val secondsLeft = intent.getIntExtra("secondsLeft", 0)
-                val secondsTotal = intent.getIntExtra("secondsTotal", 1)
-                channel?.invokeMethod("tick", intArrayOf(secondsLeft, secondsTotal))
+                channel?.invokeMethod("tick", timerService?.timer?.generateMethodChannelPayload())
             }
         }
 

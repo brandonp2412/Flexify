@@ -1,3 +1,4 @@
+import 'package:flexify/timer.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +12,15 @@ late MethodChannel android;
 
 class AppState extends ChangeNotifier {
   String? selectedExercise;
-  int? secondsLeft;
-  int? secondsTotal;
+  Timer timer = Timer.emptyTimer();
 
   void selectExercise(String exercise) {
     selectedExercise = exercise;
     notifyListeners();
   }
 
-  void updateSeconds(int left, int total) {
-    secondsLeft = left;
-    secondsTotal = total;
+  void updateTimer(Timer newTimer) {
+    timer = newTimer;
     notifyListeners();
   }
 }
@@ -87,10 +86,16 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     android.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
-        int left = call.arguments[0];
-        int total = call.arguments[1];
-        Provider.of<AppState>(context, listen: false)
-            .updateSeconds(left, total);
+        final newTimer = Timer(
+          Duration(milliseconds: call.arguments[0]),
+          Duration(milliseconds: call.arguments[1]),
+          DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
+        );
+
+        Provider.of<AppState>(
+          context,
+          listen: false,
+        ).updateTimer(newTimer);
       }
     });
 
@@ -100,13 +105,14 @@ class _MyHomePageState extends State<MyHomePage>
         builder: (BuildContext context) {
           return Scaffold(
             bottomSheet: Consumer<AppState>(builder: (context, value, child) {
-              final duration = value.secondsTotal ?? 0;
-              final elapsed = duration - (value.secondsLeft ?? 0);
+              final duration = value.timer.getDuration().inSeconds;
+              final elapsed = value.timer.getElapsed().inSeconds;
 
               return Visibility(
                 visible: duration > 0,
                 child: LinearProgressIndicator(
-                    value: duration == 0 ? 0 : elapsed / duration),
+                  value: duration == 0 ? 0 : elapsed / duration,
+                ),
               );
             }),
             body: SafeArea(

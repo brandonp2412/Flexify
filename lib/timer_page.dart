@@ -21,8 +21,8 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    final duration = appState.secondsTotal ?? 0;
-    final elapsed = (duration) - (appState.secondsLeft ?? 0);
+    final duration = appState.timer.getDuration().inSeconds;
+    final elapsed = appState.timer.getElapsed().inSeconds;
 
     return Scaffold(
       appBar: AppBar(

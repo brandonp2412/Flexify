@@ -101,14 +101,10 @@ class TimerService : Service() {
     }
 
     private fun sendTickBroadcast() {
-        sendBroadcast(
-            Intent(MainActivity.TICK_BROADCAST)
-                .putExtra("secondsLeft", timer.getRemainingSeconds())
-                .putExtra("secondsTotal", timer.getDurationSeconds())
-        )
+        sendBroadcast(Intent(MainActivity.TICK_BROADCAST))
     }
 
-    private fun onTimerExpired(intent: Intent?) {
+    private fun onTimerExpired() {
         Log.d("TimerService", "onTimerExpired duration=${timer.getDurationSeconds()}")
         timer.expire()
         vibrate()
@@ -169,7 +165,7 @@ class TimerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null && intent.action == TIMER_EXPIRED) onTimerExpired(intent)
+        if (intent != null && intent.action == TIMER_EXPIRED) onTimerExpired()
         else onTimerStart(intent);
         return START_STICKY
     }

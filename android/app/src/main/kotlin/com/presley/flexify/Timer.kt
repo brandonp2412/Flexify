@@ -79,6 +79,14 @@ class Timer(private var msTimerDuration: Long) {
         return true
     }
 
+    fun generateMethodChannelPayload(): LongArray  {
+        return longArrayOf(
+            totalTimerDuration,
+            totalTimerDuration - getRemainingMillis(),
+            java.lang.System.currentTimeMillis()
+        )
+    }
+
     private fun requestPermission(context: Context): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true
         val intent = Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
