@@ -29,7 +29,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late List<String> planExercises;
 
   int selectedIndex = 0;
-  bool timerRunning = false;
   final repsNode = FocusNode();
   final weightNode = FocusNode();
 
@@ -40,12 +39,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController = TextEditingController();
     planExercises = widget.plan.exercises.split(',');
     getLast();
-    Provider.of<AppState>(context, listen: false).addListener(updateRunning);
   }
 
   @override
   void dispose() {
-    Provider.of<AppState>(context, listen: false).removeListener(updateRunning);
     repsController.dispose();
     weightController.dispose();
     repsNode.dispose();
@@ -53,15 +50,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     super.dispose();
   }
 
-  void updateRunning() {
-    final appState = Provider.of<AppState>(context, listen: false);
-    setState(() {
-      if (appState.secondsLeft == null)
-        timerRunning = false;
-      else
-        timerRunning = appState.secondsLeft! > 0;
-    });
-  }
 
   void selectWeight() {
     weightController.selection = TextSelection(
@@ -152,15 +140,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (!mounted) return;
     final appState = Provider.of<AppState>(context, listen: false);
     appState.updateSeconds(210000, 210000);
-    setState(() {
-      timerRunning = true;
-    });
+  }
+
+  bool isTimerRunning(BuildContext context) {
+    final secondsLeft = context.watch<AppState>().secondsLeft;
+    if (secondsLeft == null) return false;
+    return secondsLeft > 0;
   }
 
   @override
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
+    final timerRunning = isTimerRunning(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -245,9 +237,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 ? FloatingActionButton(
                     onPressed: () {
                       android.invokeMethod('stop');
-                      setState(() {
-                        timerRunning = false;
-                      });
                     },
                     child: const Icon(Icons.stop),
                   )

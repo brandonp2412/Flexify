@@ -11,42 +11,19 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  int duration = 0;
-  int elapsed = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    android.invokeMethod('getProgress').then((args) => setState(() {
-          int secondsLeft = args[0];
-          int secondsTotal = args[1];
-          elapsed = secondsTotal - secondsLeft;
-          duration = secondsTotal;
-        }));
-    Provider.of<AppState>(context, listen: false).addListener(updateTime);
+  String generateTitleText(int duration, int elapsed) {
+    final minutes = ((duration - elapsed) ~/ 60).toString().padLeft(2, '0');
+    final seconds = ((duration - elapsed) % 60).toString().padLeft(2, '0');
+    return "$minutes:$seconds";
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    Provider.of<AppState>(context, listen: false).removeListener(updateTime);
-  }
-
-  void updateTime() {
-    final appState = Provider.of<AppState>(context, listen: false);
-    setState(() {
-      int secondsLeft = appState.secondsLeft ?? 0;
-      int secondsTotal = appState.secondsTotal ?? 0;
-      elapsed = secondsTotal - secondsLeft;
-      duration = secondsTotal;
-    });
-  }
-
-  get minutes => ((duration - elapsed) ~/ 60).toString().padLeft(2, '0');
-  get seconds => ((duration - elapsed) % 60).toString().padLeft(2, '0');
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
+    final duration = appState.secondsTotal ?? 0;
+    final elapsed = (duration) - (appState.secondsLeft ?? 0);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Timer'),
@@ -55,8 +32,8 @@ class _TimerPageState extends State<TimerPage> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            progressWidget(context),
-            textWidget(context),
+            progressWidget(context, duration, elapsed),
+            textWidget(context, duration, elapsed),
           ],
         ),
       ),
@@ -64,17 +41,13 @@ class _TimerPageState extends State<TimerPage> {
         onPressed: () {
           const platform = MethodChannel('com.presley.flexify/android');
           platform.invokeMethod('stop');
-          setState(() {
-            duration = 0;
-            elapsed = 0;
-          });
         },
         child: const Icon(Icons.stop),
       ),
     );
   }
 
-  SizedBox progressWidget(BuildContext context) {
+  SizedBox progressWidget(BuildContext context, int duration, int elapsed) {
     return SizedBox(
       height: 300,
       width: 300,
@@ -90,13 +63,13 @@ class _TimerPageState extends State<TimerPage> {
     );
   }
 
-  Column textWidget(BuildContext context) {
+  Column textWidget(BuildContext context, int duration, int elapsed) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const SizedBox(height: 32.0),
         Text(
-          "$minutes:$seconds",
+          generateTitleText(duration, elapsed),
           style: TextStyle(
             fontSize: 50.0,
             color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -106,13 +79,7 @@ class _TimerPageState extends State<TimerPage> {
         TextButton(
           onPressed: () {
             android.invokeMethod('add');
-            setState(() {
-              if (duration == 0)
-                duration += 61; // Immediately show progress at first.
-              else
-                duration += 60;
-              if (elapsed == 0 || elapsed > duration) elapsed = 1;
-            });
+            /* TODO: Make update show immediately */
           },
           child: const Text('+1 min'),
         ),
