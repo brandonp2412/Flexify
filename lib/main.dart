@@ -100,9 +100,9 @@ class _MyHomePageState extends State<MyHomePage>
         builder: (BuildContext context) {
           return Scaffold(
             bottomSheet: Consumer<AppState>(builder: (context, value, child) {
-              final elapsed =
-                  (value.secondsTotal ?? 0) - (value.secondsLeft ?? 0);
               final duration = value.secondsTotal ?? 0;
+              final elapsed = duration - (value.secondsLeft ?? 0);
+
               return Visibility(
                 visible: duration > 0,
                 child: LinearProgressIndicator(

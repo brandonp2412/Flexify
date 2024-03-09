@@ -66,18 +66,18 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "getProgress" -> {
-                    if (timerBound && timerService?.running == true)
+                    if (timerBound && timerService?.timer?.isRunning() == true)
                         result.success(
                             intArrayOf(
-                                timerService?.secondsLeft!!,
-                                timerService?.secondsTotal!!
+                                timerService?.timer!!.getRemainingSeconds(),
+                                timerService?.timer!!.getDurationSeconds()
                             )
                         )
                     else result.success(intArrayOf(0, 0))
                 }
 
                 "add" -> {
-                    if (timerService?.running == true) {
+                    if (timerService?.timer?.isRunning() == true) {
                         val intent = Intent(TimerService.ADD_BROADCAST)
                         sendBroadcast(intent)
                     } else {
@@ -109,6 +109,14 @@ class MainActivity : FlutterActivity() {
                 channel?.invokeMethod("tick", intArrayOf(secondsLeft, secondsTotal))
             }
         }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        timerService?.apply {
+            mainActivityFocused = hasFocus
+            updateTimerUI()
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -203,7 +211,7 @@ class MainActivity : FlutterActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (timerService?.running != true) {
+        if (timerService?.timer?.isRunning() != true) {
             val intent = Intent(TimerService.STOP_BROADCAST)
             sendBroadcast(intent);
         }

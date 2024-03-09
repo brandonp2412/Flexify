@@ -79,7 +79,6 @@ class _TimerPageState extends State<TimerPage> {
         TextButton(
           onPressed: () {
             android.invokeMethod('add');
-            /* TODO: Make update show immediately */
           },
           child: const Text('+1 min'),
         ),
