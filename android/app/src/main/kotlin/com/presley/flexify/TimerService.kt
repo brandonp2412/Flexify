@@ -19,18 +19,15 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import java.util.Timer
-import kotlin.concurrent.fixedRateTimer
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TimerService : Service() {
-
+    private lateinit var timerHandler: Handler
+    private var timerRunnable: Runnable? = null
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
     private val binder = LocalBinder()
     private var currentDescription = ""
-    private var updateLoopTimer: Timer = Timer();
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
 
@@ -49,10 +46,11 @@ class TimerService : Service() {
                 flexifyTimer.stop(applicationContext)
                 flexifyTimer.expire()
 
-                updateLoopTimer.cancel()
+                timerRunnable?.let { timerHandler.removeCallbacks(it) }
                 mediaPlayer?.stop()
                 vibrator?.cancel()
-                updateAppUI()
+
+                if (intent != null && intent.action == STOP_BROADCAST_INTERNAL) updateAppUI()
                 val notificationManager = NotificationManagerCompat.from(this@TimerService)
                 notificationManager.cancel(ONGOING_ID)
                 stopForeground(STOP_FOREGROUND_REMOVE)
@@ -64,35 +62,48 @@ class TimerService : Service() {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Log.d("TimerService", "Received add broadcast intent")
+                val timeStamp = intent?.getLongExtra("timeStamp", 0)
                 if (flexifyTimer.isExpired()) return startTimer(
                     FlexifyTimer.ONE_MINUTE_MILLI,
-                    intent?.getLongExtra("timeStamp", 0) ?: 0
+                    timeStamp ?: 0
                 )
 
                 flexifyTimer.increaseDuration(applicationContext, FlexifyTimer.ONE_MINUTE_MILLI)
                 updateNotification(flexifyTimer.getRemainingSeconds())
                 mediaPlayer?.stop()
                 vibrator?.cancel()
-                updateAppUI()
+                if (intent != null && intent.action == ADD_BROADCAST_INTERNAL) updateAppUI()
             }
         }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         super.onCreate()
-
+        timerHandler = Handler(Looper.getMainLooper())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             applicationContext.registerReceiver(
-                stopReceiver, IntentFilter(STOP_BROADCAST),
+                stopReceiver, IntentFilter().apply {
+                    addAction(STOP_BROADCAST)
+                    addAction(STOP_BROADCAST_INTERNAL)
+                },
                 Context.RECEIVER_NOT_EXPORTED
             )
             applicationContext.registerReceiver(
-                addReceiver, IntentFilter(ADD_BROADCAST),
+                addReceiver, IntentFilter().apply {
+                    addAction(ADD_BROADCAST)
+                    addAction(ADD_BROADCAST_INTERNAL)
+                },
                 Context.RECEIVER_NOT_EXPORTED
             )
         } else {
-            applicationContext.registerReceiver(stopReceiver, IntentFilter(STOP_BROADCAST))
-            applicationContext.registerReceiver(addReceiver, IntentFilter(ADD_BROADCAST))
+            applicationContext.registerReceiver(stopReceiver, IntentFilter().apply {
+                addAction(STOP_BROADCAST)
+                addAction(STOP_BROADCAST_INTERNAL)
+            })
+            applicationContext.registerReceiver(addReceiver, IntentFilter().apply {
+                addAction(ADD_BROADCAST)
+                addAction(ADD_BROADCAST_INTERNAL)
+            })
         }
     }
 
@@ -110,13 +121,13 @@ class TimerService : Service() {
     }
 
     private fun startTimer(msDuration: Long, timeStamp: Long) {
-        updateLoopTimer.cancel()
+        timerRunnable?.let { timerHandler.removeCallbacks(it) }
 
         flexifyTimer.stop(applicationContext)
         flexifyTimer = FlexifyTimer(msDuration)
         flexifyTimer.start(
             applicationContext,
-            if (timeStamp > 0) System.currentTimeMillis() - timeStamp else 0
+            if (timeStamp > 0) System.currentTimeMillis() - timeStamp else 0,
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -132,16 +143,16 @@ class TimerService : Service() {
         battery()
         Log.d("TimerService", "onTimerStart seconds=${flexifyTimer.getDurationSeconds()}")
 
-        updateLoopTimer = fixedRateTimer(
-            "updateNotificationUI",
-            false,
-            flexifyTimer.getRemainingMillis() % 1000,
-            1000
-        ) {
-            if (!flexifyTimer.isExpired()) updateNotification(flexifyTimer.getRemainingSeconds())
+        timerRunnable = object : Runnable {
+            override fun run() {
+                if (flexifyTimer.isExpired()) return
+                if (flexifyTimer.hasSecondsUpdated()) updateNotification(flexifyTimer.getRemainingSeconds())
+                timerHandler.postDelayed(this, flexifyTimer.getRemainingMillis() % 20)
+            }
         }
+        timerHandler.postDelayed(timerRunnable!!, 20)
 
-        updateAppUI()
+        if (timeStamp == 0.toLong()) updateAppUI()
     }
 
     private fun onTimerStart(intent: Intent?) {
@@ -160,7 +171,7 @@ class TimerService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        updateLoopTimer.cancel()
+        timerHandler.removeCallbacks(timerRunnable!!)
         applicationContext.unregisterReceiver(stopReceiver)
         applicationContext.unregisterReceiver(addReceiver)
         mediaPlayer?.stop()
@@ -208,7 +219,7 @@ class TimerService : Service() {
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val stopBroadcast = Intent(STOP_BROADCAST)
+        val stopBroadcast = Intent(STOP_BROADCAST_INTERNAL)
         stopBroadcast.setPackage(applicationContext.packageName)
         val stopPending =
             PendingIntent.getBroadcast(
@@ -218,7 +229,9 @@ class TimerService : Service() {
                 PendingIntent.FLAG_IMMUTABLE
             )
         val addBroadcast =
-            Intent(ADD_BROADCAST).apply { setPackage(applicationContext.packageName) }
+            Intent(ADD_BROADCAST_INTERNAL).apply {
+                setPackage(applicationContext.packageName)
+            }
         val addPending =
             PendingIntent.getBroadcast(
                 applicationContext,
@@ -299,7 +312,7 @@ class TimerService : Service() {
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val stopBroadcast = Intent(STOP_BROADCAST)
+        val stopBroadcast = Intent(STOP_BROADCAST_INTERNAL)
         stopBroadcast.setPackage(applicationContext.packageName)
         val pendingStop =
             PendingIntent.getBroadcast(
@@ -309,7 +322,7 @@ class TimerService : Service() {
                 PendingIntent.FLAG_IMMUTABLE
             )
         val addBroadcast =
-            Intent(ADD_BROADCAST).apply { setPackage(applicationContext.packageName) }
+            Intent(ADD_BROADCAST_INTERNAL).apply { setPackage(applicationContext.packageName) }
         val addPending =
             PendingIntent.getBroadcast(
                 applicationContext,
@@ -361,7 +374,9 @@ class TimerService : Service() {
 
     companion object {
         const val STOP_BROADCAST = "stop-timer-event"
+        const val STOP_BROADCAST_INTERNAL = "stop-timer-event-internal"
         const val ADD_BROADCAST = "add-timer-event"
+        const val ADD_BROADCAST_INTERNAL = "add-timer-event-internal"
         const val TIMER_EXPIRED = "timer-expired-event"
         const val ONGOING_ID = 1
         const val FINISHED_ID = 1

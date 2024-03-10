@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
+import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,7 @@ class AppState extends ChangeNotifier {
     updateTimer(newTimer);
     android.invokeMethod('add', [newTimer.getTimeStamp()]);
   }
-  
+
   void stopTimer() {
     updateTimer(NativeTimerWrapper.emptyTimer());
     android.invokeMethod('stop');
@@ -38,7 +38,8 @@ class AppState extends ChangeNotifier {
   void startTimer(String exercise, Duration duration) {
     final timer = nativeTimer.increaseDuration(duration);
     updateTimer(timer);
-    android.invokeMethod('timer', [duration.inMilliseconds, exercise, timer.getTimeStamp()]);
+    android.invokeMethod(
+        'timer', [duration.inMilliseconds, exercise, timer.getTimeStamp()]);
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {
@@ -47,7 +48,7 @@ class AppState extends ChangeNotifier {
     if (nativeTimer.isRunning() && !wasRunning) {
       _timer?.cancel();
       _timer = Timer.periodic(
-        const Duration(seconds: 1),
+        const Duration(milliseconds: 20),
         (timer) {
           if (nativeTimer.update()) _timer?.cancel();
           notifyListeners();
@@ -122,10 +123,11 @@ class _MyHomePageState extends State<MyHomePage>
     android.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
         final newTimer = NativeTimerWrapper(
-            Duration(milliseconds: call.arguments[0]),
-            Duration(milliseconds: call.arguments[1]),
-            DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
-            NativeTimerState.values[call.arguments[3] as int]);
+          Duration(milliseconds: call.arguments[0]),
+          Duration(milliseconds: call.arguments[1]),
+          DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
+          NativeTimerState.values[call.arguments[3] as int],
+        );
 
         Provider.of<AppState>(
           context,
@@ -140,13 +142,13 @@ class _MyHomePageState extends State<MyHomePage>
         builder: (BuildContext context) {
           return Scaffold(
             bottomSheet: Consumer<AppState>(builder: (context, value, child) {
-              final duration = value.nativeTimer.getDuration().inSeconds;
-              final elapsed = value.nativeTimer.getElapsed().inSeconds;
+              final duration = value.nativeTimer.getDuration();
+              final elapsed = value.nativeTimer.getElapsed();
 
               return Visibility(
-                visible: duration > 0,
+                visible: duration > Duration.zero,
                 child: LinearProgressIndicator(
-                  value: duration == 0 ? 0 : elapsed / duration,
+                  value: duration == Duration.zero ? 0 : elapsed.inMilliseconds / duration.inMilliseconds,
                 ),
               );
             }),

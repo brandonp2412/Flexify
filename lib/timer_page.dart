@@ -14,28 +14,29 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  String generateTitleText(int duration, int elapsed) {
-    final minutes = ((duration - elapsed) ~/ 60).toString().padLeft(2, '0');
-    final seconds = ((duration - elapsed) % 60).toString().padLeft(2, '0');
+  String generateTitleText(Duration remaining) {
+    final minutes = (remaining.inMinutes).toString().padLeft(2, '0');
+    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
     return "$minutes:$seconds";
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    final duration = appState.nativeTimer.getDuration().inSeconds;
-    final elapsed = appState.nativeTimer.getElapsed().inSeconds;
+    final duration = appState.nativeTimer.getDuration();
+    final elapsed = appState.nativeTimer.getElapsed();
+    final remaining = appState.nativeTimer.getRemaining();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timer'),
+        title: Text('Timer'),
       ),
       body: Center(
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             progressWidget(context, duration, elapsed),
-            textWidget(context, duration, elapsed),
+            textWidget(context, remaining),
           ],
         ),
       ),
@@ -46,13 +47,13 @@ class _TimerPageState extends State<TimerPage> {
     );
   }
 
-  SizedBox progressWidget(BuildContext context, int duration, int elapsed) {
+  SizedBox progressWidget(BuildContext context, Duration duration, Duration elapsed) {
     return SizedBox(
       height: 300,
       width: 300,
       child: CircularProgressIndicator(
         strokeCap: StrokeCap.round,
-        value: duration == 0 ? 0 : elapsed / duration,
+        value: duration == Duration.zero ? 0 : elapsed.inMilliseconds / duration.inMilliseconds,
         strokeWidth: 20,
         backgroundColor:
             Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
@@ -62,13 +63,13 @@ class _TimerPageState extends State<TimerPage> {
     );
   }
 
-  Column textWidget(BuildContext context, int duration, int elapsed) {
+  Column textWidget(BuildContext context, Duration remaining) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const SizedBox(height: 32.0),
         Text(
-          generateTitleText(duration, elapsed),
+          generateTitleText(remaining),
           style: TextStyle(
             fontSize: 50.0,
             color: Theme.of(context).textTheme.bodyLarge!.color,

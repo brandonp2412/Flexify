@@ -27,7 +27,8 @@ class FlexifyTimer(private var msTimerDuration: Long) {
 
     fun start(context: Context, elapsedTime: Long = 0) {
         if (state != State.Paused) return
-        endTime = SystemClock.elapsedRealtime() + msTimerDuration - elapsedTime
+        msTimerDuration -= elapsedTime
+        endTime = SystemClock.elapsedRealtime() + msTimerDuration
         registerPendingIntent(context)
         state = State.Running
     }
@@ -79,9 +80,16 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         return longArrayOf(
             totalTimerDuration,
             totalTimerDuration - getRemainingMillis(),
-            java.lang.System.currentTimeMillis(),
+            System.currentTimeMillis(),
             state.ordinal.toLong()
         )
+    }
+
+    fun hasSecondsUpdated(): Boolean {
+        val remainingSeconds = getRemainingSeconds()
+        if (previousSeconds == remainingSeconds) return false
+        previousSeconds = remainingSeconds
+        return true
     }
 
     private fun requestPermission(context: Context): Boolean {
@@ -167,6 +175,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
     }
 
     private var endTime: Long = 0
+    private var previousSeconds: Int = 0
     private var state: State = State.Paused
     private var totalTimerDuration: Long = msTimerDuration
 
