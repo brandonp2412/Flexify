@@ -1,20 +1,23 @@
 package com.presley.flexify
 
 import android.app.AlarmManager
+import android.app.AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
 import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.SystemClock
-import android.provider.Settings.*
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.O)
-class Timer(private var msTimerDuration: Long) {
+class FlexifyTimer(private var msTimerDuration: Long) {
 
     enum class State {
         Running,
@@ -22,9 +25,9 @@ class Timer(private var msTimerDuration: Long) {
         Expired
     }
 
-    fun start(context: Context) {
+    fun start(context: Context, elapsedTime: Long = 0) {
         if (state != State.Paused) return
-        endTime = SystemClock.elapsedRealtime() + msTimerDuration
+        endTime = SystemClock.elapsedRealtime() + msTimerDuration - elapsedTime
         registerPendingIntent(context)
         state = State.Running
     }
@@ -67,23 +70,17 @@ class Timer(private var msTimerDuration: Long) {
     }
 
     fun getRemainingMillis(): Long {
-        return if (state==State.Running) endTime - SystemClock.elapsedRealtime()
+        return if (state == State.Running) endTime - SystemClock.elapsedRealtime()
         else
             msTimerDuration
     }
 
-    fun hasSecondsUpdated(): Boolean {
-        val remainingSeconds = getRemainingSeconds()
-        if (previousSeconds == remainingSeconds) return false
-        previousSeconds = remainingSeconds
-        return true
-    }
-
-    fun generateMethodChannelPayload(): LongArray  {
+    fun generateMethodChannelPayload(): LongArray {
         return longArrayOf(
             totalTimerDuration,
             totalTimerDuration - getRemainingMillis(),
-            java.lang.System.currentTimeMillis()
+            java.lang.System.currentTimeMillis(),
+            state.ordinal.toLong()
         )
     }
 
@@ -93,8 +90,27 @@ class Timer(private var msTimerDuration: Long) {
         intent.data = Uri.parse("package:" + context.packageName)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         return try {
+            val receiver = object : BroadcastReceiver() {
+                override fun onReceive(context2: Context?, intent: Intent?) {
+                    context.unregisterReceiver(this)
+                    registerPendingIntent(context)
+                }
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(
+                    receiver, IntentFilter(ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED),
+                    Context.RECEIVER_NOT_EXPORTED
+                )
+            } else {
+                context.registerReceiver(
+                    receiver,
+                    IntentFilter(ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)
+                )
+            }
+
             context.startActivity(intent)
-            true
+            false
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
                 context,
@@ -151,14 +167,13 @@ class Timer(private var msTimerDuration: Long) {
     }
 
     private var endTime: Long = 0
-    private var previousSeconds: Int = 0
     private var state: State = State.Paused
     private var totalTimerDuration: Long = msTimerDuration
 
 
     companion object {
-        fun emptyTimer(): Timer {
-            return Timer(0)
+        fun emptyTimer(): FlexifyTimer {
+            return FlexifyTimer(0)
         }
 
         const val ONE_MINUTE_MILLI: Long = 60000

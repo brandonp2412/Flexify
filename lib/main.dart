@@ -1,4 +1,6 @@
-import 'package:flexify/timer.dart';
+import 'dart:async';
+
+import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +13,47 @@ late AppDatabase database;
 late MethodChannel android;
 
 class AppState extends ChangeNotifier {
+  Timer? _timer;
   String? selectedExercise;
-  Timer timer = Timer.emptyTimer();
+  NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
 
   void selectExercise(String exercise) {
     selectedExercise = exercise;
     notifyListeners();
   }
 
-  void updateTimer(Timer newTimer) {
-    timer = newTimer;
+  void addOneMinute() {
+    final newTimer = nativeTimer.increaseDuration(
+      const Duration(minutes: 1),
+    );
+    updateTimer(newTimer);
+    android.invokeMethod('add', [newTimer.getTimeStamp()]);
+  }
+  
+  void stopTimer() {
+    updateTimer(NativeTimerWrapper.emptyTimer());
+    android.invokeMethod('stop');
+  }
+
+  void startTimer(String exercise, Duration duration) {
+    final timer = nativeTimer.increaseDuration(duration);
+    updateTimer(timer);
+    android.invokeMethod('timer', [duration.inMilliseconds, exercise, timer.getTimeStamp()]);
+  }
+
+  void updateTimer(NativeTimerWrapper newTimer) {
+    final wasRunning = _timer?.isActive ?? false;
+    nativeTimer = newTimer;
+    if (nativeTimer.isRunning() && !wasRunning) {
+      _timer?.cancel();
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (timer) {
+          if (nativeTimer.update()) _timer?.cancel();
+          notifyListeners();
+        },
+      );
+    }
     notifyListeners();
   }
 }
@@ -29,10 +62,12 @@ void main() {
   database = AppDatabase();
   android = const MethodChannel("com.presley.flexify/android");
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ChangeNotifierProvider(
-    create: (context) => AppState(),
-    child: const MyApp(),
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppState(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -86,11 +121,11 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     android.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
-        final newTimer = Timer(
-          Duration(milliseconds: call.arguments[0]),
-          Duration(milliseconds: call.arguments[1]),
-          DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
-        );
+        final newTimer = NativeTimerWrapper(
+            Duration(milliseconds: call.arguments[0]),
+            Duration(milliseconds: call.arguments[1]),
+            DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
+            NativeTimerState.values[call.arguments[3] as int]);
 
         Provider.of<AppState>(
           context,
@@ -105,8 +140,8 @@ class _MyHomePageState extends State<MyHomePage>
         builder: (BuildContext context) {
           return Scaffold(
             bottomSheet: Consumer<AppState>(builder: (context, value, child) {
-              final duration = value.timer.getDuration().inSeconds;
-              final elapsed = value.timer.getElapsed().inSeconds;
+              final duration = value.nativeTimer.getDuration().inSeconds;
+              final elapsed = value.nativeTimer.getElapsed().inSeconds;
 
               return Visibility(
                 visible: duration > 0,

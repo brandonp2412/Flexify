@@ -6,8 +6,8 @@ import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/timer_page.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'plan_tile.dart';
@@ -296,8 +296,7 @@ class _PlansPageState extends State<PlansPage> {
             csvData.add([plan.id, plan.days, plan.exercises]);
           }
 
-          final permission = await Permission.notification.request();
-          if (!permission.isGranted) return;
+          if (!await requestNotificationPermission()) return;
           final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
           android.invokeMethod('save', ['plans.csv', csv]);
         },

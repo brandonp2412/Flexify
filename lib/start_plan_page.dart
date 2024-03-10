@@ -1,10 +1,10 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
 import 'exercise_tile.dart';
 
 class StartPlanPage extends StatefulWidget {
@@ -117,7 +117,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController.text = last.weight.toString();
   }
 
-  void save() async {
+  Future save(AppState appState) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
@@ -131,22 +131,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
 
     database.into(database.gymSets).insert(gymSet);
-    final permission = await Permission.notification.request();
-    if (!permission.isGranted) return;
-    //                                           3s     3m30s
-    const duration = Duration(minutes: 3, seconds: 30);
-    android.invokeMethod('timer', [duration.inMilliseconds, exercise]);
+    await requestNotificationPermission();
 
-    if (!mounted) return;
-    final appState = Provider.of<AppState>(context, listen: false);
-    appState.updateTimer(appState.timer.increaseTimerDuration(duration));
+    const duration = Duration(minutes: 3, seconds: 30);
+    appState.startTimer(exercise, duration);
   }
 
   @override
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    final timerRunning = context.watch<AppState>().timer.isRunning();
+    final appState = context.watch<AppState>();
+    final timerRunning = appState.nativeTimer.isRunning();
 
     return Scaffold(
       appBar: AppBar(
@@ -189,9 +185,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     focusNode: repsNode,
                     decoration: const InputDecoration(labelText: 'Reps'),
                     keyboardType: TextInputType.number,
-                    onSubmitted: (value) {
-                      save();
-                    },
+                    onSubmitted: (value) async => await save(appState),
                     onTap: () {
                       repsController.selection = TextSelection(
                         baseOffset: 0,
@@ -229,13 +223,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
             bottom: 0,
             child: timerRunning
                 ? FloatingActionButton(
-                    onPressed: () {
-                      android.invokeMethod('stop');
-                    },
+                    onPressed: () => appState.stopTimer(),
                     child: const Icon(Icons.stop),
                   )
                 : FloatingActionButton(
-                    onPressed: save,
+                    onPressed: () async => await save(appState),
                     tooltip: "Save this set",
                     child: const Icon(Icons.save),
                   ),
@@ -247,18 +239,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               visible: timerRunning,
               child: FloatingActionButton(
                 tooltip: "Add 1 min",
-                onPressed: () {
-                  android.invokeMethod('add');
-                  final appState = Provider.of<AppState>(
-                    context,
-                    listen: false,
-                  );
-                  appState.updateTimer(
-                    appState.timer.increaseTimerDuration(
-                      const Duration(minutes: 2),
-                    ),
-                  );
-                },
+                onPressed: () => appState.addOneMinute(),
                 child: const Icon(Icons.add),
               ),
             ),

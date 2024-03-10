@@ -8,7 +8,6 @@ import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'graph_tile.dart';
@@ -238,8 +237,7 @@ class _GraphsPageState extends State<GraphsPage> {
             ]);
           }
 
-          final permission = await Permission.notification.request();
-          if (!permission.isGranted) return;
+          if (!await requestNotificationPermission()) return;
           final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
           android.invokeMethod('save', ['gym_sets.csv', csv]);
         },
@@ -248,8 +246,7 @@ class _GraphsPageState extends State<GraphsPage> {
   }
 
   void postNotification(File file) async {
-    final permission = await Permission.notification.request();
-    if (!permission.isGranted) return;
+
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     const android =
         AndroidInitializationSettings('@drawable/baseline_arrow_downward_24');

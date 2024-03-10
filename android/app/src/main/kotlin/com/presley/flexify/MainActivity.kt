@@ -52,7 +52,7 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
                 "timer" -> {
                     val args = call.arguments as ArrayList<*>
-                    timer(args[0] as Int, args[1] as String)
+                    timer(args[0] as Int, args[1] as String, args[2] as Long)
                 }
 
                 "save" -> {
@@ -66,22 +66,23 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "getProgress" -> {
-                    if (timerBound && timerService?.timer?.isRunning() == true)
+                    if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
                         result.success(
                             intArrayOf(
-                                timerService?.timer!!.getRemainingSeconds(),
-                                timerService?.timer!!.getDurationSeconds()
+                                timerService?.flexifyTimer!!.getRemainingSeconds(),
+                                timerService?.flexifyTimer!!.getDurationSeconds()
                             )
                         )
                     else result.success(intArrayOf(0, 0))
                 }
 
                 "add" -> {
-                    if (timerService?.timer?.isRunning() == true) {
+                    if (timerService?.flexifyTimer?.isRunning() == true) {
                         val intent = Intent(TimerService.ADD_BROADCAST)
                         sendBroadcast(intent)
                     } else {
-                        timer(1000 * 60, "Rest timer")
+                        val args = call.arguments as ArrayList<*>
+                        timer(1000 * 60, "Rest timer", args[0] as Long)
                     }
                 }
 
@@ -95,33 +96,33 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
-        applicationContext.registerReceiver(
-            tickReceiver, IntentFilter(TICK_BROADCAST),
-            RECEIVER_VISIBLE_TO_INSTANT_APPS
-        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            applicationContext.registerReceiver(
+                tickReceiver, IntentFilter(TICK_BROADCAST),
+                RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            applicationContext.registerReceiver(tickReceiver, IntentFilter(TICK_BROADCAST))
+        }
     }
 
     private val tickReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                channel?.invokeMethod("tick", timerService?.timer?.generateMethodChannelPayload())
+                channel?.invokeMethod(
+                    "tick",
+                    timerService?.flexifyTimer?.generateMethodChannelPayload()
+                )
             }
         }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        timerService?.apply {
-            mainActivityFocused = hasFocus
-            updateTimerUI()
-        }
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         applicationContext.unregisterReceiver(tickReceiver)
     }
 
-    private fun timer(milliseconds: Int, description: String) {
+    private fun timer(milliseconds: Int, description: String, timeStamp: Long) {
         Log.d("MainActivity", "Queue $description for $milliseconds delay")
         val intent = Intent(context, TimerService::class.java).also { intent ->
             bindService(
@@ -132,6 +133,7 @@ class MainActivity : FlutterActivity() {
         }
         intent.putExtra("milliseconds", milliseconds)
         intent.putExtra("description", description)
+        intent.putExtra("timeStamp", timeStamp)
         context.startForegroundService(intent)
     }
 
@@ -209,7 +211,7 @@ class MainActivity : FlutterActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (timerService?.timer?.isRunning() != true) {
+        if (timerService?.flexifyTimer?.isRunning() != true) {
             val intent = Intent(TimerService.STOP_BROADCAST)
             sendBroadcast(intent);
         }

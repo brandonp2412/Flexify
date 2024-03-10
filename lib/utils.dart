@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 DateTime parseDate(String dateString) {
   List<String> formats = [
@@ -15,4 +16,9 @@ DateTime parseDate(String dateString) {
   }
 
   throw FormatException('Invalid date format: $dateString');
+}
+
+Future<bool> requestNotificationPermission() async {
+  final permission = await Permission.notification.request();
+  return permission.isGranted;
 }
