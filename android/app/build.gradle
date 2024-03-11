@@ -65,6 +65,11 @@ android {
        }
    }
    buildTypes {
+       debug {
+           if (keystorePropertiesFile.exists()) {
+               signingConfig signingConfigs.release
+           }
+       }
        release {
            signingConfig signingConfigs.release
        }
