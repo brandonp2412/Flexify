@@ -28,6 +28,7 @@ class TimerService : Service() {
     private var vibrator: Vibrator? = null
     private val binder = LocalBinder()
     private var currentDescription = ""
+    var mainActivityVisible = true
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
 
@@ -62,6 +63,9 @@ class TimerService : Service() {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Log.d("TimerService", "Received add broadcast intent")
+                mediaPlayer?.stop()
+                vibrator?.cancel()
+
                 val timeStamp = intent?.getLongExtra("timeStamp", 0)
                 if (flexifyTimer.isExpired()) return startTimer(
                     FlexifyTimer.ONE_MINUTE_MILLI,
@@ -70,8 +74,7 @@ class TimerService : Service() {
 
                 flexifyTimer.increaseDuration(applicationContext, FlexifyTimer.ONE_MINUTE_MILLI)
                 updateNotification(flexifyTimer.getRemainingSeconds())
-                mediaPlayer?.stop()
-                vibrator?.cancel()
+
                 if (intent != null && intent.action == ADD_BROADCAST_INTERNAL) updateAppUI()
             }
         }
@@ -120,6 +123,20 @@ class TimerService : Service() {
         updateAppUI()
     }
 
+    fun updateTimerNotificationRefreshRate() {
+        timerRunnable?.let {
+            timerHandler.removeCallbacks(it)
+            timerHandler.postDelayed(it, getDelay(SystemClock.elapsedRealtime()))
+        }
+    }
+
+    private fun getDelay(startTime: Long): Long {
+        if (mainActivityVisible) return 20
+
+        val delay = flexifyTimer.getRemainingMillis() % 1000
+        return if (SystemClock.elapsedRealtime() - startTime + delay > 980) 20 else delay
+    }
+
     private fun startTimer(msDuration: Long, timeStamp: Long) {
         timerRunnable?.let { timerHandler.removeCallbacks(it) }
 
@@ -145,12 +162,13 @@ class TimerService : Service() {
 
         timerRunnable = object : Runnable {
             override fun run() {
+                val startTime = SystemClock.elapsedRealtime()
                 if (flexifyTimer.isExpired()) return
                 if (flexifyTimer.hasSecondsUpdated()) updateNotification(flexifyTimer.getRemainingSeconds())
-                timerHandler.postDelayed(this, flexifyTimer.getRemainingMillis() % 20)
+                timerHandler.postDelayed(this, getDelay(startTime))
             }
         }
-        timerHandler.postDelayed(timerRunnable!!, 20)
+        timerHandler.postDelayed(timerRunnable!!, getDelay(SystemClock.elapsedRealtime()))
 
         if (timeStamp == 0.toLong()) updateAppUI()
     }

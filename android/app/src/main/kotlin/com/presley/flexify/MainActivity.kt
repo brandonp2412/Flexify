@@ -117,6 +117,14 @@ class MainActivity : FlutterActivity() {
             }
         }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        timerService?.apply {
+            mainActivityVisible = hasFocus
+            updateTimerNotificationRefreshRate()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         applicationContext.unregisterReceiver(tickReceiver)
