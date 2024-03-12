@@ -8,7 +8,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'plan_tile.dart';
 
@@ -185,7 +184,7 @@ class _PlansPageState extends State<PlansPage> {
           Navigator.of(context).pop();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TimerPage()),
+            MaterialPageRoute(builder: (context) => const TimerPage()),
           );
         },
       ),

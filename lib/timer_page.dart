@@ -1,9 +1,6 @@
 import 'package:flexify/main.dart';
-import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
@@ -29,7 +26,7 @@ class _TimerPageState extends State<TimerPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Timer'),
+        title: const Text('Timer'),
       ),
       body: Center(
         child: Stack(

@@ -3,7 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class GraphData {
   final String created;

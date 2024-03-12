@@ -1,6 +1,4 @@
-import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 
 enum NativeTimerState { running, paused, expired }
 
