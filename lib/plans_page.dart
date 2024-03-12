@@ -58,7 +58,6 @@ class _PlansPageState extends State<PlansPage> {
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
-        Provider.of<AppState>(context, listen: false).selectExercise("");
         navigatorKey.currentState!.pop();
       },
       child: Navigator(

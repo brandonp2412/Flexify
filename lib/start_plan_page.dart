@@ -150,7 +150,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Provider.of<AppState>(context, listen: false).selectExercise("");
             Navigator.pop(context);
           },
         ),

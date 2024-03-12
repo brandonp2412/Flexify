@@ -56,7 +56,6 @@ class _GraphsPageState extends State<GraphsPage> {
         return NavigatorPopHandler(
           onPop: () {
             if (navigatorKey.currentState!.canPop() == false) return;
-            Provider.of<AppState>(context, listen: false).selectExercise("");
             navigatorKey.currentState!.pop();
           },
           child: Navigator(
@@ -246,7 +245,6 @@ class _GraphsPageState extends State<GraphsPage> {
   }
 
   void postNotification(File file) async {
-
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     const android =
         AndroidInitializationSettings('@drawable/baseline_arrow_downward_24');
