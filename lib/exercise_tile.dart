@@ -25,9 +25,9 @@ class ExerciseTile extends StatelessWidget {
         onLongPressStart: (details) async {
           final position = RelativeRect.fromLTRB(
             details.globalPosition.dx,
-            details.globalPosition.dy,
+            details.globalPosition.dy - 40,
             MediaQuery.of(context).size.width - details.globalPosition.dx,
-            MediaQuery.of(context).size.height - details.globalPosition.dy,
+            MediaQuery.of(context).size.height - details.globalPosition.dy - 40,
           );
 
           await showMenu(
