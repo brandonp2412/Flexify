@@ -18,7 +18,7 @@ class PlansPage extends StatefulWidget {
   createState() => _PlansPageState();
 }
 
-class _PlansPageState extends State<PlansPage> {
+class _PlansPageState extends State<PlansPage> with AutomaticKeepAliveClientMixin {
   List<Plan>? plans;
   late Stream<List<drift.TypedResult>> countStream;
   TextEditingController searchController = TextEditingController();
@@ -53,6 +53,7 @@ class _PlansPageState extends State<PlansPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final weekday = weekdays[DateTime.now().weekday - 1];
     return NavigatorPopHandler(
       onPop: () {
@@ -302,4 +303,7 @@ class _PlansPageState extends State<PlansPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

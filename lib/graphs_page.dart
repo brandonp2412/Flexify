@@ -20,7 +20,7 @@ class GraphsPage extends StatefulWidget {
   createState() => _GraphsPageState();
 }
 
-class _GraphsPageState extends State<GraphsPage> {
+class _GraphsPageState extends State<GraphsPage> with AutomaticKeepAliveClientMixin {
   late Stream<List<drift.TypedResult>> stream;
   TextEditingController searchController = TextEditingController();
   String selectedExercise = "";
@@ -37,6 +37,7 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Consumer<AppState>(
       builder: (context, value, child) {
         if (value.selectedExercise?.isNotEmpty == true)
@@ -270,4 +271,7 @@ class _GraphsPageState extends State<GraphsPage> {
       payload: file.path,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
