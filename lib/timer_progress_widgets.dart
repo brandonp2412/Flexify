@@ -10,11 +10,13 @@ class TimerProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TimerState>(builder: (context, timerState, child) {
       final duration = timerState.nativeTimer.getDuration();
+      final elapsed = timerState.nativeTimer.getElapsed();
+      final remaining = timerState.nativeTimer.getRemaining();
       return Visibility(
         visible: duration > Duration.zero,
         child: TweenAnimationBuilder(
-          tween: Tween<double>(begin: 0, end: 1),
-          duration: duration,
+          tween: Tween<double>(begin: elapsed.inMilliseconds / duration.inMilliseconds, end: 1),
+          duration: remaining,
           builder: (context, value, child) => LinearProgressIndicator(
             value: value,
           ),
@@ -31,10 +33,12 @@ class TimerCircularProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TimerState>(builder: (context, timerState, child) {
       final duration = timerState.nativeTimer.getDuration();
+      final elapsed = timerState.nativeTimer.getElapsed();
+      final remaining = timerState.nativeTimer.getRemaining();
       return duration > Duration.zero
           ? TweenAnimationBuilder(
-              tween: Tween<double>(begin: 0, end: 1),
-              duration: duration,
+              tween: Tween<double>(begin: elapsed.inMilliseconds / duration.inMilliseconds, end: 1),
+              duration: remaining,
               builder: (context, value, child) =>
                   _TimerCircularProgressIndicatorTile(
                 value: value,
