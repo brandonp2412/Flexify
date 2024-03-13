@@ -48,72 +48,41 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
-  late TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 3, vsync: this);
-    tabController.animation!.addListener(() {
-      setState(() {
-        currentIndex = tabController.index;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return const DefaultTabController(
       length: 3,
-      child: Builder(
-        builder: (BuildContext context) {
-          return Scaffold(
-            bottomSheet: const TimerProgressIndicator(),
-            body: SafeArea(
-              child: TabBarView(
-                controller: tabController,
-                children: const [
-                  PlansPage(),
-                  GraphsPage(),
-                  SettingsPage(),
-                ],
-              ),
+      child: Scaffold(
+        bottomSheet: TimerProgressIndicator(),
+        body: SafeArea(
+          child: TabBarView(
+            children:  [
+              PlansPage(),
+              GraphsPage(),
+              SettingsPage(),
+            ],
+          ),
+        ),
+        bottomNavigationBar: TabBar(
+          tabs: [
+            Tab(
+              icon: Icon(Icons.event),
+              text: "Plans",
             ),
-            bottomNavigationBar: TabBar(
-              controller: tabController,
-              tabs: const [
-                Tab(
-                  icon: Icon(Icons.event),
-                  text: "Plans",
-                ),
-                Tab(
-                  icon: Icon(Icons.insights),
-                  text: "Graphs",
-                ),
-                Tab(
-                  icon: Icon(Icons.settings),
-                  text: "Settings",
-                ),
-              ],
+            Tab(
+              icon: Icon(Icons.insights),
+              text: "Graphs",
             ),
-          );
-        },
+            Tab(
+              icon: Icon(Icons.settings),
+              text: "Settings",
+            ),
+          ],
+        ),
       ),
     );
   }
