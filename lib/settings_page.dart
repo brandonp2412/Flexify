@@ -1,6 +1,4 @@
-import 'package:duration_picker/duration_picker.dart';
 import 'package:flexify/app_state.dart';
-import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +10,19 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late TextEditingController minutesController;
+  late TextEditingController secondsController;
+
+  @override
+  void initState() {
+    super.initState();
+    final appState = context.read<SettingsState>();
+    minutesController = TextEditingController(
+        text: appState.timerDuration.inMinutes.toString());
+    secondsController = TextEditingController(
+        text: (appState.timerDuration.inSeconds % 60).toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     final settingsState = context.watch<SettingsState>();
@@ -52,19 +63,21 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest minutes'),
-                  controller: TextEditingController(
-                      text: settingsState.timerDuration.inMinutes.toString()),
+
+                  controller: minutesController,
+
                   keyboardType: TextInputType.number,
-                  readOnly: true,
                   onTap: () async {
-                    final result = await showDurationPicker(
-                        context: context,
-                        initialTime: Duration(
-                            minutes: settingsState.timerDuration.inMinutes));
-                    if (result == null) return;
+
+                    minutesController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: minutesController.text.length);
+                  },
+                  onChanged: (value) {
                     settingsState.setDuration(Duration(
-                        minutes: result.inMinutes,
+                        minutes: int.parse(value),
                         seconds: settingsState.timerDuration.inSeconds % 60));
+
                   },
                 ),
               ),
@@ -74,20 +87,20 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest seconds'),
-                  controller: TextEditingController(
-                      text: (settingsState.timerDuration.inSeconds % 60).toString()),
+
+                  controller: secondsController,
                   keyboardType: TextInputType.number,
-                  readOnly: true,
                   onTap: () async {
-                    final result = await showDurationPicker(
-                        context: context,
-                        baseUnit: BaseUnit.second,
-                        initialTime: Duration(
-                            seconds: settingsState.timerDuration.inSeconds % 60));
-                    if (result == null) return;
+
+                    secondsController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: secondsController.text.length);
+                  },
+                  onChanged: (value) {
                     settingsState.setDuration(Duration(
-                        seconds: result.inSeconds,
+                        seconds: int.parse(value),
                         minutes: settingsState.timerDuration.inMinutes.floor()));
+
                   },
                 ),
               ),
@@ -98,8 +111,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 settingsState.setTimers(!settingsState.restTimers);
               },
               trailing: Switch(
+
                 value: settingsState.restTimers,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  settingsState.setTimers(value);
+                },
               ),
             ),
             ListTile(
@@ -109,7 +125,21 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               trailing: Switch(
                 value: settingsState.showReorder,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  settingsState.setReorder(value);
+                },
+              ),
+            ),
+            ListTile(
+              title: const Text('Show units'),
+              onTap: () {
+                settingsState.setUnits(!settingsState.showUnits);
+              },
+              trailing: Switch(
+                value: settingsState.showUnits,
+                onChanged: (value) {
+                  settingsState.setUnits(value);
+                },
               ),
             ),
           ],

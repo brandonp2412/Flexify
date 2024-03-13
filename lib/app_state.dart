@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'main.dart';
 import 'native_timer_wrapper.dart';
 
@@ -12,6 +11,7 @@ class SettingsState extends ChangeNotifier {
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
   bool showReorder = true;
   bool restTimers = true;
+  bool showUnits = true;
 
   Future<void> init() async {
     final prefsInstance = await SharedPreferences.getInstance();
@@ -30,6 +30,12 @@ class SettingsState extends ChangeNotifier {
 
     showReorder = prefsInstance.getBool("showReorder") ?? true;
     restTimers = prefsInstance.getBool("restTimers") ?? true;
+  }
+
+  void setUnits(bool show) {
+    showUnits = show;
+    prefs?.setBool('showUnits', show);
+    notifyListeners();
   }
 
   void setTimers(bool show) {
