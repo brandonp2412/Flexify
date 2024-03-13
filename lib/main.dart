@@ -2,7 +2,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings_page.dart';
-import 'package:flexify/timer_progress_indicator_tile.dart';
+import 'package:flexify/timer_progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
