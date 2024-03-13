@@ -1,3 +1,4 @@
+import 'package:flexify/app_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,10 @@ class _TimerPageState extends State<TimerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final duration = appState.nativeTimer.getDuration();
-    final elapsed = appState.nativeTimer.getElapsed();
-    final remaining = appState.nativeTimer.getRemaining();
+    final timerState = context.watch<TimerState>();
+    final duration = timerState.nativeTimer.getDuration();
+    final elapsed = timerState.nativeTimer.getElapsed();
+    final remaining = timerState.nativeTimer.getRemaining();
 
     return Scaffold(
       appBar: AppBar(
@@ -33,12 +34,12 @@ class _TimerPageState extends State<TimerPage> {
           alignment: Alignment.center,
           children: <Widget>[
             progressWidget(context, duration, elapsed),
-            textWidget(context, remaining),
+            textWidget(context, timerState, remaining),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => appState.stopTimer(),
+        onPressed: () => timerState.stopTimer(),
         child: const Icon(Icons.stop),
       ),
     );
@@ -60,7 +61,7 @@ class _TimerPageState extends State<TimerPage> {
     );
   }
 
-  Column textWidget(BuildContext context, Duration remaining) {
+  Column textWidget(BuildContext context, TimerState timerState, Duration remaining) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -80,7 +81,7 @@ class _TimerPageState extends State<TimerPage> {
               listen: false,
             );
             requestNotificationPermission();
-            appState.addOneMinute();
+            timerState.addOneMinute();
           },
           child: const Text('+1 min'),
         ),

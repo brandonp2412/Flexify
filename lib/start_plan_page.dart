@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' as drift;
+import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
@@ -116,7 +117,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController.text = last.weight.toString();
   }
 
-  Future save(AppState appState) async {
+  Future save(TimerState timerState, SettingsState settingsState) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
@@ -132,15 +133,16 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (appState.restTimers) appState.startTimer(exercise);
+    if (settingsState.restTimers) timerState.startTimer(exercise);
   }
 
   @override
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    final appState = context.watch<AppState>();
-    final timerRunning = appState.nativeTimer.isRunning();
+    final timerState = context.watch<TimerState>();
+    final settingsState = context.read<SettingsState>();
+    final timerRunning = timerState.nativeTimer.isRunning();
 
     return Scaffold(
       appBar: AppBar(
@@ -182,7 +184,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     focusNode: repsNode,
                     decoration: const InputDecoration(labelText: 'Reps'),
                     keyboardType: TextInputType.number,
-                    onSubmitted: (value) async => await save(appState),
+                    onSubmitted: (value) async => await save(timerState, settingsState),
                     onTap: () {
                       repsController.selection = TextSelection(
                         baseOffset: 0,
@@ -220,11 +222,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
             bottom: 0,
             child: timerRunning
                 ? FloatingActionButton(
-                    onPressed: () => appState.stopTimer(),
+                    onPressed: () => timerState.stopTimer(),
                     child: const Icon(Icons.stop),
                   )
                 : FloatingActionButton(
-                    onPressed: () async => await save(appState),
+                    onPressed: () async => await save(timerState, settingsState),
                     tooltip: "Save this set",
                     child: const Icon(Icons.save),
                   ),
@@ -236,7 +238,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               visible: timerRunning,
               child: FloatingActionButton(
                 tooltip: "Add 1 min",
-                onPressed: () => appState.addOneMinute(),
+                onPressed: () => timerState.addOneMinute(),
                 child: const Icon(Icons.add),
               ),
             ),

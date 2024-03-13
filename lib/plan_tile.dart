@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
@@ -47,14 +48,14 @@ class PlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final settingsState = context.watch<SettingsState>();
     return ListTile(
       title: plan.days.split(',').length == 7
           ? const Text("Daily")
           : RichText(text: TextSpan(children: getChildren(context))),
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Visibility(
-        visible: appState.showReorder,
+        visible: settingsState.showReorder,
         child: ReorderableDragStartListener(
             index: index, child: const Icon(Icons.drag_handle)),
       ),

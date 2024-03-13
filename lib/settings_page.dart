@@ -1,4 +1,5 @@
 import 'package:duration_picker/duration_picker.dart';
+import 'package:flexify/app_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final settingsState = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -23,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: <Widget>[
             DropdownButtonFormField(
-              value: appState.themeMode,
+              value: settingsState.themeMode,
               decoration: const InputDecoration(
                   labelStyle: TextStyle(), labelText: 'Theme'),
               items: const [
@@ -41,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
               onChanged: (value) {
-                appState.setTheme(value!);
+                settingsState.setTheme(value!);
               },
             ),
             const SizedBox(
@@ -52,18 +53,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest minutes'),
                   controller: TextEditingController(
-                      text: appState.timerDuration.inMinutes.toString()),
+                      text: settingsState.timerDuration.inMinutes.toString()),
                   keyboardType: TextInputType.number,
                   readOnly: true,
                   onTap: () async {
                     final result = await showDurationPicker(
                         context: context,
                         initialTime: Duration(
-                            minutes: appState.timerDuration.inMinutes));
+                            minutes: settingsState.timerDuration.inMinutes));
                     if (result == null) return;
-                    appState.setDuration(Duration(
+                    settingsState.setDuration(Duration(
                         minutes: result.inMinutes,
-                        seconds: appState.timerDuration.inSeconds % 60));
+                        seconds: settingsState.timerDuration.inSeconds % 60));
                   },
                 ),
               ),
@@ -74,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest seconds'),
                   controller: TextEditingController(
-                      text: (appState.timerDuration.inSeconds % 60).toString()),
+                      text: (settingsState.timerDuration.inSeconds % 60).toString()),
                   keyboardType: TextInputType.number,
                   readOnly: true,
                   onTap: () async {
@@ -82,11 +83,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         context: context,
                         baseUnit: BaseUnit.second,
                         initialTime: Duration(
-                            seconds: appState.timerDuration.inSeconds % 60));
+                            seconds: settingsState.timerDuration.inSeconds % 60));
                     if (result == null) return;
-                    appState.setDuration(Duration(
+                    settingsState.setDuration(Duration(
                         seconds: result.inSeconds,
-                        minutes: appState.timerDuration.inMinutes.floor()));
+                        minutes: settingsState.timerDuration.inMinutes.floor()));
                   },
                 ),
               ),
@@ -94,20 +95,20 @@ class _SettingsPageState extends State<SettingsPage> {
             ListTile(
               title: const Text('Rest timers'),
               onTap: () {
-                appState.setTimers(!appState.restTimers);
+                settingsState.setTimers(!settingsState.restTimers);
               },
               trailing: Switch(
-                value: appState.restTimers,
+                value: settingsState.restTimers,
                 onChanged: (value) {},
               ),
             ),
             ListTile(
               title: const Text('Re-order items'),
               onTap: () {
-                appState.setReorder(!appState.showReorder);
+                settingsState.setReorder(!settingsState.showReorder);
               },
               trailing: Switch(
-                value: appState.showReorder,
+                value: settingsState.showReorder,
                 onChanged: (value) {},
               ),
             ),
