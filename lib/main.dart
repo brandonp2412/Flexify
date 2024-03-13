@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
+import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,12 +15,14 @@ late AppDatabase database;
 late MethodChannel android;
 
 class AppState extends ChangeNotifier {
+  Timer? _timer;
   String? selectedExercise;
   SharedPreferences? prefs;
   ThemeMode themeMode = ThemeMode.system;
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
   bool showReorder = true;
   bool restTimers = true;
+  NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
 
   AppState() {
     SharedPreferences.getInstance().then((value) {
@@ -66,6 +71,42 @@ class AppState extends ChangeNotifier {
 
   void selectExercise(String exercise) {
     selectedExercise = exercise;
+    notifyListeners();
+  }
+
+  void addOneMinute() {
+    final newTimer = nativeTimer.increaseDuration(
+      const Duration(minutes: 1),
+    );
+    updateTimer(newTimer);
+    android.invokeMethod('add', [newTimer.getTimeStamp()]);
+  }
+
+  void stopTimer() {
+    updateTimer(NativeTimerWrapper.emptyTimer());
+    android.invokeMethod('stop');
+  }
+
+  void startTimer(String exercise) {
+    final timer = nativeTimer.increaseDuration(timerDuration);
+    updateTimer(timer);
+    android.invokeMethod('timer',
+        [timerDuration.inMilliseconds, exercise, timer.getTimeStamp()]);
+  }
+
+  void updateTimer(NativeTimerWrapper newTimer) {
+    final wasRunning = _timer?.isActive ?? false;
+    nativeTimer = newTimer;
+    if (nativeTimer.isRunning() && !wasRunning) {
+      _timer?.cancel();
+      _timer = Timer.periodic(
+        const Duration(milliseconds: 20),
+        (timer) {
+          if (nativeTimer.update()) _timer?.cancel();
+          notifyListeners();
+        },
+      );
+    }
     notifyListeners();
   }
 }
@@ -132,11 +173,40 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    android.setMethodCallHandler((call) async {
+      if (call.method == 'tick') {
+        final newTimer = NativeTimerWrapper(
+          Duration(milliseconds: call.arguments[0]),
+          Duration(milliseconds: call.arguments[1]),
+          DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
+          NativeTimerState.values[call.arguments[3] as int],
+        );
+
+        Provider.of<AppState>(
+          context,
+          listen: false,
+        ).updateTimer(newTimer);
+      }
+    });
+
     return DefaultTabController(
       length: 3,
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
+            bottomSheet: Consumer<AppState>(builder: (context, value, child) {
+              final duration = value.nativeTimer.getDuration();
+              final elapsed = value.nativeTimer.getElapsed();
+
+              return Visibility(
+                visible: duration > Duration.zero,
+                child: LinearProgressIndicator(
+                  value: duration == Duration.zero
+                      ? 0
+                      : elapsed.inMilliseconds / duration.inMilliseconds,
+                ),
+              );
+            }),
             body: SafeArea(
               child: TabBarView(
                 controller: tabController,

@@ -132,12 +132,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (appState.restTimers)
-      android.invokeMethod('timer', [
-        appState.timerDuration.inMilliseconds,
-        exercise,
-        DateTime.now().millisecondsSinceEpoch
-      ]);
+    if (appState.restTimers) appState.startTimer(exercise);
   }
 
   @override
@@ -145,6 +140,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     final appState = context.watch<AppState>();
+    final timerRunning = appState.nativeTimer.isRunning();
 
     return Scaffold(
       appBar: AppBar(
@@ -217,10 +213,35 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async => await save(appState),
-        tooltip: "Save this set",
-        child: const Icon(Icons.save),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: timerRunning
+                ? FloatingActionButton(
+                    onPressed: () => appState.stopTimer(),
+                    child: const Icon(Icons.stop),
+                  )
+                : FloatingActionButton(
+                    onPressed: () async => await save(appState),
+                    tooltip: "Save this set",
+                    child: const Icon(Icons.save),
+                  ),
+          ),
+          Positioned(
+            left: 32.0,
+            bottom: 0,
+            child: Visibility(
+              visible: timerRunning,
+              child: FloatingActionButton(
+                tooltip: "Add 1 min",
+                onPressed: () => appState.addOneMinute(),
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
