@@ -105,7 +105,9 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               trailing: Switch(
                 value: appState.restTimers,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  appState.setTimers(value);
+                },
               ),
             ),
             ListTile(
@@ -115,7 +117,9 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               trailing: Switch(
                 value: appState.showReorder,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  appState.setReorder(value);
+                },
               ),
             ),
           ],
