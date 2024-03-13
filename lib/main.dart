@@ -36,15 +36,15 @@ Future<void> main() async {
         ),
         darkTheme: ThemeData.dark(),
         themeMode: settingsState.themeMode,
-        home: const MyHomePage(),
+        home: const HomePage(),
       ),
     ),
   );
 }
 
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

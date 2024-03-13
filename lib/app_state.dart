@@ -86,7 +86,7 @@ class TimerState extends ChangeNotifier {
     });
   }
 
-  Future addOneMinute() async {
+  Future<void> addOneMinute() async {
     final newTimer = nativeTimer.increaseDuration(
       const Duration(minutes: 1),
     );
@@ -94,12 +94,12 @@ class TimerState extends ChangeNotifier {
     await android.invokeMethod('add', [newTimer.getTimeStamp()]);
   }
 
-  Future stopTimer() async {
+  Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
     await android.invokeMethod('stop');
   }
 
-  Future startTimer(String exercise) async {
+  Future<void> startTimer(String exercise) async {
     final timer = nativeTimer.increaseDuration(timerDuration);
     updateTimer(timer);
     await android.invokeMethod(

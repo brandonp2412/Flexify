@@ -31,14 +31,16 @@ class PlanTile extends StatelessWidget {
     final split = plan.days.split(',');
     for (int index = 0; index < split.length; index++) {
       final day = split[index];
-      result.add(TextSpan(
-        text: day.trim(),
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: weekday == day.trim() ? FontWeight.bold : null,
-              decoration:
-                  weekday == day.trim() ? TextDecoration.underline : null,
-            ),
-      ));
+      result.add(
+        TextSpan(
+          text: day.trim(),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: weekday == day.trim() ? FontWeight.bold : null,
+                decoration:
+                    weekday == day.trim() ? TextDecoration.underline : null,
+              ),
+        ),
+      );
       if (index < split.length - 1)
         result.add(
             TextSpan(text: ", ", style: Theme.of(context).textTheme.bodyLarge));
@@ -62,11 +64,12 @@ class PlanTile extends StatelessWidget {
       onTap: () {
         navigatorKey.currentState!.push(
           MaterialPageRoute(
-              builder: (context) => StartPlanPage(
-                    plan: plan,
-                    countStream: countStream,
-                    onReorder: refresh,
-                  )),
+            builder: (context) => StartPlanPage(
+              plan: plan,
+              countStream: countStream,
+              onReorder: refresh,
+            ),
+          ),
         );
       },
       onLongPress: () {
@@ -83,9 +86,10 @@ class PlanTile extends StatelessWidget {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditPlanPage(
-                                plan: plan.toCompanion(false),
-                              )),
+                        builder: (context) => EditPlanPage(
+                          plan: plan.toCompanion(false),
+                        ),
+                      ),
                     );
                     refresh();
                   },

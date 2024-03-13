@@ -23,7 +23,6 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> with Si
         seconds = currSeconds;
       });
     });
-
   }
 
   @override

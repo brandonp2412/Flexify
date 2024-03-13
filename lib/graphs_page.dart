@@ -48,10 +48,13 @@ class _GraphsPageState extends State<GraphsPage> {
 
             if (navigatorKey.currentState!.canPop())
               navigatorKey.currentState!.pop();
-            navigatorKey.currentState!.push(MaterialPageRoute(
+            navigatorKey.currentState!.push(
+              MaterialPageRoute(
                 builder: (context) => ViewGraphPage(
-                      name: value.selectedExercise!,
-                    )));
+                  name: value.selectedExercise!,
+                ),
+              ),
+            );
           });
 
         return NavigatorPopHandler(

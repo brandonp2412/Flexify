@@ -42,7 +42,7 @@ class _PlansPageState extends State<PlansPage> {
         .watch();
   }
 
-  void updatePlans() async {
+  Future<void> updatePlans() async {
     plans = await (database.select(database.plans)
           ..orderBy([
             (u) => drift.OrderingTerm(expression: u.sequence),
@@ -60,11 +60,12 @@ class _PlansPageState extends State<PlansPage> {
         navigatorKey.currentState!.pop();
       },
       child: Navigator(
-          key: navigatorKey,
-          onGenerateRoute: (settings) => MaterialPageRoute(
-                builder: (context) => plansPage(weekday, context),
-                settings: settings,
-              )),
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => plansPage(weekday, context),
+          settings: settings,
+        ),
+      ),
     );
   }
 

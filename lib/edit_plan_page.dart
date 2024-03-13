@@ -92,18 +92,20 @@ class _EditPlanPageState extends State<EditPlanPage> {
           .toList()
           .asMap()
           .entries
-          .map((entry) => SwitchListTile(
-                title: Text(entry.value),
-                value: exerciseSelections.contains(entry.value),
-                onChanged: (value) {
-                  setState(() {
-                    if (value)
-                      exerciseSelections.add(entry.value);
-                    else
-                      exerciseSelections.remove(entry.value);
-                  });
-                },
-              ));
+          .map(
+            (entry) => SwitchListTile(
+              title: Text(entry.value),
+              value: exerciseSelections.contains(entry.value),
+              onChanged: (value) {
+                setState(() {
+                  if (value)
+                    exerciseSelections.add(entry.value);
+                  else
+                    exerciseSelections.remove(entry.value);
+                });
+              },
+            ),
+          );
 
       if (search == '') children.addAll(days);
       children.add(
