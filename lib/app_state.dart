@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'main.dart';
 import 'native_timer_wrapper.dart';
 
 class SettingsState extends ChangeNotifier {
-
   SharedPreferences? prefs;
   ThemeMode themeMode = ThemeMode.system;
 
@@ -14,23 +13,23 @@ class SettingsState extends ChangeNotifier {
   bool showReorder = true;
   bool restTimers = true;
 
-  SettingsState() {
-    SharedPreferences.getInstance().then((value) {
-      prefs = value;
+  Future<void> init() async {
+    final prefsInstance = await SharedPreferences.getInstance();
 
-      final theme = value.getString('themeMode');
-      if (theme == "ThemeMode.system")
-        themeMode = ThemeMode.system;
-      else if (theme == "ThemeMode.light")
-        themeMode = ThemeMode.light;
-      else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
+    prefs = prefsInstance;
 
-      final ms = value.getInt("timerDuration");
-      if (ms != null) timerDuration = Duration(milliseconds: ms);
+    final theme = prefsInstance.getString('themeMode');
+    if (theme == "ThemeMode.system")
+      themeMode = ThemeMode.system;
+    else if (theme == "ThemeMode.light")
+      themeMode = ThemeMode.light;
+    else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
 
-      showReorder = value.getBool("showReorder") ?? true;
-      restTimers = value.getBool("restTimers") ?? true;
-    });
+    final ms = prefsInstance.getInt("timerDuration");
+    if (ms != null) timerDuration = Duration(milliseconds: ms);
+
+    showReorder = prefsInstance.getBool("showReorder") ?? true;
+    restTimers = prefsInstance.getBool("restTimers") ?? true;
   }
 
   void setTimers(bool show) {
@@ -66,7 +65,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 }
-
 
 class TimerState extends ChangeNotifier {
   /* TODO: timerDuration shouldn't really be in either TimerState or SettingsState */

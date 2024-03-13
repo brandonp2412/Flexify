@@ -13,44 +13,38 @@ late AppDatabase database;
 late MethodChannel android;
 
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   database = AppDatabase();
   android = const MethodChannel("com.presley.flexify/android");
-  WidgetsFlutterBinding.ensureInitialized();
+
+  final settingsState = SettingsState();
+  await settingsState.init();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SettingsState()),
+        ChangeNotifierProvider(create: (context) => settingsState),
         ChangeNotifierProvider(create: (context) => AppState()),
         ChangeNotifierProvider(create: (context) => TimerState()),
       ],
-      child: const MyApp(),
+      child: MaterialApp(
+        title: 'Flexify',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(),
+        themeMode: settingsState.themeMode,
+        home: const MyHomePage(),
+      ),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final settingsState = context.watch<SettingsState>();
-    return MaterialApp(
-      title: 'Flexify',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark(),
-      themeMode: settingsState.themeMode,
-      home: const MyHomePage(),
-    );
-  }
-}
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-
 
   @override
   Widget build(BuildContext context) {
