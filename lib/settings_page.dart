@@ -1,4 +1,3 @@
-import 'package:duration_picker/duration_picker.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +10,19 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late TextEditingController minutesController;
+  late TextEditingController secondsController;
+
+  @override
+  void initState() {
+    super.initState();
+    final appState = context.read<AppState>();
+    minutesController = TextEditingController(
+        text: appState.timerDuration.inMinutes.toString());
+    secondsController = TextEditingController(
+        text: (appState.timerDuration.inSeconds % 60).toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
@@ -51,18 +63,16 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest minutes'),
-                  controller: TextEditingController(
-                      text: appState.timerDuration.inMinutes.toString()),
+                  controller: minutesController,
                   keyboardType: TextInputType.number,
-                  readOnly: true,
                   onTap: () async {
-                    final result = await showDurationPicker(
-                        context: context,
-                        initialTime: Duration(
-                            minutes: appState.timerDuration.inMinutes));
-                    if (result == null) return;
+                    minutesController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: minutesController.text.length);
+                  },
+                  onChanged: (value) {
                     appState.setDuration(Duration(
-                        minutes: result.inMinutes,
+                        minutes: int.parse(value),
                         seconds: appState.timerDuration.inSeconds % 60));
                   },
                 ),
@@ -73,19 +83,16 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest seconds'),
-                  controller: TextEditingController(
-                      text: (appState.timerDuration.inSeconds % 60).toString()),
+                  controller: secondsController,
                   keyboardType: TextInputType.number,
-                  readOnly: true,
                   onTap: () async {
-                    final result = await showDurationPicker(
-                        context: context,
-                        baseUnit: BaseUnit.second,
-                        initialTime: Duration(
-                            seconds: appState.timerDuration.inSeconds % 60));
-                    if (result == null) return;
+                    secondsController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: secondsController.text.length);
+                  },
+                  onChanged: (value) {
                     appState.setDuration(Duration(
-                        seconds: result.inSeconds,
+                        seconds: int.parse(value),
                         minutes: appState.timerDuration.inMinutes.floor()));
                   },
                 ),

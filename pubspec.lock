@@ -233,14 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.15.0"
-  duration_picker:
-    dependency: "direct main"
-    description:
-      name: duration_picker
-      sha256: "052b34dac04c29f3849bb3817a26c5aebe9e5f0697c3a374be87db2b84d75753"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   equatable:
     dependency: transitive
     description:
