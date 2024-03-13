@@ -115,7 +115,7 @@ class _ViewGraphPageState extends State<ViewGraphPage>
     return StreamBuilder<List<drift.TypedResult>>(
       stream: graphStream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const SizedBox();
+        if (!snapshot.hasData || snapshot.data!.isEmpty) return const SizedBox();
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
         final rows = snapshot.data!.reversed
             .map((row) => GraphData(
