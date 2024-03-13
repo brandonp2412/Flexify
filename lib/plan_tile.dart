@@ -4,6 +4,7 @@ import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/start_plan_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlanTile extends StatelessWidget {
   const PlanTile({
@@ -46,13 +47,17 @@ class PlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     return ListTile(
       title: plan.days.split(',').length == 7
           ? const Text("Daily")
           : RichText(text: TextSpan(children: getChildren(context))),
       subtitle: Text(plan.exercises.split(',').join(', ')),
-      trailing: ReorderableDragStartListener(
-          index: index, child: const Icon(Icons.drag_handle)),
+      trailing: Visibility(
+        visible: appState.showReorder,
+        child: ReorderableDragStartListener(
+            index: index, child: const Icon(Icons.drag_handle)),
+      ),
       onTap: () {
         navigatorKey.currentState!.push(
           MaterialPageRoute(

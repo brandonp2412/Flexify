@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/native_timer_wrapper.dart';
+import 'package:flexify/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'plans_page.dart';
 
@@ -15,7 +17,57 @@ late MethodChannel android;
 class AppState extends ChangeNotifier {
   Timer? _timer;
   String? selectedExercise;
+  SharedPreferences? prefs;
+  ThemeMode themeMode = ThemeMode.system;
+  Duration timerDuration = const Duration(minutes: 3, seconds: 30);
+  bool showReorder = true;
+  bool restTimers = true;
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
+
+  AppState() {
+    SharedPreferences.getInstance().then((value) {
+      prefs = value;
+
+      final theme = value.getString('themeMode');
+      if (theme == "ThemeMode.system")
+        themeMode = ThemeMode.system;
+      else if (theme == "ThemeMode.light")
+        themeMode = ThemeMode.light;
+      else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
+
+      final ms = value.getInt("timerDuration");
+      if (ms != null) timerDuration = Duration(milliseconds: ms);
+
+      showReorder = value.getBool("showReorder") ?? true;
+      restTimers = value.getBool("restTimers") ?? true;
+
+      notifyListeners();
+    });
+  }
+
+  void setTimers(bool show) {
+    restTimers = show;
+    prefs?.setBool('restTimers', show);
+    notifyListeners();
+  }
+
+  void setReorder(bool show) {
+    showReorder = show;
+    prefs?.setBool('showReorder', show);
+    notifyListeners();
+  }
+
+  void setDuration(Duration duration) {
+    timerDuration = duration;
+    prefs?.setInt('timerDuration', duration.inMilliseconds);
+    notifyListeners();
+  }
+
+  void setTheme(ThemeMode theme) {
+    themeMode = theme;
+    prefs?.setString('themeMode', theme.toString());
+    notifyListeners();
+  }
 
   void selectExercise(String exercise) {
     selectedExercise = exercise;
@@ -35,11 +87,11 @@ class AppState extends ChangeNotifier {
     android.invokeMethod('stop');
   }
 
-  void startTimer(String exercise, Duration duration) {
-    final timer = nativeTimer.increaseDuration(duration);
+  void startTimer(String exercise) {
+    final timer = nativeTimer.increaseDuration(timerDuration);
     updateTimer(timer);
-    android.invokeMethod(
-        'timer', [duration.inMilliseconds, exercise, timer.getTimeStamp()]);
+    android.invokeMethod('timer',
+        [timerDuration.inMilliseconds, exercise, timer.getTimeStamp()]);
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {
@@ -76,6 +128,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     return MaterialApp(
       title: 'Flexify',
       theme: ThemeData(
@@ -83,7 +136,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: appState.themeMode,
       home: const MyHomePage(),
     );
   }
@@ -104,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     tabController.animation!.addListener(() {
       setState(() {
         currentIndex = tabController.index;
@@ -137,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage>
     });
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
@@ -148,7 +201,9 @@ class _MyHomePageState extends State<MyHomePage>
               return Visibility(
                 visible: duration > Duration.zero,
                 child: LinearProgressIndicator(
-                  value: duration == Duration.zero ? 0 : elapsed.inMilliseconds / duration.inMilliseconds,
+                  value: duration == Duration.zero
+                      ? 0
+                      : elapsed.inMilliseconds / duration.inMilliseconds,
                 ),
               );
             }),
@@ -158,6 +213,7 @@ class _MyHomePageState extends State<MyHomePage>
                 children: const [
                   PlansPage(),
                   GraphsPage(),
+                  SettingsPage(),
                 ],
               ),
             ),
@@ -171,7 +227,11 @@ class _MyHomePageState extends State<MyHomePage>
                 Tab(
                   icon: Icon(Icons.insights),
                   text: "Graphs",
-                )
+                ),
+                Tab(
+                  icon: Icon(Icons.settings),
+                  text: "Settings",
+                ),
               ],
             ),
           );

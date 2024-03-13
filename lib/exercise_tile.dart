@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:provider/provider.dart';
 
 class ExerciseTile extends StatelessWidget {
   final String exercise;
@@ -21,6 +22,7 @@ class ExerciseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
     return GestureDetector(
         onLongPressStart: (details) async {
           final position = RelativeRect.fromLTRB(
@@ -68,14 +70,17 @@ class ExerciseTile extends StatelessWidget {
           children: [
             ListTile(
               onTap: onTap,
-              trailing: material.Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ReorderableDragStartListener(
-                    index: index,
-                    child: const Icon(Icons.drag_handle),
-                  )
-                ],
+              trailing: Visibility(
+                visible: appState.showReorder,
+                child: material.Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ReorderableDragStartListener(
+                      index: index,
+                      child: const Icon(Icons.drag_handle),
+                    )
+                  ],
+                ),
               ),
               title: Row(
                 children: [
