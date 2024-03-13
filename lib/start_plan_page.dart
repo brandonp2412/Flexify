@@ -27,7 +27,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController weightController;
   late List<String> planExercises;
 
+  String unit = 'kg';
   int selectedIndex = 0;
+
   final repsNode = FocusNode();
   final weightNode = FocusNode();
 
@@ -89,6 +91,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (last == null) return;
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
+    setState(() {
+      unit = last!.unit;
+    });
     final index = planExercises.indexOf(last.name);
     setState(() {
       selectedIndex = index;
@@ -125,7 +130,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       name: exercise,
       reps: reps,
       weight: weight,
-      unit: 'kg',
+      unit: unit,
       created: DateTime.now(),
     );
 
@@ -160,43 +165,59 @@ class _StartPlanPageState extends State<StartPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            weightController.text.isNotEmpty
-                ? TextField(
-                    controller: weightController,
-                    focusNode: weightNode,
-                    decoration: const InputDecoration(labelText: 'Weight (kg)'),
-                    keyboardType: TextInputType.number,
-                    onTap: () {
-                      selectWeight();
-                    },
-                    onSubmitted: (value) {
-                      repsNode.requestFocus();
-                      repsController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: repsController.text.length,
-                      );
-                    },
-                  )
-                : const SizedBox(
-                    height: 64,
-                  ),
-            repsController.text.isNotEmpty
-                ? TextField(
-                    controller: repsController,
-                    focusNode: repsNode,
-                    decoration: const InputDecoration(labelText: 'Reps'),
-                    keyboardType: TextInputType.number,
-                    onSubmitted: (value) async => await save(appState),
-                    onTap: () {
-                      repsController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: repsController.text.length,
-                      );
-                    },
-                  )
-                : const SizedBox(
-                    height: 64,
-                  ),
+            Visibility(
+              visible: weightController.text.isNotEmpty,
+              child: TextField(
+                controller: weightController,
+                focusNode: weightNode,
+                decoration: const InputDecoration(labelText: 'Weight (kg)'),
+                keyboardType: TextInputType.number,
+                onTap: () {
+                  selectWeight();
+                },
+                onSubmitted: (value) {
+                  repsNode.requestFocus();
+                  repsController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: repsController.text.length,
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: repsController.text.isNotEmpty,
+              child: TextField(
+                controller: repsController,
+                focusNode: repsNode,
+                decoration: const InputDecoration(labelText: 'Reps'),
+                keyboardType: TextInputType.number,
+                onSubmitted: (value) async => await save(appState),
+                onTap: () {
+                  repsController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: repsController.text.length,
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: appState.showUnits,
+              child: DropdownButtonFormField<String>(
+                value: unit,
+                decoration: const InputDecoration(labelText: 'Unit'),
+                items: ['kg', 'lb'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    unit = newValue!;
+                  });
+                },
+              ),
+            ),
             Expanded(
               child: StreamBuilder(
                 stream: widget.countStream,

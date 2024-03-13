@@ -122,6 +122,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
             ),
+            ListTile(
+              title: const Text('Show units'),
+              onTap: () {
+                appState.setUnits(!appState.showUnits);
+              },
+              trailing: Switch(
+                value: appState.showUnits,
+                onChanged: (value) {
+                  appState.setUnits(value);
+                },
+              ),
+            ),
           ],
         ),
       ),

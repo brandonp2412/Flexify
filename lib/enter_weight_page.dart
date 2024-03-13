@@ -15,7 +15,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
   final _formKey = GlobalKey<FormState>();
   double _weight = 0;
   String _unit = 'kg'; // Default unit
-  final List<String> _units = ['kg', 'lbs']; // Available units
+  final List<String> _units = ['kg', 'lb']; // Available units
 
   @override
   Widget build(BuildContext context) {

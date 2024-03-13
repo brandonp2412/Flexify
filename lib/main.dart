@@ -18,6 +18,7 @@ class AppState extends ChangeNotifier {
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
   bool showReorder = true;
   bool restTimers = true;
+  bool showUnits = true;
 
   AppState() {
     SharedPreferences.getInstance().then((value) {
@@ -38,6 +39,12 @@ class AppState extends ChangeNotifier {
 
       notifyListeners();
     });
+  }
+
+  void setUnits(bool show) {
+    showUnits = show;
+    prefs?.setBool('showUnits', show);
+    notifyListeners();
   }
 
   void setTimers(bool show) {
