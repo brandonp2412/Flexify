@@ -38,10 +38,12 @@ class _TimerPageState extends State<TimerPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Visibility(
+        visible: timerState.nativeTimer.isRunning(),
+        child: FloatingActionButton(
         onPressed: () => timerState.stopTimer(),
         child: const Icon(Icons.stop),
-      ),
+      ),)
     );
   }
 
