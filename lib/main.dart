@@ -2,6 +2,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings_page.dart';
+import 'package:flexify/timer_progress_indicator_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -83,19 +84,7 @@ class _MyHomePageState extends State<MyHomePage>
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
-            bottomSheet: Consumer<TimerState>(builder: (context, value, child) {
-              final duration = value.nativeTimer.getDuration();
-              final elapsed = value.nativeTimer.getElapsed();
-
-              return Visibility(
-                visible: duration > Duration.zero,
-                child: LinearProgressIndicator(
-                  value: duration == Duration.zero
-                      ? 0
-                      : elapsed.inMilliseconds / duration.inMilliseconds,
-                ),
-              );
-            }),
+            bottomSheet: const TimerProgressIndicator(),
             body: SafeArea(
               child: TabBarView(
                 controller: tabController,
