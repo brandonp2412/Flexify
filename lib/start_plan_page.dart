@@ -85,15 +85,20 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
 
-    if (last == null) return appState.selectExercise(planExercises[0]);
+    if (last == null) {
+      appState.selectExercise(planExercises[0]);
+      return setState(() {});
+    }
+    repsController.text = last.reps.toString();
+    weightController.text = last.weight.toString();
     setState(() {
-      repsController.text = last!.reps.toString();
-      weightController.text = last.weight.toString();
-      unit = last.unit;
-      final index = planExercises.indexOf(last.name);
-      selectedIndex = index;
-      appState.selectExercise(planExercises[index]);
+      unit = last!.unit;
     });
+    final index = planExercises.indexOf(last.name);
+    setState(() {
+      selectedIndex = index;
+    });
+    appState.selectExercise(planExercises[index]);
   }
 
   Future<void> select(int index) async {
