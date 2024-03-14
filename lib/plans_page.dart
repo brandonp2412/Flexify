@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/constants.dart';
@@ -12,18 +14,49 @@ import 'package:flutter/material.dart';
 import 'plan_tile.dart';
 
 class PlansPage extends StatefulWidget {
-  const PlansPage({Key? key}) : super(key: key);
+  const PlansPage({super.key});
 
   @override
-  createState() => _PlansPageState();
+  State<PlansPage> createState() => _PlansPageState();
 }
 
-class _PlansPageState extends State<PlansPage>
-    with AutomaticKeepAliveClientMixin {
-  List<Plan>? plans;
-  late Stream<List<drift.TypedResult>> countStream;
-  TextEditingController searchController = TextEditingController();
+class _PlansPageState extends State<PlansPage> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigatorPopHandler(
+      onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
+        navigatorKey.currentState!.pop();
+      },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => _PlansPageWidget(
+            navigatorKey: navigatorKey,
+          ),
+          settings: settings,
+        ),
+      ),
+    );
+  }
+}
+
+class _PlansPageWidget extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const _PlansPageWidget({required this.navigatorKey, Key? key})
+      : super(key: key);
+
+  @override
+  createState() => _PlansPageWidgetState();
+}
+
+class _PlansPageWidgetState extends State<_PlansPageWidget> {
+  late Stream<List<drift.TypedResult>> countStream;
+  StreamController<List<Plan>?> planStreamController = StreamController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -43,82 +76,19 @@ class _PlansPageState extends State<PlansPage>
         .watch();
   }
 
-  Future<void> updatePlans() async {
-    plans = await (database.select(database.plans)
-          ..orderBy([
-            (u) => drift.OrderingTerm(expression: u.sequence),
-          ]))
-        .get();
-    setState(() {});
+  Future<void> updatePlans({List<Plan>? plans}) async {
+    if (plans != null) planStreamController.add(plans);
+    else planStreamController.add(await getPlans());
   }
+
+  Future<List<Plan>?> getPlans() async => await (database.select(database.plans)
+        ..orderBy([
+          (u) => drift.OrderingTerm(expression: u.sequence),
+        ]))
+      .get();
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final weekday = weekdays[DateTime.now().weekday - 1];
-    return NavigatorPopHandler(
-      onPop: () {
-        if (navigatorKey.currentState!.canPop() == false) return;
-        navigatorKey.currentState!.pop();
-      },
-      child: Navigator(
-        key: navigatorKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => plansPage(weekday, context),
-          settings: settings,
-        ),
-      ),
-    );
-  }
-
-  Widget get plansWidget {
-    final weekday = weekdays[DateTime.now().weekday - 1];
-    if (plans == null) return const SizedBox();
-    final filtered = plans!
-        .where((element) =>
-            element.days.toLowerCase().contains(searchController.text) ||
-            element.exercises.toLowerCase().contains(searchController.text))
-        .toList();
-
-    return Expanded(
-      child: ReorderableListView.builder(
-        itemCount: filtered.length,
-        itemBuilder: (context, index) {
-          final plan = filtered[index];
-          return PlanTile(
-            key: Key(plan.id.toString()),
-            plan: plan,
-            weekday: weekday,
-            index: index,
-            countStream: countStream,
-            navigatorKey: navigatorKey,
-            refresh: updatePlans,
-          );
-        },
-        onReorder: (int oldIndex, int newIndex) {
-          if (oldIndex < newIndex) {
-            newIndex--;
-          }
-
-          final temp = plans![oldIndex];
-          plans!.removeAt(oldIndex);
-          plans!.insert(newIndex, temp);
-          setState(() {});
-
-          database.transaction(() async {
-            for (int i = 0; i < plans!.length; i++) {
-              final plan = plans![i];
-              final updatedPlan =
-                  plan.toCompanion(false).copyWith(sequence: drift.Value(i));
-              await database.update(database.plans).replace(updatedPlan);
-            }
-          });
-        },
-      ),
-    );
-  }
-
-  Scaffold plansPage(String weekday, BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
@@ -158,7 +128,13 @@ class _PlansPageState extends State<PlansPage>
                     ],
             ),
           ),
-          plansWidget
+          _PlanWidget(
+            plans: planStreamController.stream,
+            searchText: searchController.text,
+            countStream: countStream,
+            updatePlans: updatePlans,
+            navigatorKey: widget.navigatorKey,
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -308,7 +284,78 @@ class _PlansPageState extends State<PlansPage>
       ),
     );
   }
+}
+
+class _PlanWidget extends StatelessWidget {
+  final String searchText;
+  final Stream<List<Plan>?> plans;
+  final Future<void> Function({List<Plan>? plans}) updatePlans;
+  final GlobalKey<NavigatorState> navigatorKey;
+  final Stream<List<drift.TypedResult>> countStream;
+
+  const _PlanWidget({
+    required this.plans,
+    required this.searchText,
+    required this.countStream,
+    required this.updatePlans,
+    required this.navigatorKey,
+    super.key,
+  });
 
   @override
-  bool get wantKeepAlive => true;
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Plan>?>(
+      stream: plans,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          final plans = snapshot.data!;
+          final weekday = weekdays[DateTime.now().weekday - 1];
+          final filtered = plans
+              .where((element) =>
+                  element.days.toLowerCase().contains(searchText) ||
+                  element.exercises.toLowerCase().contains(searchText))
+              .toList();
+
+          return Expanded(
+            child: ReorderableListView.builder(
+              itemCount: filtered.length,
+              itemBuilder: (context, index) {
+                final plan = filtered[index];
+                return PlanTile(
+                  key: Key(plan.id.toString()),
+                  plan: plan,
+                  weekday: weekday,
+                  index: index,
+                  countStream: countStream,
+                  navigatorKey: navigatorKey,
+                  refresh: updatePlans,
+                );
+              },
+              onReorder: (int oldIndex, int newIndex) async {
+                if (oldIndex < newIndex) {
+                  newIndex--;
+                }
+
+                final temp = plans[oldIndex];
+                plans.removeAt(oldIndex);
+                plans.insert(newIndex, temp);
+
+                await updatePlans(plans: plans);
+                await database.transaction(() async {
+                  for (int i = 0; i < plans.length; i++) {
+                    final plan = plans[i];
+                    final updatedPlan = plan
+                        .toCompanion(false)
+                        .copyWith(sequence: drift.Value(i));
+                    await database.update(database.plans).replace(updatedPlan);
+                  }
+                });
+              },
+            ),
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
 }

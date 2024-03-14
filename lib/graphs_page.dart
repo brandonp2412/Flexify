@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/app_state.dart';
@@ -19,8 +20,7 @@ class GraphsPage extends StatefulWidget {
   createState() => _GraphsPageState();
 }
 
-class _GraphsPageState extends State<GraphsPage>
-    with AutomaticKeepAliveClientMixin {
+class _GraphsPageState extends State<GraphsPage> {
   late Stream<List<drift.TypedResult>> stream;
   TextEditingController searchController = TextEditingController();
   String selectedExercise = "";
@@ -35,11 +35,11 @@ class _GraphsPageState extends State<GraphsPage>
         .watch();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final appState = context.watch<AppState>();
-
     if (appState.selected?.isNotEmpty == true)
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (selectedExercise == appState.selected) return;
@@ -47,8 +47,10 @@ class _GraphsPageState extends State<GraphsPage>
           selectedExercise = appState.selected ?? "";
         });
 
-        if (navigatorKey.currentState!.canPop())
+        if (navigatorKey.currentState!.canPop()) {
           navigatorKey.currentState!.pop();
+        }
+
         navigatorKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => ViewGraphPage(
@@ -271,7 +273,4 @@ class _GraphsPageState extends State<GraphsPage>
       payload: file.path,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

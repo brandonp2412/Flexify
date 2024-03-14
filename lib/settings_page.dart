@@ -10,8 +10,7 @@ class SettingsPage extends StatefulWidget {
   createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage>
-    with AutomaticKeepAliveClientMixin {
+class _SettingsPageState extends State<SettingsPage> {
   late TextEditingController minutesController;
   late TextEditingController secondsController;
 
@@ -27,7 +26,6 @@ class _SettingsPageState extends State<SettingsPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final settingsState = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +134,4 @@ class _SettingsPageState extends State<SettingsPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

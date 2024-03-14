@@ -38,10 +38,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   void initState() {
     super.initState();
-    repsController = TextEditingController();
-    weightController = TextEditingController();
+    repsController = TextEditingController(text: "0.0");
+    weightController = TextEditingController(text: "0.0");
     planExercises = widget.plan.exercises.split(',');
-    getLast();
+    getLast(context.read<AppState>());
   }
 
   @override
@@ -60,7 +60,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
   }
 
-  Future<void> getLast() async {
+  Future<void> getLast(AppState appState) async {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
@@ -84,23 +84,16 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
-    repsController.text = "0";
-    weightController.text = "0";
-    if (!mounted) return;
-    final exerciseState = context.read<AppState>();
-    exerciseState.selectExercise(planExercises[0]);
-    setState(() {});
-    if (last == null) return;
-    repsController.text = last.reps.toString();
-    weightController.text = last.weight.toString();
+
+    if (last == null) return appState.selectExercise(planExercises[0]);
     setState(() {
-      unit = last!.unit;
-    });
-    final index = planExercises.indexOf(last.name);
-    setState(() {
+      repsController.text = last!.reps.toString();
+      weightController.text = last.weight.toString();
+      unit = last.unit;
+      final index = planExercises.indexOf(last.name);
       selectedIndex = index;
+      appState.selectExercise(planExercises[index]);
     });
-    exerciseState.selectExercise(planExercises[index]);
   }
 
   Future<void> select(int index) async {
@@ -118,9 +111,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
-    if (last == null) return;
-    repsController.text = last.reps.toString();
-    weightController.text = last.weight.toString();
+    setState(() {
+      repsController.text = last != null ? last.reps.toString() : "0.0";
+      weightController.text = last != null ? last.weight.toString() : "0.0";
+    });
   }
 
   Future<void> save(TimerState timerState, SettingsState settingsState) async {
@@ -139,7 +133,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (settingsState.restTimers) await timerState.startTimer(exercise, settingsState.timerDuration);
+    if (settingsState.restTimers)
+      await timerState.startTimer(exercise, settingsState.timerDuration);
   }
 
   @override
@@ -147,7 +142,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
-    final timerState = context.watch<TimerState>();
+    final timerState = context.read<TimerState>();
     final settingsState = context.watch<SettingsState>();
 
     return Scaffold(
@@ -164,41 +159,35 @@ class _StartPlanPageState extends State<StartPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-
-            Visibility(
-              visible: weightController.text.isNotEmpty,
-              child: TextField(
-                controller: weightController,
-                focusNode: weightNode,
-                decoration: const InputDecoration(labelText: 'Weight (kg)'),
-                keyboardType: TextInputType.number,
-                onTap: () {
-                  selectWeight();
-                },
-                onSubmitted: (value) {
-                  repsNode.requestFocus();
-                  repsController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: repsController.text.length,
-                  );
-                },
-              ),
+            TextField(
+              controller: weightController,
+              focusNode: weightNode,
+              decoration: const InputDecoration(labelText: 'Weight (kg)'),
+              keyboardType: TextInputType.number,
+              onTap: () {
+                selectWeight();
+              },
+              onSubmitted: (value) {
+                repsNode.requestFocus();
+                repsController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: repsController.text.length,
+                );
+              },
             ),
-            Visibility(
-              visible: repsController.text.isNotEmpty,
-              child: TextField(
-                controller: repsController,
-                focusNode: repsNode,
-                decoration: const InputDecoration(labelText: 'Reps'),
-                keyboardType: TextInputType.number,
-                onSubmitted: (value) async => await save(timerState, settingsState),
-                onTap: () {
-                  repsController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: repsController.text.length,
-                  );
-                },
-              ),
+            TextField(
+              controller: repsController,
+              focusNode: repsNode,
+              decoration: const InputDecoration(labelText: 'Reps'),
+              keyboardType: TextInputType.number,
+              onSubmitted: (value) async =>
+                  await save(timerState, settingsState),
+              onTap: () {
+                repsController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: repsController.text.length,
+                );
+              },
             ),
             Visibility(
               visible: settingsState.showUnits,
@@ -275,9 +264,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
           newIndex--;
         }
 
-        if (selectedIndex == oldIndex)
+        if (oldIndex == selectedIndex)
           selectedIndex = newIndex;
-        else if (selectedIndex == newIndex) selectedIndex = oldIndex;
+        else if (oldIndex < selectedIndex && newIndex >= selectedIndex)
+          selectedIndex--;
+        else if (oldIndex > selectedIndex && newIndex <= selectedIndex)
+          selectedIndex++;
 
         final temp = planExercises[oldIndex];
         planExercises.removeAt(oldIndex);
