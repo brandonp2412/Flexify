@@ -6,8 +6,6 @@ import 'native_timer_wrapper.dart';
 class SettingsState extends ChangeNotifier {
   SharedPreferences? prefs;
   ThemeMode themeMode = ThemeMode.system;
-
-  /* TODO: timerDuration shouldn't really be in either TimerState or SettingsState */
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
   bool showReorder = true;
   bool restTimers = true;
@@ -73,8 +71,6 @@ class AppState extends ChangeNotifier {
 }
 
 class TimerState extends ChangeNotifier {
-  /* TODO: timerDuration shouldn't really be in either TimerState or SettingsState */
-  Duration timerDuration = const Duration(minutes: 3, seconds: 30);
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
 
   TimerState() {
@@ -105,7 +101,7 @@ class TimerState extends ChangeNotifier {
     await android.invokeMethod('stop');
   }
 
-  Future<void> startTimer(String exercise) async {
+  Future<void> startTimer(String exercise, Duration timerDuration) async {
     final timer = nativeTimer.increaseDuration(timerDuration);
     updateTimer(timer);
     await android.invokeMethod(
