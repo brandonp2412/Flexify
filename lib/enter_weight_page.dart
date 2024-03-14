@@ -73,6 +73,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
             context.read<ExerciseState>().selectExercise('Weight');
           }
         },
+        tooltip: "Save todays weight",
         child: const Icon(Icons.save),
       ),
     );

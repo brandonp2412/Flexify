@@ -184,7 +184,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
           if (!mounted) return;
           Navigator.pop(context);
         },
-        child: const Icon(Icons.check),
+        tooltip: "Save this plan",
+        child: const Icon(Icons.save),
       ),
     );
   }
