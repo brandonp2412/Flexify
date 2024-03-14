@@ -97,9 +97,9 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
-                requestNotificationPermission();
-                timerState.addOneMinute();
+              onPressed: () async {
+                await requestNotificationPermission();
+                await timerState.addOneMinute();
               },
               child: const Text('+1 min'),
             ),

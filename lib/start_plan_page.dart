@@ -139,7 +139,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (settingsState.restTimers) timerState.startTimer(exercise, settingsState.timerDuration);
+    if (settingsState.restTimers) await timerState.startTimer(exercise, settingsState.timerDuration);
   }
 
   @override

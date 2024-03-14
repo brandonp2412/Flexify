@@ -55,9 +55,7 @@ class _SettingsPageState extends State<SettingsPage>
                   child: Text("Light"),
                 ),
               ],
-              onChanged: (value) {
-                settingsState.setTheme(value!);
-              },
+              onChanged: (value) async => await settingsState.setTheme(value!),
             ),
             const SizedBox(
               height: 8.0,
@@ -74,14 +72,12 @@ class _SettingsPageState extends State<SettingsPage>
                       extentOffset: minutesController.text.length,
                     );
                   },
-                  onChanged: (value) {
-                    settingsState.setDuration(
-                      Duration(
-                        minutes: int.parse(value),
-                        seconds: settingsState.timerDuration.inSeconds % 60,
-                      ),
-                    );
-                  },
+                  onChanged: (value) async => await settingsState.setDuration(
+                    Duration(
+                      minutes: int.parse(value),
+                      seconds: settingsState.timerDuration.inSeconds % 60,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -97,51 +93,42 @@ class _SettingsPageState extends State<SettingsPage>
                         baseOffset: 0,
                         extentOffset: secondsController.text.length);
                   },
-                  onChanged: (value) {
-                    settingsState.setDuration(
-                      Duration(
-                        seconds: int.parse(value),
-                        minutes: settingsState.timerDuration.inMinutes.floor(),
-                      ),
-                    );
-                  },
+                  onChanged: (value) async => await settingsState.setDuration(
+                    Duration(
+                      seconds: int.parse(value),
+                      minutes: settingsState.timerDuration.inMinutes.floor(),
+                    ),
+                  ),
                 ),
               ),
             ]),
             ListTile(
               title: const Text('Rest timers'),
-              onTap: () {
-                settingsState.setTimers(!settingsState.restTimers);
-              },
+              onTap: () async =>
+                  await settingsState.setTimers(!settingsState.restTimers),
               trailing: Switch(
                 value: settingsState.restTimers,
-                onChanged: (value) {
-                  settingsState.setTimers(value);
-                },
+                onChanged: (value) async =>
+                    await settingsState.setTimers(value),
               ),
             ),
             ListTile(
               title: const Text('Re-order items'),
-              onTap: () {
-                settingsState.setReorder(!settingsState.showReorder);
-              },
+              onTap: () async =>
+                  await settingsState.setReorder(!settingsState.showReorder),
               trailing: Switch(
                 value: settingsState.showReorder,
-                onChanged: (value) {
-                  settingsState.setReorder(value);
-                },
+                onChanged: (value) async =>
+                    await settingsState.setReorder(value),
               ),
             ),
             ListTile(
               title: const Text('Show units'),
-              onTap: () {
-                settingsState.setUnits(!settingsState.showUnits);
-              },
+              onTap: () async =>
+                  await settingsState.setUnits(!settingsState.showUnits),
               trailing: Switch(
                 value: settingsState.showUnits,
-                onChanged: (value) {
-                  settingsState.setUnits(value);
-                },
+                onChanged: (value) async => await settingsState.setUnits(value),
               ),
             ),
           ],

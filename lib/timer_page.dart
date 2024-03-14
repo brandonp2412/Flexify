@@ -25,7 +25,7 @@ class _TimerPageState extends State<TimerPage> {
       floatingActionButton: Visibility(
         visible: timerState.nativeTimer.isRunning(),
         child: FloatingActionButton(
-        onPressed: () => timerState.stopTimer(),
+        onPressed: () async => await timerState.stopTimer(),
         child: const Icon(Icons.stop),
       ),)
     );

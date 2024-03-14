@@ -30,31 +30,31 @@ class SettingsState extends ChangeNotifier {
     restTimers = prefsInstance.getBool("restTimers") ?? true;
   }
 
-  void setUnits(bool show) {
+  Future<void> setUnits(bool show) async {
     showUnits = show;
-    prefs?.setBool('showUnits', show);
+    await prefs?.setBool('showUnits', show);
     notifyListeners();
   }
 
-  void setTimers(bool show) {
+  Future<void> setTimers(bool show) async {
     restTimers = show;
-    prefs?.setBool('restTimers', show);
+    await prefs?.setBool('restTimers', show);
     notifyListeners();
   }
 
-  void setReorder(bool show) {
+  Future<void> setReorder(bool show) async {
     showReorder = show;
-    prefs?.setBool('showReorder', show);
+    await prefs?.setBool('showReorder', show);
     notifyListeners();
   }
 
-  void setDuration(Duration duration) {
+  Future<void> setDuration(Duration duration) async {
     timerDuration = duration;
-    prefs?.setInt('timerDuration', duration.inMilliseconds);
+    await prefs?.setInt('timerDuration', duration.inMilliseconds);
     notifyListeners();
   }
 
-  void setTheme(ThemeMode theme) {
+  Future<void> setTheme(ThemeMode theme) async {
     themeMode = theme;
     prefs?.setString('themeMode', theme.toString());
     notifyListeners();
