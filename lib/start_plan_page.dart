@@ -275,10 +275,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
           newIndex--;
         }
 
+        if (selectedIndex == oldIndex)
+          selectedIndex = newIndex;
+        else if (selectedIndex == newIndex) selectedIndex = oldIndex;
+
         final temp = planExercises[oldIndex];
         planExercises.removeAt(oldIndex);
         planExercises.insert(newIndex, temp);
-        setState(() {});
 
         final plan = widget.plan.copyWith(exercises: planExercises.join(','));
         await database.update(database.plans).replace(plan);
