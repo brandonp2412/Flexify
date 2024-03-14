@@ -56,7 +56,7 @@ class SettingsState extends ChangeNotifier {
 
   Future<void> setTheme(ThemeMode theme) async {
     themeMode = theme;
-    prefs?.setString('themeMode', theme.toString());
+    await prefs?.setString('themeMode', theme.toString());
     notifyListeners();
   }
 }

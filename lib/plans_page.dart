@@ -18,7 +18,8 @@ class PlansPage extends StatefulWidget {
   createState() => _PlansPageState();
 }
 
-class _PlansPageState extends State<PlansPage> with AutomaticKeepAliveClientMixin {
+class _PlansPageState extends State<PlansPage>
+    with AutomaticKeepAliveClientMixin {
   List<Plan>? plans;
   late Stream<List<drift.TypedResult>> countStream;
   TextEditingController searchController = TextEditingController();
@@ -165,9 +166,13 @@ class _PlansPageState extends State<PlansPage> with AutomaticKeepAliveClientMixi
           await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const EditPlanPage(
-                    plan: PlansCompanion(
-                        days: drift.Value(''), exercises: drift.Value('')))),
+              builder: (context) => const EditPlanPage(
+                plan: PlansCompanion(
+                  days: drift.Value(''),
+                  exercises: drift.Value(''),
+                ),
+              ),
+            ),
           );
           await updatePlans();
         },
