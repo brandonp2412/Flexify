@@ -26,27 +26,17 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => AppState()),
         ChangeNotifierProvider(create: (context) => TimerState()),
       ],
-      child: MaterialApp(
-        title: 'Flexify',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData.dark(),
-        themeMode: settingsState.themeMode,
-        home: const HomePage(),
-      ),
+      child: const App(),
     ),
   );
 }
 
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settingsState = context.watch<SettingsState>();
     return MaterialApp(
       title: 'Flexify',
       theme: ThemeData(
@@ -54,40 +44,16 @@ class HomePage extends StatelessWidget {
         useMaterial3: true,
       ),
       darkTheme: ThemeData.dark(),
-      themeMode: settings.themeMode,
-      home: const MyHomePage(),
+      themeMode: settingsState.themeMode,
+      home: const HomePage(),
     );
   }
+
+
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
-  late TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 3, vsync: this);
-    tabController.animation!.addListener(() {
-      setState(() {
-        currentIndex = tabController.index;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
