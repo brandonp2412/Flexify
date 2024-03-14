@@ -5,6 +5,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'exercise_tile.dart';
 
 class StartPlanPage extends StatefulWidget {
@@ -86,8 +87,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController.text = "0";
     weightController.text = "0";
     if (!mounted) return;
-    Provider.of<AppState>(context, listen: false)
-        .selectExercise(planExercises[0]);
+    final exerciseState = context.read<AppState>();
+    exerciseState.selectExercise(planExercises[0]);
     setState(() {});
     if (last == null) return;
     repsController.text = last.reps.toString();
@@ -99,8 +100,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    Provider.of<AppState>(context, listen: false)
-        .selectExercise(planExercises[index]);
+    exerciseState.selectExercise(planExercises[index]);
   }
 
   void select(int index) async {
@@ -108,7 +108,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
       selectedIndex = index;
     });
     final exercise = planExercises.elementAt(index);
-    Provider.of<AppState>(context, listen: false).selectExercise(exercise);
+    final exerciseState = context.read<AppState>();
+    exerciseState.selectExercise(exercise);
     final last = await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.equals(exercise))
           ..orderBy([
@@ -145,8 +146,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
+
     final timerState = context.watch<TimerState>();
-    final settingsState = context.read<SettingsState>();
+    final settingsState = context.watch()<SettingsState>();
     final timerRunning = timerState.nativeTimer.isRunning();
 
     return Scaffold(
@@ -237,35 +239,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ],
         ),
       ),
-      floatingActionButton: Stack(
-        children: <Widget>[
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: timerRunning
-                ? FloatingActionButton(
-                    onPressed: () => timerState.stopTimer(),
-                    child: const Icon(Icons.stop),
-                  )
-                : FloatingActionButton(
-                    onPressed: () async => await save(timerState, settingsState),
-                    tooltip: "Save this set",
-                    child: const Icon(Icons.save),
-                  ),
-          ),
-          Positioned(
-            left: 32.0,
-            bottom: 0,
-            child: Visibility(
-              visible: timerRunning,
-              child: FloatingActionButton(
-                tooltip: "Add 1 min",
-                onPressed: () => timerState.addOneMinute(),
-                child: const Icon(Icons.add),
-              ),
-            ),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async => await save(timerState, settingsState),
+        tooltip: "Save this set",
+        child: const Icon(Icons.save),
       ),
     );
   }

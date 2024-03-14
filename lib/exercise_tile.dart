@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/app_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'app_state.dart';
 
 class ExerciseTile extends StatelessWidget {
   final String exercise;

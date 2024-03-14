@@ -1,6 +1,7 @@
-import 'package:flexify/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'app_state.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -9,18 +10,19 @@ class SettingsPage extends StatefulWidget {
   createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> with AutomaticKeepAliveClientMixin {
+class _SettingsPageState extends State<SettingsPage>
+    with AutomaticKeepAliveClientMixin {
   late TextEditingController minutesController;
   late TextEditingController secondsController;
 
   @override
   void initState() {
     super.initState();
-    final appState = context.read<SettingsState>();
+    final settings = context.read<SettingsState>();
     minutesController = TextEditingController(
-        text: appState.timerDuration.inMinutes.toString());
+        text: settings.timerDuration.inMinutes.toString());
     secondsController = TextEditingController(
-        text: (appState.timerDuration.inSeconds % 60).toString());
+        text: (settings.timerDuration.inSeconds % 60).toString());
   }
 
   @override
@@ -64,21 +66,21 @@ class _SettingsPageState extends State<SettingsPage> with AutomaticKeepAliveClie
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest minutes'),
-
                   controller: minutesController,
-
                   keyboardType: TextInputType.number,
                   onTap: () async {
-
                     minutesController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: minutesController.text.length);
+                      baseOffset: 0,
+                      extentOffset: minutesController.text.length,
+                    );
                   },
                   onChanged: (value) {
-                    settingsState.setDuration(Duration(
+                    settingsState.setDuration(
+                      Duration(
                         minutes: int.parse(value),
-                        seconds: settingsState.timerDuration.inSeconds % 60));
-
+                        seconds: settingsState.timerDuration.inSeconds % 60,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -88,20 +90,20 @@ class _SettingsPageState extends State<SettingsPage> with AutomaticKeepAliveClie
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: 'Rest seconds'),
-
                   controller: secondsController,
                   keyboardType: TextInputType.number,
                   onTap: () async {
-
                     secondsController.selection = TextSelection(
                         baseOffset: 0,
                         extentOffset: secondsController.text.length);
                   },
                   onChanged: (value) {
-                    settingsState.setDuration(Duration(
+                    settingsState.setDuration(
+                      Duration(
                         seconds: int.parse(value),
-                        minutes: settingsState.timerDuration.inMinutes.floor()));
-
+                        minutes: settingsState.timerDuration.inMinutes.floor(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -112,7 +114,6 @@ class _SettingsPageState extends State<SettingsPage> with AutomaticKeepAliveClie
                 settingsState.setTimers(!settingsState.restTimers);
               },
               trailing: Switch(
-
                 value: settingsState.restTimers,
                 onChanged: (value) {
                   settingsState.setTimers(value);

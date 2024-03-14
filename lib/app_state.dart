@@ -64,10 +64,10 @@ class SettingsState extends ChangeNotifier {
 }
 
 class AppState extends ChangeNotifier {
-  String? selectedExercise;
+  String? selected;
 
   void selectExercise(String exercise) {
-    selectedExercise = exercise;
+    selected = exercise;
     notifyListeners();
   }
 }

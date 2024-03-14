@@ -15,8 +15,29 @@ class EnterWeightPage extends StatefulWidget {
 class _EnterWeightPageState extends State<EnterWeightPage> {
   final _formKey = GlobalKey<FormState>();
   double _weight = 0;
+  String yesterdaysWeight = "";
   String _unit = 'kg'; // Default unit
   final List<String> _units = ['kg', 'lb']; // Available units
+
+  @override
+  void initState() {
+    super.initState();
+    (database.gymSets.select()
+          ..where((tbl) => tbl.name.equals('Weight'))
+          ..orderBy(
+            [
+              (u) => drift.OrderingTerm(
+                  expression: u.created, mode: drift.OrderingMode.desc)
+            ],
+          )
+          ..limit(1))
+        .getSingle()
+        .then((value) => setState(
+              () {
+                yesterdaysWeight = "${value.weight} ${value.unit}";
+              },
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +76,11 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                   });
                 },
               ),
+              TextFormField(
+                controller: TextEditingController(text: yesterdaysWeight),
+                decoration: const InputDecoration(labelText: 'Previous weight'),
+                enabled: false,
+              ),
             ],
           ),
         ),
@@ -70,10 +96,10 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 unit: _unit,
                 weight: _weight));
             Navigator.pop(context);
-            Provider.of<AppState>(context, listen: false)
-                .selectExercise('Weight');
+            context.read<AppState>().selectExercise('Weight');
           }
         },
+        tooltip: "Save today's weight",
         child: const Icon(Icons.save),
       ),
     );

@@ -105,6 +105,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
           if (!mounted) return;
           Navigator.pop(context);
         },
+        tooltip: "Update all records for this exercise",
         child: const Icon(Icons.save),
       ),
     );
