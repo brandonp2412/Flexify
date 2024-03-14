@@ -15,8 +15,29 @@ class EnterWeightPage extends StatefulWidget {
 class _EnterWeightPageState extends State<EnterWeightPage> {
   final _formKey = GlobalKey<FormState>();
   double _weight = 0;
+  String yesterdaysWeight = "";
   String _unit = 'kg'; // Default unit
   final List<String> _units = ['kg', 'lb']; // Available units
+
+  @override
+  void initState() {
+    super.initState();
+    (database.gymSets.select()
+          ..where((tbl) => tbl.name.equals('Weight'))
+          ..orderBy(
+            [
+              (u) => drift.OrderingTerm(
+                  expression: u.created, mode: drift.OrderingMode.desc)
+            ],
+          )
+          ..limit(1))
+        .getSingle()
+        .then((value) => setState(
+              () {
+                yesterdaysWeight = "${value.weight} ${value.unit}";
+              },
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +75,11 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                     _unit = newValue!;
                   });
                 },
+              ),
+              TextFormField(
+                controller: TextEditingController(text: yesterdaysWeight),
+                decoration: const InputDecoration(labelText: 'Previous weight'),
+                enabled: false,
               ),
             ],
           ),
