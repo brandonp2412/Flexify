@@ -1,9 +1,12 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
+import 'package:flexify/exercise_state.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'exercise_tile.dart';
 
 class StartPlanPage extends StatefulWidget {
@@ -85,8 +88,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController.text = "0";
     weightController.text = "0";
     if (!mounted) return;
-    Provider.of<AppState>(context, listen: false)
-        .selectExercise(planExercises[0]);
+    final exerciseState = context.read<ExerciseState>();
+    exerciseState.selectExercise(planExercises[0]);
     setState(() {});
     if (last == null) return;
     repsController.text = last.reps.toString();
@@ -98,8 +101,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    Provider.of<AppState>(context, listen: false)
-        .selectExercise(planExercises[index]);
+    exerciseState.selectExercise(planExercises[index]);
   }
 
   void select(int index) async {
@@ -107,7 +109,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
       selectedIndex = index;
     });
     final exercise = planExercises.elementAt(index);
-    Provider.of<AppState>(context, listen: false).selectExercise(exercise);
+    final exerciseState = context.read<ExerciseState>();
+    exerciseState.selectExercise(exercise);
     final last = await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.equals(exercise))
           ..orderBy([
@@ -121,7 +124,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController.text = last.weight.toString();
   }
 
-  Future save(AppState appState) async {
+  Future save(SettingsState settings) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
@@ -137,9 +140,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (appState.restTimers)
+    if (settings.restTimers)
       android.invokeMethod('timer', [
-        appState.timerDuration.inMilliseconds,
+        settings.timerDuration.inMilliseconds,
         exercise,
         DateTime.now().millisecondsSinceEpoch
       ]);
@@ -149,7 +152,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    final appState = context.watch<AppState>();
+    final settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -191,7 +194,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 focusNode: repsNode,
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
-                onSubmitted: (value) async => await save(appState),
+                onSubmitted: (value) async => await save(settings),
                 onTap: () {
                   repsController.selection = TextSelection(
                     baseOffset: 0,
@@ -201,7 +204,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             ),
             Visibility(
-              visible: appState.showUnits,
+              visible: settings.showUnits,
               child: DropdownButtonFormField<String>(
                 value: unit,
                 decoration: const InputDecoration(labelText: 'Unit'),
@@ -239,7 +242,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await save(appState),
+        onPressed: () async => await save(settings),
         tooltip: "Save this set",
         child: const Icon(Icons.save),
       ),

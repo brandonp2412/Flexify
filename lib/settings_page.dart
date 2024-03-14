@@ -1,4 +1,4 @@
-import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,16 +16,16 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    final appState = context.read<AppState>();
+    final settings = context.read<SettingsState>();
     minutesController = TextEditingController(
-        text: appState.timerDuration.inMinutes.toString());
+        text: settings.timerDuration.inMinutes.toString());
     secondsController = TextEditingController(
-        text: (appState.timerDuration.inSeconds % 60).toString());
+        text: (settings.timerDuration.inSeconds % 60).toString());
   }
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final settings = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -35,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: <Widget>[
             DropdownButtonFormField(
-              value: appState.themeMode,
+              value: settings.themeMode,
               decoration: const InputDecoration(
                   labelStyle: TextStyle(), labelText: 'Theme'),
               items: const [
@@ -53,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
               onChanged: (value) {
-                appState.setTheme(value!);
+                settings.setTheme(value!);
               },
             ),
             const SizedBox(
@@ -71,9 +71,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         extentOffset: minutesController.text.length);
                   },
                   onChanged: (value) {
-                    appState.setDuration(Duration(
+                    settings.setDuration(Duration(
                         minutes: int.parse(value),
-                        seconds: appState.timerDuration.inSeconds % 60));
+                        seconds: settings.timerDuration.inSeconds % 60));
                   },
                 ),
               ),
@@ -91,9 +91,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         extentOffset: secondsController.text.length);
                   },
                   onChanged: (value) {
-                    appState.setDuration(Duration(
+                    settings.setDuration(Duration(
                         seconds: int.parse(value),
-                        minutes: appState.timerDuration.inMinutes.floor()));
+                        minutes: settings.timerDuration.inMinutes.floor()));
                   },
                 ),
               ),
@@ -101,36 +101,36 @@ class _SettingsPageState extends State<SettingsPage> {
             ListTile(
               title: const Text('Rest timers'),
               onTap: () {
-                appState.setTimers(!appState.restTimers);
+                settings.setTimers(!settings.restTimers);
               },
               trailing: Switch(
-                value: appState.restTimers,
+                value: settings.restTimers,
                 onChanged: (value) {
-                  appState.setTimers(value);
+                  settings.setTimers(value);
                 },
               ),
             ),
             ListTile(
               title: const Text('Re-order items'),
               onTap: () {
-                appState.setReorder(!appState.showReorder);
+                settings.setReorder(!settings.showReorder);
               },
               trailing: Switch(
-                value: appState.showReorder,
+                value: settings.showReorder,
                 onChanged: (value) {
-                  appState.setReorder(value);
+                  settings.setReorder(value);
                 },
               ),
             ),
             ListTile(
               title: const Text('Show units'),
               onTap: () {
-                appState.setUnits(!appState.showUnits);
+                settings.setUnits(!settings.showUnits);
               },
               trailing: Switch(
-                value: appState.showUnits,
+                value: settings.showUnits,
                 onChanged: (value) {
-                  appState.setUnits(value);
+                  settings.setUnits(value);
                 },
               ),
             ),

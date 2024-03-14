@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
+import 'package:flexify/exercise_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
@@ -36,35 +37,33 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppState>(
-      builder: (context, value, child) {
-        if (value.selectedExercise?.isNotEmpty == true)
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (selectedExercise == value.selectedExercise) return;
-            setState(() {
-              selectedExercise = value.selectedExercise ?? "";
-            });
+    final exercise = context.watch<ExerciseState>();
 
-            if (navigatorKey.currentState!.canPop())
-              navigatorKey.currentState!.pop();
-            navigatorKey.currentState!.push(MaterialPageRoute(
-                builder: (context) => ViewGraphPage(
-                      name: value.selectedExercise!,
-                    )));
-          });
+    if (exercise.selected?.isNotEmpty == true)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (selectedExercise == exercise.selected) return;
+        setState(() {
+          selectedExercise = exercise.selected ?? "";
+        });
 
-        return NavigatorPopHandler(
-          onPop: () {
-            if (navigatorKey.currentState!.canPop() == false) return;
-            navigatorKey.currentState!.pop();
-          },
-          child: Navigator(
-            key: navigatorKey,
-            onGenerateRoute: (settings) => MaterialPageRoute(
-                builder: (context) => graphsPage(), settings: settings),
-          ),
-        );
+        if (navigatorKey.currentState!.canPop())
+          navigatorKey.currentState!.pop();
+        navigatorKey.currentState!.push(MaterialPageRoute(
+            builder: (context) => ViewGraphPage(
+                  name: exercise.selected!,
+                )));
+      });
+
+    return NavigatorPopHandler(
+      onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
+        navigatorKey.currentState!.pop();
       },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+            builder: (context) => graphsPage(), settings: settings),
+      ),
     );
   }
 

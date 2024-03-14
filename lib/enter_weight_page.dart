@@ -1,4 +1,5 @@
 import 'package:flexify/database.dart';
+import 'package:flexify/exercise_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
@@ -69,8 +70,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 unit: _unit,
                 weight: _weight));
             Navigator.pop(context);
-            Provider.of<AppState>(context, listen: false)
-                .selectExercise('Weight');
+            context.read<ExerciseState>().selectExercise('Weight');
           }
         },
         child: const Icon(Icons.save),
