@@ -38,13 +38,13 @@ class _GraphsPageState extends State<GraphsPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final exercise = context.watch<AppState>();
+    final appState = context.watch<AppState>();
 
-    if (exercise.selected?.isNotEmpty == true)
+    if (appState.selected?.isNotEmpty == true)
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (selectedExercise == exercise.selected) return;
+        if (selectedExercise == appState.selected) return;
         setState(() {
-          selectedExercise = exercise.selected ?? "";
+          selectedExercise = appState.selected ?? "";
         });
 
         if (navigatorKey.currentState!.canPop())
@@ -52,7 +52,7 @@ class _GraphsPageState extends State<GraphsPage>
         navigatorKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => ViewGraphPage(
-              name: exercise.selected!,
+              name: appState.selected!,
             ),
           ),
         );
@@ -66,7 +66,9 @@ class _GraphsPageState extends State<GraphsPage>
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => graphsPage(), settings: settings),
+          builder: (context) => graphsPage(),
+          settings: settings,
+        ),
       ),
     );
   }

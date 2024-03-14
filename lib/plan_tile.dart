@@ -23,7 +23,7 @@ class PlanTile extends StatelessWidget {
   final int index;
   final Stream<List<TypedResult>> countStream;
   final GlobalKey<NavigatorState> navigatorKey;
-  final Function refresh;
+  final Future<void> Function() refresh;
 
   List<InlineSpan> getChildren(BuildContext context) {
     List<InlineSpan> result = [];
@@ -91,7 +91,7 @@ class PlanTile extends StatelessWidget {
                         ),
                       ),
                     );
-                    refresh();
+                    await refresh();
                   },
                 ),
                 ListTile(
@@ -120,7 +120,7 @@ class PlanTile extends StatelessWidget {
                                 await database
                                     .delete(database.plans)
                                     .delete(plan);
-                                refresh();
+                                await refresh();
                               },
                             ),
                           ],

@@ -169,7 +169,7 @@ class _PlansPageState extends State<PlansPage> with AutomaticKeepAliveClientMixi
                     plan: PlansCompanion(
                         days: drift.Value(''), exercises: drift.Value('')))),
           );
-          updatePlans();
+          await updatePlans();
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
@@ -235,7 +235,7 @@ class _PlansPageState extends State<PlansPage> with AutomaticKeepAliveClientMixi
                     onPressed: () async {
                       Navigator.of(context).pop();
                       await database.delete(database.plans).go();
-                      updatePlans();
+                      await updatePlans();
                     },
                   ),
                 ],
@@ -268,7 +268,7 @@ class _PlansPageState extends State<PlansPage> with AutomaticKeepAliveClientMixi
             await database.batch(
               (batch) => batch.insertAll(database.plans, plans),
             );
-            updatePlans();
+            await updatePlans();
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(

@@ -11,7 +11,7 @@ import 'exercise_tile.dart';
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
   final Stream<List<drift.TypedResult>> countStream;
-  final Function onReorder;
+  final Future<void> Function() onReorder;
 
   const StartPlanPage(
       {Key? key,
@@ -60,7 +60,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
   }
 
-  void getLast() async {
+  Future<void> getLast() async {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
@@ -103,7 +103,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     exerciseState.selectExercise(planExercises[index]);
   }
 
-  void select(int index) async {
+  Future<void> select(int index) async {
     setState(() {
       selectedIndex = index;
     });
@@ -123,7 +123,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController.text = last.weight.toString();
   }
 
-  Future save(TimerState timerState, SettingsState settingsState) async {
+  Future<void> save(TimerState timerState, SettingsState settingsState) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
@@ -148,8 +148,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
     final timerState = context.watch<TimerState>();
-    final settingsState = context.watch()<SettingsState>();
-    final timerRunning = timerState.nativeTimer.isRunning();
+    final settingsState = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -283,7 +282,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
         final plan = widget.plan.copyWith(exercises: planExercises.join(','));
         await database.update(database.plans).replace(plan);
-        widget.onReorder();
+        await widget.onReorder();
       },
     );
   }
