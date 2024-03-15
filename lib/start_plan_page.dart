@@ -1,8 +1,7 @@
 import 'package:drift/drift.dart' as drift;
+import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
-import 'package:flexify/exercise_state.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +11,7 @@ import 'exercise_tile.dart';
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
   final Stream<List<drift.TypedResult>> countStream;
-  final Function onReorder;
+  final Future<void> Function() onReorder;
 
   const StartPlanPage(
       {Key? key,
@@ -39,10 +38,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   void initState() {
     super.initState();
-    repsController = TextEditingController();
-    weightController = TextEditingController();
+    repsController = TextEditingController(text: "0.0");
+    weightController = TextEditingController(text: "0.0");
     planExercises = widget.plan.exercises.split(',');
-    getLast();
+    getLast(context.read<AppState>());
   }
 
   @override
@@ -61,7 +60,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
   }
 
-  void getLast() async {
+  Future<void> getLast(AppState appState) async {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
@@ -85,13 +84,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
-    repsController.text = "0";
-    weightController.text = "0";
-    if (!mounted) return;
-    final exerciseState = context.read<ExerciseState>();
-    exerciseState.selectExercise(planExercises[0]);
-    setState(() {});
-    if (last == null) return;
+
+    if (last == null) {
+      appState.selectExercise(planExercises[0]);
+      return setState(() {});
+    }
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
     setState(() {
@@ -101,15 +98,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    exerciseState.selectExercise(planExercises[index]);
+    appState.selectExercise(planExercises[index]);
   }
 
-  void select(int index) async {
+  Future<void> select(int index) async {
     setState(() {
       selectedIndex = index;
     });
     final exercise = planExercises.elementAt(index);
-    final exerciseState = context.read<ExerciseState>();
+    final exerciseState = context.read<AppState>();
     exerciseState.selectExercise(exercise);
     final last = await (database.gymSets.select()
           ..where((tbl) => database.gymSets.name.equals(exercise))
@@ -119,12 +116,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
-    if (last == null) return;
-    repsController.text = last.reps.toString();
-    weightController.text = last.weight.toString();
+    setState(() {
+      repsController.text = last != null ? last.reps.toString() : "0.0";
+      weightController.text = last != null ? last.weight.toString() : "0.0";
+    });
   }
 
-  Future save(SettingsState settings) async {
+  Future<void> save(TimerState timerState, SettingsState settingsState) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
@@ -140,19 +138,17 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (settings.restTimers)
-      android.invokeMethod('timer', [
-        settings.timerDuration.inMilliseconds,
-        exercise,
-        DateTime.now().millisecondsSinceEpoch
-      ]);
+    if (settingsState.restTimers)
+      await timerState.startTimer(exercise, settingsState.timerDuration);
   }
 
   @override
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    final settings = context.watch<SettingsState>();
+
+    final timerState = context.read<TimerState>();
+    final settingsState = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -168,43 +164,38 @@ class _StartPlanPageState extends State<StartPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            Visibility(
-              visible: weightController.text.isNotEmpty,
-              child: TextField(
-                controller: weightController,
-                focusNode: weightNode,
-                decoration: const InputDecoration(labelText: 'Weight (kg)'),
-                keyboardType: TextInputType.number,
-                onTap: () {
-                  selectWeight();
-                },
-                onSubmitted: (value) {
-                  repsNode.requestFocus();
-                  repsController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: repsController.text.length,
-                  );
-                },
-              ),
+            TextField(
+              controller: weightController,
+              focusNode: weightNode,
+              decoration: const InputDecoration(labelText: 'Weight (kg)'),
+              keyboardType: TextInputType.number,
+              onTap: () {
+                selectWeight();
+              },
+              onSubmitted: (value) {
+                repsNode.requestFocus();
+                repsController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: repsController.text.length,
+                );
+              },
+            ),
+            TextField(
+              controller: repsController,
+              focusNode: repsNode,
+              decoration: const InputDecoration(labelText: 'Reps'),
+              keyboardType: TextInputType.number,
+              onSubmitted: (value) async =>
+                  await save(timerState, settingsState),
+              onTap: () {
+                repsController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: repsController.text.length,
+                );
+              },
             ),
             Visibility(
-              visible: repsController.text.isNotEmpty,
-              child: TextField(
-                controller: repsController,
-                focusNode: repsNode,
-                decoration: const InputDecoration(labelText: 'Reps'),
-                keyboardType: TextInputType.number,
-                onSubmitted: (value) async => await save(settings),
-                onTap: () {
-                  repsController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: repsController.text.length,
-                  );
-                },
-              ),
-            ),
-            Visibility(
-              visible: settings.showUnits,
+              visible: settingsState.showUnits,
               child: DropdownButtonFormField<String>(
                 value: unit,
                 decoration: const InputDecoration(labelText: 'Unit'),
@@ -242,7 +233,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await save(settings),
+        onPressed: () async => await save(timerState, settingsState),
         tooltip: "Save this set",
         child: const Icon(Icons.save),
       ),
@@ -278,14 +269,20 @@ class _StartPlanPageState extends State<StartPlanPage> {
           newIndex--;
         }
 
+        if (oldIndex == selectedIndex)
+          selectedIndex = newIndex;
+        else if (oldIndex < selectedIndex && newIndex >= selectedIndex)
+          selectedIndex--;
+        else if (oldIndex > selectedIndex && newIndex <= selectedIndex)
+          selectedIndex++;
+
         final temp = planExercises[oldIndex];
         planExercises.removeAt(oldIndex);
         planExercises.insert(newIndex, temp);
-        setState(() {});
 
         final plan = widget.plan.copyWith(exercises: planExercises.join(','));
         await database.update(database.plans).replace(plan);
-        widget.onReorder();
+        await widget.onReorder();
       },
     );
   }

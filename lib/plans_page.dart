@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/constants.dart';
@@ -5,23 +7,56 @@ import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'plan_tile.dart';
 
 class PlansPage extends StatefulWidget {
-  const PlansPage({Key? key}) : super(key: key);
+  const PlansPage({super.key});
 
   @override
-  createState() => _PlansPageState();
+  State<PlansPage> createState() => _PlansPageState();
 }
 
 class _PlansPageState extends State<PlansPage> {
-  List<Plan>? plans;
-  late Stream<List<drift.TypedResult>> countStream;
-  TextEditingController searchController = TextEditingController();
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigatorPopHandler(
+      onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
+        navigatorKey.currentState!.pop();
+      },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => _PlansPageWidget(
+            navigatorKey: navigatorKey,
+          ),
+          settings: settings,
+        ),
+      ),
+    );
+  }
+}
+
+class _PlansPageWidget extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const _PlansPageWidget({required this.navigatorKey, Key? key})
+      : super(key: key);
+
+  @override
+  createState() => _PlansPageWidgetState();
+}
+
+class _PlansPageWidgetState extends State<_PlansPageWidget> {
+  late Stream<List<drift.TypedResult>> countStream;
+  StreamController<List<Plan>?> planStreamController = StreamController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -41,80 +76,19 @@ class _PlansPageState extends State<PlansPage> {
         .watch();
   }
 
-  void updatePlans() async {
-    plans = await (database.select(database.plans)
-          ..orderBy([
-            (u) => drift.OrderingTerm(expression: u.sequence),
-          ]))
-        .get();
-    setState(() {});
+  Future<void> updatePlans({List<Plan>? plans}) async {
+    if (plans != null) planStreamController.add(plans);
+    else planStreamController.add(await getPlans());
   }
+
+  Future<List<Plan>?> getPlans() async => await (database.select(database.plans)
+        ..orderBy([
+          (u) => drift.OrderingTerm(expression: u.sequence),
+        ]))
+      .get();
 
   @override
   Widget build(BuildContext context) {
-    final weekday = weekdays[DateTime.now().weekday - 1];
-    return NavigatorPopHandler(
-      onPop: () {
-        if (navigatorKey.currentState!.canPop() == false) return;
-        navigatorKey.currentState!.pop();
-      },
-      child: Navigator(
-          key: navigatorKey,
-          onGenerateRoute: (settings) => MaterialPageRoute(
-                builder: (context) => plansPage(weekday, context),
-                settings: settings,
-              )),
-    );
-  }
-
-  Widget get plansWidget {
-    final weekday = weekdays[DateTime.now().weekday - 1];
-    if (plans == null) return const SizedBox();
-    final filtered = plans!
-        .where((element) =>
-            element.days.toLowerCase().contains(searchController.text) ||
-            element.exercises.toLowerCase().contains(searchController.text))
-        .toList();
-
-    return Expanded(
-      child: ReorderableListView.builder(
-        itemCount: filtered.length,
-        itemBuilder: (context, index) {
-          final plan = filtered[index];
-          return PlanTile(
-            key: Key(plan.id.toString()),
-            plan: plan,
-            weekday: weekday,
-            index: index,
-            countStream: countStream,
-            navigatorKey: navigatorKey,
-            refresh: updatePlans,
-          );
-        },
-        onReorder: (int oldIndex, int newIndex) {
-          if (oldIndex < newIndex) {
-            newIndex--;
-          }
-
-          final temp = plans![oldIndex];
-          plans!.removeAt(oldIndex);
-          plans!.insert(newIndex, temp);
-          setState(() {});
-
-          database.transaction(() async {
-            for (int i = 0; i < plans!.length; i++) {
-              final plan = plans![i];
-              final updatedPlan =
-                  plan.toCompanion(false).copyWith(sequence: drift.Value(i));
-              await database.update(database.plans).replace(updatedPlan);
-            }
-          });
-        },
-      ),
-    );
-  }
-
-  Scaffold plansPage(String weekday, BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
@@ -145,6 +119,7 @@ class _PlansPageState extends State<PlansPage> {
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
                           enterWeight(context),
+                          timer(context),
                           downloadCsv(context),
                           uploadCsv(context),
                           deleteAll(context),
@@ -153,7 +128,13 @@ class _PlansPageState extends State<PlansPage> {
                     ],
             ),
           ),
-          plansWidget
+          _PlanWidget(
+            plans: planStreamController.stream,
+            searchText: searchController.text,
+            countStream: countStream,
+            updatePlans: updatePlans,
+            navigatorKey: widget.navigatorKey,
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -161,14 +142,34 @@ class _PlansPageState extends State<PlansPage> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const EditPlanPage(
-                    plan: PlansCompanion(
-                        days: drift.Value(''), exercises: drift.Value('')))),
+              builder: (context) => const EditPlanPage(
+                plan: PlansCompanion(
+                  days: drift.Value(''),
+                  exercises: drift.Value(''),
+                ),
+              ),
+            ),
           );
-          updatePlans();
+          await updatePlans();
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> timer(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.timer),
+        title: const Text('Timer'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const TimerPage()),
+          );
+        },
       ),
     );
   }
@@ -215,7 +216,7 @@ class _PlansPageState extends State<PlansPage> {
                     onPressed: () async {
                       Navigator.of(context).pop();
                       await database.delete(database.plans).go();
-                      updatePlans();
+                      await updatePlans();
                     },
                   ),
                 ],
@@ -248,7 +249,7 @@ class _PlansPageState extends State<PlansPage> {
             await database.batch(
               (batch) => batch.insertAll(database.plans, plans),
             );
-            updatePlans();
+            await updatePlans();
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
@@ -281,6 +282,80 @@ class _PlansPageState extends State<PlansPage> {
           android.invokeMethod('save', ['plans.csv', csv]);
         },
       ),
+    );
+  }
+}
+
+class _PlanWidget extends StatelessWidget {
+  final String searchText;
+  final Stream<List<Plan>?> plans;
+  final Future<void> Function({List<Plan>? plans}) updatePlans;
+  final GlobalKey<NavigatorState> navigatorKey;
+  final Stream<List<drift.TypedResult>> countStream;
+
+  const _PlanWidget({
+    required this.plans,
+    required this.searchText,
+    required this.countStream,
+    required this.updatePlans,
+    required this.navigatorKey,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Plan>?>(
+      stream: plans,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          final plans = snapshot.data!;
+          final weekday = weekdays[DateTime.now().weekday - 1];
+          final filtered = plans
+              .where((element) =>
+                  element.days.toLowerCase().contains(searchText) ||
+                  element.exercises.toLowerCase().contains(searchText))
+              .toList();
+
+          return Expanded(
+            child: ReorderableListView.builder(
+              itemCount: filtered.length,
+              itemBuilder: (context, index) {
+                final plan = filtered[index];
+                return PlanTile(
+                  key: Key(plan.id.toString()),
+                  plan: plan,
+                  weekday: weekday,
+                  index: index,
+                  countStream: countStream,
+                  navigatorKey: navigatorKey,
+                  refresh: updatePlans,
+                );
+              },
+              onReorder: (int oldIndex, int newIndex) async {
+                if (oldIndex < newIndex) {
+                  newIndex--;
+                }
+
+                final temp = plans[oldIndex];
+                plans.removeAt(oldIndex);
+                plans.insert(newIndex, temp);
+
+                await updatePlans(plans: plans);
+                await database.transaction(() async {
+                  for (int i = 0; i < plans.length; i++) {
+                    final plan = plans[i];
+                    final updatedPlan = plan
+                        .toCompanion(false)
+                        .copyWith(sequence: drift.Value(i));
+                    await database.update(database.plans).replace(updatedPlan);
+                  }
+                });
+              },
+            ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flexify/start_plan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class PlanTile extends StatelessWidget {
   final int index;
   final Stream<List<TypedResult>> countStream;
   final GlobalKey<NavigatorState> navigatorKey;
-  final Function refresh;
+  final Future<void> Function() refresh;
 
   List<InlineSpan> getChildren(BuildContext context) {
     List<InlineSpan> result = [];
@@ -31,14 +31,16 @@ class PlanTile extends StatelessWidget {
     final split = plan.days.split(',');
     for (int index = 0; index < split.length; index++) {
       final day = split[index];
-      result.add(TextSpan(
-        text: day.trim(),
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: weekday == day.trim() ? FontWeight.bold : null,
-              decoration:
-                  weekday == day.trim() ? TextDecoration.underline : null,
-            ),
-      ));
+      result.add(
+        TextSpan(
+          text: day.trim(),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: weekday == day.trim() ? FontWeight.bold : null,
+                decoration:
+                    weekday == day.trim() ? TextDecoration.underline : null,
+              ),
+        ),
+      );
       if (index < split.length - 1)
         result.add(
             TextSpan(text: ", ", style: Theme.of(context).textTheme.bodyLarge));
@@ -48,25 +50,26 @@ class PlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settingsState = context.watch<SettingsState>();
     return ListTile(
       title: plan.days.split(',').length == 7
           ? const Text("Daily")
           : RichText(text: TextSpan(children: getChildren(context))),
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Visibility(
-        visible: settings.showReorder,
+        visible: settingsState.showReorder,
         child: ReorderableDragStartListener(
             index: index, child: const Icon(Icons.drag_handle)),
       ),
       onTap: () {
         navigatorKey.currentState!.push(
           MaterialPageRoute(
-              builder: (context) => StartPlanPage(
-                    plan: plan,
-                    countStream: countStream,
-                    onReorder: refresh,
-                  )),
+            builder: (context) => StartPlanPage(
+              plan: plan,
+              countStream: countStream,
+              onReorder: refresh,
+            ),
+          ),
         );
       },
       onLongPress: () {
@@ -83,11 +86,12 @@ class PlanTile extends StatelessWidget {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditPlanPage(
-                                plan: plan.toCompanion(false),
-                              )),
+                        builder: (context) => EditPlanPage(
+                          plan: plan.toCompanion(false),
+                        ),
+                      ),
                     );
-                    refresh();
+                    await refresh();
                   },
                 ),
                 ListTile(
@@ -116,7 +120,7 @@ class PlanTile extends StatelessWidget {
                                 await database
                                     .delete(database.plans)
                                     .delete(plan);
-                                refresh();
+                                await refresh();
                               },
                             ),
                           ],

@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'app_state.dart';
 
 class ExerciseTile extends StatelessWidget {
   final String exercise;
@@ -23,84 +24,84 @@ class ExerciseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
+    final settingsState = context.watch<SettingsState>();
     return GestureDetector(
-        onLongPressStart: (details) async {
-          final position = RelativeRect.fromLTRB(
-            details.globalPosition.dx,
-            details.globalPosition.dy - 40,
-            MediaQuery.of(context).size.width - details.globalPosition.dx,
-            MediaQuery.of(context).size.height - details.globalPosition.dy - 40,
-          );
+      onLongPressStart: (details) async {
+        final position = RelativeRect.fromLTRB(
+          details.globalPosition.dx,
+          details.globalPosition.dy - 40,
+          MediaQuery.of(context).size.width - details.globalPosition.dx,
+          MediaQuery.of(context).size.height - details.globalPosition.dy - 40,
+        );
 
-          await showMenu(
-            context: context,
-            position: position,
-            items: [
-              PopupMenuItem(
-                value: 'delete',
-                child: ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: const Text("Delete"),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    if (count == 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('No exercises to undo')),
-                      );
-                      return;
-                    }
+        await showMenu(
+          context: context,
+          position: position,
+          items: [
+            PopupMenuItem(
+              value: 'delete',
+              child: ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text("Delete"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  if (count == 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No exercises to undo')),
+                    );
+                    return;
+                  }
 
-                    final gymSet = await (database.select(database.gymSets)
-                          ..where((r) => database.gymSets.name.equals(exercise))
-                          ..orderBy([
-                            (u) => OrderingTerm(
-                                expression: u.created, mode: OrderingMode.desc),
-                          ])
-                          ..limit(1))
-                        .getSingle();
-                    await database.gymSets.deleteOne(gymSet);
-                  },
-                ),
+                  final gymSet = await (database.select(database.gymSets)
+                        ..where((r) => database.gymSets.name.equals(exercise))
+                        ..orderBy([
+                          (u) => OrderingTerm(
+                              expression: u.created, mode: OrderingMode.desc),
+                        ])
+                        ..limit(1))
+                      .getSingle();
+                  await database.gymSets.deleteOne(gymSet);
+                },
               ),
-            ],
-          );
-        },
-        child: material.Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ListTile(
-              onTap: onTap,
-              trailing: Visibility(
-                visible: settings.showReorder,
-                child: material.Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ReorderableDragStartListener(
-                      index: index,
-                      child: const Icon(Icons.drag_handle),
-                    )
-                  ],
-                ),
-              ),
-              title: Row(
+            ),
+          ],
+        );
+      },
+      child: material.Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ListTile(
+            onTap: onTap,
+            trailing: Visibility(
+              visible: settingsState.showReorder,
+              child: material.Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Radio(
-                    value: isSelected,
-                    groupValue: true,
-                    onChanged: (value) {
-                      onTap();
-                    },
-                  ),
-                  Text("$exercise ($count)"),
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: const Icon(Icons.drag_handle),
+                  )
                 ],
               ),
             ),
-            LinearProgressIndicator(
-              value: count / 5,
+            title: Row(
+              children: [
+                Radio(
+                  value: isSelected,
+                  groupValue: true,
+                  onChanged: (value) {
+                    onTap();
+                  },
+                ),
+                Text("$exercise ($count)"),
+              ],
             ),
-          ],
-        ));
+          ),
+          LinearProgressIndicator(
+            value: count / 5,
+          ),
+        ],
+      ),
+    );
   }
 }

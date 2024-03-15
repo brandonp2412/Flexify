@@ -22,78 +22,80 @@ class GraphTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        title: Text(name),
-        subtitle: Text(weight.toString()),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewGraphPage(
-                      name: name,
-                    )),
-          );
-        },
-        onLongPress: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Wrap(
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text('Edit'),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditGraphPage(
-                                  name: name,
-                                )),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: const Text('Delete'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Confirm Delete'),
-                            content: FutureBuilder(
-                              future: getCount(),
-                              builder: (context, snapshot) => Text(
-                                  'Are you sure you want to delete all ${snapshot.data} records of $name ?'),
+      title: Text(name),
+      subtitle: Text(weight.toString()),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ViewGraphPage(
+                    name: name,
+                  )),
+        );
+      },
+      onLongPress: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text('Edit'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditGraphPage(
+                          name: name,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: const Text('Delete'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirm Delete'),
+                          content: FutureBuilder(
+                            future: getCount(),
+                            builder: (context, snapshot) => Text(
+                                'Are you sure you want to delete all ${snapshot.data} records of $name ?'),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
                             ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: const Text('Delete'),
-                                onPressed: () async {
-                                  Navigator.of(context).pop();
-                                  (database.delete(database.gymSets)
-                                        ..where((tbl) => tbl.name.equals(name)))
-                                      .go();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        });
+                            TextButton(
+                              child: const Text('Delete'),
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                (database.delete(database.gymSets)
+                                      ..where((tbl) => tbl.name.equals(name)))
+                                    .go();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

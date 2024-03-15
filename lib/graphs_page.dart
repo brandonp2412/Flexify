@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
-import 'package:flexify/exercise_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
@@ -35,23 +35,29 @@ class _GraphsPageState extends State<GraphsPage> {
         .watch();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    final exercise = context.watch<ExerciseState>();
-
-    if (exercise.selected?.isNotEmpty == true)
+    final appState = context.watch<AppState>();
+    if (appState.selected?.isNotEmpty == true)
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (selectedExercise == exercise.selected) return;
+        if (selectedExercise == appState.selected) return;
         setState(() {
-          selectedExercise = exercise.selected ?? "";
+          selectedExercise = appState.selected ?? "";
         });
 
-        if (navigatorKey.currentState!.canPop())
+        if (navigatorKey.currentState!.canPop()) {
           navigatorKey.currentState!.pop();
-        navigatorKey.currentState!.push(MaterialPageRoute(
+        }
+
+        navigatorKey.currentState!.push(
+          MaterialPageRoute(
             builder: (context) => ViewGraphPage(
-                  name: exercise.selected!,
-                )));
+              name: appState.selected!,
+            ),
+          ),
+        );
       });
 
     return NavigatorPopHandler(
@@ -62,7 +68,9 @@ class _GraphsPageState extends State<GraphsPage> {
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => graphsPage(), settings: settings),
+          builder: (context) => graphsPage(),
+          settings: settings,
+        ),
       ),
     );
   }

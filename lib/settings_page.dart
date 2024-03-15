@@ -1,6 +1,7 @@
-import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'app_state.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -25,7 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settingsState = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -35,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           children: <Widget>[
             DropdownButtonFormField(
-              value: settings.themeMode,
+              value: settingsState.themeMode,
               decoration: const InputDecoration(
                   labelStyle: TextStyle(), labelText: 'Theme'),
               items: const [
@@ -52,9 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Text("Light"),
                 ),
               ],
-              onChanged: (value) {
-                settings.setTheme(value!);
-              },
+              onChanged: (value) async => await settingsState.setTheme(value!),
             ),
             const SizedBox(
               height: 8.0,
@@ -67,14 +66,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   keyboardType: TextInputType.number,
                   onTap: () async {
                     minutesController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: minutesController.text.length);
+                      baseOffset: 0,
+                      extentOffset: minutesController.text.length,
+                    );
                   },
-                  onChanged: (value) {
-                    settings.setDuration(Duration(
-                        minutes: int.parse(value),
-                        seconds: settings.timerDuration.inSeconds % 60));
-                  },
+                  onChanged: (value) async => await settingsState.setDuration(
+                    Duration(
+                      minutes: int.parse(value),
+                      seconds: settingsState.timerDuration.inSeconds % 60,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -90,48 +91,42 @@ class _SettingsPageState extends State<SettingsPage> {
                         baseOffset: 0,
                         extentOffset: secondsController.text.length);
                   },
-                  onChanged: (value) {
-                    settings.setDuration(Duration(
-                        seconds: int.parse(value),
-                        minutes: settings.timerDuration.inMinutes.floor()));
-                  },
+                  onChanged: (value) async => await settingsState.setDuration(
+                    Duration(
+                      seconds: int.parse(value),
+                      minutes: settingsState.timerDuration.inMinutes.floor(),
+                    ),
+                  ),
                 ),
               ),
             ]),
             ListTile(
               title: const Text('Rest timers'),
-              onTap: () {
-                settings.setTimers(!settings.restTimers);
-              },
+              onTap: () async =>
+                  await settingsState.setTimers(!settingsState.restTimers),
               trailing: Switch(
-                value: settings.restTimers,
-                onChanged: (value) {
-                  settings.setTimers(value);
-                },
+                value: settingsState.restTimers,
+                onChanged: (value) async =>
+                    await settingsState.setTimers(value),
               ),
             ),
             ListTile(
               title: const Text('Re-order items'),
-              onTap: () {
-                settings.setReorder(!settings.showReorder);
-              },
+              onTap: () async =>
+                  await settingsState.setReorder(!settingsState.showReorder),
               trailing: Switch(
-                value: settings.showReorder,
-                onChanged: (value) {
-                  settings.setReorder(value);
-                },
+                value: settingsState.showReorder,
+                onChanged: (value) async =>
+                    await settingsState.setReorder(value),
               ),
             ),
             ListTile(
               title: const Text('Show units'),
-              onTap: () {
-                settings.setUnits(!settings.showUnits);
-              },
+              onTap: () async =>
+                  await settingsState.setUnits(!settingsState.showUnits),
               trailing: Switch(
-                value: settings.showUnits,
-                onChanged: (value) {
-                  settings.setUnits(value);
-                },
+                value: settingsState.showUnits,
+                onChanged: (value) async => await settingsState.setUnits(value),
               ),
             ),
           ],

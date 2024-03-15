@@ -33,7 +33,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   }
 
   @override
-  dispose() {
+  void dispose() {
     searchNode.dispose();
     searchController.dispose();
     super.dispose();
@@ -54,9 +54,14 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     if (search == '')
       actions.add(
-          IconButton(onPressed: toggleSearch, icon: const Icon(Icons.search)));
+        IconButton(
+          onPressed: toggleSearch,
+          icon: const Icon(Icons.search),
+        ),
+      );
     else
-      actions.add(IconButton(
+      actions.add(
+        IconButton(
           onPressed: () {
             searchController.clear();
             searchNode.unfocus();
@@ -65,14 +70,17 @@ class _EditPlanPageState extends State<EditPlanPage> {
               showSearch = false;
             });
           },
-          icon: const Icon(Icons.clear)));
+          icon: const Icon(Icons.clear),
+        ),
+      );
 
     List<Widget> getChildren() {
       final List<Widget> children = [];
 
       if (search == '')
         children.add(
-            Text('Days', style: Theme.of(context).textTheme.headlineSmall));
+          Text('Days', style: Theme.of(context).textTheme.headlineSmall),
+        );
 
       final days = List.generate(7, (index) {
         return SwitchListTile(
@@ -92,18 +100,20 @@ class _EditPlanPageState extends State<EditPlanPage> {
           .toList()
           .asMap()
           .entries
-          .map((entry) => SwitchListTile(
-                title: Text(entry.value),
-                value: exerciseSelections.contains(entry.value),
-                onChanged: (value) {
-                  setState(() {
-                    if (value)
-                      exerciseSelections.add(entry.value);
-                    else
-                      exerciseSelections.remove(entry.value);
-                  });
-                },
-              ));
+          .map(
+            (entry) => SwitchListTile(
+              title: Text(entry.value),
+              value: exerciseSelections.contains(entry.value),
+              onChanged: (value) {
+                setState(() {
+                  if (value)
+                    exerciseSelections.add(entry.value);
+                  else
+                    exerciseSelections.remove(entry.value);
+                });
+              },
+            ),
+          );
 
       if (search == '') children.addAll(days);
       children.add(
@@ -113,8 +123,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
       return [
         Expanded(
-          child: ListView(
-            children: children,
+          child: ListView.builder(
+            itemCount: children.length,
+            itemBuilder: (context, index) => children[index],
           ),
         ),
       ];
@@ -128,18 +139,21 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     return Scaffold(
       appBar: AppBar(
-          title: showSearch
-              ? TextField(
-                  focusNode: searchNode,
-                  controller: searchController,
-                  onChanged: (value) => setState(() {
-                    search = value;
-                  }),
-                  decoration: const InputDecoration(
-                      hintText: "Search...", border: InputBorder.none),
-                )
-              : Text(title),
-          actions: actions),
+        title: showSearch
+            ? TextField(
+                focusNode: searchNode,
+                controller: searchController,
+                onChanged: (value) => setState(() {
+                  search = value;
+                }),
+                decoration: const InputDecoration(
+                  hintText: "Search...",
+                  border: InputBorder.none,
+                ),
+              )
+            : Text(title),
+        actions: actions,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: material.Column(
