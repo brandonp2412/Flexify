@@ -4,7 +4,9 @@ import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
+import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +105,8 @@ class _GraphsPageState extends State<GraphsPage> {
                       PopupMenuButton(
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
+                          enterWeight(context),
+                          timer(context),
                           downloadCsv(context),
                           uploadCsv(context),
                           deleteAll(context),
@@ -148,6 +152,38 @@ class _GraphsPageState extends State<GraphsPage> {
             },
           )
         ],
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> timer(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.timer),
+        title: const Text('Timer'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const TimerPage()),
+          );
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> enterWeight(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.scale),
+        title: const Text('Weight'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const EnterWeightPage()),
+          );
+        },
       ),
     );
   }
