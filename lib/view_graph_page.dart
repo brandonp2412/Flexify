@@ -96,27 +96,30 @@ class _ViewGraphPageState extends State<ViewGraphPage>
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            DropdownButtonFormField(
-              value: metric,
-              items: const [
-                DropdownMenuItem(
-                  value: Metric.bestWeight,
-                  child: Text("Best weight"),
-                ),
-                DropdownMenuItem(
-                  value: Metric.oneRepMax,
-                  child: Text("One rep max (estimate)"),
-                ),
-                DropdownMenuItem(
-                  value: Metric.volume,
-                  child: Text("Volume"),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  metric = value!;
-                });
-              },
+            Visibility(
+              visible: widget.name != "Weight",
+              child: DropdownButtonFormField(
+                value: metric,
+                items: const [
+                  DropdownMenuItem(
+                    value: Metric.bestWeight,
+                    child: Text("Best weight"),
+                  ),
+                  DropdownMenuItem(
+                    value: Metric.oneRepMax,
+                    child: Text("One rep max (estimate)"),
+                  ),
+                  DropdownMenuItem(
+                    value: Metric.volume,
+                    child: Text("Volume"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    metric = value!;
+                  });
+                },
+              ),
             ),
             const SizedBox(
               height: 24.0,
