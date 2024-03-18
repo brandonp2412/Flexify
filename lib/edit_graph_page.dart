@@ -38,10 +38,18 @@ class _EditGraphPageState extends State<EditGraphPage> {
     return result.read(database.gymSets.name.count()) ?? 0;
   }
 
-  Future<void> doUpdate() {
-    return (database.gymSets.update()
+  Future<void> doUpdate() async {
+    await (database.gymSets.update()
           ..where((tbl) => tbl.name.equals(widget.name)))
         .write(GymSetsCompanion(name: Value(nameController.text)));
+    await database.customUpdate(
+      'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
+      variables: [
+        Variable.withString(widget.name),
+        Variable.withString(nameController.text)
+      ],
+      updates: {database.plans},
+    );
   }
 
   @override
