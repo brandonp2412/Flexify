@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
@@ -74,6 +75,19 @@ class _ViewGraphPageState extends State<ViewGraphPage>
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GraphHistory(
+                            name: widget.name,
+                          )),
+                );
+              },
+              icon: const Icon(Icons.history))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -115,7 +129,8 @@ class _ViewGraphPageState extends State<ViewGraphPage>
     return StreamBuilder<List<drift.TypedResult>>(
       stream: graphStream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data!.isEmpty) return const SizedBox();
+        if (!snapshot.hasData || snapshot.data!.isEmpty)
+          return const SizedBox();
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
         final rows = snapshot.data!.reversed
             .map((row) => GraphData(
