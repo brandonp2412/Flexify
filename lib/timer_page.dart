@@ -30,6 +30,4 @@ class _TimerPageState extends State<TimerPage> {
       ),)
     );
   }
-
-
 }
