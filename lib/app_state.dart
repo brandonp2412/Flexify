@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'main.dart';
 import 'native_timer_wrapper.dart';
 
@@ -102,7 +103,12 @@ class TimerState extends ChangeNotifier {
   }
 
   Future<void> startTimer(String exercise, Duration timerDuration) async {
-    final timer = nativeTimer.increaseDuration(timerDuration);
+    final timer = NativeTimerWrapper(
+      timerDuration,
+      Duration.zero,
+      DateTime.now(),
+      NativeTimerState.running,
+    );
     updateTimer(timer);
     await android.invokeMethod(
       'timer',

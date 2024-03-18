@@ -15,7 +15,11 @@ class TimerProgressIndicator extends StatelessWidget {
       return Visibility(
         visible: duration > Duration.zero,
         child: TweenAnimationBuilder(
-          tween: Tween<double>(begin: elapsed.inMilliseconds / duration.inMilliseconds, end: 1),
+          key: UniqueKey(),
+          tween: Tween<double>(
+            begin: elapsed.inMilliseconds / duration.inMilliseconds,
+            end: 1,
+          ),
           duration: remaining,
           builder: (context, value, child) => LinearProgressIndicator(
             value: value,
@@ -37,7 +41,11 @@ class TimerCircularProgressIndicator extends StatelessWidget {
       final remaining = timerState.nativeTimer.getRemaining();
       return duration > Duration.zero
           ? TweenAnimationBuilder(
-              tween: Tween<double>(begin: elapsed.inMilliseconds / duration.inMilliseconds, end: 1),
+              key: UniqueKey(),
+              tween: Tween<double>(
+                begin: elapsed.inMilliseconds / duration.inMilliseconds,
+                end: 1,
+              ),
               duration: remaining,
               builder: (context, value, child) =>
                   _TimerCircularProgressIndicatorTile(
