@@ -35,8 +35,6 @@ class _GraphsPageState extends State<GraphsPage> {
         .watch();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
@@ -119,6 +117,12 @@ class _GraphsPageState extends State<GraphsPage> {
               if (!snapshot.hasData) return const SizedBox();
               if (snapshot.hasError)
                 return ErrorWidget(snapshot.error.toString());
+              if (snapshot.data?.isEmpty == true)
+                return const ListTile(
+                  title: Text("No data yet."),
+                  subtitle: Text(
+                      "Complete plans for your progress graphs to appear here."),
+                );
               final gymSets = snapshot.data!;
 
               final filteredGymSets = gymSets.where((gymSet) {

@@ -77,8 +77,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   }
 
   Future<void> updatePlans({List<Plan>? plans}) async {
-    if (plans != null) planStreamController.add(plans);
-    else planStreamController.add(await getPlans());
+    if (plans != null)
+      planStreamController.add(plans);
+    else
+      planStreamController.add(await getPlans());
   }
 
   Future<List<Plan>?> getPlans() async => await (database.select(database.plans)
@@ -307,54 +309,59 @@ class _PlanWidget extends StatelessWidget {
     return StreamBuilder<List<Plan>?>(
       stream: plans,
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data != null) {
-          final plans = snapshot.data!;
-          final weekday = weekdays[DateTime.now().weekday - 1];
-          final filtered = plans
-              .where((element) =>
-                  element.days.toLowerCase().contains(searchText) ||
-                  element.exercises.toLowerCase().contains(searchText))
-              .toList();
-
-          return Expanded(
-            child: ReorderableListView.builder(
-              itemCount: filtered.length,
-              itemBuilder: (context, index) {
-                final plan = filtered[index];
-                return PlanTile(
-                  key: Key(plan.id.toString()),
-                  plan: plan,
-                  weekday: weekday,
-                  index: index,
-                  countStream: countStream,
-                  navigatorKey: navigatorKey,
-                  refresh: updatePlans,
-                );
-              },
-              onReorder: (int oldIndex, int newIndex) async {
-                if (oldIndex < newIndex) {
-                  newIndex--;
-                }
-
-                final temp = plans[oldIndex];
-                plans.removeAt(oldIndex);
-                plans.insert(newIndex, temp);
-
-                await updatePlans(plans: plans);
-                await database.transaction(() async {
-                  for (int i = 0; i < plans.length; i++) {
-                    final plan = plans[i];
-                    final updatedPlan = plan
-                        .toCompanion(false)
-                        .copyWith(sequence: drift.Value(i));
-                    await database.update(database.plans).replace(updatedPlan);
-                  }
-                });
-              },
-            ),
+        if (snapshot.data?.isEmpty == true)
+          return const ListTile(
+            title: Text("No plans yet."),
+            subtitle:
+                Text("Tap the plus button in the bottom right to add plans."),
           );
-        }
-        return const SizedBox();
+        if (!snapshot.hasData || snapshot.data == null) return const SizedBox();
+
+        final plans = snapshot.data!;
+        final weekday = weekdays[DateTime.now().weekday - 1];
+        final filtered = plans
+            .where((element) =>
+                element.days.toLowerCase().contains(searchText) ||
+                element.exercises.toLowerCase().contains(searchText))
+            .toList();
+
+        return Expanded(
+          child: ReorderableListView.builder(
+            itemCount: filtered.length,
+            itemBuilder: (context, index) {
+              final plan = filtered[index];
+              return PlanTile(
+                key: Key(plan.id.toString()),
+                plan: plan,
+                weekday: weekday,
+                index: index,
+                countStream: countStream,
+                navigatorKey: navigatorKey,
+                refresh: updatePlans,
+              );
+            },
+            onReorder: (int oldIndex, int newIndex) async {
+              if (oldIndex < newIndex) {
+                newIndex--;
+              }
+
+              final temp = plans[oldIndex];
+              plans.removeAt(oldIndex);
+              plans.insert(newIndex, temp);
+
+              await updatePlans(plans: plans);
+              await database.transaction(() async {
+                for (int i = 0; i < plans.length; i++) {
+                  final plan = plans[i];
+                  final updatedPlan = plan
+                      .toCompanion(false)
+                      .copyWith(sequence: drift.Value(i));
+                  await database.update(database.plans).replace(updatedPlan);
+                }
+              });
+            },
+          ),
+        );
       },
     );
   }
