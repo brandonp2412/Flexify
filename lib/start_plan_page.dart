@@ -167,7 +167,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
             TextField(
               controller: weightController,
               focusNode: weightNode,
-              decoration: const InputDecoration(labelText: 'Weight (kg)'),
+              decoration: InputDecoration(labelText: 'Weight ($unit)'),
               keyboardType: TextInputType.number,
               onTap: () {
                 selectWeight();
