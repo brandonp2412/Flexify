@@ -1,12 +1,12 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
+import 'package:flexify/exercise_list.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'exercise_tile.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
@@ -41,7 +41,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController = TextEditingController(text: "0.0");
     weightController = TextEditingController(text: "0.0");
     planExercises = widget.plan.exercises.split(',');
-    getLast(context.read<AppState>());
   }
 
   @override
@@ -162,119 +161,82 @@ class _StartPlanPageState extends State<StartPlanPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: repsController,
-              focusNode: repsNode,
-              decoration: const InputDecoration(labelText: 'Reps'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (value) {
-                weightNode.requestFocus();
-                weightController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: weightController.text.length,
-                );
-              },
-              onTap: () {
-                repsController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: repsController.text.length,
-                );
-              },
-            ),
-            TextField(
-              controller: weightController,
-              focusNode: weightNode,
-              decoration: InputDecoration(labelText: 'Weight ($unit)'),
-              keyboardType: TextInputType.number,
-              onTap: () {
-                selectWeight();
-              },
-              onSubmitted: (value) async =>
-                  await save(timerState, settingsState),
-            ),
-            Visibility(
-              visible: settingsState.showUnits,
-              child: DropdownButtonFormField<String>(
-                value: unit,
-                decoration: const InputDecoration(labelText: 'Unit'),
-                items: ['kg', 'lb'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    unit = newValue!;
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: StreamBuilder(
-                stream: widget.countStream,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const SizedBox();
+        child: FutureBuilder(
+            future: getLast(context.read<AppState>()),
+            builder: (context, snapshot) {
+              return Column(
+                children: [
+                  TextField(
+                    controller: repsController,
+                    focusNode: repsNode,
+                    decoration: const InputDecoration(labelText: 'Reps'),
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (value) {
+                      weightNode.requestFocus();
+                      weightController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: weightController.text.length,
+                      );
+                    },
+                    onTap: () {
+                      repsController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: repsController.text.length,
+                      );
+                    },
+                  ),
+                  TextField(
+                    controller: weightController,
+                    focusNode: weightNode,
+                    decoration: InputDecoration(labelText: 'Weight ($unit)'),
+                    keyboardType: TextInputType.number,
+                    onTap: () {
+                      selectWeight();
+                    },
+                    onSubmitted: (value) async =>
+                        await save(timerState, settingsState),
+                  ),
+                  Visibility(
+                    visible: settingsState.showUnits,
+                    child: DropdownButtonFormField<String>(
+                      value: unit,
+                      decoration: const InputDecoration(labelText: 'Unit'),
+                      items: ['kg', 'lb'].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          unit = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: StreamBuilder(
+                      stream: widget.countStream,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return const SizedBox();
 
-                  return exerciseList(planExercises, snapshot);
-                },
-              ),
-            ),
-          ],
-        ),
+                        return ExerciseList(
+                            planExercises: planExercises,
+                            snapshot: snapshot,
+                            selectedIndex: selectedIndex,
+                            onTap: select);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async => await save(timerState, settingsState),
         tooltip: "Save this set",
         child: const Icon(Icons.save),
       ),
-    );
-  }
-
-  exerciseList(List<String> planExercises,
-      AsyncSnapshot<List<drift.TypedResult>> snapshot) {
-    return ReorderableListView.builder(
-      itemCount: planExercises.length,
-      itemBuilder: (context, index) {
-        final exercise = planExercises[index];
-        final gymSet = snapshot.data?.firstWhere(
-            (element) => element.read(database.gymSets.name) == exercise);
-        var count = 0;
-        if (gymSet != null) count = gymSet.read(database.gymSets.name.count())!;
-
-        return ExerciseTile(
-          index: index,
-          exercise: exercise,
-          isSelected: index == selectedIndex,
-          count: count,
-          onTap: () {
-            select(index);
-          },
-          key: Key(exercise),
-        );
-      },
-      onReorder: (int oldIndex, int newIndex) async {
-        if (oldIndex < newIndex) {
-          newIndex--;
-        }
-
-        if (oldIndex == selectedIndex)
-          selectedIndex = newIndex;
-        else if (oldIndex < selectedIndex && newIndex >= selectedIndex)
-          selectedIndex--;
-        else if (oldIndex > selectedIndex && newIndex <= selectedIndex)
-          selectedIndex++;
-
-        final temp = planExercises[oldIndex];
-        planExercises.removeAt(oldIndex);
-        planExercises.insert(newIndex, temp);
-
-        final plan = widget.plan.copyWith(exercises: planExercises.join(','));
-        await database.update(database.plans).replace(plan);
-        await widget.onReorder();
-      },
     );
   }
 }
