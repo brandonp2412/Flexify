@@ -40,6 +40,8 @@ class App extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     final defaultTheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
+    final defaultDark = ColorScheme.fromSeed(
+        seedColor: Colors.deepPurple, brightness: Brightness.dark);
 
     return DynamicColorBuilder(
         builder: (lightDynamic, darkDynamic) => MaterialApp(
@@ -51,7 +53,7 @@ class App extends StatelessWidget {
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
-                colorScheme: settings.systemColors ? darkDynamic : defaultTheme,
+                colorScheme: settings.systemColors ? darkDynamic : defaultDark,
                 fontFamily: 'Manrope',
                 useMaterial3: true,
               ),
