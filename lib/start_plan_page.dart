@@ -218,14 +218,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return const SizedBox();
 
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        exerciseList(planExercises, snapshot),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  );
+                  return exerciseList(planExercises, snapshot);
                 },
               ),
             ),
@@ -243,8 +236,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   exerciseList(List<String> planExercises,
       AsyncSnapshot<List<drift.TypedResult>> snapshot) {
     return ReorderableListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       itemCount: planExercises.length,
       itemBuilder: (context, index) {
         final exercise = planExercises[index];
