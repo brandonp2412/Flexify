@@ -1,3 +1,4 @@
+import 'package:flexify/edit_gym_set.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:intl/intl.dart';
@@ -75,7 +76,9 @@ class _GraphHistoryState extends State<GraphHistory> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
+        title: selected.isEmpty
+            ? Text(widget.name)
+            : Text("${selected.length} selected"),
         actions: actions,
       ),
       body: StreamBuilder<List<GymSet>>(
@@ -110,10 +113,21 @@ class _GraphHistoryState extends State<GraphHistory> {
                         });
                       },
                       onTap: () {
-                        if (selected.isNotEmpty)
+                        if (selected.contains(gymSet.id))
+                          setState(() {
+                            selected.remove(gymSet.id);
+                          });
+                        else if (selected.isNotEmpty)
                           setState(() {
                             selected.add(gymSet.id);
                           });
+                        else
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditGymSet(gymSet: gymSet),
+                              ));
                       },
                     ),
                   ],
