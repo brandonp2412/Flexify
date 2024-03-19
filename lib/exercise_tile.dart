@@ -97,8 +97,12 @@ class ExerciseTile extends StatelessWidget {
               ],
             ),
           ),
-          LinearProgressIndicator(
-            value: count / 5,
+          TweenAnimationBuilder(
+            tween: Tween<double>(begin: (count / 5) - 1, end: count / 5),
+            duration: const Duration(milliseconds: 150),
+            builder: (context, value, child) => LinearProgressIndicator(
+              value: value,
+            ),
           ),
         ],
       ),
