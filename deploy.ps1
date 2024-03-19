@@ -15,8 +15,8 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
     Set-Content -Path "pubspec.yaml" -Value $pubspecContent
 
     git add "pubspec.yaml"
-    git tag "$newBuildNumber"
     git commit -m "Bump version to $version"
+    git tag "$newBuildNumber"
 
     Set-Location android
     Set-Content -Path "fastlane\metadata\android\en-US\changelogs\$buildNumber.txt" -Value "$lastCommit"
