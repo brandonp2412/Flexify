@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:flexify/exercise_tile.dart';
 import 'package:flexify/main.dart';
@@ -23,8 +24,9 @@ class ExerciseList extends StatelessWidget {
       itemCount: planExercises.length,
       itemBuilder: (context, index) {
         final exercise = planExercises[index];
-        final gymSet = snapshot.data?.firstWhere(
-            (element) => element.read(database.gymSets.name) == exercise);
+        final gymSet = snapshot.data?.firstWhereOrNull(
+          (element) => element.read(database.gymSets.name) == exercise,
+        );
         var count = 0;
         if (gymSet != null) count = gymSet.read(database.gymSets.name.count())!;
         return ExerciseTile(
