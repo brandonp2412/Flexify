@@ -208,9 +208,7 @@ class _ViewGraphPageState extends State<ViewGraphPage>
                 LineChartBarData(
                   spots: spots,
                   isCurved: false,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? const ColorScheme.dark().primary
-                      : const ColorScheme.light().primary,
+                  color: Theme.of(context).colorScheme.primary,
                   barWidth: 3,
                   isStrokeCapRound: true,
                 ),
