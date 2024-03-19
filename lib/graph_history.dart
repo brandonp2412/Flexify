@@ -11,12 +11,13 @@ class GraphHistory extends StatefulWidget {
   const GraphHistory({Key? key, required this.name}) : super(key: key);
 
   @override
-  _GraphHistoryState createState() => _GraphHistoryState();
+  createState() => _GraphHistoryState();
 }
 
 class _GraphHistoryState extends State<GraphHistory> {
   final ScrollController _scrollController = ScrollController();
   late Stream<List<GymSet>> stream;
+  Set<int> selected = {};
 
   @override
   void initState() {
@@ -34,8 +35,49 @@ class _GraphHistoryState extends State<GraphHistory> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> actions = [];
+
+    if (selected.isNotEmpty)
+      actions.add(IconButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Confirm Delete'),
+                  content: Text(
+                      'Are you sure you want to delete ${selected.length} records?'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Delete'),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        (database.delete(database.gymSets)
+                              ..where((tbl) => tbl.id.isIn(selected)))
+                            .go();
+                        setState(() {
+                          selected = {};
+                        });
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          icon: const Icon(Icons.delete)));
+
     return Scaffold(
-      appBar: AppBar(title: Text(widget.name)),
+      appBar: AppBar(
+        title: Text(widget.name),
+        actions: actions,
+      ),
       body: StreamBuilder<List<GymSet>>(
         stream: stream,
         builder: (context, snapshot) {
@@ -48,7 +90,6 @@ class _GraphHistoryState extends State<GraphHistory> {
                 final previousGymSet =
                     index > 0 ? snapshot.data![index - 1] : null;
 
-                // Check if this gym set is on a different day from the previous one
                 final bool showDivider = previousGymSet != null &&
                     !isSameDay(gymSet.created, previousGymSet.created);
 
@@ -62,6 +103,18 @@ class _GraphHistoryState extends State<GraphHistory> {
                       trailing: Text(
                           "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
                           style: const TextStyle(fontSize: 16)),
+                      selected: selected.contains(gymSet.id),
+                      onLongPress: () {
+                        setState(() {
+                          selected.add(gymSet.id);
+                        });
+                      },
+                      onTap: () {
+                        if (selected.isNotEmpty)
+                          setState(() {
+                            selected.add(gymSet.id);
+                          });
+                      },
                     ),
                   ],
                 );
