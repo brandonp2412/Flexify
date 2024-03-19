@@ -163,7 +163,7 @@ class _SettingsPageState extends State<SettingsPage> {
       WidgetSettings(
         key: 'system color',
         widget: ListTile(
-          title: const Text('Use system color scheme'),
+          title: const Text('System color scheme'),
           onTap: () async =>
               await settingsState.setSystem(!settingsState.systemColors),
           trailing: Switch(
