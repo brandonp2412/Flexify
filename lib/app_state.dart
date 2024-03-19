@@ -11,6 +11,7 @@ class SettingsState extends ChangeNotifier {
   bool showReorder = true;
   bool restTimers = true;
   bool showUnits = true;
+  bool systemColors = true;
 
   Future<void> init() async {
     final prefsInstance = await SharedPreferences.getInstance();
@@ -29,6 +30,12 @@ class SettingsState extends ChangeNotifier {
 
     showReorder = prefsInstance.getBool("showReorder") ?? true;
     restTimers = prefsInstance.getBool("restTimers") ?? true;
+  }
+
+  Future<void> setSystem(bool system) async {
+    systemColors = system;
+    await prefs?.setBool('systemColors', system);
+    notifyListeners();
   }
 
   Future<void> setUnits(bool show) async {

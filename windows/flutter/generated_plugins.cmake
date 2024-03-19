@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  dynamic_color
   permission_handler_windows
   sqlite3_flutter_libs
 )

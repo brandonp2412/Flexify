@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/settings_page.dart';
@@ -36,20 +37,28 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingsState = context.watch<SettingsState>();
-    return MaterialApp(
-      title: 'Flexify',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark(),
-      themeMode: settingsState.themeMode,
-      home: const HomePage(),
-    );
+    final settings = context.watch<SettingsState>();
+
+    final defaultTheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
+
+    return DynamicColorBuilder(
+        builder: (lightDynamic, darkDynamic) => MaterialApp(
+              title: 'Flexify',
+              theme: ThemeData(
+                colorScheme:
+                    settings.systemColors ? lightDynamic : defaultTheme,
+                fontFamily: 'Manrope',
+                useMaterial3: true,
+              ),
+              darkTheme: ThemeData(
+                colorScheme: settings.systemColors ? darkDynamic : defaultTheme,
+                fontFamily: 'Manrope',
+                useMaterial3: true,
+              ),
+              themeMode: settings.themeMode,
+              home: const HomePage(),
+            ));
   }
-
-
 }
 
 class HomePage extends StatelessWidget {
@@ -63,7 +72,7 @@ class HomePage extends StatelessWidget {
         bottomSheet: TimerProgressIndicator(),
         body: SafeArea(
           child: TabBarView(
-            children:  [
+            children: [
               PlansPage(),
               GraphsPage(),
               SettingsPage(),

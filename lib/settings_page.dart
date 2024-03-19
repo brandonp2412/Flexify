@@ -160,6 +160,18 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+      WidgetSettings(
+        key: 'system color',
+        widget: ListTile(
+          title: const Text('Use system color scheme'),
+          onTap: () async =>
+              await settingsState.setSystem(!settingsState.systemColors),
+          trailing: Switch(
+            value: settingsState.systemColors,
+            onChanged: (value) async => await settingsState.setSystem(value),
+          ),
+        ),
+      ),
     ];
 
     return Scaffold(
