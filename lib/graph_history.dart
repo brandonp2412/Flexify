@@ -1,16 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
+import 'package:intl/intl.dart';
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class GraphHistory extends StatefulWidget {
   final String name;
 
-  const GraphHistory({super.key, required this.name});
+  const GraphHistory({Key? key, required this.name}) : super(key: key);
 
   @override
-  createState() => _GraphHistoryState();
+  _GraphHistoryState createState() => _GraphHistoryState();
 }
 
 class _GraphHistoryState extends State<GraphHistory> {
@@ -44,13 +45,25 @@ class _GraphHistoryState extends State<GraphHistory> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final gymSet = snapshot.data![index];
-                return ListTile(
-                  title: Text(gymSet.name),
-                  subtitle: Text(
-                      DateFormat("yyyy-MM-dd hh:mm a").format(gymSet.created)),
-                  trailing: Text(
-                      "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
-                      style: const TextStyle(fontSize: 16)),
+                final previousGymSet =
+                    index > 0 ? snapshot.data![index - 1] : null;
+
+                // Check if this gym set is on a different day from the previous one
+                final bool showDivider = previousGymSet != null &&
+                    !isSameDay(gymSet.created, previousGymSet.created);
+
+                return material.Column(
+                  children: [
+                    if (showDivider) const Divider(),
+                    ListTile(
+                      title: Text(gymSet.name),
+                      subtitle: Text(DateFormat("yyyy-MM-dd hh:mm a")
+                          .format(gymSet.created)),
+                      trailing: Text(
+                          "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
+                          style: const TextStyle(fontSize: 16)),
+                    ),
+                  ],
                 );
               },
             );
@@ -62,5 +75,12 @@ class _GraphHistoryState extends State<GraphHistory> {
         },
       ),
     );
+  }
+
+  // Function to check if two DateTime objects represent the same day
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 }
