@@ -301,7 +301,6 @@ class _PlanWidget extends StatelessWidget {
     required this.countStream,
     required this.updatePlans,
     required this.navigatorKey,
-    super.key,
   });
 
   @override

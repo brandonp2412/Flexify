@@ -72,7 +72,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   }
 
   const _TimerCircularProgressIndicatorTile(
-      {required this.value, required this.timerState, super.key});
+      {required this.value, required this.timerState});
 
   @override
   Widget build(BuildContext context) {
