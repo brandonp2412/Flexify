@@ -21,6 +21,12 @@ class _GraphHistoryState extends State<GraphHistory> {
   void initState() {
     super.initState();
     stream = (database.gymSets.select()
+          ..orderBy(
+            [
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc)
+            ],
+          )
           ..where((tbl) => tbl.name.equals(widget.name)))
         .watch();
   }
