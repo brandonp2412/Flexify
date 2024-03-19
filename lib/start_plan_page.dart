@@ -165,15 +165,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
         child: Column(
           children: [
             TextField(
-              controller: weightController,
-              focusNode: weightNode,
-              decoration: InputDecoration(labelText: 'Weight ($unit)'),
+              controller: repsController,
+              focusNode: repsNode,
+              decoration: const InputDecoration(labelText: 'Reps'),
               keyboardType: TextInputType.number,
-              onTap: () {
-                selectWeight();
-              },
               onSubmitted: (value) {
-                repsNode.requestFocus();
+                weightNode.requestFocus();
+                weightController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: weightController.text.length,
+                );
+              },
+              onTap: () {
                 repsController.selection = TextSelection(
                   baseOffset: 0,
                   extentOffset: repsController.text.length,
@@ -181,18 +184,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
               },
             ),
             TextField(
-              controller: repsController,
-              focusNode: repsNode,
-              decoration: const InputDecoration(labelText: 'Reps'),
+              controller: weightController,
+              focusNode: weightNode,
+              decoration: InputDecoration(labelText: 'Weight ($unit)'),
               keyboardType: TextInputType.number,
+              onTap: () {
+                selectWeight();
+              },
               onSubmitted: (value) async =>
                   await save(timerState, settingsState),
-              onTap: () {
-                repsController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: repsController.text.length,
-                );
-              },
             ),
             Visibility(
               visible: settingsState.showUnits,
