@@ -15,14 +15,16 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
     Set-Content -Path "pubspec.yaml" -Value $pubspecContent
 
     git add "pubspec.yaml"
+    git tag "$newBuildNumber"
     git commit -m "Bump version to $version"
 
     Set-Location android
+    Set-Content -Path "fastlane\metadata\android\en-US\changelogs\$buildNumber.txt" -Value "$lastCommit"
     flutter build appbundle
     fastlane supply --skip-upload_screenshots true --skip-upload-images true --aab ..\build\app\outputs\bundle\release\app-release.aab
     flutter build apk
     gh release create "$version" --notes "$lastCommit" ..\build\app\outputs\flutter-apk\app-release.apk
-    git push
+    git push --tags
 }
 else {
     Write-Host "Failed to update version in pubspec.yaml."
