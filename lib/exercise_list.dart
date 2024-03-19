@@ -34,6 +34,7 @@ class ExerciseList extends StatelessWidget {
           isSelected: index == selectedIndex,
           count: count,
           onTap: () => onTap(index),
+          key: Key(exercise),
         );
       },
     );
