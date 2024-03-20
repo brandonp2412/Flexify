@@ -89,8 +89,9 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
+            final now = DateTime.now();
             database.gymSets.insertOne(GymSetsCompanion.insert(
-                created: DateTime.now(),
+                created: DateTime(now.year, now.month, now.day),
                 name: "Weight",
                 reps: 1,
                 unit: _unit,
