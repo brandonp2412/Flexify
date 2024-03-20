@@ -50,7 +50,6 @@ class _ViewGraphPageState extends State<ViewGraphPage>
             database.gymSets.weight.max(),
             database.gymSets.reps * database.gymSets.weight,
             oneRepMax,
-            database.gymSets.name,
             database.gymSets.created.date,
             database.gymSets.reps
           ])
