@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart';
 import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
+import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +80,7 @@ class _GraphsPageState extends State<GraphsPage> {
 
   Scaffold graphsPage() {
     return Scaffold(
-      body: Column(
+      body: material.Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -152,6 +155,25 @@ class _GraphsPageState extends State<GraphsPage> {
             },
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditGymSet(
+                gymSet: GymSetsCompanion(
+                    name: const Value(""),
+                    reps: const Value(0),
+                    weight: const Value(0),
+                    unit: const Value("kg"),
+                    created: Value(DateTime.now())),
+              ),
+            ),
+          );
+        },
+        tooltip: 'Add gym set',
+        child: const Icon(Icons.add),
       ),
     );
   }

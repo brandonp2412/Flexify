@@ -125,8 +125,8 @@ class _GraphHistoryState extends State<GraphHistory> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    EditGymSet(gymSet: gymSet),
+                                builder: (context) => EditGymSet(
+                                    gymSet: gymSet.toCompanion(false)),
                               ));
                       },
                     ),

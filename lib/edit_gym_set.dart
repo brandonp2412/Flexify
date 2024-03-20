@@ -1,10 +1,11 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 
 class EditGymSet extends StatefulWidget {
-  final GymSet gymSet;
+  final GymSetsCompanion gymSet;
 
   const EditGymSet({Key? key, required this.gymSet}) : super(key: key);
 
@@ -13,6 +14,7 @@ class EditGymSet extends StatefulWidget {
 }
 
 class _EditGymSetState extends State<EditGymSet> {
+  late TextEditingController nameController;
   late TextEditingController repsController;
   late TextEditingController weightController;
   late String unit;
@@ -21,11 +23,14 @@ class _EditGymSetState extends State<EditGymSet> {
   @override
   void initState() {
     super.initState();
-    repsController = TextEditingController(text: widget.gymSet.reps.toString());
+    repsController =
+        TextEditingController(text: widget.gymSet.reps.value.toString());
+    nameController =
+        TextEditingController(text: widget.gymSet.name.value.toString());
     weightController =
-        TextEditingController(text: widget.gymSet.weight.toString());
-    unit = widget.gymSet.unit;
-    created = widget.gymSet.created;
+        TextEditingController(text: widget.gymSet.weight.value.toString());
+    unit = widget.gymSet.unit.value;
+    created = widget.gymSet.created.value;
   }
 
   @override
@@ -35,15 +40,21 @@ class _EditGymSetState extends State<EditGymSet> {
     super.dispose();
   }
 
-  Future<void> updateGymSet() async {
+  Future<void> save() async {
     Navigator.pop(context);
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
 
-    final updatedGymSet = widget.gymSet
-        .copyWith(reps: reps, weight: weight, unit: unit, created: created);
-
-    database.update(database.gymSets).replace(updatedGymSet);
+    final gymSet = widget.gymSet.copyWith(
+        reps: Value(reps),
+        weight: Value(weight),
+        unit: Value(unit),
+        created: Value(created),
+        name: Value(nameController.text));
+    if (gymSet.id.present)
+      database.update(database.gymSets).replace(gymSet);
+    else
+      database.gymSets.insertOne(gymSet);
   }
 
   Future<void> _selectDate() async {
@@ -82,12 +93,19 @@ class _EditGymSetState extends State<EditGymSet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit ${widget.gymSet.name}'),
+        title: Text(widget.gymSet.name.value.isEmpty
+            ? 'Add set'
+            : 'Edit ${widget.gymSet.name.value}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: material.Column(
           children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+              keyboardType: TextInputType.number,
+            ),
             TextField(
               controller: repsController,
               decoration: const InputDecoration(labelText: 'Reps'),
@@ -127,7 +145,7 @@ class _EditGymSetState extends State<EditGymSet> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: updateGymSet,
+        onPressed: save,
         child: const Icon(Icons.save),
       ),
     );
