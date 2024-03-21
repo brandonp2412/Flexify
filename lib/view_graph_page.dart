@@ -120,9 +120,6 @@ class _ViewGraphPageState extends State<ViewGraphPage>
                 },
               ),
             ),
-            const SizedBox(
-              height: 24.0,
-            ),
             graphBuilder(),
           ],
         ),
@@ -134,8 +131,13 @@ class _ViewGraphPageState extends State<ViewGraphPage>
     return StreamBuilder<List<drift.TypedResult>>(
       stream: graphStream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data!.isEmpty)
-          return const SizedBox();
+        if (!snapshot.hasData) return const SizedBox();
+        if (snapshot.data?.isEmpty == true)
+          return ListTile(
+            title: Text("No data yet for ${widget.name}"),
+            subtitle: const Text("Complete some plans to view graphs here"),
+            contentPadding: EdgeInsets.zero,
+          );
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
         final rows = snapshot.data!.reversed
             .map((row) => GraphData(
@@ -188,30 +190,33 @@ class _ViewGraphPageState extends State<ViewGraphPage>
               .toList();
         }
 
-        return ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 300),
-          child: LineChart(
-            LineChartData(
-              titlesData: const FlTitlesData(
-                  topTitles:
-                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  bottomTitles:
-                      AxisTitles(sideTitles: SideTitles(showTitles: false))),
-              minY: minY,
-              maxY: maxY,
-              lineTouchData: LineTouchData(
-                enabled: true,
-                touchTooltipData: tooltipData(context, rows),
-              ),
-              lineBarsData: [
-                LineChartBarData(
-                  spots: spots,
-                  isCurved: false,
-                  color: Theme.of(context).colorScheme.primary,
-                  barWidth: 3,
-                  isStrokeCapRound: true,
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 300),
+            child: LineChart(
+              LineChartData(
+                titlesData: const FlTitlesData(
+                    topTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    bottomTitles:
+                        AxisTitles(sideTitles: SideTitles(showTitles: false))),
+                minY: minY,
+                maxY: maxY,
+                lineTouchData: LineTouchData(
+                  enabled: true,
+                  touchTooltipData: tooltipData(context, rows),
                 ),
-              ],
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: spots,
+                    isCurved: false,
+                    color: Theme.of(context).colorScheme.primary,
+                    barWidth: 3,
+                    isStrokeCapRound: true,
+                  ),
+                ],
+              ),
             ),
           ),
         );

@@ -84,61 +84,64 @@ class _GraphHistoryState extends State<GraphHistory> {
       body: StreamBuilder<List<GymSet>>(
         stream: stream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final gymSet = snapshot.data![index];
-                final previousGymSet =
-                    index > 0 ? snapshot.data![index - 1] : null;
+          if (!snapshot.hasData) return const SizedBox();
+          if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
+          if (snapshot.data?.isEmpty == true)
+            return ListTile(
+              title: Text("No entries yet for ${widget.name}"),
+              subtitle: const Text(
+                  "Start completing plans for records to appear here."),
+            );
 
-                final bool showDivider = previousGymSet != null &&
-                    !isSameDay(gymSet.created, previousGymSet.created);
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final gymSet = snapshot.data![index];
+              final previousGymSet =
+                  index > 0 ? snapshot.data![index - 1] : null;
 
-                return material.Column(
-                  children: [
-                    if (showDivider) const Divider(),
-                    ListTile(
-                      title: Text(gymSet.name),
-                      subtitle: Text(DateFormat("yyyy-MM-dd hh:mm a")
-                          .format(gymSet.created)),
-                      trailing: Text(
-                          "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
-                          style: const TextStyle(fontSize: 16)),
-                      selected: selected.contains(gymSet.id),
-                      onLongPress: () {
+              final bool showDivider = previousGymSet != null &&
+                  !isSameDay(gymSet.created, previousGymSet.created);
+
+              return material.Column(
+                children: [
+                  if (showDivider) const Divider(),
+                  ListTile(
+                    title: Text(gymSet.name),
+                    subtitle: Text(DateFormat("yyyy-MM-dd hh:mm a")
+                        .format(gymSet.created)),
+                    trailing: Text(
+                        "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
+                        style: const TextStyle(fontSize: 16)),
+                    selected: selected.contains(gymSet.id),
+                    onLongPress: () {
+                      setState(() {
+                        selected.add(gymSet.id);
+                      });
+                    },
+                    onTap: () {
+                      if (selected.contains(gymSet.id))
+                        setState(() {
+                          selected.remove(gymSet.id);
+                        });
+                      else if (selected.isNotEmpty)
                         setState(() {
                           selected.add(gymSet.id);
                         });
-                      },
-                      onTap: () {
-                        if (selected.contains(gymSet.id))
-                          setState(() {
-                            selected.remove(gymSet.id);
-                          });
-                        else if (selected.isNotEmpty)
-                          setState(() {
-                            selected.add(gymSet.id);
-                          });
-                        else
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditGymSet(
-                                    gymSet: gymSet.toCompanion(false)),
-                              ));
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return const CircularProgressIndicator();
-          }
+                      else
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EditGymSet(gymSet: gymSet.toCompanion(false)),
+                            ));
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         },
       ),
     );
