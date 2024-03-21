@@ -30,6 +30,7 @@ class SettingsState extends ChangeNotifier {
 
     showReorder = prefsInstance.getBool("showReorder") ?? true;
     restTimers = prefsInstance.getBool("restTimers") ?? true;
+    showUnits = prefsInstance.getBool("showUnits") ?? true;
   }
 
   Future<void> setSystem(bool system) async {
