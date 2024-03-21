@@ -74,7 +74,7 @@ class _ViewGraphPageState extends State<ViewGraphPage>
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
-            context.read<AppState>().selectExercise("");
+            context.read<ExerciseState>().selectExercise("");
           },
         ),
         actions: [

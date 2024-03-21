@@ -69,7 +69,7 @@ class SettingsState extends ChangeNotifier {
   }
 }
 
-class AppState extends ChangeNotifier {
+class ExerciseState extends ChangeNotifier {
   String? selected;
 
   void selectExercise(String exercise) {

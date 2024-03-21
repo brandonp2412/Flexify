@@ -42,7 +42,7 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final appState = context.watch<ExerciseState>();
     if (appState.selected?.isNotEmpty == true)
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (selectedExercise == appState.selected) return;
