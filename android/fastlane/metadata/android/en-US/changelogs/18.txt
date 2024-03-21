@@ -1,0 +1,1 @@
+Add messages for empty graph view + history
