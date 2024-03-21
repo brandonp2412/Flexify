@@ -137,8 +137,17 @@ class _StartPlanPageState extends State<StartPlanPage> {
     database.into(database.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
-    if (settingsState.restTimers)
-      await timerState.startTimer(exercise, settingsState.timerDuration);
+    if (!settingsState.restTimers) return;
+    final counts = await widget.countStream.first;
+    final countIndex = counts.indexWhere(
+        (element) => element.read(database.gymSets.name)! == exercise);
+    var count = 0;
+    if (countIndex != -1)
+      count = counts[countIndex].read(database.gymSets.name.count())!;
+    count++;
+
+    await timerState.startTimer(
+        "$exercise ($count)", settingsState.timerDuration);
   }
 
   @override

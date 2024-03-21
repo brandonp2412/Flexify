@@ -109,7 +109,7 @@ class TimerState extends ChangeNotifier {
     await android.invokeMethod('stop');
   }
 
-  Future<void> startTimer(String exercise, Duration timerDuration) async {
+  Future<void> startTimer(String title, Duration timerDuration) async {
     final timer = NativeTimerWrapper(
       timerDuration,
       Duration.zero,
@@ -119,7 +119,7 @@ class TimerState extends ChangeNotifier {
     updateTimer(timer);
     await android.invokeMethod(
       'timer',
-      [timerDuration.inMilliseconds, exercise, timer.getTimeStamp()],
+      [timerDuration.inMilliseconds, title, timer.getTimeStamp()],
     );
   }
 
