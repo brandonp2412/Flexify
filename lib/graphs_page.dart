@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
@@ -13,7 +11,6 @@ import 'package:flexify/utils.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'graph_tile.dart';
@@ -310,29 +307,6 @@ class _GraphsPageState extends State<GraphsPage> {
           android.invokeMethod('save', ['gym_sets.csv', csv]);
         },
       ),
-    );
-  }
-
-  void postNotification(File file) async {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const android =
-        AndroidInitializationSettings('@drawable/baseline_arrow_downward_24');
-    const initializationSettings = InitializationSettings(android: android);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'downloads',
-      'Downloads',
-    );
-    const platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Downloaded gym_sets.csv',
-      null,
-      platformChannelSpecifics,
-      payload: file.path,
     );
   }
 }

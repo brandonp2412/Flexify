@@ -39,10 +39,9 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.20
   path_provider: ^2.1.2
   path: ^1.8.3
-  csv: ^5.1.1
+  csv: ^6.0.0
   intl: ^0.19.0
   fl_chart: ^0.66.2
-  flutter_local_notifications: ^16.3.2
   permission_handler: ^11.3.0
   provider: ^6.1.1
   shared_preferences: ^2.2.2
@@ -57,7 +56,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   drift_dev: ^2.15.0
   build_runner: ^2.4.8
 
