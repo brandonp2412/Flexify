@@ -46,8 +46,7 @@ class _PlansPageState extends State<PlansPage> {
 class _PlansPageWidget extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  const _PlansPageWidget({required this.navigatorKey, Key? key})
-      : super(key: key);
+  const _PlansPageWidget({required this.navigatorKey});
 
   @override
   createState() => _PlansPageWidgetState();

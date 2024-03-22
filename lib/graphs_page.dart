@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 import 'graph_tile.dart';
 
 class GraphsPage extends StatefulWidget {
-  const GraphsPage({Key? key}) : super(key: key);
+  const GraphsPage({super.key});
 
   @override
   createState() => _GraphsPageState();

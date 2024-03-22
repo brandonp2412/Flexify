@@ -14,13 +14,13 @@ class ExerciseTile extends StatelessWidget {
   final int index;
 
   const ExerciseTile({
-    Key? key,
+    super.key,
     required this.exercise,
     required this.isSelected,
     required this.onTap,
     required this.count,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

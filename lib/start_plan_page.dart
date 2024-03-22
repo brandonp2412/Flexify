@@ -13,11 +13,10 @@ class StartPlanPage extends StatefulWidget {
   final Future<void> Function() onReorder;
 
   const StartPlanPage(
-      {Key? key,
+      {super.key,
       required this.plan,
       required this.countStream,
-      required this.onReorder})
-      : super(key: key);
+      required this.onReorder});
 
   @override
   createState() => _StartPlanPageState();

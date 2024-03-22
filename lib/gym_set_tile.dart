@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class GymSetTile extends StatelessWidget {
   final GymSet gymSet;
 
-  const GymSetTile({Key? key, required this.gymSet}) : super(key: key);
+  const GymSetTile({super.key, required this.gymSet});
 
   @override
   Widget build(BuildContext context) {

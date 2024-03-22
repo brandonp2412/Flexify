@@ -24,7 +24,7 @@ class GraphData {
 
 class ViewGraphPage extends StatefulWidget {
   final String name;
-  const ViewGraphPage({Key? key, required this.name}) : super(key: key);
+  const ViewGraphPage({super.key, required this.name});
 
   @override
   createState() => _ViewGraphPageState();

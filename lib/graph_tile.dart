@@ -8,8 +8,7 @@ class GraphTile extends StatelessWidget {
   final String name;
   final double weight;
 
-  const GraphTile({Key? key, required this.name, required this.weight})
-      : super(key: key);
+  const GraphTile({super.key, required this.name, required this.weight});
 
   Future<int> getCount() async {
     final result = await (database.gymSets.selectOnly()

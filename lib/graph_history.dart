@@ -9,7 +9,7 @@ import 'package:flexify/main.dart';
 class GraphHistory extends StatefulWidget {
   final String name;
 
-  const GraphHistory({Key? key, required this.name}) : super(key: key);
+  const GraphHistory({super.key, required this.name});
 
   @override
   createState() => _GraphHistoryState();

@@ -10,12 +10,12 @@ class ExerciseList extends StatelessWidget {
   final Function(int) onTap;
 
   const ExerciseList({
-    Key? key,
+    super.key,
     required this.planExercises,
     required this.snapshot,
     required this.selectedIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

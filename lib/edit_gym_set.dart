@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class EditGymSet extends StatefulWidget {
   final GymSetsCompanion gymSet;
 
-  const EditGymSet({Key? key, required this.gymSet}) : super(key: key);
+  const EditGymSet({super.key, required this.gymSet});
 
   @override
   createState() => _EditGymSetState();
