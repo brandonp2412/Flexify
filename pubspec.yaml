@@ -46,6 +46,7 @@ dependencies:
   provider: ^6.1.1
   shared_preferences: ^2.2.2
   dynamic_color: ^1.7.0
+  sqlite3: ^2.4.0
 
 dev_dependencies:
   flutter_test:
