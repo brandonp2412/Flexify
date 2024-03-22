@@ -195,7 +195,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             newPlan = newPlan.copyWith(id: Value(id));
           }
 
-          if (!mounted) return;
+          if (!context.mounted) return;
           Navigator.pop(context);
         },
         tooltip: "Save this plan",

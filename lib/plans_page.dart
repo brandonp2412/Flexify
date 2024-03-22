@@ -252,7 +252,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             );
             await updatePlans();
           } catch (e) {
-            if (!mounted) return;
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Failed to upload csv.')),
             );

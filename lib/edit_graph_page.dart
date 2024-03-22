@@ -80,8 +80,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
           }
 
           final count = await getCount();
-          if (count > 0) {
-            if (!mounted) return;
+          if (!context.mounted) return;
+          if (count == 0)
+            await doUpdate();
+          else {
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -107,10 +109,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 );
               },
             );
-          } else
-            await doUpdate();
+          }
 
-          if (!mounted) return;
+          if (!context.mounted) return;
           Navigator.pop(context);
         },
         tooltip: "Update all records for this exercise",

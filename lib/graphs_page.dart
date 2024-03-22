@@ -269,7 +269,7 @@ class _GraphsPageState extends State<GraphsPage> {
               (batch) => batch.insertAll(database.gymSets, gymSets),
             );
           } catch (e) {
-            if (!mounted) return;
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Failed to upload csv.')),
             );
