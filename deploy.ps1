@@ -1,3 +1,7 @@
+param (
+    [switch]$n
+)
+
 $pubspecContent = Get-Content "pubspec.yaml" -Raw 
 
 if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
@@ -21,8 +25,12 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
     git tag "$newBuildNumber"
 
     Set-Location android
-    flutter build appbundle
-    fastlane supply --skip-upload_screenshots true --skip-upload-images true --aab ..\build\app\outputs\bundle\release\app-release.aab
+
+    if (!$n) {
+        flutter build appbundle
+        fastlane supply --skip-upload_screenshots true --skip-upload-images true --aab ..\build\app\outputs\bundle\release\app-release.aab
+    }
+
     flutter build apk
     gh release create "$version" --notes "$lastCommit" ..\build\app\outputs\flutter-apk\app-release.apk
     git push --tags
