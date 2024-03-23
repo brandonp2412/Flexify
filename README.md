@@ -46,8 +46,6 @@ To get started with Flexify, follow these steps:
     flutter run
     ```
 
-4. **Start Tracking**: Once the app is running, start tracking your gym progress, explore the graphs, and utilize the automatic rest timers to enhance your workout experience.
-
 ## Contributing
 
 Contributions to Flexify are welcomed and encouraged! Whether you want to report a bug, suggest a feature, or submit a pull request, please feel free to contribute. For major changes, please open an issue first to discuss the proposed changes.
