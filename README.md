@@ -30,13 +30,13 @@ To get started with Flexify, follow these steps:
 1. **Clone the Repository**: Clone the Flexify repository to your local machine using Git:
 
     ```bash
-    git clone https://github.com/your-username/flexify.git
+    git clone https://github.com/brandonp2412/Flexify
     ```
 
 2. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies:
 
     ```bash
-    cd flexify
+    cd Flexify
     flutter pub get
     ```
 
