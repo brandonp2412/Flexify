@@ -1,6 +1,7 @@
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
+import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_gym_set.dart';
@@ -158,18 +159,11 @@ class _GraphsPageState extends State<GraphsPage> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditGymSet(
-                gymSet: GymSetsCompanion(
-                    name: const Value(""),
-                    reps: const Value(0),
-                    weight: const Value(0),
-                    unit: const Value("kg"),
-                    created: Value(DateTime.now())),
-              ),
+              builder: (context) => const AddExercisePage(),
             ),
           );
         },
-        tooltip: 'Add gym set',
+        tooltip: 'Add exercise',
         child: const Icon(Icons.add),
       ),
     );

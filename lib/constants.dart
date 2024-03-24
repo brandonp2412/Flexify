@@ -14,7 +14,7 @@ const weekdays = [
   'Sunday',
 ];
 
-const exercises = [
+const defaultExercises = [
   'Arnold press',
   'Back extension',
   'Barbell bench press',

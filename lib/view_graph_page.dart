@@ -54,6 +54,7 @@ class _ViewGraphPageState extends State<ViewGraphPage>
             db.gymSets.reps
           ])
           ..where(db.gymSets.name.equals(widget.name))
+          ..where(db.gymSets.hidden.equals(false))
           ..orderBy([
             drift.OrderingTerm(
                 expression: db.gymSets.created, mode: drift.OrderingMode.desc)

@@ -30,7 +30,8 @@ class _GraphHistoryState extends State<GraphHistory> {
                   OrderingTerm(expression: u.created, mode: OrderingMode.desc)
             ],
           )
-          ..where((tbl) => tbl.name.equals(widget.name)))
+          ..where((tbl) => tbl.name.equals(widget.name))
+          ..where((tbl) => tbl.hidden.equals(false)))
         .watch();
   }
 

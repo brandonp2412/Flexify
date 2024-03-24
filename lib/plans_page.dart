@@ -71,6 +71,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           ])
           ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
           ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where(db.gymSets.hidden.equals(false))
           ..groupBy([db.gymSets.name]))
         .watch();
   }

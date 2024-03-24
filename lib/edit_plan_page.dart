@@ -19,6 +19,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   late List<String> exerciseSelections;
   bool showSearch = false;
   String search = '';
+  List<String> exercises = [];
   final searchNode = FocusNode();
   final searchController = TextEditingController();
   final titleController = TextEditingController();
@@ -26,6 +27,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
   @override
   void initState() {
     super.initState();
+
+    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
+        .get()
+        .then((results) => setState(() {
+              exercises = results.map((e) => e.read(db.gymSets.name)!).toList();
+            }));
 
     titleController.text = widget.plan.title.value ?? "";
 
