@@ -246,7 +246,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               (row) => PlansCompanion(
                 days: drift.Value(row[1]),
                 exercises: drift.Value(row[2]),
-                title: drift.Value(row[3]),
+                title: drift.Value(row.elementAtOrNull(3)),
               ),
             );
             await db.batch(
@@ -255,6 +255,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             await updatePlans();
           } catch (e) {
             if (!context.mounted) return;
+            debugPrint(e.toString());
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Failed to upload csv.')),
             );
