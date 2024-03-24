@@ -1,0 +1,1 @@
+Fix fresh install missing default exercises
