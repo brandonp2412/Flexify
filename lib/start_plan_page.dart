@@ -224,10 +224,22 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   if (!snapshot.hasData) return const SizedBox();
 
                   return ExerciseList(
-                      planExercises: planExercises,
-                      snapshot: snapshot,
-                      selectedIndex: selectedIndex,
-                      onTap: select);
+                    planExercises: planExercises,
+                    snapshot: snapshot,
+                    selectedIndex: selectedIndex,
+                    onTap: select,
+                    onReorder: (oldIndex, newIndex) {
+                      if (oldIndex < newIndex) {
+                        newIndex--;
+                      }
+
+                      final temp = planExercises[oldIndex];
+                      planExercises.removeAt(oldIndex);
+                      planExercises.insert(newIndex, temp);
+                      db.update(db.plans).replace(widget.plan
+                          .copyWith(exercises: planExercises.join(',')));
+                    },
+                  );
                 },
               ),
             ),

@@ -8,6 +8,7 @@ class ExerciseList extends StatelessWidget {
   final AsyncSnapshot<List<TypedResult>> snapshot;
   final int selectedIndex;
   final Function(int) onTap;
+  final Function(int, int) onReorder;
 
   const ExerciseList({
     super.key,
@@ -15,11 +16,12 @@ class ExerciseList extends StatelessWidget {
     required this.snapshot,
     required this.selectedIndex,
     required this.onTap,
+    required this.onReorder,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ReorderableListView.builder(
       itemCount: planExercises.length,
       itemBuilder: (context, index) {
         final exercise = planExercises[index];
@@ -38,6 +40,7 @@ class ExerciseList extends StatelessWidget {
           key: Key(exercise),
         );
       },
+      onReorder: onReorder,
     );
   }
 }
