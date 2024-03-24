@@ -12,6 +12,7 @@ import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'graph_tile.dart';
 
@@ -23,18 +24,57 @@ class GraphsPage extends StatefulWidget {
 }
 
 class _GraphsPageState extends State<GraphsPage> {
-  late Stream<List<drift.TypedResult>> stream;
+  Stream<List<drift.TypedResult>>? stream;
   TextEditingController searchController = TextEditingController();
   String selectedExercise = "";
+  String orderBy = 'name';
+  String orderDir = 'asc';
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
     super.initState();
-    stream = (db.gymSets.selectOnly(distinct: true)
-          ..addColumns([db.gymSets.name, db.gymSets.weight.max()])
-          ..groupBy([db.gymSets.name]))
-        .watch();
+    SharedPreferences.getInstance().then((prefs) async {
+      final expressionString = prefs.getString('graphsOrderBy');
+      final modeString = prefs.getString('graphsOrderDir');
+      drift.Expression expression = db.gymSets.name;
+      drift.OrderingMode mode = drift.OrderingMode.asc;
+      if (expressionString == 'weight')
+        expression = db.gymSets.weight;
+      else if (expressionString == 'created')
+        expression = db.gymSets.created.max();
+      if (modeString == 'desc') mode = drift.OrderingMode.desc;
+      setStream(drift.OrderingTerm(expression: expression, mode: mode));
+    });
+  }
+
+  void setStream(drift.OrderingTerm term) async {
+    setState(() {
+      stream = (db.gymSets.selectOnly()
+            ..addColumns([
+              db.gymSets.name,
+              db.gymSets.weight.max(),
+              db.gymSets.created.max()
+            ])
+            ..orderBy([term])
+            ..groupBy([db.gymSets.name]))
+          .watch();
+    });
+    SharedPreferences.getInstance().then((prefs) {
+      var graphsOrderBy = 'name';
+      var graphsOrderDir = 'asc';
+      if (term.expression == db.gymSets.weight)
+        graphsOrderBy = 'weight';
+      else if (term.expression == db.gymSets.created.max())
+        graphsOrderBy = 'created';
+      if (term.mode == drift.OrderingMode.desc) graphsOrderDir = 'desc';
+      prefs.setString('graphsOrderBy', graphsOrderBy);
+      prefs.setString('graphsOrderDir', graphsOrderDir);
+      setState(() {
+        orderBy = graphsOrderBy;
+        orderDir = graphsOrderDir;
+      });
+    });
   }
 
   @override
@@ -102,6 +142,16 @@ class _GraphsPageState extends State<GraphsPage> {
                       )
                     ]
                   : [
+                      PopupMenuButton(
+                        icon: const Icon(Icons.sort),
+                        itemBuilder: (context) => [
+                          createdDesc(context),
+                          nameAsc(context),
+                          nameDesc(context),
+                          weightAsc(context),
+                          weightDesc(context),
+                        ],
+                      ),
                       PopupMenuButton(
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
@@ -179,6 +229,98 @@ class _GraphsPageState extends State<GraphsPage> {
             context,
             MaterialPageRoute(builder: (context) => const TimerPage()),
           );
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> nameAsc(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.text_increase),
+        title: const Text('Name ascending'),
+        selected: orderBy == 'name' && orderDir == 'asc',
+        onTap: () {
+          Navigator.of(context).pop();
+          setStream(drift.OrderingTerm(
+              expression: db.gymSets.name, mode: drift.OrderingMode.asc));
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> weightAsc(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.scale_outlined),
+        title: const Text('Weight ascending'),
+        selected: orderBy == 'weight' && orderDir == 'asc',
+        onTap: () {
+          Navigator.of(context).pop();
+          setStream(drift.OrderingTerm(
+              expression: db.gymSets.weight, mode: drift.OrderingMode.asc));
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> createdDesc(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.calendar_today),
+        title: const Text('Created descending'),
+        selected: orderBy == 'created' && orderDir == 'desc',
+        onTap: () {
+          Navigator.of(context).pop();
+          setStream(drift.OrderingTerm(
+              expression: db.gymSets.created.max(),
+              mode: drift.OrderingMode.desc));
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> weightDesc(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.scale),
+        title: const Text('Weight descending'),
+        selected: orderBy == 'weight' && orderDir == 'desc',
+        onTap: () {
+          Navigator.of(context).pop();
+          setStream(drift.OrderingTerm(
+              expression: db.gymSets.weight, mode: drift.OrderingMode.desc));
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> nameDesc(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.text_decrease),
+        title: const Text('Name descending'),
+        selected: orderBy == 'name' && orderDir == 'desc',
+        onTap: () {
+          Navigator.of(context).pop();
+          setStream(drift.OrderingTerm(
+              expression: db.gymSets.name, mode: drift.OrderingMode.desc));
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> createdAsc(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.calendar_today),
+        title: const Text('Created ascending'),
+        selected: orderBy == 'created' && orderDir == 'asc',
+        onTap: () {
+          Navigator.of(context).pop();
+          setStream(drift.OrderingTerm(
+              expression: db.gymSets.created.date,
+              mode: drift.OrderingMode.asc));
         },
       ),
     );
