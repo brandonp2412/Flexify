@@ -49,6 +49,7 @@ class _GraphsPageState extends State<GraphsPage> {
       stream = (db.gymSets.selectOnly()
             ..addColumns([
               db.gymSets.name,
+              db.gymSets.unit,
               db.gymSets.weight.max(),
               db.gymSets.created.max()
             ])
@@ -167,10 +168,13 @@ class _GraphsPageState extends State<GraphsPage> {
                     final gymSet = filteredGymSets[index];
                     final name = gymSet.read(db.gymSets.name)!;
                     final weight = gymSet.read(db.gymSets.weight.max())!;
+                    final unit = gymSet.read(db.gymSets.unit)!;
+                    final created = gymSet.read(db.gymSets.created.max())!;
                     return GraphTile(
-                      name: name,
-                      weight: weight,
-                    );
+                        name: name,
+                        weight: weight,
+                        unit: unit,
+                        created: created);
                   },
                 ),
               );
