@@ -55,13 +55,14 @@ class ExerciseTile extends StatelessWidget {
                         ])
                         ..limit(1))
                       .getSingle();
-                  if (context.mounted)
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              EditGymSet(gymSet: gymSet.toCompanion(false)),
-                        ));
+                  if (!context.mounted) return;
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditGymSet(gymSet: gymSet.toCompanion(false)),
+                      ));
+                  onTap();
                 },
               ),
             ),
