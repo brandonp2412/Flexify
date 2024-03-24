@@ -23,7 +23,7 @@ class _GraphHistoryState extends State<GraphHistory> {
   @override
   void initState() {
     super.initState();
-    stream = (database.gymSets.select()
+    stream = (db.gymSets.select()
           ..orderBy(
             [
               (u) =>
@@ -59,7 +59,7 @@ class _GraphHistoryState extends State<GraphHistory> {
                       child: const Text('Delete'),
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        (database.delete(database.gymSets)
+                        (db.delete(db.gymSets)
                               ..where((tbl) => tbl.id.isIn(selected)))
                             .go();
                         setState(() {

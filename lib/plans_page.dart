@@ -64,14 +64,14 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    countStream = (database.selectOnly(database.gymSets)
+    countStream = (db.selectOnly(db.gymSets)
           ..addColumns([
-            database.gymSets.name.count(),
-            database.gymSets.name,
+            db.gymSets.name.count(),
+            db.gymSets.name,
           ])
-          ..where(database.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where(database.gymSets.created.isSmallerThanValue(startOfTomorrow))
-          ..groupBy([database.gymSets.name]))
+          ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..groupBy([db.gymSets.name]))
         .watch();
   }
 
@@ -82,7 +82,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       planStreamController.add(await getPlans());
   }
 
-  Future<List<Plan>?> getPlans() async => await (database.select(database.plans)
+  Future<List<Plan>?> getPlans() async => await (db.select(db.plans)
         ..orderBy([
           (u) => drift.OrderingTerm(expression: u.sequence),
         ]))
@@ -216,7 +216,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                     child: const Text('Delete'),
                     onPressed: () async {
                       Navigator.of(context).pop();
-                      await database.delete(database.plans).go();
+                      await db.delete(db.plans).go();
                       await updatePlans();
                     },
                   ),
@@ -248,8 +248,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 title: drift.Value(row[3]),
               ),
             );
-            await database.batch(
-              (batch) => batch.insertAll(database.plans, plans),
+            await db.batch(
+              (batch) => batch.insertAll(db.plans, plans),
             );
             await updatePlans();
           } catch (e) {
@@ -271,7 +271,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         onTap: () async {
           Navigator.pop(context);
 
-          final plans = await database.plans.select().get();
+          final plans = await db.plans.select().get();
           final List<List<dynamic>> csvData = [
             ['id', 'days', 'exercises']
           ];
@@ -349,13 +349,13 @@ class _PlanWidget extends StatelessWidget {
               plans.insert(newIndex, temp);
 
               await updatePlans(plans: plans);
-              await database.transaction(() async {
+              await db.transaction(() async {
                 for (int i = 0; i < plans.length; i++) {
                   final plan = plans[i];
                   final updatedPlan = plan
                       .toCompanion(false)
                       .copyWith(sequence: drift.Value(i));
-                  await database.update(database.plans).replace(updatedPlan);
+                  await db.update(db.plans).replace(updatedPlan);
                 }
               });
             },

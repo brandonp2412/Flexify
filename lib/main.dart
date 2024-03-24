@@ -9,12 +9,12 @@ import 'package:provider/provider.dart';
 import 'app_state.dart';
 import 'plans_page.dart';
 
-late AppDatabase database;
+late AppDatabase db;
 late MethodChannel android;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  database = AppDatabase();
+  db = AppDatabase();
   android = const MethodChannel("com.presley.flexify/android");
 
   final settingsState = SettingsState();

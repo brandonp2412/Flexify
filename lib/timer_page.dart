@@ -11,23 +11,22 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-
   @override
   Widget build(BuildContext context) {
     final timerState = context.watch<TimerState>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timer'),
-      ),
-      body: const Center(
-        child: TimerCircularProgressIndicator(),
-      ),
-      floatingActionButton: Visibility(
-        visible: timerState.nativeTimer.isRunning(),
-        child: FloatingActionButton(
-        onPressed: () async => await timerState.stopTimer(),
-        child: const Icon(Icons.stop),
-      ),)
-    );
+        appBar: AppBar(
+          title: const Text('Timer'),
+        ),
+        body: const Center(
+          child: TimerCircularProgressIndicator(),
+        ),
+        floatingActionButton: Visibility(
+          visible: timerState.nativeTimer.isRunning(),
+          child: FloatingActionButton(
+            onPressed: () async => await timerState.stopTimer(),
+            child: const Icon(Icons.stop),
+          ),
+        ));
   }
 }

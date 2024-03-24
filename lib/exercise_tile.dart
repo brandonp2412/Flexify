@@ -52,15 +52,15 @@ class ExerciseTile extends StatelessWidget {
                     return;
                   }
 
-                  final gymSet = await (database.select(database.gymSets)
-                        ..where((r) => database.gymSets.name.equals(exercise))
+                  final gymSet = await (db.select(db.gymSets)
+                        ..where((r) => db.gymSets.name.equals(exercise))
                         ..orderBy([
                           (u) => OrderingTerm(
                               expression: u.created, mode: OrderingMode.desc),
                         ])
                         ..limit(1))
                       .getSingle();
-                  await database.gymSets.deleteOne(gymSet);
+                  await db.gymSets.deleteOne(gymSet);
                 },
               ),
             ),

@@ -2,10 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class EditPlanPage extends StatefulWidget {
   final PlansCompanion plan;
@@ -208,9 +206,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
           );
 
           if (widget.plan.id.present)
-            await database.update(database.plans).replace(newPlan);
+            await db.update(db.plans).replace(newPlan);
           else {
-            final id = await database.into(database.plans).insert(newPlan);
+            final id = await db.into(db.plans).insert(newPlan);
             newPlan = newPlan.copyWith(id: Value(id));
           }
 

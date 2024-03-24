@@ -38,29 +38,28 @@ class _ViewGraphPageState extends State<ViewGraphPage>
   @override
   bool wantKeepAlive = true;
 
-  final oneRepMax = database.gymSets.weight /
+  final oneRepMax = db.gymSets.weight /
       (const drift.Variable(1.0278) -
-          const drift.Variable(0.0278) * database.gymSets.reps);
+          const drift.Variable(0.0278) * db.gymSets.reps);
 
   @override
   void initState() {
     super.initState();
-    graphStream = (database.selectOnly(database.gymSets)
+    graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
-            database.gymSets.weight.max(),
-            database.gymSets.reps * database.gymSets.weight,
+            db.gymSets.weight.max(),
+            db.gymSets.reps * db.gymSets.weight,
             oneRepMax,
-            database.gymSets.created.date,
-            database.gymSets.reps
+            db.gymSets.created.date,
+            db.gymSets.reps
           ])
-          ..where(database.gymSets.name.equals(widget.name))
+          ..where(db.gymSets.name.equals(widget.name))
           ..orderBy([
             drift.OrderingTerm(
-                expression: database.gymSets.created,
-                mode: drift.OrderingMode.desc)
+                expression: db.gymSets.created, mode: drift.OrderingMode.desc)
           ])
           ..limit(10)
-          ..groupBy([database.gymSets.created.date]))
+          ..groupBy([db.gymSets.created.date]))
         .watch();
   }
 
@@ -141,12 +140,11 @@ class _ViewGraphPageState extends State<ViewGraphPage>
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
         final rows = snapshot.data!.reversed
             .map((row) => GraphData(
-                created: row.read(database.gymSets.created.date)!,
-                reps: row.read(database.gymSets.reps)!,
+                created: row.read(db.gymSets.created.date)!,
+                reps: row.read(db.gymSets.reps)!,
                 oneRepMax: row.read(oneRepMax)!,
-                volume:
-                    row.read(database.gymSets.reps * database.gymSets.weight)!,
-                maxWeight: row.read(database.gymSets.weight.max())!))
+                volume: row.read(db.gymSets.reps * db.gymSets.weight)!,
+                maxWeight: row.read(db.gymSets.weight.max())!))
             .toList();
 
         GraphData minRow, maxRow;

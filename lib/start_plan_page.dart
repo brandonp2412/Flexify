@@ -62,20 +62,20 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    var last = await (database.gymSets.select()
-          ..where((tbl) => database.gymSets.name.isIn(planExercises))
-          ..where((tbl) =>
-              database.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where((tbl) =>
-              database.gymSets.created.isSmallerThanValue(startOfTomorrow))
+    var last = await (db.gymSets.select()
+          ..where((tbl) => db.gymSets.name.isIn(planExercises))
+          ..where(
+              (tbl) => db.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where(
+              (tbl) => db.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
           ])
           ..limit(1))
         .getSingleOrNull();
-    last ??= await (database.gymSets.select()
-          ..where((tbl) => database.gymSets.name.equals(planExercises[0]))
+    last ??= await (db.gymSets.select()
+          ..where((tbl) => db.gymSets.name.equals(planExercises[0]))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
@@ -106,8 +106,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final exercise = planExercises.elementAt(index);
     final exerciseState = context.read<ExerciseState>();
     exerciseState.selectExercise(exercise);
-    final last = await (database.gymSets.select()
-          ..where((tbl) => database.gymSets.name.equals(exercise))
+    final last = await (db.gymSets.select()
+          ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
@@ -133,16 +133,16 @@ class _StartPlanPageState extends State<StartPlanPage> {
       created: DateTime.now(),
     );
 
-    database.into(database.gymSets).insert(gymSet);
+    db.into(db.gymSets).insert(gymSet);
     await requestNotificationPermission();
 
     if (!settingsState.restTimers) return;
     final counts = await widget.countStream.first;
-    final countIndex = counts.indexWhere(
-        (element) => element.read(database.gymSets.name)! == exercise);
+    final countIndex = counts
+        .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
     var count = 0;
     if (countIndex != -1)
-      count = counts[countIndex].read(database.gymSets.name.count())!;
+      count = counts[countIndex].read(db.gymSets.name.count())!;
     count++;
 
     await timerState.startTimer(

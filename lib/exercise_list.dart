@@ -24,12 +24,11 @@ class ExerciseList extends StatelessWidget {
       itemBuilder: (context, index) {
         final exercise = planExercises[index];
         final gymSetIndex = snapshot.data?.indexWhere(
-          (element) => element.read(database.gymSets.name) == exercise,
+          (element) => element.read(db.gymSets.name) == exercise,
         );
         var count = 0;
         if (gymSetIndex != -1)
-          count =
-              snapshot.data![gymSetIndex!].read(database.gymSets.name.count())!;
+          count = snapshot.data![gymSetIndex!].read(db.gymSets.name.count())!;
         return ExerciseTile(
           index: index,
           exercise: exercise,

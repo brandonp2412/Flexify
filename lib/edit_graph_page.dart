@@ -31,24 +31,23 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   Future<int> getCount() async {
-    final result = await (database.gymSets.selectOnly()
-          ..addColumns([database.gymSets.name.count()])
-          ..where(database.gymSets.name.equals(nameController.text)))
+    final result = await (db.gymSets.selectOnly()
+          ..addColumns([db.gymSets.name.count()])
+          ..where(db.gymSets.name.equals(nameController.text)))
         .getSingle();
-    return result.read(database.gymSets.name.count()) ?? 0;
+    return result.read(db.gymSets.name.count()) ?? 0;
   }
 
   Future<void> doUpdate() async {
-    await (database.gymSets.update()
-          ..where((tbl) => tbl.name.equals(widget.name)))
+    await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(GymSetsCompanion(name: Value(nameController.text)));
-    await database.customUpdate(
+    await db.customUpdate(
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
         Variable.withString(widget.name),
         Variable.withString(nameController.text)
       ],
-      updates: {database.plans},
+      updates: {db.plans},
     );
   }
 

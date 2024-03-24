@@ -52,9 +52,9 @@ class _EditGymSetState extends State<EditGymSet> {
         created: Value(created),
         name: Value(nameController.text));
     if (gymSet.id.present)
-      database.update(database.gymSets).replace(gymSet);
+      db.update(db.gymSets).replace(gymSet);
     else
-      database.gymSets.insertOne(gymSet);
+      db.gymSets.insertOne(gymSet);
   }
 
   Future<void> _selectDate() async {

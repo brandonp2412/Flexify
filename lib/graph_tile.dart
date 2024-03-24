@@ -11,11 +11,11 @@ class GraphTile extends StatelessWidget {
   const GraphTile({super.key, required this.name, required this.weight});
 
   Future<int> getCount() async {
-    final result = await (database.gymSets.selectOnly()
-          ..addColumns([database.gymSets.name.count()])
-          ..where(database.gymSets.name.equals(name)))
+    final result = await (db.gymSets.selectOnly()
+          ..addColumns([db.gymSets.name.count()])
+          ..where(db.gymSets.name.equals(name)))
         .getSingle();
-    return result.read(database.gymSets.name.count()) ?? 0;
+    return result.read(db.gymSets.name.count()) ?? 0;
   }
 
   @override
@@ -79,7 +79,7 @@ class GraphTile extends StatelessWidget {
                               child: const Text('Delete'),
                               onPressed: () async {
                                 Navigator.of(context).pop();
-                                (database.delete(database.gymSets)
+                                (db.delete(db.gymSets)
                                       ..where((tbl) => tbl.name.equals(name)))
                                     .go();
                               },

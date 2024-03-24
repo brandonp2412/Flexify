@@ -22,7 +22,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
   @override
   void initState() {
     super.initState();
-    (database.gymSets.select()
+    (db.gymSets.select()
           ..where((tbl) => tbl.name.equals('Weight'))
           ..orderBy(
             [
@@ -90,7 +90,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             final now = DateTime.now();
-            database.gymSets.insertOne(GymSetsCompanion.insert(
+            db.gymSets.insertOne(GymSetsCompanion.insert(
                 created: DateTime(now.year, now.month, now.day, 23, 59, 59),
                 name: "Weight",
                 reps: 1,

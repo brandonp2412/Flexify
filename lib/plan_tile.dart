@@ -121,9 +121,7 @@ class PlanTile extends StatelessWidget {
                               child: const Text('Delete'),
                               onPressed: () async {
                                 Navigator.of(context).pop();
-                                await database
-                                    .delete(database.plans)
-                                    .delete(plan);
+                                await db.delete(db.plans).delete(plan);
                                 await refresh();
                               },
                             ),

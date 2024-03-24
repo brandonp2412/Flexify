@@ -31,9 +31,9 @@ class _GraphsPageState extends State<GraphsPage> {
   @override
   void initState() {
     super.initState();
-    stream = (database.gymSets.selectOnly(distinct: true)
-          ..addColumns([database.gymSets.name, database.gymSets.weight.max()])
-          ..groupBy([database.gymSets.name]))
+    stream = (db.gymSets.selectOnly(distinct: true)
+          ..addColumns([db.gymSets.name, db.gymSets.weight.max()])
+          ..groupBy([db.gymSets.name]))
         .watch();
   }
 
@@ -130,7 +130,7 @@ class _GraphsPageState extends State<GraphsPage> {
               final gymSets = snapshot.data!;
 
               final filteredGymSets = gymSets.where((gymSet) {
-                final name = gymSet.read(database.gymSets.name)!.toLowerCase();
+                final name = gymSet.read(db.gymSets.name)!.toLowerCase();
                 final searchText = searchController.text.toLowerCase();
                 return name.contains(searchText);
               }).toList();
@@ -140,8 +140,8 @@ class _GraphsPageState extends State<GraphsPage> {
                   itemCount: filteredGymSets.length,
                   itemBuilder: (context, index) {
                     final gymSet = filteredGymSets[index];
-                    final name = gymSet.read(database.gymSets.name)!;
-                    final weight = gymSet.read(database.gymSets.weight.max())!;
+                    final name = gymSet.read(db.gymSets.name)!;
+                    final weight = gymSet.read(db.gymSets.weight.max())!;
                     return GraphTile(
                       name: name,
                       weight: weight,
@@ -232,7 +232,7 @@ class _GraphsPageState extends State<GraphsPage> {
                     child: const Text('Delete'),
                     onPressed: () async {
                       Navigator.of(context).pop();
-                      await database.delete(database.gymSets).go();
+                      await db.delete(db.gymSets).go();
                     },
                   ),
                 ],
@@ -265,8 +265,8 @@ class _GraphsPageState extends State<GraphsPage> {
                 unit: drift.Value(row[5]),
               ),
             );
-            await database.batch(
-              (batch) => batch.insertAll(database.gymSets, gymSets),
+            await db.batch(
+              (batch) => batch.insertAll(db.gymSets, gymSets),
             );
           } catch (e) {
             if (!context.mounted) return;
@@ -287,7 +287,7 @@ class _GraphsPageState extends State<GraphsPage> {
         onTap: () async {
           Navigator.pop(context);
 
-          final gymSets = await database.gymSets.select().get();
+          final gymSets = await db.gymSets.select().get();
           final List<List<dynamic>> csvData = [
             ['id', 'name', 'reps', 'weight', 'created', 'unit']
           ];

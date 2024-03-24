@@ -1,5 +1,3 @@
-
-
 enum NativeTimerState { running, paused, expired }
 
 class NativeTimerWrapper {
