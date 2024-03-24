@@ -68,6 +68,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               (tbl) => db.gymSets.created.isBiggerOrEqualValue(startOfToday))
           ..where(
               (tbl) => db.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
@@ -76,6 +77,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .getSingleOrNull();
     last ??= await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(planExercises[0]))
+          ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
@@ -108,6 +110,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     exerciseState.selectExercise(exercise);
     final last = await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
+          ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
