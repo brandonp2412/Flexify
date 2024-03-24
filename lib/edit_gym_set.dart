@@ -51,10 +51,7 @@ class _EditGymSetState extends State<EditGymSet> {
         unit: Value(unit),
         created: Value(created),
         name: Value(nameController.text));
-    if (gymSet.id.present)
-      db.update(db.gymSets).replace(gymSet);
-    else
-      db.gymSets.insertOne(gymSet);
+    db.update(db.gymSets).replace(gymSet);
   }
 
   Future<void> _selectDate() async {
@@ -93,9 +90,7 @@ class _EditGymSetState extends State<EditGymSet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.gymSet.name.value.isEmpty
-            ? 'Add set'
-            : 'Edit ${widget.gymSet.name.value}'),
+        title: Text('Edit ${widget.gymSet.name.value}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
