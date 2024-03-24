@@ -36,7 +36,7 @@ class _GraphsPageState extends State<GraphsPage> {
       drift.Expression expression = db.gymSets.name;
       drift.OrderingMode mode = drift.OrderingMode.asc;
       if (expressionString == 'weight')
-        expression = db.gymSets.weight;
+        expression = db.gymSets.weight.max();
       else if (expressionString == 'created')
         expression = db.gymSets.created.max();
       if (modeString == 'desc') mode = drift.OrderingMode.desc;
@@ -59,7 +59,7 @@ class _GraphsPageState extends State<GraphsPage> {
     SharedPreferences.getInstance().then((prefs) {
       var graphsOrderBy = 'name';
       var graphsOrderDir = 'asc';
-      if (term.expression == db.gymSets.weight)
+      if (term.expression == db.gymSets.weight.max())
         graphsOrderBy = 'weight';
       else if (term.expression == db.gymSets.created.max())
         graphsOrderBy = 'created';
@@ -233,7 +233,8 @@ class _GraphsPageState extends State<GraphsPage> {
         onTap: () {
           Navigator.of(context).pop();
           setStream(drift.OrderingTerm(
-              expression: db.gymSets.weight, mode: drift.OrderingMode.asc));
+              expression: db.gymSets.weight.max(),
+              mode: drift.OrderingMode.asc));
         },
       ),
     );
@@ -264,7 +265,8 @@ class _GraphsPageState extends State<GraphsPage> {
         onTap: () {
           Navigator.of(context).pop();
           setStream(drift.OrderingTerm(
-              expression: db.gymSets.weight, mode: drift.OrderingMode.desc));
+              expression: db.gymSets.weight.max(),
+              mode: drift.OrderingMode.desc));
         },
       ),
     );
