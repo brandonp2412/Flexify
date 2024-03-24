@@ -22,7 +22,7 @@ class GraphTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(name),
-      subtitle: Text(weight.toString()),
+      subtitle: weight > 0 ? Text(weight.toString()) : null,
       onTap: () {
         Navigator.push(
           context,

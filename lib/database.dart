@@ -37,11 +37,21 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 5;
 
+  final defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
+        created: Value(DateTime.now()),
+        name: Value(exercise),
+        reps: const Value(0),
+        weight: const Value(0),
+        hidden: const Value(true),
+        unit: const Value('kg'),
+      ));
+
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
+        await db.batch((batch) => batch.insertAll(db.gymSets, defaultSets));
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {
@@ -56,15 +66,6 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 5) {
           await m.addColumn(gymSets, gymSets.hidden);
-          final defaultSets =
-              defaultExercises.map((exercise) => GymSetsCompanion(
-                    created: Value(DateTime.now()),
-                    name: Value(exercise),
-                    reps: const Value(0),
-                    weight: const Value(0),
-                    hidden: const Value(true),
-                    unit: const Value('kg'),
-                  ));
           await db.batch((batch) => batch.insertAll(db.gymSets, defaultSets));
         }
       },
