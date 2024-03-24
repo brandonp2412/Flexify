@@ -24,6 +24,7 @@ class Plans extends Table {
   IntColumn get sequence => integer().nullable()();
   TextColumn get exercises => text()();
   TextColumn get days => text()();
+  TextColumn get title => text().nullable()();
 }
 
 @DriftDatabase(tables: [Plans, GymSets])
@@ -31,7 +32,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -46,6 +47,9 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 3) {
           await m.addColumn(plans, plans.sequence);
+        }
+        if (from < 4) {
+          await m.addColumn(plans, plans.title);
         }
       },
     );

@@ -2,8 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class EditPlanPage extends StatefulWidget {
   final PlansCompanion plan;
@@ -21,15 +23,23 @@ class _EditPlanPageState extends State<EditPlanPage> {
   String search = '';
   final searchNode = FocusNode();
   final searchController = TextEditingController();
+  final titleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    titleController.text = widget.plan.title.value ?? "";
+
     final dayList = widget.plan.days.value.split(',');
     daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
 
-    final splitExercises = widget.plan.exercises.value.split(',');
-    exerciseSelections = splitExercises;
+    if (widget.plan.exercises.value.isEmpty)
+      exerciseSelections = [];
+    else {
+      final splitExercises = widget.plan.exercises.value.split(',');
+      exerciseSelections = splitExercises;
+    }
   }
 
   @override
@@ -75,7 +85,15 @@ class _EditPlanPageState extends State<EditPlanPage> {
       );
 
     List<Widget> getChildren() {
-      final List<Widget> children = [];
+      final List<Widget> children = [
+        material.TextField(
+          decoration: const material.InputDecoration(labelText: 'Title'),
+          controller: titleController,
+        ),
+        const SizedBox(
+          height: 16.0,
+        )
+      ];
 
       if (search == '')
         children.add(
@@ -167,9 +185,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
           for (int i = 0; i < daySwitches.length; i++) {
             if (daySwitches[i]) days.add(weekdays[i]);
           }
-          if (days.isEmpty) {
+          if (days.isEmpty && titleController.text.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Select days first')),
+              const SnackBar(content: Text('Select days/title first')),
             );
             return;
           }
@@ -186,6 +204,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             exercises: Value(exerciseSelections
                 .where((element) => element.isNotEmpty)
                 .join(',')),
+            title: Value(titleController.text),
           );
 
           if (widget.plan.id.present)

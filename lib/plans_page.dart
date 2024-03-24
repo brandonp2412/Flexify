@@ -245,6 +245,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               (row) => PlansCompanion(
                 days: drift.Value(row[1]),
                 exercises: drift.Value(row[2]),
+                title: drift.Value(row[3]),
               ),
             );
             await database.batch(

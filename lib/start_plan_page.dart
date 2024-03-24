@@ -152,6 +152,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   Widget build(BuildContext context) {
     var title = widget.plan.days.replaceAll(",", ", ");
+    if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
     final timerState = context.read<TimerState>();

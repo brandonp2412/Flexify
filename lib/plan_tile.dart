@@ -51,10 +51,14 @@ class PlanTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsState = context.watch<SettingsState>();
+    Widget title = const Text("Daily");
+    if (plan.title?.isNotEmpty == true)
+      title = Text(plan.title!);
+    else if (plan.days.split(',').length < 7)
+      title = RichText(text: TextSpan(children: getChildren(context)));
+
     return ListTile(
-      title: plan.days.split(',').length == 7
-          ? const Text("Daily")
-          : RichText(text: TextSpan(children: getChildren(context))),
+      title: title,
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Visibility(
         visible: settingsState.showReorder,
