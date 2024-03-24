@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class ExerciseTile extends StatelessWidget {
     final settingsState = context.watch<SettingsState>();
     return GestureDetector(
       onLongPressStart: (details) async {
+        if (count == 0) return;
         final position = RelativeRect.fromLTRB(
           details.globalPosition.dx,
           details.globalPosition.dy - 40,
@@ -39,18 +41,37 @@ class ExerciseTile extends StatelessWidget {
           position: position,
           items: [
             PopupMenuItem(
+              value: 'edit',
+              child: ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text("Edit"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final gymSet = await (db.select(db.gymSets)
+                        ..where((r) => db.gymSets.name.equals(exercise))
+                        ..orderBy([
+                          (u) => OrderingTerm(
+                              expression: u.created, mode: OrderingMode.desc),
+                        ])
+                        ..limit(1))
+                      .getSingle();
+                  if (context.mounted)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditGymSet(gymSet: gymSet.toCompanion(false)),
+                        ));
+                },
+              ),
+            ),
+            PopupMenuItem(
               value: 'delete',
               child: ListTile(
                 leading: const Icon(Icons.delete),
                 title: const Text("Delete"),
                 onTap: () async {
                   Navigator.pop(context);
-                  if (count == 0) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No exercises to undo')),
-                    );
-                    return;
-                  }
 
                   final gymSet = await (db.select(db.gymSets)
                         ..where((r) => db.gymSets.name.equals(exercise))
