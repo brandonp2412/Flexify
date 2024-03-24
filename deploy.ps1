@@ -34,6 +34,7 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
     flutter build apk
     gh release create "$version" --notes "$lastCommit" ..\build\app\outputs\flutter-apk\app-release.apk
     git push --tags
+    git push
 }
 else {
     Write-Host "Failed to update version in pubspec.yaml."
