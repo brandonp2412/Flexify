@@ -1,9 +1,7 @@
-import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:provider/provider.dart';
 
 class EnterWeightPage extends StatefulWidget {
   const EnterWeightPage({super.key});
