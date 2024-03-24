@@ -1,0 +1,1 @@
+Fix ordering by weight on graphs page
