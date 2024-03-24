@@ -97,7 +97,6 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 unit: _unit,
                 weight: _weight));
             Navigator.pop(context);
-            context.read<ExerciseState>().selectExercise('Weight');
           }
         },
         tooltip: "Save today's weight",

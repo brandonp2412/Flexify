@@ -24,7 +24,6 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => settingsState),
-        ChangeNotifierProvider(create: (context) => ExerciseState()),
         ChangeNotifierProvider(create: (context) => TimerState()),
       ],
       child: const App(),

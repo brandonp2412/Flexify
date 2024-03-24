@@ -39,7 +39,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController = TextEditingController(text: "0.0");
     weightController = TextEditingController(text: "0.0");
     planExercises = widget.plan.exercises.split(',');
-    getLast(context.read<ExerciseState>());
+    getLast();
   }
 
   @override
@@ -58,7 +58,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
   }
 
-  Future<void> getLast(ExerciseState appState) async {
+  Future<void> getLast() async {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
@@ -85,10 +85,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
 
-    if (last == null) {
-      appState.selectExercise(planExercises[0]);
-      return setState(() {});
-    }
+    if (last == null) return setState(() {});
 
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
@@ -98,7 +95,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
       selectedIndex = index;
       unit = last!.unit;
     });
-    appState.selectExercise(planExercises[index]);
   }
 
   Future<void> select(int index) async {
@@ -106,8 +102,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
       selectedIndex = index;
     });
     final exercise = planExercises.elementAt(index);
-    final exerciseState = context.read<ExerciseState>();
-    exerciseState.selectExercise(exercise);
     final last = await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..where((tbl) => db.gymSets.hidden.equals(false))

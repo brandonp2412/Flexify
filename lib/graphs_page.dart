@@ -2,16 +2,13 @@ import 'package:csv/csv.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
-import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
-import 'package:flexify/view_graph_page.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'graph_tile.dart';
@@ -26,7 +23,6 @@ class GraphsPage extends StatefulWidget {
 class _GraphsPageState extends State<GraphsPage> {
   Stream<List<drift.TypedResult>>? stream;
   TextEditingController searchController = TextEditingController();
-  String selectedExercise = "";
   String orderBy = 'name';
   String orderDir = 'asc';
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -79,27 +75,6 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<ExerciseState>();
-    if (appState.selected?.isNotEmpty == true)
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (selectedExercise == appState.selected) return;
-        setState(() {
-          selectedExercise = appState.selected ?? "";
-        });
-
-        if (navigatorKey.currentState!.canPop()) {
-          navigatorKey.currentState!.pop();
-        }
-
-        navigatorKey.currentState!.push(
-          MaterialPageRoute(
-            builder: (context) => ViewGraphPage(
-              name: appState.selected!,
-            ),
-          ),
-        );
-      });
-
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;

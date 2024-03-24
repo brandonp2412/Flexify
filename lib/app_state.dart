@@ -70,15 +70,6 @@ class SettingsState extends ChangeNotifier {
   }
 }
 
-class ExerciseState extends ChangeNotifier {
-  String? selected;
-
-  void selectExercise(String exercise) {
-    selected = exercise;
-    notifyListeners();
-  }
-}
-
 class TimerState extends ChangeNotifier {
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
 
