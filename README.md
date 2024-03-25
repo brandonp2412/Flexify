@@ -12,15 +12,6 @@ Flexify is a Flutter project designed to help users track their gym progress con
 
 - ⏱️**Automatic Rest Timers**:  Flexify includes automatic rest timers to help you optimize your workout sessions. Stay on track and make the most out of your gym time.
 
-## Migration from Massive
-
-Gym sets and plans can be imported into Flexify.
-
-<p float="left">
-    <img src="docs/export-massive.png" height="600">
-    <img src="docs/import-flexify.png" height="600">
-</p>
-
 ## Screenshots
 <p float="left">
     <img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="600">
@@ -31,6 +22,15 @@ Gym sets and plans can be imported into Flexify.
     <img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/6_en-US.png" height="600">
     <img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" height="600">
     <img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" height="600">
+</p>
+
+## Migration from Massive
+
+Gym sets and plans can be imported into Flexify.
+
+<p float="left">
+    <img src="docs/export-massive.png" height="600">
+    <img src="docs/import-flexify.png" height="600">
 </p>
 
 ## Getting Started
