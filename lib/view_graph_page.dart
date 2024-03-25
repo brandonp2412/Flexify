@@ -35,6 +35,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   final oneRepMax = db.gymSets.weight /
       (const drift.Variable(1.0278) -
           const drift.Variable(0.0278) * db.gymSets.reps);
+  final volume =
+      const drift.CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
 
   @override
   void initState() {
@@ -42,7 +44,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
     graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
             db.gymSets.weight.max(),
-            db.gymSets.reps * db.gymSets.weight,
+            volume,
             oneRepMax,
             db.gymSets.created.date,
             db.gymSets.reps
@@ -136,7 +138,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 created: row.read(db.gymSets.created.date)!,
                 reps: row.read(db.gymSets.reps)!,
                 oneRepMax: row.read(oneRepMax)!,
-                volume: row.read(db.gymSets.reps * db.gymSets.weight)!,
+                volume: row.read(volume)!,
                 maxWeight: row.read(db.gymSets.weight.max())!))
             .toList();
 
