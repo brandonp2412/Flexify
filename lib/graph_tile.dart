@@ -1,9 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/app_state.dart';
 import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class GraphTile extends StatelessWidget {
   final String name;
@@ -28,9 +30,11 @@ class GraphTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return ListTile(
       title: Text(name),
-      subtitle: Text(DateFormat("yyyy-MM-dd hh:mm a").format(created)),
+      subtitle: Text(DateFormat(settings.dateFormat).format(created)),
       trailing: Text(
         "$weight$unit",
         style: const TextStyle(fontSize: 16),

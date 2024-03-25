@@ -12,6 +12,7 @@ class SettingsState extends ChangeNotifier {
   bool restTimers = true;
   bool showUnits = true;
   bool systemColors = true;
+  String dateFormat = "yyyy-MM-dd h:mm a";
 
   Future<void> init() async {
     final prefsInstance = await SharedPreferences.getInstance();
@@ -31,6 +32,13 @@ class SettingsState extends ChangeNotifier {
     showReorder = prefsInstance.getBool("showReorder") ?? true;
     restTimers = prefsInstance.getBool("restTimers") ?? true;
     showUnits = prefsInstance.getBool("showUnits") ?? true;
+    dateFormat = prefsInstance.getString('dateFormat') ?? "yyyy-MM-dd h:mm a";
+  }
+
+  void setFormat(String format) {
+    dateFormat = format;
+    notifyListeners();
+    prefs?.setString('dateFormat', format);
   }
 
   Future<void> setSystem(bool system) async {

@@ -1,3 +1,4 @@
+import 'package:flexify/app_state.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
@@ -5,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:provider/provider.dart';
 
 class GraphHistory extends StatefulWidget {
   final String name;
@@ -75,6 +77,8 @@ class _GraphHistoryState extends State<GraphHistory> {
           },
           icon: const Icon(Icons.delete)));
 
+    final settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(
         title: selected.isEmpty
@@ -110,8 +114,8 @@ class _GraphHistoryState extends State<GraphHistory> {
                   if (showDivider) const Divider(),
                   ListTile(
                     title: Text(gymSet.name),
-                    subtitle: Text(DateFormat("yyyy-MM-dd hh:mm a")
-                        .format(gymSet.created)),
+                    subtitle: Text(
+                        DateFormat(settings.dateFormat).format(gymSet.created)),
                     trailing: Text(
                         "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
                         style: const TextStyle(fontSize: 16)),

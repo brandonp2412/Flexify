@@ -5,6 +5,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
@@ -31,6 +32,16 @@ class _SettingsPageState extends State<SettingsPage> {
   final deleteController = MenuController();
   final searchController = TextEditingController();
 
+  final List<String> formatOptions = [
+    'dd/MM/yy',
+    'dd/MM/yy h:mm a',
+    'EEE h:mm a',
+    'h:mm a',
+    'yyyy-MM-dd',
+    'yyyy-MM-dd h:mm a',
+    'yyyy.MM.dd',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -43,14 +54,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settingsState = context.watch<SettingsState>();
+    final settings = context.watch<SettingsState>();
     List<WidgetSettings> children = [
       WidgetSettings(
         key: 'theme',
         widget: Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButtonFormField(
-            value: settingsState.themeMode,
+            value: settings.themeMode,
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Theme',
@@ -69,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text("Light"),
               ),
             ],
-            onChanged: (value) async => await settingsState.setTheme(value!),
+            onChanged: (value) async => await settings.setTheme(value!),
           ),
         ),
       ),
@@ -93,11 +104,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: minutesController.text.length,
                         );
                       },
-                      onChanged: (value) async =>
-                          await settingsState.setDuration(
+                      onChanged: (value) async => await settings.setDuration(
                         Duration(
                           minutes: int.parse(value),
-                          seconds: settingsState.timerDuration.inSeconds % 60,
+                          seconds: settings.timerDuration.inSeconds % 60,
                         ),
                       ),
                     ),
@@ -117,12 +127,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: secondsController.text.length,
                         );
                       },
-                      onChanged: (value) async =>
-                          await settingsState.setDuration(
+                      onChanged: (value) async => await settings.setDuration(
                         Duration(
                           seconds: int.parse(value),
-                          minutes:
-                              settingsState.timerDuration.inMinutes.floor(),
+                          minutes: settings.timerDuration.inMinutes.floor(),
                         ),
                       ),
                     ),
@@ -134,14 +142,35 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
+          key: 'date format',
+          widget: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: DropdownButtonFormField<String>(
+              value: settings.dateFormat,
+              items: formatOptions.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                settings.setFormat(newValue!);
+              },
+              decoration: InputDecoration(
+                labelText: 'Date format',
+                helperText:
+                    'Current date: ${DateFormat(settings.dateFormat).format(DateTime.now())}',
+              ),
+            ),
+          )),
+      WidgetSettings(
         key: 'rest timers',
         widget: ListTile(
           title: const Text('Rest timers'),
-          onTap: () async =>
-              await settingsState.setTimers(!settingsState.restTimers),
+          onTap: () async => await settings.setTimers(!settings.restTimers),
           trailing: Switch(
-            value: settingsState.restTimers,
-            onChanged: (value) async => await settingsState.setTimers(value),
+            value: settings.restTimers,
+            onChanged: (value) async => await settings.setTimers(value),
           ),
         ),
       ),
@@ -149,11 +178,10 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'reorder items',
         widget: ListTile(
           title: const Text('Re-order items'),
-          onTap: () async =>
-              await settingsState.setReorder(!settingsState.showReorder),
+          onTap: () async => await settings.setReorder(!settings.showReorder),
           trailing: Switch(
-            value: settingsState.showReorder,
-            onChanged: (value) async => await settingsState.setReorder(value),
+            value: settings.showReorder,
+            onChanged: (value) async => await settings.setReorder(value),
           ),
         ),
       ),
@@ -161,11 +189,10 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'show units',
         widget: ListTile(
           title: const Text('Show units'),
-          onTap: () async =>
-              await settingsState.setUnits(!settingsState.showUnits),
+          onTap: () async => await settings.setUnits(!settings.showUnits),
           trailing: Switch(
-            value: settingsState.showUnits,
-            onChanged: (value) async => await settingsState.setUnits(value),
+            value: settings.showUnits,
+            onChanged: (value) async => await settings.setUnits(value),
           ),
         ),
       ),
@@ -173,11 +200,10 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),
-          onTap: () async =>
-              await settingsState.setSystem(!settingsState.systemColors),
+          onTap: () async => await settings.setSystem(!settings.systemColors),
           trailing: Switch(
-            value: settingsState.systemColors,
-            onChanged: (value) async => await settingsState.setSystem(value),
+            value: settings.systemColors,
+            onChanged: (value) async => await settings.setSystem(value),
           ),
         ),
       ),
