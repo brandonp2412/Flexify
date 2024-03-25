@@ -51,7 +51,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
             TextField(
               controller: nameController,
               decoration: const InputDecoration(labelText: 'Name'),
-              keyboardType: TextInputType.number,
             ),
             DropdownButtonFormField<String>(
               value: unit,

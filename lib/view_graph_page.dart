@@ -11,13 +11,15 @@ class GraphData {
   final double maxWeight;
   final double volume;
   final double oneRepMax;
+  final String unit;
 
   GraphData(
       {required this.created,
       required this.reps,
       required this.maxWeight,
       required this.volume,
-      required this.oneRepMax});
+      required this.oneRepMax,
+      required this.unit});
 }
 
 class ViewGraphPage extends StatefulWidget {
@@ -47,7 +49,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             volume,
             oneRepMax,
             db.gymSets.created.date,
-            db.gymSets.reps
+            db.gymSets.reps,
+            db.gymSets.unit,
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
@@ -139,6 +142,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 reps: row.read(db.gymSets.reps)!,
                 oneRepMax: row.read(oneRepMax)!,
                 volume: row.read(volume)!,
+                unit: row.read(db.gymSets.unit)!,
                 maxWeight: row.read(db.gymSets.weight.max())!))
             .toList();
 
@@ -224,11 +228,12 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
         String text = "";
         if (metric == Metric.oneRepMax)
-          text = "${row.oneRepMax.toStringAsFixed(2)} ${row.created}";
+          text =
+              "${row.oneRepMax.toStringAsFixed(2)}${row.unit} ${row.created}";
         else if (metric == Metric.volume)
-          text = "${row.volume} ${row.created}";
+          text = "${row.volume}${row.unit} ${row.created}";
         else if (metric == Metric.bestWeight)
-          text = "${row.reps} ${row.maxWeight} ${row.created}";
+          text = "${row.reps} ${row.maxWeight}${row.unit} ${row.created}";
         return [
           LineTooltipItem(text,
               TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color))
