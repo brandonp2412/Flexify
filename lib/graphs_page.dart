@@ -133,9 +133,6 @@ class _GraphsPageState extends State<GraphsPage> {
                         itemBuilder: (context) => [
                           enterWeight(context),
                           timer(context),
-                          downloadCsv(context),
-                          uploadCsv(context),
-                          deleteAll(context),
                         ],
                       )
                     ],
@@ -217,7 +214,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.text_increase),
-        title: const Text('Name ascending'),
+        title: const Text('Name asc'),
         selected: orderBy == 'name' && orderDir == 'asc',
         onTap: () {
           Navigator.of(context).pop();
@@ -232,7 +229,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.scale_outlined),
-        title: const Text('Weight ascending'),
+        title: const Text('Weight asc'),
         selected: orderBy == 'weight' && orderDir == 'asc',
         onTap: () {
           Navigator.of(context).pop();
@@ -248,7 +245,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.calendar_today),
-        title: const Text('Created descending'),
+        title: const Text('Created desc'),
         selected: orderBy == 'created' && orderDir == 'desc',
         onTap: () {
           Navigator.of(context).pop();
@@ -264,7 +261,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.scale),
-        title: const Text('Weight descending'),
+        title: const Text('Weight desc'),
         selected: orderBy == 'weight' && orderDir == 'desc',
         onTap: () {
           Navigator.of(context).pop();
@@ -280,7 +277,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.text_decrease),
-        title: const Text('Name descending'),
+        title: const Text('Name desc'),
         selected: orderBy == 'name' && orderDir == 'desc',
         onTap: () {
           Navigator.of(context).pop();
@@ -295,7 +292,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.calendar_today),
-        title: const Text('Created ascending'),
+        title: const Text('Created asc'),
         selected: orderBy == 'created' && orderDir == 'asc',
         onTap: () {
           Navigator.of(context).pop();
@@ -318,109 +315,6 @@ class _GraphsPageState extends State<GraphsPage> {
             context,
             MaterialPageRoute(builder: (context) => const EnterWeightPage()),
           );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> deleteAll(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.delete),
-        title: const Text('Delete all'),
-        onTap: () {
-          Navigator.of(context).pop();
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Confirm Delete'),
-                content: const Text(
-                    'Are you sure you want to delete all records? This action is not reversible.'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  TextButton(
-                    child: const Text('Delete'),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      await db.delete(db.gymSets).go();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> uploadCsv(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.upload),
-        title: const Text('Upload CSV'),
-        onTap: () async {
-          Navigator.pop(context);
-          String csv = await android.invokeMethod('read');
-          List<List<dynamic>> rows =
-              const CsvToListConverter(eol: "\n").convert(csv);
-          if (rows.isEmpty) return;
-          try {
-            final gymSets = rows.map(
-              (row) => GymSetsCompanion(
-                name: drift.Value(row[1]),
-                reps: drift.Value(row[2]),
-                weight: drift.Value(row[3]),
-                created: drift.Value(parseDate(row[4])),
-                unit: drift.Value(row[5]),
-              ),
-            );
-            await db.batch(
-              (batch) => batch.insertAll(db.gymSets, gymSets),
-            );
-          } catch (e) {
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Failed to upload csv.')),
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> downloadCsv(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.download),
-        title: const Text('Download CSV'),
-        onTap: () async {
-          Navigator.pop(context);
-
-          final gymSets = await db.gymSets.select().get();
-          final List<List<dynamic>> csvData = [
-            ['id', 'name', 'reps', 'weight', 'created', 'unit']
-          ];
-          for (var gymSet in gymSets) {
-            csvData.add([
-              gymSet.id,
-              gymSet.name,
-              gymSet.reps,
-              gymSet.weight,
-              gymSet.created.toIso8601String(),
-              gymSet.unit,
-            ]);
-          }
-
-          if (!await requestNotificationPermission()) return;
-          final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
-          android.invokeMethod('save', ['gym_sets.csv', csv]);
         },
       ),
     );

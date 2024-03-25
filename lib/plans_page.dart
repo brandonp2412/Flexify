@@ -122,9 +122,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                         itemBuilder: (context) => [
                           enterWeight(context),
                           timer(context),
-                          downloadCsv(context),
-                          uploadCsv(context),
-                          deleteAll(context),
                         ],
                       )
                     ],
@@ -187,103 +184,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             context,
             MaterialPageRoute(builder: (context) => const EnterWeightPage()),
           );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> deleteAll(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.delete),
-        title: const Text('Delete all'),
-        onTap: () {
-          Navigator.of(context).pop();
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Confirm Delete'),
-                content: const Text(
-                    'Are you sure you want to delete all plans? This action is not reversible.'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  TextButton(
-                    child: const Text('Delete'),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                      await db.delete(db.plans).go();
-                      await updatePlans();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> uploadCsv(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.upload),
-        title: const Text('Upload CSV'),
-        onTap: () async {
-          Navigator.pop(context);
-          String csv = await android.invokeMethod('read');
-          List<List<dynamic>> rows =
-              const CsvToListConverter(eol: "\n").convert(csv);
-          if (rows.isEmpty) return;
-          try {
-            final plans = rows.map(
-              (row) => PlansCompanion(
-                days: drift.Value(row[1]),
-                exercises: drift.Value(row[2]),
-                title: drift.Value(row.elementAtOrNull(3)),
-              ),
-            );
-            await db.batch(
-              (batch) => batch.insertAll(db.plans, plans),
-            );
-            await updatePlans();
-          } catch (e) {
-            if (!context.mounted) return;
-            debugPrint(e.toString());
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Failed to upload csv.')),
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> downloadCsv(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.download),
-        title: const Text('Download CSV'),
-        onTap: () async {
-          Navigator.pop(context);
-
-          final plans = await db.plans.select().get();
-          final List<List<dynamic>> csvData = [
-            ['id', 'days', 'exercises']
-          ];
-          for (var plan in plans) {
-            csvData.add([plan.id, plan.days, plan.exercises]);
-          }
-
-          if (!await requestNotificationPermission()) return;
-          final csv = const ListToCsvConverter(eol: "\n").convert(csvData);
-          android.invokeMethod('save', ['plans.csv', csv]);
         },
       ),
     );
