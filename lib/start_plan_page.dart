@@ -228,7 +228,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     snapshot: snapshot,
                     selectedIndex: selectedIndex,
                     onTap: select,
-                    onReorder: (oldIndex, newIndex) {
+                    onReorder: (oldIndex, newIndex) async {
                       if (oldIndex < newIndex) {
                         newIndex--;
                       }
@@ -236,8 +236,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       final temp = planExercises[oldIndex];
                       planExercises.removeAt(oldIndex);
                       planExercises.insert(newIndex, temp);
-                      db.update(db.plans).replace(widget.plan
+                      await db.update(db.plans).replace(widget.plan
                           .copyWith(exercises: planExercises.join(',')));
+                      widget.onReorder();
                     },
                   );
                 },
