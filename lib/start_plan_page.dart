@@ -191,7 +191,32 @@ class _StartPlanPageState extends State<StartPlanPage> {
             TextField(
               controller: weightController,
               focusNode: weightNode,
-              decoration: InputDecoration(labelText: 'Weight ($unit)'),
+              decoration: InputDecoration(
+                  labelText: 'Weight ($unit)',
+                  suffixIcon: IconButton(
+                    tooltip: "Use body weight",
+                    icon: const Icon(Icons.scale),
+                    onPressed: () async {
+                      final weights = await (db.gymSets.select()
+                            ..where((tbl) => tbl.name.equals('Weight'))
+                            ..orderBy(
+                              [
+                                (u) => drift.OrderingTerm(
+                                    expression: u.created,
+                                    mode: drift.OrderingMode.desc)
+                              ],
+                            )
+                            ..limit(1))
+                          .get();
+                      if (!context.mounted) return;
+                      if (weights.isEmpty)
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('No weight entered yet.')));
+                      else
+                        weightController.text = weights.first.weight.toString();
+                    },
+                  )),
               keyboardType: TextInputType.number,
               onTap: () {
                 selectWeight();
