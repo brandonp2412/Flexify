@@ -92,7 +92,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
     List<Widget> getChildren() {
       final List<Widget> children = [
         material.TextField(
-          decoration: const material.InputDecoration(labelText: 'Title'),
+          decoration:
+              const material.InputDecoration(labelText: 'Title (optional)'),
           controller: titleController,
         ),
         const SizedBox(
