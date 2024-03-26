@@ -6,6 +6,7 @@ import 'package:flexify/timer_progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import 'app_state.dart';
 import 'plans_page.dart';
 
@@ -20,16 +21,16 @@ Future<void> main() async {
   final settingsState = SettingsState();
   await settingsState.init();
 
-  runApp(
-    MultiProvider(
+  runApp(appProviders(settingsState));
+}
+
+Widget appProviders(SettingsState settingsState) => MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => settingsState),
         ChangeNotifierProvider(create: (context) => TimerState()),
       ],
       child: const App(),
-    ),
-  );
-}
+    );
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -43,22 +44,22 @@ class App extends StatelessWidget {
         seedColor: Colors.deepPurple, brightness: Brightness.dark);
 
     return DynamicColorBuilder(
-        builder: (lightDynamic, darkDynamic) => MaterialApp(
-              title: 'Flexify',
-              theme: ThemeData(
-                colorScheme:
-                    settings.systemColors ? lightDynamic : defaultTheme,
-                fontFamily: 'Manrope',
-                useMaterial3: true,
-              ),
-              darkTheme: ThemeData(
-                colorScheme: settings.systemColors ? darkDynamic : defaultDark,
-                fontFamily: 'Manrope',
-                useMaterial3: true,
-              ),
-              themeMode: settings.themeMode,
-              home: const HomePage(),
-            ));
+      builder: (lightDynamic, darkDynamic) => MaterialApp(
+        title: 'Flexify',
+        theme: ThemeData(
+          colorScheme: settings.systemColors ? lightDynamic : defaultTheme,
+          fontFamily: 'Manrope',
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData(
+          colorScheme: settings.systemColors ? darkDynamic : defaultDark,
+          fontFamily: 'Manrope',
+          useMaterial3: true,
+        ),
+        themeMode: settings.themeMode,
+        home: const HomePage(),
+      ),
+    );
   }
 }
 
