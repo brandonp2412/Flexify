@@ -30,7 +30,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   Future<void> save() async {
     Navigator.pop(context);
     db.gymSets.insertOne(GymSetsCompanion.insert(
-        created: DateTime(0),
+        created: DateTime.now(),
         reps: 0,
         weight: 0,
         name: nameController.text,
