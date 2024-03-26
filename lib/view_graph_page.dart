@@ -1,9 +1,12 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/app_state.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class GraphData {
   final String created;
@@ -48,7 +51,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             db.gymSets.weight.max(),
             volume,
             oneRepMax,
-            db.gymSets.created.date,
+            db.gymSets.created,
             db.gymSets.reps,
             db.gymSets.unit,
           ])
@@ -56,7 +59,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           ..where(db.gymSets.hidden.equals(false))
           ..orderBy([
             drift.OrderingTerm(
-                expression: db.gymSets.created, mode: drift.OrderingMode.desc)
+                expression: db.gymSets.created.date,
+                mode: drift.OrderingMode.desc)
           ])
           ..limit(10)
           ..groupBy([db.gymSets.created.date]))
@@ -65,6 +69,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
@@ -117,14 +122,14 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 },
               ),
             ),
-            graphBuilder(),
+            graphBuilder(settings),
           ],
         ),
       ),
     );
   }
 
-  StreamBuilder<List<drift.TypedResult>> graphBuilder() {
+  StreamBuilder<List<drift.TypedResult>> graphBuilder(SettingsState settings) {
     return StreamBuilder<List<drift.TypedResult>>(
       stream: graphStream,
       builder: (context, snapshot) {
@@ -138,7 +143,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
         final rows = snapshot.data!.reversed
             .map((row) => GraphData(
-                created: row.read(db.gymSets.created.date)!,
+                created: DateFormat(settings.dateFormat)
+                    .format(row.read(db.gymSets.created)!),
                 reps: row.read(db.gymSets.reps)!,
                 oneRepMax: row.read(oneRepMax)!,
                 volume: row.read(volume)!,
