@@ -31,7 +31,7 @@ class SetInfo {
 
   SetInfo(int days, this.reps, this.weight)
       : dateTime =
-            DateTime.now().subtract(Duration(days: days)).copyWith(hour: 12);
+            DateTime.now().subtract(Duration(days: days),).copyWith(hour: 12);
 }
 
 List<SetInfo> graphData = [
@@ -104,6 +104,7 @@ Future<void> appWrapper() async {
 Future<void> generateScreenshot({
   required IntegrationTestWidgetsFlutterBinding binding,
   required WidgetTester tester,
+  required String screenshotName,
   bool skipSettle = false,
   Future<void> Function()? navigateToPage,
 }) async {
@@ -115,7 +116,7 @@ Future<void> generateScreenshot({
     await tester.pumpAndSettle();
   else
     await tester.pump();
-  await binding.takeScreenshot(tester.testDescription);
+  await binding.takeScreenshot(screenshotName);
 }
 
 GymSetsCompanion generateGymSetCompanion(String exercise, double weight,
@@ -128,9 +129,10 @@ GymSetsCompanion generateGymSetCompanion(String exercise, double weight,
       created: date ?? DateTime.now(),
     );
 
-Future<void> navigateToGraphPage(WidgetTester tester) async => await tester.tap(
-      find.byIcon(Icons.insights),
-    );
+Future<void> navigateToGraphPage(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.insights));
+  await tester.pumpAndSettle();
+}
 
 Future<void> navigateToTricepsDips(WidgetTester tester) async {
   await tester.dragUntilVisible(
@@ -149,13 +151,14 @@ void main() {
   IntegrationTestWidgetsFlutterBinding binding =
       IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() async {
-    await requestNotificationPermission();
-    await Permission.ignoreBatteryOptimizations.request();
-    await Permission.scheduleExactAlarm.request();
+  const deviceType = String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
+  if (deviceType.isEmpty) throw "FLEXIFY_DEVICE_TYPE must be set, so integration test knows what screenshots to take";
+  const isPhoneScreenshots = deviceType == "phoneScreenshots";
 
+  setUpAll(() async {
     app.db = AppDatabase();
     app.android = const MethodChannel("com.presley.flexify/android");
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(app.android, (message) => null);
 
     await app.db.delete(app.db.gymSets).go();
     await app.db.delete(app.db.plans).go();
@@ -187,12 +190,13 @@ void main() {
     });
   });
 
-  group("Generate phoneScreenshots", () {
+  group("Generate default screenshots ", () {
     testWidgets(
       "PlanPage",
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '1_en-US'
       ),
     );
     testWidgets(
@@ -200,6 +204,7 @@ void main() {
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '2_en-US',
         navigateToPage: () async => await navigateToGraphPage(tester),
       ),
     );
@@ -208,24 +213,48 @@ void main() {
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '3_en-US',
         navigateToPage: () async => await tester.tap(
           find.byIcon(Icons.settings),
         ),
       ),
     );
     testWidgets(
-      "ViewGraphPage",
-      (tester) async => await generateScreenshot(
+      "StartPlanPage",
+          (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '4_en-US',
+        navigateToPage: () async {
+          await tester.pumpAndSettle();
+          await tester.tap(
+            find.widgetWithText(
+              ListTile,
+              plans.first.exercises.value.split(",").join(", "),
+            ),
+          );
+        },
+      ),
+    );
+  });
+
+  group("Generate extra screenshots", () {
+    if (!isPhoneScreenshots) return;
+    testWidgets(
+      "ViewGraphPage",
+          (tester) async => await generateScreenshot(
+        binding: binding,
+        tester: tester,
+        screenshotName: '5_en-US',
         navigateToPage: () async => await navigateToViewGraphPage(tester),
       ),
     );
     testWidgets(
       "GraphHistory",
-      (tester) async => await generateScreenshot(
+          (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '6_en-US',
         navigateToPage: () async {
           await navigateToViewGraphPage(tester);
           await tester.pump();
@@ -235,9 +264,10 @@ void main() {
     );
     testWidgets(
       "EditPlanPage",
-      (tester) async => await generateScreenshot(
+          (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '7_en-US',
         navigateToPage: () async {
           await tester.tap(find.byIcon(Icons.add));
         },
@@ -245,9 +275,10 @@ void main() {
     );
     testWidgets(
       "TimerPage",
-      (tester) async => await generateScreenshot(
+          (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
+        screenshotName: '8_en-US',
         skipSettle: true,
         navigateToPage: () async {
           await tester.tap(find.byIcon(Icons.more_vert));
@@ -255,23 +286,7 @@ void main() {
           await tester.tap(find.byIcon(Icons.timer));
           await tester.pumpAndSettle();
           await tester.tap(find.text("+1 min"));
-          await tester.pump(const Duration(seconds: 7));
-        },
-      ),
-    );
-    testWidgets(
-      "StartPlanPage",
-      (tester) async => await generateScreenshot(
-        binding: binding,
-        tester: tester,
-        navigateToPage: () async {
-          await tester.pump();
-          await tester.tap(
-            find.widgetWithText(
-              ListTile,
-              plans.first.exercises.value.split(",").join(", "),
-            ),
-          );
+          await tester.pump(const Duration(seconds: 6));
         },
       ),
     );
