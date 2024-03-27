@@ -1,11 +1,9 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/exercise_tile.dart';
-import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseList extends StatelessWidget {
   final List<String> planExercises;
-  final AsyncSnapshot<List<TypedResult>> snapshot;
+  final Map<String, int> counts;
   final int selectedIndex;
   final Function(int) onTap;
   final Function(int, int) onReorder;
@@ -13,10 +11,10 @@ class ExerciseList extends StatelessWidget {
   const ExerciseList({
     super.key,
     required this.planExercises,
-    required this.snapshot,
     required this.selectedIndex,
     required this.onTap,
     required this.onReorder,
+    required this.counts,
   });
 
   @override
@@ -25,12 +23,8 @@ class ExerciseList extends StatelessWidget {
       itemCount: planExercises.length,
       itemBuilder: (context, index) {
         final exercise = planExercises[index];
-        final gymSetIndex = snapshot.data?.indexWhere(
-          (element) => element.read(db.gymSets.name) == exercise,
-        );
-        var count = 0;
-        if (gymSetIndex != -1)
-          count = snapshot.data![gymSetIndex!].read(db.gymSets.name.count())!;
+        final count = counts[exercise] ?? 0;
+
         return ExerciseTile(
           index: index,
           exercise: exercise,

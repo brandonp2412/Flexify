@@ -248,9 +248,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return const SizedBox();
 
+                  Map<String, int> counts = {};
+                  for (final row in snapshot.data!) {
+                    counts[row.read(db.gymSets.name)!] =
+                        row.read(db.gymSets.name.count())!;
+                  }
+
                   return ExerciseList(
                     planExercises: planExercises,
-                    snapshot: snapshot,
+                    counts: counts,
                     selectedIndex: selectedIndex,
                     onTap: select,
                     onReorder: (oldIndex, newIndex) async {
