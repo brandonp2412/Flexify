@@ -19,6 +19,7 @@ DateTime parseDate(String dateString) {
 }
 
 Future<bool> requestNotificationPermission() async {
+  if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty) return true;
   final permission = await Permission.notification.request();
   return permission.isGranted;
 }
