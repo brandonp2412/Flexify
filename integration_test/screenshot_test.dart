@@ -30,8 +30,11 @@ class SetInfo {
   final double weight;
 
   SetInfo(int days, this.reps, this.weight)
-      : dateTime =
-            DateTime.now().subtract(Duration(days: days),).copyWith(hour: 12);
+      : dateTime = DateTime.now()
+            .subtract(
+              Duration(days: days),
+            )
+            .copyWith(hour: 12);
 }
 
 List<SetInfo> graphData = [
@@ -134,17 +137,17 @@ Future<void> navigateToGraphPage(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> navigateToTricepsDips(WidgetTester tester) async {
-  await tester.dragUntilVisible(
-      find.text("Triceps dip"), find.byType(ListView), const Offset(0, 10));
+Future<void> navigateToBench(WidgetTester tester) async {
+  await tester.dragUntilVisible(find.text("Barbell bench press"),
+      find.byType(ListView), const Offset(0, 10));
   await tester.pump();
-  await tester.tap(find.widgetWithText(ListTile, "Triceps dip"));
+  await tester.tap(find.widgetWithText(ListTile, "Barbell bench press"));
 }
 
 Future<void> navigateToViewGraphPage(WidgetTester tester) async {
   await navigateToGraphPage(tester);
   await tester.pumpAndSettle();
-  await navigateToTricepsDips(tester);
+  await navigateToBench(tester);
 }
 
 void main() {
@@ -152,13 +155,15 @@ void main() {
       IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   const deviceType = String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
-  if (deviceType.isEmpty) throw "FLEXIFY_DEVICE_TYPE must be set, so integration test knows what screenshots to take";
+  if (deviceType.isEmpty)
+    throw "FLEXIFY_DEVICE_TYPE must be set, so integration test knows what screenshots to take";
   const isPhoneScreenshots = deviceType == "phoneScreenshots";
 
   setUpAll(() async {
     app.db = AppDatabase();
     app.android = const MethodChannel("com.presley.flexify/android");
-    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(app.android, (message) => null);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(app.android, (message) => null);
 
     await app.db.delete(app.db.gymSets).go();
     await app.db.delete(app.db.plans).go();
@@ -171,7 +176,7 @@ void main() {
 
     for (final element in graphData) {
       await app.db.into(app.db.gymSets).insert(
-            generateGymSetCompanion("Triceps dip", element.weight,
+            generateGymSetCompanion("Barbell bench press", element.weight,
                 reps: element.reps, date: element.dateTime),
           );
     }
@@ -194,10 +199,7 @@ void main() {
     testWidgets(
       "PlanPage",
       (tester) async => await generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '1_en-US'
-      ),
+          binding: binding, tester: tester, screenshotName: '1_en-US'),
     );
     testWidgets(
       "GraphPage",
@@ -221,7 +223,7 @@ void main() {
     );
     testWidgets(
       "StartPlanPage",
-          (tester) async => await generateScreenshot(
+      (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '4_en-US',
@@ -242,7 +244,7 @@ void main() {
     if (!isPhoneScreenshots) return;
     testWidgets(
       "ViewGraphPage",
-          (tester) async => await generateScreenshot(
+      (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '5_en-US',
@@ -251,7 +253,7 @@ void main() {
     );
     testWidgets(
       "GraphHistory",
-          (tester) async => await generateScreenshot(
+      (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '6_en-US',
@@ -264,7 +266,7 @@ void main() {
     );
     testWidgets(
       "EditPlanPage",
-          (tester) async => await generateScreenshot(
+      (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '7_en-US',
@@ -275,7 +277,7 @@ void main() {
     );
     testWidgets(
       "TimerPage",
-          (tester) async => await generateScreenshot(
+      (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '8_en-US',

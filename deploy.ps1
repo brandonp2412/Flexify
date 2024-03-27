@@ -4,39 +4,39 @@ param (
 
 $pubspecContent = Get-Content "pubspec.yaml" -Raw 
 
-Function GenerateScreenshots{
-  param ($deviceType)
-  flutter emulator --launch $deviceType
+Function GenerateScreenshots {
+    param ($deviceType)
+    flutter emulator --launch $deviceType
   
-  $adbName 
-  while ([string]::IsNullOrEmpty($adbName))
-  {
-    $devices = adb.exe devices
-    $devices | select -skip 1 | ForEach {
-        "$_".Split(" ") | ForEach {
-            $name = adb.exe -s $_ emu avd name
-            if ($name -eq $deviceType) {
-                if ($_.Contains("offline") -or $_.Contains("authorizing")) {
-                    Write-Output "Device is offline"
-                } else {
-                    $adbName = $_.Replace("device", "").Trim()
+    $adbName 
+    while ([string]::IsNullOrEmpty($adbName)) {
+        $devices = adb.exe devices
+        $devices | select -skip 1 | ForEach {
+            "$_".Split(" ") | ForEach {
+                $name = adb.exe -s $_ emu avd name
+                if ($name -eq $deviceType) {
+                    if ($_.Contains("offline") -or $_.Contains("authorizing")) {
+                        Write-Output "Device is offline"
+                    }
+                    else {
+                        $adbName = $_.Replace("device", "").Trim()
+                    }
                 }
             }
         }
+
+        Write-Output "Device not started, trying again in 10 seconds"
+        Start-Sleep -Seconds 10
     }
 
-    Write-Output "Device not started, trying again in 10 seconds"
-    Start-Sleep -Seconds 10
-  }
+    # Sleep 30 seconds to allow time for emulator to finish boot properly
+    Start-Sleep -Seconds 30
 
-  # Sleep 30 seconds to allow time for emulator to finish boot properly
-  Start-Sleep -Seconds 30
+    $env:FLEXIFY_DEVICE_TYPE = "$deviceType"
+    flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=$deviceType --profile -d $adbName
 
-  $env:FLEXIFY_DEVICE_TYPE="$deviceType"
-  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=$deviceType --profile -d $adbName
-
-  Write-Output "Shutting down $deviceType"
-  adb.exe -s $adbName reboot -p
+    Write-Output "Shutting down $deviceType"
+    adb.exe -s $adbName reboot -p
 }
 
 if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
@@ -58,6 +58,7 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
     GenerateScreenshots "tenInchScreenshots"
 
     git add "pubspec.yaml"
+    git add .\android\fastlane\metadata
     Set-Content -Path "android\fastlane\metadata\android\en-US\changelogs\$newBuildNumber.txt" -Value "$lastCommit"
     git add "android\fastlane\metadata\android\en-US\changelogs\$newBuildNumber.txt"
     git commit -m "Bump version to $version"
@@ -67,7 +68,7 @@ if ($pubspecContent -match 'version: (\d+\.\d+\.\d+)\+(\d+)') {
 
     if (!$n) {
         flutter build appbundle
-        fastlane supply --skip-upload_screenshots true --skip-upload-images true --aab ..\build\app\outputs\bundle\release\app-release.aab
+        fastlane supply --aab ..\build\app\outputs\bundle\release\app-release.aab
     }
 
     flutter build apk
