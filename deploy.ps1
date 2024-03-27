@@ -33,7 +33,7 @@ Function GenerateScreenshots{
   Start-Sleep -Seconds 30
 
   $env:FLEXIFY_DEVICE_TYPE="$deviceType"
-  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=$deviceType -d $adbName
+  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=$deviceType --profile -d $adbName
 
   Write-Output "Shutting down $deviceType"
   adb.exe -s $adbName reboot -p
