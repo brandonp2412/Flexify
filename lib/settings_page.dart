@@ -208,171 +208,247 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
-        key: 'download csv',
-        widget: MenuAnchor(
-          style: const MenuStyle(alignment: Alignment.center),
-          menuChildren: [
-            MenuItemButton(
-              leadingIcon: const Icon(Icons.insights),
-              child: const Text("Gym sets"),
-              onPressed: () async {
-                final gymSets = await db.gymSets.select().get();
-                final List<List<dynamic>> csvData = [
-                  ['id', 'name', 'reps', 'weight', 'created', 'unit']
-                ];
-                for (var gymSet in gymSets) {
-                  csvData.add([
-                    gymSet.id,
-                    gymSet.name,
-                    gymSet.reps,
-                    gymSet.weight,
-                    gymSet.created.toIso8601String(),
-                    gymSet.unit,
-                  ]);
-                }
+          key: 'download csv',
+          widget: TextButton.icon(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Wrap(
+                      children: <Widget>[
+                        ListTile(
+                            leading: const Icon(Icons.insights),
+                            title: const Text('Gym sets'),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              final gymSets = await db.gymSets.select().get();
+                              final List<List<dynamic>> csvData = [
+                                [
+                                  'id',
+                                  'name',
+                                  'reps',
+                                  'weight',
+                                  'created',
+                                  'unit'
+                                ]
+                              ];
+                              for (var gymSet in gymSets) {
+                                csvData.add([
+                                  gymSet.id,
+                                  gymSet.name,
+                                  gymSet.reps,
+                                  gymSet.weight,
+                                  gymSet.created.toIso8601String(),
+                                  gymSet.unit,
+                                ]);
+                              }
 
-                if (!await requestNotificationPermission()) return;
-                final csv =
-                    const ListToCsvConverter(eol: "\n").convert(csvData);
-                android.invokeMethod('save', ['gym_sets.csv', csv]);
-              },
-            ),
-            MenuItemButton(
-              leadingIcon: const Icon(Icons.event),
-              child: const Text("Plans"),
-              onPressed: () async {
-                final plans = await db.plans.select().get();
-                final List<List<dynamic>> csvData = [
-                  ['id', 'days', 'exercises']
-                ];
-                for (var plan in plans) {
-                  csvData.add([plan.id, plan.days, plan.exercises]);
-                }
+                              if (!await requestNotificationPermission())
+                                return;
+                              final csv = const ListToCsvConverter(eol: "\n")
+                                  .convert(csvData);
+                              android
+                                  .invokeMethod('save', ['gym_sets.csv', csv]);
+                            }),
+                        ListTile(
+                          leading: const Icon(Icons.event),
+                          title: const Text('Plans'),
+                          onTap: () async {
+                            Navigator.of(context).pop();
+                            final plans = await db.plans.select().get();
+                            final List<List<dynamic>> csvData = [
+                              ['id', 'days', 'exercises']
+                            ];
+                            for (var plan in plans) {
+                              csvData.add([plan.id, plan.days, plan.exercises]);
+                            }
 
-                if (!await requestNotificationPermission()) return;
-                final csv =
-                    const ListToCsvConverter(eol: "\n").convert(csvData);
-                android.invokeMethod('save', ['plans.csv', csv]);
+                            if (!await requestNotificationPermission()) return;
+                            final csv = const ListToCsvConverter(eol: "\n")
+                                .convert(csvData);
+                            android.invokeMethod('save', ['plans.csv', csv]);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
-            ),
-          ],
-          controller: downloadController,
-          child: TextButton.icon(
-              onPressed: () => downloadController.open(),
               icon: const Icon(Icons.download),
-              label: const Text("Download CSV")),
-        ),
-      ),
+              label: const Text('Download CSV'))),
       WidgetSettings(
-        key: 'upload csv',
-        widget: MenuAnchor(
-          style: const MenuStyle(alignment: Alignment.center),
-          menuChildren: [
-            MenuItemButton(
-              leadingIcon: const Icon(Icons.insights),
-              child: const Text("Gym sets"),
-              onPressed: () async {
-                String csv = await android.invokeMethod('read');
-                List<List<dynamic>> rows =
-                    const CsvToListConverter(eol: "\n").convert(csv);
-                if (rows.isEmpty) return;
-                try {
-                  final gymSets = rows.map(
-                    (row) => GymSetsCompanion(
-                      name: Value(row[1]),
-                      reps: Value(row[2]),
-                      weight: Value(row[3]),
-                      created: Value(parseDate(row[4])),
-                      unit: Value(row[5]),
-                    ),
-                  );
-                  await db.batch(
-                    (batch) => batch.insertAll(db.gymSets, gymSets),
-                  );
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Uploaded gym sets.')),
-                  );
-                } catch (e) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Failed to upload csv.')),
-                  );
-                }
+          key: 'upload csv',
+          widget: TextButton.icon(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Wrap(
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.insights),
+                          title: const Text('Gym sets'),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            String csv = await android.invokeMethod('read');
+                            List<List<dynamic>> rows =
+                                const CsvToListConverter(eol: "\n")
+                                    .convert(csv);
+                            if (rows.isEmpty) return;
+                            try {
+                              final gymSets = rows.map(
+                                (row) => GymSetsCompanion(
+                                  name: Value(row[1]),
+                                  reps: Value(row[2]),
+                                  weight: Value(row[3]),
+                                  created: Value(parseDate(row[4])),
+                                  unit: Value(row[5]),
+                                ),
+                              );
+                              await db.batch(
+                                (batch) => batch.insertAll(db.gymSets, gymSets),
+                              );
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Uploaded gym sets.')),
+                              );
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Failed to upload csv.')),
+                              );
+                            }
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.event),
+                          title: const Text('Plans'),
+                          onTap: () async {
+                            Navigator.of(context).pop();
+                            String csv = await android.invokeMethod('read');
+                            List<List<dynamic>> rows =
+                                const CsvToListConverter(eol: "\n")
+                                    .convert(csv);
+                            if (rows.isEmpty) return;
+                            try {
+                              final plans = rows.map(
+                                (row) => PlansCompanion(
+                                  days: Value(row[1]),
+                                  exercises: Value(row[2]),
+                                  title: Value(row.elementAtOrNull(3)),
+                                ),
+                              );
+                              await db.batch(
+                                (batch) => batch.insertAll(db.plans, plans),
+                              );
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Uploaded plans.')),
+                              );
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              debugPrint(e.toString());
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Failed to upload csv.')),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
-            ),
-            MenuItemButton(
-              leadingIcon: const Icon(Icons.event),
-              child: const Text("Plans"),
-              onPressed: () async {
-                String csv = await android.invokeMethod('read');
-                List<List<dynamic>> rows =
-                    const CsvToListConverter(eol: "\n").convert(csv);
-                if (rows.isEmpty) return;
-                try {
-                  final plans = rows.map(
-                    (row) => PlansCompanion(
-                      days: Value(row[1]),
-                      exercises: Value(row[2]),
-                      title: Value(row.elementAtOrNull(3)),
-                    ),
-                  );
-                  await db.batch(
-                    (batch) => batch.insertAll(db.plans, plans),
-                  );
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Uploaded plans.')),
-                  );
-                } catch (e) {
-                  if (!context.mounted) return;
-                  debugPrint(e.toString());
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Failed to upload csv.')),
-                  );
-                }
-              },
-            ),
-          ],
-          controller: uploadController,
-          child: TextButton.icon(
-              onPressed: () => uploadController.open(),
               icon: const Icon(Icons.upload),
-              label: const Text("Upload CSV")),
-        ),
-      ),
+              label: const Text('Upload CSV'))),
       WidgetSettings(
-        key: 'delete records',
-        widget: MenuAnchor(
-          style: const MenuStyle(alignment: Alignment.center),
-          menuChildren: [
-            MenuItemButton(
-              leadingIcon: const Icon(Icons.insights),
-              child: const Text("Gym sets"),
-              onPressed: () async {
-                showDialog(
+          key: 'delete records',
+          widget: TextButton.icon(
+              onPressed: () {
+                showModalBottomSheet(
                   context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Confirm Delete'),
-                      content: const Text(
-                          'Are you sure you want to delete all gym sets? This action is not reversible.'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
+                  builder: (context) {
+                    return Wrap(
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.insights),
+                          title: const Text('Gym sets'),
+                          onTap: () async {
+                            Navigator.pop(context);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Confirm Delete'),
+                                  content: const Text(
+                                      'Are you sure you want to delete all gym sets? This action is not reversible.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Delete'),
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                        await db.delete(db.gymSets).go();
+                                        if (!context.mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Deleted all gym sets.')),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                         ),
-                        TextButton(
-                          child: const Text('Delete'),
-                          onPressed: () async {
+                        ListTile(
+                          leading: const Icon(Icons.event),
+                          title: const Text('Plans'),
+                          onTap: () async {
                             Navigator.of(context).pop();
-                            await db.delete(db.gymSets).go();
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Deleted all gym sets.')),
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Confirm Delete'),
+                                  content: const Text(
+                                      'Are you sure you want to delete all plans? This action is not reversible.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Delete'),
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                        await db.delete(db.plans).go();
+                                        if (!context.mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content:
+                                                  Text('Deleted all plans.')),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
                         ),
@@ -381,51 +457,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 );
               },
-            ),
-            MenuItemButton(
-              leadingIcon: const Icon(Icons.event),
-              child: const Text("Plans"),
-              onPressed: () async {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Confirm Delete'),
-                      content: const Text(
-                          'Are you sure you want to delete all plans? This action is not reversible.'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: const Text('Delete'),
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            await db.delete(db.plans).go();
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Deleted all plans.')),
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ],
-          controller: deleteController,
-          child: TextButton.icon(
-              onPressed: () => deleteController.open(),
               icon: const Icon(Icons.delete),
-              label: const Text("Delete records")),
-        ),
-      ),
+              label: const Text('Delete records'))),
     ];
 
     return Scaffold(
