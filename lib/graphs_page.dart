@@ -4,6 +4,7 @@ import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/timer_page.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -160,15 +161,29 @@ class _GraphsPageState extends State<GraphsPage> {
                   itemCount: filteredGymSets.length,
                   itemBuilder: (context, index) {
                     final gymSet = filteredGymSets[index];
+                    final previousGymSet =
+                        index > 0 ? filteredGymSets[index - 1] : null;
+
                     final name = gymSet.read(db.gymSets.name)!;
                     final weight = gymSet.read(db.gymSets.weight.max())!;
                     final unit = gymSet.read(db.gymSets.unit)!;
                     final created = gymSet.read(db.gymSets.created.max())!;
-                    return GraphTile(
-                        name: name,
-                        weight: weight,
-                        unit: unit,
-                        created: created);
+                    final previousCreated =
+                        previousGymSet?.read(db.gymSets.created.max())!;
+
+                    final showDivider = previousCreated != null &&
+                        !isSameDay(previousCreated, created);
+
+                    return material.Column(
+                      children: [
+                        if (showDivider) const Divider(),
+                        GraphTile(
+                            name: name,
+                            weight: weight,
+                            unit: unit,
+                            created: created)
+                      ],
+                    );
                   },
                 ),
               );

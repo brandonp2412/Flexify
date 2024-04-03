@@ -1,5 +1,6 @@
 import 'package:flexify/app_state.dart';
 import 'package:flexify/edit_gym_set.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:intl/intl.dart';
@@ -148,11 +149,5 @@ class _GraphHistoryState extends State<GraphHistory> {
         },
       ),
     );
-  }
-
-  bool isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year &&
-        date1.month == date2.month &&
-        date1.day == date2.day;
   }
 }
