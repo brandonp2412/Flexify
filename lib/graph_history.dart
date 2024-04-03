@@ -18,7 +18,6 @@ class GraphHistory extends StatefulWidget {
 }
 
 class _GraphHistoryState extends State<GraphHistory> {
-  final ScrollController _scrollController = ScrollController();
   late Stream<List<GymSet>> stream;
   Set<int> selected = {};
 
@@ -99,7 +98,6 @@ class _GraphHistoryState extends State<GraphHistory> {
             );
 
           return ListView.builder(
-            controller: _scrollController,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final gymSet = snapshot.data![index];
