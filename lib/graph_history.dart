@@ -150,7 +150,6 @@ class _GraphHistoryState extends State<GraphHistory> {
     );
   }
 
-  // Function to check if two DateTime objects represent the same day
   bool isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year &&
         date1.month == date2.month &&
