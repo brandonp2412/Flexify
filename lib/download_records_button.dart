@@ -1,0 +1,73 @@
+import 'package:csv/csv.dart';
+import 'package:drift/drift.dart';
+import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
+import 'package:flutter/material.dart';
+
+class DownloadRecordsButton extends StatelessWidget {
+  const DownloadRecordsButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: const Icon(Icons.insights),
+                      title: const Text('Gym sets'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        final gymSets = await db.gymSets.select().get();
+                        final List<List<dynamic>> csvData = [
+                          ['id', 'name', 'reps', 'weight', 'created', 'unit']
+                        ];
+                        for (var gymSet in gymSets) {
+                          csvData.add([
+                            gymSet.id,
+                            gymSet.name,
+                            gymSet.reps,
+                            gymSet.weight,
+                            gymSet.created.toIso8601String(),
+                            gymSet.unit,
+                          ]);
+                        }
+
+                        if (!await requestNotificationPermission()) return;
+                        final csv = const ListToCsvConverter(eol: "\n")
+                            .convert(csvData);
+                        android.invokeMethod('save', ['gym_sets.csv', csv]);
+                      }),
+                  ListTile(
+                    leading: const Icon(Icons.event),
+                    title: const Text('Plans'),
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      final plans = await db.plans.select().get();
+                      final List<List<dynamic>> csvData = [
+                        ['id', 'days', 'exercises']
+                      ];
+                      for (var plan in plans) {
+                        csvData.add([plan.id, plan.days, plan.exercises]);
+                      }
+
+                      if (!await requestNotificationPermission()) return;
+                      final csv =
+                          const ListToCsvConverter(eol: "\n").convert(csvData);
+                      android.invokeMethod('save', ['plans.csv', csv]);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        icon: const Icon(Icons.download),
+        label: const Text('Download CSV'));
+  }
+}
