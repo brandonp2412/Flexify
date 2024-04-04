@@ -10,7 +10,7 @@ import 'app_state.dart';
 class ExerciseTile extends StatelessWidget {
   final String exercise;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback selectAllReps;
   final int count;
   final int index;
 
@@ -18,7 +18,7 @@ class ExerciseTile extends StatelessWidget {
     super.key,
     required this.exercise,
     required this.isSelected,
-    required this.onTap,
+    required this.selectAllReps,
     required this.count,
     required this.index,
   });
@@ -29,71 +29,61 @@ class ExerciseTile extends StatelessWidget {
     return GestureDetector(
       onLongPressStart: (details) async {
         if (count == 0) return;
-        final position = RelativeRect.fromLTRB(
-          details.globalPosition.dx,
-          details.globalPosition.dy - 40,
-          MediaQuery.of(context).size.width - details.globalPosition.dx,
-          MediaQuery.of(context).size.height - details.globalPosition.dy - 40,
-        );
 
-        await showMenu(
+        showModalBottomSheet(
           context: context,
-          position: position,
-          items: [
-            PopupMenuItem(
-              value: 'edit',
-              child: ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text("Edit"),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final gymSet = await (db.select(db.gymSets)
-                        ..where((r) => db.gymSets.name.equals(exercise))
-                        ..orderBy([
-                          (u) => OrderingTerm(
-                              expression: u.created, mode: OrderingMode.desc),
-                        ])
-                        ..limit(1))
-                      .getSingle();
-                  if (!context.mounted) return;
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditGymSet(gymSet: gymSet.toCompanion(false)),
-                      ));
-                  onTap();
-                },
-              ),
-            ),
-            PopupMenuItem(
-              value: 'delete',
-              child: ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text("Delete"),
-                onTap: () async {
-                  Navigator.pop(context);
-
-                  final gymSet = await (db.select(db.gymSets)
-                        ..where((r) => db.gymSets.name.equals(exercise))
-                        ..orderBy([
-                          (u) => OrderingTerm(
-                              expression: u.created, mode: OrderingMode.desc),
-                        ])
-                        ..limit(1))
-                      .getSingle();
-                  await db.gymSets.deleteOne(gymSet);
-                },
-              ),
-            ),
-          ],
+          builder: (context) {
+            return Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text('Edit'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final gymSet = await (db.select(db.gymSets)
+                          ..where((r) => db.gymSets.name.equals(exercise))
+                          ..orderBy([
+                            (u) => OrderingTerm(
+                                expression: u.created, mode: OrderingMode.desc),
+                          ])
+                          ..limit(1))
+                        .getSingle();
+                    if (!context.mounted) return;
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditGymSet(gymSet: gymSet.toCompanion(false)),
+                        ));
+                    selectAllReps();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: const Text('Delete'),
+                  onTap: () async {
+                    Navigator.of(context).pop();
+                    final gymSet = await (db.select(db.gymSets)
+                          ..where((r) => db.gymSets.name.equals(exercise))
+                          ..orderBy([
+                            (u) => OrderingTerm(
+                                expression: u.created, mode: OrderingMode.desc),
+                          ])
+                          ..limit(1))
+                        .getSingle();
+                    await db.gymSets.deleteOne(gymSet);
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
       child: material.Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ListTile(
-            onTap: onTap,
+            onTap: selectAllReps,
             trailing: Visibility(
               visible: settingsState.showReorder,
               child: material.Column(
@@ -112,7 +102,7 @@ class ExerciseTile extends StatelessWidget {
                   value: isSelected,
                   groupValue: true,
                   onChanged: (value) {
-                    onTap();
+                    selectAllReps();
                   },
                 ),
                 Text("$exercise ($count)"),

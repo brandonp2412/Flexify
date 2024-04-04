@@ -258,7 +258,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     planExercises: planExercises,
                     counts: counts,
                     selectedIndex: selectedIndex,
-                    onTap: select,
+                    selectAllReps: select,
                     onReorder: (oldIndex, newIndex) async {
                       if (oldIndex < newIndex) {
                         newIndex--;

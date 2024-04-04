@@ -5,14 +5,14 @@ class ExerciseList extends StatelessWidget {
   final List<String> planExercises;
   final Map<String, int> counts;
   final int selectedIndex;
-  final Function(int) onTap;
+  final Function(int) selectAllReps;
   final Function(int, int) onReorder;
 
   const ExerciseList({
     super.key,
     required this.planExercises,
     required this.selectedIndex,
-    required this.onTap,
+    required this.selectAllReps,
     required this.onReorder,
     required this.counts,
   });
@@ -30,7 +30,7 @@ class ExerciseList extends StatelessWidget {
           exercise: exercise,
           isSelected: index == selectedIndex,
           count: count,
-          onTap: () => onTap(index),
+          selectAllReps: () => selectAllReps(index),
           key: Key(exercise),
         );
       },
