@@ -31,6 +31,8 @@ last_commit=$(git log -1 --pretty=%B | head -n 1)
 new_version="$major.$minor.$new_patch+$new_build_number"
 yq -yi ".version |= \"$new_version\"" pubspec.yaml
 generate_screenshots "phoneScreenshots"
+generate_screenshots "sevenInchScreenshots"
+generate_screenshots "tenInchScreenshots"
 
 git add pubspec.yaml
 git add android/fastlane/metadata
