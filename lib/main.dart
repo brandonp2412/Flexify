@@ -2,6 +2,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/settings_page.dart';
+import 'package:flexify/timer_page.dart';
 import 'package:flexify/timer_progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,7 +78,7 @@ class HomePage extends StatelessWidget {
             children: [
               PlansPage(),
               GraphsPage(),
-              SettingsPage(),
+              TimerPage(),
             ],
           ),
         ),
@@ -92,8 +93,8 @@ class HomePage extends StatelessWidget {
               text: "Graphs",
             ),
             Tab(
-              icon: Icon(Icons.settings),
-              text: "Settings",
+              icon: Icon(Icons.timer),
+              text: "Timer",
             ),
           ],
         ),

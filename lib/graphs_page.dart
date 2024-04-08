@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_page.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
@@ -181,6 +182,7 @@ class _GraphsPageState extends State<GraphsPage> {
                         if (selected.isEmpty) enterWeight(context),
                         if (selected.isEmpty) timer(context),
                         selectAll(context),
+                        settingsPage(context)
                       ],
                     ),
                   ],
@@ -244,6 +246,22 @@ class _GraphsPageState extends State<GraphsPage> {
         },
         tooltip: 'Add exercise',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> settingsPage(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.settings),
+        title: const Text('Settings'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SettingsPage()),
+          );
+        },
       ),
     );
   }

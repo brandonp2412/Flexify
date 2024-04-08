@@ -15,9 +15,6 @@ class _TimerPageState extends State<TimerPage> {
   Widget build(BuildContext context) {
     final timerState = context.watch<TimerState>();
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Timer'),
-        ),
         body: const Center(
           child: TimerCircularProgressIndicator(),
         ),

@@ -6,6 +6,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_page.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flutter/material.dart';
 
@@ -120,6 +121,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                         itemBuilder: (context) => [
                           enterWeight(context),
                           timer(context),
+                          settingsPage(context),
                         ],
                       )
                     ],
@@ -151,6 +153,22 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> settingsPage(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.settings),
+        title: const Text('Settings'),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SettingsPage()),
+          );
+        },
       ),
     );
   }
