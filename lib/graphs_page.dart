@@ -4,7 +4,6 @@ import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_page.dart';
-import 'package:flexify/timer_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -180,7 +179,6 @@ class _GraphsPageState extends State<GraphsPage> {
                       icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) => [
                         if (selected.isEmpty) enterWeight(context),
-                        if (selected.isEmpty) timer(context),
                         selectAll(context),
                         settingsPage(context)
                       ],
@@ -260,22 +258,6 @@ class _GraphsPageState extends State<GraphsPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const SettingsPage()),
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> timer(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.timer),
-        title: const Text('Timer'),
-        onTap: () {
-          Navigator.of(context).pop();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const TimerPage()),
           );
         },
       ),
