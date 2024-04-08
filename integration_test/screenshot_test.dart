@@ -216,9 +216,15 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '3_en-US',
-        navigateToPage: () async => await tester.tap(
-          find.byIcon(Icons.settings),
-        ),
+        navigateToPage: () async {
+          await tester.tap(
+            find.byIcon(Icons.more_vert),
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(
+            find.byIcon(Icons.settings),
+          );
+        },
       ),
     );
     testWidgets(
@@ -283,9 +289,7 @@ void main() {
         screenshotName: '8_en-US',
         skipSettle: true,
         navigateToPage: () async {
-          await tester.tap(find.byIcon(Icons.more_vert));
-          await tester.pumpAndSettle();
-          await tester.tap(find.byIcon(Icons.timer));
+          await tester.tap(find.byIcon(Icons.timer_outlined));
           await tester.pumpAndSettle();
           await tester.tap(find.text("+1 min"));
           await tester.pump(const Duration(seconds: 6));
