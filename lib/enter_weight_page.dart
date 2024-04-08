@@ -29,12 +29,15 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
             ],
           )
           ..limit(1))
-        .getSingle()
-        .then((value) => setState(
-              () {
-                yesterdaysWeight = "${value.weight} ${value.unit}";
-              },
-            ));
+        .getSingleOrNull()
+        .then((value) {
+      if (value == null) return;
+      setState(
+        () {
+          yesterdaysWeight = "${value.weight} ${value.unit}";
+        },
+      );
+    });
   }
 
   @override
