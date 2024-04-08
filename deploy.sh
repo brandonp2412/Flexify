@@ -18,6 +18,10 @@ function generate_screenshots() {
     flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE="$1" --profile -d "$emulator_id"
 }
 
+generate_screenshots "phoneScreenshots"
+generate_screenshots "sevenInchScreenshots"
+generate_screenshots "tenInchScreenshots"
+
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
 version=$(cut -d '+' -f 1 <<< "$line")
@@ -30,9 +34,6 @@ new_build_number=$((build_number + 1))
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 new_version="$major.$minor.$new_patch+$new_build_number"
 yq -yi ".version |= \"$new_version\"" pubspec.yaml
-generate_screenshots "phoneScreenshots"
-generate_screenshots "sevenInchScreenshots"
-generate_screenshots "tenInchScreenshots"
 
 git add pubspec.yaml
 git add android/fastlane/metadata
