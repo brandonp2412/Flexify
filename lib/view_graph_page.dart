@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/app_state.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
@@ -125,6 +126,15 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             graphBuilder(settings),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Edit gym sets',
+        child: const Icon(Icons.edit),
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditGraphPage(name: widget.name),
+            )),
       ),
     );
   }
