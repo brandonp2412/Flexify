@@ -12,13 +12,17 @@ class GraphTile extends StatelessWidget {
   final double weight;
   final DateTime created;
   final String unit;
+  final Set<String> selected;
+  final Function onSelect;
 
   const GraphTile(
       {super.key,
       required this.name,
       required this.weight,
       required this.created,
-      required this.unit});
+      required this.unit,
+      required this.selected,
+      required this.onSelect});
 
   Future<int> getCount() async {
     final result = await (db.gymSets.selectOnly()
@@ -33,6 +37,7 @@ class GraphTile extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     return ListTile(
+      selected: selected.contains(name),
       title: Text(name),
       subtitle: Text(DateFormat(settings.dateFormat).format(created)),
       trailing: Text(
@@ -40,76 +45,19 @@ class GraphTile extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ViewGraphPage(
-                    name: name,
-                  )),
-        );
+        if (selected.isEmpty)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewGraphPage(
+                      name: name,
+                    )),
+          );
+        else
+          onSelect(name);
       },
       onLongPress: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: const Text('Edit'),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditGraphPage(
-                          name: name,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: const Text('Delete'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Confirm Delete'),
-                          content: FutureBuilder(
-                            future: getCount(),
-                            builder: (context, snapshot) => Text(
-                                'Are you sure you want to delete all ${snapshot.data} records of $name ?'),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('Cancel'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('Delete'),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                (db.delete(db.gymSets)
-                                      ..where((tbl) => tbl.name.equals(name)))
-                                    .go();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        onSelect(name);
       },
     );
   }
