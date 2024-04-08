@@ -36,7 +36,7 @@ class _GraphsPageState extends State<GraphsPage> {
           ])
           ..orderBy([
             drift.OrderingTerm(
-                expression: db.gymSets.weight.max(),
+                expression: db.gymSets.created.max(),
                 mode: drift.OrderingMode.desc)
           ])
           ..groupBy([db.gymSets.name]))
