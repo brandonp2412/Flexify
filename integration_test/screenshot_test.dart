@@ -137,17 +137,17 @@ Future<void> navigateToGraphPage(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> navigateToBench(WidgetTester tester) async {
-  await tester.dragUntilVisible(find.text("Barbell bench press"),
+Future<void> navigateToDumbbell(WidgetTester tester) async {
+  await tester.dragUntilVisible(find.text("Dumbbell shoulder press"),
       find.byType(ListView), const Offset(0, 10));
   await tester.pump();
-  await tester.tap(find.widgetWithText(ListTile, "Barbell bench press"));
+  await tester.tap(find.widgetWithText(ListTile, "Dumbbell shoulder press"));
 }
 
 Future<void> navigateToViewGraphPage(WidgetTester tester) async {
   await navigateToGraphPage(tester);
   await tester.pumpAndSettle();
-  await navigateToBench(tester);
+  await navigateToDumbbell(tester);
 }
 
 void main() {
@@ -176,7 +176,7 @@ void main() {
 
     for (final element in graphData) {
       await app.db.into(app.db.gymSets).insert(
-            generateGymSetCompanion("Barbell bench press", element.weight,
+            generateGymSetCompanion("Dumbbell shoulder press", element.weight,
                 reps: element.reps, date: element.dateTime),
           );
     }
