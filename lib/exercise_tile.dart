@@ -59,8 +59,8 @@ class ExerciseTile extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: const Text('Delete'),
+                  leading: const Icon(Icons.undo),
+                  title: const Text('Undo'),
                   onTap: () async {
                     Navigator.of(context).pop();
                     final gymSet = await (db.select(db.gymSets)
