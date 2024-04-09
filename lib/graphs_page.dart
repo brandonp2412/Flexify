@@ -65,12 +65,6 @@ class _GraphsPageState extends State<GraphsPage> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
-          if (snapshot.data?.isEmpty == true)
-            return const ListTile(
-              title: Text("No data yet."),
-              subtitle: Text(
-                  "Complete plans for your progress graphs to appear here."),
-            );
           final gymSets = snapshot.data!;
 
           final filteredGymSets = gymSets.where((gymSet) {
@@ -180,6 +174,12 @@ class _GraphsPageState extends State<GraphsPage> {
                   ],
                 ),
               ),
+              if (snapshot.data?.isEmpty == true)
+                const ListTile(
+                  title: Text("No data yet."),
+                  subtitle: Text(
+                      "Complete plans for your progress graphs to appear here."),
+                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: filteredGymSets.length,
