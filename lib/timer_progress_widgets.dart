@@ -12,13 +12,15 @@ class TimerProgressIndicator extends StatelessWidget {
       final duration = timerState.nativeTimer.getDuration();
       final elapsed = timerState.nativeTimer.getElapsed();
       final remaining = timerState.nativeTimer.getRemaining();
+
       return Visibility(
         visible: duration > Duration.zero,
         child: TweenAnimationBuilder(
           key: UniqueKey(),
           tween: Tween<double>(
-            begin: elapsed.inMilliseconds / duration.inMilliseconds,
-            end: 1,
+            begin: 1, // Start at 1 (full progress)
+            end: elapsed.inMilliseconds /
+                duration.inMilliseconds, // End at the current progress
           ),
           duration: remaining,
           builder: (context, value, child) => LinearProgressIndicator(
@@ -39,12 +41,14 @@ class TimerCircularProgressIndicator extends StatelessWidget {
       final duration = timerState.nativeTimer.getDuration();
       final elapsed = timerState.nativeTimer.getElapsed();
       final remaining = timerState.nativeTimer.getRemaining();
+
       return duration > Duration.zero
           ? TweenAnimationBuilder(
               key: UniqueKey(),
               tween: Tween<double>(
-                begin: elapsed.inMilliseconds / duration.inMilliseconds,
-                end: 1,
+                begin: 1, // Start at 1 (full progress)
+                end: elapsed.inMilliseconds /
+                    duration.inMilliseconds, // End at the current progress
               ),
               duration: remaining,
               builder: (context, value, child) =>
@@ -71,8 +75,10 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
     return "$minutes:$seconds";
   }
 
-  const _TimerCircularProgressIndicatorTile(
-      {required this.value, required this.timerState});
+  const _TimerCircularProgressIndicatorTile({
+    required this.value,
+    required this.timerState,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +90,13 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           width: 300,
           child: CircularProgressIndicator(
             strokeCap: StrokeCap.round,
-            value: value,
+            value: value, // Use the updated value
             strokeWidth: 20,
             backgroundColor:
                 Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
             valueColor: AlwaysStoppedAnimation<Color>(
-                Theme.of(context).colorScheme.primary),
+              Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
         Column(
