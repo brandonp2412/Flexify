@@ -160,12 +160,13 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       child: ListTile(
         leading: const Icon(Icons.settings),
         title: const Text('Settings'),
-        onTap: () {
+        onTap: () async {
           Navigator.of(context).pop();
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const SettingsPage()),
           );
+          updatePlans();
         },
       ),
     );
