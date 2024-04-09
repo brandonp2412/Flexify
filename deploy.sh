@@ -2,20 +2,20 @@
 
 set -e
 
-pubspec_content=$(cat pubspec.yaml)
-
 function generate_screenshots() {
-    devices=$(adb devices | grep emulator)
+  emulator -avd "$1" &> /dev/null &
 
-    while read line
-    do
-      emulator_id=$(echo $line | awk '{print $1}')
-      name=$(adb -s $emulator_id emu avd name | head -n 1) 
-      [ "$name" = "$1" ] && break
-    done < <(echo $devices)
+  while true; do  
+    emulator_id=$(adb devices | awk 'NR>1{print $1}')
+    name=$(adb -s $emulator_id emu avd name | head -n 1 | tr -d '\r') 
+    adb -s "$emulator_id" get-state | grep -q device && [ "$name" = "$1" ] \
+      && break
+    sleep 1
+  done
 
-    export FLEXIFY_DEVICE_TYPE="$1"
-    flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE="$1" --profile -d "$emulator_id"
+  export FLEXIFY_DEVICE_TYPE="$1"
+  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE="$1" --profile -d "$emulator_id"
+  adb -s "$emulator_id" reboot -p
 }
 
 generate_screenshots "phoneScreenshots"
