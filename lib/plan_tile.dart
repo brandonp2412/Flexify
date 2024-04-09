@@ -71,7 +71,7 @@ class PlanTile extends StatelessWidget {
             builder: (context) => StartPlanPage(
               plan: plan,
               countStream: countStream,
-              onReorder: refresh,
+              refresh: refresh,
             ),
           ),
         );

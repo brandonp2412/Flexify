@@ -10,13 +10,13 @@ import 'package:provider/provider.dart';
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
   final Stream<List<drift.TypedResult>> countStream;
-  final Future<void> Function() onReorder;
+  final Future<void> Function() refresh;
 
   const StartPlanPage(
       {super.key,
       required this.plan,
       required this.countStream,
-      required this.onReorder});
+      required this.refresh});
 
   @override
   createState() => _StartPlanPageState();
@@ -269,7 +269,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       planExercises.insert(newIndex, temp);
                       await db.update(db.plans).replace(widget.plan
                           .copyWith(exercises: planExercises.join(',')));
-                      widget.onReorder();
+                      widget.refresh();
                     },
                   );
                 },
