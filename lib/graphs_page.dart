@@ -49,11 +49,17 @@ class _GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (context) => graphsPage(),
-        settings: settings,
+    return NavigatorPopHandler(
+      onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
+        navigatorKey.currentState!.pop();
+      },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => graphsPage(),
+          settings: settings,
+        ),
       ),
     );
   }

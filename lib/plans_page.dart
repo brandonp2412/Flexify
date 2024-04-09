@@ -23,13 +23,19 @@ class _PlansPageState extends State<PlansPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      onGenerateRoute: (settings) => MaterialPageRoute(
-        builder: (context) => _PlansPageWidget(
-          navigatorKey: navigatorKey,
+    return NavigatorPopHandler(
+      onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
+        navigatorKey.currentState!.pop();
+      },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => _PlansPageWidget(
+            navigatorKey: navigatorKey,
+          ),
+          settings: settings,
         ),
-        settings: settings,
       ),
     );
   }
