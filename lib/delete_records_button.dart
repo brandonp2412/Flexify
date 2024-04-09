@@ -17,7 +17,7 @@ class DeleteRecordsButton extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.insights),
-                    title: const Text('Gym sets'),
+                    title: const Text('Graphs'),
                     onTap: () async {
                       Navigator.pop(context);
                       showDialog(
@@ -26,7 +26,7 @@ class DeleteRecordsButton extends StatelessWidget {
                           return AlertDialog(
                             title: const Text('Confirm Delete'),
                             content: const Text(
-                                'Are you sure you want to delete all gym sets? This action is not reversible.'),
+                                'Are you sure you want to delete all graphs? This action is not reversible.'),
                             actions: <Widget>[
                               TextButton(
                                 child: const Text('Cancel'),
@@ -42,7 +42,7 @@ class DeleteRecordsButton extends StatelessWidget {
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                        content: Text('Deleted all gym sets.')),
+                                        content: Text('Deleted all graphs.')),
                                   );
                                 },
                               ),
