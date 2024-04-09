@@ -6,16 +6,19 @@ function generate_screenshots() {
   emulator -avd "$1" &> /dev/null &
 
   while true; do  
-    emulator_id=$(adb devices | awk 'NR>1{print $1}')
-    name=$(adb -s $emulator_id emu avd name | head -n 1 | tr -d '\r') 
-    adb -s "$emulator_id" get-state | grep -q device && [ "$name" = "$1" ] \
+    for device in $(adb devices | awk 'NR>1{print $1}' | grep emulator); do
+      name=$(adb -s $device emu avd name | head -n 1 | tr -d '\r') 
+      [ "$name" = "$1" ] && break
+    done
+
+    adb -s "$device" get-state | grep -q device && [ "$name" = "$1" ] \
       && break
     sleep 1
   done
 
   export FLEXIFY_DEVICE_TYPE="$1"
-  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE="$1" --profile -d "$emulator_id"
-  adb -s "$emulator_id" reboot -p
+  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE="$1" --profile -d "$device"
+  adb -s "$device" reboot -p
 }
 
 generate_screenshots "phoneScreenshots"
@@ -48,7 +51,7 @@ cd android
 flutter build appbundle
 fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
 flutter build apk
-gh release create "$new_version" --notes "$last_commit" ../build/app/outputs/flutter-apk/app-release.apk
+gh release create "$major.$minor.$new_patch" --notes "$last_commit" ../build/app/outputs/flutter-apk/app-release.apk
 git push --tags
 git push
 
