@@ -153,12 +153,6 @@ class _GraphsPageState extends State<GraphsPage> {
                                                 tbl.name.isIn(selected)))
                                           .go();
                                       if (!context.mounted) return;
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Deleted ${selected.length} gym sets.')),
-                                      );
                                       setState(() {
                                         selected.clear();
                                       });
