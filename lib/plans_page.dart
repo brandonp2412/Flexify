@@ -26,6 +26,7 @@ class _PlansPageState extends State<PlansPage> {
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
+        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
         navigatorKey.currentState!.pop();
       },
       child: Navigator(
