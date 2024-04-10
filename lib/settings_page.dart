@@ -1,12 +1,11 @@
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/download_records_button.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/upload_records_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import 'app_state.dart';
 
 class WidgetSettings {
   final String key;

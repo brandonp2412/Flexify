@@ -1,10 +1,10 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flexify/app_state.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

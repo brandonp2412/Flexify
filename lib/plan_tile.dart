@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/app_state.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/start_plan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

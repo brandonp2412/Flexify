@@ -1,13 +1,14 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/timer_progress_widgets.dart';
+import 'package:flexify/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'app_state.dart';
 import 'plans_page.dart';
 
 late AppDatabase db;
