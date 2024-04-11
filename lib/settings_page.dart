@@ -204,6 +204,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
+        key: 'hide timer tab',
+        widget: ListTile(
+          title: const Text('Hide timer tab'),
+          onTap: () => settings.setHideTimerTab(!settings.hideTimerTab),
+          trailing: Switch(
+            value: settings.hideTimerTab,
+            onChanged: (value) => settings.setHideTimerTab(value),
+          ),
+        ),
+      ),
+      WidgetSettings(
           key: 'download csv', widget: const DownloadRecordsButton()),
       WidgetSettings(key: 'upload csv', widget: const UploadRecordsButton()),
       WidgetSettings(

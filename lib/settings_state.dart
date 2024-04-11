@@ -10,6 +10,7 @@ class SettingsState extends ChangeNotifier {
   bool showUnits = true;
   bool systemColors = true;
   bool explainedPermissions = false;
+  bool hideTimerTab = false;
   String dateFormat = "yyyy-MM-dd h:mm a";
 
   Future<void> init() async {
@@ -30,9 +31,16 @@ class SettingsState extends ChangeNotifier {
     showReorder = prefsInstance.getBool("showReorder") ?? true;
     restTimers = prefsInstance.getBool("restTimers") ?? true;
     showUnits = prefsInstance.getBool("showUnits") ?? true;
+    hideTimerTab = prefsInstance.getBool("hideTimerTab") ?? false;
     dateFormat = prefsInstance.getString('dateFormat') ?? "yyyy-MM-dd h:mm a";
     explainedPermissions =
         prefsInstance.getBool('explainedPermissions') ?? false;
+  }
+
+  void setHideTimerTab(bool hide) {
+    hideTimerTab = hide;
+    notifyListeners();
+    prefs?.setBool('hideTimerTab', hide);
   }
 
   void setExplained(bool explained) {

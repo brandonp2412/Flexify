@@ -71,33 +71,36 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
-      length: 3,
+    final settings = context.watch<SettingsState>();
+
+    return DefaultTabController(
+      length: settings.hideTimerTab ? 2 : 3,
       child: Scaffold(
-        bottomSheet: TimerProgressIndicator(),
+        bottomSheet: const TimerProgressIndicator(),
         body: SafeArea(
           child: TabBarView(
             children: [
-              PlansPage(),
-              GraphsPage(),
-              TimerPage(),
+              const PlansPage(),
+              const GraphsPage(),
+              if (!settings.hideTimerTab) const TimerPage(),
             ],
           ),
         ),
         bottomNavigationBar: TabBar(
           tabs: [
-            Tab(
+            const Tab(
               icon: Icon(Icons.event),
               text: "Plans",
             ),
-            Tab(
+            const Tab(
               icon: Icon(Icons.insights),
               text: "Graphs",
             ),
-            Tab(
-              icon: Icon(Icons.timer_outlined),
-              text: "Timer",
-            ),
+            if (!settings.hideTimerTab)
+              const Tab(
+                icon: Icon(Icons.timer_outlined),
+                text: "Timer",
+              ),
           ],
         ),
       ),
