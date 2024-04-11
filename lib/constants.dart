@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database.dart';
+
 enum Metric {
   oneRepMax,
   volume,
@@ -12,6 +15,20 @@ const weekdays = [
   'Friday',
   'Saturday',
   'Sunday',
+];
+
+const defaultPlans = [
+  PlansCompanion(
+      days: Value('Monday'),
+      exercises: Value(
+          'Deadlift,Lat pull-down,Barbell bent-over row,Barbell biceps curl')),
+  PlansCompanion(
+      days: Value('Wednesday'),
+      exercises: Value(
+          'Barbell bench press,Barbell shoulder press,Chest fly,Dumbbell lateral raise,Triceps extension')),
+  PlansCompanion(
+      days: Value('Friday'),
+      exercises: Value('Squat,Leg press,Leg curl,Seated calf raise')),
 ];
 
 const defaultExercises = [

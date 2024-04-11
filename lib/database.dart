@@ -51,7 +51,10 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
-        await db.batch((batch) => batch.insertAll(db.gymSets, defaultSets));
+        await db.batch((batch) {
+          batch.insertAll(db.gymSets, defaultSets);
+          batch.insertAll(db.plans, defaultPlans);
+        });
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {
