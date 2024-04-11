@@ -43,7 +43,7 @@ git add android/fastlane/metadata
 
 echo "$last_commit" > "android/fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add "android/fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
-git commit -m "Bump version to $version"
+git commit -m "Bump version to $major.$minor.$new_patch"
 git tag "$new_build_number"
 
 cd android
