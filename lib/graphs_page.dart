@@ -3,10 +3,12 @@ import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'graph_tile.dart';
 
@@ -147,15 +149,32 @@ class _GraphsPageState extends State<GraphsPage> {
                                   TextButton(
                                     child: const Text('Delete'),
                                     onPressed: () async {
+                                      final planState =
+                                          context.read<PlanState>();
+                                      final selectedCopy = selected.toList();
                                       Navigator.of(context).pop();
-                                      await (db.delete(db.gymSets)
-                                            ..where((tbl) =>
-                                                tbl.name.isIn(selected)))
-                                          .go();
-                                      if (!context.mounted) return;
                                       setState(() {
                                         selected.clear();
                                       });
+
+                                      await (db.delete(db.gymSets)
+                                            ..where((tbl) =>
+                                                tbl.name.isIn(selectedCopy)))
+                                          .go();
+                                      final plans =
+                                          await db.plans.select().get();
+                                      for (final plan in plans) {
+                                        final exercises =
+                                            plan.exercises.split(',');
+                                        exercises.removeWhere((exercise) =>
+                                            selectedCopy.contains(exercise));
+                                        final updatedExercises =
+                                            exercises.join(',');
+                                        await db.update(db.plans).replace(
+                                            plan.copyWith(
+                                                exercises: updatedExercises));
+                                      }
+                                      planState.updatePlans(null);
                                     },
                                   ),
                                 ],
