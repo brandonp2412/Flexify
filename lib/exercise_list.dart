@@ -7,6 +7,7 @@ class ExerciseList extends StatelessWidget {
   final int selectedIndex;
   final Function(int) selectAllReps;
   final Function(int, int) onReorder;
+  final bool first;
 
   const ExerciseList({
     super.key,
@@ -15,6 +16,7 @@ class ExerciseList extends StatelessWidget {
     required this.selectAllReps,
     required this.onReorder,
     required this.counts,
+    required this.first,
   });
 
   @override
@@ -26,6 +28,7 @@ class ExerciseList extends StatelessWidget {
         final count = counts[exercise] ?? 0;
 
         return ExerciseTile(
+          first: first,
           index: index,
           exercise: exercise,
           isSelected: index == selectedIndex,

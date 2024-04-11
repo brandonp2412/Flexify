@@ -30,6 +30,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late List<String> planExercises;
   PlanState? _planState;
 
+  bool first = true;
   String unit = 'kg';
   int selectedIndex = 0;
 
@@ -135,6 +136,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
   }
 
   Future<void> save(TimerState timerState, SettingsState settings) async {
+    setState(() {
+      first = false;
+    });
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
@@ -275,7 +279,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   }
 
                   return ExerciseList(
-                    planExercises: planExercises ?? [],
+                    planExercises: planExercises,
                     counts: counts,
                     selectedIndex: selectedIndex,
                     selectAllReps: select,
@@ -291,6 +295,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                           .copyWith(exercises: planExercises.join(',')));
                       widget.refresh();
                     },
+                    first: first,
                   );
                 },
               ),

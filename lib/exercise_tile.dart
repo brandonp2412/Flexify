@@ -12,6 +12,7 @@ class ExerciseTile extends StatelessWidget {
   final VoidCallback selectAllReps;
   final int count;
   final int index;
+  final bool first;
 
   const ExerciseTile({
     super.key,
@@ -20,6 +21,7 @@ class ExerciseTile extends StatelessWidget {
     required this.selectAllReps,
     required this.count,
     required this.index,
+    required this.first,
   });
 
   @override
@@ -110,7 +112,7 @@ class ExerciseTile extends StatelessWidget {
           ),
           TweenAnimationBuilder(
             tween: Tween<double>(begin: (count / 5) - 1, end: count / 5),
-            duration: const Duration(milliseconds: 150),
+            duration: Duration(milliseconds: first ? 0 : 150),
             builder: (context, value, child) => LinearProgressIndicator(
               value: value,
             ),
