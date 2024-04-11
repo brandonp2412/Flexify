@@ -18,9 +18,8 @@ class TimerProgressIndicator extends StatelessWidget {
         child: TweenAnimationBuilder(
           key: UniqueKey(),
           tween: Tween<double>(
-            begin: 1, // Start at 1 (full progress)
-            end: elapsed.inMilliseconds /
-                duration.inMilliseconds, // End at the current progress
+            begin: 1,
+            end: elapsed.inMilliseconds / duration.inMilliseconds,
           ),
           duration: remaining,
           builder: (context, value, child) => LinearProgressIndicator(
@@ -46,9 +45,8 @@ class TimerCircularProgressIndicator extends StatelessWidget {
           ? TweenAnimationBuilder(
               key: UniqueKey(),
               tween: Tween<double>(
-                begin: 1, // Start at 1 (full progress)
-                end: elapsed.inMilliseconds /
-                    duration.inMilliseconds, // End at the current progress
+                begin: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
+                end: 0,
               ),
               duration: remaining,
               builder: (context, value, child) =>
@@ -90,7 +88,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           width: 300,
           child: CircularProgressIndicator(
             strokeCap: StrokeCap.round,
-            value: value, // Use the updated value
+            value: value,
             strokeWidth: 20,
             backgroundColor:
                 Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
