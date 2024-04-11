@@ -9,6 +9,7 @@ class SettingsState extends ChangeNotifier {
   bool restTimers = true;
   bool showUnits = true;
   bool systemColors = true;
+  bool explainedPermissions = false;
   String dateFormat = "yyyy-MM-dd h:mm a";
 
   Future<void> init() async {
@@ -30,6 +31,14 @@ class SettingsState extends ChangeNotifier {
     restTimers = prefsInstance.getBool("restTimers") ?? true;
     showUnits = prefsInstance.getBool("showUnits") ?? true;
     dateFormat = prefsInstance.getString('dateFormat') ?? "yyyy-MM-dd h:mm a";
+    explainedPermissions =
+        prefsInstance.getBool('explainedPermissions') ?? false;
+  }
+
+  void setExplained(bool explained) {
+    explainedPermissions = explained;
+    notifyListeners();
+    prefs?.setBool('explainedPermissions', explained);
   }
 
   void setFormat(String format) {

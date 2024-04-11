@@ -2,10 +2,10 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/exercise_list.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -80,7 +80,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
     var last = await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.isIn(planExercises!))
+          ..where((tbl) => db.gymSets.name.isIn(planExercises))
           ..where(
               (tbl) => db.gymSets.created.isBiggerOrEqualValue(startOfToday))
           ..where(
@@ -93,7 +93,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
     last ??= await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(planExercises![0]))
+          ..where((tbl) => db.gymSets.name.equals(planExercises[0]))
           ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
@@ -106,7 +106,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
-    final index = planExercises!.indexOf(last.name);
+    final index = planExercises.indexOf(last.name);
 
     setState(() {
       selectedIndex = index;
@@ -118,7 +118,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    final exercise = planExercises!.elementAt(index);
+    final exercise = planExercises.elementAt(index);
     final last = await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..where((tbl) => db.gymSets.hidden.equals(false))
@@ -134,10 +134,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
   }
 
-  Future<void> save(TimerState timerState, SettingsState settingsState) async {
+  Future<void> save(TimerState timerState, SettingsState settings) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
-    final exercise = planExercises![selectedIndex];
+    final exercise = planExercises[selectedIndex];
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -148,9 +148,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
 
     db.into(db.gymSets).insert(gymSet);
-    await requestNotificationPermission();
+    if (!settings.explainedPermissions && settings.restTimers)
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PermissionsPage(),
+          ));
 
-    if (!settingsState.restTimers) return;
+    if (!settings.restTimers) return;
     final counts = await widget.countStream.first;
     final countIndex = counts
         .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
@@ -159,8 +164,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       count = counts[countIndex].read(db.gymSets.name.count())!;
     count++;
 
-    await timerState.startTimer(
-        "$exercise ($count)", settingsState.timerDuration);
+    await timerState.startTimer("$exercise ($count)", settings.timerDuration);
   }
 
   @override
@@ -170,7 +174,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
     final timerState = context.read<TimerState>();
-    final settingsState = context.watch<SettingsState>();
+    final settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -238,11 +242,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
               onTap: () {
                 selectWeight();
               },
-              onSubmitted: (value) async =>
-                  await save(timerState, settingsState),
+              onSubmitted: (value) async => await save(timerState, settings),
             ),
             Visibility(
-              visible: settingsState.showUnits,
+              visible: settings.showUnits,
               child: DropdownButtonFormField<String>(
                 value: unit,
                 decoration: const InputDecoration(labelText: 'Unit'),
@@ -281,11 +284,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
                         newIndex--;
                       }
 
-                      final temp = planExercises![oldIndex];
-                      planExercises!.removeAt(oldIndex);
-                      planExercises!.insert(newIndex, temp);
+                      final temp = planExercises[oldIndex];
+                      planExercises.removeAt(oldIndex);
+                      planExercises.insert(newIndex, temp);
                       await db.update(db.plans).replace(widget.plan
-                          .copyWith(exercises: planExercises!.join(',')));
+                          .copyWith(exercises: planExercises.join(',')));
                       widget.refresh();
                     },
                   );
@@ -296,7 +299,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await save(timerState, settingsState),
+        onPressed: () async => await save(timerState, settings),
         tooltip: "Save this set",
         child: const Icon(Icons.save),
       ),
