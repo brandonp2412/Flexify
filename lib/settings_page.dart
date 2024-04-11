@@ -2,8 +2,8 @@ import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/download_records_button.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/upload_records_button.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text("Light"),
               ),
             ],
-            onChanged: (value) async => await settings.setTheme(value!),
+            onChanged: (value) => settings.setTheme(value!),
           ),
         ),
       ),
@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: minutesController.text.length,
                         );
                       },
-                      onChanged: (value) async => await settings.setDuration(
+                      onChanged: (value) => settings.setDuration(
                         Duration(
                           minutes: int.parse(value),
                           seconds: settings.timerDuration.inSeconds % 60,
@@ -121,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: secondsController.text.length,
                         );
                       },
-                      onChanged: (value) async => await settings.setDuration(
+                      onChanged: (value) => settings.setDuration(
                         Duration(
                           seconds: int.parse(value),
                           minutes: settings.timerDuration.inMinutes.floor(),
@@ -161,10 +161,12 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'rest timers',
         widget: ListTile(
           title: const Text('Rest timers'),
-          onTap: () async => await settings.setTimers(!settings.restTimers),
+          onTap: () {
+            settings.setTimers(!settings.restTimers);
+          },
           trailing: Switch(
             value: settings.restTimers,
-            onChanged: (value) async => await settings.setTimers(value),
+            onChanged: (value) => settings.setTimers(value),
           ),
         ),
       ),
@@ -172,10 +174,10 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'reorder items',
         widget: ListTile(
           title: const Text('Re-order items'),
-          onTap: () async => await settings.setReorder(!settings.showReorder),
+          onTap: () => settings.setReorder(!settings.showReorder),
           trailing: Switch(
             value: settings.showReorder,
-            onChanged: (value) async => await settings.setReorder(value),
+            onChanged: (value) => settings.setReorder(value),
           ),
         ),
       ),
@@ -183,10 +185,10 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'show units',
         widget: ListTile(
           title: const Text('Show units'),
-          onTap: () async => await settings.setUnits(!settings.showUnits),
+          onTap: () => settings.setUnits(!settings.showUnits),
           trailing: Switch(
             value: settings.showUnits,
-            onChanged: (value) async => await settings.setUnits(value),
+            onChanged: (value) => settings.setUnits(value),
           ),
         ),
       ),
@@ -194,10 +196,10 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),
-          onTap: () async => await settings.setSystem(!settings.systemColors),
+          onTap: () => settings.setSystem(!settings.systemColors),
           trailing: Switch(
             value: settings.systemColors,
-            onChanged: (value) async => await settings.setSystem(value),
+            onChanged: (value) => settings.setSystem(value),
           ),
         ),
       ),
