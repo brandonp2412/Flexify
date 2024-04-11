@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/exercise_list.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -27,6 +28,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController repsController;
   late TextEditingController weightController;
   late List<String> planExercises;
+  PlanState? _planState;
 
   String unit = 'kg';
   int selectedIndex = 0;
@@ -40,6 +42,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
     repsController = TextEditingController(text: "0.0");
     weightController = TextEditingController(text: "0.0");
     planExercises = widget.plan.exercises.split(',');
+    final planState = context.read<PlanState>();
+    planState.addListener(_planChanged);
+    _planState = planState;
     getLast();
   }
 
@@ -49,7 +54,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
     weightController.dispose();
     repsNode.dispose();
     weightNode.dispose();
+    _planState?.removeListener(_planChanged);
     super.dispose();
+  }
+
+  void _planChanged() {
+    final split = _planState?.plans
+        .firstWhere((element) => element.id == widget.plan.id)
+        .exercises
+        .split(',');
+    setState(() {
+      if (split != null) planExercises = split;
+    });
   }
 
   void selectWeight() {
@@ -64,7 +80,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
     var last = await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.isIn(planExercises))
+          ..where((tbl) => db.gymSets.name.isIn(planExercises!))
           ..where(
               (tbl) => db.gymSets.created.isBiggerOrEqualValue(startOfToday))
           ..where(
@@ -77,7 +93,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
     last ??= await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(planExercises[0]))
+          ..where((tbl) => db.gymSets.name.equals(planExercises![0]))
           ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
@@ -90,7 +106,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     repsController.text = last.reps.toString();
     weightController.text = last.weight.toString();
-    final index = planExercises.indexOf(last.name);
+    final index = planExercises!.indexOf(last.name);
 
     setState(() {
       selectedIndex = index;
@@ -102,7 +118,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    final exercise = planExercises.elementAt(index);
+    final exercise = planExercises!.elementAt(index);
     final last = await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..where((tbl) => db.gymSets.hidden.equals(false))
@@ -121,7 +137,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   Future<void> save(TimerState timerState, SettingsState settingsState) async {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
-    final exercise = planExercises[selectedIndex];
+    final exercise = planExercises![selectedIndex];
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -256,7 +272,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   }
 
                   return ExerciseList(
-                    planExercises: planExercises,
+                    planExercises: planExercises ?? [],
                     counts: counts,
                     selectedIndex: selectedIndex,
                     selectAllReps: select,
@@ -265,11 +281,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
                         newIndex--;
                       }
 
-                      final temp = planExercises[oldIndex];
-                      planExercises.removeAt(oldIndex);
-                      planExercises.insert(newIndex, temp);
+                      final temp = planExercises![oldIndex];
+                      planExercises!.removeAt(oldIndex);
+                      planExercises!.insert(newIndex, temp);
                       await db.update(db.plans).replace(widget.plan
-                          .copyWith(exercises: planExercises.join(',')));
+                          .copyWith(exercises: planExercises!.join(',')));
                       widget.refresh();
                     },
                   );

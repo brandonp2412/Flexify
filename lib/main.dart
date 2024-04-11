@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/graphs_page.dart';
+import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/timer_progress_widgets.dart';
@@ -29,6 +30,7 @@ Widget appProviders(SettingsState settingsState) => MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => settingsState),
         ChangeNotifierProvider(create: (context) => TimerState()),
+        ChangeNotifierProvider(create: (context) => PlanState()),
       ],
       child: const App(),
     );

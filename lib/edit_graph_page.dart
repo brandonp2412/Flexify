@@ -1,8 +1,10 @@
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan_state.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EditGraphPage extends StatefulWidget {
   final String name;
@@ -49,6 +51,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ],
       updates: {db.plans},
     );
+    if (mounted) context.read<PlanState>().updatePlans(null);
   }
 
   @override
@@ -111,6 +114,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
           }
 
           if (!context.mounted) return;
+          Navigator.pop(context);
           Navigator.pop(context);
         },
         tooltip: "Update all records for this exercise",
