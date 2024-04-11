@@ -99,6 +99,7 @@ Future<void> appWrapper() async {
   WidgetsFlutterBinding.ensureInitialized();
   final settingsState = SettingsState();
   await settingsState.init();
+  settingsState.setTheme(ThemeMode.dark);
   runApp(app.appProviders(settingsState));
 }
 
