@@ -69,6 +69,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
               controller: nameController,
               focusNode: nameNode,
               decoration: const InputDecoration(labelText: "New name"),
+              textCapitalization: TextCapitalization.sentences,
             )
           ],
         ),

@@ -99,6 +99,7 @@ class _EditGymSetState extends State<EditGymSet> {
             TextField(
               controller: nameController,
               decoration: const InputDecoration(labelText: 'Name'),
+              textCapitalization: TextCapitalization.sentences,
             ),
             TextField(
               controller: repsController,

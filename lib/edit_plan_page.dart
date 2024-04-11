@@ -95,6 +95,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
           decoration:
               const material.InputDecoration(labelText: 'Title (optional)'),
           controller: titleController,
+          textCapitalization: TextCapitalization.sentences,
         ),
         const SizedBox(
           height: 16.0,
@@ -167,6 +168,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             ? TextField(
                 focusNode: searchNode,
                 controller: searchController,
+                textCapitalization: TextCapitalization.sentences,
                 onChanged: (value) => setState(() {
                   search = value;
                 }),
