@@ -46,13 +46,12 @@ git add "android/fastlane/metadata/android/en-US/changelogs/$new_build_number.tx
 git commit -m "Bump version to $major.$minor.$new_patch"
 git tag "$new_build_number"
 
-cd android
-
-./flutter/bin/flutter build appbundle
-fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
 ./flutter/bin/flutter build apk
 gh release create "$major.$minor.$new_patch" --notes "$last_commit" ../build/app/outputs/flutter-apk/app-release.apk
+
+./flutter/bin/flutter build appbundle
+cd android
+fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
 git push --tags
 git push
-
 cd ..
