@@ -24,6 +24,8 @@ function generate_screenshots() {
 generate_screenshots "phoneScreenshots"
 generate_screenshots "sevenInchScreenshots"
 generate_screenshots "tenInchScreenshots"
+./flutter/bin/flutter build apk
+./flutter/bin/flutter build appbundle
 
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
@@ -46,10 +48,8 @@ git add "android/fastlane/metadata/android/en-US/changelogs/$new_build_number.tx
 git commit -m "Bump version to $major.$minor.$new_patch"
 git tag "$new_build_number"
 
-./flutter/bin/flutter build apk
 gh release create "$major.$minor.$new_patch" --notes "$last_commit" ../build/app/outputs/flutter-apk/app-release.apk
 
-./flutter/bin/flutter build appbundle
 cd android
 fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
 git push --tags
