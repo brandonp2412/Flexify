@@ -24,8 +24,8 @@ function generate_screenshots() {
 generate_screenshots "phoneScreenshots"
 generate_screenshots "sevenInchScreenshots"
 generate_screenshots "tenInchScreenshots"
-./flutter/bin/flutter build apk
-./flutter/bin/flutter build appbundle
+flutter build apk
+flutter build appbundle
 
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
