@@ -3,7 +3,7 @@
 set -e
 
 function generate_screenshots() {
-  emulator -avd "$1" &> /dev/null &
+  emulator -avd "$1" -feature -Vulkan -no-boot-anim -noaudio &> /dev/null &
 
   while true; do  
     for device in $(adb devices | awk 'NR>1{print $1}' | grep emulator); do
