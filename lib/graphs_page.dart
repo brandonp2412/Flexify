@@ -33,7 +33,8 @@ class _GraphsPageState extends State<GraphsPage> {
           ..addColumns([
             db.gymSets.name,
             db.gymSets.unit,
-            db.gymSets.weight.max(),
+            db.gymSets.weight,
+            db.gymSets.reps,
             db.gymSets.created.max()
           ])
           ..orderBy([
@@ -209,8 +210,9 @@ class _GraphsPageState extends State<GraphsPage> {
                         index > 0 ? filteredGymSets[index - 1] : null;
 
                     final name = gymSet.read(db.gymSets.name)!;
-                    final weight = gymSet.read(db.gymSets.weight.max())!;
+                    final weight = gymSet.read(db.gymSets.weight)!;
                     final unit = gymSet.read(db.gymSets.unit)!;
+                    final reps = gymSet.read(db.gymSets.reps)!;
                     final created = gymSet.read(db.gymSets.created.max())!;
                     final previousCreated =
                         previousGymSet?.read(db.gymSets.created.max())!;
@@ -226,6 +228,7 @@ class _GraphsPageState extends State<GraphsPage> {
                           name: name,
                           weight: weight,
                           unit: unit,
+                          reps: reps,
                           created: created,
                           onSelect: (value) {
                             if (selected.contains(value))

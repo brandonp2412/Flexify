@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class GraphTile extends StatelessWidget {
   final String name;
   final double weight;
+  final double reps;
   final DateTime created;
   final String unit;
   final Set<String> selected;
@@ -21,7 +22,8 @@ class GraphTile extends StatelessWidget {
       required this.created,
       required this.unit,
       required this.selected,
-      required this.onSelect});
+      required this.onSelect,
+      required this.reps});
 
   Future<int> getCount() async {
     final result = await (db.gymSets.selectOnly()
@@ -40,7 +42,7 @@ class GraphTile extends StatelessWidget {
       title: Text(name),
       subtitle: Text(DateFormat(settings.dateFormat).format(created)),
       trailing: Text(
-        "$weight$unit",
+        "$reps x $weight$unit",
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () {
