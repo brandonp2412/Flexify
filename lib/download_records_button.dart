@@ -20,7 +20,7 @@ class DownloadRecordsButton extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                       leading: const Icon(Icons.insights),
-                      title: const Text('Gym sets'),
+                      title: const Text('Graphs'),
                       onTap: () async {
                         Navigator.pop(context);
                         final gymSets = await db.gymSets.select().get();
@@ -41,7 +41,7 @@ class DownloadRecordsButton extends StatelessWidget {
                         if (!await requestNotificationPermission()) return;
                         final csv = const ListToCsvConverter(eol: "\n")
                             .convert(csvData);
-                        android.invokeMethod('save', ['gym_sets.csv', csv]);
+                        android.invokeMethod('save', ['graphs.csv', csv]);
                       }),
                   ListTile(
                     leading: const Icon(Icons.event),

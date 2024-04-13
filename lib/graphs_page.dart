@@ -138,7 +138,7 @@ class _GraphsPageState extends State<GraphsPage> {
                               return AlertDialog(
                                 title: const Text('Confirm Delete'),
                                 content: Text(
-                                    'Are you sure you want to delete ${selected.length} gym sets? This action is not reversible.'),
+                                    'Are you sure you want to delete ${selected.length} graphs? This action is not reversible.'),
                                 actions: <Widget>[
                                   TextButton(
                                     child: const Text('Cancel'),

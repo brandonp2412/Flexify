@@ -2,8 +2,11 @@ import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
 class DeleteRecordsButton extends StatelessWidget {
+  final BuildContext pageContext;
+
   const DeleteRecordsButton({
     super.key,
+    required this.pageContext,
   });
 
   @override
@@ -37,13 +40,12 @@ class DeleteRecordsButton extends StatelessWidget {
                               TextButton(
                                 child: const Text('Delete'),
                                 onPressed: () async {
-                                  Navigator.of(context).pop();
+                                  Navigator.pop(context);
                                   await db.delete(db.gymSets).go();
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Deleted all graphs.')),
-                                  );
+                                  if (!pageContext.mounted) return;
+                                  Navigator.pop(pageContext);
+                                  DefaultTabController.of(pageContext)
+                                      .animateTo(1);
                                 },
                               ),
                             ],
@@ -76,11 +78,10 @@ class DeleteRecordsButton extends StatelessWidget {
                                 onPressed: () async {
                                   Navigator.of(context).pop();
                                   await db.delete(db.plans).go();
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Deleted all plans.')),
-                                  );
+                                  if (!pageContext.mounted) return;
+                                  Navigator.pop(pageContext);
+                                  DefaultTabController.of(pageContext)
+                                      .animateTo(0);
                                 },
                               ),
                             ],

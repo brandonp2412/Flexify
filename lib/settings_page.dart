@@ -216,9 +216,16 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       WidgetSettings(
           key: 'download csv', widget: const DownloadRecordsButton()),
-      WidgetSettings(key: 'upload csv', widget: const UploadRecordsButton()),
       WidgetSettings(
-          key: 'delete records', widget: const DeleteRecordsButton()),
+          key: 'upload csv',
+          widget: UploadRecordsButton(
+            pageContext: context,
+          )),
+      WidgetSettings(
+          key: 'delete records',
+          widget: DeleteRecordsButton(
+            pageContext: context,
+          )),
     ];
 
     return Scaffold(

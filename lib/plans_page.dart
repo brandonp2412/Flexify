@@ -218,7 +218,7 @@ class _PlanWidget extends StatelessWidget {
     if (filtered.isEmpty)
       return const ListTile(
         title: Text("No plans yet."),
-        subtitle: Text("Tap the ➕ button in the bottom right to add plans."),
+        subtitle: Text("Tap the plus button in the bottom right to add plans."),
       );
 
     return Expanded(

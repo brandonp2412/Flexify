@@ -128,7 +128,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Edit gym sets',
+        tooltip: 'Edit graph',
         child: const Icon(Icons.edit),
         onPressed: () => Navigator.push(
             context,

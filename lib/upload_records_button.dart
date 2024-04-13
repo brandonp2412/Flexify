@@ -6,8 +6,11 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
 class UploadRecordsButton extends StatelessWidget {
+  final BuildContext pageContext;
+
   const UploadRecordsButton({
     super.key,
+    required this.pageContext,
   });
 
   @override
@@ -21,7 +24,7 @@ class UploadRecordsButton extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.insights),
-                    title: const Text('Gym sets'),
+                    title: const Text('Graphs'),
                     onTap: () async {
                       Navigator.pop(context);
                       String csv = await android.invokeMethod('read');
@@ -41,10 +44,9 @@ class UploadRecordsButton extends StatelessWidget {
                         await db.batch(
                           (batch) => batch.insertAll(db.gymSets, gymSets),
                         );
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Uploaded gym sets.')),
-                        );
+                        if (!pageContext.mounted) return;
+                        Navigator.pop(pageContext);
+                        DefaultTabController.of(pageContext).animateTo(1);
                       } catch (e) {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -71,16 +73,14 @@ class UploadRecordsButton extends StatelessWidget {
                             title: Value(row.elementAtOrNull(3)),
                           ),
                         );
-                        await db.batch(
+                        db.batch(
                           (batch) => batch.insertAll(db.plans, plans),
                         );
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Uploaded plans.')),
-                        );
+                        if (!pageContext.mounted) return;
+                        Navigator.pop(pageContext);
+                        DefaultTabController.of(pageContext).animateTo(0);
                       } catch (e) {
                         if (!context.mounted) return;
-                        debugPrint(e.toString());
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text('Failed to upload csv.')),
