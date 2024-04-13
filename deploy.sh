@@ -39,8 +39,8 @@ new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 
-flutter build apk || git restore pubspec.yaml android/fastlane/metadata && exit 1
-flutter build appbundle || git restore pubspec.yaml android/fastlane/metadata && exit 1
+flutter build apk || (git restore pubspec.yaml android/fastlane/metadata && exit 1)
+flutter build appbundle || (git restore pubspec.yaml android/fastlane/metadata && exit 1)
 
 git add pubspec.yaml
 git add android/fastlane/metadata
