@@ -24,8 +24,6 @@ function generate_screenshots() {
 generate_screenshots "phoneScreenshots"
 generate_screenshots "sevenInchScreenshots"
 generate_screenshots "tenInchScreenshots"
-flutter build apk
-flutter build appbundle
 
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
@@ -40,6 +38,11 @@ last_commit=$(git log -1 --pretty=%B | head -n 1)
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
+
+{
+  flutter build apk
+  flutter build appbundle
+} || git checkout -- pubspec.yaml && git checkout -- android/fastlane/metadata && exit 1
 
 git add pubspec.yaml
 git add android/fastlane/metadata
