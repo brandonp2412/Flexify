@@ -155,7 +155,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     );
 
     db.into(db.gymSets).insert(gymSet);
-    if (!settings.explainedPermissions && settings.restTimers)
+    if (!settings.explainedPermissions && settings.restTimers && mounted)
       await Navigator.push(
           context,
           MaterialPageRoute(
