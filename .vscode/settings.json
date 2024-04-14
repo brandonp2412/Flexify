@@ -1,5 +1,8 @@
 {
   "dart.flutterSdkPath": ".fvm/versions/3.19.5",
   "git.detectSubmodules": false,
-  "git.detectSubmodulesLimit": 0
+  "git.detectSubmodulesLimit": 0,
+  "dart.analysisExcludedFolders": [
+      "flutter"
+  ]
 }
