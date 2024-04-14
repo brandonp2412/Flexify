@@ -31,29 +31,31 @@ class UploadRecordsButton extends StatelessWidget {
                       List<List<dynamic>> rows =
                           const CsvToListConverter(eol: "\n").convert(csv);
                       if (rows.isEmpty) return;
-                      try {
-                        final gymSets = rows.map(
-                          (row) => GymSetsCompanion(
-                            name: Value(row[1]),
-                            reps: Value(row[2]),
-                            weight: Value(row[3]),
-                            created: Value(parseDate(row[4])),
-                            unit: Value(row[5]),
-                          ),
-                        );
-                        await db.batch(
-                          (batch) => batch.insertAll(db.gymSets, gymSets),
-                        );
-                        if (!pageContext.mounted) return;
-                        Navigator.pop(pageContext);
-                        DefaultTabController.of(pageContext).animateTo(1);
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Failed to upload csv.')),
-                        );
-                      }
+
+                      final gymSets = rows.map(
+                        (row) => GymSetsCompanion(
+                          name: Value(row[1]),
+                          reps: Value(row[2]),
+                          weight: Value(row[3]),
+                          created: Value(parseDate(row[4])),
+                          unit: Value(row[5]),
+                          bodyWeight: Value(row.elementAtOrNull(6) ?? 0),
+                        ),
+                      );
+                      await db.batch(
+                        (batch) => batch.insertAll(db.gymSets, gymSets),
+                      );
+
+                      final weightSet = await getBodyWeight();
+                      if (weightSet != null)
+                        (db.gymSets.update()
+                              ..where((tbl) => tbl.bodyWeight.equals(0)))
+                            .write(GymSetsCompanion(
+                                bodyWeight: Value(weightSet.weight)));
+
+                      if (!pageContext.mounted) return;
+                      Navigator.pop(pageContext);
+                      DefaultTabController.of(pageContext).animateTo(1);
                     },
                   ),
                   ListTile(

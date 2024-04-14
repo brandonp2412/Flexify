@@ -16,6 +16,7 @@ class GraphData {
   final double volume;
   final double oneRepMax;
   final String unit;
+  final double relativeStrength;
 
   GraphData(
       {required this.created,
@@ -23,6 +24,7 @@ class GraphData {
       required this.maxWeight,
       required this.volume,
       required this.oneRepMax,
+      required this.relativeStrength,
       required this.unit});
 }
 
@@ -43,6 +45,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           const drift.Variable(0.0278) * db.gymSets.reps);
   final volume =
       const drift.CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
+  final relativeStrength = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 
   @override
   void initState() {
@@ -55,6 +58,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             db.gymSets.created,
             db.gymSets.reps,
             db.gymSets.unit,
+            relativeStrength,
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
@@ -109,11 +113,15 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                   ),
                   DropdownMenuItem(
                     value: Metric.oneRepMax,
-                    child: Text("One rep max (estimate)"),
+                    child: Text("One rep max"),
                   ),
                   DropdownMenuItem(
                     value: Metric.volume,
                     child: Text("Volume"),
+                  ),
+                  DropdownMenuItem(
+                    value: Metric.relativeStrength,
+                    child: Text("Relative strength"),
                   ),
                 ],
                 onChanged: (value) {
@@ -159,6 +167,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 oneRepMax: row.read(oneRepMax)!,
                 volume: row.read(volume)!,
                 unit: row.read(db.gymSets.unit)!,
+                relativeStrength: row.read(relativeStrength) ?? 0,
                 maxWeight: row.read(db.gymSets.weight.max())!))
             .toList();
 
@@ -175,6 +184,15 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           maxRow = rows.reduce((a, b) => a.volume > b.volume ? a : b);
           minY = (minRow.volume - minRow.volume * 0.25).floorToDouble();
           maxY = (maxRow.volume + maxRow.volume * 0.25).ceilToDouble();
+        } else if (metric == Metric.relativeStrength) {
+          minRow = rows.reduce(
+              (a, b) => a.relativeStrength < b.relativeStrength ? a : b);
+          maxRow = rows.reduce(
+              (a, b) => a.relativeStrength > b.relativeStrength ? a : b);
+          minY = (minRow.relativeStrength - minRow.relativeStrength * 0.25)
+              .floorToDouble();
+          maxY = (maxRow.relativeStrength + maxRow.relativeStrength * 0.25)
+              .ceilToDouble();
         } else {
           minRow = rows.reduce((a, b) => a.maxWeight < b.maxWeight ? a : b);
           maxRow = rows.reduce((a, b) => a.maxWeight > b.maxWeight ? a : b);
@@ -194,6 +212,13 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               .asMap()
               .entries
               .map((row) => FlSpot(row.key.toDouble(), row.value.volume))
+              .toList();
+        } else if (metric == Metric.relativeStrength) {
+          spots = rows
+              .asMap()
+              .entries
+              .map((row) =>
+                  FlSpot(row.key.toDouble(), row.value.relativeStrength))
               .toList();
         } else {
           spots = rows
@@ -246,6 +271,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         if (metric == Metric.oneRepMax)
           text =
               "${row.oneRepMax.toStringAsFixed(2)}${row.unit} ${row.created}";
+        else if (metric == Metric.relativeStrength)
+          text = "${(row.relativeStrength).toStringAsFixed(2)} ${row.created}";
         else if (metric == Metric.volume)
           text = "${row.volume}${row.unit} ${row.created}";
         else if (metric == Metric.bestWeight)

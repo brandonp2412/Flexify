@@ -17,6 +17,7 @@ class _EditGymSetState extends State<EditGymSet> {
   late TextEditingController nameController;
   late TextEditingController repsController;
   late TextEditingController weightController;
+  late TextEditingController bodyWeightController;
   late String unit;
   late DateTime created;
 
@@ -29,6 +30,8 @@ class _EditGymSetState extends State<EditGymSet> {
         TextEditingController(text: widget.gymSet.name.value.toString());
     weightController =
         TextEditingController(text: widget.gymSet.weight.value.toString());
+    bodyWeightController =
+        TextEditingController(text: widget.gymSet.bodyWeight.value.toString());
     unit = widget.gymSet.unit.value;
     created = widget.gymSet.created.value;
   }
@@ -44,12 +47,14 @@ class _EditGymSetState extends State<EditGymSet> {
     Navigator.pop(context);
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
+    final bodyWeight = double.parse(bodyWeightController.text);
 
     final gymSet = widget.gymSet.copyWith(
         reps: Value(reps),
         weight: Value(weight),
         unit: Value(unit),
         created: Value(created),
+        bodyWeight: Value(bodyWeight),
         name: Value(nameController.text));
     db.update(db.gymSets).replace(gymSet);
   }
@@ -110,11 +115,23 @@ class _EditGymSetState extends State<EditGymSet> {
             ),
             TextField(
               controller: weightController,
-              decoration: InputDecoration(labelText: 'Weight ($unit)'),
+              decoration: InputDecoration(
+                  labelText: nameController.text == 'Weight'
+                      ? 'Value ($unit)'
+                      : 'Weight ($unit)'),
               keyboardType: TextInputType.number,
               onTap: () => weightController.selection = TextSelection(
                   baseOffset: 0, extentOffset: weightController.text.length),
             ),
+            if (nameController.text != 'Weight')
+              TextField(
+                controller: bodyWeightController,
+                decoration: InputDecoration(labelText: 'Body weight ($unit)'),
+                keyboardType: TextInputType.number,
+                onTap: () => bodyWeightController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: bodyWeightController.text.length),
+              ),
             DropdownButtonFormField<String>(
               value: unit,
               decoration: const InputDecoration(labelText: 'Unit'),

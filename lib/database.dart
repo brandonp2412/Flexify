@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -20,6 +21,7 @@ class GymSets extends Table {
   TextColumn get unit => text()();
   DateTimeColumn get created => dateTime()();
   BoolColumn get hidden => boolean().withDefault(const Constant(false))();
+  RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
 }
 
 class Plans extends Table {
@@ -35,7 +37,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   final defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
         created: Value(DateTime.now()),
@@ -70,6 +72,14 @@ class AppDatabase extends _$AppDatabase {
         if (from < 5) {
           await m.addColumn(gymSets, gymSets.hidden);
           await db.batch((batch) => batch.insertAll(db.gymSets, defaultSets));
+        }
+        if (from < 6) {
+          await m.addColumn(gymSets, gymSets.bodyWeight);
+          final bodyWeight = await getBodyWeight();
+          if (bodyWeight?.weight == null) return;
+
+          await (db.gymSets.update())
+              .write(GymSetsCompanion(bodyWeight: Value(bodyWeight!.weight)));
         }
       },
     );

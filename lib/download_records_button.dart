@@ -25,7 +25,15 @@ class DownloadRecordsButton extends StatelessWidget {
                         Navigator.pop(context);
                         final gymSets = await db.gymSets.select().get();
                         final List<List<dynamic>> csvData = [
-                          ['id', 'name', 'reps', 'weight', 'created', 'unit']
+                          [
+                            'id',
+                            'name',
+                            'reps',
+                            'weight',
+                            'created',
+                            'unit',
+                            'bodyWeight'
+                          ]
                         ];
                         for (var gymSet in gymSets) {
                           csvData.add([
@@ -35,6 +43,7 @@ class DownloadRecordsButton extends StatelessWidget {
                             gymSet.weight,
                             gymSet.created.toIso8601String(),
                             gymSet.unit,
+                            gymSet.bodyWeight,
                           ]);
                         }
 

@@ -6,6 +6,7 @@ import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -142,6 +143,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final reps = double.parse(repsController.text);
     final weight = double.parse(weightController.text);
     final exercise = planExercises[selectedIndex];
+    final weightSet = await getBodyWeight();
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -149,6 +151,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       weight: weight,
       unit: unit,
       created: DateTime.now(),
+      bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
     );
 
     db.into(db.gymSets).insert(gymSet);
@@ -222,24 +225,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     tooltip: "Use body weight",
                     icon: const Icon(Icons.scale),
                     onPressed: () async {
-                      final weights = await (db.gymSets.select()
-                            ..where((tbl) => tbl.name.equals('Weight'))
-                            ..orderBy(
-                              [
-                                (u) => drift.OrderingTerm(
-                                    expression: u.created,
-                                    mode: drift.OrderingMode.desc)
-                              ],
-                            )
-                            ..limit(1))
-                          .get();
-                      if (!context.mounted) return;
-                      if (weights.isEmpty)
+                      final weightSet = await getBodyWeight();
+                      if (weightSet == null && context.mounted)
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('No weight entered yet.')));
                       else
-                        weightController.text = weights.first.weight.toString();
+                        weightController.text = weightSet!.weight.toString();
                     },
                   )),
               keyboardType: TextInputType.number,

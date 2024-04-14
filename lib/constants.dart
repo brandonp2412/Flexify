@@ -5,6 +5,7 @@ enum Metric {
   oneRepMax,
   volume,
   bestWeight,
+  relativeStrength,
 }
 
 const weekdays = [

@@ -338,9 +338,17 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("hidden" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _bodyWeightMeta =
+      const VerificationMeta('bodyWeight');
+  @override
+  late final GeneratedColumn<double> bodyWeight = GeneratedColumn<double>(
+      'body_weight', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, reps, weight, unit, created, hidden];
+      [id, name, reps, weight, unit, created, hidden, bodyWeight];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -388,6 +396,12 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       context.handle(_hiddenMeta,
           hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta));
     }
+    if (data.containsKey('body_weight')) {
+      context.handle(
+          _bodyWeightMeta,
+          bodyWeight.isAcceptableOrUnknown(
+              data['body_weight']!, _bodyWeightMeta));
+    }
     return context;
   }
 
@@ -411,6 +425,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created'])!,
       hidden: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}hidden'])!,
+      bodyWeight: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}body_weight'])!,
     );
   }
 
@@ -428,6 +444,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final String unit;
   final DateTime created;
   final bool hidden;
+  final double bodyWeight;
   const GymSet(
       {required this.id,
       required this.name,
@@ -435,7 +452,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.weight,
       required this.unit,
       required this.created,
-      required this.hidden});
+      required this.hidden,
+      required this.bodyWeight});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -446,6 +464,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     map['unit'] = Variable<String>(unit);
     map['created'] = Variable<DateTime>(created);
     map['hidden'] = Variable<bool>(hidden);
+    map['body_weight'] = Variable<double>(bodyWeight);
     return map;
   }
 
@@ -458,6 +477,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       unit: Value(unit),
       created: Value(created),
       hidden: Value(hidden),
+      bodyWeight: Value(bodyWeight),
     );
   }
 
@@ -472,6 +492,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       unit: serializer.fromJson<String>(json['unit']),
       created: serializer.fromJson<DateTime>(json['created']),
       hidden: serializer.fromJson<bool>(json['hidden']),
+      bodyWeight: serializer.fromJson<double>(json['bodyWeight']),
     );
   }
   @override
@@ -485,6 +506,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'unit': serializer.toJson<String>(unit),
       'created': serializer.toJson<DateTime>(created),
       'hidden': serializer.toJson<bool>(hidden),
+      'bodyWeight': serializer.toJson<double>(bodyWeight),
     };
   }
 
@@ -495,7 +517,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? weight,
           String? unit,
           DateTime? created,
-          bool? hidden}) =>
+          bool? hidden,
+          double? bodyWeight}) =>
       GymSet(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -504,6 +527,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         unit: unit ?? this.unit,
         created: created ?? this.created,
         hidden: hidden ?? this.hidden,
+        bodyWeight: bodyWeight ?? this.bodyWeight,
       );
   @override
   String toString() {
@@ -514,14 +538,15 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('weight: $weight, ')
           ..write('unit: $unit, ')
           ..write('created: $created, ')
-          ..write('hidden: $hidden')
+          ..write('hidden: $hidden, ')
+          ..write('bodyWeight: $bodyWeight')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, name, reps, weight, unit, created, hidden);
+      Object.hash(id, name, reps, weight, unit, created, hidden, bodyWeight);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -532,7 +557,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.weight == this.weight &&
           other.unit == this.unit &&
           other.created == this.created &&
-          other.hidden == this.hidden);
+          other.hidden == this.hidden &&
+          other.bodyWeight == this.bodyWeight);
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
@@ -543,6 +569,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<String> unit;
   final Value<DateTime> created;
   final Value<bool> hidden;
+  final Value<double> bodyWeight;
   const GymSetsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -551,6 +578,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.unit = const Value.absent(),
     this.created = const Value.absent(),
     this.hidden = const Value.absent(),
+    this.bodyWeight = const Value.absent(),
   });
   GymSetsCompanion.insert({
     this.id = const Value.absent(),
@@ -560,6 +588,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     required String unit,
     required DateTime created,
     this.hidden = const Value.absent(),
+    this.bodyWeight = const Value.absent(),
   })  : name = Value(name),
         reps = Value(reps),
         weight = Value(weight),
@@ -573,6 +602,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<String>? unit,
     Expression<DateTime>? created,
     Expression<bool>? hidden,
+    Expression<double>? bodyWeight,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -582,6 +612,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (unit != null) 'unit': unit,
       if (created != null) 'created': created,
       if (hidden != null) 'hidden': hidden,
+      if (bodyWeight != null) 'body_weight': bodyWeight,
     });
   }
 
@@ -592,7 +623,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? weight,
       Value<String>? unit,
       Value<DateTime>? created,
-      Value<bool>? hidden}) {
+      Value<bool>? hidden,
+      Value<double>? bodyWeight}) {
     return GymSetsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -601,6 +633,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       unit: unit ?? this.unit,
       created: created ?? this.created,
       hidden: hidden ?? this.hidden,
+      bodyWeight: bodyWeight ?? this.bodyWeight,
     );
   }
 
@@ -628,6 +661,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (hidden.present) {
       map['hidden'] = Variable<bool>(hidden.value);
     }
+    if (bodyWeight.present) {
+      map['body_weight'] = Variable<double>(bodyWeight.value);
+    }
     return map;
   }
 
@@ -640,7 +676,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('weight: $weight, ')
           ..write('unit: $unit, ')
           ..write('created: $created, ')
-          ..write('hidden: $hidden')
+          ..write('hidden: $hidden, ')
+          ..write('bodyWeight: $bodyWeight')
           ..write(')'))
         .toString();
   }
