@@ -53,7 +53,7 @@ git add "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git commit -m "Bump version to $new_version"
 git tag "$new_build_number"
 
-gh release create "$new_version" --notes "${changelog:-last_commit}"  \
+gh release create "$new_version" --notes "${changelog:-$last_commit}"  \
   build/app/outputs/flutter-apk/app-*-release.apk
 
 fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
