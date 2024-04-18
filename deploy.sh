@@ -10,8 +10,8 @@ function generate_screenshots() {
       name=$(adb -s $device emu avd name | head -n 1 | tr -d '\r') 
       [ "$name" = "$1" ] && break
     done
-
-    adb -s "$device" get-state | grep -q device && [ "$name" = "$1" ] \
+    boot_completed=$(adb -s "$device" shell getprop sys.boot_completed | tr -d '\r')
+    adb -s "$device" get-state | grep -q device && [ "$name" = "$1" ] && [ "$boot_completed" = "1" ] \
       && break
     sleep 1
   done
