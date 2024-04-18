@@ -11,7 +11,7 @@ class SettingsState extends ChangeNotifier {
   bool systemColors = true;
   bool explainedPermissions = false;
   bool hideTimerTab = false;
-  String dateFormat = "yyyy-MM-dd h:mm a";
+  String dateFormat = 'dd/MM/yy';
 
   Future<void> init() async {
     final prefsInstance = await SharedPreferences.getInstance();
