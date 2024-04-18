@@ -4,5 +4,14 @@
   "git.detectSubmodulesLimit": 0,
   "dart.analysisExcludedFolders": [
       "flutter"
-  ]
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "flutter/": true,
+  }
 }
