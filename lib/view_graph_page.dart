@@ -37,28 +37,29 @@ class ViewGraphPage extends StatefulWidget {
 }
 
 class _ViewGraphPageState extends State<ViewGraphPage> {
-  late Stream<List<drift.TypedResult>> graphStream;
-  Metric metric = Metric.bestWeight;
+  late Stream<List<drift.TypedResult>> _graphStream;
+  Metric _metric = Metric.bestWeight;
+  String _targetUnit = 'kg';
 
-  final oneRepMax = db.gymSets.weight /
+  final _oneRepMax = db.gymSets.weight /
       (const drift.Variable(1.0278) -
           const drift.Variable(0.0278) * db.gymSets.reps);
-  final volume =
+  final _volume =
       const drift.CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-  final relativeStrength = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+  final _relativeStrength = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 
   @override
   void initState() {
     super.initState();
-    graphStream = (db.selectOnly(db.gymSets)
+    _graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
             db.gymSets.weight.max(),
-            volume,
-            oneRepMax,
+            _volume,
+            _oneRepMax,
             db.gymSets.created,
             db.gymSets.reps,
             db.gymSets.unit,
-            relativeStrength,
+            _relativeStrength,
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
@@ -105,7 +106,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             Visibility(
               visible: widget.name != "Weight",
               child: DropdownButtonFormField(
-                value: metric,
+                decoration: const InputDecoration(labelText: 'Metric'),
+                value: _metric,
                 items: const [
                   DropdownMenuItem(
                     value: Metric.bestWeight,
@@ -126,10 +128,25 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 ],
                 onChanged: (value) {
                   setState(() {
-                    metric = value!;
+                    _metric = value!;
                   });
                 },
               ),
+            ),
+            DropdownButtonFormField<String>(
+              value: _targetUnit,
+              decoration: const InputDecoration(labelText: 'Unit'),
+              items: ['kg', 'lb'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _targetUnit = newValue!;
+                });
+              },
             ),
             graphBuilder(settings),
           ],
@@ -149,7 +166,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
 
   StreamBuilder<List<drift.TypedResult>> graphBuilder(SettingsState settings) {
     return StreamBuilder<List<drift.TypedResult>>(
-      stream: graphStream,
+      stream: _graphStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox();
         if (snapshot.data?.isEmpty == true)
@@ -159,32 +176,52 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             contentPadding: EdgeInsets.zero,
           );
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
-        final rows = snapshot.data!.reversed
-            .map((row) => GraphData(
-                created: DateFormat(settings.dateFormat)
-                    .format(row.read(db.gymSets.created)!),
-                reps: row.read(db.gymSets.reps)!,
-                oneRepMax: row.read(oneRepMax)!,
-                volume: row.read(volume)!,
-                unit: row.read(db.gymSets.unit)!,
-                relativeStrength: row.read(relativeStrength) ?? 0,
-                maxWeight: row.read(db.gymSets.weight.max())!))
-            .toList();
+        final rows = snapshot.data!.reversed.map((row) {
+          final unit = row.read(db.gymSets.unit)!;
+          var maxWeight = row.read(db.gymSets.weight.max())!;
+          var oneRepMax = row.read(_oneRepMax)!;
+          var volume = row.read(_volume)!;
+          var relativeStrength = row.read(_relativeStrength) ?? 0;
+
+          double conversionFactor = 1;
+
+          if (unit == 'lb' && _targetUnit == 'kg') {
+            conversionFactor = 0.45359237;
+          } else if (unit == 'kg' && _targetUnit == 'lb') {
+            conversionFactor = 2.20462262;
+          }
+
+          maxWeight *= conversionFactor;
+          oneRepMax *= conversionFactor;
+          volume *= conversionFactor;
+          relativeStrength *= conversionFactor;
+
+          return GraphData(
+            maxWeight: maxWeight,
+            oneRepMax: oneRepMax,
+            volume: volume,
+            relativeStrength: relativeStrength,
+            created: DateFormat(settings.dateFormat)
+                .format(row.read(db.gymSets.created)!),
+            reps: row.read(db.gymSets.reps)!,
+            unit: row.read(db.gymSets.unit)!,
+          );
+        }).toList();
 
         GraphData minRow, maxRow;
         double minY, maxY;
 
-        if (metric == Metric.oneRepMax) {
+        if (_metric == Metric.oneRepMax) {
           minRow = rows.reduce((a, b) => a.oneRepMax < b.oneRepMax ? a : b);
           maxRow = rows.reduce((a, b) => a.oneRepMax > b.oneRepMax ? a : b);
           minY = (minRow.oneRepMax - minRow.oneRepMax * 0.25).floorToDouble();
           maxY = (maxRow.oneRepMax + maxRow.oneRepMax * 0.25).ceilToDouble();
-        } else if (metric == Metric.volume) {
+        } else if (_metric == Metric.volume) {
           minRow = rows.reduce((a, b) => a.volume < b.volume ? a : b);
           maxRow = rows.reduce((a, b) => a.volume > b.volume ? a : b);
           minY = (minRow.volume - minRow.volume * 0.25).floorToDouble();
           maxY = (maxRow.volume + maxRow.volume * 0.25).ceilToDouble();
-        } else if (metric == Metric.relativeStrength) {
+        } else if (_metric == Metric.relativeStrength) {
           minRow = rows.reduce(
               (a, b) => a.relativeStrength < b.relativeStrength ? a : b);
           maxRow = rows.reduce(
@@ -201,19 +238,19 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         }
 
         List<FlSpot> spots;
-        if (metric == Metric.oneRepMax) {
+        if (_metric == Metric.oneRepMax) {
           spots = rows
               .asMap()
               .entries
               .map((row) => FlSpot(row.key.toDouble(), row.value.oneRepMax))
               .toList();
-        } else if (metric == Metric.volume) {
+        } else if (_metric == Metric.volume) {
           spots = rows
               .asMap()
               .entries
               .map((row) => FlSpot(row.key.toDouble(), row.value.volume))
               .toList();
-        } else if (metric == Metric.relativeStrength) {
+        } else if (_metric == Metric.relativeStrength) {
           spots = rows
               .asMap()
               .entries
@@ -268,15 +305,16 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
         String text = "";
-        if (metric == Metric.oneRepMax)
+        if (_metric == Metric.oneRepMax)
           text =
-              "${row.oneRepMax.toStringAsFixed(2)}${row.unit} ${row.created}";
-        else if (metric == Metric.relativeStrength)
+              "${row.oneRepMax.toStringAsFixed(2)}$_targetUnit ${row.created}";
+        else if (_metric == Metric.relativeStrength)
           text = "${(row.relativeStrength).toStringAsFixed(2)} ${row.created}";
-        else if (metric == Metric.volume)
-          text = "${row.volume}${row.unit} ${row.created}";
-        else if (metric == Metric.bestWeight)
-          text = "${row.reps} ${row.maxWeight}${row.unit} ${row.created}";
+        else if (_metric == Metric.volume)
+          text = "${row.volume}$_targetUnit ${row.created}";
+        else if (_metric == Metric.bestWeight)
+          text =
+              "${row.reps} x ${row.maxWeight.toStringAsFixed(2)}$_targetUnit ${row.created}";
         return [
           LineTooltipItem(text,
               TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color))
