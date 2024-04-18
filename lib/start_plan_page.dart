@@ -154,7 +154,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
     );
 
-    db.into(db.gymSets).insert(gymSet);
     if (!settings.explainedPermissions && settings.restTimers && mounted)
       await Navigator.push(
           context,
@@ -170,6 +169,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (countIndex != -1)
       count = counts[countIndex].read(db.gymSets.name.count())!;
     count++;
+
+    db.into(db.gymSets).insert(gymSet);
 
     await timerState.startTimer("$exercise ($count)", settings.timerDuration);
   }
