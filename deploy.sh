@@ -56,8 +56,6 @@ git tag "$new_build_number"
 gh release create "$new_version" --notes "${changelog:-last_commit}"  \
   build/app/outputs/flutter-apk/app-*-release.apk
 
-cd android
-fastlane supply --aab ../build/app/outputs/bundle/release/app-release.aab
+fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
 git push --tags
 git push
-cd ..
