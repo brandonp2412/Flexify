@@ -48,7 +48,7 @@ flutter build appbundle || (git restore pubspec.yaml fastlane/metadata && exit 1
 git add pubspec.yaml
 git add fastlane/metadata
 
-echo "${changelog:-last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
+echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git commit -m "Bump version to $new_version"
 git tag "$new_build_number"
