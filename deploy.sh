@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 function generate_screenshots() {
   $TERMINAL -t Emulator emulator -avd "$1" -feature -Vulkan -no-boot-anim -noaudio &> /dev/null &
