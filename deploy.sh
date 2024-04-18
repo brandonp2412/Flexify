@@ -46,7 +46,7 @@ flutter build apk --split-per-abi || (git restore pubspec.yaml fastlane/metadata
 flutter build appbundle || (git restore pubspec.yaml fastlane/metadata && exit 1)
 
 git add pubspec.yaml
-git add fastlane/metadata
+git add android/fastlane/metadata
 
 echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
