@@ -48,7 +48,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 expression: db.gymSets.created.date,
                 mode: drift.OrderingMode.desc)
           ])
-          ..limit(10)
+          ..limit(11)
           ..groupBy([db.gymSets.created.date]))
         .watch();
   }

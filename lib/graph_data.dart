@@ -1,5 +1,5 @@
 class GraphData {
-  final String created;
+  final DateTime created;
   final double reps;
   final double maxWeight;
   final double volume;

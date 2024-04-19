@@ -37,7 +37,6 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
     final rows = widget.data.reversed.map((row) {
       final unit = row.read(db.gymSets.unit)!;
       var maxWeight = row.read(db.gymSets.weight.max())!;
@@ -63,8 +62,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
         oneRepMax: oneRepMax,
         volume: volume,
         relativeStrength: relativeStrength,
-        created: DateFormat(settings.dateFormat)
-            .format(row.read(db.gymSets.created)!),
+        created: row.read(db.gymSets.created)!,
         reps: row.read(db.gymSets.reps)!,
         unit: row.read(db.gymSets.unit)!,
       );
@@ -99,50 +97,98 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 300),
-        child: LineChart(
-          LineChartData(
-            titlesData: const FlTitlesData(
+      child: AspectRatio(
+        aspectRatio: 0.9,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 18.0),
+          child: LineChart(
+            LineChartData(
+              titlesData: FlTitlesData(
                 topTitles:
-                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                bottomTitles:
-                    AxisTitles(sideTitles: SideTitles(showTitles: false))),
-            lineTouchData: LineTouchData(
-              enabled: true,
-              touchTooltipData: tooltipData(context, rows),
-            ),
-            lineBarsData: [
-              LineChartBarData(
-                spots: spots,
-                isCurved: false,
-                color: Theme.of(context).colorScheme.primary,
-                barWidth: 3,
-                isStrokeCapRound: true,
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 27,
+                    interval: 1,
+                    getTitlesWidget: (value, meta) =>
+                        _bottomTitleWidgets(value, meta, rows),
+                  ),
+                ),
               ),
-            ],
+              lineTouchData: LineTouchData(
+                enabled: true,
+                touchTooltipData: _tooltipData(context, rows),
+              ),
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spots,
+                  isCurved: false,
+                  color: Theme.of(context).colorScheme.primary,
+                  barWidth: 3,
+                  isStrokeCapRound: true,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  LineTouchTooltipData tooltipData(BuildContext context, List<GraphData> rows) {
+  Widget _bottomTitleWidgets(
+      double value, TitleMeta meta, List<GraphData> rows) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+    );
+    Widget text;
+    DateFormat formatter = DateFormat("d/M/yy");
+
+    int middleIndex = (rows.length / 2).floor();
+    List<int> indices;
+
+    if (rows.length % 2 == 0) {
+      indices = [0, rows.length - 1];
+    } else {
+      indices = [0, middleIndex, rows.length - 1];
+    }
+
+    if (indices.contains(value.toInt())) {
+      DateTime createdDate = rows[value.toInt()].created;
+      text = Text(formatter.format(createdDate), style: style);
+    } else {
+      text = const Text('', style: style);
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: text,
+    );
+  }
+
+  LineTouchTooltipData _tooltipData(
+      BuildContext context, List<GraphData> rows) {
+    final settings = context.watch<SettingsState>();
+
     return LineTouchTooltipData(
       tooltipBgColor: Theme.of(context).colorScheme.background,
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
+        final created = DateFormat(settings.dateFormat).format(row.created);
         String text = "";
         if (widget.metric == Metric.oneRepMax)
           text =
-              "${row.oneRepMax.toStringAsFixed(2)}${widget.targetUnit} ${row.created}";
+              "${row.oneRepMax.toStringAsFixed(2)}${widget.targetUnit} $created";
         else if (widget.metric == Metric.relativeStrength)
-          text = "${(row.relativeStrength).toStringAsFixed(2)} ${row.created}";
+          text = "${(row.relativeStrength).toStringAsFixed(2)} $created";
         else if (widget.metric == Metric.volume)
-          text = "${row.volume}${widget.targetUnit} ${row.created}";
+          text = "${row.volume}${widget.targetUnit} $created";
         else if (widget.metric == Metric.bestWeight)
           text =
-              "${row.reps} x ${row.maxWeight.toStringAsFixed(2)}${widget.targetUnit} ${row.created}";
+              "${row.reps} x ${row.maxWeight.toStringAsFixed(2)}${widget.targetUnit} $created";
         return [
           LineTooltipItem(text,
               TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color))
