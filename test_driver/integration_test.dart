@@ -7,7 +7,7 @@ Future<void> main() async => await integrationDriver(
         if (deviceType == null || deviceType.isEmpty)
           throw "FLEXIFY_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
         final imgFile = await File(
-                'android/fastlane/metadata/android/en-US/images/$deviceType/$name.png')
+                'fastlane/metadata/android/en-US/images/$deviceType/$name.png')
             .create(recursive: true);
         await imgFile.writeAsBytes(image);
         return true;

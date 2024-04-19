@@ -157,7 +157,6 @@ void main() {
   const deviceType = String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
   if (deviceType.isEmpty)
     throw "FLEXIFY_DEVICE_TYPE must be set, so integration test knows what screenshots to take";
-  const isPhoneScreenshots = deviceType == "phoneScreenshots";
 
   setUpAll(() async {
     app.db = AppDatabase();
