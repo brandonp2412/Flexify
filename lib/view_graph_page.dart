@@ -2,31 +2,13 @@ import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
+import 'package:flexify/graph_data.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-class GraphData {
-  final String created;
-  final double reps;
-  final double maxWeight;
-  final double volume;
-  final double oneRepMax;
-  final String unit;
-  final double relativeStrength;
-
-  GraphData(
-      {required this.created,
-      required this.reps,
-      required this.maxWeight,
-      required this.volume,
-      required this.oneRepMax,
-      required this.relativeStrength,
-      required this.unit});
-}
 
 class ViewGraphPage extends StatefulWidget {
   final String name;
