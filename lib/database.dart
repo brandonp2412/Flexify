@@ -39,7 +39,7 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 6;
 
-  final defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
+  final _defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
         created: Value(DateTime.now()),
         name: Value(exercise),
         reps: const Value(0),
@@ -54,7 +54,7 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
         await db.batch((batch) {
-          batch.insertAll(db.gymSets, defaultSets);
+          batch.insertAll(db.gymSets, _defaultSets);
           batch.insertAll(db.plans, defaultPlans);
         });
       },
@@ -71,7 +71,7 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 5) {
           await m.addColumn(gymSets, gymSets.hidden);
-          await db.batch((batch) => batch.insertAll(db.gymSets, defaultSets));
+          await db.batch((batch) => batch.insertAll(db.gymSets, _defaultSets));
         }
         if (from < 6) {
           await m.addColumn(gymSets, gymSets.bodyWeight);

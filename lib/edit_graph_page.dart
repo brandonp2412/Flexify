@@ -16,38 +16,38 @@ class EditGraphPage extends StatefulWidget {
 }
 
 class _EditGraphPageState extends State<EditGraphPage> {
-  final nameNode = FocusNode();
-  final nameController = TextEditingController();
+  final _nameNode = FocusNode();
+  final _nameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    nameNode.requestFocus();
+    _nameNode.requestFocus();
   }
 
   @override
   dispose() {
-    nameNode.dispose();
-    nameController.dispose();
+    _nameNode.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
   Future<int> getCount() async {
     final result = await (db.gymSets.selectOnly()
           ..addColumns([db.gymSets.name.count()])
-          ..where(db.gymSets.name.equals(nameController.text)))
+          ..where(db.gymSets.name.equals(_nameController.text)))
         .getSingle();
     return result.read(db.gymSets.name.count()) ?? 0;
   }
 
   Future<void> doUpdate() async {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
-        .write(GymSetsCompanion(name: Value(nameController.text)));
+        .write(GymSetsCompanion(name: Value(_nameController.text)));
     await db.customUpdate(
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
         Variable.withString(widget.name),
-        Variable.withString(nameController.text)
+        Variable.withString(_nameController.text)
       ],
       updates: {db.plans},
     );
@@ -66,8 +66,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: nameController,
-              focusNode: nameNode,
+              controller: _nameController,
+              focusNode: _nameNode,
               decoration: const InputDecoration(labelText: "New name"),
               textCapitalization: TextCapitalization.sentences,
             )
@@ -76,8 +76,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (widget.name == nameController.text ||
-              nameController.text.isEmpty) {
+          if (widget.name == _nameController.text ||
+              _nameController.text.isEmpty) {
             Navigator.pop(context);
             return;
           }

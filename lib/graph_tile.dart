@@ -1,5 +1,3 @@
-import 'package:drift/drift.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +22,6 @@ class GraphTile extends StatelessWidget {
       required this.selected,
       required this.onSelect,
       required this.reps});
-
-  Future<int> getCount() async {
-    final result = await (db.gymSets.selectOnly()
-          ..addColumns([db.gymSets.name.count()])
-          ..where(db.gymSets.name.equals(name)))
-        .getSingle();
-    return result.read(db.gymSets.name.count()) ?? 0;
-  }
 
   @override
   Widget build(BuildContext context) {

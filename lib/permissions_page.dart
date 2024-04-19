@@ -11,22 +11,22 @@ class PermissionsPage extends StatefulWidget {
 }
 
 class _PermissionsPageState extends State<PermissionsPage> {
-  bool schedule = false;
-  bool ignore = false;
-  bool notify = false;
+  bool _schedule = false;
+  bool _ignore = false;
+  bool _notify = false;
 
   @override
   void initState() {
     super.initState();
     Permission.notification.isGranted.then((value) => setState(() {
-          notify = value;
+          _notify = value;
         }));
     Permission.ignoreBatteryOptimizations.isGranted
         .then((value) => setState(() {
-              ignore = value;
+              _ignore = value;
             }));
     Permission.scheduleExactAlarm.isGranted.then((value) => setState(() {
-          schedule = value;
+          _schedule = value;
         }));
   }
 
@@ -65,11 +65,11 @@ class _PermissionsPageState extends State<PermissionsPage> {
                   final status =
                       await Permission.ignoreBatteryOptimizations.request();
                   setState(() {
-                    ignore = status.isGranted;
+                    _ignore = status.isGranted;
                   });
                 },
                 trailing: Switch(
-                  value: ignore,
+                  value: _ignore,
                   onChanged: (value) {},
                 ),
               ),
@@ -80,11 +80,11 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 onTap: () async {
                   final status = await Permission.scheduleExactAlarm.request();
                   setState(() {
-                    schedule = status.isGranted;
+                    _schedule = status.isGranted;
                   });
                 },
                 trailing: Switch(
-                  value: schedule,
+                  value: _schedule,
                   onChanged: (value) {},
                 ),
               ),
@@ -95,11 +95,11 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 onTap: () async {
                   final status = await Permission.notification.request();
                   setState(() {
-                    notify = status.isGranted;
+                    _notify = status.isGranted;
                   });
                 },
                 trailing: Switch(
-                  value: notify,
+                  value: _notify,
                   onChanged: (value) {},
                 ),
               ),
@@ -109,7 +109,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if ((!ignore || !schedule) && settings.restTimers)
+          if ((!_ignore || !_schedule) && settings.restTimers)
             showDialog(
               context: context,
               builder: (BuildContext context) {

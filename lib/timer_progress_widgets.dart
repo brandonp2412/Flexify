@@ -64,19 +64,20 @@ class TimerCircularProgressIndicator extends StatelessWidget {
 }
 
 class _TimerCircularProgressIndicatorTile extends StatelessWidget {
-  final double value;
-  final TimerState timerState;
+  final double _value;
+  final TimerState _timerState;
 
-  String generateTitleText(Duration remaining) {
+  String _generateTitleText(Duration remaining) {
     final minutes = (remaining.inMinutes).toString().padLeft(2, '0');
     final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
     return "$minutes:$seconds";
   }
 
   const _TimerCircularProgressIndicatorTile({
-    required this.value,
-    required this.timerState,
-  });
+    required double value,
+    required TimerState timerState,
+  })  : _timerState = timerState,
+        _value = value;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           width: 300,
           child: CircularProgressIndicator(
             strokeCap: StrokeCap.round,
-            value: value,
+            value: _value,
             strokeWidth: 20,
             backgroundColor:
                 Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
@@ -102,7 +103,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: 32.0),
             Text(
-              generateTitleText(timerState.nativeTimer.getRemaining()),
+              _generateTitleText(_timerState.nativeTimer.getRemaining()),
               style: TextStyle(
                 fontSize: 50.0,
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -112,7 +113,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 await requestNotificationPermission();
-                await timerState.addOneMinute();
+                await _timerState.addOneMinute();
               },
               child: const Text('+1 min'),
             ),

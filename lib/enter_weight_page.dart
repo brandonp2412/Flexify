@@ -12,8 +12,8 @@ class EnterWeightPage extends StatefulWidget {
 }
 
 class _EnterWeightPageState extends State<EnterWeightPage> {
-  TextEditingController valueController = TextEditingController();
-  String yesterdaysWeight = "";
+  final TextEditingController _valueController = TextEditingController();
+  String _yesterdaysWeight = "";
   String _unit = 'kg'; // Default unit
   final List<String> _units = ['kg', 'lb']; // Available units
 
@@ -21,7 +21,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
   void initState() {
     super.initState();
     getBodyWeight().then((value) => setState(() {
-          yesterdaysWeight = "${value?.weight ?? 0} ${value?.unit ?? 'kg'}";
+          _yesterdaysWeight = "${value?.weight ?? 0} ${value?.unit ?? 'kg'}";
         }));
   }
 
@@ -35,7 +35,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
           child: Column(
             children: [
               TextFormField(
-                controller: valueController,
+                controller: _valueController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Weight'),
                 validator: (value) =>
@@ -58,7 +58,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 },
               ),
               TextFormField(
-                controller: TextEditingController(text: yesterdaysWeight),
+                controller: TextEditingController(text: _yesterdaysWeight),
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
@@ -74,10 +74,11 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
               name: "Weight",
               reps: 1,
               unit: _unit,
-              weight: double.parse(valueController.text)));
+              weight: double.parse(_valueController.text)));
           (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
               GymSetsCompanion(
-                  bodyWeight: drift.Value(double.parse(valueController.text))));
+                  bodyWeight:
+                      drift.Value(double.parse(_valueController.text))));
         },
         tooltip: "Save today's weight",
         child: const Icon(Icons.save),

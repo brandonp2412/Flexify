@@ -14,55 +14,55 @@ class EditGymSet extends StatefulWidget {
 }
 
 class _EditGymSetState extends State<EditGymSet> {
-  late TextEditingController nameController;
-  late TextEditingController repsController;
-  late TextEditingController weightController;
-  late TextEditingController bodyWeightController;
-  late String unit;
-  late DateTime created;
+  late TextEditingController _nameController;
+  late TextEditingController _repsController;
+  late TextEditingController _weightController;
+  late TextEditingController _bodyWeightController;
+  late String _unit;
+  late DateTime _created;
 
   @override
   void initState() {
     super.initState();
-    repsController =
+    _repsController =
         TextEditingController(text: widget.gymSet.reps.value.toString());
-    nameController =
+    _nameController =
         TextEditingController(text: widget.gymSet.name.value.toString());
-    weightController =
+    _weightController =
         TextEditingController(text: widget.gymSet.weight.value.toString());
-    bodyWeightController =
+    _bodyWeightController =
         TextEditingController(text: widget.gymSet.bodyWeight.value.toString());
-    unit = widget.gymSet.unit.value;
-    created = widget.gymSet.created.value;
+    _unit = widget.gymSet.unit.value;
+    _created = widget.gymSet.created.value;
   }
 
   @override
   void dispose() {
-    repsController.dispose();
-    weightController.dispose();
+    _repsController.dispose();
+    _weightController.dispose();
     super.dispose();
   }
 
-  Future<void> save() async {
+  Future<void> _save() async {
     Navigator.pop(context);
-    final reps = double.parse(repsController.text);
-    final weight = double.parse(weightController.text);
-    final bodyWeight = double.parse(bodyWeightController.text);
+    final reps = double.parse(_repsController.text);
+    final weight = double.parse(_weightController.text);
+    final bodyWeight = double.parse(_bodyWeightController.text);
 
     final gymSet = widget.gymSet.copyWith(
         reps: Value(reps),
         weight: Value(weight),
-        unit: Value(unit),
-        created: Value(created),
+        unit: Value(_unit),
+        created: Value(_created),
         bodyWeight: Value(bodyWeight),
-        name: Value(nameController.text));
+        name: Value(_nameController.text));
     db.update(db.gymSets).replace(gymSet);
   }
 
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: created,
+      initialDate: _created,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -75,12 +75,12 @@ class _EditGymSetState extends State<EditGymSet> {
   Future<void> _selectTime(DateTime pickedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(created),
+      initialTime: TimeOfDay.fromDateTime(_created),
     );
 
     if (pickedTime != null) {
       setState(() {
-        created = DateTime(
+        _created = DateTime(
           pickedDate.year,
           pickedDate.month,
           pickedDate.day,
@@ -102,38 +102,38 @@ class _EditGymSetState extends State<EditGymSet> {
         child: material.Column(
           children: [
             TextField(
-              controller: nameController,
+              controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name'),
               textCapitalization: TextCapitalization.sentences,
             ),
             TextField(
-              controller: repsController,
+              controller: _repsController,
               decoration: const InputDecoration(labelText: 'Reps'),
               keyboardType: TextInputType.number,
-              onTap: () => repsController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: repsController.text.length),
+              onTap: () => _repsController.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _repsController.text.length),
             ),
             TextField(
-              controller: weightController,
+              controller: _weightController,
               decoration: InputDecoration(
-                  labelText: nameController.text == 'Weight'
-                      ? 'Value ($unit)'
-                      : 'Weight ($unit)'),
+                  labelText: _nameController.text == 'Weight'
+                      ? 'Value ($_unit)'
+                      : 'Weight ($_unit)'),
               keyboardType: TextInputType.number,
-              onTap: () => weightController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: weightController.text.length),
+              onTap: () => _weightController.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _weightController.text.length),
             ),
-            if (nameController.text != 'Weight')
+            if (_nameController.text != 'Weight')
               TextField(
-                controller: bodyWeightController,
-                decoration: InputDecoration(labelText: 'Body weight ($unit)'),
+                controller: _bodyWeightController,
+                decoration: InputDecoration(labelText: 'Body weight ($_unit)'),
                 keyboardType: TextInputType.number,
-                onTap: () => bodyWeightController.selection = TextSelection(
+                onTap: () => _bodyWeightController.selection = TextSelection(
                     baseOffset: 0,
-                    extentOffset: bodyWeightController.text.length),
+                    extentOffset: _bodyWeightController.text.length),
               ),
             DropdownButtonFormField<String>(
-              value: unit,
+              value: _unit,
               decoration: const InputDecoration(labelText: 'Unit'),
               items: ['kg', 'lb'].map((String value) {
                 return DropdownMenuItem<String>(
@@ -143,13 +143,13 @@ class _EditGymSetState extends State<EditGymSet> {
               }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
-                  unit = newValue!;
+                  _unit = newValue!;
                 });
               },
             ),
             ListTile(
               title: const Text('Created Date'),
-              subtitle: Text(created.toString()),
+              subtitle: Text(_created.toString()),
               trailing: const Icon(Icons.calendar_today),
               onTap: () => _selectDate(),
             ),
@@ -157,7 +157,7 @@ class _EditGymSetState extends State<EditGymSet> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: save,
+        onPressed: _save,
         child: const Icon(Icons.save),
       ),
     );

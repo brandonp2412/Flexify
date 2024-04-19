@@ -15,14 +15,14 @@ class EditPlanPage extends StatefulWidget {
 }
 
 class _EditPlanPageState extends State<EditPlanPage> {
-  late List<bool> daySwitches;
-  late List<String> exerciseSelections;
-  bool showSearch = false;
-  String search = '';
-  List<String> exercises = [];
-  final searchNode = FocusNode();
-  final searchController = TextEditingController();
-  final titleController = TextEditingController();
+  late List<bool> _daySwitches;
+  late List<String> _exerciseSelections;
+  bool _showSearch = false;
+  String _search = '';
+  List<String> _exercises = [];
+  final _searchNode = FocusNode();
+  final _searchController = TextEditingController();
+  final _titleController = TextEditingController();
 
   @override
   void initState() {
@@ -31,43 +31,44 @@ class _EditPlanPageState extends State<EditPlanPage> {
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()
         .then((results) => setState(() {
-              exercises = results.map((e) => e.read(db.gymSets.name)!).toList();
+              _exercises =
+                  results.map((e) => e.read(db.gymSets.name)!).toList();
             }));
 
-    titleController.text = widget.plan.title.value ?? "";
+    _titleController.text = widget.plan.title.value ?? "";
 
     final dayList = widget.plan.days.value.split(',');
-    daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
+    _daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
 
     if (widget.plan.exercises.value.isEmpty)
-      exerciseSelections = [];
+      _exerciseSelections = [];
     else {
       final splitExercises = widget.plan.exercises.value.split(',');
-      exerciseSelections = splitExercises;
+      _exerciseSelections = splitExercises;
     }
   }
 
   @override
   void dispose() {
-    searchNode.dispose();
-    searchController.dispose();
+    _searchNode.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   void toggleSearch() {
     setState(() {
-      showSearch = !showSearch;
-      if (!showSearch) search = '';
+      _showSearch = !_showSearch;
+      if (!_showSearch) _search = '';
     });
-    searchNode.requestFocus();
-    searchController.clear();
+    _searchNode.requestFocus();
+    _searchController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> actions = [];
 
-    if (search == '')
+    if (_search == '')
       actions.add(
         IconButton(
           onPressed: toggleSearch,
@@ -78,11 +79,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
       actions.add(
         IconButton(
           onPressed: () {
-            searchController.clear();
-            searchNode.unfocus();
+            _searchController.clear();
+            _searchNode.unfocus();
             setState(() {
-              search = '';
-              showSearch = false;
+              _search = '';
+              _showSearch = false;
             });
           },
           icon: const Icon(Icons.clear),
@@ -94,7 +95,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         material.TextField(
           decoration:
               const material.InputDecoration(labelText: 'Title (optional)'),
-          controller: titleController,
+          controller: _titleController,
           textCapitalization: TextCapitalization.sentences,
         ),
         const SizedBox(
@@ -102,7 +103,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         )
       ];
 
-      if (search == '')
+      if (_search == '')
         children.add(
           Text('Days', style: Theme.of(context).textTheme.headlineSmall),
         );
@@ -110,37 +111,37 @@ class _EditPlanPageState extends State<EditPlanPage> {
       final days = List.generate(7, (index) {
         return SwitchListTile(
           title: Text(weekdays[index]),
-          value: daySwitches[index],
+          value: _daySwitches[index],
           onChanged: (value) {
             setState(() {
-              daySwitches[index] = value;
+              _daySwitches[index] = value;
             });
           },
         );
       });
 
-      final tiles = exercises
+      final tiles = _exercises
           .where((exercise) =>
-              exercise.toLowerCase().contains(search.toLowerCase()))
+              exercise.toLowerCase().contains(_search.toLowerCase()))
           .toList()
           .asMap()
           .entries
           .map(
             (entry) => SwitchListTile(
               title: Text(entry.value),
-              value: exerciseSelections.contains(entry.value),
+              value: _exerciseSelections.contains(entry.value),
               onChanged: (value) {
                 setState(() {
                   if (value)
-                    exerciseSelections.add(entry.value);
+                    _exerciseSelections.add(entry.value);
                   else
-                    exerciseSelections.remove(entry.value);
+                    _exerciseSelections.remove(entry.value);
                 });
               },
             ),
           );
 
-      if (search == '') children.addAll(days);
+      if (_search == '') children.addAll(days);
       children.add(
         Text('Exercises', style: Theme.of(context).textTheme.headlineSmall),
       );
@@ -164,13 +165,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: showSearch
+        title: _showSearch
             ? TextField(
-                focusNode: searchNode,
-                controller: searchController,
+                focusNode: _searchNode,
+                controller: _searchController,
                 textCapitalization: TextCapitalization.sentences,
                 onChanged: (value) => setState(() {
-                  search = value;
+                  _search = value;
                 }),
                 decoration: const InputDecoration(
                   hintText: "Search...",
@@ -190,17 +191,17 @@ class _EditPlanPageState extends State<EditPlanPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final days = [];
-          for (int i = 0; i < daySwitches.length; i++) {
-            if (daySwitches[i]) days.add(weekdays[i]);
+          for (int i = 0; i < _daySwitches.length; i++) {
+            if (_daySwitches[i]) days.add(weekdays[i]);
           }
-          if (days.isEmpty && titleController.text.isEmpty) {
+          if (days.isEmpty && _titleController.text.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Select days/title first')),
             );
             return;
           }
 
-          if (exerciseSelections.isEmpty) {
+          if (_exerciseSelections.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Select exercises first')),
             );
@@ -209,10 +210,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
           var newPlan = widget.plan.copyWith(
             days: Value(days.join(',')),
-            exercises: Value(exerciseSelections
+            exercises: Value(_exerciseSelections
                 .where((element) => element.isNotEmpty)
                 .join(',')),
-            title: Value(titleController.text),
+            title: Value(_titleController.text),
           );
 
           if (widget.plan.id.present)

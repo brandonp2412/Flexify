@@ -128,7 +128,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 });
               },
             ),
-            graphBuilder(settings),
+            _graphBuilder(settings),
           ],
         ),
       ),
@@ -144,7 +144,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
     );
   }
 
-  StreamBuilder<List<drift.TypedResult>> graphBuilder(SettingsState settings) {
+  StreamBuilder<List<drift.TypedResult>> _graphBuilder(SettingsState settings) {
     return StreamBuilder<List<drift.TypedResult>>(
       stream: _graphStream,
       builder: (context, snapshot) {

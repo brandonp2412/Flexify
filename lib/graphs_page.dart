@@ -20,16 +20,16 @@ class GraphsPage extends StatefulWidget {
 }
 
 class _GraphsPageState extends State<GraphsPage> {
-  Stream<List<drift.TypedResult>>? stream;
-  TextEditingController searchController = TextEditingController();
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  Set<String> selected = {};
+  Stream<List<drift.TypedResult>>? _stream;
+  final TextEditingController _searchController = TextEditingController();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final Set<String> _selected = {};
 
   @override
   void initState() {
     super.initState();
 
-    stream = (db.gymSets.selectOnly()
+    _stream = (db.gymSets.selectOnly()
           ..addColumns([
             db.gymSets.name,
             db.gymSets.unit,
@@ -46,32 +46,28 @@ class _GraphsPageState extends State<GraphsPage> {
         .watch();
   }
 
-  void setStream(drift.OrderingTerm term) async {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return NavigatorPopHandler(
       onPop: () {
-        if (navigatorKey.currentState!.canPop() == false) return;
-        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
-        navigatorKey.currentState!.pop();
+        if (_navigatorKey.currentState!.canPop() == false) return;
+        if (_navigatorKey.currentState?.focusNode.hasFocus == false) return;
+        _navigatorKey.currentState!.pop();
       },
       child: Navigator(
-        key: navigatorKey,
+        key: _navigatorKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => graphsPage(),
+          builder: (context) => _graphsPage(),
           settings: settings,
         ),
       ),
     );
   }
 
-  Scaffold graphsPage() {
+  Scaffold _graphsPage() {
     return Scaffold(
       body: StreamBuilder<List<drift.TypedResult>>(
-        stream: stream,
+        stream: _stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
@@ -79,7 +75,7 @@ class _GraphsPageState extends State<GraphsPage> {
 
           final filteredGymSets = gymSets.where((gymSet) {
             final name = gymSet.read(db.gymSets.name)!.toLowerCase();
-            final searchText = searchController.text.toLowerCase();
+            final searchText = _searchController.text.toLowerCase();
             return name.contains(searchText);
           }).toList();
 
@@ -93,7 +89,7 @@ class _GraphsPageState extends State<GraphsPage> {
                   final names =
                       filteredGymSets.map((e) => e.read(db.gymSets.name)!);
                   setState(() {
-                    selected.addAll(names);
+                    _selected.addAll(names);
                   });
                 },
               ),
@@ -105,31 +101,31 @@ class _GraphsPageState extends State<GraphsPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SearchBar(
-                  hintText: selected.isEmpty
+                  hintText: _selected.isEmpty
                       ? "Search..."
-                      : "${selected.length} selected",
-                  controller: searchController,
+                      : "${_selected.length} selected",
+                  controller: _searchController,
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.only(right: 8.0),
                   ),
                   onChanged: (_) {
                     setState(() {});
                   },
-                  leading: selected.isEmpty
+                  leading: _selected.isEmpty
                       ? const Padding(
                           padding: EdgeInsets.only(left: 16.0, right: 8.0),
                           child: Icon(Icons.search))
                       : IconButton(
                           onPressed: () {
                             setState(() {
-                              selected.clear();
+                              _selected.clear();
                             });
                           },
                           icon: const Icon(Icons.arrow_back),
                           padding: EdgeInsets.zero,
                         ),
                   trailing: [
-                    if (selected.isNotEmpty)
+                    if (_selected.isNotEmpty)
                       IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
@@ -139,7 +135,7 @@ class _GraphsPageState extends State<GraphsPage> {
                               return AlertDialog(
                                 title: const Text('Confirm Delete'),
                                 content: Text(
-                                    'Are you sure you want to delete ${selected.length} graphs? This action is not reversible.'),
+                                    'Are you sure you want to delete ${_selected.length} graphs? This action is not reversible.'),
                                 actions: <Widget>[
                                   TextButton(
                                     child: const Text('Cancel'),
@@ -152,10 +148,10 @@ class _GraphsPageState extends State<GraphsPage> {
                                     onPressed: () async {
                                       final planState =
                                           context.read<PlanState>();
-                                      final selectedCopy = selected.toList();
+                                      final selectedCopy = _selected.toList();
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        selected.clear();
+                                        _selected.clear();
                                       });
 
                                       await (db.delete(db.gymSets)
@@ -187,9 +183,9 @@ class _GraphsPageState extends State<GraphsPage> {
                     PopupMenuButton(
                       icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) => [
-                        if (selected.isEmpty) enterWeight(context),
+                        if (_selected.isEmpty) _enterWeight(context),
                         selectAll(context),
-                        settingsPage(context)
+                        _settingsPage(context)
                       ],
                     ),
                   ],
@@ -224,20 +220,20 @@ class _GraphsPageState extends State<GraphsPage> {
                       children: [
                         if (showDivider) const Divider(),
                         GraphTile(
-                          selected: selected,
+                          selected: _selected,
                           name: name,
                           weight: weight,
                           unit: unit,
                           reps: reps,
                           created: created,
                           onSelect: (value) {
-                            if (selected.contains(value))
+                            if (_selected.contains(value))
                               setState(() {
-                                selected.remove(value);
+                                _selected.remove(value);
                               });
                             else
                               setState(() {
-                                selected.add(value);
+                                _selected.add(value);
                               });
                           },
                         )
@@ -265,7 +261,7 @@ class _GraphsPageState extends State<GraphsPage> {
     );
   }
 
-  PopupMenuItem<dynamic> settingsPage(BuildContext context) {
+  PopupMenuItem<dynamic> _settingsPage(BuildContext context) {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.settings),
@@ -281,7 +277,7 @@ class _GraphsPageState extends State<GraphsPage> {
     );
   }
 
-  PopupMenuItem<dynamic> enterWeight(BuildContext context) {
+  PopupMenuItem<dynamic> _enterWeight(BuildContext context) {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.scale),

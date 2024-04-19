@@ -12,14 +12,14 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  late TextEditingController nameController;
-  late String unit;
+  late TextEditingController _nameController;
+  late String _unit;
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController();
-    unit = 'kg';
+    _nameController = TextEditingController();
+    _unit = 'kg';
   }
 
   @override
@@ -27,14 +27,14 @@ class _AddExercisePageState extends State<AddExercisePage> {
     super.dispose();
   }
 
-  Future<void> save() async {
+  Future<void> _save() async {
     Navigator.pop(context);
     db.gymSets.insertOne(GymSetsCompanion.insert(
         created: DateTime.now(),
         reps: 0,
         weight: 0,
-        name: nameController.text,
-        unit: unit,
+        name: _nameController.text,
+        unit: _unit,
         hidden: const Value(true)));
   }
 
@@ -49,13 +49,13 @@ class _AddExercisePageState extends State<AddExercisePage> {
         child: material.Column(
           children: [
             TextField(
-              controller: nameController,
+              controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name'),
               textCapitalization: TextCapitalization.sentences,
               autofocus: true,
             ),
             DropdownButtonFormField<String>(
-              value: unit,
+              value: _unit,
               decoration: const InputDecoration(labelText: 'Default unit'),
               items: ['kg', 'lb'].map((String value) {
                 return DropdownMenuItem<String>(
@@ -65,7 +65,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
-                  unit = newValue!;
+                  _unit = newValue!;
                 });
               },
             ),
@@ -73,7 +73,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: save,
+        onPressed: _save,
         child: const Icon(Icons.save),
       ),
     );

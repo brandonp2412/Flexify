@@ -19,13 +19,13 @@ class GraphHistory extends StatefulWidget {
 }
 
 class _GraphHistoryState extends State<GraphHistory> {
-  late Stream<List<GymSet>> stream;
-  Set<int> selected = {};
+  late Stream<List<GymSet>> _stream;
+  Set<int> _selected = {};
 
   @override
   void initState() {
     super.initState();
-    stream = (db.gymSets.select()
+    _stream = (db.gymSets.select()
           ..orderBy(
             [
               (u) =>
@@ -41,7 +41,7 @@ class _GraphHistoryState extends State<GraphHistory> {
   Widget build(BuildContext context) {
     List<Widget> actions = [];
 
-    if (selected.isNotEmpty)
+    if (_selected.isNotEmpty)
       actions.add(IconButton(
           onPressed: () {
             showDialog(
@@ -50,7 +50,7 @@ class _GraphHistoryState extends State<GraphHistory> {
                 return AlertDialog(
                   title: const Text('Confirm Delete'),
                   content: Text(
-                      'Are you sure you want to delete ${selected.length} records?'),
+                      'Are you sure you want to delete ${_selected.length} records?'),
                   actions: <Widget>[
                     TextButton(
                       child: const Text('Cancel'),
@@ -63,10 +63,10 @@ class _GraphHistoryState extends State<GraphHistory> {
                       onPressed: () async {
                         Navigator.of(context).pop();
                         (db.delete(db.gymSets)
-                              ..where((tbl) => tbl.id.isIn(selected)))
+                              ..where((tbl) => tbl.id.isIn(_selected)))
                             .go();
                         setState(() {
-                          selected = {};
+                          _selected = {};
                         });
                       },
                     ),
@@ -81,13 +81,13 @@ class _GraphHistoryState extends State<GraphHistory> {
 
     return Scaffold(
       appBar: AppBar(
-        title: selected.isEmpty
+        title: _selected.isEmpty
             ? Text(widget.name)
-            : Text("${selected.length} selected"),
+            : Text("${_selected.length} selected"),
         actions: actions,
       ),
       body: StreamBuilder<List<GymSet>>(
-        stream: stream,
+        stream: _stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
@@ -118,20 +118,20 @@ class _GraphHistoryState extends State<GraphHistory> {
                     trailing: Text(
                         "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
                         style: const TextStyle(fontSize: 16)),
-                    selected: selected.contains(gymSet.id),
+                    selected: _selected.contains(gymSet.id),
                     onLongPress: () {
                       setState(() {
-                        selected.add(gymSet.id);
+                        _selected.add(gymSet.id);
                       });
                     },
                     onTap: () {
-                      if (selected.contains(gymSet.id))
+                      if (_selected.contains(gymSet.id))
                         setState(() {
-                          selected.remove(gymSet.id);
+                          _selected.remove(gymSet.id);
                         });
-                      else if (selected.isNotEmpty)
+                      else if (_selected.isNotEmpty)
                         setState(() {
-                          selected.add(gymSet.id);
+                          _selected.add(gymSet.id);
                         });
                       else
                         Navigator.push(
