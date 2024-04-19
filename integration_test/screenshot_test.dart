@@ -141,6 +141,7 @@ Future<void> navigateToDumbbell(WidgetTester tester) async {
       find.byType(ListView), const Offset(0, 10));
   await tester.pump();
   await tester.tap(find.widgetWithText(ListTile, "Dumbbell shoulder press"));
+  await tester.pumpAndSettle();
 }
 
 Future<void> navigateToViewGraphPage(WidgetTester tester) async {
@@ -246,7 +247,6 @@ void main() {
   });
 
   group("Generate extra screenshots", () {
-    if (!isPhoneScreenshots) return;
     testWidgets(
       "ViewGraphPage",
       (tester) async => await generateScreenshot(

@@ -150,8 +150,14 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           );
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
-        return AppLineGraph(
-            data: snapshot.data!, metric: _metric, targetUnit: _targetUnit);
+        return Expanded(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(bottom: 80.0, right: 32.0, top: 16.0),
+            child: AppLineGraph(
+                data: snapshot.data!, metric: _metric, targetUnit: _targetUnit),
+          ),
+        );
       },
     );
   }

@@ -68,52 +68,43 @@ class _AppLineGraphState extends State<AppLineGraph> {
       spots.add(FlSpot(index.toDouble(), value));
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: AspectRatio(
-        aspectRatio: 0.9,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 18.0),
-          child: LineChart(
-            LineChartData(
-              titlesData: FlTitlesData(
-                topTitles:
-                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles:
-                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                leftTitles: const AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 45,
-                  ),
-                ),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 27,
-                    interval: 1,
-                    getTitlesWidget: (value, meta) =>
-                        _bottomTitleWidgets(value, meta, rows),
-                  ),
-                ),
-              ),
-              lineTouchData: LineTouchData(
-                enabled: true,
-                touchTooltipData: _tooltipData(context, rows),
-                longPressDuration: Duration.zero,
-              ),
-              lineBarsData: [
-                LineChartBarData(
-                  spots: spots,
-                  isCurved: false,
-                  color: Theme.of(context).colorScheme.primary,
-                  barWidth: 3,
-                  isStrokeCapRound: true,
-                ),
-              ],
+    return LineChart(
+      LineChartData(
+        titlesData: FlTitlesData(
+          topTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: const AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 45,
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 27,
+              interval: 1,
+              getTitlesWidget: (value, meta) =>
+                  _bottomTitleWidgets(value, meta, rows),
             ),
           ),
         ),
+        lineTouchData: LineTouchData(
+          enabled: true,
+          touchTooltipData: _tooltipData(context, rows),
+          longPressDuration: Duration.zero,
+        ),
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: false,
+            color: Theme.of(context).colorScheme.primary,
+            barWidth: 3,
+            isStrokeCapRound: true,
+          ),
+        ],
       ),
     );
   }
