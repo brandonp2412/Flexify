@@ -68,32 +68,11 @@ class _AppLineGraphState extends State<AppLineGraph> {
       );
     }).toList();
 
-    List<FlSpot> spots;
-    if (widget.metric == Metric.oneRepMax) {
-      spots = rows
-          .asMap()
-          .entries
-          .map((row) => FlSpot(row.key.toDouble(), row.value.oneRepMax))
-          .toList();
-    } else if (widget.metric == Metric.volume) {
-      spots = rows
-          .asMap()
-          .entries
-          .map((row) => FlSpot(row.key.toDouble(), row.value.volume))
-          .toList();
-    } else if (widget.metric == Metric.relativeStrength) {
-      spots = rows
-          .asMap()
-          .entries
-          .map((row) => FlSpot(row.key.toDouble(), row.value.relativeStrength))
-          .toList();
-    } else {
-      spots = rows
-          .asMap()
-          .entries
-          .map((row) => FlSpot(row.key.toDouble(), row.value.maxWeight))
-          .toList();
-    }
+    List<FlSpot> spots = rows
+        .asMap()
+        .entries
+        .map((e) => FlSpot(e.key.toDouble(), e.value.getValue(widget.metric)))
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -108,6 +87,15 @@ class _AppLineGraphState extends State<AppLineGraph> {
                     const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 rightTitles:
                     const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 56,
+                    interval: 1,
+                    getTitlesWidget: (value, meta) =>
+                        _leftTitleWidgets(value, meta),
+                  ),
+                ),
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
@@ -135,6 +123,13 @@ class _AppLineGraphState extends State<AppLineGraph> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _leftTitleWidgets(double value, TitleMeta meta) {
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text("$value ${widget.targetUnit}"),
     );
   }
 
