@@ -2,9 +2,14 @@
 
 set -ex
 
-./screenshots.sh "phoneScreenshots"
-./screenshots.sh "sevenInchScreenshots"
-./screenshots.sh "tenInchScreenshots"
+./screenshots.sh "phoneScreenshots" &
+phonePid=$!
+./screenshots.sh "sevenInchScreenshots" &
+sevenPid=$!
+./screenshots.sh "tenInchScreenshots" &
+tenPid=$!
+
+wait $phonePid $sevenPid $tenPid
 
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
@@ -25,10 +30,8 @@ flutter build apk --split-per-abi || (git restore pubspec.yaml fastlane/metadata
 flutter build appbundle || (git restore pubspec.yaml fastlane/metadata && exit 1)
 
 git add pubspec.yaml
-git add android/fastlane/metadata
-
 echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
-git add "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
+git add fastlane/metadata
 git commit -m "Bump version to $new_version"
 git tag "$new_build_number"
 
