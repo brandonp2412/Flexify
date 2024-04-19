@@ -190,35 +190,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           );
         }).toList();
 
-        GraphData minRow, maxRow;
-        double minY, maxY;
-
-        if (_metric == Metric.oneRepMax) {
-          minRow = rows.reduce((a, b) => a.oneRepMax < b.oneRepMax ? a : b);
-          maxRow = rows.reduce((a, b) => a.oneRepMax > b.oneRepMax ? a : b);
-          minY = (minRow.oneRepMax - minRow.oneRepMax * 0.25).floorToDouble();
-          maxY = (maxRow.oneRepMax + maxRow.oneRepMax * 0.25).ceilToDouble();
-        } else if (_metric == Metric.volume) {
-          minRow = rows.reduce((a, b) => a.volume < b.volume ? a : b);
-          maxRow = rows.reduce((a, b) => a.volume > b.volume ? a : b);
-          minY = (minRow.volume - minRow.volume * 0.25).floorToDouble();
-          maxY = (maxRow.volume + maxRow.volume * 0.25).ceilToDouble();
-        } else if (_metric == Metric.relativeStrength) {
-          minRow = rows.reduce(
-              (a, b) => a.relativeStrength < b.relativeStrength ? a : b);
-          maxRow = rows.reduce(
-              (a, b) => a.relativeStrength > b.relativeStrength ? a : b);
-          minY = (minRow.relativeStrength - minRow.relativeStrength * 0.25)
-              .floorToDouble();
-          maxY = (maxRow.relativeStrength + maxRow.relativeStrength * 0.25)
-              .ceilToDouble();
-        } else {
-          minRow = rows.reduce((a, b) => a.maxWeight < b.maxWeight ? a : b);
-          maxRow = rows.reduce((a, b) => a.maxWeight > b.maxWeight ? a : b);
-          minY = (minRow.maxWeight - minRow.maxWeight * 0.25).floorToDouble();
-          maxY = (maxRow.maxWeight + maxRow.maxWeight * 0.25).ceilToDouble();
-        }
-
         List<FlSpot> spots;
         if (_metric == Metric.oneRepMax) {
           spots = rows
@@ -258,8 +229,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                         AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     bottomTitles:
                         AxisTitles(sideTitles: SideTitles(showTitles: false))),
-                minY: minY,
-                maxY: maxY,
                 lineTouchData: LineTouchData(
                   enabled: true,
                   touchTooltipData: tooltipData(context, rows),
