@@ -100,6 +100,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
               lineTouchData: LineTouchData(
                 enabled: true,
                 touchTooltipData: _tooltipData(context, rows),
+                longPressDuration: Duration.zero,
               ),
               lineBarsData: [
                 LineChartBarData(
