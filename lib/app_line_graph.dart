@@ -24,55 +24,49 @@ class AppLineGraph extends StatefulWidget {
 }
 
 class _AppLineGraphState extends State<AppLineGraph> {
-  final _oneRepMax = db.gymSets.weight /
-      (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
-  final _volume =
-      const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-  final _relativeStrength = db.gymSets.weight.max() / db.gymSets.bodyWeight;
-
   @override
   void initState() {
     super.initState();
   }
 
+  double getValue(TypedResult row, Metric metric) {
+    if (metric == Metric.oneRepMax) {
+      return row.read(oneRepMax)!;
+    } else if (metric == Metric.volume) {
+      return row.read(volume)!;
+    } else if (metric == Metric.relativeStrength) {
+      return row.read(relativeStrength)!;
+    } else if (metric == Metric.bestWeight) {
+      return row.read(db.gymSets.weight.max())!;
+    } else {
+      throw Exception("Metric not supported.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final rows = widget.data.reversed.map((row) {
-      final unit = row.read(db.gymSets.unit)!;
-      var maxWeight = row.read(db.gymSets.weight.max())!;
-      var oneRepMax = row.read(_oneRepMax)!;
-      var volume = row.read(_volume)!;
-      var relativeStrength = row.read(_relativeStrength) ?? 0;
+    List<FlSpot> spots = [];
+    List<GraphData> rows = [];
 
-      double conversionFactor = 1;
+    for (var index = 0; index < widget.data.length; index++) {
+      final row = widget.data.reversed.elementAt(index);
+      final unit = row.read(db.gymSets.unit)!;
+      var value = getValue(row, widget.metric);
 
       if (unit == 'lb' && widget.targetUnit == 'kg') {
-        conversionFactor = 0.45359237;
+        value *= 0.45359237;
       } else if (unit == 'kg' && widget.targetUnit == 'lb') {
-        conversionFactor = 2.20462262;
+        value *= 2.20462262;
       }
 
-      maxWeight *= conversionFactor;
-      oneRepMax *= conversionFactor;
-      volume *= conversionFactor;
-      relativeStrength *= conversionFactor;
-
-      return GraphData(
-        maxWeight: maxWeight,
-        oneRepMax: oneRepMax,
-        volume: volume,
-        relativeStrength: relativeStrength,
+      rows.add(GraphData(
+        value: value,
         created: row.read(db.gymSets.created)!,
         reps: row.read(db.gymSets.reps)!,
         unit: row.read(db.gymSets.unit)!,
-      );
-    }).toList();
-
-    List<FlSpot> spots = rows
-        .asMap()
-        .entries
-        .map((e) => FlSpot(e.key.toDouble(), e.value.getValue(widget.metric)))
-        .toList();
+      ));
+      spots.add(FlSpot(index.toDouble(), value));
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -87,13 +81,10 @@ class _AppLineGraphState extends State<AppLineGraph> {
                     const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 rightTitles:
                     const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                leftTitles: AxisTitles(
+                leftTitles: const AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 56,
-                    interval: 1,
-                    getTitlesWidget: (value, meta) =>
-                        _leftTitleWidgets(value, meta),
+                    reservedSize: 45,
                   ),
                 ),
                 bottomTitles: AxisTitles(
@@ -123,13 +114,6 @@ class _AppLineGraphState extends State<AppLineGraph> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _leftTitleWidgets(double value, TitleMeta meta) {
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text("$value ${widget.targetUnit}"),
     );
   }
 
@@ -173,17 +157,8 @@ class _AppLineGraphState extends State<AppLineGraph> {
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
         final created = DateFormat(settings.dateFormat).format(row.created);
-        String text = "";
-        if (widget.metric == Metric.oneRepMax)
-          text =
-              "${row.oneRepMax.toStringAsFixed(2)}${widget.targetUnit} $created";
-        else if (widget.metric == Metric.relativeStrength)
-          text = "${(row.relativeStrength).toStringAsFixed(2)} $created";
-        else if (widget.metric == Metric.volume)
-          text = "${row.volume}${widget.targetUnit} $created";
-        else if (widget.metric == Metric.bestWeight)
-          text =
-              "${row.reps} x ${row.maxWeight.toStringAsFixed(2)}${widget.targetUnit} $created";
+        String text =
+            "${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
         return [
           LineTooltipItem(text,
               TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color))

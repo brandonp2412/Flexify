@@ -21,25 +21,18 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   Metric _metric = Metric.bestWeight;
   String _targetUnit = 'kg';
 
-  final _oneRepMax = db.gymSets.weight /
-      (const drift.Variable(1.0278) -
-          const drift.Variable(0.0278) * db.gymSets.reps);
-  final _volume =
-      const drift.CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-  final _relativeStrength = db.gymSets.weight.max() / db.gymSets.bodyWeight;
-
   @override
   void initState() {
     super.initState();
     _graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
             db.gymSets.weight.max(),
-            _volume,
-            _oneRepMax,
+            volume,
+            oneRepMax,
             db.gymSets.created,
             db.gymSets.reps,
             db.gymSets.unit,
-            _relativeStrength,
+            relativeStrength,
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
