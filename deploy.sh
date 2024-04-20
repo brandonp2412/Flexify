@@ -34,10 +34,11 @@ flutter build appbundle &
 bundlePid=$!
 wait $universalPid $abiPid $bundlePid
 
+rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
 echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add fastlane/metadata
-git commit -m "Bump version to $new_version"
+git commit --amend -m "$last_commit - $new_version 🚀"
 git tag "$new_build_number"
 
 gh release create "$new_version" --notes "${changelog:-$last_commit}"  \
