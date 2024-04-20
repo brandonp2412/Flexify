@@ -59,10 +59,16 @@ class DownloadRecordsButton extends StatelessWidget {
                       Navigator.of(context).pop();
                       final plans = await db.plans.select().get();
                       final List<List<dynamic>> csvData = [
-                        ['id', 'days', 'exercises']
+                        ['id', 'days', 'exercises', 'title', 'sequence']
                       ];
                       for (var plan in plans) {
-                        csvData.add([plan.id, plan.days, plan.exercises]);
+                        csvData.add([
+                          plan.id,
+                          plan.days,
+                          plan.exercises,
+                          plan.title ?? '',
+                          plan.sequence ?? ''
+                        ]);
                       }
 
                       if (!await requestNotificationPermission()) return;

@@ -73,6 +73,7 @@ class UploadRecordsButton extends StatelessWidget {
                             days: Value(row[1]),
                             exercises: Value(row[2]),
                             title: Value(row.elementAtOrNull(3)),
+                            sequence: Value(row.elementAtOrNull(4)),
                           ),
                         );
                         db.batch(
