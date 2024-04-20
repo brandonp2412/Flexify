@@ -45,7 +45,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final planState = context.read<PlanState>();
     planState.addListener(_planChanged);
     _planState = planState;
-    _getLast();
+    _select(0);
 
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
@@ -88,45 +88,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
       baseOffset: 0,
       extentOffset: _weightController.text.length,
     );
-  }
-
-  Future<void> _getLast() async {
-    final today = DateTime.now();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    var last = await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.isIn(_planExercises))
-          ..where(
-              (tbl) => db.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where(
-              (tbl) => db.gymSets.created.isSmallerThanValue(startOfTomorrow))
-          ..where((tbl) => db.gymSets.hidden.equals(false))
-          ..orderBy([
-            (u) => drift.OrderingTerm(
-                expression: u.created, mode: drift.OrderingMode.desc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
-    last ??= await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(_planExercises[0]))
-          ..where((tbl) => db.gymSets.hidden.equals(false))
-          ..orderBy([
-            (u) => drift.OrderingTerm(
-                expression: u.created, mode: drift.OrderingMode.desc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
-
-    if (last == null) return setState(() {});
-
-    _repsController.text = last.reps.toString();
-    _weightController.text = last.weight.toString();
-    final index = _planExercises.indexOf(last.name);
-
-    setState(() {
-      _selectedIndex = index;
-      _unit = last!.unit;
-    });
   }
 
   Future<void> _select(int index) async {

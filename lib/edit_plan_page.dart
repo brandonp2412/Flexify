@@ -17,9 +17,11 @@ class EditPlanPage extends StatefulWidget {
 class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> _daySwitches;
   late List<String> _exerciseSelections;
+
   bool _showSearch = false;
   String _search = '';
   List<String> _exercises = [];
+
   final _searchNode = FocusNode();
   final _searchController = TextEditingController();
   final _titleController = TextEditingController();
