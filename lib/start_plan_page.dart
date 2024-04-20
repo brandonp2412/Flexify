@@ -12,14 +12,9 @@ import 'package:provider/provider.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
-  final Stream<List<drift.TypedResult>> countStream;
   final Future<void> Function() refresh;
 
-  const StartPlanPage(
-      {super.key,
-      required this.plan,
-      required this.countStream,
-      required this.refresh});
+  const StartPlanPage({super.key, required this.plan, required this.refresh});
 
   @override
   createState() => _StartPlanPageState();
@@ -29,6 +24,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late TextEditingController _repsController;
   late TextEditingController _weightController;
   late List<String> _planExercises;
+  late Stream<List<drift.TypedResult>> _countStream;
 
   PlanState? _planState;
   bool _first = true;
@@ -41,13 +37,30 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   void initState() {
     super.initState();
+
     _repsController = TextEditingController(text: "0.0");
     _weightController = TextEditingController(text: "0.0");
     _planExercises = widget.plan.exercises.split(',');
+
     final planState = context.read<PlanState>();
     planState.addListener(_planChanged);
     _planState = planState;
     _getLast();
+
+    final today = DateTime.now();
+    final startOfToday = DateTime(today.year, today.month, today.day);
+    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+    _countStream = (db.selectOnly(db.gymSets)
+          ..addColumns([
+            db.gymSets.name.count(),
+            db.gymSets.name,
+          ])
+          ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
+          ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
+          ..where(db.gymSets.name.isIn(_planExercises))
+          ..where(db.gymSets.hidden.equals(false))
+          ..groupBy([db.gymSets.name]))
+        .watch();
   }
 
   @override
@@ -162,7 +175,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ));
 
     if (!settings.restTimers) return;
-    final counts = await widget.countStream.first;
+    final counts = await _countStream.first;
     final countIndex = counts
         .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
     var count = 0;
@@ -261,12 +274,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
             ),
             Expanded(
               child: StreamBuilder(
-                stream: widget.countStream,
+                stream: _countStream,
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const SizedBox();
-
                   Map<String, int> counts = {};
-                  for (final row in snapshot.data!) {
+                  for (final row in snapshot.data ?? []) {
                     counts[row.read(db.gymSets.name)!] =
                         row.read(db.gymSets.name.count())!;
                   }

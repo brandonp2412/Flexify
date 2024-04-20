@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/main.dart';
@@ -13,7 +12,6 @@ class PlanTile extends StatelessWidget {
     required this.plan,
     required this.weekday,
     required this.index,
-    required this.countStream,
     required this.navigatorKey,
     required this.refresh,
   });
@@ -21,7 +19,6 @@ class PlanTile extends StatelessWidget {
   final Plan plan;
   final String weekday;
   final int index;
-  final Stream<List<TypedResult>> countStream;
   final GlobalKey<NavigatorState> navigatorKey;
   final Future<void> Function() refresh;
 
@@ -70,7 +67,6 @@ class PlanTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => StartPlanPage(
               plan: plan,
-              countStream: countStream,
               refresh: refresh,
             ),
           ),

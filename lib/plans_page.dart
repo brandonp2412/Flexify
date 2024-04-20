@@ -54,7 +54,6 @@ class _PlansPageWidget extends StatefulWidget {
 }
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
-  late Stream<List<drift.TypedResult>> _countStream;
   PlanState? _planState;
   final TextEditingController _searchController = TextEditingController();
 
@@ -62,19 +61,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   void initState() {
     super.initState();
     _updatePlans();
-    final today = DateTime.now();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    _countStream = (db.selectOnly(db.gymSets)
-          ..addColumns([
-            db.gymSets.name.count(),
-            db.gymSets.name,
-          ])
-          ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
-          ..where(db.gymSets.hidden.equals(false))
-          ..groupBy([db.gymSets.name]))
-        .watch();
   }
 
   Future<void> _updatePlans({List<Plan>? plans}) async {
@@ -124,7 +110,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           _PlanWidget(
             plans: _planState?.plans ?? [],
             searchText: _searchController.text,
-            countStream: _countStream,
             updatePlans: _updatePlans,
             navigatorKey: widget.navigatorKey,
           ),
@@ -190,12 +175,10 @@ class _PlanWidget extends StatelessWidget {
   final List<Plan> plans;
   final Future<void> Function({List<Plan>? plans}) updatePlans;
   final GlobalKey<NavigatorState> navigatorKey;
-  final Stream<List<drift.TypedResult>> countStream;
 
   const _PlanWidget({
     required this.plans,
     required this.searchText,
-    required this.countStream,
     required this.updatePlans,
     required this.navigatorKey,
   });
@@ -225,7 +208,6 @@ class _PlanWidget extends StatelessWidget {
             plan: plan,
             weekday: weekday,
             index: index,
-            countStream: countStream,
             navigatorKey: navigatorKey,
             refresh: updatePlans,
           );
