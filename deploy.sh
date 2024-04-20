@@ -26,8 +26,13 @@ new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 
-flutter build apk --split-per-abi || (git restore pubspec.yaml fastlane/metadata && exit 1)
-flutter build appbundle || (git restore pubspec.yaml fastlane/metadata && exit 1)
+flutter build apk &
+universalPid=$!
+flutter build apk --split-per-abi &
+abiPid=$!
+flutter build appbundle &
+bundlePid=$!
+wait $universalPid $abiPid $bundlePid
 
 git add pubspec.yaml
 echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
@@ -36,8 +41,8 @@ git commit -m "Bump version to $new_version"
 git tag "$new_build_number"
 
 gh release create "$new_version" --notes "${changelog:-$last_commit}"  \
-  build/app/outputs/flutter-apk/app-*-release.apk
+  build/app/outputs/flutter-apk/app*-release.apk
 
 fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
-git push --tags
+git push --tags &
 git push
