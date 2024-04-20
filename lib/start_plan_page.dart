@@ -26,36 +26,36 @@ class StartPlanPage extends StatefulWidget {
 }
 
 class _StartPlanPageState extends State<StartPlanPage> {
-  late TextEditingController repsController;
-  late TextEditingController weightController;
-  late List<String> planExercises;
+  late TextEditingController _repsController;
+  late TextEditingController _weightController;
+  late List<String> _planExercises;
+
   PlanState? _planState;
+  bool _first = true;
+  String _unit = 'kg';
+  int _selectedIndex = 0;
 
-  bool first = true;
-  String unit = 'kg';
-  int selectedIndex = 0;
-
-  final repsNode = FocusNode();
-  final weightNode = FocusNode();
+  final _repsNode = FocusNode();
+  final _weightNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    repsController = TextEditingController(text: "0.0");
-    weightController = TextEditingController(text: "0.0");
-    planExercises = widget.plan.exercises.split(',');
+    _repsController = TextEditingController(text: "0.0");
+    _weightController = TextEditingController(text: "0.0");
+    _planExercises = widget.plan.exercises.split(',');
     final planState = context.read<PlanState>();
     planState.addListener(_planChanged);
     _planState = planState;
-    getLast();
+    _getLast();
   }
 
   @override
   void dispose() {
-    repsController.dispose();
-    weightController.dispose();
-    repsNode.dispose();
-    weightNode.dispose();
+    _repsController.dispose();
+    _weightController.dispose();
+    _repsNode.dispose();
+    _weightNode.dispose();
     _planState?.removeListener(_planChanged);
     super.dispose();
   }
@@ -66,23 +66,23 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .exercises
         .split(',');
     setState(() {
-      if (split != null) planExercises = split;
+      if (split != null) _planExercises = split;
     });
   }
 
-  void selectWeight() {
-    weightController.selection = TextSelection(
+  void _selectWeight() {
+    _weightController.selection = TextSelection(
       baseOffset: 0,
-      extentOffset: weightController.text.length,
+      extentOffset: _weightController.text.length,
     );
   }
 
-  Future<void> getLast() async {
+  Future<void> _getLast() async {
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
     var last = await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.isIn(planExercises))
+          ..where((tbl) => db.gymSets.name.isIn(_planExercises))
           ..where(
               (tbl) => db.gymSets.created.isBiggerOrEqualValue(startOfToday))
           ..where(
@@ -95,7 +95,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
     last ??= await (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(planExercises[0]))
+          ..where((tbl) => db.gymSets.name.equals(_planExercises[0]))
           ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
@@ -106,21 +106,21 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     if (last == null) return setState(() {});
 
-    repsController.text = last.reps.toString();
-    weightController.text = last.weight.toString();
-    final index = planExercises.indexOf(last.name);
+    _repsController.text = last.reps.toString();
+    _weightController.text = last.weight.toString();
+    final index = _planExercises.indexOf(last.name);
 
     setState(() {
-      selectedIndex = index;
-      unit = last!.unit;
+      _selectedIndex = index;
+      _unit = last!.unit;
     });
   }
 
-  Future<void> select(int index) async {
+  Future<void> _select(int index) async {
     setState(() {
-      selectedIndex = index;
+      _selectedIndex = index;
     });
-    final exercise = planExercises.elementAt(index);
+    final exercise = _planExercises.elementAt(index);
     final last = await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..where((tbl) => db.gymSets.hidden.equals(false))
@@ -131,25 +131,25 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
     setState(() {
-      repsController.text = last != null ? last.reps.toString() : "0.0";
-      weightController.text = last != null ? last.weight.toString() : "0.0";
+      _repsController.text = last != null ? last.reps.toString() : "0.0";
+      _weightController.text = last != null ? last.weight.toString() : "0.0";
     });
   }
 
-  Future<void> save(TimerState timerState, SettingsState settings) async {
+  Future<void> _save(TimerState timerState, SettingsState settings) async {
     setState(() {
-      first = false;
+      _first = false;
     });
-    final reps = double.parse(repsController.text);
-    final weight = double.parse(weightController.text);
-    final exercise = planExercises[selectedIndex];
+    final reps = double.parse(_repsController.text);
+    final weight = double.parse(_weightController.text);
+    final exercise = _planExercises[_selectedIndex];
     final weightSet = await getBodyWeight();
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
       reps: reps,
       weight: weight,
-      unit: unit,
+      unit: _unit,
       created: DateTime.now(),
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
     );
@@ -199,29 +199,29 @@ class _StartPlanPageState extends State<StartPlanPage> {
         child: Column(
           children: [
             TextField(
-              controller: repsController,
-              focusNode: repsNode,
+              controller: _repsController,
+              focusNode: _repsNode,
               decoration: const InputDecoration(labelText: 'Reps'),
               keyboardType: TextInputType.number,
               onSubmitted: (value) {
-                weightNode.requestFocus();
-                weightController.selection = TextSelection(
+                _weightNode.requestFocus();
+                _weightController.selection = TextSelection(
                   baseOffset: 0,
-                  extentOffset: weightController.text.length,
+                  extentOffset: _weightController.text.length,
                 );
               },
               onTap: () {
-                repsController.selection = TextSelection(
+                _repsController.selection = TextSelection(
                   baseOffset: 0,
-                  extentOffset: repsController.text.length,
+                  extentOffset: _repsController.text.length,
                 );
               },
             ),
             TextField(
-              controller: weightController,
-              focusNode: weightNode,
+              controller: _weightController,
+              focusNode: _weightNode,
               decoration: InputDecoration(
-                  labelText: 'Weight ($unit)',
+                  labelText: 'Weight ($_unit)',
                   suffixIcon: IconButton(
                     tooltip: "Use body weight",
                     icon: const Icon(Icons.scale),
@@ -232,19 +232,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
                             const SnackBar(
                                 content: Text('No weight entered yet.')));
                       else
-                        weightController.text = weightSet!.weight.toString();
+                        _weightController.text = weightSet!.weight.toString();
                     },
                   )),
               keyboardType: TextInputType.number,
               onTap: () {
-                selectWeight();
+                _selectWeight();
               },
-              onSubmitted: (value) async => await save(timerState, settings),
+              onSubmitted: (value) async => await _save(timerState, settings),
             ),
             Visibility(
               visible: settings.showUnits,
               child: DropdownButtonFormField<String>(
-                value: unit,
+                value: _unit,
                 decoration: const InputDecoration(labelText: 'Unit'),
                 items: ['kg', 'lb'].map((String value) {
                   return DropdownMenuItem<String>(
@@ -254,7 +254,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
-                    unit = newValue!;
+                    _unit = newValue!;
                   });
                 },
               ),
@@ -272,23 +272,23 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   }
 
                   return ExerciseList(
-                    planExercises: planExercises,
+                    planExercises: _planExercises,
                     counts: counts,
-                    selectedIndex: selectedIndex,
-                    selectAllReps: select,
+                    selectedIndex: _selectedIndex,
+                    selectAllReps: _select,
                     onReorder: (oldIndex, newIndex) async {
                       if (oldIndex < newIndex) {
                         newIndex--;
                       }
 
-                      final temp = planExercises[oldIndex];
-                      planExercises.removeAt(oldIndex);
-                      planExercises.insert(newIndex, temp);
+                      final temp = _planExercises[oldIndex];
+                      _planExercises.removeAt(oldIndex);
+                      _planExercises.insert(newIndex, temp);
                       await db.update(db.plans).replace(widget.plan
-                          .copyWith(exercises: planExercises.join(',')));
+                          .copyWith(exercises: _planExercises.join(',')));
                       widget.refresh();
                     },
-                    first: first,
+                    first: _first,
                   );
                 },
               ),
@@ -297,7 +297,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await save(timerState, settings),
+        onPressed: () async => await _save(timerState, settings),
         tooltip: "Save this set",
         child: const Icon(Icons.save),
       ),
