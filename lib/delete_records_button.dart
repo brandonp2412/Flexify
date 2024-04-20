@@ -1,5 +1,7 @@
 import 'package:flexify/main.dart';
+import 'package:flexify/plan_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DeleteRecordsButton extends StatelessWidget {
   final BuildContext pageContext;
@@ -76,8 +78,11 @@ class DeleteRecordsButton extends StatelessWidget {
                               TextButton(
                                 child: const Text('Delete'),
                                 onPressed: () async {
+                                  final planState =
+                                      pageContext.read<PlanState>();
                                   Navigator.of(context).pop();
                                   await db.delete(db.plans).go();
+                                  planState.updatePlans(null);
                                   if (!pageContext.mounted) return;
                                   Navigator.pop(pageContext);
                                   DefaultTabController.of(pageContext)
