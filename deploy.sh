@@ -2,14 +2,9 @@
 
 set -ex
 
-./screenshots.sh "phoneScreenshots" &
-phonePid=$!
-./screenshots.sh "sevenInchScreenshots" &
-sevenPid=$!
-./screenshots.sh "tenInchScreenshots" &
-tenPid=$!
-
-wait $phonePid $sevenPid $tenPid
+./screenshots.sh "phoneScreenshots"
+./screenshots.sh "sevenInchScreenshots"
+./screenshots.sh "tenInchScreenshots"
 
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
@@ -26,13 +21,8 @@ new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 
-flutter build apk &
-universalPid=$!
-flutter build apk --split-per-abi &
-abiPid=$!
-flutter build appbundle &
-bundlePid=$!
-wait $universalPid $abiPid $bundlePid
+flutter build apk --split-per-abi
+flutter build appbundle
 
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
