@@ -32,7 +32,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     super.dispose();
   }
 
-  Future<int> getCount() async {
+  Future<int> _getCount() async {
     final result = await (db.gymSets.selectOnly()
           ..addColumns([db.gymSets.name.count()])
           ..where(db.gymSets.name.equals(_nameController.text)))
@@ -40,7 +40,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     return result.read(db.gymSets.name.count()) ?? 0;
   }
 
-  Future<void> doUpdate() async {
+  Future<void> _doUpdate() async {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(GymSetsCompanion(name: Value(_nameController.text)));
     await db.customUpdate(
@@ -82,10 +82,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
             return;
           }
 
-          final count = await getCount();
+          final count = await _getCount();
+
           if (!context.mounted) return;
           if (count == 0)
-            await doUpdate();
+            await _doUpdate();
           else {
             showDialog(
               context: context,
@@ -105,7 +106,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       child: const Text('Confirm'),
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        await doUpdate();
+                        await _doUpdate();
                       },
                     ),
                   ],
