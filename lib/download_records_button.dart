@@ -77,6 +77,6 @@ class DownloadRecordsButton extends StatelessWidget {
           );
         },
         icon: const Icon(Icons.download),
-        label: const Text('Download CSV'));
+        label: const Text('Export data'));
   }
 }

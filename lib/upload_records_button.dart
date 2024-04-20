@@ -96,6 +96,6 @@ class UploadRecordsButton extends StatelessWidget {
           );
         },
         icon: const Icon(Icons.upload),
-        label: const Text('Upload CSV'));
+        label: const Text('Import data'));
   }
 }
