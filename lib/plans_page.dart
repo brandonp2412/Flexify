@@ -54,18 +54,18 @@ class _PlansPageWidget extends StatefulWidget {
 }
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
-  late Stream<List<drift.TypedResult>> countStream;
+  late Stream<List<drift.TypedResult>> _countStream;
   PlanState? _planState;
-  TextEditingController searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    updatePlans();
+    _updatePlans();
     final today = DateTime.now();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    countStream = (db.selectOnly(db.gymSets)
+    _countStream = (db.selectOnly(db.gymSets)
           ..addColumns([
             db.gymSets.name.count(),
             db.gymSets.name,
@@ -77,15 +77,9 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         .watch();
   }
 
-  Future<void> updatePlans({List<Plan>? plans}) async {
+  Future<void> _updatePlans({List<Plan>? plans}) async {
     _planState?.updatePlans(plans);
   }
-
-  Future<List<Plan>?> getPlans() async => await (db.select(db.plans)
-        ..orderBy([
-          (u) => drift.OrderingTerm(expression: u.sequence),
-        ]))
-      .get();
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +92,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             padding: const EdgeInsets.all(8.0),
             child: SearchBar(
               hintText: "Search...",
-              controller: searchController,
+              controller: _searchController,
               padding: MaterialStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
               ),
@@ -106,12 +100,12 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 setState(() {});
               },
               leading: const Icon(Icons.search),
-              trailing: searchController.text.isNotEmpty
+              trailing: _searchController.text.isNotEmpty
                   ? [
                       IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () {
-                          searchController.clear();
+                          _searchController.clear();
                           setState(() {});
                         },
                       )
@@ -120,8 +114,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                       PopupMenuButton(
                         icon: const Icon(Icons.more_vert),
                         itemBuilder: (context) => [
-                          enterWeight(context),
-                          settingsPage(context),
+                          _enterWeight(context),
+                          _settingsPage(context),
                         ],
                       )
                     ],
@@ -129,9 +123,9 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           ),
           _PlanWidget(
             plans: _planState?.plans ?? [],
-            searchText: searchController.text,
-            countStream: countStream,
-            updatePlans: updatePlans,
+            searchText: _searchController.text,
+            countStream: _countStream,
+            updatePlans: _updatePlans,
             navigatorKey: widget.navigatorKey,
           ),
         ],
@@ -149,7 +143,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               ),
             ),
           );
-          await updatePlans();
+          await _updatePlans();
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
@@ -157,7 +151,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     );
   }
 
-  PopupMenuItem<dynamic> settingsPage(BuildContext context) {
+  PopupMenuItem<dynamic> _settingsPage(BuildContext context) {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.settings),
@@ -168,13 +162,13 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             context,
             MaterialPageRoute(builder: (context) => const SettingsPage()),
           );
-          updatePlans();
+          _updatePlans();
         },
       ),
     );
   }
 
-  PopupMenuItem<dynamic> enterWeight(BuildContext context) {
+  PopupMenuItem<dynamic> _enterWeight(BuildContext context) {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.scale),
