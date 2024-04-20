@@ -30,10 +30,10 @@ echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/
 git add fastlane/metadata
 git commit --amend -m "$last_commit - $new_version 🚀"
 git tag "$new_build_number"
+git push --tags
+git push
 
 gh release create "$new_version" --notes "${changelog:-$last_commit}"  \
   build/app/outputs/flutter-apk/app-*-release.apk
 
 fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
-git push --tags
-git push
