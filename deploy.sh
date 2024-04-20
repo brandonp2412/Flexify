@@ -32,8 +32,8 @@ git commit --amend -m "$last_commit - $new_version 🚀"
 git tag "$new_build_number"
 
 gh release create "$new_version" --notes "${changelog:-$last_commit}"  \
-  build/app/outputs/flutter-apk/app*-release.apk
+  build/app/outputs/flutter-apk/app-*-release.apk
 
 fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
-git push --tags &
+git push --tags
 git push
