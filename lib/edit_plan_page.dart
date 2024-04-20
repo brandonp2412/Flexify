@@ -55,7 +55,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     super.dispose();
   }
 
-  void toggleSearch() {
+  void _toggleSearch() {
     setState(() {
       _showSearch = !_showSearch;
       if (!_showSearch) _search = '';
@@ -64,6 +64,64 @@ class _EditPlanPageState extends State<EditPlanPage> {
     _searchController.clear();
   }
 
+  Future<void> _save() async {
+    final days = [];
+    for (int i = 0; i < _daySwitches.length; i++) {
+      if (_daySwitches[i]) days.add(weekdays[i]);
+    }
+    if (days.isEmpty && _titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Select days/title first')),
+      );
+      return;
+    }
+
+    if (_exerciseSelections.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Select exercises first')),
+      );
+      return;
+    }
+
+    var newPlan = widget.plan.copyWith(
+      days: Value(days.join(',')),
+      exercises: Value(
+          _exerciseSelections.where((element) => element.isNotEmpty).join(',')),
+      title: Value(_titleController.text),
+    );
+
+    if (widget.plan.id.present)
+      await db.update(db.plans).replace(newPlan);
+    else {
+      final id = await db.into(db.plans).insert(newPlan);
+      newPlan = newPlan.copyWith(id: Value(id));
+    }
+
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
+  Iterable<material.SwitchListTile> get tiles => _exercises
+      .where(
+          (exercise) => exercise.toLowerCase().contains(_search.toLowerCase()))
+      .toList()
+      .asMap()
+      .entries
+      .map(
+        (entry) => SwitchListTile(
+          title: Text(entry.value),
+          value: _exerciseSelections.contains(entry.value),
+          onChanged: (value) {
+            setState(() {
+              if (value)
+                _exerciseSelections.add(entry.value);
+              else
+                _exerciseSelections.remove(entry.value);
+            });
+          },
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     List<Widget> actions = [];
@@ -71,7 +129,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (_search == '')
       actions.add(
         IconButton(
-          onPressed: toggleSearch,
+          onPressed: _toggleSearch,
           icon: const Icon(Icons.search),
         ),
       );
@@ -89,73 +147,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
           icon: const Icon(Icons.clear),
         ),
       );
-
-    List<Widget> getChildren() {
-      final List<Widget> children = [
-        material.TextField(
-          decoration:
-              const material.InputDecoration(labelText: 'Title (optional)'),
-          controller: _titleController,
-          textCapitalization: TextCapitalization.sentences,
-        ),
-        const SizedBox(
-          height: 16.0,
-        )
-      ];
-
-      if (_search == '')
-        children.add(
-          Text('Days', style: Theme.of(context).textTheme.headlineSmall),
-        );
-
-      final days = List.generate(7, (index) {
-        return SwitchListTile(
-          title: Text(weekdays[index]),
-          value: _daySwitches[index],
-          onChanged: (value) {
-            setState(() {
-              _daySwitches[index] = value;
-            });
-          },
-        );
-      });
-
-      final tiles = _exercises
-          .where((exercise) =>
-              exercise.toLowerCase().contains(_search.toLowerCase()))
-          .toList()
-          .asMap()
-          .entries
-          .map(
-            (entry) => SwitchListTile(
-              title: Text(entry.value),
-              value: _exerciseSelections.contains(entry.value),
-              onChanged: (value) {
-                setState(() {
-                  if (value)
-                    _exerciseSelections.add(entry.value);
-                  else
-                    _exerciseSelections.remove(entry.value);
-                });
-              },
-            ),
-          );
-
-      if (_search == '') children.addAll(days);
-      children.add(
-        Text('Exercises', style: Theme.of(context).textTheme.headlineSmall),
-      );
-      children.addAll(tiles);
-
-      return [
-        Expanded(
-          child: ListView.builder(
-            itemCount: children.length,
-            itemBuilder: (context, index) => children[index],
-          ),
-        ),
-      ];
-    }
 
     var title = widget.plan.days.value.replaceAll(",", ", ");
     if (title.isNotEmpty)
@@ -183,49 +174,38 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: material.Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: getChildren(),
+        child: ListView(
+          children: [
+            if (_search == '') ...[
+              TextField(
+                decoration: const material.InputDecoration(
+                    labelText: 'Title (optional)'),
+                controller: _titleController,
+                textCapitalization: TextCapitalization.sentences,
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              Text('Days', style: Theme.of(context).textTheme.headlineSmall),
+              ...List.generate(
+                  7,
+                  (index) => SwitchListTile(
+                        title: Text(weekdays[index]),
+                        value: _daySwitches[index],
+                        onChanged: (value) {
+                          setState(() {
+                            _daySwitches[index] = value;
+                          });
+                        },
+                      )),
+            ],
+            Text('Exercises', style: Theme.of(context).textTheme.headlineSmall),
+            ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final days = [];
-          for (int i = 0; i < _daySwitches.length; i++) {
-            if (_daySwitches[i]) days.add(weekdays[i]);
-          }
-          if (days.isEmpty && _titleController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Select days/title first')),
-            );
-            return;
-          }
-
-          if (_exerciseSelections.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Select exercises first')),
-            );
-            return;
-          }
-
-          var newPlan = widget.plan.copyWith(
-            days: Value(days.join(',')),
-            exercises: Value(_exerciseSelections
-                .where((element) => element.isNotEmpty)
-                .join(',')),
-            title: Value(_titleController.text),
-          );
-
-          if (widget.plan.id.present)
-            await db.update(db.plans).replace(newPlan);
-          else {
-            final id = await db.into(db.plans).insert(newPlan);
-            newPlan = newPlan.copyWith(id: Value(id));
-          }
-
-          if (!context.mounted) return;
-          Navigator.pop(context);
-        },
+        onPressed: _save,
         tooltip: "Save this plan",
         child: const Icon(Icons.save),
       ),
