@@ -135,18 +135,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
             builder: (context) => const PermissionsPage(),
           ));
 
-    if (!settings.restTimers) return;
-    final counts = await _countStream.first;
-    final countIndex = counts
-        .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
-    var count = 0;
-    if (countIndex != -1)
-      count = counts[countIndex].read(db.gymSets.name.count())!;
-    count++;
+    if (settings.restTimers) {
+      final counts = await _countStream.first;
+      final countIndex = counts
+          .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
+      var count = 0;
+      if (countIndex != -1)
+        count = counts[countIndex].read(db.gymSets.name.count())!;
+      count++;
+      await timerState.startTimer("$exercise ($count)", settings.timerDuration);
+    }
 
     db.into(db.gymSets).insert(gymSet);
-
-    await timerState.startTimer("$exercise ($count)", settings.timerDuration);
   }
 
   @override
