@@ -67,28 +67,23 @@ class UploadRecordsButton extends StatelessWidget {
                       List<List<dynamic>> rows =
                           const CsvToListConverter(eol: "\n").convert(csv);
                       if (rows.isEmpty) return;
-                      try {
-                        final plans = rows.map(
-                          (row) => PlansCompanion(
-                            days: Value(row[1]),
-                            exercises: Value(row[2]),
-                            title: Value(row.elementAtOrNull(3)),
-                            sequence: Value(row.elementAtOrNull(4)),
-                          ),
-                        );
-                        db.batch(
-                          (batch) => batch.insertAll(db.plans, plans),
-                        );
-                        if (!pageContext.mounted) return;
-                        Navigator.pop(pageContext);
-                        DefaultTabController.of(pageContext).animateTo(0);
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Failed to upload csv.')),
-                        );
+                      List<PlansCompanion> plans = [];
+                      for (final row in rows) {
+                        var sequence = row.elementAtOrNull(4);
+                        if (sequence is String) sequence = 0;
+                        plans.add(PlansCompanion(
+                          days: Value(row[1]),
+                          exercises: Value(row[2]),
+                          title: Value(row.elementAtOrNull(3)),
+                          sequence: Value(sequence),
+                        ));
                       }
+                      db.batch(
+                        (batch) => batch.insertAll(db.plans, plans),
+                      );
+                      if (!pageContext.mounted) return;
+                      Navigator.pop(pageContext);
+                      DefaultTabController.of(pageContext).animateTo(0);
                     },
                   ),
                 ],
