@@ -5,10 +5,10 @@ import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
-class UploadRecordsButton extends StatelessWidget {
+class ExportData extends StatelessWidget {
   final BuildContext pageContext;
 
-  const UploadRecordsButton({
+  const ExportData({
     super.key,
     required this.pageContext,
   });

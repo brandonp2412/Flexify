@@ -1,7 +1,7 @@
 import 'package:flexify/delete_records_button.dart';
-import 'package:flexify/download_records_button.dart';
+import 'package:flexify/import_data.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/upload_records_button.dart';
+import 'package:flexify/export_data.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -225,11 +225,10 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
-          key: 'download csv', widget: const DownloadRecordsButton()),
+      WidgetSettings(key: 'download csv', widget: const ImportData()),
       WidgetSettings(
           key: 'upload csv',
-          widget: UploadRecordsButton(
+          widget: ExportData(
             pageContext: context,
           )),
       WidgetSettings(

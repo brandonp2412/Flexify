@@ -4,8 +4,8 @@ import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
-class DownloadRecordsButton extends StatelessWidget {
-  const DownloadRecordsButton({
+class ImportData extends StatelessWidget {
+  const ImportData({
     super.key,
   });
 
