@@ -13,7 +13,9 @@ import 'package:provider/provider.dart';
 import 'graph_tile.dart';
 
 class GraphsPage extends StatefulWidget {
-  const GraphsPage({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const GraphsPage({super.key, required this.navigatorKey});
 
   @override
   createState() => _GraphsPageState();
@@ -22,7 +24,6 @@ class GraphsPage extends StatefulWidget {
 class _GraphsPageState extends State<GraphsPage> {
   Stream<List<drift.TypedResult>>? _stream;
   final TextEditingController _searchController = TextEditingController();
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final Set<String> _selected = {};
 
   @override
@@ -50,12 +51,12 @@ class _GraphsPageState extends State<GraphsPage> {
   Widget build(BuildContext context) {
     return NavigatorPopHandler(
       onPop: () {
-        if (_navigatorKey.currentState!.canPop() == false) return;
-        if (_navigatorKey.currentState?.focusNode.hasFocus == false) return;
-        _navigatorKey.currentState!.pop();
+        if (graphsKey.currentState!.canPop() == false) return;
+        if (graphsKey.currentState?.focusNode.hasFocus == false) return;
+        widget.navigatorKey.currentState!.pop();
       },
       child: Navigator(
-        key: _navigatorKey,
+        key: graphsKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _graphsPage(),
           settings: settings,

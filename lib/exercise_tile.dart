@@ -40,12 +40,12 @@ class ExerciseTile extends StatelessWidget {
                   title: const Text('Graphs'),
                   onTap: () async {
                     Navigator.pop(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewGraphPage(
-                                  name: exercise,
-                                )));
+                    DefaultTabController.of(context).animateTo(1);
+                    await Future.delayed(kTabScrollDuration);
+                    graphsKey.currentState!.push(MaterialPageRoute(
+                        builder: (context) => ViewGraphPage(
+                              name: exercise,
+                            )));
                   },
                 ),
                 if (count > 0)
