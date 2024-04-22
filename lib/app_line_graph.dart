@@ -3,10 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/graph_data.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AppLineGraph extends StatefulWidget {
   final List<TypedResult> data;
@@ -116,7 +114,6 @@ class _AppLineGraphState extends State<AppLineGraph> {
       fontSize: 16,
     );
     Widget text;
-    DateFormat formatter = DateFormat("d/M/yy");
 
     int middleIndex = (rows.length / 2).floor();
     List<int> indices;
@@ -129,7 +126,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
-      text = Text(formatter.format(createdDate), style: style);
+      text = Text(DateFormat("d/M/yy").format(createdDate), style: style);
     } else {
       text = const Text('', style: style);
     }
@@ -142,15 +139,21 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
   LineTouchTooltipData _tooltipData(
       BuildContext context, List<GraphData> rows) {
-    final settings = context.watch<SettingsState>();
-
     return LineTouchTooltipData(
       tooltipBgColor: Theme.of(context).colorScheme.background,
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
-        final created = DateFormat(settings.dateFormat).format(row.created);
+        final created = DateFormat("d/M/yy").format(row.created);
+        final formatter = NumberFormat("#,###.00");
+
         String text =
-            "${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
+            "${row.reps} x ${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
+        if (widget.metric == Metric.relativeStrength)
+          text = "${row.value.toStringAsFixed(2)} $created";
+        else if (widget.metric == Metric.volume ||
+            widget.metric == Metric.oneRepMax)
+          text = "${formatter.format(row.value)}${widget.targetUnit} $created";
+
         return [
           LineTooltipItem(text,
               TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color))
