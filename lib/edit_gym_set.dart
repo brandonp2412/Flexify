@@ -96,6 +96,39 @@ class _EditGymSetState extends State<EditGymSet> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit ${widget.gymSet.name.value}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              await showDialog(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return AlertDialog(
+                    title: const Text('Confirm Delete'),
+                    content: Text(
+                        'Are you sure you want to delete ${widget.gymSet.name.value}?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.pop(dialogContext);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Delete'),
+                        onPressed: () async {
+                          Navigator.pop(dialogContext);
+                          await db.delete(db.gymSets).delete(widget.gymSet);
+                          if (context.mounted) Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
