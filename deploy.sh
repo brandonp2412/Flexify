@@ -30,8 +30,6 @@ echo "${changelog:-$last_commits}" > "fastlane/metadata/android/en-US/changelogs
 git add fastlane/metadata
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀"
-git tag "$new_build_number"
-git push --tags
 git push
 
 gh release create "$new_version" --notes "${changelog:-$last_commits}"  \
