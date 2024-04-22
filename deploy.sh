@@ -24,7 +24,7 @@ flutter build appbundle
 
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
-last_commits=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | awk '{print "- "$0}')
+last_commits=$(git log --pretty=format:"%s" @{u}..HEAD | awk '{print "- "$0}')
 changelog="$1"
 echo "${changelog:-$last_commits}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add fastlane/metadata
