@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/graph_data.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
@@ -26,6 +27,7 @@ class AppLineGraph extends StatefulWidget {
 class _AppLineGraphState extends State<AppLineGraph> {
   late Stream<List<TypedResult>> _graphStream;
   late SettingsState _settings;
+  DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
   @override
   void initState() {
@@ -134,6 +136,32 @@ class _AppLineGraphState extends State<AppLineGraph> {
                 ),
                 lineTouchData: LineTouchData(
                   enabled: true,
+                  touchCallback: (event, touchResponse) async {
+                    if (event is! FlPanDownEvent) return;
+                    if (widget.metric != Metric.bestWeight) return;
+                    if (DateTime.now().difference(_lastTap) <
+                        const Duration(milliseconds: 300)) {
+                      final index = touchResponse?.lineBarSpots?[0].spotIndex;
+                      if (index == null) return;
+                      final row = rows[index];
+                      final gymSet = await (db.gymSets.select()
+                            ..where((tbl) => tbl.created.equals(row.created))
+                            ..where((tbl) => tbl.reps.equals(row.reps))
+                            ..where((tbl) => tbl.weight.equals(row.value))
+                            ..where((tbl) => tbl.name.equals(widget.name))
+                            ..limit(1))
+                          .getSingle();
+
+                      if (!context.mounted) return;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditGymSet(
+                                    gymSet: gymSet.toCompanion(false),
+                                  )));
+                    }
+                    _lastTap = DateTime.now();
+                  },
                   touchTooltipData: _tooltipData(context, rows),
                   longPressDuration: Duration.zero,
                 ),
