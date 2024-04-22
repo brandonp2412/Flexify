@@ -17,7 +17,6 @@ class ViewGraphPage extends StatefulWidget {
 }
 
 class _ViewGraphPageState extends State<ViewGraphPage> {
-  late Stream<List<drift.TypedResult>> _graphStream;
   Metric _metric = Metric.bestWeight;
   String _targetUnit = 'kg';
   bool _editing = false;
@@ -27,26 +26,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   @override
   void initState() {
     super.initState();
-    _graphStream = (db.selectOnly(db.gymSets)
-          ..addColumns([
-            db.gymSets.weight.max(),
-            volume,
-            oneRepMax,
-            db.gymSets.created,
-            db.gymSets.reps,
-            db.gymSets.unit,
-            relativeStrength,
-          ])
-          ..where(db.gymSets.name.equals(widget.name))
-          ..where(db.gymSets.hidden.equals(false))
-          ..orderBy([
-            drift.OrderingTerm(
-                expression: db.gymSets.created.date,
-                mode: drift.OrderingMode.desc)
-          ])
-          ..limit(11)
-          ..groupBy([db.gymSets.created.date]))
-        .watch();
     _nameController = TextEditingController(text: widget.name);
   }
 
@@ -138,32 +117,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 });
               },
             ),
-            StreamBuilder<List<drift.TypedResult>>(
-              stream: _graphStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox();
-                if (snapshot.data?.isEmpty == true)
-                  return ListTile(
-                    title: Text("No data yet for ${widget.name}"),
-                    subtitle:
-                        const Text("Complete some plans to view graphs here"),
-                    contentPadding: EdgeInsets.zero,
-                  );
-                if (snapshot.hasError)
-                  return ErrorWidget(snapshot.error.toString());
-
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 80.0, right: 32.0, top: 16.0),
-                    child: AppLineGraph(
-                        data: snapshot.data!,
-                        metric: _metric,
-                        targetUnit: _targetUnit),
-                  ),
-                );
-              },
-            ),
+            AppLineGraph(
+                name: widget.name, metric: _metric, targetUnit: _targetUnit),
           ],
         ),
       ),

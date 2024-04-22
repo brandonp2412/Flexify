@@ -9,13 +9,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AppLineGraph extends StatefulWidget {
-  final List<TypedResult> data;
+  final String name;
   final Metric metric;
   final String targetUnit;
 
   const AppLineGraph(
       {super.key,
-      required this.data,
+      required this.name,
       required this.metric,
       required this.targetUnit});
 
@@ -24,9 +24,30 @@ class AppLineGraph extends StatefulWidget {
 }
 
 class _AppLineGraphState extends State<AppLineGraph> {
+  late Stream<List<TypedResult>> _graphStream;
+
   @override
   void initState() {
     super.initState();
+    _graphStream = (db.selectOnly(db.gymSets)
+          ..addColumns([
+            db.gymSets.weight.max(),
+            volume,
+            oneRepMax,
+            db.gymSets.created,
+            db.gymSets.reps,
+            db.gymSets.unit,
+            relativeStrength,
+          ])
+          ..where(db.gymSets.name.equals(widget.name))
+          ..where(db.gymSets.hidden.equals(false))
+          ..orderBy([
+            OrderingTerm(
+                expression: db.gymSets.created.date, mode: OrderingMode.desc)
+          ])
+          ..limit(11)
+          ..groupBy([db.gymSets.created.date]))
+        .watch();
   }
 
   double getValue(TypedResult row, Metric metric) {
@@ -46,67 +67,88 @@ class _AppLineGraphState extends State<AppLineGraph> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
-    List<FlSpot> spots = [];
-    List<GraphData> rows = [];
 
-    for (var index = 0; index < widget.data.length; index++) {
-      final row = widget.data.reversed.elementAt(index);
-      final unit = row.read(db.gymSets.unit)!;
-      var value = getValue(row, widget.metric);
+    return StreamBuilder<List<TypedResult>>(
+      stream: _graphStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox();
+        if (snapshot.data?.isEmpty == true)
+          return ListTile(
+            title: Text("No data yet for ${widget.name}"),
+            subtitle: const Text("Complete some plans to view graphs here"),
+            contentPadding: EdgeInsets.zero,
+          );
+        if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
-      if (unit == 'lb' && widget.targetUnit == 'kg') {
-        value *= 0.45359237;
-      } else if (unit == 'kg' && widget.targetUnit == 'lb') {
-        value *= 2.20462262;
-      }
+        List<FlSpot> spots = [];
+        List<GraphData> rows = [];
 
-      rows.add(GraphData(
-        value: value,
-        created: row.read(db.gymSets.created)!,
-        reps: row.read(db.gymSets.reps)!,
-        unit: row.read(db.gymSets.unit)!,
-      ));
-      spots.add(FlSpot(index.toDouble(), value));
-    }
+        for (var index = 0; index < snapshot.data!.length; index++) {
+          final row = snapshot.data!.reversed.elementAt(index);
+          final unit = row.read(db.gymSets.unit)!;
+          var value = getValue(row, widget.metric);
 
-    return LineChart(
-      LineChartData(
-        titlesData: FlTitlesData(
-          topTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles: const AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 45,
+          if (unit == 'lb' && widget.targetUnit == 'kg') {
+            value *= 0.45359237;
+          } else if (unit == 'kg' && widget.targetUnit == 'lb') {
+            value *= 2.20462262;
+          }
+
+          rows.add(GraphData(
+            value: value,
+            created: row.read(db.gymSets.created)!,
+            reps: row.read(db.gymSets.reps)!,
+            unit: row.read(db.gymSets.unit)!,
+          ));
+          spots.add(FlSpot(index.toDouble(), value));
+        }
+
+        return Expanded(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(bottom: 80.0, right: 32.0, top: 16.0),
+            child: LineChart(
+              LineChartData(
+                titlesData: FlTitlesData(
+                  topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: const AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 45,
+                    ),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 27,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) =>
+                          _bottomTitleWidgets(value, meta, rows),
+                    ),
+                  ),
+                ),
+                lineTouchData: LineTouchData(
+                  enabled: true,
+                  touchTooltipData: _tooltipData(context, rows),
+                  longPressDuration: Duration.zero,
+                ),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: spots,
+                    isCurved: settings.curveLines,
+                    color: Theme.of(context).colorScheme.primary,
+                    barWidth: 3,
+                    isStrokeCapRound: true,
+                  ),
+                ],
+              ),
             ),
           ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 27,
-              interval: 1,
-              getTitlesWidget: (value, meta) =>
-                  _bottomTitleWidgets(value, meta, rows),
-            ),
-          ),
-        ),
-        lineTouchData: LineTouchData(
-          enabled: true,
-          touchTooltipData: _tooltipData(context, rows),
-          longPressDuration: Duration.zero,
-        ),
-        lineBarsData: [
-          LineChartBarData(
-            spots: spots,
-            isCurved: settings.curveLines,
-            color: Theme.of(context).colorScheme.primary,
-            barWidth: 3,
-            isStrokeCapRound: true,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
