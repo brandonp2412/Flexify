@@ -28,6 +28,7 @@ class SettingsState extends ChangeNotifier {
     final ms = prefsInstance.getInt("timerDuration");
     if (ms != null) timerDuration = Duration(milliseconds: ms);
 
+    systemColors = prefsInstance.getBool("systemColors") ?? true;
     showReorder = prefsInstance.getBool("showReorder") ?? true;
     restTimers = prefsInstance.getBool("restTimers") ?? true;
     showUnits = prefsInstance.getBool("showUnits") ?? true;
