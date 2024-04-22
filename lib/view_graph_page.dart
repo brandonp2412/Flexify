@@ -5,6 +5,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(
         title: _editing
@@ -131,21 +134,22 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 });
               },
             ),
-            DropdownButtonFormField<String>(
-              value: _targetUnit,
-              decoration: const InputDecoration(labelText: 'Unit'),
-              items: ['kg', 'lb'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _targetUnit = newValue!;
-                });
-              },
-            ),
+            if (settings.showUnits)
+              DropdownButtonFormField<String>(
+                value: _targetUnit,
+                decoration: const InputDecoration(labelText: 'Unit'),
+                items: ['kg', 'lb'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _targetUnit = newValue!;
+                  });
+                },
+              ),
             AppLineGraph(
               name: widget.name,
               metric: _metric,
