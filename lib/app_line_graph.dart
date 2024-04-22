@@ -13,12 +13,14 @@ class AppLineGraph extends StatefulWidget {
   final String name;
   final Metric metric;
   final String targetUnit;
+  final AppGroupBy groupBy;
 
   const AppLineGraph(
       {super.key,
       required this.name,
       required this.metric,
-      required this.targetUnit});
+      required this.targetUnit,
+      required this.groupBy});
 
   @override
   createState() => _AppLineGraphState();
@@ -27,20 +29,51 @@ class AppLineGraph extends StatefulWidget {
 class _AppLineGraphState extends State<AppLineGraph> {
   late Stream<List<TypedResult>> _graphStream;
   late SettingsState _settings;
+  final _ormColumn = db.gymSets.weight /
+      (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
+  final _volumeColumn =
+      const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
+  final _relativeColumn = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+  final _weekColumn = const CustomExpression<double>("STRFTIME('%W', created)");
+
   DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
+
+  @override
+  void didUpdateWidget(covariant AppLineGraph oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _setStream();
+  }
 
   @override
   void initState() {
     super.initState();
+    _setStream();
+    _settings = context.read<SettingsState>();
+  }
+
+  void _setStream() {
+    Iterable<Expression> groupBy = [db.gymSets.created.date];
+
+    if (widget.groupBy == AppGroupBy.month)
+      groupBy = [db.gymSets.created.day, db.gymSets.created.month];
+    else if (widget.groupBy == AppGroupBy.week)
+      groupBy = [
+        db.gymSets.created.year,
+        db.gymSets.created.month,
+        _weekColumn
+      ];
+    else if (widget.groupBy == AppGroupBy.year)
+      groupBy = [db.gymSets.created.year];
+
     _graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
             db.gymSets.weight.max(),
-            volume,
-            oneRepMax,
+            _volumeColumn,
+            _ormColumn,
             db.gymSets.created,
             db.gymSets.reps,
             db.gymSets.unit,
-            relativeStrength,
+            _relativeColumn,
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
@@ -49,18 +82,17 @@ class _AppLineGraphState extends State<AppLineGraph> {
                 expression: db.gymSets.created.date, mode: OrderingMode.desc)
           ])
           ..limit(11)
-          ..groupBy([db.gymSets.created.date]))
+          ..groupBy(groupBy))
         .watch();
-    _settings = context.read<SettingsState>();
   }
 
   double getValue(TypedResult row, Metric metric) {
     if (metric == Metric.oneRepMax) {
-      return row.read(oneRepMax)!;
+      return row.read(_ormColumn)!;
     } else if (metric == Metric.volume) {
-      return row.read(volume)!;
+      return row.read(_volumeColumn)!;
     } else if (metric == Metric.relativeStrength) {
-      return row.read(relativeStrength)!;
+      return row.read(_relativeColumn)!;
     } else if (metric == Metric.bestWeight) {
       return row.read(db.gymSets.weight.max())!;
     } else {

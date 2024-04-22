@@ -18,8 +18,10 @@ class ViewGraphPage extends StatefulWidget {
 
 class _ViewGraphPageState extends State<ViewGraphPage> {
   Metric _metric = Metric.bestWeight;
+  AppGroupBy _groupBy = AppGroupBy.day;
   String _targetUnit = 'kg';
   bool _editing = false;
+
   final _nameNode = FocusNode();
   late TextEditingController _nameController;
 
@@ -102,6 +104,33 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 },
               ),
             ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Group by'),
+              value: _groupBy,
+              items: const [
+                DropdownMenuItem(
+                  value: AppGroupBy.day,
+                  child: Text("Day"),
+                ),
+                DropdownMenuItem(
+                  value: AppGroupBy.week,
+                  child: Text("Week"),
+                ),
+                DropdownMenuItem(
+                  value: AppGroupBy.month,
+                  child: Text("Month"),
+                ),
+                DropdownMenuItem(
+                  value: AppGroupBy.year,
+                  child: Text("Year"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _groupBy = value!;
+                });
+              },
+            ),
             DropdownButtonFormField<String>(
               value: _targetUnit,
               decoration: const InputDecoration(labelText: 'Unit'),
@@ -118,7 +147,11 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               },
             ),
             AppLineGraph(
-                name: widget.name, metric: _metric, targetUnit: _targetUnit),
+              name: widget.name,
+              metric: _metric,
+              targetUnit: _targetUnit,
+              groupBy: _groupBy,
+            ),
           ],
         ),
       ),

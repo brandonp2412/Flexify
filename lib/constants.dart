@@ -1,11 +1,12 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
-import 'package:flexify/main.dart';
 
-final oneRepMax = db.gymSets.weight /
-    (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
-const volume = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-final relativeStrength = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+enum AppGroupBy {
+  day,
+  week,
+  month,
+  year,
+}
 
 enum Metric {
   oneRepMax,
