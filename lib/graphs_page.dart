@@ -86,7 +86,7 @@ class _GraphsPageState extends State<GraphsPage> {
                 leading: const Icon(Icons.done_all),
                 title: const Text('Select all'),
                 onTap: () async {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                   final names =
                       filteredGymSets.map((e) => e.read(db.gymSets.name)!);
                   setState(() {
@@ -225,7 +225,7 @@ class _GraphsPageState extends State<GraphsPage> {
                 TextButton(
                   child: const Text('Cancel'),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pop(context);
                   },
                 ),
                 TextButton(
@@ -233,7 +233,7 @@ class _GraphsPageState extends State<GraphsPage> {
                   onPressed: () async {
                     final planState = context.read<PlanState>();
                     final selectedCopy = _selected.toList();
-                    Navigator.of(context).pop();
+                    Navigator.pop(context);
                     setState(() {
                       _selected.clear();
                     });
@@ -284,7 +284,7 @@ class _GraphsPageState extends State<GraphsPage> {
         leading: const Icon(Icons.settings),
         title: const Text('Settings'),
         onTap: () {
-          Navigator.of(context).pop();
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const SettingsPage()),
@@ -300,7 +300,7 @@ class _GraphsPageState extends State<GraphsPage> {
         leading: const Icon(Icons.scale),
         title: const Text('Enter weight'),
         onTap: () {
-          Navigator.of(context).pop();
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EnterWeightPage()),
@@ -316,7 +316,7 @@ class _GraphsPageState extends State<GraphsPage> {
         leading: const Icon(Icons.clear),
         title: const Text('Clear'),
         onTap: () async {
-          Navigator.of(context).pop();
+          Navigator.pop(context);
           setState(() {
             _selected.clear();
           });

@@ -120,14 +120,14 @@ class _PermissionsPageState extends State<PermissionsPage> {
                     TextButton(
                       child: const Text('Cancel'),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                     ),
                     TextButton(
                       child: const Text('OK'),
                       onPressed: () async {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                         settings.setExplained(true);
                       },
                     ),
@@ -136,7 +136,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
               },
             );
           else {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
             settings.setExplained(true);
           }
         },

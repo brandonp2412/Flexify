@@ -56,7 +56,7 @@ class ImportData extends StatelessWidget {
                     leading: const Icon(Icons.event),
                     title: const Text('Plans'),
                     onTap: () async {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       final plans = await db.plans.select().get();
                       final List<List<dynamic>> csvData = [
                         ['id', 'days', 'exercises', 'title', 'sequence']

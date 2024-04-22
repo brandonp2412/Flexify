@@ -55,13 +55,13 @@ class _GraphHistoryState extends State<GraphHistory> {
                     TextButton(
                       child: const Text('Cancel'),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                     ),
                     TextButton(
                       child: const Text('Delete'),
                       onPressed: () async {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                         (db.delete(db.gymSets)
                               ..where((tbl) => tbl.id.isIn(_selected)))
                             .go();

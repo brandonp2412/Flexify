@@ -36,7 +36,7 @@ class DeleteRecordsButton extends StatelessWidget {
                               TextButton(
                                 child: const Text('Cancel'),
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  Navigator.pop(context);
                                 },
                               ),
                               TextButton(
@@ -60,7 +60,7 @@ class DeleteRecordsButton extends StatelessWidget {
                     leading: const Icon(Icons.event),
                     title: const Text('Plans'),
                     onTap: () async {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -72,7 +72,7 @@ class DeleteRecordsButton extends StatelessWidget {
                               TextButton(
                                 child: const Text('Cancel'),
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  Navigator.pop(context);
                                 },
                               ),
                               TextButton(
@@ -80,7 +80,7 @@ class DeleteRecordsButton extends StatelessWidget {
                                 onPressed: () async {
                                   final planState =
                                       pageContext.read<PlanState>();
-                                  Navigator.of(context).pop();
+                                  Navigator.pop(context);
                                   await db.delete(db.plans).go();
                                   planState.updatePlans(null);
                                   if (!pageContext.mounted) return;

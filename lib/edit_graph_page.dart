@@ -99,13 +99,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     TextButton(
                       child: const Text('Cancel'),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                     ),
                     TextButton(
                       child: const Text('Confirm'),
                       onPressed: () async {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                         await _doUpdate();
                       },
                     ),

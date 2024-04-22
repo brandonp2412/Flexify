@@ -63,7 +63,7 @@ class ExerciseTile extends StatelessWidget {
                   leading: const Icon(Icons.undo),
                   title: const Text('Undo'),
                   onTap: () async {
-                    Navigator.of(context).pop();
+                    Navigator.pop(context);
                     final gymSet = await (db.select(db.gymSets)
                           ..where((r) => db.gymSets.name.equals(exercise))
                           ..orderBy([

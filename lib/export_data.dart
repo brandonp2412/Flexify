@@ -62,7 +62,7 @@ class ExportData extends StatelessWidget {
                     leading: const Icon(Icons.event),
                     title: const Text('Plans'),
                     onTap: () async {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       String csv = await android.invokeMethod('read');
                       List<List<dynamic>> rows =
                           const CsvToListConverter(eol: "\n").convert(csv);

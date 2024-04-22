@@ -142,7 +142,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         leading: const Icon(Icons.settings),
         title: const Text('Settings'),
         onTap: () async {
-          Navigator.of(context).pop();
+          Navigator.pop(context);
           await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const SettingsPage()),
@@ -159,7 +159,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         leading: const Icon(Icons.scale),
         title: const Text('Weight'),
         onTap: () {
-          Navigator.of(context).pop();
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EnterWeightPage()),
