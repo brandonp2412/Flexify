@@ -97,7 +97,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
         lineBarsData: [
           LineChartBarData(
             spots: spots,
-            isCurved: false,
+            isCurved: true,
             color: Theme.of(context).colorScheme.primary,
             barWidth: 3,
             isStrokeCapRound: true,
