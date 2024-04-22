@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
+import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
@@ -125,67 +126,15 @@ class _GraphsPageState extends State<GraphsPage> {
                           padding: EdgeInsets.zero,
                         ),
                   trailing: [
-                    if (_selected.isNotEmpty)
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirm Delete'),
-                                content: Text(
-                                    'Are you sure you want to delete ${_selected.length} graphs? This action is not reversible.'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Cancel'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Delete'),
-                                    onPressed: () async {
-                                      final planState =
-                                          context.read<PlanState>();
-                                      final selectedCopy = _selected.toList();
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        _selected.clear();
-                                      });
-
-                                      await (db.delete(db.gymSets)
-                                            ..where((tbl) =>
-                                                tbl.name.isIn(selectedCopy)))
-                                          .go();
-                                      final plans =
-                                          await db.plans.select().get();
-                                      for (final plan in plans) {
-                                        final exercises =
-                                            plan.exercises.split(',');
-                                        exercises.removeWhere((exercise) =>
-                                            selectedCopy.contains(exercise));
-                                        final updatedExercises =
-                                            exercises.join(',');
-                                        await db.update(db.plans).replace(
-                                            plan.copyWith(
-                                                exercises: updatedExercises));
-                                      }
-                                      planState.updatePlans(null);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
+                    if (_selected.isNotEmpty) _deleteGraphs(context),
+                    if (_selected.length == 1) _editGraph(context),
                     PopupMenuButton(
                       icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) => [
-                        if (_selected.isEmpty) _enterWeight(context),
                         selectAll(context),
-                        _settingsPage(context)
+                        if (_selected.isNotEmpty) _clear(context),
+                        if (_selected.isEmpty) _enterWeight(context),
+                        if (_selected.isEmpty) _settingsPage(context)
                       ],
                     ),
                   ],
@@ -261,6 +210,74 @@ class _GraphsPageState extends State<GraphsPage> {
     );
   }
 
+  IconButton _deleteGraphs(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm Delete'),
+              content: Text(
+                  'Are you sure you want to delete ${_selected.length} graphs? This action is not reversible.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Delete'),
+                  onPressed: () async {
+                    final planState = context.read<PlanState>();
+                    final selectedCopy = _selected.toList();
+                    Navigator.of(context).pop();
+                    setState(() {
+                      _selected.clear();
+                    });
+
+                    await (db.delete(db.gymSets)
+                          ..where((tbl) => tbl.name.isIn(selectedCopy)))
+                        .go();
+                    final plans = await db.plans.select().get();
+                    for (final plan in plans) {
+                      final exercises = plan.exercises.split(',');
+                      exercises.removeWhere(
+                          (exercise) => selectedCopy.contains(exercise));
+                      final updatedExercises = exercises.join(',');
+                      await db
+                          .update(db.plans)
+                          .replace(plan.copyWith(exercises: updatedExercises));
+                    }
+                    planState.updatePlans(null);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  IconButton _editGraph(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.edit),
+      tooltip: 'Edit graph',
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EditGraphPage(
+                    name: _selected.first,
+                  )),
+        );
+      },
+    );
+  }
+
   PopupMenuItem<dynamic> _settingsPage(BuildContext context) {
     return PopupMenuItem(
       child: ListTile(
@@ -281,13 +298,28 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.scale),
-        title: const Text('Weight'),
+        title: const Text('Enter weight'),
         onTap: () {
           Navigator.of(context).pop();
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EnterWeightPage()),
           );
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> _clear(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.clear),
+        title: const Text('Clear'),
+        onTap: () async {
+          Navigator.of(context).pop();
+          setState(() {
+            _selected.clear();
+          });
         },
       ),
     );
