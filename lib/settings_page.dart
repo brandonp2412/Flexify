@@ -159,9 +159,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 settings.setLong(newValue!);
               },
               decoration: InputDecoration(
-                labelText: 'Long date format',
-                helperText:
-                    'Current date: ${DateFormat(settings.longDateFormat).format(DateTime.now())}',
+                labelText:
+                    'Long date format (${DateFormat(settings.longDateFormat).format(DateTime.now())})',
               ),
             ),
           )),
@@ -181,9 +180,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 settings.setShort(newValue!);
               },
               decoration: InputDecoration(
-                labelText: 'Short date format',
-                helperText:
-                    'Current date: ${DateFormat(settings.shortDateFormat).format(DateTime.now())}',
+                labelText:
+                    'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
               ),
             ),
           )),
