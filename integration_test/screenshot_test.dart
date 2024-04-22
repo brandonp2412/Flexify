@@ -20,6 +20,7 @@ Map<String, double> exercisesToPopulateTestDB = {
   "Dumbbell chest press": 55,
   "Dumbbell lateral raise": 10,
   "Dumbbell shoulder press": 40,
+  "Triceps dip": 20,
 };
 
 class SetInfo {
@@ -240,6 +241,11 @@ void main() {
               plans.first.exercises.value.split(",").join(", "),
             ),
           );
+          await tester.pumpAndSettle();
+          await tester.enterText(find.widgetWithText(TextField, "Reps"), "10");
+          await tester.enterText(
+              find.widgetWithText(TextField, "Weight (kg)"), "20");
+          await tester.pumpAndSettle();
         },
       ),
     );
@@ -276,6 +282,19 @@ void main() {
         screenshotName: '7_en-US',
         navigateToPage: () async {
           await tester.tap(find.byIcon(Icons.add));
+          await tester.pumpAndSettle();
+
+          // If I didn't do this, it would only tap the title and not enter the text.
+          binding.testTextInput.register();
+
+          await tester.enterText(
+              find.widgetWithText(TextField, "Title (optional)"), "Full body");
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("Monday"));
+          await tester.tap(find.text("Wednesday"));
+          await tester.tap(find.text("Friday"));
+          await tester.tap(find.text("Barbell bench press"));
+          await tester.pumpAndSettle();
         },
       ),
     );

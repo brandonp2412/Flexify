@@ -1,0 +1,11 @@
+- Improve screenshots
+- Hide unit selector on graphs if units are turned off
+- Add group by field for graphs (day/week/month/year)
+- Animate to graphs tab when viewing an exercise from plans
+- View graphs for an exercise from plans
+- Remove tags from deploy.sh - 1.0.59 🚀
+- Add delete button to edit gym set page
+- Edit graph points by double tapping
+- Move date settings helper text into the label
+- Add short date format setting
+- Refactor line graphs
