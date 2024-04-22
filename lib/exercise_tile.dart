@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
+import 'package:flexify/view_graph_page.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,52 +30,67 @@ class ExerciseTile extends StatelessWidget {
     final settingsState = context.watch<SettingsState>();
     return GestureDetector(
       onLongPressStart: (details) async {
-        if (count == 0) return;
-
         showModalBottomSheet(
           context: context,
           builder: (context) {
             return Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: const Text('Edit'),
+                  leading: const Icon(Icons.insights),
+                  title: const Text('Graphs'),
                   onTap: () async {
                     Navigator.pop(context);
-                    final gymSet = await (db.select(db.gymSets)
-                          ..where((r) => db.gymSets.name.equals(exercise))
-                          ..orderBy([
-                            (u) => OrderingTerm(
-                                expression: u.created, mode: OrderingMode.desc),
-                          ])
-                          ..limit(1))
-                        .getSingle();
-                    if (!context.mounted) return;
-                    await Navigator.push(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              EditGymSet(gymSet: gymSet.toCompanion(false)),
-                        ));
-                    selectAllReps();
+                            builder: (context) => ViewGraphPage(
+                                  name: exercise,
+                                )));
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.undo),
-                  title: const Text('Undo'),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    final gymSet = await (db.select(db.gymSets)
-                          ..where((r) => db.gymSets.name.equals(exercise))
-                          ..orderBy([
-                            (u) => OrderingTerm(
-                                expression: u.created, mode: OrderingMode.desc),
-                          ])
-                          ..limit(1))
-                        .getSingle();
-                    await db.gymSets.deleteOne(gymSet);
-                  },
-                ),
+                if (count > 0)
+                  ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: const Text('Edit'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final gymSet = await (db.select(db.gymSets)
+                            ..where((r) => db.gymSets.name.equals(exercise))
+                            ..orderBy([
+                              (u) => OrderingTerm(
+                                  expression: u.created,
+                                  mode: OrderingMode.desc),
+                            ])
+                            ..limit(1))
+                          .getSingle();
+                      if (!context.mounted) return;
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditGymSet(gymSet: gymSet.toCompanion(false)),
+                          ));
+                      selectAllReps();
+                    },
+                  ),
+                if (count > 0)
+                  ListTile(
+                    leading: const Icon(Icons.undo),
+                    title: const Text('Undo'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final gymSet = await (db.select(db.gymSets)
+                            ..where((r) => db.gymSets.name.equals(exercise))
+                            ..orderBy([
+                              (u) => OrderingTerm(
+                                  expression: u.created,
+                                  mode: OrderingMode.desc),
+                            ])
+                            ..limit(1))
+                          .getSingle();
+                      await db.gymSets.deleteOne(gymSet);
+                    },
+                  ),
               ],
             );
           },
