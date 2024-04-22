@@ -25,6 +25,7 @@ class AppLineGraph extends StatefulWidget {
 
 class _AppLineGraphState extends State<AppLineGraph> {
   late Stream<List<TypedResult>> _graphStream;
+  late SettingsState _settings;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
           ..limit(11)
           ..groupBy([db.gymSets.created.date]))
         .watch();
+    _settings = context.read<SettingsState>();
   }
 
   double getValue(TypedResult row, Metric metric) {
@@ -66,7 +68,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    _settings = context.watch<SettingsState>();
 
     return StreamBuilder<List<TypedResult>>(
       stream: _graphStream,
@@ -138,7 +140,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
                 lineBarsData: [
                   LineChartBarData(
                     spots: spots,
-                    isCurved: settings.curveLines,
+                    isCurved: _settings.curveLines,
                     color: Theme.of(context).colorScheme.primary,
                     barWidth: 3,
                     isStrokeCapRound: true,
@@ -171,7 +173,8 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
-      text = Text(DateFormat("d/M/yy").format(createdDate), style: style);
+      text = Text(DateFormat(_settings.shortDateFormat).format(createdDate),
+          style: style);
     } else {
       text = const Text('', style: style);
     }
@@ -188,7 +191,8 @@ class _AppLineGraphState extends State<AppLineGraph> {
       tooltipBgColor: Theme.of(context).colorScheme.background,
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
-        final created = DateFormat("d/M/yy").format(row.created);
+        final created =
+            DateFormat(_settings.shortDateFormat).format(row.created);
         final formatter = NumberFormat("#,###.00");
 
         String text =

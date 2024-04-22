@@ -6,7 +6,8 @@ class SettingsState extends ChangeNotifier {
 
   ThemeMode themeMode = ThemeMode.system;
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
-  String dateFormat = 'dd/MM/yy';
+  String longDateFormat = 'dd/MM/yy';
+  String shortDateFormat = 'd/M/yy';
 
   bool showReorder = true;
   bool restTimers = true;
@@ -21,7 +22,8 @@ class SettingsState extends ChangeNotifier {
 
     prefs = prefsInstance;
 
-    dateFormat = prefsInstance.getString('dateFormat') ?? "yyyy-MM-dd h:mm a";
+    longDateFormat = prefsInstance.getString('longDateFormat') ?? "dd/MM/yy";
+    shortDateFormat = prefsInstance.getString('shortDateFormat') ?? "d/M/yy";
     final theme = prefsInstance.getString('themeMode');
     if (theme == "ThemeMode.system")
       themeMode = ThemeMode.system;
@@ -60,10 +62,16 @@ class SettingsState extends ChangeNotifier {
     prefs?.setBool('explainedPermissions', explained);
   }
 
-  void setFormat(String format) {
-    dateFormat = format;
+  void setLong(String format) {
+    longDateFormat = format;
     notifyListeners();
-    prefs?.setString('dateFormat', format);
+    prefs?.setString('longDateFormat', format);
+  }
+
+  void setShort(String format) {
+    shortDateFormat = format;
+    notifyListeners();
+    prefs?.setString('shortDateFormat', format);
   }
 
   void setSystem(bool system) {

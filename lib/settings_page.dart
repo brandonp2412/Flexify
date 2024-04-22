@@ -26,11 +26,19 @@ class _SettingsPageState extends State<SettingsPage> {
   late TextEditingController secondsController;
   final searchController = TextEditingController();
 
-  final List<String> formatOptions = [
+  final List<String> shortFormats = [
+    'd/M/yy',
+    'M/d/yy',
+    'd-M-yy',
+    'M-d-yy',
+    'd.M.yy',
+    'M.d.yy',
+  ];
+
+  final List<String> longFormats = [
     'dd/MM/yy',
     'dd/MM/yy h:mm a',
     'EEE h:mm a',
-    'h:mm a',
     'yyyy-MM-dd',
     'yyyy-MM-dd h:mm a',
     'yyyy.MM.dd',
@@ -136,24 +144,46 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
-          key: 'date format',
+          key: 'long date format',
           widget: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: DropdownButtonFormField<String>(
-              value: settings.dateFormat,
-              items: formatOptions.map((String value) {
+              value: settings.longDateFormat,
+              items: longFormats.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
                 );
               }).toList(),
               onChanged: (newValue) {
-                settings.setFormat(newValue!);
+                settings.setLong(newValue!);
               },
               decoration: InputDecoration(
-                labelText: 'Date format',
+                labelText: 'Long date format',
                 helperText:
-                    'Current date: ${DateFormat(settings.dateFormat).format(DateTime.now())}',
+                    'Current date: ${DateFormat(settings.longDateFormat).format(DateTime.now())}',
+              ),
+            ),
+          )),
+      WidgetSettings(
+          key: 'short date format',
+          widget: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: DropdownButtonFormField<String>(
+              value: settings.shortDateFormat,
+              items: shortFormats.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                settings.setShort(newValue!);
+              },
+              decoration: InputDecoration(
+                labelText: 'Short date format',
+                helperText:
+                    'Current date: ${DateFormat(settings.shortDateFormat).format(DateTime.now())}',
               ),
             ),
           )),

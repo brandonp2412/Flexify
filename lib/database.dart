@@ -8,6 +8,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
@@ -37,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   final _defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
         created: Value(DateTime.now()),
@@ -80,6 +81,12 @@ class AppDatabase extends _$AppDatabase {
 
           await (db.gymSets.update())
               .write(GymSetsCompanion(bodyWeight: Value(bodyWeight!.weight)));
+        }
+        if (from < 7) {
+          final prefs = await SharedPreferences.getInstance();
+          final dateFormat = prefs.getString('dateFormat');
+          if (dateFormat == null) return;
+          prefs.setString('longDateFormat', dateFormat);
         }
       },
     );

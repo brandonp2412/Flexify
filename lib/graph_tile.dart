@@ -30,7 +30,7 @@ class GraphTile extends StatelessWidget {
     return ListTile(
       selected: selected.contains(name),
       title: Text(name),
-      subtitle: Text(DateFormat(settings.dateFormat).format(created)),
+      subtitle: Text(DateFormat(settings.longDateFormat).format(created)),
       trailing: Text(
         "$reps x $weight$unit",
         style: const TextStyle(fontSize: 16),

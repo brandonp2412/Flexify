@@ -113,8 +113,8 @@ class _GraphHistoryState extends State<GraphHistory> {
                   if (showDivider) const Divider(),
                   ListTile(
                     title: Text(gymSet.name),
-                    subtitle: Text(
-                        DateFormat(settings.dateFormat).format(gymSet.created)),
+                    subtitle: Text(DateFormat(settings.longDateFormat)
+                        .format(gymSet.created)),
                     trailing: Text(
                         "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
                         style: const TextStyle(fontSize: 16)),
