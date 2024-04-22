@@ -21,21 +21,21 @@ class PlansPage extends StatefulWidget {
 }
 
 class _PlansPageState extends State<PlansPage> {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return NavigatorPopHandler(
       onPop: () {
-        if (navigatorKey.currentState!.canPop() == false) return;
-        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
-        navigatorKey.currentState!.pop();
+        if (_navigatorKey.currentState!.canPop() == false) return;
+        if (_navigatorKey.currentState?.focusNode.hasFocus == false) return;
+        _navigatorKey.currentState!.pop();
       },
       child: Navigator(
-        key: navigatorKey,
+        key: _navigatorKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _PlansPageWidget(
-            navigatorKey: navigatorKey,
+            navigatorKey: _navigatorKey,
           ),
           settings: settings,
         ),
