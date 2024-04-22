@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
-import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
@@ -127,7 +126,6 @@ class _GraphsPageState extends State<GraphsPage> {
                         ),
                   trailing: [
                     if (_selected.isNotEmpty) _deleteGraphs(context),
-                    if (_selected.length == 1) _editGraph(context),
                     PopupMenuButton(
                       icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) => [
@@ -257,22 +255,6 @@ class _GraphsPageState extends State<GraphsPage> {
               ],
             );
           },
-        );
-      },
-    );
-  }
-
-  IconButton _editGraph(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.edit),
-      tooltip: 'Edit graph',
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => EditGraphPage(
-                    name: _selected.first,
-                  )),
         );
       },
     );

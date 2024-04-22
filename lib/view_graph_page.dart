@@ -1,10 +1,10 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/app_line_graph.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/edit_graph_page.dart';
+import 'package:flexify/database.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/plan_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +20,9 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   late Stream<List<drift.TypedResult>> _graphStream;
   Metric _metric = Metric.bestWeight;
   String _targetUnit = 'kg';
+  bool _editing = false;
+  final _nameNode = FocusNode();
+  late TextEditingController _nameController;
 
   @override
   void initState() {
@@ -44,32 +47,46 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
           ..limit(11)
           ..groupBy([db.gymSets.created.date]))
         .watch();
+    _nameController = TextEditingController(text: widget.name);
   }
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
+        title: _editing
+            ? TextField(
+                focusNode: _nameNode,
+                controller: _nameController,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                ),
+                onSubmitted: (value) => _saveName(),
+              )
+            : Text(widget.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            if (_editing)
+              setState(() {
+                _editing = false;
+              });
+            else
+              Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GraphHistory(
-                            name: widget.name,
-                          )),
-                );
+                setState(() {
+                  _editing = !_editing;
+                });
+                _nameNode.requestFocus();
+                _nameController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _nameController.text.length);
               },
-              icon: const Icon(Icons.history))
+              icon: const Icon(Icons.edit))
         ],
       ),
       body: Padding(
@@ -121,44 +138,125 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                 });
               },
             ),
-            _graphBuilder(settings),
+            StreamBuilder<List<drift.TypedResult>>(
+              stream: _graphStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox();
+                if (snapshot.data?.isEmpty == true)
+                  return ListTile(
+                    title: Text("No data yet for ${widget.name}"),
+                    subtitle:
+                        const Text("Complete some plans to view graphs here"),
+                    contentPadding: EdgeInsets.zero,
+                  );
+                if (snapshot.hasError)
+                  return ErrorWidget(snapshot.error.toString());
+
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 80.0, right: 32.0, top: 16.0),
+                    child: AppLineGraph(
+                        data: snapshot.data!,
+                        metric: _metric,
+                        targetUnit: _targetUnit),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Edit graph',
-        child: const Icon(Icons.edit),
-        onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditGraphPage(name: widget.name),
-            )),
-      ),
+      floatingActionButton: _editing
+          ? FloatingActionButton(
+              onPressed: _saveName,
+              child: const Icon(Icons.save),
+            )
+          : FloatingActionButton(
+              tooltip: 'View history',
+              child: const Icon(Icons.history),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => GraphHistory(
+                          name: widget.name,
+                        )),
+              ),
+            ),
     );
   }
 
-  StreamBuilder<List<drift.TypedResult>> _graphBuilder(SettingsState settings) {
-    return StreamBuilder<List<drift.TypedResult>>(
-      stream: _graphStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const SizedBox();
-        if (snapshot.data?.isEmpty == true)
-          return ListTile(
-            title: Text("No data yet for ${widget.name}"),
-            subtitle: const Text("Complete some plans to view graphs here"),
-            contentPadding: EdgeInsets.zero,
-          );
-        if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
+  Future<int> _countName() async {
+    final result = await (db.gymSets.selectOnly()
+          ..addColumns([db.gymSets.name.count()])
+          ..where(db.gymSets.name.equals(_nameController.text)))
+        .getSingle();
+    return result.read(db.gymSets.name.count()) ?? 0;
+  }
 
-        return Expanded(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(bottom: 80.0, right: 32.0, top: 16.0),
-            child: AppLineGraph(
-                data: snapshot.data!, metric: _metric, targetUnit: _targetUnit),
-          ),
-        );
-      },
+  Future<void> _updateName() async {
+    await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
+        .write(GymSetsCompanion(name: drift.Value(_nameController.text)));
+    await db.customUpdate(
+      'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
+      variables: [
+        drift.Variable.withString(widget.name),
+        drift.Variable.withString(_nameController.text)
+      ],
+      updates: {db.plans},
     );
+    if (!mounted) return;
+    context.read<PlanState>().updatePlans(null);
+
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ViewGraphPage(
+                name: _nameController.text,
+              )),
+    );
+  }
+
+  Future<void> _saveName() async {
+    setState(() {
+      _editing = false;
+    });
+
+    if (widget.name == _nameController.text || _nameController.text.isEmpty)
+      return;
+
+    final count = await _countName();
+
+    if (!mounted) return;
+    if (count == 0)
+      await _updateName();
+    else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Update conflict'),
+            content: Text(
+                'Your new name exists already for $count records. Are you sure?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Confirm'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await _updateName();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
