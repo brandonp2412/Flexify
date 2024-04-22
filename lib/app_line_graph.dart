@@ -3,8 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/graph_data.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AppLineGraph extends StatefulWidget {
   final List<TypedResult> data;
@@ -43,6 +45,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
     List<FlSpot> spots = [];
     List<GraphData> rows = [];
 
@@ -97,7 +100,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
         lineBarsData: [
           LineChartBarData(
             spots: spots,
-            isCurved: true,
+            isCurved: settings.curveLines,
             color: Theme.of(context).colorScheme.primary,
             barWidth: 3,
             isStrokeCapRound: true,

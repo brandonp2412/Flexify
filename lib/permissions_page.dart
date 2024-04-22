@@ -50,11 +50,10 @@ class _PermissionsPageState extends State<PermissionsPage> {
               ),
               ListTile(
                 title: const Text('Rest timers'),
-                onTap: () async =>
-                    await settings.setTimers(!settings.restTimers),
+                onTap: () => settings.setTimers(!settings.restTimers),
                 trailing: Switch(
                   value: settings.restTimers,
-                  onChanged: (value) async => await settings.setTimers(value),
+                  onChanged: (value) => settings.setTimers(value),
                 ),
               ),
               ListTile(

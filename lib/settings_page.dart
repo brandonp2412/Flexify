@@ -215,6 +215,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
+        key: 'curve line graphs',
+        widget: ListTile(
+          title: const Text('Curve line graphs'),
+          onTap: () => settings.setCurvedLines(!settings.curveLines),
+          trailing: Switch(
+            value: settings.curveLines,
+            onChanged: (value) => settings.setCurvedLines(value),
+          ),
+        ),
+      ),
+      WidgetSettings(
           key: 'download csv', widget: const DownloadRecordsButton()),
       WidgetSettings(
           key: 'upload csv',

@@ -3,21 +3,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsState extends ChangeNotifier {
   SharedPreferences? prefs;
+
   ThemeMode themeMode = ThemeMode.system;
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
+  String dateFormat = 'dd/MM/yy';
+
   bool showReorder = true;
   bool restTimers = true;
   bool showUnits = true;
   bool systemColors = true;
   bool explainedPermissions = false;
   bool hideTimerTab = false;
-  String dateFormat = 'dd/MM/yy';
+  bool curveLines = false;
 
   Future<void> init() async {
     final prefsInstance = await SharedPreferences.getInstance();
 
     prefs = prefsInstance;
 
+    dateFormat = prefsInstance.getString('dateFormat') ?? "yyyy-MM-dd h:mm a";
     final theme = prefsInstance.getString('themeMode');
     if (theme == "ThemeMode.system")
       themeMode = ThemeMode.system;
@@ -33,9 +37,15 @@ class SettingsState extends ChangeNotifier {
     restTimers = prefsInstance.getBool("restTimers") ?? true;
     showUnits = prefsInstance.getBool("showUnits") ?? true;
     hideTimerTab = prefsInstance.getBool("hideTimerTab") ?? false;
-    dateFormat = prefsInstance.getString('dateFormat') ?? "yyyy-MM-dd h:mm a";
     explainedPermissions =
         prefsInstance.getBool('explainedPermissions') ?? false;
+    curveLines = prefsInstance.getBool('curveLines') ?? false;
+  }
+
+  void setCurvedLines(bool curve) {
+    curveLines = curve;
+    notifyListeners();
+    prefs?.setBool('curveLines', curve);
   }
 
   void setHideTimerTab(bool hide) {
@@ -56,39 +66,39 @@ class SettingsState extends ChangeNotifier {
     prefs?.setString('dateFormat', format);
   }
 
-  Future<void> setSystem(bool system) async {
+  void setSystem(bool system) {
     systemColors = system;
-    await prefs?.setBool('systemColors', system);
+    prefs?.setBool('systemColors', system);
     notifyListeners();
   }
 
-  Future<void> setUnits(bool show) async {
+  void setUnits(bool show) {
     showUnits = show;
-    await prefs?.setBool('showUnits', show);
+    prefs?.setBool('showUnits', show);
     notifyListeners();
   }
 
-  Future<void> setTimers(bool show) async {
+  void setTimers(bool show) {
     restTimers = show;
-    await prefs?.setBool('restTimers', show);
+    prefs?.setBool('restTimers', show);
     notifyListeners();
   }
 
-  Future<void> setReorder(bool show) async {
+  void setReorder(bool show) {
     showReorder = show;
-    await prefs?.setBool('showReorder', show);
+    prefs?.setBool('showReorder', show);
     notifyListeners();
   }
 
-  Future<void> setDuration(Duration duration) async {
+  void setDuration(Duration duration) {
     timerDuration = duration;
-    await prefs?.setInt('timerDuration', duration.inMilliseconds);
+    prefs?.setInt('timerDuration', duration.inMilliseconds);
     notifyListeners();
   }
 
-  Future<void> setTheme(ThemeMode theme) async {
+  void setTheme(ThemeMode theme) {
     themeMode = theme;
-    await prefs?.setString('themeMode', theme.toString());
+    prefs?.setString('themeMode', theme.toString());
     notifyListeners();
   }
 }
