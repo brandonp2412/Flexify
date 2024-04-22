@@ -15,8 +15,6 @@ patch=$(cut -d '.' -f 3 <<< "$version")
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
 
-changelog="$1"
-last_commit=$(git log -1 --pretty=%B | head -n 1)
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
@@ -26,14 +24,17 @@ flutter build appbundle
 
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
-echo "${changelog:-$last_commit}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
+last_commits=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | awk '{print "- "$0}')
+changelog="$1"
+echo "${changelog:-$last_commits}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add fastlane/metadata
+last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀"
 git tag "$new_build_number"
 git push --tags
 git push
 
-gh release create "$new_version" --notes "${changelog:-$last_commit}"  \
+gh release create "$new_version" --notes "${changelog:-$last_commits}"  \
   build/app/outputs/flutter-apk/app-*-release.apk
 
 fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
