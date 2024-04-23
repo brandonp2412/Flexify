@@ -143,7 +143,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       if (countIndex != -1)
         count = counts[countIndex].read(db.gymSets.name.count())!;
       count++;
-      await timerState.startTimer("$exercise ($count)", settings.timerDuration);
+      timerState.startTimer("$exercise ($count)", settings.timerDuration);
     }
 
     db.into(db.gymSets).insert(gymSet);
