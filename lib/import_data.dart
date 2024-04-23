@@ -1,12 +1,16 @@
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
+import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
 class ImportData extends StatelessWidget {
+  final BuildContext pageContext;
+
   const ImportData({
     super.key,
+    required this.pageContext,
   });
 
   @override
@@ -19,62 +23,67 @@ class ImportData extends StatelessWidget {
               return Wrap(
                 children: <Widget>[
                   ListTile(
-                      leading: const Icon(Icons.insights),
-                      title: const Text('Graphs'),
-                      onTap: () async {
-                        Navigator.pop(context);
-                        final gymSets = await db.gymSets.select().get();
-                        final List<List<dynamic>> csvData = [
-                          [
-                            'id',
-                            'name',
-                            'reps',
-                            'weight',
-                            'created',
-                            'unit',
-                            'bodyWeight'
-                          ]
-                        ];
-                        for (var gymSet in gymSets) {
-                          csvData.add([
-                            gymSet.id,
-                            gymSet.name,
-                            gymSet.reps,
-                            gymSet.weight,
-                            gymSet.created.toIso8601String(),
-                            gymSet.unit,
-                            gymSet.bodyWeight,
-                          ]);
-                        }
+                    leading: const Icon(Icons.insights),
+                    title: const Text('Graphs'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      String csv = await android.invokeMethod('read');
+                      List<List<dynamic>> rows =
+                          const CsvToListConverter(eol: "\n").convert(csv);
+                      if (rows.isEmpty) return;
 
-                        if (!await requestNotificationPermission()) return;
-                        final csv = const ListToCsvConverter(eol: "\n")
-                            .convert(csvData);
-                        android.invokeMethod('save', ['graphs.csv', csv]);
-                      }),
+                      final gymSets = rows.map(
+                        (row) => GymSetsCompanion(
+                          name: Value(row[1]),
+                          reps: Value(row[2]),
+                          weight: Value(row[3]),
+                          created: Value(parseDate(row[4])),
+                          unit: Value(row[5]),
+                          bodyWeight: Value(row.elementAtOrNull(6) ?? 0),
+                        ),
+                      );
+                      await db.batch(
+                        (batch) => batch.insertAll(db.gymSets, gymSets),
+                      );
+
+                      final weightSet = await getBodyWeight();
+                      if (weightSet != null)
+                        (db.gymSets.update()
+                              ..where((tbl) => tbl.bodyWeight.equals(0)))
+                            .write(GymSetsCompanion(
+                                bodyWeight: Value(weightSet.weight)));
+
+                      if (!pageContext.mounted) return;
+                      Navigator.pop(pageContext);
+                      DefaultTabController.of(pageContext).animateTo(1);
+                    },
+                  ),
                   ListTile(
                     leading: const Icon(Icons.event),
                     title: const Text('Plans'),
                     onTap: () async {
                       Navigator.pop(context);
-                      final plans = await db.plans.select().get();
-                      final List<List<dynamic>> csvData = [
-                        ['id', 'days', 'exercises', 'title', 'sequence']
-                      ];
-                      for (var plan in plans) {
-                        csvData.add([
-                          plan.id,
-                          plan.days,
-                          plan.exercises,
-                          plan.title ?? '',
-                          plan.sequence ?? ''
-                        ]);
+                      String csv = await android.invokeMethod('read');
+                      List<List<dynamic>> rows =
+                          const CsvToListConverter(eol: "\n").convert(csv);
+                      if (rows.isEmpty) return;
+                      List<PlansCompanion> plans = [];
+                      for (final row in rows) {
+                        var sequence = row.elementAtOrNull(4);
+                        if (sequence is String) sequence = 0;
+                        plans.add(PlansCompanion(
+                          days: Value(row[1]),
+                          exercises: Value(row[2]),
+                          title: Value(row.elementAtOrNull(3)),
+                          sequence: Value(sequence),
+                        ));
                       }
-
-                      if (!await requestNotificationPermission()) return;
-                      final csv =
-                          const ListToCsvConverter(eol: "\n").convert(csvData);
-                      android.invokeMethod('save', ['plans.csv', csv]);
+                      db.batch(
+                        (batch) => batch.insertAll(db.plans, plans),
+                      );
+                      if (!pageContext.mounted) return;
+                      Navigator.pop(pageContext);
+                      DefaultTabController.of(pageContext).animateTo(0);
                     },
                   ),
                 ],
@@ -82,7 +91,7 @@ class ImportData extends StatelessWidget {
             },
           );
         },
-        icon: const Icon(Icons.download),
-        label: const Text('Export data'));
+        icon: const Icon(Icons.upload),
+        label: const Text('Import data'));
   }
 }
