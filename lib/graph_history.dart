@@ -82,7 +82,7 @@ class _GraphHistoryState extends State<GraphHistory> {
     return Scaffold(
       appBar: AppBar(
         title: _selected.isEmpty
-            ? Text(widget.name)
+            ? Text("${widget.name} history")
             : Text("${_selected.length} selected"),
         actions: actions,
       ),
