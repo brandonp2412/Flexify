@@ -62,8 +62,8 @@ class PlanTile extends StatelessWidget {
         child: ReorderableDragStartListener(
             index: index, child: const Icon(Icons.drag_handle)),
       ),
-      onTap: () {
-        navigatorKey.currentState!.push(
+      onTap: () async {
+        await navigatorKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => StartPlanPage(
               plan: plan,
@@ -71,6 +71,7 @@ class PlanTile extends StatelessWidget {
             ),
           ),
         );
+        refresh();
       },
       onLongPress: () {
         showModalBottomSheet(
