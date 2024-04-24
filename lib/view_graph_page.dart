@@ -77,9 +77,8 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            Visibility(
-              visible: widget.name != "Weight",
-              child: DropdownButtonFormField(
+            if (widget.name != 'Weight')
+              DropdownButtonFormField(
                 decoration: const InputDecoration(labelText: 'Metric'),
                 value: _metric,
                 items: const [
@@ -106,7 +105,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
                   });
                 },
               ),
-            ),
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: 'Group by'),
               value: _groupBy,
