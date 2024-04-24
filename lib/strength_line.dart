@@ -92,7 +92,7 @@ class _StrengthLineState extends State<StrengthLine> {
     } else if (metric == StrengthMetric.volume) {
       return row.read(_volumeColumn)!;
     } else if (metric == StrengthMetric.relativeStrength) {
-      return row.read(_relativeColumn)!;
+      return row.read(_relativeColumn) ?? 0;
     } else if (metric == StrengthMetric.bestWeight) {
       return row.read(db.gymSets.weight.max())!;
     } else {
