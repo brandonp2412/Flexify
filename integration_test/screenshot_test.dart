@@ -101,6 +101,8 @@ Future<void> appWrapper() async {
   final settingsState = SettingsState();
   await settingsState.init();
   settingsState.setTheme(ThemeMode.dark);
+  settingsState.setExplained(true);
+  settingsState.setTimers(false);
   runApp(app.appProviders(settingsState));
 }
 
@@ -242,9 +244,10 @@ void main() {
             ),
           );
           await tester.pumpAndSettle();
-          await tester.enterText(find.widgetWithText(TextField, "Reps"), "10");
-          await tester.enterText(
-              find.widgetWithText(TextField, "Weight (kg)"), "20");
+          await tester.tap(find.byTooltip('Save'));
+          await tester.pumpAndSettle();
+          final firstExercise = plans.first.exercises.value.split(',').first;
+          await tester.tap(find.text("$firstExercise (2)"));
           await tester.pumpAndSettle();
         },
       ),

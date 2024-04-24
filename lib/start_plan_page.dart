@@ -270,7 +270,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async => await _save(timerState, settings),
-        tooltip: "Save this set",
+        tooltip: "Save",
         child: const Icon(Icons.save),
       ),
     );

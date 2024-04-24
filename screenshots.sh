@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$TERMINAL -t Emulator emulator -avd "$1" -feature -Vulkan -no-boot-anim -noaudio &> /dev/null &
+$TERMINAL -t Hide emulator -avd "$1" -feature -Vulkan -no-boot-anim -noaudio &> /dev/null &
 
 while true; do  
 for device in $(adb devices | awk 'NR>1{print $1}' | grep emulator); do
