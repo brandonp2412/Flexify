@@ -253,9 +253,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(key: 'download csv', widget: const ExportData()),
+      WidgetSettings(key: 'export data', widget: const ExportData()),
       WidgetSettings(
-          key: 'upload csv',
+          key: 'import data',
           widget: ImportData(
             pageContext: context,
           )),
