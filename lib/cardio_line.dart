@@ -106,7 +106,7 @@ class _CardioLineState extends State<CardioLine> {
 
         for (var index = 0; index < snapshot.data!.length; index++) {
           final row = snapshot.data!.reversed.elementAt(index);
-          var value = _getValue(row);
+          var value = double.parse(_getValue(row).toStringAsFixed(2));
 
           rows.add(CardioData(
             value: value,
