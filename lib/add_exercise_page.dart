@@ -12,15 +12,9 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  late TextEditingController _nameController;
-  late String _unit;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _unit = 'kg';
-  }
+  final TextEditingController _nameController = TextEditingController();
+  String _unit = 'kg';
+  bool _cardio = false;
 
   @override
   void dispose() {
@@ -35,6 +29,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         weight: 0,
         name: _nameController.text,
         unit: _unit,
+        cardio: Value(_cardio),
         hidden: const Value(true)));
   }
 
@@ -68,6 +63,20 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   _unit = newValue!;
                 });
               },
+            ),
+            ListTile(
+              title: const Text('Cardio'),
+              onTap: () {
+                setState(() {
+                  _cardio = !_cardio;
+                });
+              },
+              trailing: Switch(
+                value: _cardio,
+                onChanged: (value) => setState(() {
+                  _cardio = value;
+                }),
+              ),
             ),
           ],
         ),

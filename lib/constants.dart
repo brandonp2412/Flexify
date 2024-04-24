@@ -8,7 +8,9 @@ enum AppGroupBy {
   year,
 }
 
-enum Metric {
+enum CardioMetric { pace, distance, duration }
+
+enum StrengthMetric {
   oneRepMax,
   volume,
   bestWeight,

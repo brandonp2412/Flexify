@@ -36,6 +36,9 @@ class _GraphsPageState extends State<GraphsPage> {
             db.gymSets.unit,
             db.gymSets.weight,
             db.gymSets.reps,
+            db.gymSets.cardio,
+            db.gymSets.duration,
+            db.gymSets.distance,
             db.gymSets.created.max()
           ])
           ..orderBy([
@@ -157,6 +160,9 @@ class _GraphsPageState extends State<GraphsPage> {
                     final weight = gymSet.read(db.gymSets.weight)!;
                     final unit = gymSet.read(db.gymSets.unit)!;
                     final reps = gymSet.read(db.gymSets.reps)!;
+                    final cardio = gymSet.read(db.gymSets.cardio)!;
+                    final duration = gymSet.read(db.gymSets.duration)!;
+                    final distance = gymSet.read(db.gymSets.distance)!;
                     final created = gymSet.read(db.gymSets.created.max())!;
                     final previousCreated =
                         previousGymSet?.read(db.gymSets.created.max())!;
@@ -174,6 +180,9 @@ class _GraphsPageState extends State<GraphsPage> {
                           unit: unit,
                           reps: reps,
                           created: created,
+                          cardio: cardio,
+                          duration: duration,
+                          distance: distance,
                           onSelect: (value) {
                             if (_selected.contains(value))
                               setState(() {

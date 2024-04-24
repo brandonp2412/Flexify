@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/view_graph_page.dart';
+import 'package:flexify/view_strength_page.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseModal extends StatelessWidget {
@@ -26,7 +26,7 @@ class ExerciseModal extends StatelessWidget {
             DefaultTabController.of(context).animateTo(1);
             await Future.delayed(kTabScrollDuration);
             graphsKey.currentState!.push(MaterialPageRoute(
-                builder: (context) => ViewGraphPage(
+                builder: (context) => ViewStrengthPage(
                       name: exercise,
                     )));
           },

@@ -346,9 +346,45 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       type: DriftSqlType.double,
       requiredDuringInsert: false,
       defaultValue: const Constant(0.0));
+  static const VerificationMeta _durationMeta =
+      const VerificationMeta('duration');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, reps, weight, unit, created, hidden, bodyWeight];
+  late final GeneratedColumn<double> duration = GeneratedColumn<double>(
+      'duration', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  static const VerificationMeta _distanceMeta =
+      const VerificationMeta('distance');
+  @override
+  late final GeneratedColumn<double> distance = GeneratedColumn<double>(
+      'distance', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  static const VerificationMeta _cardioMeta = const VerificationMeta('cardio');
+  @override
+  late final GeneratedColumn<bool> cardio = GeneratedColumn<bool>(
+      'cardio', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("cardio" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        reps,
+        weight,
+        unit,
+        created,
+        hidden,
+        bodyWeight,
+        duration,
+        distance,
+        cardio
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -402,6 +438,18 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           bodyWeight.isAcceptableOrUnknown(
               data['body_weight']!, _bodyWeightMeta));
     }
+    if (data.containsKey('duration')) {
+      context.handle(_durationMeta,
+          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
+    }
+    if (data.containsKey('distance')) {
+      context.handle(_distanceMeta,
+          distance.isAcceptableOrUnknown(data['distance']!, _distanceMeta));
+    }
+    if (data.containsKey('cardio')) {
+      context.handle(_cardioMeta,
+          cardio.isAcceptableOrUnknown(data['cardio']!, _cardioMeta));
+    }
     return context;
   }
 
@@ -427,6 +475,12 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.bool, data['${effectivePrefix}hidden'])!,
       bodyWeight: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}body_weight'])!,
+      duration: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
+      distance: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}distance'])!,
+      cardio: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
     );
   }
 
@@ -445,6 +499,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final DateTime created;
   final bool hidden;
   final double bodyWeight;
+  final double duration;
+  final double distance;
+  final bool cardio;
   const GymSet(
       {required this.id,
       required this.name,
@@ -453,7 +510,10 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.unit,
       required this.created,
       required this.hidden,
-      required this.bodyWeight});
+      required this.bodyWeight,
+      required this.duration,
+      required this.distance,
+      required this.cardio});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -465,6 +525,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     map['created'] = Variable<DateTime>(created);
     map['hidden'] = Variable<bool>(hidden);
     map['body_weight'] = Variable<double>(bodyWeight);
+    map['duration'] = Variable<double>(duration);
+    map['distance'] = Variable<double>(distance);
+    map['cardio'] = Variable<bool>(cardio);
     return map;
   }
 
@@ -478,6 +541,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       created: Value(created),
       hidden: Value(hidden),
       bodyWeight: Value(bodyWeight),
+      duration: Value(duration),
+      distance: Value(distance),
+      cardio: Value(cardio),
     );
   }
 
@@ -493,6 +559,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       created: serializer.fromJson<DateTime>(json['created']),
       hidden: serializer.fromJson<bool>(json['hidden']),
       bodyWeight: serializer.fromJson<double>(json['bodyWeight']),
+      duration: serializer.fromJson<double>(json['duration']),
+      distance: serializer.fromJson<double>(json['distance']),
+      cardio: serializer.fromJson<bool>(json['cardio']),
     );
   }
   @override
@@ -507,6 +576,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'created': serializer.toJson<DateTime>(created),
       'hidden': serializer.toJson<bool>(hidden),
       'bodyWeight': serializer.toJson<double>(bodyWeight),
+      'duration': serializer.toJson<double>(duration),
+      'distance': serializer.toJson<double>(distance),
+      'cardio': serializer.toJson<bool>(cardio),
     };
   }
 
@@ -518,7 +590,10 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           String? unit,
           DateTime? created,
           bool? hidden,
-          double? bodyWeight}) =>
+          double? bodyWeight,
+          double? duration,
+          double? distance,
+          bool? cardio}) =>
       GymSet(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -528,6 +603,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         created: created ?? this.created,
         hidden: hidden ?? this.hidden,
         bodyWeight: bodyWeight ?? this.bodyWeight,
+        duration: duration ?? this.duration,
+        distance: distance ?? this.distance,
+        cardio: cardio ?? this.cardio,
       );
   @override
   String toString() {
@@ -539,14 +617,17 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('unit: $unit, ')
           ..write('created: $created, ')
           ..write('hidden: $hidden, ')
-          ..write('bodyWeight: $bodyWeight')
+          ..write('bodyWeight: $bodyWeight, ')
+          ..write('duration: $duration, ')
+          ..write('distance: $distance, ')
+          ..write('cardio: $cardio')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, reps, weight, unit, created, hidden, bodyWeight);
+  int get hashCode => Object.hash(id, name, reps, weight, unit, created, hidden,
+      bodyWeight, duration, distance, cardio);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -558,7 +639,10 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.unit == this.unit &&
           other.created == this.created &&
           other.hidden == this.hidden &&
-          other.bodyWeight == this.bodyWeight);
+          other.bodyWeight == this.bodyWeight &&
+          other.duration == this.duration &&
+          other.distance == this.distance &&
+          other.cardio == this.cardio);
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
@@ -570,6 +654,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<DateTime> created;
   final Value<bool> hidden;
   final Value<double> bodyWeight;
+  final Value<double> duration;
+  final Value<double> distance;
+  final Value<bool> cardio;
   const GymSetsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -579,6 +666,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.created = const Value.absent(),
     this.hidden = const Value.absent(),
     this.bodyWeight = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.distance = const Value.absent(),
+    this.cardio = const Value.absent(),
   });
   GymSetsCompanion.insert({
     this.id = const Value.absent(),
@@ -589,6 +679,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     required DateTime created,
     this.hidden = const Value.absent(),
     this.bodyWeight = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.distance = const Value.absent(),
+    this.cardio = const Value.absent(),
   })  : name = Value(name),
         reps = Value(reps),
         weight = Value(weight),
@@ -603,6 +696,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<DateTime>? created,
     Expression<bool>? hidden,
     Expression<double>? bodyWeight,
+    Expression<double>? duration,
+    Expression<double>? distance,
+    Expression<bool>? cardio,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -613,6 +709,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (created != null) 'created': created,
       if (hidden != null) 'hidden': hidden,
       if (bodyWeight != null) 'body_weight': bodyWeight,
+      if (duration != null) 'duration': duration,
+      if (distance != null) 'distance': distance,
+      if (cardio != null) 'cardio': cardio,
     });
   }
 
@@ -624,7 +723,10 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<String>? unit,
       Value<DateTime>? created,
       Value<bool>? hidden,
-      Value<double>? bodyWeight}) {
+      Value<double>? bodyWeight,
+      Value<double>? duration,
+      Value<double>? distance,
+      Value<bool>? cardio}) {
     return GymSetsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -634,6 +736,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       created: created ?? this.created,
       hidden: hidden ?? this.hidden,
       bodyWeight: bodyWeight ?? this.bodyWeight,
+      duration: duration ?? this.duration,
+      distance: distance ?? this.distance,
+      cardio: cardio ?? this.cardio,
     );
   }
 
@@ -664,6 +769,15 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (bodyWeight.present) {
       map['body_weight'] = Variable<double>(bodyWeight.value);
     }
+    if (duration.present) {
+      map['duration'] = Variable<double>(duration.value);
+    }
+    if (distance.present) {
+      map['distance'] = Variable<double>(distance.value);
+    }
+    if (cardio.present) {
+      map['cardio'] = Variable<bool>(cardio.value);
+    }
     return map;
   }
 
@@ -677,7 +791,10 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('unit: $unit, ')
           ..write('created: $created, ')
           ..write('hidden: $hidden, ')
-          ..write('bodyWeight: $bodyWeight')
+          ..write('bodyWeight: $bodyWeight, ')
+          ..write('duration: $duration, ')
+          ..write('distance: $distance, ')
+          ..write('cardio: $cardio')
           ..write(')'))
         .toString();
   }

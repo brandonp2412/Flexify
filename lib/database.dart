@@ -23,6 +23,9 @@ class GymSets extends Table {
   DateTimeColumn get created => dateTime()();
   BoolColumn get hidden => boolean().withDefault(const Constant(false))();
   RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
+  RealColumn get duration => real().withDefault(const Constant(0.0))();
+  RealColumn get distance => real().withDefault(const Constant(0.0))();
+  BoolColumn get cardio => boolean().withDefault(const Constant(false))();
 }
 
 class Plans extends Table {
@@ -38,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   final _defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
         created: Value(DateTime.now()),
@@ -87,6 +90,11 @@ class AppDatabase extends _$AppDatabase {
           final dateFormat = prefs.getString('dateFormat');
           if (dateFormat == null) return;
           prefs.setString('longDateFormat', dateFormat);
+        }
+        if (from < 8) {
+          await m.addColumn(db.gymSets, gymSets.duration);
+          await m.addColumn(db.gymSets, gymSets.distance);
+          await m.addColumn(db.gymSets, gymSets.cardio);
         }
       },
     );

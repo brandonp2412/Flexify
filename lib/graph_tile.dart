@@ -1,11 +1,15 @@
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/view_graph_page.dart';
+import 'package:flexify/view_cardio_page.dart';
+import 'package:flexify/view_strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class GraphTile extends StatelessWidget {
   final String name;
+  final bool cardio;
+  final double duration;
+  final double distance;
   final double weight;
   final double reps;
   final DateTime created;
@@ -21,7 +25,10 @@ class GraphTile extends StatelessWidget {
       required this.unit,
       required this.selected,
       required this.onSelect,
-      required this.reps});
+      required this.reps,
+      required this.cardio,
+      required this.duration,
+      required this.distance});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +39,7 @@ class GraphTile extends StatelessWidget {
       title: Text(name),
       subtitle: Text(DateFormat(settings.longDateFormat).format(created)),
       trailing: Text(
-        "$reps x $weight$unit",
+        cardio ? "$distance / $duration" : "$reps x $weight$unit",
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () {
@@ -40,9 +47,11 @@ class GraphTile extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ViewGraphPage(
-                      name: name,
-                    )),
+                builder: (context) => cardio
+                    ? ViewCardioPage(name: name)
+                    : ViewStrengthPage(
+                        name: name,
+                      )),
           );
         else
           onSelect(name);

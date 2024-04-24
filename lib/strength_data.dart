@@ -1,10 +1,10 @@
-class GraphData {
+class StrengthData {
   final DateTime created;
   final double reps;
   final String unit;
   final double value;
 
-  GraphData(
+  StrengthData(
       {required this.created,
       required this.reps,
       required this.unit,

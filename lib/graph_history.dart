@@ -116,7 +116,9 @@ class _GraphHistoryState extends State<GraphHistory> {
                     subtitle: Text(DateFormat(settings.longDateFormat)
                         .format(gymSet.created)),
                     trailing: Text(
-                        "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
+                        gymSet.cardio
+                            ? "${gymSet.distance} / ${gymSet.duration}"
+                            : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
                         style: const TextStyle(fontSize: 16)),
                     selected: _selected.contains(gymSet.id),
                     onLongPress: () {

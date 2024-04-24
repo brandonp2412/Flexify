@@ -2,20 +2,20 @@ import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_gym_set.dart';
-import 'package:flexify/graph_data.dart';
+import 'package:flexify/strength_data.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class AppLineGraph extends StatefulWidget {
+class StrengthLine extends StatefulWidget {
   final String name;
-  final Metric metric;
+  final StrengthMetric metric;
   final String targetUnit;
   final AppGroupBy groupBy;
 
-  const AppLineGraph(
+  const StrengthLine(
       {super.key,
       required this.name,
       required this.metric,
@@ -23,10 +23,10 @@ class AppLineGraph extends StatefulWidget {
       required this.groupBy});
 
   @override
-  createState() => _AppLineGraphState();
+  createState() => _StrengthLineState();
 }
 
-class _AppLineGraphState extends State<AppLineGraph> {
+class _StrengthLineState extends State<StrengthLine> {
   late Stream<List<TypedResult>> _graphStream;
   late SettingsState _settings;
   final _ormColumn = db.gymSets.weight /
@@ -39,7 +39,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
   DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
   @override
-  void didUpdateWidget(covariant AppLineGraph oldWidget) {
+  void didUpdateWidget(covariant StrengthLine oldWidget) {
     super.didUpdateWidget(oldWidget);
     _setStream();
   }
@@ -55,7 +55,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
     Iterable<Expression> groupBy = [db.gymSets.created.date];
 
     if (widget.groupBy == AppGroupBy.month)
-      groupBy = [db.gymSets.created.day, db.gymSets.created.month];
+      groupBy = [db.gymSets.created.year, db.gymSets.created.month];
     else if (widget.groupBy == AppGroupBy.week)
       groupBy = [
         db.gymSets.created.year,
@@ -86,14 +86,14 @@ class _AppLineGraphState extends State<AppLineGraph> {
         .watch();
   }
 
-  double getValue(TypedResult row, Metric metric) {
-    if (metric == Metric.oneRepMax) {
+  double getValue(TypedResult row, StrengthMetric metric) {
+    if (metric == StrengthMetric.oneRepMax) {
       return row.read(_ormColumn)!;
-    } else if (metric == Metric.volume) {
+    } else if (metric == StrengthMetric.volume) {
       return row.read(_volumeColumn)!;
-    } else if (metric == Metric.relativeStrength) {
+    } else if (metric == StrengthMetric.relativeStrength) {
       return row.read(_relativeColumn)!;
-    } else if (metric == Metric.bestWeight) {
+    } else if (metric == StrengthMetric.bestWeight) {
       return row.read(db.gymSets.weight.max())!;
     } else {
       throw Exception("Metric not supported.");
@@ -117,7 +117,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
         List<FlSpot> spots = [];
-        List<GraphData> rows = [];
+        List<StrengthData> rows = [];
 
         for (var index = 0; index < snapshot.data!.length; index++) {
           final row = snapshot.data!.reversed.elementAt(index);
@@ -130,7 +130,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
             value *= 2.20462262;
           }
 
-          rows.add(GraphData(
+          rows.add(StrengthData(
             value: value,
             created: row.read(db.gymSets.created)!,
             reps: row.read(db.gymSets.reps)!,
@@ -170,7 +170,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
                   enabled: true,
                   touchCallback: (event, touchResponse) async {
                     if (event is! FlPanDownEvent) return;
-                    if (widget.metric != Metric.bestWeight) return;
+                    if (widget.metric != StrengthMetric.bestWeight) return;
                     if (DateTime.now().difference(_lastTap) <
                         const Duration(milliseconds: 300)) {
                       final index = touchResponse?.lineBarSpots?[0].spotIndex;
@@ -215,7 +215,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
   }
 
   Widget _bottomTitleWidgets(
-      double value, TitleMeta meta, List<GraphData> rows) {
+      double value, TitleMeta meta, List<StrengthData> rows) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
@@ -246,7 +246,7 @@ class _AppLineGraphState extends State<AppLineGraph> {
   }
 
   LineTouchTooltipData _tooltipData(
-      BuildContext context, List<GraphData> rows) {
+      BuildContext context, List<StrengthData> rows) {
     return LineTouchTooltipData(
       tooltipBgColor: Theme.of(context).colorScheme.background,
       getTooltipItems: (touchedSpots) {
@@ -257,10 +257,10 @@ class _AppLineGraphState extends State<AppLineGraph> {
 
         String text =
             "${row.reps} x ${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
-        if (widget.metric == Metric.relativeStrength)
+        if (widget.metric == StrengthMetric.relativeStrength)
           text = "${row.value.toStringAsFixed(2)} $created";
-        else if (widget.metric == Metric.volume ||
-            widget.metric == Metric.oneRepMax)
+        else if (widget.metric == StrengthMetric.volume ||
+            widget.metric == StrengthMetric.oneRepMax)
           text = "${formatter.format(row.value)}${widget.targetUnit} $created";
 
         return [

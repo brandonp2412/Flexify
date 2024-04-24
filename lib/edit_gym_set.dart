@@ -18,8 +18,11 @@ class _EditGymSetState extends State<EditGymSet> {
   late TextEditingController _repsController;
   late TextEditingController _weightController;
   late TextEditingController _bodyWeightController;
+  late TextEditingController _distanceController;
+  late TextEditingController _durationController;
   late String _unit;
   late DateTime _created;
+  late bool _cardio;
 
   @override
   void initState() {
@@ -32,8 +35,13 @@ class _EditGymSetState extends State<EditGymSet> {
         TextEditingController(text: widget.gymSet.weight.value.toString());
     _bodyWeightController =
         TextEditingController(text: widget.gymSet.bodyWeight.value.toString());
+    _durationController =
+        TextEditingController(text: widget.gymSet.duration.value.toString());
+    _distanceController =
+        TextEditingController(text: widget.gymSet.distance.value.toString());
     _unit = widget.gymSet.unit.value;
     _created = widget.gymSet.created.value;
+    _cardio = widget.gymSet.cardio.value;
   }
 
   @override
@@ -45,17 +53,16 @@ class _EditGymSetState extends State<EditGymSet> {
 
   Future<void> _save() async {
     Navigator.pop(context);
-    final reps = double.parse(_repsController.text);
-    final weight = double.parse(_weightController.text);
-    final bodyWeight = double.parse(_bodyWeightController.text);
-
     final gymSet = widget.gymSet.copyWith(
-        reps: Value(reps),
-        weight: Value(weight),
-        unit: Value(_unit),
-        created: Value(_created),
-        bodyWeight: Value(bodyWeight),
-        name: Value(_nameController.text));
+      name: Value(_nameController.text),
+      unit: Value(_unit),
+      created: Value(_created),
+      reps: Value(double.parse(_repsController.text)),
+      weight: Value(double.parse(_weightController.text)),
+      bodyWeight: Value(double.parse(_bodyWeightController.text)),
+      distance: Value(double.parse(_distanceController.text)),
+      duration: Value(double.parse(_durationController.text)),
+    );
     db.update(db.gymSets).replace(gymSet);
   }
 
@@ -134,28 +141,48 @@ class _EditGymSetState extends State<EditGymSet> {
         padding: const EdgeInsets.all(16.0),
         child: material.Column(
           children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            TextField(
-              controller: _repsController,
-              decoration: const InputDecoration(labelText: 'Reps'),
-              keyboardType: TextInputType.number,
-              onTap: () => _repsController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: _repsController.text.length),
-            ),
-            TextField(
-              controller: _weightController,
-              decoration: InputDecoration(
-                  labelText: _nameController.text == 'Weight'
-                      ? 'Value ($_unit)'
-                      : 'Weight ($_unit)'),
-              keyboardType: TextInputType.number,
-              onTap: () => _weightController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: _weightController.text.length),
-            ),
+            if (!_cardio) ...[
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+                textCapitalization: TextCapitalization.sentences,
+              ),
+              TextField(
+                controller: _repsController,
+                decoration: const InputDecoration(labelText: 'Reps'),
+                keyboardType: TextInputType.number,
+                onTap: () => _repsController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _repsController.text.length),
+              ),
+              TextField(
+                controller: _weightController,
+                decoration: InputDecoration(
+                    labelText: _nameController.text == 'Weight'
+                        ? 'Value ($_unit)'
+                        : 'Weight ($_unit)'),
+                keyboardType: TextInputType.number,
+                onTap: () => _weightController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _weightController.text.length),
+              ),
+            ],
+            if (_cardio) ...[
+              TextField(
+                controller: _distanceController,
+                decoration: const InputDecoration(labelText: 'Distance'),
+                keyboardType: TextInputType.number,
+                onTap: () => _distanceController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _distanceController.text.length),
+              ),
+              TextField(
+                controller: _durationController,
+                decoration: const InputDecoration(labelText: 'Duration'),
+                keyboardType: TextInputType.number,
+                onTap: () => _durationController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _durationController.text.length),
+              ),
+            ],
             if (_nameController.text != 'Weight')
               TextField(
                 controller: _bodyWeightController,
@@ -165,21 +192,22 @@ class _EditGymSetState extends State<EditGymSet> {
                     baseOffset: 0,
                     extentOffset: _bodyWeightController.text.length),
               ),
-            DropdownButtonFormField<String>(
-              value: _unit,
-              decoration: const InputDecoration(labelText: 'Unit'),
-              items: ['kg', 'lb'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _unit = newValue!;
-                });
-              },
-            ),
+            if (!_cardio)
+              DropdownButtonFormField<String>(
+                value: _unit,
+                decoration: const InputDecoration(labelText: 'Unit'),
+                items: ['kg', 'lb'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _unit = newValue!;
+                  });
+                },
+              ),
             ListTile(
               title: const Text('Created Date'),
               subtitle: Text(_created.toString()),

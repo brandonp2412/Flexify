@@ -21,8 +21,14 @@ class StartPlanPage extends StatefulWidget {
 }
 
 class _StartPlanPageState extends State<StartPlanPage> {
-  late TextEditingController _repsController;
-  late TextEditingController _weightController;
+  final _repsController = TextEditingController(text: "0.0");
+  final _weightController = TextEditingController(text: "0.0");
+  final _distanceController = TextEditingController(text: "0.0");
+  final _durationController = TextEditingController(text: "0.0");
+  final _durationNode = FocusNode();
+  final _repsNode = FocusNode();
+  final _weightNode = FocusNode();
+
   late List<String> _planExercises;
   late Stream<List<drift.TypedResult>> _countStream;
 
@@ -30,16 +36,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
   bool _first = true;
   String _unit = 'kg';
   int _selectedIndex = 0;
-
-  final _repsNode = FocusNode();
-  final _weightNode = FocusNode();
+  bool _cardio = false;
 
   @override
   void initState() {
     super.initState();
 
-    _repsController = TextEditingController(text: "0.0");
-    _weightController = TextEditingController(text: "0.0");
     _planExercises = widget.plan.exercises.split(',');
 
     final planState = context.read<PlanState>();
@@ -90,7 +92,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final exercise = _planExercises.elementAt(index);
     final last = await (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
-          ..where((tbl) => db.gymSets.hidden.equals(false))
           ..orderBy([
             (u) => drift.OrderingTerm(
                 expression: u.created, mode: drift.OrderingMode.desc),
@@ -100,6 +101,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       _repsController.text = last != null ? last.reps.toString() : "0.0";
       _weightController.text = last != null ? last.weight.toString() : "0.0";
+      _distanceController.text =
+          last != null ? last.distance.toString() : "0.0";
+      _durationController.text =
+          last != null ? last.duration.toString() : "0.0";
+      _cardio = last?.cardio ?? false;
     });
   }
 
@@ -107,17 +113,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       _first = false;
     });
-    final reps = double.parse(_repsController.text);
-    final weight = double.parse(_weightController.text);
     final exercise = _planExercises[_selectedIndex];
     final weightSet = await getBodyWeight();
 
     final gymSet = GymSetsCompanion.insert(
       name: exercise,
-      reps: reps,
-      weight: weight,
+      reps: double.parse(_repsController.text),
+      weight: double.parse(_weightController.text),
       unit: _unit,
       created: DateTime.now(),
+      cardio: drift.Value(_cardio),
+      duration: drift.Value(double.parse(_durationController.text)),
+      distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
     );
 
@@ -165,55 +172,56 @@ class _StartPlanPageState extends State<StartPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            TextField(
-              controller: _repsController,
-              focusNode: _repsNode,
-              decoration: const InputDecoration(labelText: 'Reps'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (value) {
-                _weightNode.requestFocus();
-                _weightController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: _weightController.text.length,
-                );
-              },
-              onTap: () {
-                _repsController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: _repsController.text.length,
-                );
-              },
-            ),
-            TextField(
-              controller: _weightController,
-              focusNode: _weightNode,
-              decoration: InputDecoration(
-                  labelText: 'Weight ($_unit)',
-                  suffixIcon: IconButton(
-                    tooltip: "Use body weight",
-                    icon: const Icon(Icons.scale),
-                    onPressed: () async {
-                      final weightSet = await getBodyWeight();
-                      if (weightSet == null && context.mounted)
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('No weight entered yet.')));
-                      else
-                        _weightController.text = weightSet!.weight.toString();
-                    },
-                  )),
-              keyboardType: TextInputType.number,
-              onTap: () {
-                _weightController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: _weightController.text.length,
-                );
-              },
-              onSubmitted: (value) async => await _save(timerState, settings),
-            ),
-            Visibility(
-              visible: settings.showUnits,
-              child: DropdownButtonFormField<String>(
+            if (!_cardio)
+              TextField(
+                controller: _repsController,
+                focusNode: _repsNode,
+                decoration: const InputDecoration(labelText: 'Reps'),
+                keyboardType: TextInputType.number,
+                onSubmitted: (value) {
+                  _weightNode.requestFocus();
+                  _weightController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _weightController.text.length,
+                  );
+                },
+                onTap: () {
+                  _repsController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _repsController.text.length,
+                  );
+                },
+              ),
+            if (!_cardio)
+              TextField(
+                controller: _weightController,
+                focusNode: _weightNode,
+                decoration: InputDecoration(
+                    labelText: 'Weight ($_unit)',
+                    suffixIcon: IconButton(
+                      tooltip: "Use body weight",
+                      icon: const Icon(Icons.scale),
+                      onPressed: () async {
+                        final weightSet = await getBodyWeight();
+                        if (weightSet == null && context.mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('No weight entered yet.')));
+                        else
+                          _weightController.text = weightSet!.weight.toString();
+                      },
+                    )),
+                keyboardType: TextInputType.number,
+                onTap: () {
+                  _weightController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _weightController.text.length,
+                  );
+                },
+                onSubmitted: (value) async => await _save(timerState, settings),
+              ),
+            if (settings.showUnits && !_cardio)
+              DropdownButtonFormField<String>(
                 value: _unit,
                 decoration: const InputDecoration(labelText: 'Unit'),
                 items: ['kg', 'lb'].map((String value) {
@@ -228,7 +236,42 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   });
                 },
               ),
-            ),
+            if (_cardio) ...[
+              TextField(
+                controller: _distanceController,
+                decoration: const InputDecoration(
+                  labelText: 'Distance',
+                ),
+                keyboardType: TextInputType.number,
+                onTap: () {
+                  _distanceController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _distanceController.text.length,
+                  );
+                },
+                onSubmitted: (value) {
+                  _durationNode.requestFocus();
+                  _durationController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _durationController.text.length,
+                  );
+                },
+              ),
+              TextField(
+                controller: _durationController,
+                focusNode: _durationNode,
+                decoration: const InputDecoration(
+                  labelText: 'Duration',
+                ),
+                keyboardType: TextInputType.number,
+                onTap: () {
+                  _durationController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _durationController.text.length,
+                  );
+                },
+              ),
+            ],
             Expanded(
               child: StreamBuilder(
                 stream: _countStream,
