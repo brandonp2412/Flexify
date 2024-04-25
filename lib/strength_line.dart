@@ -34,14 +34,14 @@ class _StrengthLineState extends State<StrengthLine> {
   final _volumeColumn =
       const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
   final _relativeColumn = db.gymSets.weight.max() / db.gymSets.bodyWeight;
-  final _weekColumn = const CustomExpression<double>("STRFTIME('%W', created)");
 
   DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
   @override
   void didUpdateWidget(covariant StrengthLine oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _setStream();
+
+    if (oldWidget.groupBy != widget.groupBy) _setStream();
   }
 
   @override
@@ -60,7 +60,7 @@ class _StrengthLineState extends State<StrengthLine> {
       groupBy = [
         db.gymSets.created.year,
         db.gymSets.created.month,
-        _weekColumn
+        const CustomExpression<double>("STRFTIME('%W', created)")
       ];
     else if (widget.groupBy == AppGroupBy.year)
       groupBy = [db.gymSets.created.year];
