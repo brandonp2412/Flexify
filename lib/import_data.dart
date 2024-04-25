@@ -4,6 +4,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ImportData extends StatelessWidget {
   final BuildContext pageContext;
@@ -32,19 +33,40 @@ class ImportData extends StatelessWidget {
                           const CsvToListConverter(eol: "\n").convert(csv);
                       if (rows.isEmpty) return;
 
-                      final gymSets = rows.map(
-                        (row) => GymSetsCompanion(
-                          name: Value(row[1]),
-                          reps: Value(row[2]),
-                          weight: Value(row[3]),
-                          created: Value(parseDate(row[4])),
-                          unit: Value(row[5]),
-                          bodyWeight: Value(row.elementAtOrNull(6) ?? 0),
-                        ),
-                      );
-                      await db.batch(
-                        (batch) => batch.insertAll(db.gymSets, gymSets),
-                      );
+                      try {
+                        final gymSets = rows.map(
+                          (row) => GymSetsCompanion(
+                            name: Value(row[1]),
+                            reps: Value(row[2] is String
+                                ? double.parse(row[2])
+                                : row[2]),
+                            weight: Value(row[3] is String
+                                ? double.parse(row[3])
+                                : row[3]),
+                            created: Value(parseDate(row[4])),
+                            unit: Value(row[5]),
+                            bodyWeight: Value(row.elementAtOrNull(6) is String
+                                ? double.parse(row[6])
+                                : row.elementAtOrNull(6) ?? 0),
+                          ),
+                        );
+                        await db.gymSets.deleteAll();
+                        await db.gymSets.insertAll(gymSets);
+                      } catch (error) {
+                        if (!pageContext.mounted) return;
+                        ScaffoldMessenger.of(pageContext).showSnackBar(
+                          SnackBar(
+                            content: const Text('Failed to import data'),
+                            action: SnackBarAction(
+                                label: "Copy",
+                                onPressed: () {
+                                  Clipboard.setData(
+                                      ClipboardData(text: error.toString()));
+                                }),
+                          ),
+                        );
+                        return;
+                      }
 
                       final weightSet = await getBodyWeight();
                       if (weightSet != null)

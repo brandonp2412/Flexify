@@ -1,0 +1,2 @@
+- Fix importing from Massive sets export
+- Fix line graph crash for empty relative strengths
