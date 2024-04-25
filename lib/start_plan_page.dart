@@ -26,6 +26,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final _weightController = TextEditingController(text: "0.0");
   final _distanceController = TextEditingController(text: "0.0");
   final _durationController = TextEditingController(text: "0.0");
+  final _distanceNode = FocusNode();
   final _durationNode = FocusNode();
   final _repsNode = FocusNode();
   final _weightNode = FocusNode();
@@ -253,6 +254,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             if (_cardio) ...[
               TextField(
+                focusNode: _distanceNode,
                 controller: _distanceController,
                 decoration: const InputDecoration(
                   labelText: 'Distance',
@@ -266,10 +268,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 },
                 onSubmitted: (value) {
                   _durationNode.requestFocus();
-                  _durationController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _durationController.text.length,
-                  );
                 },
               ),
               TextField(
