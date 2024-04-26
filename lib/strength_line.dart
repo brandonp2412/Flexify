@@ -104,7 +104,7 @@ class _StrengthLineState extends State<StrengthLine> {
   Widget build(BuildContext context) {
     _settings = context.watch<SettingsState>();
 
-    return StreamBuilder<List<TypedResult>>(
+    return StreamBuilder(
       stream: _graphStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox();
@@ -178,7 +178,7 @@ class _StrengthLineState extends State<StrengthLine> {
                       final row = rows[index];
                       final gymSet = await (db.gymSets.select()
                             ..where((tbl) => tbl.created.equals(row.created))
-                            ..where((tbl) => tbl.reps.equals(row.reps))
+                            ..where((tbl) => tbl.reps.equals(row.reps!))
                             ..where((tbl) => tbl.weight.equals(row.value))
                             ..where((tbl) => tbl.name.equals(widget.name))
                             ..limit(1))
