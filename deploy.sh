@@ -19,8 +19,8 @@ new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 
-flutter build apk --split-per-abi
-flutter build appbundle
+./flutter/bin/flutter build apk --split-per-abi
+./flutter/bin/flutter build appbundle
 
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
