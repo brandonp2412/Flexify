@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
-import 'package:flexify/exercise_modal.dart';
+import 'package:flexify/exercise_list.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan_state.dart';
@@ -295,7 +295,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
                         row.read(db.gymSets.name.count())!;
                   }
 
-                  return exerciseList(counts, settings);
+                  return ExerciseList(
+                      exercises: _planExercises,
+                      refresh: widget.refresh,
+                      selected: _selectedIndex,
+                      onSelect: _select,
+                      counts: counts,
+                      firstRender: _first,
+                      plan: widget.plan);
                 },
               ),
             ),
@@ -308,78 +315,5 @@ class _StartPlanPageState extends State<StartPlanPage> {
         child: const Icon(Icons.save),
       ),
     );
-  }
-
-  ReorderableListView exerciseList(
-      Map<String, int> counts, SettingsState settings) {
-    return ReorderableListView.builder(
-        itemCount: _planExercises.length,
-        itemBuilder: (context, index) {
-          final exercise = _planExercises[index];
-          final count = counts[exercise] ?? 0;
-
-          return GestureDetector(
-            key: Key(exercise),
-            onLongPressStart: (details) async {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return ExerciseModal(exercise: exercise, hasData: count > 0);
-                },
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ListTile(
-                  onTap: () => _select(index),
-                  trailing: Visibility(
-                    visible: settings.showReorder,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ReorderableDragStartListener(
-                          index: index,
-                          child: const Icon(Icons.drag_handle),
-                        )
-                      ],
-                    ),
-                  ),
-                  title: Row(
-                    children: [
-                      Radio(
-                        value: index == _selectedIndex,
-                        groupValue: true,
-                        onChanged: (value) {
-                          _select(index);
-                        },
-                      ),
-                      Text("$exercise ($count)"),
-                    ],
-                  ),
-                ),
-                TweenAnimationBuilder(
-                  tween: Tween<double>(begin: (count / 5) - 1, end: count / 5),
-                  duration: Duration(milliseconds: _first ? 0 : 150),
-                  builder: (context, value, child) => LinearProgressIndicator(
-                    value: value,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-        onReorder: (oldIndex, newIndex) async {
-          if (oldIndex < newIndex) {
-            newIndex--;
-          }
-
-          final temp = _planExercises[oldIndex];
-          _planExercises.removeAt(oldIndex);
-          _planExercises.insert(newIndex, temp);
-          await db.update(db.plans).replace(
-              widget.plan.copyWith(exercises: _planExercises.join(',')));
-          widget.refresh();
-        });
   }
 }
