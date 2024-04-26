@@ -48,7 +48,7 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
+        child: ListView(
           children: [
             if (widget.name != 'Weight')
               DropdownButtonFormField(

@@ -139,7 +139,8 @@ class _StrengthLineState extends State<StrengthLine> {
           spots.add(FlSpot(index.toDouble(), value));
         }
 
-        return Expanded(
+        return SizedBox(
+          height: 400,
           child: Padding(
             padding:
                 const EdgeInsets.only(bottom: 80.0, right: 32.0, top: 16.0),
