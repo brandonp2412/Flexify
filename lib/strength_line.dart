@@ -59,7 +59,6 @@ class _StrengthLineState extends State<StrengthLine> {
     else if (widget.groupBy == AppGroupBy.week)
       groupBy = [
         db.gymSets.created.year,
-        db.gymSets.created.month,
         const CustomExpression<double>("STRFTIME('%W', created)")
       ];
     else if (widget.groupBy == AppGroupBy.year)
