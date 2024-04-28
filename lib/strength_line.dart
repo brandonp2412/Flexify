@@ -191,7 +191,9 @@ class _StrengthLineState extends State<StrengthLine> {
                                     gymSet: gymSet.toCompanion(false),
                                   )));
                     }
-                    _lastTap = DateTime.now();
+                    setState(() {
+                      _lastTap = DateTime.now();
+                    });
                   },
                   touchTooltipData: _tooltipData(context, rows),
                   longPressDuration: Duration.zero,
