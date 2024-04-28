@@ -78,7 +78,8 @@ class HomePage extends StatelessWidget {
     return DefaultTabController(
       length: settings.hideTimerTab ? 2 : 3,
       child: Scaffold(
-        bottomSheet: const TimerProgressIndicator(),
+        bottomSheet:
+            settings.hideTimerTab ? null : const TimerProgressIndicator(),
         body: SafeArea(
           child: TabBarView(
             children: [
