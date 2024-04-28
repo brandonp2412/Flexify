@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/view_cardio_page.dart';
 import 'package:flexify/view_strength_page.dart';
 import 'package:flutter/material.dart';
 
@@ -23,12 +24,21 @@ class ExerciseModal extends StatelessWidget {
           title: const Text('Graphs'),
           onTap: () async {
             Navigator.pop(context);
-            DefaultTabController.of(context).animateTo(1);
-            await Future.delayed(kTabScrollDuration);
-            graphsKey.currentState!.push(MaterialPageRoute(
-                builder: (context) => ViewStrengthPage(
-                      name: exercise,
-                    )));
+
+            final gymSet = await (db.gymSets.select()
+                  ..where((tbl) => tbl.name.equals(exercise))
+                  ..limit(1))
+                .getSingle();
+
+            if (!context.mounted) return;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => gymSet.cardio
+                        ? ViewCardioPage(name: exercise)
+                        : ViewStrengthPage(
+                            name: exercise,
+                          )));
           },
         ),
         if (hasData)
