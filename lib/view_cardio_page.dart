@@ -3,6 +3,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ViewCardioPage extends StatefulWidget {
   final String name;
@@ -15,6 +16,32 @@ class ViewCardioPage extends StatefulWidget {
 class _ViewCardioPageState extends State<ViewCardioPage> {
   CardioMetric _metric = CardioMetric.pace;
   AppGroupBy _groupBy = AppGroupBy.day;
+  SharedPreferences? _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+
+    SharedPreferences.getInstance().then((prefs) async {
+      _prefs = prefs;
+      final groupBy = prefs.getString("viewCardio${widget.name}.groupBy");
+      final metric = prefs.getString("viewCardio${widget.name}.metric");
+
+      setState(() {
+        if (groupBy == AppGroupBy.week.toString())
+          _groupBy = AppGroupBy.week;
+        else if (groupBy == AppGroupBy.month.toString())
+          _groupBy = AppGroupBy.month;
+        else if (groupBy == AppGroupBy.year.toString())
+          _groupBy = AppGroupBy.year;
+
+        if (metric == CardioMetric.distance.toString())
+          _metric = CardioMetric.distance;
+        else if (metric == CardioMetric.duration.toString())
+          _metric = CardioMetric.duration;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +92,8 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
               onChanged: (value) {
                 setState(() {
                   _metric = value!;
+                  _prefs?.setString(
+                      "viewCardio${widget.name}.metric", value.toString());
                 });
               },
             ),
@@ -92,6 +121,8 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
               onChanged: (value) {
                 setState(() {
                   _groupBy = value!;
+                  _prefs?.setString(
+                      "viewCardio${widget.name}.groupBy", value.toString());
                 });
               },
             ),
