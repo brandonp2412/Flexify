@@ -1,10 +1,11 @@
-import 'package:flexify/strength_line.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/graph_history.dart';
 import 'package:flexify/settings_state.dart';
+import 'package:flexify/strength_line.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ViewStrengthPage extends StatefulWidget {
   final String name;
@@ -18,6 +19,36 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
   StrengthMetric _metric = StrengthMetric.bestWeight;
   AppGroupBy _groupBy = AppGroupBy.day;
   String _targetUnit = 'kg';
+  SharedPreferences? _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) async {
+      _prefs = prefs;
+      final targetUnit =
+          prefs.getString("viewStrength${widget.name}.targetUnit");
+      final groupBy = prefs.getString("viewStrength${widget.name}.groupBy");
+      final metric = prefs.getString("viewStrength${widget.name}.metric");
+
+      setState(() {
+        if (targetUnit != null) _targetUnit = targetUnit;
+
+        if (groupBy == 'AppGroupBy.week')
+          _groupBy = AppGroupBy.week;
+        else if (groupBy == 'AppGroupBy.month')
+          _groupBy = AppGroupBy.month;
+        else if (groupBy == 'AppGroupBy.year') _groupBy = AppGroupBy.year;
+
+        if (metric == 'StrengthMetric.oneRepMax')
+          _metric = StrengthMetric.oneRepMax;
+        else if (metric == 'StrengthMetric.relativeStrength')
+          _metric = StrengthMetric.relativeStrength;
+        else if (metric == 'StrengthMetric.volume')
+          _metric = StrengthMetric.volume;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +106,8 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                 onChanged: (value) {
                   setState(() {
                     _metric = value!;
+                    _prefs?.setString(
+                        "viewStrength${widget.name}.metric", value.toString());
                   });
                 },
               ),
@@ -102,6 +135,8 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
               onChanged: (value) {
                 setState(() {
                   _groupBy = value!;
+                  _prefs?.setString(
+                      "viewStrength${widget.name}.groupBy", value.toString());
                 });
               },
             ),
@@ -118,6 +153,8 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                 onChanged: (String? newValue) {
                   setState(() {
                     _targetUnit = newValue!;
+                    _prefs?.setString(
+                        "viewStrength${widget.name}.targetUnit", newValue);
                   });
                 },
               ),
