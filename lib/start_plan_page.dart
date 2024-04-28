@@ -101,6 +101,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..limit(1))
         .getSingleOrNull();
     setState(() {
+      _unit = last?.unit ?? 'kg';
+      if (last?.cardio == true && _unit == 'kg') _unit = 'km';
       _repsController.text = last != null ? last.reps.toString() : "0.0";
       _weightController.text = last != null ? last.weight.toString() : "0.0";
       _distanceController.text =
@@ -236,23 +238,21 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 },
                 onSubmitted: (value) async => await _save(timerState, settings),
               ),
-            if (settings.showUnits && !_cardio)
-              DropdownButtonFormField<String>(
-                value: _unit,
-                decoration: const InputDecoration(labelText: 'Unit'),
-                items: ['kg', 'lb'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+            if (_cardio) ...[
+              TextField(
+                controller: _durationController,
+                focusNode: _durationNode,
+                decoration: const InputDecoration(
+                  labelText: 'Duration',
+                ),
+                keyboardType: TextInputType.number,
+                onTap: () {
+                  _durationController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _durationController.text.length,
                   );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _unit = newValue!;
-                  });
                 },
               ),
-            if (_cardio) ...[
               TextField(
                 focusNode: _distanceNode,
                 controller: _distanceController,
@@ -270,21 +270,24 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   _durationNode.requestFocus();
                 },
               ),
-              TextField(
-                controller: _durationController,
-                focusNode: _durationNode,
-                decoration: const InputDecoration(
-                  labelText: 'Duration',
-                ),
-                keyboardType: TextInputType.number,
-                onTap: () {
-                  _durationController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _durationController.text.length,
+            ],
+            if (settings.showUnits)
+              DropdownButtonFormField<String>(
+                value: _unit,
+                decoration: const InputDecoration(labelText: 'Unit'),
+                items:
+                    (_cardio ? ['km', 'mi'] : ['kg', 'lb']).map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
                   );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _unit = newValue!;
+                  });
                 },
               ),
-            ],
             Expanded(
               child: StreamBuilder(
                 stream: _countStream,

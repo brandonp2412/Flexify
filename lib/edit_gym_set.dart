@@ -192,22 +192,22 @@ class _EditGymSetState extends State<EditGymSet> {
                     baseOffset: 0,
                     extentOffset: _bodyWeightController.text.length),
               ),
-            if (!_cardio)
-              DropdownButtonFormField<String>(
-                value: _unit,
-                decoration: const InputDecoration(labelText: 'Unit'),
-                items: ['kg', 'lb'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _unit = newValue!;
-                  });
-                },
-              ),
+            DropdownButtonFormField<String>(
+              value: _unit,
+              decoration: const InputDecoration(labelText: 'Unit'),
+              items:
+                  (_cardio ? ['km', 'mi'] : ['kg', 'lb']).map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _unit = newValue!;
+                });
+              },
+            ),
             ListTile(
               title: const Text('Created Date'),
               subtitle: Text(_created.toString()),

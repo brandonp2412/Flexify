@@ -117,7 +117,7 @@ class _GraphHistoryState extends State<GraphHistory> {
                         .format(gymSet.created)),
                     trailing: Text(
                         gymSet.cardio
-                            ? "${gymSet.distance} / ${gymSet.duration}"
+                            ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
                             : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
                         style: const TextStyle(fontSize: 16)),
                     selected: _selected.contains(gymSet.id),

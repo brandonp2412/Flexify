@@ -52,7 +52,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
             DropdownButtonFormField<String>(
               value: _unit,
               decoration: const InputDecoration(labelText: 'Default unit'),
-              items: ['kg', 'lb'].map((String value) {
+              items:
+                  (_cardio ? ['km', 'mi'] : ['kg', 'lb']).map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -69,6 +70,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
               onTap: () {
                 setState(() {
                   _cardio = !_cardio;
+                  if (_cardio)
+                    _unit = 'km';
+                  else
+                    _unit = 'kg';
                 });
               },
               trailing: Switch(

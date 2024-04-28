@@ -61,6 +61,7 @@ class _CardioLineState extends State<CardioLine> {
             db.gymSets.distance.sum(),
             db.gymSets.distance.sum() / db.gymSets.duration.sum(),
             db.gymSets.created,
+            db.gymSets.unit,
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
@@ -112,6 +113,7 @@ class _CardioLineState extends State<CardioLine> {
           rows.add(CardioData(
             value: value,
             created: row.read(db.gymSets.created)!,
+            unit: row.read(db.gymSets.unit)!,
           ));
           spots.add(FlSpot(index.toDouble(), value));
         }
