@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
@@ -22,7 +23,9 @@ class GraphsPage extends StatefulWidget {
 }
 
 class _GraphsPageState extends State<GraphsPage> {
-  Stream<List<drift.TypedResult>>? _stream;
+  late Stream<List<drift.TypedResult>> _stream;
+
+  List<String> _todaysExercises = [];
   final TextEditingController _searchController = TextEditingController();
   final Set<String> _selected = {};
 
@@ -48,6 +51,18 @@ class _GraphsPageState extends State<GraphsPage> {
           ])
           ..groupBy([db.gymSets.name]))
         .watch();
+
+    final weekday = weekdays[DateTime.now().weekday - 1];
+    (db.plans.select()..where((tbl) => tbl.days.contains(weekday)))
+        .get()
+        .then((todaysPlans) {
+      final exercises = todaysPlans
+          .map((plan) => plan.exercises.split(','))
+          .expand((element) => element);
+      setState(() {
+        _todaysExercises = exercises.toList();
+      });
+    });
   }
 
   @override
@@ -75,9 +90,14 @@ class _GraphsPageState extends State<GraphsPage> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
-          final gymSets = snapshot.data!;
 
-          final filteredGymSets = gymSets.where((gymSet) {
+          final todaysGymSets = snapshot.data!.where((gymSet) =>
+              _todaysExercises.contains(gymSet.read(db.gymSets.name)));
+          final otherGymSets = snapshot.data!.where((gymSet) =>
+              !_todaysExercises.contains(gymSet.read(db.gymSets.name)));
+          final orderedGymSets = [...todaysGymSets, ...otherGymSets];
+
+          final filteredGymSets = orderedGymSets.where((gymSet) {
             final name = gymSet.read(db.gymSets.name)!.toLowerCase();
             final searchText = _searchController.text.toLowerCase();
             return name.contains(searchText);
