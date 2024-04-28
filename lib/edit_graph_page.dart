@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
+import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   final _nameNode = FocusNode();
   late TextEditingController _nameController;
   bool _cardio = false;
+  String? _unit;
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         .getSingle()
         .then((value) => setState(() {
               _cardio = value.cardio;
+              _unit = value.unit;
             }));
   }
 
@@ -48,10 +51,20 @@ class _EditGraphPageState extends State<EditGraphPage> {
     return result.read(db.gymSets.name.count()) ?? 0;
   }
 
+  Future<bool> _mixedUnits() async {
+    final result = await (db.gymSets.selectOnly(distinct: true)
+          ..addColumns([db.gymSets.unit])
+          ..where(db.gymSets.name.equals(_nameController.text)))
+        .get();
+    return result.length > 1;
+  }
+
   Future<void> _doUpdate() async {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(GymSetsCompanion(
-            name: Value(_nameController.text), cardio: Value(_cardio)));
+            name: Value(_nameController.text),
+            cardio: Value(_cardio),
+            unit: _unit != null ? Value(_unit!) : const Value.absent()));
     await db.customUpdate(
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
@@ -61,6 +74,77 @@ class _EditGraphPageState extends State<EditGraphPage> {
       updates: {db.plans},
     );
     if (mounted) context.read<PlanState>().updatePlans(null);
+  }
+
+  _save() async {
+    if (_nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Name cannot be empty.')),
+      );
+      Navigator.pop(context);
+      return;
+    }
+
+    final count = await _getCount();
+
+    if (count > 0 && widget.name != _nameController.text && mounted)
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Update conflict'),
+            content: Text(
+                'Your new name exists already for $count records. Are you sure?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Confirm'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await _doUpdate();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    else if (await _mixedUnits() && mounted)
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Units conflict'),
+            content: const Text(
+                'Not all of your records are the same unit. Are you sure?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Confirm'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await _doUpdate();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    else
+      await _doUpdate();
+
+    if (!mounted) return;
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override
@@ -80,11 +164,25 @@ class _EditGraphPageState extends State<EditGraphPage> {
               decoration: const InputDecoration(labelText: "New name"),
               textCapitalization: TextCapitalization.sentences,
             ),
+            if (_unit != null)
+              UnitSelector(
+                value: _unit!,
+                cardio: _cardio,
+                onChanged: (value) {
+                  setState(() {
+                    _unit = value;
+                  });
+                },
+              ),
             ListTile(
               title: const Text('Cardio'),
               onTap: () {
                 setState(() {
                   _cardio = !_cardio;
+                  if (_cardio)
+                    _unit = 'km';
+                  else
+                    _unit = 'kg';
                 });
               },
               trailing: Switch(
@@ -98,52 +196,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (_nameController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Name cannot be empty.')),
-            );
-            Navigator.pop(context);
-            return;
-          }
-
-          final count = await _getCount();
-
-          if (!context.mounted) return;
-          if (count == 0 || widget.name == _nameController.text)
-            await _doUpdate();
-          else {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Update conflict'),
-                  content: Text(
-                      'Your new name exists already for $count records. Are you sure?'),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    TextButton(
-                      child: const Text('Confirm'),
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        await _doUpdate();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-
-          if (!context.mounted) return;
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
+        onPressed: _save,
         tooltip: "Update all records for this exercise",
         child: const Icon(Icons.save),
       ),

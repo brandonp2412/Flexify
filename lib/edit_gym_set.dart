@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 
@@ -192,21 +193,14 @@ class _EditGymSetState extends State<EditGymSet> {
                     baseOffset: 0,
                     extentOffset: _bodyWeightController.text.length),
               ),
-            DropdownButtonFormField<String>(
+            UnitSelector(
               value: _unit,
-              decoration: const InputDecoration(labelText: 'Unit'),
-              items:
-                  (_cardio ? ['km', 'mi'] : ['kg', 'lb']).map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
                   _unit = newValue!;
                 });
               },
+              cardio: _cardio,
             ),
             ListTile(
               title: const Text('Created Date'),

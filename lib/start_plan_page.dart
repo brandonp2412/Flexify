@@ -7,6 +7,7 @@ import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_state.dart';
+import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -272,16 +273,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             ],
             if (settings.showUnits)
-              DropdownButtonFormField<String>(
+              UnitSelector(
                 value: _unit,
-                decoration: const InputDecoration(labelText: 'Unit'),
-                items:
-                    (_cardio ? ['km', 'mi'] : ['kg', 'lb']).map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                cardio: _cardio,
                 onChanged: (String? newValue) {
                   setState(() {
                     _unit = newValue!;
