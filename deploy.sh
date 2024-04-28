@@ -18,16 +18,25 @@ new_build_number=$((build_number + 1))
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
-
-./flutter/bin/flutter build apk --split-per-abi
-./flutter/bin/flutter build appbundle
-
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
 last_commits=$(git log --pretty=format:"%s" @{u}..HEAD | awk '{print "- "$0}')
 changelog="$1"
 echo "${changelog:-$last_commits}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add fastlane/metadata
+
+if ! git diff-files --quiet --ignore-submodules --; then
+    echo "There are unstaged changes in the repository:"
+    git --no-pager diff
+    git restore --staged pubspec.yaml fastlane/metadata
+    git restore pubspec.yaml fastlane/metadata
+    rm "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
+    exit 1
+fi
+
+./flutter/bin/flutter build apk --split-per-abi
+./flutter/bin/flutter build appbundle
+
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 $rest"
 git push
