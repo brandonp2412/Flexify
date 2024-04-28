@@ -49,7 +49,8 @@ class _CardioLineState extends State<CardioLine> {
       groupBy = [
         db.gymSets.created.year,
         db.gymSets.created.month,
-        const CustomExpression<double>("STRFTIME('%W', created)")
+        const CustomExpression<int>(
+            "STRFTIME('%W', DATE(created, 'unixepoch'))")
       ];
     else if (widget.groupBy == AppGroupBy.year)
       groupBy = [db.gymSets.created.year];
