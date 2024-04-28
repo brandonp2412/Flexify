@@ -34,6 +34,8 @@ class _StrengthLineState extends State<StrengthLine> {
   final _volumeColumn =
       const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
   final _relativeColumn = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+  final _weekCol =
+      const CustomExpression<int>("STRFTIME('%W', DATE(created, 'unixepoch'))");
 
   DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
@@ -57,10 +59,7 @@ class _StrengthLineState extends State<StrengthLine> {
     if (widget.groupBy == AppGroupBy.month)
       groupBy = [db.gymSets.created.year, db.gymSets.created.month];
     else if (widget.groupBy == AppGroupBy.week)
-      groupBy = [
-        db.gymSets.created.year,
-        const CustomExpression<double>("STRFTIME('%W', created)")
-      ];
+      groupBy = [db.gymSets.created.year, db.gymSets.created.month, _weekCol];
     else if (widget.groupBy == AppGroupBy.year)
       groupBy = [db.gymSets.created.year];
 
