@@ -25,7 +25,7 @@ changelog="$1"
 echo "${changelog:-$last_commits}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
 git add fastlane/metadata
 
-if [[ -n "$(git status -s)" ]]; then
+if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
     echo "There are unstaged changes in the repository:"
     git --no-pager diff
     git restore --staged pubspec.yaml fastlane/metadata

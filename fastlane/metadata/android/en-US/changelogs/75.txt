@@ -1,0 +1,11 @@
+- Fix deployment
+- Fix deploy.sh exiting with no changes
+- Revert "Remember strength graph settings"
+- Revert "Remember settings for cardio graphs"
+- Hide timer progress when timer tab is hidden
+- List todays exercises first on graphs page
+- Remember settings for cardio graphs
+- Remember strength graph settings
+- Add missing setState to strength_line
+- Enable mass editing of units for graphs
+- Fix tapping graphs for cardio exercises
