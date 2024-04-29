@@ -34,18 +34,17 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
       setState(() {
         if (targetUnit != null) _targetUnit = targetUnit;
 
-        if (groupBy == AppGroupBy.week.toString())
+        if (groupBy == 'AppGroupBy.week')
           _groupBy = AppGroupBy.week;
-        else if (groupBy == AppGroupBy.month.toString())
+        else if (groupBy == 'AppGroupBy.month')
           _groupBy = AppGroupBy.month;
-        else if (groupBy == AppGroupBy.year.toString())
-          _groupBy = AppGroupBy.year;
+        else if (groupBy == 'AppGroupBy.year') _groupBy = AppGroupBy.year;
 
-        if (metric == StrengthMetric.oneRepMax.toString())
+        if (metric == 'StrengthMetric.oneRepMax')
           _metric = StrengthMetric.oneRepMax;
-        else if (metric == StrengthMetric.relativeStrength.toString())
+        else if (metric == 'StrengthMetric.relativeStrength')
           _metric = StrengthMetric.relativeStrength;
-        else if (metric == StrengthMetric.volume.toString())
+        else if (metric == 'StrengthMetric.volume')
           _metric = StrengthMetric.volume;
       });
     });
