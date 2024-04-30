@@ -6,6 +6,7 @@ class SettingsState extends ChangeNotifier {
 
   ThemeMode themeMode = ThemeMode.system;
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
+  int maxSets = 5;
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
 
@@ -31,6 +32,7 @@ class SettingsState extends ChangeNotifier {
       themeMode = ThemeMode.light;
     else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
 
+    maxSets = prefsInstance.getInt("maxSets") ?? 5;
     final ms = prefsInstance.getInt("timerDuration");
     if (ms != null) timerDuration = Duration(milliseconds: ms);
 
@@ -42,6 +44,12 @@ class SettingsState extends ChangeNotifier {
     explainedPermissions =
         prefsInstance.getBool('explainedPermissions') ?? false;
     curveLines = prefsInstance.getBool('curveLines') ?? false;
+  }
+
+  void setMaxSets(int max) {
+    maxSets = max;
+    notifyListeners();
+    prefs?.setInt('maxSets', max);
   }
 
   void setCurvedLines(bool curve) {

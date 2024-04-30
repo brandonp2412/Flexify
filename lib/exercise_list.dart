@@ -75,7 +75,9 @@ class ExerciseList extends StatelessWidget {
                   ),
                 ),
                 TweenAnimationBuilder(
-                  tween: Tween<double>(begin: (count / 5) - 1, end: count / 5),
+                  tween: Tween<double>(
+                      begin: (count / settings.maxSets) - 1,
+                      end: count / settings.maxSets),
                   duration: Duration(milliseconds: firstRender ? 0 : 150),
                   builder: (context, value, child) => LinearProgressIndicator(
                     value: value,

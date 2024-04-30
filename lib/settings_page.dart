@@ -24,6 +24,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   late TextEditingController minutesController;
   late TextEditingController secondsController;
+  late TextEditingController _maxSetsController;
   final searchController = TextEditingController();
 
   final List<String> shortFormats = [
@@ -52,6 +53,8 @@ class _SettingsPageState extends State<SettingsPage> {
         text: settings.timerDuration.inMinutes.toString());
     secondsController = TextEditingController(
         text: (settings.timerDuration.inSeconds % 60).toString());
+    _maxSetsController =
+        TextEditingController(text: settings.maxSets.toString());
   }
 
   @override
@@ -140,6 +143,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ],
+          ),
+        ),
+      ),
+      WidgetSettings(
+        key: 'max sets',
+        widget: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: TextField(
+            decoration: const InputDecoration(labelText: 'Max sets'),
+            controller: _maxSetsController,
+            keyboardType: TextInputType.number,
+            onTap: () async {
+              _maxSetsController.selection = TextSelection(
+                baseOffset: 0,
+                extentOffset: _maxSetsController.text.length,
+              );
+            },
+            onSubmitted: (value) => settings.setMaxSets(int.parse(value)),
           ),
         ),
       ),
