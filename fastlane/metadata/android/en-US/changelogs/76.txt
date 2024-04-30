@@ -1,0 +1,5 @@
+- Go to next exercise once you hit max sets
+- Reverse todays plan on graphs page
+- Stop rest timers once a workout is complete
+- Improve settings performance
+- Add max sets setting

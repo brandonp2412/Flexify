@@ -148,9 +148,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
       if (countIndex != -1)
         count = counts[countIndex].read(db.gymSets.name.count())!;
       count++;
-      if (count < settings.maxSets ||
+      if (count != settings.maxSets ||
           _selectedIndex < _planExercises.length - 1)
         timerState.startTimer("$exercise ($count)", settings.timerDuration);
+      if (count == settings.maxSets &&
+          _selectedIndex < _planExercises.length - 1)
+        _select(_selectedIndex + 1);
     }
 
     db.into(db.gymSets).insert(gymSet);
