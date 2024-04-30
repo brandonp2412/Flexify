@@ -109,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: minutesController.text.length,
                         );
                       },
-                      onChanged: (value) => settings.setDuration(
+                      onSubmitted: (value) => settings.setDuration(
                         Duration(
                           minutes: int.parse(value),
                           seconds: settings.timerDuration.inSeconds % 60,
@@ -132,7 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: secondsController.text.length,
                         );
                       },
-                      onChanged: (value) => settings.setDuration(
+                      onSubmitted: (value) => settings.setDuration(
                         Duration(
                           seconds: int.parse(value),
                           minutes: settings.timerDuration.inMinutes.floor(),
