@@ -91,8 +91,11 @@ class _GraphsPageState extends State<GraphsPage> {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
-          final todaysGymSets = snapshot.data!.where((gymSet) =>
-              _todaysExercises.contains(gymSet.read(db.gymSets.name)));
+          final todaysGymSets = snapshot.data!
+              .where((gymSet) =>
+                  _todaysExercises.contains(gymSet.read(db.gymSets.name)))
+              .toList()
+              .reversed;
           final otherGymSets = snapshot.data!.where((gymSet) =>
               !_todaysExercises.contains(gymSet.read(db.gymSets.name)));
           final orderedGymSets = [...todaysGymSets, ...otherGymSets];
