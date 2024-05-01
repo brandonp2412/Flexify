@@ -101,16 +101,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
+    if (last == null) return;
+
     setState(() {
-      _unit = last?.unit ?? 'kg';
-      if (last?.cardio == true && _unit == 'kg') _unit = 'km';
-      _repsController.text = last != null ? last.reps.toString() : "0.0";
-      _weightController.text = last != null ? last.weight.toString() : "0.0";
-      _distanceController.text =
-          last != null ? last.distance.toString() : "0.0";
-      _durationController.text =
-          last != null ? last.duration.toString() : "0.0";
-      _cardio = last?.cardio ?? false;
+      _unit = last.unit;
+      _repsController.text = last.reps.toString();
+      _weightController.text = last.weight.toString();
+      _distanceController.text = last.distance.toString();
+      _durationController.text = last.duration.toString();
+      _cardio = last.cardio;
+
+      if (_cardio && (_unit == 'kg' || _unit == 'lb'))
+        _unit = 'km';
+      else if (!_cardio && (_unit == 'km' || _unit == 'mi')) _unit = 'kg';
     });
   }
 

@@ -33,6 +33,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
         .then((value) => setState(() {
               _cardio = value.cardio;
               _unit = value.unit;
+              if (_cardio && (_unit == 'kg' || _unit == 'lb'))
+                _unit = 'km';
+              else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
+                _unit = 'kg';
             }));
   }
 
