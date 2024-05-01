@@ -15,7 +15,7 @@ class GraphTile extends StatelessWidget {
   final DateTime created;
   final String unit;
   final Set<String> selected;
-  final Function onSelect;
+  final Function(String) onSelect;
 
   const GraphTile(
       {super.key,

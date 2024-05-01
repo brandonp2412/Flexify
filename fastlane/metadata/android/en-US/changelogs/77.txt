@@ -1,0 +1,6 @@
+- Allow multi deleting of plans
+- Rename "Enter weight" as "Weight" on graphs page
+- Add edit button to graphs page dropdown
+- Focus distance after submitting duration
+- Fix crashes with inconsistent cardio types
+- Remove history suffix from graph_history

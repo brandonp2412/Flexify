@@ -1,17 +1,15 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' as drift;
-import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
+import 'package:flexify/plans_list.dart';
 import 'package:flexify/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'plan_tile.dart';
 
 class PlansPage extends StatefulWidget {
   const PlansPage({super.key});
@@ -56,6 +54,7 @@ class _PlansPageWidget extends StatefulWidget {
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
   PlanState? _planState;
   final TextEditingController _searchController = TextEditingController();
+  final Set<int> _selected = {};
 
   @override
   void initState() {
@@ -70,6 +69,29 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   @override
   Widget build(BuildContext context) {
     _planState = context.watch<PlanState>();
+    final filtered = _planState?.plans
+        .where((element) =>
+            element.days.toLowerCase().contains(_searchController.text) ||
+            element.exercises.toLowerCase().contains(_searchController.text))
+        .toList();
+
+    PopupMenuItem<dynamic> selectAll(BuildContext context) {
+      return PopupMenuItem(
+        child: ListTile(
+          leading: const Icon(Icons.done_all),
+          title: const Text('Select all'),
+          onTap: () async {
+            Navigator.pop(context);
+            final ids = filtered?.map((e) => e.id);
+            if (ids == null) return;
+
+            setState(() {
+              _selected.addAll(ids);
+            });
+          },
+        ),
+      );
+    }
 
     return Scaffold(
       body: Column(
@@ -77,41 +99,62 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchBar(
-              hintText: "Search...",
+              hintText: _selected.isEmpty
+                  ? "Search..."
+                  : "${_selected.length} selected",
               controller: _searchController,
               padding: MaterialStateProperty.all(
-                const EdgeInsets.symmetric(horizontal: 16.0),
+                const EdgeInsets.only(right: 8.0),
               ),
               onChanged: (_) {
                 setState(() {});
               },
-              leading: const Icon(Icons.search),
-              trailing: _searchController.text.isNotEmpty
-                  ? [
-                      IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() {});
-                        },
-                      )
-                    ]
-                  : [
-                      PopupMenuButton(
-                        icon: const Icon(Icons.more_vert),
-                        itemBuilder: (context) => [
-                          _enterWeight(context),
-                          _settingsPage(context),
-                        ],
-                      )
-                    ],
+              leading: _selected.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.only(left: 16.0, right: 8.0),
+                      child: Icon(Icons.search))
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _selected.clear();
+                        });
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                      padding: EdgeInsets.zero,
+                    ),
+              trailing: [
+                if (_selected.isNotEmpty) _deletePlans(context),
+                PopupMenuButton(
+                  icon: const Icon(Icons.more_vert),
+                  itemBuilder: (context) => [
+                    selectAll(context),
+                    if (_selected.isNotEmpty) _edit(context),
+                    if (_selected.isNotEmpty) _clear(context),
+                    if (_selected.isEmpty) _enterWeight(context),
+                    if (_selected.isEmpty) _settingsPage(context)
+                  ],
+                ),
+              ],
             ),
           ),
-          _PlanWidget(
-            plans: _planState?.plans ?? [],
-            searchText: _searchController.text,
-            updatePlans: _updatePlans,
-            navigatorKey: widget.navigatorKey,
+          Expanded(
+            child: PlansList(
+              plans: filtered ?? [],
+              searchText: _searchController.text,
+              updatePlans: _updatePlans,
+              navigatorKey: widget.navigatorKey,
+              selected: _selected,
+              onSelect: (id) {
+                if (_selected.contains(id))
+                  setState(() {
+                    _selected.remove(id);
+                  });
+                else
+                  setState(() {
+                    _selected.add(id);
+                  });
+              },
+            ),
           ),
         ],
       ),
@@ -168,67 +211,80 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       ),
     );
   }
-}
 
-class _PlanWidget extends StatelessWidget {
-  final String searchText;
-  final List<Plan> plans;
-  final Future<void> Function({List<Plan>? plans}) updatePlans;
-  final GlobalKey<NavigatorState> navigatorKey;
+  IconButton _deletePlans(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm Delete'),
+              content: Text(
+                  'Are you sure you want to delete ${_selected.length} plans? This action is not reversible.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                TextButton(
+                  child: const Text('Delete'),
+                  onPressed: () async {
+                    final planState = context.read<PlanState>();
+                    final selectedCopy = _selected.toList();
+                    Navigator.pop(context);
 
-  const _PlanWidget({
-    required this.plans,
-    required this.searchText,
-    required this.updatePlans,
-    required this.navigatorKey,
-  });
+                    setState(() {
+                      _selected.clear();
+                    });
 
-  @override
-  Widget build(BuildContext context) {
-    final weekday = weekdays[DateTime.now().weekday - 1];
-    final filtered = plans
-        .where((element) =>
-            element.days.toLowerCase().contains(searchText) ||
-            element.exercises.toLowerCase().contains(searchText))
-        .toList();
+                    await db.plans
+                        .deleteWhere((tbl) => tbl.id.isIn(selectedCopy));
+                    planState.updatePlans(null);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
-    if (filtered.isEmpty)
-      return const ListTile(
-        title: Text("No plans yet."),
-        subtitle: Text("Tap the plus button in the bottom right to add plans."),
-      );
-
-    return Expanded(
-      child: ReorderableListView.builder(
-        itemCount: filtered.length,
-        itemBuilder: (context, index) {
-          final plan = filtered[index];
-          return PlanTile(
-            key: Key(plan.id.toString()),
-            plan: plan,
-            weekday: weekday,
-            index: index,
-            navigatorKey: navigatorKey,
-            refresh: updatePlans,
+  PopupMenuItem<dynamic> _edit(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.edit),
+        title: const Text('Edit'),
+        onTap: () async {
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditPlanPage(
+                      plan: _planState!.plans
+                          .firstWhere(
+                              (element) => element.id == _selected.first)
+                          .toCompanion(false),
+                    )),
           );
         },
-        onReorder: (int oldIndex, int newIndex) async {
-          if (oldIndex < newIndex) {
-            newIndex--;
-          }
+      ),
+    );
+  }
 
-          final temp = plans[oldIndex];
-          plans.removeAt(oldIndex);
-          plans.insert(newIndex, temp);
-
-          await updatePlans(plans: plans);
-          await db.transaction(() async {
-            for (int i = 0; i < plans.length; i++) {
-              final plan = plans[i];
-              final updatedPlan =
-                  plan.toCompanion(false).copyWith(sequence: drift.Value(i));
-              await db.update(db.plans).replace(updatedPlan);
-            }
+  PopupMenuItem<dynamic> _clear(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.clear),
+        title: const Text('Clear'),
+        onTap: () async {
+          Navigator.pop(context);
+          setState(() {
+            _selected.clear();
           });
         },
       ),
