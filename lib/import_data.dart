@@ -100,9 +100,8 @@ class ImportData extends StatelessWidget {
                           sequence: Value(sequence),
                         ));
                       }
-                      db.batch(
-                        (batch) => batch.insertAll(db.plans, plans),
-                      );
+                      await db.plans.deleteAll();
+                      await db.plans.insertAll(plans);
                       if (!pageContext.mounted) return;
                       Navigator.pop(pageContext);
                       DefaultTabController.of(pageContext).animateTo(0);
