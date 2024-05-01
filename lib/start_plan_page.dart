@@ -261,6 +261,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     extentOffset: _durationController.text.length,
                   );
                 },
+                onSubmitted: (value) {
+                  _distanceNode.requestFocus();
+                  _distanceController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _distanceController.text.length,
+                  );
+                },
               ),
               TextField(
                 focusNode: _distanceNode,
@@ -274,9 +281,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                     baseOffset: 0,
                     extentOffset: _distanceController.text.length,
                   );
-                },
-                onSubmitted: (value) {
-                  _durationNode.requestFocus();
                 },
               ),
             ],
