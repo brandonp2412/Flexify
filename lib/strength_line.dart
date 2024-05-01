@@ -168,6 +168,7 @@ class _StrengthLineState extends State<StrengthLine> {
                 lineTouchData: LineTouchData(
                   enabled: true,
                   touchCallback: (event, touchResponse) async {
+                    if (event is ScaleUpdateDetails) return;
                     if (event is! FlPanDownEvent) return;
                     if (widget.metric != StrengthMetric.bestWeight) return;
                     if (DateTime.now().difference(_lastTap) <
