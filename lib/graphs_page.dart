@@ -208,14 +208,14 @@ class _GraphsPageState extends State<GraphsPage> {
                           cardio: cardio,
                           duration: duration,
                           distance: distance,
-                          onSelect: (value) {
-                            if (_selected.contains(value))
+                          onSelect: (name) {
+                            if (_selected.contains(name))
                               setState(() {
-                                _selected.remove(value);
+                                _selected.remove(name);
                               });
                             else
                               setState(() {
-                                _selected.add(value);
+                                _selected.add(name);
                               });
                           },
                         )
@@ -315,7 +315,7 @@ class _GraphsPageState extends State<GraphsPage> {
     return PopupMenuItem(
       child: ListTile(
         leading: const Icon(Icons.scale),
-        title: const Text('Enter weight'),
+        title: const Text('Weight'),
         onTap: () {
           Navigator.pop(context);
           Navigator.push(
