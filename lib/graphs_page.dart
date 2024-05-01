@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
@@ -157,6 +158,7 @@ class _GraphsPageState extends State<GraphsPage> {
                       icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) => [
                         selectAll(context),
+                        if (_selected.isNotEmpty) _edit(context),
                         if (_selected.isNotEmpty) _clear(context),
                         if (_selected.isEmpty) _enterWeight(context),
                         if (_selected.isEmpty) _settingsPage(context)
@@ -319,6 +321,25 @@ class _GraphsPageState extends State<GraphsPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EnterWeightPage()),
+          );
+        },
+      ),
+    );
+  }
+
+  PopupMenuItem<dynamic> _edit(BuildContext context) {
+    return PopupMenuItem(
+      child: ListTile(
+        leading: const Icon(Icons.edit),
+        title: const Text('Edit'),
+        onTap: () async {
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditGraphPage(
+                      name: _selected.first,
+                    )),
           );
         },
       ),
