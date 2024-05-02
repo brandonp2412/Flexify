@@ -296,7 +296,6 @@ void main() {
           await tester.tap(find.text("Monday"));
           await tester.tap(find.text("Wednesday"));
           await tester.tap(find.text("Friday"));
-          await tester.tap(find.text("Barbell bench press"));
           await tester.pumpAndSettle();
         },
       ),
