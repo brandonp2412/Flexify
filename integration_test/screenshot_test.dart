@@ -121,21 +121,23 @@ Future<void> appWrapper() async {
   runApp(app.appProviders(settingsState));
 }
 
-BuildContext getBuildContext(WidgetTester tester,
-    {TabBarState tabBarState = TabBarState.plans}) {
-  if (tabBarState == TabBarState.plans)
-    return (tester.state(find.byType(PlansPage)) as PlansPageState)
-        .navigatorKey
-        .currentState!
-        .context;
+BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {
+  switch (tabBarState) {
+    case TabBarState.plans:
+      return (tester.state(find.byType(PlansPage)) as PlansPageState)
+          .navigatorKey
+          .currentContext!;
+    case TabBarState.graphs:
+      return (tester.state(find.byType(GraphsPage)) as GraphsPageState)
+          .navigatorKey
+          .currentContext!;
+    case TabBarState.timer:
+      return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
+    case null:
+      break;
+  }
 
-  if (tabBarState == TabBarState.graphs)
-    return (tester.state(find.byType(GraphsPage)) as GraphsPageState)
-        .navigatorKey
-        .currentState!
-        .context;
-
-  return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
+  return tester.element(find.byType(TabBarView));
 }
 
 void navigateTo({required BuildContext context, required Widget page}) {
@@ -157,12 +159,12 @@ Future<void> generateScreenshot({
   await appWrapper();
   await tester.pumpAndSettle();
 
-  final controllerState = getBuildContext(tester);
+  final controllerState = getBuildContext(tester, null);
   DefaultTabController.of(controllerState).index = tabBarState.index;
   await tester.pumpAndSettle();
 
   if (navigateToPage != null) {
-    final navState = getBuildContext(tester, tabBarState: tabBarState);
+    final navState = getBuildContext(tester, tabBarState);
     await navigateToPage(navState);
   }
 
