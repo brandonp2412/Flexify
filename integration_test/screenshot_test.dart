@@ -152,9 +152,9 @@ Future<void> generateScreenshot({
   required IntegrationTestWidgetsFlutterBinding binding,
   required WidgetTester tester,
   required String screenshotName,
+  required TabBarState tabBarState,
   Future<void> Function(BuildContext context)? navigateToPage,
   bool skipSettle = false,
-  TabBarState tabBarState = TabBarState.plans,
 }) async {
   await appWrapper();
   await tester.pumpAndSettle();
@@ -232,7 +232,11 @@ void main() {
     testWidgets(
       "PlanPage",
       (tester) async => await generateScreenshot(
-          binding: binding, tester: tester, screenshotName: '1_en-US'),
+        binding: binding,
+        tester: tester,
+        screenshotName: '1_en-US',
+        tabBarState: TabBarState.plans,
+      ),
     );
 
     testWidgets(
@@ -259,6 +263,7 @@ void main() {
           context: context,
           page: const SettingsPage(),
         ),
+        tabBarState: TabBarState.plans,
       ),
     );
 
@@ -277,6 +282,7 @@ void main() {
             ),
           );
         },
+        tabBarState: TabBarState.plans,
       ),
     );
   });
