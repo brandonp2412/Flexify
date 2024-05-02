@@ -66,7 +66,6 @@ class App extends StatelessWidget {
   }
 }
 
-final graphsKey = GlobalKey<NavigatorState>();
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -84,9 +83,7 @@ class HomePage extends StatelessWidget {
           child: TabBarView(
             children: [
               const PlansPage(),
-              GraphsPage(
-                navigatorKey: graphsKey,
-              ),
+              const GraphsPage(),
               if (!settings.hideTimerTab) const TimerPage(),
             ],
           ),

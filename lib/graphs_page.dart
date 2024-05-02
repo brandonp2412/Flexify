@@ -15,20 +15,20 @@ import 'package:provider/provider.dart';
 import 'graph_tile.dart';
 
 class GraphsPage extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
 
-  const GraphsPage({super.key, required this.navigatorKey});
+  const GraphsPage({super.key});
 
   @override
-  createState() => _GraphsPageState();
+  createState() => GraphsPageState();
 }
 
-class _GraphsPageState extends State<GraphsPage> {
+class GraphsPageState extends State<GraphsPage> {
   late Stream<List<drift.TypedResult>> _stream;
 
   List<String> _todaysExercises = [];
   final TextEditingController _searchController = TextEditingController();
   final Set<String> _selected = {};
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -70,12 +70,12 @@ class _GraphsPageState extends State<GraphsPage> {
   Widget build(BuildContext context) {
     return NavigatorPopHandler(
       onPop: () {
-        if (graphsKey.currentState!.canPop() == false) return;
-        if (graphsKey.currentState?.focusNode.hasFocus == false) return;
-        widget.navigatorKey.currentState!.pop();
+        if (navigatorKey.currentState!.canPop() == false) return;
+        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
+        navigatorKey.currentState!.pop();
       },
       child: Navigator(
-        key: graphsKey,
+        key: navigatorKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _graphsPage(),
           settings: settings,

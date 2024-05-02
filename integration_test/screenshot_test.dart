@@ -1,12 +1,23 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
+import 'package:flexify/edit_plan_page.dart';
+import 'package:flexify/graph_history.dart';
+import 'package:flexify/graphs_page.dart';
 import 'package:flexify/main.dart' as app;
+import 'package:flexify/plan_state.dart';
+import 'package:flexify/plans_page.dart';
+import 'package:flexify/settings_page.dart';
 import 'package:flexify/settings_state.dart';
+import 'package:flexify/start_plan_page.dart';
+import 'package:flexify/timer_page.dart';
+import 'package:flexify/timer_state.dart';
+import 'package:flexify/view_strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Map<String, double> exercisesToPopulateTestDB = {
@@ -96,6 +107,10 @@ List<PlansCompanion> plans = [
   ),
 ];
 
+enum TabBarState { plans, graphs, timer }
+
+const screenshotExercise = "Dumbbell shoulder press";
+
 Future<void> appWrapper() async {
   WidgetsFlutterBinding.ensureInitialized();
   final settingsState = SettingsState();
@@ -106,21 +121,54 @@ Future<void> appWrapper() async {
   runApp(app.appProviders(settingsState));
 }
 
+BuildContext getBuildContext(WidgetTester tester,
+    {TabBarState tabBarState = TabBarState.plans}) {
+  if (tabBarState == TabBarState.plans)
+    return (tester.state(find.byType(PlansPage)) as PlansPageState)
+        .navigatorKey
+        .currentState!
+        .context;
+
+  if (tabBarState == TabBarState.graphs)
+    return (tester.state(find.byType(GraphsPage)) as GraphsPageState)
+        .navigatorKey
+        .currentState!
+        .context;
+
+  return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
+}
+
+void navigateTo({required BuildContext context, required Widget page}) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => page,
+    ),
+  );
+}
+
 Future<void> generateScreenshot({
   required IntegrationTestWidgetsFlutterBinding binding,
   required WidgetTester tester,
   required String screenshotName,
+  Future<void> Function(BuildContext context)? navigateToPage,
   bool skipSettle = false,
-  Future<void> Function()? navigateToPage,
+  TabBarState tabBarState = TabBarState.plans,
 }) async {
   await appWrapper();
-  await tester.pump();
-  if (navigateToPage != null) await navigateToPage();
+  await tester.pumpAndSettle();
+
+  final controllerState = getBuildContext(tester);
+  DefaultTabController.of(controllerState).index = tabBarState.index;
+  await tester.pumpAndSettle();
+
+  if (navigateToPage != null) {
+    final navState = getBuildContext(tester, tabBarState: tabBarState);
+    await navigateToPage(navState);
+  }
+
+  skipSettle ? await tester.pump() : await tester.pumpAndSettle();
   await binding.convertFlutterSurfaceToImage();
-  if (!skipSettle)
-    await tester.pumpAndSettle();
-  else
-    await tester.pump();
+  skipSettle ? await tester.pump() : await tester.pumpAndSettle();
   await binding.takeScreenshot(screenshotName);
 }
 
@@ -133,25 +181,6 @@ GymSetsCompanion generateGymSetCompanion(String exercise, double weight,
       unit: "kg",
       created: date ?? DateTime.now(),
     );
-
-Future<void> navigateToGraphPage(WidgetTester tester) async {
-  await tester.tap(find.byIcon(Icons.insights));
-  await tester.pumpAndSettle();
-}
-
-Future<void> navigateToDumbbell(WidgetTester tester) async {
-  await tester.dragUntilVisible(find.text("Dumbbell shoulder press"),
-      find.byType(ListView), const Offset(0, 10));
-  await tester.pump();
-  await tester.tap(find.widgetWithText(ListTile, "Dumbbell shoulder press"));
-  await tester.pumpAndSettle();
-}
-
-Future<void> navigateToViewGraphPage(WidgetTester tester) async {
-  await navigateToGraphPage(tester);
-  await tester.pumpAndSettle();
-  await navigateToDumbbell(tester);
-}
 
 void main() {
   IntegrationTestWidgetsFlutterBinding binding =
@@ -203,52 +232,48 @@ void main() {
       (tester) async => await generateScreenshot(
           binding: binding, tester: tester, screenshotName: '1_en-US'),
     );
+
     testWidgets(
       "GraphPage",
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '2_en-US',
-        navigateToPage: () async => await navigateToGraphPage(tester),
+        navigateToPage: (context) async => navigateTo(
+          context: context,
+          page: const GraphsPage(),
+        ),
+        tabBarState: TabBarState.graphs,
       ),
     );
+
     testWidgets(
       "SettingsPage",
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '3_en-US',
-        navigateToPage: () async {
-          await tester.tap(
-            find.byIcon(Icons.more_vert),
-          );
-          await tester.pumpAndSettle();
-          await tester.tap(
-            find.byIcon(Icons.settings),
-          );
-        },
+        navigateToPage: (context) async => navigateTo(
+          context: context,
+          page: const SettingsPage(),
+        ),
       ),
     );
+
     testWidgets(
       "StartPlanPage",
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '4_en-US',
-        navigateToPage: () async {
-          await tester.pumpAndSettle();
-          await tester.tap(
-            find.widgetWithText(
-              ListTile,
-              plans.first.exercises.value.split(",").join(", "),
+        navigateToPage: (context) async {
+          navigateTo(
+            context: context,
+            page: StartPlanPage(
+              plan: context.read<PlanState>().plans.first,
+              refresh: () async {},
             ),
           );
-          await tester.pumpAndSettle();
-          await tester.tap(find.byTooltip('Save'));
-          await tester.pumpAndSettle();
-          final firstExercise = plans.first.exercises.value.split(',').first;
-          await tester.tap(find.text("$firstExercise (2)"));
-          await tester.pumpAndSettle();
         },
       ),
     );
@@ -261,45 +286,42 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '5_en-US',
-        navigateToPage: () async => await navigateToViewGraphPage(tester),
+        navigateToPage: (context) async => navigateTo(
+          context: context,
+          page: const ViewStrengthPage(name: screenshotExercise),
+        ),
+        tabBarState: TabBarState.graphs,
       ),
     );
+
     testWidgets(
       "GraphHistory",
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '6_en-US',
-        navigateToPage: () async {
-          await navigateToViewGraphPage(tester);
-          await tester.pump();
-          await tester.tap(find.byIcon(Icons.history));
-        },
+        navigateToPage: (context) async => navigateTo(
+          context: context,
+          page: const GraphHistory(name: screenshotExercise),
+        ),
+        tabBarState: TabBarState.graphs,
       ),
     );
+
     testWidgets(
       "EditPlanPage",
       (tester) async => await generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '7_en-US',
-        navigateToPage: () async {
-          await tester.tap(find.byIcon(Icons.add));
-          await tester.pumpAndSettle();
-
-          // If I didn't do this, it would only tap the title and not enter the text.
-          binding.testTextInput.register();
-
-          await tester.enterText(
-              find.widgetWithText(TextField, "Title (optional)"), "Full body");
-          await tester.pumpAndSettle();
-          await tester.tap(find.text("Monday"));
-          await tester.tap(find.text("Wednesday"));
-          await tester.tap(find.text("Friday"));
-          await tester.pumpAndSettle();
-        },
+        navigateToPage: (context) async => navigateTo(
+          context: context,
+          page: EditPlanPage(plan: plans.first),
+        ),
+        tabBarState: TabBarState.graphs,
       ),
     );
+
     testWidgets(
       "TimerPage",
       (tester) async => await generateScreenshot(
@@ -307,12 +329,12 @@ void main() {
         tester: tester,
         screenshotName: '8_en-US',
         skipSettle: true,
-        navigateToPage: () async {
-          await tester.tap(find.byIcon(Icons.timer_outlined));
-          await tester.pumpAndSettle();
-          await tester.tap(find.text("+1 min"));
-          await tester.pump(const Duration(seconds: 6));
+        navigateToPage: (context) async {
+          await context.read<TimerState>().addOneMinute();
+          await tester.pump();
+          await tester.pump(const Duration(seconds: 7));
         },
+        tabBarState: TabBarState.timer,
       ),
     );
   });

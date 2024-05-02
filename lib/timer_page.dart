@@ -7,23 +7,24 @@ class TimerPage extends StatefulWidget {
   const TimerPage({super.key});
 
   @override
-  createState() => _TimerPageState();
+  createState() => TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> {
+class TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     final timerState = context.watch<TimerState>();
     return Scaffold(
-        body: const Center(
-          child: TimerCircularProgressIndicator(),
+      body: const Center(
+        child: TimerCircularProgressIndicator(),
+      ),
+      floatingActionButton: Visibility(
+        visible: timerState.nativeTimer.isRunning(),
+        child: FloatingActionButton(
+          onPressed: () async => await timerState.stopTimer(),
+          child: const Icon(Icons.stop),
         ),
-        floatingActionButton: Visibility(
-          visible: timerState.nativeTimer.isRunning(),
-          child: FloatingActionButton(
-            onPressed: () async => await timerState.stopTimer(),
-            child: const Icon(Icons.stop),
-          ),
-        ));
+      ),
+    );
   }
 }
