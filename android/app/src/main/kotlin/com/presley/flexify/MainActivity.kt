@@ -168,10 +168,7 @@ class MainActivity : FlutterActivity() {
             if (requestCode == READ_REQUEST_CODE) {
                 val inputStream = contentResolver.openInputStream(uri)
                 val reader = BufferedReader(InputStreamReader(inputStream))
-                val csvData = reader.use {
-                    it.readLine()
-                    it.readText()
-                }
+                val csvData = reader.readText()
                 resultChannel?.success(csvData)
             } else if (requestCode == WRITE_REQUEST_CODE) {
                 val pickedDir = DocumentFile.fromTreeUri(context, uri)
