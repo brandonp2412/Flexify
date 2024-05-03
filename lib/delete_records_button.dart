@@ -46,8 +46,6 @@ class DeleteRecordsButton extends StatelessWidget {
                                   await db.delete(db.gymSets).go();
                                   if (!pageContext.mounted) return;
                                   Navigator.pop(pageContext);
-                                  DefaultTabController.of(pageContext)
-                                      .animateTo(2);
                                 },
                               ),
                             ],
@@ -85,8 +83,6 @@ class DeleteRecordsButton extends StatelessWidget {
                                   planState.updatePlans(null);
                                   if (!pageContext.mounted) return;
                                   Navigator.pop(pageContext);
-                                  DefaultTabController.of(pageContext)
-                                      .animateTo(1);
                                 },
                               ),
                             ],
