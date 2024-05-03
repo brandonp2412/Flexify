@@ -52,6 +52,9 @@ class ImportData extends StatelessWidget {
         else
           bodyWeight = const Value(0);
 
+        if (columns.elementAtOrNull(10) == 'hidden')
+          hidden = Value(bool.parse(row[10]));
+
         return GymSetsCompanion(
           name: Value(row[1]),
           reps: reps,
@@ -60,6 +63,15 @@ class ImportData extends StatelessWidget {
           unit: Value(row[5]),
           hidden: hidden,
           bodyWeight: bodyWeight,
+          duration: columns.elementAtOrNull(7) == 'duration'
+              ? Value(row[7])
+              : const Value(0),
+          distance: columns.elementAtOrNull(8) == 'distance'
+              ? Value(row[8])
+              : const Value(0),
+          cardio: columns.elementAtOrNull(9) == 'cardio'
+              ? Value(bool.parse(row[9]))
+              : const Value(false),
         );
       },
     );
@@ -73,7 +85,6 @@ class ImportData extends StatelessWidget {
 
     if (!pageContext.mounted) return;
     Navigator.pop(pageContext);
-    DefaultTabController.of(pageContext).animateTo(2);
   }
 
   _importPlans(BuildContext context) async {
@@ -96,7 +107,6 @@ class ImportData extends StatelessWidget {
     await db.plans.insertAll(plans);
     if (!pageContext.mounted) return;
     Navigator.pop(pageContext);
-    DefaultTabController.of(pageContext).animateTo(1);
   }
 
   @override

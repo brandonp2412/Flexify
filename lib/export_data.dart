@@ -32,7 +32,11 @@ class ExportData extends StatelessWidget {
                             'weight',
                             'created',
                             'unit',
-                            'bodyWeight'
+                            'bodyWeight',
+                            'duration',
+                            'distance',
+                            'cardio',
+                            'hidden',
                           ]
                         ];
                         for (var gymSet in gymSets) {
@@ -44,6 +48,10 @@ class ExportData extends StatelessWidget {
                             gymSet.created.toIso8601String(),
                             gymSet.unit,
                             gymSet.bodyWeight,
+                            gymSet.duration,
+                            gymSet.distance,
+                            gymSet.cardio,
+                            gymSet.hidden
                           ]);
                         }
 
