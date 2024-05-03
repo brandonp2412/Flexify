@@ -7,7 +7,6 @@ import 'package:flexify/plan_tile.dart';
 import 'package:flutter/material.dart';
 
 class PlansList extends StatelessWidget {
-  final String searchText;
   final List<Plan> plans;
   final Future<void> Function({List<Plan>? plans}) updatePlans;
   final GlobalKey<NavigatorState> navigatorKey;
@@ -17,7 +16,6 @@ class PlansList extends StatelessWidget {
   const PlansList({
     super.key,
     required this.plans,
-    required this.searchText,
     required this.updatePlans,
     required this.navigatorKey,
     required this.selected,

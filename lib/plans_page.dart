@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' as drift;
+import 'package:flexify/app_search.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
-import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/plans_list.dart';
-import 'package:flexify/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,8 +52,8 @@ class _PlansPageWidget extends StatefulWidget {
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
   PlanState? _planState;
-  final TextEditingController _searchController = TextEditingController();
   final Set<int> _selected = {};
+  String _search = '';
 
   @override
   void initState() {
@@ -71,76 +70,50 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     _planState = context.watch<PlanState>();
     final filtered = _planState?.plans
         .where((element) =>
-            element.days.toLowerCase().contains(_searchController.text) ||
-            element.exercises.toLowerCase().contains(_searchController.text))
+            element.days.toLowerCase().contains(_search.toLowerCase()) ||
+            element.exercises.toLowerCase().contains(_search.toLowerCase()))
         .toList();
-
-    PopupMenuItem<dynamic> selectAll(BuildContext context) {
-      return PopupMenuItem(
-        child: ListTile(
-          leading: const Icon(Icons.done_all),
-          title: const Text('Select all'),
-          onTap: () async {
-            Navigator.pop(context);
-            final ids = filtered?.map((e) => e.id);
-            if (ids == null) return;
-
-            setState(() {
-              _selected.addAll(ids);
-            });
-          },
-        ),
-      );
-    }
 
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchBar(
-              hintText: _selected.isEmpty
-                  ? "Search..."
-                  : "${_selected.length} selected",
-              controller: _searchController,
-              padding: MaterialStateProperty.all(
-                const EdgeInsets.only(right: 8.0),
-              ),
-              onChanged: (_) {
-                setState(() {});
-              },
-              leading: _selected.isEmpty
-                  ? const Padding(
-                      padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                      child: Icon(Icons.search))
-                  : IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _selected.clear();
-                        });
-                      },
-                      icon: const Icon(Icons.arrow_back),
-                      padding: EdgeInsets.zero,
-                    ),
-              trailing: [
-                if (_selected.isNotEmpty) _deletePlans(context),
-                PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
-                  itemBuilder: (context) => [
-                    selectAll(context),
-                    if (_selected.isNotEmpty) _edit(context),
-                    if (_selected.isNotEmpty) _clear(context),
-                    if (_selected.isEmpty) _enterWeight(context),
-                    if (_selected.isEmpty) _settingsPage(context)
-                  ],
-                ),
-              ],
+          AppSearch(
+            onChange: (value) {
+              setState(() {
+                _search = value;
+              });
+            },
+            onClear: () => setState(() {
+              _selected.clear();
+            }),
+            onDelete: () async {
+              final planState = context.read<PlanState>();
+              final selectedCopy = _selected.toList();
+              setState(() {
+                _selected.clear();
+              });
+              await db.plans.deleteWhere((tbl) => tbl.id.isIn(selectedCopy));
+              planState.updatePlans(null);
+            },
+            onSelect: () => setState(() {
+              _selected.addAll(filtered?.map((plan) => plan.id) ?? []);
+            }),
+            selected: _selected,
+            onEdit: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditPlanPage(
+                        plan: _planState!.plans
+                            .firstWhere(
+                                (element) => element.id == _selected.first)
+                            .toCompanion(false),
+                      )),
             ),
+            onRefresh: () => _updatePlans(),
           ),
           Expanded(
             child: PlansList(
               plans: filtered ?? [],
-              searchText: _searchController.text,
               updatePlans: _updatePlans,
               navigatorKey: widget.navigatorKey,
               selected: _selected,
@@ -175,118 +148,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         },
         tooltip: 'Add plan',
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> _settingsPage(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.settings),
-        title: const Text('Settings'),
-        onTap: () async {
-          Navigator.pop(context);
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SettingsPage()),
-          );
-          _updatePlans();
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> _enterWeight(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.scale),
-        title: const Text('Weight'),
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const EnterWeightPage()),
-          );
-        },
-      ),
-    );
-  }
-
-  IconButton _deletePlans(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.delete),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirm Delete'),
-              content: Text(
-                  'Are you sure you want to delete ${_selected.length} plans? This action is not reversible.'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                TextButton(
-                  child: const Text('Delete'),
-                  onPressed: () async {
-                    final planState = context.read<PlanState>();
-                    final selectedCopy = _selected.toList();
-                    Navigator.pop(context);
-
-                    setState(() {
-                      _selected.clear();
-                    });
-
-                    await db.plans
-                        .deleteWhere((tbl) => tbl.id.isIn(selectedCopy));
-                    planState.updatePlans(null);
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  PopupMenuItem<dynamic> _edit(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.edit),
-        title: const Text('Edit'),
-        onTap: () async {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditPlanPage(
-                      plan: _planState!.plans
-                          .firstWhere(
-                              (element) => element.id == _selected.first)
-                          .toCompanion(false),
-                    )),
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> _clear(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.clear),
-        title: const Text('Clear'),
-        onTap: () async {
-          Navigator.pop(context);
-          setState(() {
-            _selected.clear();
-          });
-        },
       ),
     );
   }

@@ -73,7 +73,7 @@ class ImportData extends StatelessWidget {
 
     if (!pageContext.mounted) return;
     Navigator.pop(pageContext);
-    DefaultTabController.of(pageContext).animateTo(1);
+    DefaultTabController.of(pageContext).animateTo(2);
   }
 
   _importPlans(BuildContext context) async {
@@ -96,7 +96,7 @@ class ImportData extends StatelessWidget {
     await db.plans.insertAll(plans);
     if (!pageContext.mounted) return;
     Navigator.pop(pageContext);
-    DefaultTabController.of(pageContext).animateTo(0);
+    DefaultTabController.of(pageContext).animateTo(1);
   }
 
   @override

@@ -47,7 +47,7 @@ class DeleteRecordsButton extends StatelessWidget {
                                   if (!pageContext.mounted) return;
                                   Navigator.pop(pageContext);
                                   DefaultTabController.of(pageContext)
-                                      .animateTo(1);
+                                      .animateTo(2);
                                 },
                               ),
                             ],
@@ -86,7 +86,7 @@ class DeleteRecordsButton extends StatelessWidget {
                                   if (!pageContext.mounted) return;
                                   Navigator.pop(pageContext);
                                   DefaultTabController.of(pageContext)
-                                      .animateTo(0);
+                                      .animateTo(1);
                                 },
                               ),
                             ],

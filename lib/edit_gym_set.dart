@@ -1,9 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
+import 'package:flexify/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EditGymSet extends StatefulWidget {
   final GymSetsCompanion gymSet;
@@ -15,7 +19,6 @@ class EditGymSet extends StatefulWidget {
 }
 
 class _EditGymSetState extends State<EditGymSet> {
-  late TextEditingController _nameController;
   late TextEditingController _repsController;
   late TextEditingController _weightController;
   late TextEditingController _bodyWeightController;
@@ -24,14 +27,16 @@ class _EditGymSetState extends State<EditGymSet> {
   late String _unit;
   late DateTime _created;
   late bool _cardio;
+  late String _name;
+
+  List<String> _nameOptions = [];
 
   @override
   void initState() {
     super.initState();
     _repsController =
         TextEditingController(text: widget.gymSet.reps.value.toString());
-    _nameController =
-        TextEditingController(text: widget.gymSet.name.value.toString());
+    _name = widget.gymSet.name.value;
     _weightController =
         TextEditingController(text: widget.gymSet.weight.value.toString());
     _bodyWeightController =
@@ -43,6 +48,14 @@ class _EditGymSetState extends State<EditGymSet> {
     _unit = widget.gymSet.unit.value;
     _created = widget.gymSet.created.value;
     _cardio = widget.gymSet.cardio.value;
+    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
+        .get()
+        .then((results) {
+      final names = results.map((result) => result.read(db.gymSets.name)!);
+      setState(() {
+        _nameOptions = names.toList();
+      });
+    });
   }
 
   @override
@@ -55,7 +68,7 @@ class _EditGymSetState extends State<EditGymSet> {
   Future<void> _save() async {
     Navigator.pop(context);
     final gymSet = widget.gymSet.copyWith(
-      name: Value(_nameController.text),
+      name: Value(_name),
       unit: Value(_unit),
       created: Value(_created),
       reps: Value(double.parse(_repsController.text)),
@@ -64,7 +77,16 @@ class _EditGymSetState extends State<EditGymSet> {
       distance: Value(double.parse(_distanceController.text)),
       duration: Value(double.parse(_durationController.text)),
     );
-    db.update(db.gymSets).replace(gymSet);
+
+    if (widget.gymSet.id.present)
+      db.update(db.gymSets).replace(gymSet);
+    else {
+      db.into(db.gymSets).insert(gymSet);
+      final settings = context.read<SettingsState>();
+      if (!settings.restTimers) return;
+      final timer = context.read<TimerState>();
+      timer.startTimer(_name, settings.timerDuration);
+    }
   }
 
   Future<void> _selectDate() async {
@@ -103,69 +125,97 @@ class _EditGymSetState extends State<EditGymSet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit ${widget.gymSet.name.value}'),
+        title: Text(widget.gymSet.id.present
+            ? 'Edit ${widget.gymSet.name.value}'
+            : 'Add gym set'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () async {
-              await showDialog(
-                context: context,
-                builder: (BuildContext dialogContext) {
-                  return AlertDialog(
-                    title: const Text('Confirm Delete'),
-                    content: Text(
-                        'Are you sure you want to delete ${widget.gymSet.name.value}?'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.pop(dialogContext);
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Delete'),
-                        onPressed: () async {
-                          Navigator.pop(dialogContext);
-                          await db.delete(db.gymSets).delete(widget.gymSet);
-                          if (context.mounted) Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          )
+          if (widget.gymSet.id.present)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext dialogContext) {
+                    return AlertDialog(
+                      title: const Text('Confirm Delete'),
+                      content: Text(
+                          'Are you sure you want to delete ${widget.gymSet.name.value}?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Delete'),
+                          onPressed: () async {
+                            Navigator.pop(dialogContext);
+                            await db.delete(db.gymSets).delete(widget.gymSet);
+                            if (context.mounted) Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            )
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: material.Column(
           children: [
-            if (!_cardio) ...[
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              TextField(
-                controller: _repsController,
-                decoration: const InputDecoration(labelText: 'Reps'),
-                keyboardType: TextInputType.number,
-                onTap: () => _repsController.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _repsController.text.length),
-              ),
-              TextField(
-                controller: _weightController,
-                decoration: InputDecoration(
-                    labelText: _nameController.text == 'Weight'
-                        ? 'Value ($_unit)'
-                        : 'Weight ($_unit)'),
-                keyboardType: TextInputType.number,
-                onTap: () => _weightController.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _weightController.text.length),
-              ),
-            ],
+            Autocomplete<String>(
+              optionsBuilder: (textEditingValue) {
+                return _nameOptions.where((option) => option
+                    .toLowerCase()
+                    .contains(textEditingValue.text.toLowerCase()));
+              },
+              onSelected: (option) async {
+                final last = await (db.gymSets.select()
+                      ..where((tbl) => tbl.name.equals(option))
+                      ..limit(1))
+                    .getSingleOrNull();
+                if (last == null) return;
+                final bodyWeight = await getBodyWeight();
+
+                setState(() {
+                  _name = option;
+                  _repsController.text = last.reps.toString();
+                  _weightController.text = last.weight.toString();
+                  _bodyWeightController.text =
+                      bodyWeight?.weight.toString() ?? '0';
+                  _durationController.text = last.duration.toString();
+                  _distanceController.text = last.distance.toString();
+                  _unit = last.unit;
+                  _created = DateTime.now();
+                  _cardio = last.cardio;
+                });
+              },
+              initialValue: TextEditingValue(text: widget.gymSet.name.value),
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextFormField(
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  controller: textEditingController,
+                  onTap: () {
+                    textEditingController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: textEditingController.text.length);
+                  },
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                );
+              },
+            ),
             if (_cardio) ...[
               TextField(
                 controller: _distanceController,
@@ -184,7 +234,26 @@ class _EditGymSetState extends State<EditGymSet> {
                     extentOffset: _durationController.text.length),
               ),
             ],
-            if (_nameController.text != 'Weight')
+            if (!_cardio) ...[
+              TextField(
+                controller: _repsController,
+                decoration: const InputDecoration(labelText: 'Reps'),
+                keyboardType: TextInputType.number,
+                onTap: () => _repsController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _repsController.text.length),
+              ),
+              TextField(
+                controller: _weightController,
+                decoration: InputDecoration(
+                    labelText: _name == 'Weight'
+                        ? 'Value ($_unit)'
+                        : 'Weight ($_unit)'),
+                keyboardType: TextInputType.number,
+                onTap: () => _weightController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _weightController.text.length),
+              ),
+            ],
+            if (_name != 'Weight')
               TextField(
                 controller: _bodyWeightController,
                 decoration: InputDecoration(labelText: 'Body weight ($_unit)'),

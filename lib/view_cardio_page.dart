@@ -1,8 +1,10 @@
 import 'package:flexify/cardio_line.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
-import 'package:flexify/graph_history.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ViewCardioPage extends StatefulWidget {
   final String name;
@@ -16,8 +18,41 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
   CardioMetric _metric = CardioMetric.pace;
   AppGroupBy _groupBy = AppGroupBy.day;
 
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  Future<void> _selectEnd() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null)
+      setState(() {
+        _endDate = pickedDate;
+      });
+  }
+
+  Future<void> _selectStart() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null)
+      setState(() {
+        _startDate = pickedDate;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
@@ -95,23 +130,46 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
                 });
               },
             ),
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    title: const Text('Start date'),
+                    subtitle: _startDate != null
+                        ? Text(DateFormat(settings.shortDateFormat)
+                            .format(_startDate!))
+                        : null,
+                    onLongPress: () => setState(() {
+                      _startDate = null;
+                    }),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () => _selectStart(),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: const Text('Stop date'),
+                    subtitle: _endDate != null
+                        ? Text(DateFormat(settings.shortDateFormat)
+                            .format(_endDate!))
+                        : null,
+                    onLongPress: () => setState(() {
+                      _endDate = null;
+                    }),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () => _selectEnd(),
+                  ),
+                )
+              ],
+            ),
             CardioLine(
               name: widget.name,
               metric: _metric,
               groupBy: _groupBy,
+              startDate: _startDate,
+              endDate: _endDate,
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'View history',
-        child: const Icon(Icons.history),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => GraphHistory(
-                    name: widget.name,
-                  )),
         ),
       ),
     );

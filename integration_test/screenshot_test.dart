@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
-import 'package:flexify/graph_history.dart';
+import 'package:flexify/history_page.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan_state.dart';
@@ -310,7 +310,7 @@ void main() {
         screenshotName: '6_en-US',
         navigateToPage: (context) async => navigateTo(
           context: context,
-          page: const GraphHistory(name: screenshotExercise),
+          page: const HistoryPage(),
         ),
         tabBarState: TabBarState.graphs,
       ),

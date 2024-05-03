@@ -14,13 +14,17 @@ class StrengthLine extends StatefulWidget {
   final StrengthMetric metric;
   final String targetUnit;
   final AppGroupBy groupBy;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
   const StrengthLine(
       {super.key,
       required this.name,
       required this.metric,
       required this.targetUnit,
-      required this.groupBy});
+      required this.groupBy,
+      this.startDate,
+      this.endDate});
 
   @override
   createState() => _StrengthLineState();
@@ -43,7 +47,9 @@ class _StrengthLineState extends State<StrengthLine> {
   void didUpdateWidget(covariant StrengthLine oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.groupBy != widget.groupBy) _setStream();
+    if (oldWidget.groupBy != widget.groupBy ||
+        oldWidget.startDate != widget.startDate ||
+        oldWidget.endDate != widget.endDate) _setStream();
   }
 
   @override
@@ -75,6 +81,10 @@ class _StrengthLineState extends State<StrengthLine> {
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
+          ..where(db.gymSets.created
+              .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)))
+          ..where(db.gymSets.created.isSmallerThanValue(
+              widget.endDate ?? DateTime.now().add(const Duration(days: 1))))
           ..orderBy([
             OrderingTerm(
                 expression: db.gymSets.created.date, mode: OrderingMode.desc)

@@ -1,12 +1,11 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
+import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
-import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
-import 'package:flexify/settings_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'graph_tile.dart';
 
 class GraphsPage extends StatefulWidget {
-
   const GraphsPage({super.key});
 
   @override
@@ -26,9 +24,9 @@ class GraphsPageState extends State<GraphsPage> {
   late Stream<List<drift.TypedResult>> _stream;
 
   List<String> _todaysExercises = [];
-  final TextEditingController _searchController = TextEditingController();
   final Set<String> _selected = {};
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  String _search = '';
 
   @override
   void initState() {
@@ -103,68 +101,55 @@ class GraphsPageState extends State<GraphsPage> {
 
           final filteredGymSets = orderedGymSets.where((gymSet) {
             final name = gymSet.read(db.gymSets.name)!.toLowerCase();
-            final searchText = _searchController.text.toLowerCase();
+            final searchText = _search.toLowerCase();
             return name.contains(searchText);
           }).toList();
 
-          PopupMenuItem<dynamic> selectAll(BuildContext context) {
-            return PopupMenuItem(
-              child: ListTile(
-                leading: const Icon(Icons.done_all),
-                title: const Text('Select all'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final names =
-                      filteredGymSets.map((e) => e.read(db.gymSets.name)!);
-                  setState(() {
-                    _selected.addAll(names);
-                  });
-                },
-              ),
-            );
-          }
-
           return material.Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SearchBar(
-                  hintText: _selected.isEmpty
-                      ? "Search..."
-                      : "${_selected.length} selected",
-                  controller: _searchController,
-                  padding: MaterialStateProperty.all(
-                    const EdgeInsets.only(right: 8.0),
-                  ),
-                  onChanged: (_) {
-                    setState(() {});
-                  },
-                  leading: _selected.isEmpty
-                      ? const Padding(
-                          padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                          child: Icon(Icons.search))
-                      : IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _selected.clear();
-                            });
-                          },
-                          icon: const Icon(Icons.arrow_back),
-                          padding: EdgeInsets.zero,
-                        ),
-                  trailing: [
-                    if (_selected.isNotEmpty) _deleteGraphs(context),
-                    PopupMenuButton(
-                      icon: const Icon(Icons.more_vert),
-                      itemBuilder: (context) => [
-                        selectAll(context),
-                        if (_selected.isNotEmpty) _edit(context),
-                        if (_selected.isNotEmpty) _clear(context),
-                        if (_selected.isEmpty) _enterWeight(context),
-                        if (_selected.isEmpty) _settingsPage(context)
-                      ],
-                    ),
-                  ],
+              AppSearch(
+                onChange: (value) {
+                  setState(() {
+                    _search = value;
+                  });
+                },
+                onClear: () => setState(() {
+                  _selected.clear();
+                }),
+                onDelete: () async {
+                  final planState = context.read<PlanState>();
+                  final selectedCopy = _selected.toList();
+                  setState(() {
+                    _selected.clear();
+                  });
+
+                  await (db.delete(db.gymSets)
+                        ..where((tbl) => tbl.name.isIn(selectedCopy)))
+                      .go();
+
+                  final plans = await db.plans.select().get();
+                  for (final plan in plans) {
+                    final exercises = plan.exercises.split(',');
+                    exercises.removeWhere(
+                        (exercise) => selectedCopy.contains(exercise));
+                    final updatedExercises = exercises.join(',');
+                    await db
+                        .update(db.plans)
+                        .replace(plan.copyWith(exercises: updatedExercises));
+                  }
+                  planState.updatePlans(null);
+                },
+                onSelect: () => setState(() {
+                  _selected.addAll(filteredGymSets
+                      .map((gymSet) => gymSet.read(db.gymSets.name)!));
+                }),
+                selected: _selected,
+                onEdit: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditGraphPage(
+                            name: _selected.first,
+                          )),
                 ),
               ),
               if (snapshot.data?.isEmpty == true)
@@ -239,124 +224,6 @@ class GraphsPageState extends State<GraphsPage> {
         },
         tooltip: 'Add exercise',
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  IconButton _deleteGraphs(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.delete),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirm Delete'),
-              content: Text(
-                  'Are you sure you want to delete ${_selected.length} graphs? This action is not reversible.'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                TextButton(
-                  child: const Text('Delete'),
-                  onPressed: () async {
-                    final planState = context.read<PlanState>();
-                    final selectedCopy = _selected.toList();
-                    Navigator.pop(context);
-                    setState(() {
-                      _selected.clear();
-                    });
-
-                    await (db.delete(db.gymSets)
-                          ..where((tbl) => tbl.name.isIn(selectedCopy)))
-                        .go();
-                    final plans = await db.plans.select().get();
-                    for (final plan in plans) {
-                      final exercises = plan.exercises.split(',');
-                      exercises.removeWhere(
-                          (exercise) => selectedCopy.contains(exercise));
-                      final updatedExercises = exercises.join(',');
-                      await db
-                          .update(db.plans)
-                          .replace(plan.copyWith(exercises: updatedExercises));
-                    }
-                    planState.updatePlans(null);
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  PopupMenuItem<dynamic> _settingsPage(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.settings),
-        title: const Text('Settings'),
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SettingsPage()),
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> _enterWeight(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.scale),
-        title: const Text('Weight'),
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const EnterWeightPage()),
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> _edit(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.edit),
-        title: const Text('Edit'),
-        onTap: () async {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditGraphPage(
-                      name: _selected.first,
-                    )),
-          );
-        },
-      ),
-    );
-  }
-
-  PopupMenuItem<dynamic> _clear(BuildContext context) {
-    return PopupMenuItem(
-      child: ListTile(
-        leading: const Icon(Icons.clear),
-        title: const Text('Clear'),
-        onTap: () async {
-          Navigator.pop(context);
-          setState(() {
-            _selected.clear();
-          });
-        },
       ),
     );
   }

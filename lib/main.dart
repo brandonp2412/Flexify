@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database.dart';
+import 'package:flexify/history_page.dart';
 import 'package:flexify/graphs_page.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/settings_state.dart';
@@ -66,7 +67,6 @@ class App extends StatelessWidget {
   }
 }
 
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -75,13 +75,14 @@ class HomePage extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     return DefaultTabController(
-      length: settings.hideTimerTab ? 2 : 3,
+      length: settings.hideTimerTab ? 3 : 4,
       child: Scaffold(
         bottomSheet:
             settings.hideTimerTab ? null : const TimerProgressIndicator(),
         body: SafeArea(
           child: TabBarView(
             children: [
+              const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
               if (!settings.hideTimerTab) const TimerPage(),
@@ -90,6 +91,10 @@ class HomePage extends StatelessWidget {
         ),
         bottomNavigationBar: TabBar(
           tabs: [
+            const Tab(
+              icon: Icon(Icons.history),
+              text: "History",
+            ),
             const Tab(
               icon: Icon(Icons.event),
               text: "Plans",
