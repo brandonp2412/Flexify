@@ -29,6 +29,7 @@ class _EditGymSetState extends State<EditGymSet> {
   late bool _cardio;
   late String _name;
 
+  TextEditingController? _nameController;
   List<String> _nameOptions = [];
 
   @override
@@ -56,6 +57,18 @@ class _EditGymSetState extends State<EditGymSet> {
         _nameOptions = names.toList();
       });
     });
+    if (!widget.gymSet.id.present)
+      (db.gymSets.select()
+            ..orderBy([
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+            ])
+            ..limit(1))
+          .getSingle()
+          .then((gymSet) async {
+        final bodyWeight = await getBodyWeight();
+        _updateFields(gymSet.copyWith(bodyWeight: bodyWeight?.weight));
+      });
   }
 
   @override
@@ -122,6 +135,22 @@ class _EditGymSetState extends State<EditGymSet> {
     }
   }
 
+  void _updateFields(GymSet gymSet) {
+    _nameController?.text = gymSet.name;
+
+    setState(() {
+      _name = gymSet.name;
+      _repsController.text = gymSet.reps.toString();
+      _weightController.text = gymSet.weight.toString();
+      _bodyWeightController.text = gymSet.bodyWeight.toString();
+      _durationController.text = gymSet.duration.toString();
+      _distanceController.text = gymSet.distance.toString();
+      _unit = gymSet.unit;
+      _created = DateTime.now();
+      _cardio = gymSet.cardio;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,27 +210,16 @@ class _EditGymSetState extends State<EditGymSet> {
                     .getSingleOrNull();
                 if (last == null) return;
                 final bodyWeight = await getBodyWeight();
-
-                setState(() {
-                  _name = option;
-                  _repsController.text = last.reps.toString();
-                  _weightController.text = last.weight.toString();
-                  _bodyWeightController.text =
-                      bodyWeight?.weight.toString() ?? '0';
-                  _durationController.text = last.duration.toString();
-                  _distanceController.text = last.distance.toString();
-                  _unit = last.unit;
-                  _created = DateTime.now();
-                  _cardio = last.cardio;
-                });
+                _updateFields(last.copyWith(bodyWeight: bodyWeight?.weight));
               },
-              initialValue: TextEditingValue(text: widget.gymSet.name.value),
+              initialValue: TextEditingValue(text: _name),
               fieldViewBuilder: (
                 BuildContext context,
                 TextEditingController textEditingController,
                 FocusNode focusNode,
                 VoidCallback onFieldSubmitted,
               ) {
+                _nameController = textEditingController;
                 return TextFormField(
                   decoration: const InputDecoration(labelText: 'Name'),
                   controller: textEditingController,
