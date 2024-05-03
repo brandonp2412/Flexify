@@ -123,65 +123,68 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) {
-                    final gymSet = filtered[index];
-                    final previousGymSet =
-                        index > 0 ? filtered[index - 1] : null;
+                child: snapshot.data?.isEmpty == true
+                    ? const ListTile(
+                        title: Text("No entries yet."),
+                        subtitle: Text(
+                            "Start inserting data for records to appear here."),
+                      )
+                    : ListView.builder(
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final gymSet = filtered[index];
+                          final previousGymSet =
+                              index > 0 ? filtered[index - 1] : null;
 
-                    final bool showDivider = previousGymSet != null &&
-                        !isSameDay(gymSet.created, previousGymSet.created);
+                          final bool showDivider = previousGymSet != null &&
+                              !isSameDay(
+                                  gymSet.created, previousGymSet.created);
 
-                    return material.Column(
-                      children: [
-                        if (showDivider) const Divider(),
-                        ListTile(
-                          title: Text(gymSet.name),
-                          subtitle: Text(DateFormat(settings.longDateFormat)
-                              .format(gymSet.created)),
-                          trailing: Text(
-                              gymSet.cardio
-                                  ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
-                                  : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
-                              style: const TextStyle(fontSize: 16)),
-                          selected: _selected.contains(gymSet.id),
-                          onLongPress: () {
-                            setState(() {
-                              _selected.add(gymSet.id);
-                            });
-                          },
-                          onTap: () {
-                            if (_selected.contains(gymSet.id))
-                              setState(() {
-                                _selected.remove(gymSet.id);
-                              });
-                            else if (_selected.isNotEmpty)
-                              setState(() {
-                                _selected.add(gymSet.id);
-                              });
-                            else
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EditGymSet(
-                                        gymSet: gymSet.toCompanion(false)),
-                                  ));
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                          return material.Column(
+                            children: [
+                              if (showDivider) const Divider(),
+                              ListTile(
+                                title: Text(gymSet.name),
+                                subtitle: Text(
+                                    DateFormat(settings.longDateFormat)
+                                        .format(gymSet.created)),
+                                trailing: Text(
+                                    gymSet.cardio
+                                        ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
+                                        : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
+                                    style: const TextStyle(fontSize: 16)),
+                                selected: _selected.contains(gymSet.id),
+                                onLongPress: () {
+                                  setState(() {
+                                    _selected.add(gymSet.id);
+                                  });
+                                },
+                                onTap: () {
+                                  if (_selected.contains(gymSet.id))
+                                    setState(() {
+                                      _selected.remove(gymSet.id);
+                                    });
+                                  else if (_selected.isNotEmpty)
+                                    setState(() {
+                                      _selected.add(gymSet.id);
+                                    });
+                                  else
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EditGymSet(
+                                              gymSet:
+                                                  gymSet.toCompanion(false)),
+                                        ));
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
               ),
               if (!snapshot.hasData) const SizedBox(),
               if (snapshot.hasError) ErrorWidget(snapshot.error.toString()),
-              if (snapshot.data?.isEmpty == true)
-                const ListTile(
-                  title: Text("No entries yet."),
-                  subtitle:
-                      Text("Start inserting data for records to appear here."),
-                ),
             ],
           );
         },
