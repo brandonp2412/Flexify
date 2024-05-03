@@ -14,10 +14,10 @@ class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
   @override
-  createState() => _HistoryPageState();
+  createState() => HistoryPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage> {
+class HistoryPageState extends State<HistoryPage> {
   late Stream<List<GymSet>> _stream;
   Set<int> _selected = {};
   String _search = '';

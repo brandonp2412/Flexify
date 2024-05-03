@@ -1,0 +1,12 @@
+- Fix screenshots
+- Fix exporting/importing hidden and cardio types
+- Fix turning off cardio when editing a set
+- Stop animating to tabs after deleting
+- Move empty entries message to the top of history
+- Add history tab
+- Update screenshots
+- Update screenShots for compare
+- Added tabBarState to every test
+- Added global context No longer dependent on PlansPage being the first Page
+- Added updated screenshots to compare
+- Simplify screenshots

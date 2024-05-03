@@ -107,7 +107,7 @@ List<PlansCompanion> plans = [
   ),
 ];
 
-enum TabBarState { plans, graphs, timer }
+enum TabBarState { history, plans, graphs, timer }
 
 const screenshotExercise = "Dumbbell shoulder press";
 
@@ -133,6 +133,9 @@ BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {
           .currentContext!;
     case TabBarState.timer:
       return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
+    case TabBarState.history:
+      return (tester.state(find.byType(HistoryPage)) as HistoryPageState)
+          .context;
     case null:
       break;
   }
