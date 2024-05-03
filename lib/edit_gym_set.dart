@@ -76,6 +76,7 @@ class _EditGymSetState extends State<EditGymSet> {
       bodyWeight: Value(double.parse(_bodyWeightController.text)),
       distance: Value(double.parse(_distanceController.text)),
       duration: Value(double.parse(_durationController.text)),
+      cardio: Value(_cardio),
     );
 
     if (widget.gymSet.id.present)
