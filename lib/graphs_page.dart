@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/app_search.dart';
-import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
@@ -23,7 +22,6 @@ class GraphsPage extends StatefulWidget {
 class GraphsPageState extends State<GraphsPage> {
   late Stream<List<drift.TypedResult>> _stream;
 
-  List<String> _todaysExercises = [];
   final Set<String> _selected = {};
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   String _search = '';
@@ -50,18 +48,6 @@ class GraphsPageState extends State<GraphsPage> {
           ])
           ..groupBy([db.gymSets.name]))
         .watch();
-
-    final weekday = weekdays[DateTime.now().weekday - 1];
-    (db.plans.select()..where((tbl) => tbl.days.contains(weekday)))
-        .get()
-        .then((todaysPlans) {
-      final exercises = todaysPlans
-          .map((plan) => plan.exercises.split(','))
-          .expand((element) => element);
-      setState(() {
-        _todaysExercises = exercises.toList();
-      });
-    });
   }
 
   @override
@@ -90,16 +76,7 @@ class GraphsPageState extends State<GraphsPage> {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
-          final todaysGymSets = snapshot.data!
-              .where((gymSet) =>
-                  _todaysExercises.contains(gymSet.read(db.gymSets.name)))
-              .toList()
-              .reversed;
-          final otherGymSets = snapshot.data!.where((gymSet) =>
-              !_todaysExercises.contains(gymSet.read(db.gymSets.name)));
-          final orderedGymSets = [...todaysGymSets, ...otherGymSets];
-
-          final filteredGymSets = orderedGymSets.where((gymSet) {
+          final gymSets = snapshot.data!.where((gymSet) {
             final name = gymSet.read(db.gymSets.name)!.toLowerCase();
             final searchText = _search.toLowerCase();
             return name.contains(searchText);
@@ -140,8 +117,8 @@ class GraphsPageState extends State<GraphsPage> {
                   planState.updatePlans(null);
                 },
                 onSelect: () => setState(() {
-                  _selected.addAll(filteredGymSets
-                      .map((gymSet) => gymSet.read(db.gymSets.name)!));
+                  _selected.addAll(
+                      gymSets.map((gymSet) => gymSet.read(db.gymSets.name)!));
                 }),
                 selected: _selected,
                 onEdit: () => Navigator.push(
@@ -160,11 +137,11 @@ class GraphsPageState extends State<GraphsPage> {
                 ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: filteredGymSets.length,
+                  itemCount: gymSets.length,
                   itemBuilder: (context, index) {
-                    final gymSet = filteredGymSets[index];
+                    final gymSet = gymSets[index];
                     final previousGymSet =
-                        index > 0 ? filteredGymSets[index - 1] : null;
+                        index > 0 ? gymSets[index - 1] : null;
 
                     final name = gymSet.read(db.gymSets.name)!;
                     final weight = gymSet.read(db.gymSets.weight)!;
