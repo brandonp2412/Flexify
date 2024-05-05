@@ -40,6 +40,7 @@ class _AppSearchState extends State<AppSearch> {
         padding: MaterialStateProperty.all(
           const EdgeInsets.only(right: 8.0),
         ),
+        textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
         leading: widget.selected.isEmpty
             ? const Padding(
