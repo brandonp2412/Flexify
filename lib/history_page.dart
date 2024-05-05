@@ -141,7 +141,7 @@ class HistoryPageState extends State<HistoryPage> {
                             setState(() {
                               _selected.remove(id);
                             });
-                          else if (_selected.isNotEmpty)
+                          else
                             setState(() {
                               _selected.add(id);
                             });
