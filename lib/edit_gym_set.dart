@@ -7,6 +7,7 @@ import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EditGymSet extends StatefulWidget {
@@ -153,6 +154,8 @@ class _EditGymSetState extends State<EditGymSet> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.gymSet.id.present
@@ -292,7 +295,8 @@ class _EditGymSetState extends State<EditGymSet> {
             ),
             ListTile(
               title: const Text('Created Date'),
-              subtitle: Text(_created.toString()),
+              subtitle:
+                  Text(DateFormat(settings.longDateFormat).format(_created)),
               trailing: const Icon(Icons.calendar_today),
               onTap: () => _selectDate(),
             ),
