@@ -1,14 +1,11 @@
-import 'package:flexify/app_search.dart';
-import 'package:flexify/edit_gym_set.dart';
-import 'package:flexify/settings_state.dart';
-import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:intl/intl.dart';
 import 'package:drift/drift.dart';
+import 'package:flexify/app_search.dart';
 import 'package:flexify/database.dart';
+import 'package:flexify/edit_gym_set.dart';
+import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -21,19 +18,28 @@ class HistoryPageState extends State<HistoryPage> {
   late Stream<List<GymSet>> _stream;
   Set<int> _selected = {};
   String _search = '';
+  int _limit = 10;
 
   @override
   void initState() {
     super.initState();
-    _stream = (db.gymSets.select()
-          ..orderBy(
-            [
-              (u) =>
-                  OrderingTerm(expression: u.created, mode: OrderingMode.desc)
-            ],
-          )
-          ..where((tbl) => tbl.hidden.equals(false)))
-        .watch();
+    _setStream();
+  }
+
+  void _setStream() {
+    setState(() {
+      _stream = (db.gymSets.select()
+            ..orderBy(
+              [
+                (u) =>
+                    OrderingTerm(expression: u.created, mode: OrderingMode.desc)
+              ],
+            )
+            ..where((tbl) => tbl.name.contains(_search.toLowerCase()))
+            ..where((tbl) => tbl.hidden.equals(false))
+            ..limit(_limit))
+          .watch();
+    });
   }
 
   @override
@@ -76,8 +82,6 @@ class HistoryPageState extends State<HistoryPage> {
           },
           icon: const Icon(Icons.delete)));
 
-    final settings = context.watch<SettingsState>();
-
     return Scaffold(
       body: StreamBuilder<List<GymSet>>(
         stream: _stream,
@@ -95,6 +99,7 @@ class HistoryPageState extends State<HistoryPage> {
                   setState(() {
                     _search = value;
                   });
+                  _setStream();
                 },
                 onClear: () => setState(() {
                   _selected.clear();
@@ -129,59 +134,25 @@ class HistoryPageState extends State<HistoryPage> {
                         subtitle: Text(
                             "Start inserting data for records to appear here."),
                       )
-                    : ListView.builder(
-                        itemCount: filtered.length,
-                        itemBuilder: (context, index) {
-                          final gymSet = filtered[index];
-                          final previousGymSet =
-                              index > 0 ? filtered[index - 1] : null;
-
-                          final bool showDivider = previousGymSet != null &&
-                              !isSameDay(
-                                  gymSet.created, previousGymSet.created);
-
-                          return material.Column(
-                            children: [
-                              if (showDivider) const Divider(),
-                              ListTile(
-                                title: Text(gymSet.name),
-                                subtitle: Text(
-                                    DateFormat(settings.longDateFormat)
-                                        .format(gymSet.created)),
-                                trailing: Text(
-                                    gymSet.cardio
-                                        ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
-                                        : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
-                                    style: const TextStyle(fontSize: 16)),
-                                selected: _selected.contains(gymSet.id),
-                                onLongPress: () {
-                                  setState(() {
-                                    _selected.add(gymSet.id);
-                                  });
-                                },
-                                onTap: () {
-                                  if (_selected.contains(gymSet.id))
-                                    setState(() {
-                                      _selected.remove(gymSet.id);
-                                    });
-                                  else if (_selected.isNotEmpty)
-                                    setState(() {
-                                      _selected.add(gymSet.id);
-                                    });
-                                  else
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => EditGymSet(
-                                              gymSet:
-                                                  gymSet.toCompanion(false)),
-                                        ));
-                                },
-                              ),
-                            ],
-                          );
+                    : HistoryList(
+                        gymSets: filtered,
+                        onSelect: (id) {
+                          if (_selected.contains(id))
+                            setState(() {
+                              _selected.remove(id);
+                            });
+                          else if (_selected.isNotEmpty)
+                            setState(() {
+                              _selected.add(id);
+                            });
                         },
-                      ),
+                        selected: _selected,
+                        onNext: () {
+                          setState(() {
+                            _limit += 10;
+                          });
+                          _setStream();
+                        }),
               ),
               if (!snapshot.hasData) const SizedBox(),
               if (snapshot.hasError) ErrorWidget(snapshot.error.toString()),
