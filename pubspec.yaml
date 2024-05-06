@@ -20,6 +20,7 @@ dependencies:
   shared_preferences: ^2.2.2
   dynamic_color: ^1.7.0
   sqlite3: ^2.4.0
+  file_picker: ^8.0.3
 dev_dependencies:
   integration_test:
     sdk: flutter

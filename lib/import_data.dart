@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
@@ -15,8 +18,13 @@ class ImportData extends StatelessWidget {
 
   _importGraphs(BuildContext context) async {
     Navigator.pop(context);
-    String csv = await android.invokeMethod('read');
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    File file = File(result.files.single.path!);
+    var csv = await file.readAsString();
     List<List<dynamic>> rows = const CsvToListConverter(eol: "\n").convert(csv);
+
     if (rows.length <= 1) return;
 
     final columns = rows.first;
@@ -89,8 +97,13 @@ class ImportData extends StatelessWidget {
 
   _importPlans(BuildContext context) async {
     Navigator.pop(context);
-    String csv = await android.invokeMethod('read');
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    File file = File(result.files.single.path!);
+    var csv = await file.readAsString();
     List<List<dynamic>> rows = const CsvToListConverter(eol: "\n").convert(csv);
+
     if (rows.length <= 1) return;
     List<PlansCompanion> plans = [];
     for (final row in rows.skip(1)) {

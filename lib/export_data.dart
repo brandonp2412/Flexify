@@ -1,5 +1,6 @@
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -56,9 +57,14 @@ class ExportData extends StatelessWidget {
                         }
 
                         if (!await requestNotificationPermission()) return;
+
                         final csv = const ListToCsvConverter(eol: "\n")
                             .convert(csvData);
-                        android.invokeMethod('save', ['graphs.csv', csv]);
+                        final bytes = Uint8List.fromList(csv.codeUnits);
+                        await FilePicker.platform.saveFile(
+                          fileName: 'graphs.csv',
+                          bytes: bytes,
+                        );
                       }),
                   ListTile(
                     leading: const Icon(Icons.event),
@@ -80,9 +86,14 @@ class ExportData extends StatelessWidget {
                       }
 
                       if (!await requestNotificationPermission()) return;
+
                       final csv =
                           const ListToCsvConverter(eol: "\n").convert(csvData);
-                      android.invokeMethod('save', ['plans.csv', csv]);
+                      final bytes = Uint8List.fromList(csv.codeUnits);
+                      await FilePicker.platform.saveFile(
+                        fileName: 'plans.csv',
+                        bytes: bytes,
+                      );
                     },
                   ),
                 ],

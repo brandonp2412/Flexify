@@ -60,11 +60,6 @@ class MainActivity : FlutterActivity() {
                     save(args[0] as String, args[1] as String)
                 }
 
-                "read" -> {
-                    resultChannel = result
-                    read()
-                }
-
                 "getProgress" -> {
                     if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
                         result.success(
@@ -152,25 +147,11 @@ class MainActivity : FlutterActivity() {
         activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
     }
 
-    private fun read() {
-        Log.d("MainActivity", "Request to read")
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/comma-separated-values"
-        }
-        startActivityForResult(intent, READ_REQUEST_CODE)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         data?.data?.also { uri ->
-            if (requestCode == READ_REQUEST_CODE) {
-                val inputStream = contentResolver.openInputStream(uri)
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val csvData = reader.readText()
-                resultChannel?.success(csvData)
-            } else if (requestCode == WRITE_REQUEST_CODE) {
+            if (requestCode == WRITE_REQUEST_CODE) {
                 val pickedDir = DocumentFile.fromTreeUri(context, uri)
                 val file = pickedDir?.createFile("text/csv", savedFilename!!)
                 file?.uri?.also { fileUri ->
