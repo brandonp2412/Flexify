@@ -83,6 +83,7 @@ class ImportData extends StatelessWidget {
         );
       },
     );
+
     await db.gymSets.deleteAll();
     await db.gymSets.insertAll(gymSets);
 
@@ -116,6 +117,7 @@ class ImportData extends StatelessWidget {
         sequence: Value(sequence),
       ));
     }
+
     await db.plans.deleteAll();
     await db.plans.insertAll(plans);
     if (!pageContext.mounted) return;
