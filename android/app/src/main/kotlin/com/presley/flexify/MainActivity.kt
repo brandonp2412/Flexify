@@ -9,6 +9,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -23,12 +25,11 @@ import java.io.InputStreamReader
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : FlutterActivity() {
-    private var savedFilename: String? = null
-    private var savedContent: String? = null
     private var channel: MethodChannel? = null
-    private var resultChannel: MethodChannel.Result? = null
     private var timerBound = false
     private var timerService: TimerService? = null
+    private var savedContent: String? = null
+    private var savedFilename: String? = null
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -58,6 +59,11 @@ class MainActivity : FlutterActivity() {
                 "save" -> {
                     val args = call.arguments as ArrayList<*>
                     save(args[0] as String, args[1] as String)
+                }
+
+                "pick" -> {
+                    val args = call.arguments as ArrayList<*>
+                    pick(args[0] as String, args[1] as String)
                 }
 
                 "getProgress" -> {
@@ -140,10 +146,10 @@ class MainActivity : FlutterActivity() {
         context.startForegroundService(intent)
     }
 
-    private fun save(filename: String, content: String) {
+    private fun pick(filename: String, content: String) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        savedFilename = filename
         savedContent = content
+        savedFilename = filename
         activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
     }
 
@@ -152,46 +158,37 @@ class MainActivity : FlutterActivity() {
 
         data?.data?.also { uri ->
             if (requestCode == WRITE_REQUEST_CODE) {
-                val pickedDir = DocumentFile.fromTreeUri(context, uri)
-                val file = pickedDir?.createFile("text/csv", savedFilename!!)
-                file?.uri?.also { fileUri ->
-                    context.contentResolver.openOutputStream(fileUri)
-                        ?.use { it.write(savedContent!!.toByteArray()) }
-                    val fileIntent = Intent(Intent.ACTION_VIEW, fileUri)
-                    fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    context.grantUriPermission(
-                        fileIntent.resolveActivity(context.packageManager)?.packageName ?: "",
-                        fileUri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    )
-                    val contentIntent = PendingIntent.getActivity(
-                        context,
-                        0,
-                        fileIntent,
-                        PendingIntent.FLAG_IMMUTABLE
-                    )
-                    val notificationManager =
-                        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        val channel = NotificationChannel(
-                            "downloads",
-                            "Downloads",
-                            NotificationManager.IMPORTANCE_HIGH
-                        )
-                        notificationManager.createNotificationChannel(channel)
-                    }
+                val sharedPreferences =
+                    getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+                val edit = sharedPreferences.edit()
+                edit.putString("backupDirectory", uri.toString())
+                edit.apply()
 
-                    val notification = NotificationCompat.Builder(context, "downloads")
-                        .setContentTitle(uri.path?.split(":")?.get(1) + "/" + file.name)
-                        .setContentText("Tap to open.")
-                        .setSmallIcon(R.drawable.baseline_arrow_downward_24)
-                        .setContentIntent(contentIntent)
-                        .setAutoCancel(true)
-                        .build()
-
-                    notificationManager.notify(file.name.hashCode(), notification)
+                val dir = DocumentFile.fromTreeUri(context, uri)
+                var file = dir?.findFile(savedFilename!!)
+                if (file == null) file = dir?.createFile("text/csv", savedFilename!!)
+                context.contentResolver.openOutputStream(file!!.uri).use {
+                    it?.write(savedContent!!.toByteArray())
                 }
             }
+        }
+    }
+
+    private fun save(filename: String, content: String) {
+        val sharedPreferences =
+            getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        val backupDirectory = sharedPreferences.getString("backupDirectory", null) ?: return;
+        val backupUri = Uri.parse(backupDirectory)
+        val pickedDir = DocumentFile.fromTreeUri(context, backupUri)
+
+        var file = pickedDir?.findFile(filename)
+        if (file == null) file = pickedDir?.createFile("text/csv", filename)
+
+        val fileUri = file?.uri
+        if (fileUri != null) {
+            val outputStream = context.contentResolver.openOutputStream(fileUri, "wa")
+            outputStream?.write(content.toByteArray())
+            outputStream?.close()
         }
     }
 
@@ -205,7 +202,7 @@ class MainActivity : FlutterActivity() {
 
     companion object {
         const val FLUTTER_CHANNEL = "com.presley.flexify/android"
-        const val READ_REQUEST_CODE = 42
+        const val SHARED_PREFERENCES = "flexify"
         const val WRITE_REQUEST_CODE = 43
         const val TICK_BROADCAST = "tick-event"
     }

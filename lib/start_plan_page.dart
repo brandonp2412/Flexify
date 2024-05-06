@@ -160,6 +160,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     }
 
     db.into(db.gymSets).insert(gymSet);
+
+    if (settings.automaticBackup) appendLine(gymSet);
   }
 
   @override

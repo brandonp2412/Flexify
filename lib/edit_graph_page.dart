@@ -2,7 +2,9 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +79,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ],
       updates: {db.plans},
     );
-    if (mounted) context.read<PlanState>().updatePlans(null);
+    if (!mounted) return;
+    context.read<PlanState>().updatePlans(null);
+    final settings = context.read<SettingsState>();
+    if (settings.automaticBackup)
+      android.invokeMethod('save', ['graphs.csv', await getGymSetCsv()]);
   }
 
   _save() async {

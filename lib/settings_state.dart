@@ -1,3 +1,5 @@
+import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +19,7 @@ class SettingsState extends ChangeNotifier {
   bool explainedPermissions = false;
   bool hideTimerTab = false;
   bool curveLines = false;
+  bool automaticBackup = false;
 
   Future<void> init() async {
     final prefsInstance = await SharedPreferences.getInstance();
@@ -44,6 +47,18 @@ class SettingsState extends ChangeNotifier {
     explainedPermissions =
         prefsInstance.getBool('explainedPermissions') ?? false;
     curveLines = prefsInstance.getBool('curveLines') ?? false;
+    automaticBackup = prefsInstance.getBool('automaticBackup') ?? false;
+  }
+
+  void setAutomatic(bool backup) async {
+    if (backup) {
+      final csv = await getGymSetCsv();
+      android.invokeMethod('pick', ['graphs.csv', csv]);
+    }
+
+    automaticBackup = backup;
+    notifyListeners();
+    prefs?.setBool('automaticBackup', backup);
   }
 
   void setMaxSets(int max) {

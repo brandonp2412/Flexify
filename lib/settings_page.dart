@@ -274,6 +274,17 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+      WidgetSettings(
+        key: 'automatic backups',
+        widget: ListTile(
+          title: const Text('Backup automatically'),
+          onTap: () => settings.setAutomatic(!settings.automaticBackup),
+          trailing: Switch(
+            value: settings.automaticBackup,
+            onChanged: (value) => settings.setAutomatic(value),
+          ),
+        ),
+      ),
       WidgetSettings(key: 'export data', widget: const ExportData()),
       WidgetSettings(
           key: 'import data',

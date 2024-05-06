@@ -29,6 +29,7 @@ class _EditGymSetState extends State<EditGymSet> {
   late DateTime _created;
   late bool _cardio;
   late String _name;
+  late SettingsState _settings;
 
   TextEditingController? _nameController;
   List<String> _nameOptions = [];
@@ -50,6 +51,7 @@ class _EditGymSetState extends State<EditGymSet> {
     _unit = widget.gymSet.unit.value;
     _created = widget.gymSet.created.value;
     _cardio = widget.gymSet.cardio.value;
+    _settings = context.read<SettingsState>();
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()
         .then((results) {
@@ -90,6 +92,8 @@ class _EditGymSetState extends State<EditGymSet> {
       final timer = context.read<TimerState>();
       timer.startTimer(_name, settings.timerDuration);
     }
+
+    if (_settings.automaticBackup) appendLine(gymSet);
   }
 
   Future<void> _selectDate() async {
@@ -142,7 +146,7 @@ class _EditGymSetState extends State<EditGymSet> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    _settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -284,7 +288,7 @@ class _EditGymSetState extends State<EditGymSet> {
             ListTile(
               title: const Text('Created Date'),
               subtitle:
-                  Text(DateFormat(settings.longDateFormat).format(_created)),
+                  Text(DateFormat(_settings.longDateFormat).format(_created)),
               trailing: const Icon(Icons.calendar_today),
               onTap: () => _selectDate(),
             ),
