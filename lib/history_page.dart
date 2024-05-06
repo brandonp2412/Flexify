@@ -178,7 +178,9 @@ class HistoryPageState extends State<HistoryPage> {
                 hidden: const Value(false),
               );
           gymSet = gymSet.copyWith(
+            id: const Value.absent(),
             bodyWeight: Value(bodyWeight?.weight ?? 0),
+            created: Value(DateTime.now()),
           );
 
           if (!context.mounted) return;
