@@ -4,6 +4,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 
@@ -162,22 +163,30 @@ class HistoryPageState extends State<HistoryPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          final gymSets = await _stream.first;
+          final bodyWeight = await getBodyWeight();
+          var gymSet = gymSets.firstOrNull?.toCompanion(false) ??
+              GymSetsCompanion.insert(
+                name: '',
+                reps: 0,
+                created: DateTime.now(),
+                unit: 'kg',
+                weight: 0,
+                cardio: const Value(false),
+                duration: const Value(0),
+                distance: const Value(0),
+                hidden: const Value(false),
+              );
+          gymSet = gymSet.copyWith(
+            bodyWeight: Value(bodyWeight?.weight ?? 0),
+          );
+
+          if (!context.mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EditGymSet(
-                gymSet: GymSetsCompanion.insert(
-                  name: '',
-                  reps: 0,
-                  created: DateTime.now(),
-                  unit: 'kg',
-                  weight: 0,
-                  bodyWeight: const Value(0),
-                  cardio: const Value(false),
-                  duration: const Value(0),
-                  distance: const Value(0),
-                  hidden: const Value(false),
-                ),
+                gymSet: gymSet,
               ),
             ),
           );

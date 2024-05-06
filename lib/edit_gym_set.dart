@@ -58,18 +58,6 @@ class _EditGymSetState extends State<EditGymSet> {
         _nameOptions = names.toList();
       });
     });
-    if (!widget.gymSet.id.present)
-      (db.gymSets.select()
-            ..orderBy([
-              (u) =>
-                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-            ])
-            ..limit(1))
-          .getSingle()
-          .then((gymSet) async {
-        final bodyWeight = await getBodyWeight();
-        _updateFields(gymSet.copyWith(bodyWeight: bodyWeight?.weight));
-      });
   }
 
   @override
