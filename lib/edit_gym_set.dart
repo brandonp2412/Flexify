@@ -227,6 +227,9 @@ class _EditGymSetState extends State<EditGymSet> {
                   onFieldSubmitted: (String value) {
                     onFieldSubmitted();
                   },
+                  onChanged: (value) => setState(() {
+                    _name = value;
+                  }),
                 );
               },
             ),
