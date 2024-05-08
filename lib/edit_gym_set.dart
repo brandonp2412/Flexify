@@ -92,8 +92,6 @@ class _EditGymSetState extends State<EditGymSet> {
       final timer = context.read<TimerState>();
       timer.startTimer(_name, settings.timerDuration);
     }
-
-    if (_settings.automaticBackup) appendLine(gymSet);
   }
 
   Future<void> _selectDate() async {

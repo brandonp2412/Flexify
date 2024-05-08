@@ -7,6 +7,8 @@ import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 class ImportData extends StatelessWidget {
   final BuildContext pageContext;
@@ -96,6 +98,20 @@ class ImportData extends StatelessWidget {
     Navigator.pop(pageContext);
   }
 
+  _importDatabase(BuildContext context) async {
+    Navigator.pop(context);
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    File sourceFile = File(result.files.single.path!);
+    final dbFolder = await getApplicationDocumentsDirectory();
+    await db.close();
+    await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
+    db = AppDatabase();
+    if (!pageContext.mounted) return;
+    Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
+  }
+
   _importPlans(BuildContext context) async {
     Navigator.pop(context);
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -142,6 +158,11 @@ class ImportData extends StatelessWidget {
                     leading: const Icon(Icons.event),
                     title: const Text('Plans'),
                     onTap: () => _importPlans(context),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.storage),
+                    title: const Text('Database'),
+                    onTap: () => _importDatabase(context),
                   ),
                 ],
               );

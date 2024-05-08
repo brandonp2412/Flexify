@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsState extends ChangeNotifier {
@@ -52,8 +56,8 @@ class SettingsState extends ChangeNotifier {
 
   void setAutomatic(bool backup) async {
     if (backup) {
-      final csv = await getGymSetCsv();
-      android.invokeMethod('pick', ['graphs.csv', csv]);
+      final dbFolder = await getApplicationDocumentsDirectory();
+      android.invokeMethod('pick', [join(dbFolder.path, 'flexify.sqlite')]);
     }
 
     automaticBackup = backup;

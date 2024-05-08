@@ -1,7 +1,6 @@
 package com.presley.flexify
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -9,27 +8,24 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import androidx.documentfile.provider.DocumentFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.io.File
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
     private var timerBound = false
     private var timerService: TimerService? = null
-    private var savedContent: String? = null
-    private var savedFilename: String? = null
+    private var savedPath: String? = null
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -63,7 +59,7 @@ class MainActivity : FlutterActivity() {
 
                 "pick" -> {
                     val args = call.arguments as ArrayList<*>
-                    pick(args[0] as String, args[1] as String)
+                    pick(args[0] as String)
                 }
 
                 "getProgress" -> {
@@ -146,10 +142,9 @@ class MainActivity : FlutterActivity() {
         context.startForegroundService(intent)
     }
 
-    private fun pick(filename: String, content: String) {
+    private fun pick(path: String) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        savedContent = content
-        savedFilename = filename
+        savedPath = path
         activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
     }
 
@@ -158,18 +153,27 @@ class MainActivity : FlutterActivity() {
 
         data?.data?.also { uri ->
             if (requestCode == WRITE_REQUEST_CODE) {
-                val sharedPreferences =
-                    getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-                val edit = sharedPreferences.edit()
-                edit.putString("backupDirectory", uri.toString())
-                edit.apply()
-
-                val dir = DocumentFile.fromTreeUri(context, uri)
-                var file = dir?.findFile(savedFilename!!)
-                if (file == null) file = dir?.createFile("text/csv", savedFilename!!)
-                context.contentResolver.openOutputStream(file!!.uri).use {
-                    it?.write(savedContent!!.toByteArray())
+                val intent = Intent(context, BackupReceiver::class.java).apply {
+                    putExtra("dbPath", savedPath)
+                    putExtra("backupPath", uri.toString())
                 }
+                BackupReceiver().onReceive(context, intent)
+
+                val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+                    PendingIntent.FLAG_IMMUTABLE)
+
+                val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = System.currentTimeMillis()
+                    set(Calendar.HOUR_OF_DAY, 14)
+                }
+
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent
+                )
             }
         }
     }

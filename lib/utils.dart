@@ -5,25 +5,6 @@ import 'package:flexify/main.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-void appendLine(GymSetsCompanion gymSet) {
-  final line = const ListToCsvConverter(eol: "\n").convert([
-    [
-      0,
-      gymSet.name.value,
-      gymSet.reps.value,
-      gymSet.weight.value,
-      gymSet.created.value.toIso8601String(),
-      gymSet.unit.value,
-      gymSet.bodyWeight.value,
-      gymSet.duration.value,
-      gymSet.distance.value,
-      gymSet.cardio.value,
-      gymSet.hidden.value
-    ]
-  ]);
-  android.invokeMethod('save', ['graphs.csv', '\n$line']);
-}
-
 Future<String> getGymSetCsv() async {
   final gymSets = await db.gymSets.select().get();
   final List<List<dynamic>> csvData = [

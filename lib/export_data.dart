@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:csv/csv.dart';
+import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ExportData extends StatelessWidget {
   const ExportData({
@@ -58,6 +62,21 @@ class ExportData extends StatelessWidget {
                       final bytes = Uint8List.fromList(csv.codeUnits);
                       await FilePicker.platform.saveFile(
                         fileName: 'plans.csv',
+                        bytes: bytes,
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.storage),
+                    title: const Text('Database'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final dbFolder = await getApplicationDocumentsDirectory();
+                      final file =
+                          File(p.join(dbFolder.path, 'flexify.sqlite'));
+                      final bytes = await file.readAsBytes();
+                      await FilePicker.platform.saveFile(
+                        fileName: 'flexify.sqlite',
                         bytes: bytes,
                       );
                     },

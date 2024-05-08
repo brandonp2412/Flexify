@@ -81,9 +81,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
     );
     if (!mounted) return;
     context.read<PlanState>().updatePlans(null);
-    final settings = context.read<SettingsState>();
-    if (settings.automaticBackup)
-      android.invokeMethod('save', ['graphs.csv', await getGymSetCsv()]);
   }
 
   _save() async {
