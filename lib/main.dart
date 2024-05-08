@@ -73,16 +73,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
+    var length = 4;
+    if (settings.hideTimerTab) length--;
+    if (settings.hideHistoryTab) length--;
 
     return DefaultTabController(
-      length: settings.hideTimerTab ? 3 : 4,
+      length: length,
       child: Scaffold(
         bottomSheet:
             settings.hideTimerTab ? null : const TimerProgressIndicator(),
         body: SafeArea(
           child: TabBarView(
             children: [
-              const HistoryPage(),
+              if (!settings.hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
               if (!settings.hideTimerTab) const TimerPage(),
@@ -91,10 +94,11 @@ class HomePage extends StatelessWidget {
         ),
         bottomNavigationBar: TabBar(
           tabs: [
-            const Tab(
-              icon: Icon(Icons.history),
-              text: "History",
-            ),
+            if (!settings.hideHistoryTab)
+              const Tab(
+                icon: Icon(Icons.history),
+                text: "History",
+              ),
             const Tab(
               icon: Icon(Icons.event),
               text: "Plans",

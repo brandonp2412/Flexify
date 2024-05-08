@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flexify/main.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,6 +19,7 @@ class SettingsState extends ChangeNotifier {
   bool systemColors = true;
   bool explainedPermissions = false;
   bool hideTimerTab = false;
+  bool hideHistoryTab = false;
   bool curveLines = false;
   bool automaticBackup = false;
 
@@ -48,6 +46,7 @@ class SettingsState extends ChangeNotifier {
     restTimers = prefsInstance.getBool("restTimers") ?? true;
     showUnits = prefsInstance.getBool("showUnits") ?? true;
     hideTimerTab = prefsInstance.getBool("hideTimerTab") ?? false;
+    hideHistoryTab = prefsInstance.getBool("hideHistoryTab") ?? false;
     explainedPermissions =
         prefsInstance.getBool('explainedPermissions') ?? false;
     curveLines = prefsInstance.getBool('curveLines') ?? false;
@@ -77,10 +76,16 @@ class SettingsState extends ChangeNotifier {
     prefs?.setBool('curveLines', curve);
   }
 
-  void setHideTimerTab(bool hide) {
+  void setHideTimer(bool hide) {
     hideTimerTab = hide;
     notifyListeners();
     prefs?.setBool('hideTimerTab', hide);
+  }
+
+  void setHideHistory(bool hide) {
+    hideHistoryTab = hide;
+    notifyListeners();
+    prefs?.setBool('hideHistoryTab', hide);
   }
 
   void setExplained(bool explained) {

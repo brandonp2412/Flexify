@@ -256,10 +256,21 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'hide timer tab',
         widget: ListTile(
           title: const Text('Hide timer tab'),
-          onTap: () => settings.setHideTimerTab(!settings.hideTimerTab),
+          onTap: () => settings.setHideTimer(!settings.hideTimerTab),
           trailing: Switch(
             value: settings.hideTimerTab,
-            onChanged: (value) => settings.setHideTimerTab(value),
+            onChanged: (value) => settings.setHideTimer(value),
+          ),
+        ),
+      ),
+      WidgetSettings(
+        key: 'hide history tab',
+        widget: ListTile(
+          title: const Text('Hide history tab'),
+          onTap: () => settings.setHideHistory(!settings.hideHistoryTab),
+          trailing: Switch(
+            value: settings.hideHistoryTab,
+            onChanged: (value) => settings.setHideHistory(value),
           ),
         ),
       ),

@@ -16,6 +16,39 @@ class HistoryPage extends StatefulWidget {
 }
 
 class HistoryPageState extends State<HistoryPage> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigatorPopHandler(
+      onPop: () {
+        if (navigatorKey.currentState!.canPop() == false) return;
+        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
+        navigatorKey.currentState!.pop();
+      },
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => _HistoryPageWidget(
+            navigatorKey: navigatorKey,
+          ),
+          settings: settings,
+        ),
+      ),
+    );
+  }
+}
+
+class _HistoryPageWidget extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const _HistoryPageWidget({required this.navigatorKey});
+
+  @override
+  createState() => _HistoryPageWidgetState();
+}
+
+class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   late Stream<List<GymSet>> _stream;
   Set<int> _selected = {};
   String _search = '';
