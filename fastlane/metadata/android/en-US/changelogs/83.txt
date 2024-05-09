@@ -1,0 +1,5 @@
+- Fix timers
+- Optimize timers
+- Fix automatic backups
+- Add vibrate and alarm sound settings
+- Optimize edit graph page

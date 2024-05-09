@@ -52,8 +52,8 @@ class MainActivity : FlutterActivity() {
                 "timer" -> {
                     val title = call.argument<String>("title")
                     val timestamp = call.argument<Long>("timestamp")
-                    val duration = sharedPrefs.getInt("flutter.timerDuration", 0)
-                    timer(duration, title!!, timestamp!!)
+                    val duration = sharedPrefs.getLong("flutter.timerDuration", 0)
+                    timer(duration.toInt(), title!!, timestamp!!)
                 }
 
                 "pick" -> {
@@ -140,7 +140,7 @@ class MainActivity : FlutterActivity() {
         intent.putExtra("timeStamp", timeStamp)
         val alarmSound = sharedPrefs.getString("flutter.alarmSound", null)
         intent.putExtra("alarmSound", alarmSound)
-        val vibrate = sharedPrefs.getString("flutter.vibrate", null)
+        val vibrate = sharedPrefs.getBoolean("flutter.vibrate", true)
         intent.putExtra("vibrate", vibrate)
         context.startForegroundService(intent)
     }
