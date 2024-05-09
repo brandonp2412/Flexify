@@ -153,7 +153,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       count++;
       if (count != settings.maxSets ||
           _selectedIndex < _planExercises.length - 1)
-        timerState.startTimer("$exercise ($count)", settings.timerDuration);
+        timerState.startTimer("$exercise ($count)", settings);
       if (count == settings.maxSets &&
           _selectedIndex < _planExercises.length - 1)
         _select(_selectedIndex + 1);

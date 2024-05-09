@@ -1,5 +1,6 @@
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 
 class TimerState extends ChangeNotifier {
@@ -20,12 +21,17 @@ class TimerState extends ChangeNotifier {
     });
   }
 
-  Future<void> addOneMinute() async {
+  Future<void> addOneMinute(SettingsState settings) async {
     final newTimer = nativeTimer.increaseDuration(
       const Duration(minutes: 1),
     );
     updateTimer(newTimer);
-    await android.invokeMethod('add', [newTimer.getTimeStamp()]);
+    final args = {
+      'timestamp': newTimer.getTimeStamp(),
+      'alarmSound': settings.alarmSound,
+      'vibrate': settings.vibrate,
+    };
+    await android.invokeMethod('add', args);
   }
 
   Future<void> stopTimer() async {
@@ -33,18 +39,22 @@ class TimerState extends ChangeNotifier {
     await android.invokeMethod('stop');
   }
 
-  Future<void> startTimer(String title, Duration timerDuration) async {
+  Future<void> startTimer(String title, SettingsState settings) async {
     final timer = NativeTimerWrapper(
-      timerDuration,
+      settings.timerDuration,
       Duration.zero,
       DateTime.now(),
       NativeTimerState.running,
     );
     updateTimer(timer);
-    await android.invokeMethod(
-      'timer',
-      [timerDuration.inMilliseconds, title, timer.getTimeStamp()],
-    );
+    final args = {
+      'durationMs': settings.timerDuration.inMilliseconds,
+      'title': title,
+      'timestamp': timer.getTimeStamp(),
+      'alarmSound': settings.alarmSound,
+      'vibrate': settings.vibrate,
+    };
+    await android.invokeMethod('timer', args);
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {

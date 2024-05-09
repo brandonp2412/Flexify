@@ -341,7 +341,7 @@ void main() {
         screenshotName: '8_en-US',
         skipSettle: true,
         navigateToPage: (context) async {
-          await context.read<TimerState>().addOneMinute();
+          await context.read<TimerState>().addOneMinute(SettingsState());
           await tester.pump();
           await tester.pump(const Duration(seconds: 7));
         },

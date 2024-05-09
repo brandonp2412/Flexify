@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
 import 'package:flexify/settings_state.dart';
@@ -109,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: minutesController.text.length,
                         );
                       },
-                      onSubmitted: (value) => settings.setDuration(
+                      onChanged: (value) => settings.setDuration(
                         Duration(
                           minutes: int.parse(value),
                           seconds: settings.timerDuration.inSeconds % 60,
@@ -132,7 +133,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           extentOffset: secondsController.text.length,
                         );
                       },
-                      onSubmitted: (value) => settings.setDuration(
+                      onChanged: (value) => settings.setDuration(
                         Duration(
                           seconds: int.parse(value),
                           minutes: settings.timerDuration.inMinutes.floor(),
@@ -220,6 +221,19 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
+        key: 'vibrate',
+        widget: ListTile(
+          title: const Text('Vibrate'),
+          onTap: () {
+            settings.setVibrate(!settings.vibrate);
+          },
+          trailing: Switch(
+            value: settings.vibrate,
+            onChanged: (value) => settings.setVibrate(value),
+          ),
+        ),
+      ),
+      WidgetSettings(
         key: 'reorder items',
         widget: ListTile(
           title: const Text('Re-order items'),
@@ -296,6 +310,22 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+      WidgetSettings(
+          key: 'alarm sound',
+          widget: material.TextButton.icon(
+              onPressed: () async {
+                final result =
+                    await FilePicker.platform.pickFiles(type: FileType.audio);
+                if (result == null || result.files.single.path == null) return;
+                settings.setAlarm(result.files.single.path!);
+              },
+              onLongPress: () {
+                settings.setAlarm(null);
+              },
+              icon: const Icon(Icons.music_note),
+              label: settings.alarmSound == null
+                  ? const Text("Alarm sound")
+                  : Text(settings.alarmSound!.split('/').last))),
       WidgetSettings(key: 'export data', widget: const ExportData()),
       WidgetSettings(
           key: 'import data',

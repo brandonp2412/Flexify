@@ -12,7 +12,9 @@ class SettingsState extends ChangeNotifier {
   int maxSets = 5;
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
+  String? alarmSound;
 
+  bool vibrate = true;
   bool showReorder = true;
   bool restTimers = true;
   bool showUnits = true;
@@ -28,6 +30,7 @@ class SettingsState extends ChangeNotifier {
 
     prefs = prefsInstance;
 
+    alarmSound = prefsInstance.getString('alarmSound');
     longDateFormat = prefsInstance.getString('longDateFormat') ?? "dd/MM/yy";
     shortDateFormat = prefsInstance.getString('shortDateFormat') ?? "d/M/yy";
     final theme = prefsInstance.getString('themeMode');
@@ -51,6 +54,16 @@ class SettingsState extends ChangeNotifier {
         prefsInstance.getBool('explainedPermissions') ?? false;
     curveLines = prefsInstance.getBool('curveLines') ?? false;
     automaticBackup = prefsInstance.getBool('automaticBackup') ?? false;
+    vibrate = prefsInstance.getBool('vibrate') ?? true;
+  }
+
+  void setAlarm(String? sound) async {
+    alarmSound = sound;
+    notifyListeners();
+    if (sound == null)
+      prefs?.remove("alarmSound");
+    else
+      prefs?.setString('alarmSound', sound);
   }
 
   void setAutomatic(bool backup) async {
@@ -58,7 +71,6 @@ class SettingsState extends ChangeNotifier {
       final dbFolder = await getApplicationDocumentsDirectory();
       android.invokeMethod('pick', [join(dbFolder.path, 'flexify.sqlite')]);
     }
-
     automaticBackup = backup;
     notifyListeners();
     prefs?.setBool('automaticBackup', backup);
@@ -68,6 +80,12 @@ class SettingsState extends ChangeNotifier {
     maxSets = max;
     notifyListeners();
     prefs?.setInt('maxSets', max);
+  }
+
+  void setVibrate(bool value) {
+    vibrate = value;
+    notifyListeners();
+    prefs?.setBool('vibrate', value);
   }
 
   void setCurvedLines(bool curve) {

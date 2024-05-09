@@ -48,8 +48,12 @@ class MainActivity : FlutterActivity() {
         channel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "timer" -> {
-                    val args = call.arguments as ArrayList<*>
-                    timer(args[0] as Int, args[1] as String, args[2] as Long)
+                    val duration = call.argument<Int>("durationMs")
+                    val title = call.argument<String>("title")
+                    val timestamp = call.argument<Long>("timestamp")
+                    val alarmSound = call.argument<String>("alarmSound")
+                    val vibrate = call.argument<Boolean>("vibrate")
+                    timer(duration!!, title!!, timestamp!!, alarmSound, vibrate ?: true)
                 }
 
                 "save" -> {
@@ -78,8 +82,10 @@ class MainActivity : FlutterActivity() {
                         val intent = Intent(TimerService.ADD_BROADCAST)
                         sendBroadcast(intent)
                     } else {
-                        val args = call.arguments as ArrayList<*>
-                        timer(1000 * 60, "Rest timer", args[0] as Long)
+                        val timestamp = call.argument<Long>("timestamp")
+                        val alarmSound = call.argument<String>("alarmSound")
+                        val vibrate = call.argument<Boolean>("vibrate")
+                        timer(1000 * 60, "Rest timer", timestamp!!, alarmSound, vibrate ?: true)
                     }
                 }
 
@@ -127,7 +133,13 @@ class MainActivity : FlutterActivity() {
         applicationContext.unregisterReceiver(tickReceiver)
     }
 
-    private fun timer(milliseconds: Int, description: String, timeStamp: Long) {
+    private fun timer(
+        milliseconds: Int,
+        description: String,
+        timeStamp: Long,
+        alarmSound: String?,
+        vibrate: Boolean = true
+    ) {
         Log.d("MainActivity", "Queue $description for $milliseconds delay")
         val intent = Intent(context, TimerService::class.java).also { intent ->
             bindService(
@@ -139,6 +151,8 @@ class MainActivity : FlutterActivity() {
         intent.putExtra("milliseconds", milliseconds)
         intent.putExtra("description", description)
         intent.putExtra("timeStamp", timeStamp)
+        intent.putExtra("alarmSound", alarmSound)
+        intent.putExtra("vibrate", vibrate)
         context.startForegroundService(intent)
     }
 
@@ -159,8 +173,10 @@ class MainActivity : FlutterActivity() {
                 }
                 BackupReceiver().onReceive(context, intent)
 
-                val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                    PendingIntent.FLAG_IMMUTABLE)
+                val pendingIntent = PendingIntent.getBroadcast(
+                    context, 0, intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
 
                 val calendar: Calendar = Calendar.getInstance().apply {
                     timeInMillis = System.currentTimeMillis()

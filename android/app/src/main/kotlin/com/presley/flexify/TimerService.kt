@@ -28,6 +28,8 @@ class TimerService : Service() {
     private var vibrator: Vibrator? = null
     private val binder = LocalBinder()
     private var currentDescription = ""
+    private var alarmSound: String? = null
+    private var shouldVibrate = true
     var mainActivityVisible = true
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
@@ -175,6 +177,8 @@ class TimerService : Service() {
 
     private fun onTimerStart(intent: Intent?) {
         currentDescription = intent?.getStringExtra("description").toString()
+        alarmSound = intent?.getStringExtra("alarmSound")
+        shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
         startTimer(
             (intent?.getIntExtra("milliseconds", 0) ?: 0).toLong(),
             intent?.getLongExtra("timeStamp", 0) ?: 0
@@ -223,9 +227,19 @@ class TimerService : Service() {
     }
 
     private fun playSound() {
-        mediaPlayer = MediaPlayer.create(applicationContext, R.raw.argon)
-        mediaPlayer?.start()
-        mediaPlayer?.setOnCompletionListener { vibrator?.cancel() }
+        mediaPlayer = if (alarmSound != null)
+            MediaPlayer().apply {
+                setDataSource(applicationContext, Uri.parse(alarmSound))
+                prepare()
+                start()
+                setOnCompletionListener { vibrator?.cancel() }
+            }
+        else {
+            MediaPlayer.create(applicationContext, R.raw.argon).apply {
+                start()
+                setOnCompletionListener { vibrator?.cancel() }
+            }
+        }
     }
 
     private fun getProgress(timeLeftInSeconds: Int): NotificationCompat.Builder {
@@ -292,6 +306,7 @@ class TimerService : Service() {
     }
 
     private fun vibrate() {
+        if (!shouldVibrate) return;
         val pattern =
             longArrayOf(0, 1000, 1000, 1000, 1000, 1000)
         vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

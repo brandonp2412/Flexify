@@ -90,7 +90,7 @@ class _EditGymSetState extends State<EditGymSet> {
       final settings = context.read<SettingsState>();
       if (!settings.restTimers) return;
       final timer = context.read<TimerState>();
-      timer.startTimer(_name, settings.timerDuration);
+      timer.startTimer(_name, settings);
     }
   }
 
