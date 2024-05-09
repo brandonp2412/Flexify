@@ -50,12 +50,10 @@ class MainActivity : FlutterActivity() {
         channel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "timer" -> {
-                    val duration = call.argument<Int>("durationMs")
                     val title = call.argument<String>("title")
                     val timestamp = call.argument<Long>("timestamp")
-                    val alarmSound = call.argument<String>("alarmSound")
-                    val vibrate = call.argument<Boolean>("vibrate")
-                    timer(duration!!, title!!, timestamp!!, alarmSound, vibrate ?: true)
+                    val duration = sharedPrefs.getInt("flutter.timerDuration", 0)
+                    timer(duration, title!!, timestamp!!)
                 }
 
                 "pick" -> {
@@ -80,9 +78,7 @@ class MainActivity : FlutterActivity() {
                         sendBroadcast(intent)
                     } else {
                         val timestamp = call.argument<Long>("timestamp")
-                        val alarmSound = call.argument<String>("alarmSound")
-                        val vibrate = call.argument<Boolean>("vibrate")
-                        timer(1000 * 60, "Rest timer", timestamp!!, alarmSound, vibrate ?: true)
+                        timer(1000 * 60, "Rest timer", timestamp!!)
                     }
                 }
 
@@ -130,14 +126,8 @@ class MainActivity : FlutterActivity() {
         applicationContext.unregisterReceiver(tickReceiver)
     }
 
-    private fun timer(
-        milliseconds: Int,
-        description: String,
-        timeStamp: Long,
-        alarmSound: String?,
-        vibrate: Boolean = true
-    ) {
-        Log.d("MainActivity", "Queue $description for $milliseconds delay")
+    private fun timer(duration: Int, description: String, timeStamp: Long) {
+        Log.d("MainActivity", "Queue $description for $duration delay")
         val intent = Intent(context, TimerService::class.java).also { intent ->
             bindService(
                 intent,
@@ -145,10 +135,12 @@ class MainActivity : FlutterActivity() {
                 Context.BIND_AUTO_CREATE
             )
         }
-        intent.putExtra("milliseconds", milliseconds)
+        intent.putExtra("milliseconds", duration)
         intent.putExtra("description", description)
         intent.putExtra("timeStamp", timeStamp)
+        val alarmSound = sharedPrefs.getString("flutter.alarmSound", null)
         intent.putExtra("alarmSound", alarmSound)
+        val vibrate = sharedPrefs.getString("flutter.vibrate", null)
         intent.putExtra("vibrate", vibrate)
         context.startForegroundService(intent)
     }

@@ -21,15 +21,13 @@ class TimerState extends ChangeNotifier {
     });
   }
 
-  Future<void> addOneMinute(SettingsState settings) async {
+  Future<void> addOneMinute() async {
     final newTimer = nativeTimer.increaseDuration(
       const Duration(minutes: 1),
     );
     updateTimer(newTimer);
     final args = {
       'timestamp': newTimer.getTimeStamp(),
-      'alarmSound': settings.alarmSound,
-      'vibrate': settings.vibrate,
     };
     await android.invokeMethod('add', args);
   }
@@ -48,11 +46,8 @@ class TimerState extends ChangeNotifier {
     );
     updateTimer(timer);
     final args = {
-      'durationMs': settings.timerDuration.inMilliseconds,
       'title': title,
       'timestamp': timer.getTimeStamp(),
-      'alarmSound': settings.alarmSound,
-      'vibrate': settings.vibrate,
     };
     await android.invokeMethod('timer', args);
   }
