@@ -1,24 +1,20 @@
 package com.presley.flexify
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.net.Uri
+import android.content.SharedPreferences
 import android.os.Build
+import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.documentfile.provider.DocumentFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import java.io.File
-import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : FlutterActivity() {
@@ -26,6 +22,12 @@ class MainActivity : FlutterActivity() {
     private var timerBound = false
     private var timerService: TimerService? = null
     private var savedPath: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPrefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        AlarmUtil.setRepeatingAlarm(context)
+    }
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -54,11 +56,6 @@ class MainActivity : FlutterActivity() {
                     val alarmSound = call.argument<String>("alarmSound")
                     val vibrate = call.argument<Boolean>("vibrate")
                     timer(duration!!, title!!, timestamp!!, alarmSound, vibrate ?: true)
-                }
-
-                "save" -> {
-                    val args = call.arguments as ArrayList<*>
-                    save(args[0] as String, args[1] as String)
                 }
 
                 "pick" -> {
@@ -158,6 +155,11 @@ class MainActivity : FlutterActivity() {
 
     private fun pick(path: String) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        sharedPrefs.edit().apply {
+            putString("flutter.dbPath", path)
+            commit()
+        }
+
         savedPath = path
         activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
     }
@@ -167,48 +169,14 @@ class MainActivity : FlutterActivity() {
 
         data?.data?.also { uri ->
             if (requestCode == WRITE_REQUEST_CODE) {
-                val intent = Intent(context, BackupReceiver::class.java).apply {
-                    putExtra("dbPath", savedPath)
-                    putExtra("backupPath", uri.toString())
+                sharedPrefs.edit().apply {
+                    putString("flutter.backupPath", uri.toString())
+                    commit()
                 }
+                val intent = Intent(context, BackupReceiver::class.java)
                 BackupReceiver().onReceive(context, intent)
-
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context, 0, intent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-
-                val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = System.currentTimeMillis()
-                    set(Calendar.HOUR_OF_DAY, 14)
-                }
-
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY,
-                    pendingIntent
-                )
+                AlarmUtil.setRepeatingAlarm(context)
             }
-        }
-    }
-
-    private fun save(filename: String, content: String) {
-        val sharedPreferences =
-            getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        val backupDirectory = sharedPreferences.getString("backupDirectory", null) ?: return;
-        val backupUri = Uri.parse(backupDirectory)
-        val pickedDir = DocumentFile.fromTreeUri(context, backupUri)
-
-        var file = pickedDir?.findFile(filename)
-        if (file == null) file = pickedDir?.createFile("text/csv", filename)
-
-        val fileUri = file?.uri
-        if (fileUri != null) {
-            val outputStream = context.contentResolver.openOutputStream(fileUri, "wa")
-            outputStream?.write(content.toByteArray())
-            outputStream?.close()
         }
     }
 
@@ -221,8 +189,8 @@ class MainActivity : FlutterActivity() {
     }
 
     companion object {
+        lateinit var sharedPrefs: SharedPreferences
         const val FLUTTER_CHANNEL = "com.presley.flexify/android"
-        const val SHARED_PREFERENCES = "flexify"
         const val WRITE_REQUEST_CODE = 43
         const val TICK_BROADCAST = "tick-event"
     }

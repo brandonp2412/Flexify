@@ -13,14 +13,12 @@ import java.io.File
 class BackupReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
-        val dbPath = intent?.getStringExtra("dbPath")
-        val backupUri = Uri.parse(intent?.getStringExtra("backupPath"))
+        if (context == null) return
+
+        val dbPath = MainActivity.sharedPrefs.getString("flutter.dbPath", null)
+        val backupPath = MainActivity.sharedPrefs.getString("flutter.backupPath", null)
+        val backupUri = Uri.parse(backupPath)
         Log.d("BackupReceiver", "dbPath=$dbPath,backupUri=$backupUri")
-        val sharedPreferences =
-            context!!.getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        val edit = sharedPreferences.edit()
-        edit.putString("backupDirectory", backupUri.toString())
-        edit.apply()
 
         val dbFile = File(dbPath!!)
         val dir = DocumentFile.fromTreeUri(context, backupUri)
