@@ -126,12 +126,14 @@ class ImportData extends StatelessWidget {
     for (final row in rows.skip(1)) {
       var sequence = row.elementAtOrNull(4);
       if (sequence is String) sequence = 0;
-      plans.add(PlansCompanion(
-        days: Value(row[1]),
-        exercises: Value(row[2]),
-        title: Value(row.elementAtOrNull(3)),
-        sequence: Value(sequence),
-      ));
+      plans.add(
+        PlansCompanion(
+          days: Value(row[1]),
+          exercises: Value(row[2]),
+          title: Value(row.elementAtOrNull(3)),
+          sequence: Value(sequence),
+        ),
+      );
     }
 
     await db.plans.deleteAll();
@@ -143,33 +145,34 @@ class ImportData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Wrap(
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.insights),
-                    title: const Text('Graphs'),
-                    onTap: () => _importGraphs(context),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.event),
-                    title: const Text('Plans'),
-                    onTap: () => _importPlans(context),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.storage),
-                    title: const Text('Database'),
-                    onTap: () => _importDatabase(context),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        icon: const Icon(Icons.upload),
-        label: const Text('Import data'));
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.insights),
+                  title: const Text('Graphs'),
+                  onTap: () => _importGraphs(context),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.event),
+                  title: const Text('Plans'),
+                  onTap: () => _importPlans(context),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.storage),
+                  title: const Text('Database'),
+                  onTap: () => _importDatabase(context),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      icon: const Icon(Icons.upload),
+      label: const Text('Import data'),
+    );
   }
 }

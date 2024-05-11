@@ -15,13 +15,14 @@ class CardioLine extends StatefulWidget {
   final DateTime? startDate;
   final DateTime? endDate;
 
-  const CardioLine(
-      {super.key,
-      required this.name,
-      required this.metric,
-      required this.groupBy,
-      this.startDate,
-      this.endDate});
+  const CardioLine({
+    super.key,
+    required this.name,
+    required this.metric,
+    required this.groupBy,
+    this.startDate,
+    this.endDate,
+  });
 
   @override
   createState() => _CardioLineState();
@@ -54,7 +55,8 @@ class _CardioLineState extends State<CardioLine> {
         db.gymSets.created.year,
         db.gymSets.created.month,
         const CustomExpression<int>(
-            "STRFTIME('%W', DATE(created, 'unixepoch'))")
+          "STRFTIME('%W', DATE(created, 'unixepoch'))",
+        ),
       ];
     else if (widget.groupBy == AppGroupBy.year)
       groupBy = [db.gymSets.created.year];
@@ -69,13 +71,20 @@ class _CardioLineState extends State<CardioLine> {
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
-          ..where(db.gymSets.created
-              .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)))
-          ..where(db.gymSets.created.isSmallerThanValue(
-              widget.endDate ?? DateTime.now().add(const Duration(days: 1))))
+          ..where(
+            db.gymSets.created
+                .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)),
+          )
+          ..where(
+            db.gymSets.created.isSmallerThanValue(
+              widget.endDate ?? DateTime.now().add(const Duration(days: 1)),
+            ),
+          )
           ..orderBy([
             OrderingTerm(
-                expression: db.gymSets.created.date, mode: OrderingMode.desc)
+              expression: db.gymSets.created.date,
+              mode: OrderingMode.desc,
+            ),
           ])
           ..limit(11)
           ..groupBy(groupBy))
@@ -118,11 +127,13 @@ class _CardioLineState extends State<CardioLine> {
           final row = snapshot.data!.reversed.elementAt(index);
           var value = double.parse(_getValue(row).toStringAsFixed(2));
 
-          rows.add(CardioData(
-            value: value,
-            created: row.read(db.gymSets.created)!,
-            unit: row.read(db.gymSets.unit)!,
-          ));
+          rows.add(
+            CardioData(
+              value: value,
+              created: row.read(db.gymSets.created)!,
+              unit: row.read(db.gymSets.unit)!,
+            ),
+          );
           spots.add(FlSpot(index.toDouble(), value));
         }
 
@@ -134,9 +145,11 @@ class _CardioLineState extends State<CardioLine> {
               LineChartData(
                 titlesData: FlTitlesData(
                   topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   leftTitles: const AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -160,10 +173,11 @@ class _CardioLineState extends State<CardioLine> {
                     tooltipBgColor: Theme.of(context).colorScheme.background,
                     getTooltipItems: (touchedSpots) => [
                       LineTooltipItem(
-                          touchedSpots.first.y.toStringAsFixed(2),
-                          TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color))
+                        touchedSpots.first.y.toStringAsFixed(2),
+                        TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -185,7 +199,10 @@ class _CardioLineState extends State<CardioLine> {
   }
 
   Widget _bottomTitleWidgets(
-      double value, TitleMeta meta, List<CardioData> rows) {
+    double value,
+    TitleMeta meta,
+    List<CardioData> rows,
+  ) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
@@ -203,8 +220,10 @@ class _CardioLineState extends State<CardioLine> {
 
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
-      text = Text(DateFormat(_settings.shortDateFormat).format(createdDate),
-          style: style);
+      text = Text(
+        DateFormat(_settings.shortDateFormat).format(createdDate),
+        style: style,
+      );
     } else {
       text = const Text('', style: style);
     }

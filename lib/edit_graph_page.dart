@@ -21,6 +21,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   late TextEditingController _nameController;
   bool _cardio = false;
   String? _unit;
+  final Duration _restDuration = const Duration(minutes: 3, seconds: 30);
 
   @override
   void initState() {
@@ -30,14 +31,15 @@ class _EditGraphPageState extends State<EditGraphPage> {
           ..where((tbl) => tbl.name.equals(widget.name))
           ..limit(1))
         .getSingle()
-        .then((value) => setState(() {
-              _cardio = value.cardio;
-              _unit = value.unit;
-              if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-                _unit = 'km';
-              else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
-                _unit = 'kg';
-            }));
+        .then(
+          (value) => setState(() {
+            _cardio = value.cardio;
+            _unit = value.unit;
+            if (_cardio && (_unit == 'kg' || _unit == 'lb'))
+              _unit = 'km';
+            else if (!_cardio && (_unit == 'km' || _unit == 'mi')) _unit = 'kg';
+          }),
+        );
   }
 
   @override
@@ -65,15 +67,18 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   Future<void> _doUpdate() async {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
-        .write(GymSetsCompanion(
-            name: Value(_nameController.text),
-            cardio: Value(_cardio),
-            unit: _unit != null ? Value(_unit!) : const Value.absent()));
+        .write(
+      GymSetsCompanion(
+        name: Value(_nameController.text),
+        cardio: Value(_cardio),
+        unit: _unit != null ? Value(_unit!) : const Value.absent(),
+      ),
+    );
     await db.customUpdate(
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
         Variable.withString(widget.name),
-        Variable.withString(_nameController.text)
+        Variable.withString(_nameController.text),
       ],
       updates: {db.plans},
     );
@@ -99,7 +104,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
           return AlertDialog(
             title: const Text('Update conflict'),
             content: Text(
-                'Your new name exists already for $count records. Are you sure?'),
+              'Your new name exists already for $count records. Are you sure?',
+            ),
             actions: <Widget>[
               TextButton(
                 child: const Text('Cancel'),
@@ -125,7 +131,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
           return AlertDialog(
             title: const Text('Units conflict'),
             content: const Text(
-                'Not all of your records are the same unit. Are you sure?'),
+              'Not all of your records are the same unit. Are you sure?',
+            ),
             actions: <Widget>[
               TextButton(
                 child: const Text('Cancel'),

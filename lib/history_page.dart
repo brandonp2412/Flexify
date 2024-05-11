@@ -65,8 +65,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       _stream = (db.gymSets.select()
             ..orderBy(
               [
-                (u) =>
-                    OrderingTerm(expression: u.created, mode: OrderingMode.desc)
+                (u) => OrderingTerm(
+                    expression: u.created, mode: OrderingMode.desc),
               ],
             )
             ..where((tbl) => tbl.name.contains(_search.toLowerCase()))
@@ -81,7 +81,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     List<Widget> actions = [];
 
     if (_selected.isNotEmpty)
-      actions.add(IconButton(
+      actions.add(
+        IconButton(
           onPressed: () {
             showDialog(
               context: context,
@@ -89,7 +90,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 return AlertDialog(
                   title: const Text('Confirm Delete'),
                   content: Text(
-                      'Are you sure you want to delete ${_selected.length} records?'),
+                    'Are you sure you want to delete ${_selected.length} records?',
+                  ),
                   actions: <Widget>[
                     TextButton(
                       child: const Text('Cancel'),
@@ -114,15 +116,20 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
               },
             );
           },
-          icon: const Icon(Icons.delete)));
+          icon: const Icon(Icons.delete),
+        ),
+      );
 
     return Scaffold(
       body: StreamBuilder<List<GymSet>>(
         stream: _stream,
         builder: (context, snapshot) {
           final filtered = snapshot.data
-                  ?.where((gymSet) =>
-                      gymSet.name.toLowerCase().contains(_search.toLowerCase()))
+                  ?.where(
+                    (gymSet) => gymSet.name
+                        .toLowerCase()
+                        .contains(_search.toLowerCase()),
+                  )
                   .toList() ??
               [];
 
@@ -153,12 +160,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 onEdit: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => EditGymSet(
-                            gymSet: snapshot.data!
-                                .firstWhere(
-                                    (element) => element.id == _selected.first)
-                                .toCompanion(false),
-                          )),
+                    builder: (context) => EditGymSet(
+                      gymSet: snapshot.data!
+                          .firstWhere(
+                            (element) => element.id == _selected.first,
+                          )
+                          .toCompanion(false),
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -166,7 +175,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     ? const ListTile(
                         title: Text("No entries yet."),
                         subtitle: Text(
-                            "Start inserting data for records to appear here."),
+                          "Start inserting data for records to appear here.",
+                        ),
                       )
                     : HistoryList(
                         gymSets: filtered,
@@ -186,7 +196,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                             _limit += 10;
                           });
                           _setStream();
-                        }),
+                        },
+                      ),
               ),
               if (!snapshot.hasData) const SizedBox(),
               if (snapshot.hasError) ErrorWidget(snapshot.error.toString()),

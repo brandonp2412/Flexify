@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class UnitSelector extends StatelessWidget {
-  const UnitSelector(
-      {super.key,
-      required this.value,
-      required this.cardio,
-      required this.onChanged});
+  const UnitSelector({
+    super.key,
+    required this.value,
+    required this.cardio,
+    required this.onChanged,
+  });
 
   final String value;
   final bool cardio;

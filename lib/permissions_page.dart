@@ -18,16 +18,21 @@ class _PermissionsPageState extends State<PermissionsPage> {
   @override
   void initState() {
     super.initState();
-    Permission.notification.isGranted.then((value) => setState(() {
-          _notify = value;
-        }));
-    Permission.ignoreBatteryOptimizations.isGranted
-        .then((value) => setState(() {
-              _ignore = value;
-            }));
-    Permission.scheduleExactAlarm.isGranted.then((value) => setState(() {
-          _schedule = value;
-        }));
+    Permission.notification.isGranted.then(
+      (value) => setState(() {
+        _notify = value;
+      }),
+    );
+    Permission.ignoreBatteryOptimizations.isGranted.then(
+      (value) => setState(() {
+        _ignore = value;
+      }),
+    );
+    Permission.scheduleExactAlarm.isGranted.then(
+      (value) => setState(() {
+        _schedule = value;
+      }),
+    );
   }
 
   @override
@@ -46,7 +51,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
               const ListTile(
                 title: Text("Rest timers are on, but permissions are missing."),
                 subtitle: Text(
-                    "If you disable rest timers, then these permissions aren't needed."),
+                  "If you disable rest timers, then these permissions aren't needed.",
+                ),
               ),
               ListTile(
                 title: const Text('Rest timers'),
@@ -59,7 +65,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
               ListTile(
                 title: const Text('Disable battery optimizations'),
                 subtitle: const Text(
-                    'Progress may pause if battery optimizations stay on.'),
+                  'Progress may pause if battery optimizations stay on.',
+                ),
                 onTap: () async {
                   final status =
                       await Permission.ignoreBatteryOptimizations.request();
@@ -75,7 +82,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
               ListTile(
                 title: const Text('Schedule exact alarm'),
                 subtitle: const Text(
-                    'Alarms cannot be accurate if this is disabled.'),
+                  'Alarms cannot be accurate if this is disabled.',
+                ),
                 onTap: () async {
                   final status = await Permission.scheduleExactAlarm.request();
                   setState(() {
@@ -90,7 +98,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
               ListTile(
                 title: const Text('Post notifications'),
                 subtitle: const Text(
-                    'Timer progress is sent to the notification bar'),
+                  'Timer progress is sent to the notification bar',
+                ),
                 onTap: () async {
                   final status = await Permission.notification.request();
                   setState(() {
@@ -115,7 +124,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 return AlertDialog(
                   title: const Text('Invalid permissions'),
                   content: const Text(
-                      'Rest timers are enabled without sufficient permissions. Are you sure?'),
+                    'Rest timers are enabled without sufficient permissions. Are you sure?',
+                  ),
                   actions: <Widget>[
                     TextButton(
                       child: const Text('Cancel'),

@@ -38,17 +38,20 @@ class PlanTile extends StatelessWidget {
         TextSpan(
           text: day.trim(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: weekday == day.trim() ? FontWeight.bold : null,
-              decoration:
-                  weekday == day.trim() ? TextDecoration.underline : null,
-              color: color),
+                fontWeight: weekday == day.trim() ? FontWeight.bold : null,
+                decoration:
+                    weekday == day.trim() ? TextDecoration.underline : null,
+                color: color,
+              ),
         ),
       );
       if (index < split.length - 1)
-        result.add(TextSpan(
-          text: ", ",
-          style: Theme.of(context).textTheme.bodyLarge,
-        ));
+        result.add(
+          TextSpan(
+            text: ", ",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        );
     }
     return result;
   }
@@ -68,7 +71,9 @@ class PlanTile extends StatelessWidget {
       trailing: Visibility(
         visible: settingsState.showReorder,
         child: ReorderableDragStartListener(
-            index: index, child: const Icon(Icons.drag_handle)),
+          index: index,
+          child: const Icon(Icons.drag_handle),
+        ),
       ),
       selected: selected.contains(plan.id),
       onTap: () async {

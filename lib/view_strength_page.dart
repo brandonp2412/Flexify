@@ -64,16 +64,18 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditGraphPage(
-                            name: widget.name,
-                          )),
-                );
-              },
-              icon: const Icon(Icons.edit))
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditGraphPage(
+                    name: widget.name,
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit),
+          ),
         ],
       ),
       body: Padding(
@@ -157,8 +159,10 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                   child: ListTile(
                     title: const Text('Start date'),
                     subtitle: _startDate != null
-                        ? Text(DateFormat(settings.shortDateFormat)
-                            .format(_startDate!))
+                        ? Text(
+                            DateFormat(settings.shortDateFormat)
+                                .format(_startDate!),
+                          )
                         : null,
                     onLongPress: () => setState(() {
                       _startDate = null;
@@ -171,8 +175,10 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                   child: ListTile(
                     title: const Text('Stop date'),
                     subtitle: _endDate != null
-                        ? Text(DateFormat(settings.shortDateFormat)
-                            .format(_endDate!))
+                        ? Text(
+                            DateFormat(settings.shortDateFormat)
+                                .format(_endDate!),
+                          )
                         : null,
                     onLongPress: () => setState(() {
                       _endDate = null;
@@ -180,7 +186,7 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                     trailing: const Icon(Icons.calendar_today),
                     onTap: () => _selectEnd(),
                   ),
-                )
+                ),
               ],
             ),
             StrengthLine(

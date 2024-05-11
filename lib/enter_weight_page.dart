@@ -20,9 +20,11 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
   @override
   void initState() {
     super.initState();
-    getBodyWeight().then((value) => setState(() {
-          _yesterdaysWeight = "${value?.weight ?? 0} ${value?.unit ?? 'kg'}";
-        }));
+    getBodyWeight().then(
+      (value) => setState(() {
+        _yesterdaysWeight = "${value?.weight ?? 0} ${value?.unit ?? 'kg'}";
+      }),
+    );
   }
 
   @override
@@ -63,16 +65,20 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Navigator.pop(context);
-          db.gymSets.insertOne(GymSetsCompanion.insert(
+          db.gymSets.insertOne(
+            GymSetsCompanion.insert(
               created: DateTime.now(),
               name: "Weight",
               reps: 1,
               unit: _unit,
-              weight: double.parse(_valueController.text)));
+              weight: double.parse(_valueController.text),
+            ),
+          );
           (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
-              GymSetsCompanion(
-                  bodyWeight:
-                      drift.Value(double.parse(_valueController.text))));
+            GymSetsCompanion(
+              bodyWeight: drift.Value(double.parse(_valueController.text)),
+            ),
+          );
         },
         tooltip: "Save today's weight",
         child: const Icon(Icons.save),

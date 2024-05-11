@@ -4,9 +4,10 @@ class StrengthData {
   final String unit;
   final double value;
 
-  StrengthData(
-      {required this.created,
-      required this.reps,
-      required this.unit,
-      required this.value});
+  StrengthData({
+    required this.created,
+    required this.reps,
+    required this.unit,
+    required this.value,
+  });
 }

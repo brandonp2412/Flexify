@@ -39,12 +39,13 @@ class GraphsPageState extends State<GraphsPage> {
             db.gymSets.cardio,
             db.gymSets.duration,
             db.gymSets.distance,
-            db.gymSets.created.max()
+            db.gymSets.created.max(),
           ])
           ..orderBy([
             drift.OrderingTerm(
-                expression: db.gymSets.created.max(),
-                mode: drift.OrderingMode.desc)
+              expression: db.gymSets.created.max(),
+              mode: drift.OrderingMode.desc,
+            ),
           ])
           ..groupBy([db.gymSets.name]))
         .watch();
@@ -108,7 +109,8 @@ class GraphsPageState extends State<GraphsPage> {
                   for (final plan in plans) {
                     final exercises = plan.exercises.split(',');
                     exercises.removeWhere(
-                        (exercise) => selectedCopy.contains(exercise));
+                      (exercise) => selectedCopy.contains(exercise),
+                    );
                     final updatedExercises = exercises.join(',');
                     await db
                         .update(db.plans)
@@ -118,22 +120,25 @@ class GraphsPageState extends State<GraphsPage> {
                 },
                 onSelect: () => setState(() {
                   _selected.addAll(
-                      gymSets.map((gymSet) => gymSet.read(db.gymSets.name)!));
+                    gymSets.map((gymSet) => gymSet.read(db.gymSets.name)!),
+                  );
                 }),
                 selected: _selected,
                 onEdit: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => EditGraphPage(
-                            name: _selected.first,
-                          )),
+                    builder: (context) => EditGraphPage(
+                      name: _selected.first,
+                    ),
+                  ),
                 ),
               ),
               if (snapshot.data?.isEmpty == true)
                 const ListTile(
                   title: Text("No data yet."),
                   subtitle: Text(
-                      "Complete plans for your progress graphs to appear here."),
+                    "Complete plans for your progress graphs to appear here.",
+                  ),
                 ),
               Expanded(
                 child: ListView.builder(
@@ -180,12 +185,12 @@ class GraphsPageState extends State<GraphsPage> {
                                 _selected.add(name);
                               });
                           },
-                        )
+                        ),
                       ],
                     );
                   },
                 ),
-              )
+              ),
             ],
           );
         },

@@ -51,9 +51,11 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
     final settings = context.read<SettingsState>();
     minutesController = TextEditingController(
-        text: settings.timerDuration.inMinutes.toString());
+      text: settings.timerDuration.inMinutes.toString(),
+    );
     secondsController = TextEditingController(
-        text: (settings.timerDuration.inSeconds % 60).toString());
+      text: (settings.timerDuration.inSeconds % 60).toString(),
+    );
     _maxSetsController =
         TextEditingController(text: settings.maxSets.toString());
   }
@@ -166,47 +168,49 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
-          key: 'long date format',
-          widget: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: DropdownButtonFormField<String>(
-              value: settings.longDateFormat,
-              items: longFormats.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                settings.setLong(newValue!);
-              },
-              decoration: InputDecoration(
-                labelText:
-                    'Long date format (${DateFormat(settings.longDateFormat).format(DateTime.now())})',
-              ),
+        key: 'long date format',
+        widget: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: DropdownButtonFormField<String>(
+            value: settings.longDateFormat,
+            items: longFormats.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              settings.setLong(newValue!);
+            },
+            decoration: InputDecoration(
+              labelText:
+                  'Long date format (${DateFormat(settings.longDateFormat).format(DateTime.now())})',
             ),
-          )),
+          ),
+        ),
+      ),
       WidgetSettings(
-          key: 'short date format',
-          widget: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: DropdownButtonFormField<String>(
-              value: settings.shortDateFormat,
-              items: shortFormats.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                settings.setShort(newValue!);
-              },
-              decoration: InputDecoration(
-                labelText:
-                    'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
-              ),
+        key: 'short date format',
+        widget: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: DropdownButtonFormField<String>(
+            value: settings.shortDateFormat,
+            items: shortFormats.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              settings.setShort(newValue!);
+            },
+            decoration: InputDecoration(
+              labelText:
+                  'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
             ),
-          )),
+          ),
+        ),
+      ),
       WidgetSettings(
         key: 'rest timers',
         widget: ListTile(
@@ -311,32 +315,36 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
-          key: 'alarm sound',
-          widget: material.TextButton.icon(
-              onPressed: () async {
-                final result =
-                    await FilePicker.platform.pickFiles(type: FileType.audio);
-                if (result == null || result.files.single.path == null) return;
-                settings.setAlarm(result.files.single.path!);
-              },
-              onLongPress: () {
-                settings.setAlarm(null);
-              },
-              icon: const Icon(Icons.music_note),
-              label: settings.alarmSound == null
-                  ? const Text("Alarm sound")
-                  : Text(settings.alarmSound!.split('/').last))),
+        key: 'alarm sound',
+        widget: material.TextButton.icon(
+          onPressed: () async {
+            final result =
+                await FilePicker.platform.pickFiles(type: FileType.audio);
+            if (result == null || result.files.single.path == null) return;
+            settings.setAlarm(result.files.single.path!);
+          },
+          onLongPress: () {
+            settings.setAlarm(null);
+          },
+          icon: const Icon(Icons.music_note),
+          label: settings.alarmSound == null
+              ? const Text("Alarm sound")
+              : Text(settings.alarmSound!.split('/').last),
+        ),
+      ),
       WidgetSettings(key: 'export data', widget: const ExportData()),
       WidgetSettings(
-          key: 'import data',
-          widget: ImportData(
-            pageContext: context,
-          )),
+        key: 'import data',
+        widget: ImportData(
+          pageContext: context,
+        ),
+      ),
       WidgetSettings(
-          key: 'delete records',
-          widget: DeleteRecordsButton(
-            pageContext: context,
-          )),
+        key: 'delete records',
+        widget: DeleteRecordsButton(
+          pageContext: context,
+        ),
+      ),
     ];
 
     return Scaffold(
@@ -357,11 +365,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     setState(() {});
                   },
                   leading: const Icon(Icons.search),
-                )
+                ),
               ] +
               children
-                  .where((element) =>
-                      element.key.contains(searchController.text.toLowerCase()))
+                  .where(
+                    (element) => element.key
+                        .contains(searchController.text.toLowerCase()),
+                  )
                   .map((e) => e.widget)
                   .toList(),
         ),

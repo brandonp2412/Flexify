@@ -29,16 +29,21 @@ const weekdays = [
 
 const defaultPlans = [
   PlansCompanion(
-      days: Value('Monday'),
-      exercises: Value(
-          'Deadlift,Lat pull-down,Barbell bent-over row,Barbell biceps curl')),
+    days: Value('Monday'),
+    exercises: Value(
+      'Deadlift,Lat pull-down,Barbell bent-over row,Barbell biceps curl',
+    ),
+  ),
   PlansCompanion(
-      days: Value('Wednesday'),
-      exercises: Value(
-          'Barbell bench press,Barbell shoulder press,Chest fly,Dumbbell lateral raise,Triceps extension')),
+    days: Value('Wednesday'),
+    exercises: Value(
+      'Barbell bench press,Barbell shoulder press,Chest fly,Dumbbell lateral raise,Triceps extension',
+    ),
+  ),
   PlansCompanion(
-      days: Value('Friday'),
-      exercises: Value('Squat,Leg press,Leg curl,Seated calf raise')),
+    days: Value('Friday'),
+    exercises: Value('Squat,Leg press,Leg curl,Seated calf raise'),
+  ),
 ];
 
 const defaultExercises = [
@@ -99,5 +104,5 @@ const defaultExercises = [
   'Upright row',
   'Weighted Russian twist',
   'Wide-grip pull-up',
-  'Wide-grip push-up'
+  'Wide-grip push-up',
 ];

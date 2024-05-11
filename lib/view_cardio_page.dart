@@ -64,16 +64,18 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditGraphPage(
-                            name: widget.name,
-                          )),
-                );
-              },
-              icon: const Icon(Icons.edit))
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditGraphPage(
+                    name: widget.name,
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit),
+          ),
         ],
       ),
       body: Padding(
@@ -136,8 +138,10 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
                   child: ListTile(
                     title: const Text('Start date'),
                     subtitle: _startDate != null
-                        ? Text(DateFormat(settings.shortDateFormat)
-                            .format(_startDate!))
+                        ? Text(
+                            DateFormat(settings.shortDateFormat)
+                                .format(_startDate!),
+                          )
                         : null,
                     onLongPress: () => setState(() {
                       _startDate = null;
@@ -150,8 +154,10 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
                   child: ListTile(
                     title: const Text('Stop date'),
                     subtitle: _endDate != null
-                        ? Text(DateFormat(settings.shortDateFormat)
-                            .format(_endDate!))
+                        ? Text(
+                            DateFormat(settings.shortDateFormat)
+                                .format(_endDate!),
+                          )
                         : null,
                     onLongPress: () => setState(() {
                       _endDate = null;
@@ -159,7 +165,7 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
                     trailing: const Icon(Icons.calendar_today),
                     onTap: () => _selectEnd(),
                   ),
-                )
+                ),
               ],
             ),
             CardioLine(

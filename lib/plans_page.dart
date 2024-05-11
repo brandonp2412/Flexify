@@ -69,9 +69,11 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   Widget build(BuildContext context) {
     _planState = context.watch<PlanState>();
     final filtered = _planState?.plans
-        .where((element) =>
-            element.days.toLowerCase().contains(_search.toLowerCase()) ||
-            element.exercises.toLowerCase().contains(_search.toLowerCase()))
+        .where(
+          (element) =>
+              element.days.toLowerCase().contains(_search.toLowerCase()) ||
+              element.exercises.toLowerCase().contains(_search.toLowerCase()),
+        )
         .toList();
 
     return Scaffold(
@@ -102,12 +104,14 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             onEdit: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EditPlanPage(
-                        plan: _planState!.plans
-                            .firstWhere(
-                                (element) => element.id == _selected.first)
-                            .toCompanion(false),
-                      )),
+                builder: (context) => EditPlanPage(
+                  plan: _planState!.plans
+                      .firstWhere(
+                        (element) => element.id == _selected.first,
+                      )
+                      .toCompanion(false),
+                ),
+              ),
             ),
             onRefresh: () => _updatePlans(),
           ),

@@ -3,4 +3,5 @@ include: package:flutter_lints/flutter.yaml
 linter:
   rules:
     curly_braces_in_flow_control_structures: false
+    require_trailing_commas: true
 

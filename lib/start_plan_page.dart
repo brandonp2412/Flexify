@@ -97,7 +97,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
             (u) => drift.OrderingTerm(
-                expression: u.created, mode: drift.OrderingMode.desc),
+                  expression: u.created,
+                  mode: drift.OrderingMode.desc,
+                ),
           ])
           ..limit(1))
         .getSingleOrNull();
@@ -138,10 +140,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     if (!settings.explainedPermissions && settings.restTimers && mounted)
       await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PermissionsPage(),
-          ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PermissionsPage(),
+        ),
+      );
 
     if (settings.restTimers) {
       final counts = await _countStream.first;
@@ -182,17 +185,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditPlanPage(plan: widget.plan.toCompanion(false)),
-                    ));
-                widget.refresh();
-              },
-              icon: const Icon(Icons.edit))
+            onPressed: () async {
+              Navigator.pop(context);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditPlanPage(plan: widget.plan.toCompanion(false)),
+                ),
+              );
+              widget.refresh();
+            },
+            icon: const Icon(Icons.edit),
+          ),
         ],
       ),
       body: Padding(
@@ -224,20 +229,23 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 controller: _weightController,
                 focusNode: _weightNode,
                 decoration: InputDecoration(
-                    labelText: 'Weight ($_unit)',
-                    suffixIcon: IconButton(
-                      tooltip: "Use body weight",
-                      icon: const Icon(Icons.scale),
-                      onPressed: () async {
-                        final weightSet = await getBodyWeight();
-                        if (weightSet == null && context.mounted)
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('No weight entered yet.')));
-                        else
-                          _weightController.text = weightSet!.weight.toString();
-                      },
-                    )),
+                  labelText: 'Weight ($_unit)',
+                  suffixIcon: IconButton(
+                    tooltip: "Use body weight",
+                    icon: const Icon(Icons.scale),
+                    onPressed: () async {
+                      final weightSet = await getBodyWeight();
+                      if (weightSet == null && context.mounted)
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('No weight entered yet.'),
+                          ),
+                        );
+                      else
+                        _weightController.text = weightSet!.weight.toString();
+                    },
+                  ),
+                ),
                 keyboardType: TextInputType.number,
                 onTap: () {
                   _weightController.selection = TextSelection(
@@ -305,13 +313,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   }
 
                   return ExerciseList(
-                      exercises: _planExercises,
-                      refresh: widget.refresh,
-                      selected: _selectedIndex,
-                      onSelect: _select,
-                      counts: counts,
-                      firstRender: _first,
-                      plan: widget.plan);
+                    exercises: _planExercises,
+                    refresh: widget.refresh,
+                    selected: _selectedIndex,
+                    onSelect: _select,
+                    counts: counts,
+                    firstRender: _first,
+                    plan: widget.plan,
+                  );
                 },
               ),
             ),

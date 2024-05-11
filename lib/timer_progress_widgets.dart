@@ -9,26 +9,28 @@ class TimerProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TimerState>(builder: (context, timerState, child) {
-      final duration = timerState.nativeTimer.getDuration();
-      final elapsed = timerState.nativeTimer.getElapsed();
-      final remaining = timerState.nativeTimer.getRemaining();
+    return Consumer<TimerState>(
+      builder: (context, timerState, child) {
+        final duration = timerState.nativeTimer.getDuration();
+        final elapsed = timerState.nativeTimer.getElapsed();
+        final remaining = timerState.nativeTimer.getRemaining();
 
-      return Visibility(
-        visible: duration > Duration.zero,
-        child: TweenAnimationBuilder(
-          key: UniqueKey(),
-          tween: Tween<double>(
-            begin: 1,
-            end: elapsed.inMilliseconds / duration.inMilliseconds,
+        return Visibility(
+          visible: duration > Duration.zero,
+          child: TweenAnimationBuilder(
+            key: UniqueKey(),
+            tween: Tween<double>(
+              begin: 1,
+              end: elapsed.inMilliseconds / duration.inMilliseconds,
+            ),
+            duration: remaining,
+            builder: (context, value, child) => LinearProgressIndicator(
+              value: value,
+            ),
           ),
-          duration: remaining,
-          builder: (context, value, child) => LinearProgressIndicator(
-            value: value,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
@@ -37,30 +39,32 @@ class TimerCircularProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TimerState>(builder: (context, timerState, child) {
-      final duration = timerState.nativeTimer.getDuration();
-      final elapsed = timerState.nativeTimer.getElapsed();
-      final remaining = timerState.nativeTimer.getRemaining();
+    return Consumer<TimerState>(
+      builder: (context, timerState, child) {
+        final duration = timerState.nativeTimer.getDuration();
+        final elapsed = timerState.nativeTimer.getElapsed();
+        final remaining = timerState.nativeTimer.getRemaining();
 
-      return duration > Duration.zero
-          ? TweenAnimationBuilder(
-              key: UniqueKey(),
-              tween: Tween<double>(
-                begin: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
-                end: 0,
-              ),
-              duration: remaining,
-              builder: (context, value, child) =>
-                  _TimerCircularProgressIndicatorTile(
-                value: value,
+        return duration > Duration.zero
+            ? TweenAnimationBuilder(
+                key: UniqueKey(),
+                tween: Tween<double>(
+                  begin: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
+                  end: 0,
+                ),
+                duration: remaining,
+                builder: (context, value, child) =>
+                    _TimerCircularProgressIndicatorTile(
+                  value: value,
+                  timerState: timerState,
+                ),
+              )
+            : _TimerCircularProgressIndicatorTile(
+                value: 0,
                 timerState: timerState,
-              ),
-            )
-          : _TimerCircularProgressIndicatorTile(
-              value: 0,
-              timerState: timerState,
-            );
-    });
+              );
+      },
+    );
   }
 }
 

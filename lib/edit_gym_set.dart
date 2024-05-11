@@ -148,9 +148,11 @@ class _EditGymSetState extends State<EditGymSet> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.gymSet.id.present
-            ? 'Edit ${widget.gymSet.name.value}'
-            : 'Add gym set'),
+        title: Text(
+          widget.gymSet.id.present
+              ? 'Edit ${widget.gymSet.name.value}'
+              : 'Add gym set',
+        ),
         actions: [
           if (widget.gymSet.id.present)
             IconButton(
@@ -162,7 +164,8 @@ class _EditGymSetState extends State<EditGymSet> {
                     return AlertDialog(
                       title: const Text('Confirm Delete'),
                       content: Text(
-                          'Are you sure you want to delete ${widget.gymSet.name.value}?'),
+                        'Are you sure you want to delete ${widget.gymSet.name.value}?',
+                      ),
                       actions: <Widget>[
                         TextButton(
                           child: const Text('Cancel'),
@@ -183,7 +186,7 @@ class _EditGymSetState extends State<EditGymSet> {
                   },
                 );
               },
-            )
+            ),
         ],
       ),
       body: Padding(
@@ -192,9 +195,11 @@ class _EditGymSetState extends State<EditGymSet> {
           children: [
             Autocomplete<String>(
               optionsBuilder: (textEditingValue) {
-                return _nameOptions.where((option) => option
-                    .toLowerCase()
-                    .contains(textEditingValue.text.toLowerCase()));
+                return _nameOptions.where(
+                  (option) => option
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase()),
+                );
               },
               onSelected: (option) async {
                 final last = await (db.gymSets.select()
@@ -218,8 +223,9 @@ class _EditGymSetState extends State<EditGymSet> {
                   controller: textEditingController,
                   onTap: () {
                     textEditingController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: textEditingController.text.length);
+                      baseOffset: 0,
+                      extentOffset: textEditingController.text.length,
+                    );
                   },
                   focusNode: focusNode,
                   onFieldSubmitted: (String value) {
@@ -237,16 +243,18 @@ class _EditGymSetState extends State<EditGymSet> {
                 decoration: const InputDecoration(labelText: 'Distance'),
                 keyboardType: TextInputType.number,
                 onTap: () => _distanceController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _distanceController.text.length),
+                  baseOffset: 0,
+                  extentOffset: _distanceController.text.length,
+                ),
               ),
               TextField(
                 controller: _durationController,
                 decoration: const InputDecoration(labelText: 'Duration'),
                 keyboardType: TextInputType.number,
                 onTap: () => _durationController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _durationController.text.length),
+                  baseOffset: 0,
+                  extentOffset: _durationController.text.length,
+                ),
               ),
             ],
             if (!_cardio) ...[
@@ -255,17 +263,21 @@ class _EditGymSetState extends State<EditGymSet> {
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
                 onTap: () => _repsController.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _repsController.text.length),
+                  baseOffset: 0,
+                  extentOffset: _repsController.text.length,
+                ),
               ),
               TextField(
                 controller: _weightController,
                 decoration: InputDecoration(
-                    labelText: _name == 'Weight'
-                        ? 'Value ($_unit)'
-                        : 'Weight ($_unit)'),
+                  labelText:
+                      _name == 'Weight' ? 'Value ($_unit)' : 'Weight ($_unit)',
+                ),
                 keyboardType: TextInputType.number,
                 onTap: () => _weightController.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _weightController.text.length),
+                  baseOffset: 0,
+                  extentOffset: _weightController.text.length,
+                ),
               ),
             ],
             if (_name != 'Weight')
@@ -274,8 +286,9 @@ class _EditGymSetState extends State<EditGymSet> {
                 decoration: InputDecoration(labelText: 'Body weight ($_unit)'),
                 keyboardType: TextInputType.number,
                 onTap: () => _bodyWeightController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _bodyWeightController.text.length),
+                  baseOffset: 0,
+                  extentOffset: _bodyWeightController.text.length,
+                ),
               ),
             UnitSelector(
               value: _unit,

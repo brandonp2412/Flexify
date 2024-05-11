@@ -32,10 +32,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()
-        .then((results) => setState(() {
-              _exercises =
-                  results.map((e) => e.read(db.gymSets.name)!).toList();
-            }));
+        .then(
+          (results) => setState(() {
+            _exercises = results.map((e) => e.read(db.gymSets.name)!).toList();
+          }),
+        );
 
     _titleController.text = widget.plan.title.value ?? "";
 
@@ -88,7 +89,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
     var newPlan = widget.plan.copyWith(
       days: Value(days.join(',')),
       exercises: Value(
-          _exerciseSelections.where((element) => element.isNotEmpty).join(',')),
+        _exerciseSelections.where((element) => element.isNotEmpty).join(','),
+      ),
       title: Value(_titleController.text),
     );
 
@@ -105,7 +107,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Iterable<material.SwitchListTile> get tiles => _exercises
       .where(
-          (exercise) => exercise.toLowerCase().contains(_search.toLowerCase()))
+        (exercise) => exercise.toLowerCase().contains(_search.toLowerCase()),
+      )
       .toList()
       .asMap()
       .entries
@@ -181,7 +184,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
             if (_search == '') ...[
               TextField(
                 decoration: const material.InputDecoration(
-                    labelText: 'Title (optional)'),
+                  labelText: 'Title (optional)',
+                ),
                 controller: _titleController,
                 textCapitalization: TextCapitalization.sentences,
               ),
@@ -190,16 +194,17 @@ class _EditPlanPageState extends State<EditPlanPage> {
               ),
               Text('Days', style: Theme.of(context).textTheme.headlineSmall),
               ...List.generate(
-                  7,
-                  (index) => SwitchListTile(
-                        title: Text(weekdays[index]),
-                        value: _daySwitches[index],
-                        onChanged: (value) {
-                          setState(() {
-                            _daySwitches[index] = value;
-                          });
-                        },
-                      )),
+                7,
+                (index) => SwitchListTile(
+                  title: Text(weekdays[index]),
+                  value: _daySwitches[index],
+                  onChanged: (value) {
+                    setState(() {
+                      _daySwitches[index] = value;
+                    });
+                  },
+                ),
+              ),
             ],
             Text('Exercises', style: Theme.of(context).textTheme.headlineSmall),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),

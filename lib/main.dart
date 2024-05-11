@@ -45,7 +45,9 @@ class App extends StatelessWidget {
 
     final defaultTheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
     final defaultDark = ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple, brightness: Brightness.dark);
+      seedColor: Colors.deepPurple,
+      brightness: Brightness.dark,
+    );
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) => MaterialApp(

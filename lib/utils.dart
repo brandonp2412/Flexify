@@ -34,7 +34,7 @@ Future<String> getGymSetCsv() async {
       gymSet.duration,
       gymSet.distance,
       gymSet.cardio,
-      gymSet.hidden
+      gymSet.hidden,
     ]);
   }
   return const ListToCsvConverter(eol: "\n").convert(csvData);

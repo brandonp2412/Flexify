@@ -24,14 +24,17 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   Future<void> _save() async {
     Navigator.pop(context);
-    db.gymSets.insertOne(GymSetsCompanion.insert(
+    db.gymSets.insertOne(
+      GymSetsCompanion.insert(
         created: DateTime.now(),
         reps: 0,
         weight: 0,
         name: _nameController.text,
         unit: _unit,
         cardio: Value(_cardio),
-        hidden: const Value(true)));
+        hidden: const Value(true),
+      ),
+    );
   }
 
   @override

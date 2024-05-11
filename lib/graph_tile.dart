@@ -17,18 +17,19 @@ class GraphTile extends StatelessWidget {
   final Set<String> selected;
   final Function(String) onSelect;
 
-  const GraphTile(
-      {super.key,
-      required this.name,
-      required this.weight,
-      required this.created,
-      required this.unit,
-      required this.selected,
-      required this.onSelect,
-      required this.reps,
-      required this.cardio,
-      required this.duration,
-      required this.distance});
+  const GraphTile({
+    super.key,
+    required this.name,
+    required this.weight,
+    required this.created,
+    required this.unit,
+    required this.selected,
+    required this.onSelect,
+    required this.reps,
+    required this.cardio,
+    required this.duration,
+    required this.distance,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +48,12 @@ class GraphTile extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => cardio
-                    ? ViewCardioPage(name: name)
-                    : ViewStrengthPage(
-                        name: name,
-                      )),
+              builder: (context) => cardio
+                  ? ViewCardioPage(name: name)
+                  : ViewStrengthPage(
+                      name: name,
+                    ),
+            ),
           );
         else
           onSelect(name);

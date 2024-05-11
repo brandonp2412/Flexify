@@ -3,15 +3,16 @@ import 'package:flexify/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class AppSearch extends StatefulWidget {
-  const AppSearch(
-      {super.key,
-      required this.selected,
-      required this.onChange,
-      required this.onClear,
-      required this.onEdit,
-      required this.onDelete,
-      required this.onSelect,
-      this.onRefresh});
+  const AppSearch({
+    super.key,
+    required this.selected,
+    required this.onChange,
+    required this.onClear,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onSelect,
+    this.onRefresh,
+  });
 
   final Set<dynamic> selected;
   final Function(String) onChange;
@@ -45,7 +46,8 @@ class _AppSearchState extends State<AppSearch> {
         leading: widget.selected.isEmpty
             ? const Padding(
                 padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                child: Icon(Icons.search))
+                child: Icon(Icons.search),
+              )
             : IconButton(
                 onPressed: () {
                   widget.onClear();
@@ -64,7 +66,8 @@ class _AppSearchState extends State<AppSearch> {
                     return AlertDialog(
                       title: const Text('Confirm Delete'),
                       content: Text(
-                          'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.'),
+                        'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
+                      ),
                       actions: <Widget>[
                         TextButton(
                           child: const Text('Cancel'),
@@ -130,7 +133,8 @@ class _AppSearchState extends State<AppSearch> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EnterWeightPage()),
+                          builder: (context) => const EnterWeightPage(),
+                        ),
                       );
                     },
                   ),
@@ -145,12 +149,13 @@ class _AppSearchState extends State<AppSearch> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SettingsPage()),
+                          builder: (context) => const SettingsPage(),
+                        ),
                       );
                       if (widget.onRefresh != null) widget.onRefresh!();
                     },
                   ),
-                )
+                ),
             ],
           ),
         ],

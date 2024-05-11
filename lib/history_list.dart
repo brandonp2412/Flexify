@@ -76,12 +76,14 @@ class _HistoryListState extends State<HistoryList> {
             ListTile(
               title: Text(gymSet.name),
               subtitle: Text(
-                  DateFormat(settings.longDateFormat).format(gymSet.created)),
+                DateFormat(settings.longDateFormat).format(gymSet.created),
+              ),
               trailing: Text(
-                  gymSet.cardio
-                      ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
-                      : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
-                  style: const TextStyle(fontSize: 16)),
+                gymSet.cardio
+                    ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
+                    : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
+                style: const TextStyle(fontSize: 16),
+              ),
               selected: widget.selected.contains(gymSet.id),
               onLongPress: () {
                 widget.onSelect(gymSet.id);
@@ -91,11 +93,12 @@ class _HistoryListState extends State<HistoryList> {
                   widget.onSelect(gymSet.id);
                 else
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditGymSet(gymSet: gymSet.toCompanion(false)),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditGymSet(gymSet: gymSet.toCompanion(false)),
+                    ),
+                  );
               },
             ),
           ],

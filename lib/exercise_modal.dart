@@ -32,13 +32,15 @@ class ExerciseModal extends StatelessWidget {
 
             if (!context.mounted) return;
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => gymSet.cardio
-                        ? ViewCardioPage(name: exercise)
-                        : ViewStrengthPage(
-                            name: exercise,
-                          )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => gymSet.cardio
+                    ? ViewCardioPage(name: exercise)
+                    : ViewStrengthPage(
+                        name: exercise,
+                      ),
+              ),
+            );
           },
         ),
         if (hasData)
@@ -51,17 +53,20 @@ class ExerciseModal extends StatelessWidget {
                     ..where((r) => db.gymSets.name.equals(exercise))
                     ..orderBy([
                       (u) => drift.OrderingTerm(
-                          expression: u.created, mode: drift.OrderingMode.desc),
+                            expression: u.created,
+                            mode: drift.OrderingMode.desc,
+                          ),
                     ])
                     ..limit(1))
                   .getSingle();
               if (!context.mounted) return;
               await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        EditGymSet(gymSet: gymSet.toCompanion(false)),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditGymSet(gymSet: gymSet.toCompanion(false)),
+                ),
+              );
             },
           ),
         if (hasData)
@@ -74,7 +79,9 @@ class ExerciseModal extends StatelessWidget {
                     ..where((r) => db.gymSets.name.equals(exercise))
                     ..orderBy([
                       (u) => drift.OrderingTerm(
-                          expression: u.created, mode: drift.OrderingMode.desc),
+                            expression: u.created,
+                            mode: drift.OrderingMode.desc,
+                          ),
                     ])
                     ..limit(1))
                   .getSingle();

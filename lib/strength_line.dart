@@ -17,14 +17,15 @@ class StrengthLine extends StatefulWidget {
   final DateTime? startDate;
   final DateTime? endDate;
 
-  const StrengthLine(
-      {super.key,
-      required this.name,
-      required this.metric,
-      required this.targetUnit,
-      required this.groupBy,
-      this.startDate,
-      this.endDate});
+  const StrengthLine({
+    super.key,
+    required this.name,
+    required this.metric,
+    required this.targetUnit,
+    required this.groupBy,
+    this.startDate,
+    this.endDate,
+  });
 
   @override
   createState() => _StrengthLineState();
@@ -81,13 +82,20 @@ class _StrengthLineState extends State<StrengthLine> {
           ])
           ..where(db.gymSets.name.equals(widget.name))
           ..where(db.gymSets.hidden.equals(false))
-          ..where(db.gymSets.created
-              .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)))
-          ..where(db.gymSets.created.isSmallerThanValue(
-              widget.endDate ?? DateTime.now().add(const Duration(days: 1))))
+          ..where(
+            db.gymSets.created
+                .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)),
+          )
+          ..where(
+            db.gymSets.created.isSmallerThanValue(
+              widget.endDate ?? DateTime.now().add(const Duration(days: 1)),
+            ),
+          )
           ..orderBy([
             OrderingTerm(
-                expression: db.gymSets.created.date, mode: OrderingMode.desc)
+              expression: db.gymSets.created.date,
+              mode: OrderingMode.desc,
+            ),
           ])
           ..limit(11)
           ..groupBy(groupBy))
@@ -138,12 +146,14 @@ class _StrengthLineState extends State<StrengthLine> {
             value *= 2.20462262;
           }
 
-          rows.add(StrengthData(
-            value: value,
-            created: row.read(db.gymSets.created)!,
-            reps: row.read(db.gymSets.reps)!,
-            unit: row.read(db.gymSets.unit)!,
-          ));
+          rows.add(
+            StrengthData(
+              value: value,
+              created: row.read(db.gymSets.created)!,
+              reps: row.read(db.gymSets.reps)!,
+              unit: row.read(db.gymSets.unit)!,
+            ),
+          );
           spots.add(FlSpot(index.toDouble(), value));
         }
 
@@ -156,9 +166,11 @@ class _StrengthLineState extends State<StrengthLine> {
               LineChartData(
                 titlesData: FlTitlesData(
                   topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   leftTitles: const AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -196,11 +208,13 @@ class _StrengthLineState extends State<StrengthLine> {
 
                       if (!context.mounted) return;
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditGymSet(
-                                    gymSet: gymSet.toCompanion(false),
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditGymSet(
+                            gymSet: gymSet.toCompanion(false),
+                          ),
+                        ),
+                      );
                     }
                     setState(() {
                       _lastTap = DateTime.now();
@@ -227,7 +241,10 @@ class _StrengthLineState extends State<StrengthLine> {
   }
 
   Widget _bottomTitleWidgets(
-      double value, TitleMeta meta, List<StrengthData> rows) {
+    double value,
+    TitleMeta meta,
+    List<StrengthData> rows,
+  ) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
@@ -245,8 +262,10 @@ class _StrengthLineState extends State<StrengthLine> {
 
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
-      text = Text(DateFormat(_settings.shortDateFormat).format(createdDate),
-          style: style);
+      text = Text(
+        DateFormat(_settings.shortDateFormat).format(createdDate),
+        style: style,
+      );
     } else {
       text = const Text('', style: style);
     }
@@ -258,7 +277,9 @@ class _StrengthLineState extends State<StrengthLine> {
   }
 
   LineTouchTooltipData _tooltipData(
-      BuildContext context, List<StrengthData> rows) {
+    BuildContext context,
+    List<StrengthData> rows,
+  ) {
     return LineTouchTooltipData(
       tooltipBgColor: Theme.of(context).colorScheme.background,
       getTooltipItems: (touchedSpots) {
@@ -276,8 +297,10 @@ class _StrengthLineState extends State<StrengthLine> {
           text = "${formatter.format(row.value)}${widget.targetUnit} $created";
 
         return [
-          LineTooltipItem(text,
-              TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color))
+          LineTooltipItem(
+            text,
+            TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
+          ),
         ];
       },
     );
