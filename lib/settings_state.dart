@@ -26,35 +26,32 @@ class SettingsState extends ChangeNotifier {
   bool automaticBackup = false;
 
   Future<void> init() async {
-    final prefsInstance = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
 
-    prefs = prefsInstance;
-
-    alarmSound = prefsInstance.getString('alarmSound');
-    longDateFormat = prefsInstance.getString('longDateFormat') ?? "dd/MM/yy";
-    shortDateFormat = prefsInstance.getString('shortDateFormat') ?? "d/M/yy";
-    final theme = prefsInstance.getString('themeMode');
+    alarmSound = prefs?.getString('alarmSound');
+    longDateFormat = prefs?.getString('longDateFormat') ?? "dd/MM/yy";
+    shortDateFormat = prefs?.getString('shortDateFormat') ?? "d/M/yy";
+    final theme = prefs?.getString('themeMode');
     if (theme == "ThemeMode.system")
       themeMode = ThemeMode.system;
     else if (theme == "ThemeMode.light")
       themeMode = ThemeMode.light;
     else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
 
-    maxSets = prefsInstance.getInt("maxSets") ?? 5;
-    final ms = prefsInstance.getInt("timerDuration");
+    maxSets = prefs?.getInt("maxSets") ?? 5;
+    final ms = prefs?.getInt("timerDuration");
     if (ms != null) timerDuration = Duration(milliseconds: ms);
 
-    systemColors = prefsInstance.getBool("systemColors") ?? true;
-    showReorder = prefsInstance.getBool("showReorder") ?? true;
-    restTimers = prefsInstance.getBool("restTimers") ?? true;
-    showUnits = prefsInstance.getBool("showUnits") ?? true;
-    hideTimerTab = prefsInstance.getBool("hideTimerTab") ?? false;
-    hideHistoryTab = prefsInstance.getBool("hideHistoryTab") ?? false;
-    explainedPermissions =
-        prefsInstance.getBool('explainedPermissions') ?? false;
-    curveLines = prefsInstance.getBool('curveLines') ?? false;
-    automaticBackup = prefsInstance.getBool('automaticBackup') ?? false;
-    vibrate = prefsInstance.getBool('vibrate') ?? true;
+    systemColors = prefs?.getBool("systemColors") ?? true;
+    showReorder = prefs?.getBool("showReorder") ?? true;
+    restTimers = prefs?.getBool("restTimers") ?? true;
+    showUnits = prefs?.getBool("showUnits") ?? true;
+    hideTimerTab = prefs?.getBool("hideTimerTab") ?? false;
+    hideHistoryTab = prefs?.getBool("hideHistoryTab") ?? false;
+    explainedPermissions = prefs?.getBool('explainedPermissions') ?? false;
+    curveLines = prefs?.getBool('curveLines') ?? false;
+    automaticBackup = prefs?.getBool('automaticBackup') ?? false;
+    vibrate = prefs?.getBool('vibrate') ?? true;
   }
 
   void setAlarm(String? sound) async {
