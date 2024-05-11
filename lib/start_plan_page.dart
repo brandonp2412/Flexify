@@ -151,13 +151,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       );
 
-    final counts = await _countStream.first;
-    final countIndex = counts
+    final maxSets = await _maxSetsStream.first;
+    final maxIndex = maxSets
         .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
-    var count = 0;
-    if (countIndex != -1)
-      count = counts[countIndex].read(db.gymSets.name.count())!;
-    count++;
+    var max = 3;
+    if (maxIndex != -1) max = maxSets[maxIndex].read(db.gymSets.maxSets)!;
 
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -170,10 +168,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
       distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
       restMs: drift.Value(_restMs),
-      maxSets: drift.Value(counts[countIndex].read(db.gymSets.maxSets)!),
+      maxSets: drift.Value(max),
     );
 
     if (settings.restTimers) {
+      final counts = await _countStream.first;
+      final countIndex = counts
+          .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
+      var count = 0;
+      if (countIndex != -1)
+        count = counts[countIndex].read(db.gymSets.name.count())!;
+      count++;
+
       final finishedPlan = count == gymSet.maxSets.value &&
           _selectedIndex == _planExercises.length - 1;
       if (!finishedPlan)
