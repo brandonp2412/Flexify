@@ -66,7 +66,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
             ..orderBy(
               [
                 (u) => OrderingTerm(
-                    expression: u.created, mode: OrderingMode.desc),
+                      expression: u.created,
+                      mode: OrderingMode.desc,
+                    ),
               ],
             )
             ..where((tbl) => tbl.name.contains(_search.toLowerCase()))
@@ -161,46 +163,45 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditGymSet(
-                      gymSet: snapshot.data!
-                          .firstWhere(
-                            (element) => element.id == _selected.first,
-                          )
-                          .toCompanion(false),
+                      gymSet: snapshot.data!.firstWhere(
+                        (element) => element.id == _selected.first,
+                      ),
                     ),
                   ),
                 ),
               ),
-              Expanded(
-                child: snapshot.data?.isEmpty == true
-                    ? const ListTile(
-                        title: Text("No entries yet."),
-                        subtitle: Text(
-                          "Start inserting data for records to appear here.",
-                        ),
-                      )
-                    : HistoryList(
-                        gymSets: filtered,
-                        onSelect: (id) {
-                          if (_selected.contains(id))
-                            setState(() {
-                              _selected.remove(id);
-                            });
-                          else
-                            setState(() {
-                              _selected.add(id);
-                            });
-                        },
-                        selected: _selected,
-                        onNext: () {
-                          setState(() {
-                            _limit += 10;
-                          });
-                          _setStream();
-                        },
-                      ),
-              ),
-              if (!snapshot.hasData) const SizedBox(),
-              if (snapshot.hasError) ErrorWidget(snapshot.error.toString()),
+              if (snapshot.data?.isEmpty == true)
+                const ListTile(
+                  title: Text("No entries yet."),
+                  subtitle: Text(
+                    "Start inserting data for records to appear here.",
+                  ),
+                ),
+              if (snapshot.hasError)
+                Expanded(child: ErrorWidget(snapshot.error.toString())),
+              if (snapshot.hasData)
+                Expanded(
+                  child: HistoryList(
+                    gymSets: filtered,
+                    onSelect: (id) {
+                      if (_selected.contains(id))
+                        setState(() {
+                          _selected.remove(id);
+                        });
+                      else
+                        setState(() {
+                          _selected.add(id);
+                        });
+                    },
+                    selected: _selected,
+                    onNext: () {
+                      setState(() {
+                        _limit += 10;
+                      });
+                      _setStream();
+                    },
+                  ),
+                ),
             ],
           );
         },
@@ -209,22 +210,26 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
         onPressed: () async {
           final gymSets = await _stream.first;
           final bodyWeight = await getBodyWeight();
-          var gymSet = gymSets.firstOrNull?.toCompanion(false) ??
-              GymSetsCompanion.insert(
+          GymSet gymSet = gymSets.firstOrNull ??
+              GymSet(
+                id: 0,
+                bodyWeight: bodyWeight?.weight ?? 0,
+                restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
                 name: '',
                 reps: 0,
                 created: DateTime.now(),
                 unit: 'kg',
                 weight: 0,
-                cardio: const Value(false),
-                duration: const Value(0),
-                distance: const Value(0),
-                hidden: const Value(false),
+                cardio: false,
+                duration: 0,
+                distance: 0,
+                hidden: false,
+                maxSets: 3,
               );
           gymSet = gymSet.copyWith(
-            id: const Value.absent(),
-            bodyWeight: Value(bodyWeight?.weight ?? 0),
-            created: Value(DateTime.now()),
+            id: 0,
+            bodyWeight: bodyWeight?.weight ?? 0,
+            created: DateTime.now(),
           );
 
           if (!context.mounted) return;

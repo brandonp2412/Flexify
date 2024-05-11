@@ -8,8 +8,6 @@ class SettingsState extends ChangeNotifier {
   SharedPreferences? prefs;
 
   ThemeMode themeMode = ThemeMode.system;
-  Duration timerDuration = const Duration(minutes: 3, seconds: 30);
-  int maxSets = 5;
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
   String? alarmSound;
@@ -37,10 +35,6 @@ class SettingsState extends ChangeNotifier {
     else if (theme == "ThemeMode.light")
       themeMode = ThemeMode.light;
     else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
-
-    maxSets = prefs?.getInt("maxSets") ?? 5;
-    final ms = prefs?.getInt("timerDuration");
-    if (ms != null) timerDuration = Duration(milliseconds: ms);
 
     systemColors = prefs?.getBool("systemColors") ?? true;
     showReorder = prefs?.getBool("showReorder") ?? true;
@@ -71,12 +65,6 @@ class SettingsState extends ChangeNotifier {
     automaticBackup = backup;
     notifyListeners();
     prefs?.setBool('automaticBackup', backup);
-  }
-
-  void setMaxSets(int max) {
-    maxSets = max;
-    notifyListeners();
-    prefs?.setInt('maxSets', max);
   }
 
   void setVibrate(bool value) {
@@ -142,12 +130,6 @@ class SettingsState extends ChangeNotifier {
   void setReorder(bool show) {
     showReorder = show;
     prefs?.setBool('showReorder', show);
-    notifyListeners();
-  }
-
-  void setDuration(Duration duration) {
-    timerDuration = duration;
-    prefs?.setInt('timerDuration', duration.inMilliseconds);
     notifyListeners();
   }
 

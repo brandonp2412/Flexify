@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EditGymSet extends StatefulWidget {
-  final GymSetsCompanion gymSet;
+  final GymSet gymSet;
 
   const EditGymSet({super.key, required this.gymSet});
 
@@ -20,16 +20,17 @@ class EditGymSet extends StatefulWidget {
 }
 
 class _EditGymSetState extends State<EditGymSet> {
-  late TextEditingController _repsController;
-  late TextEditingController _weightController;
-  late TextEditingController _bodyWeightController;
-  late TextEditingController _distanceController;
-  late TextEditingController _durationController;
+  final _repsController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _bodyWeightController = TextEditingController();
+  final _distanceController = TextEditingController();
+  final _durationController = TextEditingController();
   late String _unit;
   late DateTime _created;
   late bool _cardio;
   late String _name;
   late SettingsState _settings;
+  late int _restMs;
 
   TextEditingController? _nameController;
   List<String> _nameOptions = [];
@@ -37,21 +38,8 @@ class _EditGymSetState extends State<EditGymSet> {
   @override
   void initState() {
     super.initState();
-    _repsController =
-        TextEditingController(text: widget.gymSet.reps.value.toString());
-    _name = widget.gymSet.name.value;
-    _weightController =
-        TextEditingController(text: widget.gymSet.weight.value.toString());
-    _bodyWeightController =
-        TextEditingController(text: widget.gymSet.bodyWeight.value.toString());
-    _durationController =
-        TextEditingController(text: widget.gymSet.duration.value.toString());
-    _distanceController =
-        TextEditingController(text: widget.gymSet.distance.value.toString());
-    _unit = widget.gymSet.unit.value;
-    _created = widget.gymSet.created.value;
-    _cardio = widget.gymSet.cardio.value;
     _settings = context.read<SettingsState>();
+    _updateFields(widget.gymSet);
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()
         .then((results) {
@@ -72,25 +60,26 @@ class _EditGymSetState extends State<EditGymSet> {
   Future<void> _save() async {
     Navigator.pop(context);
     final gymSet = widget.gymSet.copyWith(
-      name: Value(_name),
-      unit: Value(_unit),
-      created: Value(_created),
-      reps: Value(double.parse(_repsController.text)),
-      weight: Value(double.parse(_weightController.text)),
-      bodyWeight: Value(double.parse(_bodyWeightController.text)),
-      distance: Value(double.parse(_distanceController.text)),
-      duration: Value(double.parse(_durationController.text)),
-      cardio: Value(_cardio),
+      name: _name,
+      unit: _unit,
+      created: _created,
+      reps: double.parse(_repsController.text),
+      weight: double.parse(_weightController.text),
+      bodyWeight: double.parse(_bodyWeightController.text),
+      distance: double.parse(_distanceController.text),
+      duration: double.parse(_durationController.text),
+      cardio: _cardio,
+      restMs: _restMs,
     );
 
-    if (widget.gymSet.id.present)
+    if (widget.gymSet.id > 0)
       db.update(db.gymSets).replace(gymSet);
     else {
-      db.into(db.gymSets).insert(gymSet);
+      db.into(db.gymSets).insert(gymSet.copyWith(id: null));
       final settings = context.read<SettingsState>();
       if (!settings.restTimers) return;
       final timer = context.read<TimerState>();
-      timer.startTimer(_name, settings);
+      timer.startTimer(_name, Duration(milliseconds: _restMs));
     }
   }
 
@@ -139,6 +128,7 @@ class _EditGymSetState extends State<EditGymSet> {
       _unit = gymSet.unit;
       _created = DateTime.now();
       _cardio = gymSet.cardio;
+      _restMs = gymSet.restMs;
     });
   }
 
@@ -149,12 +139,10 @@ class _EditGymSetState extends State<EditGymSet> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.gymSet.id.present
-              ? 'Edit ${widget.gymSet.name.value}'
-              : 'Add gym set',
+          widget.gymSet.id > 0 ? 'Edit ${widget.gymSet.name}' : 'Add gym set',
         ),
         actions: [
-          if (widget.gymSet.id.present)
+          if (widget.gymSet.id > 0)
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () async {
@@ -164,7 +152,7 @@ class _EditGymSetState extends State<EditGymSet> {
                     return AlertDialog(
                       title: const Text('Confirm Delete'),
                       content: Text(
-                        'Are you sure you want to delete ${widget.gymSet.name.value}?',
+                        'Are you sure you want to delete ${widget.gymSet.name}?',
                       ),
                       actions: <Widget>[
                         TextButton(

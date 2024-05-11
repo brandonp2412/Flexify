@@ -34,12 +34,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   late List<String> _planExercises;
   late Stream<List<drift.TypedResult>> _countStream;
+  late Stream<List<drift.TypedResult>> _maxSetsStream;
 
   PlanState? _planState;
   bool _first = true;
   String _unit = 'kg';
   int _selectedIndex = 0;
   bool _cardio = false;
+  int _restMs = const Duration(minutes: 3, seconds: 30).inMilliseconds;
 
   @override
   void initState() {
@@ -64,6 +66,20 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
           ..where(db.gymSets.name.isIn(_planExercises))
           ..where(db.gymSets.hidden.equals(false))
+          ..groupBy([db.gymSets.name]))
+        .watch();
+    _maxSetsStream = (db.selectOnly(db.gymSets)
+          ..addColumns([
+            db.gymSets.maxSets,
+            db.gymSets.name,
+          ])
+          ..where(db.gymSets.name.isIn(_planExercises))
+          ..orderBy([
+            drift.OrderingTerm(
+              expression: db.gymSets.created.date,
+              mode: drift.OrderingMode.desc,
+            ),
+          ])
           ..groupBy([db.gymSets.name]))
         .watch();
   }
@@ -112,6 +128,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _distanceController.text = last.distance.toString();
       _durationController.text = last.duration.toString();
       _cardio = last.cardio;
+      _restMs = last.restMs;
 
       if (_cardio && (_unit == 'kg' || _unit == 'lb'))
         _unit = 'km';
@@ -126,7 +143,23 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final exercise = _planExercises[_selectedIndex];
     final weightSet = await getBodyWeight();
 
-    final gymSet = GymSetsCompanion.insert(
+    if (!settings.explainedPermissions && settings.restTimers && mounted)
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PermissionsPage(),
+        ),
+      );
+
+    final counts = await _countStream.first;
+    final countIndex = counts
+        .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
+    var count = 0;
+    if (countIndex != -1)
+      count = counts[countIndex].read(db.gymSets.name.count())!;
+    count++;
+
+    var gymSet = GymSetsCompanion.insert(
       name: exercise,
       reps: double.parse(_repsController.text),
       weight: double.parse(_weightController.text),
@@ -136,30 +169,22 @@ class _StartPlanPageState extends State<StartPlanPage> {
       duration: drift.Value(double.parse(_durationController.text)),
       distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
+      restMs: drift.Value(_restMs),
+      maxSets: drift.Value(counts[countIndex].read(db.gymSets.maxSets)!),
     );
 
-    if (!settings.explainedPermissions && settings.restTimers && mounted)
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const PermissionsPage(),
-        ),
-      );
-
     if (settings.restTimers) {
-      final counts = await _countStream.first;
-      final countIndex = counts
-          .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
-      var count = 0;
-      if (countIndex != -1)
-        count = counts[countIndex].read(db.gymSets.name.count())!;
-      count++;
-      if (count != settings.maxSets ||
-          _selectedIndex < _planExercises.length - 1)
-        timerState.startTimer("$exercise ($count)", settings);
-      if (count == settings.maxSets &&
-          _selectedIndex < _planExercises.length - 1)
-        _select(_selectedIndex + 1);
+      final finishedPlan = count == gymSet.maxSets.value &&
+          _selectedIndex == _planExercises.length - 1;
+      if (!finishedPlan)
+        timerState.startTimer(
+          "$exercise ($count)",
+          Duration(milliseconds: _restMs),
+        );
+
+      final finishedExercise = count == gymSet.maxSets.value &&
+          _selectedIndex < _planExercises.length - 1;
+      if (finishedExercise) _select(_selectedIndex + 1);
     }
 
     db.into(db.gymSets).insert(gymSet);
@@ -304,22 +329,34 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             Expanded(
               child: StreamBuilder(
-                stream: _countStream,
-                builder: (context, snapshot) {
-                  Map<String, int> counts = {};
-                  for (final row in snapshot.data ?? []) {
-                    counts[row.read(db.gymSets.name)!] =
-                        row.read(db.gymSets.name.count())!;
+                stream: _maxSetsStream,
+                builder: (context, maxSetsSnapshot) {
+                  Map<String, int> maxSets = {};
+                  for (final row in maxSetsSnapshot.data ?? []) {
+                    maxSets[row.read(db.gymSets.name)!] =
+                        row.read(db.gymSets.maxSets)!;
                   }
 
-                  return ExerciseList(
-                    exercises: _planExercises,
-                    refresh: widget.refresh,
-                    selected: _selectedIndex,
-                    onSelect: _select,
-                    counts: counts,
-                    firstRender: _first,
-                    plan: widget.plan,
+                  return StreamBuilder(
+                    stream: _countStream,
+                    builder: (context, snapshot) {
+                      Map<String, int> counts = {};
+                      for (final row in snapshot.data ?? []) {
+                        counts[row.read(db.gymSets.name)!] =
+                            row.read(db.gymSets.name.count())!;
+                      }
+
+                      return ExerciseList(
+                        exercises: _planExercises,
+                        refresh: widget.refresh,
+                        selected: _selectedIndex,
+                        onSelect: _select,
+                        counts: counts,
+                        firstRender: _first,
+                        plan: widget.plan,
+                        maxSets: maxSets,
+                      );
+                    },
                   );
                 },
               ),

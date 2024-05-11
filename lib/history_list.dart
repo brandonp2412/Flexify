@@ -95,8 +95,7 @@ class _HistoryListState extends State<HistoryList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          EditGymSet(gymSet: gymSet.toCompanion(false)),
+                      builder: (context) => EditGymSet(gymSet: gymSet),
                     ),
                   );
               },

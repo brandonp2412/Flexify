@@ -23,9 +23,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late TextEditingController minutesController;
-  late TextEditingController secondsController;
-  late TextEditingController _maxSetsController;
   final searchController = TextEditingController();
 
   final List<String> shortFormats = [
@@ -49,15 +46,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    final settings = context.read<SettingsState>();
-    minutesController = TextEditingController(
-      text: settings.timerDuration.inMinutes.toString(),
-    );
-    secondsController = TextEditingController(
-      text: (settings.timerDuration.inSeconds % 60).toString(),
-    );
-    _maxSetsController =
-        TextEditingController(text: settings.maxSets.toString());
   }
 
   @override
@@ -89,81 +77,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ],
             onChanged: (value) => settings.setTheme(value!),
-          ),
-        ),
-      ),
-      WidgetSettings(
-        key: 'rest minutes seconds',
-        widget: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: material.Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration:
-                          const InputDecoration(labelText: 'Rest minutes'),
-                      controller: minutesController,
-                      keyboardType: TextInputType.number,
-                      onTap: () async {
-                        minutesController.selection = TextSelection(
-                          baseOffset: 0,
-                          extentOffset: minutesController.text.length,
-                        );
-                      },
-                      onChanged: (value) => settings.setDuration(
-                        Duration(
-                          minutes: int.parse(value),
-                          seconds: settings.timerDuration.inSeconds % 60,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration:
-                          const InputDecoration(labelText: 'Rest seconds'),
-                      controller: secondsController,
-                      keyboardType: TextInputType.number,
-                      onTap: () async {
-                        secondsController.selection = TextSelection(
-                          baseOffset: 0,
-                          extentOffset: secondsController.text.length,
-                        );
-                      },
-                      onChanged: (value) => settings.setDuration(
-                        Duration(
-                          seconds: int.parse(value),
-                          minutes: settings.timerDuration.inMinutes.floor(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      WidgetSettings(
-        key: 'max sets',
-        widget: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: TextField(
-            decoration: const InputDecoration(labelText: 'Max sets'),
-            controller: _maxSetsController,
-            keyboardType: TextInputType.number,
-            onTap: () async {
-              _maxSetsController.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: _maxSetsController.text.length,
-              );
-            },
-            onSubmitted: (value) => settings.setMaxSets(int.parse(value)),
           ),
         ),
       ),

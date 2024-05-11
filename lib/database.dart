@@ -26,6 +26,10 @@ class GymSets extends Table {
   RealColumn get duration => real().withDefault(const Constant(0.0))();
   RealColumn get distance => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();
+  IntColumn get restMs => integer().withDefault(
+        Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds),
+      )();
+  IntColumn get maxSets => integer().withDefault(const Constant(3))();
 }
 
 class Plans extends Table {
@@ -41,16 +45,18 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 10;
 
-  final _defaultSets = defaultExercises.map((exercise) => GymSetsCompanion(
-        created: Value(DateTime.now()),
-        name: Value(exercise),
-        reps: const Value(0),
-        weight: const Value(0),
-        hidden: const Value(true),
-        unit: const Value('kg'),
-      ));
+  final _defaultSets = defaultExercises.map(
+    (exercise) => GymSetsCompanion(
+      created: Value(DateTime.now()),
+      name: Value(exercise),
+      reps: const Value(0),
+      weight: const Value(0),
+      hidden: const Value(true),
+      unit: const Value('kg'),
+    ),
+  );
 
   @override
   MigrationStrategy get migration {
@@ -58,43 +64,72 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
         await db.batch((batch) {
-          batch.insertAll(db.gymSets, _defaultSets);
-          batch.insertAll(db.plans, defaultPlans);
+          batch.insertAll(gymSets, _defaultSets);
+          batch.insertAll(plans, defaultPlans);
         });
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {
-          await m.createIndex(Index('GymSets',
-              "CREATE INDEX gym_sets_name_created ON gym_sets(name, created);"));
+          await m.createIndex(
+            Index(
+              'GymSets',
+              "CREATE INDEX gym_sets_name_created ON gym_sets(name, created);",
+            ),
+          );
         }
+
         if (from < 3) {
           await m.addColumn(plans, plans.sequence);
         }
         if (from < 4) {
           await m.addColumn(plans, plans.title);
         }
+
         if (from < 5) {
           await m.addColumn(gymSets, gymSets.hidden);
-          await db.batch((batch) => batch.insertAll(db.gymSets, _defaultSets));
+          await db.batch((batch) => batch.insertAll(gymSets, _defaultSets));
         }
+
         if (from < 6) {
           await m.addColumn(gymSets, gymSets.bodyWeight);
           final bodyWeight = await getBodyWeight();
           if (bodyWeight?.weight == null) return;
 
-          await (db.gymSets.update())
+          await (gymSets.update())
               .write(GymSetsCompanion(bodyWeight: Value(bodyWeight!.weight)));
         }
+
+        SharedPreferences? prefs;
+
         if (from < 7) {
-          final prefs = await SharedPreferences.getInstance();
+          prefs = await SharedPreferences.getInstance();
           final dateFormat = prefs.getString('dateFormat');
           if (dateFormat == null) return;
           prefs.setString('longDateFormat', dateFormat);
         }
+
         if (from < 8) {
-          await m.addColumn(db.gymSets, gymSets.duration);
-          await m.addColumn(db.gymSets, gymSets.distance);
-          await m.addColumn(db.gymSets, gymSets.cardio);
+          await m.addColumn(gymSets, gymSets.duration);
+          await m.addColumn(gymSets, gymSets.distance);
+          await m.addColumn(gymSets, gymSets.cardio);
+        }
+
+        if (from < 9) {
+          await m.addColumn(gymSets, gymSets.restMs);
+          final timerDuration = prefs?.getInt('timerDuration');
+          if (timerDuration != null)
+            await (gymSets
+                .update()
+                .write(GymSetsCompanion(restMs: Value(timerDuration))));
+        }
+
+        if (from < 10) {
+          await m.addColumn(gymSets, gymSets.maxSets);
+          final maxSets = prefs?.getInt('maxSets');
+          if (maxSets != null)
+            await (gymSets
+                .update()
+                .write(GymSetsCompanion(maxSets: Value(maxSets))));
         }
       },
     );
@@ -112,7 +147,9 @@ LazyDatabase _openConnection() {
 
     final cachebase = (await getTemporaryDirectory()).path;
     sqlite3.tempDirectory = cachebase;
-    return NativeDatabase.createInBackground(file,
-        logStatements: kDebugMode ? true : false);
+    return NativeDatabase.createInBackground(
+      file,
+      logStatements: kDebugMode ? true : false,
+    );
   });
 }

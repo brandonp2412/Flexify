@@ -11,6 +11,7 @@ class ExerciseList extends StatelessWidget {
   final int selected;
   final Future<void> Function(int) onSelect;
   final Map<String, int> counts;
+  final Map<String, int> maxSets;
   final bool firstRender;
   final Plan plan;
 
@@ -23,6 +24,7 @@ class ExerciseList extends StatelessWidget {
     required this.counts,
     required this.firstRender,
     required this.plan,
+    required this.maxSets,
   });
 
   @override
@@ -34,6 +36,7 @@ class ExerciseList extends StatelessWidget {
       itemBuilder: (context, index) {
         final exercise = exercises[index];
         final count = counts[exercise] ?? 0;
+        final max = maxSets[exercise] ?? 3;
 
         return GestureDetector(
           key: Key(exercise),
@@ -71,14 +74,16 @@ class ExerciseList extends StatelessWidget {
                         onSelect(index);
                       },
                     ),
-                    Text("$exercise ($count)"),
+                    Text(exercise),
+                    const Spacer(),
+                    Text("($count / $max)"),
                   ],
                 ),
               ),
               TweenAnimationBuilder(
                 tween: Tween<double>(
-                  begin: (count / settings.maxSets) - 1,
-                  end: count / settings.maxSets,
+                  begin: (count / max) - 1,
+                  end: count / max,
                 ),
                 duration: Duration(milliseconds: firstRender ? 0 : 150),
                 builder: (context, value, child) => LinearProgressIndicator(

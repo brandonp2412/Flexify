@@ -18,15 +18,23 @@ class EditGraphPage extends StatefulWidget {
 
 class _EditGraphPageState extends State<EditGraphPage> {
   final _nameNode = FocusNode();
+  final _minutesNode = FocusNode();
+  final _secondsNode = FocusNode();
+  final _maxSetsNode = FocusNode();
+
   late TextEditingController _nameController;
+  final TextEditingController _minutesController = TextEditingController();
+  final TextEditingController _secondsController = TextEditingController();
+  final TextEditingController _maxSetsController = TextEditingController();
+
   bool _cardio = false;
   String? _unit;
-  final Duration _restDuration = const Duration(minutes: 3, seconds: 30);
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.name);
+
     (db.gymSets.select()
           ..where((tbl) => tbl.name.equals(widget.name))
           ..limit(1))
@@ -35,6 +43,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
           (value) => setState(() {
             _cardio = value.cardio;
             _unit = value.unit;
+            final duration = Duration(milliseconds: value.restMs);
+            _minutesController.text = duration.inMinutes.toString();
+            _secondsController.text = (duration.inSeconds % 60).toString();
+            _maxSetsController.text = value.maxSets.toString();
             if (_cardio && (_unit == 'kg' || _unit == 'lb'))
               _unit = 'km';
             else if (!_cardio && (_unit == 'km' || _unit == 'mi')) _unit = 'kg';
@@ -45,7 +57,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
   @override
   dispose() {
     _nameNode.dispose();
+    _minutesNode.dispose();
+    _maxSetsNode.dispose();
     _nameController.dispose();
+    _minutesController.dispose();
+    _maxSetsController.dispose();
     super.dispose();
   }
 
@@ -66,14 +82,22 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   Future<void> _doUpdate() async {
+    final duration = Duration(
+      minutes: int.parse(_minutesController.text),
+      seconds: int.parse(_secondsController.text),
+    );
+
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
       GymSetsCompanion(
         name: Value(_nameController.text),
         cardio: Value(_cardio),
         unit: _unit != null ? Value(_unit!) : const Value.absent(),
+        restMs: Value(duration.inMilliseconds),
+        maxSets: Value(int.parse(_maxSetsController.text)),
       ),
     );
+
     await db.customUpdate(
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
@@ -82,6 +106,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ],
       updates: {db.plans},
     );
+
     if (!mounted) return;
     context.read<PlanState>().updatePlans(null);
   }
@@ -156,7 +181,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
     if (!mounted) return;
     Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   @override
@@ -186,6 +210,49 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   });
                 },
               ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _minutesController,
+                    focusNode: _minutesNode,
+                    decoration:
+                        const InputDecoration(labelText: "Rest minutes"),
+                    keyboardType: material.TextInputType.number,
+                    onTap: () {
+                      _minutesController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _minutesController.text.length,
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 8.0,
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _secondsController,
+                    focusNode: _secondsNode,
+                    decoration:
+                        const InputDecoration(labelText: "Rest seconds"),
+                    keyboardType: material.TextInputType.number,
+                    onTap: () {
+                      _secondsController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _secondsController.text.length,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            TextField(
+              controller: _maxSetsController,
+              focusNode: _maxSetsNode,
+              decoration: const InputDecoration(labelText: "Max sets"),
+              keyboardType: TextInputType.number,
+            ),
             ListTile(
               title: const Text('Cardio'),
               onTap: () {

@@ -63,8 +63,7 @@ class ExerciseModal extends StatelessWidget {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      EditGymSet(gymSet: gymSet.toCompanion(false)),
+                  builder: (context) => EditGymSet(gymSet: gymSet),
                 ),
               );
             },

@@ -72,37 +72,44 @@ List<PlansCompanion> plans = [
   PlansCompanion(
     days: Value([weekdays[1], weekdays[5]].join(",")),
     exercises: Value(
-        ["Triceps dip", " Squat", "Standing calf raise", "Pull-up"].join(",")),
+      ["Triceps dip", " Squat", "Standing calf raise", "Pull-up"].join(","),
+    ),
     title: const Value("Tuesday, Saturday"),
   ),
   PlansCompanion(
     days: Value([weekdays[2], weekdays[6]].join(",")),
-    exercises: Value([
-      "Barbell bench press",
-      "Barbell bent-over row",
-      "Dumbbell lateral raise",
-      "Barbell biceps curl"
-    ].join(",")),
+    exercises: Value(
+      [
+        "Barbell bench press",
+        "Barbell bent-over row",
+        "Dumbbell lateral raise",
+        "Barbell biceps curl",
+      ].join(","),
+    ),
     title: const Value("Wednesday, Sunday"),
   ),
   PlansCompanion(
     days: Value(weekdays[0]),
-    exercises: Value([
-      "Barbell shoulder press",
-      "Crunch",
-      "Chin-up",
-      "Romanian deadlift"
-    ].join(",")),
+    exercises: Value(
+      [
+        "Barbell shoulder press",
+        "Crunch",
+        "Chin-up",
+        "Romanian deadlift",
+      ].join(","),
+    ),
     title: const Value("Monday"),
   ),
   PlansCompanion(
     days: Value(weekdays[3]),
-    exercises: Value([
-      "Barbell shoulder press",
-      "Neck curl",
-      "Chin-up",
-      "Romanian deadlift"
-    ].join(",")),
+    exercises: Value(
+      [
+        "Barbell shoulder press",
+        "Neck curl",
+        "Chin-up",
+        "Romanian deadlift",
+      ].join(","),
+    ),
     title: const Value("Thursday"),
   ),
 ];
@@ -177,8 +184,12 @@ Future<void> generateScreenshot({
   await binding.takeScreenshot(screenshotName);
 }
 
-GymSetsCompanion generateGymSetCompanion(String exercise, double weight,
-        {double reps = 12, DateTime? date}) =>
+GymSetsCompanion generateGymSetCompanion(
+  String exercise,
+  double weight, {
+  double reps = 12,
+  DateTime? date,
+}) =>
     GymSetsCompanion.insert(
       name: exercise,
       reps: reps,
@@ -212,8 +223,12 @@ void main() {
 
     for (final element in graphData) {
       await app.db.into(app.db.gymSets).insert(
-            generateGymSetCompanion("Dumbbell shoulder press", element.weight,
-                reps: element.reps, date: element.dateTime),
+            generateGymSetCompanion(
+              "Dumbbell shoulder press",
+              element.weight,
+              reps: element.reps,
+              date: element.dateTime,
+            ),
           );
     }
 

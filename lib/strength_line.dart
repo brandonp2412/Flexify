@@ -211,7 +211,7 @@ class _StrengthLineState extends State<StrengthLine> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditGymSet(
-                            gymSet: gymSet.toCompanion(false),
+                            gymSet: gymSet,
                           ),
                         ),
                       );

@@ -52,8 +52,9 @@ class MainActivity : FlutterActivity() {
                 "timer" -> {
                     val title = call.argument<String>("title")
                     val timestamp = call.argument<Long>("timestamp")
-                    val duration = sharedPrefs.getLong("flutter.timerDuration", 0)
-                    timer(duration.toInt(), title!!, timestamp!!)
+                    val threeMinutesThirtySeconds = 210000
+                    val restMs = call.argument<Int>("restMs") ?: threeMinutesThirtySeconds
+                    timer(restMs, title!!, timestamp!!)
                 }
 
                 "pick" -> {
@@ -126,8 +127,8 @@ class MainActivity : FlutterActivity() {
         applicationContext.unregisterReceiver(tickReceiver)
     }
 
-    private fun timer(duration: Int, description: String, timeStamp: Long) {
-        Log.d("MainActivity", "Queue $description for $duration delay")
+    private fun timer(durationMs: Int, description: String, timeStamp: Long) {
+        Log.d("MainActivity", "Queue $description for $durationMs delay")
         val intent = Intent(context, TimerService::class.java).also { intent ->
             bindService(
                 intent,
@@ -135,7 +136,7 @@ class MainActivity : FlutterActivity() {
                 Context.BIND_AUTO_CREATE
             )
         }
-        intent.putExtra("milliseconds", duration)
+        intent.putExtra("milliseconds", durationMs)
         intent.putExtra("description", description)
         intent.putExtra("timeStamp", timeStamp)
         val alarmSound = sharedPrefs.getString("flutter.alarmSound", null)

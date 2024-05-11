@@ -371,6 +371,22 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("cardio" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _restMsMeta = const VerificationMeta('restMs');
+  @override
+  late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
+      'rest_ms', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue:
+          Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds));
+  static const VerificationMeta _maxSetsMeta =
+      const VerificationMeta('maxSets');
+  @override
+  late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
+      'max_sets', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(3));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -383,7 +399,9 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
         bodyWeight,
         duration,
         distance,
-        cardio
+        cardio,
+        restMs,
+        maxSets
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -450,6 +468,14 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       context.handle(_cardioMeta,
           cardio.isAcceptableOrUnknown(data['cardio']!, _cardioMeta));
     }
+    if (data.containsKey('rest_ms')) {
+      context.handle(_restMsMeta,
+          restMs.isAcceptableOrUnknown(data['rest_ms']!, _restMsMeta));
+    }
+    if (data.containsKey('max_sets')) {
+      context.handle(_maxSetsMeta,
+          maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
+    }
     return context;
   }
 
@@ -481,6 +507,10 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.double, data['${effectivePrefix}distance'])!,
       cardio: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
+      restMs: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}rest_ms'])!,
+      maxSets: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
     );
   }
 
@@ -502,6 +532,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final double duration;
   final double distance;
   final bool cardio;
+  final int restMs;
+  final int maxSets;
   const GymSet(
       {required this.id,
       required this.name,
@@ -513,7 +545,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.bodyWeight,
       required this.duration,
       required this.distance,
-      required this.cardio});
+      required this.cardio,
+      required this.restMs,
+      required this.maxSets});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -528,6 +562,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     map['duration'] = Variable<double>(duration);
     map['distance'] = Variable<double>(distance);
     map['cardio'] = Variable<bool>(cardio);
+    map['rest_ms'] = Variable<int>(restMs);
+    map['max_sets'] = Variable<int>(maxSets);
     return map;
   }
 
@@ -544,6 +580,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       duration: Value(duration),
       distance: Value(distance),
       cardio: Value(cardio),
+      restMs: Value(restMs),
+      maxSets: Value(maxSets),
     );
   }
 
@@ -562,6 +600,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       duration: serializer.fromJson<double>(json['duration']),
       distance: serializer.fromJson<double>(json['distance']),
       cardio: serializer.fromJson<bool>(json['cardio']),
+      restMs: serializer.fromJson<int>(json['restMs']),
+      maxSets: serializer.fromJson<int>(json['maxSets']),
     );
   }
   @override
@@ -579,6 +619,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'duration': serializer.toJson<double>(duration),
       'distance': serializer.toJson<double>(distance),
       'cardio': serializer.toJson<bool>(cardio),
+      'restMs': serializer.toJson<int>(restMs),
+      'maxSets': serializer.toJson<int>(maxSets),
     };
   }
 
@@ -593,7 +635,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? bodyWeight,
           double? duration,
           double? distance,
-          bool? cardio}) =>
+          bool? cardio,
+          int? restMs,
+          int? maxSets}) =>
       GymSet(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -606,6 +650,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         duration: duration ?? this.duration,
         distance: distance ?? this.distance,
         cardio: cardio ?? this.cardio,
+        restMs: restMs ?? this.restMs,
+        maxSets: maxSets ?? this.maxSets,
       );
   @override
   String toString() {
@@ -620,14 +666,16 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('bodyWeight: $bodyWeight, ')
           ..write('duration: $duration, ')
           ..write('distance: $distance, ')
-          ..write('cardio: $cardio')
+          ..write('cardio: $cardio, ')
+          ..write('restMs: $restMs, ')
+          ..write('maxSets: $maxSets')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, name, reps, weight, unit, created, hidden,
-      bodyWeight, duration, distance, cardio);
+      bodyWeight, duration, distance, cardio, restMs, maxSets);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -642,7 +690,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.bodyWeight == this.bodyWeight &&
           other.duration == this.duration &&
           other.distance == this.distance &&
-          other.cardio == this.cardio);
+          other.cardio == this.cardio &&
+          other.restMs == this.restMs &&
+          other.maxSets == this.maxSets);
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
@@ -657,6 +707,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<double> duration;
   final Value<double> distance;
   final Value<bool> cardio;
+  final Value<int> restMs;
+  final Value<int> maxSets;
   const GymSetsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -669,6 +721,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.duration = const Value.absent(),
     this.distance = const Value.absent(),
     this.cardio = const Value.absent(),
+    this.restMs = const Value.absent(),
+    this.maxSets = const Value.absent(),
   });
   GymSetsCompanion.insert({
     this.id = const Value.absent(),
@@ -682,6 +736,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.duration = const Value.absent(),
     this.distance = const Value.absent(),
     this.cardio = const Value.absent(),
+    this.restMs = const Value.absent(),
+    this.maxSets = const Value.absent(),
   })  : name = Value(name),
         reps = Value(reps),
         weight = Value(weight),
@@ -699,6 +755,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<double>? duration,
     Expression<double>? distance,
     Expression<bool>? cardio,
+    Expression<int>? restMs,
+    Expression<int>? maxSets,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -712,6 +770,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (duration != null) 'duration': duration,
       if (distance != null) 'distance': distance,
       if (cardio != null) 'cardio': cardio,
+      if (restMs != null) 'rest_ms': restMs,
+      if (maxSets != null) 'max_sets': maxSets,
     });
   }
 
@@ -726,7 +786,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? bodyWeight,
       Value<double>? duration,
       Value<double>? distance,
-      Value<bool>? cardio}) {
+      Value<bool>? cardio,
+      Value<int>? restMs,
+      Value<int>? maxSets}) {
     return GymSetsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -739,6 +801,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       duration: duration ?? this.duration,
       distance: distance ?? this.distance,
       cardio: cardio ?? this.cardio,
+      restMs: restMs ?? this.restMs,
+      maxSets: maxSets ?? this.maxSets,
     );
   }
 
@@ -778,6 +842,12 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (cardio.present) {
       map['cardio'] = Variable<bool>(cardio.value);
     }
+    if (restMs.present) {
+      map['rest_ms'] = Variable<int>(restMs.value);
+    }
+    if (maxSets.present) {
+      map['max_sets'] = Variable<int>(maxSets.value);
+    }
     return map;
   }
 
@@ -794,7 +864,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('bodyWeight: $bodyWeight, ')
           ..write('duration: $duration, ')
           ..write('distance: $distance, ')
-          ..write('cardio: $cardio')
+          ..write('cardio: $cardio, ')
+          ..write('restMs: $restMs, ')
+          ..write('maxSets: $maxSets')
           ..write(')'))
         .toString();
   }

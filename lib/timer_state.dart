@@ -1,6 +1,5 @@
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 
 class TimerState extends ChangeNotifier {
@@ -37,9 +36,9 @@ class TimerState extends ChangeNotifier {
     await android.invokeMethod('stop');
   }
 
-  Future<void> startTimer(String title, SettingsState settings) async {
+  Future<void> startTimer(String title, Duration rest) async {
     final timer = NativeTimerWrapper(
-      settings.timerDuration,
+      rest,
       Duration.zero,
       DateTime.now(),
       NativeTimerState.running,
@@ -48,6 +47,7 @@ class TimerState extends ChangeNotifier {
     final args = {
       'title': title,
       'timestamp': timer.getTimeStamp(),
+      'restMs': rest.inMilliseconds,
     };
     await android.invokeMethod('timer', args);
   }

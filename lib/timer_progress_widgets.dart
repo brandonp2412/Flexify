@@ -1,4 +1,3 @@
-import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -86,8 +85,6 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
