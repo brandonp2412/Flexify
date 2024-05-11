@@ -75,8 +75,6 @@ class ExerciseList extends StatelessWidget {
                       },
                     ),
                     Text(exercise),
-                    const Spacer(),
-                    Text("($count / $max)"),
                   ],
                 ),
               ),
