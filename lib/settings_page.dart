@@ -23,7 +23,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final searchController = TextEditingController();
+  final _searchController = TextEditingController();
 
   final List<String> shortFormats = [
     'd/M/yy',
@@ -270,7 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
                 SearchBar(
                   hintText: "Search...",
-                  controller: searchController,
+                  controller: _searchController,
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 16.0),
                   ),
@@ -283,7 +283,7 @@ class _SettingsPageState extends State<SettingsPage> {
               children
                   .where(
                     (element) => element.key
-                        .contains(searchController.text.toLowerCase()),
+                        .contains(_searchController.text.toLowerCase()),
                   )
                   .map((e) => e.widget)
                   .toList(),
