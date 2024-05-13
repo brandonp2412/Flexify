@@ -21,6 +21,12 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
   DateTime? _startDate;
   DateTime? _endDate;
 
+  @override
+  initState() {
+    super.initState();
+    if (widget.name == 'Weight') _groupBy = AppGroupBy.week;
+  }
+
   Future<void> _selectEnd() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
