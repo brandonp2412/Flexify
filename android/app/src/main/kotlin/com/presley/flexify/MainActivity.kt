@@ -7,14 +7,17 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.documentfile.provider.DocumentFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : FlutterActivity() {
@@ -26,7 +29,6 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPrefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-        AlarmUtil.setRepeatingAlarm(context)
     }
 
     private val timerConnection = object : ServiceConnection {
@@ -60,6 +62,10 @@ class MainActivity : FlutterActivity() {
                 "pick" -> {
                     val args = call.arguments as ArrayList<*>
                     pick(args[0] as String)
+                }
+
+                "save" -> {
+                    save()
                 }
 
                 "getProgress" -> {
@@ -147,6 +153,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun pick(path: String) {
+        Log.d("MainActivity.pick", "dbPath=$path")
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         sharedPrefs.edit().apply {
             putString("flutter.dbPath", path)
@@ -166,9 +173,26 @@ class MainActivity : FlutterActivity() {
                     putString("flutter.backupPath", uri.toString())
                     commit()
                 }
-                val intent = Intent(context, BackupReceiver::class.java)
-                BackupReceiver().onReceive(context, intent)
-                AlarmUtil.setRepeatingAlarm(context)
+                save()
+            }
+        }
+    }
+
+    private fun save() {
+        val dbPath = sharedPrefs.getString("flutter.dbPath", null)
+        val backupPath = sharedPrefs.getString("flutter.backupPath", null)
+        val backupUri = Uri.parse(backupPath)
+        Log.d("MainActivity.save", "dbPath=$dbPath,backupUri=$backupUri")
+
+        val dbFile = File(dbPath!!)
+        val dir = DocumentFile.fromTreeUri(context, backupUri)
+        var file = dir?.findFile("flexify.sqlite")
+        if (file == null) file = dir?.createFile("application/x-sqlite3", "flexify.sqlite")
+        val outputStream = context.contentResolver.openOutputStream(file!!.uri)
+
+        dbFile.inputStream().use { input ->
+            outputStream?.use { output ->
+                input.copyTo(output)
             }
         }
     }

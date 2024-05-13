@@ -182,7 +182,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
       final finishedPlan = count == gymSet.maxSets.value &&
           _selectedIndex == _planExercises.length - 1;
-      if (!finishedPlan)
+      if (finishedPlan && settings.automaticBackup)
+        android.invokeMethod('save');
+      else
         timerState.startTimer(
           "$exercise ($count)",
           Duration(milliseconds: _restMs),

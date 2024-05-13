@@ -1,0 +1,5 @@
+- Backup automatically at the end of a plan
+- Update start plan after editing an entry
+- Group weight by week by default
+- Update dependencies
+- Fix variable name of settings page
