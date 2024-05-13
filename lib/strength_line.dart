@@ -281,7 +281,7 @@ class _StrengthLineState extends State<StrengthLine> {
     List<StrengthData> rows,
   ) {
     return LineTouchTooltipData(
-      tooltipBgColor: Theme.of(context).colorScheme.background,
+      getTooltipColor: (touch) => Theme.of(context).colorScheme.background,
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
         final created =

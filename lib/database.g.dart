@@ -874,6 +874,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
+  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
   late final $PlansTable plans = $PlansTable(this);
   late final $GymSetsTable gymSets = $GymSetsTable(this);
   @override
@@ -881,4 +882,409 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [plans, gymSets];
+}
+
+typedef $$PlansTableInsertCompanionBuilder = PlansCompanion Function({
+  Value<int> id,
+  Value<int?> sequence,
+  required String exercises,
+  required String days,
+  Value<String?> title,
+});
+typedef $$PlansTableUpdateCompanionBuilder = PlansCompanion Function({
+  Value<int> id,
+  Value<int?> sequence,
+  Value<String> exercises,
+  Value<String> days,
+  Value<String?> title,
+});
+
+class $$PlansTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PlansTable,
+    Plan,
+    $$PlansTableFilterComposer,
+    $$PlansTableOrderingComposer,
+    $$PlansTableProcessedTableManager,
+    $$PlansTableInsertCompanionBuilder,
+    $$PlansTableUpdateCompanionBuilder> {
+  $$PlansTableTableManager(_$AppDatabase db, $PlansTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$PlansTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$PlansTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) => $$PlansTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> sequence = const Value.absent(),
+            Value<String> exercises = const Value.absent(),
+            Value<String> days = const Value.absent(),
+            Value<String?> title = const Value.absent(),
+          }) =>
+              PlansCompanion(
+            id: id,
+            sequence: sequence,
+            exercises: exercises,
+            days: days,
+            title: title,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> sequence = const Value.absent(),
+            required String exercises,
+            required String days,
+            Value<String?> title = const Value.absent(),
+          }) =>
+              PlansCompanion.insert(
+            id: id,
+            sequence: sequence,
+            exercises: exercises,
+            days: days,
+            title: title,
+          ),
+        ));
+}
+
+class $$PlansTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $PlansTable,
+    Plan,
+    $$PlansTableFilterComposer,
+    $$PlansTableOrderingComposer,
+    $$PlansTableProcessedTableManager,
+    $$PlansTableInsertCompanionBuilder,
+    $$PlansTableUpdateCompanionBuilder> {
+  $$PlansTableProcessedTableManager(super.$state);
+}
+
+class $$PlansTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $PlansTable> {
+  $$PlansTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get sequence => $state.composableBuilder(
+      column: $state.table.sequence,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get exercises => $state.composableBuilder(
+      column: $state.table.exercises,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get days => $state.composableBuilder(
+      column: $state.table.days,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$PlansTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $PlansTable> {
+  $$PlansTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get sequence => $state.composableBuilder(
+      column: $state.table.sequence,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get exercises => $state.composableBuilder(
+      column: $state.table.exercises,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get days => $state.composableBuilder(
+      column: $state.table.days,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
+  Value<int> id,
+  required String name,
+  required double reps,
+  required double weight,
+  required String unit,
+  required DateTime created,
+  Value<bool> hidden,
+  Value<double> bodyWeight,
+  Value<double> duration,
+  Value<double> distance,
+  Value<bool> cardio,
+  Value<int> restMs,
+  Value<int> maxSets,
+});
+typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<double> reps,
+  Value<double> weight,
+  Value<String> unit,
+  Value<DateTime> created,
+  Value<bool> hidden,
+  Value<double> bodyWeight,
+  Value<double> duration,
+  Value<double> distance,
+  Value<bool> cardio,
+  Value<int> restMs,
+  Value<int> maxSets,
+});
+
+class $$GymSetsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $GymSetsTable,
+    GymSet,
+    $$GymSetsTableFilterComposer,
+    $$GymSetsTableOrderingComposer,
+    $$GymSetsTableProcessedTableManager,
+    $$GymSetsTableInsertCompanionBuilder,
+    $$GymSetsTableUpdateCompanionBuilder> {
+  $$GymSetsTableTableManager(_$AppDatabase db, $GymSetsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$GymSetsTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$GymSetsTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) => $$GymSetsTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<double> reps = const Value.absent(),
+            Value<double> weight = const Value.absent(),
+            Value<String> unit = const Value.absent(),
+            Value<DateTime> created = const Value.absent(),
+            Value<bool> hidden = const Value.absent(),
+            Value<double> bodyWeight = const Value.absent(),
+            Value<double> duration = const Value.absent(),
+            Value<double> distance = const Value.absent(),
+            Value<bool> cardio = const Value.absent(),
+            Value<int> restMs = const Value.absent(),
+            Value<int> maxSets = const Value.absent(),
+          }) =>
+              GymSetsCompanion(
+            id: id,
+            name: name,
+            reps: reps,
+            weight: weight,
+            unit: unit,
+            created: created,
+            hidden: hidden,
+            bodyWeight: bodyWeight,
+            duration: duration,
+            distance: distance,
+            cardio: cardio,
+            restMs: restMs,
+            maxSets: maxSets,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            required double reps,
+            required double weight,
+            required String unit,
+            required DateTime created,
+            Value<bool> hidden = const Value.absent(),
+            Value<double> bodyWeight = const Value.absent(),
+            Value<double> duration = const Value.absent(),
+            Value<double> distance = const Value.absent(),
+            Value<bool> cardio = const Value.absent(),
+            Value<int> restMs = const Value.absent(),
+            Value<int> maxSets = const Value.absent(),
+          }) =>
+              GymSetsCompanion.insert(
+            id: id,
+            name: name,
+            reps: reps,
+            weight: weight,
+            unit: unit,
+            created: created,
+            hidden: hidden,
+            bodyWeight: bodyWeight,
+            duration: duration,
+            distance: distance,
+            cardio: cardio,
+            restMs: restMs,
+            maxSets: maxSets,
+          ),
+        ));
+}
+
+class $$GymSetsTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $GymSetsTable,
+    GymSet,
+    $$GymSetsTableFilterComposer,
+    $$GymSetsTableOrderingComposer,
+    $$GymSetsTableProcessedTableManager,
+    $$GymSetsTableInsertCompanionBuilder,
+    $$GymSetsTableUpdateCompanionBuilder> {
+  $$GymSetsTableProcessedTableManager(super.$state);
+}
+
+class $$GymSetsTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $GymSetsTable> {
+  $$GymSetsTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get reps => $state.composableBuilder(
+      column: $state.table.reps,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get weight => $state.composableBuilder(
+      column: $state.table.weight,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get unit => $state.composableBuilder(
+      column: $state.table.unit,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get created => $state.composableBuilder(
+      column: $state.table.created,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get hidden => $state.composableBuilder(
+      column: $state.table.hidden,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get bodyWeight => $state.composableBuilder(
+      column: $state.table.bodyWeight,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get duration => $state.composableBuilder(
+      column: $state.table.duration,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get distance => $state.composableBuilder(
+      column: $state.table.distance,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get cardio => $state.composableBuilder(
+      column: $state.table.cardio,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get restMs => $state.composableBuilder(
+      column: $state.table.restMs,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get maxSets => $state.composableBuilder(
+      column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$GymSetsTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $GymSetsTable> {
+  $$GymSetsTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get reps => $state.composableBuilder(
+      column: $state.table.reps,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get weight => $state.composableBuilder(
+      column: $state.table.weight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get unit => $state.composableBuilder(
+      column: $state.table.unit,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get created => $state.composableBuilder(
+      column: $state.table.created,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get hidden => $state.composableBuilder(
+      column: $state.table.hidden,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get bodyWeight => $state.composableBuilder(
+      column: $state.table.bodyWeight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get duration => $state.composableBuilder(
+      column: $state.table.duration,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get distance => $state.composableBuilder(
+      column: $state.table.distance,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get cardio => $state.composableBuilder(
+      column: $state.table.cardio,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get restMs => $state.composableBuilder(
+      column: $state.table.restMs,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get maxSets => $state.composableBuilder(
+      column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+class _$AppDatabaseManager {
+  final _$AppDatabase _db;
+  _$AppDatabaseManager(this._db);
+  $$PlansTableTableManager get plans =>
+      $$PlansTableTableManager(_db, _db.plans);
+  $$GymSetsTableTableManager get gymSets =>
+      $$GymSetsTableTableManager(_db, _db.gymSets);
 }
