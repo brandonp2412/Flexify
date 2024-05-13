@@ -10,10 +10,12 @@ class ExerciseModal extends StatelessWidget {
     super.key,
     required this.exercise,
     required this.hasData,
+    required this.onSelect,
   });
 
   final String exercise;
   final bool hasData;
+  final Function() onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,7 @@ class ExerciseModal extends StatelessWidget {
                   builder: (context) => EditGymSet(gymSet: gymSet),
                 ),
               );
+              onSelect();
             },
           ),
         if (hasData)
@@ -85,6 +88,7 @@ class ExerciseModal extends StatelessWidget {
                     ..limit(1))
                   .getSingle();
               await db.gymSets.deleteOne(gymSet);
+              onSelect();
             },
           ),
       ],

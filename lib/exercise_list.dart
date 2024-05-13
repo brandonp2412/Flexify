@@ -44,7 +44,11 @@ class ExerciseList extends StatelessWidget {
             showModalBottomSheet(
               context: context,
               builder: (context) {
-                return ExerciseModal(exercise: exercise, hasData: count > 0);
+                return ExerciseModal(
+                  exercise: exercise,
+                  hasData: count > 0,
+                  onSelect: () => onSelect(index),
+                );
               },
             );
           },
