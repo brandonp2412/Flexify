@@ -1,0 +1,5 @@
+- Add multidex to android/app/build.gradle
+- Update flutter to 3.22.0
+- Update pubspec.lock
+- Update vscode settings
+- Fix inserting records from history page
