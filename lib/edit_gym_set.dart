@@ -75,7 +75,8 @@ class _EditGymSetState extends State<EditGymSet> {
     if (widget.gymSet.id > 0)
       db.update(db.gymSets).replace(gymSet);
     else {
-      db.into(db.gymSets).insert(gymSet.copyWith(id: null));
+      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+      db.into(db.gymSets).insert(insert);
       final settings = context.read<SettingsState>();
       if (!settings.restTimers) return;
       final timer = context.read<TimerState>();
