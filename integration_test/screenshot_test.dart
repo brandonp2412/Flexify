@@ -241,6 +241,7 @@ void main() {
       "showReorder": true,
       "resetTimers": true,
       "showUnits": true,
+      "systemColors": false,
       "dateFormat": "yyyy-MM-dd h:mm a",
       "timerDuration": const Duration(minutes: 3, seconds: 30).inMilliseconds,
     });
