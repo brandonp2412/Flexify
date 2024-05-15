@@ -271,7 +271,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 SearchBar(
                   hintText: "Search...",
                   controller: _searchController,
-                  padding: MaterialStateProperty.all(
+                  padding: WidgetStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 16.0),
                   ),
                   onChanged: (_) {
