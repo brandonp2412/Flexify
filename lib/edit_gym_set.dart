@@ -197,7 +197,12 @@ class _EditGymSetState extends State<EditGymSet> {
                     .getSingleOrNull();
                 if (last == null) return;
                 final bodyWeight = await getBodyWeight();
-                _updateFields(last.copyWith(bodyWeight: bodyWeight?.weight));
+                _updateFields(
+                  last.copyWith(
+                    bodyWeight: bodyWeight?.weight,
+                    created: DateTime.now(),
+                  ),
+                );
               },
               initialValue: TextEditingValue(text: _name),
               fieldViewBuilder: (
