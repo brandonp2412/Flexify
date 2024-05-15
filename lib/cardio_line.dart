@@ -168,10 +168,9 @@ class _CardioLineState extends State<CardioLine> {
                 ),
                 lineTouchData: LineTouchData(
                   enabled: true,
-                  longPressDuration: Duration.zero,
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipColor: (touch) =>
-                        Theme.of(context).colorScheme.background,
+                        Theme.of(context).colorScheme.surface,
                     getTooltipItems: (touchedSpots) => [
                       LineTooltipItem(
                         touchedSpots.first.y.toStringAsFixed(2),

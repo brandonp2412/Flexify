@@ -1,0 +1,5 @@
+- Fix swiping across graphs for tab movement
+- Delete timers.webm
+- Fix wrong created dates when editing gym sets
+- Fix settings/enter weight page being discarded
+- Disable system colors in screenshot test

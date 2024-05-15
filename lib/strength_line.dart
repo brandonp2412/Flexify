@@ -221,7 +221,6 @@ class _StrengthLineState extends State<StrengthLine> {
                     });
                   },
                   touchTooltipData: _tooltipData(context, rows),
-                  longPressDuration: Duration.zero,
                 ),
                 lineBarsData: [
                   LineChartBarData(
@@ -281,7 +280,7 @@ class _StrengthLineState extends State<StrengthLine> {
     List<StrengthData> rows,
   ) {
     return LineTouchTooltipData(
-      getTooltipColor: (touch) => Theme.of(context).colorScheme.background,
+      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
         final created =
