@@ -118,7 +118,9 @@ class TimerService : Service() {
     }
 
     private fun updateAppUI() {
-        sendBroadcast(Intent(MainActivity.TICK_BROADCAST))
+        val intent = Intent(MainActivity.TICK_BROADCAST)
+        intent.setPackage(applicationContext.packageName)
+        sendBroadcast(intent)
     }
 
     private fun onTimerExpired() {
@@ -332,12 +334,13 @@ class TimerService : Service() {
                     channelId,
                     "Timer Finished Channel",
                     NotificationManager.IMPORTANCE_HIGH
-                )
-            channel.setSound(null, null)
-            channel.setBypassDnd(true)
-            channel.enableVibration(false)
-            channel.description = "Plays an alarm when a rest timer completes."
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                ).apply {
+                    setSound(null, null)
+                    setBypassDnd(true)
+                    enableVibration(false)
+                    description = "Plays an alarm when a rest timer completes."
+                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                }
             notificationManager.createNotificationChannel(channel)
         }
 
@@ -377,6 +380,7 @@ class TimerService : Service() {
             .setContentIntent(contentPending)
             .setAutoCancel(true)
             .setDeleteIntent(pendingStop)
+            .addAction(R.drawable.ic_baseline_stop_24, "Stop", pendingStop)
             .addAction(R.drawable.ic_baseline_stop_24, "Add 1 min", addPending)
 
         if (ActivityCompat.checkSelfPermission(
