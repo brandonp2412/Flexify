@@ -127,7 +127,7 @@ class _EditGymSetState extends State<EditGymSet> {
       _durationController.text = gymSet.duration.toString();
       _distanceController.text = gymSet.distance.toString();
       _unit = gymSet.unit;
-      _created = DateTime.now();
+      _created = gymSet.created;
       _cardio = gymSet.cardio;
       _restMs = gymSet.restMs;
     });
