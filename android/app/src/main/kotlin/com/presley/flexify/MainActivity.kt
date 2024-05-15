@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -90,7 +91,9 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "stop" -> {
+                    Log.d("MainActivity", "Request to stop")
                     val intent = Intent(TimerService.STOP_BROADCAST)
+                    intent.setPackage(applicationContext.packageName)
                     sendBroadcast(intent)
                 }
 
@@ -100,14 +103,11 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            applicationContext.registerReceiver(
-                tickReceiver, IntentFilter(TICK_BROADCAST),
-                RECEIVER_NOT_EXPORTED
-            )
-        } else {
-            applicationContext.registerReceiver(tickReceiver, IntentFilter(TICK_BROADCAST))
-        }
+        ContextCompat.registerReceiver(
+            applicationContext,
+            tickReceiver, IntentFilter(TICK_BROADCAST),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private val tickReceiver =
@@ -201,7 +201,8 @@ class MainActivity : FlutterActivity() {
         super.onResume()
         if (timerService?.flexifyTimer?.isRunning() != true) {
             val intent = Intent(TimerService.STOP_BROADCAST)
-            sendBroadcast(intent);
+            intent.setPackage(applicationContext.packageName)
+            sendBroadcast(intent)
         }
     }
 

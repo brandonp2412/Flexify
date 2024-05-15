@@ -32,6 +32,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TimerService : Service() {
@@ -47,7 +48,7 @@ class TimerService : Service() {
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
 
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent): IBinder {
         return binder
     }
 
@@ -58,7 +59,7 @@ class TimerService : Service() {
     private val stopReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                Log.d("TimerService", "Received stop broadcast intent")
+                Log.d("TimerService", "Received stop broadcast intent mediaPlayer=$mediaPlayer")
                 flexifyTimer.stop(applicationContext)
                 flexifyTimer.expire()
 
@@ -94,35 +95,26 @@ class TimerService : Service() {
             }
         }
 
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         super.onCreate()
         timerHandler = Handler(Looper.getMainLooper())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            applicationContext.registerReceiver(
-                stopReceiver, IntentFilter().apply {
-                    addAction(STOP_BROADCAST)
-                    addAction(STOP_BROADCAST_INTERNAL)
-                },
-                Context.RECEIVER_NOT_EXPORTED
-            )
-            applicationContext.registerReceiver(
-                addReceiver, IntentFilter().apply {
-                    addAction(ADD_BROADCAST)
-                    addAction(ADD_BROADCAST_INTERNAL)
-                },
-                Context.RECEIVER_NOT_EXPORTED
-            )
-        } else {
-            applicationContext.registerReceiver(stopReceiver, IntentFilter().apply {
+        ContextCompat.registerReceiver(
+            applicationContext,
+            stopReceiver, IntentFilter().apply {
                 addAction(STOP_BROADCAST)
                 addAction(STOP_BROADCAST_INTERNAL)
-            })
-            applicationContext.registerReceiver(addReceiver, IntentFilter().apply {
+            },
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
+        ContextCompat.registerReceiver(
+            applicationContext,
+            addReceiver, IntentFilter().apply {
                 addAction(ADD_BROADCAST)
                 addAction(ADD_BROADCAST_INTERNAL)
-            })
-        }
+            },
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private fun updateAppUI() {
@@ -162,6 +154,7 @@ class TimerService : Service() {
             if (timeStamp > 0) System.currentTimeMillis() - timeStamp else 0,
         )
 
+        @SuppressLint("WrongConstant")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startForeground(
                 ONGOING_ID,
@@ -200,7 +193,7 @@ class TimerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null && intent.action == TIMER_EXPIRED) onTimerExpired()
-        else onTimerStart(intent);
+        else onTimerStart(intent)
         return START_STICKY
     }
 
@@ -241,18 +234,15 @@ class TimerService : Service() {
 
     private fun playSound() {
         mediaPlayer = if (alarmSound != null)
-            MediaPlayer().apply {
-                setDataSource(applicationContext, Uri.parse(alarmSound))
-                prepare()
+            MediaPlayer.create(applicationContext, Uri.parse(alarmSound)).apply {
                 start()
                 setOnCompletionListener { vibrator?.cancel() }
             }
-        else {
+        else
             MediaPlayer.create(applicationContext, R.raw.argon).apply {
                 start()
                 setOnCompletionListener { vibrator?.cancel() }
             }
-        }
     }
 
     private fun getProgress(timeLeftInSeconds: Int): NotificationCompat.Builder {
@@ -319,7 +309,7 @@ class TimerService : Service() {
     }
 
     private fun vibrate() {
-        if (!shouldVibrate) return;
+        if (!shouldVibrate) return
         val pattern =
             longArrayOf(0, 1000, 1000, 1000, 1000, 1000)
         vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -412,6 +402,7 @@ class TimerService : Service() {
         notificationManager.notify(ONGOING_ID, notification.build())
     }
 
+    @SuppressLint("DefaultLocale")
     private fun formatTime(timeInSeconds: Int): String {
         val minutes = timeInSeconds / 60
         val seconds = timeInSeconds % 60

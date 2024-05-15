@@ -15,6 +15,7 @@ import android.os.SystemClock
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 
 @RequiresApi(Build.VERSION_CODES.O)
 class FlexifyTimer(private var msTimerDuration: Long) {
@@ -105,18 +106,11 @@ class FlexifyTimer(private var msTimerDuration: Long) {
                 }
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                context.registerReceiver(
-                    receiver, IntentFilter(ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED),
-                    Context.RECEIVER_NOT_EXPORTED
-                )
-            } else {
-                context.registerReceiver(
-                    receiver,
-                    IntentFilter(ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)
-                )
-            }
-
+            ContextCompat.registerReceiver(
+                context,
+                receiver, IntentFilter(ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED),
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
             context.startActivity(intent)
             false
         } catch (e: ActivityNotFoundException) {
