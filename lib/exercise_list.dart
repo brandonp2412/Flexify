@@ -79,6 +79,8 @@ class ExerciseList extends StatelessWidget {
                       },
                     ),
                     Text(exercise),
+                    const Spacer(),
+                    if (settings.showPlanCounts) Text("($count)"),
                   ],
                 ),
               ),

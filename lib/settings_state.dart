@@ -16,6 +16,7 @@ class SettingsState extends ChangeNotifier {
   bool showReorder = true;
   bool restTimers = true;
   bool showUnits = true;
+  bool showPlanCounts = true;
   bool systemColors = true;
   bool explainedPermissions = false;
   bool hideTimerTab = false;
@@ -36,6 +37,7 @@ class SettingsState extends ChangeNotifier {
       themeMode = ThemeMode.light;
     else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
 
+    showPlanCounts = prefs?.getBool("showPlanCounts") ?? true;
     systemColors = prefs?.getBool("systemColors") ?? true;
     showReorder = prefs?.getBool("showReorder") ?? true;
     restTimers = prefs?.getBool("restTimers") ?? true;
@@ -65,6 +67,12 @@ class SettingsState extends ChangeNotifier {
     automaticBackup = backup;
     notifyListeners();
     prefs?.setBool('automaticBackup', backup);
+  }
+
+  void setShowPlanCounts(bool value) {
+    showPlanCounts = value;
+    notifyListeners();
+    prefs?.setBool('showPlanCounts', value);
   }
 
   void setVibrate(bool value) {

@@ -173,6 +173,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
+        key: 'show plan counts',
+        widget: ListTile(
+          title: const Text('Show plan counts'),
+          onTap: () => settings.setShowPlanCounts(!settings.showPlanCounts),
+          trailing: Switch(
+            value: settings.showPlanCounts,
+            onChanged: (value) => settings.setShowPlanCounts(value),
+          ),
+        ),
+      ),
+      WidgetSettings(
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),
