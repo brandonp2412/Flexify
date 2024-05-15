@@ -38,7 +38,7 @@ class _AppSearchState extends State<AppSearch> {
             ? "Search..."
             : "${widget.selected.length} selected",
         controller: _searchController,
-        padding: MaterialStateProperty.all(
+        padding: WidgetStateProperty.all(
           const EdgeInsets.only(right: 8.0),
         ),
         textCapitalization: TextCapitalization.sentences,
@@ -107,8 +107,9 @@ class _AppSearchState extends State<AppSearch> {
                     leading: const Icon(Icons.edit),
                     title: const Text('Edit'),
                     onTap: () async {
+                      await widget.onEdit();
+                      if (!context.mounted) return;
                       Navigator.pop(context);
-                      widget.onEdit();
                     },
                   ),
                 ),
@@ -128,14 +129,15 @@ class _AppSearchState extends State<AppSearch> {
                   child: ListTile(
                     leading: const Icon(Icons.scale),
                     title: const Text('Weight'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const EnterWeightPage(),
                         ),
                       );
+                      if (!context.mounted) return;
+                      Navigator.pop(context);
                     },
                   ),
                 ),
@@ -145,13 +147,14 @@ class _AppSearchState extends State<AppSearch> {
                     leading: const Icon(Icons.settings),
                     title: const Text('Settings'),
                     onTap: () async {
-                      Navigator.pop(context);
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const SettingsPage(),
                         ),
                       );
+                      if (!context.mounted) return;
+                      Navigator.pop(context);
                       if (widget.onRefresh != null) widget.onRefresh!();
                     },
                   ),
