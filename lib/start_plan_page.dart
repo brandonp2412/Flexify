@@ -245,16 +245,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 keyboardType: TextInputType.number,
                 onSubmitted: (value) {
                   _weightNode.requestFocus();
-                  _weightController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _weightController.text.length,
-                  );
+                  selectAll(_weightController);
                 },
                 onTap: () {
-                  _repsController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _repsController.text.length,
-                  );
+                  selectAll(_repsController);
                 },
               ),
             if (!_cardio)
@@ -281,10 +275,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {
-                  _weightController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _weightController.text.length,
-                  );
+                  selectAll(_weightController);
                 },
                 onSubmitted: (value) async => await _save(timerState, settings),
               ),
@@ -297,17 +288,11 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {
-                  _durationController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _durationController.text.length,
-                  );
+                  selectAll(_durationController);
                 },
                 onSubmitted: (value) {
                   _distanceNode.requestFocus();
-                  _distanceController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _distanceController.text.length,
-                  );
+                  selectAll(_distanceController);
                 },
               ),
               TextField(
@@ -318,10 +303,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {
-                  _distanceController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _distanceController.text.length,
-                  );
+                  selectAll(_distanceController);
                 },
               ),
             ],

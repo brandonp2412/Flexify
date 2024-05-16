@@ -29,7 +29,39 @@ class ExportData extends StatelessWidget {
                   onTap: () async {
                     Navigator.pop(context);
                     if (!await requestNotificationPermission()) return;
-                    final csv = await getGymSetCsv();
+                    final gymSets = await db.gymSets.select().get();
+                    final List<List<dynamic>> csvData = [
+                      [
+                        'id',
+                        'name',
+                        'reps',
+                        'weight',
+                        'created',
+                        'unit',
+                        'bodyWeight',
+                        'duration',
+                        'distance',
+                        'cardio',
+                        'hidden',
+                      ]
+                    ];
+                    for (var gymSet in gymSets) {
+                      csvData.add([
+                        gymSet.id,
+                        gymSet.name,
+                        gymSet.reps,
+                        gymSet.weight,
+                        gymSet.created.toIso8601String(),
+                        gymSet.unit,
+                        gymSet.bodyWeight,
+                        gymSet.duration,
+                        gymSet.distance,
+                        gymSet.cardio,
+                        gymSet.hidden,
+                      ]);
+                    }
+                    final csv =
+                        const ListToCsvConverter(eol: "\n").convert(csvData);
                     final bytes = Uint8List.fromList(csv.codeUnits);
                     await FilePicker.platform.saveFile(
                       fileName: 'graphs.csv',

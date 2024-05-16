@@ -1,44 +1,12 @@
-import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-Future<String> getGymSetCsv() async {
-  final gymSets = await db.gymSets.select().get();
-  final List<List<dynamic>> csvData = [
-    [
-      'id',
-      'name',
-      'reps',
-      'weight',
-      'created',
-      'unit',
-      'bodyWeight',
-      'duration',
-      'distance',
-      'cardio',
-      'hidden',
-    ]
-  ];
-  for (var gymSet in gymSets) {
-    csvData.add([
-      gymSet.id,
-      gymSet.name,
-      gymSet.reps,
-      gymSet.weight,
-      gymSet.created.toIso8601String(),
-      gymSet.unit,
-      gymSet.bodyWeight,
-      gymSet.duration,
-      gymSet.distance,
-      gymSet.cardio,
-      gymSet.hidden,
-    ]);
-  }
-  return const ListToCsvConverter(eol: "\n").convert(csvData);
-}
+void selectAll(TextEditingController controller) => controller.selection =
+    TextSelection(baseOffset: 0, extentOffset: controller.text.length);
 
 DateTime parseDate(String dateString) {
   List<String> formats = [

@@ -3,6 +3,7 @@ import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/unit_selector.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -219,12 +220,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     decoration:
                         const InputDecoration(labelText: "Rest minutes"),
                     keyboardType: material.TextInputType.number,
-                    onTap: () {
-                      _minutesController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: _minutesController.text.length,
-                      );
-                    },
+                    onTap: () => selectAll(_minutesController),
                   ),
                 ),
                 const SizedBox(
@@ -238,10 +234,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                         const InputDecoration(labelText: "Rest seconds"),
                     keyboardType: material.TextInputType.number,
                     onTap: () {
-                      _secondsController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: _secondsController.text.length,
-                      );
+                      selectAll(_secondsController);
                     },
                   ),
                 ),
