@@ -99,10 +99,7 @@ class AppDatabase extends _$AppDatabase {
               .write(GymSetsCompanion(bodyWeight: Value(bodyWeight!.weight)));
         }
 
-        SharedPreferences? prefs;
-
         if (from < 7) {
-          prefs = await SharedPreferences.getInstance();
           final dateFormat = prefs.getString('dateFormat');
           if (dateFormat == null) return;
           prefs.setString('longDateFormat', dateFormat);
@@ -116,7 +113,7 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 9) {
           await m.addColumn(gymSets, gymSets.restMs);
-          final timerDuration = prefs?.getInt('timerDuration');
+          final timerDuration = prefs.getInt('timerDuration');
           if (timerDuration != null)
             await (gymSets
                 .update()
@@ -125,7 +122,7 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 10) {
           await m.addColumn(gymSets, gymSets.maxSets);
-          final maxSets = prefs?.getInt('maxSets');
+          final maxSets = prefs.getInt('maxSets');
           if (maxSets != null)
             await (gymSets
                 .update()

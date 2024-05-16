@@ -10,31 +10,31 @@ import 'package:flexify/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'plans_page.dart';
 
 late AppDatabase db;
 late MethodChannel android;
+late SharedPreferences prefs;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  db = AppDatabase();
+  prefs = await SharedPreferences.getInstance();
   android = const MethodChannel("com.presley.flexify/android");
+  db = AppDatabase();
 
-  final settingsState = SettingsState();
-  await settingsState.init();
-
-  runApp(appProviders(settingsState));
-}
-
-Widget appProviders(SettingsState settingsState) => MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => settingsState),
+        ChangeNotifierProvider(create: (context) => SettingsState()),
         ChangeNotifierProvider(create: (context) => TimerState()),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
       child: const App(),
-    );
+    ),
+  );
+}
 
 class App extends StatelessWidget {
   const App({super.key});
