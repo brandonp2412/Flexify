@@ -54,7 +54,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _planState = planState;
     _select(0);
 
-    final today = DateTime.now();
+    final today = DateTime.now().toLocal();
     final startOfToday = DateTime(today.year, today.month, today.day);
     final startOfTomorrow = startOfToday.add(const Duration(days: 1));
     _countStream = (db.selectOnly(db.gymSets)
@@ -162,7 +162,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       reps: double.parse(_repsController.text),
       weight: double.parse(_weightController.text),
       unit: _unit,
-      created: DateTime.now(),
+      created: DateTime.now().toLocal(),
       cardio: drift.Value(_cardio),
       duration: drift.Value(double.parse(_durationController.text)),
       distance: drift.Value(double.parse(_distanceController.text)),

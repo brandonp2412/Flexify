@@ -49,7 +49,7 @@ class AppDatabase extends _$AppDatabase {
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
-      created: Value(DateTime.now()),
+      created: Value(DateTime.now().toLocal()),
       name: Value(exercise),
       reps: const Value(0),
       weight: const Value(0),

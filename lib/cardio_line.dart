@@ -77,7 +77,8 @@ class _CardioLineState extends State<CardioLine> {
           )
           ..where(
             db.gymSets.created.isSmallerThanValue(
-              widget.endDate ?? DateTime.now().add(const Duration(days: 1)),
+              widget.endDate ??
+                  DateTime.now().toLocal().add(const Duration(days: 1)),
             ),
           )
           ..orderBy([

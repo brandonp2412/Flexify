@@ -67,7 +67,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
           Navigator.pop(context);
           db.gymSets.insertOne(
             GymSetsCompanion.insert(
-              created: DateTime.now(),
+              created: DateTime.now().toLocal(),
               name: "Weight",
               reps: 1,
               unit: _unit,

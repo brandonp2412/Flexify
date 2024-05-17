@@ -88,7 +88,8 @@ class _StrengthLineState extends State<StrengthLine> {
           )
           ..where(
             db.gymSets.created.isSmallerThanValue(
-              widget.endDate ?? DateTime.now().add(const Duration(days: 1)),
+              widget.endDate ??
+                  DateTime.now().toLocal().add(const Duration(days: 1)),
             ),
           )
           ..orderBy([

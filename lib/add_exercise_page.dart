@@ -26,7 +26,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
     Navigator.pop(context);
     db.gymSets.insertOne(
       GymSetsCompanion.insert(
-        created: DateTime.now(),
+        created: DateTime.now().toLocal(),
         reps: 0,
         weight: 0,
         name: _nameController.text,

@@ -200,7 +200,7 @@ class _EditGymSetState extends State<EditGymSet> {
                 _updateFields(
                   last.copyWith(
                     bodyWeight: bodyWeight?.weight,
-                    created: DateTime.now(),
+                    created: DateTime.now().toLocal(),
                   ),
                 );
               },

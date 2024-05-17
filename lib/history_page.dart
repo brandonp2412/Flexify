@@ -217,7 +217,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
                 name: '',
                 reps: 0,
-                created: DateTime.now(),
+                created: DateTime.now().toLocal(),
                 unit: 'kg',
                 weight: 0,
                 cardio: false,
@@ -229,7 +229,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           gymSet = gymSet.copyWith(
             id: 0,
             bodyWeight: bodyWeight?.weight ?? 0,
-            created: DateTime.now(),
+            created: DateTime.now().toLocal(),
           );
 
           if (!context.mounted) return;
