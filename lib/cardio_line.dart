@@ -46,19 +46,21 @@ class _CardioLineState extends State<CardioLine> {
   }
 
   void _setStream() {
-    Iterable<Expression> groupBy = [db.gymSets.created.date];
-
+    Expression<String> createdCol = const CustomExpression<String>(
+      "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+    );
     if (widget.groupBy == Period.month)
-      groupBy = [db.gymSets.created.year, db.gymSets.created.month];
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
+      );
     else if (widget.groupBy == Period.week)
-      groupBy = [
-        db.gymSets.created.year,
-        db.gymSets.created.month,
-        const CustomExpression<int>(
-          "STRFTIME('%W', DATE(created, 'unixepoch'))",
-        ),
-      ];
-    else if (widget.groupBy == Period.year) groupBy = [db.gymSets.created.year];
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    else if (widget.groupBy == Period.year)
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
+      );
 
     _graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
@@ -87,7 +89,7 @@ class _CardioLineState extends State<CardioLine> {
             ),
           ])
           ..limit(11)
-          ..groupBy(groupBy))
+          ..groupBy([createdCol]))
         .watch();
   }
 
@@ -130,7 +132,7 @@ class _CardioLineState extends State<CardioLine> {
           rows.add(
             CardioData(
               value: value,
-              created: row.read(db.gymSets.created)!,
+              created: row.read(db.gymSets.created)!.toLocal(),
               unit: row.read(db.gymSets.unit)!,
             ),
           );

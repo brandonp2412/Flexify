@@ -34,13 +34,11 @@ class StrengthLine extends StatefulWidget {
 class _StrengthLineState extends State<StrengthLine> {
   late Stream<List<TypedResult>> _graphStream;
   late SettingsState _settings;
-  final _ormColumn = db.gymSets.weight /
+  final _ormCol = db.gymSets.weight /
       (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
-  final _volumeColumn =
+  final _volumeCol =
       const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-  final _relativeColumn = db.gymSets.weight.max() / db.gymSets.bodyWeight;
-  final _weekCol =
-      const CustomExpression<int>("STRFTIME('%W', DATE(created, 'unixepoch'))");
+  final _relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 
   DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
@@ -61,56 +59,66 @@ class _StrengthLineState extends State<StrengthLine> {
   }
 
   void _setStream() {
-    Iterable<Expression> groupBy = [db.gymSets.created.date];
-
+    Expression<String> createdCol = const CustomExpression<String>(
+      "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+    );
     if (widget.groupBy == Period.month)
-      groupBy = [db.gymSets.created.year, db.gymSets.created.month];
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
+      );
     else if (widget.groupBy == Period.week)
-      groupBy = [db.gymSets.created.year, db.gymSets.created.month, _weekCol];
-    else if (widget.groupBy == Period.year) groupBy = [db.gymSets.created.year];
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    else if (widget.groupBy == Period.year)
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
+      );
 
-    _graphStream = (db.selectOnly(db.gymSets)
-          ..addColumns([
-            db.gymSets.weight.max(),
-            db.gymSets.reps.max(),
-            _volumeColumn,
-            _ormColumn,
-            db.gymSets.created,
-            db.gymSets.reps,
-            db.gymSets.unit,
-            _relativeColumn,
-          ])
-          ..where(db.gymSets.name.equals(widget.name))
-          ..where(db.gymSets.hidden.equals(false))
-          ..where(
-            db.gymSets.created
-                .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)),
-          )
-          ..where(
-            db.gymSets.created.isSmallerThanValue(
-              widget.endDate ??
-                  DateTime.now().toLocal().add(const Duration(days: 1)),
-            ),
-          )
-          ..orderBy([
-            OrderingTerm(
-              expression: db.gymSets.created.date,
-              mode: OrderingMode.desc,
-            ),
-          ])
-          ..limit(11)
-          ..groupBy(groupBy))
-        .watch();
+    setState(() {
+      _graphStream = (db.selectOnly(db.gymSets)
+            ..addColumns([
+              db.gymSets.weight.max(),
+              db.gymSets.reps.max(),
+              _volumeCol,
+              _ormCol,
+              db.gymSets.created,
+              db.gymSets.reps,
+              db.gymSets.unit,
+              _relativeCol,
+            ])
+            ..where(db.gymSets.name.equals(widget.name))
+            ..where(db.gymSets.hidden.equals(false))
+            ..where(
+              db.gymSets.created
+                  .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)),
+            )
+            ..where(
+              db.gymSets.created.isSmallerThanValue(
+                widget.endDate ??
+                    DateTime.now().toLocal().add(const Duration(days: 1)),
+              ),
+            )
+            ..orderBy([
+              OrderingTerm(
+                expression: createdCol,
+                mode: OrderingMode.desc,
+              ),
+            ])
+            ..limit(11)
+            ..groupBy([createdCol]))
+          .watch();
+    });
   }
 
   double getValue(TypedResult row, StrengthMetric metric) {
     switch (metric) {
       case StrengthMetric.oneRepMax:
-        return row.read(_ormColumn)!;
+        return row.read(_ormCol)!;
       case StrengthMetric.volume:
-        return row.read(_volumeColumn)!;
+        return row.read(_volumeCol)!;
       case StrengthMetric.relativeStrength:
-        return row.read(_relativeColumn) ?? 0;
+        return row.read(_relativeCol) ?? 0;
       case StrengthMetric.bestWeight:
         return row.read(db.gymSets.weight.max())!;
       case StrengthMetric.bestReps:
@@ -151,7 +159,7 @@ class _StrengthLineState extends State<StrengthLine> {
           rows.add(
             StrengthData(
               value: value,
-              created: row.read(db.gymSets.created)!,
+              created: row.read(db.gymSets.created)!.toLocal(),
               reps: row.read(db.gymSets.reps)!,
               unit: row.read(db.gymSets.unit)!,
             ),

@@ -155,9 +155,11 @@ class GraphsPageState extends State<GraphsPage> {
                     final cardio = gymSet.read(db.gymSets.cardio)!;
                     final duration = gymSet.read(db.gymSets.duration)!;
                     final distance = gymSet.read(db.gymSets.distance)!;
-                    final created = gymSet.read(db.gymSets.created.max())!;
-                    final previousCreated =
-                        previousGymSet?.read(db.gymSets.created.max())!;
+                    final created =
+                        gymSet.read(db.gymSets.created.max())!.toLocal();
+                    final previousCreated = previousGymSet
+                        ?.read(db.gymSets.created.max())!
+                        .toLocal();
 
                     final showDivider = previousCreated != null &&
                         !isSameDay(previousCreated, created);
