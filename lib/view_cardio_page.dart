@@ -80,7 +80,7 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
+        child: ListView(
           children: [
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: 'Metric'),

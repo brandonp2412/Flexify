@@ -245,6 +245,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
               focusNode: _maxSetsNode,
               decoration: const InputDecoration(labelText: "Max sets"),
               keyboardType: TextInputType.number,
+              onTap: () => selectAll(_maxSetsController),
             ),
             ListTile(
               title: const Text('Cardio'),
