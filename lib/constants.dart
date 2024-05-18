@@ -15,6 +15,7 @@ enum StrengthMetric {
   volume,
   bestWeight,
   relativeStrength,
+  bestReps,
 }
 
 const weekdays = [

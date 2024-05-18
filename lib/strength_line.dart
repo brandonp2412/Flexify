@@ -72,6 +72,7 @@ class _StrengthLineState extends State<StrengthLine> {
     _graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([
             db.gymSets.weight.max(),
+            db.gymSets.reps.max(),
             _volumeColumn,
             _ormColumn,
             db.gymSets.created,
@@ -103,16 +104,17 @@ class _StrengthLineState extends State<StrengthLine> {
   }
 
   double getValue(TypedResult row, StrengthMetric metric) {
-    if (metric == StrengthMetric.oneRepMax) {
-      return row.read(_ormColumn)!;
-    } else if (metric == StrengthMetric.volume) {
-      return row.read(_volumeColumn)!;
-    } else if (metric == StrengthMetric.relativeStrength) {
-      return row.read(_relativeColumn) ?? 0;
-    } else if (metric == StrengthMetric.bestWeight) {
-      return row.read(db.gymSets.weight.max())!;
-    } else {
-      throw Exception("Metric not supported.");
+    switch (metric) {
+      case StrengthMetric.oneRepMax:
+        return row.read(_ormColumn)!;
+      case StrengthMetric.volume:
+        return row.read(_volumeColumn)!;
+      case StrengthMetric.relativeStrength:
+        return row.read(_relativeColumn) ?? 0;
+      case StrengthMetric.bestWeight:
+        return row.read(db.gymSets.weight.max())!;
+      case StrengthMetric.bestReps:
+        return row.read(db.gymSets.reps.max())!;
     }
   }
 
@@ -289,11 +291,19 @@ class _StrengthLineState extends State<StrengthLine> {
 
         String text =
             "${row.reps} x ${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
-        if (widget.metric == StrengthMetric.relativeStrength)
-          text = "${row.value.toStringAsFixed(2)} $created";
-        else if (widget.metric == StrengthMetric.volume ||
-            widget.metric == StrengthMetric.oneRepMax)
-          text = "${formatter.format(row.value)}${widget.targetUnit} $created";
+        switch (widget.metric) {
+          case StrengthMetric.bestReps:
+          case StrengthMetric.relativeStrength:
+            text = "${row.value.toStringAsFixed(2)} $created";
+            break;
+          case StrengthMetric.volume:
+          case StrengthMetric.oneRepMax:
+            text =
+                "${formatter.format(row.value)}${widget.targetUnit} $created";
+            break;
+          case StrengthMetric.bestWeight:
+            break;
+        }
 
         return [
           LineTooltipItem(
