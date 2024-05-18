@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 
-enum AppGroupBy {
+enum Period {
   day,
   week,
   month,

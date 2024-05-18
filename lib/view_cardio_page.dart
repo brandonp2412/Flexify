@@ -16,7 +16,7 @@ class ViewCardioPage extends StatefulWidget {
 
 class _ViewCardioPageState extends State<ViewCardioPage> {
   CardioMetric _metric = CardioMetric.pace;
-  AppGroupBy _groupBy = AppGroupBy.day;
+  Period _groupBy = Period.day;
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -110,19 +110,19 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
               value: _groupBy,
               items: const [
                 DropdownMenuItem(
-                  value: AppGroupBy.day,
+                  value: Period.day,
                   child: Text("Day"),
                 ),
                 DropdownMenuItem(
-                  value: AppGroupBy.week,
+                  value: Period.week,
                   child: Text("Week"),
                 ),
                 DropdownMenuItem(
-                  value: AppGroupBy.month,
+                  value: Period.month,
                   child: Text("Month"),
                 ),
                 DropdownMenuItem(
-                  value: AppGroupBy.year,
+                  value: Period.year,
                   child: Text("Year"),
                 ),
               ],

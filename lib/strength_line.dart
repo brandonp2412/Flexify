@@ -13,7 +13,7 @@ class StrengthLine extends StatefulWidget {
   final String name;
   final StrengthMetric metric;
   final String targetUnit;
-  final AppGroupBy groupBy;
+  final Period groupBy;
   final DateTime? startDate;
   final DateTime? endDate;
 
@@ -63,12 +63,11 @@ class _StrengthLineState extends State<StrengthLine> {
   void _setStream() {
     Iterable<Expression> groupBy = [db.gymSets.created.date];
 
-    if (widget.groupBy == AppGroupBy.month)
+    if (widget.groupBy == Period.month)
       groupBy = [db.gymSets.created.year, db.gymSets.created.month];
-    else if (widget.groupBy == AppGroupBy.week)
+    else if (widget.groupBy == Period.week)
       groupBy = [db.gymSets.created.year, db.gymSets.created.month, _weekCol];
-    else if (widget.groupBy == AppGroupBy.year)
-      groupBy = [db.gymSets.created.year];
+    else if (widget.groupBy == Period.year) groupBy = [db.gymSets.created.year];
 
     _graphStream = (db.selectOnly(db.gymSets)
           ..addColumns([

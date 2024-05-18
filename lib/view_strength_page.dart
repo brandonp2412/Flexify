@@ -16,7 +16,7 @@ class ViewStrengthPage extends StatefulWidget {
 
 class _ViewStrengthPageState extends State<ViewStrengthPage> {
   StrengthMetric _metric = StrengthMetric.bestWeight;
-  AppGroupBy _groupBy = AppGroupBy.day;
+  Period _groupBy = Period.day;
   String _targetUnit = 'kg';
   DateTime? _startDate;
   DateTime? _endDate;
@@ -24,7 +24,7 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
   @override
   initState() {
     super.initState();
-    if (widget.name == 'Weight') _groupBy = AppGroupBy.week;
+    if (widget.name == 'Weight') _groupBy = Period.week;
   }
 
   Future<void> _selectEnd() async {
@@ -121,19 +121,19 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
               value: _groupBy,
               items: const [
                 DropdownMenuItem(
-                  value: AppGroupBy.day,
+                  value: Period.day,
                   child: Text("Day"),
                 ),
                 DropdownMenuItem(
-                  value: AppGroupBy.week,
+                  value: Period.week,
                   child: Text("Week"),
                 ),
                 DropdownMenuItem(
-                  value: AppGroupBy.month,
+                  value: Period.month,
                   child: Text("Month"),
                 ),
                 DropdownMenuItem(
-                  value: AppGroupBy.year,
+                  value: Period.year,
                   child: Text("Year"),
                 ),
               ],
