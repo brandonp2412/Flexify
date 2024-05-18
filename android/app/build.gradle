@@ -87,6 +87,9 @@ android.applicationVariants.all { variant ->
         def abiVersionCode = project.ext.abiCodes.get(output.getFilter(com.android.build.OutputFile.ABI))
         if (abiVersionCode != null) {
             output.versionCodeOverride = variant.versionCode * 10 + abiVersionCode
+        } else if (output.getFilter(com.android.build.OutputFile.ABI) == null) {
+            // This is a universal APK
+            output.versionCodeOverride = variant.versionCode * 10 + 3
         }
     }
 }
