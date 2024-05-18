@@ -121,7 +121,6 @@ const screenshotExercise = "Dumbbell shoulder press";
 Future<void> appWrapper() async {
   WidgetsFlutterBinding.ensureInitialized();
   final settingsState = SettingsState();
-  await settingsState.init();
   settingsState.setTheme(ThemeMode.dark);
   settingsState.setExplained(true);
   settingsState.setTimers(false);
@@ -209,6 +208,7 @@ void main() {
   setUpAll(() async {
     app.db = AppDatabase();
     app.android = const MethodChannel("com.presley.flexify/android");
+    app.prefs = await SharedPreferences.getInstance();
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.android, (message) => null);
 

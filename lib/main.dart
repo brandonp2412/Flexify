@@ -23,18 +23,19 @@ Future<void> main() async {
   prefs = await SharedPreferences.getInstance();
   android = const MethodChannel("com.presley.flexify/android");
   db = AppDatabase();
+  final settings = SettingsState();
 
-  runApp(
-    MultiProvider(
+  runApp(appProviders(settings));
+}
+
+Widget appProviders(SettingsState settingsState) => MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SettingsState()),
+        ChangeNotifierProvider(create: (context) => settingsState),
         ChangeNotifierProvider(create: (context) => TimerState()),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
       child: const App(),
-    ),
-  );
-}
+    );
 
 class App extends StatelessWidget {
   const App({super.key});
