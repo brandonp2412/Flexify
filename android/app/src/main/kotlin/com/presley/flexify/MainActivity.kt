@@ -83,6 +83,7 @@ class MainActivity : FlutterActivity() {
                 "add" -> {
                     if (timerService?.flexifyTimer?.isRunning() == true) {
                         val intent = Intent(TimerService.ADD_BROADCAST)
+                        intent.setPackage(applicationContext.packageName)
                         sendBroadcast(intent)
                     } else {
                         val timestamp = call.argument<Long>("timestamp")
