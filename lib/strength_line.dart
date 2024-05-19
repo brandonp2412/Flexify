@@ -79,7 +79,6 @@ class _StrengthLineState extends State<StrengthLine> {
       _graphStream = (db.selectOnly(db.gymSets)
             ..addColumns([
               db.gymSets.weight.max(),
-              db.gymSets.reps.max(),
               _volumeCol,
               _ormCol,
               db.gymSets.created,
@@ -121,8 +120,6 @@ class _StrengthLineState extends State<StrengthLine> {
         return row.read(_relativeCol) ?? 0;
       case StrengthMetric.bestWeight:
         return row.read(db.gymSets.weight.max())!;
-      case StrengthMetric.bestReps:
-        return row.read(db.gymSets.reps.max())!;
     }
   }
 
@@ -300,7 +297,6 @@ class _StrengthLineState extends State<StrengthLine> {
         String text =
             "${row.reps} x ${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
         switch (widget.metric) {
-          case StrengthMetric.bestReps:
           case StrengthMetric.relativeStrength:
             text = "${row.value.toStringAsFixed(2)} $created";
             break;
