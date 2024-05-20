@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_gym_set.dart';
@@ -45,10 +46,7 @@ class _StrengthLineState extends State<StrengthLine> {
   @override
   void didUpdateWidget(covariant StrengthLine oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.groupBy != widget.groupBy ||
-        oldWidget.startDate != widget.startDate ||
-        oldWidget.endDate != widget.endDate) _setStream();
+    _setStream();
   }
 
   @override
@@ -82,7 +80,9 @@ class _StrengthLineState extends State<StrengthLine> {
               _volumeCol,
               _ormCol,
               db.gymSets.created,
-              db.gymSets.reps,
+              if (widget.metric == StrengthMetric.bestReps)
+                db.gymSets.reps.max(),
+              if (widget.metric != StrengthMetric.bestReps) db.gymSets.reps,
               db.gymSets.unit,
               _relativeCol,
             ])
@@ -120,6 +120,12 @@ class _StrengthLineState extends State<StrengthLine> {
         return row.read(_relativeCol) ?? 0;
       case StrengthMetric.bestWeight:
         return row.read(db.gymSets.weight.max())!;
+      case StrengthMetric.bestReps:
+        try {
+          return row.read(db.gymSets.reps.max())!;
+        } catch (error) {
+          return 0;
+        }
     }
   }
 
@@ -153,11 +159,16 @@ class _StrengthLineState extends State<StrengthLine> {
             value *= 2.20462262;
           }
 
+          double reps = 0.0;
+          try {
+            reps = row.read(db.gymSets.reps)!;
+          } catch (_) {}
+
           rows.add(
             StrengthData(
               value: value,
               created: row.read(db.gymSets.created)!.toLocal(),
-              reps: row.read(db.gymSets.reps)!,
+              reps: reps,
               unit: row.read(db.gymSets.unit)!,
             ),
           );
@@ -297,6 +308,7 @@ class _StrengthLineState extends State<StrengthLine> {
         String text =
             "${row.reps} x ${row.value.toStringAsFixed(2)}${widget.targetUnit} $created";
         switch (widget.metric) {
+          case StrengthMetric.bestReps:
           case StrengthMetric.relativeStrength:
             text = "${row.value.toStringAsFixed(2)} $created";
             break;

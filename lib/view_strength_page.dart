@@ -98,6 +98,10 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                     child: Text("Best weight"),
                   ),
                   DropdownMenuItem(
+                    value: StrengthMetric.bestReps,
+                    child: Text("Best reps"),
+                  ),
+                  DropdownMenuItem(
                     value: StrengthMetric.oneRepMax,
                     child: Text("One rep max"),
                   ),
