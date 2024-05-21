@@ -27,6 +27,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final _weightController = TextEditingController(text: "0.0");
   final _distanceController = TextEditingController(text: "0.0");
   final _durationController = TextEditingController(text: "0.0");
+  final _inclineController = TextEditingController(text: "0");
+
   final _distanceNode = FocusNode();
   final _durationNode = FocusNode();
   final _repsNode = FocusNode();
@@ -127,6 +129,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _weightController.text = last.weight.toString();
       _distanceController.text = last.distance.toString();
       _durationController.text = last.duration.toString();
+      _inclineController.text = last.incline?.toString() ?? "";
       _cardio = last.cardio;
       _restMs = last.restMs;
 
@@ -169,6 +172,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
       restMs: drift.Value(_restMs),
       maxSets: drift.Value(max),
+      incline: drift.Value(int.tryParse(_inclineController.text)),
     );
 
     if (settings.restTimers) {
@@ -237,7 +241,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            if (!_cardio)
+            if (!_cardio) ...[
               TextField(
                 controller: _repsController,
                 focusNode: _repsNode,
@@ -251,7 +255,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   selectAll(_repsController);
                 },
               ),
-            if (!_cardio)
               TextField(
                 controller: _weightController,
                 focusNode: _weightNode,
@@ -279,6 +282,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 },
                 onSubmitted: (value) async => await _save(timerState, settings),
               ),
+            ],
             if (_cardio) ...[
               TextField(
                 controller: _durationController,
@@ -295,16 +299,31 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   selectAll(_distanceController);
                 },
               ),
-              TextField(
-                focusNode: _distanceNode,
-                controller: _distanceController,
-                decoration: const InputDecoration(
-                  labelText: 'Distance',
-                ),
-                keyboardType: TextInputType.number,
-                onTap: () {
-                  selectAll(_distanceController);
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      focusNode: _distanceNode,
+                      controller: _distanceController,
+                      decoration: const InputDecoration(
+                        labelText: 'Distance',
+                      ),
+                      keyboardType: TextInputType.number,
+                      onTap: () {
+                        selectAll(_distanceController);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: TextField(
+                      controller: _inclineController,
+                      decoration: const InputDecoration(labelText: 'Incline'),
+                      keyboardType: TextInputType.number,
+                      onTap: () => selectAll(_inclineController),
+                    ),
+                  ),
+                ],
               ),
             ],
             if (settings.showUnits)

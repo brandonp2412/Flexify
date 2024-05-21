@@ -25,6 +25,8 @@ class _EditGymSetState extends State<EditGymSet> {
   final _bodyWeightController = TextEditingController();
   final _distanceController = TextEditingController();
   final _durationController = TextEditingController();
+  final _inclineController = TextEditingController();
+
   late String _unit;
   late DateTime _created;
   late bool _cardio;
@@ -63,13 +65,14 @@ class _EditGymSetState extends State<EditGymSet> {
       name: _name,
       unit: _unit,
       created: _created,
-      reps: double.parse(_repsController.text),
-      weight: double.parse(_weightController.text),
-      bodyWeight: double.parse(_bodyWeightController.text),
-      distance: double.parse(_distanceController.text),
-      duration: double.parse(_durationController.text),
+      reps: double.tryParse(_repsController.text),
+      weight: double.tryParse(_weightController.text),
+      bodyWeight: double.tryParse(_bodyWeightController.text),
+      distance: double.tryParse(_distanceController.text),
+      duration: double.tryParse(_durationController.text),
       cardio: _cardio,
       restMs: _restMs,
+      incline: Value(int.tryParse(_inclineController.text)),
     );
 
     if (widget.gymSet.id > 0)
@@ -130,6 +133,7 @@ class _EditGymSetState extends State<EditGymSet> {
       _created = gymSet.created;
       _cardio = gymSet.cardio;
       _restMs = gymSet.restMs;
+      _inclineController.text = gymSet.incline?.toString() ?? "";
     });
   }
 
@@ -240,6 +244,12 @@ class _EditGymSetState extends State<EditGymSet> {
                 decoration: const InputDecoration(labelText: 'Duration'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_durationController),
+              ),
+              TextField(
+                controller: _inclineController,
+                decoration: const InputDecoration(labelText: 'Incline'),
+                keyboardType: TextInputType.number,
+                onTap: () => selectAll(_inclineController),
               ),
             ],
             if (!_cardio) ...[

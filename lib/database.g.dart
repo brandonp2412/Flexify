@@ -387,6 +387,12 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(3));
+  static const VerificationMeta _inclineMeta =
+      const VerificationMeta('incline');
+  @override
+  late final GeneratedColumn<int> incline = GeneratedColumn<int>(
+      'incline', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -401,7 +407,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
         distance,
         cardio,
         restMs,
-        maxSets
+        maxSets,
+        incline
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -476,6 +483,10 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       context.handle(_maxSetsMeta,
           maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
     }
+    if (data.containsKey('incline')) {
+      context.handle(_inclineMeta,
+          incline.isAcceptableOrUnknown(data['incline']!, _inclineMeta));
+    }
     return context;
   }
 
@@ -511,6 +522,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.int, data['${effectivePrefix}rest_ms'])!,
       maxSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
+      incline: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}incline']),
     );
   }
 
@@ -534,6 +547,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final bool cardio;
   final int restMs;
   final int maxSets;
+  final int? incline;
   const GymSet(
       {required this.id,
       required this.name,
@@ -547,7 +561,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.distance,
       required this.cardio,
       required this.restMs,
-      required this.maxSets});
+      required this.maxSets,
+      this.incline});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -564,6 +579,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     map['cardio'] = Variable<bool>(cardio);
     map['rest_ms'] = Variable<int>(restMs);
     map['max_sets'] = Variable<int>(maxSets);
+    if (!nullToAbsent || incline != null) {
+      map['incline'] = Variable<int>(incline);
+    }
     return map;
   }
 
@@ -582,6 +600,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       cardio: Value(cardio),
       restMs: Value(restMs),
       maxSets: Value(maxSets),
+      incline: incline == null && nullToAbsent
+          ? const Value.absent()
+          : Value(incline),
     );
   }
 
@@ -602,6 +623,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       cardio: serializer.fromJson<bool>(json['cardio']),
       restMs: serializer.fromJson<int>(json['restMs']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
+      incline: serializer.fromJson<int?>(json['incline']),
     );
   }
   @override
@@ -621,6 +643,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'cardio': serializer.toJson<bool>(cardio),
       'restMs': serializer.toJson<int>(restMs),
       'maxSets': serializer.toJson<int>(maxSets),
+      'incline': serializer.toJson<int?>(incline),
     };
   }
 
@@ -637,7 +660,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? distance,
           bool? cardio,
           int? restMs,
-          int? maxSets}) =>
+          int? maxSets,
+          Value<int?> incline = const Value.absent()}) =>
       GymSet(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -652,6 +676,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         cardio: cardio ?? this.cardio,
         restMs: restMs ?? this.restMs,
         maxSets: maxSets ?? this.maxSets,
+        incline: incline.present ? incline.value : this.incline,
       );
   @override
   String toString() {
@@ -668,14 +693,15 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('distance: $distance, ')
           ..write('cardio: $cardio, ')
           ..write('restMs: $restMs, ')
-          ..write('maxSets: $maxSets')
+          ..write('maxSets: $maxSets, ')
+          ..write('incline: $incline')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, name, reps, weight, unit, created, hidden,
-      bodyWeight, duration, distance, cardio, restMs, maxSets);
+      bodyWeight, duration, distance, cardio, restMs, maxSets, incline);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -692,7 +718,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.distance == this.distance &&
           other.cardio == this.cardio &&
           other.restMs == this.restMs &&
-          other.maxSets == this.maxSets);
+          other.maxSets == this.maxSets &&
+          other.incline == this.incline);
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
@@ -709,6 +736,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<bool> cardio;
   final Value<int> restMs;
   final Value<int> maxSets;
+  final Value<int?> incline;
   const GymSetsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -723,6 +751,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.cardio = const Value.absent(),
     this.restMs = const Value.absent(),
     this.maxSets = const Value.absent(),
+    this.incline = const Value.absent(),
   });
   GymSetsCompanion.insert({
     this.id = const Value.absent(),
@@ -738,6 +767,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.cardio = const Value.absent(),
     this.restMs = const Value.absent(),
     this.maxSets = const Value.absent(),
+    this.incline = const Value.absent(),
   })  : name = Value(name),
         reps = Value(reps),
         weight = Value(weight),
@@ -757,6 +787,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<bool>? cardio,
     Expression<int>? restMs,
     Expression<int>? maxSets,
+    Expression<int>? incline,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -772,6 +803,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (cardio != null) 'cardio': cardio,
       if (restMs != null) 'rest_ms': restMs,
       if (maxSets != null) 'max_sets': maxSets,
+      if (incline != null) 'incline': incline,
     });
   }
 
@@ -788,7 +820,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? distance,
       Value<bool>? cardio,
       Value<int>? restMs,
-      Value<int>? maxSets}) {
+      Value<int>? maxSets,
+      Value<int?>? incline}) {
     return GymSetsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -803,6 +836,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       cardio: cardio ?? this.cardio,
       restMs: restMs ?? this.restMs,
       maxSets: maxSets ?? this.maxSets,
+      incline: incline ?? this.incline,
     );
   }
 
@@ -848,6 +882,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (maxSets.present) {
       map['max_sets'] = Variable<int>(maxSets.value);
     }
+    if (incline.present) {
+      map['incline'] = Variable<int>(incline.value);
+    }
     return map;
   }
 
@@ -866,7 +903,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('distance: $distance, ')
           ..write('cardio: $cardio, ')
           ..write('restMs: $restMs, ')
-          ..write('maxSets: $maxSets')
+          ..write('maxSets: $maxSets, ')
+          ..write('incline: $incline')
           ..write(')'))
         .toString();
   }
@@ -1032,6 +1070,7 @@ typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
   Value<bool> cardio,
   Value<int> restMs,
   Value<int> maxSets,
+  Value<int?> incline,
 });
 typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<int> id,
@@ -1047,6 +1086,7 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<bool> cardio,
   Value<int> restMs,
   Value<int> maxSets,
+  Value<int?> incline,
 });
 
 class $$GymSetsTableTableManager extends RootTableManager<
@@ -1081,6 +1121,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<bool> cardio = const Value.absent(),
             Value<int> restMs = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
+            Value<int?> incline = const Value.absent(),
           }) =>
               GymSetsCompanion(
             id: id,
@@ -1096,6 +1137,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             cardio: cardio,
             restMs: restMs,
             maxSets: maxSets,
+            incline: incline,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
@@ -1111,6 +1153,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<bool> cardio = const Value.absent(),
             Value<int> restMs = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
+            Value<int?> incline = const Value.absent(),
           }) =>
               GymSetsCompanion.insert(
             id: id,
@@ -1126,6 +1169,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             cardio: cardio,
             restMs: restMs,
             maxSets: maxSets,
+            incline: incline,
           ),
         ));
 }
@@ -1209,6 +1253,11 @@ class $$GymSetsTableFilterComposer
       column: $state.table.maxSets,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get incline => $state.composableBuilder(
+      column: $state.table.incline,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$GymSetsTableOrderingComposer
@@ -1276,6 +1325,11 @@ class $$GymSetsTableOrderingComposer
 
   ColumnOrderings<int> get maxSets => $state.composableBuilder(
       column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get incline => $state.composableBuilder(
+      column: $state.table.incline,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }

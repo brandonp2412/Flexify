@@ -29,6 +29,7 @@ class GymSets extends Table {
         Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds),
       )();
   IntColumn get maxSets => integer().withDefault(const Constant(3))();
+  IntColumn get incline => integer().nullable()();
 }
 
 class Plans extends Table {
@@ -44,7 +45,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
@@ -126,6 +127,10 @@ class AppDatabase extends _$AppDatabase {
             await (gymSets
                 .update()
                 .write(GymSetsCompanion(maxSets: Value(maxSets))));
+        }
+
+        if (from < 11) {
+          await m.addColumn(gymSets, gymSets.incline);
         }
       },
     );
