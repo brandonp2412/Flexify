@@ -43,6 +43,7 @@ class ExportData extends StatelessWidget {
                         'distance',
                         'cardio',
                         'hidden',
+                        'incline',
                       ]
                     ];
                     for (var gymSet in gymSets) {
@@ -58,6 +59,7 @@ class ExportData extends StatelessWidget {
                         gymSet.distance,
                         gymSet.cardio,
                         gymSet.hidden,
+                        gymSet.incline,
                       ]);
                     }
                     final csv =

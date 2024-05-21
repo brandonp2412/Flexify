@@ -82,6 +82,9 @@ class ImportData extends StatelessWidget {
           cardio: columns.elementAtOrNull(9) == 'cardio'
               ? Value(bool.parse(row[9]))
               : const Value(false),
+          incline: columns.elementAtOrNull(11) == 'incline'
+              ? Value(int.tryParse(row[9]))
+              : const Value(null),
         );
       },
     );
