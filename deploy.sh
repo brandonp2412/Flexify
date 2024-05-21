@@ -46,5 +46,5 @@ gh release create "$new_version" --notes "${changelog:-$last_commits}"  \
   build/app/outputs/flutter-apk/app-*-release.apk
 git pull
 
-# fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
+bundle exec fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
 echo q | flutter run --release -d 'pixel 5'
