@@ -23,14 +23,35 @@ class GymSets extends Table {
 }
 
 double _getValue(TypedResult row, CardioMetric metric) {
-  if (metric == CardioMetric.distance) {
-    return row.read(db.gymSets.distance.sum())!;
-  } else if (metric == CardioMetric.duration) {
-    return row.read(db.gymSets.duration.sum())!;
-  } else if (metric == CardioMetric.pace) {
-    return row.read(db.gymSets.distance.sum() / db.gymSets.duration.sum()) ?? 0;
-  } else {
-    throw Exception("Metric not supported.");
+  switch (metric) {
+    case CardioMetric.pace:
+      return row.read(db.gymSets.distance.sum() / db.gymSets.duration.sum()) ??
+          0;
+    case CardioMetric.distance:
+      return row.read(db.gymSets.distance.sum())!;
+    case CardioMetric.duration:
+      return row.read(db.gymSets.duration.sum())!;
+  }
+}
+
+Expression<String> _getCreated(Period groupBy) {
+  switch (groupBy) {
+    case Period.day:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.week:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.month:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.year:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
+      );
   }
 }
 
@@ -41,22 +62,6 @@ Stream<List<CardioData>> watchCardio({
   DateTime? startDate,
   DateTime? endDate,
 }) {
-  Expression<String> createdCol = const CustomExpression<String>(
-    "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
-  );
-  if (groupBy == Period.month)
-    createdCol = const CustomExpression<String>(
-      "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
-    );
-  else if (groupBy == Period.week)
-    createdCol = const CustomExpression<String>(
-      "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
-    );
-  else if (groupBy == Period.year)
-    createdCol = const CustomExpression<String>(
-      "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
-    );
-
   return (db.selectOnly(db.gymSets)
         ..addColumns([
           db.gymSets.duration.sum(),
@@ -82,7 +87,7 @@ Stream<List<CardioData>> watchCardio({
           ),
         ])
         ..limit(11)
-        ..groupBy([createdCol]))
+        ..groupBy([_getCreated(groupBy)]))
       .watch()
       .map(
         (results) => results
