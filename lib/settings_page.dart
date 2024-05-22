@@ -1,10 +1,9 @@
-import 'dart:io';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flexify/import_data.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +28,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final _searchController = TextEditingController();
+  late AudioPlayer _player;
 
   final List<String> shortFormats = [
     'd/M/yy',
@@ -51,6 +51,14 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
+    _player = AudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _player.stop();
+    _player.dispose();
   }
 
   @override
@@ -251,6 +259,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result == null || result.files.single.path == null) return;
             settings.setAlarm(result.files.single.path!);
+            _player.play(DeviceFileSource(result.files.single.path!));
           },
           onLongPress: () {
             settings.setAlarm(null);

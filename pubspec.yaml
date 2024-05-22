@@ -1,7 +1,7 @@
 name: flexify
 description: Track gym progress, visualize graphs, enjoy offline support & timers
 publish_to: none
-version: 1.0.88+95
+version: 1.0.89+96
 environment:
   sdk: '>=3.2.6 <4.0.0'
 dependencies:
@@ -22,6 +22,7 @@ dependencies:
   sqlite3: ^2.4.0
   file_picker: ^8.0.3
   share_plus: ^9.0.0
+  audioplayers: ^6.0.0
 dev_dependencies:
   integration_test:
     sdk: flutter
