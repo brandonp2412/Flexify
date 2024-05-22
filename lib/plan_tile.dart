@@ -1,3 +1,4 @@
+import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/start_plan_page.dart';
@@ -69,7 +70,7 @@ class PlanTile extends StatelessWidget {
       title: title,
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Visibility(
-        visible: settingsState.showReorder,
+        visible: settingsState.planTrailing == PlanTrailing.reorder,
         child: ReorderableDragStartListener(
           index: index,
           child: const Icon(Icons.drag_handle),

@@ -1,3 +1,4 @@
+import 'package:flexify/constants.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -5,15 +6,14 @@ import 'package:path_provider/path_provider.dart';
 
 class SettingsState extends ChangeNotifier {
   ThemeMode themeMode = ThemeMode.system;
+  PlanTrailing planTrailing = PlanTrailing.reorder;
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
   String? alarmSound;
 
   bool vibrate = true;
-  bool showReorder = true;
   bool restTimers = true;
   bool showUnits = true;
-  bool showPlanCounts = true;
   bool systemColors = true;
   bool explainedPermissions = false;
   bool hideTimerTab = false;
@@ -25,16 +25,21 @@ class SettingsState extends ChangeNotifier {
     alarmSound = prefs.getString('alarmSound');
     longDateFormat = prefs.getString('longDateFormat') ?? "dd/MM/yy";
     shortDateFormat = prefs.getString('shortDateFormat') ?? "d/M/yy";
-    final theme = prefs.getString('themeMode');
-    if (theme == "ThemeMode.system")
-      themeMode = ThemeMode.system;
-    else if (theme == "ThemeMode.light")
-      themeMode = ThemeMode.light;
-    else if (theme == "ThemeMode.dark") themeMode = ThemeMode.dark;
 
-    showPlanCounts = prefs.getBool("showPlanCounts") ?? true;
+    final theme = prefs.getString('themeMode');
+    if (theme == ThemeMode.system.toString())
+      themeMode = ThemeMode.system;
+    else if (theme == ThemeMode.light.toString())
+      themeMode = ThemeMode.light;
+    else if (theme == ThemeMode.dark.toString()) themeMode = ThemeMode.dark;
+
+    final plan = prefs.getString('planTrailing');
+    if (plan == PlanTrailing.count.toString())
+      planTrailing = PlanTrailing.count;
+    else if (plan == PlanTrailing.reorder.toString())
+      planTrailing = PlanTrailing.reorder;
+
     systemColors = prefs.getBool("systemColors") ?? true;
-    showReorder = prefs.getBool("showReorder") ?? true;
     restTimers = prefs.getBool("restTimers") ?? true;
     showUnits = prefs.getBool("showUnits") ?? true;
     hideTimerTab = prefs.getBool("hideTimerTab") ?? false;
@@ -64,10 +69,10 @@ class SettingsState extends ChangeNotifier {
     prefs.setBool('automaticBackup', backup);
   }
 
-  void setShowPlanCounts(bool value) {
-    showPlanCounts = value;
+  void setPlanTrailing(PlanTrailing value) {
+    planTrailing = value;
     notifyListeners();
-    prefs.setBool('showPlanCounts', value);
+    prefs.setString('planTrailing', value.toString());
   }
 
   void setVibrate(bool value) {
@@ -127,12 +132,6 @@ class SettingsState extends ChangeNotifier {
   void setTimers(bool show) {
     restTimers = show;
     prefs.setBool('restTimers', show);
-    notifyListeners();
-  }
-
-  void setReorder(bool show) {
-    showReorder = show;
-    prefs.setBool('showReorder', show);
     notifyListeners();
   }
 

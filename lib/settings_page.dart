@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
 import 'package:flexify/import_data.dart';
@@ -69,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'theme',
         widget: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: DropdownButtonFormField(
+          child: DropdownButtonFormField<ThemeMode>(
             value: settings.themeMode,
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
@@ -138,6 +139,30 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
+        key: 'plan trailing',
+        widget: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButtonFormField<PlanTrailing>(
+            value: settings.planTrailing,
+            decoration: const InputDecoration(
+              labelStyle: TextStyle(),
+              labelText: 'Plan trailing display',
+            ),
+            items: const [
+              DropdownMenuItem(
+                value: PlanTrailing.reorder,
+                child: Text("Re-order"),
+              ),
+              DropdownMenuItem(
+                value: PlanTrailing.count,
+                child: Text("Count"),
+              ),
+            ],
+            onChanged: (value) => settings.setPlanTrailing(value!),
+          ),
+        ),
+      ),
+      WidgetSettings(
         key: 'rest timers',
         widget: ListTile(
           title: const Text('Rest timers'),
@@ -164,17 +189,6 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       WidgetSettings(
-        key: 'reorder items',
-        widget: ListTile(
-          title: const Text('Re-order items'),
-          onTap: () => settings.setReorder(!settings.showReorder),
-          trailing: Switch(
-            value: settings.showReorder,
-            onChanged: (value) => settings.setReorder(value),
-          ),
-        ),
-      ),
-      WidgetSettings(
         key: 'show units',
         widget: ListTile(
           title: const Text('Show units'),
@@ -182,17 +196,6 @@ class _SettingsPageState extends State<SettingsPage> {
           trailing: Switch(
             value: settings.showUnits,
             onChanged: (value) => settings.setUnits(value),
-          ),
-        ),
-      ),
-      WidgetSettings(
-        key: 'show plan counts',
-        widget: ListTile(
-          title: const Text('Show plan counts'),
-          onTap: () => settings.setShowPlanCounts(!settings.showPlanCounts),
-          trailing: Switch(
-            value: settings.showPlanCounts,
-            onChanged: (value) => settings.setShowPlanCounts(value),
           ),
         ),
       ),

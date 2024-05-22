@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 
+enum PlanTrailing { reorder, count }
+
 enum Period {
   day,
   week,

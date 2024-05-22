@@ -1,0 +1,4 @@
+- Combine "Show reorder" and "Show counts" setting
+- Refactor plans
+- Refactor graphs page
+- Refactor gym_sets

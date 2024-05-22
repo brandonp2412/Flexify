@@ -1,3 +1,4 @@
+import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/exercise_modal.dart';
 import 'package:flexify/gym_sets.dart';
@@ -58,18 +59,20 @@ class ExerciseList extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () => onSelect(index),
-                trailing: Visibility(
-                  visible: settings.showReorder,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
+                trailing: settings.planTrailing == PlanTrailing.reorder
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ReorderableDragStartListener(
+                            index: index,
+                            child: const Icon(Icons.drag_handle),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        "($count / $max)",
+                        style: const TextStyle(fontSize: 16),
                       ),
-                    ],
-                  ),
-                ),
                 title: Row(
                   children: [
                     Radio(
@@ -80,8 +83,6 @@ class ExerciseList extends StatelessWidget {
                       },
                     ),
                     Text(exercise),
-                    const Spacer(),
-                    if (settings.showPlanCounts) Text("($count / $max)"),
                   ],
                 ),
               ),
