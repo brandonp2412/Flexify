@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
@@ -6,7 +8,10 @@ import 'package:flexify/import_data.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class WidgetSettings {
   final String key;
@@ -254,6 +259,18 @@ class _SettingsPageState extends State<SettingsPage> {
           label: settings.alarmSound == null
               ? const Text("Alarm sound")
               : Text(settings.alarmSound!.split('/').last),
+        ),
+      ),
+      WidgetSettings(
+        key: 'share database',
+        widget: TextButton.icon(
+          onPressed: () async {
+            final dbFolder = await getApplicationDocumentsDirectory();
+            final dbPath = join(dbFolder.path, 'flexify.sqlite');
+            await Share.shareXFiles([XFile(dbPath)]);
+          },
+          label: const Text("Share database"),
+          icon: const Icon(Icons.share),
         ),
       ),
       WidgetSettings(key: 'export data', widget: const ExportData()),

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plans.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
@@ -12,33 +14,6 @@ import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'database.g.dart';
-
-class GymSets extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text()();
-  RealColumn get reps => real()();
-  RealColumn get weight => real()();
-  TextColumn get unit => text()();
-  DateTimeColumn get created => dateTime()();
-  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
-  RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
-  RealColumn get duration => real().withDefault(const Constant(0.0))();
-  RealColumn get distance => real().withDefault(const Constant(0.0))();
-  BoolColumn get cardio => boolean().withDefault(const Constant(false))();
-  IntColumn get restMs => integer().withDefault(
-        Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds),
-      )();
-  IntColumn get maxSets => integer().withDefault(const Constant(3))();
-  IntColumn get incline => integer().nullable()();
-}
-
-class Plans extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get sequence => integer().nullable()();
-  TextColumn get exercises => text()();
-  TextColumn get days => text()();
-  TextColumn get title => text().nullable()();
-}
 
 @DriftDatabase(tables: [Plans, GymSets])
 class AppDatabase extends _$AppDatabase {
