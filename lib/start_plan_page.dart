@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
 import 'package:flexify/exercise_list.dart';
+import 'package:flexify/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan_state.dart';
@@ -35,8 +36,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final _weightNode = FocusNode();
 
   late List<String> _planExercises;
-  late Stream<List<drift.TypedResult>> _countStream;
-  late Stream<List<drift.TypedResult>> _maxSetsStream;
+  late Stream<List<GymCount>> _countStream;
 
   PlanState? _planState;
   bool _first = true;
@@ -56,34 +56,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _planState = planState;
     _select(0);
 
-    final today = DateTime.now().toLocal();
-    final startOfToday = DateTime(today.year, today.month, today.day);
-    final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-    _countStream = (db.selectOnly(db.gymSets)
-          ..addColumns([
-            db.gymSets.name.count(),
-            db.gymSets.name,
-          ])
-          ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
-          ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
-          ..where(db.gymSets.name.isIn(_planExercises))
-          ..where(db.gymSets.hidden.equals(false))
-          ..groupBy([db.gymSets.name]))
-        .watch();
-    _maxSetsStream = (db.selectOnly(db.gymSets)
-          ..addColumns([
-            db.gymSets.maxSets,
-            db.gymSets.name,
-          ])
-          ..where(db.gymSets.name.isIn(_planExercises))
-          ..orderBy([
-            drift.OrderingTerm(
-              expression: db.gymSets.created.date,
-              mode: drift.OrderingMode.desc,
-            ),
-          ])
-          ..groupBy([db.gymSets.name]))
-        .watch();
+    _countStream = watchCount(_planExercises);
   }
 
   @override
@@ -154,11 +127,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       );
 
-    final maxSets = await _maxSetsStream.first;
-    final maxIndex = maxSets
-        .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
+    final maxSets = await _countStream.first;
+    final maxIndex = maxSets.indexWhere((element) => element.name == exercise);
     var max = 3;
-    if (maxIndex != -1) max = maxSets[maxIndex].read(db.gymSets.maxSets)!;
+    if (maxIndex != -1) max = maxSets[maxIndex].maxSets;
 
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -177,11 +149,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     if (settings.restTimers) {
       final counts = await _countStream.first;
-      final countIndex = counts
-          .indexWhere((element) => element.read(db.gymSets.name)! == exercise);
+      final countIndex =
+          counts.indexWhere((element) => element.name == exercise);
       var count = 0;
-      if (countIndex != -1)
-        count = counts[countIndex].read(db.gymSets.name.count())!;
+      if (countIndex != -1) count = counts[countIndex].count;
       count++;
 
       final finishedPlan = count == gymSet.maxSets.value &&
@@ -338,35 +309,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             Expanded(
               child: StreamBuilder(
-                stream: _maxSetsStream,
-                builder: (context, maxSetsSnapshot) {
-                  Map<String, int> maxSets = {};
-                  for (final row in maxSetsSnapshot.data ?? []) {
-                    maxSets[row.read(db.gymSets.name)!] =
-                        row.read(db.gymSets.maxSets)!;
-                  }
-
-                  return StreamBuilder(
-                    stream: _countStream,
-                    builder: (context, snapshot) {
-                      Map<String, int> counts = {};
-                      for (final row in snapshot.data ?? []) {
-                        counts[row.read(db.gymSets.name)!] =
-                            row.read(db.gymSets.name.count())!;
-                      }
-
-                      return ExerciseList(
-                        exercises: _planExercises,
-                        refresh: widget.refresh,
-                        selected: _selectedIndex,
-                        onSelect: _select,
-                        counts: counts,
-                        firstRender: _first,
-                        plan: widget.plan,
-                        maxSets: maxSets,
-                      );
-                    },
-                  );
+                stream: _countStream,
+                builder: (context, snapshot) {
+                  if (snapshot.data != null)
+                    return ExerciseList(
+                      exercises: _planExercises,
+                      refresh: widget.refresh,
+                      selected: _selectedIndex,
+                      onSelect: _select,
+                      counts: snapshot.data!,
+                      firstRender: _first,
+                      plan: widget.plan,
+                    );
+                  return const SizedBox();
                 },
               ),
             ),

@@ -141,3 +141,39 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
             .toList(),
       );
 }
+
+typedef GymCount = ({
+  int count,
+  String name,
+  int maxSets,
+});
+
+Stream<List<GymCount>> watchCount(List<String> exercises) {
+  final today = DateTime.now().toLocal();
+  final startOfToday = DateTime(today.year, today.month, today.day);
+  final startOfTomorrow = startOfToday.add(const Duration(days: 1));
+
+  return (db.selectOnly(db.gymSets)
+        ..addColumns([
+          db.gymSets.name.count(),
+          db.gymSets.name,
+          db.gymSets.maxSets,
+        ])
+        ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
+        ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
+        ..where(db.gymSets.name.isIn(exercises))
+        ..where(db.gymSets.hidden.equals(false))
+        ..groupBy([db.gymSets.name]))
+      .watch()
+      .map(
+        (results) => results
+            .map(
+              (result) => (
+                count: result.read(db.gymSets.name.count())!,
+                name: result.read(db.gymSets.name)!,
+                maxSets: result.read(db.gymSets.maxSets)!
+              ),
+            )
+            .toList(),
+      );
+}

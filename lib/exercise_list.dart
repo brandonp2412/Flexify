@@ -1,5 +1,6 @@
 import 'package:flexify/database.dart';
 import 'package:flexify/exercise_modal.dart';
+import 'package:flexify/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,7 @@ class ExerciseList extends StatelessWidget {
   final Future<void> Function() refresh;
   final int selected;
   final Future<void> Function(int) onSelect;
-  final Map<String, int> counts;
-  final Map<String, int> maxSets;
+  final List<GymCount> counts;
   final bool firstRender;
   final Plan plan;
 
@@ -24,7 +24,6 @@ class ExerciseList extends StatelessWidget {
     required this.counts,
     required this.firstRender,
     required this.plan,
-    required this.maxSets,
   });
 
   @override
@@ -35,8 +34,10 @@ class ExerciseList extends StatelessWidget {
       itemCount: exercises.length,
       itemBuilder: (context, index) {
         final exercise = exercises[index];
-        final count = counts[exercise] ?? 0;
-        final max = maxSets[exercise] ?? 3;
+        final countIndex =
+            counts.indexWhere((element) => element.name == exercise);
+        final count = countIndex == -1 ? 0 : counts[countIndex].count;
+        final max = countIndex == -1 ? 3 : counts[countIndex].maxSets;
 
         return GestureDetector(
           key: Key(exercise),
@@ -80,7 +81,7 @@ class ExerciseList extends StatelessWidget {
                     ),
                     Text(exercise),
                     const Spacer(),
-                    if (settings.showPlanCounts) Text("($count)"),
+                    if (settings.showPlanCounts) Text("($count / $max)"),
                   ],
                 ),
               ),
