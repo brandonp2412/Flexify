@@ -1,8 +1,7 @@
-import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/cardio_data.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/main.dart';
+import 'package:flexify/gym_sets.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +28,7 @@ class CardioLine extends StatefulWidget {
 }
 
 class _CardioLineState extends State<CardioLine> {
-  late Stream<List<TypedResult>> _graphStream;
+  late Stream<List<CardioData>> _graphStream;
   late SettingsState _settings;
 
   @override
@@ -46,71 +45,20 @@ class _CardioLineState extends State<CardioLine> {
   }
 
   void _setStream() {
-    Expression<String> createdCol = const CustomExpression<String>(
-      "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+    _graphStream = watchCardio(
+      endDate: widget.endDate,
+      groupBy: widget.groupBy,
+      metric: widget.metric,
+      name: widget.name,
+      startDate: widget.startDate,
     );
-    if (widget.groupBy == Period.month)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    else if (widget.groupBy == Period.week)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    else if (widget.groupBy == Period.year)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
-      );
-
-    _graphStream = (db.selectOnly(db.gymSets)
-          ..addColumns([
-            db.gymSets.duration.sum(),
-            db.gymSets.distance.sum(),
-            db.gymSets.distance.sum() / db.gymSets.duration.sum(),
-            db.gymSets.created,
-            db.gymSets.unit,
-          ])
-          ..where(db.gymSets.name.equals(widget.name))
-          ..where(db.gymSets.hidden.equals(false))
-          ..where(
-            db.gymSets.created
-                .isBiggerOrEqualValue(widget.startDate ?? DateTime(0)),
-          )
-          ..where(
-            db.gymSets.created.isSmallerThanValue(
-              widget.endDate ??
-                  DateTime.now().toLocal().add(const Duration(days: 1)),
-            ),
-          )
-          ..orderBy([
-            OrderingTerm(
-              expression: db.gymSets.created.date,
-              mode: OrderingMode.desc,
-            ),
-          ])
-          ..limit(11)
-          ..groupBy([createdCol]))
-        .watch();
-  }
-
-  double _getValue(TypedResult row) {
-    if (widget.metric == CardioMetric.distance) {
-      return row.read(db.gymSets.distance.sum())!;
-    } else if (widget.metric == CardioMetric.duration) {
-      return row.read(db.gymSets.duration.sum())!;
-    } else if (widget.metric == CardioMetric.pace) {
-      return row.read(db.gymSets.distance.sum() / db.gymSets.duration.sum()) ??
-          0;
-    } else {
-      throw Exception("Metric not supported.");
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     _settings = context.watch<SettingsState>();
 
-    return StreamBuilder<List<TypedResult>>(
+    return StreamBuilder(
       stream: _graphStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox();
@@ -123,20 +71,11 @@ class _CardioLineState extends State<CardioLine> {
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
         List<FlSpot> spots = [];
-        List<CardioData> rows = [];
+        final rows = snapshot.data!.reversed.toList();
 
         for (var index = 0; index < snapshot.data!.length; index++) {
           final row = snapshot.data!.reversed.elementAt(index);
-          var value = double.parse(_getValue(row).toStringAsFixed(2));
-
-          rows.add(
-            CardioData(
-              value: value,
-              created: row.read(db.gymSets.created)!.toLocal(),
-              unit: row.read(db.gymSets.unit)!,
-            ),
-          );
-          spots.add(FlSpot(index.toDouble(), value));
+          spots.add(FlSpot(index.toDouble(), row.value));
         }
 
         return SizedBox(
