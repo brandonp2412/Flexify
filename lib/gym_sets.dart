@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/cardio_data.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 
 class GymSets extends Table {
@@ -97,6 +98,44 @@ Stream<List<CardioData>> watchCardio({
                 value:
                     double.parse(_getValue(result, metric).toStringAsFixed(2)),
                 unit: result.read(db.gymSets.unit)!,
+              ),
+            )
+            .toList(),
+      );
+}
+
+Stream<List<GymSetsCompanion>> watchGraphs() {
+  return (db.gymSets.selectOnly()
+        ..addColumns([
+          db.gymSets.name,
+          db.gymSets.unit,
+          db.gymSets.weight,
+          db.gymSets.reps,
+          db.gymSets.cardio,
+          db.gymSets.duration,
+          db.gymSets.distance,
+          db.gymSets.created.max(),
+        ])
+        ..orderBy([
+          OrderingTerm(
+            expression: db.gymSets.created.max(),
+            mode: OrderingMode.desc,
+          ),
+        ])
+        ..groupBy([db.gymSets.name]))
+      .watch()
+      .map(
+        (results) => results
+            .map(
+              (result) => GymSetsCompanion(
+                name: Value(result.read(db.gymSets.name)!),
+                weight: Value(result.read(db.gymSets.weight)!),
+                unit: Value(result.read(db.gymSets.unit)!),
+                reps: Value(result.read(db.gymSets.reps)!),
+                cardio: Value(result.read(db.gymSets.cardio)!),
+                duration: Value(result.read(db.gymSets.duration)!),
+                distance: Value(result.read(db.gymSets.distance)!),
+                created: Value(result.read(db.gymSets.created.max())!),
               ),
             )
             .toList(),

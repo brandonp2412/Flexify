@@ -2,7 +2,9 @@ import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/add_exercise_page.dart';
 import 'package:flexify/app_search.dart';
+import 'package:flexify/database.dart';
 import 'package:flexify/edit_graph_page.dart';
+import 'package:flexify/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/utils.dart';
@@ -20,7 +22,7 @@ class GraphsPage extends StatefulWidget {
 }
 
 class GraphsPageState extends State<GraphsPage> {
-  late Stream<List<drift.TypedResult>> _stream;
+  late Stream<List<GymSetsCompanion>> _stream;
 
   final Set<String> _selected = {};
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -30,25 +32,7 @@ class GraphsPageState extends State<GraphsPage> {
   void initState() {
     super.initState();
 
-    _stream = (db.gymSets.selectOnly()
-          ..addColumns([
-            db.gymSets.name,
-            db.gymSets.unit,
-            db.gymSets.weight,
-            db.gymSets.reps,
-            db.gymSets.cardio,
-            db.gymSets.duration,
-            db.gymSets.distance,
-            db.gymSets.created.max(),
-          ])
-          ..orderBy([
-            drift.OrderingTerm(
-              expression: db.gymSets.created.max(),
-              mode: drift.OrderingMode.desc,
-            ),
-          ])
-          ..groupBy([db.gymSets.name]))
-        .watch();
+    _stream = watchGraphs();
   }
 
   @override
@@ -71,14 +55,14 @@ class GraphsPageState extends State<GraphsPage> {
 
   Scaffold _graphsPage() {
     return Scaffold(
-      body: StreamBuilder<List<drift.TypedResult>>(
+      body: StreamBuilder(
         stream: _stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
           final gymSets = snapshot.data!.where((gymSet) {
-            final name = gymSet.read(db.gymSets.name)!.toLowerCase();
+            final name = gymSet.name.value.toLowerCase();
             final searchText = _search.toLowerCase();
             return name.contains(searchText);
           }).toList();
@@ -120,7 +104,7 @@ class GraphsPageState extends State<GraphsPage> {
                 },
                 onSelect: () => setState(() {
                   _selected.addAll(
-                    gymSets.map((gymSet) => gymSet.read(db.gymSets.name)!),
+                    gymSets.map((gymSet) => gymSet.name.value),
                   );
                 }),
                 selected: _selected,
@@ -148,35 +132,18 @@ class GraphsPageState extends State<GraphsPage> {
                     final previousGymSet =
                         index > 0 ? gymSets[index - 1] : null;
 
-                    final name = gymSet.read(db.gymSets.name)!;
-                    final weight = gymSet.read(db.gymSets.weight)!;
-                    final unit = gymSet.read(db.gymSets.unit)!;
-                    final reps = gymSet.read(db.gymSets.reps)!;
-                    final cardio = gymSet.read(db.gymSets.cardio)!;
-                    final duration = gymSet.read(db.gymSets.duration)!;
-                    final distance = gymSet.read(db.gymSets.distance)!;
-                    final created =
-                        gymSet.read(db.gymSets.created.max())!.toLocal();
-                    final previousCreated = previousGymSet
-                        ?.read(db.gymSets.created.max())!
-                        .toLocal();
+                    final previousCreated =
+                        previousGymSet?.created.value.toLocal();
 
                     final showDivider = previousCreated != null &&
-                        !isSameDay(previousCreated, created);
+                        !isSameDay(previousCreated, gymSet.created.value);
 
                     return material.Column(
                       children: [
                         if (showDivider) const Divider(),
                         GraphTile(
                           selected: _selected,
-                          name: name,
-                          weight: weight,
-                          unit: unit,
-                          reps: reps,
-                          created: created,
-                          cardio: cardio,
-                          duration: duration,
-                          distance: distance,
+                          gymSet: gymSet,
                           onSelect: (name) {
                             if (_selected.contains(name))
                               setState(() {

@@ -1,3 +1,4 @@
+import 'package:flexify/database.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/view_cardio_page.dart';
 import 'package:flexify/view_strength_page.dart';
@@ -6,29 +7,15 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class GraphTile extends StatelessWidget {
-  final String name;
-  final bool cardio;
-  final double duration;
-  final double distance;
-  final double weight;
-  final double reps;
-  final DateTime created;
-  final String unit;
+  final GymSetsCompanion gymSet;
   final Set<String> selected;
   final Function(String) onSelect;
 
   const GraphTile({
     super.key,
-    required this.name,
-    required this.weight,
-    required this.created,
-    required this.unit,
     required this.selected,
     required this.onSelect,
-    required this.reps,
-    required this.cardio,
-    required this.duration,
-    required this.distance,
+    required this.gymSet,
   });
 
   @override
@@ -36,11 +23,15 @@ class GraphTile extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     return ListTile(
-      selected: selected.contains(name),
-      title: Text(name),
-      subtitle: Text(DateFormat(settings.longDateFormat).format(created)),
+      selected: selected.contains(gymSet.name.value),
+      title: Text(gymSet.name.value),
+      subtitle: Text(
+        DateFormat(settings.longDateFormat).format(gymSet.created.value),
+      ),
       trailing: Text(
-        cardio ? "$distance / $duration" : "$reps x $weight$unit",
+        gymSet.cardio.value
+            ? "${gymSet.distance.value} / ${gymSet.duration.value}"
+            : "${gymSet.reps.value} x ${gymSet.weight.value}${gymSet.unit.value}",
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () {
@@ -48,18 +39,18 @@ class GraphTile extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => cardio
-                  ? ViewCardioPage(name: name)
+              builder: (context) => gymSet.cardio.value
+                  ? ViewCardioPage(name: gymSet.name.value)
                   : ViewStrengthPage(
-                      name: name,
+                      name: gymSet.name.value,
                     ),
             ),
           );
         else
-          onSelect(name);
+          onSelect(gymSet.name.value);
       },
       onLongPress: () {
-        onSelect(name);
+        onSelect(gymSet.name.value);
       },
     );
   }
