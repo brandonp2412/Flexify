@@ -1,0 +1,5 @@
+- Space out full description properly
+- Specify git pull --tags after creating github release
+- Re-enable google play deployments
+- Add incline to export/import
+- Add incline to cardio type
