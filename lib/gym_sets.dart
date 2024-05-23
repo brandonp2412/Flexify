@@ -153,23 +153,31 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
   final startOfToday = DateTime(today.year, today.month, today.day);
   final startOfTomorrow = startOfToday.add(const Duration(days: 1));
 
+  final todayCount = db.alias(db.gymSets, 'todayCount');
+
   return (db.selectOnly(db.gymSets)
         ..addColumns([
-          db.gymSets.name.count(),
           db.gymSets.name,
+          todayCount.name.count(),
           db.gymSets.maxSets,
         ])
-        ..where(db.gymSets.created.isBiggerOrEqualValue(startOfToday))
-        ..where(db.gymSets.created.isSmallerThanValue(startOfTomorrow))
+        ..join([
+          leftOuterJoin(
+            todayCount,
+            todayCount.name.equalsExp(db.gymSets.name) &
+                db.gymSets.created.isBiggerOrEqualValue(startOfToday) &
+                db.gymSets.created.isSmallerThanValue(startOfTomorrow) &
+                db.gymSets.hidden.equals(false),
+          ),
+        ])
         ..where(db.gymSets.name.isIn(exercises))
-        ..where(db.gymSets.hidden.equals(false))
         ..groupBy([db.gymSets.name]))
       .watch()
       .map(
         (results) => results
             .map(
               (result) => (
-                count: result.read(db.gymSets.name.count())!,
+                count: result.read(todayCount.name.count())!,
                 name: result.read(db.gymSets.name)!,
                 maxSets: result.read(db.gymSets.maxSets)!
               ),
