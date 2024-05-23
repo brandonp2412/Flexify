@@ -91,17 +91,20 @@ Stream<List<CardioData>> watchCardio({
         ..groupBy([_getCreated(groupBy)]))
       .watch()
       .map(
-        (results) => results
-            .map(
-              (result) => CardioData(
-                created: result.read(db.gymSets.created)!,
-                value:
-                    double.parse(_getValue(result, metric).toStringAsFixed(2)),
-                unit: result.read(db.gymSets.unit)!,
-              ),
-            )
-            .toList(),
-      );
+    (results) {
+      List<CardioData> list = [];
+      for (final result in results.reversed) {
+        list.add(
+          CardioData(
+            created: result.read(db.gymSets.created)!,
+            value: double.parse(_getValue(result, metric).toStringAsFixed(2)),
+            unit: result.read(db.gymSets.unit)!,
+          ),
+        );
+      }
+      return list;
+    },
+  );
 }
 
 Stream<List<GymSetsCompanion>> watchGraphs() {

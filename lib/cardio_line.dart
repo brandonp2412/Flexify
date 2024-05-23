@@ -71,10 +71,10 @@ class _CardioLineState extends State<CardioLine> {
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
         List<FlSpot> spots = [];
-        final rows = snapshot.data!.reversed.toList();
+        final rows = snapshot.data!;
 
         for (var index = 0; index < snapshot.data!.length; index++) {
-          final row = snapshot.data!.reversed.elementAt(index);
+          final row = snapshot.data!.elementAt(index);
           spots.add(FlSpot(index.toDouble(), row.value));
         }
 

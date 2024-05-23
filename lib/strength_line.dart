@@ -33,7 +33,7 @@ class StrengthLine extends StatefulWidget {
 }
 
 class _StrengthLineState extends State<StrengthLine> {
-  late Stream<List<TypedResult>> _graphStream;
+  late Stream<List<StrengthData>> _graphStream;
   late SettingsState _settings;
   final _ormCol = db.gymSets.weight /
       (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
@@ -106,11 +106,41 @@ class _StrengthLineState extends State<StrengthLine> {
             ])
             ..limit(11)
             ..groupBy([createdCol]))
-          .watch();
+          .watch()
+          .map(
+        (results) {
+          List<StrengthData> list = [];
+          for (final result in results.reversed) {
+            final unit = result.read(db.gymSets.unit)!;
+            var value = _getValue(result, widget.metric);
+
+            if (unit == 'lb' && widget.targetUnit == 'kg') {
+              value *= 0.45359237;
+            } else if (unit == 'kg' && widget.targetUnit == 'lb') {
+              value *= 2.20462262;
+            }
+
+            double reps = 0.0;
+            try {
+              reps = result.read(db.gymSets.reps)!;
+            } catch (_) {}
+
+            list.add(
+              StrengthData(
+                created: result.read(db.gymSets.created)!.toLocal(),
+                value: value,
+                unit: unit,
+                reps: reps,
+              ),
+            );
+          }
+          return list;
+        },
+      );
     });
   }
 
-  double getValue(TypedResult row, StrengthMetric metric) {
+  double _getValue(TypedResult row, StrengthMetric metric) {
     switch (metric) {
       case StrengthMetric.oneRepMax:
         return row.read(_ormCol)!;
@@ -133,7 +163,7 @@ class _StrengthLineState extends State<StrengthLine> {
   Widget build(BuildContext context) {
     _settings = context.watch<SettingsState>();
 
-    return StreamBuilder<List<TypedResult>>(
+    return StreamBuilder(
       stream: _graphStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox();
@@ -146,33 +176,10 @@ class _StrengthLineState extends State<StrengthLine> {
         if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
         List<FlSpot> spots = [];
-        List<StrengthData> rows = [];
+        final rows = snapshot.data!;
 
         for (var index = 0; index < snapshot.data!.length; index++) {
-          final row = snapshot.data!.reversed.elementAt(index);
-          final unit = row.read(db.gymSets.unit)!;
-          var value = getValue(row, widget.metric);
-
-          if (unit == 'lb' && widget.targetUnit == 'kg') {
-            value *= 0.45359237;
-          } else if (unit == 'kg' && widget.targetUnit == 'lb') {
-            value *= 2.20462262;
-          }
-
-          double reps = 0.0;
-          try {
-            reps = row.read(db.gymSets.reps)!;
-          } catch (_) {}
-
-          rows.add(
-            StrengthData(
-              value: value,
-              created: row.read(db.gymSets.created)!.toLocal(),
-              reps: reps,
-              unit: row.read(db.gymSets.unit)!,
-            ),
-          );
-          spots.add(FlSpot(index.toDouble(), value));
+          spots.add(FlSpot(index.toDouble(), snapshot.data![index].value));
         }
 
         return SizedBox(
