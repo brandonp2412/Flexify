@@ -311,17 +311,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
               child: StreamBuilder(
                 stream: _countStream,
                 builder: (context, snapshot) {
-                  if (snapshot.data != null)
-                    return ExerciseList(
-                      exercises: _planExercises,
-                      refresh: widget.refresh,
-                      selected: _selectedIndex,
-                      onSelect: _select,
-                      counts: snapshot.data!,
-                      firstRender: _first,
-                      plan: widget.plan,
-                    );
-                  return const SizedBox();
+                  return ExerciseList(
+                    exercises: _planExercises,
+                    refresh: widget.refresh,
+                    selected: _selectedIndex,
+                    onSelect: _select,
+                    counts: snapshot.data,
+                    firstRender: _first,
+                    plan: widget.plan,
+                  );
                 },
               ),
             ),

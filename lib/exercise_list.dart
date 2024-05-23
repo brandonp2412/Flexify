@@ -12,7 +12,7 @@ class ExerciseList extends StatelessWidget {
   final Future<void> Function() refresh;
   final int selected;
   final Future<void> Function(int) onSelect;
-  final List<GymCount> counts;
+  final List<GymCount>? counts;
   final bool firstRender;
   final Plan plan;
 
@@ -36,9 +36,14 @@ class ExerciseList extends StatelessWidget {
       itemBuilder: (context, index) {
         final exercise = exercises[index];
         final countIndex =
-            counts.indexWhere((element) => element.name == exercise);
-        final count = countIndex == -1 ? 0 : counts[countIndex].count;
-        final max = countIndex == -1 ? 3 : counts[countIndex].maxSets;
+            counts?.indexWhere((element) => element.name == exercise);
+        var count = 0;
+        var max = 3;
+
+        if (countIndex != null && countIndex > -1 && counts != null) {
+          count = counts![countIndex].count;
+          max = counts![countIndex].maxSets;
+        }
 
         return GestureDetector(
           key: Key(exercise),
