@@ -20,7 +20,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
@@ -38,6 +38,12 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
+        await m.createIndex(
+          Index(
+            'GymSets',
+            "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
+          ),
+        );
         await db.batch((batch) {
           batch.insertAll(gymSets, _defaultSets);
           batch.insertAll(plans, defaultPlans);
@@ -48,7 +54,7 @@ class AppDatabase extends _$AppDatabase {
           await m.createIndex(
             Index(
               'GymSets',
-              "CREATE INDEX gym_sets_name_created ON gym_sets(name, created);",
+              "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
             ),
           );
         }
@@ -106,6 +112,15 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 11) {
           await m.addColumn(gymSets, gymSets.incline);
+        }
+
+        if (from < 12) {
+          await m.createIndex(
+            Index(
+              'GymSets',
+              "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
+            ),
+          );
         }
       },
     );
