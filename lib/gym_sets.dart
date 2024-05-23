@@ -155,23 +155,17 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
   final today = DateTime.now().toLocal();
   final startOfToday = DateTime(today.year, today.month, today.day);
   final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-
-  final todayCount = db.alias(db.gymSets, 'todayCount');
+  final todayS = startOfToday.millisecondsSinceEpoch / 1000;
+  final tomorrowS = startOfTomorrow.millisecondsSinceEpoch / 1000;
+  final countColumn = CustomExpression<int>(
+    "COUNT(CASE WHEN created >= $todayS AND created < $tomorrowS AND hidden = 0 THEN 1 END)",
+  );
 
   return (db.selectOnly(db.gymSets)
         ..addColumns([
           db.gymSets.name,
-          todayCount.name.count(),
+          countColumn,
           db.gymSets.maxSets,
-        ])
-        ..join([
-          leftOuterJoin(
-            todayCount,
-            todayCount.name.equalsExp(db.gymSets.name) &
-                db.gymSets.created.isBiggerOrEqualValue(startOfToday) &
-                db.gymSets.created.isSmallerThanValue(startOfTomorrow) &
-                db.gymSets.hidden.equals(false),
-          ),
         ])
         ..where(db.gymSets.name.isIn(exercises))
         ..groupBy([db.gymSets.name]))
@@ -179,10 +173,10 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
       .map(
         (results) => results
             .map(
-              (result) => (
-                count: result.read(todayCount.name.count())!,
-                name: result.read(db.gymSets.name)!,
-                maxSets: result.read(db.gymSets.maxSets)!
+              (resultRow) => (
+                count: resultRow.read<int>(countColumn)!,
+                name: resultRow.read(db.gymSets.name)!,
+                maxSets: resultRow.read(db.gymSets.maxSets)!,
               ),
             )
             .toList(),
