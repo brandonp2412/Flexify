@@ -65,12 +65,11 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
-
     List<SettingsLine> lines = [
       SettingsLine(
         key: 'theme',
         widget: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<ThemeMode>(
             value: settings.themeMode,
             decoration: const InputDecoration(
@@ -98,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsLine(
         key: 'long date format',
         widget: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
             value: settings.longDateFormat,
             items: longFormats.map((String value) {
@@ -120,7 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsLine(
         key: 'short date format',
         widget: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
             value: settings.shortDateFormat,
             items: shortFormats.map((String value) {
@@ -142,7 +141,7 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsLine(
         key: 'plan trailing',
         widget: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<PlanTrailing>(
             value: settings.planTrailing,
             decoration: const InputDecoration(
@@ -327,6 +326,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 setState(() {});
               },
               leading: const Icon(Icons.search),
+            ),
+            const SizedBox(
+              height: 8.0,
             ),
             Expanded(
               child: ListView.builder(
