@@ -13,11 +13,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class WidgetSettings {
+class SettingsLine {
   final String key;
   final Widget widget;
 
-  WidgetSettings({required this.key, required this.widget});
+  SettingsLine({required this.key, required this.widget});
 }
 
 class SettingsPage extends StatefulWidget {
@@ -65,8 +65,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
-    List<WidgetSettings> children = [
-      WidgetSettings(
+    List<SettingsLine> children = [
+      SettingsLine(
         key: 'theme',
         widget: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -94,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'long date format',
         widget: Padding(
           padding: const EdgeInsets.only(left: 8.0),
@@ -116,7 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'short date format',
         widget: Padding(
           padding: const EdgeInsets.only(left: 8.0),
@@ -138,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'plan trailing',
         widget: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -162,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'rest timers',
         widget: ListTile(
           title: const Text('Rest timers'),
@@ -175,7 +175,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'vibrate',
         widget: ListTile(
           title: const Text('Vibrate'),
@@ -188,7 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'show units',
         widget: ListTile(
           title: const Text('Show units'),
@@ -199,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),
@@ -210,7 +210,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'hide timer tab',
         widget: ListTile(
           title: const Text('Hide timer tab'),
@@ -221,7 +221,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'hide history tab',
         widget: ListTile(
           title: const Text('Hide history tab'),
@@ -232,7 +232,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'curve line graphs',
         widget: ListTile(
           title: const Text('Curve line graphs'),
@@ -243,7 +243,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'automatic backups',
         widget: ListTile(
           title: const Text('Backup automatically'),
@@ -254,7 +254,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'alarm sound',
         widget: material.TextButton.icon(
           onPressed: () async {
@@ -273,7 +273,7 @@ class _SettingsPageState extends State<SettingsPage> {
               : Text(settings.alarmSound!.split('/').last),
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'share database',
         widget: TextButton.icon(
           onPressed: () async {
@@ -285,14 +285,14 @@ class _SettingsPageState extends State<SettingsPage> {
           icon: const Icon(Icons.share),
         ),
       ),
-      WidgetSettings(key: 'export data', widget: const ExportData()),
-      WidgetSettings(
+      SettingsLine(key: 'export data', widget: const ExportData()),
+      SettingsLine(
         key: 'import data',
         widget: ImportData(
           pageContext: context,
         ),
       ),
-      WidgetSettings(
+      SettingsLine(
         key: 'delete records',
         widget: DeleteRecordsButton(
           pageContext: context,
