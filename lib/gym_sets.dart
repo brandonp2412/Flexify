@@ -152,13 +152,13 @@ typedef GymCount = ({
 });
 
 Stream<List<GymCount>> watchCount(List<String> exercises) {
-  final today = DateTime.now().toLocal();
-  final startOfToday = DateTime(today.year, today.month, today.day);
-  final startOfTomorrow = startOfToday.add(const Duration(days: 1));
-  final todayS = startOfToday.millisecondsSinceEpoch / 1000;
-  final tomorrowS = startOfTomorrow.millisecondsSinceEpoch / 1000;
-  final countColumn = CustomExpression<int>(
-    "COUNT(CASE WHEN created >= $todayS AND created < $tomorrowS AND hidden = 0 THEN 1 END)",
+  const countColumn = CustomExpression<int>(
+    """
+      COUNT(
+        CASE WHEN DATE(created, 'unixepoch', 'localtime') = DATE('now') 
+          AND hidden = 0 THEN 1 END
+      )
+      """,
   );
 
   return (db.selectOnly(db.gymSets)
