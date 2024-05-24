@@ -65,7 +65,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
-    List<SettingsLine> children = [
+
+    List<SettingsLine> lines = [
       SettingsLine(
         key: 'theme',
         widget: Padding(
@@ -300,33 +301,40 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     ];
 
+    final filtered = lines
+        .where(
+          (element) =>
+              element.key.contains(_searchController.text.toLowerCase()),
+        )
+        .map((e) => e.widget)
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView(
+        child: Column(
           children: <Widget>[
-                SearchBar(
-                  hintText: "Search...",
-                  controller: _searchController,
-                  padding: WidgetStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 16.0),
-                  ),
-                  onChanged: (_) {
-                    setState(() {});
-                  },
-                  leading: const Icon(Icons.search),
-                ),
-              ] +
-              children
-                  .where(
-                    (element) => element.key
-                        .contains(_searchController.text.toLowerCase()),
-                  )
-                  .map((e) => e.widget)
-                  .toList(),
+            SearchBar(
+              hintText: "Search...",
+              controller: _searchController,
+              padding: WidgetStateProperty.all(
+                const EdgeInsets.symmetric(horizontal: 16.0),
+              ),
+              onChanged: (_) {
+                setState(() {});
+              },
+              leading: const Icon(Icons.search),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) => filtered[index],
+                itemCount: filtered.length,
+              ),
+            ),
+          ],
         ),
       ),
     );
