@@ -35,7 +35,10 @@ if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
 fi
 
 ./flutter/bin/flutter build apk --split-per-abi
-./flutter/bin/flutter build appbundle
+
+if [ "$1" == "-p" ]; then
+  ./flutter/bin/flutter build appbundle
+fi
 
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 
