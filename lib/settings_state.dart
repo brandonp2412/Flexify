@@ -8,6 +8,7 @@ class SettingsState extends ChangeNotifier {
   ThemeMode themeMode = ThemeMode.system;
   PlanTrailing planTrailing = PlanTrailing.reorder;
   Duration timerDuration = const Duration(minutes: 3, seconds: 30);
+  int maxSets = 3;
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
   String? alarmSound;
@@ -26,6 +27,7 @@ class SettingsState extends ChangeNotifier {
     alarmSound = prefs.getString('alarmSound');
     longDateFormat = prefs.getString('longDateFormat') ?? "dd/MM/yy";
     shortDateFormat = prefs.getString('shortDateFormat') ?? "d/M/yy";
+    maxSets = prefs.getInt('maxSets') ?? 3;
 
     final duration = prefs.getInt('timerDuration');
     if (duration != null)
@@ -55,6 +57,12 @@ class SettingsState extends ChangeNotifier {
     curveLines = prefs.getBool('curveLines') ?? false;
     automaticBackup = prefs.getBool('automaticBackup') ?? false;
     vibrate = prefs.getBool('vibrate') ?? true;
+  }
+
+  void setMaxSets(int value) {
+    maxSets = value;
+    notifyListeners();
+    prefs.setInt('maxSets', value);
   }
 
   void setDuration(Duration value) {

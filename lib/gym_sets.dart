@@ -17,7 +17,7 @@ class GymSets extends Table {
   RealColumn get distance => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();
   IntColumn get restMs => integer().nullable()();
-  IntColumn get maxSets => integer().withDefault(const Constant(3))();
+  IntColumn get maxSets => integer().nullable()();
   IntColumn get incline => integer().nullable()();
 }
 
@@ -146,7 +146,8 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
 typedef GymCount = ({
   int count,
   String name,
-  int maxSets,
+  int? maxSets,
+  int? restMs,
 });
 
 Stream<List<GymCount>> watchCount(List<String> exercises) {
@@ -164,6 +165,7 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
           db.gymSets.name,
           countColumn,
           db.gymSets.maxSets,
+          db.gymSets.restMs,
         ])
         ..where(db.gymSets.name.isIn(exercises))
         ..groupBy([db.gymSets.name]))
@@ -174,7 +176,8 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
               (resultRow) => (
                 count: resultRow.read<int>(countColumn)!,
                 name: resultRow.read(db.gymSets.name)!,
-                maxSets: resultRow.read(db.gymSets.maxSets)!,
+                maxSets: resultRow.read(db.gymSets.maxSets),
+                restMs: resultRow.read(db.gymSets.restMs),
               ),
             )
             .toList(),

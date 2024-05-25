@@ -20,7 +20,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
@@ -134,6 +134,19 @@ class AppDatabase extends _$AppDatabase {
               .write(
             const GymSetsCompanion(
               restMs: Value(null),
+            ),
+          );
+        }
+
+        if (from < 14) {
+          await m.alterTable(TableMigration(db.gymSets));
+          (db.gymSets.update()
+                ..where(
+                  (u) => u.maxSets.equals(3),
+                ))
+              .write(
+            const GymSetsCompanion(
+              maxSets: Value(null),
             ),
           );
         }

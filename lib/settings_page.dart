@@ -5,6 +5,7 @@ import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
 import 'package:flexify/import_data.dart';
 import 'package:flexify/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +32,8 @@ class _SettingsPageState extends State<SettingsPage> {
   final _searchController = TextEditingController();
   final _minutesController = TextEditingController(text: '3');
   final _secondsController = TextEditingController(text: '30');
+  final _maxSetsController = TextEditingController(text: '3');
+
   late AudioPlayer _player;
   late SettingsState _settings;
 
@@ -60,6 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _minutesController.text = _settings.timerDuration.inMinutes.toString();
     _secondsController.text =
         (_settings.timerDuration.inSeconds % 60).toString();
+    _maxSetsController.text = _settings.maxSets.toString();
   }
 
   @override
@@ -170,6 +174,20 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsLine(
+        key: 'max sets',
+        widget: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: TextField(
+            controller: _maxSetsController,
+            decoration: const InputDecoration(labelText: 'Maximum sets'),
+            keyboardType: const TextInputType.numberWithOptions(decimal: false),
+            onTap: () => selectAll(_maxSetsController),
+            onChanged: (value) =>
+                _settings.setMaxSets(int.tryParse(value) ?? 0),
+          ),
+        ),
+      ),
+      SettingsLine(
         key: 'rest minutes seconds',
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -183,12 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           const InputDecoration(labelText: 'Rest minutes'),
                       controller: _minutesController,
                       keyboardType: TextInputType.number,
-                      onTap: () async {
-                        _minutesController.selection = TextSelection(
-                          baseOffset: 0,
-                          extentOffset: _minutesController.text.length,
-                        );
-                      },
+                      onTap: () => selectAll(_minutesController),
                       onChanged: (value) => _settings.setDuration(
                         Duration(
                           minutes: int.parse(value),
@@ -205,12 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       decoration: const InputDecoration(labelText: 'seconds'),
                       controller: _secondsController,
                       keyboardType: TextInputType.number,
-                      onTap: () async {
-                        _secondsController.selection = TextSelection(
-                          baseOffset: 0,
-                          extentOffset: _secondsController.text.length,
-                        );
-                      },
+                      onTap: () => selectAll(_secondsController),
                       onChanged: (value) => _settings.setDuration(
                         Duration(
                           seconds: int.parse(value),

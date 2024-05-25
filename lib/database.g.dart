@@ -380,10 +380,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       const VerificationMeta('maxSets');
   @override
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(3));
+      'max_sets', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _inclineMeta =
       const VerificationMeta('incline');
   @override
@@ -518,7 +516,7 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       restMs: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}rest_ms']),
       maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}max_sets']),
       incline: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}incline']),
     );
@@ -543,7 +541,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final double distance;
   final bool cardio;
   final int? restMs;
-  final int maxSets;
+  final int? maxSets;
   final int? incline;
   const GymSet(
       {required this.id,
@@ -558,7 +556,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.distance,
       required this.cardio,
       this.restMs,
-      required this.maxSets,
+      this.maxSets,
       this.incline});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -577,7 +575,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     if (!nullToAbsent || restMs != null) {
       map['rest_ms'] = Variable<int>(restMs);
     }
-    map['max_sets'] = Variable<int>(maxSets);
+    if (!nullToAbsent || maxSets != null) {
+      map['max_sets'] = Variable<int>(maxSets);
+    }
     if (!nullToAbsent || incline != null) {
       map['incline'] = Variable<int>(incline);
     }
@@ -599,7 +599,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       cardio: Value(cardio),
       restMs:
           restMs == null && nullToAbsent ? const Value.absent() : Value(restMs),
-      maxSets: Value(maxSets),
+      maxSets: maxSets == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxSets),
       incline: incline == null && nullToAbsent
           ? const Value.absent()
           : Value(incline),
@@ -622,7 +624,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       distance: serializer.fromJson<double>(json['distance']),
       cardio: serializer.fromJson<bool>(json['cardio']),
       restMs: serializer.fromJson<int?>(json['restMs']),
-      maxSets: serializer.fromJson<int>(json['maxSets']),
+      maxSets: serializer.fromJson<int?>(json['maxSets']),
       incline: serializer.fromJson<int?>(json['incline']),
     );
   }
@@ -642,7 +644,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'distance': serializer.toJson<double>(distance),
       'cardio': serializer.toJson<bool>(cardio),
       'restMs': serializer.toJson<int?>(restMs),
-      'maxSets': serializer.toJson<int>(maxSets),
+      'maxSets': serializer.toJson<int?>(maxSets),
       'incline': serializer.toJson<int?>(incline),
     };
   }
@@ -660,7 +662,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? distance,
           bool? cardio,
           Value<int?> restMs = const Value.absent(),
-          int? maxSets,
+          Value<int?> maxSets = const Value.absent(),
           Value<int?> incline = const Value.absent()}) =>
       GymSet(
         id: id ?? this.id,
@@ -675,7 +677,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         distance: distance ?? this.distance,
         cardio: cardio ?? this.cardio,
         restMs: restMs.present ? restMs.value : this.restMs,
-        maxSets: maxSets ?? this.maxSets,
+        maxSets: maxSets.present ? maxSets.value : this.maxSets,
         incline: incline.present ? incline.value : this.incline,
       );
   @override
@@ -735,7 +737,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<double> distance;
   final Value<bool> cardio;
   final Value<int?> restMs;
-  final Value<int> maxSets;
+  final Value<int?> maxSets;
   final Value<int?> incline;
   const GymSetsCompanion({
     this.id = const Value.absent(),
@@ -820,7 +822,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? distance,
       Value<bool>? cardio,
       Value<int?>? restMs,
-      Value<int>? maxSets,
+      Value<int?>? maxSets,
       Value<int?>? incline}) {
     return GymSetsCompanion(
       id: id ?? this.id,
@@ -1069,7 +1071,7 @@ typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
   Value<double> distance,
   Value<bool> cardio,
   Value<int?> restMs,
-  Value<int> maxSets,
+  Value<int?> maxSets,
   Value<int?> incline,
 });
 typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
@@ -1085,7 +1087,7 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<double> distance,
   Value<bool> cardio,
   Value<int?> restMs,
-  Value<int> maxSets,
+  Value<int?> maxSets,
   Value<int?> incline,
 });
 
@@ -1120,7 +1122,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<double> distance = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
             Value<int?> restMs = const Value.absent(),
-            Value<int> maxSets = const Value.absent(),
+            Value<int?> maxSets = const Value.absent(),
             Value<int?> incline = const Value.absent(),
           }) =>
               GymSetsCompanion(
@@ -1152,7 +1154,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<double> distance = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
             Value<int?> restMs = const Value.absent(),
-            Value<int> maxSets = const Value.absent(),
+            Value<int?> maxSets = const Value.absent(),
             Value<int?> incline = const Value.absent(),
           }) =>
               GymSetsCompanion.insert(

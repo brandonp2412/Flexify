@@ -38,11 +38,11 @@ class ExerciseList extends StatelessWidget {
         final countIndex =
             counts?.indexWhere((element) => element.name == exercise);
         var count = 0;
-        var max = 3;
+        int max = settings.maxSets;
 
         if (countIndex != null && countIndex > -1 && counts != null) {
           count = counts![countIndex].count;
-          max = counts![countIndex].maxSets;
+          max = counts![countIndex].maxSets ?? settings.maxSets;
         }
 
         return GestureDetector(

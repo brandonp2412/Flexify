@@ -127,11 +127,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       );
 
-    final maxSets = await _countStream.first;
-    final maxIndex = maxSets.indexWhere((element) => element.name == exercise);
-    var max = 3;
-    if (maxIndex != -1) max = maxSets[maxIndex].maxSets;
-    final last = await _getLast(exercise);
+    final counts = await _countStream.first;
+    final countIndex = counts.indexWhere((element) => element.name == exercise);
+
+    int? max;
+    int? restMs;
+    if (countIndex != -1) {
+      max = counts[countIndex].maxSets;
+      restMs = counts[countIndex].restMs;
+    }
 
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -143,13 +147,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
       duration: drift.Value(double.parse(_durationController.text)),
       distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
-      restMs: drift.Value(last?.restMs),
+      restMs: drift.Value(restMs),
       maxSets: drift.Value(max),
       incline: drift.Value(int.tryParse(_inclineController.text)),
     );
 
     if (_settings.restTimers) {
-      final counts = await _countStream.first;
       final countIndex =
           counts.indexWhere((element) => element.name == exercise);
       var count = 0;
@@ -163,8 +166,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
       else
         timerState.startTimer(
           "$exercise ($count)",
-          last?.restMs != null
-              ? Duration(milliseconds: last!.restMs!)
+          restMs != null
+              ? Duration(milliseconds: restMs)
               : _settings.timerDuration,
         );
 
