@@ -21,8 +21,8 @@ yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
 last_commits=$(git log --pretty=format:"%s" @{u}..HEAD | awk '{print "- "$0}')
-changelog="$1"
-echo "${changelog:-$last_commits}" > "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
+changelog_number=$((new_build_number * 10 + 3))
+echo "$last_commits" > "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 git add fastlane/metadata
 
 if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
