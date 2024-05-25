@@ -20,7 +20,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
@@ -119,6 +119,21 @@ class AppDatabase extends _$AppDatabase {
             Index(
               'GymSets',
               "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
+            ),
+          );
+        }
+
+        if (from < 13) {
+          await m.alterTable(TableMigration(db.gymSets));
+          (db.gymSets.update()
+                ..where(
+                  (u) => u.restMs.equals(
+                    const Duration(minutes: 3, seconds: 30).inMilliseconds,
+                  ),
+                ))
+              .write(
+            const GymSetsCompanion(
+              restMs: Value(null),
             ),
           );
         }

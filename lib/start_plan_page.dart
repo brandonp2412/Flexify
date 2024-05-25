@@ -37,25 +37,23 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   late List<String> _planExercises;
   late Stream<List<GymCount>> _countStream;
+  late SettingsState _settings;
 
   PlanState? _planState;
   bool _first = true;
   String _unit = 'kg';
   int _selectedIndex = 0;
   bool _cardio = false;
-  int _restMs = const Duration(minutes: 3, seconds: 30).inMilliseconds;
 
   @override
   void initState() {
     super.initState();
-
     _planExercises = widget.plan.exercises.split(',');
-
     final planState = context.read<PlanState>();
     planState.addListener(_planChanged);
     _planState = planState;
     _select(0);
-
+    _settings = context.read<SettingsState>();
     _countStream = watchCount(_planExercises);
   }
 
@@ -79,12 +77,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
   }
 
-  Future<void> _select(int index) async {
-    setState(() {
-      _selectedIndex = index;
-    });
-    final exercise = _planExercises.elementAt(index);
-    final last = await (db.gymSets.select()
+  Future<GymSet?> _getLast(String exercise) async {
+    return (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
             (u) => drift.OrderingTerm(
@@ -94,6 +88,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
           ])
           ..limit(1))
         .getSingleOrNull();
+  }
+
+  Future<void> _select(int index) async {
+    setState(() {
+      _selectedIndex = index;
+    });
+    final last = await _getLast(_planExercises[index]);
     if (last == null) return;
 
     setState(() {
@@ -104,7 +105,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _durationController.text = last.duration.toString();
       _inclineController.text = last.incline?.toString() ?? "";
       _cardio = last.cardio;
-      _restMs = last.restMs;
 
       if (_cardio && (_unit == 'kg' || _unit == 'lb'))
         _unit = 'km';
@@ -112,14 +112,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
   }
 
-  Future<void> _save(TimerState timerState, SettingsState settings) async {
+  Future<void> _save(TimerState timerState) async {
     setState(() {
       _first = false;
     });
     final exercise = _planExercises[_selectedIndex];
     final weightSet = await getBodyWeight();
 
-    if (!settings.explainedPermissions && settings.restTimers && mounted)
+    if (!_settings.explainedPermissions && _settings.restTimers && mounted)
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -131,6 +131,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final maxIndex = maxSets.indexWhere((element) => element.name == exercise);
     var max = 3;
     if (maxIndex != -1) max = maxSets[maxIndex].maxSets;
+    final last = await _getLast(exercise);
 
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
@@ -142,12 +143,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
       duration: drift.Value(double.parse(_durationController.text)),
       distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
-      restMs: drift.Value(_restMs),
+      restMs: drift.Value(last?.restMs),
       maxSets: drift.Value(max),
       incline: drift.Value(int.tryParse(_inclineController.text)),
     );
 
-    if (settings.restTimers) {
+    if (_settings.restTimers) {
       final counts = await _countStream.first;
       final countIndex =
           counts.indexWhere((element) => element.name == exercise);
@@ -157,12 +158,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
       final finishedPlan = count == gymSet.maxSets.value &&
           _selectedIndex == _planExercises.length - 1;
-      if (finishedPlan && settings.automaticBackup)
+      if (finishedPlan && _settings.automaticBackup)
         android.invokeMethod('save');
       else
         timerState.startTimer(
           "$exercise ($count)",
-          Duration(milliseconds: _restMs),
+          last?.restMs != null
+              ? Duration(milliseconds: last!.restMs!)
+              : _settings.timerDuration,
         );
 
       final finishedExercise = count == gymSet.maxSets.value &&
@@ -180,7 +183,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
     final timerState = context.read<TimerState>();
-    final settings = context.watch<SettingsState>();
+    _settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -251,7 +254,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 onTap: () {
                   selectAll(_weightController);
                 },
-                onSubmitted: (value) async => await _save(timerState, settings),
+                onSubmitted: (value) async => await _save(timerState),
               ),
             ],
             if (_cardio) ...[
@@ -297,7 +300,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 ],
               ),
             ],
-            if (settings.showUnits)
+            if (_settings.showUnits)
               UnitSelector(
                 value: _unit,
                 cardio: _cardio,
@@ -327,7 +330,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await _save(timerState, settings),
+        onPressed: () async => await _save(timerState),
         tooltip: "Save",
         child: const Icon(Icons.save),
       ),

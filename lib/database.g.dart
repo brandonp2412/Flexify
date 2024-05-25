@@ -374,11 +374,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   static const VerificationMeta _restMsMeta = const VerificationMeta('restMs');
   @override
   late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
-      'rest_ms', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue:
-          Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds));
+      'rest_ms', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _maxSetsMeta =
       const VerificationMeta('maxSets');
   @override
@@ -519,7 +516,7 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       cardio: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
       restMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rest_ms'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}rest_ms']),
       maxSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
       incline: attachedDatabase.typeMapping
@@ -545,7 +542,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final double duration;
   final double distance;
   final bool cardio;
-  final int restMs;
+  final int? restMs;
   final int maxSets;
   final int? incline;
   const GymSet(
@@ -560,7 +557,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.duration,
       required this.distance,
       required this.cardio,
-      required this.restMs,
+      this.restMs,
       required this.maxSets,
       this.incline});
   @override
@@ -577,7 +574,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     map['duration'] = Variable<double>(duration);
     map['distance'] = Variable<double>(distance);
     map['cardio'] = Variable<bool>(cardio);
-    map['rest_ms'] = Variable<int>(restMs);
+    if (!nullToAbsent || restMs != null) {
+      map['rest_ms'] = Variable<int>(restMs);
+    }
     map['max_sets'] = Variable<int>(maxSets);
     if (!nullToAbsent || incline != null) {
       map['incline'] = Variable<int>(incline);
@@ -598,7 +597,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       duration: Value(duration),
       distance: Value(distance),
       cardio: Value(cardio),
-      restMs: Value(restMs),
+      restMs:
+          restMs == null && nullToAbsent ? const Value.absent() : Value(restMs),
       maxSets: Value(maxSets),
       incline: incline == null && nullToAbsent
           ? const Value.absent()
@@ -621,7 +621,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       duration: serializer.fromJson<double>(json['duration']),
       distance: serializer.fromJson<double>(json['distance']),
       cardio: serializer.fromJson<bool>(json['cardio']),
-      restMs: serializer.fromJson<int>(json['restMs']),
+      restMs: serializer.fromJson<int?>(json['restMs']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
       incline: serializer.fromJson<int?>(json['incline']),
     );
@@ -641,7 +641,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'duration': serializer.toJson<double>(duration),
       'distance': serializer.toJson<double>(distance),
       'cardio': serializer.toJson<bool>(cardio),
-      'restMs': serializer.toJson<int>(restMs),
+      'restMs': serializer.toJson<int?>(restMs),
       'maxSets': serializer.toJson<int>(maxSets),
       'incline': serializer.toJson<int?>(incline),
     };
@@ -659,7 +659,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? duration,
           double? distance,
           bool? cardio,
-          int? restMs,
+          Value<int?> restMs = const Value.absent(),
           int? maxSets,
           Value<int?> incline = const Value.absent()}) =>
       GymSet(
@@ -674,7 +674,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         duration: duration ?? this.duration,
         distance: distance ?? this.distance,
         cardio: cardio ?? this.cardio,
-        restMs: restMs ?? this.restMs,
+        restMs: restMs.present ? restMs.value : this.restMs,
         maxSets: maxSets ?? this.maxSets,
         incline: incline.present ? incline.value : this.incline,
       );
@@ -734,7 +734,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<double> duration;
   final Value<double> distance;
   final Value<bool> cardio;
-  final Value<int> restMs;
+  final Value<int?> restMs;
   final Value<int> maxSets;
   final Value<int?> incline;
   const GymSetsCompanion({
@@ -819,7 +819,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? duration,
       Value<double>? distance,
       Value<bool>? cardio,
-      Value<int>? restMs,
+      Value<int?>? restMs,
       Value<int>? maxSets,
       Value<int?>? incline}) {
     return GymSetsCompanion(
@@ -1068,7 +1068,7 @@ typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
   Value<double> duration,
   Value<double> distance,
   Value<bool> cardio,
-  Value<int> restMs,
+  Value<int?> restMs,
   Value<int> maxSets,
   Value<int?> incline,
 });
@@ -1084,7 +1084,7 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<double> duration,
   Value<double> distance,
   Value<bool> cardio,
-  Value<int> restMs,
+  Value<int?> restMs,
   Value<int> maxSets,
   Value<int?> incline,
 });
@@ -1119,7 +1119,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<double> duration = const Value.absent(),
             Value<double> distance = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
-            Value<int> restMs = const Value.absent(),
+            Value<int?> restMs = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
             Value<int?> incline = const Value.absent(),
           }) =>
@@ -1151,7 +1151,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<double> duration = const Value.absent(),
             Value<double> distance = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
-            Value<int> restMs = const Value.absent(),
+            Value<int?> restMs = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
             Value<int?> incline = const Value.absent(),
           }) =>

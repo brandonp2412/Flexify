@@ -44,9 +44,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
           (value) => setState(() {
             _cardio = value.cardio;
             _unit = value.unit;
-            final duration = Duration(milliseconds: value.restMs);
-            _minutesController.text = duration.inMinutes.toString();
-            _secondsController.text = (duration.inSeconds % 60).toString();
+
+            if (value.restMs != null) {
+              final duration = Duration(milliseconds: value.restMs!);
+              _minutesController.text = duration.inMinutes.toString();
+              _secondsController.text = (duration.inSeconds % 60).toString();
+            }
+
             _maxSetsController.text = value.maxSets.toString();
             if (_cardio && (_unit == 'kg' || _unit == 'lb'))
               _unit = 'km';
@@ -83,10 +87,15 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   Future<void> _doUpdate() async {
-    final duration = Duration(
-      minutes: int.parse(_minutesController.text),
-      seconds: int.parse(_secondsController.text),
-    );
+    final minutes = int.tryParse(_minutesController.text);
+    final seconds = int.tryParse(_secondsController.text);
+
+    Duration? duration;
+    if (minutes != null && minutes > 0 || seconds != null && seconds > 0)
+      duration = Duration(
+        minutes: minutes ?? 0,
+        seconds: seconds ?? 0,
+      );
 
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
@@ -94,7 +103,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         name: Value(_nameController.text),
         cardio: Value(_cardio),
         unit: _unit != null ? Value(_unit!) : const Value.absent(),
-        restMs: Value(duration.inMilliseconds),
+        restMs: Value(duration?.inMilliseconds),
         maxSets: Value(int.parse(_maxSetsController.text)),
       ),
     );

@@ -16,9 +16,7 @@ class GymSets extends Table {
   RealColumn get duration => real().withDefault(const Constant(0.0))();
   RealColumn get distance => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();
-  IntColumn get restMs => integer().withDefault(
-        Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds),
-      )();
+  IntColumn get restMs => integer().nullable()();
   IntColumn get maxSets => integer().withDefault(const Constant(3))();
   IntColumn get incline => integer().nullable()();
 }

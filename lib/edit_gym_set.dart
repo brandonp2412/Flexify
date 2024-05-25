@@ -32,7 +32,7 @@ class _EditGymSetState extends State<EditGymSet> {
   late bool _cardio;
   late String _name;
   late SettingsState _settings;
-  late int _restMs;
+  int? _restMs;
 
   TextEditingController? _nameController;
   List<String> _nameOptions = [];
@@ -71,7 +71,7 @@ class _EditGymSetState extends State<EditGymSet> {
       distance: double.tryParse(_distanceController.text),
       duration: double.tryParse(_durationController.text),
       cardio: _cardio,
-      restMs: _restMs,
+      restMs: Value(_restMs),
       incline: Value(int.tryParse(_inclineController.text)),
     );
 
@@ -83,7 +83,10 @@ class _EditGymSetState extends State<EditGymSet> {
       final settings = context.read<SettingsState>();
       if (!settings.restTimers) return;
       final timer = context.read<TimerState>();
-      timer.startTimer(_name, Duration(milliseconds: _restMs));
+      if (_restMs != null)
+        timer.startTimer(_name, Duration(milliseconds: _restMs!));
+      else
+        timer.startTimer(_name, _settings.timerDuration);
     }
   }
 
