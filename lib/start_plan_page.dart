@@ -117,7 +117,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _first = false;
     });
     final exercise = _planExercises[_selectedIndex];
-    final weightSet = await getBodyWeight();
+    var bodyWeight = 0.0;
+    if (!_settings.hideWeight)
+      bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
     if (!_settings.explainedPermissions && _settings.restTimers && mounted)
       await Navigator.push(
@@ -146,7 +148,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       cardio: drift.Value(_cardio),
       duration: drift.Value(double.parse(_durationController.text)),
       distance: drift.Value(double.parse(_distanceController.text)),
-      bodyWeight: drift.Value(weightSet?.weight ?? 0.0),
+      bodyWeight: drift.Value(bodyWeight),
       restMs: drift.Value(restMs),
       maxSets: drift.Value(max),
       incline: drift.Value(int.tryParse(_inclineController.text)),
@@ -232,21 +234,24 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 focusNode: _weightNode,
                 decoration: InputDecoration(
                   labelText: 'Weight ($_unit)',
-                  suffixIcon: IconButton(
-                    tooltip: "Use body weight",
-                    icon: const Icon(Icons.scale),
-                    onPressed: () async {
-                      final weightSet = await getBodyWeight();
-                      if (weightSet == null && context.mounted)
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('No weight entered yet.'),
-                          ),
-                        );
-                      else
-                        _weightController.text = weightSet!.weight.toString();
-                    },
-                  ),
+                  suffixIcon: _settings.hideWeight
+                      ? null
+                      : IconButton(
+                          tooltip: "Use body weight",
+                          icon: const Icon(Icons.scale),
+                          onPressed: () async {
+                            final weightSet = await getBodyWeight();
+                            if (weightSet == null && context.mounted)
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('No weight entered yet.'),
+                                ),
+                              );
+                            else
+                              _weightController.text =
+                                  weightSet!.weight.toString();
+                          },
+                        ),
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {

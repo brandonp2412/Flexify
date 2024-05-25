@@ -1,6 +1,8 @@
 import 'package:flexify/enter_weight_page.dart';
 import 'package:flexify/settings_page.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppSearch extends StatefulWidget {
   const AppSearch({
@@ -31,6 +33,8 @@ class _AppSearchState extends State<AppSearch> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SearchBar(
@@ -124,7 +128,7 @@ class _AppSearchState extends State<AppSearch> {
                     },
                   ),
                 ),
-              if (widget.selected.isEmpty)
+              if (widget.selected.isEmpty && !settings.hideWeight)
                 PopupMenuItem(
                   child: ListTile(
                     leading: const Icon(Icons.scale),

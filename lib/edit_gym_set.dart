@@ -203,13 +203,22 @@ class _EditGymSetState extends State<EditGymSet> {
                       ..limit(1))
                     .getSingleOrNull();
                 if (last == null) return;
-                final bodyWeight = await getBodyWeight();
-                _updateFields(
-                  last.copyWith(
-                    bodyWeight: bodyWeight?.weight,
-                    created: DateTime.now().toLocal(),
-                  ),
-                );
+
+                if (_settings.hideWeight)
+                  _updateFields(
+                    last.copyWith(
+                      created: DateTime.now().toLocal(),
+                    ),
+                  );
+                else {
+                  final bodyWeight = await getBodyWeight();
+                  _updateFields(
+                    last.copyWith(
+                      bodyWeight: bodyWeight?.weight,
+                      created: DateTime.now().toLocal(),
+                    ),
+                  );
+                }
               },
               initialValue: TextEditingValue(text: _name),
               fieldViewBuilder: (
@@ -272,7 +281,7 @@ class _EditGymSetState extends State<EditGymSet> {
                 onTap: () => selectAll(_weightController),
               ),
             ],
-            if (_name != 'Weight')
+            if (_name != 'Weight' && !_settings.hideWeight)
               TextField(
                 controller: _bodyWeightController,
                 decoration: InputDecoration(labelText: 'Body weight ($_unit)'),

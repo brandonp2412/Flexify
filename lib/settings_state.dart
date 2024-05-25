@@ -19,6 +19,7 @@ class SettingsState extends ChangeNotifier {
   bool hideTimerTab = false;
   bool hideHistoryTab = false;
   bool curveLines = false;
+  bool hideWeight = false;
 
   SettingsState() {
     alarmSound = prefs.getString('alarmSound');
@@ -53,6 +54,13 @@ class SettingsState extends ChangeNotifier {
     explainedPermissions = prefs.getBool('explainedPermissions') ?? false;
     curveLines = prefs.getBool('curveLines') ?? false;
     vibrate = prefs.getBool('vibrate') ?? true;
+    hideWeight = prefs.getBool('hideWeight') ?? false;
+  }
+
+  void setHideWeight(bool value) {
+    hideWeight = value;
+    notifyListeners();
+    prefs.setBool('hideWeight', value);
   }
 
   void setMaxSets(int value) {

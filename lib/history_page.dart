@@ -4,9 +4,11 @@ import 'package:flexify/database.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -208,12 +210,15 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          final settings = context.read<SettingsState>();
           final gymSets = await _stream.first;
-          final bodyWeight = await getBodyWeight();
+          var bodyWeight = 0.0;
+          if (!settings.hideWeight)
+            bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
           GymSet gymSet = gymSets.firstOrNull ??
               GymSet(
                 id: 0,
-                bodyWeight: bodyWeight?.weight ?? 0,
+                bodyWeight: bodyWeight,
                 restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
                 name: '',
                 reps: 0,
@@ -228,7 +233,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
               );
           gymSet = gymSet.copyWith(
             id: 0,
-            bodyWeight: bodyWeight?.weight ?? 0,
+            bodyWeight: bodyWeight,
             created: DateTime.now().toLocal(),
           );
 

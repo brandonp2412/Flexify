@@ -92,27 +92,28 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
               DropdownButtonFormField(
                 decoration: const InputDecoration(labelText: 'Metric'),
                 value: _metric,
-                items: const [
-                  DropdownMenuItem(
+                items: [
+                  const DropdownMenuItem(
                     value: StrengthMetric.bestWeight,
                     child: Text("Best weight"),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: StrengthMetric.bestReps,
                     child: Text("Best reps"),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: StrengthMetric.oneRepMax,
                     child: Text("One rep max"),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: StrengthMetric.volume,
                     child: Text("Volume"),
                   ),
-                  DropdownMenuItem(
-                    value: StrengthMetric.relativeStrength,
-                    child: Text("Relative strength"),
-                  ),
+                  if (!settings.hideWeight)
+                    const DropdownMenuItem(
+                      value: StrengthMetric.relativeStrength,
+                      child: Text("Relative strength"),
+                    ),
                 ],
                 onChanged: (value) {
                   setState(() {

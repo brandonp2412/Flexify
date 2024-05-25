@@ -1,0 +1,8 @@
+- Add setting to hide body weight tracking
+- Fix changelogs for fastlane releases
+- Remove automatic backups feature
+- Add setting for maximum # of sets
+- Add rest minutes/seconds global override
+- Make settings padding sizes consistent
+- Stick search bar to top of settings
+- Rename WidgetSettings -> SettingsLine

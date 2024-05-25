@@ -304,6 +304,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsLine(
+        key: 'hide weight',
+        widget: ListTile(
+          title: const Text('Hide weight'),
+          onTap: () => _settings.setHideWeight(!_settings.hideWeight),
+          trailing: Switch(
+            value: _settings.hideWeight,
+            onChanged: (value) => _settings.setHideWeight(value),
+          ),
+        ),
+      ),
+      SettingsLine(
         key: 'curve line graphs',
         widget: ListTile(
           title: const Text('Curve line graphs'),
