@@ -124,6 +124,7 @@ Future<void> appWrapper() async {
   settingsState.setTheme(ThemeMode.dark);
   settingsState.setExplained(true);
   settingsState.setTimers(false);
+  settingsState.setSystem(false);
   runApp(app.appProviders(settingsState));
 }
 
