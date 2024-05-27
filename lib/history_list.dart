@@ -38,6 +38,7 @@ class _HistoryListState extends State<HistoryList> {
   void dispose() {
     super.dispose();
     _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
   }
 
   void _scrollListener() {
