@@ -19,6 +19,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     super.dispose();
   }
 

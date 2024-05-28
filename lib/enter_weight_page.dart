@@ -28,6 +28,12 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
   }
 
   @override
+  void dispose() {
+    _valueController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Enter Weight')),

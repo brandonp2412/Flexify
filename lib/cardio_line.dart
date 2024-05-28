@@ -44,6 +44,12 @@ class _CardioLineState extends State<CardioLine> {
     _settings = context.read<SettingsState>();
   }
 
+  @override
+  void dispose() {
+    _settings.dispose();
+    super.dispose();
+  }
+
   void _setStream() {
     _graphStream = watchCardio(
       endDate: widget.endDate,

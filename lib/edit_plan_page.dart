@@ -55,6 +55,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void dispose() {
     _searchNode.dispose();
     _searchController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 

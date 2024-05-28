@@ -32,6 +32,12 @@ class _AppSearchState extends State<AppSearch> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
 

@@ -61,9 +61,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
   void dispose() {
     _repsController.dispose();
     _weightController.dispose();
+    _distanceController.dispose();
+    _durationController.dispose();
+    _inclineController.dispose();
+
     _repsNode.dispose();
     _weightNode.dispose();
+    _distanceNode.dispose();
+    _durationNode.dispose();
+
     _planState?.removeListener(_planChanged);
+    _settings.dispose();
+
     super.dispose();
   }
 

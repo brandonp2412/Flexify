@@ -56,6 +56,13 @@ class _EditGymSetState extends State<EditGymSet> {
   void dispose() {
     _repsController.dispose();
     _weightController.dispose();
+    _bodyWeightController.dispose();
+    _distanceController.dispose();
+    _durationController.dispose();
+    _inclineController.dispose();
+    _nameController?.dispose();
+    _settings.dispose();
+
     super.dispose();
   }
 

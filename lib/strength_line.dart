@@ -56,6 +56,12 @@ class _StrengthLineState extends State<StrengthLine> {
     _settings = context.read<SettingsState>();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _settings.dispose();
+  }
+
   void _setStream() {
     Expression<String> createdCol = const CustomExpression<String>(
       "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",

@@ -64,9 +64,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
   dispose() {
     _nameNode.dispose();
     _minutesNode.dispose();
+    _secondsNode.dispose();
     _maxSetsNode.dispose();
+
     _nameController.dispose();
     _minutesController.dispose();
+    _secondsController.dispose();
     _maxSetsController.dispose();
     super.dispose();
   }

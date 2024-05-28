@@ -68,9 +68,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _player.stop();
     _player.dispose();
+    _searchController.dispose();
+    _minutesController.dispose();
+    _secondsController.dispose();
+    _maxSetsController.dispose();
+    _settings.dispose();
+
+    super.dispose();
   }
 
   @override
