@@ -60,19 +60,23 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 3) {
-          await m.addColumn(plans, plans.sequence);
+          await m.addColumn(plans, plans.sequence).catchError((value) => null);
         }
         if (from < 4) {
-          await m.addColumn(plans, plans.title);
+          await m.addColumn(plans, plans.title).catchError((value) => null);
         }
 
         if (from < 5) {
-          await m.addColumn(gymSets, gymSets.hidden);
+          await m
+              .addColumn(gymSets, gymSets.hidden)
+              .catchError((value) => null);
           await batch((batch) => batch.insertAll(gymSets, _defaultSets));
         }
 
         if (from < 6) {
-          await m.addColumn(gymSets, gymSets.bodyWeight);
+          await m
+              .addColumn(gymSets, gymSets.bodyWeight)
+              .catchError((value) => null);
           final bodyWeight = await getBodyWeight();
           if (bodyWeight?.weight == null) return;
 
@@ -87,13 +91,21 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 8) {
-          await m.addColumn(gymSets, gymSets.duration);
-          await m.addColumn(gymSets, gymSets.distance);
-          await m.addColumn(gymSets, gymSets.cardio);
+          await m
+              .addColumn(gymSets, gymSets.duration)
+              .catchError((value) => null);
+          await m
+              .addColumn(gymSets, gymSets.distance)
+              .catchError((value) => null);
+          await m
+              .addColumn(gymSets, gymSets.cardio)
+              .catchError((value) => null);
         }
 
         if (from < 9) {
-          await m.addColumn(gymSets, gymSets.restMs);
+          await m
+              .addColumn(gymSets, gymSets.restMs)
+              .catchError((value) => null);
           final timerDuration = prefs.getInt('timerDuration');
           if (timerDuration != null)
             await (gymSets
@@ -102,7 +114,9 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 10) {
-          await m.addColumn(gymSets, gymSets.maxSets);
+          await m
+              .addColumn(gymSets, gymSets.maxSets)
+              .catchError((value) => null);
           final maxSets = prefs.getInt('maxSets');
           if (maxSets != null)
             await (gymSets
@@ -111,7 +125,9 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 11) {
-          await m.addColumn(gymSets, gymSets.incline);
+          await m
+              .addColumn(gymSets, gymSets.incline)
+              .catchError((value) => null);
         }
 
         if (from < 12) {
@@ -124,7 +140,9 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 13) {
-          await m.alterTable(TableMigration(gymSets));
+          await m
+              .alterTable(TableMigration(gymSets))
+              .catchError((value) => null);
           (gymSets.update()
                 ..where(
                   (u) => u.restMs.equals(
@@ -139,7 +157,9 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 14) {
-          await m.alterTable(TableMigration(gymSets));
+          await m
+              .alterTable(TableMigration(gymSets))
+              .catchError((value) => null);
           (gymSets.update()
                 ..where(
                   (u) => u.maxSets.equals(3),

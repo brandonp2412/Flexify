@@ -1,0 +1,1 @@
+- Catch errors in migrations
