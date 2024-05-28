@@ -44,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
             "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
           ),
         );
-        await db.batch((batch) {
+        await batch((batch) {
           batch.insertAll(gymSets, _defaultSets);
           batch.insertAll(plans, defaultPlans);
         });
@@ -68,7 +68,7 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 5) {
           await m.addColumn(gymSets, gymSets.hidden);
-          await db.batch((batch) => batch.insertAll(gymSets, _defaultSets));
+          await batch((batch) => batch.insertAll(gymSets, _defaultSets));
         }
 
         if (from < 6) {
@@ -124,8 +124,8 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 13) {
-          await m.alterTable(TableMigration(db.gymSets));
-          (db.gymSets.update()
+          await m.alterTable(TableMigration(gymSets));
+          (gymSets.update()
                 ..where(
                   (u) => u.restMs.equals(
                     const Duration(minutes: 3, seconds: 30).inMilliseconds,
@@ -139,8 +139,8 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 14) {
-          await m.alterTable(TableMigration(db.gymSets));
-          (db.gymSets.update()
+          await m.alterTable(TableMigration(gymSets));
+          (gymSets.update()
                 ..where(
                   (u) => u.maxSets.equals(3),
                 ))
