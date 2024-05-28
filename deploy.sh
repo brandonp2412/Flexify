@@ -2,6 +2,7 @@
 
 set -ex
 
+./flutter/bin/flutter test
 ./screenshots.sh "phoneScreenshots"
 ./screenshots.sh "sevenInchScreenshots"
 ./screenshots.sh "tenInchScreenshots"

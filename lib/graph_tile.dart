@@ -31,7 +31,7 @@ class GraphTile extends StatelessWidget {
       trailing: Text(
         gymSet.cardio.value
             ? "${gymSet.distance.value} / ${gymSet.duration.value}"
-            : "${gymSet.reps.value} x ${gymSet.weight.value}${gymSet.unit.value}",
+            : "${gymSet.reps.value} x ${gymSet.weight.value} ${gymSet.unit.value}",
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () {

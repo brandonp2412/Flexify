@@ -150,6 +150,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
             settings.setExplained(true);
           }
         },
+        tooltip: "Confirm",
         child: const Icon(Icons.check),
       ),
     );

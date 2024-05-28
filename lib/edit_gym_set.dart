@@ -309,6 +309,7 @@ class _EditGymSetState extends State<EditGymSet> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _save,
+        tooltip: "Save",
         child: const Icon(Icons.save),
       ),
     );

@@ -94,6 +94,7 @@ class _AppSearchState extends State<AppSearch> {
             ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
+            tooltip: "Show menu",
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: ListTile(
