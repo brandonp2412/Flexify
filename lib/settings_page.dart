@@ -74,7 +74,6 @@ class _SettingsPageState extends State<SettingsPage> {
     _minutesController.dispose();
     _secondsController.dispose();
     _maxSetsController.dispose();
-    _settings.dispose();
 
     super.dispose();
   }

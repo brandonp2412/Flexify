@@ -59,7 +59,6 @@ class _StrengthLineState extends State<StrengthLine> {
   @override
   void dispose() {
     super.dispose();
-    _settings.dispose();
   }
 
   void _setStream() {

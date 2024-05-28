@@ -71,7 +71,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _durationNode.dispose();
 
     _planState?.removeListener(_planChanged);
-    _settings.dispose();
 
     super.dispose();
   }

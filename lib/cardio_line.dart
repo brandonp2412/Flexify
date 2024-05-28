@@ -46,7 +46,6 @@ class _CardioLineState extends State<CardioLine> {
 
   @override
   void dispose() {
-    _settings.dispose();
     super.dispose();
   }
 
