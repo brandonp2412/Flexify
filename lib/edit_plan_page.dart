@@ -137,6 +137,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         IconButton(
           onPressed: _toggleSearch,
           icon: const Icon(Icons.search),
+          tooltip: "Search",
         ),
       );
     else
@@ -214,7 +215,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _save,
-        tooltip: "Save this plan",
+        tooltip: "Save",
         child: const Icon(Icons.save),
       ),
     );
