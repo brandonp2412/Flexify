@@ -150,7 +150,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           );
           await _updatePlans();
         },
-        tooltip: 'Add plan',
+        tooltip: 'Add',
         child: const Icon(Icons.add),
       ),
     );
