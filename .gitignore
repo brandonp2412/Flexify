@@ -45,3 +45,5 @@ android/fastlane/report.xml
 
 # FVM Version Cache
 .fvm/
+
+coverage/
