@@ -173,7 +173,7 @@ class GraphsPageState extends State<GraphsPage> {
             ),
           );
         },
-        tooltip: 'Add exercise',
+        tooltip: 'Add',
         child: const Icon(Icons.add),
       ),
     );

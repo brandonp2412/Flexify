@@ -75,6 +75,7 @@ class _ViewCardioPageState extends State<ViewCardioPage> {
               );
             },
             icon: const Icon(Icons.edit),
+            tooltip: "Edit",
           ),
         ],
       ),

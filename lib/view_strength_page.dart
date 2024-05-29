@@ -81,6 +81,7 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
               );
             },
             icon: const Icon(Icons.edit),
+            tooltip: "Edit",
           ),
         ],
       ),
