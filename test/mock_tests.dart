@@ -17,6 +17,7 @@ mockTests() async {
     "systemColors": false,
     "dateFormat": "yyyy-MM-dd h:mm a",
     "timerDuration": const Duration(minutes: 3, seconds: 30).inMilliseconds,
+    "hideWeight": true,
   });
   prefs = await SharedPreferences.getInstance();
   android = const MethodChannel("com.presley.flexify/android");
