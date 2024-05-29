@@ -86,6 +86,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _save,
+        tooltip: 'Save',
         child: const Icon(Icons.save),
       ),
     );
