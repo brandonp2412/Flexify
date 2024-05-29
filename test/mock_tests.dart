@@ -1,4 +1,5 @@
 import 'package:drift/native.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,8 @@ mockTests() async {
     "dateFormat": "yyyy-MM-dd h:mm a",
     "timerDuration": const Duration(minutes: 3, seconds: 30).inMilliseconds,
     "hideWeight": true,
+    "planTrailing": PlanTrailing.count.toString(),
+    "explainedPermissions": true,
   });
   prefs = await SharedPreferences.getInstance();
   android = const MethodChannel("com.presley.flexify/android");
