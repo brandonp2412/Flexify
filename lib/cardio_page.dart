@@ -1,31 +1,25 @@
+import 'package:flexify/cardio_line.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_graph_page.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/strength_line.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class ViewStrengthPage extends StatefulWidget {
+class CardioPage extends StatefulWidget {
   final String name;
-  const ViewStrengthPage({super.key, required this.name});
+  const CardioPage({super.key, required this.name});
 
   @override
-  createState() => _ViewStrengthPageState();
+  createState() => _CardioPageState();
 }
 
-class _ViewStrengthPageState extends State<ViewStrengthPage> {
-  StrengthMetric _metric = StrengthMetric.bestWeight;
+class _CardioPageState extends State<CardioPage> {
+  CardioMetric _metric = CardioMetric.pace;
   Period _groupBy = Period.day;
-  String _targetUnit = 'kg';
+
   DateTime? _startDate;
   DateTime? _endDate;
-
-  @override
-  initState() {
-    super.initState();
-    if (widget.name == 'Weight') _groupBy = Period.week;
-  }
 
   Future<void> _selectEnd() async {
     final DateTime? pickedDate = await showDatePicker(
@@ -89,39 +83,29 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
-            if (widget.name != 'Weight')
-              DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: 'Metric'),
-                value: _metric,
-                items: [
-                  const DropdownMenuItem(
-                    value: StrengthMetric.bestWeight,
-                    child: Text("Best weight"),
-                  ),
-                  const DropdownMenuItem(
-                    value: StrengthMetric.bestReps,
-                    child: Text("Best reps"),
-                  ),
-                  const DropdownMenuItem(
-                    value: StrengthMetric.oneRepMax,
-                    child: Text("One rep max"),
-                  ),
-                  const DropdownMenuItem(
-                    value: StrengthMetric.volume,
-                    child: Text("Volume"),
-                  ),
-                  if (!settings.hideWeight)
-                    const DropdownMenuItem(
-                      value: StrengthMetric.relativeStrength,
-                      child: Text("Relative strength"),
-                    ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _metric = value!;
-                  });
-                },
-              ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Metric'),
+              value: _metric,
+              items: const [
+                DropdownMenuItem(
+                  value: CardioMetric.pace,
+                  child: Text("Pace (distance / time)"),
+                ),
+                DropdownMenuItem(
+                  value: CardioMetric.duration,
+                  child: Text("Duration"),
+                ),
+                DropdownMenuItem(
+                  value: CardioMetric.distance,
+                  child: Text("Distance"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _metric = value!;
+                });
+              },
+            ),
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: 'Group by'),
               value: _groupBy,
@@ -149,22 +133,6 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                 });
               },
             ),
-            if (settings.showUnits)
-              DropdownButtonFormField<String>(
-                value: _targetUnit,
-                decoration: const InputDecoration(labelText: 'Unit'),
-                items: ['kg', 'lb'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _targetUnit = newValue!;
-                  });
-                },
-              ),
             Row(
               children: [
                 Expanded(
@@ -201,10 +169,9 @@ class _ViewStrengthPageState extends State<ViewStrengthPage> {
                 ),
               ],
             ),
-            StrengthLine(
+            CardioLine(
               name: widget.name,
               metric: _metric,
-              targetUnit: _targetUnit,
               groupBy: _groupBy,
               startDate: _startDate,
               endDate: _endDate,

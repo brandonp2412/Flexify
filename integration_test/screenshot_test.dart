@@ -12,7 +12,7 @@ import 'package:flexify/settings_state.dart';
 import 'package:flexify/start_plan_page.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/timer_state.dart';
-import 'package:flexify/view_strength_page.dart';
+import 'package:flexify/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -316,7 +316,7 @@ void main() {
         screenshotName: '5_en-US',
         navigateToPage: (context) async => navigateTo(
           context: context,
-          page: const ViewStrengthPage(name: screenshotExercise),
+          page: const StrengthPage(name: screenshotExercise),
         ),
         tabBarState: TabBarState.graphs,
       ),

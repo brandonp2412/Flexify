@@ -1,7 +1,7 @@
 import 'package:flexify/database.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/view_cardio_page.dart';
-import 'package:flexify/view_strength_page.dart';
+import 'package:flexify/cardio_page.dart';
+import 'package:flexify/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +30,7 @@ class GraphTile extends StatelessWidget {
       ),
       trailing: Text(
         gymSet.cardio.value
-            ? "${gymSet.distance.value} / ${gymSet.duration.value}"
+            ? "${gymSet.distance.value} ${gymSet.unit.value} / ${gymSet.duration.value}"
             : "${gymSet.reps.value} x ${gymSet.weight.value} ${gymSet.unit.value}",
         style: const TextStyle(fontSize: 16),
       ),
@@ -40,8 +40,8 @@ class GraphTile extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => gymSet.cardio.value
-                  ? ViewCardioPage(name: gymSet.name.value)
-                  : ViewStrengthPage(
+                  ? CardioPage(name: gymSet.name.value)
+                  : StrengthPage(
                       name: gymSet.name.value,
                     ),
             ),

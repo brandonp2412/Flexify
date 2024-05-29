@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/view_cardio_page.dart';
-import 'package:flexify/view_strength_page.dart';
+import 'package:flexify/cardio_page.dart';
+import 'package:flexify/strength_page.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseModal extends StatelessWidget {
@@ -37,8 +37,8 @@ class ExerciseModal extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => gymSet.cardio
-                    ? ViewCardioPage(name: exercise)
-                    : ViewStrengthPage(
+                    ? CardioPage(name: exercise)
+                    : StrengthPage(
                         name: exercise,
                       ),
               ),
