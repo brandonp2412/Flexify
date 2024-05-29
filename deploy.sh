@@ -31,7 +31,7 @@ if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
     git --no-pager diff
     git restore --staged pubspec.yaml fastlane/metadata
     git restore pubspec.yaml fastlane/metadata
-    rm "fastlane/metadata/android/en-US/changelogs/$new_build_number.txt"
+    rm "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
     exit 1
 fi
 
