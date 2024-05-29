@@ -69,6 +69,7 @@ class _AppSearchState extends State<AppSearch> {
           if (widget.selected.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete),
+              tooltip: "Delete selected",
               onPressed: () {
                 showDialog(
                   context: context,

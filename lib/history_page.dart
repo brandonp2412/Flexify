@@ -247,7 +247,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
             ),
           );
         },
-        tooltip: 'Add gym set',
+        tooltip: 'Add',
         child: const Icon(Icons.add),
       ),
     );
