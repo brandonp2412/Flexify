@@ -154,10 +154,13 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
   const countColumn = CustomExpression<int>(
     """
       COUNT(
-        CASE WHEN DATE(created, 'unixepoch', 'localtime') = DATE('now') 
-          AND hidden = 0 THEN 1 END
+        CASE 
+          WHEN DATE(created, 'unixepoch', 'localtime') = 
+            DATE('now', 'localtime') AND hidden = 0 
+          THEN 1 
+        END
       )
-      """,
+   """,
   );
 
   return (db.selectOnly(db.gymSets)
