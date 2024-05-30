@@ -169,14 +169,17 @@ class _StartPlanPageState extends State<StartPlanPage> {
       if (countIndex != -1) count = counts[countIndex].count;
       count++;
 
-      timerState.startTimer(
-        "$exercise ($count)",
-        restMs != null
-            ? Duration(milliseconds: restMs)
-            : _settings.timerDuration,
-      );
+      final finishedPlan = count == (max ?? _settings.maxSets) &&
+          _selectedIndex == _planExercises.length - 1;
+      if (!finishedPlan)
+        timerState.startTimer(
+          "$exercise ($count)",
+          restMs != null
+              ? Duration(milliseconds: restMs)
+              : _settings.timerDuration,
+        );
 
-      final finishedExercise = count == gymSet.maxSets.value &&
+      final finishedExercise = count == (max ?? _settings.maxSets) &&
           _selectedIndex < _planExercises.length - 1;
       if (finishedExercise) _select(_selectedIndex + 1);
     }

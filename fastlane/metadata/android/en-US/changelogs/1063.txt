@@ -1,0 +1,3 @@
+- Fix detecting the end of plans
+- Add more settings unit tests
+- Fix undo when deploy.sh fails
