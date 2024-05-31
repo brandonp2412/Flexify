@@ -1,0 +1,3 @@
+- Fix settings page test
+- Use the correct unit for graphs by default
+- Add setting for strength & cardio units

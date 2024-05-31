@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'mock_tests.dart';
 
 void main() async {
-  testWidgets('SettingsPage', (WidgetTester tester) async {
+  render(WidgetTester tester) async {
     await mockTests();
     await tester.pumpWidget(
       MultiProvider(
@@ -25,16 +25,24 @@ void main() async {
       ),
     );
     await tester.pumpAndSettle();
+  }
 
+  testWidgets('SettingsPage searches', (WidgetTester tester) async {
+    await render(tester);
     expect(find.text('Settings'), findsOne);
     expect(find.text('Search...'), findsOne);
-    expect(find.textContaining('Long date format'), findsOne);
-    expect(find.textContaining('Short date format'), findsOne);
-    expect(find.textContaining('Maximum sets'), findsOne);
-    expect(find.textContaining('Rest minutes'), findsOne);
-    expect(find.textContaining('Rest timers'), findsOne);
-    expect(find.textContaining('Vibrate'), findsOne);
-    expect(find.textContaining('Show units'), findsOne);
+
+    await tester.enterText(find.bySemanticsLabel('Search...'), 'Rest timers');
+    await tester.pump();
+
+    expect(find.textContaining('Theme'), findsNothing);
+    expect(find.textContaining('Rest timers'), findsNWidgets(2));
+
+    await db.close();
+  });
+
+  testWidgets('SettingsPage changes', (WidgetTester tester) async {
+    await render(tester);
 
     await tester.tap(find.text('System'));
     await tester.pump();
@@ -56,8 +64,14 @@ void main() async {
 
     await tester.tap(find.text('Rest timers'));
     await tester.pump();
-    await tester.tap(find.text('Vibrate'));
+
+    await tester.enterText(find.bySemanticsLabel('Search...'), 'Vibrate');
     await tester.pump();
+    await tester.tap(find.widgetWithText(ListTile, 'Vibrate'));
+
+    await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
+    await tester.pump();
+    await tester.tap(find.widgetWithText(ListTile, 'Show units'));
 
     await db.close();
   });
