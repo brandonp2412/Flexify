@@ -169,6 +169,10 @@ class MainActivity : FlutterActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         data?.data?.also { uri ->
+            val contentResolver = applicationContext.contentResolver
+            val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, takeFlags)
+
             if (requestCode == WRITE_REQUEST_CODE) {
                 sharedPrefs.edit().apply {
                     putString("flutter.backupPath", uri.toString())
