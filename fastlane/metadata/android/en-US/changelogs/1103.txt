@@ -1,0 +1,3 @@
+- Stop warning on missed taps for settings tests
+- Merge branch 'main' of github.com:brandonp2412/Flexify
+- Fix test warnings for settings page

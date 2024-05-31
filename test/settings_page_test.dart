@@ -67,13 +67,17 @@ void main() async {
 
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Vibrate');
     await tester.pump();
-    await tester.tap(find.widgetWithText(ListTile, 'Vibrate'),
-        warnIfMissed: false);
+    await tester.tap(
+      find.widgetWithText(ListTile, 'Vibrate'),
+      warnIfMissed: false,
+    );
 
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
     await tester.pump();
-    await tester.tap(find.widgetWithText(ListTile, 'Show units'),
-        warnIfMissed: false);
+    await tester.tap(
+      find.widgetWithText(ListTile, 'Show units'),
+      warnIfMissed: false,
+    );
 
     await db.close();
   });
