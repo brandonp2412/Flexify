@@ -1,6 +1,8 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SettingsState extends ChangeNotifier {
   ThemeMode themeMode = ThemeMode.system;
@@ -22,6 +24,8 @@ class SettingsState extends ChangeNotifier {
   bool hideHistoryTab = false;
   bool curveLines = false;
   bool hideWeight = false;
+  bool automaticBackup = false;
+
 
   SettingsState() {
     alarmSound = prefs.getString('alarmSound');
@@ -57,6 +61,7 @@ class SettingsState extends ChangeNotifier {
     hideHistoryTab = prefs.getBool("hideHistoryTab") ?? false;
     explainedPermissions = prefs.getBool('explainedPermissions') ?? false;
     curveLines = prefs.getBool('curveLines') ?? false;
+    automaticBackup = prefs.getBool('automaticBackup') ?? false;
     vibrate = prefs.getBool('vibrate') ?? true;
     hideWeight = prefs.getBool('hideWeight') ?? false;
   }
@@ -104,6 +109,16 @@ class SettingsState extends ChangeNotifier {
       prefs.remove("alarmSound");
     else
       prefs.setString('alarmSound', sound);
+  }
+
+  void setAutomatic(bool backup) async {
+    if (backup) {
+      final dbFolder = await getApplicationDocumentsDirectory();
+      android.invokeMethod('pick', [join(dbFolder.path, 'flexify.sqlite')]);
+    }
+    automaticBackup = backup;
+    notifyListeners();
+    prefs.setBool('automaticBackup', backup);
   }
 
   void setPlanTrailing(PlanTrailing value) {

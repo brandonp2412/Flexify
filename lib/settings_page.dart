@@ -365,6 +365,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsLine(
+        key: 'automatic backups',
+        widget: ListTile(
+          title: const Text('Backup automatically'),
+          onTap: () => _settings.setAutomatic(!_settings.automaticBackup),
+          trailing: Switch(
+            value: _settings.automaticBackup,
+            onChanged: (value) => _settings.setAutomatic(value),
+          ),
+        ),
+      ),
+      SettingsLine(
         key: 'alarm sound',
         widget: material.TextButton.icon(
           onPressed: () async {
