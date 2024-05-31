@@ -15,24 +15,33 @@ class _PermissionsPageState extends State<PermissionsPage> {
   bool _ignore = false;
   bool _notify = false;
 
+  Future requestPermission(Permission permission) async {
+    final value = await permission.request().isGranted;
+    setState(() {
+      switch (permission) {
+        case Permission.notification:
+          _notify = value;
+        case Permission.ignoreBatteryOptimizations:
+          _ignore = value;
+        case Permission.scheduleExactAlarm:
+          _schedule = value;
+        default:
+          return;
+      }
+    });
+  }
+
+  Future initPermissionStatus() async {
+    _notify = await Permission.notification.isGranted;
+    _ignore = await Permission.ignoreBatteryOptimizations.isGranted;
+    _schedule = await Permission.scheduleExactAlarm.isGranted;
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    Permission.notification.isGranted.then(
-      (value) => setState(() {
-        _notify = value;
-      }),
-    );
-    Permission.ignoreBatteryOptimizations.isGranted.then(
-      (value) => setState(() {
-        _ignore = value;
-      }),
-    );
-    Permission.scheduleExactAlarm.isGranted.then(
-      (value) => setState(() {
-        _schedule = value;
-      }),
-    );
+    initPermissionStatus();
   }
 
   @override
@@ -67,16 +76,10 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 subtitle: const Text(
                   'Progress may pause if battery optimizations stay on.',
                 ),
-                onTap: () async {
-                  final status =
-                      await Permission.ignoreBatteryOptimizations.request();
-                  setState(() {
-                    _ignore = status.isGranted;
-                  });
-                },
+                onTap: () async => await requestPermission(Permission.ignoreBatteryOptimizations),
                 trailing: Switch(
                   value: _ignore,
-                  onChanged: (value) {},
+                  onChanged: (_) async => await requestPermission(Permission.ignoreBatteryOptimizations),
                 ),
               ),
               ListTile(
@@ -84,15 +87,10 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 subtitle: const Text(
                   'Alarms cannot be accurate if this is disabled.',
                 ),
-                onTap: () async {
-                  final status = await Permission.scheduleExactAlarm.request();
-                  setState(() {
-                    _schedule = status.isGranted;
-                  });
-                },
+                onTap: () async => await requestPermission(Permission.scheduleExactAlarm),
                 trailing: Switch(
                   value: _schedule,
-                  onChanged: (value) {},
+                  onChanged: (_) async => await requestPermission(Permission.scheduleExactAlarm),
                 ),
               ),
               ListTile(
@@ -100,15 +98,10 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 subtitle: const Text(
                   'Timer progress is sent to the notification bar',
                 ),
-                onTap: () async {
-                  final status = await Permission.notification.request();
-                  setState(() {
-                    _notify = status.isGranted;
-                  });
-                },
+                onTap: () async => await requestPermission(Permission.notification),
                 trailing: Switch(
                   value: _notify,
-                  onChanged: (value) {},
+                  onChanged: (_) async => await requestPermission(Permission.notification),
                 ),
               ),
             ],
