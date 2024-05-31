@@ -10,6 +10,8 @@ class SettingsState extends ChangeNotifier {
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
   String? alarmSound;
+  String? cardioUnit;
+  String? strengthUnit;
 
   bool vibrate = true;
   bool restTimers = true;
@@ -23,6 +25,8 @@ class SettingsState extends ChangeNotifier {
 
   SettingsState() {
     alarmSound = prefs.getString('alarmSound');
+    cardioUnit = prefs.getString('cardioUnit');
+    strengthUnit = prefs.getString('strengthUnit');
     longDateFormat = prefs.getString('longDateFormat') ?? "dd/MM/yy";
     shortDateFormat = prefs.getString('shortDateFormat') ?? "d/M/yy";
     maxSets = prefs.getInt('maxSets') ?? 3;
@@ -73,6 +77,24 @@ class SettingsState extends ChangeNotifier {
     timerDuration = value;
     notifyListeners();
     prefs.setInt('timerDuration', value.inMilliseconds);
+  }
+
+  void setCardioUnit(String? value) async {
+    cardioUnit = value;
+    notifyListeners();
+    if (value == null)
+      prefs.remove("cardioUnit");
+    else
+      prefs.setString('cardioUnit', value);
+  }
+
+  void setStrengthUnit(String? value) async {
+    strengthUnit = value;
+    notifyListeners();
+    if (value == null)
+      prefs.remove("strengthUnit");
+    else
+      prefs.setString("strengthUnit", value);
   }
 
   void setAlarm(String? sound) async {

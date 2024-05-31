@@ -1,9 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddExercisePage extends StatefulWidget {
   const AddExercisePage({super.key});
@@ -14,7 +16,7 @@ class AddExercisePage extends StatefulWidget {
 
 class _AddExercisePageState extends State<AddExercisePage> {
   final TextEditingController _nameController = TextEditingController();
-  String _unit = 'kg';
+  String? _unit;
   bool _cardio = false;
 
   @override
@@ -23,23 +25,31 @@ class _AddExercisePageState extends State<AddExercisePage> {
     super.dispose();
   }
 
-  Future<void> _save() async {
-    Navigator.pop(context);
-    db.gymSets.insertOne(
+  Future<void> _save(String unit) async {
+    await db.gymSets.insertOne(
       GymSetsCompanion.insert(
         created: DateTime.now().toLocal(),
         reps: 0,
         weight: 0,
         name: _nameController.text,
-        unit: _unit,
+        unit: unit,
         cardio: Value(_cardio),
         hidden: const Value(true),
       ),
     );
+
+    if (mounted) Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
+    var unit = _unit;
+    if (unit == null && _cardio)
+      unit = settings.cardioUnit ?? 'km';
+    else if (unit == null && !_cardio) unit = settings.strengthUnit ?? 'kg';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add exercise'),
@@ -55,7 +65,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               autofocus: true,
             ),
             UnitSelector(
-              value: _unit,
+              value: unit!,
               cardio: _cardio,
               onChanged: (String? newValue) {
                 setState(() {
@@ -69,9 +79,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 setState(() {
                   _cardio = !_cardio;
                   if (_cardio)
-                    _unit = 'km';
+                    _unit = settings.cardioUnit ?? 'km';
                   else
-                    _unit = 'kg';
+                    _unit = settings.strengthUnit ?? 'kg';
                 });
               },
               trailing: Switch(
@@ -85,7 +95,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _save,
+        onPressed: () => _save(unit!),
         tooltip: 'Save',
         child: const Icon(Icons.save),
       ),

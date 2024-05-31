@@ -111,6 +111,40 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsLine(
+        key: 'strength unit',
+        widget: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: DropdownButtonFormField<String>(
+            value: _settings.strengthUnit ?? 'kg',
+            decoration: const InputDecoration(labelText: 'Strength unit'),
+            items: ['kg', 'lb'].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (value) => _settings.setStrengthUnit(value),
+          ),
+        ),
+      ),
+      SettingsLine(
+        key: 'cardio unit',
+        widget: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: DropdownButtonFormField<String>(
+            value: _settings.cardioUnit ?? 'km',
+            decoration: const InputDecoration(labelText: 'Cardio unit'),
+            items: ['km', 'mi'].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (value) => _settings.setCardioUnit(value),
+          ),
+        ),
+      ),
+      SettingsLine(
         key: 'long date format',
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

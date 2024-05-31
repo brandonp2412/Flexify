@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan_state.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
@@ -36,6 +37,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
     super.initState();
     _nameController = TextEditingController(text: widget.name);
 
+    final settings = context.read<SettingsState>();
+
     (db.gymSets.select()
           ..where((tbl) => tbl.name.equals(widget.name))
           ..limit(1))
@@ -54,8 +57,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
             if (value.maxSets != null)
               _maxSetsController.text = value.maxSets.toString();
             if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-              _unit = 'km';
-            else if (!_cardio && (_unit == 'km' || _unit == 'mi')) _unit = 'kg';
+              _unit = settings.cardioUnit ?? 'km';
+            else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
+              _unit = settings.strengthUnit ?? 'kg';
           }),
         );
   }
@@ -199,6 +203,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit ${widget.name.toLowerCase()}"),
@@ -266,9 +272,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 setState(() {
                   _cardio = !_cardio;
                   if (_cardio)
-                    _unit = 'km';
+                    _unit = settings.cardioUnit ?? 'km';
                   else
-                    _unit = 'kg';
+                    _unit = settings.strengthUnit ?? 'kg';
                 });
               },
               trailing: Switch(

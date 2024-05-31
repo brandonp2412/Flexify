@@ -1,9 +1,11 @@
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:provider/provider.dart';
 
 class EnterWeightPage extends StatefulWidget {
   const EnterWeightPage({super.key});
@@ -15,14 +17,18 @@ class EnterWeightPage extends StatefulWidget {
 class _EnterWeightPageState extends State<EnterWeightPage> {
   final TextEditingController _valueController = TextEditingController();
   String _yesterdaysWeight = "";
-  String _unit = 'kg';
+  String? _unit;
 
   @override
   void initState() {
     super.initState();
+    final settings = context.read<SettingsState>();
+
     getBodyWeight().then(
       (value) => setState(() {
-        _yesterdaysWeight = "${value?.weight ?? 0} ${value?.unit ?? 'kg'}";
+        _yesterdaysWeight =
+            "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit ?? 'kg'}";
+        _unit = value?.unit;
       }),
     );
   }
@@ -35,6 +41,8 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Enter Weight')),
       body: Form(
@@ -51,7 +59,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
                 autofocus: true,
               ),
               UnitSelector(
-                value: _unit,
+                value: _unit ?? settings.strengthUnit ?? 'kg',
                 cardio: false,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -76,7 +84,7 @@ class _EnterWeightPageState extends State<EnterWeightPage> {
               created: DateTime.now().toLocal(),
               name: "Weight",
               reps: 1,
-              unit: _unit,
+              unit: _unit ?? settings.strengthUnit ?? 'kg',
               weight: double.parse(_valueController.text),
             ),
           );

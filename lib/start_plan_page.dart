@@ -41,7 +41,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   PlanState? _planState;
   bool _first = true;
-  String _unit = 'kg';
+  String? _unit;
   int _selectedIndex = 0;
   bool _cardio = false;
 
@@ -115,8 +115,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _cardio = last.cardio;
 
       if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-        _unit = 'km';
-      else if (!_cardio && (_unit == 'km' || _unit == 'mi')) _unit = 'kg';
+        _unit = _settings.cardioUnit ?? 'km';
+      else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
+        _unit = _settings.strengthUnit ?? 'kg';
     });
   }
 
@@ -147,11 +148,19 @@ class _StartPlanPageState extends State<StartPlanPage> {
       restMs = counts[countIndex].restMs;
     }
 
+    var unit = _unit;
+    if (unit == null) {
+      if (_cardio)
+        unit = _settings.cardioUnit ?? 'km';
+      else
+        unit = _settings.strengthUnit ?? 'kg';
+    }
+
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
       reps: double.parse(_repsController.text),
       weight: double.parse(_weightController.text),
-      unit: _unit,
+      unit: _unit!,
       created: DateTime.now().toLocal(),
       cardio: drift.Value(_cardio),
       duration: drift.Value(double.parse(_durationController.text)),
@@ -195,6 +204,14 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     final timerState = context.read<TimerState>();
     _settings = context.watch<SettingsState>();
+
+    var unit = _unit;
+    if (unit == null) {
+      if (_cardio)
+        unit = _settings.cardioUnit ?? 'km';
+      else
+        unit = _settings.strengthUnit ?? 'kg';
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -316,7 +333,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
             ],
             if (_settings.showUnits)
               UnitSelector(
-                value: _unit,
+                value: unit,
                 cardio: _cardio,
                 onChanged: (String? newValue) {
                   setState(() {

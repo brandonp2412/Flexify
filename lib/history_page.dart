@@ -215,6 +215,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           var bodyWeight = 0.0;
           if (!settings.hideWeight)
             bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
+
           GymSet gymSet = gymSets.firstOrNull ??
               GymSet(
                 id: 0,
@@ -223,7 +224,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 name: '',
                 reps: 0,
                 created: DateTime.now().toLocal(),
-                unit: 'kg',
+                unit: settings.strengthUnit ?? 'kg',
                 weight: 0,
                 cardio: false,
                 duration: 0,
