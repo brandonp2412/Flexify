@@ -40,6 +40,7 @@ class ExerciseModal extends StatelessWidget {
                     ? CardioPage(name: exercise)
                     : StrengthPage(
                         name: exercise,
+                        unit: gymSet.unit,
                       ),
               ),
             );

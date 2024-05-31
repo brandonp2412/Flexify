@@ -8,16 +8,18 @@ import 'package:provider/provider.dart';
 
 class StrengthPage extends StatefulWidget {
   final String name;
-  const StrengthPage({super.key, required this.name});
+  final String unit;
+
+  const StrengthPage({super.key, required this.name, required this.unit});
 
   @override
   createState() => _StrengthPageState();
 }
 
 class _StrengthPageState extends State<StrengthPage> {
+  late String _targetUnit = widget.unit;
   StrengthMetric _metric = StrengthMetric.bestWeight;
   Period _groupBy = Period.day;
-  String _targetUnit = 'kg';
   DateTime? _startDate;
   DateTime? _endDate;
 

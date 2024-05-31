@@ -43,6 +43,7 @@ class GraphTile extends StatelessWidget {
                   ? CardioPage(name: gymSet.name.value)
                   : StrengthPage(
                       name: gymSet.name.value,
+                      unit: gymSet.unit.value,
                     ),
             ),
           );

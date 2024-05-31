@@ -24,6 +24,7 @@ void main() async {
         child: const MaterialApp(
           home: StrengthPage(
             name: 'Dumbbell shoulder press',
+            unit: 'kg',
           ),
         ),
       ),
@@ -53,6 +54,7 @@ void main() async {
         child: const MaterialApp(
           home: StrengthPage(
             name: 'Dumbbell shoulder press',
+            unit: 'kg',
           ),
         ),
       ),
@@ -79,6 +81,7 @@ void main() async {
         child: const MaterialApp(
           home: StrengthPage(
             name: 'Dumbbell shoulder press',
+            unit: 'kg',
           ),
         ),
       ),

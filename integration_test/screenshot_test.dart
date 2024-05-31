@@ -316,7 +316,10 @@ void main() {
         screenshotName: '5_en-US',
         navigateToPage: (context) async => navigateTo(
           context: context,
-          page: const StrengthPage(name: screenshotExercise),
+          page: const StrengthPage(
+            name: screenshotExercise,
+            unit: 'kg',
+          ),
         ),
         tabBarState: TabBarState.graphs,
       ),
