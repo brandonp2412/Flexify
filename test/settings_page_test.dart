@@ -62,16 +62,18 @@ void main() async {
     await tester.pump();
     expect(find.text('7'), findsOne);
 
-    await tester.tap(find.text('Rest timers'));
+    await tester.tap(find.text('Rest timers'), warnIfMissed: false);
     await tester.pump();
 
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Vibrate');
     await tester.pump();
-    await tester.tap(find.widgetWithText(ListTile, 'Vibrate'));
+    await tester.tap(find.widgetWithText(ListTile, 'Vibrate'),
+        warnIfMissed: false);
 
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
     await tester.pump();
-    await tester.tap(find.widgetWithText(ListTile, 'Show units'));
+    await tester.tap(find.widgetWithText(ListTile, 'Show units'),
+        warnIfMissed: false);
 
     await db.close();
   });
