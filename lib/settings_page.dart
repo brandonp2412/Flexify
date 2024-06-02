@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/about_page.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
@@ -90,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
           child: DropdownButtonFormField<ThemeMode>(
             value: _settings.themeMode,
             icon: Theme.of(context).colorScheme.brightness == Brightness.dark
-                ? const Icon(Icons.dark_mode)
+                ? const Icon(Icons.dark_mode_outlined)
                 : const Icon(Icons.light_mode),
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
@@ -451,6 +452,19 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutPage(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.info_outline_rounded),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
