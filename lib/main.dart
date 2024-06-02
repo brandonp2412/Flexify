@@ -103,7 +103,7 @@ class HomePage extends StatelessWidget {
                 text: "History",
               ),
             const Tab(
-              icon: Icon(Icons.event),
+              icon: Icon(Icons.calendar_today),
               text: "Plans",
             ),
             const Tab(
