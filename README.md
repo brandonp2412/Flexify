@@ -22,7 +22,10 @@ Flexify is a Flutter project designed to help users track their gym progress con
         height="75">
 </a>
 
-<img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.presley.flexify">
+<p float="left">
+    <img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.presley.flexify">
+    <img alt="Release downloads" src="https://img.shields.io/github/downloads/brandonp2412/Flexify/total.svg">
+</p>
 
 ## Screenshots
 
