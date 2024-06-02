@@ -36,6 +36,9 @@ if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
 fi
 
 ./flutter/bin/flutter build apk --split-per-abi
+./flutter/bin/flutter build apk
+apk=build/app/outputs/flutter-apk
+mv $apk/app-release.apk $apk/flexify.apk
 
 if [ "$1" == "-p" ]; then
   ./flutter/bin/flutter build appbundle
@@ -47,7 +50,8 @@ $rest"
 git push
 
 gh release create "$new_version" --notes "${changelog:-$last_commits}"  \
-  build/app/outputs/flutter-apk/app-*-release.apk
+  $apk/app-*-release.apk \
+  $apk/flexify.apk
 git pull --tags
 
 if [ "$1" == "-p" ]; then
