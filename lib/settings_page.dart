@@ -81,6 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     _settings = context.watch<SettingsState>();
+
     List<SettingsLine> lines = [
       SettingsLine(
         key: 'theme',
@@ -88,6 +89,9 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<ThemeMode>(
             value: _settings.themeMode,
+            icon: Theme.of(context).colorScheme.brightness == Brightness.dark
+                ? const Icon(Icons.dark_mode)
+                : const Icon(Icons.light_mode),
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Theme',
@@ -115,6 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
+            icon: const Icon(Icons.scale),
             value: _settings.strengthUnit ?? 'kg',
             decoration: const InputDecoration(labelText: 'Strength unit'),
             items: ['kg', 'lb'].map((String value) {
@@ -132,6 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
+            icon: const Icon(Icons.scale_outlined),
             value: _settings.cardioUnit ?? 'km',
             decoration: const InputDecoration(labelText: 'Cardio unit'),
             items: ['km', 'mi'].map((String value) {
@@ -149,6 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
+            icon: const Icon(Icons.calendar_month),
             value: _settings.longDateFormat,
             items: longFormats.map((String value) {
               return DropdownMenuItem<String>(
@@ -171,6 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
+            icon: const Icon(Icons.calendar_today),
             value: _settings.shortDateFormat,
             items: shortFormats.map((String value) {
               return DropdownMenuItem<String>(
@@ -194,6 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<PlanTrailing>(
             value: _settings.planTrailing,
+            icon: const Icon(Icons.arrow_right),
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Plan trailing display',
@@ -218,7 +227,10 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
             controller: _maxSetsController,
-            decoration: const InputDecoration(labelText: 'Maximum sets'),
+            decoration: const InputDecoration(
+              labelText: 'Maximum sets',
+              suffixIcon: Icon(Icons.sports_gymnastics),
+            ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(_maxSetsController),
             onChanged: (value) =>
@@ -236,8 +248,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration:
-                          const InputDecoration(labelText: 'Rest minutes'),
+                      decoration: const InputDecoration(
+                        labelText: 'Rest minutes',
+                      ),
                       controller: _minutesController,
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(_minutesController),
@@ -254,7 +267,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(labelText: 'seconds'),
+                      decoration: const InputDecoration(
+                        labelText: 'seconds',
+                        suffixIcon: Icon(Icons.timer_outlined),
+                      ),
                       controller: _secondsController,
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(_secondsController),
@@ -276,6 +292,9 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'rest timers',
         widget: ListTile(
           title: const Text('Rest timers'),
+          leading: _settings.restTimers
+              ? const Icon(Icons.timer)
+              : const Icon(Icons.timer_outlined),
           onTap: () {
             _settings.setTimers(!_settings.restTimers);
           },
@@ -289,6 +308,7 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'vibrate',
         widget: ListTile(
           title: const Text('Vibrate'),
+          leading: const Icon(Icons.vibration),
           onTap: () {
             _settings.setVibrate(!_settings.vibrate);
           },
@@ -302,6 +322,7 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'show units',
         widget: ListTile(
           title: const Text('Show units'),
+          leading: const Icon(Icons.scale_sharp),
           onTap: () => _settings.setUnits(!_settings.showUnits),
           trailing: Switch(
             value: _settings.showUnits,
@@ -313,6 +334,9 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),
+          leading: _settings.systemColors
+              ? const Icon(Icons.color_lens)
+              : const Icon(Icons.color_lens_outlined),
           onTap: () => _settings.setSystem(!_settings.systemColors),
           trailing: Switch(
             value: _settings.systemColors,
@@ -324,6 +348,9 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'hide timer tab',
         widget: ListTile(
           title: const Text('Hide timer tab'),
+          leading: _settings.hideTimerTab
+              ? const Icon(Icons.timer_outlined)
+              : const Icon(Icons.timer),
           onTap: () => _settings.setHideTimer(!_settings.hideTimerTab),
           trailing: Switch(
             value: _settings.hideTimerTab,
@@ -335,6 +362,7 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'hide history tab',
         widget: ListTile(
           title: const Text('Hide history tab'),
+          leading: const Icon(Icons.history),
           onTap: () => _settings.setHideHistory(!_settings.hideHistoryTab),
           trailing: Switch(
             value: _settings.hideHistoryTab,
@@ -346,6 +374,7 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'hide weight',
         widget: ListTile(
           title: const Text('Hide weight'),
+          leading: const Icon(Icons.scale_outlined),
           onTap: () => _settings.setHideWeight(!_settings.hideWeight),
           trailing: Switch(
             value: _settings.hideWeight,
@@ -357,6 +386,7 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'curve line graphs',
         widget: ListTile(
           title: const Text('Curve line graphs'),
+          leading: const Icon(Icons.insights),
           onTap: () => _settings.setCurvedLines(!_settings.curveLines),
           trailing: Switch(
             value: _settings.curveLines,
