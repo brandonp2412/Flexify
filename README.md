@@ -21,6 +21,11 @@ Flexify is a Flutter project designed to help users track their gym progress con
         alt="Get it on F-Droid"
         height="75">
 </a>
+<a href="https://github.com/brandonp2412/Flexify/releases/latest/download/app-arm64-v8a-release.apk">
+    <img src="docs/get-it-on-android.png"
+        alt="Get the APK"
+        height="75">
+</a>
 
 <p float="left">
     <img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.presley.flexify">
