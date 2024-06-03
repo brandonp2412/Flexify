@@ -1,0 +1,31 @@
+name: Build and Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Flutter
+      uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+
+    - name: Build Windows
+      run: .\flutter\bin\flutter build windows
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./build/windows/x64/runner/Release/flexify.exe
+        asset_name: flexify.exe
+        asset_content_type: application/octet-stream
