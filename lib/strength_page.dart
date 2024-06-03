@@ -124,49 +124,6 @@ class _StrengthPageState extends State<StrengthPage> {
                   });
                 },
               ),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Group by'),
-              value: _groupBy,
-              items: const [
-                DropdownMenuItem(
-                  value: Period.day,
-                  child: Text("Day"),
-                ),
-                DropdownMenuItem(
-                  value: Period.week,
-                  child: Text("Week"),
-                ),
-                DropdownMenuItem(
-                  value: Period.month,
-                  child: Text("Month"),
-                ),
-                DropdownMenuItem(
-                  value: Period.year,
-                  child: Text("Year"),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _groupBy = value!;
-                });
-              },
-            ),
-            if (settings.showUnits)
-              DropdownButtonFormField<String>(
-                value: _targetUnit,
-                decoration: const InputDecoration(labelText: 'Unit'),
-                items: ['kg', 'lb'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _targetUnit = newValue!;
-                  });
-                },
-              ),
             Row(
               children: [
                 Expanded(
@@ -203,6 +160,63 @@ class _StrengthPageState extends State<StrengthPage> {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: Period.values.map((period) {
+                return TextButton(
+                  onPressed: _groupBy == period
+                      ? null
+                      : () {
+                          setState(() {
+                            _groupBy = period;
+                          });
+                        },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      color: _groupBy == period
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.transparent,
+                      width: 2,
+                    ),
+                  ),
+                  child: Text(
+                    period.name[0].toUpperCase() + period.name.substring(1),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            if (settings.showUnits)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: ['kg', 'lb'].map((unit) {
+                  return TextButton(
+                    onPressed: _targetUnit == unit
+                        ? null
+                        : () {
+                            setState(() {
+                              _targetUnit = unit;
+                            });
+                          },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: _targetUnit == unit
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
+                        width: 2,
+                      ),
+                    ),
+                    child: Text(
+                      unit,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             StrengthLine(
               name: widget.name,
               metric: _metric,
