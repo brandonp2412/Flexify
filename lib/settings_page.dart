@@ -92,9 +92,6 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<ThemeMode>(
             value: _settings.themeMode,
-            icon: Theme.of(context).colorScheme.brightness == Brightness.dark
-                ? const Icon(Icons.dark_mode_outlined)
-                : const Icon(Icons.light_mode),
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Theme',
@@ -122,7 +119,6 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            icon: const Icon(Icons.scale),
             value: _settings.strengthUnit ?? 'kg',
             decoration: const InputDecoration(labelText: 'Strength unit'),
             items: ['kg', 'lb'].map((String value) {
@@ -140,7 +136,6 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            icon: const Icon(Icons.scale_outlined),
             value: _settings.cardioUnit ?? 'km',
             decoration: const InputDecoration(labelText: 'Cardio unit'),
             items: ['km', 'mi'].map((String value) {
@@ -158,7 +153,6 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            icon: const Icon(Icons.calendar_month),
             value: _settings.longDateFormat,
             items: longFormats.map((String value) {
               return DropdownMenuItem<String>(
@@ -181,7 +175,6 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            icon: const Icon(Icons.calendar_today),
             value: _settings.shortDateFormat,
             items: shortFormats.map((String value) {
               return DropdownMenuItem<String>(
@@ -205,7 +198,6 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<PlanTrailing>(
             value: _settings.planTrailing,
-            icon: const Icon(Icons.arrow_right),
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Plan trailing display',
@@ -232,7 +224,6 @@ class _SettingsPageState extends State<SettingsPage> {
             controller: _maxSetsController,
             decoration: const InputDecoration(
               labelText: 'Maximum sets',
-              suffixIcon: Icon(Icons.sports_gymnastics),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(_maxSetsController),
@@ -273,7 +264,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: TextField(
                         decoration: const InputDecoration(
                           labelText: 'seconds',
-                          suffixIcon: Icon(Icons.timer_outlined),
                         ),
                         controller: _secondsController,
                         keyboardType: TextInputType.number,
