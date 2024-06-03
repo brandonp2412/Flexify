@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
@@ -171,7 +173,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       incline: drift.Value(int.tryParse(_inclineController.text)),
     );
 
-    if (_settings.restTimers) {
+    if (_settings.restTimers && Platform.isAndroid) {
       final countIndex =
           counts.indexWhere((element) => element.name == exercise);
       var count = 0;

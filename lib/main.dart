@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/history_page.dart';
@@ -77,7 +79,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
     var length = 4;
-    if (settings.hideTimerTab) length--;
+    if (settings.hideTimerTab || !Platform.isAndroid) length--;
     if (settings.hideHistoryTab) length--;
 
     return DefaultTabController(
@@ -110,7 +112,7 @@ class HomePage extends StatelessWidget {
               icon: Icon(Icons.insights),
               text: "Graphs",
             ),
-            if (!settings.hideTimerTab)
+            if (!settings.hideTimerTab && Platform.isAndroid)
               const Tab(
                 icon: Icon(Icons.timer_outlined),
                 text: "Timer",

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
@@ -8,6 +10,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class EditGymSet extends StatefulWidget {
@@ -86,7 +89,7 @@ class _EditGymSetState extends State<EditGymSet> {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
       db.into(db.gymSets).insert(insert);
       final settings = context.read<SettingsState>();
-      if (!settings.restTimers) return;
+      if (!settings.restTimers || !Platform.isAndroid) return;
       final timer = context.read<TimerState>();
       if (_restMs != null)
         timer.startTimer(_name, Duration(milliseconds: _restMs!));

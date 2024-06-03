@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/about_page.dart';
@@ -239,86 +241,89 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      SettingsLine(
-        key: 'rest minutes seconds',
-        widget: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: material.Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Rest minutes',
-                      ),
-                      controller: _minutesController,
-                      keyboardType: TextInputType.number,
-                      onTap: () => selectAll(_minutesController),
-                      onChanged: (value) => _settings.setDuration(
-                        Duration(
-                          minutes: int.parse(value),
-                          seconds: _settings.timerDuration.inSeconds % 60,
+      if (Platform.isAndroid)
+        SettingsLine(
+          key: 'rest minutes seconds',
+          widget: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: material.Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Rest minutes',
+                        ),
+                        controller: _minutesController,
+                        keyboardType: TextInputType.number,
+                        onTap: () => selectAll(_minutesController),
+                        onChanged: (value) => _settings.setDuration(
+                          Duration(
+                            minutes: int.parse(value),
+                            seconds: _settings.timerDuration.inSeconds % 60,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'seconds',
-                        suffixIcon: Icon(Icons.timer_outlined),
-                      ),
-                      controller: _secondsController,
-                      keyboardType: TextInputType.number,
-                      onTap: () => selectAll(_secondsController),
-                      onChanged: (value) => _settings.setDuration(
-                        Duration(
-                          seconds: int.parse(value),
-                          minutes: _settings.timerDuration.inMinutes.floor(),
+                    const SizedBox(
+                      width: 8.0,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'seconds',
+                          suffixIcon: Icon(Icons.timer_outlined),
+                        ),
+                        controller: _secondsController,
+                        keyboardType: TextInputType.number,
+                        onTap: () => selectAll(_secondsController),
+                        onChanged: (value) => _settings.setDuration(
+                          Duration(
+                            seconds: int.parse(value),
+                            minutes: _settings.timerDuration.inMinutes.floor(),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      SettingsLine(
-        key: 'rest timers',
-        widget: ListTile(
-          title: const Text('Rest timers'),
-          leading: _settings.restTimers
-              ? const Icon(Icons.timer)
-              : const Icon(Icons.timer_outlined),
-          onTap: () {
-            _settings.setTimers(!_settings.restTimers);
-          },
-          trailing: Switch(
-            value: _settings.restTimers,
-            onChanged: (value) => _settings.setTimers(value),
+      if (Platform.isAndroid)
+        SettingsLine(
+          key: 'rest timers',
+          widget: ListTile(
+            title: const Text('Rest timers'),
+            leading: _settings.restTimers
+                ? const Icon(Icons.timer)
+                : const Icon(Icons.timer_outlined),
+            onTap: () {
+              _settings.setTimers(!_settings.restTimers);
+            },
+            trailing: Switch(
+              value: _settings.restTimers,
+              onChanged: (value) => _settings.setTimers(value),
+            ),
           ),
         ),
-      ),
-      SettingsLine(
-        key: 'vibrate',
-        widget: ListTile(
-          title: const Text('Vibrate'),
-          leading: const Icon(Icons.vibration),
-          onTap: () {
-            _settings.setVibrate(!_settings.vibrate);
-          },
-          trailing: Switch(
-            value: _settings.vibrate,
-            onChanged: (value) => _settings.setVibrate(value),
+      if (Platform.isAndroid)
+        SettingsLine(
+          key: 'vibrate',
+          widget: ListTile(
+            title: const Text('Vibrate'),
+            leading: const Icon(Icons.vibration),
+            onTap: () {
+              _settings.setVibrate(!_settings.vibrate);
+            },
+            trailing: Switch(
+              value: _settings.vibrate,
+              onChanged: (value) => _settings.setVibrate(value),
+            ),
           ),
         ),
-      ),
       SettingsLine(
         key: 'show units',
         widget: ListTile(
