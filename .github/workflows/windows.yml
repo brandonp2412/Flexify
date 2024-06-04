@@ -16,7 +16,7 @@ jobs:
           channel: "stable"
 
       - name: Build Windows
-        run: .\flutter\bin\flutter build windows
+        run: flutter build windows
 
       - name: Archive Release files
         run: |
