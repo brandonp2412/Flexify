@@ -57,7 +57,7 @@ fi
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 
 $rest"
-git push --force
+git push
 
 gh release create "$new_version" --notes "$last_commits"  \
   $apk/app-*-release.apk \
