@@ -12,5 +12,6 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "flutter/": true,
-  }
+  },
+  "editor.formatOnSave": true
 }
