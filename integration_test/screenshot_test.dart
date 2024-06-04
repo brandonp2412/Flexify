@@ -1,18 +1,20 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/edit_plan_page.dart';
-import 'package:flexify/history_page.dart';
 import 'package:flexify/graphs_page.dart';
+import 'package:flexify/history_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan_state.dart';
 import 'package:flexify/plans_page.dart';
 import 'package:flexify/settings_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/start_plan_page.dart';
+import 'package:flexify/strength_page.dart';
 import 'package:flexify/timer_page.dart';
 import 'package:flexify/timer_state.dart';
-import 'package:flexify/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -353,20 +355,21 @@ void main() {
       ),
     );
 
-    testWidgets(
-      "TimerPage",
-      (tester) async => await generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '8_en-US',
-        skipSettle: true,
-        navigateToPage: (context) async {
-          await context.read<TimerState>().addOneMinute();
-          await tester.pump();
-          await tester.pump(const Duration(seconds: 7));
-        },
-        tabBarState: TabBarState.timer,
-      ),
-    );
+    if (Platform.isAndroid)
+      testWidgets(
+        "TimerPage",
+        (tester) async => await generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '8_en-US',
+          skipSettle: true,
+          navigateToPage: (context) async {
+            await context.read<TimerState>().addOneMinute();
+            await tester.pump();
+            await tester.pump(const Duration(seconds: 7));
+          },
+          tabBarState: TabBarState.timer,
+        ),
+      );
   });
 }
