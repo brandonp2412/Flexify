@@ -1,0 +1,33 @@
+name: macos
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - name: Build MacOS
+        run: flutter build macos
+
+      - name: Archive Release files
+        run:
+          - cd build/macos/Build/Products/Release
+          - zip -r macos.zip .
+
+      - name: Upload zip
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./build/macos/Build/Products/Release/macos.zip
+          asset_name: MacOS zip
+          tag: ${{ github.ref }}
+          overwrite: false

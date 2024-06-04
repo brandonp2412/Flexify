@@ -53,6 +53,7 @@ gh release create "$new_version" --notes "${changelog:-$last_commits}"  \
   $apk/app-*-release.apk \
   $apk/flexify.apk
 gh workflow run windows --ref "$new_version"
+gh workflow run macos --ref "$new_version"
 git pull --tags
 
 if [ "$1" == "-p" ]; then
