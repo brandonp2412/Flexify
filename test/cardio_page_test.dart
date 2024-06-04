@@ -36,6 +36,7 @@ void main() async {
         child: const MaterialApp(
           home: CardioPage(
             name: 'Run',
+            unit: 'km',
           ),
         ),
       ),
@@ -76,6 +77,7 @@ void main() async {
         child: const MaterialApp(
           home: CardioPage(
             name: 'Run',
+            unit: 'km',
           ),
         ),
       ),
@@ -113,6 +115,7 @@ void main() async {
         child: const MaterialApp(
           home: CardioPage(
             name: 'Run',
+            unit: 'km',
           ),
         ),
       ),

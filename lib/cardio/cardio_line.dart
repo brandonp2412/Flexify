@@ -11,6 +11,7 @@ class CardioLine extends StatefulWidget {
   final String name;
   final CardioMetric metric;
   final Period groupBy;
+  final String targetUnit;
   final DateTime? startDate;
   final DateTime? endDate;
 
@@ -21,6 +22,7 @@ class CardioLine extends StatefulWidget {
     required this.groupBy,
     this.startDate,
     this.endDate,
+    required this.targetUnit,
   });
 
   @override
@@ -56,6 +58,7 @@ class _CardioLineState extends State<CardioLine> {
       metric: widget.metric,
       name: widget.name,
       startDate: widget.startDate,
+      targetUnit: widget.targetUnit,
     );
   }
 

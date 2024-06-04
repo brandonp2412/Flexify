@@ -37,7 +37,7 @@ class ExerciseModal extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => gymSet.cardio
-                    ? CardioPage(name: exercise)
+                    ? CardioPage(name: exercise, unit: gymSet.unit)
                     : StrengthPage(
                         name: exercise,
                         unit: gymSet.unit,

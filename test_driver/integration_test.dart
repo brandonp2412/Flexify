@@ -16,7 +16,6 @@ Future<void> main() async => await integrationDriver(
           imgFile = await File(
             'fastlane/metadata/android/en-US/images/$deviceType/$name.png',
           ).create(recursive: true);
-        print("Writing ${imgFile.path}");
         await imgFile.writeAsBytes(image);
         return true;
       },

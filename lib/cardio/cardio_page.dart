@@ -8,13 +8,15 @@ import 'package:provider/provider.dart';
 
 class CardioPage extends StatefulWidget {
   final String name;
-  const CardioPage({super.key, required this.name});
+  final String unit;
+  const CardioPage({super.key, required this.name, required this.unit});
 
   @override
   createState() => _CardioPageState();
 }
 
 class _CardioPageState extends State<CardioPage> {
+  late String _targetUnit = widget.unit;
   CardioMetric _metric = CardioMetric.pace;
   Period _groupBy = Period.day;
 
@@ -133,6 +135,26 @@ class _CardioPageState extends State<CardioPage> {
                 });
               },
             ),
+            if (_metric == CardioMetric.distance && settings.showUnits)
+              DropdownButtonFormField(
+                decoration: const InputDecoration(labelText: 'Unit'),
+                value: _targetUnit,
+                items: const [
+                  DropdownMenuItem(
+                    value: 'km',
+                    child: Text("km"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'mi',
+                    child: Text("mi"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _targetUnit = value!;
+                  });
+                },
+              ),
             Row(
               children: [
                 Expanded(
@@ -175,6 +197,7 @@ class _CardioPageState extends State<CardioPage> {
               groupBy: _groupBy,
               startDate: _startDate,
               endDate: _endDate,
+              targetUnit: _targetUnit,
             ),
           ],
         ),

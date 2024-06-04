@@ -58,6 +58,7 @@ Stream<List<CardioData>> watchCardio({
   Period groupBy = Period.day,
   String name = "",
   CardioMetric metric = CardioMetric.pace,
+  String targetUnit = "km",
   DateTime? startDate,
   DateTime? endDate,
 }) {
@@ -92,11 +93,18 @@ Stream<List<CardioData>> watchCardio({
     (results) {
       List<CardioData> list = [];
       for (final result in results.reversed) {
+        var value = _getValue(result, metric);
+        final unit = result.read(db.gymSets.unit)!;
+
+        if (unit == 'km' && targetUnit == 'mi')
+          value /= 1.609;
+        else if (unit == 'mi' && targetUnit == 'km') value *= 1.609;
+
         list.add(
           CardioData(
             created: result.read(db.gymSets.created)!,
-            value: double.parse(_getValue(result, metric).toStringAsFixed(2)),
-            unit: result.read(db.gymSets.unit)!,
+            value: double.parse(value.toStringAsFixed(2)),
+            unit: targetUnit,
           ),
         );
       }
