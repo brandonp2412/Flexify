@@ -118,14 +118,27 @@ class _CardioLineState extends State<CardioLine> {
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipColor: (touch) =>
                         Theme.of(context).colorScheme.surface,
-                    getTooltipItems: (touchedSpots) => [
-                      LineTooltipItem(
-                        touchedSpots.first.y.toStringAsFixed(2),
-                        TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                    getTooltipItems: (touchedSpots) {
+                      final row = rows.elementAt(touchedSpots.first.spotIndex);
+                      String text = row.value.toStringAsFixed(2);
+                      switch (widget.metric) {
+                        case CardioMetric.pace:
+                        case CardioMetric.duration:
+                          break;
+                        case CardioMetric.distance:
+                          text += " ${row.unit}";
+                          break;
+                      }
+
+                      return [
+                        LineTooltipItem(
+                          text,
+                          TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                          ),
                         ),
-                      ),
-                    ],
+                      ];
+                    },
                   ),
                 ),
                 lineBarsData: [
