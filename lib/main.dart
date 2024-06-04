@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
               if (!settings.hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!settings.hideTimerTab) const TimerPage(),
+              if (!settings.hideTimerTab && Platform.isAndroid) const TimerPage(),
             ],
           ),
         ),
