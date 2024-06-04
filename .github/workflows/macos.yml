@@ -19,9 +19,9 @@ jobs:
         run: flutter build macos
 
       - name: Archive Release files
-        run:
-          - cd build/macos/Build/Products/Release
-          - zip -r MacOS.zip .
+        run: |
+          cd build/macos/Build/Products/Release
+          zip -r MacOS.zip .
 
       - name: Upload zip
         uses: svenstaro/upload-release-action@v2
