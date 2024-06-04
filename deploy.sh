@@ -47,9 +47,9 @@ fi
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 
 $rest"
-git push
+git push --force
 
-gh release create "$new_version" --notes "${changelog:-$last_commits}"  \
+gh release create "$new_version" --notes "$last_commits"  \
   $apk/app-*-release.apk \
   $apk/flexify.apk
 gh workflow run windows --ref "$new_version"
