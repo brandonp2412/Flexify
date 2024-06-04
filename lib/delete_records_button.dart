@@ -1,5 +1,5 @@
 import 'package:flexify/main.dart';
-import 'package:flexify/plan_state.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

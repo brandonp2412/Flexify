@@ -1,7 +1,7 @@
-import 'package:flexify/database.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/cardio_page.dart';
-import 'package:flexify/strength_page.dart';
+import 'package:flexify/cardio/cardio_page.dart';
+import 'package:flexify/strength/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

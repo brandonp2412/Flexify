@@ -1,7 +1,7 @@
 import 'package:flexify/constants.dart';
-import 'package:flexify/database.dart';
-import 'package:flexify/exercise_modal.dart';
-import 'package:flexify/gym_sets.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/plan/exercise_modal.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';

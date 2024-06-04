@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database.dart';
+import 'package:flexify/database/database.dart';
 
 enum PlanTrailing { reorder, count }
 

@@ -1,6 +1,6 @@
-import 'package:flexify/cardio_line.dart';
+import 'package:flexify/cardio/cardio_line.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/edit_graph_page.dart';
+import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/app_search.dart';
-import 'package:flexify/database.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';

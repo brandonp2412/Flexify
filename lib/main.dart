@@ -1,20 +1,20 @@
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flexify/database.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/history_page.dart';
-import 'package:flexify/graphs_page.dart';
-import 'package:flexify/plan_state.dart';
+import 'package:flexify/graph/graphs_page.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/timer_page.dart';
-import 'package:flexify/timer_progress_widgets.dart';
-import 'package:flexify/timer_state.dart';
+import 'package:flexify/timer/timer_page.dart';
+import 'package:flexify/timer/timer_progress_widgets.dart';
+import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'plans_page.dart';
+import 'plan/plans_page.dart';
 
 late AppDatabase db;
 late MethodChannel android;
@@ -93,7 +93,8 @@ class HomePage extends StatelessWidget {
               if (!settings.hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!settings.hideTimerTab && Platform.isAndroid) const TimerPage(),
+              if (!settings.hideTimerTab && Platform.isAndroid)
+                const TimerPage(),
             ],
           ),
           bottomNavigationBar: TabBar(

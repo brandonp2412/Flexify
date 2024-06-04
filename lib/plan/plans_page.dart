@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/app_search.dart';
-import 'package:flexify/database.dart';
-import 'package:flexify/edit_plan_page.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan_state.dart';
-import 'package:flexify/plans_list.dart';
+import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plans_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

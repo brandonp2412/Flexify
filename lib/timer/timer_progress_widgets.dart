@@ -1,4 +1,4 @@
-import 'package:flexify/timer_state.dart';
+import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

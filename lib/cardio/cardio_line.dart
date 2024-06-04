@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flexify/cardio_data.dart';
+import 'package:flexify/cardio/cardio_data.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/gym_sets.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

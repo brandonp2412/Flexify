@@ -1,12 +1,12 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
-import 'package:flexify/add_exercise_page.dart';
+import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/app_search.dart';
-import 'package:flexify/database.dart';
-import 'package:flexify/edit_graph_page.dart';
-import 'package:flexify/gym_sets.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan_state.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:flexify/database.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
