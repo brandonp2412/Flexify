@@ -1,0 +1,2 @@
+- Rename macos zip file
+- Fix ios checking for integration tests

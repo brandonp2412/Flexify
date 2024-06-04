@@ -21,13 +21,13 @@ jobs:
       - name: Archive Release files
         run:
           - cd build/macos/Build/Products/Release
-          - zip -r macos.zip .
+          - zip -r MacOS.zip .
 
       - name: Upload zip
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./build/macos/Build/Products/Release/macos.zip
+          file: ./build/macos/Build/Products/Release/MacOS.zip
           asset_name: MacOS zip
           tag: ${{ github.ref }}
           overwrite: false
