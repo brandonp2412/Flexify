@@ -3,7 +3,6 @@ import 'package:drift/native.dart';
 import 'package:drift_dev/api/migrations.dart';
 import 'package:flexify/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +28,6 @@ void main() {
 
       for (int to = from + 1; to <= currentVersion; to++) {
         if (to == 8 || to == 9) continue;
-        debugPrint("Migrating from $from to $to");
         final connection = await verifier.startAt(from);
         db = AppDatabase(executor: connection);
         await verifier.migrateAndValidate(db, to);

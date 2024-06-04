@@ -1,0 +1,3 @@
+- Remove debug prints from migrations tests
+- Remove git push --force from deploy.sh
+- Fix all database migration issues
