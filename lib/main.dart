@@ -82,13 +82,13 @@ class HomePage extends StatelessWidget {
     if (settings.hideTimerTab || !Platform.isAndroid) length--;
     if (settings.hideHistoryTab) length--;
 
-    return DefaultTabController(
-      length: length,
-      child: Scaffold(
-        bottomSheet:
-            settings.hideTimerTab ? null : const TimerProgressIndicator(),
-        body: SafeArea(
-          child: TabBarView(
+    return SafeArea(
+      child: DefaultTabController(
+        length: length,
+        child: Scaffold(
+          bottomSheet:
+              settings.hideTimerTab ? null : const TimerProgressIndicator(),
+          body: TabBarView(
             children: [
               if (!settings.hideHistoryTab) const HistoryPage(),
               const PlansPage(),
@@ -96,28 +96,28 @@ class HomePage extends StatelessWidget {
               if (!settings.hideTimerTab && Platform.isAndroid) const TimerPage(),
             ],
           ),
-        ),
-        bottomNavigationBar: TabBar(
-          tabs: [
-            if (!settings.hideHistoryTab)
+          bottomNavigationBar: TabBar(
+            tabs: [
+              if (!settings.hideHistoryTab)
+                const Tab(
+                  icon: Icon(Icons.history),
+                  text: "History",
+                ),
               const Tab(
-                icon: Icon(Icons.history),
-                text: "History",
+                icon: Icon(Icons.calendar_today),
+                text: "Plans",
               ),
-            const Tab(
-              icon: Icon(Icons.calendar_today),
-              text: "Plans",
-            ),
-            const Tab(
-              icon: Icon(Icons.insights),
-              text: "Graphs",
-            ),
-            if (!settings.hideTimerTab && Platform.isAndroid)
               const Tab(
-                icon: Icon(Icons.timer_outlined),
-                text: "Timer",
+                icon: Icon(Icons.insights),
+                text: "Graphs",
               ),
-          ],
+              if (!settings.hideTimerTab && Platform.isAndroid)
+                const Tab(
+                  icon: Icon(Icons.timer_outlined),
+                  text: "Timer",
+                ),
+            ],
+          ),
         ),
       ),
     );
