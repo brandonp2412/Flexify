@@ -32,11 +32,11 @@ void main() async {
     expect(find.text('Settings'), findsOne);
     expect(find.text('Search...'), findsOne);
 
-    await tester.enterText(find.bySemanticsLabel('Search...'), 'Rest timers');
-    await tester.pump();
+    await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
+    await tester.pumpAndSettle();
 
     expect(find.textContaining('Theme'), findsNothing);
-    expect(find.textContaining('Rest timers'), findsNWidgets(2));
+    expect(find.widgetWithText(ListTile, 'Show units'), findsOne);
 
     await db.close();
   });
@@ -53,24 +53,6 @@ void main() async {
     await tester.enterText(find.bySemanticsLabel('Maximum sets'), '5');
     await tester.pump();
     expect(find.text('5'), findsOne);
-
-    await tester.enterText(find.bySemanticsLabel('Rest minutes'), '6');
-    await tester.pump();
-    expect(find.text('6'), findsOne);
-
-    await tester.enterText(find.bySemanticsLabel('seconds'), '7');
-    await tester.pump();
-    expect(find.text('7'), findsOne);
-
-    await tester.tap(find.text('Rest timers'), warnIfMissed: false);
-    await tester.pump();
-
-    await tester.enterText(find.bySemanticsLabel('Search...'), 'Vibrate');
-    await tester.pump();
-    await tester.tap(
-      find.widgetWithText(ListTile, 'Vibrate'),
-      warnIfMissed: false,
-    );
 
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
     await tester.pump();

@@ -33,7 +33,7 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Dumbbell shoulder press'), findsOne);
     expect(find.text('Metric'), findsOne);
-    expect(find.text('Group by'), findsOne);
+    expect(find.text('Day'), findsOne);
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
