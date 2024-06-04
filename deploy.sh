@@ -50,10 +50,6 @@ fi
 apk=build/app/outputs/flutter-apk
 mv $apk/app-release.apk $apk/flexify.apk
 
-if [ "$1" == "-p" ]; then
-  ./flutter/bin/flutter build appbundle
-fi
-
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 
 $rest"
@@ -65,9 +61,5 @@ gh release create "$new_version" --notes "$last_commits"  \
 gh workflow run windows --ref "$new_version"
 gh workflow run macos --ref "$new_version"
 git pull --tags
-
-if [ "$1" == "-p" ]; then
-  bundle exec fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
-fi
 
 echo q | flutter run --release -d 'pixel 5'
