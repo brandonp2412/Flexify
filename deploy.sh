@@ -3,6 +3,16 @@
 set -ex
 
 ./flutter/bin/flutter test
+
+dart run drift_dev schema dump lib/database.dart drift_schemas
+dart run drift_dev schema steps drift_schemas/ lib/database/schema_versions.dart
+dart run drift_dev schema generate drift_schemas/ test/generated_migrations/
+if [[ -n "$(git diff --stat)" ]]; then
+    echo "There are unstaged changes in the repository:"
+    git --no-pager diff
+    exit 1
+fi
+
 ./screenshots.sh "phoneScreenshots"
 ./screenshots.sh "sevenInchScreenshots"
 ./screenshots.sh "tenInchScreenshots"

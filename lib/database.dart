@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plans.dart';
@@ -49,100 +50,72 @@ class AppDatabase extends _$AppDatabase {
           batch.insertAll(plans, defaultPlans);
         });
       },
-      onUpgrade: (Migrator m, int from, int to) async {
-        if (from < 2) {
+      onUpgrade: stepByStep(
+        from1To2: (m, schema) async {
+          await m.alterTable(TableMigration(schema.gymSets));
+          await m.alterTable(TableMigration(schema.plans));
           await m.createIndex(
             Index(
               'GymSets',
               "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
             ),
           );
-        }
-
-        if (from < 3) {
-          await m.addColumn(plans, plans.sequence).catchError((value) => null);
-        }
-        if (from < 4) {
-          await m.addColumn(plans, plans.title).catchError((value) => null);
-        }
-
-        if (from < 5) {
-          await m
-              .addColumn(gymSets, gymSets.hidden)
-              .catchError((value) => null);
+        },
+        from2To3: (m, schema) async {
+          await m.addColumn(schema.plans, schema.plans.sequence);
+        },
+        from3To4: (m, schema) async {
+          await m.addColumn(schema.plans, schema.plans.title);
+        },
+        from4To5: (m, schema) async {
+          await m.addColumn(schema.gymSets, schema.gymSets.hidden);
           await batch((batch) => batch.insertAll(gymSets, _defaultSets));
-        }
-
-        if (from < 6) {
-          await m
-              .addColumn(gymSets, gymSets.bodyWeight)
-              .catchError((value) => null);
+        },
+        from5To6: (m, schema) async {
+          await m.addColumn(schema.gymSets, schema.gymSets.bodyWeight);
           final bodyWeight = await getBodyWeight();
           if (bodyWeight?.weight == null) return;
 
           await (gymSets.update())
               .write(GymSetsCompanion(bodyWeight: Value(bodyWeight!.weight)));
-        }
-
-        if (from < 7) {
+        },
+        from6To7: (m, schema) async {
           final dateFormat = prefs.getString('dateFormat');
           if (dateFormat == null) return;
           prefs.setString('longDateFormat', dateFormat);
-        }
-
-        if (from < 8) {
-          await m
-              .addColumn(gymSets, gymSets.duration)
-              .catchError((value) => null);
-          await m
-              .addColumn(gymSets, gymSets.distance)
-              .catchError((value) => null);
-          await m
-              .addColumn(gymSets, gymSets.cardio)
-              .catchError((value) => null);
-        }
-
-        if (from < 9) {
-          await m
-              .addColumn(gymSets, gymSets.restMs)
-              .catchError((value) => null);
+        },
+        from7To8: (m, schema) async {
+          await m.addColumn(schema.gymSets, schema.gymSets.duration);
+          await m.addColumn(schema.gymSets, schema.gymSets.distance);
+          await m.addColumn(schema.gymSets, schema.gymSets.cardio);
+        },
+        from8To10: (Migrator m, Schema10 schema) async {
+          await m.addColumn(schema.gymSets, schema.gymSets.restMs);
           final timerDuration = prefs.getInt('timerDuration');
           if (timerDuration != null)
             await (gymSets
                 .update()
                 .write(GymSetsCompanion(restMs: Value(timerDuration))));
-        }
-
-        if (from < 10) {
-          await m
-              .addColumn(gymSets, gymSets.maxSets)
-              .catchError((value) => null);
+          await m.addColumn(schema.gymSets, schema.gymSets.maxSets);
           final maxSets = prefs.getInt('maxSets');
           if (maxSets != null)
             await (gymSets
                 .update()
                 .write(GymSetsCompanion(maxSets: Value(maxSets))));
-        }
-
-        if (from < 11) {
-          await m
-              .addColumn(gymSets, gymSets.incline)
-              .catchError((value) => null);
-        }
-
-        if (from < 12) {
+        },
+        from10To11: (m, schema) async {
+          await m.addColumn(schema.gymSets, schema.gymSets.incline);
+        },
+        from11To12: (m, schema) async {
           await m.createIndex(
             Index(
               'GymSets',
               "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
             ),
           );
-        }
-
-        if (from < 13) {
-          await m
-              .alterTable(TableMigration(gymSets))
-              .catchError((value) => null);
+        },
+        from12To13: (m, schema) async {
+          await m.alterTable(TableMigration(schema.gymSets));
           (gymSets.update()
                 ..where(
                   (u) => u.restMs.equals(
@@ -154,12 +127,9 @@ class AppDatabase extends _$AppDatabase {
               restMs: Value(null),
             ),
           );
-        }
-
-        if (from < 14) {
-          await m
-              .alterTable(TableMigration(gymSets))
-              .catchError((value) => null);
+        },
+        from13To14: (m, schema) async {
+          await m.alterTable(TableMigration(schema.gymSets));
           (gymSets.update()
                 ..where(
                   (u) => u.maxSets.equals(3),
@@ -169,8 +139,8 @@ class AppDatabase extends _$AppDatabase {
               maxSets: Value(null),
             ),
           );
-        }
-      },
+        },
+      ),
     );
   }
 }
