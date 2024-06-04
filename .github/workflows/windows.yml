@@ -22,12 +22,11 @@ jobs:
         run: |
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload zip
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./flexify-windows.zip
-          asset_name: flexify-windows.zip
-          asset_content_type: application/zip
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./flexify-windows.zip
+          asset_name: Windows zip
+          tag: ${{ github.ref }}
+          overwrite: false
