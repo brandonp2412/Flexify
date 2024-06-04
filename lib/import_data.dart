@@ -111,6 +111,7 @@ class ImportData extends StatelessWidget {
     await db.close();
     await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
     db = AppDatabase();
+    await (db.gymSets.select()..limit(1)).get();
     if (!pageContext.mounted) return;
     Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
   }
