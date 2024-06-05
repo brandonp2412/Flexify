@@ -26,6 +26,11 @@ Flexify is a Flutter project designed to help users track their gym progress con
         alt="Get the APK"
         height="75">
 </a>
+<a href="https://github.com/brandonp2412/FitBook/releases/latest/download/flexify-linux.zip">
+    <img src="docs/get-it-on-linux.png"
+        alt="Get it on Linux"
+        height="75">
+</a>
 
 <p float="left">
     <img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.presley.flexify">

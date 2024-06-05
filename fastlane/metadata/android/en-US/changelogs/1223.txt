@@ -1,0 +1,1 @@
+- Add linux to GitHub releases

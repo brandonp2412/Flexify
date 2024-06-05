@@ -48,6 +48,7 @@ fi
 ./flutter/bin/flutter build apk --split-per-abi
 ./flutter/bin/flutter build apk
 apk=build/app/outputs/flutter-apk
+(cd $apk/pipeline/linux/x64/release/bundle && zip -r flexify-linux.zip .)
 mv $apk/app-release.apk $apk/flexify.apk
 
 last_commit=$(git log -1 --pretty=%B | head -n 1)
@@ -57,7 +58,8 @@ git push
 
 gh release create "$new_version" --notes "$last_commits"  \
   $apk/app-*-release.apk \
-  $apk/flexify.apk
+  $apk/flexify.apk \
+  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
 git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
