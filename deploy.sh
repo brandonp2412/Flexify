@@ -56,11 +56,24 @@ git commit --amend -m "$last_commit - $new_version 🚀
 $rest"
 git push
 
-gh release create "$new_version" --notes "$last_commits"  \
+notes="$last_commits
+
+<p float="left">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/5_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/6_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" height="600">
+    <img src="https://github.com/brandonp2412/Flexify/blob/$new_version/fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" height="600">
+</p>
+"
+
+gh release create "$new_version" --notes "$notes"  \
   $apk/app-*-release.apk \
   $apk/flexify.apk \
-  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip \
-  fastlane/metadata/android/en-US/images/phoneScreenshots/*.png
+  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
 git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
