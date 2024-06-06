@@ -281,8 +281,7 @@ class _EditGymSetState extends State<EditGymSet> {
               TextField(
                 controller: _weightController,
                 decoration: InputDecoration(
-                  labelText:
-                      _name == 'Weight' ? 'Value ($_unit)' : 'Weight ($_unit)',
+                  labelText: _name == 'Weight' ? 'Value ' : 'Weight ',
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_weightController),
@@ -291,7 +290,7 @@ class _EditGymSetState extends State<EditGymSet> {
             if (_name != 'Weight' && !_settings.hideWeight)
               TextField(
                 controller: _bodyWeightController,
-                decoration: InputDecoration(labelText: 'Body weight ($_unit)'),
+                decoration: const InputDecoration(labelText: 'Body weight '),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_bodyWeightController),
               ),
