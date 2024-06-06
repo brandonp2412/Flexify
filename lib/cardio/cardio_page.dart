@@ -2,6 +2,7 @@ import 'package:flexify/cardio/cardio_line.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/settings_state.dart';
+import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -109,24 +110,12 @@ class _CardioPageState extends State<CardioPage> {
               },
             ),
             if (_metric == CardioMetric.distance && settings.showUnits)
-              DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: 'Unit'),
+              UnitSelector(
                 value: _targetUnit,
-                items: const [
-                  DropdownMenuItem(
-                    value: 'km',
-                    child: Text("km"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'mi',
-                    child: Text("mi"),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _targetUnit = value!;
-                  });
-                },
+                cardio: true,
+                onChanged: (value) => setState(() {
+                  _targetUnit = value!;
+                }),
               ),
             Row(
               children: [
