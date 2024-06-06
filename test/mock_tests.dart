@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../integration_test/screenshot_test.dart';
 
-mockTests() async {
+mockTests({bool insert = true}) async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({
     "themeMode": "ThemeMode.system",
@@ -26,6 +26,7 @@ mockTests() async {
   android = const MethodChannel("com.presley.flexify/android");
   db = AppDatabase(executor: NativeDatabase.memory());
 
+  if (!insert) return;
   await db.delete(db.gymSets).go();
   await db.delete(db.plans).go();
 
