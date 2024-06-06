@@ -1,6 +1,6 @@
 # Flexify
 
-Flexify is a Flutter project designed to help users track their gym progress conveniently. With Flexify, you can seamlessly monitor your workout routines, visualize your progress through graphs, and enjoy automatic rest timers, all without the need for an internet connection.
+Get fit with Flexify. Easily track your gym progression with offline records and seamless graphs.
 
 
 ## Features
