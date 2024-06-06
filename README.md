@@ -50,7 +50,7 @@ Get fit with Flexify. Easily track your gym progression with offline records and
     <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" height="600">
 </p>
 
-## Migration from Massive
+## Migration from [Massive](https://github.com/brandonp2412/Massive)
 
 Gym sets and plans can be imported into Flexify.
 
