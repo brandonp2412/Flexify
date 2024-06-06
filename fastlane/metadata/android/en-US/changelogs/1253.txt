@@ -1,0 +1,1 @@
+- Fix multi edit preview selections
