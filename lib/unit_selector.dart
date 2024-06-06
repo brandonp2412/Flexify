@@ -12,20 +12,28 @@ class UnitSelector extends StatelessWidget {
   final bool cardio;
   final Function(String?) onChanged;
 
+  void _onTap() {
+    if (value == 'kg')
+      onChanged('lb');
+    else if (value == 'km')
+      onChanged('mi');
+    else if (value == 'lb')
+      onChanged('kg');
+    else if (value == 'mi') onChanged('km');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      value: value,
-      decoration: const InputDecoration(labelText: 'Unit'),
-      items: (cardio ? ['km', 'mi'] : ['kg', 'lb']).map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        onChanged(newValue);
-      },
+    return ListTile(
+      title: Text('Unit ($value)'),
+      leading: value == 'kg' || value == 'km'
+          ? const Icon(Icons.straighten)
+          : const Icon(Icons.square_foot),
+      onTap: _onTap,
+      trailing: Switch(
+        value: value == 'kg' || value == 'km',
+        onChanged: (_) => _onTap(),
+      ),
     );
   }
 }

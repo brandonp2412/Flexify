@@ -188,10 +188,9 @@ class _StrengthLineState extends State<StrengthLine> {
         }
 
         return SizedBox(
-          height: 400,
+          height: 380,
           child: Padding(
-            padding:
-                const EdgeInsets.only(bottom: 80.0, right: 32.0, top: 16.0),
+            padding: const EdgeInsets.only(right: 32.0, top: 16.0),
             child: LineChart(
               LineChartData(
                 titlesData: FlTitlesData(

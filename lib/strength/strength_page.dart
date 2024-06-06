@@ -2,6 +2,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/strength/strength_line.dart';
+import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -124,99 +125,53 @@ class _StrengthPageState extends State<StrengthPage> {
                   });
                 },
               ),
-            Row(
-              children: [
-                Expanded(
-                  child: ListTile(
-                    title: const Text('Start date'),
-                    subtitle: _startDate != null
-                        ? Text(
-                            DateFormat(settings.shortDateFormat)
-                                .format(_startDate!),
-                          )
-                        : null,
-                    onLongPress: () => setState(() {
-                      _startDate = null;
-                    }),
-                    trailing: const Icon(Icons.calendar_today),
-                    onTap: () => _selectStart(),
-                  ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: const Text('Stop date'),
-                    subtitle: _endDate != null
-                        ? Text(
-                            DateFormat(settings.shortDateFormat)
-                                .format(_endDate!),
-                          )
-                        : null,
-                    onLongPress: () => setState(() {
-                      _endDate = null;
-                    }),
-                    trailing: const Icon(Icons.calendar_today),
-                    onTap: () => _selectEnd(),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: Period.values.map((period) {
-                return TextButton(
-                  onPressed: _groupBy == period
-                      ? null
-                      : () {
-                          setState(() {
-                            _groupBy = period;
-                          });
-                        },
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: _groupBy == period
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                  child: Text(
-                    period.name[0].toUpperCase() + period.name.substring(1),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
             if (settings.showUnits)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: ['kg', 'lb'].map((unit) {
-                  return TextButton(
-                    onPressed: _targetUnit == unit
-                        ? null
-                        : () {
-                            setState(() {
-                              _targetUnit = unit;
-                            });
-                          },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: _targetUnit == unit
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                        width: 2,
-                      ),
-                    ),
-                    child: Text(
-                      unit,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  );
-                }).toList(),
+              UnitSelector(
+                value: _targetUnit,
+                cardio: false,
+                onChanged: (value) => setState(() {
+                  _targetUnit = value!;
+                }),
               ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('Start date'),
+                      subtitle: _startDate != null
+                          ? Text(
+                              DateFormat(settings.shortDateFormat)
+                                  .format(_startDate!),
+                            )
+                          : null,
+                      onLongPress: () => setState(() {
+                        _startDate = null;
+                      }),
+                      trailing: const Icon(Icons.calendar_today),
+                      onTap: () => _selectStart(),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('Stop date'),
+                      subtitle: _endDate != null
+                          ? Text(
+                              DateFormat(settings.shortDateFormat)
+                                  .format(_endDate!),
+                            )
+                          : null,
+                      onLongPress: () => setState(() {
+                        _endDate = null;
+                      }),
+                      trailing: const Icon(Icons.calendar_today),
+                      onTap: () => _selectEnd(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             StrengthLine(
               name: widget.name,
               metric: _metric,
@@ -224,6 +179,37 @@ class _StrengthPageState extends State<StrengthPage> {
               groupBy: _groupBy,
               startDate: _startDate,
               endDate: _endDate,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: Period.values.map((period) {
+                  return TextButton(
+                    onPressed: _groupBy == period
+                        ? null
+                        : () {
+                            setState(() {
+                              _groupBy = period;
+                            });
+                          },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: _groupBy == period
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
+                        width: 2,
+                      ),
+                    ),
+                    child: Text(
+                      period.name[0].toUpperCase() + period.name.substring(1),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ],
         ),
