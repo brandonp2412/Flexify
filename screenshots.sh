@@ -17,7 +17,7 @@ export FLEXIFY_DEVICE_TYPE="$1"
 
 flutter drive --driver=test_driver/integration_test.dart \
   --target=integration_test/screenshot_test.dart \
-  --dart-define=FLEXIFY_DEVICE_TYPE="$1" --profile -d "$device"
+  --dart-define=FLEXIFY_DEVICE_TYPE="$1" -d "$device"
 code=$?
 
 adb -s "$device" reboot -p

@@ -30,17 +30,20 @@ Future<void> main() async {
   runApp(appProviders(settings));
 }
 
-Widget appProviders(SettingsState settingsState) => MultiProvider(
+Widget appProviders(SettingsState settingsState, {showBanner = true}) =>
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => settingsState),
         ChangeNotifierProvider(create: (context) => TimerState()),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
-      child: const App(),
+      child: App(showBanner: showBanner),
     );
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final bool showBanner;
+
+  const App({super.key, required this.showBanner});
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +70,7 @@ class App extends StatelessWidget {
         ),
         themeMode: settings.themeMode,
         home: const HomePage(),
+        debugShowCheckedModeBanner: showBanner,
       ),
     );
   }
