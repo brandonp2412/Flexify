@@ -59,7 +59,8 @@ git push
 gh release create "$new_version" --notes "$last_commits"  \
   $apk/app-*-release.apk \
   $apk/flexify.apk \
-  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
+  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip \
+  fastlane/metadata/android/en-US/images/phoneScreenshots/*.png
 git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
