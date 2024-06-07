@@ -9,6 +9,7 @@ import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PlansPage extends StatefulWidget {
   const PlansPage({super.key});
@@ -80,6 +81,24 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       body: Column(
         children: [
           AppSearch(
+            onShare: () async {
+              final selected = _selected.toList();
+              setState(() {
+                _selected.clear();
+              });
+              final plans = (_planState?.plans)!
+                  .where(
+                    (plan) => selected.contains(plan.id),
+                  )
+                  .toList();
+              final summaries = plans
+                  .map(
+                    (plan) =>
+                        """${plan.days.split(',').join(', ')}:\n${plan.exercises.split(',').map((exercise) => "- $exercise").join('\n')}""",
+                  )
+                  .join('\n\n');
+              await Share.share(summaries);
+            },
             onChange: (value) {
               setState(() {
                 _search = value;

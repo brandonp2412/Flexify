@@ -10,6 +10,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -141,6 +142,23 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           return material.Column(
             children: [
               AppSearch(
+                onShare: () async {
+                  final gymSets = (await _stream.first)
+                      .where(
+                        (gymSet) => _selected.contains(gymSet.id),
+                      )
+                      .toList();
+                  final summaries = gymSets
+                      .map(
+                        (gymSet) =>
+                            "${gymSet.reps}x${gymSet.weight}${gymSet.unit} ${gymSet.name}",
+                      )
+                      .join(', ');
+                  await Share.share("I just did $summaries");
+                  setState(() {
+                    _selected.clear();
+                  });
+                },
                 onChange: (value) {
                   setState(() {
                     _search = value;

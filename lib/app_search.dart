@@ -13,6 +13,7 @@ class AppSearch extends StatefulWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onSelect,
+    required this.onShare,
     this.onRefresh,
   });
 
@@ -22,6 +23,7 @@ class AppSearch extends StatefulWidget {
   final Function onEdit;
   final Function onDelete;
   final Function onSelect;
+  final Function onShare;
   final Function? onRefresh;
 
   @override
@@ -113,7 +115,7 @@ class _AppSearchState extends State<AppSearch> {
                   },
                 ),
               ),
-              if (widget.selected.isNotEmpty)
+              if (widget.selected.isNotEmpty) ...[
                 PopupMenuItem(
                   child: ListTile(
                     leading: const Icon(Icons.edit),
@@ -125,7 +127,17 @@ class _AppSearchState extends State<AppSearch> {
                     },
                   ),
                 ),
-              if (widget.selected.isNotEmpty)
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: const Icon(Icons.share),
+                    title: const Text('Share'),
+                    onTap: () async {
+                      await widget.onShare();
+                      if (!context.mounted) return;
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
                 PopupMenuItem(
                   child: ListTile(
                     leading: const Icon(Icons.clear),
@@ -136,6 +148,7 @@ class _AppSearchState extends State<AppSearch> {
                     },
                   ),
                 ),
+              ],
               if (widget.selected.isEmpty && !settings.hideWeight)
                 PopupMenuItem(
                   child: ListTile(

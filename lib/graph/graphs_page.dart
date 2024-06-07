@@ -11,6 +11,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'graph_tile.dart';
 
@@ -70,6 +71,24 @@ class GraphsPageState extends State<GraphsPage> {
           return material.Column(
             children: [
               AppSearch(
+                onShare: () async {
+                  final selected = _selected.toList();
+                  setState(() {
+                    _selected.clear();
+                  });
+                  final gymSets = (await _stream.first)
+                      .where(
+                        (gymSet) => selected.contains(gymSet.name.value),
+                      )
+                      .toList();
+                  final summaries = gymSets
+                      .map(
+                        (gymSet) =>
+                            "${gymSet.reps}x${gymSet.weight}${gymSet.unit} ${gymSet.name}",
+                      )
+                      .join(', ');
+                  await Share.share("I just did $summaries");
+                },
                 onChange: (value) {
                   setState(() {
                     _search = value;
