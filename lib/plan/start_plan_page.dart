@@ -32,11 +32,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final _durationController = TextEditingController(text: "0.0");
   final _inclineController = TextEditingController(text: "0");
 
-  final _distanceNode = FocusNode();
-  final _durationNode = FocusNode();
-  final _repsNode = FocusNode();
-  final _weightNode = FocusNode();
-
   late List<String> _planExercises;
   late Stream<List<GymCount>> _countStream;
   late SettingsState _settings;
@@ -66,11 +61,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _distanceController.dispose();
     _durationController.dispose();
     _inclineController.dispose();
-
-    _repsNode.dispose();
-    _weightNode.dispose();
-    _distanceNode.dispose();
-    _durationNode.dispose();
 
     _planState?.removeListener(_planChanged);
 
@@ -248,11 +238,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
             if (!_cardio) ...[
               TextField(
                 controller: _repsController,
-                focusNode: _repsNode,
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
                 onSubmitted: (value) {
-                  _weightNode.requestFocus();
                   selectAll(_weightController);
                 },
                 onTap: () {
@@ -261,7 +250,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
               TextField(
                 controller: _weightController,
-                focusNode: _weightNode,
                 decoration: InputDecoration(
                   labelText: 'Weight ($_unit)',
                   suffixIcon: _settings.hideWeight
@@ -293,7 +281,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
             if (_cardio) ...[
               TextField(
                 controller: _durationController,
-                focusNode: _durationNode,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   labelText: 'Duration',
                 ),
@@ -302,7 +290,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   selectAll(_durationController);
                 },
                 onSubmitted: (value) {
-                  _distanceNode.requestFocus();
                   selectAll(_distanceController);
                 },
               ),
@@ -310,12 +297,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 children: [
                   Expanded(
                     child: TextField(
-                      focusNode: _distanceNode,
+                      textInputAction: TextInputAction.next,
                       controller: _distanceController,
                       decoration: const InputDecoration(
                         labelText: 'Distance',
                       ),
                       keyboardType: TextInputType.number,
+                      onSubmitted: (value) => selectAll(_inclineController),
                       onTap: () {
                         selectAll(_distanceController);
                       },
@@ -328,6 +316,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       decoration: const InputDecoration(labelText: 'Incline'),
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(_inclineController),
+                      onSubmitted: (value) => _save(timerState),
                     ),
                   ),
                 ],

@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/edit_gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';

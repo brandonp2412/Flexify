@@ -19,11 +19,6 @@ class EditGraphPage extends StatefulWidget {
 }
 
 class _EditGraphPageState extends State<EditGraphPage> {
-  final _nameNode = FocusNode();
-  final _minutesNode = FocusNode();
-  final _secondsNode = FocusNode();
-  final _maxSetsNode = FocusNode();
-
   late TextEditingController _nameController;
   final TextEditingController _minutesController = TextEditingController();
   final TextEditingController _secondsController = TextEditingController();
@@ -66,11 +61,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   @override
   dispose() {
-    _nameNode.dispose();
-    _minutesNode.dispose();
-    _secondsNode.dispose();
-    _maxSetsNode.dispose();
-
     _nameController.dispose();
     _minutesController.dispose();
     _secondsController.dispose();
@@ -216,26 +206,23 @@ class _EditGraphPageState extends State<EditGraphPage> {
           children: [
             TextField(
               controller: _nameController,
-              focusNode: _nameNode,
+              textInputAction: TextInputAction.next,
               decoration: const InputDecoration(labelText: "New name"),
               textCapitalization: TextCapitalization.sentences,
             ),
-            if (_unit != null)
-              UnitSelector(
-                value: _unit!,
-                cardio: _cardio,
-                onChanged: (value) {
-                  setState(() {
-                    _unit = value;
-                  });
-                },
-              ),
+            TextField(
+              controller: _maxSetsController,
+              textInputAction: TextInputAction.next,
+              decoration: const InputDecoration(labelText: "Max sets"),
+              keyboardType: TextInputType.number,
+              onTap: () => selectAll(_maxSetsController),
+            ),
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _minutesController,
-                    focusNode: _minutesNode,
+                    textInputAction: TextInputAction.next,
                     decoration:
                         const InputDecoration(labelText: "Rest minutes"),
                     keyboardType: material.TextInputType.number,
@@ -248,7 +235,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 Expanded(
                   child: TextField(
                     controller: _secondsController,
-                    focusNode: _secondsNode,
+                    textInputAction: TextInputAction.next,
                     decoration:
                         const InputDecoration(labelText: "Rest seconds"),
                     keyboardType: material.TextInputType.number,
@@ -259,13 +246,16 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 ),
               ],
             ),
-            TextField(
-              controller: _maxSetsController,
-              focusNode: _maxSetsNode,
-              decoration: const InputDecoration(labelText: "Max sets"),
-              keyboardType: TextInputType.number,
-              onTap: () => selectAll(_maxSetsController),
-            ),
+            if (_unit != null)
+              UnitSelector(
+                value: _unit!,
+                cardio: _cardio,
+                onChanged: (value) {
+                  setState(() {
+                    _unit = value;
+                  });
+                },
+              ),
             ListTile(
               title: const Text('Cardio'),
               onTap: () {

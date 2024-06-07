@@ -238,6 +238,7 @@ class _EditGymSetState extends State<EditGymSet> {
                 return TextFormField(
                   decoration: const InputDecoration(labelText: 'Name'),
                   controller: textEditingController,
+                  textInputAction: TextInputAction.next,
                   onTap: () {
                     selectAll(textEditingController);
                   },
@@ -257,12 +258,14 @@ class _EditGymSetState extends State<EditGymSet> {
                 decoration: const InputDecoration(labelText: 'Distance'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_distanceController),
+                textInputAction: TextInputAction.next,
               ),
               TextField(
                 controller: _durationController,
                 decoration: const InputDecoration(labelText: 'Duration'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_durationController),
+                textInputAction: TextInputAction.next,
               ),
               TextField(
                 controller: _inclineController,
@@ -277,6 +280,7 @@ class _EditGymSetState extends State<EditGymSet> {
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_repsController),
+                textInputAction: TextInputAction.next,
               ),
               TextField(
                 controller: _weightController,
@@ -285,6 +289,7 @@ class _EditGymSetState extends State<EditGymSet> {
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_weightController),
+                textInputAction: TextInputAction.next,
               ),
             ],
             if (_name != 'Weight' && !_settings.hideWeight)
