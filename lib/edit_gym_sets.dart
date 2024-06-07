@@ -53,7 +53,12 @@ class _EditGymSetsState extends State<EditGymSets> {
         _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
         _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
         _oldBodyWeights = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-        _oldCreateds = gymSets.map((gymSet) => gymSet.created).join(', ');
+        _oldCreateds = gymSets
+            .map(
+              (gymSet) =>
+                  DateFormat(_settings.longDateFormat).format(gymSet.created),
+            )
+            .join(', ');
         _oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
         _oldDurations = gymSets.map((gymSet) => gymSet.duration).join(', ');
         _oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
@@ -260,7 +265,7 @@ class _EditGymSetsState extends State<EditGymSets> {
               subtitle: Text(
                 _created != null
                     ? DateFormat(_settings.longDateFormat).format(_created!)
-                    : '',
+                    : _oldCreateds ?? "",
               ),
               trailing: const Icon(Icons.calendar_today),
               onTap: () => _selectDate(),
