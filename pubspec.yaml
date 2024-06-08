@@ -34,6 +34,7 @@ dev_dependencies:
   drift_dev: ^2.15.0
   build_runner: ^2.4.8
   flutter_launcher_icons: ^0.13.1
+  msix: ^3.16.7
 flutter:
   uses-material-design: true
   assets:
@@ -55,3 +56,14 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/ic_launcher.png"
+msix_config:
+  display_name: Flexify
+  publisher_display_name: Frisbee Software
+  identity_name: FrisbeeSoftware.Flexify
+  msix_version: 1.0.0.0
+  logo_path: C:\Users\brandon\flexify\windows\runner\resources\app_icon.ico
+  publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
+  store: true
+  capabilities: userNotificationListener
+  certificate_path: C:\Users\brandon\CERTIFICATE.pfx
+  certificate_password: ""
