@@ -19,7 +19,7 @@ class AboutPage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Image(
-              image: AssetImage('assets/ic_launcher.webp'),
+              image: AssetImage('assets/ic_launcher.png'),
               height: 150,
             ),
           ),
