@@ -59,6 +59,19 @@ class AboutPage extends StatelessWidget {
               if (await canLaunchUrlString(url)) await launchUrlString(url);
             },
           ),
+          ListTile(
+            title: const Text("Source code"),
+            leading: const Icon(Icons.code),
+            subtitle: FutureBuilder(
+              future: packageInfo,
+              builder: (context, snapshot) =>
+                  const Text("Check it out on GitHub"),
+            ),
+            onTap: () async {
+              const url = 'https://github.com/brandonp2412/Flexify';
+              if (await canLaunchUrlString(url)) await launchUrlString(url);
+            },
+          ),
           if (!Platform.isMacOS && !Platform.isIOS)
             ListTile(
               title: const Text("Donate"),
