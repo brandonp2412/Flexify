@@ -75,6 +75,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
             ),
             ListTile(
               title: const Text('Cardio'),
+              leading: _cardio
+                  ? const Icon(Icons.sports_gymnastics)
+                  : const Icon(Icons.fitness_center),
               onTap: () {
                 setState(() {
                   _cardio = !_cardio;

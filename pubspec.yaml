@@ -1,7 +1,7 @@
 name: flexify
 description: Track gym progress, visualize graphs, enjoy offline support & timers
 publish_to: none
-version: 1.1.19+126
+version: 1.1.20+127
 environment:
   sdk: '>=3.2.6 <4.0.0'
 dependencies:
@@ -42,20 +42,20 @@ flutter:
 flutter_launcher_icons:
   android: false
   ios: true
-  image_path: "assets/ic_launcher.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
+  image_path: assets/ic_launcher.png
+  min_sdk_android: 21
   web:
     generate: true
-    image_path: "assets/ic_launcher.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+    image_path: assets/ic_launcher.png
+    background_color: '#hexcode'
+    theme_color: '#hexcode'
   windows:
     generate: true
-    image_path: "assets/ic_launcher.png"
-    icon_size: 48 # min:48, max:256, default: 48
+    image_path: assets/ic_launcher.png
+    icon_size: 48
   macos:
     generate: true
-    image_path: "assets/ic_launcher.png"
+    image_path: assets/ic_launcher.png
 msix_config:
   display_name: Flexify
   publisher_display_name: Frisbee Software
@@ -66,4 +66,4 @@ msix_config:
   store: true
   capabilities: userNotificationListener
   certificate_path: C:\Users\brandon\CERTIFICATE.pfx
-  certificate_password: ""
+  certificate_password: ''

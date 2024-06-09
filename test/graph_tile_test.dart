@@ -41,6 +41,6 @@ void main() async {
     );
 
     expect(find.text('Bench press'), findsOne);
-    expect(find.text('5.0 x 20.0 kg'), findsOne);
+    expect(find.text('5 x 20 kg'), findsOne);
   });
 }

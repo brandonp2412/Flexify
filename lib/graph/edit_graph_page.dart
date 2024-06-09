@@ -257,6 +257,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 },
               ),
             ListTile(
+              leading: _cardio
+                  ? const Icon(Icons.sports_gymnastics)
+                  : const Icon(Icons.fitness_center),
               title: const Text('Cardio'),
               onTap: () {
                 setState(() {

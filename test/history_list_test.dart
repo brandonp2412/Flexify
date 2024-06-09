@@ -50,6 +50,6 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Bench press'), findsOne);
-    expect(find.text('2.0 x 3.0 kg'), findsOne);
+    expect(find.text('2 x 3 kg'), findsOne);
   });
 }
