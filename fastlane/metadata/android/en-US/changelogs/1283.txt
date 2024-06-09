@@ -1,0 +1,2 @@
+- Force push in deploy
+- Add icon to cardio toggle - 1.1.20 🚀

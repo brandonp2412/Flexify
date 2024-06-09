@@ -54,7 +54,7 @@ mv $apk/app-release.apk $apk/flexify.apk
 last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 
 $rest"
-git push
+git push --force
 
 notes="$last_commits
 
