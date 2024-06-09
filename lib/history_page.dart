@@ -151,7 +151,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   final summaries = gymSets
                       .map(
                         (gymSet) =>
-                            "${gymSet.reps}x${gymSet.weight}${gymSet.unit} ${gymSet.name}",
+                            "${toString(gymSet.reps)}x${toString(gymSet.weight)}${gymSet.unit} ${gymSet.name}",
                       )
                       .join(', ');
                   await Share.share("I just did $summaries");

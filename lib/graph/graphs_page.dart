@@ -84,7 +84,7 @@ class GraphsPageState extends State<GraphsPage> {
                   final summaries = gymSets
                       .map(
                         (gymSet) =>
-                            "${gymSet.reps}x${gymSet.weight}${gymSet.unit} ${gymSet.name}",
+                            "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
                       )
                       .join(', ');
                   await Share.share("I just did $summaries");
