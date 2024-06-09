@@ -48,3 +48,9 @@ Future<GymSet?> getBodyWeight() async {
       .getSingleOrNull();
   return weightSet;
 }
+
+String toString(double value) {
+  final string = value.toString();
+  if (string.endsWith('.0')) return string.substring(0, string.length - 2);
+  return string;
+}

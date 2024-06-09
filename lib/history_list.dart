@@ -81,8 +81,8 @@ class _HistoryListState extends State<HistoryList> {
               ),
               trailing: Text(
                 gymSet.cardio
-                    ? "${gymSet.distance}${gymSet.unit} / ${gymSet.duration}"
-                    : "${gymSet.reps} x ${gymSet.weight} ${gymSet.unit}",
+                    ? "${toString(gymSet.distance)} ${gymSet.unit} / ${toString(gymSet.duration)}"
+                    : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
                 style: const TextStyle(fontSize: 16),
               ),
               selected: widget.selected.contains(gymSet.id),

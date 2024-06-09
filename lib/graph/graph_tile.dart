@@ -5,6 +5,7 @@ import 'package:flexify/strength/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flexify/utils.dart';
 
 class GraphTile extends StatelessWidget {
   final GymSetsCompanion gymSet;
@@ -30,8 +31,8 @@ class GraphTile extends StatelessWidget {
       ),
       trailing: Text(
         gymSet.cardio.value
-            ? "${gymSet.distance.value} ${gymSet.unit.value} / ${gymSet.duration.value}"
-            : "${gymSet.reps.value} x ${gymSet.weight.value} ${gymSet.unit.value}",
+            ? "${toString(gymSet.distance.value)} ${gymSet.unit.value} / ${toString(gymSet.duration.value)}"
+            : "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}",
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () {

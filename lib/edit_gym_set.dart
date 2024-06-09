@@ -134,11 +134,11 @@ class _EditGymSetState extends State<EditGymSet> {
 
     setState(() {
       _name = gymSet.name;
-      _repsController.text = gymSet.reps.toString();
-      _weightController.text = gymSet.weight.toString();
-      _bodyWeightController.text = gymSet.bodyWeight.toString();
-      _durationController.text = gymSet.duration.toString();
-      _distanceController.text = gymSet.distance.toString();
+      _repsController.text = toString(gymSet.reps);
+      _weightController.text = toString(gymSet.weight);
+      _bodyWeightController.text = toString(gymSet.bodyWeight);
+      _durationController.text = toString(gymSet.duration);
+      _distanceController.text = toString(gymSet.distance);
       _unit = gymSet.unit;
       _created = gymSet.created;
       _cardio = gymSet.cardio;

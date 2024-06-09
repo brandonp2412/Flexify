@@ -99,10 +99,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     setState(() {
       _unit = last.unit;
-      _repsController.text = last.reps.toString();
-      _weightController.text = last.weight.toString();
-      _distanceController.text = last.distance.toString();
-      _durationController.text = last.duration.toString();
+      _repsController.text = toString(last.reps);
+      _weightController.text = toString(last.weight);
+      _distanceController.text = toString(last.distance);
+      _durationController.text = toString(last.duration);
       _inclineController.text = last.incline?.toString() ?? "";
       _cardio = last.cardio;
 
@@ -267,7 +267,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                               );
                             else
                               _weightController.text =
-                                  weightSet!.weight.toString();
+                                  toString(weightSet!.weight);
                           },
                         ),
                 ),
