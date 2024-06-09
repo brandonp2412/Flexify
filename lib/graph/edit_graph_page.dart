@@ -193,8 +193,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit ${widget.name.toLowerCase()}"),
@@ -265,9 +263,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 setState(() {
                   _cardio = !_cardio;
                   if (_cardio)
-                    _unit = settings.cardioUnit ?? 'km';
+                    _unit = _unit == 'kg' ? 'km' : 'mi';
                   else
-                    _unit = settings.strengthUnit ?? 'kg';
+                    _unit = _unit == 'km' ? 'kg' : 'lb';
                 });
               },
               trailing: Switch(
