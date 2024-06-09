@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -57,19 +59,20 @@ class AboutPage extends StatelessWidget {
               if (await canLaunchUrlString(url)) await launchUrlString(url);
             },
           ),
-          ListTile(
-            title: const Text("Donate"),
-            leading: const Icon(Icons.favorite_outline),
-            subtitle: FutureBuilder(
-              future: packageInfo,
-              builder: (context, snapshot) =>
-                  const Text("Help support this project"),
+          if (!Platform.isMacOS && !Platform.isIOS)
+            ListTile(
+              title: const Text("Donate"),
+              leading: const Icon(Icons.favorite_outline),
+              subtitle: FutureBuilder(
+                future: packageInfo,
+                builder: (context, snapshot) =>
+                    const Text("Help support this project"),
+              ),
+              onTap: () async {
+                const url = 'https://github.com/sponsors/brandonp2412';
+                if (await canLaunchUrlString(url)) await launchUrlString(url);
+              },
             ),
-            onTap: () async {
-              const url = 'https://github.com/sponsors/brandonp2412';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
-            },
-          ),
         ],
       ),
     );
