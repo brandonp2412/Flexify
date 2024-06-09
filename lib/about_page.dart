@@ -33,6 +33,10 @@ class AboutPage extends StatelessWidget {
               builder: (context, snapshot) =>
                   Text(snapshot.data?.version ?? "1.0.0"),
             ),
+            onTap: () async {
+              const url = 'https://github.com/brandonp2412/Flexify/releases';
+              if (await canLaunchUrlString(url)) await launchUrlString(url);
+            },
           ),
           ListTile(
             title: const Text("Author"),
