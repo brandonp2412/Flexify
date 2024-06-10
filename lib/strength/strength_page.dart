@@ -20,14 +20,14 @@ class StrengthPage extends StatefulWidget {
 class _StrengthPageState extends State<StrengthPage> {
   late String _targetUnit = widget.unit;
   StrengthMetric _metric = StrengthMetric.bestWeight;
-  Period _groupBy = Period.day;
+  Period _period = Period.day;
   DateTime? _startDate;
   DateTime? _endDate;
 
   @override
   initState() {
     super.initState();
-    if (widget.name == 'Weight') _groupBy = Period.week;
+    if (widget.name == 'Weight') _period = Period.week;
   }
 
   Future<void> _selectEnd() async {
@@ -125,6 +125,33 @@ class _StrengthPageState extends State<StrengthPage> {
                   });
                 },
               ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Period'),
+              value: _period,
+              items: const [
+                DropdownMenuItem(
+                  value: Period.day,
+                  child: Text("Daily"),
+                ),
+                DropdownMenuItem(
+                  value: Period.week,
+                  child: Text("Weekly"),
+                ),
+                DropdownMenuItem(
+                  value: Period.month,
+                  child: Text("Monthly"),
+                ),
+                DropdownMenuItem(
+                  value: Period.year,
+                  child: Text("Yearly"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _period = value!;
+                });
+              },
+            ),
             if (settings.showUnits)
               UnitSelector(
                 value: _targetUnit,
@@ -176,40 +203,9 @@ class _StrengthPageState extends State<StrengthPage> {
               name: widget.name,
               metric: _metric,
               targetUnit: _targetUnit,
-              groupBy: _groupBy,
+              period: _period,
               startDate: _startDate,
               endDate: _endDate,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: Period.values.map((period) {
-                  return TextButton(
-                    onPressed: _groupBy == period
-                        ? null
-                        : () {
-                            setState(() {
-                              _groupBy = period;
-                            });
-                          },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: _groupBy == period
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                        width: 2,
-                      ),
-                    ),
-                    child: Text(
-                      period.name[0].toUpperCase() + period.name.substring(1),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
             ),
           ],
         ),

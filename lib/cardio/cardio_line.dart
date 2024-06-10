@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class CardioLine extends StatefulWidget {
   final String name;
   final CardioMetric metric;
-  final Period groupBy;
+  final Period period;
   final String targetUnit;
   final DateTime? startDate;
   final DateTime? endDate;
@@ -19,7 +19,7 @@ class CardioLine extends StatefulWidget {
     super.key,
     required this.name,
     required this.metric,
-    required this.groupBy,
+    required this.period,
     this.startDate,
     this.endDate,
     required this.targetUnit,
@@ -54,7 +54,7 @@ class _CardioLineState extends State<CardioLine> {
   void _setStream() {
     _graphStream = watchCardio(
       endDate: widget.endDate,
-      groupBy: widget.groupBy,
+      groupBy: widget.period,
       metric: widget.metric,
       name: widget.name,
       startDate: widget.startDate,

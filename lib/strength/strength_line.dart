@@ -14,7 +14,7 @@ class StrengthLine extends StatefulWidget {
   final String name;
   final StrengthMetric metric;
   final String targetUnit;
-  final Period groupBy;
+  final Period period;
   final DateTime? startDate;
   final DateTime? endDate;
 
@@ -23,7 +23,7 @@ class StrengthLine extends StatefulWidget {
     required this.name,
     required this.metric,
     required this.targetUnit,
-    required this.groupBy,
+    required this.period,
     this.startDate,
     this.endDate,
   });
@@ -65,15 +65,15 @@ class _StrengthLineState extends State<StrengthLine> {
     Expression<String> createdCol = const CustomExpression<String>(
       "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
     );
-    if (widget.groupBy == Period.month)
+    if (widget.period == Period.month)
       createdCol = const CustomExpression<String>(
         "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
       );
-    else if (widget.groupBy == Period.week)
+    else if (widget.period == Period.week)
       createdCol = const CustomExpression<String>(
         "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
       );
-    else if (widget.groupBy == Period.year)
+    else if (widget.period == Period.year)
       createdCol = const CustomExpression<String>(
         "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
       );

@@ -19,7 +19,7 @@ class CardioPage extends StatefulWidget {
 class _CardioPageState extends State<CardioPage> {
   late String _targetUnit = widget.unit;
   CardioMetric _metric = CardioMetric.pace;
-  Period _groupBy = Period.day;
+  Period _period = Period.day;
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -109,6 +109,33 @@ class _CardioPageState extends State<CardioPage> {
                 });
               },
             ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Period'),
+              value: _period,
+              items: const [
+                DropdownMenuItem(
+                  value: Period.day,
+                  child: Text("Daily"),
+                ),
+                DropdownMenuItem(
+                  value: Period.week,
+                  child: Text("Weekly"),
+                ),
+                DropdownMenuItem(
+                  value: Period.month,
+                  child: Text("Monthly"),
+                ),
+                DropdownMenuItem(
+                  value: Period.year,
+                  child: Text("Yearly"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _period = value!;
+                });
+              },
+            ),
             if (_metric == CardioMetric.distance && settings.showUnits)
               UnitSelector(
                 value: _targetUnit,
@@ -156,41 +183,10 @@ class _CardioPageState extends State<CardioPage> {
             CardioLine(
               name: widget.name,
               metric: _metric,
-              groupBy: _groupBy,
+              period: _period,
               startDate: _startDate,
               endDate: _endDate,
               targetUnit: _targetUnit,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: Period.values.map((period) {
-                  return TextButton(
-                    onPressed: _groupBy == period
-                        ? null
-                        : () {
-                            setState(() {
-                              _groupBy = period;
-                            });
-                          },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: _groupBy == period
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.transparent,
-                        width: 2,
-                      ),
-                    ),
-                    child: Text(
-                      period.name[0].toUpperCase() + period.name.substring(1),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
             ),
           ],
         ),
