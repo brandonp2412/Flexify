@@ -448,17 +448,18 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: const Text('Settings'),
         actions: [
-          IconButton(
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AboutPage(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.info_outline_rounded),
-          ),
+          if (!Platform.isIOS && !Platform.isMacOS)
+            IconButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AboutPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.info_outline_rounded),
+            ),
         ],
       ),
       body: Padding(
