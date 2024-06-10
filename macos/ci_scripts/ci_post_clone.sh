@@ -8,9 +8,9 @@ export PATH="$PATH:$HOME/flutter/bin"
 
 flutter precache --macos
 flutter pub get
-flutter build macos
 HOMEBREW_NO_AUTO_UPDATE=1
 brew install cocoapods
 cd macos && pod install
+flutter build macos
 
 exit 0
