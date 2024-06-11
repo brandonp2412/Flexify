@@ -9,7 +9,7 @@ flutter precache --macos
 flutter pub get
 HOMEBREW_NO_AUTO_UPDATE=1
 brew install cocoapods
-flutter build macos --debug
+flutter build macos
 cd macos && pod install
 
 exit 0
