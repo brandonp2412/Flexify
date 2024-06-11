@@ -1,0 +1,1 @@
+- Only open permissions page on android

@@ -122,7 +122,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (!_settings.hideWeight)
       bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
-    if (!_settings.explainedPermissions && _settings.restTimers && mounted)
+    if (Platform.isAndroid &&
+        !_settings.explainedPermissions &&
+        _settings.restTimers &&
+        mounted)
       await Navigator.push(
         context,
         MaterialPageRoute(
