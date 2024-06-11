@@ -3,8 +3,7 @@
 set -e
 
 cd $CI_PRIMARY_REPOSITORY_PATH
-git clone https://github.com/flutter/flutter.git --depth 1 $HOME/flutter
-export PATH="$PATH:$HOME/flutter/bin"
+export PATH="$PATH:$(pwd)/flutter/bin"
 
 flutter precache --macos
 flutter pub get
