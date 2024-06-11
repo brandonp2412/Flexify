@@ -9,6 +9,7 @@ import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -194,7 +195,7 @@ class _EditGymSetState extends State<EditGymSet> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: material.Column(
+        child: ListView(
           children: [
             Autocomplete<String>(
               optionsBuilder: (textEditingValue) {
