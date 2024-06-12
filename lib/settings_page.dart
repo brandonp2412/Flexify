@@ -340,20 +340,21 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      SettingsLine(
-        key: 'hide timer tab',
-        widget: ListTile(
-          title: const Text('Hide timer tab'),
-          leading: _settings.hideTimerTab
-              ? const Icon(Icons.timer_outlined)
-              : const Icon(Icons.timer),
-          onTap: () => _settings.setHideTimer(!_settings.hideTimerTab),
-          trailing: Switch(
-            value: _settings.hideTimerTab,
-            onChanged: (value) => _settings.setHideTimer(value),
+      if (Platform.isAndroid)
+        SettingsLine(
+          key: 'hide timer tab',
+          widget: ListTile(
+            title: const Text('Hide timer tab'),
+            leading: _settings.hideTimerTab
+                ? const Icon(Icons.timer_outlined)
+                : const Icon(Icons.timer),
+            onTap: () => _settings.setHideTimer(!_settings.hideTimerTab),
+            trailing: Switch(
+              value: _settings.hideTimerTab,
+              onChanged: (value) => _settings.setHideTimer(value),
+            ),
           ),
         ),
-      ),
       SettingsLine(
         key: 'hide history tab',
         widget: ListTile(
