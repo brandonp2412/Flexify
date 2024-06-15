@@ -127,7 +127,7 @@ class _StrengthPageState extends State<StrengthPage> {
         final formatter = NumberFormat("#,###.00");
 
         String text =
-            "${row.reps} x ${row.value.toStringAsFixed(2)}${_targetUnit} $created";
+            "${row.reps} x ${row.value.toStringAsFixed(2)}$_targetUnit $created";
         switch (_metric) {
           case StrengthMetric.bestReps:
           case StrengthMetric.relativeStrength:
@@ -135,7 +135,7 @@ class _StrengthPageState extends State<StrengthPage> {
             break;
           case StrengthMetric.volume:
           case StrengthMetric.oneRepMax:
-            text = "${formatter.format(row.value)}${_targetUnit} $created";
+            text = "${formatter.format(row.value)}$_targetUnit $created";
             break;
           case StrengthMetric.bestWeight:
             break;
@@ -445,7 +445,11 @@ class _StrengthPageState extends State<StrengthPage> {
                               interval: 1,
                               getTitlesWidget: (value, meta) =>
                                   _bottomTitleWidgets(
-                                      value, meta, rows, settings),
+                                value,
+                                meta,
+                                rows,
+                                settings,
+                              ),
                             ),
                           ),
                         ),
@@ -462,13 +466,16 @@ class _StrengthPageState extends State<StrengthPage> {
                               if (index == null) return;
                               final row = rows[index];
                               final gymSet = await (db.gymSets.select()
-                                    ..where((tbl) =>
-                                        tbl.created.equals(row.created))
+                                    ..where(
+                                      (tbl) => tbl.created.equals(row.created),
+                                    )
                                     ..where((tbl) => tbl.reps.equals(row.reps))
                                     ..where(
-                                        (tbl) => tbl.weight.equals(row.value))
+                                      (tbl) => tbl.weight.equals(row.value),
+                                    )
                                     ..where(
-                                        (tbl) => tbl.name.equals(widget.name))
+                                      (tbl) => tbl.name.equals(widget.name),
+                                    )
                                     ..limit(1))
                                   .getSingle();
 

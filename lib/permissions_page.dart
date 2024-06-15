@@ -76,10 +76,12 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 subtitle: const Text(
                   'Progress may pause if battery optimizations stay on.',
                 ),
-                onTap: () async => await requestPermission(Permission.ignoreBatteryOptimizations),
+                onTap: () async => await requestPermission(
+                    Permission.ignoreBatteryOptimizations),
                 trailing: Switch(
                   value: _ignore,
-                  onChanged: (_) async => await requestPermission(Permission.ignoreBatteryOptimizations),
+                  onChanged: (_) async => await requestPermission(
+                      Permission.ignoreBatteryOptimizations),
                 ),
               ),
               ListTile(
@@ -87,10 +89,12 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 subtitle: const Text(
                   'Alarms cannot be accurate if this is disabled.',
                 ),
-                onTap: () async => await requestPermission(Permission.scheduleExactAlarm),
+                onTap: () async =>
+                    await requestPermission(Permission.scheduleExactAlarm),
                 trailing: Switch(
                   value: _schedule,
-                  onChanged: (_) async => await requestPermission(Permission.scheduleExactAlarm),
+                  onChanged: (_) async =>
+                      await requestPermission(Permission.scheduleExactAlarm),
                 ),
               ),
               ListTile(
@@ -98,10 +102,12 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 subtitle: const Text(
                   'Timer progress is sent to the notification bar',
                 ),
-                onTap: () async => await requestPermission(Permission.notification),
+                onTap: () async =>
+                    await requestPermission(Permission.notification),
                 trailing: Switch(
                   value: _notify,
-                  onChanged: (_) async => await requestPermission(Permission.notification),
+                  onChanged: (_) async =>
+                      await requestPermission(Permission.notification),
                 ),
               ),
             ],

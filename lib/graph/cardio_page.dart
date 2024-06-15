@@ -293,7 +293,11 @@ class _CardioPageState extends State<CardioPage> {
                               interval: 1,
                               getTitlesWidget: (value, meta) =>
                                   _bottomTitleWidgets(
-                                      value, meta, rows, settings),
+                                value,
+                                meta,
+                                rows,
+                                settings,
+                              ),
                             ),
                           ),
                         ),
@@ -341,7 +345,7 @@ class _CardioPageState extends State<CardioPage> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             );
           },
