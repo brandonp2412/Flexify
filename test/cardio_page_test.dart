@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flexify/cardio/cardio_page.dart';
+import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';

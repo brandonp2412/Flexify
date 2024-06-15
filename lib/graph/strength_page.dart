@@ -3,9 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graph/view_graph.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/strength/strength_data.dart';
+import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -505,6 +506,14 @@ class _StrengthPageState extends State<StrengthPage> {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ViewGraph(name: widget.name),
+          ),
+        ),
+        child: const Icon(Icons.history),
       ),
     );
   }

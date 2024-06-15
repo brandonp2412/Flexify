@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/cardio/cardio_data.dart';
+import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
