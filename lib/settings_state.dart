@@ -22,6 +22,7 @@ class SettingsState extends ChangeNotifier {
   bool hideHistoryTab = false;
   bool curveLines = false;
   bool hideWeight = false;
+  bool groupHistory = true;
 
   SettingsState() {
     alarmSound = prefs.getString('alarmSound');
@@ -59,6 +60,13 @@ class SettingsState extends ChangeNotifier {
     curveLines = prefs.getBool('curveLines') ?? false;
     vibrate = prefs.getBool('vibrate') ?? true;
     hideWeight = prefs.getBool('hideWeight') ?? false;
+    groupHistory = prefs.getBool('groupHistory') ?? true;
+  }
+
+  void setGroupHistory(bool value) {
+    groupHistory = value;
+    notifyListeners();
+    prefs.setBool('groupHistory', value);
   }
 
   void setHideWeight(bool value) {

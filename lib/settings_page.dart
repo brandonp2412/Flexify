@@ -315,6 +315,18 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       SettingsLine(
+        key: 'group history',
+        widget: ListTile(
+          title: const Text('Group history'),
+          leading: const Icon(Icons.expand_more),
+          onTap: () => _settings.setGroupHistory(!_settings.groupHistory),
+          trailing: Switch(
+            value: _settings.groupHistory,
+            onChanged: (value) => _settings.setGroupHistory(value),
+          ),
+        ),
+      ),
+      SettingsLine(
         key: 'show units',
         widget: ListTile(
           title: const Text('Show units'),

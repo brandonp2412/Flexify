@@ -3,6 +3,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/edit_gym_set.dart';
 import 'package:flexify/edit_gym_sets.dart';
+import 'package:flexify/history_collapsed.dart';
 import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
@@ -52,11 +53,19 @@ class _HistoryPageWidget extends StatefulWidget {
   createState() => _HistoryPageWidgetState();
 }
 
+class HistoryDay {
+  final String name;
+  final List<GymSet> gymSets;
+  final DateTime day;
+
+  HistoryDay({required this.name, required this.gymSets, required this.day});
+}
+
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   late Stream<List<GymSet>> _stream;
   Set<int> _selected = {};
   String _search = '';
-  int _limit = 20;
+  int _limit = 100;
 
   @override
   void initState() {
@@ -80,6 +89,22 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
             ..limit(_limit))
           .watch();
     });
+  }
+
+  List<HistoryDay> _getHistoryDays(List<GymSet> gymSets) {
+    List<HistoryDay> historyDays = [];
+    for (final gymSet in gymSets) {
+      final day = DateUtils.dateOnly(gymSet.created);
+      final index = historyDays
+          .indexWhere((hd) => isSameDay(hd.day, day) && hd.name == gymSet.name);
+      if (index == -1)
+        historyDays.add(
+          HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day),
+        );
+      else
+        historyDays[index].gymSets.add(gymSet);
+    }
+    return historyDays;
   }
 
   @override
@@ -127,23 +152,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       );
 
     return Scaffold(
-      body: StreamBuilder<List<GymSet>>(
+      body: StreamBuilder(
         stream: _stream,
         builder: (context, snapshot) {
-          final filtered = snapshot.data
-                  ?.where(
-                    (gymSet) => gymSet.name
-                        .toLowerCase()
-                        .contains(_search.toLowerCase()),
-                  )
-                  .toList() ??
-              [];
-
           return material.Column(
             children: [
               AppSearch(
                 onShare: () async {
-                  final gymSets = (await _stream.first)
+                  final gymSets = snapshot.data!
                       .where(
                         (gymSet) => _selected.contains(gymSet.id),
                       )
@@ -177,7 +193,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   });
                 },
                 onSelect: () => setState(() {
-                  _selected.addAll(filtered.map((gymSet) => gymSet.id));
+                  if (snapshot.data == null) return;
+                  _selected.addAll(snapshot.data!.map((gymSet) => gymSet.id));
                 }),
                 selected: _selected,
                 onEdit: () => Navigator.push(
@@ -200,24 +217,53 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 Expanded(child: ErrorWidget(snapshot.error.toString())),
               if (snapshot.hasData)
                 Expanded(
-                  child: HistoryList(
-                    gymSets: filtered,
-                    onSelect: (id) {
-                      if (_selected.contains(id))
-                        setState(() {
-                          _selected.remove(id);
-                        });
-                      else
-                        setState(() {
-                          _selected.add(id);
-                        });
-                    },
-                    selected: _selected,
-                    onNext: () {
-                      setState(() {
-                        _limit += 10;
-                      });
-                      _setStream();
+                  child: Builder(
+                    builder: (context) {
+                      final settings = context.watch<SettingsState>();
+
+                      if (settings.groupHistory) {
+                        final historyDays = _getHistoryDays(snapshot.data!);
+                        return HistoryCollapsed(
+                          historyDays: historyDays,
+                          onSelect: (id) {
+                            if (_selected.contains(id))
+                              setState(() {
+                                _selected.remove(id);
+                              });
+                            else
+                              setState(() {
+                                _selected.add(id);
+                              });
+                          },
+                          selected: _selected,
+                          onNext: () {
+                            setState(() {
+                              _limit += 100;
+                            });
+                            _setStream();
+                          },
+                        );
+                      } else
+                        return HistoryList(
+                          gymSets: snapshot.data!,
+                          onSelect: (id) {
+                            if (_selected.contains(id))
+                              setState(() {
+                                _selected.remove(id);
+                              });
+                            else
+                              setState(() {
+                                _selected.add(id);
+                              });
+                          },
+                          selected: _selected,
+                          onNext: () {
+                            setState(() {
+                              _limit += 100;
+                            });
+                            _setStream();
+                          },
+                        );
                     },
                   ),
                 ),
