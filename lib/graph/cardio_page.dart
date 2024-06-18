@@ -268,7 +268,7 @@ class _CardioPageState extends State<CardioPage> {
                   ],
                 ),
                 SizedBox(
-                  height: 400,
+                  height: 350,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                     child: LineChart(
