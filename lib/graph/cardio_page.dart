@@ -87,14 +87,12 @@ class _CardioPageState extends State<CardioPage> {
     );
     Widget text;
 
-    int middleIndex = (rows.length / 2).floor();
-    List<int> indices;
-
-    if (rows.length % 2 == 0) {
-      indices = [0, rows.length - 1];
-    } else {
-      indices = [0, middleIndex, rows.length - 1];
-    }
+    double screenWidth = MediaQuery.of(context).size.width;
+    double labelWidth = 120;
+    int labelCount = (screenWidth / labelWidth).floor();
+    List<int> indices = List.generate(labelCount, (index) {
+      return ((rows.length - 1) * index / (labelCount - 1)).round();
+    });
 
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
