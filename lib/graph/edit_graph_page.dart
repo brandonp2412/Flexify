@@ -258,7 +258,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
               leading: _cardio
                   ? const Icon(Icons.sports_gymnastics)
                   : const Icon(Icons.fitness_center),
-              title: const Text('Cardio'),
+              title: _cardio ? const Text('Cardio') : const Text('Strength'),
               onTap: () {
                 setState(() {
                   _cardio = !_cardio;
