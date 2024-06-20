@@ -24,16 +24,21 @@ class UnitSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text('Unit ($value)'),
-      leading: value == 'kg' || value == 'km'
-          ? const Icon(Icons.straighten)
-          : const Icon(Icons.square_foot),
-      onTap: _onTap,
-      trailing: Switch(
-        value: value == 'kg' || value == 'km',
-        onChanged: (_) => _onTap(),
-      ),
+    return Column(
+      children: [
+        const SizedBox(height: 8.0),
+        ListTile(
+          title: Text('Unit ($value)'),
+          leading: value == 'kg' || value == 'km'
+              ? const Icon(Icons.straighten)
+              : const Icon(Icons.square_foot),
+          onTap: _onTap,
+          trailing: Switch(
+            value: value == 'kg' || value == 'km',
+            onChanged: (_) => _onTap(),
+          ),
+        ),
+      ],
     );
   }
 }

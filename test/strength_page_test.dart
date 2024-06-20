@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/strength/strength_page.dart';
+import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

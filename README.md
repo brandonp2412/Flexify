@@ -31,8 +31,8 @@ Get fit with Flexify. Easily track your gym progression with offline records and
         alt="Get it on Linux"
         height="75">
 </a>
-<a href="https://apps.apple.com/us/app/flexify/id6503730178?mt=12&amp;itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 226.51px; height: 75px;">
-    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the Mac App Store" style="border-radius: 13px; width: 226.51px; height: 75px;">
+<a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 226.51px; height: 75px;">
+    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the App Store" style="border-radius: 13px; width: 226.51px; height: 75px;">
 </a>
 <a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 226.51px; height: 75px;">
     <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the App Store" style="border-radius: 13px; width: 226.51px; height: 75px;">
