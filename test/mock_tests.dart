@@ -21,6 +21,7 @@ mockTests({bool insert = true}) async {
     "hideWeight": true,
     "planTrailing": PlanTrailing.count.toString(),
     "explainedPermissions": true,
+    "groupHistory": false,
   });
   prefs = await SharedPreferences.getInstance();
   android = const MethodChannel("com.presley.flexify/android");
