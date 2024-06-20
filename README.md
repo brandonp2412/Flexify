@@ -2,6 +2,11 @@
 
 Get fit with Flexify. Easily track your gym progression with offline records and seamless graphs.
 
+<p float="left">
+    <img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.presley.flexify">
+    <img alt="Release downloads" src="https://img.shields.io/github/downloads/brandonp2412/Flexify/total.svg">
+    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/brandonp2412/flexify">
+</p>
 
 ## Features
 
@@ -31,18 +36,10 @@ Get fit with Flexify. Easily track your gym progression with offline records and
         alt="Get it on Linux"
         height="75">
 </a>
-<a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 226.51px; height: 75px;">
-    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the App Store" style="border-radius: 13px; width: 226.51px; height: 75px;">
-</a>
-<a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 226.51px; height: 75px;">
-    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the App Store" style="border-radius: 13px; width: 226.51px; height: 75px;">
-</a>
 
-<p float="left">
-    <img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.presley.flexify">
-    <img alt="Release downloads" src="https://img.shields.io/github/downloads/brandonp2412/Flexify/total.svg">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/brandonp2412/flexify">
-</p>
+<a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 226.51px; height: 75px;">
+    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the App Store" style="border-radius: 13px; width: 226.51px; height: 75px;">
+</a>
 
 ## Screenshots
 
