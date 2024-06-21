@@ -16,7 +16,7 @@ Get fit with Flexify. Easily track your gym progression with offline records and
 
 - 📈 **Graphs**: Visualize your progress over time with intuitive graphs. Understand your improvements and identify areas for further development.
 
-- ⏱️ **Automatic Rest Timers**: Flexify includes automatic rest timers to help you optimize your workout sessions. Stay on track and make the most out of your gym time.
+- ⏱️ **Automatic Rest Timers**: Flexify includes automatic rest timers to help you optimize your workout sessions. Stay on track and make the most out of your gym time. (Android only)
 
 <a href='https://play.google.com/store/apps/details?id=com.presley.flexify'>
     <img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>
