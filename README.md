@@ -59,7 +59,7 @@ To get started with Flexify, follow these steps:
 1. **Clone the Repository**: Clone the Flexify repository to your local machine using Git:
 
    ```bash
-   git clone https://github.com/brandonp2412/Flexify flexify
+   git clone --recursive https://github.com/brandonp2412/Flexify flexify
    ```
 
 2. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies:

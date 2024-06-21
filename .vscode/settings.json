@@ -14,16 +14,6 @@
     "flutter/": true
   },
   "editor.formatOnSave": true,
-  "dart.flutterSdkPath": ".fvm/versions/3.22.2",
-  "sqltools.useNodeRuntime": true,
-  "sqltools.connections": [
-    {
-      "previewLimit": 50,
-      "driver": "SQLite",
-      "name": "Flexify",
-      "database": "/home/brandon/documents/flexify.sqlite"
-    }
-  ],
   "editor.codeActionsOnSave": {
     "source.fixAll": "always",
     "source.organizeImports": "always"
