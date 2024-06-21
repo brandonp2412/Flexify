@@ -64,6 +64,4 @@ msix_config:
   logo_path: C:\Users\brandon\flexify\assets\ic_launcher.png
   publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
   store: true
-  capabilities: userNotificationListener
-  certificate_path: C:\Users\brandon\CERTIFICATE.pfx
-  certificate_password: ''
+  capabilities: runFullTrust
