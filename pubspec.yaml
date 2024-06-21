@@ -60,8 +60,8 @@ msix_config:
   display_name: Flexify
   publisher_display_name: Frisbee Software
   identity_name: FrisbeeSoftware.Flexify
-  msix_version: 1.0.0.0
-  logo_path: C:\Users\brandon\flexify\windows\runner\resources\app_icon.ico
+  msix_version: 1.0.1.0
+  logo_path: C:\Users\brandon\flexify\assets\ic_launcher.png
   publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
   store: true
   capabilities: userNotificationListener
