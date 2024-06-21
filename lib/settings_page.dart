@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final _secondsController = TextEditingController(text: '30');
   final _maxSetsController = TextEditingController(text: '3');
 
-  late AudioPlayer _player;
+  AudioPlayer? _player;
   late SettingsState _settings;
 
   final List<String> shortFormats = [
@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    _player = AudioPlayer();
+    if (Platform.isAndroid) _player = AudioPlayer();
     _settings = context.read<SettingsState>();
     _minutesController.text = _settings.timerDuration.inMinutes.toString();
     _secondsController.text =
@@ -71,8 +71,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    _player.stop();
-    _player.dispose();
+    if (Platform.isAndroid) {
+      _player?.stop();
+      _player?.dispose();
+    }
+
     _searchController.dispose();
     _minutesController.dispose();
     _secondsController.dispose();
@@ -403,25 +406,26 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      SettingsLine(
-        key: 'alarm sound',
-        widget: material.TextButton.icon(
-          onPressed: () async {
-            final result =
-                await FilePicker.platform.pickFiles(type: FileType.audio);
-            if (result == null || result.files.single.path == null) return;
-            _settings.setAlarm(result.files.single.path!);
-            _player.play(DeviceFileSource(result.files.single.path!));
-          },
-          onLongPress: () {
-            _settings.setAlarm(null);
-          },
-          icon: const Icon(Icons.music_note),
-          label: _settings.alarmSound == null
-              ? const Text("Alarm sound")
-              : Text(_settings.alarmSound!.split('/').last),
+      if (Platform.isAndroid)
+        SettingsLine(
+          key: 'alarm sound',
+          widget: material.TextButton.icon(
+            onPressed: () async {
+              final result =
+                  await FilePicker.platform.pickFiles(type: FileType.audio);
+              if (result == null || result.files.single.path == null) return;
+              _settings.setAlarm(result.files.single.path!);
+              _player?.play(DeviceFileSource(result.files.single.path!));
+            },
+            onLongPress: () {
+              _settings.setAlarm(null);
+            },
+            icon: const Icon(Icons.music_note),
+            label: _settings.alarmSound == null
+                ? const Text("Alarm sound")
+                : Text(_settings.alarmSound!.split('/').last),
+          ),
         ),
-      ),
       SettingsLine(
         key: 'share database',
         widget: TextButton.icon(
