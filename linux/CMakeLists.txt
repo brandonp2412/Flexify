@@ -54,6 +54,7 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
 
+
 add_definitions(-DAPPLICATION_ID="${APPLICATION_ID}")
 
 # Define the application target. To change its name, change BINARY_NAME above,
@@ -64,13 +65,19 @@ add_executable(${BINARY_NAME}
   "main.cc"
   "my_application.cc"
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
+        flexify_native_impl.cpp
+        flexify_native_impl.h
 )
 
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})
 
+add_subdirectory(flexify_native)
+target_link_libraries(${BINARY_NAME} PRIVATE flexifyNative)
+
 # Add dependency libraries. Add any application-specific dependencies here.
+target_link_libraries(${BINARY_NAME} PRIVATE notify)
 target_link_libraries(${BINARY_NAME} PRIVATE flutter)
 target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK)
 

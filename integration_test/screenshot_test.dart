@@ -210,10 +210,10 @@ void main() {
 
   setUpAll(() async {
     app.db = AppDatabase();
-    app.android = const MethodChannel("com.presley.flexify/android");
+    app.timerChannel = const MethodChannel("com.presley.flexify/timer");
     app.prefs = await SharedPreferences.getInstance();
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(app.android, (message) => null);
+        .setMockMethodCallHandler(app.timerChannel, (message) => null);
 
     await app.db.delete(app.db.gymSets).go();
     await app.db.delete(app.db.plans).go();

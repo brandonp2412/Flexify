@@ -6,7 +6,7 @@ class TimerState extends ChangeNotifier {
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
 
   TimerState() {
-    android.setMethodCallHandler((call) async {
+    timerChannel.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
         final newTimer = NativeTimerWrapper(
           Duration(milliseconds: call.arguments[0]),
@@ -28,12 +28,12 @@ class TimerState extends ChangeNotifier {
     final args = {
       'timestamp': newTimer.getTimeStamp(),
     };
-    await android.invokeMethod('add', args);
+    await timerChannel.invokeMethod('add', args);
   }
 
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
-    await android.invokeMethod('stop');
+    await timerChannel.invokeMethod('stop');
   }
 
   Future<void> startTimer(String title, Duration rest) async {
@@ -49,7 +49,7 @@ class TimerState extends ChangeNotifier {
       'timestamp': timer.getTimeStamp(),
       'restMs': rest.inMilliseconds,
     };
-    await android.invokeMethod('timer', args);
+    await timerChannel.invokeMethod('timer', args);
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {

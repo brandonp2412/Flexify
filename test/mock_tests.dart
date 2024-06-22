@@ -24,7 +24,7 @@ mockTests({bool insert = true}) async {
     "groupHistory": false,
   });
   prefs = await SharedPreferences.getInstance();
-  android = const MethodChannel("com.presley.flexify/android");
+  timerChannel = const MethodChannel("com.presley.flexify/timer");
   db = AppDatabase(executor: NativeDatabase.memory());
 
   if (!insert) return;

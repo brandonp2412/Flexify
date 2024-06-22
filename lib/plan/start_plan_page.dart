@@ -122,7 +122,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (!_settings.hideWeight)
       bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
-    if (Platform.isAndroid &&
+    if (platformSupportsTimer() &&
         !_settings.explainedPermissions &&
         _settings.restTimers &&
         mounted)
@@ -166,7 +166,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       incline: drift.Value(int.tryParse(_inclineController.text)),
     );
 
-    if (_settings.restTimers && Platform.isAndroid) {
+    if (_settings.restTimers && platformSupportsTimer()) {
       final countIndex =
           counts.indexWhere((element) => element.name == exercise);
       var count = 0;

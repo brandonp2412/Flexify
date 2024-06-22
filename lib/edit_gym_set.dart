@@ -87,7 +87,7 @@ class _EditGymSetState extends State<EditGymSet> {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
       db.into(db.gymSets).insert(insert);
       final settings = context.read<SettingsState>();
-      if (!settings.restTimers || !Platform.isAndroid) return;
+      if (!settings.restTimers || !platformSupportsTimer()) return;
       final timer = context.read<TimerState>();
       if (_restMs != null)
         timer.startTimer(_name, Duration(milliseconds: _restMs!));

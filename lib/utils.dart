@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
@@ -28,6 +30,7 @@ DateTime parseDate(String dateString) {
 Future<bool> requestNotificationPermission() async {
   if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
     return true;
+  if (platformIsDesktop()) return true;
   final permission = await Permission.notification.request();
   return permission.isGranted;
 }
@@ -54,3 +57,8 @@ String toString(double value) {
   if (string.endsWith('.0')) return string.substring(0, string.length - 2);
   return string;
 }
+
+bool platformSupportsTimer() => Platform.isAndroid || Platform.isLinux;
+
+// TODO: Should macOS be added here?
+bool platformIsDesktop() => Platform.isLinux || Platform.isWindows;

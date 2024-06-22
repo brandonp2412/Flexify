@@ -56,17 +56,6 @@ class MainActivity : FlutterActivity() {
                     timer(restMs, title!!, timestamp!!)
                 }
 
-                "getProgress" -> {
-                    if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
-                        result.success(
-                            intArrayOf(
-                                timerService?.flexifyTimer!!.getRemainingSeconds(),
-                                timerService?.flexifyTimer!!.getDurationSeconds()
-                            )
-                        )
-                    else result.success(intArrayOf(0, 0))
-                }
-
                 "add" -> {
                     if (timerService?.flexifyTimer?.isRunning() == true) {
                         val intent = Intent(TimerService.ADD_BROADCAST)

@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) _player = AudioPlayer();
+    if (platformSupportsTimer()) _player = AudioPlayer();
     _settings = context.read<SettingsState>();
     _minutesController.text = _settings.timerDuration.inMinutes.toString();
     _secondsController.text =
@@ -71,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    if (Platform.isAndroid) {
+    if (platformSupportsTimer()) {
       _player?.stop();
       _player?.dispose();
     }
@@ -235,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      if (Platform.isAndroid)
+      if (platformSupportsTimer())
         SettingsLine(
           key: 'rest minutes seconds',
           widget: Padding(
@@ -285,7 +285,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
-      if (Platform.isAndroid)
+      if (platformSupportsTimer())
         SettingsLine(
           key: 'rest timers',
           widget: ListTile(
@@ -302,7 +302,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
-      if (Platform.isAndroid)
+      if (platformSupportsTimer())
         SettingsLine(
           key: 'vibrate',
           widget: ListTile(
@@ -355,7 +355,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      if (Platform.isAndroid)
+      if (platformSupportsTimer())
         SettingsLine(
           key: 'hide timer tab',
           widget: ListTile(
@@ -406,7 +406,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      if (Platform.isAndroid)
+      if (platformSupportsTimer())
         SettingsLine(
           key: 'alarm sound',
           widget: material.TextButton.icon(

@@ -9,6 +9,7 @@ import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -17,13 +18,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'plan/plans_page.dart';
 
 late AppDatabase db;
-late MethodChannel android;
+late MethodChannel timerChannel;
 late SharedPreferences prefs;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
-  android = const MethodChannel("com.presley.flexify/android");
+  timerChannel = const MethodChannel("com.presley.flexify/timer");
   db = AppDatabase();
   final settings = SettingsState();
 
@@ -89,7 +90,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
     var length = 4;
-    if (settings.hideTimerTab || !Platform.isAndroid) length--;
+    if (settings.hideTimerTab || !platformSupportsTimer()) length--;
     if (settings.hideHistoryTab) length--;
 
     return SafeArea(
@@ -103,7 +104,7 @@ class HomePage extends StatelessWidget {
               if (!settings.hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!settings.hideTimerTab && Platform.isAndroid)
+              if (!settings.hideTimerTab && platformSupportsTimer())
                 const TimerPage(),
             ],
           ),
@@ -122,7 +123,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.insights),
                 text: "Graphs",
               ),
-              if (!settings.hideTimerTab && Platform.isAndroid)
+              if (!settings.hideTimerTab && platformSupportsTimer())
                 const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",
