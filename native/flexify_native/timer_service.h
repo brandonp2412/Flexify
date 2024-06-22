@@ -120,7 +120,7 @@ namespace flexify {
                 const auto remaining = timer.getRemainingSeconds();
                 if (remaining.count() > 0) platform_specific::updateCountdownNotification<P>(description,formatRemainingSeconds(remaining));
             }
-            std::this_thread::sleep_for(1min / 60);
+            std::this_thread::sleep_for(1s / 60);
         }
 
         if (timer.shouldExpire()) {
