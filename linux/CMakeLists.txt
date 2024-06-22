@@ -69,9 +69,6 @@ add_executable(${BINARY_NAME}
   "my_application.cc"
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
         flexify_native_impl.cpp
-        flexify_native_impl.h
-        flexify_native/flexify_native/timer_service.h
-        flexify_native/flexify_native/channel.h
 )
 
 # Apply the standard set of build settings. This can be removed for applications

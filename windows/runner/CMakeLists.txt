@@ -14,7 +14,10 @@ add_executable(${BINARY_NAME} WIN32
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
   "Runner.rc"
   "runner.exe.manifest"
+  "flexify_native_impl.cpp"
 )
+
+include_directories(flexify_native)
 
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.

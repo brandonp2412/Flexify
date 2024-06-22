@@ -1,8 +1,16 @@
 #include "flutter_window.h"
+#include <flutter/event_channel.h>
+#include <flutter/event_sink.h>
+#include <flutter/event_stream_handler_functions.h>
+#include <flutter/method_channel.h>
+#include <flutter/standard_method_codec.h>
+#include <windows.h>
 
+#include <memory>
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
+#include "flexify_native_impl.h"
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
@@ -25,6 +33,20 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+
+
+
+    flutter::MethodChannel<> channel(
+            flutter_controller_->engine()->messenger(), "com.presley.flexify/timer",
+            &flutter::StandardMethodCodec::GetInstance());
+    flexify::platform_specific::initWindows(channel);
+    channel.SetMethodCallHandler(
+            [](const flutter::MethodCall<>& call,
+               std::unique_ptr<flutter::MethodResult<>> result) {
+
+                // TODO
+            });
+
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {

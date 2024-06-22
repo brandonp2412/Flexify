@@ -58,7 +58,7 @@ String toString(double value) {
   return string;
 }
 
-bool platformSupportsTimer() => Platform.isAndroid || Platform.isLinux;
+bool platformSupportsTimer() => Platform.isAndroid || Platform.isLinux || Platform.isWindows;
 
 // TODO: Should macOS be added here?
 bool platformIsDesktop() => Platform.isLinux || Platform.isWindows;
