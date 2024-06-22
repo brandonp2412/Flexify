@@ -7,12 +7,13 @@
 #include <libnotify/notify.h>
 
 flexify::TimerService<flexify::Linux> timer_service;
-
+FlMethodChannel* methodChannel = nullptr;
 
 namespace flexify::platform_specific
 {
     void initLinux(FlMethodChannel* channel) {
-        timer_service = flexify::TimerService<flexify::Linux>(channel);
+        methodChannel = channel;
+        timer_service = flexify::TimerService<flexify::Linux>();
         flexify::platform_specific::nativeCodeInit<flexify::Linux, NotifyActionCallback>({
             [](NotifyNotification *notification, char *action, gpointer user_data){
                 timer_service.stop();
@@ -96,5 +97,12 @@ namespace flexify::platform_specific
     void stopNotification<Linux>() {
         if (notification) notify_notification_close(notification, nullptr);
         std::cout << "stopNotification()" << std::endl;
+    }
+
+    template <>
+    void sendTickPayload<Linux>(int64_t* payload, size_t size) {
+        if (!methodChannel) return;
+        FlValue* value = fl_value_new_int64_list(payload, 4);
+        fl_method_channel_invoke_method(methodChannel, "tick", value, nullptr, nullptr, nullptr);
     }
 }

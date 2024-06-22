@@ -12,6 +12,7 @@
 #include <libnotify/notify.h>
 
 namespace flexify::platform_specific {
+
     void initLinux(FlMethodChannel* channel);
 
     template <>
@@ -40,6 +41,9 @@ namespace flexify::platform_specific {
 
     template <>
     void stopNotification<Linux>();
+
+    template <>
+    void sendTickPayload<Linux>(int64_t* payload, size_t size);
 }
 
 #endif //RUNNER_FLEXIFY_NATIVE_IMPL_H
