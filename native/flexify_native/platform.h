@@ -4,7 +4,7 @@
 
 #ifndef NATIVE_PLATFORM_H
 #define NATIVE_PLATFORM_H
-
+#include <string>
 
 namespace flexify {
 
@@ -19,10 +19,17 @@ namespace flexify {
         CallbackT addOneMin;
     };
 
+    enum Platform;
+    template <Platform P>
+    class TimerService;
+
     namespace platform_specific {
 
         template <Platform P, typename CallbackT>
         void nativeCodeInit(NotificationActionHandlers<CallbackT> callback);
+
+        template <Platform P>
+        TimerService<P>& getTimerService();
 
         template <Platform P>
         void startNativeTimer();

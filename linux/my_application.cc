@@ -7,9 +7,6 @@
 
 #include "flutter/generated_plugin_registrant.h"
 #include "flexify_native_impl.h"
-#include <chrono>
-#include <iostream>
-
 
 struct _MyApplication {
   GtkApplication parent_instance;
@@ -17,68 +14,7 @@ struct _MyApplication {
   FlMethodChannel* timer_channel;
 };
 
-
-
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
-
-flexify::TimerService<flexify::Linux> timer_service = flexify::TimerService<flexify::Linux>();
-
-static void timer_method_call_handler(FlMethodChannel* channel,
-                                      FlMethodCall* method_call,
-                                      gpointer user_data) {
-    g_autoptr(FlMethodResponse) response = nullptr;
-
-    std::cout << fl_method_call_get_name(method_call) << std::endl;
-
-    if (strcmp(fl_method_call_get_name(method_call), "timer") == 0) {
-        FlValue* args = fl_method_call_get_args(method_call);
-
-        FlValue* titleValue = fl_value_lookup_string(args, "title");
-        FlValue* timestampValue = fl_value_lookup_string(args, "timestamp");
-        FlValue* restMsValue = fl_value_lookup_string(args, "restMs");
-
-        std::string title;
-        std::optional<std::chrono::time_point<std::chrono::high_resolution_clock>> timestamp;
-        std::chrono::milliseconds restMs;
-
-        if (titleValue != nullptr && fl_value_get_type(titleValue) == FL_VALUE_TYPE_STRING) {
-            title = fl_value_get_string(titleValue);
-        }
-
-        if (timestampValue != nullptr && fl_value_get_type(timestampValue) == FL_VALUE_TYPE_INT) {
-            timestamp = flexify::convertLongToTimePoint(fl_value_get_int(timestampValue));
-        }
-
-        if (restMsValue != nullptr && fl_value_get_type(restMsValue) == FL_VALUE_TYPE_INT) {
-            restMs = std::chrono::milliseconds(fl_value_get_int(restMsValue));
-        } else restMs = std::chrono::milliseconds (210000);
-
-        timer_service.start(title, timestamp, restMs);
-        response = FL_METHOD_RESPONSE(fl_method_success_response_new(nullptr));
-    } else if (strcmp(fl_method_call_get_name(method_call), "add") == 0) {
-        if (!timer_service.isRunning()) {
-            FlValue* args = fl_method_call_get_args(method_call);
-            FlValue* timestamp = fl_value_lookup_string(args, "timestamp");
-            if (timestamp != nullptr || fl_value_get_type(timestamp) == FL_VALUE_TYPE_INT)
-            {
-                timer_service.start("Rest timer", flexify::convertLongToTimePoint(fl_value_get_int(timestamp)), flexify::ONE_MINUTE_MILLI);
-            }
-        } else {
-            timer_service.add(std::nullopt);
-        }
-        response = FL_METHOD_RESPONSE(fl_method_success_response_new(nullptr));
-    } else if (strcmp(fl_method_call_get_name(method_call), "stop") == 0) {
-        timer_service.stop();
-        response = FL_METHOD_RESPONSE(fl_method_success_response_new(nullptr));
-    } else {
-        response = FL_METHOD_RESPONSE(fl_method_not_implemented_response_new());
-    }
-
-    g_autoptr(GError) error = nullptr;
-    if (!fl_method_call_respond(method_call, response, &error)) {
-        g_warning("Failed to send response: %s", error->message);
-    }
-}
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
@@ -129,12 +65,8 @@ static void my_application_activate(GApplication* application) {
   self->timer_channel = fl_method_channel_new(
             fl_engine_get_binary_messenger(fl_view_get_engine(view)),
             "com.presley.flexify/timer", FL_METHOD_CODEC(codec));
-  fl_method_channel_set_method_call_handler(self->timer_channel, timer_method_call_handler, self, nullptr);
-
-  flexify::platform_specific::nativeCodeInit<flexify::Linux, NotifyActionCallback>({
-      [](NotifyNotification *notification, char *action, gpointer user_data){ timer_service.stop(); },
-      [](NotifyNotification *notification, char *action, gpointer user_data){ timer_service.add(std::nullopt); }
-  });
+  fl_method_channel_set_method_call_handler(self->timer_channel, flexify::timer_method_call_handler<flexify::Linux>, self, nullptr);
+  flexify::platform_specific::initLinux(self->timer_channel);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }

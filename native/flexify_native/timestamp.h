@@ -8,11 +8,12 @@
 #include <chrono>
 #include <optional>
 
+#include "timer.h"
 
 namespace flexify {
-    inline std::optional<std::chrono::time_point<std::chrono::high_resolution_clock>> convertLongToTimePoint(int64_t timestamp) {
+    inline std::optional<std::chrono::time_point<fclock_t>> convertLongToTimePoint(int64_t timestamp) {
         if (timestamp == 0) return std::nullopt;
-        return std::chrono::time_point<std::chrono::system_clock>(std::chrono::milliseconds(timestamp));
+        return std::chrono::time_point<fclock_t>(std::chrono::milliseconds(timestamp));
     }
 }
 

@@ -11,6 +11,7 @@
 #include <optional>
 #include <sstream>
 #include <iostream>
+#include <flutter_linux/flutter_linux.h>
 
 #include "timer.h"
 #include "platform.h"
@@ -23,36 +24,43 @@ namespace flexify {
     class TimerService {
     public:
         TimerService();
+        explicit TimerService(FlMethodChannel* channel);
 
         void start(
                 std::string pDescription,
-                std::optional<std::chrono::time_point<std::chrono::high_resolution_clock>> timestamp,
+                std::optional<std::chrono::time_point<fclock_t>> timestamp,
                 std::chrono::milliseconds duration
                 );
 
-        void add(std::optional<std::chrono::time_point<std::chrono::high_resolution_clock>> timestamp);
+        void add(std::optional<std::chrono::time_point<fclock_t>> timestamp);
         void stop();
+        void updateAppUI();
 
         inline bool isRunning() { return timer.isRunning(); }
     private:
         void update();
 
         bool shouldVibrate;
+        FlexifyTimer<P> timer;
         std::string alarmSound;
 
         std::thread updateLoop;
         std::string description;
-        FlexifyTimer<P> timer = FlexifyTimer<P>::emptyTimer();
+        FlMethodChannel* timerChannel;
     };
 
+    template<Platform P>
+    TimerService<P>::TimerService() : shouldVibrate(false), timer(FlexifyTimer<P>::emptyTimer()), timerChannel(nullptr) {
+
+    }
 
     template<Platform P>
-    TimerService<P>::TimerService() {
+    TimerService<P>::TimerService(FlMethodChannel* channel) : timer(FlexifyTimer<P>::emptyTimer()), timerChannel(channel){
     }
 
     template<Platform P>
     void TimerService<P>::start(std::string pDescription,
-                                std::optional<std::chrono::time_point<std::chrono::high_resolution_clock>> timestamp,
+                                std::optional<std::chrono::time_point<fclock_t>> timestamp,
                                 std::chrono::milliseconds duration
     ) {
         timer.expire();
@@ -64,32 +72,36 @@ namespace flexify {
         // alarmSound = sharedPrefs.getString("flutter.alarmSound", null);
         // shouldVibrate = sharedPrefs.getBoolean("flutter.vibrate", true);
 
-        timer.start(timestamp.has_value() ? std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - timestamp.value()) : 0ms);
-
-        // TODO: platform_specific::showNotification<P>();
-        // TODO: start notification loop
+        timer.start(timestamp.has_value() ? std::chrono::duration_cast<std::chrono::milliseconds>(fclock_t::now() - timestamp.value()) : 0ms);
         updateLoop = std::thread(&TimerService<P>::update, this);
     }
 
     template<Platform P>
-    void TimerService<P>::add(std::optional<std::chrono::time_point<std::chrono::high_resolution_clock>> timestamp) {
+    void TimerService<P>::add(std::optional<std::chrono::time_point<fclock_t>> timestamp) {
         platform_specific::stopAttention<P>();
-
         if (timer.hasExpired()) return start(description, timestamp, ONE_MINUTE_MILLI);
-
         timer.increaseDuration(ONE_MINUTE_MILLI);
-        //platform_specific::updateCountdownNotification<P>();
-
-        // TODO if add is from notification then we need to update app UI
     }
 
     template<Platform P>
     void TimerService<P>::stop() {
         timer.expire();
         platform_specific::stopAttention<P>();
-
-        // TODO if stop from notification update app UI
         platform_specific::stopNotification<P>();
+        updateAppUI();
+    }
+
+
+    template<Platform P>
+    void TimerService<P>::updateAppUI() {
+        int64_t payload[4] = {
+                timer.getDuration().count(),
+                (timer.getDuration() - timer.getRemaining()).count(),
+                std::chrono::duration_cast<std::chrono::milliseconds>(fclock_t::now().time_since_epoch()).count(),
+                timer.getState()
+        };
+        FlValue* value = fl_value_new_int64_list(payload, 4);
+        fl_method_channel_invoke_method(timerChannel, "tick", value, nullptr, nullptr, nullptr);
     }
 
     inline std::string formatRemainingSeconds(std::chrono::seconds sec) {
@@ -98,16 +110,23 @@ namespace flexify {
 
         std::stringstream ss;
         ss << (minutes.count() < 10 ? "0" : "") << minutes.count() << (seconds.count() < 10 ? ":0" : ":") << seconds.count();
-        std::cout << ss.str() << std::endl;
         return ss.str();
     }
 
     template<Platform P>
     void TimerService<P>::update() {
-        std::cout << "UPDATE THREAD RUNNING LOLOLO" << timer.hasExpired() << std::endl;
-        while (!timer.hasExpired()) {
-            if (timer.hasSecondsUpdated()) platform_specific::updateCountdownNotification<P>(description,formatRemainingSeconds(timer.getRemainingSeconds()));
+        while (!timer.hasExpired() && !timer.shouldExpire()) {
+            if (timer.hasSecondsUpdated()) {
+                const auto remaining = timer.getRemainingSeconds();
+                if (remaining.count() > 0) platform_specific::updateCountdownNotification<P>(description,formatRemainingSeconds(remaining));
+            }
             std::this_thread::sleep_for(1min / 60);
+        }
+
+        if (timer.shouldExpire()) {
+            timer.expire();
+            updateAppUI();
+            platform_specific::showFinishedNotification<P>(description);
         }
     }
 }

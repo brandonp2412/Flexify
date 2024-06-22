@@ -6,8 +6,23 @@
 #include <iostream>
 #include <libnotify/notify.h>
 
+flexify::TimerService<flexify::Linux> timer_service;
+
+
 namespace flexify::platform_specific
 {
+    void initLinux(FlMethodChannel* channel) {
+        timer_service = flexify::TimerService<flexify::Linux>(channel);
+        flexify::platform_specific::nativeCodeInit<flexify::Linux, NotifyActionCallback>({
+            [](NotifyNotification *notification, char *action, gpointer user_data){
+                timer_service.stop();
+                },
+            [](NotifyNotification *notification, char *action, gpointer user_data){
+                timer_service.add(std::nullopt);
+                timer_service.updateAppUI();
+            }
+        });
+    }
 
     NotificationActionHandlers<NotifyActionCallback> callbacks;
 
@@ -18,23 +33,28 @@ namespace flexify::platform_specific
     }
 
     template <>
+    TimerService<Linux>& getTimerService() {
+        return timer_service;
+    }
+
+    template <>
     void startNativeTimer<Linux>() {
-        std::cout << "startNativeTimer()" << std::endl;
+        /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
     template <>
     void stopNativeTimer<Linux>() {
-        std::cout << "stopNativeTimer()" << std::endl;
+        /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
     template <>
     void startAttention<Linux>() {
-        std::cout << "startAttention()" << std::endl;
+        /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
     template <>
     void stopAttention<Linux>() {
-        std::cout << "stopAttention()" << std::endl;
+        /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
 
@@ -48,6 +68,7 @@ namespace flexify::platform_specific
         }
 
         notify_notification_set_urgency(notification, NotifyUrgency::NOTIFY_URGENCY_CRITICAL);
+        notify_notification_set_timeout(notification, 60000); /* TODO: HOW LONG SHOULD WE BE HERE FOR */
         if (!notify_notification_show(notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
         std::cout << "showFinishedNotification()" << std::endl;
     }
@@ -58,11 +79,12 @@ namespace flexify::platform_specific
     void updateCountdownNotification<Linux>(const std::string& description, const std::string& remainingTime) {
         if (!notification) {
             notification = notify_notification_new(description.c_str(), remainingTime.c_str(), 0);
-            notify_notification_add_action(notification, "action_click", "Stop", callbacks.stop, nullptr, nullptr);
             notify_notification_add_action(notification, "action_click", "Add One Minute", callbacks.addOneMin, nullptr, nullptr);
+            notify_notification_add_action(notification, "action_close", "Stop", callbacks.stop, nullptr, nullptr);
             notify_notification_set_timeout(notification, 1000);
         } else {
             notify_notification_update(notification, description.c_str(), remainingTime.c_str(), 0);
+            notify_notification_set_timeout(notification, 1000);
         }
 
         notify_notification_set_urgency(notification, NotifyUrgency::NOTIFY_URGENCY_NORMAL);

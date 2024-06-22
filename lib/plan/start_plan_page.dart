@@ -125,7 +125,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (platformSupportsTimer() &&
         !_settings.explainedPermissions &&
         _settings.restTimers &&
-        mounted)
+        mounted && !platformIsDesktop())
       await Navigator.push(
         context,
         MaterialPageRoute(

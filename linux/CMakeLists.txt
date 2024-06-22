@@ -2,6 +2,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
+# set(CMAKE_CXX_STANDARD 20)
+# set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "flexify")
@@ -67,14 +70,14 @@ add_executable(${BINARY_NAME}
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
         flexify_native_impl.cpp
         flexify_native_impl.h
+        flexify_native/flexify_native/timer_service.h
+        flexify_native/flexify_native/channel.h
 )
 
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})
-
-add_subdirectory(flexify_native)
-target_link_libraries(${BINARY_NAME} PRIVATE flexifyNative)
+include_directories(flexify_native)
 
 # Add dependency libraries. Add any application-specific dependencies here.
 target_link_libraries(${BINARY_NAME} PRIVATE notify)

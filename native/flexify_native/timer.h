@@ -15,37 +15,37 @@ namespace flexify {
         Expired
     };
 
+    using fclock_t = std::chrono::system_clock;
+
     template<Platform P>
     class FlexifyTimer {
     public:
         explicit FlexifyTimer(std::chrono::milliseconds timerDuration);
-
         ~FlexifyTimer();
 
         static inline FlexifyTimer<P> emptyTimer() { return FlexifyTimer<P>(0ms); }
 
         void start(std::chrono::milliseconds elapsedTime = 0ms);
-
         void stop();
-
         void expire();
-
         void increaseDuration(std::chrono::milliseconds increase);
-
         bool hasSecondsUpdated();
 
         inline bool isRunning() { return state == TimerState::Running; }
-
         inline bool hasExpired() { return state == TimerState::Expired; }
+        inline bool shouldExpire() { return getRemaining().count() < 0; }
+        inline TimerState getState() { return state; }
 
-        inline std::chrono::seconds getRemainingSeconds() { return std::chrono::duration_cast<std::chrono::seconds>(state == TimerState::Running ? endTime - std::chrono::high_resolution_clock::now() : timerDuration); }
+        inline std::chrono::milliseconds getDuration() { return totalTimerDuration; }
+        inline std::chrono::milliseconds getRemaining() { return std::chrono::duration_cast<std::chrono::milliseconds>(state == TimerState::Running ? endTime - fclock_t::now() : timerDuration); }
+        inline std::chrono::seconds getRemainingSeconds() { return std::chrono::duration_cast<std::chrono::seconds>(getRemaining()); }
 
     private:
         TimerState state;
         std::chrono::seconds previousSeconds;
         std::chrono::milliseconds timerDuration;
         std::chrono::milliseconds totalTimerDuration;
-        std::chrono::time_point<std::chrono::high_resolution_clock> endTime;
+        std::chrono::time_point<fclock_t> endTime;
     };
 
     template<Platform P>
@@ -71,7 +71,7 @@ namespace flexify {
     void FlexifyTimer<P>::start(std::chrono::milliseconds elapsedTime) {
         if (state != TimerState::Paused) return;
         timerDuration -= elapsedTime;
-        endTime = std::chrono::high_resolution_clock::now() + timerDuration;
+        endTime = fclock_t::now() + timerDuration;
         platform_specific::startNativeTimer<P>();
         state = TimerState::Running;
     }
@@ -79,8 +79,7 @@ namespace flexify {
     template<Platform P>
     void FlexifyTimer<P>::stop() {
         if (state != TimerState::Running) return;
-        timerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                endTime - std::chrono::high_resolution_clock::now());
+        timerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - fclock_t::now());
         platform_specific::stopNativeTimer<P>();
         state = TimerState::Paused;
     }

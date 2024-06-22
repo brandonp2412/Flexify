@@ -4,14 +4,21 @@
 
 #ifndef RUNNER_FLEXIFY_NATIVE_IMPL_H
 #define RUNNER_FLEXIFY_NATIVE_IMPL_H
+
+#include <flexify_native/channel.h>
 #include <flexify_native/timestamp.h>
 #include <flexify_native/timer_service.h>
+
 #include <libnotify/notify.h>
 
 namespace flexify::platform_specific {
+    void initLinux(FlMethodChannel* channel);
 
     template <>
     void nativeCodeInit<Linux>(NotificationActionHandlers<NotifyActionCallback> callback);
+
+    template <>
+    TimerService<Linux>& getTimerService();
 
     template <>
     void startNativeTimer<Linux>();
