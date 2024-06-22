@@ -8,15 +8,29 @@
 #include <flexify_native/channel.h>
 #include <flexify_native/timestamp.h>
 #include <flexify_native/timer_service.h>
-
+#include <flutter_linux/flutter_linux.h>
 #include <libnotify/notify.h>
 
 namespace flexify::platform_specific {
 
     void initLinux(FlMethodChannel* channel);
 
+    void timer_method_call_handler(FlMethodChannel* flChannel, FlMethodCall* method_call, gpointer user_data);
+
     template <>
     void nativeCodeInit<Linux>(NotificationActionHandlers<NotifyActionCallback> callback);
+
+    template <>
+    TimerArgs getTimerArgs<Linux>(FlMethodChannel* channel, FlMethodCall* methodCall);
+
+    template <>
+    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Linux>(FlMethodChannel* channel, FlMethodCall* methodCall);
+
+    template<>
+    void sendResult<Linux, FlMethodCall*, true>(FlMethodCall* result);
+
+    template<>
+    void sendResult<Linux, FlMethodCall*, false>(FlMethodCall* result);
 
     template <>
     TimerService<Linux>& getTimerService();

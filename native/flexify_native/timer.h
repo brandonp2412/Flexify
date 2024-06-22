@@ -15,8 +15,6 @@ namespace flexify {
         Expired
     };
 
-    using fclock_t = std::chrono::system_clock;
-
     template<Platform P>
     class FlexifyTimer {
     public:

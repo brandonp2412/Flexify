@@ -65,7 +65,7 @@ static void my_application_activate(GApplication* application) {
   self->timer_channel = fl_method_channel_new(
             fl_engine_get_binary_messenger(fl_view_get_engine(view)),
             "com.presley.flexify/timer", FL_METHOD_CODEC(codec));
-  fl_method_channel_set_method_call_handler(self->timer_channel, flexify::timer_method_call_handler<flexify::Linux>, self, nullptr);
+  fl_method_channel_set_method_call_handler(self->timer_channel, flexify::platform_specific::timer_method_call_handler, self, nullptr);
   flexify::platform_specific::initLinux(self->timer_channel);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
