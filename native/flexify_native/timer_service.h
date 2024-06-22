@@ -11,7 +11,6 @@
 #include <optional>
 #include <sstream>
 #include <iostream>
-#include <flutter_linux/flutter_linux.h>
 
 #include "timer.h"
 #include "platform.h"
@@ -24,7 +23,6 @@ namespace flexify {
     class TimerService {
     public:
         TimerService();
-        explicit TimerService(FlMethodChannel* channel);
 
         void start(
                 std::string pDescription,
@@ -46,19 +44,14 @@ namespace flexify {
 
         std::thread updateLoop;
         std::string description;
-        FlMethodChannel* timerChannel;
     };
 
-    template<Platform P>
-    TimerService<P>::TimerService() : shouldVibrate(false), timer(FlexifyTimer<P>::emptyTimer()), timerChannel(nullptr) {
+    template <Platform P>
+    TimerService<P>::TimerService() : shouldVibrate(false), timer(FlexifyTimer<P>::emptyTimer()) {
 
     }
 
-    template<Platform P>
-    TimerService<P>::TimerService(FlMethodChannel* channel) : timer(FlexifyTimer<P>::emptyTimer()), timerChannel(channel){
-    }
-
-    template<Platform P>
+    template <Platform P>
     void TimerService<P>::start(std::string pDescription,
                                 std::optional<std::chrono::time_point<fclock_t>> timestamp,
                                 std::chrono::milliseconds duration
@@ -76,14 +69,14 @@ namespace flexify {
         updateLoop = std::thread(&TimerService<P>::update, this);
     }
 
-    template<Platform P>
+    template <Platform P>
     void TimerService<P>::add(std::optional<std::chrono::time_point<fclock_t>> timestamp) {
         platform_specific::stopAttention<P>();
         if (timer.hasExpired()) return start(description, timestamp, ONE_MINUTE_MILLI);
         timer.increaseDuration(ONE_MINUTE_MILLI);
     }
 
-    template<Platform P>
+    template <Platform P>
     void TimerService<P>::stop() {
         timer.expire();
         platform_specific::stopAttention<P>();
@@ -92,7 +85,7 @@ namespace flexify {
     }
 
 
-    template<Platform P>
+    template <Platform P>
     void TimerService<P>::updateAppUI() {
         int64_t payload[4] = {
                 timer.getDuration().count(),
@@ -100,8 +93,8 @@ namespace flexify {
                 std::chrono::duration_cast<std::chrono::milliseconds>(fclock_t::now().time_since_epoch()).count(),
                 timer.getState()
         };
-        FlValue* value = fl_value_new_int64_list(payload, 4);
-        fl_method_channel_invoke_method(timerChannel, "tick", value, nullptr, nullptr, nullptr);
+        
+        flexify::platform_specific::sendTickPayload<P>(payload, 4);
     }
 
     inline std::string formatRemainingSeconds(std::chrono::seconds sec) {
@@ -113,7 +106,7 @@ namespace flexify {
         return ss.str();
     }
 
-    template<Platform P>
+    template <Platform P>
     void TimerService<P>::update() {
         while (!timer.hasExpired() && !timer.shouldExpire()) {
             if (timer.hasSecondsUpdated()) {

@@ -51,6 +51,9 @@ namespace flexify {
 
         template <Platform P>
         void stopNotification();
+
+        template <Platform P>
+        void sendTickPayload(int64_t* payload, size_t size);
     }
 }
 
