@@ -140,7 +140,7 @@ class MainActivity : FlutterActivity() {
 
     companion object {
         lateinit var sharedPrefs: SharedPreferences
-        const val FLUTTER_CHANNEL = "com.presley.flexify/android"
+        const val FLUTTER_CHANNEL = "com.presley.flexify/timer"
         const val TICK_BROADCAST = "tick-event"
     }
 }
