@@ -21,7 +21,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase({QueryExecutor? executor}) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 14;
+  int get schemaVersion => 15;
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
@@ -139,6 +139,20 @@ class AppDatabase extends _$AppDatabase {
               maxSets: Value(null),
             ),
           );
+        },
+        from14To15: (Migrator m, Schema15 schema) async {
+          final maxSets = prefs.getInt('maxSets');
+
+          if (maxSets != null)
+            (gymSets.update()
+                  ..where(
+                    (u) => u.maxSets.equals(maxSets),
+                  ))
+                .write(
+              const GymSetsCompanion(
+                maxSets: Value(null),
+              ),
+            );
         },
       ),
     );
