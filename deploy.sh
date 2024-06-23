@@ -3,7 +3,7 @@
 set -ex
 
 changelogfile=$(mktemp /tmp/changelog.XXXXXX)
-vim "$changelogfile"
+nvim "$changelogfile"
 changelog=$(cat $changelogfile)
 
 ./flutter/bin/flutter test
