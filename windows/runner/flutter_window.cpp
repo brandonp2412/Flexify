@@ -36,16 +36,12 @@ bool FlutterWindow::OnCreate() {
 
 
 
-    flutter::MethodChannel<> channel(
+    auto channel = std::make_unique<flutter::MethodChannel<>>(
             flutter_controller_->engine()->messenger(), "com.presley.flexify/timer",
             &flutter::StandardMethodCodec::GetInstance());
-    flexify::platform_specific::initWindows(channel);
-    channel.SetMethodCallHandler(
-            [](const flutter::MethodCall<>& call,
-               std::unique_ptr<flutter::MethodResult<>> result) {
+    flexify::platform_specific::initWindows(std::move(channel));
+    channel->SetMethodCallHandler(flexify::platform_specific::timer_method_call_handler);
 
-                // TODO
-            });
 
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 

@@ -3,18 +3,19 @@
 //
 
 #include "flexify_native_impl.h"
+
 #include <iostream>
 
-
 flexify::TimerService<flexify::Windows> timer_service;
-
+std::unique_ptr<flutter::MethodChannel<>> methodChannel;
 
 namespace flexify::platform_specific
 {
-    void initLinux(flutter::MethodChannel<>& channel) {
-        timer_service = flexify::TimerService<flexify::Linux>();
-
-     /*   flexify::platform_specific::nativeCodeInit<flexify::Linux, NotifyActionCallback>({
+    void initWindows(std::unique_ptr<flutter::MethodChannel<>> channel) {
+        methodChannel = std::move(channel);
+        timer_service = flexify::TimerService<flexify::Windows>();
+        /*
+        flexify::platform_specific::nativeCodeInit<flexify::Windows, NotifyActionCallback>({
             [](NotifyNotification *notification, char *action, gpointer user_data){
                 timer_service.stop();
                 },
@@ -25,11 +26,64 @@ namespace flexify::platform_specific
         });*/
     }
 
+    void timer_method_call_handler(const flutter::MethodCall<>& call, const std::unique_ptr<flutter::MethodResult<>>& result) {
+        if (call.method_name() == "timer") flexify::handleMethodCall<Windows, MethodCall::Timer, const flutter::MethodCall<>&, flutter::MethodResult<>*>(call, result.get());
+        else if (call.method_name() == "add") flexify::handleMethodCall<Windows, MethodCall::Add, const flutter::MethodCall<>&, flutter::MethodResult<>*>(call, result.get());
+        else if (call.method_name() == "stop") flexify::handleMethodCall<Windows, MethodCall::Stop, const flutter::MethodCall<>&, flutter::MethodResult<>*>(call, result.get());
+        else {
+            flexify::platform_specific::sendResult<Windows, flutter::MethodResult<>*, false>(result.get());
+        }
+    }
+
+    template <>
+    TimerArgs getTimerArgs<Windows>(const flutter::MethodCall<>& call, flutter::MethodResult<>* result) {
+        const auto& args = std::get<flutter::EncodableMap>(*call.arguments());
+
+        std::string title;
+        std::optional<std::chrono::time_point<fclock_t>> timestamp;
+        std::chrono::milliseconds restMs;
+
+        if (const auto titleValue = args.find(flutter::EncodableValue("title")); titleValue != args.end()) {
+            title = std::get<std::string>(titleValue->second);
+        }
+
+        if (const auto timestampValue = args.find(flutter::EncodableValue("timestamp")); timestampValue != args.end()) {
+            timestamp = flexify::convertLongToTimePoint(std::get<int64_t>(timestampValue->second));
+        }
+
+        if (const auto restMsValue = args.find(flutter::EncodableValue("restMs")); restMsValue != args.end()) {
+            restMs = std::chrono::milliseconds(std::get<int64_t>(restMsValue->second));
+        } else restMs = std::chrono::milliseconds (210000);
+
+        return { title, timestamp, restMs };
+    }
+
+    template <>
+    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Windows>(const flutter::MethodCall<>& call, flutter::MethodResult<>* result) {
+        const auto& args = std::get<flutter::EncodableMap>(*call.arguments());
+        if (const auto timestamp = args.find(flutter::EncodableValue("timestamp")); timestamp != args.end())
+        {
+            return flexify::convertLongToTimePoint(std::get<int64_t>(timestamp->second));
+        }
+        return std::nullopt;
+    }
+
+    template<>
+    void sendResult<Windows, flutter::MethodResult<>*, true>(flutter::MethodResult<>* result) {
+        result->NotImplemented();
+    }
+
+    template<>
+    void sendResult<Windows, flutter::MethodResult<>*, false>(flutter::MethodResult<>* result) {
+        result->Success();
+    }
+
     NotificationActionHandlers<NotifyActionCallback> callbacks;
 
     template <>
     void nativeCodeInit<Windows>(NotificationActionHandlers<NotifyActionCallback> callback) {
 
+        callbacks = callback;
     }
 
     template <>
@@ -38,63 +92,44 @@ namespace flexify::platform_specific
     }
 
     template <>
-    void startNativeTimer<Linux>() {
+    void startNativeTimer<Windows>() {
         /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
     template <>
-    void stopNativeTimer<Linux>() {
+    void stopNativeTimer<Windows>() {
         /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
     template <>
-    void startAttention<Linux>() {
+    void startAttention<Windows>() {
         /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
     template <>
-    void stopAttention<Linux>() {
+    void stopAttention<Windows>() {
         /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
 
-    NotifyNotification *notification;
     template <>
-    void showFinishedNotification<Linux>(const std::string& description) {
-        if (!notification) {
-            notification = notify_notification_new("Timer Finished", description.c_str(), 0);
-        } else {
-            notify_notification_update(notification, "Timer Finished", description.c_str(), 0);
-        }
+    void showFinishedNotification<Windows>(const std::string& description) {
 
-        notify_notification_set_urgency(notification, NotifyUrgency::NOTIFY_URGENCY_CRITICAL);
-        notify_notification_set_timeout(notification, 60000); /* TODO: HOW LONG SHOULD WE BE HERE FOR */
-        if (!notify_notification_show(notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
-        std::cout << "showFinishedNotification()" << std::endl;
-    }
-
-
-
-    template <>
-    void updateCountdownNotification<Linux>(const std::string& description, const std::string& remainingTime) {
-        if (!notification) {
-            notification = notify_notification_new(description.c_str(), remainingTime.c_str(), 0);
-            notify_notification_add_action(notification, "action_click", "Add One Minute", callbacks.addOneMin, nullptr, nullptr);
-            notify_notification_add_action(notification, "action_close", "Stop", callbacks.stop, nullptr, nullptr);
-            notify_notification_set_timeout(notification, 1000);
-        } else {
-            notify_notification_update(notification, description.c_str(), remainingTime.c_str(), 0);
-            notify_notification_set_timeout(notification, 1000);
-        }
-
-        notify_notification_set_urgency(notification, NotifyUrgency::NOTIFY_URGENCY_NORMAL);
-        if (!notify_notification_show(notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
-        std::cout << "updateCountdownNotification()" << std::endl;
     }
 
     template <>
-    void stopNotification<Linux>() {
-        if (notification) notify_notification_close(notification, nullptr);
-        std::cout << "stopNotification()" << std::endl;
+    void updateCountdownNotification<Windows>(const std::string& description, const std::string& remainingTime) {
+
+    }
+
+    template <>
+    void stopNotification<Windows>() {
+
+    }
+
+    template <>
+    void sendTickPayload<Windows>(int64_t* payload, size_t size) {
+        if (!methodChannel) return;
+        methodChannel->InvokeMethod("tick", std::make_unique<flutter::EncodableValue>((payload, payload + size - 1)),nullptr);
     }
 }
