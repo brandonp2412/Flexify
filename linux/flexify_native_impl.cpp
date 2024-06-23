@@ -172,11 +172,6 @@ namespace flexify::platform_specific
         if (applicationData.notification) notify_notification_close(applicationData.notification, nullptr);
     }
 
-    struct MethodChannelFunc {
-            std::string name;
-            FlValue* value;
-        };
-
     static inline gboolean mainThreadFunc(gpointer user_data) {
         fl_method_channel_invoke_method(applicationData.methodChannel, "tick", (FlValue*) user_data, nullptr, nullptr, nullptr);
         return false;
