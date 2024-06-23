@@ -23,6 +23,7 @@ namespace flexify {
     class TimerService {
     public:
         TimerService();
+        ~TimerService();
 
         void start(
                 std::string pDescription,
@@ -49,6 +50,15 @@ namespace flexify {
     template <Platform P>
     TimerService<P>::TimerService() : shouldVibrate(false), timer(FlexifyTimer<P>::emptyTimer()) {
 
+    }
+
+
+    template <Platform P>
+    TimerService<P>::~TimerService() {
+        timer.expire();
+        platform_specific::stopAttention<P>();
+        platform_specific::stopNotification<P>();
+        if (updateLoop.joinable()) updateLoop.join();
     }
 
     template <Platform P>

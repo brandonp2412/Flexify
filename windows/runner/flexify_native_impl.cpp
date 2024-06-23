@@ -5,15 +5,16 @@
 #include "flexify_native_impl.h"
 
 #include <iostream>
+#include <windows.h>
 
-flexify::TimerService<flexify::Windows> timer_service;
+std::unique_ptr<flexify::TimerService<flexify::Windows>> timer_service;
 std::unique_ptr<flutter::MethodChannel<>> methodChannel;
 
 namespace flexify::platform_specific
 {
     void initWindows(std::unique_ptr<flutter::MethodChannel<>> channel) {
         methodChannel = std::move(channel);
-        timer_service = flexify::TimerService<flexify::Windows>();
+        timer_service = std::make_unique<flexify::TimerService<flexify::Windows>>();
         /*
         flexify::platform_specific::nativeCodeInit<flexify::Windows, NotifyActionCallback>({
             [](NotifyNotification *notification, char *action, gpointer user_data){
@@ -70,25 +71,25 @@ namespace flexify::platform_specific
 
     template<>
     void sendResult<Windows, flutter::MethodResult<>*, true>(flutter::MethodResult<>* result) {
-        result->NotImplemented();
+        result->Success();
     }
 
     template<>
     void sendResult<Windows, flutter::MethodResult<>*, false>(flutter::MethodResult<>* result) {
-        result->Success();
+        result->NotImplemented();
     }
+
 
     NotificationActionHandlers<NotifyActionCallback> callbacks;
 
     template <>
     void nativeCodeInit<Windows>(NotificationActionHandlers<NotifyActionCallback> callback) {
-
         callbacks = callback;
     }
 
     template <>
     TimerService<Windows>& getTimerService() {
-        return timer_service;
+        return *timer_service;
     }
 
     template <>
