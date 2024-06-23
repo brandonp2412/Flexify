@@ -27,17 +27,17 @@ namespace flexify::platform_specific
     }
 
     void timer_method_call_handler(const flutter::MethodCall<>& call, const std::unique_ptr<flutter::MethodResult<>>& result) {
-        if (call.method_name() == "timer") flexify::handleMethodCall<Windows, MethodCall::Timer, const flutter::MethodCall<>&, flutter::MethodResult<>*>(call, result.get());
-        else if (call.method_name() == "add") flexify::handleMethodCall<Windows, MethodCall::Add, const flutter::MethodCall<>&, flutter::MethodResult<>*>(call, result.get());
-        else if (call.method_name() == "stop") flexify::handleMethodCall<Windows, MethodCall::Stop, const flutter::MethodCall<>&, flutter::MethodResult<>*>(call, result.get());
+        if (call.method_name() == "timer") flexify::handleMethodCall<Windows, MethodCall::Timer, const flutter::MethodCall<>*, flutter::MethodResult<>*>(&call, result.get());
+        else if (call.method_name() == "add") flexify::handleMethodCall<Windows, MethodCall::Add, const flutter::MethodCall<>*, flutter::MethodResult<>*>(&call, result.get());
+        else if (call.method_name() == "stop") flexify::handleMethodCall<Windows, MethodCall::Stop, const flutter::MethodCall<>*, flutter::MethodResult<>*>(&call, result.get());
         else {
             flexify::platform_specific::sendResult<Windows, flutter::MethodResult<>*, false>(result.get());
         }
     }
 
     template <>
-    TimerArgs getTimerArgs<Windows>(const flutter::MethodCall<>& call, flutter::MethodResult<>* result) {
-        const auto& args = std::get<flutter::EncodableMap>(*call.arguments());
+    TimerArgs getTimerArgs<Windows>(const flutter::MethodCall<>* call, flutter::MethodResult<>* result) {
+        const auto& args = std::get<flutter::EncodableMap>(*call->arguments());
 
         std::string title;
         std::optional<std::chrono::time_point<fclock_t>> timestamp;
@@ -59,8 +59,8 @@ namespace flexify::platform_specific
     }
 
     template <>
-    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Windows>(const flutter::MethodCall<>& call, flutter::MethodResult<>* result) {
-        const auto& args = std::get<flutter::EncodableMap>(*call.arguments());
+    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Windows>(const flutter::MethodCall<>* call, flutter::MethodResult<>* result) {
+        const auto& args = std::get<flutter::EncodableMap>(*call->arguments());
         if (const auto timestamp = args.find(flutter::EncodableValue("timestamp")); timestamp != args.end())
         {
             return flexify::convertLongToTimePoint(std::get<int64_t>(timestamp->second));

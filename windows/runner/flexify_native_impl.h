@@ -23,7 +23,7 @@ namespace flexify::platform_specific {
 
     void initWindows(std::unique_ptr<flutter::MethodChannel<>> channel);
 
-    void timer_method_call_handler(const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result);
+    void timer_method_call_handler(const flutter::MethodCall<>& call, const std::unique_ptr<flutter::MethodResult<>>& result);
 
     using NotifyActionCallback = void (*) (int*);
 
@@ -31,10 +31,10 @@ namespace flexify::platform_specific {
     void nativeCodeInit<Windows>(NotificationActionHandlers<NotifyActionCallback> callback);
 
     template <>
-    TimerArgs getTimerArgs<Windows>(const flutter::MethodCall<>& call, flutter::MethodResult<>* result);
+    TimerArgs getTimerArgs<Windows>(const flutter::MethodCall<>* call, flutter::MethodResult<>* result);
 
     template <>
-    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Windows>(const flutter::MethodCall<>& call, flutter::MethodResult<>* result);
+    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Windows>(const flutter::MethodCall<>* call, flutter::MethodResult<>* result);
 
     template<>
     void sendResult<Windows, flutter::MethodResult<>*, true>(flutter::MethodResult<>* result);
