@@ -154,8 +154,6 @@ namespace flexify::platform_specific
 
     template <>
     void updateCountdownNotification<Linux>(const std::string& description, const std::string& remainingTime) {
-
-        std::cout << applicationData.iconPath << std::endl;
         if (!applicationData.notification) {
             applicationData.notification = notify_notification_new(description.c_str(), remainingTime.c_str(), applicationData.iconPath.c_str());
             notify_notification_add_action(applicationData.notification, "action_close", "Stop", callbacks.stop, nullptr, nullptr);
