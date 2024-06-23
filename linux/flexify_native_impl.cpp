@@ -172,10 +172,20 @@ namespace flexify::platform_specific
         if (applicationData.notification) notify_notification_close(applicationData.notification, nullptr);
     }
 
+    struct MethodChannelFunc {
+            std::string name;
+            FlValue* value;
+        };
+
+    static inline gboolean mainThreadFunc(gpointer user_data) {
+        fl_method_channel_invoke_method(applicationData.methodChannel, "tick", (FlValue*) user_data, nullptr, nullptr, nullptr);
+        return false;
+    }
+
     template <>
     void sendTickPayload<Linux>(int64_t* payload, size_t size) {
         if (!applicationData.methodChannel) return;
         FlValue* value = fl_value_new_int64_list(payload, size);
-        fl_method_channel_invoke_method(applicationData.methodChannel, "tick", value, nullptr, nullptr, nullptr);
+        g_idle_add_full(G_THREAD_PRIORITY_HIGH, mainThreadFunc, value, nullptr);
     }
 }
