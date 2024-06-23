@@ -23,6 +23,9 @@ class GraphTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
 
+    final minutes = gymSet.duration.value.floor();
+    final seconds =
+        ((gymSet.duration.value * 60) % 60).floor().toString().padLeft(2, '0');
     return ListTile(
       selected: selected.contains(gymSet.name.value),
       title: Text(gymSet.name.value),
@@ -31,7 +34,7 @@ class GraphTile extends StatelessWidget {
       ),
       trailing: Text(
         gymSet.cardio.value
-            ? "${toString(gymSet.distance.value)} ${gymSet.unit.value} / ${toString(gymSet.duration.value)}"
+            ? "${toString(gymSet.distance.value)} ${gymSet.unit.value} / $minutes:$seconds"
             : "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}",
         style: const TextStyle(fontSize: 16),
       ),

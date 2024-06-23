@@ -310,7 +310,15 @@ class _CardioPageState extends State<CardioPage> {
                               String text = row.value.toStringAsFixed(2);
                               switch (_metric) {
                                 case CardioMetric.pace:
+                                  text = "${row.value} ${row.unit} / min";
+                                  break;
                                 case CardioMetric.duration:
+                                  final minutes = row.value.floor();
+                                  final seconds = ((row.value * 60) % 60)
+                                      .floor()
+                                      .toString()
+                                      .padLeft(2, '0');
+                                  text = "$minutes:$seconds";
                                   break;
                                 case CardioMetric.distance:
                                   text += " ${row.unit}";

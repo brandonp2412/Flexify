@@ -88,36 +88,41 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             ExpansionTile(
               title: Text(history.name),
               shape: const Border.symmetric(),
-              children: history.gymSets
-                  .map(
-                    (gymSet) => ListTile(
-                      title: Text(
-                        gymSet.cardio
-                            ? "${toString(gymSet.distance)} ${gymSet.unit} / ${toString(gymSet.duration)}"
-                            : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
-                      ),
-                      subtitle: Text(
-                        DateFormat(settings.longDateFormat)
-                            .format(gymSet.created),
-                      ),
-                      selected: widget.selected.contains(gymSet.id),
-                      onLongPress: () {
-                        widget.onSelect(gymSet.id);
-                      },
-                      onTap: () {
-                        if (widget.selected.isNotEmpty)
-                          widget.onSelect(gymSet.id);
-                        else
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditGymSet(gymSet: gymSet),
-                            ),
-                          );
-                      },
+              children: history.gymSets.map(
+                (gymSet) {
+                  final minutes = gymSet.duration.floor();
+                  final seconds = ((gymSet.duration * 60) % 60)
+                      .floor()
+                      .toString()
+                      .padLeft(2, '0');
+                  return ListTile(
+                    title: Text(
+                      gymSet.cardio
+                          ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
+                          : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
                     ),
-                  )
-                  .toList(),
+                    subtitle: Text(
+                      DateFormat(settings.longDateFormat)
+                          .format(gymSet.created),
+                    ),
+                    selected: widget.selected.contains(gymSet.id),
+                    onLongPress: () {
+                      widget.onSelect(gymSet.id);
+                    },
+                    onTap: () {
+                      if (widget.selected.isNotEmpty)
+                        widget.onSelect(gymSet.id);
+                      else
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditGymSet(gymSet: gymSet),
+                          ),
+                        );
+                    },
+                  );
+                },
+              ).toList(),
             ),
           ],
         );

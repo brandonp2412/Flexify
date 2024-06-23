@@ -29,7 +29,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final _repsController = TextEditingController(text: "0.0");
   final _weightController = TextEditingController(text: "0.0");
   final _distanceController = TextEditingController(text: "0.0");
-  final _durationController = TextEditingController(text: "0.0");
+  final _minutesController = TextEditingController(text: "0.0");
+  final _secondsController = TextEditingController(text: "0.0");
   final _inclineController = TextEditingController(text: "0");
 
   late List<String> _planExercises;
@@ -59,7 +60,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _repsController.dispose();
     _weightController.dispose();
     _distanceController.dispose();
-    _durationController.dispose();
+    _minutesController.dispose();
     _inclineController.dispose();
 
     _planState?.removeListener(_planChanged);
@@ -102,7 +103,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _repsController.text = toString(last.reps);
       _weightController.text = toString(last.weight);
       _distanceController.text = toString(last.distance);
-      _durationController.text = toString(last.duration);
+      _minutesController.text = last.duration.floor().toString();
+      _secondsController.text = ((last.duration * 60) % 60).floor().toString();
       _inclineController.text = last.incline?.toString() ?? "";
       _cardio = last.cardio;
 
@@ -125,7 +127,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (platformSupportsTimer() &&
         !_settings.explainedPermissions &&
         _settings.restTimers &&
-        mounted && !platformIsDesktop())
+        mounted &&
+        !platformIsDesktop())
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -151,6 +154,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
         unit = _settings.strengthUnit ?? 'kg';
     }
 
+    final minutes = int.tryParse(_minutesController.text);
+    final seconds = int.tryParse(_secondsController.text);
+    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
+
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
       reps: double.parse(_repsController.text),
@@ -158,7 +165,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       unit: _unit!,
       created: DateTime.now().toLocal(),
       cardio: drift.Value(_cardio),
-      duration: drift.Value(double.parse(_durationController.text)),
+      duration: drift.Value(duration),
       distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(bodyWeight),
       restMs: drift.Value(restMs),
@@ -282,19 +289,30 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             ],
             if (_cardio) ...[
-              TextField(
-                controller: _durationController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  labelText: 'Duration',
-                ),
-                keyboardType: TextInputType.number,
-                onTap: () {
-                  selectAll(_durationController);
-                },
-                onSubmitted: (value) {
-                  selectAll(_distanceController);
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _minutesController,
+                      decoration: const InputDecoration(labelText: 'Minutes'),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      onTap: () => selectAll(_minutesController),
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: TextField(
+                      controller: _secondsController,
+                      decoration: const InputDecoration(labelText: 'Seconds'),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      onTap: () => selectAll(_secondsController),
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [

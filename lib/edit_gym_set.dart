@@ -25,7 +25,8 @@ class _EditGymSetState extends State<EditGymSet> {
   final _weightController = TextEditingController();
   final _bodyWeightController = TextEditingController();
   final _distanceController = TextEditingController();
-  final _durationController = TextEditingController();
+  final _minutesController = TextEditingController();
+  final _secondsController = TextEditingController();
   final _inclineController = TextEditingController();
 
   late String _unit;
@@ -59,7 +60,7 @@ class _EditGymSetState extends State<EditGymSet> {
     _weightController.dispose();
     _bodyWeightController.dispose();
     _distanceController.dispose();
-    _durationController.dispose();
+    _minutesController.dispose();
     _inclineController.dispose();
 
     super.dispose();
@@ -67,6 +68,10 @@ class _EditGymSetState extends State<EditGymSet> {
 
   Future<void> _save() async {
     Navigator.pop(context);
+    final minutes = int.tryParse(_minutesController.text);
+    final seconds = int.tryParse(_secondsController.text);
+    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
+
     final gymSet = widget.gymSet.copyWith(
       name: _name,
       unit: _unit,
@@ -75,7 +80,7 @@ class _EditGymSetState extends State<EditGymSet> {
       weight: double.tryParse(_weightController.text),
       bodyWeight: double.tryParse(_bodyWeightController.text),
       distance: double.tryParse(_distanceController.text),
-      duration: double.tryParse(_durationController.text),
+      duration: duration,
       cardio: _cardio,
       restMs: Value(_restMs),
       incline: Value(int.tryParse(_inclineController.text)),
@@ -136,7 +141,9 @@ class _EditGymSetState extends State<EditGymSet> {
       _repsController.text = toString(gymSet.reps);
       _weightController.text = toString(gymSet.weight);
       _bodyWeightController.text = toString(gymSet.bodyWeight);
-      _durationController.text = toString(gymSet.duration);
+      _minutesController.text = gymSet.duration.floor().toString();
+      _secondsController.text =
+          ((gymSet.duration * 60) % 60).floor().toString();
       _distanceController.text = toString(gymSet.distance);
       _unit = gymSet.unit;
       _created = gymSet.created;
@@ -259,12 +266,30 @@ class _EditGymSetState extends State<EditGymSet> {
                 onTap: () => selectAll(_distanceController),
                 textInputAction: TextInputAction.next,
               ),
-              TextField(
-                controller: _durationController,
-                decoration: const InputDecoration(labelText: 'Duration'),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(_durationController),
-                textInputAction: TextInputAction.next,
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _minutesController,
+                      decoration: const InputDecoration(labelText: 'Minutes'),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      onTap: () => selectAll(_minutesController),
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: TextField(
+                      controller: _secondsController,
+                      decoration: const InputDecoration(labelText: 'Seconds'),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      onTap: () => selectAll(_secondsController),
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                ],
               ),
               TextField(
                 controller: _inclineController,

@@ -70,6 +70,9 @@ class _HistoryListState extends State<HistoryList> {
 
         final bool showDivider = previousGymSet != null &&
             !isSameDay(gymSet.created, previousGymSet.created);
+        final minutes = gymSet.duration.floor();
+        final seconds =
+            ((gymSet.duration * 60) % 60).floor().toString().padLeft(2, '0');
 
         return Column(
           children: [
@@ -81,7 +84,7 @@ class _HistoryListState extends State<HistoryList> {
               ),
               trailing: Text(
                 gymSet.cardio
-                    ? "${toString(gymSet.distance)} ${gymSet.unit} / ${toString(gymSet.duration)}"
+                    ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
                     : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
                 style: const TextStyle(fontSize: 16),
               ),

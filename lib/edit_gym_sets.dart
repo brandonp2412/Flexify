@@ -23,7 +23,8 @@ class _EditGymSetsState extends State<EditGymSets> {
   final _weightController = TextEditingController();
   final _bodyWeightController = TextEditingController();
   final _distanceController = TextEditingController();
-  final _durationController = TextEditingController();
+  final _minutesController = TextEditingController();
+  final _secondsController = TextEditingController();
   final _inclineController = TextEditingController();
   final _nameController = TextEditingController();
   late SettingsState _settings;
@@ -38,7 +39,8 @@ class _EditGymSetsState extends State<EditGymSets> {
   String? _oldBodyWeights;
   String? _oldCreateds;
   String? _oldDistances;
-  String? _oldDurations;
+  String? _oldMinutes;
+  String? _oldSeconds;
   String? _oldInclines;
 
   @override
@@ -49,6 +51,7 @@ class _EditGymSetsState extends State<EditGymSets> {
         .get()
         .then((gymSets) {
       setState(() {
+        _cardio = gymSets.first.cardio;
         _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
         _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
         _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
@@ -60,7 +63,11 @@ class _EditGymSetsState extends State<EditGymSets> {
             )
             .join(', ');
         _oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
-        _oldDurations = gymSets.map((gymSet) => gymSet.duration).join(', ');
+        _oldMinutes =
+            gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
+        _oldSeconds = gymSets
+            .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
+            .join(', ');
         _oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
       });
     });
@@ -72,7 +79,8 @@ class _EditGymSetsState extends State<EditGymSets> {
     _weightController.dispose();
     _bodyWeightController.dispose();
     _distanceController.dispose();
-    _durationController.dispose();
+    _minutesController.dispose();
+    _secondsController.dispose();
     _inclineController.dispose();
 
     super.dispose();
@@ -84,7 +92,9 @@ class _EditGymSetsState extends State<EditGymSets> {
     final weight = double.tryParse(_weightController.text);
     final bodyWeight = double.tryParse(_bodyWeightController.text);
     final distance = double.tryParse(_distanceController.text);
-    final duration = double.tryParse(_durationController.text);
+    final minutes = int.tryParse(_minutesController.text);
+    final seconds = int.tryParse(_secondsController.text);
+    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
     final incline = int.tryParse(_inclineController.text);
 
     final gymSet = GymSetsCompanion(
@@ -100,7 +110,7 @@ class _EditGymSetsState extends State<EditGymSets> {
       weight: weight != null ? Value(weight) : const Value.absent(),
       bodyWeight: bodyWeight != null ? Value(bodyWeight) : const Value.absent(),
       distance: distance != null ? Value(distance) : const Value.absent(),
-      duration: duration != null ? Value(duration) : const Value.absent(),
+      duration: Value(duration),
     );
 
     (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(gymSet);
@@ -203,14 +213,36 @@ class _EditGymSetsState extends State<EditGymSets> {
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_distanceController),
               ),
-              TextField(
-                controller: _durationController,
-                decoration: InputDecoration(
-                  labelText: 'Duration',
-                  hintText: _oldDurations,
-                ),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(_durationController),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _minutesController,
+                      decoration: InputDecoration(
+                        labelText: 'Minutes',
+                        hintText: _oldMinutes,
+                      ),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      onTap: () => selectAll(_minutesController),
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: TextField(
+                      controller: _secondsController,
+                      decoration: InputDecoration(
+                        labelText: 'Seconds',
+                        hintText: _oldSeconds,
+                      ),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      onTap: () => selectAll(_secondsController),
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                ],
               ),
               TextField(
                 controller: _inclineController,
