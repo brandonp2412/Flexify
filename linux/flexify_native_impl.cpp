@@ -4,28 +4,43 @@
 
 #include "flexify_native_impl.h"
 #include <iostream>
+#include <filesystem>
 #include <libnotify/notify.h>
-
-flexify::TimerService<flexify::Linux> timer_service;
-FlMethodChannel* methodChannel = nullptr;
 
 namespace flexify::platform_specific
 {
+
+
+    struct FlexifyApplicationData {
+        FlexifyApplicationData() : methodChannel(nullptr), notification(nullptr) {}
+
+        FlexifyApplicationData(FlMethodChannel* channel) : iconPath(std::filesystem::canonical("/proc/self/exe").parent_path() += "/data/flutter_assets/assets/ic_launcher.png"),
+                                                           methodChannel(channel),
+                                                           notification(nullptr),
+                                                           timer_service(std::make_unique<flexify::TimerService<flexify::Linux>>())
+                                                           {}
+        std::string iconPath;
+        FlMethodChannel* methodChannel;
+        NotifyNotification *notification;
+        std::unique_ptr<flexify::TimerService<flexify::Linux>> timer_service;
+    };
+
+    FlexifyApplicationData applicationData;
+
     void initLinux(FlMethodChannel* channel) {
-        methodChannel = channel;
-        timer_service = flexify::TimerService<flexify::Linux>();
+        applicationData = FlexifyApplicationData(channel);
         flexify::platform_specific::nativeCodeInit<flexify::Linux, NotifyActionCallback>({
             [](NotifyNotification *notification, char *action, gpointer user_data){
-                timer_service.stop();
+                applicationData.timer_service->stop();
                 },
             [](NotifyNotification *notification, char *action, gpointer user_data){
-                timer_service.add(std::nullopt);
-                timer_service.updateAppUI();
+                applicationData.timer_service->add(std::nullopt);
+                applicationData.timer_service->updateAppUI();
             }
         });
     }
 
-    void timer_method_call_handler(FlMethodChannel* flChannel, FlMethodCall* method_call, gpointer user_data) {
+    void timer_method_call_handler(FlMethodChannel* flChannel, FlMethodCall* method_call, gpointer) {
         if (strcmp(fl_method_call_get_name(method_call), "timer") == 0) flexify::handleMethodCall<Linux, MethodCall::Timer, FlMethodChannel*, FlMethodCall*>(flChannel, method_call);
         else if (strcmp(fl_method_call_get_name(method_call), "add") == 0) flexify::handleMethodCall<Linux, MethodCall::Add, FlMethodChannel*, FlMethodCall*>(flChannel, method_call);
         else if (strcmp(fl_method_call_get_name(method_call), "stop") == 0) flexify::handleMethodCall<Linux, MethodCall::Stop, FlMethodChannel*, FlMethodCall*>(flChannel, method_call);
@@ -35,7 +50,7 @@ namespace flexify::platform_specific
     }
 
     template <>
-    TimerArgs getTimerArgs<Linux>(FlMethodChannel* channel, FlMethodCall* methodCall) {
+    TimerArgs getTimerArgs<Linux>(FlMethodChannel*, FlMethodCall* methodCall) {
         FlValue* args = fl_method_call_get_args(methodCall);
 
         FlValue* titleValue = fl_value_lookup_string(args, "title");
@@ -62,7 +77,7 @@ namespace flexify::platform_specific
     }
 
     template <>
-    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Linux>(FlMethodChannel* channel, FlMethodCall* methodCall) {
+    std::optional<std::chrono::time_point<fclock_t>> getAddArgs<Linux>(FlMethodChannel*, FlMethodCall* methodCall) {
         FlValue* args = fl_method_call_get_args(methodCall);
         FlValue* timestamp = fl_value_lookup_string(args, "timestamp");
         if (timestamp != nullptr || fl_value_get_type(timestamp) == FL_VALUE_TYPE_INT)
@@ -100,7 +115,7 @@ namespace flexify::platform_specific
 
     template <>
     TimerService<Linux>& getTimerService() {
-        return timer_service;
+        return *applicationData.timer_service;
     }
 
     template <>
@@ -123,45 +138,46 @@ namespace flexify::platform_specific
         /* TODO: SHOULD THIS BE IMPLEMENTED? */
     }
 
-    NotifyNotification *notification;
+
     template <>
     void showFinishedNotification<Linux>(const std::string& description) {
-        if (!notification) {
-            notification = notify_notification_new("Timer Finished", description.c_str(), 0);
+        if (!applicationData.notification) {
+            applicationData.notification = notify_notification_new("Timer Finished", description.c_str(), applicationData.iconPath.c_str());
         } else {
-            notify_notification_update(notification, "Timer Finished", description.c_str(), 0);
+            notify_notification_update(applicationData.notification, "Timer Finished", description.c_str(), applicationData.iconPath.c_str());
         }
 
-        notify_notification_set_urgency(notification, NotifyUrgency::NOTIFY_URGENCY_CRITICAL);
-        notify_notification_set_timeout(notification, 60000); /* TODO: HOW LONG SHOULD WE BE HERE FOR */
-        if (!notify_notification_show(notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
+        notify_notification_set_urgency(applicationData.notification, NotifyUrgency::NOTIFY_URGENCY_CRITICAL);
+        notify_notification_set_timeout(applicationData.notification, 60000); /* TODO: HOW LONG SHOULD WE BE HERE FOR */
+        if (!notify_notification_show(applicationData.notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
     }
 
     template <>
     void updateCountdownNotification<Linux>(const std::string& description, const std::string& remainingTime) {
-        if (!notification) {
-            notification = notify_notification_new(description.c_str(), remainingTime.c_str(), 0);
-            notify_notification_add_action(notification, "action_click", "Add One Minute", callbacks.addOneMin, nullptr, nullptr);
-            notify_notification_add_action(notification, "action_close", "Stop", callbacks.stop, nullptr, nullptr);
-            notify_notification_set_timeout(notification, 1000);
+
+        std::cout << applicationData.iconPath << std::endl;
+        if (!applicationData.notification) {
+            applicationData.notification = notify_notification_new(description.c_str(), remainingTime.c_str(), applicationData.iconPath.c_str());
+            notify_notification_add_action(applicationData.notification, "action_close", "Stop", callbacks.stop, nullptr, nullptr);
+            notify_notification_add_action(applicationData.notification, "action_click", "Add 1 min", callbacks.addOneMin, nullptr, nullptr);
+            notify_notification_set_timeout(applicationData.notification, NOTIFY_EXPIRES_NEVER);
         } else {
-            notify_notification_update(notification, description.c_str(), remainingTime.c_str(), 0);
-            notify_notification_set_timeout(notification, 1000);
+            notify_notification_update(applicationData.notification, description.c_str(), remainingTime.c_str(), applicationData.iconPath.c_str());
         }
 
-        notify_notification_set_urgency(notification, NotifyUrgency::NOTIFY_URGENCY_NORMAL);
-        if (!notify_notification_show(notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
+        notify_notification_set_urgency(applicationData.notification, NotifyUrgency::NOTIFY_URGENCY_NORMAL);
+        if (!notify_notification_show(applicationData.notification, nullptr)) std::cerr << "Notification failed to show!" << std::endl;
     }
 
     template <>
     void stopNotification<Linux>() {
-        if (notification) notify_notification_close(notification, nullptr);
+        if (applicationData.notification) notify_notification_close(applicationData.notification, nullptr);
     }
 
     template <>
     void sendTickPayload<Linux>(int64_t* payload, size_t size) {
-        if (!methodChannel) return;
-        FlValue* value = fl_value_new_int64_list(payload, 4);
-        fl_method_channel_invoke_method(methodChannel, "tick", value, nullptr, nullptr, nullptr);
+        if (!applicationData.methodChannel) return;
+        FlValue* value = fl_value_new_int64_list(payload, size);
+        fl_method_channel_invoke_method(applicationData.methodChannel, "tick", value, nullptr, nullptr, nullptr);
     }
 }
