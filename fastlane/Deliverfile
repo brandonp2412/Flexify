@@ -1,0 +1,23 @@
+# The Deliverfile allows you to store various App Store Connect metadata
+# For more information, check out the docs
+# https://docs.fastlane.tools/actions/deliver/
+
+username 'brandon@presley.nz'
+app_identifier 'com.presley.fitbook'
+force true
+automatic_release true
+api_key_path "/Users/brandon/app-store-connect.json"
+run_precheck_before_submit false
+submit_for_review true
+skip_screenshots true
+
+submission_information({
+    add_id_info_uses_idfa: false,
+})
+
+app_review_information({
+  first_name: "Brandon",
+  last_name: "Presley",
+  email_address: "brandon@presley.nz",
+  phone_number: "+44 844 209 0611",
+})
