@@ -109,10 +109,13 @@ class ExportData extends StatelessWidget {
                     final dbFolder = await getApplicationDocumentsDirectory();
                     final file = File(p.join(dbFolder.path, 'flexify.sqlite'));
                     final bytes = await file.readAsBytes();
-                    await FilePicker.platform.saveFile(
+                    final result = await FilePicker.platform.saveFile(
                       fileName: 'flexify.sqlite',
                       bytes: bytes,
                     );
+                    if (Platform.isMacOS ||
+                        Platform.isWindows ||
+                        Platform.isLinux) await file.copy(result!);
                   },
                 ),
               ],
