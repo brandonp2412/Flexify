@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/history_page.dart';

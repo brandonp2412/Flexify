@@ -77,11 +77,13 @@ class _PermissionsPageState extends State<PermissionsPage> {
                   'Progress may pause if battery optimizations stay on.',
                 ),
                 onTap: () async => await requestPermission(
-                    Permission.ignoreBatteryOptimizations),
+                  Permission.ignoreBatteryOptimizations,
+                ),
                 trailing: Switch(
                   value: _ignore,
                   onChanged: (_) async => await requestPermission(
-                      Permission.ignoreBatteryOptimizations),
+                    Permission.ignoreBatteryOptimizations,
+                  ),
                 ),
               ),
               ListTile(
