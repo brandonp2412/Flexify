@@ -1,9 +1,9 @@
 name: flexify
 description: Track gym progress, visualize graphs, enjoy offline support & timers
 publish_to: none
-version: 1.1.30+137
+version: 1.1.30+138
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ">=3.2.6 <4.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -47,8 +47,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: assets/ic_launcher.png
-    background_color: '#hexcode'
-    theme_color: '#hexcode'
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
   windows:
     generate: true
     image_path: assets/ic_launcher.png
