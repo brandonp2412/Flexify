@@ -66,3 +66,14 @@ gh release create "$new_version" --notes "$changelog"  \
 git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
+
+macpass="$(pass macbook)"
+ssh macbook "
+  set -e
+  source .zprofile 
+  cd flexify 
+  git pull 
+  security unlock-keychain -p '$macpass'
+  nohup ./macos.sh > /var/log/flexify-macos.txt 2>&1 &
+  nohup ./ios.sh > /var/log/flexify-ios.txt 2>&1 &
+"
