@@ -3,7 +3,7 @@ import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
-import 'package:flexify/graph/view_graph.dart';
+import 'package:flexify/graph/view_graph_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
@@ -360,7 +360,7 @@ class _CardioPageState extends State<CardioPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ViewGraph(name: widget.name),
+            builder: (context) => ViewGraphPage(name: widget.name),
           ),
         ),
         child: const Icon(Icons.history),

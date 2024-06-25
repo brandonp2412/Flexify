@@ -4,16 +4,16 @@ import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
-class ViewGraph extends StatefulWidget {
+class ViewGraphPage extends StatefulWidget {
   final String name;
 
-  const ViewGraph({super.key, required this.name});
+  const ViewGraphPage({super.key, required this.name});
 
   @override
-  createState() => _ViewGraphState();
+  createState() => _ViewGraphPageState();
 }
 
-class _ViewGraphState extends State<ViewGraph> {
+class _ViewGraphPageState extends State<ViewGraphPage> {
   late Stream<List<GymSet>> _stream;
   int _limit = 20;
 

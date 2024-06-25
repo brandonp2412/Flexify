@@ -1,4 +1,4 @@
-import 'package:flexify/enter_weight_page.dart';
+import 'package:flexify/weight_page.dart';
 import 'package:flexify/settings_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +158,7 @@ class _AppSearchState extends State<AppSearch> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const EnterWeightPage(),
+                          builder: (context) => const WeightPage(),
                         ),
                       );
                       if (!context.mounted) return;

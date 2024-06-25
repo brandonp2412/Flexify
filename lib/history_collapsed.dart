@@ -1,4 +1,4 @@
-import 'package:flexify/edit_gym_set.dart';
+import 'package:flexify/edit_set_page.dart';
 import 'package:flexify/history_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -116,7 +116,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditGymSet(gymSet: gymSet),
+                            builder: (context) => EditSetPage(gymSet: gymSet),
                           ),
                         );
                     },

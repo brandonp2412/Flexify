@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
-import 'package:flexify/graph/add_exercise_page.dart';
+import 'package:flexify/graph/exercise_page.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
@@ -188,7 +188,7 @@ class GraphsPageState extends State<GraphsPage> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const AddExercisePage(),
+              builder: (context) => const ExercisePage(),
             ),
           );
         },

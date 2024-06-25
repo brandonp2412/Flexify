@@ -1,5 +1,5 @@
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_gym_set.dart';
+import 'package:flexify/edit_set_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +99,7 @@ class _HistoryListState extends State<HistoryList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EditGymSet(gymSet: gymSet),
+                      builder: (context) => EditSetPage(gymSet: gymSet),
                     ),
                   );
               },

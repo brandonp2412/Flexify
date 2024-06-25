@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class EditGymSet extends StatefulWidget {
+class EditSetPage extends StatefulWidget {
   final GymSet gymSet;
 
-  const EditGymSet({super.key, required this.gymSet});
+  const EditSetPage({super.key, required this.gymSet});
 
   @override
-  createState() => _EditGymSetState();
+  createState() => _EditSetPageState();
 }
 
-class _EditGymSetState extends State<EditGymSet> {
+class _EditSetPageState extends State<EditSetPage> {
   final _repsController = TextEditingController();
   final _weightController = TextEditingController();
   final _bodyWeightController = TextEditingController();

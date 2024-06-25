@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_gym_set.dart';
-import 'package:flexify/edit_gym_sets.dart';
+import 'package:flexify/edit_set_page.dart';
+import 'package:flexify/edit_sets_page.dart';
 import 'package:flexify/history_collapsed.dart';
 import 'package:flexify/history_list.dart';
 import 'package:flexify/main.dart';
@@ -200,7 +200,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 onEdit: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditGymSets(
+                    builder: (context) => EditSetsPage(
                       ids: _selected.toList(),
                     ),
                   ),
@@ -305,7 +305,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditGymSet(
+              builder: (context) => EditSetPage(
                 gymSet: gymSet,
               ),
             ),

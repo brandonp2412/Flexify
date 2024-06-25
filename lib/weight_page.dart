@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:provider/provider.dart';
 
-class EnterWeightPage extends StatefulWidget {
-  const EnterWeightPage({super.key});
+class WeightPage extends StatefulWidget {
+  const WeightPage({super.key});
 
   @override
-  createState() => _EnterWeightPageState();
+  createState() => _WeightPageState();
 }
 
-class _EnterWeightPageState extends State<EnterWeightPage> {
+class _WeightPageState extends State<WeightPage> {
   final TextEditingController _valueController = TextEditingController();
   String _yesterdaysWeight = "";
   String? _unit;

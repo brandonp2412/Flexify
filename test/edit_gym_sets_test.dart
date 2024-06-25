@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_gym_sets.dart';
+import 'package:flexify/edit_sets_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
@@ -51,7 +51,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
-          home: EditGymSets(
+          home: EditSetsPage(
             ids: ids,
           ),
         ),
