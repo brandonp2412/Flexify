@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/history_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -55,7 +57,17 @@ void main() async {
   });
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
-    await mockTests();
+    await mockTests(insert: false);
+    await db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 1,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+      ),
+    ]);
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -70,9 +82,12 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    final tile = find.byType(ListTile).first;
-    await tester.tap(tile);
+    await tester.tap(find.text('Bench press'));
     await tester.pumpAndSettle();
+
+    await tester.tap(find.text('1 x 90 kg'));
+    await tester.pumpAndSettle();
+
     expect(find.textContaining('Edit'), findsOne);
 
     await db.close();
@@ -107,7 +122,17 @@ void main() async {
   });
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
-    await mockTests();
+    await mockTests(insert: false);
+    await db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 1,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+      ),
+    ]);
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -122,16 +147,29 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    final tile = find.byType(ListTile).first;
-    await tester.longPress(tile);
+    await tester.tap(find.text('Bench press'));
     await tester.pumpAndSettle();
+
+    await tester.longPress(find.text('1 x 90 kg'));
+    await tester.pumpAndSettle();
+
     expect(find.text('1 selected'), findsOne);
 
     await db.close();
   });
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
-    await mockTests();
+    await mockTests(insert: false);
+    await db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 1,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+      ),
+    ]);
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -146,9 +184,10 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    final tile = find.byType(ListTile).first;
+    await tester.tap(find.text('Bench press'));
+    await tester.pumpAndSettle();
 
-    await tester.longPress(tile);
+    await tester.longPress(find.text('1 x 90 kg'));
     await tester.pumpAndSettle();
 
     final delete = find.byTooltip('Delete selected');

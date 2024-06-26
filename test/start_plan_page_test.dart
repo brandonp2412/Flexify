@@ -81,7 +81,7 @@ void main() async {
   });
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
-    await mockTests();
+    await mockTests(insert: false);
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -115,7 +115,11 @@ void main() async {
     final save = find.byTooltip('Save');
     await tester.tap(save);
     await tester.pumpAndSettle();
-    expect(find.text("(1 / 3)"), findsWidgets);
+
+    final gymSets = await (db.gymSets.select()
+          ..where((u) => u.name.equals('Barbell bench press')))
+        .get();
+    expect(gymSets.length, equals(1));
 
     await db.close();
   });
