@@ -64,20 +64,43 @@ class ExerciseList extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () => onSelect(index),
-                trailing: settings.planTrailing == PlanTrailing.reorder
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ReorderableDragStartListener(
-                            index: index,
-                            child: const Icon(Icons.drag_handle),
-                          ),
-                        ],
-                      )
-                    : Text(
-                        "($count / $max)",
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                trailing: Builder(
+                  builder: (context) {
+                    switch (settings.planTrailing) {
+                      case PlanTrailing.reorder:
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ReorderableDragStartListener(
+                              index: index,
+                              child: const Icon(Icons.drag_handle),
+                            ),
+                          ],
+                        );
+
+                      case PlanTrailing.ratio:
+                        return Text(
+                          "$count / $max",
+                          style: const TextStyle(fontSize: 16),
+                        );
+
+                      case PlanTrailing.count:
+                        return Text(
+                          count.toString(),
+                          style: const TextStyle(fontSize: 16),
+                        );
+
+                      case PlanTrailing.percent:
+                        return Text(
+                          "${(count / max * 100).toStringAsFixed(2)}%",
+                          style: const TextStyle(fontSize: 16),
+                        );
+
+                      case PlanTrailing.none:
+                        return const SizedBox();
+                    }
+                  },
+                ),
                 title: Row(
                   children: [
                     Radio(

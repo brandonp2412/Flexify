@@ -87,6 +87,9 @@ class PlanTile extends StatelessWidget {
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Builder(
         builder: (context) {
+          if (settings.planTrailing == PlanTrailing.none)
+            return const SizedBox();
+
           if (settings.planTrailing == PlanTrailing.reorder)
             return ReorderableDragStartListener(
               index: index,
@@ -106,13 +109,30 @@ class PlanTile extends StatelessWidget {
                     .contains(count.read(db.gymSets.name)),
               );
               if (counts.isEmpty) return const SizedBox();
+
               final total = counts
                   .map((count) => count.read(_countColumn))
                   .reduce((a, b) => (a ?? 0) + (b ?? 0));
+              if (settings.planTrailing == PlanTrailing.count)
+                return Text(
+                  "$total",
+                  style: const TextStyle(fontSize: 16),
+                );
+
               final max = counts
                   .map((count) => count.read(db.gymSets.maxSets))
                   .reduce((a, b) => (a ?? 3) + (b ?? 3));
-              return Text("($total / $max)");
+
+              if (settings.planTrailing == PlanTrailing.percent)
+                return Text(
+                  "${((total ?? 0) / max! * 100).toStringAsFixed(2)}%",
+                  style: const TextStyle(fontSize: 16),
+                );
+              else
+                return Text(
+                  "$total / $max",
+                  style: const TextStyle(fontSize: 16),
+                );
             },
           );
         },

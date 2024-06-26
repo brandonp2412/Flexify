@@ -229,10 +229,8 @@ class AppDatabase extends _$AppDatabase {
             themeMode = material.ThemeMode.dark;
 
           final plan = prefs.getString('planTrailing');
-          if (plan == PlanTrailing.count.toString())
-            planTrailing = PlanTrailing.count;
-          else if (plan == PlanTrailing.reorder.toString())
-            planTrailing = PlanTrailing.reorder;
+          for (final trailing in PlanTrailing.values)
+            if (plan == trailing.toString()) planTrailing = trailing;
 
           systemColors = prefs.getBool("systemColors") ?? true;
           restTimers = prefs.getBool("restTimers") ?? true;

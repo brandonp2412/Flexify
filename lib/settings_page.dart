@@ -219,6 +219,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 value: PlanTrailing.count,
                 child: Text("Count"),
               ),
+              DropdownMenuItem(
+                value: PlanTrailing.percent,
+                child: Text("Percent"),
+              ),
+              DropdownMenuItem(
+                value: PlanTrailing.ratio,
+                child: Text("Ratio"),
+              ),
+              DropdownMenuItem(
+                value: PlanTrailing.none,
+                child: Text("None"),
+              ),
             ],
             onChanged: (value) => _settings.setPlanTrailing(value!),
           ),

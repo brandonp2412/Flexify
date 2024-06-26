@@ -46,10 +46,8 @@ class SettingsState extends ChangeNotifier {
     else if (theme == ThemeMode.dark.toString()) themeMode = ThemeMode.dark;
 
     final plan = settings.planTrailing;
-    if (plan == PlanTrailing.count.toString())
-      planTrailing = PlanTrailing.count;
-    else if (plan == PlanTrailing.reorder.toString())
-      planTrailing = PlanTrailing.reorder;
+    for (final trailing in PlanTrailing.values)
+      if (plan == trailing.toString()) planTrailing = trailing;
 
     systemColors = settings.systemColors;
     restTimers = settings.restTimers;
