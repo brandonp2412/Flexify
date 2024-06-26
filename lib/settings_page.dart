@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   AudioPlayer? _player;
   late SettingsState _settings;
 
-  final List<String> shortFormats = [
+  final List<String> _shortFormats = [
     'd/M/yy',
     'M/d/yy',
     'd-M-yy',
@@ -49,13 +49,18 @@ class _SettingsPageState extends State<SettingsPage> {
     'M.d.yy',
   ];
 
-  final List<String> longFormats = [
+  final List<String> _longFormats = [
     'dd/MM/yy',
     'dd/MM/yy h:mm a',
+    'dd/MM/yy H:mm',
     'EEE h:mm a',
     'yyyy-MM-dd',
     'yyyy-MM-dd h:mm a',
+    'yyyy-MM-dd H:mm',
     'yyyy.MM.dd',
+    'yyyy.MM.dd h:mm a',
+    'yyyy.MM.dd H:mm',
+    'MMM d (EEE) h:mm a',
   ];
 
   @override
@@ -157,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
             value: _settings.longDateFormat,
-            items: longFormats.map((String value) {
+            items: _longFormats.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -179,7 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
             value: _settings.shortDateFormat,
-            items: shortFormats.map((String value) {
+            items: _shortFormats.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
