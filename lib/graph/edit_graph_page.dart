@@ -52,9 +52,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
             if (value.maxSets != null)
               _maxSetsController.text = value.maxSets.toString();
             if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-              _unit = settings.cardioUnit ?? 'km';
+              _unit = settings.cardioUnit;
             else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
-              _unit = settings.strengthUnit ?? 'kg';
+              _unit = settings.strengthUnit;
           }),
         );
   }

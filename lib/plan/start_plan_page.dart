@@ -107,9 +107,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
       _cardio = last.cardio;
 
       if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-        _unit = _settings.cardioUnit ?? 'km';
+        _unit = _settings.cardioUnit;
       else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
-        _unit = _settings.strengthUnit ?? 'kg';
+        _unit = _settings.strengthUnit;
     });
   }
 
@@ -147,9 +147,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
     var unit = _unit;
     if (unit == null) {
       if (_cardio)
-        unit = _settings.cardioUnit ?? 'km';
+        unit = _settings.cardioUnit;
       else
-        unit = _settings.strengthUnit ?? 'kg';
+        unit = _settings.strengthUnit;
     }
 
     final minutes = int.tryParse(_minutesController.text);
@@ -186,6 +186,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
           restMs != null
               ? Duration(milliseconds: restMs)
               : _settings.timerDuration,
+          _settings.alarmSound,
+          _settings.vibrate,
         );
 
       final finishedExercise = count == (max ?? _settings.maxSets) &&
@@ -208,9 +210,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
     var unit = _unit;
     if (unit == null) {
       if (_cardio)
-        unit = _settings.cardioUnit ?? 'km';
+        unit = _settings.cardioUnit;
       else
-        unit = _settings.strengthUnit ?? 'kg';
+        unit = _settings.strengthUnit;
     }
 
     return Scaffold(

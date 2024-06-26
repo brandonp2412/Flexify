@@ -47,8 +47,8 @@ class _ExercisePageState extends State<ExercisePage> {
 
     var unit = _unit;
     if (unit == null && _cardio)
-      unit = settings.cardioUnit ?? 'km';
-    else if (unit == null && !_cardio) unit = settings.strengthUnit ?? 'kg';
+      unit = settings.cardioUnit;
+    else if (unit == null && !_cardio) unit = settings.strengthUnit;
 
     return Scaffold(
       appBar: AppBar(
@@ -82,9 +82,9 @@ class _ExercisePageState extends State<ExercisePage> {
                 setState(() {
                   _cardio = !_cardio;
                   if (_cardio)
-                    _unit = settings.cardioUnit ?? 'km';
+                    _unit = settings.cardioUnit;
                   else
-                    _unit = settings.strengthUnit ?? 'kg';
+                    _unit = settings.strengthUnit;
                 });
               },
               trailing: Switch(

@@ -20,13 +20,18 @@ class TimerState extends ChangeNotifier {
     });
   }
 
-  Future<void> addOneMinute() async {
+  Future<void> addOneMinute(
+    String alarmSound,
+    bool vibrate,
+  ) async {
     final newTimer = nativeTimer.increaseDuration(
       const Duration(minutes: 1),
     );
     updateTimer(newTimer);
     final args = {
       'timestamp': newTimer.getTimeStamp(),
+      'alarmSound': alarmSound,
+      'vibrate': vibrate,
     };
     await timerChannel.invokeMethod('add', args);
   }
@@ -36,7 +41,12 @@ class TimerState extends ChangeNotifier {
     await timerChannel.invokeMethod('stop');
   }
 
-  Future<void> startTimer(String title, Duration rest) async {
+  Future<void> startTimer(
+    String title,
+    Duration rest,
+    String alarmSound,
+    bool vibrate,
+  ) async {
     final timer = NativeTimerWrapper(
       rest,
       Duration.zero,
@@ -48,6 +58,8 @@ class TimerState extends ChangeNotifier {
       'title': title,
       'timestamp': timer.getTimeStamp(),
       'restMs': rest.inMilliseconds,
+      'alarmSound': alarmSound,
+      'vibrate': vibrate,
     };
     await timerChannel.invokeMethod('timer', args);
   }

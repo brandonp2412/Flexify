@@ -20,7 +20,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Map<String, double> exercisesToPopulateTestDB = {
   "Barbell bench press": 90,
@@ -211,7 +210,6 @@ void main() {
   setUpAll(() async {
     app.db = AppDatabase();
     app.timerChannel = const MethodChannel("com.presley.flexify/timer");
-    app.prefs = await SharedPreferences.getInstance();
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.timerChannel, (message) => null);
 
@@ -238,16 +236,6 @@ void main() {
     for (var element in plans) {
       await app.db.into(app.db.plans).insert(element);
     }
-
-    SharedPreferences.setMockInitialValues({
-      "themeMode": "ThemeMode.system",
-      "showReorder": true,
-      "resetTimers": true,
-      "showUnits": true,
-      "systemColors": false,
-      "dateFormat": "yyyy-MM-dd h:mm a",
-      "timerDuration": const Duration(minutes: 3, seconds: 30).inMilliseconds,
-    });
   });
 
   group("Generate default screenshots ", () {
@@ -364,7 +352,7 @@ void main() {
           screenshotName: '8_en-US',
           skipSettle: true,
           navigateToPage: (context) async {
-            await context.read<TimerState>().addOneMinute();
+            await context.read<TimerState>().addOneMinute('', true);
             await tester.pump();
             await tester.pump(const Duration(seconds: 7));
           },

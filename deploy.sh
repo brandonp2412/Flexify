@@ -7,16 +7,7 @@ nvim "$changelogfile"
 changelog=$(cat $changelogfile)
 
 ./flutter/bin/flutter test
-
-dart run drift_dev schema dump lib/database/database.dart drift_schemas
-dart run drift_dev schema steps drift_schemas/ lib/database/schema_versions.dart
-dart run drift_dev schema generate drift_schemas/ test/generated_migrations/
-if [[ -n "$(git diff --stat)" ]]; then
-    echo "There are unstaged changes in the repository:"
-    git --no-pager diff
-    exit 1
-fi
-
+./migrate.sh
 ./screenshots.sh "phoneScreenshots"
 ./screenshots.sh "sevenInchScreenshots"
 ./screenshots.sh "tenInchScreenshots"
@@ -42,9 +33,6 @@ git add fastlane/metadata
 if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
     echo "There are unstaged changes in the repository:"
     git --no-pager diff
-    git restore --staged pubspec.yaml fastlane/metadata
-    git restore pubspec.yaml fastlane/metadata
-    rm "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
     exit 1
 fi
 

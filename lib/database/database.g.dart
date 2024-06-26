@@ -912,16 +912,948 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   }
 }
 
+class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _themeModeMeta =
+      const VerificationMeta('themeMode');
+  @override
+  late final GeneratedColumn<String> themeMode = GeneratedColumn<String>(
+      'theme_mode', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _planTrailingMeta =
+      const VerificationMeta('planTrailing');
+  @override
+  late final GeneratedColumn<String> planTrailing = GeneratedColumn<String>(
+      'plan_trailing', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _longDateFormatMeta =
+      const VerificationMeta('longDateFormat');
+  @override
+  late final GeneratedColumn<String> longDateFormat = GeneratedColumn<String>(
+      'long_date_format', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _shortDateFormatMeta =
+      const VerificationMeta('shortDateFormat');
+  @override
+  late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
+      'short_date_format', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _timerDurationMeta =
+      const VerificationMeta('timerDuration');
+  @override
+  late final GeneratedColumn<int> timerDuration = GeneratedColumn<int>(
+      'timer_duration', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _maxSetsMeta =
+      const VerificationMeta('maxSets');
+  @override
+  late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
+      'max_sets', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _vibrateMeta =
+      const VerificationMeta('vibrate');
+  @override
+  late final GeneratedColumn<bool> vibrate = GeneratedColumn<bool>(
+      'vibrate', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("vibrate" IN (0, 1))'));
+  static const VerificationMeta _restTimersMeta =
+      const VerificationMeta('restTimers');
+  @override
+  late final GeneratedColumn<bool> restTimers = GeneratedColumn<bool>(
+      'rest_timers', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("rest_timers" IN (0, 1))'));
+  static const VerificationMeta _showUnitsMeta =
+      const VerificationMeta('showUnits');
+  @override
+  late final GeneratedColumn<bool> showUnits = GeneratedColumn<bool>(
+      'show_units', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("show_units" IN (0, 1))'));
+  static const VerificationMeta _systemColorsMeta =
+      const VerificationMeta('systemColors');
+  @override
+  late final GeneratedColumn<bool> systemColors = GeneratedColumn<bool>(
+      'system_colors', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("system_colors" IN (0, 1))'));
+  static const VerificationMeta _explainedPermissionsMeta =
+      const VerificationMeta('explainedPermissions');
+  @override
+  late final GeneratedColumn<bool> explainedPermissions = GeneratedColumn<bool>(
+      'explained_permissions', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("explained_permissions" IN (0, 1))'));
+  static const VerificationMeta _hideTimerTabMeta =
+      const VerificationMeta('hideTimerTab');
+  @override
+  late final GeneratedColumn<bool> hideTimerTab = GeneratedColumn<bool>(
+      'hide_timer_tab', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_timer_tab" IN (0, 1))'));
+  static const VerificationMeta _hideHistoryTabMeta =
+      const VerificationMeta('hideHistoryTab');
+  @override
+  late final GeneratedColumn<bool> hideHistoryTab = GeneratedColumn<bool>(
+      'hide_history_tab', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_history_tab" IN (0, 1))'));
+  static const VerificationMeta _curveLinesMeta =
+      const VerificationMeta('curveLines');
+  @override
+  late final GeneratedColumn<bool> curveLines = GeneratedColumn<bool>(
+      'curve_lines', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("curve_lines" IN (0, 1))'));
+  static const VerificationMeta _hideWeightMeta =
+      const VerificationMeta('hideWeight');
+  @override
+  late final GeneratedColumn<bool> hideWeight = GeneratedColumn<bool>(
+      'hide_weight', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_weight" IN (0, 1))'));
+  static const VerificationMeta _groupHistoryMeta =
+      const VerificationMeta('groupHistory');
+  @override
+  late final GeneratedColumn<bool> groupHistory = GeneratedColumn<bool>(
+      'group_history', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("group_history" IN (0, 1))'));
+  static const VerificationMeta _alarmSoundMeta =
+      const VerificationMeta('alarmSound');
+  @override
+  late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
+      'alarm_sound', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cardioUnitMeta =
+      const VerificationMeta('cardioUnit');
+  @override
+  late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
+      'cardio_unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _strengthUnitMeta =
+      const VerificationMeta('strengthUnit');
+  @override
+  late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
+      'strength_unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        themeMode,
+        planTrailing,
+        longDateFormat,
+        shortDateFormat,
+        timerDuration,
+        maxSets,
+        vibrate,
+        restTimers,
+        showUnits,
+        systemColors,
+        explainedPermissions,
+        hideTimerTab,
+        hideHistoryTab,
+        curveLines,
+        hideWeight,
+        groupHistory,
+        alarmSound,
+        cardioUnit,
+        strengthUnit
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'settings';
+  @override
+  VerificationContext validateIntegrity(Insertable<Setting> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('theme_mode')) {
+      context.handle(_themeModeMeta,
+          themeMode.isAcceptableOrUnknown(data['theme_mode']!, _themeModeMeta));
+    } else if (isInserting) {
+      context.missing(_themeModeMeta);
+    }
+    if (data.containsKey('plan_trailing')) {
+      context.handle(
+          _planTrailingMeta,
+          planTrailing.isAcceptableOrUnknown(
+              data['plan_trailing']!, _planTrailingMeta));
+    } else if (isInserting) {
+      context.missing(_planTrailingMeta);
+    }
+    if (data.containsKey('long_date_format')) {
+      context.handle(
+          _longDateFormatMeta,
+          longDateFormat.isAcceptableOrUnknown(
+              data['long_date_format']!, _longDateFormatMeta));
+    } else if (isInserting) {
+      context.missing(_longDateFormatMeta);
+    }
+    if (data.containsKey('short_date_format')) {
+      context.handle(
+          _shortDateFormatMeta,
+          shortDateFormat.isAcceptableOrUnknown(
+              data['short_date_format']!, _shortDateFormatMeta));
+    } else if (isInserting) {
+      context.missing(_shortDateFormatMeta);
+    }
+    if (data.containsKey('timer_duration')) {
+      context.handle(
+          _timerDurationMeta,
+          timerDuration.isAcceptableOrUnknown(
+              data['timer_duration']!, _timerDurationMeta));
+    } else if (isInserting) {
+      context.missing(_timerDurationMeta);
+    }
+    if (data.containsKey('max_sets')) {
+      context.handle(_maxSetsMeta,
+          maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
+    } else if (isInserting) {
+      context.missing(_maxSetsMeta);
+    }
+    if (data.containsKey('vibrate')) {
+      context.handle(_vibrateMeta,
+          vibrate.isAcceptableOrUnknown(data['vibrate']!, _vibrateMeta));
+    } else if (isInserting) {
+      context.missing(_vibrateMeta);
+    }
+    if (data.containsKey('rest_timers')) {
+      context.handle(
+          _restTimersMeta,
+          restTimers.isAcceptableOrUnknown(
+              data['rest_timers']!, _restTimersMeta));
+    } else if (isInserting) {
+      context.missing(_restTimersMeta);
+    }
+    if (data.containsKey('show_units')) {
+      context.handle(_showUnitsMeta,
+          showUnits.isAcceptableOrUnknown(data['show_units']!, _showUnitsMeta));
+    } else if (isInserting) {
+      context.missing(_showUnitsMeta);
+    }
+    if (data.containsKey('system_colors')) {
+      context.handle(
+          _systemColorsMeta,
+          systemColors.isAcceptableOrUnknown(
+              data['system_colors']!, _systemColorsMeta));
+    } else if (isInserting) {
+      context.missing(_systemColorsMeta);
+    }
+    if (data.containsKey('explained_permissions')) {
+      context.handle(
+          _explainedPermissionsMeta,
+          explainedPermissions.isAcceptableOrUnknown(
+              data['explained_permissions']!, _explainedPermissionsMeta));
+    } else if (isInserting) {
+      context.missing(_explainedPermissionsMeta);
+    }
+    if (data.containsKey('hide_timer_tab')) {
+      context.handle(
+          _hideTimerTabMeta,
+          hideTimerTab.isAcceptableOrUnknown(
+              data['hide_timer_tab']!, _hideTimerTabMeta));
+    } else if (isInserting) {
+      context.missing(_hideTimerTabMeta);
+    }
+    if (data.containsKey('hide_history_tab')) {
+      context.handle(
+          _hideHistoryTabMeta,
+          hideHistoryTab.isAcceptableOrUnknown(
+              data['hide_history_tab']!, _hideHistoryTabMeta));
+    } else if (isInserting) {
+      context.missing(_hideHistoryTabMeta);
+    }
+    if (data.containsKey('curve_lines')) {
+      context.handle(
+          _curveLinesMeta,
+          curveLines.isAcceptableOrUnknown(
+              data['curve_lines']!, _curveLinesMeta));
+    } else if (isInserting) {
+      context.missing(_curveLinesMeta);
+    }
+    if (data.containsKey('hide_weight')) {
+      context.handle(
+          _hideWeightMeta,
+          hideWeight.isAcceptableOrUnknown(
+              data['hide_weight']!, _hideWeightMeta));
+    } else if (isInserting) {
+      context.missing(_hideWeightMeta);
+    }
+    if (data.containsKey('group_history')) {
+      context.handle(
+          _groupHistoryMeta,
+          groupHistory.isAcceptableOrUnknown(
+              data['group_history']!, _groupHistoryMeta));
+    } else if (isInserting) {
+      context.missing(_groupHistoryMeta);
+    }
+    if (data.containsKey('alarm_sound')) {
+      context.handle(
+          _alarmSoundMeta,
+          alarmSound.isAcceptableOrUnknown(
+              data['alarm_sound']!, _alarmSoundMeta));
+    } else if (isInserting) {
+      context.missing(_alarmSoundMeta);
+    }
+    if (data.containsKey('cardio_unit')) {
+      context.handle(
+          _cardioUnitMeta,
+          cardioUnit.isAcceptableOrUnknown(
+              data['cardio_unit']!, _cardioUnitMeta));
+    } else if (isInserting) {
+      context.missing(_cardioUnitMeta);
+    }
+    if (data.containsKey('strength_unit')) {
+      context.handle(
+          _strengthUnitMeta,
+          strengthUnit.isAcceptableOrUnknown(
+              data['strength_unit']!, _strengthUnitMeta));
+    } else if (isInserting) {
+      context.missing(_strengthUnitMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Setting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Setting(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      themeMode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}theme_mode'])!,
+      planTrailing: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}plan_trailing'])!,
+      longDateFormat: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}long_date_format'])!,
+      shortDateFormat: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
+      timerDuration: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timer_duration'])!,
+      maxSets: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
+      vibrate: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}vibrate'])!,
+      restTimers: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}rest_timers'])!,
+      showUnits: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
+      systemColors: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}system_colors'])!,
+      explainedPermissions: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}explained_permissions'])!,
+      hideTimerTab: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_timer_tab'])!,
+      hideHistoryTab: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_history_tab'])!,
+      curveLines: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}curve_lines'])!,
+      hideWeight: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_weight'])!,
+      groupHistory: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}group_history'])!,
+      alarmSound: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
+      cardioUnit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
+      strengthUnit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
+    );
+  }
+
+  @override
+  $SettingsTable createAlias(String alias) {
+    return $SettingsTable(attachedDatabase, alias);
+  }
+}
+
+class Setting extends DataClass implements Insertable<Setting> {
+  final int id;
+  final String themeMode;
+  final String planTrailing;
+  final String longDateFormat;
+  final String shortDateFormat;
+  final int timerDuration;
+  final int maxSets;
+  final bool vibrate;
+  final bool restTimers;
+  final bool showUnits;
+  final bool systemColors;
+  final bool explainedPermissions;
+  final bool hideTimerTab;
+  final bool hideHistoryTab;
+  final bool curveLines;
+  final bool hideWeight;
+  final bool groupHistory;
+  final String alarmSound;
+  final String cardioUnit;
+  final String strengthUnit;
+  const Setting(
+      {required this.id,
+      required this.themeMode,
+      required this.planTrailing,
+      required this.longDateFormat,
+      required this.shortDateFormat,
+      required this.timerDuration,
+      required this.maxSets,
+      required this.vibrate,
+      required this.restTimers,
+      required this.showUnits,
+      required this.systemColors,
+      required this.explainedPermissions,
+      required this.hideTimerTab,
+      required this.hideHistoryTab,
+      required this.curveLines,
+      required this.hideWeight,
+      required this.groupHistory,
+      required this.alarmSound,
+      required this.cardioUnit,
+      required this.strengthUnit});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['theme_mode'] = Variable<String>(themeMode);
+    map['plan_trailing'] = Variable<String>(planTrailing);
+    map['long_date_format'] = Variable<String>(longDateFormat);
+    map['short_date_format'] = Variable<String>(shortDateFormat);
+    map['timer_duration'] = Variable<int>(timerDuration);
+    map['max_sets'] = Variable<int>(maxSets);
+    map['vibrate'] = Variable<bool>(vibrate);
+    map['rest_timers'] = Variable<bool>(restTimers);
+    map['show_units'] = Variable<bool>(showUnits);
+    map['system_colors'] = Variable<bool>(systemColors);
+    map['explained_permissions'] = Variable<bool>(explainedPermissions);
+    map['hide_timer_tab'] = Variable<bool>(hideTimerTab);
+    map['hide_history_tab'] = Variable<bool>(hideHistoryTab);
+    map['curve_lines'] = Variable<bool>(curveLines);
+    map['hide_weight'] = Variable<bool>(hideWeight);
+    map['group_history'] = Variable<bool>(groupHistory);
+    map['alarm_sound'] = Variable<String>(alarmSound);
+    map['cardio_unit'] = Variable<String>(cardioUnit);
+    map['strength_unit'] = Variable<String>(strengthUnit);
+    return map;
+  }
+
+  SettingsCompanion toCompanion(bool nullToAbsent) {
+    return SettingsCompanion(
+      id: Value(id),
+      themeMode: Value(themeMode),
+      planTrailing: Value(planTrailing),
+      longDateFormat: Value(longDateFormat),
+      shortDateFormat: Value(shortDateFormat),
+      timerDuration: Value(timerDuration),
+      maxSets: Value(maxSets),
+      vibrate: Value(vibrate),
+      restTimers: Value(restTimers),
+      showUnits: Value(showUnits),
+      systemColors: Value(systemColors),
+      explainedPermissions: Value(explainedPermissions),
+      hideTimerTab: Value(hideTimerTab),
+      hideHistoryTab: Value(hideHistoryTab),
+      curveLines: Value(curveLines),
+      hideWeight: Value(hideWeight),
+      groupHistory: Value(groupHistory),
+      alarmSound: Value(alarmSound),
+      cardioUnit: Value(cardioUnit),
+      strengthUnit: Value(strengthUnit),
+    );
+  }
+
+  factory Setting.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Setting(
+      id: serializer.fromJson<int>(json['id']),
+      themeMode: serializer.fromJson<String>(json['themeMode']),
+      planTrailing: serializer.fromJson<String>(json['planTrailing']),
+      longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
+      shortDateFormat: serializer.fromJson<String>(json['shortDateFormat']),
+      timerDuration: serializer.fromJson<int>(json['timerDuration']),
+      maxSets: serializer.fromJson<int>(json['maxSets']),
+      vibrate: serializer.fromJson<bool>(json['vibrate']),
+      restTimers: serializer.fromJson<bool>(json['restTimers']),
+      showUnits: serializer.fromJson<bool>(json['showUnits']),
+      systemColors: serializer.fromJson<bool>(json['systemColors']),
+      explainedPermissions:
+          serializer.fromJson<bool>(json['explainedPermissions']),
+      hideTimerTab: serializer.fromJson<bool>(json['hideTimerTab']),
+      hideHistoryTab: serializer.fromJson<bool>(json['hideHistoryTab']),
+      curveLines: serializer.fromJson<bool>(json['curveLines']),
+      hideWeight: serializer.fromJson<bool>(json['hideWeight']),
+      groupHistory: serializer.fromJson<bool>(json['groupHistory']),
+      alarmSound: serializer.fromJson<String>(json['alarmSound']),
+      cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
+      strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'themeMode': serializer.toJson<String>(themeMode),
+      'planTrailing': serializer.toJson<String>(planTrailing),
+      'longDateFormat': serializer.toJson<String>(longDateFormat),
+      'shortDateFormat': serializer.toJson<String>(shortDateFormat),
+      'timerDuration': serializer.toJson<int>(timerDuration),
+      'maxSets': serializer.toJson<int>(maxSets),
+      'vibrate': serializer.toJson<bool>(vibrate),
+      'restTimers': serializer.toJson<bool>(restTimers),
+      'showUnits': serializer.toJson<bool>(showUnits),
+      'systemColors': serializer.toJson<bool>(systemColors),
+      'explainedPermissions': serializer.toJson<bool>(explainedPermissions),
+      'hideTimerTab': serializer.toJson<bool>(hideTimerTab),
+      'hideHistoryTab': serializer.toJson<bool>(hideHistoryTab),
+      'curveLines': serializer.toJson<bool>(curveLines),
+      'hideWeight': serializer.toJson<bool>(hideWeight),
+      'groupHistory': serializer.toJson<bool>(groupHistory),
+      'alarmSound': serializer.toJson<String>(alarmSound),
+      'cardioUnit': serializer.toJson<String>(cardioUnit),
+      'strengthUnit': serializer.toJson<String>(strengthUnit),
+    };
+  }
+
+  Setting copyWith(
+          {int? id,
+          String? themeMode,
+          String? planTrailing,
+          String? longDateFormat,
+          String? shortDateFormat,
+          int? timerDuration,
+          int? maxSets,
+          bool? vibrate,
+          bool? restTimers,
+          bool? showUnits,
+          bool? systemColors,
+          bool? explainedPermissions,
+          bool? hideTimerTab,
+          bool? hideHistoryTab,
+          bool? curveLines,
+          bool? hideWeight,
+          bool? groupHistory,
+          String? alarmSound,
+          String? cardioUnit,
+          String? strengthUnit}) =>
+      Setting(
+        id: id ?? this.id,
+        themeMode: themeMode ?? this.themeMode,
+        planTrailing: planTrailing ?? this.planTrailing,
+        longDateFormat: longDateFormat ?? this.longDateFormat,
+        shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+        timerDuration: timerDuration ?? this.timerDuration,
+        maxSets: maxSets ?? this.maxSets,
+        vibrate: vibrate ?? this.vibrate,
+        restTimers: restTimers ?? this.restTimers,
+        showUnits: showUnits ?? this.showUnits,
+        systemColors: systemColors ?? this.systemColors,
+        explainedPermissions: explainedPermissions ?? this.explainedPermissions,
+        hideTimerTab: hideTimerTab ?? this.hideTimerTab,
+        hideHistoryTab: hideHistoryTab ?? this.hideHistoryTab,
+        curveLines: curveLines ?? this.curveLines,
+        hideWeight: hideWeight ?? this.hideWeight,
+        groupHistory: groupHistory ?? this.groupHistory,
+        alarmSound: alarmSound ?? this.alarmSound,
+        cardioUnit: cardioUnit ?? this.cardioUnit,
+        strengthUnit: strengthUnit ?? this.strengthUnit,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Setting(')
+          ..write('id: $id, ')
+          ..write('themeMode: $themeMode, ')
+          ..write('planTrailing: $planTrailing, ')
+          ..write('longDateFormat: $longDateFormat, ')
+          ..write('shortDateFormat: $shortDateFormat, ')
+          ..write('timerDuration: $timerDuration, ')
+          ..write('maxSets: $maxSets, ')
+          ..write('vibrate: $vibrate, ')
+          ..write('restTimers: $restTimers, ')
+          ..write('showUnits: $showUnits, ')
+          ..write('systemColors: $systemColors, ')
+          ..write('explainedPermissions: $explainedPermissions, ')
+          ..write('hideTimerTab: $hideTimerTab, ')
+          ..write('hideHistoryTab: $hideHistoryTab, ')
+          ..write('curveLines: $curveLines, ')
+          ..write('hideWeight: $hideWeight, ')
+          ..write('groupHistory: $groupHistory, ')
+          ..write('alarmSound: $alarmSound, ')
+          ..write('cardioUnit: $cardioUnit, ')
+          ..write('strengthUnit: $strengthUnit')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      themeMode,
+      planTrailing,
+      longDateFormat,
+      shortDateFormat,
+      timerDuration,
+      maxSets,
+      vibrate,
+      restTimers,
+      showUnits,
+      systemColors,
+      explainedPermissions,
+      hideTimerTab,
+      hideHistoryTab,
+      curveLines,
+      hideWeight,
+      groupHistory,
+      alarmSound,
+      cardioUnit,
+      strengthUnit);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Setting &&
+          other.id == this.id &&
+          other.themeMode == this.themeMode &&
+          other.planTrailing == this.planTrailing &&
+          other.longDateFormat == this.longDateFormat &&
+          other.shortDateFormat == this.shortDateFormat &&
+          other.timerDuration == this.timerDuration &&
+          other.maxSets == this.maxSets &&
+          other.vibrate == this.vibrate &&
+          other.restTimers == this.restTimers &&
+          other.showUnits == this.showUnits &&
+          other.systemColors == this.systemColors &&
+          other.explainedPermissions == this.explainedPermissions &&
+          other.hideTimerTab == this.hideTimerTab &&
+          other.hideHistoryTab == this.hideHistoryTab &&
+          other.curveLines == this.curveLines &&
+          other.hideWeight == this.hideWeight &&
+          other.groupHistory == this.groupHistory &&
+          other.alarmSound == this.alarmSound &&
+          other.cardioUnit == this.cardioUnit &&
+          other.strengthUnit == this.strengthUnit);
+}
+
+class SettingsCompanion extends UpdateCompanion<Setting> {
+  final Value<int> id;
+  final Value<String> themeMode;
+  final Value<String> planTrailing;
+  final Value<String> longDateFormat;
+  final Value<String> shortDateFormat;
+  final Value<int> timerDuration;
+  final Value<int> maxSets;
+  final Value<bool> vibrate;
+  final Value<bool> restTimers;
+  final Value<bool> showUnits;
+  final Value<bool> systemColors;
+  final Value<bool> explainedPermissions;
+  final Value<bool> hideTimerTab;
+  final Value<bool> hideHistoryTab;
+  final Value<bool> curveLines;
+  final Value<bool> hideWeight;
+  final Value<bool> groupHistory;
+  final Value<String> alarmSound;
+  final Value<String> cardioUnit;
+  final Value<String> strengthUnit;
+  const SettingsCompanion({
+    this.id = const Value.absent(),
+    this.themeMode = const Value.absent(),
+    this.planTrailing = const Value.absent(),
+    this.longDateFormat = const Value.absent(),
+    this.shortDateFormat = const Value.absent(),
+    this.timerDuration = const Value.absent(),
+    this.maxSets = const Value.absent(),
+    this.vibrate = const Value.absent(),
+    this.restTimers = const Value.absent(),
+    this.showUnits = const Value.absent(),
+    this.systemColors = const Value.absent(),
+    this.explainedPermissions = const Value.absent(),
+    this.hideTimerTab = const Value.absent(),
+    this.hideHistoryTab = const Value.absent(),
+    this.curveLines = const Value.absent(),
+    this.hideWeight = const Value.absent(),
+    this.groupHistory = const Value.absent(),
+    this.alarmSound = const Value.absent(),
+    this.cardioUnit = const Value.absent(),
+    this.strengthUnit = const Value.absent(),
+  });
+  SettingsCompanion.insert({
+    this.id = const Value.absent(),
+    required String themeMode,
+    required String planTrailing,
+    required String longDateFormat,
+    required String shortDateFormat,
+    required int timerDuration,
+    required int maxSets,
+    required bool vibrate,
+    required bool restTimers,
+    required bool showUnits,
+    required bool systemColors,
+    required bool explainedPermissions,
+    required bool hideTimerTab,
+    required bool hideHistoryTab,
+    required bool curveLines,
+    required bool hideWeight,
+    required bool groupHistory,
+    required String alarmSound,
+    required String cardioUnit,
+    required String strengthUnit,
+  })  : themeMode = Value(themeMode),
+        planTrailing = Value(planTrailing),
+        longDateFormat = Value(longDateFormat),
+        shortDateFormat = Value(shortDateFormat),
+        timerDuration = Value(timerDuration),
+        maxSets = Value(maxSets),
+        vibrate = Value(vibrate),
+        restTimers = Value(restTimers),
+        showUnits = Value(showUnits),
+        systemColors = Value(systemColors),
+        explainedPermissions = Value(explainedPermissions),
+        hideTimerTab = Value(hideTimerTab),
+        hideHistoryTab = Value(hideHistoryTab),
+        curveLines = Value(curveLines),
+        hideWeight = Value(hideWeight),
+        groupHistory = Value(groupHistory),
+        alarmSound = Value(alarmSound),
+        cardioUnit = Value(cardioUnit),
+        strengthUnit = Value(strengthUnit);
+  static Insertable<Setting> custom({
+    Expression<int>? id,
+    Expression<String>? themeMode,
+    Expression<String>? planTrailing,
+    Expression<String>? longDateFormat,
+    Expression<String>? shortDateFormat,
+    Expression<int>? timerDuration,
+    Expression<int>? maxSets,
+    Expression<bool>? vibrate,
+    Expression<bool>? restTimers,
+    Expression<bool>? showUnits,
+    Expression<bool>? systemColors,
+    Expression<bool>? explainedPermissions,
+    Expression<bool>? hideTimerTab,
+    Expression<bool>? hideHistoryTab,
+    Expression<bool>? curveLines,
+    Expression<bool>? hideWeight,
+    Expression<bool>? groupHistory,
+    Expression<String>? alarmSound,
+    Expression<String>? cardioUnit,
+    Expression<String>? strengthUnit,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (themeMode != null) 'theme_mode': themeMode,
+      if (planTrailing != null) 'plan_trailing': planTrailing,
+      if (longDateFormat != null) 'long_date_format': longDateFormat,
+      if (shortDateFormat != null) 'short_date_format': shortDateFormat,
+      if (timerDuration != null) 'timer_duration': timerDuration,
+      if (maxSets != null) 'max_sets': maxSets,
+      if (vibrate != null) 'vibrate': vibrate,
+      if (restTimers != null) 'rest_timers': restTimers,
+      if (showUnits != null) 'show_units': showUnits,
+      if (systemColors != null) 'system_colors': systemColors,
+      if (explainedPermissions != null)
+        'explained_permissions': explainedPermissions,
+      if (hideTimerTab != null) 'hide_timer_tab': hideTimerTab,
+      if (hideHistoryTab != null) 'hide_history_tab': hideHistoryTab,
+      if (curveLines != null) 'curve_lines': curveLines,
+      if (hideWeight != null) 'hide_weight': hideWeight,
+      if (groupHistory != null) 'group_history': groupHistory,
+      if (alarmSound != null) 'alarm_sound': alarmSound,
+      if (cardioUnit != null) 'cardio_unit': cardioUnit,
+      if (strengthUnit != null) 'strength_unit': strengthUnit,
+    });
+  }
+
+  SettingsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? themeMode,
+      Value<String>? planTrailing,
+      Value<String>? longDateFormat,
+      Value<String>? shortDateFormat,
+      Value<int>? timerDuration,
+      Value<int>? maxSets,
+      Value<bool>? vibrate,
+      Value<bool>? restTimers,
+      Value<bool>? showUnits,
+      Value<bool>? systemColors,
+      Value<bool>? explainedPermissions,
+      Value<bool>? hideTimerTab,
+      Value<bool>? hideHistoryTab,
+      Value<bool>? curveLines,
+      Value<bool>? hideWeight,
+      Value<bool>? groupHistory,
+      Value<String>? alarmSound,
+      Value<String>? cardioUnit,
+      Value<String>? strengthUnit}) {
+    return SettingsCompanion(
+      id: id ?? this.id,
+      themeMode: themeMode ?? this.themeMode,
+      planTrailing: planTrailing ?? this.planTrailing,
+      longDateFormat: longDateFormat ?? this.longDateFormat,
+      shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+      timerDuration: timerDuration ?? this.timerDuration,
+      maxSets: maxSets ?? this.maxSets,
+      vibrate: vibrate ?? this.vibrate,
+      restTimers: restTimers ?? this.restTimers,
+      showUnits: showUnits ?? this.showUnits,
+      systemColors: systemColors ?? this.systemColors,
+      explainedPermissions: explainedPermissions ?? this.explainedPermissions,
+      hideTimerTab: hideTimerTab ?? this.hideTimerTab,
+      hideHistoryTab: hideHistoryTab ?? this.hideHistoryTab,
+      curveLines: curveLines ?? this.curveLines,
+      hideWeight: hideWeight ?? this.hideWeight,
+      groupHistory: groupHistory ?? this.groupHistory,
+      alarmSound: alarmSound ?? this.alarmSound,
+      cardioUnit: cardioUnit ?? this.cardioUnit,
+      strengthUnit: strengthUnit ?? this.strengthUnit,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (themeMode.present) {
+      map['theme_mode'] = Variable<String>(themeMode.value);
+    }
+    if (planTrailing.present) {
+      map['plan_trailing'] = Variable<String>(planTrailing.value);
+    }
+    if (longDateFormat.present) {
+      map['long_date_format'] = Variable<String>(longDateFormat.value);
+    }
+    if (shortDateFormat.present) {
+      map['short_date_format'] = Variable<String>(shortDateFormat.value);
+    }
+    if (timerDuration.present) {
+      map['timer_duration'] = Variable<int>(timerDuration.value);
+    }
+    if (maxSets.present) {
+      map['max_sets'] = Variable<int>(maxSets.value);
+    }
+    if (vibrate.present) {
+      map['vibrate'] = Variable<bool>(vibrate.value);
+    }
+    if (restTimers.present) {
+      map['rest_timers'] = Variable<bool>(restTimers.value);
+    }
+    if (showUnits.present) {
+      map['show_units'] = Variable<bool>(showUnits.value);
+    }
+    if (systemColors.present) {
+      map['system_colors'] = Variable<bool>(systemColors.value);
+    }
+    if (explainedPermissions.present) {
+      map['explained_permissions'] = Variable<bool>(explainedPermissions.value);
+    }
+    if (hideTimerTab.present) {
+      map['hide_timer_tab'] = Variable<bool>(hideTimerTab.value);
+    }
+    if (hideHistoryTab.present) {
+      map['hide_history_tab'] = Variable<bool>(hideHistoryTab.value);
+    }
+    if (curveLines.present) {
+      map['curve_lines'] = Variable<bool>(curveLines.value);
+    }
+    if (hideWeight.present) {
+      map['hide_weight'] = Variable<bool>(hideWeight.value);
+    }
+    if (groupHistory.present) {
+      map['group_history'] = Variable<bool>(groupHistory.value);
+    }
+    if (alarmSound.present) {
+      map['alarm_sound'] = Variable<String>(alarmSound.value);
+    }
+    if (cardioUnit.present) {
+      map['cardio_unit'] = Variable<String>(cardioUnit.value);
+    }
+    if (strengthUnit.present) {
+      map['strength_unit'] = Variable<String>(strengthUnit.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SettingsCompanion(')
+          ..write('id: $id, ')
+          ..write('themeMode: $themeMode, ')
+          ..write('planTrailing: $planTrailing, ')
+          ..write('longDateFormat: $longDateFormat, ')
+          ..write('shortDateFormat: $shortDateFormat, ')
+          ..write('timerDuration: $timerDuration, ')
+          ..write('maxSets: $maxSets, ')
+          ..write('vibrate: $vibrate, ')
+          ..write('restTimers: $restTimers, ')
+          ..write('showUnits: $showUnits, ')
+          ..write('systemColors: $systemColors, ')
+          ..write('explainedPermissions: $explainedPermissions, ')
+          ..write('hideTimerTab: $hideTimerTab, ')
+          ..write('hideHistoryTab: $hideHistoryTab, ')
+          ..write('curveLines: $curveLines, ')
+          ..write('hideWeight: $hideWeight, ')
+          ..write('groupHistory: $groupHistory, ')
+          ..write('alarmSound: $alarmSound, ')
+          ..write('cardioUnit: $cardioUnit, ')
+          ..write('strengthUnit: $strengthUnit')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
   late final $PlansTable plans = $PlansTable(this);
   late final $GymSetsTable gymSets = $GymSetsTable(this);
+  late final $SettingsTable settings = $SettingsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [plans, gymSets];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [plans, gymSets, settings];
 }
 
 typedef $$PlansTableInsertCompanionBuilder = PlansCompanion Function({
@@ -1336,6 +2268,381 @@ class $$GymSetsTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
+  Value<int> id,
+  required String themeMode,
+  required String planTrailing,
+  required String longDateFormat,
+  required String shortDateFormat,
+  required int timerDuration,
+  required int maxSets,
+  required bool vibrate,
+  required bool restTimers,
+  required bool showUnits,
+  required bool systemColors,
+  required bool explainedPermissions,
+  required bool hideTimerTab,
+  required bool hideHistoryTab,
+  required bool curveLines,
+  required bool hideWeight,
+  required bool groupHistory,
+  required String alarmSound,
+  required String cardioUnit,
+  required String strengthUnit,
+});
+typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
+  Value<int> id,
+  Value<String> themeMode,
+  Value<String> planTrailing,
+  Value<String> longDateFormat,
+  Value<String> shortDateFormat,
+  Value<int> timerDuration,
+  Value<int> maxSets,
+  Value<bool> vibrate,
+  Value<bool> restTimers,
+  Value<bool> showUnits,
+  Value<bool> systemColors,
+  Value<bool> explainedPermissions,
+  Value<bool> hideTimerTab,
+  Value<bool> hideHistoryTab,
+  Value<bool> curveLines,
+  Value<bool> hideWeight,
+  Value<bool> groupHistory,
+  Value<String> alarmSound,
+  Value<String> cardioUnit,
+  Value<String> strengthUnit,
+});
+
+class $$SettingsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SettingsTable,
+    Setting,
+    $$SettingsTableFilterComposer,
+    $$SettingsTableOrderingComposer,
+    $$SettingsTableProcessedTableManager,
+    $$SettingsTableInsertCompanionBuilder,
+    $$SettingsTableUpdateCompanionBuilder> {
+  $$SettingsTableTableManager(_$AppDatabase db, $SettingsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$SettingsTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$SettingsTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$SettingsTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<String> themeMode = const Value.absent(),
+            Value<String> planTrailing = const Value.absent(),
+            Value<String> longDateFormat = const Value.absent(),
+            Value<String> shortDateFormat = const Value.absent(),
+            Value<int> timerDuration = const Value.absent(),
+            Value<int> maxSets = const Value.absent(),
+            Value<bool> vibrate = const Value.absent(),
+            Value<bool> restTimers = const Value.absent(),
+            Value<bool> showUnits = const Value.absent(),
+            Value<bool> systemColors = const Value.absent(),
+            Value<bool> explainedPermissions = const Value.absent(),
+            Value<bool> hideTimerTab = const Value.absent(),
+            Value<bool> hideHistoryTab = const Value.absent(),
+            Value<bool> curveLines = const Value.absent(),
+            Value<bool> hideWeight = const Value.absent(),
+            Value<bool> groupHistory = const Value.absent(),
+            Value<String> alarmSound = const Value.absent(),
+            Value<String> cardioUnit = const Value.absent(),
+            Value<String> strengthUnit = const Value.absent(),
+          }) =>
+              SettingsCompanion(
+            id: id,
+            themeMode: themeMode,
+            planTrailing: planTrailing,
+            longDateFormat: longDateFormat,
+            shortDateFormat: shortDateFormat,
+            timerDuration: timerDuration,
+            maxSets: maxSets,
+            vibrate: vibrate,
+            restTimers: restTimers,
+            showUnits: showUnits,
+            systemColors: systemColors,
+            explainedPermissions: explainedPermissions,
+            hideTimerTab: hideTimerTab,
+            hideHistoryTab: hideHistoryTab,
+            curveLines: curveLines,
+            hideWeight: hideWeight,
+            groupHistory: groupHistory,
+            alarmSound: alarmSound,
+            cardioUnit: cardioUnit,
+            strengthUnit: strengthUnit,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required String themeMode,
+            required String planTrailing,
+            required String longDateFormat,
+            required String shortDateFormat,
+            required int timerDuration,
+            required int maxSets,
+            required bool vibrate,
+            required bool restTimers,
+            required bool showUnits,
+            required bool systemColors,
+            required bool explainedPermissions,
+            required bool hideTimerTab,
+            required bool hideHistoryTab,
+            required bool curveLines,
+            required bool hideWeight,
+            required bool groupHistory,
+            required String alarmSound,
+            required String cardioUnit,
+            required String strengthUnit,
+          }) =>
+              SettingsCompanion.insert(
+            id: id,
+            themeMode: themeMode,
+            planTrailing: planTrailing,
+            longDateFormat: longDateFormat,
+            shortDateFormat: shortDateFormat,
+            timerDuration: timerDuration,
+            maxSets: maxSets,
+            vibrate: vibrate,
+            restTimers: restTimers,
+            showUnits: showUnits,
+            systemColors: systemColors,
+            explainedPermissions: explainedPermissions,
+            hideTimerTab: hideTimerTab,
+            hideHistoryTab: hideHistoryTab,
+            curveLines: curveLines,
+            hideWeight: hideWeight,
+            groupHistory: groupHistory,
+            alarmSound: alarmSound,
+            cardioUnit: cardioUnit,
+            strengthUnit: strengthUnit,
+          ),
+        ));
+}
+
+class $$SettingsTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $SettingsTable,
+    Setting,
+    $$SettingsTableFilterComposer,
+    $$SettingsTableOrderingComposer,
+    $$SettingsTableProcessedTableManager,
+    $$SettingsTableInsertCompanionBuilder,
+    $$SettingsTableUpdateCompanionBuilder> {
+  $$SettingsTableProcessedTableManager(super.$state);
+}
+
+class $$SettingsTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SettingsTable> {
+  $$SettingsTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get themeMode => $state.composableBuilder(
+      column: $state.table.themeMode,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get planTrailing => $state.composableBuilder(
+      column: $state.table.planTrailing,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get longDateFormat => $state.composableBuilder(
+      column: $state.table.longDateFormat,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get shortDateFormat => $state.composableBuilder(
+      column: $state.table.shortDateFormat,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get timerDuration => $state.composableBuilder(
+      column: $state.table.timerDuration,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get maxSets => $state.composableBuilder(
+      column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get vibrate => $state.composableBuilder(
+      column: $state.table.vibrate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get restTimers => $state.composableBuilder(
+      column: $state.table.restTimers,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get showUnits => $state.composableBuilder(
+      column: $state.table.showUnits,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get systemColors => $state.composableBuilder(
+      column: $state.table.systemColors,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get explainedPermissions => $state.composableBuilder(
+      column: $state.table.explainedPermissions,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get hideTimerTab => $state.composableBuilder(
+      column: $state.table.hideTimerTab,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get hideHistoryTab => $state.composableBuilder(
+      column: $state.table.hideHistoryTab,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get curveLines => $state.composableBuilder(
+      column: $state.table.curveLines,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get hideWeight => $state.composableBuilder(
+      column: $state.table.hideWeight,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get groupHistory => $state.composableBuilder(
+      column: $state.table.groupHistory,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get alarmSound => $state.composableBuilder(
+      column: $state.table.alarmSound,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get cardioUnit => $state.composableBuilder(
+      column: $state.table.cardioUnit,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get strengthUnit => $state.composableBuilder(
+      column: $state.table.strengthUnit,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$SettingsTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SettingsTable> {
+  $$SettingsTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get themeMode => $state.composableBuilder(
+      column: $state.table.themeMode,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get planTrailing => $state.composableBuilder(
+      column: $state.table.planTrailing,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get longDateFormat => $state.composableBuilder(
+      column: $state.table.longDateFormat,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get shortDateFormat => $state.composableBuilder(
+      column: $state.table.shortDateFormat,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get timerDuration => $state.composableBuilder(
+      column: $state.table.timerDuration,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get maxSets => $state.composableBuilder(
+      column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get vibrate => $state.composableBuilder(
+      column: $state.table.vibrate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get restTimers => $state.composableBuilder(
+      column: $state.table.restTimers,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get showUnits => $state.composableBuilder(
+      column: $state.table.showUnits,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get systemColors => $state.composableBuilder(
+      column: $state.table.systemColors,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get explainedPermissions => $state.composableBuilder(
+      column: $state.table.explainedPermissions,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get hideTimerTab => $state.composableBuilder(
+      column: $state.table.hideTimerTab,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get hideHistoryTab => $state.composableBuilder(
+      column: $state.table.hideHistoryTab,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get curveLines => $state.composableBuilder(
+      column: $state.table.curveLines,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get hideWeight => $state.composableBuilder(
+      column: $state.table.hideWeight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get groupHistory => $state.composableBuilder(
+      column: $state.table.groupHistory,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get alarmSound => $state.composableBuilder(
+      column: $state.table.alarmSound,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get cardioUnit => $state.composableBuilder(
+      column: $state.table.cardioUnit,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get strengthUnit => $state.composableBuilder(
+      column: $state.table.strengthUnit,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class _$AppDatabaseManager {
   final _$AppDatabase _db;
   _$AppDatabaseManager(this._db);
@@ -1343,4 +2650,6 @@ class _$AppDatabaseManager {
       $$PlansTableTableManager(_db, _db.plans);
   $$GymSetsTableTableManager get gymSets =>
       $$GymSetsTableTableManager(_db, _db.gymSets);
+  $$SettingsTableTableManager get settings =>
+      $$SettingsTableTableManager(_db, _db.settings);
 }

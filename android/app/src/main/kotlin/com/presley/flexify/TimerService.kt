@@ -95,6 +95,7 @@ class TimerService : Service() {
             }
         }
 
+    @SuppressLint("WrongConstant")
     override fun onCreate() {
         super.onCreate()
         timerHandler = Handler(Looper.getMainLooper())
@@ -201,7 +202,7 @@ class TimerService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        timerHandler.removeCallbacks(timerRunnable!!)
+        if (timerRunnable != null) timerHandler.removeCallbacks(timerRunnable!!)
         applicationContext.unregisterReceiver(stopReceiver)
         applicationContext.unregisterReceiver(addReceiver)
         mediaPlayer?.stop()

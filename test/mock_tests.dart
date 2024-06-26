@@ -1,29 +1,13 @@
 import 'package:drift/native.dart';
-import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../integration_test/screenshot_test.dart';
 
 mockTests({bool insert = true}) async {
   TestWidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences.setMockInitialValues({
-    "themeMode": "ThemeMode.system",
-    "showReorder": true,
-    "resetTimers": true,
-    "showUnits": true,
-    "systemColors": false,
-    "dateFormat": "yyyy-MM-dd h:mm a",
-    "timerDuration": const Duration(minutes: 3, seconds: 30).inMilliseconds,
-    "hideWeight": true,
-    "planTrailing": PlanTrailing.count.toString(),
-    "explainedPermissions": true,
-    "groupHistory": false,
-  });
-  prefs = await SharedPreferences.getInstance();
   timerChannel = const MethodChannel("com.presley.flexify/timer");
   db = AppDatabase(executor: NativeDatabase.memory());
 

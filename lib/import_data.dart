@@ -5,10 +5,12 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class ImportData extends StatelessWidget {
   final BuildContext pageContext;
@@ -111,7 +113,11 @@ class ImportData extends StatelessWidget {
     await db.close();
     await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
     db = AppDatabase();
-    await (db.gymSets.select()..limit(1)).get();
+    await (db.settings.update())
+        .write(const SettingsCompanion(alarmSound: Value('')));
+    if (!pageContext.mounted) return;
+    final settingsState = pageContext.read<SettingsState>();
+    await settingsState.init();
     if (!pageContext.mounted) return;
     Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
   }

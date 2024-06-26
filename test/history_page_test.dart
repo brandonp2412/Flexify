@@ -6,7 +6,6 @@ import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mock_tests.dart';
 
@@ -109,9 +108,6 @@ void main() async {
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     await mockTests();
-    SharedPreferences.setMockInitialValues({
-      "groupHistory": false,
-    });
     await tester.pumpWidget(
       MultiProvider(
         providers: [

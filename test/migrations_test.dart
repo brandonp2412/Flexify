@@ -18,7 +18,6 @@ void main() {
   test('upgrade from all versions', () async {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
-    prefs = await SharedPreferences.getInstance();
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     final currentVersion =
         AppDatabase(executor: NativeDatabase.memory()).schemaVersion;

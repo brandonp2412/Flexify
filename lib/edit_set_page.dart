@@ -93,9 +93,19 @@ class _EditSetPageState extends State<EditSetPage> {
       if (!settings.restTimers || !platformSupportsTimer()) return;
       final timer = context.read<TimerState>();
       if (_restMs != null)
-        timer.startTimer(_name, Duration(milliseconds: _restMs!));
+        timer.startTimer(
+          _name,
+          Duration(milliseconds: _restMs!),
+          settings.alarmSound,
+          settings.vibrate,
+        );
       else
-        timer.startTimer(_name, _settings.timerDuration);
+        timer.startTimer(
+          _name,
+          _settings.timerDuration,
+          settings.alarmSound,
+          settings.vibrate,
+        );
     }
   }
 

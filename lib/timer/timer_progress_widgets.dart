@@ -1,3 +1,4 @@
+import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -116,8 +117,12 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
+                final settings = context.read<SettingsState>();
                 await requestNotificationPermission();
-                await _timerState.addOneMinute();
+                await _timerState.addOneMinute(
+                  settings.alarmSound,
+                  settings.vibrate,
+                );
               },
               child: const Text('+1 min'),
             ),

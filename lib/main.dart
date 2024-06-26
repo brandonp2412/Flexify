@@ -1,7 +1,8 @@
+import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/history_page.dart';
 import 'package:flexify/graph/graphs_page.dart';
+import 'package:flexify/history_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
@@ -11,19 +12,17 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'plan/plans_page.dart';
 
 late AppDatabase db;
 late MethodChannel timerChannel;
-late SharedPreferences prefs;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  prefs = await SharedPreferences.getInstance();
   timerChannel = const MethodChannel("com.presley.flexify/timer");
   db = AppDatabase();
+  await (db.settings.select()..limit(1)).getSingle();
   final settings = SettingsState();
 
   runApp(appProviders(settings));

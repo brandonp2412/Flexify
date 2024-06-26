@@ -287,7 +287,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 name: '',
                 reps: 0,
                 created: DateTime.now().toLocal(),
-                unit: settings.strengthUnit ?? 'kg',
+                unit: settings.strengthUnit,
                 weight: 0,
                 cardio: false,
                 duration: 0,

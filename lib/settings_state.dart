@@ -1,4 +1,6 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +11,9 @@ class SettingsState extends ChangeNotifier {
   int maxSets = 3;
   String longDateFormat = 'dd/MM/yy';
   String shortDateFormat = 'd/M/yy';
-  String? alarmSound;
-  String? cardioUnit;
-  String? strengthUnit;
+  String alarmSound = '';
+  String cardioUnit = 'km';
+  String strengthUnit = 'kg';
 
   bool vibrate = true;
   bool restTimers = true;
@@ -24,165 +26,166 @@ class SettingsState extends ChangeNotifier {
   bool hideWeight = false;
   bool groupHistory = true;
 
-  SettingsState() {
-    alarmSound = prefs.getString('alarmSound');
-    cardioUnit = prefs.getString('cardioUnit');
-    strengthUnit = prefs.getString('strengthUnit');
-    longDateFormat = prefs.getString('longDateFormat') ?? "dd/MM/yy";
-    shortDateFormat = prefs.getString('shortDateFormat') ?? "d/M/yy";
-    maxSets = prefs.getInt('maxSets') ?? 3;
+  Future<void> init() async {
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    alarmSound = settings.alarmSound;
+    cardioUnit = settings.cardioUnit;
+    strengthUnit = settings.strengthUnit;
+    longDateFormat = settings.longDateFormat;
+    shortDateFormat = settings.shortDateFormat;
+    maxSets = settings.maxSets;
 
-    final duration = prefs.getInt('timerDuration');
-    if (duration != null)
-      timerDuration = Duration(milliseconds: duration);
-    else
-      timerDuration = const Duration(minutes: 3, seconds: 30);
+    final duration = settings.timerDuration;
+    timerDuration = Duration(milliseconds: duration);
 
-    final theme = prefs.getString('themeMode');
+    final theme = settings.themeMode;
     if (theme == ThemeMode.system.toString())
       themeMode = ThemeMode.system;
     else if (theme == ThemeMode.light.toString())
       themeMode = ThemeMode.light;
     else if (theme == ThemeMode.dark.toString()) themeMode = ThemeMode.dark;
 
-    final plan = prefs.getString('planTrailing');
+    final plan = settings.planTrailing;
     if (plan == PlanTrailing.count.toString())
       planTrailing = PlanTrailing.count;
     else if (plan == PlanTrailing.reorder.toString())
       planTrailing = PlanTrailing.reorder;
 
-    systemColors = prefs.getBool("systemColors") ?? true;
-    restTimers = prefs.getBool("restTimers") ?? true;
-    showUnits = prefs.getBool("showUnits") ?? true;
-    hideTimerTab = prefs.getBool("hideTimerTab") ?? false;
-    hideHistoryTab = prefs.getBool("hideHistoryTab") ?? false;
-    explainedPermissions = prefs.getBool('explainedPermissions') ?? false;
-    curveLines = prefs.getBool('curveLines') ?? false;
-    vibrate = prefs.getBool('vibrate') ?? true;
-    hideWeight = prefs.getBool('hideWeight') ?? false;
-    groupHistory = prefs.getBool('groupHistory') ?? true;
+    systemColors = settings.systemColors;
+    restTimers = settings.restTimers;
+    showUnits = settings.showUnits;
+    hideTimerTab = settings.hideTimerTab;
+    hideHistoryTab = settings.hideHistoryTab;
+    explainedPermissions = settings.explainedPermissions;
+    curveLines = settings.curveLines;
+    vibrate = settings.vibrate;
+    hideWeight = settings.hideWeight;
+    groupHistory = settings.groupHistory;
+    notifyListeners();
+  }
+
+  SettingsState() {
+    init();
   }
 
   void setGroupHistory(bool value) {
     groupHistory = value;
     notifyListeners();
-    prefs.setBool('groupHistory', value);
+    (db.settings.update()).write(SettingsCompanion(groupHistory: Value(value)));
   }
 
   void setHideWeight(bool value) {
     hideWeight = value;
     notifyListeners();
-    prefs.setBool('hideWeight', value);
+    (db.settings.update()).write(SettingsCompanion(hideWeight: Value(value)));
   }
 
   void setMaxSets(int value) {
     maxSets = value;
     notifyListeners();
-    prefs.setInt('maxSets', value);
+    (db.settings.update()).write(SettingsCompanion(maxSets: Value(value)));
   }
 
   void setDuration(Duration value) {
     timerDuration = value;
     notifyListeners();
-    prefs.setInt('timerDuration', value.inMilliseconds);
+    (db.settings.update())
+        .write(SettingsCompanion(timerDuration: Value(value.inMilliseconds)));
   }
 
-  void setCardioUnit(String? value) async {
+  void setCardioUnit(String value) async {
     cardioUnit = value;
     notifyListeners();
-    if (value == null)
-      prefs.remove("cardioUnit");
-    else
-      prefs.setString('cardioUnit', value);
+    (db.settings.update()).write(SettingsCompanion(cardioUnit: Value(value)));
   }
 
-  void setStrengthUnit(String? value) async {
+  void setStrengthUnit(String value) async {
     strengthUnit = value;
     notifyListeners();
-    if (value == null)
-      prefs.remove("strengthUnit");
-    else
-      prefs.setString("strengthUnit", value);
+    (db.settings.update()).write(SettingsCompanion(strengthUnit: Value(value)));
   }
 
-  void setAlarm(String? sound) async {
+  void setAlarm(String sound) async {
     alarmSound = sound;
     notifyListeners();
-    if (sound == null)
-      prefs.remove("alarmSound");
-    else
-      prefs.setString('alarmSound', sound);
+    (db.settings.update()).write(SettingsCompanion(alarmSound: Value(sound)));
   }
 
   void setPlanTrailing(PlanTrailing value) {
     planTrailing = value;
     notifyListeners();
-    prefs.setString('planTrailing', value.toString());
+    (db.settings.update())
+        .write(SettingsCompanion(planTrailing: Value(value.toString())));
   }
 
   void setVibrate(bool value) {
     vibrate = value;
     notifyListeners();
-    prefs.setBool('vibrate', value);
+    (db.settings.update()).write(SettingsCompanion(vibrate: Value(value)));
   }
 
-  void setCurvedLines(bool curve) {
-    curveLines = curve;
+  void setCurvedLines(bool value) {
+    curveLines = value;
     notifyListeners();
-    prefs.setBool('curveLines', curve);
+    (db.settings.update()).write(SettingsCompanion(curveLines: Value(value)));
   }
 
-  void setHideTimer(bool hide) {
-    hideTimerTab = hide;
+  void setHideTimer(bool value) {
+    hideTimerTab = value;
     notifyListeners();
-    prefs.setBool('hideTimerTab', hide);
+    (db.settings.update()).write(SettingsCompanion(hideTimerTab: Value(value)));
   }
 
-  void setHideHistory(bool hide) {
-    hideHistoryTab = hide;
+  void setHideHistory(bool value) {
+    hideHistoryTab = value;
     notifyListeners();
-    prefs.setBool('hideHistoryTab', hide);
+    (db.settings.update())
+        .write(SettingsCompanion(hideHistoryTab: Value(value)));
   }
 
-  void setExplained(bool explained) {
-    explainedPermissions = explained;
+  void setExplained(bool value) {
+    explainedPermissions = value;
     notifyListeners();
-    prefs.setBool('explainedPermissions', explained);
+    (db.settings.update())
+        .write(SettingsCompanion(explainedPermissions: Value(value)));
   }
 
-  void setLong(String format) {
-    longDateFormat = format;
+  void setLong(String value) {
+    longDateFormat = value;
     notifyListeners();
-    prefs.setString('longDateFormat', format);
+    (db.settings.update())
+        .write(SettingsCompanion(longDateFormat: Value(value)));
   }
 
-  void setShort(String format) {
-    shortDateFormat = format;
+  void setShort(String value) {
+    shortDateFormat = value;
     notifyListeners();
-    prefs.setString('shortDateFormat', format);
+    (db.settings.update())
+        .write(SettingsCompanion(shortDateFormat: Value(value)));
   }
 
-  void setSystem(bool system) {
-    systemColors = system;
-    prefs.setBool('systemColors', system);
-    notifyListeners();
-  }
-
-  void setUnits(bool show) {
-    showUnits = show;
-    prefs.setBool('showUnits', show);
+  void setSystem(bool value) {
+    systemColors = value;
+    (db.settings.update()).write(SettingsCompanion(systemColors: Value(value)));
     notifyListeners();
   }
 
-  void setTimers(bool show) {
-    restTimers = show;
-    prefs.setBool('restTimers', show);
+  void setUnits(bool value) {
+    showUnits = value;
+    (db.settings.update()).write(SettingsCompanion(showUnits: Value(value)));
     notifyListeners();
   }
 
-  void setTheme(ThemeMode theme) {
-    themeMode = theme;
-    prefs.setString('themeMode', theme.toString());
+  void setTimers(bool value) {
+    restTimers = value;
+    (db.settings.update()).write(SettingsCompanion(restTimers: Value(value)));
+    notifyListeners();
+  }
+
+  void setTheme(ThemeMode value) {
+    themeMode = value;
+    (db.settings.update())
+        .write(SettingsCompanion(themeMode: Value(value.toString())));
     notifyListeners();
   }
 }

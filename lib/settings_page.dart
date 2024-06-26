@@ -122,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            value: _settings.strengthUnit ?? 'kg',
+            value: _settings.strengthUnit,
             decoration: const InputDecoration(labelText: 'Strength unit'),
             items: ['kg', 'lb'].map((String value) {
               return DropdownMenuItem<String>(
@@ -130,7 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(value),
               );
             }).toList(),
-            onChanged: (value) => _settings.setStrengthUnit(value),
+            onChanged: (value) => _settings.setStrengthUnit(value!),
           ),
         ),
       ),
@@ -139,7 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            value: _settings.cardioUnit ?? 'km',
+            value: _settings.cardioUnit,
             decoration: const InputDecoration(labelText: 'Cardio unit'),
             items: ['km', 'mi'].map((String value) {
               return DropdownMenuItem<String>(
@@ -147,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(value),
               );
             }).toList(),
-            onChanged: (value) => _settings.setCardioUnit(value),
+            onChanged: (value) => _settings.setCardioUnit(value!),
           ),
         ),
       ),
@@ -418,12 +418,12 @@ class _SettingsPageState extends State<SettingsPage> {
               _player?.play(DeviceFileSource(result.files.single.path!));
             },
             onLongPress: () {
-              _settings.setAlarm(null);
+              _settings.setAlarm('');
             },
             icon: const Icon(Icons.music_note),
-            label: _settings.alarmSound == null
+            label: _settings.alarmSound.isEmpty
                 ? const Text("Alarm sound")
-                : Text(_settings.alarmSound!.split('/').last),
+                : Text(_settings.alarmSound.split('/').last),
           ),
         ),
       SettingsLine(
