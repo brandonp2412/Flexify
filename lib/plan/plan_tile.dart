@@ -1,5 +1,7 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class PlanTile extends StatelessWidget {
     required this.refresh,
     required this.onSelect,
     required this.selected,
+    required this.countStream,
   });
 
   final Plan plan;
@@ -24,6 +27,19 @@ class PlanTile extends StatelessWidget {
   final Future<void> Function() refresh;
   final Function(int) onSelect;
   final Set<int> selected;
+  final Stream<List<TypedResult>> countStream;
+
+  final _countColumn = const CustomExpression<int>(
+    """
+      COUNT(
+        CASE 
+          WHEN DATE(created, 'unixepoch', 'localtime') = 
+            DATE('now', 'localtime') AND hidden = 0 
+          THEN 1 
+        END
+      )
+   """,
+  );
 
   List<InlineSpan> getChildren(BuildContext context) {
     List<InlineSpan> result = [];
@@ -59,7 +75,7 @@ class PlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingsState = context.watch<SettingsState>();
+    final settings = context.watch<SettingsState>();
     Widget title = const Text("Daily");
     if (plan.title?.isNotEmpty == true)
       title = Text(plan.title!);
@@ -69,12 +85,37 @@ class PlanTile extends StatelessWidget {
     return ListTile(
       title: title,
       subtitle: Text(plan.exercises.split(',').join(', ')),
-      trailing: Visibility(
-        visible: settingsState.planTrailing == PlanTrailing.reorder,
-        child: ReorderableDragStartListener(
-          index: index,
-          child: const Icon(Icons.drag_handle),
-        ),
+      trailing: Builder(
+        builder: (context) {
+          if (settings.planTrailing == PlanTrailing.reorder)
+            return ReorderableDragStartListener(
+              index: index,
+              child: const Icon(Icons.drag_handle),
+            );
+
+          return StreamBuilder(
+            stream: countStream,
+            builder: (context, snapshot) {
+              if (snapshot.data == null ||
+                  snapshot.data!.isEmpty ||
+                  snapshot.hasError) return const SizedBox();
+
+              final counts = snapshot.data!.where(
+                (count) => plan.exercises
+                    .split(',')
+                    .contains(count.read(db.gymSets.name)),
+              );
+              if (counts.isEmpty) return const SizedBox();
+              final total = counts
+                  .map((count) => count.read(_countColumn))
+                  .reduce((a, b) => (a ?? 0) + (b ?? 0));
+              final max = counts
+                  .map((count) => count.read(db.gymSets.maxSets))
+                  .reduce((a, b) => (a ?? 3) + (b ?? 3));
+              return Text("($total / $max)");
+            },
+          );
+        },
       ),
       selected: selected.contains(plan.id),
       onTap: () async {

@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_tile.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlansList extends StatelessWidget {
   final List<Plan> plans;
@@ -13,7 +16,7 @@ class PlansList extends StatelessWidget {
   final Set<int> selected;
   final Function(int) onSelect;
 
-  const PlansList({
+  PlansList({
     super.key,
     required this.plans,
     required this.updatePlans,
@@ -21,6 +24,35 @@ class PlansList extends StatelessWidget {
     required this.selected,
     required this.onSelect,
   });
+
+  late final _nameList = plans
+      .map((plan) => plan.exercises.split(','))
+      .expand((list) => list)
+      .toList();
+  final _countColumn = const CustomExpression<int>(
+    """
+      COUNT(
+        CASE 
+          WHEN DATE(created, 'unixepoch', 'localtime') = 
+            DATE('now', 'localtime') AND hidden = 0 
+          THEN 1 
+        END
+      )
+   """,
+  );
+  late final _stream = (db.gymSets.selectOnly()
+        ..addColumns(
+          [
+            db.gymSets.maxSets,
+            db.gymSets.name,
+            _countColumn,
+          ],
+        )
+        ..where(
+          db.gymSets.name.isIn(_nameList),
+        )
+        ..groupBy([db.gymSets.name]))
+      .watch();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +77,7 @@ class PlansList extends StatelessWidget {
           refresh: updatePlans,
           selected: selected,
           onSelect: (id) => onSelect(id),
+          countStream: _stream,
         );
       },
       onReorder: (int oldIndex, int newIndex) async {
