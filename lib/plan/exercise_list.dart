@@ -110,7 +110,7 @@ class ExerciseList extends StatelessWidget {
                         onSelect(index);
                       },
                     ),
-                    Text(exercise),
+                    Flexible(child: Text(exercise)),
                   ],
                 ),
               ),
