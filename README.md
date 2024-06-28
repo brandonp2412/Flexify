@@ -3,9 +3,9 @@
 Get fit with Flexify. Easily track your gym progression with offline records and seamless graphs.
 
 <p float="left">
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218">
-    <img alt="Release downloads" src="https://img.shields.io/github/downloads/brandonp2412/Flexify/total.svg?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218">
+    <a href="/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
+    <a href="/graphs/traffic"><img alt="Release downloads" src="https://img.shields.io/github/downloads/brandonp2412/Flexify/total.svg?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
+    <a href="/"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
 </p>
 
 ## Features
