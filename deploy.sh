@@ -29,12 +29,6 @@ rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
 git add fastlane/metadata
 
-if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-    echo "There are unstaged changes in the repository:"
-    git --no-pager diff
-    exit 1
-fi
-
 ./flutter/bin/flutter build apk --split-per-abi
 ./flutter/bin/flutter build apk
 apk=build/app/outputs/flutter-apk
