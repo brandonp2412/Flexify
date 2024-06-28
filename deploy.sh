@@ -12,8 +12,8 @@ new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
 changelog_number=$((new_build_number * 10 + 3))
 
-nvim "fastlane/metadata/android/en-AU/changelogs/$changelog_number.txt"
-changelog=$(cat "fastlane/metadata/android/en-AU/changelogs/$changelog_number.txt")
+nvim "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
+changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt")
 echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
 
 ./flutter/bin/flutter test
