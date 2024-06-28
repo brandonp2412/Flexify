@@ -10,13 +10,13 @@ Get fit with Flexify. Easily track your gym progression with offline records and
 
 ## Features
 
-- 💪 **Track Gym Progress**: Flexify allows you to effortlessly track your gym progress. Log your workouts, sets, reps, and weights with ease.
+- 💪 **Track gym progress**: Log your reps and weights with ease.
 
-- 📵 **Offline Support**: No internet connection? No problem! Flexify works offline, ensuring you can focus solely on your workout without worrying about connectivity issues.
-
-- 📈 **Graphs**: Visualize your progress over time with intuitive graphs. Understand your improvements and identify areas for further development.
-
-- ⏱️ **Automatic Rest Timers**: Flexify includes automatic rest timers to help you optimize your workout sessions. Stay on track and make the most out of your gym time. (Android only)
+- 📵 **Offline**: Flexify doesn't use the internet at all.
+- 📈 **Graphs**: Visualize your progress over time with intuitive graphs.
+- 🏃 **Cardio tracking**: Record your progress with cardio types.
+- ⚙️ **Highly customizable**: Toggle features on/off, swap between light/dark theme and much more.
+- ⏱️ **Automatic rest timers**: Stay focused with alarms after resting (Android + Linux only).
 
 <a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href="https://f-droid.org/packages/com.presley.flexify"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
 <a href="https://github.com/brandonp2412/Flexify/releases/latest/download/flexify.apk"><img src="docs/get-it-on-android.png" alt="Get the APK" height="75"></a>
