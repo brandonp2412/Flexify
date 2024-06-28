@@ -23,18 +23,11 @@ class GraphsPage extends StatefulWidget {
 }
 
 class GraphsPageState extends State<GraphsPage> {
-  late Stream<List<GymSetsCompanion>> _stream;
+  late final Stream<List<GymSetsCompanion>> _stream = watchGraphs();
 
   final Set<String> _selected = {};
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   String _search = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    _stream = watchGraphs();
-  }
 
   @override
   Widget build(BuildContext context) {

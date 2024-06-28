@@ -19,7 +19,8 @@ class EditGraphPage extends StatefulWidget {
 }
 
 class _EditGraphPageState extends State<EditGraphPage> {
-  late TextEditingController _nameController;
+  late final TextEditingController _nameController =
+      TextEditingController(text: widget.name);
   final TextEditingController _minutesController = TextEditingController();
   final TextEditingController _secondsController = TextEditingController();
   final TextEditingController _maxSetsController = TextEditingController();
@@ -30,7 +31,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.name);
 
     final settings = context.read<SettingsState>();
 

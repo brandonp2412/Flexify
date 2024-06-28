@@ -27,11 +27,11 @@ class _EditSetPageState extends State<EditSetPage> {
   final _secondsController = TextEditingController();
   final _inclineController = TextEditingController();
 
+  late SettingsState _settings = context.read<SettingsState>();
   late String _unit;
   late DateTime _created;
   late bool _cardio;
   late String _name;
-  late SettingsState _settings;
   int? _restMs;
 
   TextEditingController? _nameController;
@@ -40,7 +40,6 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void initState() {
     super.initState();
-    _settings = context.read<SettingsState>();
     _updateFields(widget.gymSet);
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()

@@ -31,11 +31,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final _secondsController = TextEditingController(text: "0.0");
   final _inclineController = TextEditingController(text: "0");
 
-  late List<String> _planExercises;
-  late Stream<List<GymCount>> _countStream;
-  late SettingsState _settings;
+  late List<String> _planExercises = widget.plan.exercises.split(',');
+  late final Stream<List<GymCount>> _countStream =
+      watchCount(widget.plan.id, _planExercises);
+  late SettingsState _settings = context.read<SettingsState>();
 
-  PlanState? _planState;
+  late final PlanState _planState = context.read<PlanState>();
   bool _first = true;
   String? _unit;
   int _selectedIndex = 0;
@@ -44,13 +45,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   void initState() {
     super.initState();
-    _planExercises = widget.plan.exercises.split(',');
-    final planState = context.read<PlanState>();
-    planState.addListener(_planChanged);
-    _planState = planState;
+    _planState.addListener(_planChanged);
     _select(0);
-    _settings = context.read<SettingsState>();
-    _countStream = watchCount(widget.plan.id);
   }
 
   @override
@@ -61,18 +57,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _minutesController.dispose();
     _inclineController.dispose();
 
-    _planState?.removeListener(_planChanged);
+    _planState.removeListener(_planChanged);
 
     super.dispose();
   }
 
   void _planChanged() {
-    final split = _planState?.plans
+    final split = _planState.plans
         .firstWhere((element) => element.id == widget.plan.id)
         .exercises
         .split(',');
     setState(() {
-      if (split != null) _planExercises = split;
+      _planExercises = split;
     });
   }
 

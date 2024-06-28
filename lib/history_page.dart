@@ -63,6 +63,7 @@ class HistoryDay {
 
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   late Stream<List<GymSet>> _stream;
+
   Set<int> _selected = {};
   String _search = '';
   int _limit = 100;
