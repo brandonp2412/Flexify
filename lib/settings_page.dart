@@ -32,13 +32,17 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late SettingsState _settings = context.read<SettingsState>();
+  late final _minutesController =
+      TextEditingController(text: _settings.timerDuration.inMinutes.toString());
+  late final _secondsController = TextEditingController(
+    text: (_settings.timerDuration.inSeconds % 60).toString(),
+  );
+  late final _maxSetsController =
+      TextEditingController(text: _settings.maxSets.toString());
   final _searchController = TextEditingController();
-  final _minutesController = TextEditingController(text: '3');
-  final _secondsController = TextEditingController(text: '30');
-  final _maxSetsController = TextEditingController(text: '3');
 
   AudioPlayer? _player;
-  late SettingsState _settings;
 
   final List<String> _shortFormats = [
     'd/M/yy',
@@ -67,11 +71,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     if (platformSupportsTimer()) _player = AudioPlayer();
-    _settings = context.read<SettingsState>();
-    _minutesController.text = _settings.timerDuration.inMinutes.toString();
-    _secondsController.text =
-        (_settings.timerDuration.inSeconds % 60).toString();
-    _maxSetsController.text = _settings.maxSets.toString();
   }
 
   @override

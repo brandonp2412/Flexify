@@ -159,13 +159,14 @@ typedef GymCount = ({
   int? restMs,
 });
 
-Stream<List<GymCount>> watchCount(int planId) {
-  const countColumn = CustomExpression<int>(
+Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
+  final countColumn = CustomExpression<int>(
     """
       COUNT(
         CASE 
           WHEN DATE(created, 'unixepoch', 'localtime') = 
-            DATE('now', 'localtime') AND hidden = 0 
+            DATE('now', 'localtime') AND hidden = 0
+            AND plan_id = $planId
           THEN 1 
         END
       )
@@ -179,7 +180,7 @@ Stream<List<GymCount>> watchCount(int planId) {
           db.gymSets.maxSets,
           db.gymSets.restMs,
         ])
-        ..where(db.gymSets.planId.equals(planId))
+        ..where(db.gymSets.name.isIn(exercises))
         ..groupBy([db.gymSets.name]))
       .watch()
       .map(

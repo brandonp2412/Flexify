@@ -27,7 +27,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   final _secondsController = TextEditingController();
   final _inclineController = TextEditingController();
   final _nameController = TextEditingController();
-  late SettingsState _settings;
+  late SettingsState _settings = context.read<SettingsState>();
 
   String? _unit;
   DateTime? _created;
@@ -46,7 +46,6 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   void initState() {
     super.initState();
-    _settings = context.read<SettingsState>();
     (db.gymSets.select()..where((u) => u.id.isIn(widget.ids)))
         .get()
         .then((gymSets) {

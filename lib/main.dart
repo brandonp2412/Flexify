@@ -15,13 +15,11 @@ import 'package:provider/provider.dart';
 
 import 'plan/plans_page.dart';
 
-late AppDatabase db;
-late MethodChannel timerChannel;
+AppDatabase db = AppDatabase();
+MethodChannel timerChannel = const MethodChannel("com.presley.flexify/timer");
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  timerChannel = const MethodChannel("com.presley.flexify/timer");
-  db = AppDatabase();
   await (db.settings.select()..limit(1)).getSingle();
   final settings = SettingsState();
 

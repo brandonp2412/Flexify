@@ -1,13 +1,12 @@
 import 'dart:async';
+
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_tile.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PlansList extends StatelessWidget {
   final List<Plan> plans;
