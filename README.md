@@ -19,8 +19,6 @@ Get fit with Flexify. Easily track your gym progression with offline records and
 - ⏱️ **Automatic rest timers**: Stay focused with alarms after resting (Android + Linux only).
 
 <a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href="https://f-droid.org/packages/com.presley.flexify"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
-<a href="https://github.com/brandonp2412/Flexify/releases/latest/download/flexify.apk"><img src="docs/get-it-on-android.png" alt="Get the APK" height="75"></a>
-<a href="https://github.com/brandonp2412/Flexify/releases/latest/download/flexify-linux.zip"><img src="docs/get-it-on-linux.png" alt="Get it on Linux" height="75"></a>
 
 <a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="75"/></a>
 <a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1717977600" alt="Download on the App Store" height="75"></a>
