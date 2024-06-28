@@ -19,6 +19,7 @@ class GymSets extends Table {
   IntColumn get restMs => integer().nullable()();
   IntColumn get maxSets => integer().nullable()();
   IntColumn get incline => integer().nullable()();
+  IntColumn get planId => integer().nullable()();
 }
 
 double _getValue(TypedResult row, CardioMetric metric) {
@@ -158,7 +159,7 @@ typedef GymCount = ({
   int? restMs,
 });
 
-Stream<List<GymCount>> watchCount(List<String> exercises) {
+Stream<List<GymCount>> watchCount(int planId) {
   const countColumn = CustomExpression<int>(
     """
       COUNT(
@@ -178,7 +179,7 @@ Stream<List<GymCount>> watchCount(List<String> exercises) {
           db.gymSets.maxSets,
           db.gymSets.restMs,
         ])
-        ..where(db.gymSets.name.isIn(exercises))
+        ..where(db.gymSets.planId.equals(planId))
         ..groupBy([db.gymSets.name]))
       .watch()
       .map(

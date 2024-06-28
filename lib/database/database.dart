@@ -23,7 +23,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase({QueryExecutor? executor}) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 16;
+  int get schemaVersion => 17;
 
   final _defaultSets = defaultExercises.map(
     (exercise) => GymSetsCompanion(
@@ -266,6 +266,9 @@ class AppDatabase extends _$AppDatabase {
               systemColors: systemColors,
             ),
           );
+        },
+        from16To17: (Migrator m, Schema17 schema) async {
+          await m.addColumn(schema.gymSets, schema.gymSets.planId);
         },
       ),
     );

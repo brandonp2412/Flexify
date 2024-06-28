@@ -50,7 +50,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     _planState = planState;
     _select(0);
     _settings = context.read<SettingsState>();
-    _countStream = watchCount(_planExercises);
+    _countStream = watchCount(widget.plan.id);
   }
 
   @override
@@ -169,6 +169,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       restMs: drift.Value(restMs),
       maxSets: drift.Value(max),
       incline: drift.Value(int.tryParse(_inclineController.text)),
+      planId: drift.Value(widget.plan.id),
     );
 
     if (_settings.restTimers && platformSupportsTimer()) {
