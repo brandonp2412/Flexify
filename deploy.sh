@@ -12,9 +12,9 @@ new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
 changelog_number=$((new_build_number * 10 + 3))
 
-nvim "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
-changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt")
-echo "$changelog" > fastlane/metadata/en-US/release_notes.txt
+nvim "fastlane/metadata/android/en-AU/changelogs/$changelog_number.txt"
+changelog=$(cat "fastlane/metadata/android/en-AU/changelogs/$changelog_number.txt")
+echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
 
 ./flutter/bin/flutter test
 ./migrate.sh
@@ -27,8 +27,6 @@ new_version="$major.$minor.$new_patch"
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
-changelog_number=$((new_build_number * 10 + 3))
-echo "$changelog" > "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 git add fastlane/metadata
 
 if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
