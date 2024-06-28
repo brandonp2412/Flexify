@@ -2,16 +2,6 @@
 
 set -ex
 
-changelogfile=$(mktemp /tmp/changelog.XXXXXX)
-nvim "$changelogfile"
-changelog=$(cat $changelogfile)
-
-./flutter/bin/flutter test
-./migrate.sh
-./screenshots.sh "phoneScreenshots"
-./screenshots.sh "sevenInchScreenshots"
-./screenshots.sh "tenInchScreenshots"
-
 line=$(yq -r .version pubspec.yaml)
 build_number=$(cut -d '+' -f 2 <<< "$line")
 version=$(cut -d '+' -f 1 <<< "$line")
@@ -20,6 +10,17 @@ minor=$(cut -d '.' -f 2 <<< "$version")
 patch=$(cut -d '.' -f 3 <<< "$version")
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
+changelog_number=$((new_build_number * 10 + 3))
+
+nvim "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
+changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt")
+echo "$changelog" > fastlane/metadata/en-US/release_notes.txt
+
+./flutter/bin/flutter test
+./migrate.sh
+./screenshots.sh "phoneScreenshots"
+./screenshots.sh "sevenInchScreenshots"
+./screenshots.sh "tenInchScreenshots"
 
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
@@ -55,13 +56,13 @@ git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
 
-macpass="$(pass macbook)"
+set +x
 ssh macbook "
   set -e
   source .zprofile 
   cd flexify 
   git pull 
-  security unlock-keychain -p '$macpass'
-  nohup ./macos.sh > /var/log/flexify-macos.txt 2>&1 &
-  nohup ./ios.sh > /var/log/flexify-ios.txt 2>&1 &
+  security unlock-keychain -p $(pass macbook)
+  ./macos.sh || true
+  ./ios.sh
 "
