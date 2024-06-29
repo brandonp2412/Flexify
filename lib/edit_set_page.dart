@@ -26,6 +26,7 @@ class _EditSetPageState extends State<EditSetPage> {
   final _minutesController = TextEditingController();
   final _secondsController = TextEditingController();
   final _inclineController = TextEditingController();
+  final _repsNode = FocusNode();
 
   late SettingsState _settings = context.read<SettingsState>();
   late String _unit;
@@ -54,6 +55,7 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void dispose() {
     _repsController.dispose();
+    _repsNode.dispose();
     _weightController.dispose();
     _bodyWeightController.dispose();
     _distanceController.dispose();
@@ -167,7 +169,7 @@ class _EditSetPageState extends State<EditSetPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.gymSet.id > 0 ? 'Edit ${widget.gymSet.name}' : 'Add gym set',
+          widget.gymSet.id > 0 ? 'Edit ${widget.gymSet.name}' : 'Add set',
         ),
         actions: [
           if (widget.gymSet.id > 0)
@@ -239,6 +241,8 @@ class _EditSetPageState extends State<EditSetPage> {
                     ),
                   );
                 }
+                _repsNode.requestFocus();
+                selectAll(_repsController);
               },
               initialValue: TextEditingValue(text: _name),
               fieldViewBuilder: (
@@ -308,10 +312,12 @@ class _EditSetPageState extends State<EditSetPage> {
             if (!_cardio) ...[
               TextField(
                 controller: _repsController,
+                focusNode: _repsNode,
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(_repsController),
                 textInputAction: TextInputAction.next,
+                onSubmitted: (_) => selectAll(_weightController),
               ),
               TextField(
                 controller: _weightController,
