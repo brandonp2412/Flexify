@@ -1,9 +1,8 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/plan/plans_list.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,19 +26,7 @@ class PlanTile extends StatelessWidget {
   final Future<void> Function() refresh;
   final Function(int) onSelect;
   final Set<int> selected;
-  final Stream<List<TypedResult>> countStream;
-
-  final _countColumn = const CustomExpression<int>(
-    """
-      COUNT(
-        CASE 
-          WHEN DATE(created, 'unixepoch', 'localtime') = 
-            DATE('now', 'localtime') AND hidden = 0 
-          THEN 1 
-        END
-      )
-   """,
-  );
+  final Stream<List<Count>> countStream;
 
   List<InlineSpan> getChildren(BuildContext context) {
     List<InlineSpan> result = [];
@@ -103,34 +90,24 @@ class PlanTile extends StatelessWidget {
                   snapshot.data!.isEmpty ||
                   snapshot.hasError) return const SizedBox();
 
-              final counts = snapshot.data!.where(
-                (count) => plan.exercises
-                    .split(',')
-                    .contains(count.read(db.gymSets.name)),
-              );
-              if (counts.isEmpty) return const SizedBox();
+              final count =
+                  snapshot.data?.firstWhere((d) => d.planId == plan.id);
+              if (count == null) return const SizedBox();
 
-              final total = counts
-                  .map((count) => count.read(_countColumn))
-                  .reduce((a, b) => (a ?? 0) + (b ?? 0));
               if (settings.planTrailing == PlanTrailing.count)
                 return Text(
-                  "$total",
+                  "${count.total}",
                   style: const TextStyle(fontSize: 16),
                 );
 
-              final max = counts
-                  .map((count) => count.read(db.gymSets.maxSets))
-                  .reduce((a, b) => (a ?? 3) + (b ?? 3));
-
               if (settings.planTrailing == PlanTrailing.percent)
                 return Text(
-                  "${((total ?? 0) / max! * 100).toStringAsFixed(2)}%",
+                  "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
                   style: const TextStyle(fontSize: 16),
                 );
               else
                 return Text(
-                  "$total / $max",
+                  "${count.total} / ${count.maxSets}",
                   style: const TextStyle(fontSize: 16),
                 );
             },
