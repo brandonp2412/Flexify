@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/exercise_modal.dart';
