@@ -1,12 +1,19 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' as drift;
-import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flutter/material.dart';
+
+class Count {
+  final int planId;
+  final int total;
+  final int maxSets;
+
+  Count({required this.planId, required this.total, required this.maxSets});
+}
 
 class PlansList extends StatelessWidget {
   final List<Plan> plans;
@@ -24,34 +31,38 @@ class PlansList extends StatelessWidget {
     required this.onSelect,
   });
 
-  late final _nameList = plans
-      .map((plan) => plan.exercises.split(','))
-      .expand((list) => list)
-      .toList();
-  final _countColumn = const CustomExpression<int>(
+  late final _stream = (db.customSelect(
     """
-      COUNT(
-        CASE 
-          WHEN DATE(created, 'unixepoch', 'localtime') = 
-            DATE('now', 'localtime') AND hidden = 0 
-          THEN 1 
-        END
-      )
-   """,
-  );
-  late final _stream = (db.gymSets.selectOnly()
-        ..addColumns(
-          [
-            db.gymSets.maxSets,
-            db.gymSets.name,
-            _countColumn,
-          ],
+    SELECT id, SUM(COALESCE(max_sets, 3)) AS max_sets, 
+      SUM(todays_count) AS todays_count FROM (
+      SELECT p.id, gs.name, gs.max_sets, 
+        COUNT(
+          CASE WHEN p.id = gs.plan_id 
+            AND DATE(created, 'unixepoch', 'localtime') = 
+              DATE('now', 'localtime') 
+            AND hidden = 0 
+            THEN 1 
+          END
+        ) as todays_count
+      FROM plans p
+      LEFT JOIN gym_sets gs
+        ON INSTR(p.exercises, gs.name) != 0
+      GROUP BY gs.name, p.id
+    ) 
+    GROUP BY id
+""",
+    readsFrom: {db.plans, db.gymSets},
+  )).watch().map((rows) {
+    return rows
+        .map(
+          (row) => Count(
+            maxSets: row.read<int>('max_sets'),
+            planId: row.read<int>('id'),
+            total: row.read<int>('todays_count'),
+          ),
         )
-        ..where(
-          db.gymSets.name.isIn(_nameList),
-        )
-        ..groupBy([db.gymSets.name]))
-      .watch();
+        .toList();
+  });
 
   @override
   Widget build(BuildContext context) {
