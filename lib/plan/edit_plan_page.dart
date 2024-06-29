@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -30,14 +31,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
-        .get()
-        .then(
-          (results) => setState(() {
-            _exercises = results.map((e) => e.read(db.gymSets.name)!).toList();
-          }),
-        );
-
+    _setExercises();
     _titleController.text = widget.plan.title.value ?? "";
 
     final dayList = widget.plan.days.value.split(',');
@@ -49,6 +43,16 @@ class _EditPlanPageState extends State<EditPlanPage> {
       final splitExercises = widget.plan.exercises.value.split(',');
       _exerciseSelections = splitExercises;
     }
+  }
+
+  void _setExercises() {
+    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
+        .get()
+        .then(
+          (results) => setState(() {
+            _exercises = results.map((e) => e.read(db.gymSets.name)!).toList();
+          }),
+        );
   }
 
   @override
@@ -208,7 +212,27 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
               ),
             ],
-            Text('Exercises', style: Theme.of(context).textTheme.headlineSmall),
+            material.Row(
+              children: [
+                Text(
+                  'Exercises',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () async {
+                    await Navigator.of(context).push(
+                      material.MaterialPageRoute(
+                        builder: (context) => const AddExercisePage(),
+                      ),
+                    );
+                    _setExercises();
+                  },
+                  tooltip: 'Add exercise',
+                ),
+              ],
+            ),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
           ],
         ),

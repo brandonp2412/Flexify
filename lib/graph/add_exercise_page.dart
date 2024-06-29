@@ -7,14 +7,14 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ExercisePage extends StatefulWidget {
-  const ExercisePage({super.key});
+class AddExercisePage extends StatefulWidget {
+  const AddExercisePage({super.key});
 
   @override
-  createState() => _ExercisePageState();
+  createState() => _AddExercisePageState();
 }
 
-class _ExercisePageState extends State<ExercisePage> {
+class _AddExercisePageState extends State<AddExercisePage> {
   final TextEditingController _nameController = TextEditingController();
   String? _unit;
   bool _cardio = false;

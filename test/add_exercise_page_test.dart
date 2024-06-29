@@ -1,4 +1,4 @@
-import 'package:flexify/graph/exercise_page.dart';
+import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
@@ -20,7 +20,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: const MaterialApp(
-          home: ExercisePage(),
+          home: AddExercisePage(),
         ),
       ),
     );

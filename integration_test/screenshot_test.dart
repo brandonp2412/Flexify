@@ -129,7 +129,7 @@ Future<void> appWrapper() async {
   settingsState.setExplained(true);
   settingsState.setTimers(false);
   settingsState.setSystem(false);
-  runApp(app.appProviders(settingsState, showBanner: false));
+  runApp(app.appProviders(settingsState));
 }
 
 BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {

@@ -212,19 +212,43 @@ class _SettingsPageState extends State<SettingsPage> {
             items: const [
               DropdownMenuItem(
                 value: PlanTrailing.reorder,
-                child: Text("Re-order"),
+                child: material.Row(
+                  children: [
+                    Text("Re-order"),
+                    SizedBox(width: 8),
+                    Icon(Icons.menu, size: 18),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.count,
-                child: Text("Count"),
+                child: Row(
+                  children: [
+                    Text("Count"),
+                    SizedBox(width: 8),
+                    Text("(5)"),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.percent,
-                child: Text("Percent"),
+                child: Row(
+                  children: [
+                    Text("Percent"),
+                    SizedBox(width: 8),
+                    Text("(50%)"),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.ratio,
-                child: Text("Ratio"),
+                child: Row(
+                  children: [
+                    Text("Ratio"),
+                    SizedBox(width: 8),
+                    Text("(5 / 10)"),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.none,

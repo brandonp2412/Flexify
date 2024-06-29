@@ -1,10 +1,10 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
-import 'package:flexify/graph/exercise_page.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/graph/add_exercise_page.dart';
+import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/utils.dart';
@@ -22,7 +22,8 @@ class GraphsPage extends StatefulWidget {
   createState() => GraphsPageState();
 }
 
-class GraphsPageState extends State<GraphsPage> {
+class GraphsPageState extends State<GraphsPage>
+    with AutomaticKeepAliveClientMixin {
   late final Stream<List<GymSetsCompanion>> _stream = watchGraphs();
 
   final Set<String> _selected = {};
@@ -31,6 +32,7 @@ class GraphsPageState extends State<GraphsPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
@@ -181,7 +183,7 @@ class GraphsPageState extends State<GraphsPage> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ExercisePage(),
+              builder: (context) => const AddExercisePage(),
             ),
           );
         },
@@ -190,4 +192,7 @@ class GraphsPageState extends State<GraphsPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

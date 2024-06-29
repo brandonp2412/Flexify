@@ -125,7 +125,7 @@ void main() async {
     final tile = find.byType(ListTile).first;
     await tester.longPress(tile);
     await tester.pumpAndSettle();
-    expect(find.text('1 selected'), findsOne);
+    expect(find.text('1'), findsOne);
 
     await db.close();
   });

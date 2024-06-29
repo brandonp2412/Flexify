@@ -46,27 +46,31 @@ class _AppSearchState extends State<AppSearch> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SearchBar(
-        hintText: widget.selected.isEmpty
-            ? "Search..."
-            : "${widget.selected.length} selected",
+        hintText: "Search...",
         controller: _searchController,
         padding: WidgetStateProperty.all(
           const EdgeInsets.only(right: 8.0),
         ),
         textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
-        leading: widget.selected.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                child: Icon(Icons.search),
-              )
-            : IconButton(
-                onPressed: () {
-                  widget.onClear();
-                },
-                icon: const Icon(Icons.arrow_back),
-                padding: EdgeInsets.zero,
-              ),
+        leading:
+            widget.selected.isEmpty && _searchController.text.isEmpty == true
+                ? const Padding(
+                    padding: EdgeInsets.only(left: 16.0, right: 8.0),
+                    child: Icon(Icons.search),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      widget.onClear();
+                      _searchController.text = '';
+                      widget.onChange('');
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      right: 8.0,
+                    ),
+                  ),
         trailing: [
           if (widget.selected.isNotEmpty)
             IconButton(
@@ -101,90 +105,95 @@ class _AppSearchState extends State<AppSearch> {
                 );
               },
             ),
-          PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
-            tooltip: "Show menu",
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: ListTile(
-                  leading: const Icon(Icons.done_all),
-                  title: const Text('Select all'),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    widget.onSelect();
-                  },
-                ),
-              ),
-              if (widget.selected.isNotEmpty) ...[
+          Badge.count(
+            count: widget.selected.length,
+            isLabelVisible: widget.selected.isNotEmpty,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              tooltip: "Show menu",
+              itemBuilder: (context) => [
                 PopupMenuItem(
                   child: ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text('Edit'),
+                    leading: const Icon(Icons.done_all),
+                    title: const Text('Select all'),
                     onTap: () async {
-                      await widget.onEdit();
-                      if (!context.mounted) return;
                       Navigator.pop(context);
+                      widget.onSelect();
                     },
                   ),
                 ),
-                PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.share),
-                    title: const Text('Share'),
-                    onTap: () async {
-                      await widget.onShare();
-                      if (!context.mounted) return;
-                      Navigator.pop(context);
-                    },
+                if (widget.selected.isNotEmpty) ...[
+                  PopupMenuItem(
+                    child: ListTile(
+                      leading: const Icon(Icons.edit),
+                      title: const Text('Edit'),
+                      onTap: () async {
+                        await widget.onEdit();
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
-                ),
-                PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.clear),
-                    title: const Text('Clear'),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      widget.onClear();
-                    },
+                  PopupMenuItem(
+                    child: ListTile(
+                      leading: const Icon(Icons.share),
+                      title: const Text('Share'),
+                      onTap: () async {
+                        await widget.onShare();
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
-                ),
+                  PopupMenuItem(
+                    child: ListTile(
+                      leading: const Icon(Icons.clear),
+                      title: const Text('Clear'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        widget.onClear();
+                      },
+                    ),
+                  ),
+                ],
+                if (widget.selected.isEmpty && !settings.hideWeight)
+                  PopupMenuItem(
+                    child: ListTile(
+                      leading: const Icon(Icons.scale),
+                      title: const Text('Weight'),
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WeightPage(),
+                          ),
+                        );
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                if (widget.selected.isEmpty)
+                  PopupMenuItem(
+                    child: ListTile(
+                      leading: const Icon(Icons.settings),
+                      title: const Text('Settings'),
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsPage(),
+                          ),
+                        );
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        if (widget.onRefresh != null) widget.onRefresh!();
+                      },
+                    ),
+                  ),
               ],
-              if (widget.selected.isEmpty && !settings.hideWeight)
-                PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.scale),
-                    title: const Text('Weight'),
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const WeightPage(),
-                        ),
-                      );
-                      if (!context.mounted) return;
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              if (widget.selected.isEmpty)
-                PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Settings'),
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SettingsPage(),
-                        ),
-                      );
-                      if (!context.mounted) return;
-                      Navigator.pop(context);
-                      if (widget.onRefresh != null) widget.onRefresh!();
-                    },
-                  ),
-                ),
-            ],
+            ),
           ),
         ],
       ),

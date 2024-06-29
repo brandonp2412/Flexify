@@ -5,7 +5,9 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_tile.dart';
+import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Count {
   final int planId;
@@ -74,41 +76,62 @@ class PlansList extends StatelessWidget {
         subtitle: Text("Tap the plus button in the bottom right to add plans."),
       );
 
-    return ReorderableListView.builder(
-      itemCount: plans.length,
-      itemBuilder: (context, index) {
-        final plan = plans[index];
-        return PlanTile(
-          key: Key(plan.id.toString()),
-          plan: plan,
-          weekday: weekday,
-          index: index,
-          navigatorKey: navigatorKey,
-          refresh: updatePlans,
-          selected: selected,
-          onSelect: (id) => onSelect(id),
-          countStream: _stream,
-        );
-      },
-      onReorder: (int oldIndex, int newIndex) async {
-        if (oldIndex < newIndex) {
-          newIndex--;
-        }
+    final settings = context.read<SettingsState>();
 
-        final temp = plans[oldIndex];
-        plans.removeAt(oldIndex);
-        plans.insert(newIndex, temp);
-
-        await updatePlans(plans: plans);
-        await db.transaction(() async {
-          for (int i = 0; i < plans.length; i++) {
-            final plan = plans[i];
-            final updatedPlan =
-                plan.toCompanion(false).copyWith(sequence: drift.Value(i));
-            await db.update(db.plans).replace(updatedPlan);
+    if (settings.planTrailing == PlanTrailing.reorder)
+      return ReorderableListView.builder(
+        itemCount: plans.length,
+        itemBuilder: (context, index) {
+          final plan = plans[index];
+          return PlanTile(
+            key: Key(plan.id.toString()),
+            plan: plan,
+            weekday: weekday,
+            index: index,
+            navigatorKey: navigatorKey,
+            refresh: updatePlans,
+            selected: selected,
+            onSelect: (id) => onSelect(id),
+            countStream: _stream,
+          );
+        },
+        onReorder: (int oldIndex, int newIndex) async {
+          if (oldIndex < newIndex) {
+            newIndex--;
           }
-        });
-      },
-    );
+
+          final temp = plans[oldIndex];
+          plans.removeAt(oldIndex);
+          plans.insert(newIndex, temp);
+
+          await updatePlans(plans: plans);
+          await db.transaction(() async {
+            for (int i = 0; i < plans.length; i++) {
+              final plan = plans[i];
+              final updatedPlan =
+                  plan.toCompanion(false).copyWith(sequence: drift.Value(i));
+              await db.update(db.plans).replace(updatedPlan);
+            }
+          });
+        },
+      );
+    else
+      return ListView.builder(
+        itemCount: plans.length,
+        itemBuilder: (context, index) {
+          final plan = plans[index];
+          return PlanTile(
+            key: Key(plan.id.toString()),
+            plan: plan,
+            weekday: weekday,
+            index: index,
+            navigatorKey: navigatorKey,
+            refresh: updatePlans,
+            selected: selected,
+            onSelect: (id) => onSelect(id),
+            countStream: _stream,
+          );
+        },
+      );
   }
 }
