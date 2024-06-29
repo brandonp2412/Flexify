@@ -153,7 +153,7 @@ void main() async {
     await tester.longPress(find.text('1 x 90 kg'));
     await tester.pumpAndSettle();
 
-    expect(find.text('1 selected'), findsOne);
+    expect(find.text('1'), findsOne);
 
     await db.close();
   });
