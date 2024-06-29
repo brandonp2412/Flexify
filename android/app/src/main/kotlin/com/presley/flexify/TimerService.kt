@@ -236,7 +236,7 @@ class TimerService : Service() {
     }
 
     private fun playSound() {
-        mediaPlayer = if (alarmSound != null)
+        mediaPlayer = if (alarmSound?.isNotEmpty() == true)
             MediaPlayer.create(applicationContext, Uri.parse(alarmSound)).apply {
                 start()
                 setOnCompletionListener { vibrator?.cancel() }
