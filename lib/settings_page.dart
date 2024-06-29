@@ -9,8 +9,10 @@ import 'package:flexify/export_data.dart';
 import 'package:flexify/import_data.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -212,19 +214,43 @@ class _SettingsPageState extends State<SettingsPage> {
             items: const [
               DropdownMenuItem(
                 value: PlanTrailing.reorder,
-                child: Text("Re-order"),
+                child: material.Row(
+                  children: [
+                    Text("Re-order"),
+                    SizedBox(width: 8),
+                    Icon(Icons.menu, size: 18),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.count,
-                child: Text("Count"),
+                child: Row(
+                  children: [
+                    Text("Count"),
+                    SizedBox(width: 8),
+                    Text("(5)"),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.percent,
-                child: Text("Percent"),
+                child: Row(
+                  children: [
+                    Text("Percent"),
+                    SizedBox(width: 8),
+                    Text("(50%)"),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.ratio,
-                child: Text("Ratio"),
+                child: Row(
+                  children: [
+                    Text("Ratio"),
+                    SizedBox(width: 8),
+                    Text("(5 / 10)"),
+                  ],
+                ),
               ),
               DropdownMenuItem(
                 value: PlanTrailing.none,
