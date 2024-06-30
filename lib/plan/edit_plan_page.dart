@@ -110,7 +110,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     Navigator.pop(context);
   }
 
-  Iterable<material.SwitchListTile> get tiles => _exercises
+  Iterable<Widget> get tiles => _exercises
       .where(
         (exercise) => exercise.toLowerCase().contains(_search.toLowerCase()),
       )
@@ -118,17 +118,40 @@ class _EditPlanPageState extends State<EditPlanPage> {
       .asMap()
       .entries
       .map(
-        (entry) => SwitchListTile(
-          title: Text(entry.value),
-          value: _exerciseSelections.contains(entry.value),
-          onChanged: (value) {
-            setState(() {
-              if (value)
-                _exerciseSelections.add(entry.value);
-              else
-                _exerciseSelections.remove(entry.value);
-            });
-          },
+        (entry) => material.Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          child: material.Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                width: 64,
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: "Sets",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  entry.value,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              Switch(
+                value: _exerciseSelections.contains(entry.value),
+                onChanged: (value) {
+                  setState(() {
+                    if (value)
+                      _exerciseSelections.add(entry.value);
+                    else
+                      _exerciseSelections.remove(entry.value);
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       );
 
@@ -233,6 +256,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
           ],
         ),
