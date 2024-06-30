@@ -16,6 +16,7 @@ nvim "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt")
 echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
 
+metrics check-unused-code lib
 ./flutter/bin/flutter test
 ./migrate.sh
 ./screenshots.sh "phoneScreenshots"
