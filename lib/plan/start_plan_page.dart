@@ -163,7 +163,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
       distance: drift.Value(double.parse(_distanceController.text)),
       bodyWeight: drift.Value(bodyWeight),
       restMs: drift.Value(restMs),
-      maxSets: drift.Value(max),
       incline: drift.Value(int.tryParse(_inclineController.text)),
       planId: drift.Value(widget.plan.id),
     );

@@ -120,6 +120,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               });
               await db.plans.deleteWhere((tbl) => tbl.id.isIn(selectedCopy));
               planState.updatePlans(null);
+              await db.planExercises
+                  .deleteWhere((tbl) => tbl.planId.isIn(selectedCopy));
             },
             onSelect: () => setState(() {
               _selected.addAll(filtered?.map((plan) => plan.id) ?? []);
@@ -168,6 +170,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 plan: PlansCompanion(
                   days: drift.Value(''),
                   exercises: drift.Value(''),
+                  id: drift.Value(-1),
                 ),
               ),
             ),

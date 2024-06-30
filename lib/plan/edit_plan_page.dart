@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 
@@ -22,6 +25,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   bool _showSearch = false;
   String _search = '';
   List<String> _exercises = [];
+  List<TextEditingController> _controllers = [];
 
   final _searchNode = FocusNode();
   final _searchController = TextEditingController();
@@ -46,11 +50,30 @@ class _EditPlanPageState extends State<EditPlanPage> {
   }
 
   void _setExercises() {
-    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
+    (db.gymSets.selectOnly()
+          ..addColumns([db.gymSets.name, db.planExercises.maxSets])
+          ..join([
+            leftOuterJoin(
+              db.planExercises,
+              db.planExercises.planId.equals(widget.plan.id.value) &
+                  db.planExercises.exercise.equalsExp(db.gymSets.name),
+            ),
+          ])
+          ..groupBy([db.gymSets.name]))
         .get()
         .then(
           (results) => setState(() {
-            _exercises = results.map((e) => e.read(db.gymSets.name)!).toList();
+            _exercises = [];
+            _controllers = [];
+
+            for (final result in results) {
+              _exercises.add(result.read(db.gymSets.name)!);
+              _controllers.add(
+                TextEditingController(
+                  text: result.read(db.planExercises.maxSets)?.toString(),
+                ),
+              );
+            }
           }),
         );
   }
@@ -91,20 +114,37 @@ class _EditPlanPageState extends State<EditPlanPage> {
       return;
     }
 
-    var newPlan = widget.plan.copyWith(
-      days: Value(days.join(',')),
-      exercises: Value(
-        _exerciseSelections.where((element) => element.isNotEmpty).join(','),
-      ),
+    var newPlan = PlansCompanion.insert(
+      days: days.join(','),
+      exercises:
+          _exerciseSelections.where((element) => element.isNotEmpty).join(','),
       title: Value(_titleController.text),
     );
 
-    if (widget.plan.id.present)
-      await db.update(db.plans).replace(newPlan);
-    else {
-      final id = await db.into(db.plans).insert(newPlan);
+    int? id;
+    if (widget.plan.id.value != -1) {
+      await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
+      await db.planExercises
+          .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
+      id = widget.plan.id.value;
+    } else {
+      id = await db.into(db.plans).insert(newPlan);
       newPlan = newPlan.copyWith(id: Value(id));
     }
+
+    List<PlanExercisesCompanion> planExercises = [];
+    for (var i = 0; i < _exercises.length; i++) {
+      planExercises.add(
+        PlanExercisesCompanion.insert(
+          planId: id,
+          exercise: _exercises[i],
+          enabled: _exerciseSelections.contains(_exercises[i]),
+          maxSets: Value(int.tryParse(_controllers[i].text)),
+        ),
+      );
+    }
+
+    await db.planExercises.insertAll(planExercises);
 
     if (!mounted) return;
     Navigator.pop(context);
@@ -121,12 +161,22 @@ class _EditPlanPageState extends State<EditPlanPage> {
         (entry) => material.Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
           child: material.Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: 64,
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: _controllers[entry.key],
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: false),
+                  onTap: () => selectAll(_controllers[entry.key]),
+                  onChanged: (value) {
+                    if (value.isNotEmpty &&
+                        !_exerciseSelections.contains(entry.value))
+                      setState(() {
+                        _exerciseSelections.add(entry.value);
+                      });
+                  },
+                  decoration: const InputDecoration(
                     labelText: "Sets",
                     border: OutlineInputBorder(),
                   ),
@@ -134,19 +184,29 @@ class _EditPlanPageState extends State<EditPlanPage> {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(
-                  entry.value,
-                  style: Theme.of(context).textTheme.titleMedium,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_exerciseSelections.contains(entry.value))
+                        _exerciseSelections.remove(entry.value);
+                      else
+                        _exerciseSelections.add(entry.value);
+                    });
+                  },
+                  child: Text(
+                    entry.value,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
               ),
               Switch(
                 value: _exerciseSelections.contains(entry.value),
                 onChanged: (value) {
                   setState(() {
-                    if (value)
-                      _exerciseSelections.add(entry.value);
-                    else
+                    if (_exerciseSelections.contains(entry.value))
                       _exerciseSelections.remove(entry.value);
+                    else
+                      _exerciseSelections.add(entry.value);
                   });
                 },
               ),

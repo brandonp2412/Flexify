@@ -23,7 +23,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
       TextEditingController(text: widget.name);
   final TextEditingController _minutesController = TextEditingController();
   final TextEditingController _secondsController = TextEditingController();
-  final TextEditingController _maxSetsController = TextEditingController();
 
   bool _cardio = false;
   String? _unit;
@@ -49,8 +48,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
               _secondsController.text = (duration.inSeconds % 60).toString();
             }
 
-            if (value.maxSets != null)
-              _maxSetsController.text = value.maxSets.toString();
             if (_cardio && (_unit == 'kg' || _unit == 'lb'))
               _unit = settings.cardioUnit;
             else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
@@ -64,7 +61,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
     _nameController.dispose();
     _minutesController.dispose();
     _secondsController.dispose();
-    _maxSetsController.dispose();
     super.dispose();
   }
 
@@ -102,7 +98,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
         cardio: Value(_cardio),
         unit: _unit != null ? Value(_unit!) : const Value.absent(),
         restMs: Value(duration?.inMilliseconds),
-        maxSets: Value(int.tryParse(_maxSetsController.text)),
       ),
     );
 
@@ -207,13 +202,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(labelText: "New name"),
               textCapitalization: TextCapitalization.sentences,
-            ),
-            TextField(
-              controller: _maxSetsController,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: "Max sets"),
-              keyboardType: TextInputType.number,
-              onTap: () => selectAll(_maxSetsController),
             ),
             Row(
               children: [
