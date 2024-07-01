@@ -206,11 +206,15 @@ class _StartPlanPageState extends State<StartPlanPage> {
         actions: [
           IconButton(
             onPressed: () async {
+              final plan = await (db.plans.select()
+                    ..whereSamePrimaryKey(widget.plan))
+                  .getSingle();
+              if (!context.mounted) return;
               await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      EditPlanPage(plan: widget.plan.toCompanion(false)),
+                      EditPlanPage(plan: plan.toCompanion(false)),
                 ),
               );
               widget.refresh();
