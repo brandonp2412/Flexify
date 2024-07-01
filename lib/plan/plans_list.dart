@@ -54,7 +54,7 @@ class PlansList extends StatelessWidget {
       ) 
       GROUP BY id
     """,
-    readsFrom: {db.plans, db.gymSets},
+    readsFrom: {db.plans, db.gymSets, db.planExercises},
   )).watch().map((rows) {
     return rows
         .map(
