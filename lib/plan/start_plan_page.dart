@@ -206,7 +206,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              Navigator.pop(context);
               await Navigator.push(
                 context,
                 MaterialPageRoute(
