@@ -17,7 +17,6 @@ class GymSets extends Table {
   RealColumn get distance => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();
   IntColumn get restMs => integer().nullable()();
-  IntColumn get maxSets => integer().nullable()();
   IntColumn get incline => integer().nullable()();
   IntColumn get planId => integer().nullable()();
 }
@@ -165,22 +164,30 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
       COUNT(
         CASE 
           WHEN DATE(created, 'unixepoch', 'localtime') = 
-            DATE('now', 'localtime') AND hidden = 0
-            AND plan_id = $planId
+            DATE('now', 'localtime') AND hidden = 0 
+              AND gym_sets.plan_id = $planId
           THEN 1 
         END
       )
    """,
   );
 
-  return (db.selectOnly(db.gymSets)
+  return (db.selectOnly(db.planExercises)
         ..addColumns([
           db.gymSets.name,
           countColumn,
-          db.gymSets.maxSets,
+          db.planExercises.maxSets,
           db.gymSets.restMs,
         ])
-        ..where(db.gymSets.name.isIn(exercises))
+        ..join([
+          innerJoin(
+            db.gymSets,
+            db.gymSets.name.equalsExp(db.planExercises.exercise),
+          ),
+        ])
+        ..where(
+          db.planExercises.planId.equals(planId) & db.planExercises.enabled,
+        )
         ..groupBy([db.gymSets.name]))
       .watch()
       .map(
@@ -189,7 +196,7 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
               (resultRow) => (
                 count: resultRow.read<int>(countColumn)!,
                 name: resultRow.read(db.gymSets.name)!,
-                maxSets: resultRow.read(db.gymSets.maxSets),
+                maxSets: resultRow.read(db.planExercises.maxSets),
                 restMs: resultRow.read(db.gymSets.restMs),
               ),
             )

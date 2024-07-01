@@ -19,24 +19,24 @@ class EditSetPage extends StatefulWidget {
 }
 
 class _EditSetPageState extends State<EditSetPage> {
-  final _repsController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _bodyWeightController = TextEditingController();
-  final _distanceController = TextEditingController();
-  final _minutesController = TextEditingController();
-  final _secondsController = TextEditingController();
-  final _inclineController = TextEditingController();
-  final _repsNode = FocusNode();
+  final repsController = TextEditingController();
+  final weightController = TextEditingController();
+  final bodyWeightController = TextEditingController();
+  final distanceController = TextEditingController();
+  final minutesController = TextEditingController();
+  final secondsController = TextEditingController();
+  final inclineController = TextEditingController();
+  final repsNode = FocusNode();
 
-  late SettingsState _settings = context.read<SettingsState>();
-  late String _unit;
-  late DateTime _created;
-  late bool _cardio;
-  late String _name;
-  int? _restMs;
+  late SettingsState settings = context.read<SettingsState>();
+  late String unit;
+  late DateTime created;
+  late bool cardio;
+  late String name;
+  int? restMs;
 
-  TextEditingController? _nameController;
-  List<String> _nameOptions = [];
+  TextEditingController? nameController;
+  List<String> nameOptions = [];
 
   @override
   void initState() {
@@ -47,42 +47,42 @@ class _EditSetPageState extends State<EditSetPage> {
         .then((results) {
       final names = results.map((result) => result.read(db.gymSets.name)!);
       setState(() {
-        _nameOptions = names.toList();
+        nameOptions = names.toList();
       });
     });
   }
 
   @override
   void dispose() {
-    _repsController.dispose();
-    _repsNode.dispose();
-    _weightController.dispose();
-    _bodyWeightController.dispose();
-    _distanceController.dispose();
-    _minutesController.dispose();
-    _inclineController.dispose();
+    repsController.dispose();
+    repsNode.dispose();
+    weightController.dispose();
+    bodyWeightController.dispose();
+    distanceController.dispose();
+    minutesController.dispose();
+    inclineController.dispose();
 
     super.dispose();
   }
 
   Future<void> _save() async {
     Navigator.pop(context);
-    final minutes = int.tryParse(_minutesController.text);
-    final seconds = int.tryParse(_secondsController.text);
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
     final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
 
     final gymSet = widget.gymSet.copyWith(
-      name: _name,
-      unit: _unit,
-      created: _created,
-      reps: double.tryParse(_repsController.text),
-      weight: double.tryParse(_weightController.text),
-      bodyWeight: double.tryParse(_bodyWeightController.text),
-      distance: double.tryParse(_distanceController.text),
+      name: name,
+      unit: unit,
+      created: created,
+      reps: double.tryParse(repsController.text),
+      weight: double.tryParse(weightController.text),
+      bodyWeight: double.tryParse(bodyWeightController.text),
+      distance: double.tryParse(distanceController.text),
       duration: duration,
-      cardio: _cardio,
-      restMs: Value(_restMs),
-      incline: Value(int.tryParse(_inclineController.text)),
+      cardio: cardio,
+      restMs: Value(restMs),
+      incline: Value(int.tryParse(inclineController.text)),
     );
 
     if (widget.gymSet.id > 0)
@@ -93,17 +93,17 @@ class _EditSetPageState extends State<EditSetPage> {
       final settings = context.read<SettingsState>();
       if (!settings.restTimers || !platformSupportsTimer()) return;
       final timer = context.read<TimerState>();
-      if (_restMs != null)
+      if (restMs != null)
         timer.startTimer(
-          _name,
-          Duration(milliseconds: _restMs!),
+          name,
+          Duration(milliseconds: restMs!),
           settings.alarmSound,
           settings.vibrate,
         );
       else
         timer.startTimer(
-          _name,
-          _settings.timerDuration,
+          name,
+          settings.timerDuration,
           settings.alarmSound,
           settings.vibrate,
         );
@@ -113,7 +113,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _created,
+      initialDate: created,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -126,12 +126,12 @@ class _EditSetPageState extends State<EditSetPage> {
   Future<void> _selectTime(DateTime pickedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(_created),
+      initialTime: TimeOfDay.fromDateTime(created),
     );
 
     if (pickedTime != null) {
       setState(() {
-        _created = DateTime(
+        created = DateTime(
           pickedDate.year,
           pickedDate.month,
           pickedDate.day,
@@ -143,28 +143,28 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   void _updateFields(GymSet gymSet) {
-    _nameController?.text = gymSet.name;
+    nameController?.text = gymSet.name;
 
     setState(() {
-      _name = gymSet.name;
-      _repsController.text = toString(gymSet.reps);
-      _weightController.text = toString(gymSet.weight);
-      _bodyWeightController.text = toString(gymSet.bodyWeight);
-      _minutesController.text = gymSet.duration.floor().toString();
-      _secondsController.text =
+      name = gymSet.name;
+      repsController.text = toString(gymSet.reps);
+      weightController.text = toString(gymSet.weight);
+      bodyWeightController.text = toString(gymSet.bodyWeight);
+      minutesController.text = gymSet.duration.floor().toString();
+      secondsController.text =
           ((gymSet.duration * 60) % 60).floor().toString();
-      _distanceController.text = toString(gymSet.distance);
-      _unit = gymSet.unit;
-      _created = gymSet.created;
-      _cardio = gymSet.cardio;
-      _restMs = gymSet.restMs;
-      _inclineController.text = gymSet.incline?.toString() ?? "";
+      distanceController.text = toString(gymSet.distance);
+      unit = gymSet.unit;
+      created = gymSet.created;
+      cardio = gymSet.cardio;
+      restMs = gymSet.restMs;
+      inclineController.text = gymSet.incline?.toString() ?? "";
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _settings = context.watch<SettingsState>();
+    settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -213,7 +213,7 @@ class _EditSetPageState extends State<EditSetPage> {
           children: [
             Autocomplete<String>(
               optionsBuilder: (textEditingValue) {
-                return _nameOptions.where(
+                return nameOptions.where(
                   (option) => option
                       .toLowerCase()
                       .contains(textEditingValue.text.toLowerCase()),
@@ -226,7 +226,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     .getSingleOrNull();
                 if (last == null) return;
 
-                if (_settings.hideWeight)
+                if (settings.hideWeight)
                   _updateFields(
                     last.copyWith(
                       created: DateTime.now().toLocal(),
@@ -241,17 +241,17 @@ class _EditSetPageState extends State<EditSetPage> {
                     ),
                   );
                 }
-                _repsNode.requestFocus();
-                selectAll(_repsController);
+                repsNode.requestFocus();
+                selectAll(repsController);
               },
-              initialValue: TextEditingValue(text: _name),
+              initialValue: TextEditingValue(text: name),
               fieldViewBuilder: (
                 BuildContext context,
                 TextEditingController textEditingController,
                 FocusNode focusNode,
                 VoidCallback onFieldSubmitted,
               ) {
-                _nameController = textEditingController;
+                nameController = textEditingController;
                 return TextFormField(
                   decoration: const InputDecoration(labelText: 'Name'),
                   controller: textEditingController,
@@ -264,91 +264,91 @@ class _EditSetPageState extends State<EditSetPage> {
                     onFieldSubmitted();
                   },
                   onChanged: (value) => setState(() {
-                    _name = value;
+                    name = value;
                   }),
                 );
               },
             ),
-            if (_cardio) ...[
+            if (cardio) ...[
               TextField(
-                controller: _distanceController,
+                controller: distanceController,
                 decoration: const InputDecoration(labelText: 'Distance'),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_distanceController),
+                onTap: () => selectAll(distanceController),
                 textInputAction: TextInputAction.next,
               ),
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _minutesController,
+                      controller: minutesController,
                       decoration: const InputDecoration(labelText: 'Minutes'),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(_minutesController),
+                      onTap: () => selectAll(minutesController),
                       textInputAction: TextInputAction.next,
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      controller: _secondsController,
+                      controller: secondsController,
                       decoration: const InputDecoration(labelText: 'Seconds'),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(_secondsController),
+                      onTap: () => selectAll(secondsController),
                       textInputAction: TextInputAction.next,
                     ),
                   ),
                 ],
               ),
               TextField(
-                controller: _inclineController,
+                controller: inclineController,
                 decoration: const InputDecoration(labelText: 'Incline'),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_inclineController),
+                onTap: () => selectAll(inclineController),
               ),
             ],
-            if (!_cardio) ...[
+            if (!cardio) ...[
               TextField(
-                controller: _repsController,
-                focusNode: _repsNode,
+                controller: repsController,
+                focusNode: repsNode,
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_repsController),
+                onTap: () => selectAll(repsController),
                 textInputAction: TextInputAction.next,
-                onSubmitted: (_) => selectAll(_weightController),
+                onSubmitted: (_) => selectAll(weightController),
               ),
               TextField(
-                controller: _weightController,
+                controller: weightController,
                 decoration: InputDecoration(
-                  labelText: _name == 'Weight' ? 'Value ' : 'Weight ',
+                  labelText: name == 'Weight' ? 'Value ' : 'Weight ',
                 ),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_weightController),
+                onTap: () => selectAll(weightController),
                 textInputAction: TextInputAction.next,
               ),
             ],
-            if (_name != 'Weight' && !_settings.hideWeight)
+            if (name != 'Weight' && !settings.hideWeight)
               TextField(
-                controller: _bodyWeightController,
+                controller: bodyWeightController,
                 decoration: const InputDecoration(labelText: 'Body weight '),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_bodyWeightController),
+                onTap: () => selectAll(bodyWeightController),
               ),
             UnitSelector(
-              value: _unit,
+              value: unit,
               onChanged: (String? newValue) {
                 setState(() {
-                  _unit = newValue!;
+                  unit = newValue!;
                 });
               },
-              cardio: _cardio,
+              cardio: cardio,
             ),
             ListTile(
               title: const Text('Created Date'),
               subtitle:
-                  Text(DateFormat(_settings.longDateFormat).format(_created)),
+                  Text(DateFormat(settings.longDateFormat).format(created)),
               trailing: const Icon(Icons.calendar_today),
               onTap: () => _selectDate(),
             ),

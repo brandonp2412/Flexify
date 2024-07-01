@@ -69,8 +69,8 @@ class TimerCircularProgressIndicator extends StatelessWidget {
 }
 
 class _TimerCircularProgressIndicatorTile extends StatelessWidget {
-  final double _value;
-  final TimerState _timerState;
+  final double value;
+  final TimerState timerState;
 
   String _generateTitleText(Duration remaining) {
     final minutes = (remaining.inMinutes).toString().padLeft(2, '0');
@@ -79,10 +79,9 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   }
 
   const _TimerCircularProgressIndicatorTile({
-    required double value,
-    required TimerState timerState,
-  })  : _timerState = timerState,
-        _value = value;
+    required this.value,
+    required this.timerState,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +93,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           width: 300,
           child: CircularProgressIndicator(
             strokeCap: StrokeCap.round,
-            value: _value,
+            value: value,
             strokeWidth: 20,
             backgroundColor:
                 Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
@@ -108,7 +107,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: 32.0),
             Text(
-              _generateTitleText(_timerState.nativeTimer.getRemaining()),
+              _generateTitleText(timerState.nativeTimer.getRemaining()),
               style: TextStyle(
                 fontSize: 50.0,
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -119,7 +118,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               onPressed: () async {
                 final settings = context.read<SettingsState>();
                 await requestNotificationPermission();
-                await _timerState.addOneMinute(
+                await timerState.addOneMinute(
                   settings.alarmSound,
                   settings.vibrate,
                 );

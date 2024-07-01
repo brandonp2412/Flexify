@@ -15,13 +15,15 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  final TextEditingController _nameController = TextEditingController();
-  String? _unit;
-  bool _cardio = false;
+  final TextEditingController nameController = TextEditingController();
+  bool cardio = false;
+
+  late final settings = context.watch<SettingsState>();
+  late String unit = settings.strengthUnit;
 
   @override
   void dispose() {
-    _nameController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -31,9 +33,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
         created: DateTime.now().toLocal(),
         reps: 0,
         weight: 0,
-        name: _nameController.text,
+        name: nameController.text,
         unit: unit,
-        cardio: Value(_cardio),
+        cardio: Value(cardio),
         hidden: const Value(true),
       ),
     );
@@ -43,13 +45,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
-    var unit = _unit;
-    if (unit == null && _cardio)
-      unit = settings.cardioUnit;
-    else if (unit == null && !_cardio) unit = settings.strengthUnit;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add exercise'),
@@ -59,38 +54,38 @@ class _AddExercisePageState extends State<AddExercisePage> {
         child: material.Column(
           children: [
             TextField(
-              controller: _nameController,
+              controller: nameController,
               decoration: const InputDecoration(labelText: 'Name'),
               textCapitalization: TextCapitalization.sentences,
               autofocus: true,
             ),
             UnitSelector(
-              value: unit!,
-              cardio: _cardio,
+              value: unit,
+              cardio: cardio,
               onChanged: (String? newValue) {
                 setState(() {
-                  _unit = newValue!;
+                  unit = newValue!;
                 });
               },
             ),
             ListTile(
               title: const Text('Cardio'),
-              leading: _cardio
+              leading: cardio
                   ? const Icon(Icons.sports_gymnastics)
                   : const Icon(Icons.fitness_center),
               onTap: () {
                 setState(() {
-                  _cardio = !_cardio;
-                  if (_cardio)
-                    _unit = settings.cardioUnit;
+                  cardio = !cardio;
+                  if (cardio)
+                    unit = settings.cardioUnit;
                   else
-                    _unit = settings.strengthUnit;
+                    unit = settings.strengthUnit;
                 });
               },
               trailing: Switch(
-                value: _cardio,
+                value: cardio,
                 onChanged: (value) => setState(() {
-                  _cardio = value;
+                  cardio = value;
                 }),
               ),
             ),
@@ -98,7 +93,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _save(unit!),
+        onPressed: () => _save(unit),
         tooltip: 'Save',
         child: const Icon(Icons.save),
       ),

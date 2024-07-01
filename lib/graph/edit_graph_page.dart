@@ -19,14 +19,13 @@ class EditGraphPage extends StatefulWidget {
 }
 
 class _EditGraphPageState extends State<EditGraphPage> {
-  late final TextEditingController _nameController =
+  late final TextEditingController nameController =
       TextEditingController(text: widget.name);
-  final TextEditingController _minutesController = TextEditingController();
-  final TextEditingController _secondsController = TextEditingController();
-  final TextEditingController _maxSetsController = TextEditingController();
+  final TextEditingController minutesController = TextEditingController();
+  final TextEditingController secondsController = TextEditingController();
 
-  bool _cardio = false;
-  String? _unit;
+  bool cardio = false;
+  String? unit;
 
   @override
   void initState() {
@@ -40,38 +39,35 @@ class _EditGraphPageState extends State<EditGraphPage> {
         .getSingle()
         .then(
           (value) => setState(() {
-            _cardio = value.cardio;
-            _unit = value.unit;
+            cardio = value.cardio;
+            unit = value.unit;
 
             if (value.restMs != null) {
               final duration = Duration(milliseconds: value.restMs!);
-              _minutesController.text = duration.inMinutes.toString();
-              _secondsController.text = (duration.inSeconds % 60).toString();
+              minutesController.text = duration.inMinutes.toString();
+              secondsController.text = (duration.inSeconds % 60).toString();
             }
 
-            if (value.maxSets != null)
-              _maxSetsController.text = value.maxSets.toString();
-            if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-              _unit = settings.cardioUnit;
-            else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
-              _unit = settings.strengthUnit;
+            if (cardio && (unit == 'kg' || unit == 'lb'))
+              unit = settings.cardioUnit;
+            else if (!cardio && (unit == 'km' || unit == 'mi'))
+              unit = settings.strengthUnit;
           }),
         );
   }
 
   @override
   dispose() {
-    _nameController.dispose();
-    _minutesController.dispose();
-    _secondsController.dispose();
-    _maxSetsController.dispose();
+    nameController.dispose();
+    minutesController.dispose();
+    secondsController.dispose();
     super.dispose();
   }
 
   Future<int> _getCount() async {
     final result = await (db.gymSets.selectOnly()
           ..addColumns([db.gymSets.name.count()])
-          ..where(db.gymSets.name.equals(_nameController.text)))
+          ..where(db.gymSets.name.equals(nameController.text)))
         .getSingle();
     return result.read(db.gymSets.name.count()) ?? 0;
   }
@@ -79,14 +75,14 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Future<bool> _mixedUnits() async {
     final result = await (db.gymSets.selectOnly(distinct: true)
           ..addColumns([db.gymSets.unit])
-          ..where(db.gymSets.name.equals(_nameController.text)))
+          ..where(db.gymSets.name.equals(nameController.text)))
         .get();
     return result.length > 1;
   }
 
   Future<void> _doUpdate() async {
-    final minutes = int.tryParse(_minutesController.text);
-    final seconds = int.tryParse(_secondsController.text);
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
 
     Duration? duration;
     if (minutes != null && minutes > 0 || seconds != null && seconds > 0)
@@ -98,11 +94,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
       GymSetsCompanion(
-        name: Value(_nameController.text),
-        cardio: Value(_cardio),
-        unit: _unit != null ? Value(_unit!) : const Value.absent(),
+        name: Value(nameController.text),
+        cardio: Value(cardio),
+        unit: unit != null ? Value(unit!) : const Value.absent(),
         restMs: Value(duration?.inMilliseconds),
-        maxSets: Value(int.tryParse(_maxSetsController.text)),
       ),
     );
 
@@ -110,7 +105,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
         Variable.withString(widget.name),
-        Variable.withString(_nameController.text),
+        Variable.withString(nameController.text),
       ],
       updates: {db.plans},
     );
@@ -120,7 +115,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   _save() async {
-    if (_nameController.text.isEmpty) {
+    if (nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Name cannot be empty.')),
       );
@@ -130,7 +125,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
     final count = await _getCount();
 
-    if (count > 0 && widget.name != _nameController.text && mounted)
+    if (count > 0 && widget.name != nameController.text && mounted)
       await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -203,28 +198,21 @@ class _EditGraphPageState extends State<EditGraphPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: _nameController,
+              controller: nameController,
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(labelText: "New name"),
               textCapitalization: TextCapitalization.sentences,
-            ),
-            TextField(
-              controller: _maxSetsController,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: "Max sets"),
-              keyboardType: TextInputType.number,
-              onTap: () => selectAll(_maxSetsController),
             ),
             Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _minutesController,
+                    controller: minutesController,
                     textInputAction: TextInputAction.next,
                     decoration:
                         const InputDecoration(labelText: "Rest minutes"),
                     keyboardType: material.TextInputType.number,
-                    onTap: () => selectAll(_minutesController),
+                    onTap: () => selectAll(minutesController),
                   ),
                 ),
                 const SizedBox(
@@ -232,46 +220,46 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 ),
                 Expanded(
                   child: TextField(
-                    controller: _secondsController,
+                    controller: secondsController,
                     textInputAction: TextInputAction.next,
                     decoration:
                         const InputDecoration(labelText: "Rest seconds"),
                     keyboardType: material.TextInputType.number,
                     onTap: () {
-                      selectAll(_secondsController);
+                      selectAll(secondsController);
                     },
                   ),
                 ),
               ],
             ),
-            if (_unit != null)
+            if (unit != null)
               UnitSelector(
-                value: _unit!,
-                cardio: _cardio,
+                value: unit!,
+                cardio: cardio,
                 onChanged: (value) {
                   setState(() {
-                    _unit = value;
+                    unit = value;
                   });
                 },
               ),
             ListTile(
-              leading: _cardio
+              leading: cardio
                   ? const Icon(Icons.sports_gymnastics)
                   : const Icon(Icons.fitness_center),
-              title: _cardio ? const Text('Cardio') : const Text('Strength'),
+              title: cardio ? const Text('Cardio') : const Text('Strength'),
               onTap: () {
                 setState(() {
-                  _cardio = !_cardio;
-                  if (_cardio)
-                    _unit = _unit == 'kg' ? 'km' : 'mi';
+                  cardio = !cardio;
+                  if (cardio)
+                    unit = unit == 'kg' ? 'km' : 'mi';
                   else
-                    _unit = _unit == 'km' ? 'kg' : 'lb';
+                    unit = unit == 'km' ? 'kg' : 'lb';
                 });
               },
               trailing: Switch(
-                value: _cardio,
+                value: cardio,
                 onChanged: (value) => setState(() {
-                  _cardio = value;
+                  cardio = value;
                 }),
               ),
             ),

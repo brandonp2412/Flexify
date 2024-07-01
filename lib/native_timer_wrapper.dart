@@ -2,14 +2,11 @@ enum NativeTimerState { running, paused, expired }
 
 class NativeTimerWrapper {
   NativeTimerWrapper(
-    Duration totalTimerDuration,
-    Duration elapsedTimerDuration,
-    DateTime timeStamp,
-    NativeTimerState state,
-  )   : _totalTimerDuration = totalTimerDuration,
-        _elapsedTimerDuration = elapsedTimerDuration,
-        _timeStamp = timeStamp,
-        _state = state;
+    this.totalTimerDuration,
+    this.elapsedTimerDuration,
+    this.timeStamp,
+    this.state,
+  );
 
   static NativeTimerWrapper emptyTimer() => NativeTimerWrapper(
         Duration.zero,
@@ -18,35 +15,35 @@ class NativeTimerWrapper {
         NativeTimerState.expired,
       );
 
-  Duration getElapsed() => _totalTimerDuration != Duration.zero
-      ? DateTime.now().difference(_timeStamp) + _elapsedTimerDuration
+  Duration getElapsed() => totalTimerDuration != Duration.zero
+      ? DateTime.now().difference(timeStamp) + elapsedTimerDuration
       : Duration.zero;
 
-  Duration getDuration() => _totalTimerDuration;
+  Duration getDuration() => totalTimerDuration;
 
   Duration getRemaining() => getDuration() - getElapsed();
 
-  int getTimeStamp() => _timeStamp.millisecondsSinceEpoch;
+  int getTimeStamp() => timeStamp.millisecondsSinceEpoch;
 
-  bool isRunning() => _state == NativeTimerState.running;
+  bool isRunning() => state == NativeTimerState.running;
 
   NativeTimerWrapper increaseDuration(Duration increase) => NativeTimerWrapper(
-        _totalTimerDuration + increase,
-        isRunning() ? _elapsedTimerDuration : Duration.zero,
-        isRunning() ? _timeStamp : DateTime.now(),
+        totalTimerDuration + increase,
+        isRunning() ? elapsedTimerDuration : Duration.zero,
+        isRunning() ? timeStamp : DateTime.now(),
         NativeTimerState.running,
       );
 
   bool update() {
-    if (_state == NativeTimerState.running &&
+    if (state == NativeTimerState.running &&
         (getDuration() - getElapsed()).inMilliseconds <= 0) {
-      _state == NativeTimerState.expired;
+      state == NativeTimerState.expired;
     }
-    return _state != NativeTimerState.running;
+    return state != NativeTimerState.running;
   }
 
-  final NativeTimerState _state;
-  final Duration _totalTimerDuration;
-  final Duration _elapsedTimerDuration;
-  final DateTime _timeStamp;
+  final NativeTimerState state;
+  final Duration totalTimerDuration;
+  final Duration elapsedTimerDuration;
+  final DateTime timeStamp;
 }

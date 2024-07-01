@@ -25,34 +25,34 @@ class HistoryCollapsed extends StatefulWidget {
 }
 
 class _HistoryCollapsedState extends State<HistoryCollapsed> {
-  bool _goingNext = false;
-  final ScrollController _scrollController = ScrollController();
+  bool goingNext = false;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
+    scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
+    scrollController.removeListener(_scrollListener);
+    scrollController.dispose();
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels <
-            _scrollController.position.maxScrollExtent - 200 ||
-        _goingNext) return;
+    if (scrollController.position.pixels <
+            scrollController.position.maxScrollExtent - 200 ||
+        goingNext) return;
     setState(() {
-      _goingNext = true;
+      goingNext = true;
     });
     try {
       widget.onNext();
     } finally {
       setState(() {
-        _goingNext = false;
+        goingNext = false;
       });
     }
   }
@@ -63,7 +63,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
 
     return ListView.builder(
       itemCount: widget.historyDays.length,
-      controller: _scrollController,
+      controller: scrollController,
       itemBuilder: (context, index) {
         final history = widget.historyDays[index];
         final previousHistory =
