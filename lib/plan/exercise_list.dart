@@ -3,6 +3,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:provider/provider.dart';
 
 class ExerciseList extends StatelessWidget {
   final List<String> exercises;
-  final Future<void> Function() refresh;
   final int selected;
   final Future<void> Function(int) onSelect;
   final List<GymCount>? counts;
@@ -20,7 +20,6 @@ class ExerciseList extends StatelessWidget {
   const ExerciseList({
     super.key,
     required this.exercises,
-    required this.refresh,
     required this.selected,
     required this.onSelect,
     required this.counts,
@@ -147,7 +146,9 @@ class ExerciseList extends StatelessWidget {
           await db
               .update(db.plans)
               .replace(plan.copyWith(exercises: exercises.join(',')));
-          refresh();
+          if (!context.mounted) return;
+          final planState = context.read<PlanState>();
+          planState.updatePlans(null);
         },
       );
     else

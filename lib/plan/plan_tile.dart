@@ -13,7 +13,6 @@ class PlanTile extends StatelessWidget {
     required this.weekday,
     required this.index,
     required this.navigatorKey,
-    required this.refresh,
     required this.onSelect,
     required this.selected,
     required this.countStream,
@@ -23,7 +22,6 @@ class PlanTile extends StatelessWidget {
   final String weekday;
   final int index;
   final GlobalKey<NavigatorState> navigatorKey;
-  final Future<void> Function() refresh;
   final Function(int) onSelect;
   final Set<int> selected;
   final Stream<List<Count>> countStream;
@@ -122,11 +120,9 @@ class PlanTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => StartPlanPage(
               plan: plan,
-              refresh: refresh,
             ),
           ),
         );
-        refresh();
       },
       onLongPress: () {
         onSelect(plan.id);

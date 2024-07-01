@@ -6,8 +6,10 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_tile.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EditPlanPage extends StatefulWidget {
   final PlansCompanion plan;
@@ -146,6 +148,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
     await db.planExercises.insertAll(planExercises);
 
     if (!mounted) return;
+    final planState = context.read<PlanState>();
+    planState.updatePlans(null);
     Navigator.pop(context);
   }
 

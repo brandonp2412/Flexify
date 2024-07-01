@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class Count {
 
 class PlansList extends StatelessWidget {
   final List<Plan> plans;
-  final Future<void> Function({List<Plan>? plans}) updatePlans;
   final GlobalKey<NavigatorState> navigatorKey;
   final Set<int> selected;
   final Function(int) onSelect;
@@ -27,7 +25,6 @@ class PlansList extends StatelessWidget {
   PlansList({
     super.key,
     required this.plans,
-    required this.updatePlans,
     required this.navigatorKey,
     required this.selected,
     required this.onSelect,
@@ -92,7 +89,6 @@ class PlansList extends StatelessWidget {
             weekday: weekday,
             index: index,
             navigatorKey: navigatorKey,
-            refresh: updatePlans,
             selected: selected,
             onSelect: (id) => onSelect(id),
             countStream: stream,
@@ -107,7 +103,8 @@ class PlansList extends StatelessWidget {
           plans.removeAt(oldIndex);
           plans.insert(newIndex, temp);
 
-          await updatePlans(plans: plans);
+          final planState = context.read<PlanState>();
+          planState.updatePlans(plans);
           await db.transaction(() async {
             for (int i = 0; i < plans.length; i++) {
               final plan = plans[i];
@@ -129,7 +126,6 @@ class PlansList extends StatelessWidget {
             weekday: weekday,
             index: index,
             navigatorKey: navigatorKey,
-            refresh: updatePlans,
             selected: selected,
             onSelect: (id) => onSelect(id),
             countStream: stream,

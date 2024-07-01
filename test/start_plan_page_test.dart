@@ -33,7 +33,6 @@ void main() async {
         child: MaterialApp(
           home: StartPlanPage(
             plan: plan,
-            refresh: () => Future.value(null),
           ),
         ),
       ),
@@ -68,7 +67,6 @@ void main() async {
         child: MaterialApp(
           home: StartPlanPage(
             plan: plan,
-            refresh: () => Future.value(null),
           ),
         ),
       ),
@@ -101,7 +99,6 @@ void main() async {
         child: MaterialApp(
           home: StartPlanPage(
             plan: plan,
-            refresh: () => Future.value(null),
           ),
         ),
       ),

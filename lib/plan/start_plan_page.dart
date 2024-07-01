@@ -15,9 +15,8 @@ import 'package:provider/provider.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
-  final Future<void> Function() refresh;
 
-  const StartPlanPage({super.key, required this.plan, required this.refresh});
+  const StartPlanPage({super.key, required this.plan});
 
   @override
   createState() => _StartPlanPageState();
@@ -41,6 +40,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late SettingsState settings = context.read<SettingsState>();
   late final PlanState planState = context.read<PlanState>();
   late String unit = settings.strengthUnit;
+  late String title = widget.plan.days.replaceAll(",", ", ");
 
   @override
   void initState() {
@@ -69,6 +69,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .split(',');
     setState(() {
       planExercises = split;
+      title = planState.plans
+          .firstWhere((plan) => plan.id == widget.plan.id)
+          .days
+          .replaceAll(',', ', ');
     });
   }
 
@@ -187,7 +191,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    var title = widget.plan.days.replaceAll(",", ", ");
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
@@ -217,7 +220,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       EditPlanPage(plan: plan.toCompanion(false)),
                 ),
               );
-              widget.refresh();
             },
             icon: const Icon(Icons.edit),
           ),
@@ -343,7 +345,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 builder: (context, snapshot) {
                   return ExerciseList(
                     exercises: planExercises,
-                    refresh: widget.refresh,
                     selected: selectedIndex,
                     onSelect: _select,
                     counts: snapshot.data,
