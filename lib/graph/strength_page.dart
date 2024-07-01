@@ -23,31 +23,31 @@ class StrengthPage extends StatefulWidget {
 }
 
 class _StrengthPageState extends State<StrengthPage> {
-  late String _targetUnit = widget.unit;
-  late Stream<List<StrengthData>> _graphStream;
-  StrengthMetric _metric = StrengthMetric.bestWeight;
-  Period _period = Period.day;
-  DateTime? _startDate;
-  DateTime? _endDate;
-  DateTime _lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
+  late String targetUnit = widget.unit;
+  late Stream<List<StrengthData>> graphStream;
+  StrengthMetric metric = StrengthMetric.bestWeight;
+  Period period = Period.day;
+  DateTime? startDate;
+  DateTime? endDate;
+  DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
-  final _ormCol = db.gymSets.weight /
+  final ormCol = db.gymSets.weight /
       (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
-  final _volumeCol =
+  final volumeCol =
       const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-  final _relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+  final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 
   @override
   initState() {
     super.initState();
-    if (widget.name == 'Weight') _period = Period.week;
+    if (widget.name == 'Weight') period = Period.week;
     _setStream();
   }
 
   Future<void> _selectEnd() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _endDate,
+      initialDate: endDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -55,7 +55,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (pickedDate == null) return;
 
     setState(() {
-      _endDate = pickedDate;
+      endDate = pickedDate;
     });
     _setStream();
   }
@@ -63,7 +63,7 @@ class _StrengthPageState extends State<StrengthPage> {
   Future<void> _selectStart() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _startDate,
+      initialDate: startDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -71,7 +71,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (pickedDate == null) return;
 
     setState(() {
-      _startDate = pickedDate;
+      startDate = pickedDate;
     });
     _setStream();
   }
@@ -125,15 +125,15 @@ class _StrengthPageState extends State<StrengthPage> {
         final formatter = NumberFormat("#,###.00");
 
         String text =
-            "${row.reps} x ${row.value.toStringAsFixed(2)}$_targetUnit $created";
-        switch (_metric) {
+            "${row.reps} x ${row.value.toStringAsFixed(2)}$targetUnit $created";
+        switch (metric) {
           case StrengthMetric.bestReps:
           case StrengthMetric.relativeStrength:
             text = "${row.value.toStringAsFixed(2)} $created";
             break;
           case StrengthMetric.volume:
           case StrengthMetric.oneRepMax:
-            text = "${formatter.format(row.value)}$_targetUnit $created";
+            text = "${formatter.format(row.value)}$targetUnit $created";
             break;
           case StrengthMetric.bestWeight:
             break;
@@ -153,40 +153,40 @@ class _StrengthPageState extends State<StrengthPage> {
     Expression<String> createdCol = const CustomExpression<String>(
       "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
     );
-    if (_period == Period.month)
+    if (period == Period.month)
       createdCol = const CustomExpression<String>(
         "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
       );
-    else if (_period == Period.week)
+    else if (period == Period.week)
       createdCol = const CustomExpression<String>(
         "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
       );
-    else if (_period == Period.year)
+    else if (period == Period.year)
       createdCol = const CustomExpression<String>(
         "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
       );
 
     setState(() {
-      _graphStream = (db.selectOnly(db.gymSets)
+      graphStream = (db.selectOnly(db.gymSets)
             ..addColumns([
               db.gymSets.weight.max(),
-              _volumeCol,
-              _ormCol,
+              volumeCol,
+              ormCol,
               db.gymSets.created,
-              if (_metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
-              if (_metric != StrengthMetric.bestReps) db.gymSets.reps,
+              if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+              if (metric != StrengthMetric.bestReps) db.gymSets.reps,
               db.gymSets.unit,
-              _relativeCol,
+              relativeCol,
             ])
             ..where(db.gymSets.name.equals(widget.name))
             ..where(db.gymSets.hidden.equals(false))
             ..where(
               db.gymSets.created
-                  .isBiggerOrEqualValue(_startDate ?? DateTime(0)),
+                  .isBiggerOrEqualValue(startDate ?? DateTime(0)),
             )
             ..where(
               db.gymSets.created.isSmallerThanValue(
-                _endDate ??
+                endDate ??
                     DateTime.now().toLocal().add(const Duration(days: 1)),
               ),
             )
@@ -204,11 +204,11 @@ class _StrengthPageState extends State<StrengthPage> {
           List<StrengthData> list = [];
           for (final result in results.reversed) {
             final unit = result.read(db.gymSets.unit)!;
-            var value = _getValue(result, _metric);
+            var value = _getValue(result, metric);
 
-            if (unit == 'lb' && _targetUnit == 'kg') {
+            if (unit == 'lb' && targetUnit == 'kg') {
               value *= 0.45359237;
-            } else if (unit == 'kg' && _targetUnit == 'lb') {
+            } else if (unit == 'kg' && targetUnit == 'lb') {
               value *= 2.20462262;
             }
 
@@ -235,11 +235,11 @@ class _StrengthPageState extends State<StrengthPage> {
   double _getValue(TypedResult row, StrengthMetric metric) {
     switch (metric) {
       case StrengthMetric.oneRepMax:
-        return row.read(_ormCol)!;
+        return row.read(ormCol)!;
       case StrengthMetric.volume:
-        return row.read(_volumeCol)!;
+        return row.read(volumeCol)!;
       case StrengthMetric.relativeStrength:
-        return row.read(_relativeCol) ?? 0;
+        return row.read(relativeCol) ?? 0;
       case StrengthMetric.bestWeight:
         return row.read(db.gymSets.weight.max())!;
       case StrengthMetric.bestReps:
@@ -284,7 +284,7 @@ class _StrengthPageState extends State<StrengthPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: StreamBuilder(
-          stream: _graphStream,
+          stream: graphStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const SizedBox();
             if (snapshot.data?.isEmpty == true)
@@ -308,7 +308,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 if (widget.name != 'Weight')
                   DropdownButtonFormField(
                     decoration: const InputDecoration(labelText: 'Metric'),
-                    value: _metric,
+                    value: metric,
                     items: [
                       const DropdownMenuItem(
                         value: StrengthMetric.bestWeight,
@@ -334,14 +334,14 @@ class _StrengthPageState extends State<StrengthPage> {
                     ],
                     onChanged: (value) {
                       setState(() {
-                        _metric = value!;
+                        metric = value!;
                       });
                       _setStream();
                     },
                   ),
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Period'),
-                  value: _period,
+                  value: period,
                   items: const [
                     DropdownMenuItem(
                       value: Period.day,
@@ -362,18 +362,18 @@ class _StrengthPageState extends State<StrengthPage> {
                   ],
                   onChanged: (value) {
                     setState(() {
-                      _period = value!;
+                      period = value!;
                     });
                     _setStream();
                   },
                 ),
                 if (settings.showUnits)
                   UnitSelector(
-                    value: _targetUnit,
+                    value: targetUnit,
                     cardio: false,
                     onChanged: (value) {
                       setState(() {
-                        _targetUnit = value!;
+                        targetUnit = value!;
                       });
                       _setStream();
                     },
@@ -385,14 +385,14 @@ class _StrengthPageState extends State<StrengthPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text('Start date'),
-                          subtitle: _startDate != null
+                          subtitle: startDate != null
                               ? Text(
                                   DateFormat(settings.shortDateFormat)
-                                      .format(_startDate!),
+                                      .format(startDate!),
                                 )
                               : null,
                           onLongPress: () => setState(() {
-                            _startDate = null;
+                            startDate = null;
                           }),
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () => _selectStart(),
@@ -401,14 +401,14 @@ class _StrengthPageState extends State<StrengthPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text('Stop date'),
-                          subtitle: _endDate != null
+                          subtitle: endDate != null
                               ? Text(
                                   DateFormat(settings.shortDateFormat)
-                                      .format(_endDate!),
+                                      .format(endDate!),
                                 )
                               : null,
                           onLongPress: () => setState(() {
-                            _endDate = null;
+                            endDate = null;
                           }),
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () => _selectEnd(),
@@ -456,8 +456,8 @@ class _StrengthPageState extends State<StrengthPage> {
                           touchCallback: (event, touchResponse) async {
                             if (event is ScaleUpdateDetails) return;
                             if (event is! FlPanDownEvent) return;
-                            if (_metric != StrengthMetric.bestWeight) return;
-                            if (DateTime.now().difference(_lastTap) <
+                            if (metric != StrengthMetric.bestWeight) return;
+                            if (DateTime.now().difference(lastTap) <
                                 const Duration(milliseconds: 300)) {
                               final index =
                                   touchResponse?.lineBarSpots?[0].spotIndex;
@@ -488,7 +488,7 @@ class _StrengthPageState extends State<StrengthPage> {
                               );
                             }
                             setState(() {
-                              _lastTap = DateTime.now();
+                              lastTap = DateTime.now();
                             });
                           },
                           touchTooltipData:

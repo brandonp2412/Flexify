@@ -24,11 +24,11 @@ class GraphsPage extends StatefulWidget {
 
 class GraphsPageState extends State<GraphsPage>
     with AutomaticKeepAliveClientMixin {
-  late final Stream<List<GymSetsCompanion>> _stream = watchGraphs();
+  late final Stream<List<GymSetsCompanion>> stream = watchGraphs();
 
-  final Set<String> _selected = {};
+  final Set<String> selected = {};
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  String _search = '';
+  String search = '';
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +52,14 @@ class GraphsPageState extends State<GraphsPage>
   Scaffold _graphsPage() {
     return Scaffold(
       body: StreamBuilder(
-        stream: _stream,
+        stream: stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
           final gymSets = snapshot.data!.where((gymSet) {
             final name = gymSet.name.value.toLowerCase();
-            final searchText = _search.toLowerCase();
+            final searchText = search.toLowerCase();
             return name.contains(searchText);
           }).toList();
 
@@ -67,13 +67,13 @@ class GraphsPageState extends State<GraphsPage>
             children: [
               AppSearch(
                 onShare: () async {
-                  final selected = _selected.toList();
+                  final selCopy = selected.toList();
                   setState(() {
-                    _selected.clear();
+                    selected.clear();
                   });
-                  final gymSets = (await _stream.first)
+                  final gymSets = (await stream.first)
                       .where(
-                        (gymSet) => selected.contains(gymSet.name.value),
+                        (gymSet) => selCopy.contains(gymSet.name.value),
                       )
                       .toList();
                   final summaries = gymSets
@@ -86,17 +86,17 @@ class GraphsPageState extends State<GraphsPage>
                 },
                 onChange: (value) {
                   setState(() {
-                    _search = value;
+                    search = value;
                   });
                 },
                 onClear: () => setState(() {
-                  _selected.clear();
+                  selected.clear();
                 }),
                 onDelete: () async {
                   final planState = context.read<PlanState>();
-                  final selectedCopy = _selected.toList();
+                  final selectedCopy = selected.toList();
                   setState(() {
-                    _selected.clear();
+                    selected.clear();
                   });
 
                   await (db.delete(db.gymSets)
@@ -117,16 +117,16 @@ class GraphsPageState extends State<GraphsPage>
                   planState.updatePlans(null);
                 },
                 onSelect: () => setState(() {
-                  _selected.addAll(
+                  selected.addAll(
                     gymSets.map((gymSet) => gymSet.name.value),
                   );
                 }),
-                selected: _selected,
+                selected: selected,
                 onEdit: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditGraphPage(
-                      name: _selected.first,
+                      name: selected.first,
                     ),
                   ),
                 ),
@@ -156,16 +156,16 @@ class GraphsPageState extends State<GraphsPage>
                       children: [
                         if (showDivider) const Divider(),
                         GraphTile(
-                          selected: _selected,
+                          selected: selected,
                           gymSet: gymSet,
                           onSelect: (name) {
-                            if (_selected.contains(name))
+                            if (selected.contains(name))
                               setState(() {
-                                _selected.remove(name);
+                                selected.remove(name);
                               });
                             else
                               setState(() {
-                                _selected.add(name);
+                                selected.add(name);
                               });
                           },
                         ),

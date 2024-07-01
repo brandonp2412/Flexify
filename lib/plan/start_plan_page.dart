@@ -24,51 +24,51 @@ class StartPlanPage extends StatefulWidget {
 }
 
 class _StartPlanPageState extends State<StartPlanPage> {
-  final _repsController = TextEditingController(text: "0.0");
-  final _weightController = TextEditingController(text: "0.0");
-  final _distanceController = TextEditingController(text: "0.0");
-  final _minutesController = TextEditingController(text: "0.0");
-  final _secondsController = TextEditingController(text: "0.0");
-  final _inclineController = TextEditingController(text: "0");
+  final repsController = TextEditingController(text: "0.0");
+  final weightController = TextEditingController(text: "0.0");
+  final distanceController = TextEditingController(text: "0.0");
+  final minutesController = TextEditingController(text: "0.0");
+  final secondsController = TextEditingController(text: "0.0");
+  final inclineController = TextEditingController(text: "0");
 
-  late List<String> _planExercises = widget.plan.exercises.split(',');
-  late final Stream<List<GymCount>> _countStream =
-      watchCount(widget.plan.id, _planExercises);
-  late SettingsState _settings = context.read<SettingsState>();
+  bool first = true;
+  int selectedIndex = 0;
+  bool cardio = false;
 
-  late final PlanState _planState = context.read<PlanState>();
-  bool _first = true;
-  String? _unit;
-  int _selectedIndex = 0;
-  bool _cardio = false;
+  late List<String> planExercises = widget.plan.exercises.split(',');
+  late final Stream<List<GymCount>> countStream =
+      watchCount(widget.plan.id, planExercises);
+  late SettingsState settings = context.read<SettingsState>();
+  late final PlanState planState = context.read<PlanState>();
+  late String unit = settings.strengthUnit;
 
   @override
   void initState() {
     super.initState();
-    _planState.addListener(_planChanged);
+    planState.addListener(_planChanged);
     _select(0);
   }
 
   @override
   void dispose() {
-    _repsController.dispose();
-    _weightController.dispose();
-    _distanceController.dispose();
-    _minutesController.dispose();
-    _inclineController.dispose();
+    repsController.dispose();
+    weightController.dispose();
+    distanceController.dispose();
+    minutesController.dispose();
+    inclineController.dispose();
 
-    _planState.removeListener(_planChanged);
+    planState.removeListener(_planChanged);
 
     super.dispose();
   }
 
   void _planChanged() {
-    final split = _planState.plans
+    final split = planState.plans
         .firstWhere((element) => element.id == widget.plan.id)
         .exercises
         .split(',');
     setState(() {
-      _planExercises = split;
+      planExercises = split;
     });
   }
 
@@ -87,40 +87,39 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   Future<void> _select(int index) async {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
-    final last = await _getLast(_planExercises[index]);
+    final last = await _getLast(planExercises[index]);
     if (last == null) return;
 
     setState(() {
-      _unit = last.unit;
-      _repsController.text = toString(last.reps);
-      _weightController.text = toString(last.weight);
-      _distanceController.text = toString(last.distance);
-      _minutesController.text = last.duration.floor().toString();
-      _secondsController.text = ((last.duration * 60) % 60).floor().toString();
-      _inclineController.text = last.incline?.toString() ?? "";
-      _cardio = last.cardio;
+      unit = last.unit;
+      repsController.text = toString(last.reps);
+      weightController.text = toString(last.weight);
+      distanceController.text = toString(last.distance);
+      minutesController.text = last.duration.floor().toString();
+      secondsController.text = ((last.duration * 60) % 60).floor().toString();
+      inclineController.text = last.incline?.toString() ?? "";
+      cardio = last.cardio;
 
-      if (_cardio && (_unit == 'kg' || _unit == 'lb'))
-        _unit = _settings.cardioUnit;
-      else if (!_cardio && (_unit == 'km' || _unit == 'mi'))
-        _unit = _settings.strengthUnit;
+      if (cardio && (unit == 'kg' || unit == 'lb'))
+        unit = settings.cardioUnit;
+      else if (!cardio && (unit == 'km' || unit == 'mi'))
+        unit = settings.strengthUnit;
     });
   }
 
   Future<void> _save(TimerState timerState) async {
     setState(() {
-      _first = false;
+      first = false;
     });
-    final exercise = _planExercises[_selectedIndex];
+    final exercise = planExercises[selectedIndex];
     var bodyWeight = 0.0;
-    if (!_settings.hideWeight)
-      bodyWeight = (await getBodyWeight())?.weight ?? 0;
+    if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
     if (platformSupportsTimer() &&
-        !_settings.explainedPermissions &&
-        _settings.restTimers &&
+        !settings.explainedPermissions &&
+        settings.restTimers &&
         mounted &&
         !platformIsDesktop())
       await Navigator.push(
@@ -130,7 +129,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       );
 
-    final counts = await _countStream.first;
+    final counts = await countStream.first;
     final countIndex = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
@@ -140,56 +139,47 @@ class _StartPlanPageState extends State<StartPlanPage> {
       restMs = counts[countIndex].restMs;
     }
 
-    var unit = _unit;
-    if (unit == null) {
-      if (_cardio)
-        unit = _settings.cardioUnit;
-      else
-        unit = _settings.strengthUnit;
-    }
-
-    final minutes = int.tryParse(_minutesController.text);
-    final seconds = int.tryParse(_secondsController.text);
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
     final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
 
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
-      reps: double.parse(_repsController.text),
-      weight: double.parse(_weightController.text),
-      unit: _unit!,
+      reps: double.parse(repsController.text),
+      weight: double.parse(weightController.text),
+      unit: unit,
       created: DateTime.now().toLocal(),
-      cardio: drift.Value(_cardio),
+      cardio: drift.Value(cardio),
       duration: drift.Value(duration),
-      distance: drift.Value(double.parse(_distanceController.text)),
+      distance: drift.Value(double.parse(distanceController.text)),
       bodyWeight: drift.Value(bodyWeight),
       restMs: drift.Value(restMs),
-      maxSets: drift.Value(max),
-      incline: drift.Value(int.tryParse(_inclineController.text)),
+      incline: drift.Value(int.tryParse(inclineController.text)),
       planId: drift.Value(widget.plan.id),
     );
 
-    if (_settings.restTimers && platformSupportsTimer()) {
+    if (settings.restTimers && platformSupportsTimer()) {
       final countIndex =
           counts.indexWhere((element) => element.name == exercise);
       var count = 0;
       if (countIndex != -1) count = counts[countIndex].count;
       count++;
 
-      final finishedPlan = count == (max ?? _settings.maxSets) &&
-          _selectedIndex == _planExercises.length - 1;
+      final finishedPlan = count == (max ?? settings.maxSets) &&
+          selectedIndex == planExercises.length - 1;
       if (!finishedPlan)
         timerState.startTimer(
           "$exercise ($count)",
           restMs != null
               ? Duration(milliseconds: restMs)
-              : _settings.timerDuration,
-          _settings.alarmSound,
-          _settings.vibrate,
+              : settings.timerDuration,
+          settings.alarmSound,
+          settings.vibrate,
         );
 
-      final finishedExercise = count == (max ?? _settings.maxSets) &&
-          _selectedIndex < _planExercises.length - 1;
-      if (finishedExercise) _select(_selectedIndex + 1);
+      final finishedExercise = count == (max ?? settings.maxSets) &&
+          selectedIndex < planExercises.length - 1;
+      if (finishedExercise) _select(selectedIndex + 1);
     }
 
     db.into(db.gymSets).insert(gymSet);
@@ -202,15 +192,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
     final timerState = context.read<TimerState>();
-    _settings = context.watch<SettingsState>();
-
-    var unit = _unit;
-    if (unit == null) {
-      if (_cardio)
-        unit = _settings.cardioUnit;
-      else
-        unit = _settings.strengthUnit;
-    }
+    settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -242,24 +224,24 @@ class _StartPlanPageState extends State<StartPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            if (!_cardio) ...[
+            if (!cardio) ...[
               TextField(
-                controller: _repsController,
+                controller: repsController,
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (value) {
-                  selectAll(_weightController);
+                  selectAll(weightController);
                 },
                 onTap: () {
-                  selectAll(_repsController);
+                  selectAll(repsController);
                 },
               ),
               TextField(
-                controller: _weightController,
+                controller: weightController,
                 decoration: InputDecoration(
-                  labelText: 'Weight ($_unit)',
-                  suffixIcon: _settings.hideWeight
+                  labelText: 'Weight ($unit)',
+                  suffixIcon: settings.hideWeight
                       ? null
                       : IconButton(
                           tooltip: "Use body weight",
@@ -273,42 +255,42 @@ class _StartPlanPageState extends State<StartPlanPage> {
                                 ),
                               );
                             else
-                              _weightController.text =
+                              weightController.text =
                                   toString(weightSet!.weight);
                           },
                         ),
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {
-                  selectAll(_weightController);
+                  selectAll(weightController);
                 },
                 onSubmitted: (value) async => await _save(timerState),
               ),
             ],
-            if (_cardio) ...[
+            if (cardio) ...[
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _minutesController,
+                      controller: minutesController,
                       decoration: const InputDecoration(labelText: 'Minutes'),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(_minutesController),
+                      onTap: () => selectAll(minutesController),
                       textInputAction: TextInputAction.next,
-                      onSubmitted: (value) => selectAll(_secondsController),
+                      onSubmitted: (value) => selectAll(secondsController),
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      controller: _secondsController,
+                      controller: secondsController,
                       decoration: const InputDecoration(labelText: 'Seconds'),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(_secondsController),
+                      onTap: () => selectAll(secondsController),
                       textInputAction: TextInputAction.next,
-                      onSubmitted: (value) => selectAll(_distanceController),
+                      onSubmitted: (value) => selectAll(distanceController),
                     ),
                   ),
                 ],
@@ -318,51 +300,51 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   Expanded(
                     child: TextField(
                       textInputAction: TextInputAction.next,
-                      controller: _distanceController,
+                      controller: distanceController,
                       decoration: const InputDecoration(
                         labelText: 'Distance',
                       ),
                       keyboardType: TextInputType.number,
-                      onSubmitted: (value) => selectAll(_inclineController),
+                      onSubmitted: (value) => selectAll(inclineController),
                       onTap: () {
-                        selectAll(_distanceController);
+                        selectAll(distanceController);
                       },
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      controller: _inclineController,
+                      controller: inclineController,
                       decoration: const InputDecoration(labelText: 'Incline'),
                       keyboardType: TextInputType.number,
-                      onTap: () => selectAll(_inclineController),
+                      onTap: () => selectAll(inclineController),
                       onSubmitted: (value) => _save(timerState),
                     ),
                   ),
                 ],
               ),
             ],
-            if (_settings.showUnits)
+            if (settings.showUnits)
               UnitSelector(
                 value: unit,
-                cardio: _cardio,
+                cardio: cardio,
                 onChanged: (String? newValue) {
                   setState(() {
-                    _unit = newValue!;
+                    unit = newValue!;
                   });
                 },
               ),
             Expanded(
               child: StreamBuilder(
-                stream: _countStream,
+                stream: countStream,
                 builder: (context, snapshot) {
                   return ExerciseList(
-                    exercises: _planExercises,
+                    exercises: planExercises,
                     refresh: widget.refresh,
-                    selected: _selectedIndex,
+                    selected: selectedIndex,
                     onSelect: _select,
                     counts: snapshot.data,
-                    firstRender: _first,
+                    firstRender: first,
                     plan: widget.plan,
                   );
                 },

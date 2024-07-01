@@ -19,29 +19,29 @@ class EditSetsPage extends StatefulWidget {
 }
 
 class _EditSetsPageState extends State<EditSetsPage> {
-  final _repsController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _bodyWeightController = TextEditingController();
-  final _distanceController = TextEditingController();
-  final _minutesController = TextEditingController();
-  final _secondsController = TextEditingController();
-  final _inclineController = TextEditingController();
-  final _nameController = TextEditingController();
-  late SettingsState _settings = context.read<SettingsState>();
+  final repsController = TextEditingController();
+  final weightController = TextEditingController();
+  final bodyWeightController = TextEditingController();
+  final distanceController = TextEditingController();
+  final minutesController = TextEditingController();
+  final secondsController = TextEditingController();
+  final inclineController = TextEditingController();
+  final nameController = TextEditingController();
+  late SettingsState settings = context.read<SettingsState>();
 
-  String? _unit;
-  DateTime? _created;
-  bool? _cardio;
-  int? _restMs;
-  String? _oldNames;
-  String? _oldReps;
-  String? _oldWeights;
-  String? _oldBodyWeights;
-  String? _oldCreateds;
-  String? _oldDistances;
-  String? _oldMinutes;
-  String? _oldSeconds;
-  String? _oldInclines;
+  String? unit;
+  DateTime? created;
+  bool? cardio;
+  int? restMs;
+  String? oldNames;
+  String? oldReps;
+  String? oldWeights;
+  String? oldBodyWeights;
+  String? oldCreateds;
+  String? oldDistances;
+  String? oldMinutes;
+  String? oldSeconds;
+  String? oldInclines;
 
   @override
   void initState() {
@@ -50,60 +50,60 @@ class _EditSetsPageState extends State<EditSetsPage> {
         .get()
         .then((gymSets) {
       setState(() {
-        _cardio = gymSets.first.cardio;
-        _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
-        _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
-        _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-        _oldBodyWeights = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-        _oldCreateds = gymSets
+        cardio = gymSets.first.cardio;
+        oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
+        oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
+        oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
+        oldBodyWeights = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+        oldCreateds = gymSets
             .map(
               (gymSet) =>
-                  DateFormat(_settings.longDateFormat).format(gymSet.created),
+                  DateFormat(settings.longDateFormat).format(gymSet.created),
             )
             .join(', ');
-        _oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
-        _oldMinutes =
+        oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
+        oldMinutes =
             gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
-        _oldSeconds = gymSets
+        oldSeconds = gymSets
             .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
             .join(', ');
-        _oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
+        oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
       });
     });
   }
 
   @override
   void dispose() {
-    _repsController.dispose();
-    _weightController.dispose();
-    _bodyWeightController.dispose();
-    _distanceController.dispose();
-    _minutesController.dispose();
-    _secondsController.dispose();
-    _inclineController.dispose();
+    repsController.dispose();
+    weightController.dispose();
+    bodyWeightController.dispose();
+    distanceController.dispose();
+    minutesController.dispose();
+    secondsController.dispose();
+    inclineController.dispose();
 
     super.dispose();
   }
 
   Future<void> _save() async {
     Navigator.pop(context);
-    final reps = double.tryParse(_repsController.text);
-    final weight = double.tryParse(_weightController.text);
-    final bodyWeight = double.tryParse(_bodyWeightController.text);
-    final distance = double.tryParse(_distanceController.text);
-    final minutes = int.tryParse(_minutesController.text);
-    final seconds = int.tryParse(_secondsController.text);
+    final reps = double.tryParse(repsController.text);
+    final weight = double.tryParse(weightController.text);
+    final bodyWeight = double.tryParse(bodyWeightController.text);
+    final distance = double.tryParse(distanceController.text);
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
     final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
-    final incline = int.tryParse(_inclineController.text);
+    final incline = int.tryParse(inclineController.text);
 
     final gymSet = GymSetsCompanion(
-      name: _nameController.text != ''
-          ? Value(_nameController.text)
+      name: nameController.text != ''
+          ? Value(nameController.text)
           : const Value.absent(),
-      unit: _unit != null ? Value(_unit!) : const Value.absent(),
-      created: _created != null ? Value(_created!) : const Value.absent(),
-      cardio: _cardio != null ? Value(_cardio!) : const Value.absent(),
-      restMs: _restMs != null ? Value(_restMs!) : const Value.absent(),
+      unit: unit != null ? Value(unit!) : const Value.absent(),
+      created: created != null ? Value(created!) : const Value.absent(),
+      cardio: cardio != null ? Value(cardio!) : const Value.absent(),
+      restMs: restMs != null ? Value(restMs!) : const Value.absent(),
       incline: incline != null ? Value(incline) : const Value.absent(),
       reps: reps != null ? Value(reps) : const Value.absent(),
       weight: weight != null ? Value(weight) : const Value.absent(),
@@ -118,7 +118,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _created,
+      initialDate: created,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -131,12 +131,12 @@ class _EditSetsPageState extends State<EditSetsPage> {
   Future<void> _selectTime(DateTime pickedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(_created ?? DateTime.now()),
+      initialTime: TimeOfDay.fromDateTime(created ?? DateTime.now()),
     );
 
     if (pickedTime != null) {
       setState(() {
-        _created = DateTime(
+        created = DateTime(
           pickedDate.year,
           pickedDate.month,
           pickedDate.day,
@@ -149,7 +149,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   @override
   Widget build(BuildContext context) {
-    _settings = context.watch<SettingsState>();
+    settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -197,106 +197,106 @@ class _EditSetsPageState extends State<EditSetsPage> {
         child: material.Column(
           children: [
             TextField(
-              controller: _nameController,
+              controller: nameController,
               decoration:
-                  InputDecoration(labelText: "Name", hintText: _oldNames),
+                  InputDecoration(labelText: "Name", hintText: oldNames),
               textCapitalization: TextCapitalization.sentences,
             ),
-            if (_cardio == true) ...[
+            if (cardio == true) ...[
               TextField(
-                controller: _distanceController,
+                controller: distanceController,
                 decoration: InputDecoration(
                   labelText: 'Distance',
-                  hintText: _oldDistances,
+                  hintText: oldDistances,
                 ),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_distanceController),
+                onTap: () => selectAll(distanceController),
               ),
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _minutesController,
+                      controller: minutesController,
                       decoration: InputDecoration(
                         labelText: 'Minutes',
-                        hintText: _oldMinutes,
+                        hintText: oldMinutes,
                       ),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(_minutesController),
+                      onTap: () => selectAll(minutesController),
                       textInputAction: TextInputAction.next,
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      controller: _secondsController,
+                      controller: secondsController,
                       decoration: InputDecoration(
                         labelText: 'Seconds',
-                        hintText: _oldSeconds,
+                        hintText: oldSeconds,
                       ),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(_secondsController),
+                      onTap: () => selectAll(secondsController),
                       textInputAction: TextInputAction.next,
                     ),
                   ),
                 ],
               ),
               TextField(
-                controller: _inclineController,
+                controller: inclineController,
                 decoration: InputDecoration(
                   labelText: 'Incline',
-                  hintText: _oldInclines,
+                  hintText: oldInclines,
                 ),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_inclineController),
+                onTap: () => selectAll(inclineController),
               ),
             ],
-            if (_cardio == false || _cardio == null) ...[
+            if (cardio == false || cardio == null) ...[
               TextField(
-                controller: _repsController,
+                controller: repsController,
                 decoration:
-                    InputDecoration(labelText: 'Reps', hintText: _oldReps),
+                    InputDecoration(labelText: 'Reps', hintText: oldReps),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_repsController),
+                onTap: () => selectAll(repsController),
               ),
               TextField(
-                controller: _weightController,
+                controller: weightController,
                 decoration: InputDecoration(
                   labelText:
-                      _nameController.text == 'Weight' ? 'Value' : 'Weight',
-                  hintText: _oldWeights,
+                      nameController.text == 'Weight' ? 'Value' : 'Weight',
+                  hintText: oldWeights,
                 ),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_weightController),
+                onTap: () => selectAll(weightController),
               ),
             ],
-            if (_nameController.text != 'Weight' && !_settings.hideWeight)
+            if (nameController.text != 'Weight' && !settings.hideWeight)
               TextField(
-                controller: _bodyWeightController,
+                controller: bodyWeightController,
                 decoration: InputDecoration(
                   labelText: 'Body weight',
-                  hintText: _oldBodyWeights,
+                  hintText: oldBodyWeights,
                 ),
                 keyboardType: TextInputType.number,
-                onTap: () => selectAll(_bodyWeightController),
+                onTap: () => selectAll(bodyWeightController),
               ),
             UnitSelector(
-              value: _unit ?? 'kg',
+              value: unit ?? 'kg',
               onChanged: (String? newValue) {
                 setState(() {
-                  _unit = newValue!;
+                  unit = newValue!;
                 });
               },
-              cardio: _cardio ?? false,
+              cardio: cardio ?? false,
             ),
             ListTile(
               title: const Text('Created Date'),
               subtitle: Text(
-                _created != null
-                    ? DateFormat(_settings.longDateFormat).format(_created!)
-                    : _oldCreateds ?? "",
+                created != null
+                    ? DateFormat(settings.longDateFormat).format(created!)
+                    : oldCreateds ?? "",
               ),
               trailing: const Icon(Icons.calendar_today),
               onTap: () => _selectDate(),

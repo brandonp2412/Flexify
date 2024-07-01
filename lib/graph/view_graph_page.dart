@@ -14,8 +14,8 @@ class ViewGraphPage extends StatefulWidget {
 }
 
 class _ViewGraphPageState extends State<ViewGraphPage> {
-  late Stream<List<GymSet>> _stream;
-  int _limit = 20;
+  late Stream<List<GymSet>> stream;
+  int limit = 20;
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
 
   void _setStream() {
     setState(() {
-      _stream = (db.gymSets.select()
+      stream = (db.gymSets.select()
             ..orderBy(
               [
                 (u) => OrderingTerm(
@@ -36,7 +36,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             )
             ..where((tbl) => tbl.name.equals(widget.name))
             ..where((tbl) => tbl.hidden.equals(false))
-            ..limit(_limit))
+            ..limit(limit))
           .watch();
     });
   }
@@ -48,7 +48,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         title: Text(widget.name),
       ),
       body: StreamBuilder(
-        stream: _stream,
+        stream: stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.data?.isEmpty == true)
@@ -65,7 +65,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
             selected: const {},
             onNext: () {
               setState(() {
-                _limit += 10;
+                limit += 10;
               });
               _setStream();
             },

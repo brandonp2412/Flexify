@@ -33,27 +33,28 @@ class PlansList extends StatelessWidget {
     required this.onSelect,
   });
 
-  late final _stream = (db.customSelect(
+  late final stream = (db.customSelect(
     """
-    SELECT id, SUM(COALESCE(max_sets, 3)) AS max_sets, 
-      SUM(todays_count) AS todays_count FROM (
-      SELECT p.id, gs.name, gs.max_sets, 
-        COUNT(
-          CASE WHEN p.id = gs.plan_id 
-            AND DATE(created, 'unixepoch', 'localtime') = 
-              DATE('now', 'localtime') 
-            AND hidden = 0 
-            THEN 1 
-          END
-        ) as todays_count
-      FROM plans p
-      LEFT JOIN gym_sets gs
-        ON INSTR(p.exercises, gs.name) != 0
-      GROUP BY gs.name, p.id
-    ) 
-    GROUP BY id
-""",
-    readsFrom: {db.plans, db.gymSets},
+      SELECT id, SUM(max_sets) AS max_sets, 
+        SUM(todays_count) AS todays_count FROM (
+          SELECT p.id, pe.exercise AS name, COALESCE(pe.max_sets, 3) AS max_sets, 
+            COUNT(
+              CASE WHEN p.id = gs.plan_id 
+                AND DATE(created, 'unixepoch', 'localtime') = 
+                  DATE('now', 'localtime') 
+                AND hidden = 0 
+                THEN 1 
+              END
+            ) as todays_count
+          FROM plans p
+          LEFT JOIN plan_exercises pe ON p.id = pe.plan_id
+            AND pe.enabled = true
+          LEFT JOIN gym_sets gs ON pe.exercise = gs.name
+          GROUP BY pe.exercise, p.id
+      ) 
+      GROUP BY id
+    """,
+    readsFrom: {db.plans, db.gymSets, db.planExercises},
   )).watch().map((rows) {
     return rows
         .map(
@@ -92,7 +93,7 @@ class PlansList extends StatelessWidget {
             refresh: updatePlans,
             selected: selected,
             onSelect: (id) => onSelect(id),
-            countStream: _stream,
+            countStream: stream,
           );
         },
         onReorder: (int oldIndex, int newIndex) async {
@@ -129,7 +130,7 @@ class PlansList extends StatelessWidget {
             refresh: updatePlans,
             selected: selected,
             onSelect: (id) => onSelect(id),
-            countStream: _stream,
+            countStream: stream,
           );
         },
       );

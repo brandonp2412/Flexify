@@ -376,12 +376,6 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
       'rest_ms', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _maxSetsMeta =
-      const VerificationMeta('maxSets');
-  @override
-  late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _inclineMeta =
       const VerificationMeta('incline');
   @override
@@ -407,7 +401,6 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
         distance,
         cardio,
         restMs,
-        maxSets,
         incline,
         planId
       ];
@@ -480,10 +473,6 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       context.handle(_restMsMeta,
           restMs.isAcceptableOrUnknown(data['rest_ms']!, _restMsMeta));
     }
-    if (data.containsKey('max_sets')) {
-      context.handle(_maxSetsMeta,
-          maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
-    }
     if (data.containsKey('incline')) {
       context.handle(_inclineMeta,
           incline.isAcceptableOrUnknown(data['incline']!, _inclineMeta));
@@ -525,8 +514,6 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
       restMs: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}rest_ms']),
-      maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets']),
       incline: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}incline']),
       planId: attachedDatabase.typeMapping
@@ -553,7 +540,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final double distance;
   final bool cardio;
   final int? restMs;
-  final int? maxSets;
   final int? incline;
   final int? planId;
   const GymSet(
@@ -569,7 +555,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.distance,
       required this.cardio,
       this.restMs,
-      this.maxSets,
       this.incline,
       this.planId});
   @override
@@ -588,9 +573,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     map['cardio'] = Variable<bool>(cardio);
     if (!nullToAbsent || restMs != null) {
       map['rest_ms'] = Variable<int>(restMs);
-    }
-    if (!nullToAbsent || maxSets != null) {
-      map['max_sets'] = Variable<int>(maxSets);
     }
     if (!nullToAbsent || incline != null) {
       map['incline'] = Variable<int>(incline);
@@ -616,9 +598,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       cardio: Value(cardio),
       restMs:
           restMs == null && nullToAbsent ? const Value.absent() : Value(restMs),
-      maxSets: maxSets == null && nullToAbsent
-          ? const Value.absent()
-          : Value(maxSets),
       incline: incline == null && nullToAbsent
           ? const Value.absent()
           : Value(incline),
@@ -643,7 +622,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       distance: serializer.fromJson<double>(json['distance']),
       cardio: serializer.fromJson<bool>(json['cardio']),
       restMs: serializer.fromJson<int?>(json['restMs']),
-      maxSets: serializer.fromJson<int?>(json['maxSets']),
       incline: serializer.fromJson<int?>(json['incline']),
       planId: serializer.fromJson<int?>(json['planId']),
     );
@@ -664,7 +642,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'distance': serializer.toJson<double>(distance),
       'cardio': serializer.toJson<bool>(cardio),
       'restMs': serializer.toJson<int?>(restMs),
-      'maxSets': serializer.toJson<int?>(maxSets),
       'incline': serializer.toJson<int?>(incline),
       'planId': serializer.toJson<int?>(planId),
     };
@@ -683,7 +660,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? distance,
           bool? cardio,
           Value<int?> restMs = const Value.absent(),
-          Value<int?> maxSets = const Value.absent(),
           Value<int?> incline = const Value.absent(),
           Value<int?> planId = const Value.absent()}) =>
       GymSet(
@@ -699,7 +675,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         distance: distance ?? this.distance,
         cardio: cardio ?? this.cardio,
         restMs: restMs.present ? restMs.value : this.restMs,
-        maxSets: maxSets.present ? maxSets.value : this.maxSets,
         incline: incline.present ? incline.value : this.incline,
         planId: planId.present ? planId.value : this.planId,
       );
@@ -718,7 +693,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('distance: $distance, ')
           ..write('cardio: $cardio, ')
           ..write('restMs: $restMs, ')
-          ..write('maxSets: $maxSets, ')
           ..write('incline: $incline, ')
           ..write('planId: $planId')
           ..write(')'))
@@ -727,7 +701,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
 
   @override
   int get hashCode => Object.hash(id, name, reps, weight, unit, created, hidden,
-      bodyWeight, duration, distance, cardio, restMs, maxSets, incline, planId);
+      bodyWeight, duration, distance, cardio, restMs, incline, planId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -744,7 +718,6 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.distance == this.distance &&
           other.cardio == this.cardio &&
           other.restMs == this.restMs &&
-          other.maxSets == this.maxSets &&
           other.incline == this.incline &&
           other.planId == this.planId);
 }
@@ -762,7 +735,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<double> distance;
   final Value<bool> cardio;
   final Value<int?> restMs;
-  final Value<int?> maxSets;
   final Value<int?> incline;
   final Value<int?> planId;
   const GymSetsCompanion({
@@ -778,7 +750,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.distance = const Value.absent(),
     this.cardio = const Value.absent(),
     this.restMs = const Value.absent(),
-    this.maxSets = const Value.absent(),
     this.incline = const Value.absent(),
     this.planId = const Value.absent(),
   });
@@ -795,7 +766,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.distance = const Value.absent(),
     this.cardio = const Value.absent(),
     this.restMs = const Value.absent(),
-    this.maxSets = const Value.absent(),
     this.incline = const Value.absent(),
     this.planId = const Value.absent(),
   })  : name = Value(name),
@@ -816,7 +786,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<double>? distance,
     Expression<bool>? cardio,
     Expression<int>? restMs,
-    Expression<int>? maxSets,
     Expression<int>? incline,
     Expression<int>? planId,
   }) {
@@ -833,7 +802,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (distance != null) 'distance': distance,
       if (cardio != null) 'cardio': cardio,
       if (restMs != null) 'rest_ms': restMs,
-      if (maxSets != null) 'max_sets': maxSets,
       if (incline != null) 'incline': incline,
       if (planId != null) 'plan_id': planId,
     });
@@ -852,7 +820,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? distance,
       Value<bool>? cardio,
       Value<int?>? restMs,
-      Value<int?>? maxSets,
       Value<int?>? incline,
       Value<int?>? planId}) {
     return GymSetsCompanion(
@@ -868,7 +835,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       distance: distance ?? this.distance,
       cardio: cardio ?? this.cardio,
       restMs: restMs ?? this.restMs,
-      maxSets: maxSets ?? this.maxSets,
       incline: incline ?? this.incline,
       planId: planId ?? this.planId,
     );
@@ -913,9 +879,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (restMs.present) {
       map['rest_ms'] = Variable<int>(restMs.value);
     }
-    if (maxSets.present) {
-      map['max_sets'] = Variable<int>(maxSets.value);
-    }
     if (incline.present) {
       map['incline'] = Variable<int>(incline.value);
     }
@@ -940,7 +903,6 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('distance: $distance, ')
           ..write('cardio: $cardio, ')
           ..write('restMs: $restMs, ')
-          ..write('maxSets: $maxSets, ')
           ..write('incline: $incline, ')
           ..write('planId: $planId')
           ..write(')'))
@@ -1878,18 +1840,317 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   }
 }
 
+class $PlanExercisesTable extends PlanExercises
+    with TableInfo<$PlanExercisesTable, PlanExercise> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PlanExercisesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
+  @override
+  late final GeneratedColumn<int> planId = GeneratedColumn<int>(
+      'plan_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES plans (id)'));
+  static const VerificationMeta _exerciseMeta =
+      const VerificationMeta('exercise');
+  @override
+  late final GeneratedColumn<String> exercise = GeneratedColumn<String>(
+      'exercise', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES gym_sets (name)'));
+  static const VerificationMeta _enabledMeta =
+      const VerificationMeta('enabled');
+  @override
+  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+      'enabled', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("enabled" IN (0, 1))'));
+  static const VerificationMeta _maxSetsMeta =
+      const VerificationMeta('maxSets');
+  @override
+  late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
+      'max_sets', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, planId, exercise, enabled, maxSets];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'plan_exercises';
+  @override
+  VerificationContext validateIntegrity(Insertable<PlanExercise> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('plan_id')) {
+      context.handle(_planIdMeta,
+          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
+    } else if (isInserting) {
+      context.missing(_planIdMeta);
+    }
+    if (data.containsKey('exercise')) {
+      context.handle(_exerciseMeta,
+          exercise.isAcceptableOrUnknown(data['exercise']!, _exerciseMeta));
+    } else if (isInserting) {
+      context.missing(_exerciseMeta);
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(_enabledMeta,
+          enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta));
+    } else if (isInserting) {
+      context.missing(_enabledMeta);
+    }
+    if (data.containsKey('max_sets')) {
+      context.handle(_maxSetsMeta,
+          maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PlanExercise map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PlanExercise(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      planId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plan_id'])!,
+      exercise: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}exercise'])!,
+      enabled: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}enabled'])!,
+      maxSets: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}max_sets']),
+    );
+  }
+
+  @override
+  $PlanExercisesTable createAlias(String alias) {
+    return $PlanExercisesTable(attachedDatabase, alias);
+  }
+}
+
+class PlanExercise extends DataClass implements Insertable<PlanExercise> {
+  final int id;
+  final int planId;
+  final String exercise;
+  final bool enabled;
+  final int? maxSets;
+  const PlanExercise(
+      {required this.id,
+      required this.planId,
+      required this.exercise,
+      required this.enabled,
+      this.maxSets});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['plan_id'] = Variable<int>(planId);
+    map['exercise'] = Variable<String>(exercise);
+    map['enabled'] = Variable<bool>(enabled);
+    if (!nullToAbsent || maxSets != null) {
+      map['max_sets'] = Variable<int>(maxSets);
+    }
+    return map;
+  }
+
+  PlanExercisesCompanion toCompanion(bool nullToAbsent) {
+    return PlanExercisesCompanion(
+      id: Value(id),
+      planId: Value(planId),
+      exercise: Value(exercise),
+      enabled: Value(enabled),
+      maxSets: maxSets == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxSets),
+    );
+  }
+
+  factory PlanExercise.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PlanExercise(
+      id: serializer.fromJson<int>(json['id']),
+      planId: serializer.fromJson<int>(json['planId']),
+      exercise: serializer.fromJson<String>(json['exercise']),
+      enabled: serializer.fromJson<bool>(json['enabled']),
+      maxSets: serializer.fromJson<int?>(json['maxSets']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'planId': serializer.toJson<int>(planId),
+      'exercise': serializer.toJson<String>(exercise),
+      'enabled': serializer.toJson<bool>(enabled),
+      'maxSets': serializer.toJson<int?>(maxSets),
+    };
+  }
+
+  PlanExercise copyWith(
+          {int? id,
+          int? planId,
+          String? exercise,
+          bool? enabled,
+          Value<int?> maxSets = const Value.absent()}) =>
+      PlanExercise(
+        id: id ?? this.id,
+        planId: planId ?? this.planId,
+        exercise: exercise ?? this.exercise,
+        enabled: enabled ?? this.enabled,
+        maxSets: maxSets.present ? maxSets.value : this.maxSets,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PlanExercise(')
+          ..write('id: $id, ')
+          ..write('planId: $planId, ')
+          ..write('exercise: $exercise, ')
+          ..write('enabled: $enabled, ')
+          ..write('maxSets: $maxSets')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, planId, exercise, enabled, maxSets);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PlanExercise &&
+          other.id == this.id &&
+          other.planId == this.planId &&
+          other.exercise == this.exercise &&
+          other.enabled == this.enabled &&
+          other.maxSets == this.maxSets);
+}
+
+class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
+  final Value<int> id;
+  final Value<int> planId;
+  final Value<String> exercise;
+  final Value<bool> enabled;
+  final Value<int?> maxSets;
+  const PlanExercisesCompanion({
+    this.id = const Value.absent(),
+    this.planId = const Value.absent(),
+    this.exercise = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.maxSets = const Value.absent(),
+  });
+  PlanExercisesCompanion.insert({
+    this.id = const Value.absent(),
+    required int planId,
+    required String exercise,
+    required bool enabled,
+    this.maxSets = const Value.absent(),
+  })  : planId = Value(planId),
+        exercise = Value(exercise),
+        enabled = Value(enabled);
+  static Insertable<PlanExercise> custom({
+    Expression<int>? id,
+    Expression<int>? planId,
+    Expression<String>? exercise,
+    Expression<bool>? enabled,
+    Expression<int>? maxSets,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (planId != null) 'plan_id': planId,
+      if (exercise != null) 'exercise': exercise,
+      if (enabled != null) 'enabled': enabled,
+      if (maxSets != null) 'max_sets': maxSets,
+    });
+  }
+
+  PlanExercisesCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? planId,
+      Value<String>? exercise,
+      Value<bool>? enabled,
+      Value<int?>? maxSets}) {
+    return PlanExercisesCompanion(
+      id: id ?? this.id,
+      planId: planId ?? this.planId,
+      exercise: exercise ?? this.exercise,
+      enabled: enabled ?? this.enabled,
+      maxSets: maxSets ?? this.maxSets,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (planId.present) {
+      map['plan_id'] = Variable<int>(planId.value);
+    }
+    if (exercise.present) {
+      map['exercise'] = Variable<String>(exercise.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (maxSets.present) {
+      map['max_sets'] = Variable<int>(maxSets.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlanExercisesCompanion(')
+          ..write('id: $id, ')
+          ..write('planId: $planId, ')
+          ..write('exercise: $exercise, ')
+          ..write('enabled: $enabled, ')
+          ..write('maxSets: $maxSets')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
   late final $PlansTable plans = $PlansTable(this);
   late final $GymSetsTable gymSets = $GymSetsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
+  late final $PlanExercisesTable planExercises = $PlanExercisesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [plans, gymSets, settings];
+      [plans, gymSets, settings, planExercises];
 }
 
 typedef $$PlansTableInsertCompanionBuilder = PlansCompanion Function({
@@ -1995,6 +2256,19 @@ class $$PlansTableFilterComposer
       column: $state.table.title,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter planExercisesRefs(
+      ComposableFilter Function($$PlanExercisesTableFilterComposer f) f) {
+    final $$PlanExercisesTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.planExercises,
+        getReferencedColumn: (t) => t.planId,
+        builder: (joinBuilder, parentComposers) =>
+            $$PlanExercisesTableFilterComposer(ComposerState($state.db,
+                $state.db.planExercises, joinBuilder, parentComposers)));
+    return f(composer);
+  }
 }
 
 class $$PlansTableOrderingComposer
@@ -2039,7 +2313,6 @@ typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
   Value<double> distance,
   Value<bool> cardio,
   Value<int?> restMs,
-  Value<int?> maxSets,
   Value<int?> incline,
   Value<int?> planId,
 });
@@ -2056,7 +2329,6 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<double> distance,
   Value<bool> cardio,
   Value<int?> restMs,
-  Value<int?> maxSets,
   Value<int?> incline,
   Value<int?> planId,
 });
@@ -2092,7 +2364,6 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<double> distance = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
             Value<int?> restMs = const Value.absent(),
-            Value<int?> maxSets = const Value.absent(),
             Value<int?> incline = const Value.absent(),
             Value<int?> planId = const Value.absent(),
           }) =>
@@ -2109,7 +2380,6 @@ class $$GymSetsTableTableManager extends RootTableManager<
             distance: distance,
             cardio: cardio,
             restMs: restMs,
-            maxSets: maxSets,
             incline: incline,
             planId: planId,
           ),
@@ -2126,7 +2396,6 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<double> distance = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
             Value<int?> restMs = const Value.absent(),
-            Value<int?> maxSets = const Value.absent(),
             Value<int?> incline = const Value.absent(),
             Value<int?> planId = const Value.absent(),
           }) =>
@@ -2143,7 +2412,6 @@ class $$GymSetsTableTableManager extends RootTableManager<
             distance: distance,
             cardio: cardio,
             restMs: restMs,
-            maxSets: maxSets,
             incline: incline,
             planId: planId,
           ),
@@ -2225,11 +2493,6 @@ class $$GymSetsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<int> get maxSets => $state.composableBuilder(
-      column: $state.table.maxSets,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
   ColumnFilters<int> get incline => $state.composableBuilder(
       column: $state.table.incline,
       builder: (column, joinBuilders) =>
@@ -2239,6 +2502,19 @@ class $$GymSetsTableFilterComposer
       column: $state.table.planId,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter planExercisesRefs(
+      ComposableFilter Function($$PlanExercisesTableFilterComposer f) f) {
+    final $$PlanExercisesTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.name,
+        referencedTable: $state.db.planExercises,
+        getReferencedColumn: (t) => t.exercise,
+        builder: (joinBuilder, parentComposers) =>
+            $$PlanExercisesTableFilterComposer(ComposerState($state.db,
+                $state.db.planExercises, joinBuilder, parentComposers)));
+    return f(composer);
+  }
 }
 
 class $$GymSetsTableOrderingComposer
@@ -2301,11 +2577,6 @@ class $$GymSetsTableOrderingComposer
 
   ColumnOrderings<int> get restMs => $state.composableBuilder(
       column: $state.table.restMs,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get maxSets => $state.composableBuilder(
-      column: $state.table.maxSets,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -2695,6 +2966,171 @@ class $$SettingsTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$PlanExercisesTableInsertCompanionBuilder = PlanExercisesCompanion
+    Function({
+  Value<int> id,
+  required int planId,
+  required String exercise,
+  required bool enabled,
+  Value<int?> maxSets,
+});
+typedef $$PlanExercisesTableUpdateCompanionBuilder = PlanExercisesCompanion
+    Function({
+  Value<int> id,
+  Value<int> planId,
+  Value<String> exercise,
+  Value<bool> enabled,
+  Value<int?> maxSets,
+});
+
+class $$PlanExercisesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PlanExercisesTable,
+    PlanExercise,
+    $$PlanExercisesTableFilterComposer,
+    $$PlanExercisesTableOrderingComposer,
+    $$PlanExercisesTableProcessedTableManager,
+    $$PlanExercisesTableInsertCompanionBuilder,
+    $$PlanExercisesTableUpdateCompanionBuilder> {
+  $$PlanExercisesTableTableManager(_$AppDatabase db, $PlanExercisesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$PlanExercisesTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$PlanExercisesTableOrderingComposer(ComposerState(db, table)),
+          getChildManagerBuilder: (p) =>
+              $$PlanExercisesTableProcessedTableManager(p),
+          getUpdateCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            Value<int> planId = const Value.absent(),
+            Value<String> exercise = const Value.absent(),
+            Value<bool> enabled = const Value.absent(),
+            Value<int?> maxSets = const Value.absent(),
+          }) =>
+              PlanExercisesCompanion(
+            id: id,
+            planId: planId,
+            exercise: exercise,
+            enabled: enabled,
+            maxSets: maxSets,
+          ),
+          getInsertCompanionBuilder: ({
+            Value<int> id = const Value.absent(),
+            required int planId,
+            required String exercise,
+            required bool enabled,
+            Value<int?> maxSets = const Value.absent(),
+          }) =>
+              PlanExercisesCompanion.insert(
+            id: id,
+            planId: planId,
+            exercise: exercise,
+            enabled: enabled,
+            maxSets: maxSets,
+          ),
+        ));
+}
+
+class $$PlanExercisesTableProcessedTableManager extends ProcessedTableManager<
+    _$AppDatabase,
+    $PlanExercisesTable,
+    PlanExercise,
+    $$PlanExercisesTableFilterComposer,
+    $$PlanExercisesTableOrderingComposer,
+    $$PlanExercisesTableProcessedTableManager,
+    $$PlanExercisesTableInsertCompanionBuilder,
+    $$PlanExercisesTableUpdateCompanionBuilder> {
+  $$PlanExercisesTableProcessedTableManager(super.$state);
+}
+
+class $$PlanExercisesTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $PlanExercisesTable> {
+  $$PlanExercisesTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get enabled => $state.composableBuilder(
+      column: $state.table.enabled,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get maxSets => $state.composableBuilder(
+      column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$PlansTableFilterComposer get planId {
+    final $$PlansTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $state.db.plans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $$PlansTableFilterComposer(
+            ComposerState(
+                $state.db, $state.db.plans, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $$GymSetsTableFilterComposer get exercise {
+    final $$GymSetsTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exercise,
+        referencedTable: $state.db.gymSets,
+        getReferencedColumn: (t) => t.name,
+        builder: (joinBuilder, parentComposers) => $$GymSetsTableFilterComposer(
+            ComposerState(
+                $state.db, $state.db.gymSets, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$PlanExercisesTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $PlanExercisesTable> {
+  $$PlanExercisesTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get enabled => $state.composableBuilder(
+      column: $state.table.enabled,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get maxSets => $state.composableBuilder(
+      column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$PlansTableOrderingComposer get planId {
+    final $$PlansTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $state.db.plans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $$PlansTableOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.plans, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $$GymSetsTableOrderingComposer get exercise {
+    final $$GymSetsTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exercise,
+        referencedTable: $state.db.gymSets,
+        getReferencedColumn: (t) => t.name,
+        builder: (joinBuilder, parentComposers) =>
+            $$GymSetsTableOrderingComposer(ComposerState(
+                $state.db, $state.db.gymSets, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
 class _$AppDatabaseManager {
   final _$AppDatabase _db;
   _$AppDatabaseManager(this._db);
@@ -2704,4 +3140,6 @@ class _$AppDatabaseManager {
       $$GymSetsTableTableManager(_db, _db.gymSets);
   $$SettingsTableTableManager get settings =>
       $$SettingsTableTableManager(_db, _db.settings);
+  $$PlanExercisesTableTableManager get planExercises =>
+      $$PlanExercisesTableTableManager(_db, _db.planExercises);
 }

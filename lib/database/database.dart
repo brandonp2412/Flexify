@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/defaults.dart';
+import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/database/settings.dart';
@@ -18,23 +20,12 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [Plans, GymSets, Settings])
+@DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises])
 class AppDatabase extends _$AppDatabase {
   AppDatabase({QueryExecutor? executor}) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 17;
-
-  final _defaultSets = defaultExercises.map(
-    (exercise) => GymSetsCompanion(
-      created: Value(DateTime.now().toLocal()),
-      name: Value(exercise),
-      reps: const Value(0),
-      weight: const Value(0),
-      hidden: const Value(true),
-      unit: const Value('kg'),
-    ),
-  );
+  int get schemaVersion => 18;
 
   @override
   MigrationStrategy get migration {
@@ -47,10 +38,13 @@ class AppDatabase extends _$AppDatabase {
             "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
           ),
         );
+
         await batch((batch) {
-          batch.insertAll(gymSets, _defaultSets);
+          batch.insertAll(gymSets, defaultSets);
           batch.insertAll(plans, defaultPlans);
+          batch.insertAll(planExercises, defaultPlanExercises);
         });
+
         await settings.insertOne(
           SettingsCompanion.insert(
             themeMode: material.ThemeMode.system.toString(),
@@ -95,7 +89,7 @@ class AppDatabase extends _$AppDatabase {
         },
         from4To5: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.hidden);
-          await batch((batch) => batch.insertAll(gymSets, _defaultSets));
+          await batch((batch) => batch.insertAll(gymSets, defaultSets));
         },
         from5To6: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.bodyWeight);
@@ -127,9 +121,9 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(schema.gymSets, schema.gymSets.maxSets);
           final maxSets = prefs.getInt('maxSets');
           if (maxSets != null)
-            await (gymSets
-                .update()
-                .write(GymSetsCompanion(maxSets: Value(maxSets))));
+            await m.database.customUpdate(
+              "UPDATE gym_sets SET max_sets = $maxSets",
+            );
         },
         from10To11: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.incline);
@@ -158,14 +152,8 @@ class AppDatabase extends _$AppDatabase {
         },
         from13To14: (m, schema) async {
           await m.alterTable(TableMigration(schema.gymSets));
-          (gymSets.update()
-                ..where(
-                  (u) => u.maxSets.equals(3),
-                ))
-              .write(
-            const GymSetsCompanion(
-              maxSets: Value(null),
-            ),
+          await m.database.customUpdate(
+            "UPDATE gym_sets SET max_sets = NULL WHERE max_sets = 3",
           );
         },
         from14To15: (Migrator m, Schema15 schema) async {
@@ -173,14 +161,8 @@ class AppDatabase extends _$AppDatabase {
           final maxSets = prefs.getInt('maxSets');
 
           if (maxSets != null)
-            (gymSets.update()
-                  ..where(
-                    (u) => u.maxSets.equals(maxSets),
-                  ))
-                .write(
-              const GymSetsCompanion(
-                maxSets: Value(null),
-              ),
+            await m.database.customUpdate(
+              "UPDATE gym_sets SET max_sets = NULL WHERE max_sets = $maxSets",
             );
         },
         from15To16: (Migrator m, Schema16 schema) async {
@@ -269,6 +251,39 @@ class AppDatabase extends _$AppDatabase {
         },
         from16To17: (Migrator m, Schema17 schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.planId);
+        },
+        from17To18: (Migrator m, Schema18 schema) async {
+          final plans = await (schema.plans.select()).get();
+          const maxSets = CustomExpression<int>('max_sets');
+          final gymSets = await (schema.gymSets.selectOnly()
+                ..addColumns(
+                  [maxSets, schema.gymSets.name],
+                )
+                ..groupBy([schema.gymSets.name]))
+              .get();
+
+          List<PlanExercisesCompanion> pe = [];
+          for (final plan in plans) {
+            final exercises = plan.read<String>('exercises').split(',');
+
+            for (final exercise in exercises) {
+              final gymSet = gymSets.firstWhere(
+                (gymSet) => gymSet.read(schema.gymSets.name) == exercise,
+              );
+              pe.add(
+                PlanExercisesCompanion.insert(
+                  planId: plan.read('id'),
+                  exercise: exercise,
+                  enabled: true,
+                  maxSets: Value(gymSet.read(maxSets)),
+                ),
+              );
+            }
+          }
+
+          await m.createTable(schema.planExercises);
+          await planExercises.insertAll(pe);
+          await m.alterTable(TableMigration(schema.gymSets));
         },
       ),
     );
