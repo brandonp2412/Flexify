@@ -19,33 +19,33 @@ class EditPlanPage extends StatefulWidget {
 }
 
 class _EditPlanPageState extends State<EditPlanPage> {
-  late List<bool> _daySwitches;
-  late List<String> _exerciseSelections;
+  late List<bool> daySwitches;
+  late List<String> exerciseSelections;
 
-  bool _showSearch = false;
-  String _search = '';
-  List<String> _exercises = [];
-  List<TextEditingController> _controllers = [];
+  bool showSearch = false;
+  String search = '';
+  List<String> exercises = [];
+  List<TextEditingController> controllers = [];
 
-  final _searchNode = FocusNode();
-  final _searchController = TextEditingController();
-  final _titleController = TextEditingController();
+  final searchNode = FocusNode();
+  final searchController = TextEditingController();
+  final titleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     _setExercises();
-    _titleController.text = widget.plan.title.value ?? "";
+    titleController.text = widget.plan.title.value ?? "";
 
     final dayList = widget.plan.days.value.split(',');
-    _daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
+    daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
 
     if (widget.plan.exercises.value.isEmpty)
-      _exerciseSelections = [];
+      exerciseSelections = [];
     else {
       final splitExercises = widget.plan.exercises.value.split(',');
-      _exerciseSelections = splitExercises;
+      exerciseSelections = splitExercises;
     }
   }
 
@@ -63,12 +63,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
         .get()
         .then(
           (results) => setState(() {
-            _exercises = [];
-            _controllers = [];
+            exercises = [];
+            controllers = [];
 
             for (final result in results) {
-              _exercises.add(result.read(db.gymSets.name)!);
-              _controllers.add(
+              exercises.add(result.read(db.gymSets.name)!);
+              controllers.add(
                 TextEditingController(
                   text: result.read(db.planExercises.maxSets)?.toString(),
                 ),
@@ -80,34 +80,34 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   void dispose() {
-    _searchNode.dispose();
-    _searchController.dispose();
-    _titleController.dispose();
+    searchNode.dispose();
+    searchController.dispose();
+    titleController.dispose();
     super.dispose();
   }
 
   void _toggleSearch() {
     setState(() {
-      _showSearch = !_showSearch;
-      if (!_showSearch) _search = '';
+      showSearch = !showSearch;
+      if (!showSearch) search = '';
     });
-    _searchNode.requestFocus();
-    _searchController.clear();
+    searchNode.requestFocus();
+    searchController.clear();
   }
 
   Future<void> _save() async {
     final days = [];
-    for (int i = 0; i < _daySwitches.length; i++) {
-      if (_daySwitches[i]) days.add(weekdays[i]);
+    for (int i = 0; i < daySwitches.length; i++) {
+      if (daySwitches[i]) days.add(weekdays[i]);
     }
-    if (days.isEmpty && _titleController.text.isEmpty) {
+    if (days.isEmpty && titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Select days/title first')),
       );
       return;
     }
 
-    if (_exerciseSelections.isEmpty) {
+    if (exerciseSelections.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Select exercises first')),
       );
@@ -117,8 +117,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
     var newPlan = PlansCompanion.insert(
       days: days.join(','),
       exercises:
-          _exerciseSelections.where((element) => element.isNotEmpty).join(','),
-      title: Value(_titleController.text),
+          exerciseSelections.where((element) => element.isNotEmpty).join(','),
+      title: Value(titleController.text),
     );
 
     int? id;
@@ -133,13 +133,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
     }
 
     List<PlanExercisesCompanion> planExercises = [];
-    for (var i = 0; i < _exercises.length; i++) {
+    for (var i = 0; i < exercises.length; i++) {
       planExercises.add(
         PlanExercisesCompanion.insert(
           planId: id,
-          exercise: _exercises[i],
-          enabled: _exerciseSelections.contains(_exercises[i]),
-          maxSets: Value(int.tryParse(_controllers[i].text)),
+          exercise: exercises[i],
+          enabled: exerciseSelections.contains(exercises[i]),
+          maxSets: Value(int.tryParse(controllers[i].text)),
         ),
       );
     }
@@ -150,9 +150,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
     Navigator.pop(context);
   }
 
-  Iterable<Widget> get tiles => _exercises
+  Iterable<Widget> get tiles => exercises
       .where(
-        (exercise) => exercise.toLowerCase().contains(_search.toLowerCase()),
+        (exercise) => exercise.toLowerCase().contains(search.toLowerCase()),
       )
       .toList()
       .asMap()
@@ -165,15 +165,15 @@ class _EditPlanPageState extends State<EditPlanPage> {
               SizedBox(
                 width: 64,
                 child: TextField(
-                  controller: _controllers[entry.key],
+                  controller: controllers[entry.key],
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: false),
-                  onTap: () => selectAll(_controllers[entry.key]),
+                  onTap: () => selectAll(controllers[entry.key]),
                   onChanged: (value) {
                     if (value.isNotEmpty &&
-                        !_exerciseSelections.contains(entry.value))
+                        !exerciseSelections.contains(entry.value))
                       setState(() {
-                        _exerciseSelections.add(entry.value);
+                        exerciseSelections.add(entry.value);
                       });
                   },
                   decoration: const InputDecoration(
@@ -187,10 +187,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (_exerciseSelections.contains(entry.value))
-                        _exerciseSelections.remove(entry.value);
+                      if (exerciseSelections.contains(entry.value))
+                        exerciseSelections.remove(entry.value);
                       else
-                        _exerciseSelections.add(entry.value);
+                        exerciseSelections.add(entry.value);
                     });
                   },
                   child: Text(
@@ -200,13 +200,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
               ),
               Switch(
-                value: _exerciseSelections.contains(entry.value),
+                value: exerciseSelections.contains(entry.value),
                 onChanged: (value) {
                   setState(() {
-                    if (_exerciseSelections.contains(entry.value))
-                      _exerciseSelections.remove(entry.value);
+                    if (exerciseSelections.contains(entry.value))
+                      exerciseSelections.remove(entry.value);
                     else
-                      _exerciseSelections.add(entry.value);
+                      exerciseSelections.add(entry.value);
                   });
                 },
               ),
@@ -219,7 +219,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   Widget build(BuildContext context) {
     List<Widget> actions = [];
 
-    if (_search == '')
+    if (search == '')
       actions.add(
         IconButton(
           onPressed: _toggleSearch,
@@ -231,11 +231,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
       actions.add(
         IconButton(
           onPressed: () {
-            _searchController.clear();
-            _searchNode.unfocus();
+            searchController.clear();
+            searchNode.unfocus();
             setState(() {
-              _search = '';
-              _showSearch = false;
+              search = '';
+              showSearch = false;
             });
           },
           icon: const Icon(Icons.clear),
@@ -250,13 +250,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: _showSearch
+        title: showSearch
             ? TextField(
-                focusNode: _searchNode,
-                controller: _searchController,
+                focusNode: searchNode,
+                controller: searchController,
                 textCapitalization: TextCapitalization.sentences,
                 onChanged: (value) => setState(() {
-                  _search = value;
+                  search = value;
                 }),
                 decoration: const InputDecoration(
                   hintText: "Search...",
@@ -270,12 +270,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
-            if (_search == '') ...[
+            if (search == '') ...[
               TextField(
                 decoration: const material.InputDecoration(
                   labelText: 'Title (optional)',
                 ),
-                controller: _titleController,
+                controller: titleController,
                 textCapitalization: TextCapitalization.sentences,
               ),
               const SizedBox(
@@ -286,10 +286,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 7,
                 (index) => SwitchListTile(
                   title: Text(weekdays[index]),
-                  value: _daySwitches[index],
+                  value: daySwitches[index],
                   onChanged: (value) {
                     setState(() {
-                      _daySwitches[index] = value;
+                      daySwitches[index] = value;
                     });
                   },
                 ),

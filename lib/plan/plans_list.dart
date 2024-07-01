@@ -33,7 +33,7 @@ class PlansList extends StatelessWidget {
     required this.onSelect,
   });
 
-  late final _stream = (db.customSelect(
+  late final stream = (db.customSelect(
     """
       SELECT id, SUM(max_sets) AS max_sets, 
         SUM(todays_count) AS todays_count FROM (
@@ -93,7 +93,7 @@ class PlansList extends StatelessWidget {
             refresh: updatePlans,
             selected: selected,
             onSelect: (id) => onSelect(id),
-            countStream: _stream,
+            countStream: stream,
           );
         },
         onReorder: (int oldIndex, int newIndex) async {
@@ -130,7 +130,7 @@ class PlansList extends StatelessWidget {
             refresh: updatePlans,
             selected: selected,
             onSelect: (id) => onSelect(id),
-            countStream: _stream,
+            countStream: stream,
           );
         },
       );

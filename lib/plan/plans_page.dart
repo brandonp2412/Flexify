@@ -57,9 +57,9 @@ class _PlansPageWidget extends StatefulWidget {
 }
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
-  PlanState? _planState;
-  final Set<int> _selected = {};
-  String _search = '';
+  PlanState? planState;
+  final Set<int> selected = {};
+  String search = '';
 
   @override
   void initState() {
@@ -68,17 +68,17 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   }
 
   Future<void> _updatePlans({List<Plan>? plans}) async {
-    _planState?.updatePlans(plans);
+    planState?.updatePlans(plans);
   }
 
   @override
   Widget build(BuildContext context) {
-    _planState = context.watch<PlanState>();
-    final filtered = _planState?.plans
+    planState = context.watch<PlanState>();
+    final filtered = planState?.plans
         .where(
           (element) =>
-              element.days.toLowerCase().contains(_search.toLowerCase()) ||
-              element.exercises.toLowerCase().contains(_search.toLowerCase()),
+              element.days.toLowerCase().contains(search.toLowerCase()) ||
+              element.exercises.toLowerCase().contains(search.toLowerCase()),
         )
         .toList();
 
@@ -87,36 +87,37 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         children: [
           AppSearch(
             onShare: () async {
-              final selected = _selected.toList();
-              setState(() {
-                _selected.clear();
-              });
-              final plans = (_planState?.plans)!
+              final plans = (planState?.plans)!
                   .where(
                     (plan) => selected.contains(plan.id),
                   )
                   .toList();
+
               final summaries = plans
                   .map(
                     (plan) =>
                         """${plan.days.split(',').join(', ')}:\n${plan.exercises.split(',').map((exercise) => "- $exercise").join('\n')}""",
                   )
                   .join('\n\n');
+
               await Share.share(summaries);
+              setState(() {
+                selected.clear();
+              });
             },
             onChange: (value) {
               setState(() {
-                _search = value;
+                search = value;
               });
             },
             onClear: () => setState(() {
-              _selected.clear();
+              selected.clear();
             }),
             onDelete: () async {
               final planState = context.read<PlanState>();
-              final selectedCopy = _selected.toList();
+              final selectedCopy = selected.toList();
               setState(() {
-                _selected.clear();
+                selected.clear();
               });
               await db.plans.deleteWhere((tbl) => tbl.id.isIn(selectedCopy));
               planState.updatePlans(null);
@@ -124,16 +125,16 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   .deleteWhere((tbl) => tbl.planId.isIn(selectedCopy));
             },
             onSelect: () => setState(() {
-              _selected.addAll(filtered?.map((plan) => plan.id) ?? []);
+              selected.addAll(filtered?.map((plan) => plan.id) ?? []);
             }),
-            selected: _selected,
+            selected: selected,
             onEdit: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => EditPlanPage(
-                  plan: _planState!.plans
+                  plan: planState!.plans
                       .firstWhere(
-                        (element) => element.id == _selected.first,
+                        (element) => element.id == selected.first,
                       )
                       .toCompanion(false),
                 ),
@@ -146,15 +147,15 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               plans: filtered ?? [],
               updatePlans: _updatePlans,
               navigatorKey: widget.navigatorKey,
-              selected: _selected,
+              selected: selected,
               onSelect: (id) {
-                if (_selected.contains(id))
+                if (selected.contains(id))
                   setState(() {
-                    _selected.remove(id);
+                    selected.remove(id);
                   });
                 else
                   setState(() {
-                    _selected.add(id);
+                    selected.add(id);
                   });
               },
             ),

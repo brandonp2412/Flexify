@@ -15,9 +15,11 @@ class WeightPage extends StatefulWidget {
 }
 
 class _WeightPageState extends State<WeightPage> {
-  final TextEditingController _valueController = TextEditingController();
-  String _yesterdaysWeight = "";
-  String? _unit;
+  final TextEditingController valueController = TextEditingController();
+  String yesterdaysWeight = "";
+  String? unit;
+
+  String testingUnusedField = "This is never used.";
 
   @override
   void initState() {
@@ -26,16 +28,16 @@ class _WeightPageState extends State<WeightPage> {
 
     getBodyWeight().then(
       (value) => setState(() {
-        _yesterdaysWeight =
-            "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit ?? 'kg'}";
-        _unit = value?.unit;
+        yesterdaysWeight =
+            "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
+        unit = value?.unit;
       }),
     );
   }
 
   @override
   void dispose() {
-    _valueController.dispose();
+    valueController.dispose();
     super.dispose();
   }
 
@@ -51,7 +53,7 @@ class _WeightPageState extends State<WeightPage> {
           child: Column(
             children: [
               TextFormField(
-                controller: _valueController,
+                controller: valueController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Weight'),
                 validator: (value) =>
@@ -59,16 +61,16 @@ class _WeightPageState extends State<WeightPage> {
                 autofocus: true,
               ),
               UnitSelector(
-                value: _unit ?? settings.strengthUnit ?? 'kg',
+                value: unit ?? settings.strengthUnit,
                 cardio: false,
                 onChanged: (String? newValue) {
                   setState(() {
-                    _unit = newValue!;
+                    unit = newValue!;
                   });
                 },
               ),
               TextFormField(
-                controller: TextEditingController(text: _yesterdaysWeight),
+                controller: TextEditingController(text: yesterdaysWeight),
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
@@ -84,13 +86,13 @@ class _WeightPageState extends State<WeightPage> {
               created: DateTime.now().toLocal(),
               name: "Weight",
               reps: 1,
-              unit: _unit ?? settings.strengthUnit ?? 'kg',
-              weight: double.parse(_valueController.text),
+              unit: unit ?? settings.strengthUnit,
+              weight: double.parse(valueController.text),
             ),
           );
           (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
             GymSetsCompanion(
-              bodyWeight: drift.Value(double.parse(_valueController.text)),
+              bodyWeight: drift.Value(double.parse(valueController.text)),
             ),
           );
         },

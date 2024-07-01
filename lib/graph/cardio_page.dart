@@ -20,13 +20,13 @@ class CardioPage extends StatefulWidget {
 }
 
 class _CardioPageState extends State<CardioPage> {
-  late String _targetUnit = widget.unit;
-  late Stream<List<CardioData>> _graphStream;
-  CardioMetric _metric = CardioMetric.pace;
-  Period _period = Period.day;
+  late String targetUnit = widget.unit;
+  late Stream<List<CardioData>> graphStream;
+  CardioMetric metric = CardioMetric.pace;
+  Period period = Period.day;
 
-  DateTime? _startDate;
-  DateTime? _endDate;
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   void initState() {
@@ -35,27 +35,27 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   void _setStream() {
-    _graphStream = watchCardio(
-      endDate: _endDate,
-      groupBy: _period,
-      metric: _metric,
+    graphStream = watchCardio(
+      endDate: endDate,
+      groupBy: period,
+      metric: metric,
       name: widget.name,
-      startDate: _startDate,
-      targetUnit: _targetUnit,
+      startDate: startDate,
+      targetUnit: targetUnit,
     );
   }
 
   Future<void> _selectEnd() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _endDate,
+      initialDate: endDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
     if (pickedDate == null) return;
     setState(() {
-      _endDate = pickedDate;
+      endDate = pickedDate;
     });
     _setStream();
   }
@@ -63,14 +63,14 @@ class _CardioPageState extends State<CardioPage> {
   Future<void> _selectStart() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _startDate,
+      initialDate: startDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
     if (pickedDate == null) return;
     setState(() {
-      _startDate = pickedDate;
+      startDate = pickedDate;
     });
     _setStream();
   }
@@ -143,7 +143,7 @@ class _CardioPageState extends State<CardioPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: StreamBuilder(
-          stream: _graphStream,
+          stream: graphStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const SizedBox();
             if (snapshot.data?.isEmpty == true)
@@ -168,7 +168,7 @@ class _CardioPageState extends State<CardioPage> {
               children: [
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Metric'),
-                  value: _metric,
+                  value: metric,
                   items: const [
                     DropdownMenuItem(
                       value: CardioMetric.pace,
@@ -185,14 +185,14 @@ class _CardioPageState extends State<CardioPage> {
                   ],
                   onChanged: (value) {
                     setState(() {
-                      _metric = value!;
+                      metric = value!;
                     });
                     _setStream();
                   },
                 ),
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Period'),
-                  value: _period,
+                  value: period,
                   items: const [
                     DropdownMenuItem(
                       value: Period.day,
@@ -213,18 +213,18 @@ class _CardioPageState extends State<CardioPage> {
                   ],
                   onChanged: (value) {
                     setState(() {
-                      _period = value!;
+                      period = value!;
                     });
                     _setStream();
                   },
                 ),
-                if (_metric == CardioMetric.distance && settings.showUnits)
+                if (metric == CardioMetric.distance && settings.showUnits)
                   UnitSelector(
-                    value: _targetUnit,
+                    value: targetUnit,
                     cardio: true,
                     onChanged: (value) {
                       setState(() {
-                        _targetUnit = value!;
+                        targetUnit = value!;
                       });
                       _setStream();
                     },
@@ -234,14 +234,14 @@ class _CardioPageState extends State<CardioPage> {
                     Expanded(
                       child: ListTile(
                         title: const Text('Start date'),
-                        subtitle: _startDate != null
+                        subtitle: startDate != null
                             ? Text(
                                 DateFormat(settings.shortDateFormat)
-                                    .format(_startDate!),
+                                    .format(startDate!),
                               )
                             : null,
                         onLongPress: () => setState(() {
-                          _startDate = null;
+                          startDate = null;
                         }),
                         trailing: const Icon(Icons.calendar_today),
                         onTap: () => _selectStart(),
@@ -250,14 +250,14 @@ class _CardioPageState extends State<CardioPage> {
                     Expanded(
                       child: ListTile(
                         title: const Text('Stop date'),
-                        subtitle: _endDate != null
+                        subtitle: endDate != null
                             ? Text(
                                 DateFormat(settings.shortDateFormat)
-                                    .format(_endDate!),
+                                    .format(endDate!),
                               )
                             : null,
                         onLongPress: () => setState(() {
-                          _endDate = null;
+                          endDate = null;
                         }),
                         trailing: const Icon(Icons.calendar_today),
                         onTap: () => _selectEnd(),
@@ -308,7 +308,7 @@ class _CardioPageState extends State<CardioPage> {
                               final row =
                                   rows.elementAt(touchedSpots.first.spotIndex);
                               String text = row.value.toStringAsFixed(2);
-                              switch (_metric) {
+                              switch (metric) {
                                 case CardioMetric.pace:
                                   text = "${row.value} ${row.unit} / min";
                                   break;

@@ -67,11 +67,11 @@ class HistoryDay {
 }
 
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
-  late Stream<List<GymSet>> _stream;
+  late Stream<List<GymSet>> stream;
 
-  Set<int> _selected = {};
-  String _search = '';
-  int _limit = 100;
+  Set<int> selected = {};
+  String search = '';
+  int limit = 100;
 
   @override
   void initState() {
@@ -81,7 +81,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   void _setStream() {
     setState(() {
-      _stream = (db.gymSets.select()
+      stream = (db.gymSets.select()
             ..orderBy(
               [
                 (u) => OrderingTerm(
@@ -90,9 +90,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     ),
               ],
             )
-            ..where((tbl) => tbl.name.contains(_search.toLowerCase()))
+            ..where((tbl) => tbl.name.contains(search.toLowerCase()))
             ..where((tbl) => tbl.hidden.equals(false))
-            ..limit(_limit))
+            ..limit(limit))
           .watch();
     });
   }
@@ -117,7 +117,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   Widget build(BuildContext context) {
     List<Widget> actions = [];
 
-    if (_selected.isNotEmpty)
+    if (selected.isNotEmpty)
       actions.add(
         IconButton(
           onPressed: () {
@@ -127,7 +127,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 return AlertDialog(
                   title: const Text('Confirm Delete'),
                   content: Text(
-                    'Are you sure you want to delete ${_selected.length} records?',
+                    'Are you sure you want to delete ${selected.length} records?',
                   ),
                   actions: <Widget>[
                     TextButton(
@@ -141,10 +141,10 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       onPressed: () async {
                         Navigator.pop(context);
                         (db.delete(db.gymSets)
-                              ..where((tbl) => tbl.id.isIn(_selected)))
+                              ..where((tbl) => tbl.id.isIn(selected)))
                             .go();
                         setState(() {
-                          _selected = {};
+                          selected = {};
                         });
                       },
                     ),
@@ -159,7 +159,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: _stream,
+        stream: stream,
         builder: (context, snapshot) {
           return material.Column(
             children: [
@@ -167,7 +167,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 onShare: () async {
                   final gymSets = snapshot.data!
                       .where(
-                        (gymSet) => _selected.contains(gymSet.id),
+                        (gymSet) => selected.contains(gymSet.id),
                       )
                       .toList();
                   final summaries = gymSets
@@ -178,36 +178,36 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       .join(', ');
                   await Share.share("I just did $summaries");
                   setState(() {
-                    _selected.clear();
+                    selected.clear();
                   });
                 },
                 onChange: (value) {
                   setState(() {
-                    _search = value;
+                    search = value;
                   });
                   _setStream();
                 },
                 onClear: () => setState(() {
-                  _selected.clear();
+                  selected.clear();
                 }),
                 onDelete: () {
                   (db.delete(db.gymSets)
-                        ..where((tbl) => tbl.id.isIn(_selected)))
+                        ..where((tbl) => tbl.id.isIn(selected)))
                       .go();
                   setState(() {
-                    _selected.clear();
+                    selected.clear();
                   });
                 },
                 onSelect: () => setState(() {
                   if (snapshot.data == null) return;
-                  _selected.addAll(snapshot.data!.map((gymSet) => gymSet.id));
+                  selected.addAll(snapshot.data!.map((gymSet) => gymSet.id));
                 }),
-                selected: _selected,
+                selected: selected,
                 onEdit: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditSetsPage(
-                      ids: _selected.toList(),
+                      ids: selected.toList(),
                     ),
                   ),
                 ),
@@ -232,19 +232,19 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         return HistoryCollapsed(
                           historyDays: historyDays,
                           onSelect: (id) {
-                            if (_selected.contains(id))
+                            if (selected.contains(id))
                               setState(() {
-                                _selected.remove(id);
+                                selected.remove(id);
                               });
                             else
                               setState(() {
-                                _selected.add(id);
+                                selected.add(id);
                               });
                           },
-                          selected: _selected,
+                          selected: selected,
                           onNext: () {
                             setState(() {
-                              _limit += 100;
+                              limit += 100;
                             });
                             _setStream();
                           },
@@ -253,19 +253,19 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         return HistoryList(
                           gymSets: snapshot.data!,
                           onSelect: (id) {
-                            if (_selected.contains(id))
+                            if (selected.contains(id))
                               setState(() {
-                                _selected.remove(id);
+                                selected.remove(id);
                               });
                             else
                               setState(() {
-                                _selected.add(id);
+                                selected.add(id);
                               });
                           },
-                          selected: _selected,
+                          selected: selected,
                           onNext: () {
                             setState(() {
-                              _limit += 100;
+                              limit += 100;
                             });
                             _setStream();
                           },
@@ -280,7 +280,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final settings = context.read<SettingsState>();
-          final gymSets = await _stream.first;
+          final gymSets = await stream.first;
           var bodyWeight = 0.0;
           if (!settings.hideWeight)
             bodyWeight = (await getBodyWeight())?.weight ?? 0.0;

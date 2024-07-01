@@ -32,19 +32,19 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late SettingsState _settings = context.read<SettingsState>();
-  late final _minutesController =
-      TextEditingController(text: _settings.timerDuration.inMinutes.toString());
-  late final _secondsController = TextEditingController(
-    text: (_settings.timerDuration.inSeconds % 60).toString(),
+  late SettingsState settings = context.read<SettingsState>();
+  late final minutesController =
+      TextEditingController(text: settings.timerDuration.inMinutes.toString());
+  late final secondsController = TextEditingController(
+    text: (settings.timerDuration.inSeconds % 60).toString(),
   );
-  late final _maxSetsController =
-      TextEditingController(text: _settings.maxSets.toString());
-  final _searchController = TextEditingController();
+  late final maxSetsController =
+      TextEditingController(text: settings.maxSets.toString());
+  final searchController = TextEditingController();
 
-  AudioPlayer? _player;
+  AudioPlayer? player;
 
-  final List<String> _shortFormats = [
+  final List<String> shortFormats = [
     'd/M/yy',
     'M/d/yy',
     'd-M-yy',
@@ -53,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
     'M.d.yy',
   ];
 
-  final List<String> _longFormats = [
+  final List<String> longFormats = [
     'dd/MM/yy',
     'dd/MM/yy h:mm a',
     'dd/MM/yy H:mm',
@@ -70,27 +70,27 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    if (platformSupportsTimer()) _player = AudioPlayer();
+    if (platformSupportsTimer()) player = AudioPlayer();
   }
 
   @override
   void dispose() {
     if (platformSupportsTimer()) {
-      _player?.stop();
-      _player?.dispose();
+      player?.stop();
+      player?.dispose();
     }
 
-    _searchController.dispose();
-    _minutesController.dispose();
-    _secondsController.dispose();
-    _maxSetsController.dispose();
+    searchController.dispose();
+    minutesController.dispose();
+    secondsController.dispose();
+    maxSetsController.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _settings = context.watch<SettingsState>();
+    settings = context.watch<SettingsState>();
 
     List<SettingsLine> lines = [
       SettingsLine(
@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<ThemeMode>(
-            value: _settings.themeMode,
+            value: settings.themeMode,
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Theme',
@@ -117,7 +117,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text("Light"),
               ),
             ],
-            onChanged: (value) => _settings.setTheme(value!),
+            onChanged: (value) => settings.setTheme(value!),
           ),
         ),
       ),
@@ -126,7 +126,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            value: _settings.strengthUnit,
+            value: settings.strengthUnit,
             decoration: const InputDecoration(labelText: 'Strength unit'),
             items: ['kg', 'lb'].map((String value) {
               return DropdownMenuItem<String>(
@@ -134,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(value),
               );
             }).toList(),
-            onChanged: (value) => _settings.setStrengthUnit(value!),
+            onChanged: (value) => settings.setStrengthUnit(value!),
           ),
         ),
       ),
@@ -143,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            value: _settings.cardioUnit,
+            value: settings.cardioUnit,
             decoration: const InputDecoration(labelText: 'Cardio unit'),
             items: ['km', 'mi'].map((String value) {
               return DropdownMenuItem<String>(
@@ -151,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(value),
               );
             }).toList(),
-            onChanged: (value) => _settings.setCardioUnit(value!),
+            onChanged: (value) => settings.setCardioUnit(value!),
           ),
         ),
       ),
@@ -160,19 +160,19 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            value: _settings.longDateFormat,
-            items: _longFormats.map((String value) {
+            value: settings.longDateFormat,
+            items: longFormats.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
               );
             }).toList(),
             onChanged: (newValue) {
-              _settings.setLong(newValue!);
+              settings.setLong(newValue!);
             },
             decoration: InputDecoration(
               labelText:
-                  'Long date format (${DateFormat(_settings.longDateFormat).format(DateTime.now())})',
+                  'Long date format (${DateFormat(settings.longDateFormat).format(DateTime.now())})',
             ),
           ),
         ),
@@ -182,19 +182,19 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<String>(
-            value: _settings.shortDateFormat,
-            items: _shortFormats.map((String value) {
+            value: settings.shortDateFormat,
+            items: shortFormats.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
               );
             }).toList(),
             onChanged: (newValue) {
-              _settings.setShort(newValue!);
+              settings.setShort(newValue!);
             },
             decoration: InputDecoration(
               labelText:
-                  'Short date format (${DateFormat(_settings.shortDateFormat).format(DateTime.now())})',
+                  'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
             ),
           ),
         ),
@@ -204,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: DropdownButtonFormField<PlanTrailing>(
-            value: _settings.planTrailing,
+            value: settings.planTrailing,
             decoration: const InputDecoration(
               labelStyle: TextStyle(),
               labelText: 'Plan trailing display',
@@ -255,7 +255,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text("None"),
               ),
             ],
-            onChanged: (value) => _settings.setPlanTrailing(value!),
+            onChanged: (value) => settings.setPlanTrailing(value!),
           ),
         ),
       ),
@@ -264,14 +264,14 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
-            controller: _maxSetsController,
+            controller: maxSetsController,
             decoration: const InputDecoration(
               labelText: 'Maximum sets',
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
-            onTap: () => selectAll(_maxSetsController),
+            onTap: () => selectAll(maxSetsController),
             onChanged: (value) =>
-                _settings.setMaxSets(int.tryParse(value) ?? 0),
+                settings.setMaxSets(int.tryParse(value) ?? 0),
           ),
         ),
       ),
@@ -289,13 +289,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         decoration: const InputDecoration(
                           labelText: 'Rest minutes',
                         ),
-                        controller: _minutesController,
+                        controller: minutesController,
                         keyboardType: TextInputType.number,
-                        onTap: () => selectAll(_minutesController),
-                        onChanged: (value) => _settings.setDuration(
+                        onTap: () => selectAll(minutesController),
+                        onChanged: (value) => settings.setDuration(
                           Duration(
                             minutes: int.parse(value),
-                            seconds: _settings.timerDuration.inSeconds % 60,
+                            seconds: settings.timerDuration.inSeconds % 60,
                           ),
                         ),
                       ),
@@ -308,13 +308,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         decoration: const InputDecoration(
                           labelText: 'seconds',
                         ),
-                        controller: _secondsController,
+                        controller: secondsController,
                         keyboardType: TextInputType.number,
-                        onTap: () => selectAll(_secondsController),
-                        onChanged: (value) => _settings.setDuration(
+                        onTap: () => selectAll(secondsController),
+                        onChanged: (value) => settings.setDuration(
                           Duration(
                             seconds: int.parse(value),
-                            minutes: _settings.timerDuration.inMinutes.floor(),
+                            minutes: settings.timerDuration.inMinutes.floor(),
                           ),
                         ),
                       ),
@@ -330,15 +330,15 @@ class _SettingsPageState extends State<SettingsPage> {
           key: 'rest timers',
           widget: ListTile(
             title: const Text('Rest timers'),
-            leading: _settings.restTimers
+            leading: settings.restTimers
                 ? const Icon(Icons.timer)
                 : const Icon(Icons.timer_outlined),
             onTap: () {
-              _settings.setTimers(!_settings.restTimers);
+              settings.setTimers(!settings.restTimers);
             },
             trailing: Switch(
-              value: _settings.restTimers,
-              onChanged: (value) => _settings.setTimers(value),
+              value: settings.restTimers,
+              onChanged: (value) => settings.setTimers(value),
             ),
           ),
         ),
@@ -349,11 +349,11 @@ class _SettingsPageState extends State<SettingsPage> {
             title: const Text('Vibrate'),
             leading: const Icon(Icons.vibration),
             onTap: () {
-              _settings.setVibrate(!_settings.vibrate);
+              settings.setVibrate(!settings.vibrate);
             },
             trailing: Switch(
-              value: _settings.vibrate,
-              onChanged: (value) => _settings.setVibrate(value),
+              value: settings.vibrate,
+              onChanged: (value) => settings.setVibrate(value),
             ),
           ),
         ),
@@ -362,10 +362,10 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: ListTile(
           title: const Text('Group history'),
           leading: const Icon(Icons.expand_more),
-          onTap: () => _settings.setGroupHistory(!_settings.groupHistory),
+          onTap: () => settings.setGroupHistory(!settings.groupHistory),
           trailing: Switch(
-            value: _settings.groupHistory,
-            onChanged: (value) => _settings.setGroupHistory(value),
+            value: settings.groupHistory,
+            onChanged: (value) => settings.setGroupHistory(value),
           ),
         ),
       ),
@@ -374,10 +374,10 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: ListTile(
           title: const Text('Show units'),
           leading: const Icon(Icons.scale_sharp),
-          onTap: () => _settings.setUnits(!_settings.showUnits),
+          onTap: () => settings.setUnits(!settings.showUnits),
           trailing: Switch(
-            value: _settings.showUnits,
-            onChanged: (value) => _settings.setUnits(value),
+            value: settings.showUnits,
+            onChanged: (value) => settings.setUnits(value),
           ),
         ),
       ),
@@ -385,13 +385,13 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),
-          leading: _settings.systemColors
+          leading: settings.systemColors
               ? const Icon(Icons.color_lens)
               : const Icon(Icons.color_lens_outlined),
-          onTap: () => _settings.setSystem(!_settings.systemColors),
+          onTap: () => settings.setSystem(!settings.systemColors),
           trailing: Switch(
-            value: _settings.systemColors,
-            onChanged: (value) => _settings.setSystem(value),
+            value: settings.systemColors,
+            onChanged: (value) => settings.setSystem(value),
           ),
         ),
       ),
@@ -400,13 +400,13 @@ class _SettingsPageState extends State<SettingsPage> {
           key: 'hide timer tab',
           widget: ListTile(
             title: const Text('Hide timer tab'),
-            leading: _settings.hideTimerTab
+            leading: settings.hideTimerTab
                 ? const Icon(Icons.timer_outlined)
                 : const Icon(Icons.timer),
-            onTap: () => _settings.setHideTimer(!_settings.hideTimerTab),
+            onTap: () => settings.setHideTimer(!settings.hideTimerTab),
             trailing: Switch(
-              value: _settings.hideTimerTab,
-              onChanged: (value) => _settings.setHideTimer(value),
+              value: settings.hideTimerTab,
+              onChanged: (value) => settings.setHideTimer(value),
             ),
           ),
         ),
@@ -415,10 +415,10 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: ListTile(
           title: const Text('Hide history tab'),
           leading: const Icon(Icons.history),
-          onTap: () => _settings.setHideHistory(!_settings.hideHistoryTab),
+          onTap: () => settings.setHideHistory(!settings.hideHistoryTab),
           trailing: Switch(
-            value: _settings.hideHistoryTab,
-            onChanged: (value) => _settings.setHideHistory(value),
+            value: settings.hideHistoryTab,
+            onChanged: (value) => settings.setHideHistory(value),
           ),
         ),
       ),
@@ -427,10 +427,10 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: ListTile(
           title: const Text('Hide weight'),
           leading: const Icon(Icons.scale_outlined),
-          onTap: () => _settings.setHideWeight(!_settings.hideWeight),
+          onTap: () => settings.setHideWeight(!settings.hideWeight),
           trailing: Switch(
-            value: _settings.hideWeight,
-            onChanged: (value) => _settings.setHideWeight(value),
+            value: settings.hideWeight,
+            onChanged: (value) => settings.setHideWeight(value),
           ),
         ),
       ),
@@ -439,10 +439,10 @@ class _SettingsPageState extends State<SettingsPage> {
         widget: ListTile(
           title: const Text('Curve line graphs'),
           leading: const Icon(Icons.insights),
-          onTap: () => _settings.setCurvedLines(!_settings.curveLines),
+          onTap: () => settings.setCurvedLines(!settings.curveLines),
           trailing: Switch(
-            value: _settings.curveLines,
-            onChanged: (value) => _settings.setCurvedLines(value),
+            value: settings.curveLines,
+            onChanged: (value) => settings.setCurvedLines(value),
           ),
         ),
       ),
@@ -454,16 +454,16 @@ class _SettingsPageState extends State<SettingsPage> {
               final result =
                   await FilePicker.platform.pickFiles(type: FileType.audio);
               if (result == null || result.files.single.path == null) return;
-              _settings.setAlarm(result.files.single.path!);
-              _player?.play(DeviceFileSource(result.files.single.path!));
+              settings.setAlarm(result.files.single.path!);
+              player?.play(DeviceFileSource(result.files.single.path!));
             },
             onLongPress: () {
-              _settings.setAlarm('');
+              settings.setAlarm('');
             },
             icon: const Icon(Icons.music_note),
-            label: _settings.alarmSound.isEmpty
+            label: settings.alarmSound.isEmpty
                 ? const Text("Alarm sound")
-                : Text(_settings.alarmSound.split('/').last),
+                : Text(settings.alarmSound.split('/').last),
           ),
         ),
       SettingsLine(
@@ -496,7 +496,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final filtered = lines
         .where(
           (element) =>
-              element.key.contains(_searchController.text.toLowerCase()),
+              element.key.contains(searchController.text.toLowerCase()),
         )
         .map((e) => e.widget)
         .toList();
@@ -525,7 +525,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             SearchBar(
               hintText: "Search...",
-              controller: _searchController,
+              controller: searchController,
               padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
               ),
