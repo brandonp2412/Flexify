@@ -5,7 +5,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/utils.dart';
+import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 
@@ -129,7 +129,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
       id = widget.plan.id.value;
     } else {
       id = await db.into(db.plans).insert(newPlan);
-      newPlan = newPlan.copyWith(id: Value(id));
     }
 
     List<PlanExercisesCompanion> planExercises = [];
@@ -158,60 +157,20 @@ class _EditPlanPageState extends State<EditPlanPage> {
       .asMap()
       .entries
       .map(
-        (entry) => material.Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-          child: material.Row(
-            children: [
-              SizedBox(
-                width: 64,
-                child: TextField(
-                  controller: controllers[entry.key],
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: false),
-                  onTap: () => selectAll(controllers[entry.key]),
-                  onChanged: (value) {
-                    if (value.isNotEmpty &&
-                        !exerciseSelections.contains(entry.value))
-                      setState(() {
-                        exerciseSelections.add(entry.value);
-                      });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Sets",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (exerciseSelections.contains(entry.value))
-                        exerciseSelections.remove(entry.value);
-                      else
-                        exerciseSelections.add(entry.value);
-                    });
-                  },
-                  child: Text(
-                    entry.value,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-              ),
-              Switch(
-                value: exerciseSelections.contains(entry.value),
-                onChanged: (value) {
-                  setState(() {
-                    if (exerciseSelections.contains(entry.value))
-                      exerciseSelections.remove(entry.value);
-                    else
-                      exerciseSelections.add(entry.value);
-                  });
-                },
-              ),
-            ],
-          ),
+        (entry) => ExerciseTile(
+          controllers: controllers,
+          entry: entry,
+          add: (value) {
+            setState(() {
+              exerciseSelections.add(value);
+            });
+          },
+          remove: (value) {
+            setState(() {
+              exerciseSelections.remove(value);
+            });
+          },
+          on: exerciseSelections.contains(entry.value),
         ),
       );
 
