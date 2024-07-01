@@ -37,7 +37,8 @@ class PlansList extends StatelessWidget {
     """
       SELECT id, SUM(max_sets) AS max_sets, 
         SUM(todays_count) AS todays_count FROM (
-          SELECT p.id, pe.exercise AS name, COALESCE(pe.max_sets, 3) AS max_sets, 
+          SELECT p.id, pe.exercise AS name, 
+            COALESCE(pe.max_sets, settings.max_sets) AS max_sets, 
             COUNT(
               CASE WHEN p.id = gs.plan_id 
                 AND DATE(created, 'unixepoch', 'localtime') = 
@@ -49,12 +50,13 @@ class PlansList extends StatelessWidget {
           FROM plans p
           LEFT JOIN plan_exercises pe ON p.id = pe.plan_id
             AND pe.enabled = true
+          LEFT JOIN settings
           LEFT JOIN gym_sets gs ON pe.exercise = gs.name
           GROUP BY pe.exercise, p.id
       ) 
       GROUP BY id
     """,
-    readsFrom: {db.plans, db.gymSets, db.planExercises},
+    readsFrom: {db.plans, db.gymSets, db.planExercises, db.settings},
   )).watch().map((rows) {
     return rows
         .map(
