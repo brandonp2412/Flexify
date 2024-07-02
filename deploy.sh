@@ -14,7 +14,7 @@ changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.tx
 echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
 
 dart analyze lib
-dart format --set-exit-if-changed $DART_FILE
+dart format --set-exit-if-changed lib
 ./flutter/bin/flutter test
 ./migrate.sh
 ./screenshots.sh "phoneScreenshots"
