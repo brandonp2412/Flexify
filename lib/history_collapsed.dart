@@ -59,8 +59,6 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return ListView.builder(
       itemCount: widget.historyDays.length,
       controller: scrollController,
@@ -78,9 +76,11 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
               Row(
                 children: [
                   const Expanded(child: Divider()),
-                  Text(
-                    DateFormat(settings.shortDateFormat)
-                        .format(previousHistory.day),
+                  Selector<SettingsState, String>(
+                    selector: (p0, p1) => p1.shortDateFormat,
+                    builder: (context, value, child) => Text(
+                      DateFormat(value).format(previousHistory.day),
+                    ),
                   ),
                   const Expanded(child: Divider()),
                 ],
@@ -101,9 +101,11 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                           ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
                           : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
                     ),
-                    subtitle: Text(
-                      DateFormat(settings.longDateFormat)
-                          .format(gymSet.created),
+                    subtitle: Selector<SettingsState, String>(
+                      selector: (p0, p1) => p1.longDateFormat,
+                      builder: (context, value, child) => Text(
+                        DateFormat(value).format(gymSet.created),
+                      ),
                     ),
                     selected: widget.selected.contains(gymSet.id),
                     onLongPress: () {
