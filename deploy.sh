@@ -30,7 +30,7 @@ git commit --amend -m "$last_commit - $new_version 🚀
 $rest"
 
 tmpdir=$(mktemp -d)
-rsync -av --exclude='build' . $tmpdir
+rsync -a --exclude='build' . $tmpdir
 cd $tmpdir
 
 if [[ -n "$(git diff --stat)" ]]; then
@@ -41,6 +41,7 @@ fi
 
 ./flutter/bin/flutter build apk --split-per-abi
 ./flutter/bin/flutter build apk
+./flutter/bin/flutter build linux
 apk=build/app/outputs/flutter-apk
 (cd $apk/pipeline/linux/x64/release/bundle && zip -r flexify-linux.zip .)
 mv $apk/app-release.apk $apk/flexify.apk
