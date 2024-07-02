@@ -13,7 +13,6 @@ class PlanTile extends StatelessWidget {
     required this.weekday,
     required this.index,
     required this.navigatorKey,
-    required this.refresh,
     required this.onSelect,
     required this.selected,
     required this.countStream,
@@ -23,7 +22,6 @@ class PlanTile extends StatelessWidget {
   final String weekday;
   final int index;
   final GlobalKey<NavigatorState> navigatorKey;
-  final Future<void> Function() refresh;
   final Function(int) onSelect;
   final Set<int> selected;
   final Stream<List<Count>> countStream;
@@ -62,7 +60,6 @@ class PlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
     Widget title = const Text("Daily");
     if (plan.title?.isNotEmpty == true)
       title = Text(plan.title!);
@@ -74,10 +71,12 @@ class PlanTile extends StatelessWidget {
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Builder(
         builder: (context) {
-          if (settings.planTrailing == PlanTrailing.none)
-            return const SizedBox();
+          final planTrailing = context.select<SettingsState, PlanTrailing>(
+            (value) => value.planTrailing,
+          );
+          if (planTrailing == PlanTrailing.none) return const SizedBox();
 
-          if (settings.planTrailing == PlanTrailing.reorder)
+          if (planTrailing == PlanTrailing.reorder)
             return ReorderableDragStartListener(
               index: index,
               child: const Icon(Icons.drag_handle),
@@ -94,13 +93,13 @@ class PlanTile extends StatelessWidget {
                   snapshot.data?.firstWhere((d) => d.planId == plan.id);
               if (count == null) return const SizedBox();
 
-              if (settings.planTrailing == PlanTrailing.count)
+              if (planTrailing == PlanTrailing.count)
                 return Text(
                   "${count.total}",
                   style: const TextStyle(fontSize: 16),
                 );
 
-              if (settings.planTrailing == PlanTrailing.percent)
+              if (planTrailing == PlanTrailing.percent)
                 return Text(
                   "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
                   style: const TextStyle(fontSize: 16),
@@ -122,11 +121,9 @@ class PlanTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => StartPlanPage(
               plan: plan,
-              refresh: refresh,
             ),
           ),
         );
-        refresh();
       },
       onLongPress: () {
         onSelect(plan.id);

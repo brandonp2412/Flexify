@@ -50,7 +50,7 @@ void main() async {
     await tester.pump();
     expect(find.text('Light'), findsOne);
 
-    await tester.enterText(find.bySemanticsLabel('Maximum sets'), '5');
+    await tester.enterText(find.bySemanticsLabel('Sets per exercise'), '5');
     await tester.pump();
     expect(find.text('5'), findsOne);
 

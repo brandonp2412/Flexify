@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_list.dart';
 import 'package:flutter/material.dart';
@@ -64,11 +62,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   @override
   void initState() {
     super.initState();
-    _updatePlans();
-  }
-
-  Future<void> _updatePlans({List<Plan>? plans}) async {
-    planState?.updatePlans(plans);
   }
 
   @override
@@ -140,12 +133,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 ),
               ),
             ),
-            onRefresh: () => _updatePlans(),
           ),
           Expanded(
             child: PlansList(
               plans: filtered ?? [],
-              updatePlans: _updatePlans,
               navigatorKey: widget.navigatorKey,
               selected: selected,
               onSelect: (id) {
@@ -171,12 +162,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 plan: PlansCompanion(
                   days: drift.Value(''),
                   exercises: drift.Value(''),
-                  id: drift.Value(-1),
                 ),
               ),
             ),
           );
-          await _updatePlans();
         },
         tooltip: 'Add',
         child: const Icon(Icons.add),

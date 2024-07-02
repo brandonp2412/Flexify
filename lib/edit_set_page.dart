@@ -28,7 +28,6 @@ class _EditSetPageState extends State<EditSetPage> {
   final inclineController = TextEditingController();
   final repsNode = FocusNode();
 
-  late SettingsState settings = context.read<SettingsState>();
   late String unit;
   late DateTime created;
   late bool cardio;
@@ -151,8 +150,7 @@ class _EditSetPageState extends State<EditSetPage> {
       weightController.text = toString(gymSet.weight);
       bodyWeightController.text = toString(gymSet.bodyWeight);
       minutesController.text = gymSet.duration.floor().toString();
-      secondsController.text =
-          ((gymSet.duration * 60) % 60).floor().toString();
+      secondsController.text = ((gymSet.duration * 60) % 60).floor().toString();
       distanceController.text = toString(gymSet.distance);
       unit = gymSet.unit;
       created = gymSet.created;
@@ -164,8 +162,6 @@ class _EditSetPageState extends State<EditSetPage> {
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -226,7 +222,12 @@ class _EditSetPageState extends State<EditSetPage> {
                     .getSingleOrNull();
                 if (last == null) return;
 
-                if (settings.hideWeight)
+                if (!context.mounted) return;
+                final hideWeight = context.select<SettingsState, bool>(
+                  (value) => value.hideWeight,
+                );
+
+                if (hideWeight)
                   _updateFields(
                     last.copyWith(
                       created: DateTime.now().toLocal(),
@@ -329,28 +330,41 @@ class _EditSetPageState extends State<EditSetPage> {
                 textInputAction: TextInputAction.next,
               ),
             ],
-            if (name != 'Weight' && !settings.hideWeight)
-              TextField(
-                controller: bodyWeightController,
-                decoration: const InputDecoration(labelText: 'Body weight '),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(bodyWeightController),
+            Selector<SettingsState, bool>(
+              builder: (context, hideWeight, child) => Visibility(
+                visible: !hideWeight,
+                child: TextField(
+                  controller: bodyWeightController,
+                  decoration: const InputDecoration(labelText: 'Body weight '),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(bodyWeightController),
+                ),
               ),
-            UnitSelector(
-              value: unit,
-              onChanged: (String? newValue) {
-                setState(() {
-                  unit = newValue!;
-                });
-              },
-              cardio: cardio,
+              selector: (p0, p1) => p1.hideWeight,
             ),
-            ListTile(
-              title: const Text('Created Date'),
-              subtitle:
-                  Text(DateFormat(settings.longDateFormat).format(created)),
-              trailing: const Icon(Icons.calendar_today),
-              onTap: () => _selectDate(),
+            Selector<SettingsState, bool>(
+              builder: (context, showUnits, child) => Visibility(
+                visible: showUnits,
+                child: UnitSelector(
+                  value: unit,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      unit = newValue!;
+                    });
+                  },
+                  cardio: cardio,
+                ),
+              ),
+              selector: (p0, p1) => p1.showUnits,
+            ),
+            Selector<SettingsState, String>(
+              builder: (context, longDateFormat, child) => ListTile(
+                title: const Text('Created Date'),
+                subtitle: Text(DateFormat(longDateFormat).format(created)),
+                trailing: const Icon(Icons.calendar_today),
+                onTap: () => _selectDate(),
+              ),
+              selector: (p0, p1) => p1.longDateFormat,
             ),
           ],
         ),

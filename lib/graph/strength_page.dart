@@ -80,7 +80,7 @@ class _StrengthPageState extends State<StrengthPage> {
     double value,
     TitleMeta meta,
     List<StrengthData> rows,
-    SettingsState settings,
+    String format,
   ) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
@@ -98,7 +98,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
       text = Text(
-        DateFormat(settings.shortDateFormat).format(createdDate),
+        DateFormat(format).format(createdDate),
         style: style,
       );
     } else {
@@ -114,14 +114,13 @@ class _StrengthPageState extends State<StrengthPage> {
   LineTouchTooltipData _tooltipData(
     BuildContext context,
     List<StrengthData> rows,
-    SettingsState settings,
+    String format,
   ) {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
         final row = rows.elementAt(touchedSpots.first.spotIndex);
-        final created =
-            DateFormat(settings.shortDateFormat).format(row.created);
+        final created = DateFormat(format).format(row.created);
         final formatter = NumberFormat("#,###.00");
 
         String text =
@@ -181,8 +180,7 @@ class _StrengthPageState extends State<StrengthPage> {
             ..where(db.gymSets.name.equals(widget.name))
             ..where(db.gymSets.hidden.equals(false))
             ..where(
-              db.gymSets.created
-                  .isBiggerOrEqualValue(startDate ?? DateTime(0)),
+              db.gymSets.created.isBiggerOrEqualValue(startDate ?? DateTime(0)),
             )
             ..where(
               db.gymSets.created.isSmallerThanValue(
@@ -253,8 +251,6 @@ class _StrengthPageState extends State<StrengthPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
@@ -303,42 +299,54 @@ class _StrengthPageState extends State<StrengthPage> {
               spots.add(FlSpot(index.toDouble(), snapshot.data![index].value));
             }
 
+            final format = context.select<SettingsState, String>(
+              (value) => value.shortDateFormat,
+            );
+
+            final curveLines = context
+                .select<SettingsState, bool>((value) => value.curveLines);
+
             return ListView(
               children: [
-                if (widget.name != 'Weight')
-                  DropdownButtonFormField(
-                    decoration: const InputDecoration(labelText: 'Metric'),
-                    value: metric,
-                    items: [
-                      const DropdownMenuItem(
-                        value: StrengthMetric.bestWeight,
-                        child: Text("Best weight"),
-                      ),
-                      const DropdownMenuItem(
-                        value: StrengthMetric.bestReps,
-                        child: Text("Best reps"),
-                      ),
-                      const DropdownMenuItem(
-                        value: StrengthMetric.oneRepMax,
-                        child: Text("One rep max"),
-                      ),
-                      const DropdownMenuItem(
-                        value: StrengthMetric.volume,
-                        child: Text("Volume"),
-                      ),
-                      if (!settings.hideWeight)
+                Selector<SettingsState, bool>(
+                  selector: (p0, p1) => p1.hideWeight,
+                  builder: (context, hideWeight, child) => Visibility(
+                    visible: widget.name != 'Weight',
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: 'Metric'),
+                      value: metric,
+                      items: [
                         const DropdownMenuItem(
-                          value: StrengthMetric.relativeStrength,
-                          child: Text("Relative strength"),
+                          value: StrengthMetric.bestWeight,
+                          child: Text("Best weight"),
                         ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        metric = value!;
-                      });
-                      _setStream();
-                    },
+                        const DropdownMenuItem(
+                          value: StrengthMetric.bestReps,
+                          child: Text("Best reps"),
+                        ),
+                        const DropdownMenuItem(
+                          value: StrengthMetric.oneRepMax,
+                          child: Text("One rep max"),
+                        ),
+                        const DropdownMenuItem(
+                          value: StrengthMetric.volume,
+                          child: Text("Volume"),
+                        ),
+                        if (!hideWeight)
+                          const DropdownMenuItem(
+                            value: StrengthMetric.relativeStrength,
+                            child: Text("Relative strength"),
+                          ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          metric = value!;
+                        });
+                        _setStream();
+                      },
+                    ),
                   ),
+                ),
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Period'),
                   value: period,
@@ -367,17 +375,22 @@ class _StrengthPageState extends State<StrengthPage> {
                     _setStream();
                   },
                 ),
-                if (settings.showUnits)
-                  UnitSelector(
-                    value: targetUnit,
-                    cardio: false,
-                    onChanged: (value) {
-                      setState(() {
-                        targetUnit = value!;
-                      });
-                      _setStream();
-                    },
+                Selector<SettingsState, bool>(
+                  builder: (context, showUnits, child) => Visibility(
+                    visible: showUnits,
+                    child: UnitSelector(
+                      value: targetUnit,
+                      cardio: false,
+                      onChanged: (value) {
+                        setState(() {
+                          targetUnit = value!;
+                        });
+                        _setStream();
+                      },
+                    ),
                   ),
+                  selector: (p0, p1) => p1.showUnits,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
@@ -385,12 +398,16 @@ class _StrengthPageState extends State<StrengthPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text('Start date'),
-                          subtitle: startDate != null
-                              ? Text(
-                                  DateFormat(settings.shortDateFormat)
-                                      .format(startDate!),
-                                )
-                              : null,
+                          subtitle: Selector<SettingsState, String>(
+                            selector: (p0, p1) => p1.shortDateFormat,
+                            builder: (context, value, child) {
+                              if (startDate == null) return Text(value);
+
+                              return Text(
+                                DateFormat(value).format(startDate!),
+                              );
+                            },
+                          ),
                           onLongPress: () => setState(() {
                             startDate = null;
                           }),
@@ -401,12 +418,16 @@ class _StrengthPageState extends State<StrengthPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text('Stop date'),
-                          subtitle: endDate != null
-                              ? Text(
-                                  DateFormat(settings.shortDateFormat)
-                                      .format(endDate!),
-                                )
-                              : null,
+                          subtitle: Selector<SettingsState, String>(
+                            selector: (p0, p1) => p1.shortDateFormat,
+                            builder: (context, value, child) {
+                              if (endDate == null) return Text(value);
+
+                              return Text(
+                                DateFormat(value).format(endDate!),
+                              );
+                            },
+                          ),
                           onLongPress: () => setState(() {
                             endDate = null;
                           }),
@@ -446,7 +467,7 @@ class _StrengthPageState extends State<StrengthPage> {
                                 value,
                                 meta,
                                 rows,
-                                settings,
+                                format,
                               ),
                             ),
                           ),
@@ -491,13 +512,12 @@ class _StrengthPageState extends State<StrengthPage> {
                               lastTap = DateTime.now();
                             });
                           },
-                          touchTooltipData:
-                              _tooltipData(context, rows, settings),
+                          touchTooltipData: _tooltipData(context, rows, format),
                         ),
                         lineBarsData: [
                           LineChartBarData(
                             spots: spots,
-                            isCurved: settings.curveLines,
+                            isCurved: curveLines,
                             color: Theme.of(context).colorScheme.primary,
                             barWidth: 3,
                             isStrokeCapRound: true,

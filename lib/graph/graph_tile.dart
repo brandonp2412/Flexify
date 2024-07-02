@@ -21,8 +21,6 @@ class GraphTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     String trailing;
 
     if (gymSet.cardio.value) {
@@ -41,8 +39,11 @@ class GraphTile extends StatelessWidget {
     return ListTile(
       selected: selected.contains(gymSet.name.value),
       title: Text(gymSet.name.value),
-      subtitle: Text(
-        DateFormat(settings.longDateFormat).format(gymSet.created.value),
+      subtitle: Selector<SettingsState, String>(
+        selector: (p0, p1) => p1.longDateFormat,
+        builder: (context, value, child) => Text(
+          DateFormat(value).format(gymSet.created.value),
+        ),
       ),
       trailing: Text(
         trailing,

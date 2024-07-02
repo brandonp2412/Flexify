@@ -3,6 +3,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:provider/provider.dart';
 
 class ExerciseList extends StatelessWidget {
   final List<String> exercises;
-  final Future<void> Function() refresh;
   final int selected;
   final Future<void> Function(int) onSelect;
   final List<GymCount>? counts;
@@ -20,7 +20,6 @@ class ExerciseList extends StatelessWidget {
   const ExerciseList({
     super.key,
     required this.exercises,
-    required this.refresh,
     required this.selected,
     required this.onSelect,
     required this.counts,
@@ -28,20 +27,25 @@ class ExerciseList extends StatelessWidget {
     required this.plan,
   });
 
-  Widget _itemBuilder(BuildContext context, int index, SettingsState settings) {
+  Widget _itemBuilder(
+    BuildContext context,
+    int index,
+    int maxSets,
+    PlanTrailing planTrailing,
+  ) {
     final exercise = exercises[index];
     final countIndex =
         counts?.indexWhere((element) => element.name == exercise);
     var count = 0;
-    int max = settings.maxSets;
+    int max = maxSets;
 
     if (countIndex != null && countIndex > -1 && counts != null) {
       count = counts![countIndex].count;
-      max = counts![countIndex].maxSets ?? settings.maxSets;
+      max = counts![countIndex].maxSets ?? maxSets;
     }
 
     Widget trailing = const SizedBox();
-    switch (settings.planTrailing) {
+    switch (planTrailing) {
       case PlanTrailing.reorder:
         trailing = ReorderableDragStartListener(
           index: index,
@@ -76,7 +80,7 @@ class ExerciseList extends StatelessWidget {
     }
 
     // Desktop platform automatically puts the trailing reorder button.
-    if (platformIsDesktop() && settings.planTrailing == PlanTrailing.reorder)
+    if (platformIsDesktop() && planTrailing == PlanTrailing.reorder)
       trailing = const SizedBox();
 
     return GestureDetector(
@@ -130,12 +134,16 @@ class ExerciseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final maxSets =
+        context.select<SettingsState, int>((value) => value.maxSets);
+    final planTrailing = context
+        .select<SettingsState, PlanTrailing>((value) => value.planTrailing);
 
-    if (settings.planTrailing == PlanTrailing.reorder)
+    if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
         itemCount: exercises.length,
-        itemBuilder: (context, index) => _itemBuilder(context, index, settings),
+        itemBuilder: (context, index) =>
+            _itemBuilder(context, index, maxSets, planTrailing),
         onReorder: (oldIndex, newIndex) async {
           if (oldIndex < newIndex) {
             newIndex--;
@@ -147,13 +155,16 @@ class ExerciseList extends StatelessWidget {
           await db
               .update(db.plans)
               .replace(plan.copyWith(exercises: exercises.join(',')));
-          refresh();
+          if (!context.mounted) return;
+          final planState = context.read<PlanState>();
+          planState.updatePlans(null);
         },
       );
     else
       return ListView.builder(
         itemCount: exercises.length,
-        itemBuilder: (context, index) => _itemBuilder(context, index, settings),
+        itemBuilder: (context, index) =>
+            _itemBuilder(context, index, maxSets, planTrailing),
       );
   }
 }

@@ -59,8 +59,6 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return ListView.builder(
       itemCount: widget.gymSets.length,
       controller: scrollController,
@@ -79,8 +77,11 @@ class _HistoryListState extends State<HistoryList> {
             if (showDivider) const Divider(),
             ListTile(
               title: Text(gymSet.name),
-              subtitle: Text(
-                DateFormat(settings.longDateFormat).format(gymSet.created),
+              subtitle: Selector<SettingsState, String>(
+                selector: (p0, p1) => p1.longDateFormat,
+                builder: (context, value, child) => Text(
+                  DateFormat(value).format(gymSet.created),
+                ),
               ),
               trailing: Text(
                 gymSet.cardio

@@ -191,8 +191,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   selected.clear();
                 }),
                 onDelete: () {
-                  (db.delete(db.gymSets)
-                        ..where((tbl) => tbl.id.isIn(selected)))
+                  (db.delete(db.gymSets)..where((tbl) => tbl.id.isIn(selected)))
                       .go();
                   setState(() {
                     selected.clear();
@@ -225,9 +224,11 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 Expanded(
                   child: Builder(
                     builder: (context) {
-                      final settings = context.watch<SettingsState>();
+                      final groupHistory = context.select<SettingsState, bool>(
+                        (value) => value.groupHistory,
+                      );
 
-                      if (settings.groupHistory) {
+                      if (groupHistory) {
                         final historyDays = _getHistoryDays(snapshot.data!);
                         return HistoryCollapsed(
                           historyDays: historyDays,

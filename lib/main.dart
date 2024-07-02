@@ -40,7 +40,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final systemColors = context.select<SettingsState, bool>(
+      (value) => value.systemColors,
+    );
+    final themeMode =
+        context.select<SettingsState, ThemeMode>((value) => value.themeMode);
 
     final defaultTheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
     final defaultDark = ColorScheme.fromSeed(
@@ -52,7 +56,7 @@ class App extends StatelessWidget {
       builder: (lightDynamic, darkDynamic) => MaterialApp(
         title: 'Flexify',
         theme: ThemeData(
-          colorScheme: settings.systemColors ? lightDynamic : defaultTheme,
+          colorScheme: systemColors ? lightDynamic : defaultTheme,
           fontFamily: 'Manrope',
           useMaterial3: true,
           inputDecorationTheme: const InputDecorationTheme(
@@ -60,14 +64,14 @@ class App extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(
-          colorScheme: settings.systemColors ? darkDynamic : defaultDark,
+          colorScheme: systemColors ? darkDynamic : defaultDark,
           fontFamily: 'Manrope',
           useMaterial3: true,
           inputDecorationTheme: const InputDecorationTheme(
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
         ),
-        themeMode: settings.themeMode,
+        themeMode: themeMode,
         home: const HomePage(),
         debugShowCheckedModeBanner: false,
       ),
@@ -80,29 +84,30 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final hideHistoryTab =
+        context.select<SettingsState, bool>((value) => value.hideHistoryTab);
+    final hideTimerTab =
+        context.select<SettingsState, bool>((value) => value.hideTimerTab);
     var length = 4;
-    if (settings.hideTimerTab || !platformSupportsTimer()) length--;
-    if (settings.hideHistoryTab) length--;
+    if (hideTimerTab || !platformSupportsTimer()) length--;
+    if (hideHistoryTab) length--;
 
     return SafeArea(
       child: DefaultTabController(
         length: length,
         child: Scaffold(
-          bottomSheet:
-              settings.hideTimerTab ? null : const TimerProgressIndicator(),
+          bottomSheet: hideTimerTab ? null : const TimerProgressIndicator(),
           body: TabBarView(
             children: [
-              if (!settings.hideHistoryTab) const HistoryPage(),
+              if (!hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!settings.hideTimerTab && platformSupportsTimer())
-                const TimerPage(),
+              if (!hideTimerTab && platformSupportsTimer()) const TimerPage(),
             ],
           ),
           bottomNavigationBar: TabBar(
             tabs: [
-              if (!settings.hideHistoryTab)
+              if (!hideHistoryTab)
                 const Tab(
                   icon: Icon(Icons.history),
                   text: "History",
@@ -115,7 +120,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.insights),
                 text: "Graphs",
               ),
-              if (!settings.hideTimerTab && platformSupportsTimer())
+              if (!hideTimerTab && platformSupportsTimer())
                 const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",

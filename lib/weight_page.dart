@@ -43,8 +43,6 @@ class _WeightPageState extends State<WeightPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return Scaffold(
       appBar: AppBar(title: const Text('Enter Weight')),
       body: Form(
@@ -60,14 +58,17 @@ class _WeightPageState extends State<WeightPage> {
                     value!.isEmpty ? 'Please enter weight' : null,
                 autofocus: true,
               ),
-              UnitSelector(
-                value: unit ?? settings.strengthUnit,
-                cardio: false,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    unit = newValue!;
-                  });
-                },
+              Selector<SettingsState, String>(
+                selector: (p0, p1) => p1.strengthUnit,
+                builder: (context, value, child) => UnitSelector(
+                  value: unit ?? value,
+                  cardio: false,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      unit = newValue!;
+                    });
+                  },
+                ),
               ),
               TextFormField(
                 controller: TextEditingController(text: yesterdaysWeight),
@@ -80,7 +81,9 @@ class _WeightPageState extends State<WeightPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          final settings = context.read<SettingsState>();
           Navigator.pop(context);
+
           db.gymSets.insertOne(
             GymSetsCompanion.insert(
               created: DateTime.now().toLocal(),

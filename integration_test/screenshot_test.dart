@@ -291,7 +291,6 @@ void main() {
             context: context,
             page: StartPlanPage(
               plan: context.read<PlanState>().plans.first,
-              refresh: () async {},
             ),
           );
         },

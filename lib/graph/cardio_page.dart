@@ -79,7 +79,7 @@ class _CardioPageState extends State<CardioPage> {
     double value,
     TitleMeta meta,
     List<CardioData> rows,
-    SettingsState settings,
+    String format,
   ) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _CardioPageState extends State<CardioPage> {
     if (indices.contains(value.toInt())) {
       DateTime createdDate = rows[value.toInt()].created;
       text = Text(
-        DateFormat(settings.shortDateFormat).format(createdDate),
+        DateFormat(format).format(createdDate),
         style: style,
       );
     } else {
@@ -112,8 +112,6 @@ class _CardioPageState extends State<CardioPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
@@ -163,6 +161,12 @@ class _CardioPageState extends State<CardioPage> {
               final value = double.parse(row.value.toStringAsFixed(1));
               spots.add(FlSpot(index.toDouble(), value));
             }
+
+            final curveLines = context
+                .select<SettingsState, bool>((value) => value.curveLines);
+            final format = context.select<SettingsState, String>(
+              (value) => value.shortDateFormat,
+            );
 
             return ListView(
               children: [
@@ -218,28 +222,38 @@ class _CardioPageState extends State<CardioPage> {
                     _setStream();
                   },
                 ),
-                if (metric == CardioMetric.distance && settings.showUnits)
-                  UnitSelector(
-                    value: targetUnit,
-                    cardio: true,
-                    onChanged: (value) {
-                      setState(() {
-                        targetUnit = value!;
-                      });
-                      _setStream();
-                    },
+                if (metric == CardioMetric.distance)
+                  Selector<SettingsState, bool>(
+                    selector: (p0, p1) => p1.showUnits,
+                    builder: (context, value, child) => Visibility(
+                      visible: value,
+                      child: UnitSelector(
+                        value: targetUnit,
+                        cardio: true,
+                        onChanged: (value) {
+                          setState(() {
+                            targetUnit = value!;
+                          });
+                          _setStream();
+                        },
+                      ),
+                    ),
                   ),
                 Row(
                   children: [
                     Expanded(
                       child: ListTile(
                         title: const Text('Start date'),
-                        subtitle: startDate != null
-                            ? Text(
-                                DateFormat(settings.shortDateFormat)
-                                    .format(startDate!),
-                              )
-                            : null,
+                        subtitle: Selector<SettingsState, String>(
+                          selector: (p0, p1) => p1.shortDateFormat,
+                          builder: (context, value, child) {
+                            if (startDate == null) return Text(value);
+
+                            return Text(
+                              DateFormat(value).format(startDate!),
+                            );
+                          },
+                        ),
                         onLongPress: () => setState(() {
                           startDate = null;
                         }),
@@ -250,12 +264,16 @@ class _CardioPageState extends State<CardioPage> {
                     Expanded(
                       child: ListTile(
                         title: const Text('Stop date'),
-                        subtitle: endDate != null
-                            ? Text(
-                                DateFormat(settings.shortDateFormat)
-                                    .format(endDate!),
-                              )
-                            : null,
+                        subtitle: Selector<SettingsState, String>(
+                          selector: (p0, p1) => p1.shortDateFormat,
+                          builder: (context, value, child) {
+                            if (endDate == null) return Text(value);
+
+                            return Text(
+                              DateFormat(value).format(endDate!),
+                            );
+                          },
+                        ),
                         onLongPress: () => setState(() {
                           endDate = null;
                         }),
@@ -294,7 +312,7 @@ class _CardioPageState extends State<CardioPage> {
                                 value,
                                 meta,
                                 rows,
-                                settings,
+                                format,
                               ),
                             ),
                           ),
@@ -342,7 +360,7 @@ class _CardioPageState extends State<CardioPage> {
                         lineBarsData: [
                           LineChartBarData(
                             spots: spots,
-                            isCurved: settings.curveLines,
+                            isCurved: curveLines,
                             color: Theme.of(context).colorScheme.primary,
                             barWidth: 3,
                             isStrokeCapRound: true,

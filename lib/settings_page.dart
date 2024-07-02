@@ -266,12 +266,11 @@ class _SettingsPageState extends State<SettingsPage> {
           child: TextField(
             controller: maxSetsController,
             decoration: const InputDecoration(
-              labelText: 'Maximum sets',
+              labelText: 'Sets per exercise',
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(maxSetsController),
-            onChanged: (value) =>
-                settings.setMaxSets(int.tryParse(value) ?? 0),
+            onChanged: (value) => settings.setMaxSets(int.tryParse(value) ?? 3),
           ),
         ),
       ),

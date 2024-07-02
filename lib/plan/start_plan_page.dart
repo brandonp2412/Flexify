@@ -15,9 +15,8 @@ import 'package:provider/provider.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
-  final Future<void> Function() refresh;
 
-  const StartPlanPage({super.key, required this.plan, required this.refresh});
+  const StartPlanPage({super.key, required this.plan});
 
   @override
   createState() => _StartPlanPageState();
@@ -38,9 +37,9 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late List<String> planExercises = widget.plan.exercises.split(',');
   late final Stream<List<GymCount>> countStream =
       watchCount(widget.plan.id, planExercises);
-  late SettingsState settings = context.read<SettingsState>();
   late final PlanState planState = context.read<PlanState>();
-  late String unit = settings.strengthUnit;
+  late String unit = context.read<SettingsState>().strengthUnit;
+  late String title = widget.plan.days.replaceAll(",", ", ");
 
   @override
   void initState() {
@@ -69,6 +68,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .split(',');
     setState(() {
       planExercises = split;
+      title = planState.plans
+          .firstWhere((plan) => plan.id == widget.plan.id)
+          .days
+          .replaceAll(',', ', ');
     });
   }
 
@@ -89,6 +92,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
+    final settings = context.read<SettingsState>();
     final last = await _getLast(planExercises[index]);
     if (last == null) return;
 
@@ -115,6 +119,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
     final exercise = planExercises[selectedIndex];
     var bodyWeight = 0.0;
+    final settings = context.read<SettingsState>();
     if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
     if (platformSupportsTimer() &&
@@ -187,12 +192,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    var title = widget.plan.days.replaceAll(",", ", ");
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
 
     final timerState = context.read<TimerState>();
-    settings = context.watch<SettingsState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -206,15 +209,17 @@ class _StartPlanPageState extends State<StartPlanPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              Navigator.pop(context);
+              final plan = await (db.plans.select()
+                    ..whereSamePrimaryKey(widget.plan))
+                  .getSingle();
+              if (!context.mounted) return;
               await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      EditPlanPage(plan: widget.plan.toCompanion(false)),
+                      EditPlanPage(plan: plan.toCompanion(false)),
                 ),
               );
-              widget.refresh();
             },
             icon: const Icon(Icons.edit),
           ),
@@ -241,24 +246,27 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 controller: weightController,
                 decoration: InputDecoration(
                   labelText: 'Weight ($unit)',
-                  suffixIcon: settings.hideWeight
-                      ? null
-                      : IconButton(
-                          tooltip: "Use body weight",
-                          icon: const Icon(Icons.scale),
-                          onPressed: () async {
-                            final weightSet = await getBodyWeight();
-                            if (weightSet == null && context.mounted)
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('No weight entered yet.'),
-                                ),
-                              );
-                            else
-                              weightController.text =
-                                  toString(weightSet!.weight);
-                          },
-                        ),
+                  suffixIcon: Selector<SettingsState, bool>(
+                    selector: (p0, p1) => p1.hideWeight,
+                    builder: (context, hideWeight, child) => Visibility(
+                      visible: !hideWeight,
+                      child: IconButton(
+                        tooltip: "Use body weight",
+                        icon: const Icon(Icons.scale),
+                        onPressed: () async {
+                          final weightSet = await getBodyWeight();
+                          if (weightSet == null && context.mounted)
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('No weight entered yet.'),
+                              ),
+                            );
+                          else
+                            weightController.text = toString(weightSet!.weight);
+                        },
+                      ),
+                    ),
+                  ),
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {
@@ -324,23 +332,27 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 ],
               ),
             ],
-            if (settings.showUnits)
-              UnitSelector(
-                value: unit,
-                cardio: cardio,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    unit = newValue!;
-                  });
-                },
+            Selector<SettingsState, bool>(
+              selector: (p0, p1) => p1.showUnits,
+              builder: (context, showUnits, child) => Visibility(
+                visible: showUnits,
+                child: UnitSelector(
+                  value: unit,
+                  cardio: cardio,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      unit = newValue!;
+                    });
+                  },
+                ),
               ),
+            ),
             Expanded(
               child: StreamBuilder(
                 stream: countStream,
                 builder: (context, snapshot) {
                   return ExerciseList(
                     exercises: planExercises,
-                    refresh: widget.refresh,
                     selected: selectedIndex,
                     onSelect: _select,
                     counts: snapshot.data,

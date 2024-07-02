@@ -27,7 +27,6 @@ class _EditSetsPageState extends State<EditSetsPage> {
   final secondsController = TextEditingController();
   final inclineController = TextEditingController();
   final nameController = TextEditingController();
-  late SettingsState settings = context.read<SettingsState>();
 
   String? unit;
   DateTime? created;
@@ -46,6 +45,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   void initState() {
     super.initState();
+    final settings = context.read<SettingsState>();
+
     (db.gymSets.select()..where((u) => u.id.isIn(widget.ids)))
         .get()
         .then((gymSets) {
@@ -149,8 +150,6 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -272,34 +271,49 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 onTap: () => selectAll(weightController),
               ),
             ],
-            if (nameController.text != 'Weight' && !settings.hideWeight)
-              TextField(
-                controller: bodyWeightController,
-                decoration: InputDecoration(
-                  labelText: 'Body weight',
-                  hintText: oldBodyWeights,
+            if (nameController.text != 'Weight')
+              Selector<SettingsState, bool>(
+                builder: (context, hideWeight, child) => Visibility(
+                  visible: !hideWeight,
+                  child: TextField(
+                    controller: bodyWeightController,
+                    decoration: InputDecoration(
+                      labelText: 'Body weight',
+                      hintText: oldBodyWeights,
+                    ),
+                    keyboardType: TextInputType.number,
+                    onTap: () => selectAll(bodyWeightController),
+                  ),
                 ),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(bodyWeightController),
+                selector: (p0, p1) => p1.hideWeight,
               ),
-            UnitSelector(
-              value: unit ?? 'kg',
-              onChanged: (String? newValue) {
-                setState(() {
-                  unit = newValue!;
-                });
-              },
-              cardio: cardio ?? false,
+            Selector<SettingsState, bool>(
+              builder: (context, showUnits, child) => Visibility(
+                visible: showUnits,
+                child: UnitSelector(
+                  value: unit ?? 'kg',
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      unit = newValue!;
+                    });
+                  },
+                  cardio: cardio ?? false,
+                ),
+              ),
+              selector: (p0, p1) => p1.showUnits,
             ),
-            ListTile(
-              title: const Text('Created Date'),
-              subtitle: Text(
-                created != null
-                    ? DateFormat(settings.longDateFormat).format(created!)
-                    : oldCreateds ?? "",
+            Selector<SettingsState, String>(
+              builder: (context, longDateFormat, child) => ListTile(
+                title: const Text('Created Date'),
+                subtitle: Text(
+                  created != null
+                      ? DateFormat(longDateFormat).format(created!)
+                      : oldCreateds ?? "",
+                ),
+                trailing: const Icon(Icons.calendar_today),
+                onTap: () => _selectDate(),
               ),
-              trailing: const Icon(Icons.calendar_today),
-              onTap: () => _selectDate(),
+              selector: (p0, p1) => p1.longDateFormat,
             ),
           ],
         ),

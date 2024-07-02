@@ -33,7 +33,6 @@ void main() async {
               ],
               onSelect: (value) {},
               selected: const {},
-              updatePlans: ({plans}) => Future.value(null),
               navigatorKey: GlobalKey(),
             ),
           ),
