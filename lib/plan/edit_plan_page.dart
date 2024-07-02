@@ -53,7 +53,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   void _setExercises() {
     var query = db.gymSets.selectOnly()
-      ..addColumns([db.gymSets.name, db.planExercises.maxSets])
+      ..addColumns([db.gymSets.name])
       ..groupBy([db.gymSets.name]);
 
     if (widget.plan.id.present)
@@ -64,7 +64,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
             db.planExercises.planId.equals(widget.plan.id.value) &
                 db.planExercises.exercise.equalsExp(db.gymSets.name),
           ),
-        ]);
+        ])
+        ..addColumns([db.planExercises.maxSets]);
 
     query.get().then(
           (results) => setState(() {
@@ -73,9 +74,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
             for (final result in results) {
               exercises.add(result.read(db.gymSets.name)!);
+              String text = '';
+              if (widget.plan.id.present)
+                text = result.read(db.planExercises.maxSets)?.toString() ?? "";
               controllers.add(
                 TextEditingController(
-                  text: result.read(db.planExercises.maxSets)?.toString(),
+                  text: text,
                 ),
               );
             }
