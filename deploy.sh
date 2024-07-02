@@ -29,16 +29,6 @@ last_commit=$(git log -1 --pretty=%B | head -n 1)
 git commit --amend -m "$last_commit - $new_version 🚀 
 $rest"
 
-tmpdir=$(mktemp -d)
-rsync -a --exclude='build' . $tmpdir
-cd $tmpdir
-
-if [[ -n "$(git diff --stat)" ]]; then
-    echo "There are unstaged changes in the repository:"
-    git --no-pager diff
-    exit 1
-fi
-
 ./flutter/bin/flutter build apk --split-per-abi
 ./flutter/bin/flutter build apk
 ./flutter/bin/flutter build linux
