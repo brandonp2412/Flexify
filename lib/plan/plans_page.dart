@@ -162,7 +162,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 plan: PlansCompanion(
                   days: drift.Value(''),
                   exercises: drift.Value(''),
-                  id: drift.Value(-1),
                 ),
               ),
             ),

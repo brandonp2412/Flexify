@@ -52,18 +52,21 @@ class _EditPlanPageState extends State<EditPlanPage> {
   }
 
   void _setExercises() {
-    (db.gymSets.selectOnly()
-          ..addColumns([db.gymSets.name, db.planExercises.maxSets])
-          ..join([
-            leftOuterJoin(
-              db.planExercises,
-              db.planExercises.planId.equals(widget.plan.id.value) &
-                  db.planExercises.exercise.equalsExp(db.gymSets.name),
-            ),
-          ])
-          ..groupBy([db.gymSets.name]))
-        .get()
-        .then(
+    var query = db.gymSets.selectOnly()
+      ..addColumns([db.gymSets.name, db.planExercises.maxSets])
+      ..groupBy([db.gymSets.name]);
+
+    if (widget.plan.id.present)
+      query = query
+        ..join([
+          leftOuterJoin(
+            db.planExercises,
+            db.planExercises.planId.equals(widget.plan.id.value) &
+                db.planExercises.exercise.equalsExp(db.gymSets.name),
+          ),
+        ]);
+
+    query.get().then(
           (results) => setState(() {
             exercises = [];
             controllers = [];
@@ -124,7 +127,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     int? id;
-    if (widget.plan.id.value != -1) {
+    if (widget.plan.id.present) {
       await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
       await db.planExercises
           .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
