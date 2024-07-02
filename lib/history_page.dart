@@ -115,48 +115,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> actions = [];
-
-    if (selected.isNotEmpty)
-      actions.add(
-        IconButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Confirm Delete'),
-                  content: Text(
-                    'Are you sure you want to delete ${selected.length} records?',
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    TextButton(
-                      child: const Text('Delete'),
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        (db.delete(db.gymSets)
-                              ..where((tbl) => tbl.id.isIn(selected)))
-                            .go();
-                        setState(() {
-                          selected = {};
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-          icon: const Icon(Icons.delete),
-        ),
-      );
-
     return Scaffold(
       body: StreamBuilder(
         stream: stream,
