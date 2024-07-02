@@ -165,7 +165,8 @@ class _CardioPageState extends State<CardioPage> {
             final curveLines = context
                 .select<SettingsState, bool>((value) => value.curveLines);
             final format = context.select<SettingsState, String>(
-                (value) => value.shortDateFormat);
+              (value) => value.shortDateFormat,
+            );
 
             return ListView(
               children: [
