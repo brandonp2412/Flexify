@@ -24,6 +24,7 @@ void main() async {
         child: const MaterialApp(
           home: EditPlanPage(
             plan: PlansCompanion(
+              id: Value(-1),
               days: Value('Monday,Tuesday,Wednesday'),
               exercises: Value('Bench press,Row,Bicep curl'),
               sequence: Value(1),
@@ -59,6 +60,7 @@ void main() async {
         child: const MaterialApp(
           home: EditPlanPage(
             plan: PlansCompanion(
+              id: Value(-1),
               days: Value('Monday,Tuesday,Wednesday'),
               exercises: Value('Bench press,Row,Bicep curl'),
               sequence: Value(1),
