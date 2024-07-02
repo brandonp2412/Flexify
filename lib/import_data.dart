@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -149,6 +150,7 @@ class ImportData extends StatelessWidget {
     await db.plans.deleteAll();
     await db.plans.insertAll(plans);
     if (!pageContext.mounted) return;
+    pageContext.read<PlanState>().updatePlans(null);
     Navigator.pop(pageContext);
   }
 
