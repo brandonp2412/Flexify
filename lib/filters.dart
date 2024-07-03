@@ -146,7 +146,8 @@ class _FiltersState extends State<Filters> {
                   lastDate: DateTime(2100),
                 );
                 if (pickedDate != null) widget.setStart(pickedDate.toLocal());
-                if (context.mounted) Navigator.pop(context);
+                if (context.mounted && pickedDate != null)
+                  Navigator.pop(context);
               },
             ),
           ),
@@ -171,7 +172,8 @@ class _FiltersState extends State<Filters> {
                   lastDate: DateTime(2100),
                 );
                 if (pickedDate != null) widget.setEnd(pickedDate.toLocal());
-                if (context.mounted) Navigator.pop(context);
+                if (context.mounted && pickedDate != null)
+                  Navigator.pop(context);
               },
               onLongPress: () {
                 widget.setEnd(null);
