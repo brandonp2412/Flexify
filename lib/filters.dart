@@ -42,6 +42,18 @@ class _FiltersState extends State<Filters> {
 
   @override
   Widget build(BuildContext context) {
+    String? reps;
+    if (widget.repsGtController.text.isNotEmpty)
+      reps = '> ${widget.repsGtController.text} ';
+    if (widget.repsLtController.text.isNotEmpty)
+      reps = '${reps ?? ''}< ${widget.repsLtController.text}';
+
+    String? weight;
+    if (widget.weightGtController.text.isNotEmpty)
+      weight = '> ${widget.weightGtController.text} ';
+    if (widget.weightLtController.text.isNotEmpty)
+      weight = '${weight ?? ''}< ${widget.weightLtController.text}';
+
     return Badge.count(
       count: filtersCount,
       isLabelVisible: filtersCount > 0,
@@ -49,75 +61,111 @@ class _FiltersState extends State<Filters> {
       child: PopupMenuButton(
         itemBuilder: (context) => [
           PopupMenuItem(
-            child: TextField(
-              controller: widget.repsGtController,
-              onSubmitted: (value) {
-                widget.setStream();
+            child: ListTile(
+              leading: const Icon(Icons.repeat),
+              title: const Text('Reps'),
+              subtitle: reps != null ? Text(reps) : null,
+              onTap: () {
                 Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Reps filter"),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          TextField(
+                            onChanged: (value) => widget.setStream(),
+                            controller: widget.repsGtController,
+                            decoration: const InputDecoration(
+                              labelText: "Greater than",
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          TextField(
+                            onChanged: (value) => widget.setStream(),
+                            controller: widget.repsLtController,
+                            decoration:
+                                const InputDecoration(labelText: "Less than"),
+                            keyboardType: TextInputType.number,
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Clear'),
+                        onPressed: () async {
+                          widget.repsGtController.text = '';
+                          widget.repsLtController.text = '';
+                          widget.setStream();
+                          Navigator.pop(context);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
               },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                label: Row(
-                  children: [
-                    Text("Reps"),
-                    Icon(Icons.arrow_right),
-                  ],
-                ),
-              ),
             ),
           ),
           PopupMenuItem(
-            child: TextField(
-              controller: widget.repsLtController,
-              onSubmitted: (value) {
-                widget.setStream();
+            child: ListTile(
+              leading: const Icon(Icons.scale),
+              title: const Text('Weight'),
+              subtitle: weight != null ? Text(weight) : null,
+              onTap: () {
                 Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Weight filter"),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          TextField(
+                            onChanged: (value) => widget.setStream(),
+                            controller: widget.weightGtController,
+                            decoration: const InputDecoration(
+                              labelText: "Greater than",
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          TextField(
+                            onChanged: (value) => widget.setStream(),
+                            controller: widget.weightLtController,
+                            decoration:
+                                const InputDecoration(labelText: "Less than"),
+                            keyboardType: TextInputType.number,
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Clear'),
+                        onPressed: () async {
+                          widget.weightGtController.text = '';
+                          widget.weightLtController.text = '';
+                          widget.setStream();
+                          Navigator.pop(context);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
               },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                label: Row(
-                  children: [
-                    Text("Reps"),
-                    Icon(Icons.arrow_left),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          PopupMenuItem(
-            child: TextField(
-              controller: widget.weightGtController,
-              onSubmitted: (value) {
-                widget.setStream();
-                Navigator.pop(context);
-              },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                label: Row(
-                  children: [
-                    Text("Weight"),
-                    Icon(Icons.arrow_right),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          PopupMenuItem(
-            child: TextField(
-              controller: widget.weightLtController,
-              onSubmitted: (value) {
-                widget.setStream();
-                Navigator.pop(context);
-              },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                label: Row(
-                  children: [
-                    Text("Weight"),
-                    Icon(Icons.arrow_left),
-                  ],
-                ),
-              ),
             ),
           ),
           PopupMenuItem(
@@ -139,6 +187,7 @@ class _FiltersState extends State<Filters> {
                         : Text(shortDateFormat),
               ),
               onTap: () async {
+                Navigator.pop(context);
                 final DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: widget.startDate,
@@ -146,8 +195,6 @@ class _FiltersState extends State<Filters> {
                   lastDate: DateTime(2100),
                 );
                 if (pickedDate != null) widget.setStart(pickedDate.toLocal());
-                if (context.mounted && pickedDate != null)
-                  Navigator.pop(context);
               },
             ),
           ),
@@ -165,6 +212,7 @@ class _FiltersState extends State<Filters> {
                         : Text(shortDateFormat),
               ),
               onTap: () async {
+                Navigator.pop(context);
                 final DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: widget.endDate,
@@ -172,8 +220,6 @@ class _FiltersState extends State<Filters> {
                   lastDate: DateTime(2100),
                 );
                 if (pickedDate != null) widget.setEnd(pickedDate.toLocal());
-                if (context.mounted && pickedDate != null)
-                  Navigator.pop(context);
               },
               onLongPress: () {
                 widget.setEnd(null);

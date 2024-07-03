@@ -151,7 +151,7 @@ class _AppSearchState extends State<AppSearch> {
                     ),
                     PopupMenuItem(
                       child: ListTile(
-                        leading: const Icon(Icons.clear),
+                        leading: const Icon(Icons.clear_all),
                         title: const Text('Clear'),
                         onTap: () async {
                           Navigator.pop(context);
