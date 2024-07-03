@@ -40,7 +40,7 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void initState() {
     super.initState();
-    _updateFields(widget.gymSet);
+    updateFields(widget.gymSet);
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()
         .then((results) {
@@ -118,11 +118,11 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     if (pickedDate != null) {
-      _selectTime(pickedDate);
+      selectTime(pickedDate);
     }
   }
 
-  Future<void> _selectTime(DateTime pickedDate) async {
+  Future<void> selectTime(DateTime pickedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(created),
@@ -141,7 +141,7 @@ class _EditSetPageState extends State<EditSetPage> {
     }
   }
 
-  void _updateFields(GymSet gymSet) {
+  void updateFields(GymSet gymSet) {
     nameController?.text = gymSet.name;
 
     setState(() {
@@ -228,14 +228,14 @@ class _EditSetPageState extends State<EditSetPage> {
                 );
 
                 if (hideWeight)
-                  _updateFields(
+                  updateFields(
                     last.copyWith(
                       created: DateTime.now().toLocal(),
                     ),
                   );
                 else {
                   final bodyWeight = await getBodyWeight();
-                  _updateFields(
+                  updateFields(
                     last.copyWith(
                       bodyWeight: bodyWeight?.weight,
                       created: DateTime.now().toLocal(),

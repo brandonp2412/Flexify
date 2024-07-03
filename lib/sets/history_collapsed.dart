@@ -31,17 +31,17 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(_scrollListener);
+    scrollController.addListener(scrollListener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    scrollController.removeListener(_scrollListener);
+    scrollController.removeListener(scrollListener);
     scrollController.dispose();
   }
 
-  void _scrollListener() {
+  void scrollListener() {
     if (scrollController.position.pixels <
             scrollController.position.maxScrollExtent - 200 ||
         goingNext) return;

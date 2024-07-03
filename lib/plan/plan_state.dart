@@ -16,11 +16,11 @@ class PlanState extends ChangeNotifier {
     if (newPlans != null)
       plans = newPlans;
     else
-      plans = await _getPlans();
+      plans = await getPlans();
     notifyListeners();
   }
 
-  Future<List<Plan>> _getPlans() async => await (db.select(db.plans)
+  Future<List<Plan>> getPlans() async => await (db.select(db.plans)
         ..orderBy([
           (u) => OrderingTerm(expression: u.sequence),
         ]))

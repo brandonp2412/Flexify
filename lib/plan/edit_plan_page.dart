@@ -37,7 +37,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    _setExercises();
+    setExercises();
     titleController.text = widget.plan.title.value ?? "";
 
     final dayList = widget.plan.days.value.split(',');
@@ -51,7 +51,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     }
   }
 
-  void _setExercises() {
+  void setExercises() {
     var query = db.gymSets.selectOnly()
       ..addColumns([db.gymSets.name])
       ..groupBy([db.gymSets.name]);
@@ -95,7 +95,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     super.dispose();
   }
 
-  void _toggleSearch() {
+  void toggleSearch() {
     setState(() {
       showSearch = !showSearch;
       if (!showSearch) search = '';
@@ -192,7 +192,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (search == '')
       actions.add(
         IconButton(
-          onPressed: _toggleSearch,
+          onPressed: toggleSearch,
           icon: const Icon(Icons.search),
           tooltip: "Search",
         ),
@@ -280,7 +280,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                         builder: (context) => const AddExercisePage(),
                       ),
                     );
-                    _setExercises();
+                    setExercises();
                   },
                   tooltip: 'Add exercise',
                 ),

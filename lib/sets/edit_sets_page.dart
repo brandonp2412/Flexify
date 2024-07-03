@@ -125,11 +125,11 @@ class _EditSetsPageState extends State<EditSetsPage> {
     );
 
     if (pickedDate != null) {
-      _selectTime(pickedDate);
+      selectTime(pickedDate);
     }
   }
 
-  Future<void> _selectTime(DateTime pickedDate) async {
+  Future<void> selectTime(DateTime pickedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(created ?? DateTime.now()),

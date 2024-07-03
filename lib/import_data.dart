@@ -21,7 +21,7 @@ class ImportData extends StatelessWidget {
     required this.pageContext,
   });
 
-  _importGraphs(BuildContext context) async {
+  importGraphs(BuildContext context) async {
     Navigator.pop(context);
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result == null) return;
@@ -104,7 +104,7 @@ class ImportData extends StatelessWidget {
     Navigator.pop(pageContext);
   }
 
-  _importDatabase(BuildContext context) async {
+  importDatabase(BuildContext context) async {
     Navigator.pop(context);
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result == null) return;
@@ -123,7 +123,7 @@ class ImportData extends StatelessWidget {
     Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
   }
 
-  _importPlans(BuildContext context) async {
+  importPlans(BuildContext context) async {
     Navigator.pop(context);
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result == null) return;
@@ -166,17 +166,17 @@ class ImportData extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.insights),
                   title: const Text('Graphs'),
-                  onTap: () => _importGraphs(context),
+                  onTap: () => importGraphs(context),
                 ),
                 ListTile(
                   leading: const Icon(Icons.event),
                   title: const Text('Plans'),
-                  onTap: () => _importPlans(context),
+                  onTap: () => importPlans(context),
                 ),
                 ListTile(
                   leading: const Icon(Icons.storage),
                   title: const Text('Database'),
-                  onTap: () => _importDatabase(context),
+                  onTap: () => importDatabase(context),
                 ),
               ],
             );

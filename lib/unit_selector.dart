@@ -12,7 +12,7 @@ class UnitSelector extends StatelessWidget {
   final bool cardio;
   final Function(String?) onChanged;
 
-  void _onTap() {
+  void onTap() {
     if (value == 'kg')
       onChanged('lb');
     else if (value == 'km')
@@ -32,10 +32,10 @@ class UnitSelector extends StatelessWidget {
           leading: value == 'kg' || value == 'km'
               ? const Icon(Icons.straighten)
               : const Icon(Icons.square_foot),
-          onTap: _onTap,
+          onTap: onTap,
           trailing: Switch(
             value: value == 'kg' || value == 'km',
-            onChanged: (_) => _onTap(),
+            onChanged: (_) => onTap(),
           ),
         ),
       ],

@@ -72,7 +72,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   final double value;
   final TimerState timerState;
 
-  String _generateTitleText(Duration remaining) {
+  String generateTitleText(Duration remaining) {
     final minutes = (remaining.inMinutes).toString().padLeft(2, '0');
     final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
     return "$minutes:$seconds";
@@ -107,7 +107,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: 32.0),
             Text(
-              _generateTitleText(timerState.nativeTimer.getRemaining()),
+              generateTitleText(timerState.nativeTimer.getRemaining()),
               style: TextStyle(
                 fontSize: 50.0,
                 color: Theme.of(context).textTheme.bodyLarge!.color,

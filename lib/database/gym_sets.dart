@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/main.dart';
 
 class GymSets extends Table {
@@ -21,7 +21,7 @@ class GymSets extends Table {
   IntColumn get planId => integer().nullable()();
 }
 
-double _getValue(TypedResult row, CardioMetric metric) {
+double getValue(TypedResult row, CardioMetric metric) {
   switch (metric) {
     case CardioMetric.pace:
       return row.read(db.gymSets.distance.sum() / db.gymSets.duration.sum()) ??
@@ -93,7 +93,7 @@ Stream<List<CardioData>> watchCardio({
     (results) {
       List<CardioData> list = [];
       for (final result in results.reversed) {
-        var value = _getValue(result, metric);
+        var value = getValue(result, metric);
         final unit = result.read(db.gymSets.unit)!;
 
         if (unit == 'km' && targetUnit == 'mi')

@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/view_graph_page.dart';
 import 'package:flexify/settings_state.dart';
@@ -31,10 +31,10 @@ class _CardioPageState extends State<CardioPage> {
   @override
   void initState() {
     super.initState();
-    _setStream();
+    setStream();
   }
 
-  void _setStream() {
+  void setStream() {
     graphStream = watchCardio(
       endDate: endDate,
       groupBy: period,
@@ -57,7 +57,7 @@ class _CardioPageState extends State<CardioPage> {
     setState(() {
       endDate = pickedDate;
     });
-    _setStream();
+    setStream();
   }
 
   Future<void> _selectStart() async {
@@ -72,10 +72,10 @@ class _CardioPageState extends State<CardioPage> {
     setState(() {
       startDate = pickedDate;
     });
-    _setStream();
+    setStream();
   }
 
-  Widget _bottomTitleWidgets(
+  Widget bottomTitleWidgets(
     double value,
     TitleMeta meta,
     List<CardioData> rows,
@@ -191,7 +191,7 @@ class _CardioPageState extends State<CardioPage> {
                     setState(() {
                       metric = value!;
                     });
-                    _setStream();
+                    setStream();
                   },
                 ),
                 DropdownButtonFormField(
@@ -219,7 +219,7 @@ class _CardioPageState extends State<CardioPage> {
                     setState(() {
                       period = value!;
                     });
-                    _setStream();
+                    setStream();
                   },
                 ),
                 if (metric == CardioMetric.distance)
@@ -234,7 +234,7 @@ class _CardioPageState extends State<CardioPage> {
                           setState(() {
                             targetUnit = value!;
                           });
-                          _setStream();
+                          setStream();
                         },
                       ),
                     ),
@@ -308,7 +308,7 @@ class _CardioPageState extends State<CardioPage> {
                               reservedSize: 27,
                               interval: 1,
                               getTitlesWidget: (value, meta) =>
-                                  _bottomTitleWidgets(
+                                  bottomTitleWidgets(
                                 value,
                                 meta,
                                 rows,

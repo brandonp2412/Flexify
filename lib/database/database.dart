@@ -4,11 +4,11 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/defaults.dart';
-import 'package:flexify/database/plan_exercises.dart';
-import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/database/gym_sets.dart';
-import 'package:flexify/database/settings.dart';
+import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/plans.dart';
+import 'package:flexify/database/schema_versions.dart';
+import 'package:flexify/database/settings.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
@@ -22,7 +22,7 @@ part 'database.g.dart';
 
 @DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase({QueryExecutor? executor}) : super(executor ?? _openConnection());
+  AppDatabase({QueryExecutor? executor}) : super(executor ?? openConnection());
 
   @override
   int get schemaVersion => 18;
@@ -290,7 +290,7 @@ class AppDatabase extends _$AppDatabase {
   }
 }
 
-LazyDatabase _openConnection() {
+LazyDatabase openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'flexify.sqlite'));
