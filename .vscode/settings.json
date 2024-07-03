@@ -23,5 +23,9 @@
       "name": "Flexify",
       "database": "/home/brandon/documents/flexify.sqlite"
     }
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always",
+    "source.organizeImports": "always"
+  }
 }
