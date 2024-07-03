@@ -1,5 +1,5 @@
 import 'package:flexify/database/database.dart';
-import 'package:flexify/history_list.dart';
+import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';

@@ -1,5 +1,5 @@
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_set_page.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';

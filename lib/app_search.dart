@@ -15,6 +15,7 @@ class AppSearch extends StatefulWidget {
     required this.onSelect,
     required this.onShare,
     this.onRefresh,
+    this.filter,
   });
 
   final Set<dynamic> selected;
@@ -25,6 +26,7 @@ class AppSearch extends StatefulWidget {
   final Function onSelect;
   final Function onShare;
   final Function? onRefresh;
+  final Widget? filter;
 
   @override
   State<AppSearch> createState() => _AppSearchState();
@@ -103,6 +105,7 @@ class _AppSearchState extends State<AppSearch> {
                 );
               },
             ),
+          if (widget.selected.isEmpty && widget.filter != null) widget.filter!,
           Badge.count(
             count: widget.selected.length,
             isLabelVisible: widget.selected.isNotEmpty,

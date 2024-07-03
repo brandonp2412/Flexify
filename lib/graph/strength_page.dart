@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/edit_set_page.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/view_graph_page.dart';
 import 'package:flexify/main.dart';

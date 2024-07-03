@@ -1,11 +1,12 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_set_page.dart';
-import 'package:flexify/edit_sets_page.dart';
-import 'package:flexify/history_collapsed.dart';
-import 'package:flexify/history_list.dart';
+import 'package:flexify/filters.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/sets/edit_set_page.dart';
+import 'package:flexify/sets/edit_sets_page.dart';
+import 'package:flexify/sets/history_collapsed.dart';
+import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
@@ -69,35 +70,86 @@ class HistoryDay {
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   late Stream<List<GymSet>> stream;
 
+  final repsGtController = TextEditingController();
+  final repsLtController = TextEditingController();
+  final weightGtController = TextEditingController();
+  final weightLtController = TextEditingController();
+
   Set<int> selected = {};
   String search = '';
   int limit = 100;
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   void initState() {
     super.initState();
-    _setStream();
+    setStream();
   }
 
-  void _setStream() {
+  void setStream() {
+    var query = (db.gymSets.select()
+      ..orderBy(
+        [
+          (u) => OrderingTerm(
+                expression: u.created,
+                mode: OrderingMode.desc,
+              ),
+        ],
+      )
+      ..where((tbl) => tbl.name.contains(search.toLowerCase()))
+      ..where((tbl) => tbl.hidden.equals(false))
+      ..limit(limit));
+
+    if (startDate != null)
+      query = query
+        ..where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));
+    if (endDate != null)
+      query = query
+        ..where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
+    if (repsGtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.reps.isBiggerThanValue(
+                double.tryParse(repsGtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+    if (repsLtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.reps.isSmallerThanValue(
+                double.tryParse(repsLtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+    if (weightGtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.weight.isBiggerThanValue(
+                double.tryParse(weightGtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+    if (weightLtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.weight.isSmallerThanValue(
+                double.tryParse(weightLtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+
     setState(() {
-      stream = (db.gymSets.select()
-            ..orderBy(
-              [
-                (u) => OrderingTerm(
-                      expression: u.created,
-                      mode: OrderingMode.desc,
-                    ),
-              ],
-            )
-            ..where((tbl) => tbl.name.contains(search.toLowerCase()))
-            ..where((tbl) => tbl.hidden.equals(false))
-            ..limit(limit))
-          .watch();
+      stream = query.watch();
     });
   }
 
-  List<HistoryDay> _getHistoryDays(List<GymSet> gymSets) {
+  List<HistoryDay> getHistoryDays(List<GymSet> gymSets) {
     List<HistoryDay> historyDays = [];
     for (final gymSet in gymSets) {
       final day = DateUtils.dateOnly(gymSet.created);
@@ -122,6 +174,34 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           return material.Column(
             children: [
               AppSearch(
+                filter: Filters(
+                  repsGtController: repsGtController,
+                  repsLtController: repsLtController,
+                  weightGtController: weightGtController,
+                  weightLtController: weightLtController,
+                  setStream: () {
+                    setState(() {
+                      limit = 100;
+                    });
+                    setStream();
+                  },
+                  endDate: endDate,
+                  startDate: startDate,
+                  setEnd: (value) {
+                    setState(() {
+                      endDate = value;
+                      limit = 100;
+                    });
+                    setStream();
+                  },
+                  setStart: (value) {
+                    setState(() {
+                      startDate = value;
+                      limit = 100;
+                    });
+                    setStream();
+                  },
+                ),
                 onShare: () async {
                   final gymSets = snapshot.data!
                       .where(
@@ -143,7 +223,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   setState(() {
                     search = value;
                   });
-                  _setStream();
+                  setStream();
                 },
                 onClear: () => setState(() {
                   selected.clear();
@@ -187,7 +267,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       );
 
                       if (groupHistory) {
-                        final historyDays = _getHistoryDays(snapshot.data!);
+                        final historyDays = getHistoryDays(snapshot.data!);
                         return HistoryCollapsed(
                           historyDays: historyDays,
                           onSelect: (id) {
@@ -205,7 +285,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                             setState(() {
                               limit += 100;
                             });
-                            _setStream();
+                            setStream();
                           },
                         );
                       } else
@@ -226,7 +306,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                             setState(() {
                               limit += 100;
                             });
-                            _setStream();
+                            setStream();
                           },
                         );
                     },
