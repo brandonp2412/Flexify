@@ -1,5 +1,5 @@
-import 'package:flexify/edit_set_page.dart';
-import 'package:flexify/history_page.dart';
+import 'package:flexify/sets/edit_set_page.dart';
+import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';

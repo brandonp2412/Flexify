@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/edit_sets_page.dart';
+import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';

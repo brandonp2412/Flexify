@@ -69,17 +69,20 @@ class _AddExercisePageState extends State<AddExercisePage> {
               },
             ),
             ListTile(
-              title: const Text('Cardio'),
+              title: cardio ? const Text('Cardio') : const Text('Strength'),
               leading: cardio
                   ? const Icon(Icons.sports_gymnastics)
                   : const Icon(Icons.fitness_center),
               onTap: () {
                 setState(() {
                   cardio = !cardio;
-                  if (cardio)
-                    unit = settings.cardioUnit;
-                  else
-                    unit = settings.strengthUnit;
+                  if (cardio && unit == 'km')
+                    unit = 'kg';
+                  else if (cardio && unit == 'mi')
+                    unit = 'lb';
+                  else if (!cardio && unit == 'kg')
+                    unit = 'km';
+                  else if (!cardio && unit == 'lb') unit = 'mi';
                 });
               },
               trailing: Switch(

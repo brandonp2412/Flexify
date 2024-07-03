@@ -5,7 +5,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/graph/graphs_page.dart';
-import 'package:flexify/history_page.dart';
+import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
