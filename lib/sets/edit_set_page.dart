@@ -165,7 +165,7 @@ class _EditSetPageState extends State<EditSetPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.gymSet.id > 0 ? 'Edit ${widget.gymSet.name}' : 'Add set',
+          widget.gymSet.id > 0 ? widget.gymSet.name : 'Add set',
         ),
         actions: [
           if (widget.gymSet.id > 0)
