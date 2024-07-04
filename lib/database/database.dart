@@ -264,7 +264,7 @@ class AppDatabase extends _$AppDatabase {
                 ..groupBy([schema.gymSets.name]))
               .get();
 
-          List<PlanExercisesCompanion> pe = [];
+          List<Insertable<QueryRow>> pe = [];
           for (final plan in plans) {
             final exercises = plan.read<String>('exercises').split(',');
 
@@ -273,18 +273,18 @@ class AppDatabase extends _$AppDatabase {
                 (gymSet) => gymSet.read(schema.gymSets.name) == exercise,
               );
               pe.add(
-                PlanExercisesCompanion.insert(
-                  planId: plan.read('id'),
-                  exercise: exercise,
-                  enabled: true,
-                  maxSets: Value(gymSet.read(maxSets)),
-                ),
+                RawValuesInsertable({
+                  'plan_id': plan.read('id'),
+                  'exercise': Variable(exercise),
+                  'enabled': const Variable(true),
+                  'max_sets': Variable(gymSet.read(maxSets)),
+                }),
               );
             }
           }
 
           await m.createTable(schema.planExercises);
-          await planExercises.insertAll(pe);
+          await schema.planExercises.insertAll(pe);
           await m.alterTable(TableMigration(schema.gymSets));
         },
       ),
