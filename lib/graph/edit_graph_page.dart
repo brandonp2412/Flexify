@@ -98,11 +98,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
       GymSetsCompanion(
-          name: Value(nameController.text),
-          cardio: Value(cardio),
-          unit: Value.absentIfNull(unit),
-          restMs: Value(duration?.inMilliseconds),
-          image: Value.absentIfNull(image),),
+        name: Value(nameController.text),
+        cardio: Value(cardio),
+        unit: Value.absentIfNull(unit),
+        restMs: Value(duration?.inMilliseconds),
+        image: Value.absentIfNull(image),
+      ),
     );
 
     await db.customUpdate(

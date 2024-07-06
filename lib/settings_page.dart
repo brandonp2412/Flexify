@@ -384,7 +384,9 @@ class _SettingsPageState extends State<SettingsPage> {
         key: 'show images',
         widget: ListTile(
           title: const Text('Show images'),
-          leading: settings.showImages ? const Icon(Icons.image) : const Icon(Icons.image_outlined),
+          leading: settings.showImages
+              ? const Icon(Icons.image)
+              : const Icon(Icons.image_outlined),
           onTap: () => settings.setShowImages(!settings.showImages),
           trailing: Switch(
             value: settings.showImages,

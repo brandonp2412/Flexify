@@ -25,5 +25,4 @@ class Settings extends Table {
   BoolColumn get curveLines => boolean()();
   BoolColumn get hideWeight => boolean()();
   BoolColumn get groupHistory => boolean()();
-
 }

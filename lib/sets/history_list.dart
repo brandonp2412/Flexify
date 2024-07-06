@@ -61,8 +61,8 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages = context
-        .select<SettingsState, bool>((settings) => settings.showImages);
+    final showImages =
+        context.select<SettingsState, bool>((settings) => settings.showImages);
 
     return ListView.builder(
       itemCount: widget.gymSets.length,
