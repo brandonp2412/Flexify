@@ -19,6 +19,7 @@ class GymSets extends Table {
   IntColumn get restMs => integer().nullable()();
   IntColumn get incline => integer().nullable()();
   IntColumn get planId => integer().nullable()();
+  TextColumn get image => text().nullable()();
 }
 
 double getValue(TypedResult row, CardioMetric metric) {
@@ -124,6 +125,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
           db.gymSets.duration,
           db.gymSets.distance,
           db.gymSets.created.max(),
+          db.gymSets.image,
         ])
         ..orderBy([
           OrderingTerm(
@@ -145,6 +147,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
                 duration: Value(result.read(db.gymSets.duration)!),
                 distance: Value(result.read(db.gymSets.distance)!),
                 created: Value(result.read(db.gymSets.created.max())!),
+                image: Value(result.read(db.gymSets.image)),
               ),
             )
             .toList(),

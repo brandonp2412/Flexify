@@ -381,6 +381,18 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsLine(
+        key: 'show images',
+        widget: ListTile(
+          title: const Text('Show images'),
+          leading: settings.showImages ? const Icon(Icons.image) : const Icon(Icons.image_outlined),
+          onTap: () => settings.setShowImages(!settings.showImages),
+          trailing: Switch(
+            value: settings.showImages,
+            onChanged: (value) => settings.setShowImages(value),
+          ),
+        ),
+      ),
+      SettingsLine(
         key: 'system color',
         widget: ListTile(
           title: const Text('System color scheme'),

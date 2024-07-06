@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -26,6 +29,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   bool cardio = false;
   String? unit;
+  String? image;
 
   @override
   void initState() {
@@ -94,11 +98,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
       GymSetsCompanion(
-        name: Value(nameController.text),
-        cardio: Value(cardio),
-        unit: unit != null ? Value(unit!) : const Value.absent(),
-        restMs: Value(duration?.inMilliseconds),
-      ),
+          name: Value(nameController.text),
+          cardio: Value(cardio),
+          unit: Value.absentIfNull(unit),
+          restMs: Value(duration?.inMilliseconds),
+          image: Value.absentIfNull(image),),
     );
 
     await db.customUpdate(
@@ -194,8 +198,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: material.Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             TextField(
               controller: nameController,
@@ -262,6 +265,48 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   cardio = value;
                 }),
               ),
+            ),
+            Selector<SettingsState, bool>(
+              builder: (context, showImages, child) {
+                return Visibility(
+                  visible: showImages,
+                  child: material.Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              setState(() {
+                                image = result?.files.single.path;
+                              });
+                            },
+                            label: const Text('Image'),
+                            icon: const Icon(Icons.image),
+                          ),
+                          if (image != null)
+                            TextButton.icon(
+                              onPressed: () async {
+                                setState(() {
+                                  image = null;
+                                });
+                              },
+                              label: const Text('Delete'),
+                              icon: const Icon(Icons.delete),
+                            ),
+                        ],
+                      ),
+                      if (image != null) ...[
+                        const SizedBox(height: 8),
+                        Image.file(File(image!)),
+                      ],
+                    ],
+                  ),
+                );
+              },
+              selector: (p0, p1) => p1.showImages,
             ),
           ],
         ),

@@ -112,6 +112,9 @@ class GymSets extends Table with TableInfo {
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
       'plan_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  late final GeneratedColumn<String> image = GeneratedColumn<String>(
+      'image', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -127,7 +130,8 @@ class GymSets extends Table with TableInfo {
         cardio,
         restMs,
         incline,
-        planId
+        planId,
+        image
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -207,9 +211,10 @@ class Settings extends Table with TableInfo {
   late final GeneratedColumn<bool> showImages = GeneratedColumn<bool>(
       'show_images', aliasedName, false,
       type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_images" IN (0, 1))'));
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
+      defaultValue: const Constant(true));
   late final GeneratedColumn<bool> systemColors = GeneratedColumn<bool>(
       'system_colors', aliasedName, false,
       type: DriftSqlType.bool,
@@ -348,8 +353,8 @@ class PlanExercises extends Table with TableInfo {
   }
 }
 
-class DatabaseAtV18 extends GeneratedDatabase {
-  DatabaseAtV18(QueryExecutor e) : super(e);
+class DatabaseAtV19 extends GeneratedDatabase {
+  DatabaseAtV19(QueryExecutor e) : super(e);
   late final Plans plans = Plans(this);
   late final GymSets gymSets = GymSets(this);
   late final Settings settings = Settings(this);
@@ -361,5 +366,5 @@ class DatabaseAtV18 extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [plans, gymSets, settings, planExercises];
   @override
-  int get schemaVersion => 18;
+  int get schemaVersion => 19;
 }

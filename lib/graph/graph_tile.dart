@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flexify/database/database.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/graph/cardio_page.dart';
@@ -22,6 +24,8 @@ class GraphTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String trailing;
+    final showImages =
+        context.select<SettingsState, bool>((settings) => settings.showImages);
 
     if (gymSet.cardio.value) {
       final minutes = gymSet.duration.value.floor();
@@ -37,6 +41,9 @@ class GraphTile extends StatelessWidget {
     }
 
     return ListTile(
+      leading: showImages && gymSet.image.value != null
+          ? Image.file(File(gymSet.image.value!))
+          : null,
       selected: selected.contains(gymSet.name.value),
       title: Text(gymSet.name.value),
       subtitle: Selector<SettingsState, String>(

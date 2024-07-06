@@ -25,6 +25,7 @@ class SettingsState extends ChangeNotifier {
   bool curveLines = false;
   bool hideWeight = false;
   bool groupHistory = true;
+  bool showImages = true;
 
   Future<void> init() async {
     final settings = await (db.settings.select()..limit(1)).getSingle();
@@ -52,6 +53,7 @@ class SettingsState extends ChangeNotifier {
     systemColors = settings.systemColors;
     restTimers = settings.restTimers;
     showUnits = settings.showUnits;
+    showImages = settings.showImages;
     hideTimerTab = settings.hideTimerTab;
     hideHistoryTab = settings.hideHistoryTab;
     explainedPermissions = settings.explainedPermissions;
@@ -165,6 +167,12 @@ class SettingsState extends ChangeNotifier {
   void setSystem(bool value) {
     systemColors = value;
     (db.settings.update()).write(SettingsCompanion(systemColors: Value(value)));
+    notifyListeners();
+  }
+
+  void setShowImages(bool value) {
+    showImages = value;
+    (db.settings.update()).write(SettingsCompanion(showImages: Value(value)));
     notifyListeners();
   }
 

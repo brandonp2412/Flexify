@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings_state.dart';
@@ -6,6 +9,7 @@ import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -33,132 +37,10 @@ class _EditSetPageState extends State<EditSetPage> {
   late bool cardio;
   late String name;
   int? restMs;
+  String? image;
 
   TextEditingController? nameController;
   List<String> nameOptions = [];
-
-  @override
-  void initState() {
-    super.initState();
-    updateFields(widget.gymSet);
-    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
-        .get()
-        .then((results) {
-      final names = results.map((result) => result.read(db.gymSets.name)!);
-      setState(() {
-        nameOptions = names.toList();
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    repsController.dispose();
-    repsNode.dispose();
-    weightController.dispose();
-    bodyWeightController.dispose();
-    distanceController.dispose();
-    minutesController.dispose();
-    inclineController.dispose();
-
-    super.dispose();
-  }
-
-  Future<void> _save() async {
-    Navigator.pop(context);
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
-
-    final gymSet = widget.gymSet.copyWith(
-      name: name,
-      unit: unit,
-      created: created,
-      reps: double.tryParse(repsController.text),
-      weight: double.tryParse(weightController.text),
-      bodyWeight: double.tryParse(bodyWeightController.text),
-      distance: double.tryParse(distanceController.text),
-      duration: duration,
-      cardio: cardio,
-      restMs: Value(restMs),
-      incline: Value(int.tryParse(inclineController.text)),
-    );
-
-    if (widget.gymSet.id > 0)
-      db.update(db.gymSets).replace(gymSet);
-    else {
-      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-      db.into(db.gymSets).insert(insert);
-      final settings = context.read<SettingsState>();
-      if (!settings.restTimers || !platformSupportsTimer()) return;
-      final timer = context.read<TimerState>();
-      if (restMs != null)
-        timer.startTimer(
-          name,
-          Duration(milliseconds: restMs!),
-          settings.alarmSound,
-          settings.vibrate,
-        );
-      else
-        timer.startTimer(
-          name,
-          settings.timerDuration,
-          settings.alarmSound,
-          settings.vibrate,
-        );
-    }
-  }
-
-  Future<void> _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: created,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate != null) {
-      selectTime(pickedDate);
-    }
-  }
-
-  Future<void> selectTime(DateTime pickedDate) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(created),
-    );
-
-    if (pickedTime != null) {
-      setState(() {
-        created = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-      });
-    }
-  }
-
-  void updateFields(GymSet gymSet) {
-    nameController?.text = gymSet.name;
-
-    setState(() {
-      name = gymSet.name;
-      repsController.text = toString(gymSet.reps);
-      weightController.text = toString(gymSet.weight);
-      bodyWeightController.text = toString(gymSet.bodyWeight);
-      minutesController.text = gymSet.duration.floor().toString();
-      secondsController.text = ((gymSet.duration * 60) % 60).floor().toString();
-      distanceController.text = toString(gymSet.distance);
-      unit = gymSet.unit;
-      created = gymSet.created;
-      cardio = gymSet.cardio;
-      restMs = gymSet.restMs;
-      inclineController.text = gymSet.incline?.toString() ?? "";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +217,9 @@ class _EditSetPageState extends State<EditSetPage> {
                 visible: !hideWeight,
                 child: TextField(
                   controller: bodyWeightController,
-                  decoration: const InputDecoration(labelText: 'Body weight during set '),
+                  decoration: const InputDecoration(
+                    labelText: 'Body weight during set ',
+                  ),
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(bodyWeightController),
                 ),
@@ -359,21 +243,188 @@ class _EditSetPageState extends State<EditSetPage> {
             ),
             Selector<SettingsState, String>(
               builder: (context, longDateFormat, child) => ListTile(
-                title: const Text('Created Date'),
+                title: const Text('Created date'),
                 subtitle: Text(DateFormat(longDateFormat).format(created)),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () => _selectDate(),
               ),
               selector: (p0, p1) => p1.longDateFormat,
             ),
+            Selector<SettingsState, bool>(
+              builder: (context, showImages, child) {
+                return Visibility(
+                  visible: showImages,
+                  child: material.Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              setState(() {
+                                image = result?.files.single.path;
+                              });
+                            },
+                            label: const Text('Image'),
+                            icon: const Icon(Icons.image),
+                          ),
+                          if (image != null)
+                            TextButton.icon(
+                              onPressed: () async {
+                                setState(() {
+                                  image = null;
+                                });
+                              },
+                              label: const Text('Delete'),
+                              icon: const Icon(Icons.delete),
+                            ),
+                        ],
+                      ),
+                      if (image != null) ...[
+                        const SizedBox(height: 8),
+                        Image.file(File(image!)),
+                      ],
+                    ],
+                  ),
+                );
+              },
+              selector: (p0, p1) => p1.showImages,
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _save,
+        onPressed: save,
         tooltip: "Save",
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    repsController.dispose();
+    repsNode.dispose();
+    weightController.dispose();
+    bodyWeightController.dispose();
+    distanceController.dispose();
+    minutesController.dispose();
+    inclineController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateFields(widget.gymSet);
+    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
+        .get()
+        .then((results) {
+      final names = results.map((result) => result.read(db.gymSets.name)!);
+      setState(() {
+        nameOptions = names.toList();
+      });
+    });
+  }
+
+  Future<void> selectTime(DateTime pickedDate) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(created),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        created = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+      });
+    }
+  }
+
+  void updateFields(GymSet gymSet) {
+    nameController?.text = gymSet.name;
+
+    setState(() {
+      image = gymSet.image;
+      name = gymSet.name;
+      repsController.text = toString(gymSet.reps);
+      weightController.text = toString(gymSet.weight);
+      bodyWeightController.text = toString(gymSet.bodyWeight);
+      minutesController.text = gymSet.duration.floor().toString();
+      secondsController.text = ((gymSet.duration * 60) % 60).floor().toString();
+      distanceController.text = toString(gymSet.distance);
+      unit = gymSet.unit;
+      created = gymSet.created;
+      cardio = gymSet.cardio;
+      restMs = gymSet.restMs;
+      inclineController.text = gymSet.incline?.toString() ?? "";
+    });
+  }
+
+  Future<void> save() async {
+    Navigator.pop(context);
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
+    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
+
+    final gymSet = widget.gymSet.copyWith(
+      name: name,
+      unit: unit,
+      created: created,
+      reps: double.tryParse(repsController.text),
+      weight: double.tryParse(weightController.text),
+      bodyWeight: double.tryParse(bodyWeightController.text),
+      distance: double.tryParse(distanceController.text),
+      duration: duration,
+      cardio: cardio,
+      restMs: Value(restMs),
+      incline: Value(int.tryParse(inclineController.text)),
+      image: Value(image),
+    );
+
+    if (widget.gymSet.id > 0)
+      db.update(db.gymSets).replace(gymSet);
+    else {
+      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+      db.into(db.gymSets).insert(insert);
+      final settings = context.read<SettingsState>();
+      if (!settings.restTimers || !platformSupportsTimer()) return;
+      final timer = context.read<TimerState>();
+      if (restMs != null)
+        timer.startTimer(
+          name,
+          Duration(milliseconds: restMs!),
+          settings.alarmSound,
+          settings.vibrate,
+        );
+      else
+        timer.startTimer(
+          name,
+          settings.timerDuration,
+          settings.alarmSound,
+          settings.vibrate,
+        );
+    }
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: created,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      selectTime(pickedDate);
+    }
   }
 }
