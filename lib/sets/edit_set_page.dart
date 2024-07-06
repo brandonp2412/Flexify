@@ -335,7 +335,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 visible: !hideWeight,
                 child: TextField(
                   controller: bodyWeightController,
-                  decoration: const InputDecoration(labelText: 'Body weight '),
+                  decoration: const InputDecoration(labelText: 'Body weight during set '),
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(bodyWeightController),
                 ),
