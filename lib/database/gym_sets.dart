@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/main.dart';
 
 class GymSets extends Table {
@@ -19,9 +19,10 @@ class GymSets extends Table {
   IntColumn get restMs => integer().nullable()();
   IntColumn get incline => integer().nullable()();
   IntColumn get planId => integer().nullable()();
+  TextColumn get image => text().nullable()();
 }
 
-double _getValue(TypedResult row, CardioMetric metric) {
+double getValue(TypedResult row, CardioMetric metric) {
   switch (metric) {
     case CardioMetric.pace:
       return row.read(db.gymSets.distance.sum() / db.gymSets.duration.sum()) ??
@@ -93,7 +94,7 @@ Stream<List<CardioData>> watchCardio({
     (results) {
       List<CardioData> list = [];
       for (final result in results.reversed) {
-        var value = _getValue(result, metric);
+        var value = getValue(result, metric);
         final unit = result.read(db.gymSets.unit)!;
 
         if (unit == 'km' && targetUnit == 'mi')
@@ -124,6 +125,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
           db.gymSets.duration,
           db.gymSets.distance,
           db.gymSets.created.max(),
+          db.gymSets.image,
         ])
         ..orderBy([
           OrderingTerm(
@@ -145,6 +147,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
                 duration: Value(result.read(db.gymSets.duration)!),
                 distance: Value(result.read(db.gymSets.distance)!),
                 created: Value(result.read(db.gymSets.created.max())!),
+                image: Value(result.read(db.gymSets.image)),
               ),
             )
             .toList(),

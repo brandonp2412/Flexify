@@ -42,14 +42,14 @@ class GraphsPageState extends State<GraphsPage>
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => _graphsPage(),
+          builder: (context) => graphsPage(),
           settings: settings,
         ),
       ),
     );
   }
 
-  Scaffold _graphsPage() {
+  Scaffold graphsPage() {
     return Scaffold(
       body: StreamBuilder(
         stream: stream,

@@ -57,7 +57,7 @@ void main() async {
   });
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
-    await mockTests(insert: false);
+    await mockTests();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -88,7 +88,7 @@ void main() async {
     await tester.tap(find.text('1 x 90 kg'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Edit'), findsOne);
+    expect(find.textContaining('Name'), findsOne);
 
     await db.close();
   });
@@ -122,7 +122,7 @@ void main() async {
   });
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
-    await mockTests(insert: false);
+    await mockTests();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -159,7 +159,7 @@ void main() async {
   });
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
-    await mockTests(insert: false);
+    await mockTests();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',

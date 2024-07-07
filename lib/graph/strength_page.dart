@@ -1,12 +1,12 @@
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/graph/view_graph_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings_state.dart';
-import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +41,7 @@ class _StrengthPageState extends State<StrengthPage> {
   initState() {
     super.initState();
     if (widget.name == 'Weight') period = Period.week;
-    _setStream();
+    setStream();
   }
 
   Future<void> _selectEnd() async {
@@ -57,7 +57,7 @@ class _StrengthPageState extends State<StrengthPage> {
     setState(() {
       endDate = pickedDate;
     });
-    _setStream();
+    setStream();
   }
 
   Future<void> _selectStart() async {
@@ -73,10 +73,10 @@ class _StrengthPageState extends State<StrengthPage> {
     setState(() {
       startDate = pickedDate;
     });
-    _setStream();
+    setStream();
   }
 
-  Widget _bottomTitleWidgets(
+  Widget bottomTitleWidgets(
     double value,
     TitleMeta meta,
     List<StrengthData> rows,
@@ -111,7 +111,7 @@ class _StrengthPageState extends State<StrengthPage> {
     );
   }
 
-  LineTouchTooltipData _tooltipData(
+  LineTouchTooltipData tooltipData(
     BuildContext context,
     List<StrengthData> rows,
     String format,
@@ -148,7 +148,7 @@ class _StrengthPageState extends State<StrengthPage> {
     );
   }
 
-  void _setStream() {
+  void setStream() {
     Expression<String> createdCol = const CustomExpression<String>(
       "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
     );
@@ -202,7 +202,7 @@ class _StrengthPageState extends State<StrengthPage> {
           List<StrengthData> list = [];
           for (final result in results.reversed) {
             final unit = result.read(db.gymSets.unit)!;
-            var value = _getValue(result, metric);
+            var value = getValue(result, metric);
 
             if (unit == 'lb' && targetUnit == 'kg') {
               value *= 0.45359237;
@@ -230,7 +230,7 @@ class _StrengthPageState extends State<StrengthPage> {
     });
   }
 
-  double _getValue(TypedResult row, StrengthMetric metric) {
+  double getValue(TypedResult row, StrengthMetric metric) {
     switch (metric) {
       case StrengthMetric.oneRepMax:
         return row.read(ormCol)!;
@@ -342,7 +342,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         setState(() {
                           metric = value!;
                         });
-                        _setStream();
+                        setStream();
                       },
                     ),
                   ),
@@ -372,7 +372,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     setState(() {
                       period = value!;
                     });
-                    _setStream();
+                    setStream();
                   },
                 ),
                 Selector<SettingsState, bool>(
@@ -385,7 +385,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         setState(() {
                           targetUnit = value!;
                         });
-                        _setStream();
+                        setStream();
                       },
                     ),
                   ),
@@ -463,7 +463,7 @@ class _StrengthPageState extends State<StrengthPage> {
                               reservedSize: 27,
                               interval: 1,
                               getTitlesWidget: (value, meta) =>
-                                  _bottomTitleWidgets(
+                                  bottomTitleWidgets(
                                 value,
                                 meta,
                                 rows,
@@ -512,7 +512,7 @@ class _StrengthPageState extends State<StrengthPage> {
                               lastTap = DateTime.now();
                             });
                           },
-                          touchTooltipData: _tooltipData(context, rows, format),
+                          touchTooltipData: tooltipData(context, rows, format),
                         ),
                         lineBarsData: [
                           LineChartBarData(

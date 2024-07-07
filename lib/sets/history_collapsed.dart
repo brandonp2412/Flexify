@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings_state.dart';
@@ -31,17 +33,17 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(_scrollListener);
+    scrollController.addListener(scrollListener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    scrollController.removeListener(_scrollListener);
+    scrollController.removeListener(scrollListener);
     scrollController.dispose();
   }
 
-  void _scrollListener() {
+  void scrollListener() {
     if (scrollController.position.pixels <
             scrollController.position.maxScrollExtent - 200 ||
         goingNext) return;
@@ -59,6 +61,9 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
 
   @override
   Widget build(BuildContext context) {
+    final showImages =
+        context.select<SettingsState, bool>((settings) => settings.showImages);
+
     return ListView.builder(
       itemCount: widget.historyDays.length,
       controller: scrollController,
@@ -71,64 +76,84 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             !isSameDay(history.day, previousHistory.day);
 
         return Column(
-          children: [
-            if (showDivider)
-              Row(
-                children: [
-                  const Expanded(child: Divider()),
-                  Selector<SettingsState, String>(
-                    selector: (p0, p1) => p1.shortDateFormat,
-                    builder: (context, value, child) => Text(
-                      DateFormat(value).format(previousHistory.day),
-                    ),
-                  ),
-                  const Expanded(child: Divider()),
-                ],
-              ),
-            ExpansionTile(
-              title: Text(history.name),
-              shape: const Border.symmetric(),
-              children: history.gymSets.map(
-                (gymSet) {
-                  final minutes = gymSet.duration.floor();
-                  final seconds = ((gymSet.duration * 60) % 60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  return ListTile(
-                    title: Text(
-                      gymSet.cardio
-                          ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
-                          : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
-                    ),
-                    subtitle: Selector<SettingsState, String>(
-                      selector: (p0, p1) => p1.longDateFormat,
-                      builder: (context, value, child) => Text(
-                        DateFormat(value).format(gymSet.created),
-                      ),
-                    ),
-                    selected: widget.selected.contains(gymSet.id),
-                    onLongPress: () {
-                      widget.onSelect(gymSet.id);
-                    },
-                    onTap: () {
-                      if (widget.selected.isNotEmpty)
-                        widget.onSelect(gymSet.id);
-                      else
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditSetPage(gymSet: gymSet),
-                          ),
-                        );
-                    },
-                  );
-                },
-              ).toList(),
-            ),
-          ],
+          children: historyChildren(
+            showDivider,
+            previousHistory,
+            history,
+            context,
+            showImages,
+          ),
         );
       },
     );
+  }
+
+  List<Widget> historyChildren(
+    bool showDivider,
+    HistoryDay? previousHistory,
+    HistoryDay history,
+    BuildContext context,
+    bool showImages,
+  ) {
+    return [
+      if (showDivider)
+        Row(
+          children: [
+            const Expanded(child: Divider()),
+            Selector<SettingsState, String>(
+              selector: (p0, p1) => p1.shortDateFormat,
+              builder: (context, value, child) => Text(
+                DateFormat(value).format(previousHistory!.day),
+              ),
+            ),
+            const Expanded(child: Divider()),
+          ],
+        ),
+      ExpansionTile(
+        title: Text(history.name),
+        shape: const Border.symmetric(),
+        children: history.gymSets.map(
+          (gymSet) {
+            final minutes = gymSet.duration.floor();
+            final seconds = ((gymSet.duration * 60) % 60)
+                .floor()
+                .toString()
+                .padLeft(2, '0');
+
+            return ListTile(
+              leading: showImages && gymSet.image != null
+                  ? Image.file(File(gymSet.image!))
+                  : null,
+              title: Text(
+                gymSet.cardio
+                    ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
+                    : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
+              ),
+              subtitle: Selector<SettingsState, String>(
+                selector: (p0, p1) => p1.longDateFormat,
+                builder: (context, value, child) => Text(
+                  DateFormat(value).format(gymSet.created),
+                ),
+              ),
+              selected: widget.selected.contains(gymSet.id),
+              onLongPress: () {
+                widget.onSelect(gymSet.id);
+              },
+              onTap: () {
+                if (widget.selected.isNotEmpty)
+                  widget.onSelect(gymSet.id);
+                else
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditSetPage(gymSet: gymSet),
+                    ),
+                  );
+              },
+            );
+          },
+        ).toList(),
+      ),
+    ];
   }
 }

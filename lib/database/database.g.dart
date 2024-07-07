@@ -387,6 +387,11 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
       'plan_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _imageMeta = const VerificationMeta('image');
+  @override
+  late final GeneratedColumn<String> image = GeneratedColumn<String>(
+      'image', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -402,7 +407,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
         cardio,
         restMs,
         incline,
-        planId
+        planId,
+        image
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -481,6 +487,10 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
       context.handle(_planIdMeta,
           planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
     }
+    if (data.containsKey('image')) {
+      context.handle(
+          _imageMeta, image.isAcceptableOrUnknown(data['image']!, _imageMeta));
+    }
     return context;
   }
 
@@ -518,6 +528,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.int, data['${effectivePrefix}incline']),
       planId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}plan_id']),
+      image: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}image']),
     );
   }
 
@@ -542,6 +554,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final int? restMs;
   final int? incline;
   final int? planId;
+  final String? image;
   const GymSet(
       {required this.id,
       required this.name,
@@ -556,7 +569,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.cardio,
       this.restMs,
       this.incline,
-      this.planId});
+      this.planId,
+      this.image});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -579,6 +593,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     }
     if (!nullToAbsent || planId != null) {
       map['plan_id'] = Variable<int>(planId);
+    }
+    if (!nullToAbsent || image != null) {
+      map['image'] = Variable<String>(image);
     }
     return map;
   }
@@ -603,6 +620,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           : Value(incline),
       planId:
           planId == null && nullToAbsent ? const Value.absent() : Value(planId),
+      image:
+          image == null && nullToAbsent ? const Value.absent() : Value(image),
     );
   }
 
@@ -624,6 +643,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       restMs: serializer.fromJson<int?>(json['restMs']),
       incline: serializer.fromJson<int?>(json['incline']),
       planId: serializer.fromJson<int?>(json['planId']),
+      image: serializer.fromJson<String?>(json['image']),
     );
   }
   @override
@@ -644,6 +664,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'restMs': serializer.toJson<int?>(restMs),
       'incline': serializer.toJson<int?>(incline),
       'planId': serializer.toJson<int?>(planId),
+      'image': serializer.toJson<String?>(image),
     };
   }
 
@@ -661,7 +682,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           bool? cardio,
           Value<int?> restMs = const Value.absent(),
           Value<int?> incline = const Value.absent(),
-          Value<int?> planId = const Value.absent()}) =>
+          Value<int?> planId = const Value.absent(),
+          Value<String?> image = const Value.absent()}) =>
       GymSet(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -677,6 +699,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         restMs: restMs.present ? restMs.value : this.restMs,
         incline: incline.present ? incline.value : this.incline,
         planId: planId.present ? planId.value : this.planId,
+        image: image.present ? image.value : this.image,
       );
   @override
   String toString() {
@@ -694,14 +717,15 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('cardio: $cardio, ')
           ..write('restMs: $restMs, ')
           ..write('incline: $incline, ')
-          ..write('planId: $planId')
+          ..write('planId: $planId, ')
+          ..write('image: $image')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, name, reps, weight, unit, created, hidden,
-      bodyWeight, duration, distance, cardio, restMs, incline, planId);
+      bodyWeight, duration, distance, cardio, restMs, incline, planId, image);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -719,7 +743,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.cardio == this.cardio &&
           other.restMs == this.restMs &&
           other.incline == this.incline &&
-          other.planId == this.planId);
+          other.planId == this.planId &&
+          other.image == this.image);
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
@@ -737,6 +762,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<int?> restMs;
   final Value<int?> incline;
   final Value<int?> planId;
+  final Value<String?> image;
   const GymSetsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -752,6 +778,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.restMs = const Value.absent(),
     this.incline = const Value.absent(),
     this.planId = const Value.absent(),
+    this.image = const Value.absent(),
   });
   GymSetsCompanion.insert({
     this.id = const Value.absent(),
@@ -768,6 +795,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.restMs = const Value.absent(),
     this.incline = const Value.absent(),
     this.planId = const Value.absent(),
+    this.image = const Value.absent(),
   })  : name = Value(name),
         reps = Value(reps),
         weight = Value(weight),
@@ -788,6 +816,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<int>? restMs,
     Expression<int>? incline,
     Expression<int>? planId,
+    Expression<String>? image,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -804,6 +833,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (restMs != null) 'rest_ms': restMs,
       if (incline != null) 'incline': incline,
       if (planId != null) 'plan_id': planId,
+      if (image != null) 'image': image,
     });
   }
 
@@ -821,7 +851,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<bool>? cardio,
       Value<int?>? restMs,
       Value<int?>? incline,
-      Value<int?>? planId}) {
+      Value<int?>? planId,
+      Value<String?>? image}) {
     return GymSetsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -837,6 +868,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       restMs: restMs ?? this.restMs,
       incline: incline ?? this.incline,
       planId: planId ?? this.planId,
+      image: image ?? this.image,
     );
   }
 
@@ -885,6 +917,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (planId.present) {
       map['plan_id'] = Variable<int>(planId.value);
     }
+    if (image.present) {
+      map['image'] = Variable<String>(image.value);
+    }
     return map;
   }
 
@@ -904,7 +939,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('cardio: $cardio, ')
           ..write('restMs: $restMs, ')
           ..write('incline: $incline, ')
-          ..write('planId: $planId')
+          ..write('planId: $planId, ')
+          ..write('image: $image')
           ..write(')'))
         .toString();
   }
@@ -948,6 +984,24 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
       'short_date_format', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _alarmSoundMeta =
+      const VerificationMeta('alarmSound');
+  @override
+  late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
+      'alarm_sound', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cardioUnitMeta =
+      const VerificationMeta('cardioUnit');
+  @override
+  late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
+      'cardio_unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _strengthUnitMeta =
+      const VerificationMeta('strengthUnit');
+  @override
+  late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
+      'strength_unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _timerDurationMeta =
       const VerificationMeta('timerDuration');
   @override
@@ -987,6 +1041,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("show_units" IN (0, 1))'));
+  static const VerificationMeta _showImagesMeta =
+      const VerificationMeta('showImages');
+  @override
+  late final GeneratedColumn<bool> showImages = GeneratedColumn<bool>(
+      'show_images', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _systemColorsMeta =
       const VerificationMeta('systemColors');
   @override
@@ -1050,24 +1114,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("group_history" IN (0, 1))'));
-  static const VerificationMeta _alarmSoundMeta =
-      const VerificationMeta('alarmSound');
-  @override
-  late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
-      'alarm_sound', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _cardioUnitMeta =
-      const VerificationMeta('cardioUnit');
-  @override
-  late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
-      'cardio_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _strengthUnitMeta =
-      const VerificationMeta('strengthUnit');
-  @override
-  late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
-      'strength_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1075,21 +1121,22 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         planTrailing,
         longDateFormat,
         shortDateFormat,
+        alarmSound,
+        cardioUnit,
+        strengthUnit,
         timerDuration,
         maxSets,
         vibrate,
         restTimers,
         showUnits,
+        showImages,
         systemColors,
         explainedPermissions,
         hideTimerTab,
         hideHistoryTab,
         curveLines,
         hideWeight,
-        groupHistory,
-        alarmSound,
-        cardioUnit,
-        strengthUnit
+        groupHistory
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1134,6 +1181,30 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     } else if (isInserting) {
       context.missing(_shortDateFormatMeta);
     }
+    if (data.containsKey('alarm_sound')) {
+      context.handle(
+          _alarmSoundMeta,
+          alarmSound.isAcceptableOrUnknown(
+              data['alarm_sound']!, _alarmSoundMeta));
+    } else if (isInserting) {
+      context.missing(_alarmSoundMeta);
+    }
+    if (data.containsKey('cardio_unit')) {
+      context.handle(
+          _cardioUnitMeta,
+          cardioUnit.isAcceptableOrUnknown(
+              data['cardio_unit']!, _cardioUnitMeta));
+    } else if (isInserting) {
+      context.missing(_cardioUnitMeta);
+    }
+    if (data.containsKey('strength_unit')) {
+      context.handle(
+          _strengthUnitMeta,
+          strengthUnit.isAcceptableOrUnknown(
+              data['strength_unit']!, _strengthUnitMeta));
+    } else if (isInserting) {
+      context.missing(_strengthUnitMeta);
+    }
     if (data.containsKey('timer_duration')) {
       context.handle(
           _timerDurationMeta,
@@ -1167,6 +1238,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           showUnits.isAcceptableOrUnknown(data['show_units']!, _showUnitsMeta));
     } else if (isInserting) {
       context.missing(_showUnitsMeta);
+    }
+    if (data.containsKey('show_images')) {
+      context.handle(
+          _showImagesMeta,
+          showImages.isAcceptableOrUnknown(
+              data['show_images']!, _showImagesMeta));
     }
     if (data.containsKey('system_colors')) {
       context.handle(
@@ -1224,30 +1301,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     } else if (isInserting) {
       context.missing(_groupHistoryMeta);
     }
-    if (data.containsKey('alarm_sound')) {
-      context.handle(
-          _alarmSoundMeta,
-          alarmSound.isAcceptableOrUnknown(
-              data['alarm_sound']!, _alarmSoundMeta));
-    } else if (isInserting) {
-      context.missing(_alarmSoundMeta);
-    }
-    if (data.containsKey('cardio_unit')) {
-      context.handle(
-          _cardioUnitMeta,
-          cardioUnit.isAcceptableOrUnknown(
-              data['cardio_unit']!, _cardioUnitMeta));
-    } else if (isInserting) {
-      context.missing(_cardioUnitMeta);
-    }
-    if (data.containsKey('strength_unit')) {
-      context.handle(
-          _strengthUnitMeta,
-          strengthUnit.isAcceptableOrUnknown(
-              data['strength_unit']!, _strengthUnitMeta));
-    } else if (isInserting) {
-      context.missing(_strengthUnitMeta);
-    }
     return context;
   }
 
@@ -1267,6 +1320,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           DriftSqlType.string, data['${effectivePrefix}long_date_format'])!,
       shortDateFormat: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
+      alarmSound: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
+      cardioUnit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
+      strengthUnit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
       timerDuration: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}timer_duration'])!,
       maxSets: attachedDatabase.typeMapping
@@ -1277,6 +1336,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}rest_timers'])!,
       showUnits: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
+      showImages: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
       systemColors: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}system_colors'])!,
       explainedPermissions: attachedDatabase.typeMapping.read(
@@ -1291,12 +1352,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}hide_weight'])!,
       groupHistory: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}group_history'])!,
-      alarmSound: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
-      cardioUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
-      strengthUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
     );
   }
 
@@ -1312,11 +1367,15 @@ class Setting extends DataClass implements Insertable<Setting> {
   final String planTrailing;
   final String longDateFormat;
   final String shortDateFormat;
+  final String alarmSound;
+  final String cardioUnit;
+  final String strengthUnit;
   final int timerDuration;
   final int maxSets;
   final bool vibrate;
   final bool restTimers;
   final bool showUnits;
+  final bool showImages;
   final bool systemColors;
   final bool explainedPermissions;
   final bool hideTimerTab;
@@ -1324,30 +1383,28 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool curveLines;
   final bool hideWeight;
   final bool groupHistory;
-  final String alarmSound;
-  final String cardioUnit;
-  final String strengthUnit;
   const Setting(
       {required this.id,
       required this.themeMode,
       required this.planTrailing,
       required this.longDateFormat,
       required this.shortDateFormat,
+      required this.alarmSound,
+      required this.cardioUnit,
+      required this.strengthUnit,
       required this.timerDuration,
       required this.maxSets,
       required this.vibrate,
       required this.restTimers,
       required this.showUnits,
+      required this.showImages,
       required this.systemColors,
       required this.explainedPermissions,
       required this.hideTimerTab,
       required this.hideHistoryTab,
       required this.curveLines,
       required this.hideWeight,
-      required this.groupHistory,
-      required this.alarmSound,
-      required this.cardioUnit,
-      required this.strengthUnit});
+      required this.groupHistory});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1356,11 +1413,15 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['plan_trailing'] = Variable<String>(planTrailing);
     map['long_date_format'] = Variable<String>(longDateFormat);
     map['short_date_format'] = Variable<String>(shortDateFormat);
+    map['alarm_sound'] = Variable<String>(alarmSound);
+    map['cardio_unit'] = Variable<String>(cardioUnit);
+    map['strength_unit'] = Variable<String>(strengthUnit);
     map['timer_duration'] = Variable<int>(timerDuration);
     map['max_sets'] = Variable<int>(maxSets);
     map['vibrate'] = Variable<bool>(vibrate);
     map['rest_timers'] = Variable<bool>(restTimers);
     map['show_units'] = Variable<bool>(showUnits);
+    map['show_images'] = Variable<bool>(showImages);
     map['system_colors'] = Variable<bool>(systemColors);
     map['explained_permissions'] = Variable<bool>(explainedPermissions);
     map['hide_timer_tab'] = Variable<bool>(hideTimerTab);
@@ -1368,9 +1429,6 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['curve_lines'] = Variable<bool>(curveLines);
     map['hide_weight'] = Variable<bool>(hideWeight);
     map['group_history'] = Variable<bool>(groupHistory);
-    map['alarm_sound'] = Variable<String>(alarmSound);
-    map['cardio_unit'] = Variable<String>(cardioUnit);
-    map['strength_unit'] = Variable<String>(strengthUnit);
     return map;
   }
 
@@ -1381,11 +1439,15 @@ class Setting extends DataClass implements Insertable<Setting> {
       planTrailing: Value(planTrailing),
       longDateFormat: Value(longDateFormat),
       shortDateFormat: Value(shortDateFormat),
+      alarmSound: Value(alarmSound),
+      cardioUnit: Value(cardioUnit),
+      strengthUnit: Value(strengthUnit),
       timerDuration: Value(timerDuration),
       maxSets: Value(maxSets),
       vibrate: Value(vibrate),
       restTimers: Value(restTimers),
       showUnits: Value(showUnits),
+      showImages: Value(showImages),
       systemColors: Value(systemColors),
       explainedPermissions: Value(explainedPermissions),
       hideTimerTab: Value(hideTimerTab),
@@ -1393,9 +1455,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       curveLines: Value(curveLines),
       hideWeight: Value(hideWeight),
       groupHistory: Value(groupHistory),
-      alarmSound: Value(alarmSound),
-      cardioUnit: Value(cardioUnit),
-      strengthUnit: Value(strengthUnit),
     );
   }
 
@@ -1408,11 +1467,15 @@ class Setting extends DataClass implements Insertable<Setting> {
       planTrailing: serializer.fromJson<String>(json['planTrailing']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
       shortDateFormat: serializer.fromJson<String>(json['shortDateFormat']),
+      alarmSound: serializer.fromJson<String>(json['alarmSound']),
+      cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
+      strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
       timerDuration: serializer.fromJson<int>(json['timerDuration']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
       vibrate: serializer.fromJson<bool>(json['vibrate']),
       restTimers: serializer.fromJson<bool>(json['restTimers']),
       showUnits: serializer.fromJson<bool>(json['showUnits']),
+      showImages: serializer.fromJson<bool>(json['showImages']),
       systemColors: serializer.fromJson<bool>(json['systemColors']),
       explainedPermissions:
           serializer.fromJson<bool>(json['explainedPermissions']),
@@ -1421,9 +1484,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       curveLines: serializer.fromJson<bool>(json['curveLines']),
       hideWeight: serializer.fromJson<bool>(json['hideWeight']),
       groupHistory: serializer.fromJson<bool>(json['groupHistory']),
-      alarmSound: serializer.fromJson<String>(json['alarmSound']),
-      cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
-      strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
     );
   }
   @override
@@ -1435,11 +1495,15 @@ class Setting extends DataClass implements Insertable<Setting> {
       'planTrailing': serializer.toJson<String>(planTrailing),
       'longDateFormat': serializer.toJson<String>(longDateFormat),
       'shortDateFormat': serializer.toJson<String>(shortDateFormat),
+      'alarmSound': serializer.toJson<String>(alarmSound),
+      'cardioUnit': serializer.toJson<String>(cardioUnit),
+      'strengthUnit': serializer.toJson<String>(strengthUnit),
       'timerDuration': serializer.toJson<int>(timerDuration),
       'maxSets': serializer.toJson<int>(maxSets),
       'vibrate': serializer.toJson<bool>(vibrate),
       'restTimers': serializer.toJson<bool>(restTimers),
       'showUnits': serializer.toJson<bool>(showUnits),
+      'showImages': serializer.toJson<bool>(showImages),
       'systemColors': serializer.toJson<bool>(systemColors),
       'explainedPermissions': serializer.toJson<bool>(explainedPermissions),
       'hideTimerTab': serializer.toJson<bool>(hideTimerTab),
@@ -1447,9 +1511,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       'curveLines': serializer.toJson<bool>(curveLines),
       'hideWeight': serializer.toJson<bool>(hideWeight),
       'groupHistory': serializer.toJson<bool>(groupHistory),
-      'alarmSound': serializer.toJson<String>(alarmSound),
-      'cardioUnit': serializer.toJson<String>(cardioUnit),
-      'strengthUnit': serializer.toJson<String>(strengthUnit),
     };
   }
 
@@ -1459,32 +1520,37 @@ class Setting extends DataClass implements Insertable<Setting> {
           String? planTrailing,
           String? longDateFormat,
           String? shortDateFormat,
+          String? alarmSound,
+          String? cardioUnit,
+          String? strengthUnit,
           int? timerDuration,
           int? maxSets,
           bool? vibrate,
           bool? restTimers,
           bool? showUnits,
+          bool? showImages,
           bool? systemColors,
           bool? explainedPermissions,
           bool? hideTimerTab,
           bool? hideHistoryTab,
           bool? curveLines,
           bool? hideWeight,
-          bool? groupHistory,
-          String? alarmSound,
-          String? cardioUnit,
-          String? strengthUnit}) =>
+          bool? groupHistory}) =>
       Setting(
         id: id ?? this.id,
         themeMode: themeMode ?? this.themeMode,
         planTrailing: planTrailing ?? this.planTrailing,
         longDateFormat: longDateFormat ?? this.longDateFormat,
         shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+        alarmSound: alarmSound ?? this.alarmSound,
+        cardioUnit: cardioUnit ?? this.cardioUnit,
+        strengthUnit: strengthUnit ?? this.strengthUnit,
         timerDuration: timerDuration ?? this.timerDuration,
         maxSets: maxSets ?? this.maxSets,
         vibrate: vibrate ?? this.vibrate,
         restTimers: restTimers ?? this.restTimers,
         showUnits: showUnits ?? this.showUnits,
+        showImages: showImages ?? this.showImages,
         systemColors: systemColors ?? this.systemColors,
         explainedPermissions: explainedPermissions ?? this.explainedPermissions,
         hideTimerTab: hideTimerTab ?? this.hideTimerTab,
@@ -1492,9 +1558,6 @@ class Setting extends DataClass implements Insertable<Setting> {
         curveLines: curveLines ?? this.curveLines,
         hideWeight: hideWeight ?? this.hideWeight,
         groupHistory: groupHistory ?? this.groupHistory,
-        alarmSound: alarmSound ?? this.alarmSound,
-        cardioUnit: cardioUnit ?? this.cardioUnit,
-        strengthUnit: strengthUnit ?? this.strengthUnit,
       );
   @override
   String toString() {
@@ -1504,47 +1567,50 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('planTrailing: $planTrailing, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('shortDateFormat: $shortDateFormat, ')
+          ..write('alarmSound: $alarmSound, ')
+          ..write('cardioUnit: $cardioUnit, ')
+          ..write('strengthUnit: $strengthUnit, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('maxSets: $maxSets, ')
           ..write('vibrate: $vibrate, ')
           ..write('restTimers: $restTimers, ')
           ..write('showUnits: $showUnits, ')
+          ..write('showImages: $showImages, ')
           ..write('systemColors: $systemColors, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('hideTimerTab: $hideTimerTab, ')
           ..write('hideHistoryTab: $hideHistoryTab, ')
           ..write('curveLines: $curveLines, ')
           ..write('hideWeight: $hideWeight, ')
-          ..write('groupHistory: $groupHistory, ')
-          ..write('alarmSound: $alarmSound, ')
-          ..write('cardioUnit: $cardioUnit, ')
-          ..write('strengthUnit: $strengthUnit')
+          ..write('groupHistory: $groupHistory')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      themeMode,
-      planTrailing,
-      longDateFormat,
-      shortDateFormat,
-      timerDuration,
-      maxSets,
-      vibrate,
-      restTimers,
-      showUnits,
-      systemColors,
-      explainedPermissions,
-      hideTimerTab,
-      hideHistoryTab,
-      curveLines,
-      hideWeight,
-      groupHistory,
-      alarmSound,
-      cardioUnit,
-      strengthUnit);
+  int get hashCode => Object.hashAll([
+        id,
+        themeMode,
+        planTrailing,
+        longDateFormat,
+        shortDateFormat,
+        alarmSound,
+        cardioUnit,
+        strengthUnit,
+        timerDuration,
+        maxSets,
+        vibrate,
+        restTimers,
+        showUnits,
+        showImages,
+        systemColors,
+        explainedPermissions,
+        hideTimerTab,
+        hideHistoryTab,
+        curveLines,
+        hideWeight,
+        groupHistory
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1554,21 +1620,22 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.planTrailing == this.planTrailing &&
           other.longDateFormat == this.longDateFormat &&
           other.shortDateFormat == this.shortDateFormat &&
+          other.alarmSound == this.alarmSound &&
+          other.cardioUnit == this.cardioUnit &&
+          other.strengthUnit == this.strengthUnit &&
           other.timerDuration == this.timerDuration &&
           other.maxSets == this.maxSets &&
           other.vibrate == this.vibrate &&
           other.restTimers == this.restTimers &&
           other.showUnits == this.showUnits &&
+          other.showImages == this.showImages &&
           other.systemColors == this.systemColors &&
           other.explainedPermissions == this.explainedPermissions &&
           other.hideTimerTab == this.hideTimerTab &&
           other.hideHistoryTab == this.hideHistoryTab &&
           other.curveLines == this.curveLines &&
           other.hideWeight == this.hideWeight &&
-          other.groupHistory == this.groupHistory &&
-          other.alarmSound == this.alarmSound &&
-          other.cardioUnit == this.cardioUnit &&
-          other.strengthUnit == this.strengthUnit);
+          other.groupHistory == this.groupHistory);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -1577,11 +1644,15 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> planTrailing;
   final Value<String> longDateFormat;
   final Value<String> shortDateFormat;
+  final Value<String> alarmSound;
+  final Value<String> cardioUnit;
+  final Value<String> strengthUnit;
   final Value<int> timerDuration;
   final Value<int> maxSets;
   final Value<bool> vibrate;
   final Value<bool> restTimers;
   final Value<bool> showUnits;
+  final Value<bool> showImages;
   final Value<bool> systemColors;
   final Value<bool> explainedPermissions;
   final Value<bool> hideTimerTab;
@@ -1589,20 +1660,21 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> curveLines;
   final Value<bool> hideWeight;
   final Value<bool> groupHistory;
-  final Value<String> alarmSound;
-  final Value<String> cardioUnit;
-  final Value<String> strengthUnit;
   const SettingsCompanion({
     this.id = const Value.absent(),
     this.themeMode = const Value.absent(),
     this.planTrailing = const Value.absent(),
     this.longDateFormat = const Value.absent(),
     this.shortDateFormat = const Value.absent(),
+    this.alarmSound = const Value.absent(),
+    this.cardioUnit = const Value.absent(),
+    this.strengthUnit = const Value.absent(),
     this.timerDuration = const Value.absent(),
     this.maxSets = const Value.absent(),
     this.vibrate = const Value.absent(),
     this.restTimers = const Value.absent(),
     this.showUnits = const Value.absent(),
+    this.showImages = const Value.absent(),
     this.systemColors = const Value.absent(),
     this.explainedPermissions = const Value.absent(),
     this.hideTimerTab = const Value.absent(),
@@ -1610,9 +1682,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.curveLines = const Value.absent(),
     this.hideWeight = const Value.absent(),
     this.groupHistory = const Value.absent(),
-    this.alarmSound = const Value.absent(),
-    this.cardioUnit = const Value.absent(),
-    this.strengthUnit = const Value.absent(),
   });
   SettingsCompanion.insert({
     this.id = const Value.absent(),
@@ -1620,11 +1689,15 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required String planTrailing,
     required String longDateFormat,
     required String shortDateFormat,
+    required String alarmSound,
+    required String cardioUnit,
+    required String strengthUnit,
     required int timerDuration,
     required int maxSets,
     required bool vibrate,
     required bool restTimers,
     required bool showUnits,
+    this.showImages = const Value.absent(),
     required bool systemColors,
     required bool explainedPermissions,
     required bool hideTimerTab,
@@ -1632,13 +1705,13 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required bool curveLines,
     required bool hideWeight,
     required bool groupHistory,
-    required String alarmSound,
-    required String cardioUnit,
-    required String strengthUnit,
   })  : themeMode = Value(themeMode),
         planTrailing = Value(planTrailing),
         longDateFormat = Value(longDateFormat),
         shortDateFormat = Value(shortDateFormat),
+        alarmSound = Value(alarmSound),
+        cardioUnit = Value(cardioUnit),
+        strengthUnit = Value(strengthUnit),
         timerDuration = Value(timerDuration),
         maxSets = Value(maxSets),
         vibrate = Value(vibrate),
@@ -1650,21 +1723,22 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
         hideHistoryTab = Value(hideHistoryTab),
         curveLines = Value(curveLines),
         hideWeight = Value(hideWeight),
-        groupHistory = Value(groupHistory),
-        alarmSound = Value(alarmSound),
-        cardioUnit = Value(cardioUnit),
-        strengthUnit = Value(strengthUnit);
+        groupHistory = Value(groupHistory);
   static Insertable<Setting> custom({
     Expression<int>? id,
     Expression<String>? themeMode,
     Expression<String>? planTrailing,
     Expression<String>? longDateFormat,
     Expression<String>? shortDateFormat,
+    Expression<String>? alarmSound,
+    Expression<String>? cardioUnit,
+    Expression<String>? strengthUnit,
     Expression<int>? timerDuration,
     Expression<int>? maxSets,
     Expression<bool>? vibrate,
     Expression<bool>? restTimers,
     Expression<bool>? showUnits,
+    Expression<bool>? showImages,
     Expression<bool>? systemColors,
     Expression<bool>? explainedPermissions,
     Expression<bool>? hideTimerTab,
@@ -1672,9 +1746,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? curveLines,
     Expression<bool>? hideWeight,
     Expression<bool>? groupHistory,
-    Expression<String>? alarmSound,
-    Expression<String>? cardioUnit,
-    Expression<String>? strengthUnit,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1682,11 +1753,15 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (planTrailing != null) 'plan_trailing': planTrailing,
       if (longDateFormat != null) 'long_date_format': longDateFormat,
       if (shortDateFormat != null) 'short_date_format': shortDateFormat,
+      if (alarmSound != null) 'alarm_sound': alarmSound,
+      if (cardioUnit != null) 'cardio_unit': cardioUnit,
+      if (strengthUnit != null) 'strength_unit': strengthUnit,
       if (timerDuration != null) 'timer_duration': timerDuration,
       if (maxSets != null) 'max_sets': maxSets,
       if (vibrate != null) 'vibrate': vibrate,
       if (restTimers != null) 'rest_timers': restTimers,
       if (showUnits != null) 'show_units': showUnits,
+      if (showImages != null) 'show_images': showImages,
       if (systemColors != null) 'system_colors': systemColors,
       if (explainedPermissions != null)
         'explained_permissions': explainedPermissions,
@@ -1695,9 +1770,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (curveLines != null) 'curve_lines': curveLines,
       if (hideWeight != null) 'hide_weight': hideWeight,
       if (groupHistory != null) 'group_history': groupHistory,
-      if (alarmSound != null) 'alarm_sound': alarmSound,
-      if (cardioUnit != null) 'cardio_unit': cardioUnit,
-      if (strengthUnit != null) 'strength_unit': strengthUnit,
     });
   }
 
@@ -1707,32 +1779,37 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<String>? planTrailing,
       Value<String>? longDateFormat,
       Value<String>? shortDateFormat,
+      Value<String>? alarmSound,
+      Value<String>? cardioUnit,
+      Value<String>? strengthUnit,
       Value<int>? timerDuration,
       Value<int>? maxSets,
       Value<bool>? vibrate,
       Value<bool>? restTimers,
       Value<bool>? showUnits,
+      Value<bool>? showImages,
       Value<bool>? systemColors,
       Value<bool>? explainedPermissions,
       Value<bool>? hideTimerTab,
       Value<bool>? hideHistoryTab,
       Value<bool>? curveLines,
       Value<bool>? hideWeight,
-      Value<bool>? groupHistory,
-      Value<String>? alarmSound,
-      Value<String>? cardioUnit,
-      Value<String>? strengthUnit}) {
+      Value<bool>? groupHistory}) {
     return SettingsCompanion(
       id: id ?? this.id,
       themeMode: themeMode ?? this.themeMode,
       planTrailing: planTrailing ?? this.planTrailing,
       longDateFormat: longDateFormat ?? this.longDateFormat,
       shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+      alarmSound: alarmSound ?? this.alarmSound,
+      cardioUnit: cardioUnit ?? this.cardioUnit,
+      strengthUnit: strengthUnit ?? this.strengthUnit,
       timerDuration: timerDuration ?? this.timerDuration,
       maxSets: maxSets ?? this.maxSets,
       vibrate: vibrate ?? this.vibrate,
       restTimers: restTimers ?? this.restTimers,
       showUnits: showUnits ?? this.showUnits,
+      showImages: showImages ?? this.showImages,
       systemColors: systemColors ?? this.systemColors,
       explainedPermissions: explainedPermissions ?? this.explainedPermissions,
       hideTimerTab: hideTimerTab ?? this.hideTimerTab,
@@ -1740,9 +1817,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       curveLines: curveLines ?? this.curveLines,
       hideWeight: hideWeight ?? this.hideWeight,
       groupHistory: groupHistory ?? this.groupHistory,
-      alarmSound: alarmSound ?? this.alarmSound,
-      cardioUnit: cardioUnit ?? this.cardioUnit,
-      strengthUnit: strengthUnit ?? this.strengthUnit,
     );
   }
 
@@ -1764,6 +1838,15 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (shortDateFormat.present) {
       map['short_date_format'] = Variable<String>(shortDateFormat.value);
     }
+    if (alarmSound.present) {
+      map['alarm_sound'] = Variable<String>(alarmSound.value);
+    }
+    if (cardioUnit.present) {
+      map['cardio_unit'] = Variable<String>(cardioUnit.value);
+    }
+    if (strengthUnit.present) {
+      map['strength_unit'] = Variable<String>(strengthUnit.value);
+    }
     if (timerDuration.present) {
       map['timer_duration'] = Variable<int>(timerDuration.value);
     }
@@ -1778,6 +1861,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (showUnits.present) {
       map['show_units'] = Variable<bool>(showUnits.value);
+    }
+    if (showImages.present) {
+      map['show_images'] = Variable<bool>(showImages.value);
     }
     if (systemColors.present) {
       map['system_colors'] = Variable<bool>(systemColors.value);
@@ -1800,15 +1886,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (groupHistory.present) {
       map['group_history'] = Variable<bool>(groupHistory.value);
     }
-    if (alarmSound.present) {
-      map['alarm_sound'] = Variable<String>(alarmSound.value);
-    }
-    if (cardioUnit.present) {
-      map['cardio_unit'] = Variable<String>(cardioUnit.value);
-    }
-    if (strengthUnit.present) {
-      map['strength_unit'] = Variable<String>(strengthUnit.value);
-    }
     return map;
   }
 
@@ -1820,21 +1897,22 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('planTrailing: $planTrailing, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('shortDateFormat: $shortDateFormat, ')
+          ..write('alarmSound: $alarmSound, ')
+          ..write('cardioUnit: $cardioUnit, ')
+          ..write('strengthUnit: $strengthUnit, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('maxSets: $maxSets, ')
           ..write('vibrate: $vibrate, ')
           ..write('restTimers: $restTimers, ')
           ..write('showUnits: $showUnits, ')
+          ..write('showImages: $showImages, ')
           ..write('systemColors: $systemColors, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('hideTimerTab: $hideTimerTab, ')
           ..write('hideHistoryTab: $hideHistoryTab, ')
           ..write('curveLines: $curveLines, ')
           ..write('hideWeight: $hideWeight, ')
-          ..write('groupHistory: $groupHistory, ')
-          ..write('alarmSound: $alarmSound, ')
-          ..write('cardioUnit: $cardioUnit, ')
-          ..write('strengthUnit: $strengthUnit')
+          ..write('groupHistory: $groupHistory')
           ..write(')'))
         .toString();
   }
@@ -2315,6 +2393,7 @@ typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
   Value<int?> restMs,
   Value<int?> incline,
   Value<int?> planId,
+  Value<String?> image,
 });
 typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<int> id,
@@ -2331,6 +2410,7 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<int?> restMs,
   Value<int?> incline,
   Value<int?> planId,
+  Value<String?> image,
 });
 
 class $$GymSetsTableTableManager extends RootTableManager<
@@ -2366,6 +2446,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<int?> restMs = const Value.absent(),
             Value<int?> incline = const Value.absent(),
             Value<int?> planId = const Value.absent(),
+            Value<String?> image = const Value.absent(),
           }) =>
               GymSetsCompanion(
             id: id,
@@ -2382,6 +2463,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             restMs: restMs,
             incline: incline,
             planId: planId,
+            image: image,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
@@ -2398,6 +2480,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<int?> restMs = const Value.absent(),
             Value<int?> incline = const Value.absent(),
             Value<int?> planId = const Value.absent(),
+            Value<String?> image = const Value.absent(),
           }) =>
               GymSetsCompanion.insert(
             id: id,
@@ -2414,6 +2497,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             restMs: restMs,
             incline: incline,
             planId: planId,
+            image: image,
           ),
         ));
 }
@@ -2503,6 +2587,11 @@ class $$GymSetsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<String> get image => $state.composableBuilder(
+      column: $state.table.image,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ComposableFilter planExercisesRefs(
       ComposableFilter Function($$PlanExercisesTableFilterComposer f) f) {
     final $$PlanExercisesTableFilterComposer composer = $state.composerBuilder(
@@ -2589,6 +2678,11 @@ class $$GymSetsTableOrderingComposer
       column: $state.table.planId,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get image => $state.composableBuilder(
+      column: $state.table.image,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
 typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
@@ -2597,11 +2691,15 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required String planTrailing,
   required String longDateFormat,
   required String shortDateFormat,
+  required String alarmSound,
+  required String cardioUnit,
+  required String strengthUnit,
   required int timerDuration,
   required int maxSets,
   required bool vibrate,
   required bool restTimers,
   required bool showUnits,
+  Value<bool> showImages,
   required bool systemColors,
   required bool explainedPermissions,
   required bool hideTimerTab,
@@ -2609,9 +2707,6 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required bool curveLines,
   required bool hideWeight,
   required bool groupHistory,
-  required String alarmSound,
-  required String cardioUnit,
-  required String strengthUnit,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<int> id,
@@ -2619,11 +2714,15 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> planTrailing,
   Value<String> longDateFormat,
   Value<String> shortDateFormat,
+  Value<String> alarmSound,
+  Value<String> cardioUnit,
+  Value<String> strengthUnit,
   Value<int> timerDuration,
   Value<int> maxSets,
   Value<bool> vibrate,
   Value<bool> restTimers,
   Value<bool> showUnits,
+  Value<bool> showImages,
   Value<bool> systemColors,
   Value<bool> explainedPermissions,
   Value<bool> hideTimerTab,
@@ -2631,9 +2730,6 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> curveLines,
   Value<bool> hideWeight,
   Value<bool> groupHistory,
-  Value<String> alarmSound,
-  Value<String> cardioUnit,
-  Value<String> strengthUnit,
 });
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -2661,11 +2757,15 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<String> planTrailing = const Value.absent(),
             Value<String> longDateFormat = const Value.absent(),
             Value<String> shortDateFormat = const Value.absent(),
+            Value<String> alarmSound = const Value.absent(),
+            Value<String> cardioUnit = const Value.absent(),
+            Value<String> strengthUnit = const Value.absent(),
             Value<int> timerDuration = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
             Value<bool> vibrate = const Value.absent(),
             Value<bool> restTimers = const Value.absent(),
             Value<bool> showUnits = const Value.absent(),
+            Value<bool> showImages = const Value.absent(),
             Value<bool> systemColors = const Value.absent(),
             Value<bool> explainedPermissions = const Value.absent(),
             Value<bool> hideTimerTab = const Value.absent(),
@@ -2673,9 +2773,6 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> curveLines = const Value.absent(),
             Value<bool> hideWeight = const Value.absent(),
             Value<bool> groupHistory = const Value.absent(),
-            Value<String> alarmSound = const Value.absent(),
-            Value<String> cardioUnit = const Value.absent(),
-            Value<String> strengthUnit = const Value.absent(),
           }) =>
               SettingsCompanion(
             id: id,
@@ -2683,11 +2780,15 @@ class $$SettingsTableTableManager extends RootTableManager<
             planTrailing: planTrailing,
             longDateFormat: longDateFormat,
             shortDateFormat: shortDateFormat,
+            alarmSound: alarmSound,
+            cardioUnit: cardioUnit,
+            strengthUnit: strengthUnit,
             timerDuration: timerDuration,
             maxSets: maxSets,
             vibrate: vibrate,
             restTimers: restTimers,
             showUnits: showUnits,
+            showImages: showImages,
             systemColors: systemColors,
             explainedPermissions: explainedPermissions,
             hideTimerTab: hideTimerTab,
@@ -2695,9 +2796,6 @@ class $$SettingsTableTableManager extends RootTableManager<
             curveLines: curveLines,
             hideWeight: hideWeight,
             groupHistory: groupHistory,
-            alarmSound: alarmSound,
-            cardioUnit: cardioUnit,
-            strengthUnit: strengthUnit,
           ),
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
@@ -2705,11 +2803,15 @@ class $$SettingsTableTableManager extends RootTableManager<
             required String planTrailing,
             required String longDateFormat,
             required String shortDateFormat,
+            required String alarmSound,
+            required String cardioUnit,
+            required String strengthUnit,
             required int timerDuration,
             required int maxSets,
             required bool vibrate,
             required bool restTimers,
             required bool showUnits,
+            Value<bool> showImages = const Value.absent(),
             required bool systemColors,
             required bool explainedPermissions,
             required bool hideTimerTab,
@@ -2717,9 +2819,6 @@ class $$SettingsTableTableManager extends RootTableManager<
             required bool curveLines,
             required bool hideWeight,
             required bool groupHistory,
-            required String alarmSound,
-            required String cardioUnit,
-            required String strengthUnit,
           }) =>
               SettingsCompanion.insert(
             id: id,
@@ -2727,11 +2826,15 @@ class $$SettingsTableTableManager extends RootTableManager<
             planTrailing: planTrailing,
             longDateFormat: longDateFormat,
             shortDateFormat: shortDateFormat,
+            alarmSound: alarmSound,
+            cardioUnit: cardioUnit,
+            strengthUnit: strengthUnit,
             timerDuration: timerDuration,
             maxSets: maxSets,
             vibrate: vibrate,
             restTimers: restTimers,
             showUnits: showUnits,
+            showImages: showImages,
             systemColors: systemColors,
             explainedPermissions: explainedPermissions,
             hideTimerTab: hideTimerTab,
@@ -2739,9 +2842,6 @@ class $$SettingsTableTableManager extends RootTableManager<
             curveLines: curveLines,
             hideWeight: hideWeight,
             groupHistory: groupHistory,
-            alarmSound: alarmSound,
-            cardioUnit: cardioUnit,
-            strengthUnit: strengthUnit,
           ),
         ));
 }
@@ -2786,6 +2886,21 @@ class $$SettingsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<String> get alarmSound => $state.composableBuilder(
+      column: $state.table.alarmSound,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get cardioUnit => $state.composableBuilder(
+      column: $state.table.cardioUnit,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get strengthUnit => $state.composableBuilder(
+      column: $state.table.strengthUnit,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<int> get timerDuration => $state.composableBuilder(
       column: $state.table.timerDuration,
       builder: (column, joinBuilders) =>
@@ -2808,6 +2923,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get showUnits => $state.composableBuilder(
       column: $state.table.showUnits,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get showImages => $state.composableBuilder(
+      column: $state.table.showImages,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2845,21 +2965,6 @@ class $$SettingsTableFilterComposer
       column: $state.table.groupHistory,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get alarmSound => $state.composableBuilder(
-      column: $state.table.alarmSound,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get cardioUnit => $state.composableBuilder(
-      column: $state.table.cardioUnit,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get strengthUnit => $state.composableBuilder(
-      column: $state.table.strengthUnit,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$SettingsTableOrderingComposer
@@ -2890,6 +2995,21 @@ class $$SettingsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get alarmSound => $state.composableBuilder(
+      column: $state.table.alarmSound,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get cardioUnit => $state.composableBuilder(
+      column: $state.table.cardioUnit,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get strengthUnit => $state.composableBuilder(
+      column: $state.table.strengthUnit,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<int> get timerDuration => $state.composableBuilder(
       column: $state.table.timerDuration,
       builder: (column, joinBuilders) =>
@@ -2912,6 +3032,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get showUnits => $state.composableBuilder(
       column: $state.table.showUnits,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get showImages => $state.composableBuilder(
+      column: $state.table.showImages,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -2947,21 +3072,6 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get groupHistory => $state.composableBuilder(
       column: $state.table.groupHistory,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get alarmSound => $state.composableBuilder(
-      column: $state.table.alarmSound,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get cardioUnit => $state.composableBuilder(
-      column: $state.table.cardioUnit,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get strengthUnit => $state.composableBuilder(
-      column: $state.table.strengthUnit,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }

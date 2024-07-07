@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/sets/history_list.dart';
 import 'package:flutter/material.dart';
 
 class ViewGraphPage extends StatefulWidget {
@@ -20,10 +20,10 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   @override
   void initState() {
     super.initState();
-    _setStream();
+    setStream();
   }
 
-  void _setStream() {
+  void setStream() {
     setState(() {
       stream = (db.gymSets.select()
             ..orderBy(
@@ -67,7 +67,7 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
               setState(() {
                 limit += 10;
               });
-              _setStream();
+              setStream();
             },
           );
         },

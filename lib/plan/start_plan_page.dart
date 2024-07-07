@@ -1,10 +1,10 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/exercise_list.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
+import 'package:flexify/plan/edit_plan_page.dart';
+import 'package:flexify/plan/exercise_list.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -44,8 +44,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
   @override
   void initState() {
     super.initState();
-    planState.addListener(_planChanged);
-    _select(0);
+    planState.addListener(planChanged);
+    select(0);
   }
 
   @override
@@ -56,12 +56,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
     minutesController.dispose();
     inclineController.dispose();
 
-    planState.removeListener(_planChanged);
+    planState.removeListener(planChanged);
 
     super.dispose();
   }
 
-  void _planChanged() {
+  void planChanged() {
     final split = planState.plans
         .firstWhere((element) => element.id == widget.plan.id)
         .exercises
@@ -75,7 +75,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
   }
 
-  Future<GymSet?> _getLast(String exercise) async {
+  Future<GymSet?> getLast(String exercise) async {
     return (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
@@ -88,12 +88,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
         .getSingleOrNull();
   }
 
-  Future<void> _select(int index) async {
+  Future<void> select(int index) async {
     setState(() {
       selectedIndex = index;
     });
     final settings = context.read<SettingsState>();
-    final last = await _getLast(planExercises[index]);
+    final last = await getLast(planExercises[index]);
     if (last == null) return;
 
     setState(() {
@@ -113,7 +113,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
   }
 
-  Future<void> _save(TimerState timerState) async {
+  Future<void> save(TimerState timerState) async {
     setState(() {
       first = false;
     });
@@ -184,7 +184,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
       final finishedExercise = count == (max ?? settings.maxSets) &&
           selectedIndex < planExercises.length - 1;
-      if (finishedExercise) _select(selectedIndex + 1);
+      if (finishedExercise) select(selectedIndex + 1);
     }
 
     db.into(db.gymSets).insert(gymSet);
@@ -272,7 +272,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 onTap: () {
                   selectAll(weightController);
                 },
-                onSubmitted: (value) async => await _save(timerState),
+                onSubmitted: (value) async => await save(timerState),
               ),
             ],
             if (cardio) ...[
@@ -326,7 +326,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       decoration: const InputDecoration(labelText: 'Incline'),
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(inclineController),
-                      onSubmitted: (value) => _save(timerState),
+                      onSubmitted: (value) => save(timerState),
                     ),
                   ),
                 ],
@@ -354,7 +354,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   return ExerciseList(
                     exercises: planExercises,
                     selected: selectedIndex,
-                    onSelect: _select,
+                    onSelect: select,
                     counts: snapshot.data,
                     firstRender: first,
                     plan: widget.plan,
@@ -366,7 +366,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async => await _save(timerState),
+        onPressed: () async => await save(timerState),
         tooltip: "Save",
         child: const Icon(Icons.save),
       ),

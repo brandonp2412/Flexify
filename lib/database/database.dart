@@ -4,11 +4,11 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/defaults.dart';
-import 'package:flexify/database/plan_exercises.dart';
-import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/database/gym_sets.dart';
-import 'package:flexify/database/settings.dart';
+import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/plans.dart';
+import 'package:flexify/database/schema_versions.dart';
+import 'package:flexify/database/settings.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
@@ -22,10 +22,10 @@ part 'database.g.dart';
 
 @DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase({QueryExecutor? executor}) : super(executor ?? _openConnection());
+  AppDatabase({QueryExecutor? executor}) : super(executor ?? openConnection());
 
   @override
-  int get schemaVersion => 18;
+  int get schemaVersion => 19;
 
   @override
   MigrationStrategy get migration {
@@ -89,15 +89,29 @@ class AppDatabase extends _$AppDatabase {
         },
         from4To5: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.hidden);
-          await batch((batch) => batch.insertAll(gymSets, defaultSets));
+          await schema.gymSets.insertAll(
+            defaultSets.map(
+              (set) => RawValuesInsertable({
+                'name': Variable(set.name.value),
+                'reps': Variable(set.reps.value),
+                'weight': Variable(set.weight.value),
+                'unit': Variable(set.unit.value),
+                'created': Variable(set.created.value),
+                'hidden': const Variable(true),
+              }),
+            ),
+          );
         },
         from5To6: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.bodyWeight);
           final bodyWeight = await getBodyWeight();
           if (bodyWeight?.weight == null) return;
 
-          await (gymSets.update())
-              .write(GymSetsCompanion(bodyWeight: Value(bodyWeight!.weight)));
+          await (schema.gymSets.update()).write(
+            RawValuesInsertable(
+              {"body_weight": Variable(bodyWeight!.weight)},
+            ),
+          );
         },
         from6To7: (m, schema) async {
           final prefs = await SharedPreferences.getInstance();
@@ -113,11 +127,6 @@ class AppDatabase extends _$AppDatabase {
         from8To10: (Migrator m, Schema10 schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.restMs);
           final prefs = await SharedPreferences.getInstance();
-          final timerDuration = prefs.getInt('timerDuration');
-          if (timerDuration != null)
-            await (gymSets
-                .update()
-                .write(GymSetsCompanion(restMs: Value(timerDuration))));
           await m.addColumn(schema.gymSets, schema.gymSets.maxSets);
           final maxSets = prefs.getInt('maxSets');
           if (maxSets != null)
@@ -138,16 +147,9 @@ class AppDatabase extends _$AppDatabase {
         },
         from12To13: (m, schema) async {
           await m.alterTable(TableMigration(schema.gymSets));
-          (gymSets.update()
-                ..where(
-                  (u) => u.restMs.equals(
-                    const Duration(minutes: 3, seconds: 30).inMilliseconds,
-                  ),
-                ))
-              .write(
-            const GymSetsCompanion(
-              restMs: Value(null),
-            ),
+          final ms = const Duration(minutes: 3, seconds: 30).inMilliseconds;
+          await m.database.customUpdate(
+            "UPDATE gym_sets SET rest_ms = null WHERE rest_ms = $ms",
           );
         },
         from13To14: (m, schema) async {
@@ -225,28 +227,28 @@ class AppDatabase extends _$AppDatabase {
           hideWeight = prefs.getBool('hideWeight') ?? false;
           groupHistory = prefs.getBool('groupHistory') ?? true;
 
-          await settings.insertOne(
-            SettingsCompanion.insert(
-              themeMode: themeMode.toString(),
-              planTrailing: planTrailing.toString(),
-              longDateFormat: longDateFormat,
-              shortDateFormat: shortDateFormat,
-              timerDuration: timerDuration.inMilliseconds,
-              maxSets: maxSets,
-              vibrate: vibrate,
-              restTimers: restTimers,
-              showUnits: showUnits,
-              alarmSound: alarmSound ?? '',
-              cardioUnit: cardioUnit ?? 'km',
-              curveLines: curveLines,
-              explainedPermissions: explainedPermissions,
-              groupHistory: groupHistory,
-              hideHistoryTab: hideHistoryTab,
-              hideTimerTab: hideTimerTab,
-              hideWeight: hideWeight,
-              strengthUnit: strengthUnit ?? 'kg',
-              systemColors: systemColors,
-            ),
+          await schema.settings.insertOne(
+            RawValuesInsertable({
+              'theme_mode': Variable(themeMode.toString()),
+              'plan_trailing': Variable(planTrailing.toString()),
+              'long_date_format': Variable(longDateFormat),
+              'short_date_format': Variable(shortDateFormat),
+              'timer_duration': Variable(timerDuration.inMilliseconds),
+              'max_sets': Variable(maxSets),
+              'vibrate': Variable(vibrate),
+              'rest_timers': Variable(restTimers),
+              'show_units': Variable(showUnits),
+              'alarm_sound': Variable(alarmSound ?? ''),
+              'cardio_unit': Variable(cardioUnit ?? 'km'),
+              'curve_lines': Variable(curveLines),
+              'explained_permissions': Variable(explainedPermissions),
+              'group_history': Variable(groupHistory),
+              'hide_history_tab': Variable(hideHistoryTab),
+              'hide_timer_tab': Variable(hideTimerTab),
+              'hide_weight': Variable(hideWeight),
+              'strength_unit': Variable(strengthUnit ?? 'kg'),
+              'system_colors': Variable(systemColors),
+            }),
           );
         },
         from16To17: (Migrator m, Schema17 schema) async {
@@ -262,7 +264,7 @@ class AppDatabase extends _$AppDatabase {
                 ..groupBy([schema.gymSets.name]))
               .get();
 
-          List<PlanExercisesCompanion> pe = [];
+          List<Insertable<QueryRow>> pe = [];
           for (final plan in plans) {
             final exercises = plan.read<String>('exercises').split(',');
 
@@ -271,26 +273,30 @@ class AppDatabase extends _$AppDatabase {
                 (gymSet) => gymSet.read(schema.gymSets.name) == exercise,
               );
               pe.add(
-                PlanExercisesCompanion.insert(
-                  planId: plan.read('id'),
-                  exercise: exercise,
-                  enabled: true,
-                  maxSets: Value(gymSet.read(maxSets)),
-                ),
+                RawValuesInsertable({
+                  'plan_id': plan.read('id'),
+                  'exercise': Variable(exercise),
+                  'enabled': const Variable(true),
+                  'max_sets': Variable(gymSet.read(maxSets)),
+                }),
               );
             }
           }
 
           await m.createTable(schema.planExercises);
-          await planExercises.insertAll(pe);
+          await schema.planExercises.insertAll(pe);
           await m.alterTable(TableMigration(schema.gymSets));
+        },
+        from18To19: (Migrator m, Schema19 schema) async {
+          await m.addColumn(schema.settings, schema.settings.showImages);
+          await m.addColumn(schema.gymSets, schema.gymSets.image);
         },
       ),
     );
   }
 }
 
-LazyDatabase _openConnection() {
+LazyDatabase openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'flexify.sqlite'));

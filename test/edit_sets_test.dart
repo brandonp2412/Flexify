@@ -13,7 +13,7 @@ import 'mock_tests.dart';
 
 void main() async {
   testWidgets('EditGymSets', (WidgetTester tester) async {
-    await mockTests(insert: false);
+    await mockTests();
 
     await (db.gymSets.insertAll([
       GymSetsCompanion.insert(

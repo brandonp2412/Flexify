@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -26,6 +29,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   bool cardio = false;
   String? unit;
+  String? image;
 
   @override
   void initState() {
@@ -38,12 +42,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
           ..limit(1))
         .getSingle()
         .then(
-          (value) => setState(() {
-            cardio = value.cardio;
-            unit = value.unit;
+          (gymSet) => setState(() {
+            image = gymSet.image;
+            cardio = gymSet.cardio;
+            unit = gymSet.unit;
 
-            if (value.restMs != null) {
-              final duration = Duration(milliseconds: value.restMs!);
+            if (gymSet.restMs != null) {
+              final duration = Duration(milliseconds: gymSet.restMs!);
               minutesController.text = duration.inMinutes.toString();
               secondsController.text = (duration.inSeconds % 60).toString();
             }
@@ -64,7 +69,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     super.dispose();
   }
 
-  Future<int> _getCount() async {
+  Future<int> getCount() async {
     final result = await (db.gymSets.selectOnly()
           ..addColumns([db.gymSets.name.count()])
           ..where(db.gymSets.name.equals(nameController.text)))
@@ -72,7 +77,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     return result.read(db.gymSets.name.count()) ?? 0;
   }
 
-  Future<bool> _mixedUnits() async {
+  Future<bool> mixedUnits() async {
     final result = await (db.gymSets.selectOnly(distinct: true)
           ..addColumns([db.gymSets.unit])
           ..where(db.gymSets.name.equals(nameController.text)))
@@ -80,7 +85,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     return result.length > 1;
   }
 
-  Future<void> _doUpdate() async {
+  Future<void> doUpdate() async {
     final minutes = int.tryParse(minutesController.text);
     final seconds = int.tryParse(secondsController.text);
 
@@ -96,8 +101,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
       GymSetsCompanion(
         name: Value(nameController.text),
         cardio: Value(cardio),
-        unit: unit != null ? Value(unit!) : const Value.absent(),
+        unit: Value.absentIfNull(unit),
         restMs: Value(duration?.inMilliseconds),
+        image: Value.absentIfNull(image),
       ),
     );
 
@@ -114,7 +120,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     context.read<PlanState>().updatePlans(null);
   }
 
-  _save() async {
+  save() async {
     if (nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Name cannot be empty.')),
@@ -123,7 +129,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       return;
     }
 
-    final count = await _getCount();
+    final count = await getCount();
 
     if (count > 0 && widget.name != nameController.text && mounted)
       await showDialog(
@@ -145,14 +151,14 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 child: const Text('Confirm'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  await _doUpdate();
+                  await doUpdate();
                 },
               ),
             ],
           );
         },
       );
-    else if (await _mixedUnits() && mounted)
+    else if (await mixedUnits() && mounted)
       await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -172,7 +178,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 child: const Text('Confirm'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  await _doUpdate();
+                  await doUpdate();
                 },
               ),
             ],
@@ -180,7 +186,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         },
       );
     else
-      await _doUpdate();
+      await doUpdate();
 
     if (!mounted) return;
     Navigator.pop(context);
@@ -194,8 +200,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: material.Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             TextField(
               controller: nameController,
@@ -263,11 +268,53 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 }),
               ),
             ),
+            Selector<SettingsState, bool>(
+              builder: (context, showImages, child) {
+                return Visibility(
+                  visible: showImages,
+                  child: material.Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              setState(() {
+                                image = result?.files.single.path;
+                              });
+                            },
+                            label: const Text('Image'),
+                            icon: const Icon(Icons.image),
+                          ),
+                          if (image != null)
+                            TextButton.icon(
+                              onPressed: () async {
+                                setState(() {
+                                  image = null;
+                                });
+                              },
+                              label: const Text('Delete'),
+                              icon: const Icon(Icons.delete),
+                            ),
+                        ],
+                      ),
+                      if (image != null) ...[
+                        const SizedBox(height: 8),
+                        Image.file(File(image!)),
+                      ],
+                    ],
+                  ),
+                );
+              },
+              selector: (p0, p1) => p1.showImages,
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _save,
+        onPressed: save,
         tooltip: "Update all records for this exercise",
         child: const Icon(Icons.save),
       ),

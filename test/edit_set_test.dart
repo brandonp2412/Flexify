@@ -1,7 +1,7 @@
 import 'package:flexify/database/database.dart';
-import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +82,7 @@ void main() async {
       ),
     );
 
-    expect(find.text("Bench press"), findsOne);
+    expect(find.text("Bench press"), findsNWidgets(2));
 
     final button = find.byTooltip("Save");
     expect(button, findsOne);

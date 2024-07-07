@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flexify/database/database.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings_state.dart';
@@ -31,17 +33,17 @@ class _HistoryListState extends State<HistoryList> {
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(_scrollListener);
+    scrollController.addListener(scrollListener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    scrollController.removeListener(_scrollListener);
+    scrollController.removeListener(scrollListener);
     scrollController.dispose();
   }
 
-  void _scrollListener() {
+  void scrollListener() {
     if (scrollController.position.pixels <
             scrollController.position.maxScrollExtent - 200 ||
         goingNext) return;
@@ -59,6 +61,9 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
+    final showImages =
+        context.select<SettingsState, bool>((settings) => settings.showImages);
+
     return ListView.builder(
       itemCount: widget.gymSets.length,
       controller: scrollController,
@@ -76,6 +81,11 @@ class _HistoryListState extends State<HistoryList> {
           children: [
             if (showDivider) const Divider(),
             ListTile(
+              leading: showImages && gymSet.image != null
+                  ? Image.file(
+                      File(gymSet.image!),
+                    )
+                  : null,
               title: Text(gymSet.name),
               subtitle: Selector<SettingsState, String>(
                 selector: (p0, p1) => p1.longDateFormat,

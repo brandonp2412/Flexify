@@ -8,11 +8,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import '../integration_test/screenshot_test.dart';
 import 'mock_tests.dart';
 
 void main() async {
   testWidgets('StrengthPage displays', (WidgetTester tester) async {
     await mockTests();
+
+    exercisesToPopulateTestDB.forEach(
+      (key, value) async => await db.into(db.gymSets).insert(
+            generateGymSetCompanion(key, value),
+          ),
+    );
+
+    for (final element in graphData) {
+      await db.into(db.gymSets).insert(
+            generateGymSetCompanion(
+              "Dumbbell shoulder press",
+              element.weight,
+              reps: element.reps,
+              date: element.dateTime,
+            ),
+          );
+    }
+
+    for (var element in plans) {
+      await db.into(db.plans).insert(element);
+    }
 
     await tester.pumpWidget(
       MultiProvider(
@@ -41,6 +63,28 @@ void main() async {
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
     await mockTests();
+
+    exercisesToPopulateTestDB.forEach(
+      (key, value) async => await db.into(db.gymSets).insert(
+            generateGymSetCompanion(key, value),
+          ),
+    );
+
+    for (final element in graphData) {
+      await db.into(db.gymSets).insert(
+            generateGymSetCompanion(
+              "Dumbbell shoulder press",
+              element.weight,
+              reps: element.reps,
+              date: element.dateTime,
+            ),
+          );
+    }
+
+    for (var element in plans) {
+      await db.into(db.plans).insert(element);
+    }
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -68,6 +112,28 @@ void main() async {
 
   testWidgets('StrengthPage selects metrics', (WidgetTester tester) async {
     await mockTests();
+
+    exercisesToPopulateTestDB.forEach(
+      (key, value) async => await db.into(db.gymSets).insert(
+            generateGymSetCompanion(key, value),
+          ),
+    );
+
+    for (final element in graphData) {
+      await db.into(db.gymSets).insert(
+            generateGymSetCompanion(
+              "Dumbbell shoulder press",
+              element.weight,
+              reps: element.reps,
+              date: element.dateTime,
+            ),
+          );
+    }
+
+    for (var element in plans) {
+      await db.into(db.plans).insert(element);
+    }
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [

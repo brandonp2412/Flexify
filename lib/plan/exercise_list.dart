@@ -1,8 +1,8 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -27,7 +27,7 @@ class ExerciseList extends StatelessWidget {
     required this.plan,
   });
 
-  Widget _itemBuilder(
+  Widget itemBuilder(
     BuildContext context,
     int index,
     int maxSets,
@@ -143,7 +143,7 @@ class ExerciseList extends StatelessWidget {
       return ReorderableListView.builder(
         itemCount: exercises.length,
         itemBuilder: (context, index) =>
-            _itemBuilder(context, index, maxSets, planTrailing),
+            itemBuilder(context, index, maxSets, planTrailing),
         onReorder: (oldIndex, newIndex) async {
           if (oldIndex < newIndex) {
             newIndex--;
@@ -164,7 +164,7 @@ class ExerciseList extends StatelessWidget {
       return ListView.builder(
         itemCount: exercises.length,
         itemBuilder: (context, index) =>
-            _itemBuilder(context, index, maxSets, planTrailing),
+            itemBuilder(context, index, maxSets, planTrailing),
       );
   }
 }
