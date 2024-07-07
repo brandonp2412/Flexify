@@ -84,8 +84,8 @@ class _HistoryListState extends State<HistoryList> {
               leading: showImages && gymSet.image != null
                   ? Image.file(
                       File(gymSet.image!),
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.error),
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.error),
                     )
                   : null,
               title: Text(gymSet.name),

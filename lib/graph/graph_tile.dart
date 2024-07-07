@@ -44,7 +44,8 @@ class GraphTile extends StatelessWidget {
       leading: showImages && gymSet.image.value != null
           ? Image.file(
               File(gymSet.image.value!),
-              errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.error),
             )
           : null,
       selected: selected.contains(gymSet.name.value),

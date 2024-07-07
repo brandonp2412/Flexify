@@ -271,7 +271,8 @@ class _EditSetPageState extends State<EditSetPage> {
                             onLongPress: () => setState(() {
                               image = null;
                             }),
-                            child: Image.file(File(image!),
+                            child: Image.file(
+                              File(image!),
                               errorBuilder: (context, error, stackTrace) =>
                                   TextButton.icon(
                                 label: const Text('Image error'),
