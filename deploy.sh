@@ -2,7 +2,7 @@
 
 set -ex
 
-IFS='+.' read -r major minor patch build_number <<< "$(yq -r .version pubspec.yaml)"
+IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
 changelog_number=$((new_build_number * 10 + 3))
@@ -11,7 +11,7 @@ new_version="$major.$minor.$new_patch"
 
 nvim "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt")
-echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
+echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
 
 dart analyze lib
 dart format --set-exit-if-changed lib
@@ -34,7 +34,7 @@ apk=build/app/outputs/flutter-apk
 mv $apk/app-release.apk $apk/flexify.apk
 
 git push
-gh release create "$new_version" --notes "$changelog"  \
+gh release create "$new_version" --notes "$changelog" \
   $apk/app-*-release.apk \
   $apk/flexify.apk \
   $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
