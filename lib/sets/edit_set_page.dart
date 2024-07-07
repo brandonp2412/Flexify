@@ -256,37 +256,24 @@ class _EditSetPageState extends State<EditSetPage> {
                   visible: showImages,
                   child: material.Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () async {
-                              FilePickerResult? result =
-                                  await FilePicker.platform.pickFiles();
-                              if (result?.files.single == null) return;
-
-                              setState(() {
-                                image = result?.files.single.path;
-                              });
-                            },
-                            label: const Text('Image'),
-                            icon: const Icon(Icons.image),
-                          ),
-                          if (image != null)
-                            TextButton.icon(
-                              onPressed: () async {
-                                setState(() {
-                                  image = null;
-                                });
-                              },
-                              label: const Text('Delete'),
-                              icon: const Icon(Icons.delete),
-                            ),
-                        ],
-                      ),
+                      if (image == null)
+                        TextButton.icon(
+                          onPressed: pick,
+                          label: const Text('Image'),
+                          icon: const Icon(Icons.image),
+                        ),
                       if (image != null) ...[
                         const SizedBox(height: 8),
-                        Image.file(File(image!)),
+                        Tooltip(
+                          message: 'Long-press to delete',
+                          child: GestureDetector(
+                            onTap: () => pick(),
+                            onLongPress: () => setState(() {
+                                                          image=null;
+                                                        }),
+                            child: Image.file(File(image!)),
+                          ),
+                        ),
                       ],
                     ],
                   ),
@@ -303,6 +290,15 @@ class _EditSetPageState extends State<EditSetPage> {
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  void pick() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result?.files.single == null) return;
+
+    setState(() {
+      image = result?.files.single.path;
+    });
   }
 
   @override
