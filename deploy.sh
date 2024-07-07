@@ -22,12 +22,9 @@ dart format --set-exit-if-changed lib
 ./screenshots.sh "tenInchScreenshots"
 
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
-rest=$(git log -1 --pretty=%B | tail -n +2)
 git add pubspec.yaml
 git add fastlane/metadata
-last_commit=$(git log -1 --pretty=%B | head -n 1)
-git commit --amend -m "$last_commit - $new_version 🚀 
-$rest"
+git commit -m "$new_version 🚀"
 
 ./flutter/bin/flutter build apk --split-per-abi
 ./flutter/bin/flutter build apk
