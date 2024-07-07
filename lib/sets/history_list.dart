@@ -82,7 +82,9 @@ class _HistoryListState extends State<HistoryList> {
             if (showDivider) const Divider(),
             ListTile(
               leading: showImages && gymSet.image != null
-                  ? Image.file(File(gymSet.image!))
+                  ? Image.file(
+                      File(gymSet.image!),
+                    )
                   : null,
               title: Text(gymSet.name),
               subtitle: Selector<SettingsState, String>(

@@ -79,7 +79,7 @@ void main() async {
   });
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
-    await mockTests(insert: false);
+    await mockTests();
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',

@@ -42,12 +42,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
           ..limit(1))
         .getSingle()
         .then(
-          (value) => setState(() {
-            cardio = value.cardio;
-            unit = value.unit;
+          (gymSet) => setState(() {
+            image = gymSet.image;
+            cardio = gymSet.cardio;
+            unit = gymSet.unit;
 
-            if (value.restMs != null) {
-              final duration = Duration(milliseconds: value.restMs!);
+            if (gymSet.restMs != null) {
+              final duration = Duration(milliseconds: gymSet.restMs!);
               minutesController.text = duration.inMinutes.toString();
               secondsController.text = (duration.inSeconds % 60).toString();
             }

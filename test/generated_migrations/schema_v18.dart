@@ -171,15 +171,6 @@ class Settings extends Table with TableInfo {
   late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
       'short_date_format', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
-      'alarm_sound', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
-      'cardio_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
-      'strength_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   late final GeneratedColumn<int> timerDuration = GeneratedColumn<int>(
       'timer_duration', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
@@ -204,12 +195,6 @@ class Settings extends Table with TableInfo {
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("show_units" IN (0, 1))'));
-  late final GeneratedColumn<bool> showImages = GeneratedColumn<bool>(
-      'show_images', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_images" IN (0, 1))'));
   late final GeneratedColumn<bool> systemColors = GeneratedColumn<bool>(
       'system_colors', aliasedName, false,
       type: DriftSqlType.bool,
@@ -252,6 +237,15 @@ class Settings extends Table with TableInfo {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("group_history" IN (0, 1))'));
+  late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
+      'alarm_sound', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
+      'cardio_unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
+      'strength_unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -259,22 +253,21 @@ class Settings extends Table with TableInfo {
         planTrailing,
         longDateFormat,
         shortDateFormat,
-        alarmSound,
-        cardioUnit,
-        strengthUnit,
         timerDuration,
         maxSets,
         vibrate,
         restTimers,
         showUnits,
-        showImages,
         systemColors,
         explainedPermissions,
         hideTimerTab,
         hideHistoryTab,
         curveLines,
         hideWeight,
-        groupHistory
+        groupHistory,
+        alarmSound,
+        cardioUnit,
+        strengthUnit
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;

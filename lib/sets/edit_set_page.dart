@@ -369,8 +369,9 @@ class _EditSetPageState extends State<EditSetPage> {
     });
   }
 
-  Future<void> save() async {
+  save() {
     Navigator.pop(context);
+
     final minutes = int.tryParse(minutesController.text);
     final seconds = int.tryParse(secondsController.text);
     final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
@@ -413,6 +414,7 @@ class _EditSetPageState extends State<EditSetPage> {
           settings.vibrate,
         );
     }
+    if (image != null) (db.update(db.gymSets)..where((u) => u.name.equals(name))).write(GymSetsCompanion(image: Value(image)));
   }
 
   Future<void> _selectDate() async {
