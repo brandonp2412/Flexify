@@ -414,7 +414,9 @@ class _EditSetPageState extends State<EditSetPage> {
           settings.vibrate,
         );
     }
-    if (image != null) (db.update(db.gymSets)..where((u) => u.name.equals(name))).write(GymSetsCompanion(image: Value(image)));
+    if (image != null)
+      (db.update(db.gymSets)..where((u) => u.name.equals(name)))
+          .write(GymSetsCompanion(image: Value(image)));
   }
 
   Future<void> _selectDate() async {

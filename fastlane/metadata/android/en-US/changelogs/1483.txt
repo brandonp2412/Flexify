@@ -1,1 +1,2 @@
-Add image support
+- Add image support
+- Add monochrome app icons
