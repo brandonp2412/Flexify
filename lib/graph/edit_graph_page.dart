@@ -281,6 +281,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                             onPressed: () async {
                               FilePickerResult? result =
                                   await FilePicker.platform.pickFiles();
+
+                              if (result?.files.single.path == null)
+                                return;
                               setState(() {
                                 image = result?.files.single.path;
                               });

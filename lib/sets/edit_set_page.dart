@@ -263,6 +263,8 @@ class _EditSetPageState extends State<EditSetPage> {
                             onPressed: () async {
                               FilePickerResult? result =
                                   await FilePicker.platform.pickFiles();
+                              if (result?.files.single == null) return;
+
                               setState(() {
                                 image = result?.files.single.path;
                               });
