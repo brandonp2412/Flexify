@@ -269,9 +269,16 @@ class _EditSetPageState extends State<EditSetPage> {
                           child: GestureDetector(
                             onTap: () => pick(),
                             onLongPress: () => setState(() {
-                                                          image=null;
-                                                        }),
-                            child: Image.file(File(image!)),
+                              image = null;
+                            }),
+                            child: Image.file(File(image!),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  TextButton.icon(
+                                label: const Text('Image error'),
+                                icon: const Icon(Icons.error),
+                                onPressed: () => pick(),
+                              ),
+                            ),
                           ),
                         ),
                       ],

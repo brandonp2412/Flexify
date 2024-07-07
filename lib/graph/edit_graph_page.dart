@@ -298,7 +298,15 @@ class _EditGraphPageState extends State<EditGraphPage> {
                             onLongPress: () => setState(() {
                               image = null;
                             }),
-                            child: Image.file(File(image!)),
+                            child: Image.file(
+                              File(image!),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  TextButton.icon(
+                                label: const Text('Image error'),
+                                icon: const Icon(Icons.error),
+                                onPressed: () => pick(),
+                              ),
+                            ),
                           ),
                         ),
                       ],
