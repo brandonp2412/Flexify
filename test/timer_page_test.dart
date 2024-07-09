@@ -1,5 +1,5 @@
 import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';

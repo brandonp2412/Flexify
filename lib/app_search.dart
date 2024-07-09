@@ -1,6 +1,6 @@
+import 'package:flexify/settings/settings_page.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/weight_page.dart';
-import 'package:flexify/settings_page.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
