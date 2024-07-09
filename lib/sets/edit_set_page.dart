@@ -8,8 +8,8 @@ import 'package:flexify/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +31,7 @@ class _EditSetPageState extends State<EditSetPage> {
   final secondsController = TextEditingController();
   final inclineController = TextEditingController();
   final repsNode = FocusNode();
+  final distanceNode = FocusNode();
 
   late String unit;
   late DateTime created;
@@ -44,6 +45,10 @@ class _EditSetPageState extends State<EditSetPage> {
 
   @override
   Widget build(BuildContext context) {
+    final hideWeight = context.select<SettingsState, bool>(
+      (value) => value.hideWeight,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -100,14 +105,17 @@ class _EditSetPageState extends State<EditSetPage> {
               onSelected: (option) async {
                 final last = await (db.gymSets.select()
                       ..where((tbl) => tbl.name.equals(option))
+                      ..orderBy(
+                        [
+                          (u) => OrderingTerm(
+                                expression: u.created,
+                                mode: OrderingMode.desc,
+                              ),
+                        ],
+                      )
                       ..limit(1))
                     .getSingleOrNull();
                 if (last == null) return;
-
-                if (!context.mounted) return;
-                final hideWeight = context.select<SettingsState, bool>(
-                  (value) => value.hideWeight,
-                );
 
                 if (hideWeight)
                   updateFields(
@@ -124,8 +132,14 @@ class _EditSetPageState extends State<EditSetPage> {
                     ),
                   );
                 }
-                repsNode.requestFocus();
-                selectAll(repsController);
+
+                if (cardio) {
+                  distanceNode.requestFocus();
+                  selectAll(distanceController);
+                } else {
+                  repsNode.requestFocus();
+                  selectAll(repsController);
+                }
               },
               initialValue: TextEditingValue(text: name),
               fieldViewBuilder: (
@@ -155,9 +169,11 @@ class _EditSetPageState extends State<EditSetPage> {
             if (cardio) ...[
               TextField(
                 controller: distanceController,
+                focusNode: distanceNode,
                 decoration: const InputDecoration(labelText: 'Distance'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(distanceController),
+                onSubmitted: (value) => selectAll(minutesController),
                 textInputAction: TextInputAction.next,
               ),
               Row(
@@ -170,6 +186,7 @@ class _EditSetPageState extends State<EditSetPage> {
                           const TextInputType.numberWithOptions(decimal: false),
                       onTap: () => selectAll(minutesController),
                       textInputAction: TextInputAction.next,
+                      onSubmitted: (value) => selectAll(secondsController),
                     ),
                   ),
                   const SizedBox(width: 8.0),
@@ -181,6 +198,7 @@ class _EditSetPageState extends State<EditSetPage> {
                           const TextInputType.numberWithOptions(decimal: false),
                       onTap: () => selectAll(secondsController),
                       textInputAction: TextInputAction.next,
+                      onSubmitted: (value) => selectAll(inclineController),
                     ),
                   ),
                 ],
