@@ -269,9 +269,12 @@ class AppDatabase extends _$AppDatabase {
             final exercises = plan.read<String>('exercises').split(',');
 
             for (final exercise in exercises) {
-              final gymSet = gymSets.firstWhere(
+              final index = gymSets.indexWhere(
                 (gymSet) => gymSet.read(schema.gymSets.name) == exercise,
               );
+              if (index == -1) continue;
+
+              final gymSet = gymSets[index];
               pe.add(
                 RawValuesInsertable({
                   'plan_id': plan.read('id'),
