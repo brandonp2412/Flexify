@@ -94,16 +94,6 @@ List<Widget> getTimers(
           onChanged: (value) => settings.setHideTimer(value),
         ),
       ),
-    if ('show units'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Show units'),
-        leading: const Icon(Icons.scale_sharp),
-        onTap: () => settings.setUnits(!settings.showUnits),
-        trailing: Switch(
-          value: settings.showUnits,
-          onChanged: (value) => settings.setUnits(value),
-        ),
-      ),
     if ('hide weight'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Hide weight'),

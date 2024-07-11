@@ -29,14 +29,10 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final searchController = TextEditingController();
 
-  late var settings = context.read<SettingsState>();
-  late final maxSetsController =
-      TextEditingController(text: settings.maxSets.toString());
-  late final minutesController =
-      TextEditingController(text: settings.timerDuration.inMinutes.toString());
-  late final secondsController = TextEditingController(
-    text: (settings.timerDuration.inSeconds % 60).toString(),
-  );
+  late final SettingsState settings;
+  late final TextEditingController maxSetsController;
+  late final TextEditingController minutesController;
+  late final TextEditingController secondsController;
 
   AudioPlayer? player;
 
@@ -44,6 +40,14 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
 
+    settings = context.read<SettingsState>();
+    maxSetsController =
+        TextEditingController(text: settings.maxSets.toString());
+    minutesController = TextEditingController(
+        text: settings.timerDuration.inMinutes.toString());
+    secondsController = TextEditingController(
+      text: (settings.timerDuration.inSeconds % 60).toString(),
+    );
     if (platformSupportsTimer()) player = AudioPlayer();
   }
 

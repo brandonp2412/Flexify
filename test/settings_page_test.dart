@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_page.dart';
@@ -35,31 +38,52 @@ void main() async {
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Theme'), findsNothing);
+    expect(find.textContaining('Appearance'), findsNothing);
     expect(find.widgetWithText(ListTile, 'Show units'), findsOne);
 
     await db.close();
   });
 
-  testWidgets('SettingsPage changes', (WidgetTester tester) async {
+  testWidgets('SettingsPage changes theme', (WidgetTester tester) async {
     await render(tester);
 
+    await tester.tap(find.text('Appearance'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('System'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Light'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     expect(find.text('Light'), findsOne);
 
-    await tester.enterText(find.bySemanticsLabel('Sets per exercise'), '5');
-    await tester.pump();
-    expect(find.text('5'), findsOne);
+    await db.close();
+  });
 
-    await tester.enterText(find.bySemanticsLabel('Search...'), 'Show units');
-    await tester.pump();
-    await tester.tap(
-      find.widgetWithText(ListTile, 'Show units'),
-      warnIfMissed: false,
+  testWidgets('SettingsPage shows images', (WidgetTester tester) async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
+    db = AppDatabase(executor: NativeDatabase.memory());
+    await (db.settings.update())
+        .write(const SettingsCompanion(showImages: Value(false)));
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: const MaterialApp(
+          home: SettingsPage(),
+        ),
+      ),
     );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Appearance'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Show images'));
+    await tester.pumpAndSettle();
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    expect(settings.showImages, equals(true));
 
     await db.close();
   });
