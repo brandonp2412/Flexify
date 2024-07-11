@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flexify/database/database.dart';
-import 'package:flexify/settings_state.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
+import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flexify/utils.dart';
 
 class GraphTile extends StatelessWidget {
   final GymSetsCompanion gymSet;

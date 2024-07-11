@@ -4,7 +4,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/history_page.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';

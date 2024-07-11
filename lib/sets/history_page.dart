@@ -7,7 +7,7 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/history_collapsed.dart';
 import 'package:flexify/sets/history_list.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';

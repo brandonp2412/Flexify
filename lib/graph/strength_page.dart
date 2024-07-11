@@ -6,7 +6,7 @@ import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/graph/view_graph_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

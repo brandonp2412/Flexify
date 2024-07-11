@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
