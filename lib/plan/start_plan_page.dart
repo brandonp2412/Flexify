@@ -6,7 +6,7 @@ import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/exercise_list.dart';
 import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/settings_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
