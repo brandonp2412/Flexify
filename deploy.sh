@@ -12,8 +12,11 @@ changelog_number=$((new_build_number * 10 + 3))
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 
-nvim "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
-changelog=$(cat "fastlane/metadata/android/en-US/changelogs/$changelog_number.txt")
+changelog_file="fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
+git --no-pager log --pretty=format:'%s' $(git describe --tags --abbrev=0)..HEAD \
+  | awk '{print "- "$0}' > $changelog_file
+nvim $changelog_file
+changelog=$(cat $changelog_file)
 echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
 
 dart analyze lib
