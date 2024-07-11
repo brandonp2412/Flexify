@@ -1,3 +1,5 @@
+import 'package:drift/native.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
@@ -12,6 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('PlansPage lists items', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -34,6 +37,7 @@ void main() async {
 
   testWidgets('PlansPage add button', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [

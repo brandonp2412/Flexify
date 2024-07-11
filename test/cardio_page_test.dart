@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -15,6 +17,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('CardioPage displays', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(
@@ -55,6 +58,7 @@ void main() async {
 
   testWidgets('CardioPage edits', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(
@@ -93,6 +97,7 @@ void main() async {
 
   testWidgets('CardioPage selects metrics', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(

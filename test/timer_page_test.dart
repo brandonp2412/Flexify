@@ -1,3 +1,6 @@
+import 'package:drift/native.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
@@ -10,6 +13,7 @@ import 'mock_tests.dart';
 
 void main() async {
   await mockTests();
+  db = AppDatabase(executor: NativeDatabase.memory());
 
   testWidgets('TimerPage', (WidgetTester tester) async {
     await tester.pumpWidget(
