@@ -152,16 +152,6 @@ class _SettingsTimerState extends State<SettingsTimer> {
   AudioPlayer player = AudioPlayer();
 
   @override
-  void dispose() {
-    super.dispose();
-
-    minutesController.dispose();
-    secondsController.dispose();
-    player.stop();
-    player.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
 
@@ -179,5 +169,15 @@ class _SettingsTimerState extends State<SettingsTimer> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    minutesController.dispose();
+    secondsController.dispose();
+    player.stop();
+    player.dispose();
   }
 }

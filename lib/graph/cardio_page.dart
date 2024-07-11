@@ -28,53 +28,6 @@ class _CardioPageState extends State<CardioPage> {
   DateTime? startDate;
   DateTime? endDate;
 
-  @override
-  void initState() {
-    super.initState();
-    setStream();
-  }
-
-  void setStream() {
-    graphStream = watchCardio(
-      endDate: endDate,
-      groupBy: period,
-      metric: metric,
-      name: widget.name,
-      startDate: startDate,
-      targetUnit: targetUnit,
-    );
-  }
-
-  Future<void> _selectEnd() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: endDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate == null) return;
-    setState(() {
-      endDate = pickedDate;
-    });
-    setStream();
-  }
-
-  Future<void> _selectStart() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: startDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate == null) return;
-    setState(() {
-      startDate = pickedDate;
-    });
-    setStream();
-  }
-
   Widget bottomTitleWidgets(
     double value,
     TitleMeta meta,
@@ -306,6 +259,12 @@ class _CardioPageState extends State<CardioPage> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    setStream();
+  }
+
   LineChart lineChart(
     List<CardioData> rows,
     String format,
@@ -390,5 +349,46 @@ class _CardioPageState extends State<CardioPage> {
         ],
       ),
     );
+  }
+
+  void setStream() {
+    graphStream = watchCardio(
+      endDate: endDate,
+      groupBy: period,
+      metric: metric,
+      name: widget.name,
+      startDate: startDate,
+      targetUnit: targetUnit,
+    );
+  }
+
+  Future<void> _selectEnd() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return;
+    setState(() {
+      endDate = pickedDate;
+    });
+    setStream();
+  }
+
+  Future<void> _selectStart() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return;
+    setState(() {
+      startDate = pickedDate;
+    });
+    setStream();
   }
 }

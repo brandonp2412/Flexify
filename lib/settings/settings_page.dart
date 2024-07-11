@@ -37,29 +37,6 @@ class _SettingsPageState extends State<SettingsPage> {
   AudioPlayer? player;
 
   @override
-  void initState() {
-    super.initState();
-
-    settings = context.read<SettingsState>();
-    maxSetsController =
-        TextEditingController(text: settings.maxSets.toString());
-    minutesController = TextEditingController(
-        text: settings.timerDuration.inMinutes.toString());
-    secondsController = TextEditingController(
-      text: (settings.timerDuration.inSeconds % 60).toString(),
-    );
-    if (platformSupportsTimer()) player = AudioPlayer();
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    maxSetsController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
@@ -184,5 +161,29 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    maxSetsController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    settings = context.read<SettingsState>();
+    maxSetsController =
+        TextEditingController(text: settings.maxSets.toString());
+    minutesController = TextEditingController(
+      text: settings.timerDuration.inMinutes.toString(),
+    );
+    secondsController = TextEditingController(
+      text: (settings.timerDuration.inSeconds % 60).toString(),
+    );
+    if (platformSupportsTimer()) player = AudioPlayer();
   }
 }

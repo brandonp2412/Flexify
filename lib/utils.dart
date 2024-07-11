@@ -7,8 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-void selectAll(TextEditingController controller) => controller.selection =
-    TextSelection(baseOffset: 0, extentOffset: controller.text.length);
+Future<GymSet?> getBodyWeight() async {
+  final weightSet = await (db.gymSets.select()
+        ..where((tbl) => tbl.name.equals('Weight'))
+        ..orderBy(
+          [(u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc)],
+        )
+        ..limit(1))
+      .getSingleOrNull();
+  return weightSet;
+}
+
+bool isSameDay(DateTime date1, DateTime date2) {
+  return date1.year == date2.year &&
+      date1.month == date2.month &&
+      date1.day == date2.day;
+}
 
 DateTime parseDate(String dateString) {
   List<String> formats = [
@@ -27,6 +41,11 @@ DateTime parseDate(String dateString) {
   throw FormatException('Invalid date format: $dateString');
 }
 
+bool platformIsDesktop() =>
+    Platform.isLinux || Platform.isWindows || Platform.isMacOS;
+
+bool platformSupportsTimer() => Platform.isAndroid || Platform.isLinux;
+
 Future<bool> requestNotificationPermission() async {
   if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
     return true;
@@ -35,30 +54,11 @@ Future<bool> requestNotificationPermission() async {
   return permission.isGranted;
 }
 
-bool isSameDay(DateTime date1, DateTime date2) {
-  return date1.year == date2.year &&
-      date1.month == date2.month &&
-      date1.day == date2.day;
-}
-
-Future<GymSet?> getBodyWeight() async {
-  final weightSet = await (db.gymSets.select()
-        ..where((tbl) => tbl.name.equals('Weight'))
-        ..orderBy(
-          [(u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc)],
-        )
-        ..limit(1))
-      .getSingleOrNull();
-  return weightSet;
-}
+void selectAll(TextEditingController controller) => controller.selection =
+    TextSelection(baseOffset: 0, extentOffset: controller.text.length);
 
 String toString(double value) {
   final string = value.toString();
   if (string.endsWith('.0')) return string.substring(0, string.length - 2);
   return string;
 }
-
-bool platformSupportsTimer() => Platform.isAndroid || Platform.isLinux;
-
-bool platformIsDesktop() =>
-    Platform.isLinux || Platform.isWindows || Platform.isMacOS;

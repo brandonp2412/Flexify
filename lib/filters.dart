@@ -4,6 +4,16 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Filters extends StatefulWidget {
+  final TextEditingController repsGtController;
+
+  final TextEditingController repsLtController;
+  final TextEditingController weightGtController;
+  final TextEditingController weightLtController;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final Function(DateTime?) setStart;
+  final Function(DateTime?) setEnd;
+  final Function setStream;
   const Filters({
     super.key,
     required this.repsGtController,
@@ -16,16 +26,6 @@ class Filters extends StatefulWidget {
     this.startDate,
     this.endDate,
   });
-
-  final TextEditingController repsGtController;
-  final TextEditingController repsLtController;
-  final TextEditingController weightGtController;
-  final TextEditingController weightLtController;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final Function(DateTime?) setStart;
-  final Function(DateTime?) setEnd;
-  final Function setStream;
 
   @override
   createState() => _FiltersState();

@@ -42,155 +42,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late String title = widget.plan.days.replaceAll(",", ", ");
 
   @override
-  void initState() {
-    super.initState();
-    planState.addListener(planChanged);
-    select(0);
-  }
-
-  @override
-  void dispose() {
-    repsController.dispose();
-    weightController.dispose();
-    distanceController.dispose();
-    minutesController.dispose();
-    inclineController.dispose();
-
-    planState.removeListener(planChanged);
-
-    super.dispose();
-  }
-
-  void planChanged() {
-    final split = planState.plans
-        .firstWhere((element) => element.id == widget.plan.id)
-        .exercises
-        .split(',');
-    setState(() {
-      planExercises = split;
-      title = planState.plans
-          .firstWhere((plan) => plan.id == widget.plan.id)
-          .days
-          .replaceAll(',', ', ');
-    });
-  }
-
-  Future<GymSet?> getLast(String exercise) async {
-    return (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(exercise))
-          ..orderBy([
-            (u) => drift.OrderingTerm(
-                  expression: u.created,
-                  mode: drift.OrderingMode.desc,
-                ),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
-  }
-
-  Future<void> select(int index) async {
-    setState(() {
-      selectedIndex = index;
-    });
-    final settings = context.read<SettingsState>();
-    final last = await getLast(planExercises[index]);
-    if (last == null) return;
-
-    setState(() {
-      unit = last.unit;
-      repsController.text = toString(last.reps);
-      weightController.text = toString(last.weight);
-      distanceController.text = toString(last.distance);
-      minutesController.text = last.duration.floor().toString();
-      secondsController.text = ((last.duration * 60) % 60).floor().toString();
-      inclineController.text = last.incline?.toString() ?? "";
-      cardio = last.cardio;
-
-      if (cardio && (unit == 'kg' || unit == 'lb'))
-        unit = settings.cardioUnit;
-      else if (!cardio && (unit == 'km' || unit == 'mi'))
-        unit = settings.strengthUnit;
-    });
-  }
-
-  Future<void> save(TimerState timerState) async {
-    setState(() {
-      first = false;
-    });
-    final exercise = planExercises[selectedIndex];
-    var bodyWeight = 0.0;
-    final settings = context.read<SettingsState>();
-    if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
-
-    if (platformSupportsTimer() &&
-        !settings.explainedPermissions &&
-        settings.restTimers &&
-        mounted &&
-        !platformIsDesktop())
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const PermissionsPage(),
-        ),
-      );
-
-    final counts = await countStream.first;
-    final countIndex = counts.indexWhere((element) => element.name == exercise);
-
-    int? max;
-    int? restMs;
-    if (countIndex != -1) {
-      max = counts[countIndex].maxSets;
-      restMs = counts[countIndex].restMs;
-    }
-
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
-
-    var gymSet = GymSetsCompanion.insert(
-      name: exercise,
-      reps: double.parse(repsController.text),
-      weight: double.parse(weightController.text),
-      unit: unit,
-      created: DateTime.now().toLocal(),
-      cardio: drift.Value(cardio),
-      duration: drift.Value(duration),
-      distance: drift.Value(double.parse(distanceController.text)),
-      bodyWeight: drift.Value(bodyWeight),
-      restMs: drift.Value(restMs),
-      incline: drift.Value(int.tryParse(inclineController.text)),
-      planId: drift.Value(widget.plan.id),
-    );
-
-    if (settings.restTimers && platformSupportsTimer()) {
-      final countIndex =
-          counts.indexWhere((element) => element.name == exercise);
-      var count = 0;
-      if (countIndex != -1) count = counts[countIndex].count;
-      count++;
-
-      final finishedPlan = count == (max ?? settings.maxSets) &&
-          selectedIndex == planExercises.length - 1;
-      if (!finishedPlan)
-        timerState.startTimer(
-          "$exercise ($count)",
-          restMs != null
-              ? Duration(milliseconds: restMs)
-              : settings.timerDuration,
-          settings.alarmSound,
-          settings.vibrate,
-        );
-
-      final finishedExercise = count == (max ?? settings.maxSets) &&
-          selectedIndex < planExercises.length - 1;
-      if (finishedExercise) select(selectedIndex + 1);
-    }
-
-    db.into(db.gymSets).insert(gymSet);
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
@@ -371,5 +222,154 @@ class _StartPlanPageState extends State<StartPlanPage> {
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    repsController.dispose();
+    weightController.dispose();
+    distanceController.dispose();
+    minutesController.dispose();
+    inclineController.dispose();
+
+    planState.removeListener(planChanged);
+
+    super.dispose();
+  }
+
+  Future<GymSet?> getLast(String exercise) async {
+    return (db.gymSets.select()
+          ..where((tbl) => db.gymSets.name.equals(exercise))
+          ..orderBy([
+            (u) => drift.OrderingTerm(
+                  expression: u.created,
+                  mode: drift.OrderingMode.desc,
+                ),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    planState.addListener(planChanged);
+    select(0);
+  }
+
+  void planChanged() {
+    final split = planState.plans
+        .firstWhere((element) => element.id == widget.plan.id)
+        .exercises
+        .split(',');
+    setState(() {
+      planExercises = split;
+      title = planState.plans
+          .firstWhere((plan) => plan.id == widget.plan.id)
+          .days
+          .replaceAll(',', ', ');
+    });
+  }
+
+  Future<void> save(TimerState timerState) async {
+    setState(() {
+      first = false;
+    });
+    final exercise = planExercises[selectedIndex];
+    var bodyWeight = 0.0;
+    final settings = context.read<SettingsState>();
+    if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
+
+    if (platformSupportsTimer() &&
+        !settings.explainedPermissions &&
+        settings.restTimers &&
+        mounted &&
+        !platformIsDesktop())
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PermissionsPage(),
+        ),
+      );
+
+    final counts = await countStream.first;
+    final countIndex = counts.indexWhere((element) => element.name == exercise);
+
+    int? max;
+    int? restMs;
+    if (countIndex != -1) {
+      max = counts[countIndex].maxSets;
+      restMs = counts[countIndex].restMs;
+    }
+
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
+    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
+
+    var gymSet = GymSetsCompanion.insert(
+      name: exercise,
+      reps: double.parse(repsController.text),
+      weight: double.parse(weightController.text),
+      unit: unit,
+      created: DateTime.now().toLocal(),
+      cardio: drift.Value(cardio),
+      duration: drift.Value(duration),
+      distance: drift.Value(double.parse(distanceController.text)),
+      bodyWeight: drift.Value(bodyWeight),
+      restMs: drift.Value(restMs),
+      incline: drift.Value(int.tryParse(inclineController.text)),
+      planId: drift.Value(widget.plan.id),
+    );
+
+    if (settings.restTimers && platformSupportsTimer()) {
+      final countIndex =
+          counts.indexWhere((element) => element.name == exercise);
+      var count = 0;
+      if (countIndex != -1) count = counts[countIndex].count;
+      count++;
+
+      final finishedPlan = count == (max ?? settings.maxSets) &&
+          selectedIndex == planExercises.length - 1;
+      if (!finishedPlan)
+        timerState.startTimer(
+          "$exercise ($count)",
+          restMs != null
+              ? Duration(milliseconds: restMs)
+              : settings.timerDuration,
+          settings.alarmSound,
+          settings.vibrate,
+        );
+
+      final finishedExercise = count == (max ?? settings.maxSets) &&
+          selectedIndex < planExercises.length - 1;
+      if (finishedExercise) select(selectedIndex + 1);
+    }
+
+    db.into(db.gymSets).insert(gymSet);
+  }
+
+  Future<void> select(int index) async {
+    setState(() {
+      selectedIndex = index;
+    });
+    final settings = context.read<SettingsState>();
+    final last = await getLast(planExercises[index]);
+    if (last == null) return;
+
+    setState(() {
+      unit = last.unit;
+      repsController.text = toString(last.reps);
+      weightController.text = toString(last.weight);
+      distanceController.text = toString(last.distance);
+      minutesController.text = last.duration.floor().toString();
+      secondsController.text = ((last.duration * 60) % 60).floor().toString();
+      inclineController.text = last.incline?.toString() ?? "";
+      cardio = last.cardio;
+
+      if (cardio && (unit == 'kg' || unit == 'lb'))
+        unit = settings.cardioUnit;
+      else if (!cardio && (unit == 'km' || unit == 'mi'))
+        unit = settings.strengthUnit;
+    });
   }
 }

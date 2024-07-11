@@ -32,176 +32,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
   String? image;
 
   @override
-  void initState() {
-    super.initState();
-
-    final settings = context.read<SettingsState>();
-
-    (db.gymSets.select()
-          ..where((tbl) => tbl.name.equals(widget.name))
-          ..limit(1))
-        .getSingle()
-        .then(
-          (gymSet) => setState(() {
-            image = gymSet.image;
-            cardio = gymSet.cardio;
-            unit = gymSet.unit;
-
-            if (gymSet.restMs != null) {
-              final duration = Duration(milliseconds: gymSet.restMs!);
-              minutesController.text = duration.inMinutes.toString();
-              secondsController.text = (duration.inSeconds % 60).toString();
-            }
-
-            if (cardio && (unit == 'kg' || unit == 'lb'))
-              unit = settings.cardioUnit;
-            else if (!cardio && (unit == 'km' || unit == 'mi'))
-              unit = settings.strengthUnit;
-          }),
-        );
-  }
-
-  @override
-  dispose() {
-    nameController.dispose();
-    minutesController.dispose();
-    secondsController.dispose();
-    super.dispose();
-  }
-
-  void pick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result?.files.single == null) return;
-
-    setState(() {
-      image = result?.files.single.path;
-    });
-  }
-
-  Future<int> getCount() async {
-    final result = await (db.gymSets.selectOnly()
-          ..addColumns([db.gymSets.name.count()])
-          ..where(db.gymSets.name.equals(nameController.text)))
-        .getSingle();
-    return result.read(db.gymSets.name.count()) ?? 0;
-  }
-
-  Future<bool> mixedUnits() async {
-    final result = await (db.gymSets.selectOnly(distinct: true)
-          ..addColumns([db.gymSets.unit])
-          ..where(db.gymSets.name.equals(nameController.text)))
-        .get();
-    return result.length > 1;
-  }
-
-  Future<void> doUpdate() async {
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-
-    Duration? duration;
-    if (minutes != null && minutes > 0 || seconds != null && seconds > 0)
-      duration = Duration(
-        minutes: minutes ?? 0,
-        seconds: seconds ?? 0,
-      );
-
-    await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
-        .write(
-      GymSetsCompanion(
-        name: Value(nameController.text),
-        cardio: Value(cardio),
-        unit: Value.absentIfNull(unit),
-        restMs: Value(duration?.inMilliseconds),
-        image: Value.absentIfNull(image),
-      ),
-    );
-
-    await db.customUpdate(
-      'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
-      variables: [
-        Variable.withString(widget.name),
-        Variable.withString(nameController.text),
-      ],
-      updates: {db.plans},
-    );
-
-    if (!mounted) return;
-    context.read<PlanState>().updatePlans(null);
-  }
-
-  save() async {
-    if (nameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name cannot be empty.')),
-      );
-      Navigator.pop(context);
-      return;
-    }
-
-    final count = await getCount();
-
-    if (count > 0 && widget.name != nameController.text && mounted)
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Update conflict'),
-            content: Text(
-              'Your new name exists already for $count records. Are you sure?',
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                child: const Text('Confirm'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await doUpdate();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    else if (await mixedUnits() && mounted)
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Units conflict'),
-            content: const Text(
-              'Not all of your records are the same unit. Are you sure?',
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                child: const Text('Confirm'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await doUpdate();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    else
-      await doUpdate();
-
-    if (!mounted) return;
-    Navigator.pop(context);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -325,5 +155,175 @@ class _EditGraphPageState extends State<EditGraphPage> {
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  @override
+  dispose() {
+    nameController.dispose();
+    minutesController.dispose();
+    secondsController.dispose();
+    super.dispose();
+  }
+
+  Future<void> doUpdate() async {
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
+
+    Duration? duration;
+    if (minutes != null && minutes > 0 || seconds != null && seconds > 0)
+      duration = Duration(
+        minutes: minutes ?? 0,
+        seconds: seconds ?? 0,
+      );
+
+    await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
+        .write(
+      GymSetsCompanion(
+        name: Value(nameController.text),
+        cardio: Value(cardio),
+        unit: Value.absentIfNull(unit),
+        restMs: Value(duration?.inMilliseconds),
+        image: Value.absentIfNull(image),
+      ),
+    );
+
+    await db.customUpdate(
+      'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
+      variables: [
+        Variable.withString(widget.name),
+        Variable.withString(nameController.text),
+      ],
+      updates: {db.plans},
+    );
+
+    if (!mounted) return;
+    context.read<PlanState>().updatePlans(null);
+  }
+
+  Future<int> getCount() async {
+    final result = await (db.gymSets.selectOnly()
+          ..addColumns([db.gymSets.name.count()])
+          ..where(db.gymSets.name.equals(nameController.text)))
+        .getSingle();
+    return result.read(db.gymSets.name.count()) ?? 0;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    final settings = context.read<SettingsState>();
+
+    (db.gymSets.select()
+          ..where((tbl) => tbl.name.equals(widget.name))
+          ..limit(1))
+        .getSingle()
+        .then(
+          (gymSet) => setState(() {
+            image = gymSet.image;
+            cardio = gymSet.cardio;
+            unit = gymSet.unit;
+
+            if (gymSet.restMs != null) {
+              final duration = Duration(milliseconds: gymSet.restMs!);
+              minutesController.text = duration.inMinutes.toString();
+              secondsController.text = (duration.inSeconds % 60).toString();
+            }
+
+            if (cardio && (unit == 'kg' || unit == 'lb'))
+              unit = settings.cardioUnit;
+            else if (!cardio && (unit == 'km' || unit == 'mi'))
+              unit = settings.strengthUnit;
+          }),
+        );
+  }
+
+  Future<bool> mixedUnits() async {
+    final result = await (db.gymSets.selectOnly(distinct: true)
+          ..addColumns([db.gymSets.unit])
+          ..where(db.gymSets.name.equals(nameController.text)))
+        .get();
+    return result.length > 1;
+  }
+
+  void pick() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result?.files.single == null) return;
+
+    setState(() {
+      image = result?.files.single.path;
+    });
+  }
+
+  save() async {
+    if (nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Name cannot be empty.')),
+      );
+      Navigator.pop(context);
+      return;
+    }
+
+    final count = await getCount();
+
+    if (count > 0 && widget.name != nameController.text && mounted)
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Update conflict'),
+            content: Text(
+              'Your new name exists already for $count records. Are you sure?',
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Confirm'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await doUpdate();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    else if (await mixedUnits() && mounted)
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Units conflict'),
+            content: const Text(
+              'Not all of your records are the same unit. Are you sure?',
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Confirm'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await doUpdate();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    else
+      await doUpdate();
+
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 }

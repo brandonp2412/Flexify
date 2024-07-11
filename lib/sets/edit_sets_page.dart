@@ -43,112 +43,6 @@ class _EditSetsPageState extends State<EditSetsPage> {
   String? oldInclines;
 
   @override
-  void initState() {
-    super.initState();
-    final settings = context.read<SettingsState>();
-
-    (db.gymSets.select()..where((u) => u.id.isIn(widget.ids)))
-        .get()
-        .then((gymSets) {
-      setState(() {
-        cardio = gymSets.first.cardio;
-        oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
-        oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
-        oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-        oldBodyWeights = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-        oldCreateds = gymSets
-            .map(
-              (gymSet) =>
-                  DateFormat(settings.longDateFormat).format(gymSet.created),
-            )
-            .join(', ');
-        oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
-        oldMinutes =
-            gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
-        oldSeconds = gymSets
-            .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
-            .join(', ');
-        oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    repsController.dispose();
-    weightController.dispose();
-    bodyWeightController.dispose();
-    distanceController.dispose();
-    minutesController.dispose();
-    secondsController.dispose();
-    inclineController.dispose();
-
-    super.dispose();
-  }
-
-  Future<void> _save() async {
-    Navigator.pop(context);
-    final reps = double.tryParse(repsController.text);
-    final weight = double.tryParse(weightController.text);
-    final bodyWeight = double.tryParse(bodyWeightController.text);
-    final distance = double.tryParse(distanceController.text);
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
-    final incline = int.tryParse(inclineController.text);
-
-    final gymSet = GymSetsCompanion(
-      name: nameController.text != ''
-          ? Value(nameController.text)
-          : const Value.absent(),
-      unit: unit != null ? Value(unit!) : const Value.absent(),
-      created: created != null ? Value(created!) : const Value.absent(),
-      cardio: cardio != null ? Value(cardio!) : const Value.absent(),
-      restMs: restMs != null ? Value(restMs!) : const Value.absent(),
-      incline: incline != null ? Value(incline) : const Value.absent(),
-      reps: reps != null ? Value(reps) : const Value.absent(),
-      weight: weight != null ? Value(weight) : const Value.absent(),
-      bodyWeight: bodyWeight != null ? Value(bodyWeight) : const Value.absent(),
-      distance: distance != null ? Value(distance) : const Value.absent(),
-      duration: Value(duration),
-    );
-
-    (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(gymSet);
-  }
-
-  Future<void> _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: created,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate != null) {
-      selectTime(pickedDate);
-    }
-  }
-
-  Future<void> selectTime(DateTime pickedDate) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(created ?? DateTime.now()),
-    );
-
-    if (pickedTime != null) {
-      setState(() {
-        created = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -324,5 +218,111 @@ class _EditSetsPageState extends State<EditSetsPage> {
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    repsController.dispose();
+    weightController.dispose();
+    bodyWeightController.dispose();
+    distanceController.dispose();
+    minutesController.dispose();
+    secondsController.dispose();
+    inclineController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final settings = context.read<SettingsState>();
+
+    (db.gymSets.select()..where((u) => u.id.isIn(widget.ids)))
+        .get()
+        .then((gymSets) {
+      setState(() {
+        cardio = gymSets.first.cardio;
+        oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
+        oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
+        oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
+        oldBodyWeights = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+        oldCreateds = gymSets
+            .map(
+              (gymSet) =>
+                  DateFormat(settings.longDateFormat).format(gymSet.created),
+            )
+            .join(', ');
+        oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
+        oldMinutes =
+            gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
+        oldSeconds = gymSets
+            .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
+            .join(', ');
+        oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
+      });
+    });
+  }
+
+  Future<void> selectTime(DateTime pickedDate) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(created ?? DateTime.now()),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        created = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+      });
+    }
+  }
+
+  Future<void> _save() async {
+    Navigator.pop(context);
+    final reps = double.tryParse(repsController.text);
+    final weight = double.tryParse(weightController.text);
+    final bodyWeight = double.tryParse(bodyWeightController.text);
+    final distance = double.tryParse(distanceController.text);
+    final minutes = int.tryParse(minutesController.text);
+    final seconds = int.tryParse(secondsController.text);
+    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
+    final incline = int.tryParse(inclineController.text);
+
+    final gymSet = GymSetsCompanion(
+      name: nameController.text != ''
+          ? Value(nameController.text)
+          : const Value.absent(),
+      unit: unit != null ? Value(unit!) : const Value.absent(),
+      created: created != null ? Value(created!) : const Value.absent(),
+      cardio: cardio != null ? Value(cardio!) : const Value.absent(),
+      restMs: restMs != null ? Value(restMs!) : const Value.absent(),
+      incline: incline != null ? Value(incline) : const Value.absent(),
+      reps: reps != null ? Value(reps) : const Value.absent(),
+      weight: weight != null ? Value(weight) : const Value.absent(),
+      bodyWeight: bodyWeight != null ? Value(bodyWeight) : const Value.absent(),
+      distance: distance != null ? Value(distance) : const Value.absent(),
+      duration: Value(duration),
+    );
+
+    (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(gymSet);
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: created,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      selectTime(pickedDate);
+    }
   }
 }

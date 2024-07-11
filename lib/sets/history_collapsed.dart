@@ -9,6 +9,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class HistoryCollapsed extends StatefulWidget {
+  final List<HistoryDay> historyDays;
+
+  final Function(int) onSelect;
+  final Set<int> selected;
+  final Function onNext;
   const HistoryCollapsed({
     super.key,
     required this.historyDays,
@@ -17,11 +22,6 @@ class HistoryCollapsed extends StatefulWidget {
     required this.onNext,
   });
 
-  final List<HistoryDay> historyDays;
-  final Function(int) onSelect;
-  final Set<int> selected;
-  final Function onNext;
-
   @override
   State<HistoryCollapsed> createState() => _HistoryCollapsedState();
 }
@@ -29,35 +29,6 @@ class HistoryCollapsed extends StatefulWidget {
 class _HistoryCollapsedState extends State<HistoryCollapsed> {
   bool goingNext = false;
   final ScrollController scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    scrollController.addListener(scrollListener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    scrollController.removeListener(scrollListener);
-    scrollController.dispose();
-  }
-
-  void scrollListener() {
-    if (scrollController.position.pixels <
-            scrollController.position.maxScrollExtent - 200 ||
-        goingNext) return;
-    setState(() {
-      goingNext = true;
-    });
-    try {
-      widget.onNext();
-    } finally {
-      setState(() {
-        goingNext = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +57,13 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.removeListener(scrollListener);
+    scrollController.dispose();
   }
 
   List<Widget> historyChildren(
@@ -155,5 +133,27 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
         ).toList(),
       ),
     ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
+  void scrollListener() {
+    if (scrollController.position.pixels <
+            scrollController.position.maxScrollExtent - 200 ||
+        goingNext) return;
+    setState(() {
+      goingNext = true;
+    });
+    try {
+      widget.onNext();
+    } finally {
+      setState(() {
+        goingNext = false;
+      });
+    }
   }
 }

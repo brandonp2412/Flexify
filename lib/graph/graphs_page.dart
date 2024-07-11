@@ -31,6 +31,9 @@ class GraphsPageState extends State<GraphsPage>
   String search = '';
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return NavigatorPopHandler(
@@ -192,7 +195,4 @@ class GraphsPageState extends State<GraphsPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -1,22 +1,3 @@
-enum PlanTrailing { reorder, ratio, count, percent, none }
-
-enum Period {
-  day,
-  week,
-  month,
-  year,
-}
-
-enum CardioMetric { pace, distance, duration }
-
-enum StrengthMetric {
-  oneRepMax,
-  volume,
-  bestWeight,
-  relativeStrength,
-  bestReps,
-}
-
 const weekdays = [
   'Monday',
   'Tuesday',
@@ -26,3 +7,22 @@ const weekdays = [
   'Saturday',
   'Sunday',
 ];
+
+enum CardioMetric { pace, distance, duration }
+
+enum Period {
+  day,
+  week,
+  month,
+  year,
+}
+
+enum PlanTrailing { reorder, ratio, count, percent, none }
+
+enum StrengthMetric {
+  oneRepMax,
+  volume,
+  bestWeight,
+  relativeStrength,
+  bestReps,
+}

@@ -20,12 +20,27 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'database.g.dart';
 
+LazyDatabase openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'flexify.sqlite'));
+
+    if (Platform.isAndroid) {
+      await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
+    }
+
+    final cachebase = (await getTemporaryDirectory()).path;
+    sqlite3.tempDirectory = cachebase;
+    return NativeDatabase.createInBackground(
+      file,
+      logStatements: kDebugMode ? true : false,
+    );
+  });
+}
+
 @DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises])
 class AppDatabase extends _$AppDatabase {
   AppDatabase({QueryExecutor? executor}) : super(executor ?? openConnection());
-
-  @override
-  int get schemaVersion => 19;
 
   @override
   MigrationStrategy get migration {
@@ -297,22 +312,7 @@ class AppDatabase extends _$AppDatabase {
       ),
     );
   }
-}
 
-LazyDatabase openConnection() {
-  return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'flexify.sqlite'));
-
-    if (Platform.isAndroid) {
-      await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
-    }
-
-    final cachebase = (await getTemporaryDirectory()).path;
-    sqlite3.tempDirectory = cachebase;
-    return NativeDatabase.createInBackground(
-      file,
-      logStatements: kDebugMode ? true : false,
-    );
-  });
+  @override
+  int get schemaVersion => 19;
 }

@@ -12,6 +12,12 @@ class PlanState extends ChangeNotifier {
     updatePlans(null);
   }
 
+  Future<List<Plan>> getPlans() async => await (db.select(db.plans)
+        ..orderBy([
+          (u) => OrderingTerm(expression: u.sequence),
+        ]))
+      .get();
+
   Future<void> updatePlans(List<Plan>? newPlans) async {
     if (newPlans != null)
       plans = newPlans;
@@ -19,10 +25,4 @@ class PlanState extends ChangeNotifier {
       plans = await getPlans();
     notifyListeners();
   }
-
-  Future<List<Plan>> getPlans() async => await (db.select(db.plans)
-        ..orderBy([
-          (u) => OrderingTerm(expression: u.sequence),
-        ]))
-      .get();
 }

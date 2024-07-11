@@ -22,28 +22,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
   late String unit = settings.strengthUnit;
 
   @override
-  void dispose() {
-    nameController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _save(String unit) async {
-    await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        created: DateTime.now().toLocal(),
-        reps: 0,
-        weight: 0,
-        name: nameController.text,
-        unit: unit,
-        cardio: Value(cardio),
-        hidden: const Value(true),
-      ),
-    );
-
-    if (mounted) Navigator.pop(context);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -101,5 +79,27 @@ class _AddExercisePageState extends State<AddExercisePage> {
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save(String unit) async {
+    await db.gymSets.insertOne(
+      GymSetsCompanion.insert(
+        created: DateTime.now().toLocal(),
+        reps: 0,
+        weight: 0,
+        name: nameController.text,
+        unit: unit,
+        cardio: Value(cardio),
+        hidden: const Value(true),
+      ),
+    );
+
+    if (mounted) Navigator.pop(context);
   }
 }

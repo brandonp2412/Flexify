@@ -21,6 +21,59 @@ class ImportData extends StatelessWidget {
     required this.pageContext,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.insights),
+                  title: const Text('Graphs'),
+                  onTap: () => importGraphs(context),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.event),
+                  title: const Text('Plans'),
+                  onTap: () => importPlans(context),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.storage),
+                  title: const Text('Database'),
+                  onTap: () => importDatabase(context),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      icon: const Icon(Icons.upload),
+      label: const Text('Import data'),
+    );
+  }
+
+  importDatabase(BuildContext context) async {
+    Navigator.pop(context);
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    File sourceFile = File(result.files.single.path!);
+    final dbFolder = await getApplicationDocumentsDirectory();
+    await db.close();
+    await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
+    db = AppDatabase();
+    await (db.settings.update())
+        .write(const SettingsCompanion(alarmSound: Value('')));
+    if (!pageContext.mounted) return;
+    final settingsState = pageContext.read<SettingsState>();
+    await settingsState.init();
+    if (!pageContext.mounted) return;
+    Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
+  }
+
   importGraphs(BuildContext context) async {
     Navigator.pop(context);
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -104,25 +157,6 @@ class ImportData extends StatelessWidget {
     Navigator.pop(pageContext);
   }
 
-  importDatabase(BuildContext context) async {
-    Navigator.pop(context);
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
-
-    File sourceFile = File(result.files.single.path!);
-    final dbFolder = await getApplicationDocumentsDirectory();
-    await db.close();
-    await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
-    db = AppDatabase();
-    await (db.settings.update())
-        .write(const SettingsCompanion(alarmSound: Value('')));
-    if (!pageContext.mounted) return;
-    final settingsState = pageContext.read<SettingsState>();
-    await settingsState.init();
-    if (!pageContext.mounted) return;
-    Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
-  }
-
   importPlans(BuildContext context) async {
     Navigator.pop(context);
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -152,39 +186,5 @@ class ImportData extends StatelessWidget {
     if (!pageContext.mounted) return;
     pageContext.read<PlanState>().updatePlans(null);
     Navigator.pop(pageContext);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: const Icon(Icons.insights),
-                  title: const Text('Graphs'),
-                  onTap: () => importGraphs(context),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.event),
-                  title: const Text('Plans'),
-                  onTap: () => importPlans(context),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.storage),
-                  title: const Text('Database'),
-                  onTap: () => importDatabase(context),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      icon: const Icon(Icons.upload),
-      label: const Text('Import data'),
-    );
   }
 }

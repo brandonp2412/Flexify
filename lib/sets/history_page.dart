@@ -14,6 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+class HistoryDay {
+  final String name;
+  final List<GymSet> gymSets;
+  final DateTime day;
+
+  HistoryDay({required this.name, required this.gymSets, required this.day});
+}
+
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
@@ -24,6 +32,9 @@ class HistoryPage extends StatefulWidget {
 class HistoryPageState extends State<HistoryPage>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +56,6 @@ class HistoryPageState extends State<HistoryPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class _HistoryPageWidget extends StatefulWidget {
@@ -57,14 +65,6 @@ class _HistoryPageWidget extends StatefulWidget {
 
   @override
   createState() => _HistoryPageWidgetState();
-}
-
-class HistoryDay {
-  final String name;
-  final List<GymSet> gymSets;
-  final DateTime day;
-
-  HistoryDay({required this.name, required this.gymSets, required this.day});
 }
 
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
@@ -80,90 +80,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   int limit = 100;
   DateTime? startDate;
   DateTime? endDate;
-
-  @override
-  void initState() {
-    super.initState();
-    setStream();
-  }
-
-  void setStream() {
-    var query = (db.gymSets.select()
-      ..orderBy(
-        [
-          (u) => OrderingTerm(
-                expression: u.created,
-                mode: OrderingMode.desc,
-              ),
-        ],
-      )
-      ..where((tbl) => tbl.name.contains(search.toLowerCase()))
-      ..where((tbl) => tbl.hidden.equals(false))
-      ..limit(limit));
-
-    if (startDate != null)
-      query = query
-        ..where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));
-    if (endDate != null)
-      query = query
-        ..where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
-    if (repsGtController.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.reps.isBiggerThanValue(
-                double.tryParse(repsGtController.text) ?? 0,
-              ) &
-              tbl.cardio.equals(false),
-        );
-    if (repsLtController.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.reps.isSmallerThanValue(
-                double.tryParse(repsLtController.text) ?? 0,
-              ) &
-              tbl.cardio.equals(false),
-        );
-    if (weightGtController.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.weight.isBiggerThanValue(
-                double.tryParse(weightGtController.text) ?? 0,
-              ) &
-              tbl.cardio.equals(false),
-        );
-    if (weightLtController.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.weight.isSmallerThanValue(
-                double.tryParse(weightLtController.text) ?? 0,
-              ) &
-              tbl.cardio.equals(false),
-        );
-
-    setState(() {
-      stream = query.watch();
-    });
-  }
-
-  List<HistoryDay> getHistoryDays(List<GymSet> gymSets) {
-    List<HistoryDay> historyDays = [];
-    for (final gymSet in gymSets) {
-      final day = DateUtils.dateOnly(gymSet.created);
-      final index = historyDays
-          .indexWhere((hd) => isSameDay(hd.day, day) && hd.name == gymSet.name);
-      if (index == -1)
-        historyDays.add(
-          HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day),
-        );
-      else
-        historyDays[index].gymSets.add(gymSet);
-    }
-    return historyDays;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -359,5 +275,89 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  List<HistoryDay> getHistoryDays(List<GymSet> gymSets) {
+    List<HistoryDay> historyDays = [];
+    for (final gymSet in gymSets) {
+      final day = DateUtils.dateOnly(gymSet.created);
+      final index = historyDays
+          .indexWhere((hd) => isSameDay(hd.day, day) && hd.name == gymSet.name);
+      if (index == -1)
+        historyDays.add(
+          HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day),
+        );
+      else
+        historyDays[index].gymSets.add(gymSet);
+    }
+    return historyDays;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setStream();
+  }
+
+  void setStream() {
+    var query = (db.gymSets.select()
+      ..orderBy(
+        [
+          (u) => OrderingTerm(
+                expression: u.created,
+                mode: OrderingMode.desc,
+              ),
+        ],
+      )
+      ..where((tbl) => tbl.name.contains(search.toLowerCase()))
+      ..where((tbl) => tbl.hidden.equals(false))
+      ..limit(limit));
+
+    if (startDate != null)
+      query = query
+        ..where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));
+    if (endDate != null)
+      query = query
+        ..where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
+    if (repsGtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.reps.isBiggerThanValue(
+                double.tryParse(repsGtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+    if (repsLtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.reps.isSmallerThanValue(
+                double.tryParse(repsLtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+    if (weightGtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.weight.isBiggerThanValue(
+                double.tryParse(weightGtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+    if (weightLtController.text.isNotEmpty)
+      query = query
+        ..where(
+          (tbl) =>
+              tbl.weight.isSmallerThanValue(
+                double.tryParse(weightLtController.text) ?? 0,
+              ) &
+              tbl.cardio.equals(false),
+        );
+
+    setState(() {
+      stream = query.watch();
+    });
   }
 }
