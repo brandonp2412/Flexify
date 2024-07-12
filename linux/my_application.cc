@@ -6,12 +6,10 @@
 #endif
 
 #include "flutter/generated_plugin_registrant.h"
-#include "flexify_native_impl.h"
 
 struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
-  FlMethodChannel* timer_channel;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
@@ -61,13 +59,6 @@ static void my_application_activate(GApplication* application) {
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
-  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
-  self->timer_channel = fl_method_channel_new(
-            fl_engine_get_binary_messenger(fl_view_get_engine(view)),
-            "com.presley.flexify/timer", FL_METHOD_CODEC(codec));
-  fl_method_channel_set_method_call_handler(self->timer_channel, flexify::platform_specific::timer_method_call_handler, self, nullptr);
-  flexify::platform_specific::initLinux(self->timer_channel);
-
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
 
@@ -94,7 +85,6 @@ static gboolean my_application_local_command_line(GApplication* application, gch
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
-  g_clear_object(&self->timer_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 

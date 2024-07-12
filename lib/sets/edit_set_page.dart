@@ -382,7 +382,7 @@ class _EditSetPageState extends State<EditSetPage> {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
       db.into(db.gymSets).insert(insert);
       final settings = context.read<SettingsState>();
-      if (!settings.restTimers || !platformSupportsTimer()) return;
+      if (!settings.restTimers) return;
       final timer = context.read<TimerState>();
       if (restMs != null)
         timer.startTimer(

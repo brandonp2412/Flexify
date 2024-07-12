@@ -1,9 +1,16 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class TimerState extends ChangeNotifier {
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
+  Timer? next;
+  final player = AudioPlayer();
 
   TimerState() {
     timerChannel.setMethodCallHandler((call) async {
@@ -33,7 +40,17 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
-    await timerChannel.invokeMethod('add', args);
+    if (platformIsDesktop()) {
+      next?.cancel();
+      next = Timer(const Duration(minutes: 1), () => notify(null, alarmSound));
+    } else
+      return timerChannel.invokeMethod('add', args);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    next?.cancel();
   }
 
   Future<void> startTimer(
@@ -56,12 +73,37 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
-    await timerChannel.invokeMethod('timer', args);
+    if (platformIsDesktop()) {
+      next?.cancel();
+      next = Timer(rest, () => notify(title, alarmSound));
+    } else
+      await timerChannel.invokeMethod('timer', args);
   }
+
+  notify(String? title, String? alarmSound) async {
+    player.play(
+      alarmSound != null
+          ? DeviceFileSource(alarmSound)
+          : AssetSource('argon.mp3'),
+    );
+    const settings =
+        LinuxInitializationSettings(defaultActionName: 'Open notification');
+    const initSettings = InitializationSettings(
+      linux: settings,
+    );
+    final plugin = FlutterLocalNotificationsPlugin();
+    await plugin.initialize(initSettings);
+    await plugin.show(1, title ?? "Timer up", null, null);
+  }
+
+  playSound() async {}
 
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
-    await timerChannel.invokeMethod('stop');
+    if (platformIsDesktop())
+      player.stop();
+    else
+      timerChannel.invokeMethod('stop');
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {

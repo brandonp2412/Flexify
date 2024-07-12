@@ -44,8 +44,6 @@ DateTime parseDate(String dateString) {
 bool platformIsDesktop() =>
     Platform.isLinux || Platform.isWindows || Platform.isMacOS;
 
-bool platformSupportsTimer() => Platform.isAndroid || Platform.isLinux;
-
 Future<bool> requestNotificationPermission() async {
   if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
     return true;

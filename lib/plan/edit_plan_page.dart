@@ -24,7 +24,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> daySwitches;
   late List<String> exerciseSelections;
 
-  bool showSearch = false;
+  bool showOff = true;
   String search = '';
   List<String> exercises = [];
   List<TextEditingController> controllers = [];
@@ -35,7 +35,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Iterable<Widget> get tiles => exercises
       .where(
-        (exercise) => exercise.toLowerCase().contains(search.toLowerCase()),
+        (exercise) {
+          if (showOff)
+            return exercise.toLowerCase().contains(search.toLowerCase());
+          if (exerciseSelections.contains(exercise))
+            return exercise.toLowerCase().contains(search.toLowerCase());
+          return false;
+        },
       )
       .toList()
       .asMap()
@@ -60,31 +66,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> actions = [];
-
-    if (search == '')
-      actions.add(
-        IconButton(
-          onPressed: toggleSearch,
-          icon: const Icon(Icons.search),
-          tooltip: "Search",
-        ),
-      );
-    else
-      actions.add(
-        IconButton(
-          onPressed: () {
-            searchController.clear();
-            searchNode.unfocus();
-            setState(() {
-              search = '';
-              showSearch = false;
-            });
-          },
-          icon: const Icon(Icons.clear),
-        ),
-      );
-
     var title = widget.plan.days.value.replaceAll(",", ", ");
     if (title.isNotEmpty)
       title = title[0].toUpperCase() + title.substring(1).toLowerCase();
@@ -93,71 +74,72 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: showSearch
-            ? TextField(
-                focusNode: searchNode,
-                controller: searchController,
-                textCapitalization: TextCapitalization.sentences,
-                onChanged: (value) => setState(() {
-                  search = value;
-                }),
-                decoration: const InputDecoration(
-                  hintText: "Search...",
-                  border: InputBorder.none,
-                ),
-              )
-            : Text(title),
-        actions: actions,
+        title: Text(title),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
-            if (search == '') ...[
-              TextField(
-                decoration: const material.InputDecoration(
-                  labelText: 'Title (optional)',
-                ),
-                controller: titleController,
-                textCapitalization: TextCapitalization.sentences,
+            TextField(
+              decoration: const material.InputDecoration(
+                labelText: 'Title (optional)',
               ),
-              const SizedBox(
-                height: 16.0,
+              controller: titleController,
+              textCapitalization: TextCapitalization.sentences,
+            ),
+            const SizedBox(
+              height: 16.0,
+            ),
+            Text('Days', style: Theme.of(context).textTheme.headlineSmall),
+            ...List.generate(
+              7,
+              (index) => SwitchListTile(
+                title: Text(weekdays[index]),
+                value: daySwitches[index],
+                onChanged: (value) {
+                  setState(() {
+                    daySwitches[index] = value;
+                  });
+                },
               ),
-              Text('Days', style: Theme.of(context).textTheme.headlineSmall),
-              ...List.generate(
-                7,
-                (index) => SwitchListTile(
-                  title: Text(weekdays[index]),
-                  value: daySwitches[index],
-                  onChanged: (value) {
-                    setState(() {
-                      daySwitches[index] = value;
-                    });
-                  },
+            ),
+            material.Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SearchBar(
+                leading: const material.Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.search),
                 ),
+                hintText: 'Search exercises...',
+                trailing: [
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () async {
+                      await Navigator.of(context).push(
+                        material.MaterialPageRoute(
+                          builder: (context) => const AddExercisePage(),
+                        ),
+                      );
+                      setExercises();
+                    },
+                    tooltip: 'Add exercise',
+                  ),
+                  IconButton(
+                    icon: showOff
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        showOff = !showOff;
+                      });
+                    },
+                    tooltip: 'Toggle visibility',
+                  ),
+                ],
+                onChanged: (value) => setState(() {
+                  search = value;
+                }),
               ),
-            ],
-            material.Row(
-              children: [
-                Text(
-                  'Exercises',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () async {
-                    await Navigator.of(context).push(
-                      material.MaterialPageRoute(
-                        builder: (context) => const AddExercisePage(),
-                      ),
-                    );
-                    setExercises();
-                  },
-                  tooltip: 'Add exercise',
-                ),
-              ],
             ),
             const SizedBox(height: 16),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
@@ -184,6 +166,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
+    if (widget.plan.id.present) showOff = false;
     setExercises();
     titleController.text = widget.plan.title.value ?? "";
 
@@ -232,15 +215,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
             }
           }),
         );
-  }
-
-  void toggleSearch() {
-    setState(() {
-      showSearch = !showSearch;
-      if (!showSearch) search = '';
-    });
-    searchNode.requestFocus();
-    searchController.clear();
   }
 
   Future<void> _save() async {

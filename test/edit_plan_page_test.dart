@@ -72,14 +72,9 @@ void main() async {
       ),
     );
 
-    expect(find.textContaining("Title"), findsOne);
-
-    await tester.tap(find.byTooltip('Search'));
+    await tester.enterText(find.byType(SearchBar), 'Squat');
     await tester.pumpAndSettle();
-    await tester.enterText(find.bySemanticsLabel('Search...'), "Bench press");
-    await tester.pumpAndSettle();
-
-    expect(find.text('Bench press'), findsOne);
+    expect(find.text('Squat'), findsOne);
     expect(find.text('Dumbbell shoulder press'), findsNothing);
 
     await db.close();

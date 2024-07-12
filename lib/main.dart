@@ -8,7 +8,6 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +89,7 @@ class HomePage extends StatelessWidget {
     final hideTimerTab =
         context.select<SettingsState, bool>((value) => value.hideTimerTab);
     var length = 4;
-    if (hideTimerTab || !platformSupportsTimer()) length--;
+    if (hideTimerTab) length--;
     if (hideHistoryTab) length--;
 
     return SafeArea(
@@ -103,7 +102,7 @@ class HomePage extends StatelessWidget {
               if (!hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!hideTimerTab && platformSupportsTimer()) const TimerPage(),
+              if (!hideTimerTab) const TimerPage(),
             ],
           ),
           bottomNavigationBar: TabBar(
@@ -121,7 +120,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.insights),
                 text: "Graphs",
               ),
-              if (!hideTimerTab && platformSupportsTimer())
+              if (!hideTimerTab)
                 const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",
