@@ -292,7 +292,7 @@ class AppDatabase extends _$AppDatabase {
               final gymSet = gymSets[index];
               pe.add(
                 RawValuesInsertable({
-                  'plan_id': plan.read('id'),
+                  'plan_id': Variable(plan.read<int>('id')),
                   'exercise': Variable(exercise),
                   'enabled': const Variable(true),
                   'max_sets': Variable(gymSet.read(maxSets)),
