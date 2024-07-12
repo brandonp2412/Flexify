@@ -60,6 +60,7 @@ void main() async {
 
   testWidgets('PlansPage tap tile', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -84,6 +85,7 @@ void main() async {
 
   testWidgets('PlansPage settings', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -112,6 +114,7 @@ void main() async {
 
   testWidgets('PlansPage selects', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -136,6 +139,7 @@ void main() async {
 
   testWidgets('PlansPage deletes', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [

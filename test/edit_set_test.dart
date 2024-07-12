@@ -57,6 +57,7 @@ void main() async {
 
   testWidgets('EditGymSet updates', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
