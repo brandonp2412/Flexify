@@ -8,7 +8,6 @@ import 'package:flexify/settings/settings_formats.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/settings_timer.dart';
 import 'package:flexify/settings/settings_workout.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
