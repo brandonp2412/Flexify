@@ -1365,10 +1365,10 @@ final class Schema19 extends i0.VersionedSchema {
         isStrict: false,
         tableConstraints: [],
         columns: [
+          _column_2,
+          _column_1,
           _column_0,
           _column_8,
-          _column_1,
-          _column_2,
           _column_9,
         ],
         attachedDatabase: database,
@@ -1381,21 +1381,21 @@ final class Schema19 extends i0.VersionedSchema {
         isStrict: false,
         tableConstraints: [],
         columns: [
-          _column_0,
-          _column_3,
-          _column_4,
-          _column_5,
-          _column_6,
-          _column_7,
-          _column_10,
           _column_11,
-          _column_12,
-          _column_13,
           _column_14,
-          _column_18,
-          _column_17,
-          _column_39,
+          _column_7,
+          _column_13,
+          _column_12,
+          _column_10,
+          _column_0,
           _column_43,
+          _column_17,
+          _column_3,
+          _column_39,
+          _column_4,
+          _column_18,
+          _column_6,
+          _column_5,
         ],
         attachedDatabase: database,
       ),
@@ -1407,27 +1407,27 @@ final class Schema19 extends i0.VersionedSchema {
         isStrict: false,
         tableConstraints: [],
         columns: [
-          _column_0,
-          _column_20,
-          _column_21,
-          _column_22,
-          _column_23,
           _column_36,
           _column_37,
-          _column_38,
-          _column_24,
-          _column_25,
-          _column_26,
-          _column_27,
-          _column_28,
-          _column_44,
-          _column_29,
-          _column_30,
-          _column_31,
-          _column_32,
           _column_33,
-          _column_34,
+          _column_30,
           _column_35,
+          _column_32,
+          _column_31,
+          _column_34,
+          _column_0,
+          _column_22,
+          _column_25,
+          _column_21,
+          _column_27,
+          _column_23,
+          _column_44,
+          _column_28,
+          _column_38,
+          _column_29,
+          _column_20,
+          _column_24,
+          _column_26,
         ],
         attachedDatabase: database,
       ),
@@ -1439,11 +1439,11 @@ final class Schema19 extends i0.VersionedSchema {
         isStrict: false,
         tableConstraints: [],
         columns: [
-          _column_0,
-          _column_40,
-          _column_41,
           _column_42,
+          _column_41,
+          _column_0,
           _column_19,
+          _column_40,
         ],
         attachedDatabase: database,
       ),
@@ -1452,36 +1452,36 @@ final class Schema19 extends i0.VersionedSchema {
 
 class Shape13 extends i0.VersionedTable {
   Shape13({required super.source, required super.alias}) : super.aliased();
-  i1.GeneratedColumn<int> get id =>
-      columnsByName['id']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<String> get name =>
-      columnsByName['name']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<double> get reps =>
-      columnsByName['reps']! as i1.GeneratedColumn<double>;
-  i1.GeneratedColumn<double> get weight =>
-      columnsByName['weight']! as i1.GeneratedColumn<double>;
-  i1.GeneratedColumn<String> get unit =>
-      columnsByName['unit']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<DateTime> get created =>
-      columnsByName['created']! as i1.GeneratedColumn<DateTime>;
-  i1.GeneratedColumn<bool> get hidden =>
-      columnsByName['hidden']! as i1.GeneratedColumn<bool>;
   i1.GeneratedColumn<double> get bodyWeight =>
       columnsByName['body_weight']! as i1.GeneratedColumn<double>;
-  i1.GeneratedColumn<double> get duration =>
-      columnsByName['duration']! as i1.GeneratedColumn<double>;
-  i1.GeneratedColumn<double> get distance =>
-      columnsByName['distance']! as i1.GeneratedColumn<double>;
   i1.GeneratedColumn<bool> get cardio =>
       columnsByName['cardio']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<int> get restMs =>
-      columnsByName['rest_ms']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<int> get incline =>
-      columnsByName['incline']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<int> get planId =>
-      columnsByName['plan_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<DateTime> get created =>
+      columnsByName['created']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<double> get distance =>
+      columnsByName['distance']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<double> get duration =>
+      columnsByName['duration']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<bool> get hidden =>
+      columnsByName['hidden']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
   i1.GeneratedColumn<String> get image =>
       columnsByName['image']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get incline =>
+      columnsByName['incline']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get planId =>
+      columnsByName['plan_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<double> get reps =>
+      columnsByName['reps']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<int> get restMs =>
+      columnsByName['rest_ms']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get unit =>
+      columnsByName['unit']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get weight =>
+      columnsByName['weight']! as i1.GeneratedColumn<double>;
 }
 
 i1.GeneratedColumn<String> _column_43(String aliasedName) =>
@@ -1490,48 +1490,48 @@ i1.GeneratedColumn<String> _column_43(String aliasedName) =>
 
 class Shape14 extends i0.VersionedTable {
   Shape14({required super.source, required super.alias}) : super.aliased();
-  i1.GeneratedColumn<int> get id =>
-      columnsByName['id']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<String> get themeMode =>
-      columnsByName['theme_mode']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<String> get planTrailing =>
-      columnsByName['plan_trailing']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<String> get longDateFormat =>
-      columnsByName['long_date_format']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<String> get shortDateFormat =>
-      columnsByName['short_date_format']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<String> get alarmSound =>
       columnsByName['alarm_sound']! as i1.GeneratedColumn<String>;
   i1.GeneratedColumn<String> get cardioUnit =>
       columnsByName['cardio_unit']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<String> get strengthUnit =>
-      columnsByName['strength_unit']! as i1.GeneratedColumn<String>;
-  i1.GeneratedColumn<int> get timerDuration =>
-      columnsByName['timer_duration']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<int> get maxSets =>
-      columnsByName['max_sets']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<bool> get vibrate =>
-      columnsByName['vibrate']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get restTimers =>
-      columnsByName['rest_timers']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get showUnits =>
-      columnsByName['show_units']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get showImages =>
-      columnsByName['show_images']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get systemColors =>
-      columnsByName['system_colors']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get explainedPermissions =>
-      columnsByName['explained_permissions']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get hideTimerTab =>
-      columnsByName['hide_timer_tab']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get hideHistoryTab =>
-      columnsByName['hide_history_tab']! as i1.GeneratedColumn<bool>;
   i1.GeneratedColumn<bool> get curveLines =>
       columnsByName['curve_lines']! as i1.GeneratedColumn<bool>;
-  i1.GeneratedColumn<bool> get hideWeight =>
-      columnsByName['hide_weight']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get explainedPermissions =>
+      columnsByName['explained_permissions']! as i1.GeneratedColumn<bool>;
   i1.GeneratedColumn<bool> get groupHistory =>
       columnsByName['group_history']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get hideHistoryTab =>
+      columnsByName['hide_history_tab']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get hideTimerTab =>
+      columnsByName['hide_timer_tab']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get hideWeight =>
+      columnsByName['hide_weight']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get longDateFormat =>
+      columnsByName['long_date_format']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get maxSets =>
+      columnsByName['max_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get planTrailing =>
+      columnsByName['plan_trailing']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get restTimers =>
+      columnsByName['rest_timers']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get shortDateFormat =>
+      columnsByName['short_date_format']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get showImages =>
+      columnsByName['show_images']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get showUnits =>
+      columnsByName['show_units']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get strengthUnit =>
+      columnsByName['strength_unit']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get systemColors =>
+      columnsByName['system_colors']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get themeMode =>
+      columnsByName['theme_mode']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get timerDuration =>
+      columnsByName['timer_duration']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get vibrate =>
+      columnsByName['vibrate']! as i1.GeneratedColumn<bool>;
 }
 
 i1.GeneratedColumn<bool> _column_44(String aliasedName) =>
