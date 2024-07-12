@@ -48,6 +48,7 @@ class TimerProgressIndicator extends StatelessWidget {
         final duration = timerState.nativeTimer.getDuration();
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
+        print('remaining=$remaining');
 
         return Visibility(
           visible: duration > Duration.zero,
