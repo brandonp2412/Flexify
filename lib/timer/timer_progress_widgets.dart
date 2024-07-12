@@ -15,7 +15,7 @@ class TimerCircularProgressIndicator extends StatelessWidget {
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
 
-        return duration > Duration.zero
+        return duration > Duration.zero && remaining > Duration.zero
             ? TweenAnimationBuilder(
                 key: UniqueKey(),
                 tween: Tween<double>(
@@ -48,10 +48,9 @@ class TimerProgressIndicator extends StatelessWidget {
         final duration = timerState.nativeTimer.getDuration();
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
-        print('remaining=$remaining');
 
         return Visibility(
-          visible: duration > Duration.zero,
+          visible: duration > Duration.zero && remaining > Duration.zero,
           child: TweenAnimationBuilder(
             key: UniqueKey(),
             tween: Tween<double>(

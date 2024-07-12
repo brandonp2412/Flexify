@@ -280,8 +280,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final settings = context.read<SettingsState>();
     if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
-    if (platformSupportsTimer() &&
-        !settings.explainedPermissions &&
+    if (!settings.explainedPermissions &&
         settings.restTimers &&
         mounted &&
         !platformIsDesktop())
@@ -321,7 +320,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
       planId: drift.Value(widget.plan.id),
     );
 
-    if (settings.restTimers && platformSupportsTimer()) {
+    if (settings.restTimers) {
       final countIndex =
           counts.indexWhere((element) => element.name == exercise);
       var count = 0;

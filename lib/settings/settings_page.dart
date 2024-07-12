@@ -135,16 +135,15 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                         ),
-                        if (platformSupportsTimer())
-                          ListTile(
-                            leading: const Icon(Icons.timer),
-                            title: const Text("Timers"),
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const SettingsTimer(),
-                              ),
+                        ListTile(
+                          leading: const Icon(Icons.timer),
+                          title: const Text("Timers"),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsTimer(),
                             ),
                           ),
+                        ),
                         ListTile(
                           leading: const Icon(Icons.storage),
                           title: const Text("Data management"),
@@ -184,6 +183,6 @@ class _SettingsPageState extends State<SettingsPage> {
     secondsController = TextEditingController(
       text: (settings.timerDuration.inSeconds % 60).toString(),
     );
-    if (platformSupportsTimer()) player = AudioPlayer();
+    player = AudioPlayer();
   }
 }

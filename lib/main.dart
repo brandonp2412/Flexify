@@ -90,7 +90,7 @@ class HomePage extends StatelessWidget {
     final hideTimerTab =
         context.select<SettingsState, bool>((value) => value.hideTimerTab);
     var length = 4;
-    if (hideTimerTab || !platformSupportsTimer()) length--;
+    if (hideTimerTab) length--;
     if (hideHistoryTab) length--;
 
     return SafeArea(
@@ -103,7 +103,7 @@ class HomePage extends StatelessWidget {
               if (!hideHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!hideTimerTab && platformSupportsTimer()) const TimerPage(),
+              if (!hideTimerTab) const TimerPage(),
             ],
           ),
           bottomNavigationBar: TabBar(
@@ -121,7 +121,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.insights),
                 text: "Graphs",
               ),
-              if (!hideTimerTab && platformSupportsTimer())
+              if (!hideTimerTab)
                 const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",
