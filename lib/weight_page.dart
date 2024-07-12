@@ -22,26 +22,6 @@ class _WeightPageState extends State<WeightPage> {
   String testingUnusedField = "This is never used.";
 
   @override
-  void initState() {
-    super.initState();
-    final settings = context.read<SettingsState>();
-
-    getBodyWeight().then(
-      (value) => setState(() {
-        yesterdaysWeight =
-            "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
-        unit = value?.unit;
-      }),
-    );
-  }
-
-  @override
-  void dispose() {
-    valueController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Enter Weight')),
@@ -102,6 +82,26 @@ class _WeightPageState extends State<WeightPage> {
         tooltip: "Save today's weight",
         child: const Icon(Icons.save),
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    valueController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final settings = context.read<SettingsState>();
+
+    getBodyWeight().then(
+      (value) => setState(() {
+        yesterdaysWeight =
+            "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
+        unit = value?.unit;
+      }),
     );
   }
 }

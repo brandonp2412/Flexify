@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 
 class UnitSelector extends StatelessWidget {
+  final String value;
+
+  final bool cardio;
+  final Function(String?) onChanged;
   const UnitSelector({
     super.key,
     required this.value,
     required this.cardio,
     required this.onChanged,
   });
-
-  final String value;
-  final bool cardio;
-  final Function(String?) onChanged;
-
-  void onTap() {
-    if (value == 'kg')
-      onChanged('lb');
-    else if (value == 'km')
-      onChanged('mi');
-    else if (value == 'lb')
-      onChanged('kg');
-    else if (value == 'mi') onChanged('km');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,5 +30,15 @@ class UnitSelector extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void onTap() {
+    if (value == 'kg')
+      onChanged('lb');
+    else if (value == 'km')
+      onChanged('mi');
+    else if (value == 'lb')
+      onChanged('kg');
+    else if (value == 'mi') onChanged('km');
   }
 }

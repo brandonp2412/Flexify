@@ -21,6 +21,9 @@ class PlansPageState extends State<PlansPage>
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return NavigatorPopHandler(
@@ -40,9 +43,6 @@ class PlansPageState extends State<PlansPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class _PlansPageWidget extends StatefulWidget {
@@ -58,11 +58,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   PlanState? planState;
   final Set<int> selected = {};
   String search = '';
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,5 +166,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

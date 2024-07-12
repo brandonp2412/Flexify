@@ -318,15 +318,6 @@ class _EditSetPageState extends State<EditSetPage> {
     );
   }
 
-  void pick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result?.files.single == null) return;
-
-    setState(() {
-      image = result?.files.single.path;
-    });
-  }
-
   @override
   void dispose() {
     repsController.dispose();
@@ -354,42 +345,12 @@ class _EditSetPageState extends State<EditSetPage> {
     });
   }
 
-  Future<void> selectTime(DateTime pickedDate) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(created),
-    );
-
-    if (pickedTime != null) {
-      setState(() {
-        created = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-      });
-    }
-  }
-
-  void updateFields(GymSet gymSet) {
-    nameController?.text = gymSet.name;
+  void pick() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result?.files.single == null) return;
 
     setState(() {
-      image = gymSet.image;
-      name = gymSet.name;
-      repsController.text = toString(gymSet.reps);
-      weightController.text = toString(gymSet.weight);
-      bodyWeightController.text = toString(gymSet.bodyWeight);
-      minutesController.text = gymSet.duration.floor().toString();
-      secondsController.text = ((gymSet.duration * 60) % 60).floor().toString();
-      distanceController.text = toString(gymSet.distance);
-      unit = gymSet.unit;
-      created = gymSet.created;
-      cardio = gymSet.cardio;
-      restMs = gymSet.restMs;
-      inclineController.text = gymSet.incline?.toString() ?? "";
+      image = result?.files.single.path;
     });
   }
 
@@ -441,6 +402,45 @@ class _EditSetPageState extends State<EditSetPage> {
     if (image != null)
       (db.update(db.gymSets)..where((u) => u.name.equals(name)))
           .write(GymSetsCompanion(image: Value(image)));
+  }
+
+  Future<void> selectTime(DateTime pickedDate) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(created),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        created = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+      });
+    }
+  }
+
+  void updateFields(GymSet gymSet) {
+    nameController?.text = gymSet.name;
+
+    setState(() {
+      image = gymSet.image;
+      name = gymSet.name;
+      repsController.text = toString(gymSet.reps);
+      weightController.text = toString(gymSet.weight);
+      bodyWeightController.text = toString(gymSet.bodyWeight);
+      minutesController.text = gymSet.duration.floor().toString();
+      secondsController.text = ((gymSet.duration * 60) % 60).floor().toString();
+      distanceController.text = toString(gymSet.distance);
+      unit = gymSet.unit;
+      created = gymSet.created;
+      cardio = gymSet.cardio;
+      restMs = gymSet.restMs;
+      inclineController.text = gymSet.incline?.toString() ?? "";
+    });
   }
 
   Future<void> _selectDate() async {

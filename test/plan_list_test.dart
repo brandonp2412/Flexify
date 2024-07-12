@@ -1,4 +1,6 @@
+import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_list.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -13,6 +15,7 @@ void main() async {
   await mockTests();
 
   testWidgets('PlanList', (WidgetTester tester) async {
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [

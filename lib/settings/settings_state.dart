@@ -27,6 +27,10 @@ class SettingsState extends ChangeNotifier {
   bool groupHistory = true;
   bool showImages = true;
 
+  SettingsState() {
+    init();
+  }
+
   Future<void> init() async {
     final settings = await (db.settings.select()..limit(1)).getSingle();
     alarmSound = settings.alarmSound;
@@ -64,26 +68,22 @@ class SettingsState extends ChangeNotifier {
     notifyListeners();
   }
 
-  SettingsState() {
-    init();
+  void setAlarm(String sound) async {
+    alarmSound = sound;
+    notifyListeners();
+    (db.settings.update()).write(SettingsCompanion(alarmSound: Value(sound)));
   }
 
-  void setGroupHistory(bool value) {
-    groupHistory = value;
+  void setCardioUnit(String value) async {
+    cardioUnit = value;
     notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(groupHistory: Value(value)));
+    (db.settings.update()).write(SettingsCompanion(cardioUnit: Value(value)));
   }
 
-  void setHideWeight(bool value) {
-    hideWeight = value;
+  void setCurvedLines(bool value) {
+    curveLines = value;
     notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(hideWeight: Value(value)));
-  }
-
-  void setMaxSets(int value) {
-    maxSets = value;
-    notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(maxSets: Value(value)));
+    (db.settings.update()).write(SettingsCompanion(curveLines: Value(value)));
   }
 
   void setDuration(Duration value) {
@@ -93,47 +93,17 @@ class SettingsState extends ChangeNotifier {
         .write(SettingsCompanion(timerDuration: Value(value.inMilliseconds)));
   }
 
-  void setCardioUnit(String value) async {
-    cardioUnit = value;
-    notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(cardioUnit: Value(value)));
-  }
-
-  void setStrengthUnit(String value) async {
-    strengthUnit = value;
-    notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(strengthUnit: Value(value)));
-  }
-
-  void setAlarm(String sound) async {
-    alarmSound = sound;
-    notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(alarmSound: Value(sound)));
-  }
-
-  void setPlanTrailing(PlanTrailing value) {
-    planTrailing = value;
+  void setExplained(bool value) {
+    explainedPermissions = value;
     notifyListeners();
     (db.settings.update())
-        .write(SettingsCompanion(planTrailing: Value(value.toString())));
+        .write(SettingsCompanion(explainedPermissions: Value(value)));
   }
 
-  void setVibrate(bool value) {
-    vibrate = value;
+  void setGroupHistory(bool value) {
+    groupHistory = value;
     notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(vibrate: Value(value)));
-  }
-
-  void setCurvedLines(bool value) {
-    curveLines = value;
-    notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(curveLines: Value(value)));
-  }
-
-  void setHideTimer(bool value) {
-    hideTimerTab = value;
-    notifyListeners();
-    (db.settings.update()).write(SettingsCompanion(hideTimerTab: Value(value)));
+    (db.settings.update()).write(SettingsCompanion(groupHistory: Value(value)));
   }
 
   void setHideHistory(bool value) {
@@ -143,11 +113,16 @@ class SettingsState extends ChangeNotifier {
         .write(SettingsCompanion(hideHistoryTab: Value(value)));
   }
 
-  void setExplained(bool value) {
-    explainedPermissions = value;
+  void setHideTimer(bool value) {
+    hideTimerTab = value;
     notifyListeners();
-    (db.settings.update())
-        .write(SettingsCompanion(explainedPermissions: Value(value)));
+    (db.settings.update()).write(SettingsCompanion(hideTimerTab: Value(value)));
+  }
+
+  void setHideWeight(bool value) {
+    hideWeight = value;
+    notifyListeners();
+    (db.settings.update()).write(SettingsCompanion(hideWeight: Value(value)));
   }
 
   void setLong(String value) {
@@ -157,17 +132,24 @@ class SettingsState extends ChangeNotifier {
         .write(SettingsCompanion(longDateFormat: Value(value)));
   }
 
+  void setMaxSets(int value) {
+    maxSets = value;
+    notifyListeners();
+    (db.settings.update()).write(SettingsCompanion(maxSets: Value(value)));
+  }
+
+  void setPlanTrailing(PlanTrailing value) {
+    planTrailing = value;
+    notifyListeners();
+    (db.settings.update())
+        .write(SettingsCompanion(planTrailing: Value(value.toString())));
+  }
+
   void setShort(String value) {
     shortDateFormat = value;
     notifyListeners();
     (db.settings.update())
         .write(SettingsCompanion(shortDateFormat: Value(value)));
-  }
-
-  void setSystem(bool value) {
-    systemColors = value;
-    (db.settings.update()).write(SettingsCompanion(systemColors: Value(value)));
-    notifyListeners();
   }
 
   void setShowImages(bool value) {
@@ -176,9 +158,22 @@ class SettingsState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setUnits(bool value) {
-    showUnits = value;
-    (db.settings.update()).write(SettingsCompanion(showUnits: Value(value)));
+  void setStrengthUnit(String value) async {
+    strengthUnit = value;
+    notifyListeners();
+    (db.settings.update()).write(SettingsCompanion(strengthUnit: Value(value)));
+  }
+
+  void setSystem(bool value) {
+    systemColors = value;
+    (db.settings.update()).write(SettingsCompanion(systemColors: Value(value)));
+    notifyListeners();
+  }
+
+  void setTheme(ThemeMode value) {
+    themeMode = value;
+    (db.settings.update())
+        .write(SettingsCompanion(themeMode: Value(value.toString())));
     notifyListeners();
   }
 
@@ -188,10 +183,15 @@ class SettingsState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setTheme(ThemeMode value) {
-    themeMode = value;
-    (db.settings.update())
-        .write(SettingsCompanion(themeMode: Value(value.toString())));
+  void setUnits(bool value) {
+    showUnits = value;
+    (db.settings.update()).write(SettingsCompanion(showUnits: Value(value)));
     notifyListeners();
+  }
+
+  void setVibrate(bool value) {
+    vibrate = value;
+    notifyListeners();
+    (db.settings.update()).write(SettingsCompanion(vibrate: Value(value)));
   }
 }

@@ -9,6 +9,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class HistoryList extends StatefulWidget {
+  final List<GymSet> gymSets;
+
+  final Function(int) onSelect;
+  final Set<int> selected;
+  final Function onNext;
   const HistoryList({
     super.key,
     required this.gymSets,
@@ -17,11 +22,6 @@ class HistoryList extends StatefulWidget {
     required this.onNext,
   });
 
-  final List<GymSet> gymSets;
-  final Function(int) onSelect;
-  final Set<int> selected;
-  final Function onNext;
-
   @override
   State<HistoryList> createState() => _HistoryListState();
 }
@@ -29,35 +29,6 @@ class HistoryList extends StatefulWidget {
 class _HistoryListState extends State<HistoryList> {
   bool goingNext = false;
   final ScrollController scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    scrollController.addListener(scrollListener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    scrollController.removeListener(scrollListener);
-    scrollController.dispose();
-  }
-
-  void scrollListener() {
-    if (scrollController.position.pixels <
-            scrollController.position.maxScrollExtent - 200 ||
-        goingNext) return;
-    setState(() {
-      goingNext = true;
-    });
-    try {
-      widget.onNext();
-    } finally {
-      setState(() {
-        goingNext = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,5 +92,34 @@ class _HistoryListState extends State<HistoryList> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.removeListener(scrollListener);
+    scrollController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
+  void scrollListener() {
+    if (scrollController.position.pixels <
+            scrollController.position.maxScrollExtent - 200 ||
+        goingNext) return;
+    setState(() {
+      goingNext = true;
+    });
+    try {
+      widget.onNext();
+    } finally {
+      setState(() {
+        goingNext = false;
+      });
+    }
   }
 }

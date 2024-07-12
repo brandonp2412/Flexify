@@ -5,6 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppSearch extends StatefulWidget {
+  final Set<dynamic> selected;
+
+  final Function(String) onChange;
+  final Function onClear;
+  final Function onEdit;
+  final Function onDelete;
+  final Function onSelect;
+  final Function onShare;
+  final Function? onRefresh;
+  final Widget? filter;
   const AppSearch({
     super.key,
     required this.selected,
@@ -18,28 +28,12 @@ class AppSearch extends StatefulWidget {
     this.filter,
   });
 
-  final Set<dynamic> selected;
-  final Function(String) onChange;
-  final Function onClear;
-  final Function onEdit;
-  final Function onDelete;
-  final Function onSelect;
-  final Function onShare;
-  final Function? onRefresh;
-  final Widget? filter;
-
   @override
   State<AppSearch> createState() => _AppSearchState();
 }
 
 class _AppSearchState extends State<AppSearch> {
   final TextEditingController searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,5 +196,11 @@ class _AppSearchState extends State<AppSearch> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 }

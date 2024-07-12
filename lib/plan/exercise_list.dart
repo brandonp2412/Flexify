@@ -27,6 +27,42 @@ class ExerciseList extends StatelessWidget {
     required this.plan,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    final maxSets =
+        context.select<SettingsState, int>((value) => value.maxSets);
+    final planTrailing = context
+        .select<SettingsState, PlanTrailing>((value) => value.planTrailing);
+
+    if (planTrailing == PlanTrailing.reorder)
+      return ReorderableListView.builder(
+        itemCount: exercises.length,
+        itemBuilder: (context, index) =>
+            itemBuilder(context, index, maxSets, planTrailing),
+        onReorder: (oldIndex, newIndex) async {
+          if (oldIndex < newIndex) {
+            newIndex--;
+          }
+
+          final temp = exercises[oldIndex];
+          exercises.removeAt(oldIndex);
+          exercises.insert(newIndex, temp);
+          await db
+              .update(db.plans)
+              .replace(plan.copyWith(exercises: exercises.join(',')));
+          if (!context.mounted) return;
+          final planState = context.read<PlanState>();
+          planState.updatePlans(null);
+        },
+      );
+    else
+      return ListView.builder(
+        itemCount: exercises.length,
+        itemBuilder: (context, index) =>
+            itemBuilder(context, index, maxSets, planTrailing),
+      );
+  }
+
   Widget itemBuilder(
     BuildContext context,
     int index,
@@ -130,41 +166,5 @@ class ExerciseList extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final maxSets =
-        context.select<SettingsState, int>((value) => value.maxSets);
-    final planTrailing = context
-        .select<SettingsState, PlanTrailing>((value) => value.planTrailing);
-
-    if (planTrailing == PlanTrailing.reorder)
-      return ReorderableListView.builder(
-        itemCount: exercises.length,
-        itemBuilder: (context, index) =>
-            itemBuilder(context, index, maxSets, planTrailing),
-        onReorder: (oldIndex, newIndex) async {
-          if (oldIndex < newIndex) {
-            newIndex--;
-          }
-
-          final temp = exercises[oldIndex];
-          exercises.removeAt(oldIndex);
-          exercises.insert(newIndex, temp);
-          await db
-              .update(db.plans)
-              .replace(plan.copyWith(exercises: exercises.join(',')));
-          if (!context.mounted) return;
-          final planState = context.read<PlanState>();
-          planState.updatePlans(null);
-        },
-      );
-    else
-      return ListView.builder(
-        itemCount: exercises.length,
-        itemBuilder: (context, index) =>
-            itemBuilder(context, index, maxSets, planTrailing),
-      );
   }
 }

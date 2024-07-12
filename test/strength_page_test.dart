@@ -1,4 +1,6 @@
+import 'package:drift/native.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -14,6 +16,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('StrengthPage displays', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(
@@ -63,6 +66,7 @@ void main() async {
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(
@@ -112,6 +116,7 @@ void main() async {
 
   testWidgets('StrengthPage selects metrics', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(

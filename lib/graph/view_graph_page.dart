@@ -18,30 +18,6 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
   int limit = 20;
 
   @override
-  void initState() {
-    super.initState();
-    setStream();
-  }
-
-  void setStream() {
-    setState(() {
-      stream = (db.gymSets.select()
-            ..orderBy(
-              [
-                (u) => OrderingTerm(
-                      expression: u.created,
-                      mode: OrderingMode.desc,
-                    ),
-              ],
-            )
-            ..where((tbl) => tbl.name.equals(widget.name))
-            ..where((tbl) => tbl.hidden.equals(false))
-            ..limit(limit))
-          .watch();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -73,5 +49,29 @@ class _ViewGraphPageState extends State<ViewGraphPage> {
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setStream();
+  }
+
+  void setStream() {
+    setState(() {
+      stream = (db.gymSets.select()
+            ..orderBy(
+              [
+                (u) => OrderingTerm(
+                      expression: u.created,
+                      mode: OrderingMode.desc,
+                    ),
+              ],
+            )
+            ..where((tbl) => tbl.name.equals(widget.name))
+            ..where((tbl) => tbl.hidden.equals(false))
+            ..limit(limit))
+          .watch();
+    });
   }
 }

@@ -15,35 +15,6 @@ class _PermissionsPageState extends State<PermissionsPage> {
   bool ignore = false;
   bool notify = false;
 
-  Future requestPermission(Permission permission) async {
-    final value = await permission.request().isGranted;
-    setState(() {
-      switch (permission) {
-        case Permission.notification:
-          notify = value;
-        case Permission.ignoreBatteryOptimizations:
-          ignore = value;
-        case Permission.scheduleExactAlarm:
-          schedule = value;
-        default:
-          return;
-      }
-    });
-  }
-
-  Future initPermissionStatus() async {
-    notify = await Permission.notification.isGranted;
-    ignore = await Permission.ignoreBatteryOptimizations.isGranted;
-    schedule = await Permission.scheduleExactAlarm.isGranted;
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initPermissionStatus();
-  }
-
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
@@ -155,5 +126,34 @@ class _PermissionsPageState extends State<PermissionsPage> {
         child: const Icon(Icons.check),
       ),
     );
+  }
+
+  Future initPermissionStatus() async {
+    notify = await Permission.notification.isGranted;
+    ignore = await Permission.ignoreBatteryOptimizations.isGranted;
+    schedule = await Permission.scheduleExactAlarm.isGranted;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPermissionStatus();
+  }
+
+  Future requestPermission(Permission permission) async {
+    final value = await permission.request().isGranted;
+    setState(() {
+      switch (permission) {
+        case Permission.notification:
+          notify = value;
+        case Permission.ignoreBatteryOptimizations:
+          ignore = value;
+        case Permission.scheduleExactAlarm:
+          schedule = value;
+        default:
+          return;
+      }
+    });
   }
 }

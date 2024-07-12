@@ -1,28 +1,28 @@
 import 'package:drift/drift.dart';
 
 class Settings extends Table {
-  IntColumn get id => integer().autoIncrement()();
-
-  TextColumn get themeMode => text()();
-  TextColumn get planTrailing => text()();
-  TextColumn get longDateFormat => text()();
-  TextColumn get shortDateFormat => text()();
   TextColumn get alarmSound => text()();
+
   TextColumn get cardioUnit => text()();
-  TextColumn get strengthUnit => text()();
-
-  IntColumn get timerDuration => integer()();
-  IntColumn get maxSets => integer()();
-
-  BoolColumn get vibrate => boolean()();
-  BoolColumn get restTimers => boolean()();
-  BoolColumn get showUnits => boolean()();
-  BoolColumn get showImages => boolean().withDefault(const Constant(true))();
-  BoolColumn get systemColors => boolean()();
-  BoolColumn get explainedPermissions => boolean()();
-  BoolColumn get hideTimerTab => boolean()();
-  BoolColumn get hideHistoryTab => boolean()();
   BoolColumn get curveLines => boolean()();
-  BoolColumn get hideWeight => boolean()();
+  BoolColumn get explainedPermissions => boolean()();
   BoolColumn get groupHistory => boolean()();
+  BoolColumn get hideHistoryTab => boolean()();
+  BoolColumn get hideTimerTab => boolean()();
+  BoolColumn get hideWeight => boolean()();
+
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get longDateFormat => text()();
+
+  IntColumn get maxSets => integer()();
+  TextColumn get planTrailing => text()();
+  BoolColumn get restTimers => boolean()();
+  TextColumn get shortDateFormat => text()();
+  BoolColumn get showImages => boolean().withDefault(const Constant(true))();
+  BoolColumn get showUnits => boolean()();
+  TextColumn get strengthUnit => text()();
+  BoolColumn get systemColors => boolean()();
+  TextColumn get themeMode => text()();
+  IntColumn get timerDuration => integer()();
+  BoolColumn get vibrate => boolean()();
 }

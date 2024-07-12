@@ -1,6 +1,14 @@
 enum NativeTimerState { running, paused, expired }
 
 class NativeTimerWrapper {
+  final NativeTimerState state;
+
+  final Duration totalTimerDuration;
+
+  final Duration elapsedTimerDuration;
+
+  final DateTime timeStamp;
+
   NativeTimerWrapper(
     this.totalTimerDuration,
     this.elapsedTimerDuration,
@@ -8,24 +16,15 @@ class NativeTimerWrapper {
     this.state,
   );
 
-  static NativeTimerWrapper emptyTimer() => NativeTimerWrapper(
-        Duration.zero,
-        Duration.zero,
-        DateTime.now(),
-        NativeTimerState.expired,
-      );
+  Duration getDuration() => totalTimerDuration;
 
   Duration getElapsed() => totalTimerDuration != Duration.zero
       ? DateTime.now().difference(timeStamp) + elapsedTimerDuration
       : Duration.zero;
 
-  Duration getDuration() => totalTimerDuration;
-
   Duration getRemaining() => getDuration() - getElapsed();
 
   int getTimeStamp() => timeStamp.millisecondsSinceEpoch;
-
-  bool isRunning() => state == NativeTimerState.running;
 
   NativeTimerWrapper increaseDuration(Duration increase) => NativeTimerWrapper(
         totalTimerDuration + increase,
@@ -33,7 +32,7 @@ class NativeTimerWrapper {
         isRunning() ? timeStamp : DateTime.now(),
         NativeTimerState.running,
       );
-
+  bool isRunning() => state == NativeTimerState.running;
   bool update() {
     if (state == NativeTimerState.running &&
         (getDuration() - getElapsed()).inMilliseconds <= 0) {
@@ -42,8 +41,10 @@ class NativeTimerWrapper {
     return state != NativeTimerState.running;
   }
 
-  final NativeTimerState state;
-  final Duration totalTimerDuration;
-  final Duration elapsedTimerDuration;
-  final DateTime timeStamp;
+  static NativeTimerWrapper emptyTimer() => NativeTimerWrapper(
+        Duration.zero,
+        Duration.zero,
+        DateTime.now(),
+        NativeTimerState.expired,
+      );
 }

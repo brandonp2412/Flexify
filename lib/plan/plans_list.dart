@@ -22,14 +22,6 @@ class PlansList extends StatelessWidget {
   final Set<int> selected;
   final Function(int) onSelect;
 
-  PlansList({
-    super.key,
-    required this.plans,
-    required this.navigatorKey,
-    required this.selected,
-    required this.onSelect,
-  });
-
   late final stream = (db.customSelect(
     """
       SELECT id, SUM(max_sets) AS max_sets, 
@@ -64,6 +56,14 @@ class PlansList extends StatelessWidget {
           ),
         )
         .toList();
+  });
+
+  PlansList({
+    super.key,
+    required this.plans,
+    required this.navigatorKey,
+    required this.selected,
+    required this.onSelect,
   });
 
   @override

@@ -139,13 +139,6 @@ class _SettingsWorkoutState extends State<SettingsWorkout> {
       TextEditingController(text: settings.maxSets.toString());
 
   @override
-  void dispose() {
-    super.dispose();
-
-    maxSetsController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     settings = context.watch<SettingsState>();
 
@@ -157,5 +150,12 @@ class _SettingsWorkoutState extends State<SettingsWorkout> {
         children: getWorkouts('', settings, maxSetsController),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    maxSetsController.dispose();
   }
 }

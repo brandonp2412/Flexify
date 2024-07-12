@@ -1,3 +1,5 @@
+import 'package:drift/native.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -12,6 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -34,6 +37,7 @@ void main() async {
 
   testWidgets('GraphsPage add button', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -56,6 +60,7 @@ void main() async {
 
   testWidgets('GraphsPage tap tile', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -80,6 +85,7 @@ void main() async {
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -109,6 +115,7 @@ void main() async {
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -133,6 +140,7 @@ void main() async {
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [

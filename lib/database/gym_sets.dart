@@ -4,24 +4,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/main.dart';
 
-class GymSets extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text()();
-  RealColumn get reps => real()();
-  RealColumn get weight => real()();
-  TextColumn get unit => text()();
-  DateTimeColumn get created => dateTime()();
-  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
-  RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
-  RealColumn get duration => real().withDefault(const Constant(0.0))();
-  RealColumn get distance => real().withDefault(const Constant(0.0))();
-  BoolColumn get cardio => boolean().withDefault(const Constant(false))();
-  IntColumn get restMs => integer().nullable()();
-  IntColumn get incline => integer().nullable()();
-  IntColumn get planId => integer().nullable()();
-  TextColumn get image => text().nullable()();
-}
-
 double getValue(TypedResult row, CardioMetric metric) {
   switch (metric) {
     case CardioMetric.pace:
@@ -31,27 +13,6 @@ double getValue(TypedResult row, CardioMetric metric) {
       return row.read(db.gymSets.distance.sum())!;
     case CardioMetric.duration:
       return row.read(db.gymSets.duration.sum())!;
-  }
-}
-
-Expression<String> _getCreated(Period groupBy) {
-  switch (groupBy) {
-    case Period.day:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    case Period.week:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    case Period.month:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    case Period.year:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
-      );
   }
 }
 
@@ -114,53 +75,6 @@ Stream<List<CardioData>> watchCardio({
   );
 }
 
-Stream<List<GymSetsCompanion>> watchGraphs() {
-  return (db.gymSets.selectOnly()
-        ..addColumns([
-          db.gymSets.name,
-          db.gymSets.unit,
-          db.gymSets.weight,
-          db.gymSets.reps,
-          db.gymSets.cardio,
-          db.gymSets.duration,
-          db.gymSets.distance,
-          db.gymSets.created.max(),
-          db.gymSets.image,
-        ])
-        ..orderBy([
-          OrderingTerm(
-            expression: db.gymSets.created.max(),
-            mode: OrderingMode.desc,
-          ),
-        ])
-        ..groupBy([db.gymSets.name]))
-      .watch()
-      .map(
-        (results) => results
-            .map(
-              (result) => GymSetsCompanion(
-                name: Value(result.read(db.gymSets.name)!),
-                weight: Value(result.read(db.gymSets.weight)!),
-                unit: Value(result.read(db.gymSets.unit)!),
-                reps: Value(result.read(db.gymSets.reps)!),
-                cardio: Value(result.read(db.gymSets.cardio)!),
-                duration: Value(result.read(db.gymSets.duration)!),
-                distance: Value(result.read(db.gymSets.distance)!),
-                created: Value(result.read(db.gymSets.created.max())!),
-                image: Value(result.read(db.gymSets.image)),
-              ),
-            )
-            .toList(),
-      );
-}
-
-typedef GymCount = ({
-  int count,
-  String name,
-  int? maxSets,
-  int? restMs,
-});
-
 Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
   final countColumn = CustomExpression<int>(
     """
@@ -205,4 +119,90 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
             )
             .toList(),
       );
+}
+
+Stream<List<GymSetsCompanion>> watchGraphs() {
+  return (db.gymSets.selectOnly()
+        ..addColumns([
+          db.gymSets.name,
+          db.gymSets.unit,
+          db.gymSets.weight,
+          db.gymSets.reps,
+          db.gymSets.cardio,
+          db.gymSets.duration,
+          db.gymSets.distance,
+          db.gymSets.created.max(),
+          db.gymSets.image,
+        ])
+        ..orderBy([
+          OrderingTerm(
+            expression: db.gymSets.created.max(),
+            mode: OrderingMode.desc,
+          ),
+        ])
+        ..groupBy([db.gymSets.name]))
+      .watch()
+      .map(
+        (results) => results
+            .map(
+              (result) => GymSetsCompanion(
+                name: Value(result.read(db.gymSets.name)!),
+                weight: Value(result.read(db.gymSets.weight)!),
+                unit: Value(result.read(db.gymSets.unit)!),
+                reps: Value(result.read(db.gymSets.reps)!),
+                cardio: Value(result.read(db.gymSets.cardio)!),
+                duration: Value(result.read(db.gymSets.duration)!),
+                distance: Value(result.read(db.gymSets.distance)!),
+                created: Value(result.read(db.gymSets.created.max())!),
+                image: Value(result.read(db.gymSets.image)),
+              ),
+            )
+            .toList(),
+      );
+}
+
+Expression<String> _getCreated(Period groupBy) {
+  switch (groupBy) {
+    case Period.day:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.week:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.month:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.year:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
+      );
+  }
+}
+
+typedef GymCount = ({
+  int count,
+  String name,
+  int? maxSets,
+  int? restMs,
+});
+
+class GymSets extends Table {
+  RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
+  BoolColumn get cardio => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get created => dateTime()();
+  RealColumn get distance => real().withDefault(const Constant(0.0))();
+  RealColumn get duration => real().withDefault(const Constant(0.0))();
+  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get image => text().nullable()();
+  IntColumn get incline => integer().nullable()();
+  TextColumn get name => text()();
+  IntColumn get planId => integer().nullable()();
+  RealColumn get reps => real()();
+  IntColumn get restMs => integer().nullable()();
+  TextColumn get unit => text()();
+  RealColumn get weight => real()();
 }

@@ -7,6 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PlanTile extends StatelessWidget {
+  final Plan plan;
+
+  final String weekday;
+  final int index;
+  final GlobalKey<NavigatorState> navigatorKey;
+  final Function(int) onSelect;
+  final Set<int> selected;
+  final Stream<List<Count>> countStream;
   const PlanTile({
     super.key,
     required this.plan,
@@ -17,46 +25,6 @@ class PlanTile extends StatelessWidget {
     required this.selected,
     required this.countStream,
   });
-
-  final Plan plan;
-  final String weekday;
-  final int index;
-  final GlobalKey<NavigatorState> navigatorKey;
-  final Function(int) onSelect;
-  final Set<int> selected;
-  final Stream<List<Count>> countStream;
-
-  List<InlineSpan> getChildren(BuildContext context) {
-    List<InlineSpan> result = [];
-
-    var color = Theme.of(context).textTheme.bodyLarge!.color;
-    if (selected.contains(plan.id))
-      color = Theme.of(context).colorScheme.primary;
-
-    final split = plan.days.split(',');
-    for (int index = 0; index < split.length; index++) {
-      final day = split[index];
-      result.add(
-        TextSpan(
-          text: day.trim(),
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: weekday == day.trim() ? FontWeight.bold : null,
-                decoration:
-                    weekday == day.trim() ? TextDecoration.underline : null,
-                color: color,
-              ),
-        ),
-      );
-      if (index < split.length - 1)
-        result.add(
-          TextSpan(
-            text: ", ",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-        );
-    }
-    return result;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,5 +97,37 @@ class PlanTile extends StatelessWidget {
         onSelect(plan.id);
       },
     );
+  }
+
+  List<InlineSpan> getChildren(BuildContext context) {
+    List<InlineSpan> result = [];
+
+    var color = Theme.of(context).textTheme.bodyLarge!.color;
+    if (selected.contains(plan.id))
+      color = Theme.of(context).colorScheme.primary;
+
+    final split = plan.days.split(',');
+    for (int index = 0; index < split.length; index++) {
+      final day = split[index];
+      result.add(
+        TextSpan(
+          text: day.trim(),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: weekday == day.trim() ? FontWeight.bold : null,
+                decoration:
+                    weekday == day.trim() ? TextDecoration.underline : null,
+                color: color,
+              ),
+        ),
+      );
+      if (index < split.length - 1)
+        result.add(
+          TextSpan(
+            text: ", ",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        );
+    }
+    return result;
   }
 }

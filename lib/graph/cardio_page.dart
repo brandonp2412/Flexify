@@ -28,53 +28,6 @@ class _CardioPageState extends State<CardioPage> {
   DateTime? startDate;
   DateTime? endDate;
 
-  @override
-  void initState() {
-    super.initState();
-    setStream();
-  }
-
-  void setStream() {
-    graphStream = watchCardio(
-      endDate: endDate,
-      groupBy: period,
-      metric: metric,
-      name: widget.name,
-      startDate: startDate,
-      targetUnit: targetUnit,
-    );
-  }
-
-  Future<void> _selectEnd() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: endDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate == null) return;
-    setState(() {
-      endDate = pickedDate;
-    });
-    setStream();
-  }
-
-  Future<void> _selectStart() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: startDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate == null) return;
-    setState(() {
-      startDate = pickedDate;
-    });
-    setStream();
-  }
-
   Widget bottomTitleWidgets(
     double value,
     TitleMeta meta,
@@ -287,87 +240,7 @@ class _CardioPageState extends State<CardioPage> {
                   height: 350,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                    child: LineChart(
-                      LineChartData(
-                        titlesData: FlTitlesData(
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          leftTitles: const AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 45,
-                            ),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 27,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) =>
-                                  bottomTitleWidgets(
-                                value,
-                                meta,
-                                rows,
-                                format,
-                              ),
-                            ),
-                          ),
-                        ),
-                        lineTouchData: LineTouchData(
-                          enabled: true,
-                          touchTooltipData: LineTouchTooltipData(
-                            getTooltipColor: (touch) =>
-                                Theme.of(context).colorScheme.surface,
-                            getTooltipItems: (touchedSpots) {
-                              final row =
-                                  rows.elementAt(touchedSpots.first.spotIndex);
-                              String text = row.value.toStringAsFixed(2);
-                              switch (metric) {
-                                case CardioMetric.pace:
-                                  text = "${row.value} ${row.unit} / min";
-                                  break;
-                                case CardioMetric.duration:
-                                  final minutes = row.value.floor();
-                                  final seconds = ((row.value * 60) % 60)
-                                      .floor()
-                                      .toString()
-                                      .padLeft(2, '0');
-                                  text = "$minutes:$seconds";
-                                  break;
-                                case CardioMetric.distance:
-                                  text += " ${row.unit}";
-                                  break;
-                              }
-
-                              return [
-                                LineTooltipItem(
-                                  text,
-                                  TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
-                                ),
-                              ];
-                            },
-                          ),
-                        ),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: spots,
-                            isCurved: curveLines,
-                            color: Theme.of(context).colorScheme.primary,
-                            barWidth: 3,
-                            isStrokeCapRound: true,
-                          ),
-                        ],
-                      ),
-                    ),
+                    child: lineChart(rows, format, context, spots, curveLines),
                   ),
                 ),
               ],
@@ -384,5 +257,138 @@ class _CardioPageState extends State<CardioPage> {
         child: const Icon(Icons.history),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setStream();
+  }
+
+  LineChart lineChart(
+    List<CardioData> rows,
+    String format,
+    BuildContext context,
+    List<FlSpot> spots,
+    bool curveLines,
+  ) {
+    return LineChart(
+      LineChartData(
+        titlesData: FlTitlesData(
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          leftTitles: const AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 45,
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 27,
+              interval: 1,
+              getTitlesWidget: (value, meta) => bottomTitleWidgets(
+                value,
+                meta,
+                rows,
+                format,
+              ),
+            ),
+          ),
+        ),
+        lineTouchData: LineTouchData(
+          enabled: true,
+          touchTooltipData: LineTouchTooltipData(
+            getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
+            getTooltipItems: (touchedSpots) {
+              final row = rows.elementAt(touchedSpots.first.spotIndex);
+              String text = row.value.toStringAsFixed(2);
+              final created = DateFormat(format).format(row.created);
+
+              switch (metric) {
+                case CardioMetric.pace:
+                  text = "${row.value} ${row.unit} / min";
+                  break;
+                case CardioMetric.duration:
+                  final minutes = row.value.floor();
+                  final seconds = ((row.value * 60) % 60)
+                      .floor()
+                      .toString()
+                      .padLeft(2, '0');
+                  text = "$minutes:$seconds";
+                  break;
+                case CardioMetric.distance:
+                  text += " ${row.unit}";
+                  break;
+              }
+
+              return [
+                LineTooltipItem(
+                  "$text\n$created",
+                  TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
+                ),
+              ];
+            },
+          ),
+        ),
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: curveLines,
+            color: Theme.of(context).colorScheme.primary,
+            barWidth: 3,
+            isStrokeCapRound: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void setStream() {
+    graphStream = watchCardio(
+      endDate: endDate,
+      groupBy: period,
+      metric: metric,
+      name: widget.name,
+      startDate: startDate,
+      targetUnit: targetUnit,
+    );
+  }
+
+  Future<void> _selectEnd() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return;
+    setState(() {
+      endDate = pickedDate;
+    });
+    setStream();
+  }
+
+  Future<void> _selectStart() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return;
+    setState(() {
+      startDate = pickedDate;
+    });
+    setStream();
   }
 }

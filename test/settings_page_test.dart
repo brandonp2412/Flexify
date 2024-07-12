@@ -15,6 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   render(WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
     await tester.pumpWidget(
       MultiProvider(
         providers: [

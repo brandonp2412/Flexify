@@ -15,9 +15,6 @@ import 'package:provider/provider.dart';
 
 import 'plan/plans_page.dart';
 
-AppDatabase db = AppDatabase();
-MethodChannel timerChannel = const MethodChannel("com.presley.flexify/timer");
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await (db.settings.select()..limit(1)).getSingle();
@@ -25,6 +22,10 @@ Future<void> main() async {
 
   runApp(appProviders(settings));
 }
+
+AppDatabase db = AppDatabase();
+
+MethodChannel timerChannel = const MethodChannel("com.presley.flexify/timer");
 
 Widget appProviders(SettingsState settingsState) => MultiProvider(
       providers: [

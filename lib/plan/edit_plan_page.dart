@@ -33,133 +33,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
   final searchController = TextEditingController();
   final titleController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-
-    setExercises();
-    titleController.text = widget.plan.title.value ?? "";
-
-    final dayList = widget.plan.days.value.split(',');
-    daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
-
-    if (widget.plan.exercises.value.isEmpty)
-      exerciseSelections = [];
-    else {
-      final splitExercises = widget.plan.exercises.value.split(',');
-      exerciseSelections = splitExercises;
-    }
-  }
-
-  void setExercises() {
-    var query = db.gymSets.selectOnly()
-      ..addColumns([db.gymSets.name])
-      ..groupBy([db.gymSets.name]);
-
-    if (widget.plan.id.present)
-      query = query
-        ..join([
-          leftOuterJoin(
-            db.planExercises,
-            db.planExercises.planId.equals(widget.plan.id.value) &
-                db.planExercises.exercise.equalsExp(db.gymSets.name),
-          ),
-        ])
-        ..addColumns([db.planExercises.maxSets]);
-
-    query.get().then(
-          (results) => setState(() {
-            exercises = [];
-            controllers = [];
-
-            for (final result in results) {
-              exercises.add(result.read(db.gymSets.name)!);
-              String text = '';
-              if (widget.plan.id.present)
-                text = result.read(db.planExercises.maxSets)?.toString() ?? "";
-              controllers.add(
-                TextEditingController(
-                  text: text,
-                ),
-              );
-            }
-          }),
-        );
-  }
-
-  @override
-  void dispose() {
-    searchNode.dispose();
-    searchController.dispose();
-    titleController.dispose();
-    super.dispose();
-  }
-
-  void toggleSearch() {
-    setState(() {
-      showSearch = !showSearch;
-      if (!showSearch) search = '';
-    });
-    searchNode.requestFocus();
-    searchController.clear();
-  }
-
-  Future<void> _save() async {
-    final days = [];
-    for (int i = 0; i < daySwitches.length; i++) {
-      if (daySwitches[i]) days.add(weekdays[i]);
-    }
-    if (days.isEmpty && titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select days/title first')),
-      );
-      return;
-    }
-
-    if (exerciseSelections.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select exercises first')),
-      );
-      return;
-    }
-
-    var newPlan = PlansCompanion.insert(
-      days: days.join(','),
-      exercises:
-          exerciseSelections.where((element) => element.isNotEmpty).join(','),
-      title: Value(titleController.text),
-    );
-
-    int? id;
-    if (widget.plan.id.present) {
-      await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
-      await db.planExercises
-          .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
-      id = widget.plan.id.value;
-    } else {
-      id = await db.into(db.plans).insert(newPlan);
-    }
-
-    List<PlanExercisesCompanion> planExercises = [];
-    for (var i = 0; i < exercises.length; i++) {
-      planExercises.add(
-        PlanExercisesCompanion.insert(
-          planId: id,
-          exercise: exercises[i],
-          enabled: exerciseSelections.contains(exercises[i]),
-          maxSets: Value(int.tryParse(controllers[i].text)),
-        ),
-      );
-    }
-
-    await db.planExercises.insertAll(planExercises);
-
-    if (!mounted) return;
-    final planState = context.read<PlanState>();
-    planState.updatePlans(null);
-    Navigator.pop(context);
-  }
-
   Iterable<Widget> get tiles => exercises
       .where(
         (exercise) => exercise.toLowerCase().contains(search.toLowerCase()),
@@ -297,5 +170,132 @@ class _EditPlanPageState extends State<EditPlanPage> {
         child: const Icon(Icons.save),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchNode.dispose();
+    searchController.dispose();
+    titleController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setExercises();
+    titleController.text = widget.plan.title.value ?? "";
+
+    final dayList = widget.plan.days.value.split(',');
+    daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
+
+    if (widget.plan.exercises.value.isEmpty)
+      exerciseSelections = [];
+    else {
+      final splitExercises = widget.plan.exercises.value.split(',');
+      exerciseSelections = splitExercises;
+    }
+  }
+
+  void setExercises() {
+    var query = db.gymSets.selectOnly()
+      ..addColumns([db.gymSets.name])
+      ..groupBy([db.gymSets.name]);
+
+    if (widget.plan.id.present)
+      query = query
+        ..join([
+          leftOuterJoin(
+            db.planExercises,
+            db.planExercises.planId.equals(widget.plan.id.value) &
+                db.planExercises.exercise.equalsExp(db.gymSets.name),
+          ),
+        ])
+        ..addColumns([db.planExercises.maxSets]);
+
+    query.get().then(
+          (results) => setState(() {
+            exercises = [];
+            controllers = [];
+
+            for (final result in results) {
+              exercises.add(result.read(db.gymSets.name)!);
+              String text = '';
+              if (widget.plan.id.present)
+                text = result.read(db.planExercises.maxSets)?.toString() ?? "";
+              controllers.add(
+                TextEditingController(
+                  text: text,
+                ),
+              );
+            }
+          }),
+        );
+  }
+
+  void toggleSearch() {
+    setState(() {
+      showSearch = !showSearch;
+      if (!showSearch) search = '';
+    });
+    searchNode.requestFocus();
+    searchController.clear();
+  }
+
+  Future<void> _save() async {
+    final days = [];
+    for (int i = 0; i < daySwitches.length; i++) {
+      if (daySwitches[i]) days.add(weekdays[i]);
+    }
+    if (days.isEmpty && titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Select days/title first')),
+      );
+      return;
+    }
+
+    if (exerciseSelections.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Select exercises first')),
+      );
+      return;
+    }
+
+    var newPlan = PlansCompanion.insert(
+      days: days.join(','),
+      exercises:
+          exerciseSelections.where((element) => element.isNotEmpty).join(','),
+      title: Value(titleController.text),
+    );
+
+    int? id;
+    if (widget.plan.id.present) {
+      await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
+      await db.planExercises
+          .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
+      id = widget.plan.id.value;
+    } else {
+      id = await db.into(db.plans).insert(newPlan);
+    }
+
+    List<PlanExercisesCompanion> planExercises = [];
+    for (var i = 0; i < exercises.length; i++) {
+      planExercises.add(
+        PlanExercisesCompanion.insert(
+          planId: id,
+          exercise: exercises[i],
+          enabled: exerciseSelections.contains(exercises[i]),
+          maxSets: Value(int.tryParse(controllers[i].text)),
+        ),
+      );
+    }
+
+    await db.planExercises.insertAll(planExercises);
+
+    if (!mounted) return;
+    final planState = context.read<PlanState>();
+    planState.updatePlans(null);
+    Navigator.pop(context);
   }
 }

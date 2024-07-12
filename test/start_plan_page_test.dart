@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -14,6 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -48,6 +50,7 @@ void main() async {
 
   testWidgets('StartPlanPage selects', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -80,6 +83,7 @@ void main() async {
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory());
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',

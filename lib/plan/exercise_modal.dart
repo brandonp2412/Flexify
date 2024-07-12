@@ -1,21 +1,21 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
+import 'package:flexify/main.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseModal extends StatelessWidget {
+  final String exercise;
+
+  final bool hasData;
+  final Function() onSelect;
   const ExerciseModal({
     super.key,
     required this.exercise,
     required this.hasData,
     required this.onSelect,
   });
-
-  final String exercise;
-  final bool hasData;
-  final Function() onSelect;
 
   @override
   Widget build(BuildContext context) {

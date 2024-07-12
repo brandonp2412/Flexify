@@ -37,45 +37,6 @@ class _StrengthPageState extends State<StrengthPage> {
       const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
   final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 
-  @override
-  initState() {
-    super.initState();
-    if (widget.name == 'Weight') period = Period.week;
-    setStream();
-  }
-
-  Future<void> _selectEnd() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: endDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate == null) return;
-
-    setState(() {
-      endDate = pickedDate;
-    });
-    setStream();
-  }
-
-  Future<void> _selectStart() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: startDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate == null) return;
-
-    setState(() {
-      startDate = pickedDate;
-    });
-    setStream();
-  }
-
   Widget bottomTitleWidgets(
     double value,
     TitleMeta meta,
@@ -109,144 +70,6 @@ class _StrengthPageState extends State<StrengthPage> {
       axisSide: meta.axisSide,
       child: text,
     );
-  }
-
-  LineTouchTooltipData tooltipData(
-    BuildContext context,
-    List<StrengthData> rows,
-    String format,
-  ) {
-    return LineTouchTooltipData(
-      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-      getTooltipItems: (touchedSpots) {
-        final row = rows.elementAt(touchedSpots.first.spotIndex);
-        final created = DateFormat(format).format(row.created);
-        final formatter = NumberFormat("#,###.00");
-
-        String text =
-            "${row.reps} x ${row.value.toStringAsFixed(2)}$targetUnit $created";
-        switch (metric) {
-          case StrengthMetric.bestReps:
-          case StrengthMetric.relativeStrength:
-            text = "${row.value.toStringAsFixed(2)} $created";
-            break;
-          case StrengthMetric.volume:
-          case StrengthMetric.oneRepMax:
-            text = "${formatter.format(row.value)}$targetUnit $created";
-            break;
-          case StrengthMetric.bestWeight:
-            break;
-        }
-
-        return [
-          LineTooltipItem(
-            text,
-            TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
-          ),
-        ];
-      },
-    );
-  }
-
-  void setStream() {
-    Expression<String> createdCol = const CustomExpression<String>(
-      "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
-    );
-    if (period == Period.month)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    else if (period == Period.week)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    else if (period == Period.year)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
-      );
-
-    setState(() {
-      graphStream = (db.selectOnly(db.gymSets)
-            ..addColumns([
-              db.gymSets.weight.max(),
-              volumeCol,
-              ormCol,
-              db.gymSets.created,
-              if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
-              if (metric != StrengthMetric.bestReps) db.gymSets.reps,
-              db.gymSets.unit,
-              relativeCol,
-            ])
-            ..where(db.gymSets.name.equals(widget.name))
-            ..where(db.gymSets.hidden.equals(false))
-            ..where(
-              db.gymSets.created.isBiggerOrEqualValue(startDate ?? DateTime(0)),
-            )
-            ..where(
-              db.gymSets.created.isSmallerThanValue(
-                endDate ??
-                    DateTime.now().toLocal().add(const Duration(days: 1)),
-              ),
-            )
-            ..orderBy([
-              OrderingTerm(
-                expression: createdCol,
-                mode: OrderingMode.desc,
-              ),
-            ])
-            ..limit(11)
-            ..groupBy([createdCol]))
-          .watch()
-          .map(
-        (results) {
-          List<StrengthData> list = [];
-          for (final result in results.reversed) {
-            final unit = result.read(db.gymSets.unit)!;
-            var value = getValue(result, metric);
-
-            if (unit == 'lb' && targetUnit == 'kg') {
-              value *= 0.45359237;
-            } else if (unit == 'kg' && targetUnit == 'lb') {
-              value *= 2.20462262;
-            }
-
-            double reps = 0.0;
-            try {
-              reps = result.read(db.gymSets.reps)!;
-            } catch (_) {}
-
-            list.add(
-              StrengthData(
-                created: result.read(db.gymSets.created)!.toLocal(),
-                value: value,
-                unit: unit,
-                reps: reps,
-              ),
-            );
-          }
-          return list;
-        },
-      );
-    });
-  }
-
-  double getValue(TypedResult row, StrengthMetric metric) {
-    switch (metric) {
-      case StrengthMetric.oneRepMax:
-        return row.read(ormCol)!;
-      case StrengthMetric.volume:
-        return row.read(volumeCol)!;
-      case StrengthMetric.relativeStrength:
-        return row.read(relativeCol) ?? 0;
-      case StrengthMetric.bestWeight:
-        return row.read(db.gymSets.weight.max())!;
-      case StrengthMetric.bestReps:
-        try {
-          return row.read(db.gymSets.reps.max())!;
-        } catch (error) {
-          return 0;
-        }
-    }
   }
 
   @override
@@ -541,5 +364,182 @@ class _StrengthPageState extends State<StrengthPage> {
         child: const Icon(Icons.history),
       ),
     );
+  }
+
+  double getValue(TypedResult row, StrengthMetric metric) {
+    switch (metric) {
+      case StrengthMetric.oneRepMax:
+        return row.read(ormCol)!;
+      case StrengthMetric.volume:
+        return row.read(volumeCol)!;
+      case StrengthMetric.relativeStrength:
+        return row.read(relativeCol) ?? 0;
+      case StrengthMetric.bestWeight:
+        return row.read(db.gymSets.weight.max())!;
+      case StrengthMetric.bestReps:
+        try {
+          return row.read(db.gymSets.reps.max())!;
+        } catch (error) {
+          return 0;
+        }
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+    if (widget.name == 'Weight') period = Period.week;
+    setStream();
+  }
+
+  void setStream() {
+    Expression<String> createdCol = const CustomExpression<String>(
+      "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+    );
+    if (period == Period.month)
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    else if (period == Period.week)
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    else if (period == Period.year)
+      createdCol = const CustomExpression<String>(
+        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
+      );
+
+    setState(() {
+      graphStream = (db.selectOnly(db.gymSets)
+            ..addColumns([
+              db.gymSets.weight.max(),
+              volumeCol,
+              ormCol,
+              db.gymSets.created,
+              if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+              if (metric != StrengthMetric.bestReps) db.gymSets.reps,
+              db.gymSets.unit,
+              relativeCol,
+            ])
+            ..where(db.gymSets.name.equals(widget.name))
+            ..where(db.gymSets.hidden.equals(false))
+            ..where(
+              db.gymSets.created.isBiggerOrEqualValue(startDate ?? DateTime(0)),
+            )
+            ..where(
+              db.gymSets.created.isSmallerThanValue(
+                endDate ??
+                    DateTime.now().toLocal().add(const Duration(days: 1)),
+              ),
+            )
+            ..orderBy([
+              OrderingTerm(
+                expression: createdCol,
+                mode: OrderingMode.desc,
+              ),
+            ])
+            ..limit(11)
+            ..groupBy([createdCol]))
+          .watch()
+          .map(
+        (results) {
+          List<StrengthData> list = [];
+          for (final result in results.reversed) {
+            final unit = result.read(db.gymSets.unit)!;
+            var value = getValue(result, metric);
+
+            if (unit == 'lb' && targetUnit == 'kg') {
+              value *= 0.45359237;
+            } else if (unit == 'kg' && targetUnit == 'lb') {
+              value *= 2.20462262;
+            }
+
+            double reps = 0.0;
+            try {
+              reps = result.read(db.gymSets.reps)!;
+            } catch (_) {}
+
+            list.add(
+              StrengthData(
+                created: result.read(db.gymSets.created)!.toLocal(),
+                value: value,
+                unit: unit,
+                reps: reps,
+              ),
+            );
+          }
+          return list;
+        },
+      );
+    });
+  }
+
+  LineTouchTooltipData tooltipData(
+    BuildContext context,
+    List<StrengthData> rows,
+    String format,
+  ) {
+    return LineTouchTooltipData(
+      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
+      getTooltipItems: (touchedSpots) {
+        final row = rows.elementAt(touchedSpots.first.spotIndex);
+        final created = DateFormat(format).format(row.created);
+        final formatter = NumberFormat("#,###.00");
+
+        String text =
+            "${row.reps} x ${row.value.toStringAsFixed(2)}$targetUnit $created";
+        switch (metric) {
+          case StrengthMetric.bestReps:
+          case StrengthMetric.relativeStrength:
+            text = "${row.value.toStringAsFixed(2)} $created";
+            break;
+          case StrengthMetric.volume:
+          case StrengthMetric.oneRepMax:
+            text = "${formatter.format(row.value)}$targetUnit $created";
+            break;
+          case StrengthMetric.bestWeight:
+            break;
+        }
+
+        return [
+          LineTooltipItem(
+            text,
+            TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
+          ),
+        ];
+      },
+    );
+  }
+
+  Future<void> _selectEnd() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return;
+
+    setState(() {
+      endDate = pickedDate;
+    });
+    setStream();
+  }
+
+  Future<void> _selectStart() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate == null) return;
+
+    setState(() {
+      startDate = pickedDate;
+    });
+    setStream();
   }
 }

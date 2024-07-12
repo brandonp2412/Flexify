@@ -36,11 +36,6 @@ class TimerState extends ChangeNotifier {
     await timerChannel.invokeMethod('add', args);
   }
 
-  Future<void> stopTimer() async {
-    updateTimer(NativeTimerWrapper.emptyTimer());
-    await timerChannel.invokeMethod('stop');
-  }
-
   Future<void> startTimer(
     String title,
     Duration rest,
@@ -62,6 +57,11 @@ class TimerState extends ChangeNotifier {
       'vibrate': vibrate,
     };
     await timerChannel.invokeMethod('timer', args);
+  }
+
+  Future<void> stopTimer() async {
+    updateTimer(NativeTimerWrapper.emptyTimer());
+    await timerChannel.invokeMethod('stop');
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {

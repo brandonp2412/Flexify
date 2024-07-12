@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseTile extends StatelessWidget {
+  final List<TextEditingController> controllers;
+
+  final MapEntry<int, String> entry;
+  final Function(String) add;
+  final Function(String) remove;
+  final bool on;
   const ExerciseTile({
     super.key,
     required this.controllers,
@@ -12,12 +18,6 @@ class ExerciseTile extends StatelessWidget {
     required this.remove,
     required this.on,
   });
-
-  final List<TextEditingController> controllers;
-  final MapEntry<int, String> entry;
-  final Function(String) add;
-  final Function(String) remove;
-  final bool on;
 
   @override
   Widget build(BuildContext context) {

@@ -4,36 +4,6 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TimerProgressIndicator extends StatelessWidget {
-  const TimerProgressIndicator({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<TimerState>(
-      builder: (context, timerState, child) {
-        final duration = timerState.nativeTimer.getDuration();
-        final elapsed = timerState.nativeTimer.getElapsed();
-        final remaining = timerState.nativeTimer.getRemaining();
-
-        return Visibility(
-          visible: duration > Duration.zero,
-          child: TweenAnimationBuilder(
-            key: UniqueKey(),
-            tween: Tween<double>(
-              begin: 1,
-              end: elapsed.inMilliseconds / duration.inMilliseconds,
-            ),
-            duration: remaining,
-            builder: (context, value, child) => LinearProgressIndicator(
-              value: value,
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
 class TimerCircularProgressIndicator extends StatelessWidget {
   const TimerCircularProgressIndicator({super.key});
 
@@ -68,15 +38,39 @@ class TimerCircularProgressIndicator extends StatelessWidget {
   }
 }
 
+class TimerProgressIndicator extends StatelessWidget {
+  const TimerProgressIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<TimerState>(
+      builder: (context, timerState, child) {
+        final duration = timerState.nativeTimer.getDuration();
+        final elapsed = timerState.nativeTimer.getElapsed();
+        final remaining = timerState.nativeTimer.getRemaining();
+
+        return Visibility(
+          visible: duration > Duration.zero,
+          child: TweenAnimationBuilder(
+            key: UniqueKey(),
+            tween: Tween<double>(
+              begin: 1,
+              end: elapsed.inMilliseconds / duration.inMilliseconds,
+            ),
+            duration: remaining,
+            builder: (context, value, child) => LinearProgressIndicator(
+              value: value,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   final double value;
   final TimerState timerState;
-
-  String generateTitleText(Duration remaining) {
-    final minutes = (remaining.inMinutes).toString().padLeft(2, '0');
-    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
-    return "$minutes:$seconds";
-  }
 
   const _TimerCircularProgressIndicatorTile({
     required this.value,
@@ -129,5 +123,11 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String generateTitleText(Duration remaining) {
+    final minutes = (remaining.inMinutes).toString().padLeft(2, '0');
+    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+    return "$minutes:$seconds";
   }
 }
