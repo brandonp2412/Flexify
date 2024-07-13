@@ -13,8 +13,11 @@ new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 
 changelog_file="fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
-git --no-pager log --pretty=format:'%s' "$(git describe --tags --abbrev=0)"..HEAD \
-  | awk '{print "- "$0}' > $changelog_file
+if ! [ -f $changelog_file ]; then
+    git --no-pager log --pretty=format:'%s' "$(git describe --tags --abbrev=0)"..HEAD |
+        awk '{print "- "$0}' >$changelog_file
+fi
+
 nvim $changelog_file
 changelog=$(cat $changelog_file)
 echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
@@ -43,9 +46,9 @@ mv $apk/app-release.apk $apk/flexify.apk
 
 git push
 gh release create "$new_version" --notes "$changelog" \
-  $apk/app-*-release.apk \
-  $apk/flexify.apk \
-  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
+    $apk/app-*-release.apk \
+    $apk/flexify.apk \
+    $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
 git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
@@ -53,9 +56,9 @@ echo q | flutter run --release -d 'pixel 5'
 set +x
 ssh macbook "
   set -e
-  source .zprofile 
-  cd flexify 
-  git pull 
+  source .zprofile
+  cd flexify
+  git pull
   security unlock-keychain -p $(pass macbook)
   ./macos.sh || true
   ./ios.sh
