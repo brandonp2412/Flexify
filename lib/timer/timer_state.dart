@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -40,11 +40,12 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
-    if (platformIsDesktop()) {
+    if (Platform.isAndroid) {
+      timerChannel.invokeMethod('add', args);
+    } else {
       next?.cancel();
       next = Timer(const Duration(minutes: 1), () => notify(null, alarmSound));
-    } else
-      return timerChannel.invokeMethod('add', args);
+    }
   }
 
   @override
@@ -73,11 +74,12 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
-    if (platformIsDesktop()) {
+    if (Platform.isAndroid) {
+      await timerChannel.invokeMethod('timer', args);
+    } else {
       next?.cancel();
       next = Timer(rest, () => notify(title, alarmSound));
-    } else
-      await timerChannel.invokeMethod('timer', args);
+    }
   }
 
   notify(String? title, String? alarmSound) async {
@@ -88,19 +90,17 @@ class TimerState extends ChangeNotifier {
     );
     const linuxSettings =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
-    const macosSettings = DarwinInitializationSettings();
-    const initSettings =
-        InitializationSettings(linux: linuxSettings, macOS: macosSettings);
+    const darwinSettings = DarwinInitializationSettings();
+    const initSettings = InitializationSettings(
+        linux: linuxSettings, macOS: darwinSettings, iOS: darwinSettings);
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(initSettings);
     await plugin.show(1, title ?? "Timer up", null, null);
   }
 
-  playSound() async {}
-
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
-    if (platformIsDesktop())
+    if (!Platform.isAndroid)
       player.stop();
     else
       timerChannel.invokeMethod('stop');
