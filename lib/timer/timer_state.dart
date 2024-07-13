@@ -82,15 +82,15 @@ class TimerState extends ChangeNotifier {
 
   notify(String? title, String? alarmSound) async {
     player.play(
-      alarmSound != null
-          ? DeviceFileSource(alarmSound)
+      alarmSound?.isNotEmpty == true
+          ? DeviceFileSource(alarmSound!)
           : AssetSource('argon.mp3'),
     );
-    const settings =
+    const linuxSettings =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
-    const initSettings = InitializationSettings(
-      linux: settings,
-    );
+    const macosSettings = DarwinInitializationSettings();
+    const initSettings =
+        InitializationSettings(linux: linuxSettings, macOS: macosSettings);
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(initSettings);
     await plugin.show(1, title ?? "Timer up", null, null);
