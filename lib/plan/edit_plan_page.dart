@@ -22,12 +22,10 @@ class EditPlanPage extends StatefulWidget {
 
 class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> daySwitches;
-  late List<String> exerciseSelections;
 
   bool showOff = true;
   String search = '';
-  List<String> exercises = [];
-  List<TextEditingController> controllers = [];
+  List<PlanExercisesCompanion> exercises = [];
 
   final searchNode = FocusNode();
   final searchController = TextEditingController();
@@ -35,32 +33,30 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Iterable<Widget> get tiles => exercises
       .where(
-        (exercise) {
+        (pe) {
           if (showOff)
-            return exercise.toLowerCase().contains(search.toLowerCase());
-          if (exerciseSelections.contains(exercise))
-            return exercise.toLowerCase().contains(search.toLowerCase());
+            return pe.exercise.value
+                .toLowerCase()
+                .contains(search.toLowerCase());
+          if (pe.enabled.value)
+            return pe.exercise.value
+                .toLowerCase()
+                .contains(search.toLowerCase());
           return false;
         },
       )
       .toList()
-      .asMap()
-      .entries
       .map(
-        (entry) => ExerciseTile(
-          controllers: controllers,
-          entry: entry,
-          add: (value) {
+        (planExercise) => ExerciseTile(
+          planExercise: planExercise,
+          onChange: (value) {
+            final id = exercises
+                .indexWhere((pe) => pe.exercise == planExercise.exercise);
+            if (id == -1) return;
             setState(() {
-              exerciseSelections.add(value);
+              exercises[id] = value;
             });
           },
-          remove: (value) {
-            setState(() {
-              exerciseSelections.remove(value);
-            });
-          },
-          on: exerciseSelections.contains(entry.value),
         ),
       );
 
@@ -172,13 +168,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     final dayList = widget.plan.days.value.split(',');
     daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
-
-    if (widget.plan.exercises.value.isEmpty)
-      exerciseSelections = [];
-    else {
-      final splitExercises = widget.plan.exercises.value.split(',');
-      exerciseSelections = splitExercises;
-    }
   }
 
   void setExercises() {
@@ -195,23 +184,21 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 db.planExercises.exercise.equalsExp(db.gymSets.name),
           ),
         ])
-        ..addColumns([db.planExercises.maxSets]);
+        ..addColumns(db.planExercises.$columns);
 
     query.get().then(
           (results) => setState(() {
             exercises = [];
-            controllers = [];
 
             for (final result in results) {
-              exercises.add(result.read(db.gymSets.name)!);
-              String text = '';
-              if (widget.plan.id.present)
-                text = result.read(db.planExercises.maxSets)?.toString() ?? "";
-              controllers.add(
-                TextEditingController(
-                  text: text,
-                ),
+              final pe = PlanExercisesCompanion(
+                planId: widget.plan.id,
+                id: Value.absentIfNull(result.read(db.planExercises.id)),
+                exercise: Value(result.read(db.gymSets.name)!),
+                enabled: Value(result.read(db.planExercises.enabled) ?? false),
+                maxSets: Value(result.read(db.planExercises.maxSets)),
               );
+              exercises.add(pe);
             }
           }),
         );
@@ -229,7 +216,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
       return;
     }
 
-    if (exerciseSelections.isEmpty) {
+    if (exercises.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Select exercises first')),
       );
@@ -238,34 +225,22 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     var newPlan = PlansCompanion.insert(
       days: days.join(','),
-      exercises:
-          exerciseSelections.where((element) => element.isNotEmpty).join(','),
+      exercises: exercises
+          .where((element) => element.enabled.value)
+          .map((element) => element.exercise.value)
+          .join(','),
       title: Value(titleController.text),
     );
 
-    int? id;
     if (widget.plan.id.present) {
       await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
       await db.planExercises
           .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
-      id = widget.plan.id.value;
     } else {
-      id = await db.into(db.plans).insert(newPlan);
+      await db.into(db.plans).insert(newPlan);
     }
 
-    List<PlanExercisesCompanion> planExercises = [];
-    for (var i = 0; i < exercises.length; i++) {
-      planExercises.add(
-        PlanExercisesCompanion.insert(
-          planId: id,
-          exercise: exercises[i],
-          enabled: exerciseSelections.contains(exercises[i]),
-          maxSets: Value(int.tryParse(controllers[i].text)),
-        ),
-      );
-    }
-
-    await db.planExercises.insertAll(planExercises);
+    await db.planExercises.insertAll(exercises);
 
     if (!mounted) return;
     final planState = context.read<PlanState>();

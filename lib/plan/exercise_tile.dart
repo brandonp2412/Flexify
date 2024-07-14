@@ -1,23 +1,28 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ExerciseTile extends StatelessWidget {
-  final List<TextEditingController> controllers;
+class ExerciseTile extends StatefulWidget {
+  final PlanExercisesCompanion planExercise;
+  final Function(PlanExercisesCompanion) onChange;
 
-  final MapEntry<int, String> entry;
-  final Function(String) add;
-  final Function(String) remove;
-  final bool on;
   const ExerciseTile({
     super.key,
-    required this.controllers,
-    required this.entry,
-    required this.add,
-    required this.remove,
-    required this.on,
+    required this.onChange,
+    required this.planExercise,
   });
+
+  @override
+  State<ExerciseTile> createState() => _ExerciseTileState();
+}
+
+class _ExerciseTileState extends State<ExerciseTile> {
+  late final controller = TextEditingController(
+    text: widget.planExercise.maxSets.value?.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +35,16 @@ class ExerciseTile extends StatelessWidget {
             child: Selector<SettingsState, int>(
               selector: (context, settings) => settings.value.maxSets,
               builder: (context, value, child) => TextField(
-                controller: controllers[entry.key],
+                controller: controller,
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: false),
-                onTap: () => selectAll(controllers[entry.key]),
+                onTap: () => selectAll(controller),
                 onChanged: (value) {
-                  if (value.isNotEmpty && !on) add(entry.value);
+                  final pe = widget.planExercise.copyWith(
+                    enabled: const Value(true),
+                    maxSets: Value(int.tryParse(controller.text)),
+                  );
+                  widget.onChange(pe);
                 },
                 decoration: InputDecoration(
                   labelText: "Sets",
@@ -49,24 +58,26 @@ class ExerciseTile extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                if (on)
-                  remove(entry.value);
-                else
-                  add(entry.value);
+                widget.onChange(
+                  widget.planExercise.copyWith(
+                    enabled: Value(!widget.planExercise.enabled.value),
+                  ),
+                );
               },
               child: Text(
-                entry.value,
+                widget.planExercise.exercise.value,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
           ),
           Switch(
-            value: on,
+            value: widget.planExercise.enabled.value,
             onChanged: (value) {
-              if (on)
-                remove(entry.value);
-              else
-                add(entry.value);
+              widget.onChange(
+                widget.planExercise.copyWith(
+                  enabled: Value(value),
+                ),
+              );
             },
           ),
         ],
