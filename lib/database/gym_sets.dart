@@ -4,6 +4,10 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/main.dart';
 
+const inclineAdjustedPace = CustomExpression<double>(
+  "SUM(distance) * POW(1.1, AVG(incline)) / SUM(duration)",
+);
+
 double getValue(TypedResult row, CardioMetric metric) {
   switch (metric) {
     case CardioMetric.pace:
@@ -13,6 +17,10 @@ double getValue(TypedResult row, CardioMetric metric) {
       return row.read(db.gymSets.distance.sum())!;
     case CardioMetric.duration:
       return row.read(db.gymSets.duration.sum())!;
+    case CardioMetric.incline:
+      return row.read(db.gymSets.incline.avg())!;
+    case CardioMetric.inclineAdjustedPace:
+      return row.read(inclineAdjustedPace)!;
   }
 }
 
@@ -29,6 +37,8 @@ Stream<List<CardioData>> watchCardio({
           db.gymSets.duration.sum(),
           db.gymSets.distance.sum(),
           db.gymSets.distance.sum() / db.gymSets.duration.sum(),
+          db.gymSets.incline.avg(),
+          inclineAdjustedPace,
           db.gymSets.created,
           db.gymSets.unit,
         ])

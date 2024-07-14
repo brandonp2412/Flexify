@@ -8,7 +8,7 @@ const weekdays = [
   'Sunday',
 ];
 
-enum CardioMetric { pace, distance, duration }
+enum CardioMetric { pace, distance, duration, incline, inclineAdjustedPace }
 
 enum Period {
   day,

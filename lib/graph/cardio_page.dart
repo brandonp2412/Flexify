@@ -133,12 +133,20 @@ class _CardioPageState extends State<CardioPage> {
                       child: Text("Pace (distance / time)"),
                     ),
                     DropdownMenuItem(
+                      value: CardioMetric.inclineAdjustedPace,
+                      child: Text("Adjusted pace"),
+                    ),
+                    DropdownMenuItem(
                       value: CardioMetric.duration,
                       child: Text("Duration"),
                     ),
                     DropdownMenuItem(
                       value: CardioMetric.distance,
                       child: Text("Distance"),
+                    ),
+                    DropdownMenuItem(
+                      value: CardioMetric.incline,
+                      child: Text("Incline"),
                     ),
                   ],
                   onChanged: (value) {
@@ -327,6 +335,11 @@ class _CardioPageState extends State<CardioPage> {
                   break;
                 case CardioMetric.distance:
                   text += " ${row.unit}";
+                  break;
+                case CardioMetric.incline:
+                  text += "%";
+                  break;
+                case CardioMetric.inclineAdjustedPace:
                   break;
               }
 
