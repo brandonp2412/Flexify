@@ -215,4 +215,5 @@ class GymSets extends Table {
   IntColumn get restMs => integer().nullable()();
   TextColumn get unit => text()();
   RealColumn get weight => real()();
+  TextColumn get category => text().nullable()();
 }

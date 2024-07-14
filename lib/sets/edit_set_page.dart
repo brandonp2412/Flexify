@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -39,6 +40,7 @@ class _EditSetPageState extends State<EditSetPage> {
   late String name;
   int? restMs;
   String? image;
+  String? category;
 
   TextEditingController? nameController;
   List<String> nameOptions = [];
@@ -259,6 +261,23 @@ class _EditSetPageState extends State<EditSetPage> {
               ),
               selector: (context, settings) => settings.value.showUnits,
             ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Category'),
+              value: category,
+              items: categories
+                  .map(
+                    (category) => DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  category = value!;
+                });
+              },
+            ),
             Selector<SettingsState, String>(
               builder: (context, longDateFormat, child) => ListTile(
                 title: const Text('Created date'),
@@ -374,6 +393,7 @@ class _EditSetPageState extends State<EditSetPage> {
       restMs: Value(restMs),
       incline: Value(int.tryParse(inclineController.text)),
       image: Value(image),
+      category: Value(category),
     );
 
     if (widget.gymSet.id > 0)
@@ -427,6 +447,7 @@ class _EditSetPageState extends State<EditSetPage> {
     nameController?.text = gymSet.name;
 
     setState(() {
+      category = gymSet.category;
       image = gymSet.image;
       name = gymSet.name;
       repsController.text = toString(gymSet.reps);

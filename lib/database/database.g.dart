@@ -392,6 +392,12 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
       'weight', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         bodyWeight,
@@ -408,7 +414,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
         reps,
         restMs,
         unit,
-        weight
+        weight,
+        category
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -491,6 +498,10 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
     } else if (isInserting) {
       context.missing(_weightMeta);
     }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
     return context;
   }
 
@@ -530,6 +541,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
       weight: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category']),
     );
   }
 
@@ -555,6 +568,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final int? restMs;
   final String unit;
   final double weight;
+  final String? category;
   const GymSet(
       {required this.bodyWeight,
       required this.cardio,
@@ -570,7 +584,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       required this.reps,
       this.restMs,
       required this.unit,
-      required this.weight});
+      required this.weight,
+      this.category});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -597,6 +612,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     }
     map['unit'] = Variable<String>(unit);
     map['weight'] = Variable<double>(weight);
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
     return map;
   }
 
@@ -622,6 +640,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           restMs == null && nullToAbsent ? const Value.absent() : Value(restMs),
       unit: Value(unit),
       weight: Value(weight),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
     );
   }
 
@@ -644,6 +665,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       restMs: serializer.fromJson<int?>(json['restMs']),
       unit: serializer.fromJson<String>(json['unit']),
       weight: serializer.fromJson<double>(json['weight']),
+      category: serializer.fromJson<String?>(json['category']),
     );
   }
   @override
@@ -665,6 +687,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'restMs': serializer.toJson<int?>(restMs),
       'unit': serializer.toJson<String>(unit),
       'weight': serializer.toJson<double>(weight),
+      'category': serializer.toJson<String?>(category),
     };
   }
 
@@ -683,7 +706,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           double? reps,
           Value<int?> restMs = const Value.absent(),
           String? unit,
-          double? weight}) =>
+          double? weight,
+          Value<String?> category = const Value.absent()}) =>
       GymSet(
         bodyWeight: bodyWeight ?? this.bodyWeight,
         cardio: cardio ?? this.cardio,
@@ -700,6 +724,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         restMs: restMs.present ? restMs.value : this.restMs,
         unit: unit ?? this.unit,
         weight: weight ?? this.weight,
+        category: category.present ? category.value : this.category,
       );
   @override
   String toString() {
@@ -718,7 +743,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('reps: $reps, ')
           ..write('restMs: $restMs, ')
           ..write('unit: $unit, ')
-          ..write('weight: $weight')
+          ..write('weight: $weight, ')
+          ..write('category: $category')
           ..write(')'))
         .toString();
   }
@@ -739,7 +765,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       reps,
       restMs,
       unit,
-      weight);
+      weight,
+      category);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -758,7 +785,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.reps == this.reps &&
           other.restMs == this.restMs &&
           other.unit == this.unit &&
-          other.weight == this.weight);
+          other.weight == this.weight &&
+          other.category == this.category);
 }
 
 class GymSetsCompanion extends UpdateCompanion<GymSet> {
@@ -777,6 +805,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<int?> restMs;
   final Value<String> unit;
   final Value<double> weight;
+  final Value<String?> category;
   const GymSetsCompanion({
     this.bodyWeight = const Value.absent(),
     this.cardio = const Value.absent(),
@@ -793,6 +822,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.restMs = const Value.absent(),
     this.unit = const Value.absent(),
     this.weight = const Value.absent(),
+    this.category = const Value.absent(),
   });
   GymSetsCompanion.insert({
     this.bodyWeight = const Value.absent(),
@@ -810,6 +840,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.restMs = const Value.absent(),
     required String unit,
     required double weight,
+    this.category = const Value.absent(),
   })  : created = Value(created),
         name = Value(name),
         reps = Value(reps),
@@ -831,6 +862,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<int>? restMs,
     Expression<String>? unit,
     Expression<double>? weight,
+    Expression<String>? category,
   }) {
     return RawValuesInsertable({
       if (bodyWeight != null) 'body_weight': bodyWeight,
@@ -848,6 +880,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (restMs != null) 'rest_ms': restMs,
       if (unit != null) 'unit': unit,
       if (weight != null) 'weight': weight,
+      if (category != null) 'category': category,
     });
   }
 
@@ -866,7 +899,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<double>? reps,
       Value<int?>? restMs,
       Value<String>? unit,
-      Value<double>? weight}) {
+      Value<double>? weight,
+      Value<String?>? category}) {
     return GymSetsCompanion(
       bodyWeight: bodyWeight ?? this.bodyWeight,
       cardio: cardio ?? this.cardio,
@@ -883,6 +917,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       restMs: restMs ?? this.restMs,
       unit: unit ?? this.unit,
       weight: weight ?? this.weight,
+      category: category ?? this.category,
     );
   }
 
@@ -934,6 +969,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (weight.present) {
       map['weight'] = Variable<double>(weight.value);
     }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
     return map;
   }
 
@@ -954,7 +992,8 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('reps: $reps, ')
           ..write('restMs: $restMs, ')
           ..write('unit: $unit, ')
-          ..write('weight: $weight')
+          ..write('weight: $weight, ')
+          ..write('category: $category')
           ..write(')'))
         .toString();
   }
@@ -2408,6 +2447,7 @@ typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
   Value<int?> restMs,
   required String unit,
   required double weight,
+  Value<String?> category,
 });
 typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<double> bodyWeight,
@@ -2425,6 +2465,7 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<int?> restMs,
   Value<String> unit,
   Value<double> weight,
+  Value<String?> category,
 });
 
 class $$GymSetsTableTableManager extends RootTableManager<
@@ -2461,6 +2502,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<int?> restMs = const Value.absent(),
             Value<String> unit = const Value.absent(),
             Value<double> weight = const Value.absent(),
+            Value<String?> category = const Value.absent(),
           }) =>
               GymSetsCompanion(
             bodyWeight: bodyWeight,
@@ -2478,6 +2520,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             restMs: restMs,
             unit: unit,
             weight: weight,
+            category: category,
           ),
           getInsertCompanionBuilder: ({
             Value<double> bodyWeight = const Value.absent(),
@@ -2495,6 +2538,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<int?> restMs = const Value.absent(),
             required String unit,
             required double weight,
+            Value<String?> category = const Value.absent(),
           }) =>
               GymSetsCompanion.insert(
             bodyWeight: bodyWeight,
@@ -2512,6 +2556,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             restMs: restMs,
             unit: unit,
             weight: weight,
+            category: category,
           ),
         ));
 }
@@ -2606,6 +2651,11 @@ class $$GymSetsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<String> get category => $state.composableBuilder(
+      column: $state.table.category,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ComposableFilter planExercisesRefs(
       ComposableFilter Function($$PlanExercisesTableFilterComposer f) f) {
     final $$PlanExercisesTableFilterComposer composer = $state.composerBuilder(
@@ -2695,6 +2745,11 @@ class $$GymSetsTableOrderingComposer
 
   ColumnOrderings<double> get weight => $state.composableBuilder(
       column: $state.table.weight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get category => $state.composableBuilder(
+      column: $state.table.category,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }

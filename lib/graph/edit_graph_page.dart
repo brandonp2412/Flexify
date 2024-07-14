@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -27,9 +28,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
   final TextEditingController minutesController = TextEditingController();
   final TextEditingController secondsController = TextEditingController();
 
-  bool cardio = false;
+  bool? cardio;
   String? unit;
   String? image;
+  String? category;
 
   @override
   Widget build(BuildContext context) {
@@ -76,37 +78,55 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 ),
               ],
             ),
-            if (unit != null)
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Category'),
+              value: category,
+              items: categories
+                  .map(
+                    (category) => DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  category = value!;
+                });
+              },
+            ),
+            if (unit != null && cardio != null)
               UnitSelector(
                 value: unit!,
-                cardio: cardio,
+                cardio: cardio!,
                 onChanged: (value) {
                   setState(() {
                     unit = value;
                   });
                 },
               ),
-            ListTile(
-              leading: cardio
-                  ? const Icon(Icons.sports_gymnastics)
-                  : const Icon(Icons.fitness_center),
-              title: cardio ? const Text('Cardio') : const Text('Strength'),
-              onTap: () {
-                setState(() {
-                  cardio = !cardio;
-                  if (cardio)
-                    unit = unit == 'kg' ? 'km' : 'mi';
-                  else
-                    unit = unit == 'km' ? 'kg' : 'lb';
-                });
-              },
-              trailing: Switch(
-                value: cardio,
-                onChanged: (value) => setState(() {
-                  cardio = value;
-                }),
+            if (cardio != null)
+              ListTile(
+                leading: cardio!
+                    ? const Icon(Icons.sports_gymnastics)
+                    : const Icon(Icons.fitness_center),
+                title: cardio! ? const Text('Cardio') : const Text('Strength'),
+                onTap: () {
+                  setState(() {
+                    cardio = !cardio!;
+                    if (cardio!)
+                      unit = unit == 'kg' ? 'km' : 'mi';
+                    else
+                      unit = unit == 'km' ? 'kg' : 'lb';
+                  });
+                },
+                trailing: Switch(
+                  value: cardio!,
+                  onChanged: (value) => setState(() {
+                    cardio = value;
+                  }),
+                ),
               ),
-            ),
             Selector<SettingsState, bool>(
               builder: (context, showImages, child) {
                 return Visibility(
@@ -179,11 +199,14 @@ class _EditGraphPageState extends State<EditGraphPage> {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
       GymSetsCompanion(
-        name: Value(nameController.text),
-        cardio: Value(cardio),
+        name: nameController.text.isEmpty
+            ? const Value.absent()
+            : Value(nameController.text),
+        cardio: Value.absentIfNull(cardio),
         unit: Value.absentIfNull(unit),
-        restMs: Value(duration?.inMilliseconds),
+        restMs: Value.absentIfNull(duration?.inMilliseconds),
         image: Value.absentIfNull(image),
+        category: Value.absentIfNull(category),
       ),
     );
 
@@ -223,6 +246,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
             image = gymSet.image;
             cardio = gymSet.cardio;
             unit = gymSet.unit;
+            category = gymSet.category;
 
             if (gymSet.restMs != null) {
               final duration = Duration(milliseconds: gymSet.restMs!);
@@ -230,9 +254,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
               secondsController.text = (duration.inSeconds % 60).toString();
             }
 
-            if (cardio && (unit == 'kg' || unit == 'lb'))
+            if (gymSet.cardio && (unit == 'kg' || unit == 'lb'))
               unit = settings.value.cardioUnit;
-            else if (!cardio && (unit == 'km' || unit == 'mi'))
+            else if (!gymSet.cardio && (unit == 'km' || unit == 'mi'))
               unit = settings.value.strengthUnit;
           }),
         );

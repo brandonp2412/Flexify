@@ -8,6 +8,17 @@ const weekdays = [
   'Sunday',
 ];
 
+const categories = [
+  'Chest',
+  'Back',
+  'Shoulders',
+  'Arms',
+  'Legs',
+  'Core',
+  'Glutes',
+  'Calves',
+];
+
 enum CardioMetric { pace, distance, duration, incline, inclineAdjustedPace }
 
 enum Period {

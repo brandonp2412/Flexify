@@ -1,3 +1,4 @@
+import 'package:flexify/constants.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,15 +6,17 @@ import 'package:provider/provider.dart';
 
 class Filters extends StatefulWidget {
   final TextEditingController repsGtController;
-
   final TextEditingController repsLtController;
   final TextEditingController weightGtController;
   final TextEditingController weightLtController;
+  final String? category;
+  final Function(String?) setCategory;
   final DateTime? startDate;
   final DateTime? endDate;
   final Function(DateTime?) setStart;
   final Function(DateTime?) setEnd;
   final Function setStream;
+
   const Filters({
     super.key,
     required this.repsGtController,
@@ -23,8 +26,10 @@ class Filters extends StatefulWidget {
     required this.setStart,
     required this.setEnd,
     required this.setStream,
-    this.startDate,
-    this.endDate,
+    required this.startDate,
+    required this.endDate,
+    required this.category,
+    required this.setCategory,
   });
 
   @override
@@ -35,6 +40,7 @@ class _FiltersState extends State<Filters> {
   int get filtersCount =>
       (widget.startDate != null ? 1 : 0) +
       (widget.endDate != null ? 1 : 0) +
+      (widget.category != null ? 1 : 0) +
       (widget.weightGtController.text.isNotEmpty ? 1 : 0) +
       (widget.weightLtController.text.isNotEmpty ? 1 : 0) +
       (widget.repsLtController.text.isNotEmpty ? 1 : 0) +
@@ -60,6 +66,24 @@ class _FiltersState extends State<Filters> {
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: PopupMenuButton(
         itemBuilder: (context) => [
+          PopupMenuItem(
+            child: DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Category'),
+              value: widget.category,
+              items: categories
+                  .map(
+                    (category) => DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                widget.setCategory(value);
+                Navigator.pop(context);
+              },
+            ),
+          ),
           PopupMenuItem(
             child: ListTile(
               leading: const Icon(Icons.repeat),
@@ -238,6 +262,7 @@ class _FiltersState extends State<Filters> {
                 widget.weightLtController.text = '';
                 widget.setStart(null);
                 widget.setEnd(null);
+                widget.setCategory(null);
                 Navigator.pop(context);
               },
             ),

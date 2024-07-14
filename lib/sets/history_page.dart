@@ -80,6 +80,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   int limit = 100;
   DateTime? startDate;
   DateTime? endDate;
+  String? category;
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +114,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   setStart: (value) {
                     setState(() {
                       startDate = value;
+                      limit = 100;
+                    });
+                    setStream();
+                  },
+                  category: category,
+                  setCategory: (value) {
+                    setState(() {
+                      category = value;
                       limit = 100;
                     });
                     setStream();
@@ -313,6 +322,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       ..where((tbl) => tbl.hidden.equals(false))
       ..limit(limit));
 
+    if (category != null)
+      query = query..where((tbl) => tbl.category.equals(category!));
     if (startDate != null)
       query = query
         ..where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -32,6 +33,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   DateTime? created;
   bool? cardio;
   int? restMs;
+  String? category;
   String? oldNames;
   String? oldReps;
   String? oldWeights;
@@ -41,6 +43,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   String? oldMinutes;
   String? oldSeconds;
   String? oldInclines;
+  String? oldCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +199,26 @@ class _EditSetsPageState extends State<EditSetsPage> {
               ),
               selector: (context, settings) => settings.value.showUnits,
             ),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                labelText: 'Category',
+                hintText: oldCategories,
+              ),
+              value: category,
+              items: categories
+                  .map(
+                    (category) => DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  category = value!;
+                });
+              },
+            ),
             Selector<SettingsState, String>(
               builder: (context, longDateFormat, child) => ListTile(
                 title: const Text('Created Date'),
@@ -238,7 +261,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
     super.initState();
     final settings = context.read<SettingsState>().value;
 
-    (db.gymSets.select()..where((u) => u.id.isIn(widget.ids)))
+    (db.gymSets.select()
+          ..where((u) => u.id.isIn(widget.ids))
+          ..limit(3))
         .get()
         .then((gymSets) {
       setState(() {
@@ -260,6 +285,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
             .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
             .join(', ');
         oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
+        oldCategories = gymSets.map((gymSet) => gymSet.category).join(', ');
       });
     });
   }
@@ -295,19 +321,22 @@ class _EditSetsPageState extends State<EditSetsPage> {
     final incline = int.tryParse(inclineController.text);
 
     final gymSet = GymSetsCompanion(
-      name: nameController.text != ''
+      name: nameController.text.isNotEmpty
           ? Value(nameController.text)
           : const Value.absent(),
-      unit: unit != null ? Value(unit!) : const Value.absent(),
-      created: created != null ? Value(created!) : const Value.absent(),
-      cardio: cardio != null ? Value(cardio!) : const Value.absent(),
-      restMs: restMs != null ? Value(restMs!) : const Value.absent(),
-      incline: incline != null ? Value(incline) : const Value.absent(),
-      reps: reps != null ? Value(reps) : const Value.absent(),
-      weight: weight != null ? Value(weight) : const Value.absent(),
-      bodyWeight: bodyWeight != null ? Value(bodyWeight) : const Value.absent(),
-      distance: distance != null ? Value(distance) : const Value.absent(),
-      duration: Value(duration),
+      unit: Value.absentIfNull(unit),
+      created: Value.absentIfNull(created),
+      cardio: Value.absentIfNull(cardio),
+      restMs: Value.absentIfNull(restMs),
+      incline: Value.absentIfNull(incline),
+      reps: Value.absentIfNull(reps),
+      weight: Value.absentIfNull(weight),
+      bodyWeight: Value.absentIfNull(bodyWeight),
+      distance: Value.absentIfNull(distance),
+      duration: seconds == null && minutes == null
+          ? const Value.absent()
+          : Value(duration),
+      category: Value.absentIfNull(category),
     );
 
     (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(gymSet);
