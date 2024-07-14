@@ -101,7 +101,8 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             final reps = toString(gymSet.reps);
             final weight = toString(gymSet.weight);
             String incline = '';
-            if (gymSet.incline != null) incline = '@ ${gymSet.incline}%';
+            if (gymSet.incline != null && gymSet.incline! > 0)
+              incline = '@ ${gymSet.incline}%';
 
             return ListTile(
               leading: showImages && gymSet.image != null
