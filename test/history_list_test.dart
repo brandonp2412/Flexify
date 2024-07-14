@@ -56,5 +56,7 @@ void main() async {
 
     expect(find.text('Bench press'), findsOne);
     expect(find.text('2 x 3 kg'), findsOne);
+
+    await db.close();
   });
 }

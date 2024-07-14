@@ -37,5 +37,7 @@ void main() async {
 
     expect(find.text('Missing permissions'), findsOne);
     expect(find.byTooltip('Confirm'), findsOne);
+
+    await db.close();
   });
 }

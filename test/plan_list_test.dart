@@ -48,5 +48,7 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Bench press'), findsOne);
+
+    await db.close();
   });
 }
