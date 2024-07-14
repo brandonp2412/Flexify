@@ -131,42 +131,6 @@ List<Widget> getTimers(
               ),
         ),
       ),
-    if ('hide weight'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Hide weight'),
-        leading: const Icon(Icons.scale_outlined),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                hideWeight: Value(!settings.hideWeight),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.hideWeight,
-          onChanged: (value) => db.settings.update().write(
-                SettingsCompanion(
-                  hideWeight: Value(value),
-                ),
-              ),
-        ),
-      ),
-    if ('hide history tab'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Hide history tab'),
-        leading: const Icon(Icons.history),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                hideHistoryTab: Value(!settings.hideHistoryTab),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.hideHistoryTab,
-          onChanged: (value) => db.settings.update().write(
-                SettingsCompanion(
-                  hideHistoryTab: Value(value),
-                ),
-              ),
-        ),
-      ),
     if ('alarm sound'.contains(term.toLowerCase()))
       TextButton.icon(
         onPressed: () async {
