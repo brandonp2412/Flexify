@@ -40,7 +40,9 @@ class PlanTile extends StatelessWidget {
       trailing: Builder(
         builder: (context) {
           final planTrailing = context.select<SettingsState, PlanTrailing>(
-            (value) => value.planTrailing,
+            (settings) => PlanTrailing.values.byName(
+              settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
+            ),
           );
           if (planTrailing == PlanTrailing.none) return const SizedBox();
 

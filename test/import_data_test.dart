@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/import_data.dart';
@@ -15,10 +16,11 @@ void main() async {
   testWidgets('ImportData', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],

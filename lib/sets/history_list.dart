@@ -32,8 +32,8 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages =
-        context.select<SettingsState, bool>((settings) => settings.showImages);
+    final showImages = context
+        .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return ListView.builder(
       itemCount: widget.gymSets.length,
@@ -61,7 +61,7 @@ class _HistoryListState extends State<HistoryList> {
                   : null,
               title: Text(gymSet.name),
               subtitle: Selector<SettingsState, String>(
-                selector: (p0, p1) => p1.longDateFormat,
+                selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, value, child) => Text(
                   DateFormat(value).format(gymSet.created),
                 ),

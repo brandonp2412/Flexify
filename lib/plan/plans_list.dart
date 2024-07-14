@@ -78,7 +78,7 @@ class PlansList extends StatelessWidget {
 
     final settings = context.read<SettingsState>();
 
-    if (settings.planTrailing == PlanTrailing.reorder)
+    if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
         itemCount: plans.length,
         itemBuilder: (context, index) {

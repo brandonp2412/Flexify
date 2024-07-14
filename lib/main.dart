@@ -17,7 +17,8 @@ import 'plan/plans_page.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await (db.settings.select()..limit(1)).getSingle();
-  final settings = SettingsState();
+  final setting = await (db.settings.select()..limit(1)).getSingle();
+  final settings = SettingsState(setting);
 
   runApp(appProviders(settings));
 }
@@ -41,10 +42,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final systemColors = context.select<SettingsState, bool>(
-      (value) => value.systemColors,
+      (settings) => settings.value.systemColors,
     );
-    final themeMode =
-        context.select<SettingsState, ThemeMode>((value) => value.themeMode);
+    final themeMode = context.select<SettingsState, ThemeMode>(
+      (settings) => ThemeMode.values
+          .byName(settings.value.themeMode.replaceFirst('ThemeMode.', '')),
+    );
 
     final defaultTheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
     final defaultDark = ColorScheme.fromSeed(
@@ -84,10 +87,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hideHistoryTab =
-        context.select<SettingsState, bool>((value) => value.hideHistoryTab);
-    final hideTimerTab =
-        context.select<SettingsState, bool>((value) => value.hideTimerTab);
+    final hideHistoryTab = context.select<SettingsState, bool>(
+      (settings) => settings.value.hideHistoryTab,
+    );
+    final hideTimerTab = context
+        .select<SettingsState, bool>((settings) => settings.value.hideTimerTab);
     var length = 4;
     if (hideTimerTab) length--;
     if (hideHistoryTab) length--;

@@ -177,7 +177,7 @@ class _FiltersState extends State<Filters> {
                 Navigator.pop(context);
               },
               subtitle: Selector<SettingsState, String>(
-                selector: (p0, p1) => p1.shortDateFormat,
+                selector: (p0, settings) => settings.value.shortDateFormat,
                 builder: (context, shortDateFormat, child) =>
                     widget.startDate != null
                         ? Text(
@@ -203,7 +203,7 @@ class _FiltersState extends State<Filters> {
               leading: const Icon(Icons.calendar_month),
               title: const Text("End date"),
               subtitle: Selector<SettingsState, String>(
-                selector: (p0, p1) => p1.shortDateFormat,
+                selector: (p0, settings) => settings.value.shortDateFormat,
                 builder: (context, shortDateFormat, child) =>
                     widget.endDate != null
                         ? Text(

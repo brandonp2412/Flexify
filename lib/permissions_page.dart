@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -36,10 +39,20 @@ class _PermissionsPageState extends State<PermissionsPage> {
               ),
               ListTile(
                 title: const Text('Rest timers'),
-                onTap: () => settings.setTimers(!settings.restTimers),
+                onTap: () {
+                  db.settings.update().write(
+                        SettingsCompanion(
+                          restTimers: Value(!settings.value.restTimers),
+                        ),
+                      );
+                },
                 trailing: Switch(
-                  value: settings.restTimers,
-                  onChanged: (value) => settings.setTimers(value),
+                  value: settings.value.restTimers,
+                  onChanged: (value) => db.settings.update().write(
+                        SettingsCompanion(
+                          restTimers: Value(value),
+                        ),
+                      ),
                 ),
               ),
               ListTile(
@@ -89,7 +102,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if ((!ignore || !schedule) && settings.restTimers)
+          if ((!ignore || !schedule) && settings.value.restTimers)
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -110,7 +123,11 @@ class _PermissionsPageState extends State<PermissionsPage> {
                       onPressed: () async {
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        settings.setExplained(true);
+                        db.settings.update().write(
+                              const SettingsCompanion(
+                                explainedPermissions: Value(true),
+                              ),
+                            );
                       },
                     ),
                   ],
@@ -119,7 +136,11 @@ class _PermissionsPageState extends State<PermissionsPage> {
             );
           else {
             Navigator.pop(context);
-            settings.setExplained(true);
+            db.settings.update().write(
+                  const SettingsCompanion(
+                    explainedPermissions: Value(true),
+                  ),
+                );
           }
         },
         tooltip: "Confirm",

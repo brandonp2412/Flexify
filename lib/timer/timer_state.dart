@@ -92,7 +92,10 @@ class TimerState extends ChangeNotifier {
         LinuxInitializationSettings(defaultActionName: 'Open notification');
     const darwinSettings = DarwinInitializationSettings();
     const initSettings = InitializationSettings(
-        linux: linuxSettings, macOS: darwinSettings, iOS: darwinSettings);
+      linux: linuxSettings,
+      macOS: darwinSettings,
+      iOS: darwinSettings,
+    );
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(initSettings);
     await plugin.show(1, title ?? "Timer up", null, null);

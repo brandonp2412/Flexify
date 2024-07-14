@@ -179,7 +179,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   child: Builder(
                     builder: (context) {
                       final groupHistory = context.select<SettingsState, bool>(
-                        (value) => value.groupHistory,
+                        (settings) => settings.value.groupHistory,
                       );
 
                       if (groupHistory) {
@@ -234,7 +234,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final settings = context.read<SettingsState>();
+          final settings = context.read<SettingsState>().value;
           final gymSets = await stream.first;
           var bodyWeight = 0.0;
           if (!settings.hideWeight)

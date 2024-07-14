@@ -115,10 +115,11 @@ class _CardioPageState extends State<CardioPage> {
               spots.add(FlSpot(index.toDouble(), value));
             }
 
-            final curveLines = context
-                .select<SettingsState, bool>((value) => value.curveLines);
+            final curveLines = context.select<SettingsState, bool>(
+              (settings) => settings.value.curveLines,
+            );
             final format = context.select<SettingsState, String>(
-              (value) => value.shortDateFormat,
+              (settings) => settings.value.shortDateFormat,
             );
 
             return ListView(
@@ -177,7 +178,7 @@ class _CardioPageState extends State<CardioPage> {
                 ),
                 if (metric == CardioMetric.distance)
                   Selector<SettingsState, bool>(
-                    selector: (p0, p1) => p1.showUnits,
+                    selector: (p0, p1) => p1.value.showUnits,
                     builder: (context, value, child) => Visibility(
                       visible: value,
                       child: UnitSelector(
@@ -198,7 +199,8 @@ class _CardioPageState extends State<CardioPage> {
                       child: ListTile(
                         title: const Text('Start date'),
                         subtitle: Selector<SettingsState, String>(
-                          selector: (p0, p1) => p1.shortDateFormat,
+                          selector: (p0, settings) =>
+                              settings.value.shortDateFormat,
                           builder: (context, value, child) {
                             if (startDate == null) return Text(value);
 
@@ -218,7 +220,8 @@ class _CardioPageState extends State<CardioPage> {
                       child: ListTile(
                         title: const Text('Stop date'),
                         subtitle: Selector<SettingsState, String>(
-                          selector: (p0, p1) => p1.shortDateFormat,
+                          selector: (context, settings) =>
+                              settings.value.shortDateFormat,
                           builder: (context, value, child) {
                             if (endDate == null) return Text(value);
 

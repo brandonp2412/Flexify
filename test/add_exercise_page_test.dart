@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
@@ -14,11 +15,12 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('AddExercise', (WidgetTester tester) async {
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await mockTests();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],

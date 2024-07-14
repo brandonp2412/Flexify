@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/database/database.dart';
@@ -39,10 +40,11 @@ void main() async {
       await db.into(db.plans).insert(element);
     }
 
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -89,10 +91,11 @@ void main() async {
       await db.into(db.plans).insert(element);
     }
 
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -139,10 +142,11 @@ void main() async {
       await db.into(db.plans).insert(element);
     }
 
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],

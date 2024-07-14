@@ -16,10 +16,11 @@ void main() async {
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -39,10 +40,11 @@ void main() async {
   testWidgets('HistoryPage add button', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -72,10 +74,11 @@ void main() async {
       ),
     ]);
 
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -100,10 +103,11 @@ void main() async {
   testWidgets('HistoryPage settings', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -117,8 +121,7 @@ void main() async {
     await tester.tap(menu);
     await tester.pumpAndSettle();
 
-    final settings = find.text('Settings');
-    await tester.tap(settings);
+    await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOne);
@@ -139,10 +142,11 @@ void main() async {
       ),
     ]);
 
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -177,10 +181,11 @@ void main() async {
       ),
     ]);
 
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],

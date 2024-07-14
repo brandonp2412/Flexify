@@ -46,7 +46,7 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   Widget build(BuildContext context) {
     final hideWeight = context.select<SettingsState, bool>(
-      (value) => value.hideWeight,
+      (settings) => settings.value.hideWeight,
     );
 
     return Scaffold(
@@ -205,7 +205,7 @@ class _EditSetPageState extends State<EditSetPage> {
               ),
               TextField(
                 controller: inclineController,
-                decoration: const InputDecoration(labelText: 'Incline'),
+                decoration: const InputDecoration(labelText: 'Incline %'),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(inclineController),
               ),
@@ -236,13 +236,13 @@ class _EditSetPageState extends State<EditSetPage> {
                 child: TextField(
                   controller: bodyWeightController,
                   decoration: const InputDecoration(
-                    labelText: 'Body weight during set ',
+                    labelText: 'Body weight (during set)',
                   ),
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(bodyWeightController),
                 ),
               ),
-              selector: (p0, p1) => p1.hideWeight,
+              selector: (context, settings) => settings.value.hideWeight,
             ),
             Selector<SettingsState, bool>(
               builder: (context, showUnits, child) => Visibility(
@@ -257,7 +257,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   cardio: cardio,
                 ),
               ),
-              selector: (p0, p1) => p1.showUnits,
+              selector: (context, settings) => settings.value.showUnits,
             ),
             Selector<SettingsState, String>(
               builder: (context, longDateFormat, child) => ListTile(
@@ -266,7 +266,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () => _selectDate(),
               ),
-              selector: (p0, p1) => p1.longDateFormat,
+              selector: (context, settings) => settings.value.longDateFormat,
             ),
             Selector<SettingsState, bool>(
               builder: (context, showImages, child) {
@@ -305,7 +305,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   ),
                 );
               },
-              selector: (p0, p1) => p1.showImages,
+              selector: (context, settings) => settings.value.showImages,
             ),
           ],
         ),
@@ -381,7 +381,7 @@ class _EditSetPageState extends State<EditSetPage> {
     else {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
       db.into(db.gymSets).insert(insert);
-      final settings = context.read<SettingsState>();
+      final settings = context.read<SettingsState>().value;
       if (!settings.restTimers) return;
       final timer = context.read<TimerState>();
       if (restMs != null)
@@ -394,7 +394,7 @@ class _EditSetPageState extends State<EditSetPage> {
       else
         timer.startTimer(
           name,
-          settings.timerDuration,
+          Duration(milliseconds: settings.timerDuration),
           settings.alarmSound,
           settings.vibrate,
         );

@@ -19,7 +19,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   bool cardio = false;
 
   late final settings = context.watch<SettingsState>();
-  late String unit = settings.strengthUnit;
+  late String unit = settings.value.strengthUnit;
 
   @override
   Widget build(BuildContext context) {

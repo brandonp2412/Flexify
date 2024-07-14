@@ -38,7 +38,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late final Stream<List<GymCount>> countStream =
       watchCount(widget.plan.id, planExercises);
   late final PlanState planState = context.read<PlanState>();
-  late String unit = context.read<SettingsState>().strengthUnit;
+  late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
 
   @override
@@ -98,7 +98,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                 decoration: InputDecoration(
                   labelText: 'Weight ($unit)',
                   suffixIcon: Selector<SettingsState, bool>(
-                    selector: (p0, p1) => p1.hideWeight,
+                    selector: (context, settings) => settings.value.hideWeight,
                     builder: (context, hideWeight, child) => Visibility(
                       visible: !hideWeight,
                       child: IconButton(
@@ -174,7 +174,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                   Expanded(
                     child: TextField(
                       controller: inclineController,
-                      decoration: const InputDecoration(labelText: 'Incline'),
+                      decoration: const InputDecoration(labelText: 'Incline %'),
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(inclineController),
                       onSubmitted: (value) => save(timerState),
@@ -184,7 +184,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
               ),
             ],
             Selector<SettingsState, bool>(
-              selector: (p0, p1) => p1.showUnits,
+              selector: (context, settings) => settings.value.showUnits,
               builder: (context, showUnits, child) => Visibility(
                 visible: showUnits,
                 child: UnitSelector(
@@ -277,7 +277,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     });
     final exercise = planExercises[selectedIndex];
     var bodyWeight = 0.0;
-    final settings = context.read<SettingsState>();
+    final settings = context.read<SettingsState>().value;
     if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
     if (!settings.explainedPermissions &&
@@ -334,7 +334,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
           "$exercise ($count)",
           restMs != null
               ? Duration(milliseconds: restMs)
-              : settings.timerDuration,
+              : Duration(milliseconds: settings.timerDuration),
           settings.alarmSound,
           settings.vibrate,
         );
@@ -351,7 +351,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     setState(() {
       selectedIndex = index;
     });
-    final settings = context.read<SettingsState>();
+    final settings = context.read<SettingsState>().value;
     final last = await getLast(planExercises[index]);
     if (last == null) return;
 

@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +11,8 @@ List<Widget> getAppearances(String term, SettingsState settings) {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: DropdownButtonFormField<ThemeMode>(
-          value: settings.themeMode,
+          value: ThemeMode.values
+              .byName(settings.value.themeMode.replaceFirst('ThemeMode.', '')),
           decoration: const InputDecoration(
             labelStyle: TextStyle(),
             labelText: 'Theme',
@@ -27,7 +31,11 @@ List<Widget> getAppearances(String term, SettingsState settings) {
               child: Text("Light"),
             ),
           ],
-          onChanged: (value) => settings.setTheme(value!),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  themeMode: Value(value.toString()),
+                ),
+              ),
         ),
       ),
     if ('system color scheme'.contains(term.toLowerCase()))
@@ -35,36 +43,60 @@ List<Widget> getAppearances(String term, SettingsState settings) {
         padding: const EdgeInsets.only(top: 8.0),
         child: ListTile(
           title: const Text('System color scheme'),
-          leading: settings.systemColors
+          leading: settings.value.systemColors
               ? const Icon(Icons.color_lens)
               : const Icon(Icons.color_lens_outlined),
-          onTap: () => settings.setSystem(!settings.systemColors),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  systemColors: Value(!settings.value.systemColors),
+                ),
+              ),
           trailing: Switch(
-            value: settings.systemColors,
-            onChanged: (value) => settings.setSystem(value),
+            value: settings.value.systemColors,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    systemColors: Value(value),
+                  ),
+                ),
           ),
         ),
       ),
     if ('show images'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Show images'),
-        leading: settings.showImages
+        leading: settings.value.showImages
             ? const Icon(Icons.image)
             : const Icon(Icons.image_outlined),
-        onTap: () => settings.setShowImages(!settings.showImages),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                showImages: Value(!settings.value.showImages),
+              ),
+            ),
         trailing: Switch(
-          value: settings.showImages,
-          onChanged: (value) => settings.setShowImages(value),
+          value: settings.value.showImages,
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  showImages: Value(value),
+                ),
+              ),
         ),
       ),
     if ('curve line graphs'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Curve line graphs'),
         leading: const Icon(Icons.insights),
-        onTap: () => settings.setCurvedLines(!settings.curveLines),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                curveLines: Value(!settings.value.curveLines),
+              ),
+            ),
         trailing: Switch(
-          value: settings.curveLines,
-          onChanged: (value) => settings.setCurvedLines(value),
+          value: settings.value.curveLines,
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  curveLines: Value(value),
+                ),
+              ),
         ),
       ),
   ];

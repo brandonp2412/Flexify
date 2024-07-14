@@ -1,5 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,7 @@ import 'package:provider/provider.dart';
 
 List<Widget> getTimers(
   String term,
-  SettingsState settings,
+  Setting settings,
   TextEditingController minutesController,
   TextEditingController secondsController,
   AudioPlayer player,
@@ -15,7 +18,7 @@ List<Widget> getTimers(
   return [
     if ('rest minutes seconds'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Expanded(
@@ -26,12 +29,19 @@ List<Widget> getTimers(
                 controller: minutesController,
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(minutesController),
-                onChanged: (value) => settings.setDuration(
-                  Duration(
-                    minutes: int.parse(value),
-                    seconds: settings.timerDuration.inSeconds % 60,
-                  ),
-                ),
+                onChanged: (value) => db.settings.update().write(
+                      SettingsCompanion(
+                        timerDuration: Value(
+                          Duration(
+                            minutes: int.parse(value),
+                            seconds:
+                                Duration(milliseconds: settings.timerDuration)
+                                        .inSeconds %
+                                    60,
+                          ).inMilliseconds,
+                        ),
+                      ),
+                    ),
               ),
             ),
             const SizedBox(
@@ -45,12 +55,19 @@ List<Widget> getTimers(
                 controller: secondsController,
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(secondsController),
-                onChanged: (value) => settings.setDuration(
-                  Duration(
-                    seconds: int.parse(value),
-                    minutes: settings.timerDuration.inMinutes.floor(),
-                  ),
-                ),
+                onChanged: (value) => db.settings.update().write(
+                      SettingsCompanion(
+                        timerDuration: Value(
+                          Duration(
+                            seconds: int.parse(value),
+                            minutes:
+                                Duration(milliseconds: settings.timerDuration)
+                                    .inMinutes
+                                    .floor(),
+                          ).inMilliseconds,
+                        ),
+                      ),
+                    ),
               ),
             ),
           ],
@@ -62,24 +79,36 @@ List<Widget> getTimers(
         leading: settings.restTimers
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
-        onTap: () {
-          settings.setTimers(!settings.restTimers);
-        },
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                restTimers: Value(!settings.restTimers),
+              ),
+            ),
         trailing: Switch(
           value: settings.restTimers,
-          onChanged: (value) => settings.setTimers(value),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  restTimers: Value(value),
+                ),
+              ),
         ),
       ),
     if ('vibrate'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Vibrate'),
         leading: const Icon(Icons.vibration),
-        onTap: () {
-          settings.setVibrate(!settings.vibrate);
-        },
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                vibrate: Value(!settings.vibrate),
+              ),
+            ),
         trailing: Switch(
           value: settings.vibrate,
-          onChanged: (value) => settings.setVibrate(value),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  vibrate: Value(value),
+                ),
+              ),
         ),
       ),
     if ('hide timer tab'.contains(term.toLowerCase()))
@@ -88,30 +117,54 @@ List<Widget> getTimers(
         leading: settings.hideTimerTab
             ? const Icon(Icons.timer_outlined)
             : const Icon(Icons.timer),
-        onTap: () => settings.setHideTimer(!settings.hideTimerTab),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                hideTimerTab: Value(!settings.hideTimerTab),
+              ),
+            ),
         trailing: Switch(
           value: settings.hideTimerTab,
-          onChanged: (value) => settings.setHideTimer(value),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  hideTimerTab: Value(value),
+                ),
+              ),
         ),
       ),
     if ('hide weight'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Hide weight'),
         leading: const Icon(Icons.scale_outlined),
-        onTap: () => settings.setHideWeight(!settings.hideWeight),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                hideWeight: Value(!settings.hideWeight),
+              ),
+            ),
         trailing: Switch(
           value: settings.hideWeight,
-          onChanged: (value) => settings.setHideWeight(value),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  hideWeight: Value(value),
+                ),
+              ),
         ),
       ),
     if ('hide history tab'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Hide history tab'),
         leading: const Icon(Icons.history),
-        onTap: () => settings.setHideHistory(!settings.hideHistoryTab),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                hideHistoryTab: Value(!settings.hideHistoryTab),
+              ),
+            ),
         trailing: Switch(
           value: settings.hideHistoryTab,
-          onChanged: (value) => settings.setHideHistory(value),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  hideHistoryTab: Value(value),
+                ),
+              ),
         ),
       ),
     if ('alarm sound'.contains(term.toLowerCase()))
@@ -120,11 +173,19 @@ List<Widget> getTimers(
           final result =
               await FilePicker.platform.pickFiles(type: FileType.audio);
           if (result == null || result.files.single.path == null) return;
-          settings.setAlarm(result.files.single.path!);
+          db.settings.update().write(
+                SettingsCompanion(
+                  alarmSound: Value(result.files.single.path!),
+                ),
+              );
           player.play(DeviceFileSource(result.files.single.path!));
         },
         onLongPress: () {
-          settings.setAlarm('');
+          db.settings.update().write(
+                const SettingsCompanion(
+                  alarmSound: Value(''),
+                ),
+              );
         },
         icon: const Icon(Icons.music_note),
         label: settings.alarmSound.isEmpty
@@ -143,10 +204,15 @@ class SettingsTimer extends StatefulWidget {
 
 class _SettingsTimerState extends State<SettingsTimer> {
   late SettingsState settings = context.read<SettingsState>();
-  late final minutesController =
-      TextEditingController(text: settings.timerDuration.inMinutes.toString());
+  late final minutesController = TextEditingController(
+    text: (Duration(milliseconds: settings.value.timerDuration))
+        .inMinutes
+        .toString(),
+  );
   late final secondsController = TextEditingController(
-    text: (settings.timerDuration.inSeconds % 60).toString(),
+    text:
+        ((Duration(milliseconds: settings.value.timerDuration)).inSeconds % 60)
+            .toString(),
   );
 
   AudioPlayer player = AudioPlayer();
@@ -162,7 +228,7 @@ class _SettingsTimerState extends State<SettingsTimer> {
       body: ListView(
         children: getTimers(
           '',
-          settings,
+          settings.value,
           minutesController,
           secondsController,
           player,

@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +29,7 @@ final List<String> shortFormats = [
   'M.d.yy',
 ];
 
-List<Widget> getFormats(String term, SettingsState settings) {
+List<Widget> getFormats(String term, Setting settings) {
   return [
     if ('strength unit'.contains(term.toLowerCase()))
       Padding(
@@ -40,7 +43,11 @@ List<Widget> getFormats(String term, SettingsState settings) {
               child: Text(value),
             );
           }).toList(),
-          onChanged: (value) => settings.setStrengthUnit(value!),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  strengthUnit: Value(value!),
+                ),
+              ),
         ),
       ),
     if ('cardio unit'.contains(term.toLowerCase()))
@@ -55,7 +62,11 @@ List<Widget> getFormats(String term, SettingsState settings) {
               child: Text(value),
             );
           }).toList(),
-          onChanged: (value) => settings.setCardioUnit(value!),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  cardioUnit: Value(value!),
+                ),
+              ),
         ),
       ),
     if ('long date format'.contains(term.toLowerCase()))
@@ -69,9 +80,11 @@ List<Widget> getFormats(String term, SettingsState settings) {
               child: Text(value),
             );
           }).toList(),
-          onChanged: (newValue) {
-            settings.setLong(newValue!);
-          },
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  longDateFormat: Value(value!),
+                ),
+              ),
           decoration: InputDecoration(
             labelText:
                 'Long date format (${DateFormat(settings.longDateFormat).format(DateTime.now())})',
@@ -89,9 +102,11 @@ List<Widget> getFormats(String term, SettingsState settings) {
               child: Text(value),
             );
           }).toList(),
-          onChanged: (newValue) {
-            settings.setShort(newValue!);
-          },
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  shortDateFormat: Value(value!),
+                ),
+              ),
           decoration: InputDecoration(
             labelText:
                 'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
@@ -113,7 +128,7 @@ class SettingsFormat extends StatelessWidget {
         title: const Text("Formats"),
       ),
       body: ListView(
-        children: getFormats('', settings),
+        children: getFormats('', settings.value),
       ),
     );
   }

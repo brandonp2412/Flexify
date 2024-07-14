@@ -16,10 +16,11 @@ void main() async {
   render(WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -65,10 +66,13 @@ void main() async {
     db = AppDatabase(executor: NativeDatabase.memory());
     await (db.settings.update())
         .write(const SettingsCompanion(showImages: Value(false)));
+    final oldSettings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(
+            create: (context) => SettingsState(oldSettings),
+          ),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],

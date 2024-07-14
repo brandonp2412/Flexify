@@ -144,7 +144,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   ),
                 );
               },
-              selector: (p0, p1) => p1.showImages,
+              selector: (context, settings) => settings.value.showImages,
             ),
           ],
         ),
@@ -231,9 +231,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
             }
 
             if (cardio && (unit == 'kg' || unit == 'lb'))
-              unit = settings.cardioUnit;
+              unit = settings.value.cardioUnit;
             else if (!cardio && (unit == 'km' || unit == 'mi'))
-              unit = settings.strengthUnit;
+              unit = settings.value.strengthUnit;
           }),
         );
   }

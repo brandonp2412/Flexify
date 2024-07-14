@@ -110,7 +110,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                final settings = context.read<SettingsState>();
+                final settings = context.read<SettingsState>().value;
                 await requestNotificationPermission();
                 await timerState.addOneMinute(
                   settings.alarmSound,

@@ -39,7 +39,7 @@ class _WeightPageState extends State<WeightPage> {
                 autofocus: true,
               ),
               Selector<SettingsState, String>(
-                selector: (p0, p1) => p1.strengthUnit,
+                selector: (context, settings) => settings.value.strengthUnit,
                 builder: (context, value, child) => UnitSelector(
                   value: unit ?? value,
                   cardio: false,
@@ -61,7 +61,7 @@ class _WeightPageState extends State<WeightPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final settings = context.read<SettingsState>();
+          final settings = context.read<SettingsState>().value;
           Navigator.pop(context);
 
           db.gymSets.insertOne(
@@ -94,7 +94,7 @@ class _WeightPageState extends State<WeightPage> {
   @override
   void initState() {
     super.initState();
-    final settings = context.read<SettingsState>();
+    final settings = context.read<SettingsState>().value;
 
     getBodyWeight().then(
       (value) => setState(() {

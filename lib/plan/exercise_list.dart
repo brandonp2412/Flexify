@@ -29,10 +29,13 @@ class ExerciseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxSets =
-        context.select<SettingsState, int>((value) => value.maxSets);
-    final planTrailing = context
-        .select<SettingsState, PlanTrailing>((value) => value.planTrailing);
+    final maxSets = context
+        .select<SettingsState, int>((settings) => settings.value.maxSets);
+    final planTrailing = context.select<SettingsState, PlanTrailing>(
+      (settings) => PlanTrailing.values.byName(
+        settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
+      ),
+    );
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(

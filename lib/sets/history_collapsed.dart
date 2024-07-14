@@ -32,8 +32,8 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages =
-        context.select<SettingsState, bool>((settings) => settings.showImages);
+    final showImages = context
+        .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return ListView.builder(
       itemCount: widget.historyDays.length,
@@ -79,7 +79,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
           children: [
             const Expanded(child: Divider()),
             Selector<SettingsState, String>(
-              selector: (p0, p1) => p1.shortDateFormat,
+              selector: (context, settings) => settings.value.shortDateFormat,
               builder: (context, value, child) => Text(
                 DateFormat(value).format(previousHistory!.day),
               ),
@@ -108,7 +108,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                     : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
               ),
               subtitle: Selector<SettingsState, String>(
-                selector: (p0, p1) => p1.longDateFormat,
+                selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, value, child) => Text(
                   DateFormat(value).format(gymSet.created),
                 ),

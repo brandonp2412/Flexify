@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/settings_appearance.dart';
 import 'package:flexify/settings/settings_data.dart';
 import 'package:flexify/settings/settings_formats.dart';
@@ -28,7 +29,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final searchController = TextEditingController();
 
-  late final SettingsState settings;
+  late final Setting settings;
   late final TextEditingController maxSetsController;
   late final TextEditingController minutesController;
   late final TextEditingController secondsController;
@@ -41,15 +42,15 @@ class _SettingsPageState extends State<SettingsPage> {
     final settings = context.watch<SettingsState>();
     if (searchController.text.isNotEmpty) {
       filtered.addAll(getAppearances(searchController.text, settings));
-      filtered.addAll(getFormats(searchController.text, settings));
+      filtered.addAll(getFormats(searchController.text, settings.value));
       filtered.addAll(
-        getWorkouts(searchController.text, settings, maxSetsController),
+        getWorkouts(searchController.text, settings.value, maxSetsController),
       );
       if (player != null)
         filtered.addAll(
           getTimers(
             searchController.text,
-            settings,
+            settings.value,
             minutesController,
             secondsController,
             player!,
@@ -173,14 +174,15 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
 
-    settings = context.read<SettingsState>();
+    settings = context.read<SettingsState>().value;
     maxSetsController =
         TextEditingController(text: settings.maxSets.toString());
     minutesController = TextEditingController(
-      text: settings.timerDuration.inMinutes.toString(),
+      text: Duration(milliseconds: settings.timerDuration).inMinutes.toString(),
     );
     secondsController = TextEditingController(
-      text: (settings.timerDuration.inSeconds % 60).toString(),
+      text: (Duration(milliseconds: settings.timerDuration).inSeconds % 60)
+          .toString(),
     );
     player = AudioPlayer();
   }

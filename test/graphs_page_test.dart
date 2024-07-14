@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
@@ -15,10 +16,11 @@ void main() async {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -38,10 +40,11 @@ void main() async {
   testWidgets('GraphsPage add button', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -61,10 +64,11 @@ void main() async {
   testWidgets('GraphsPage tap tile', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -86,10 +90,11 @@ void main() async {
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -104,8 +109,7 @@ void main() async {
     await tester.tap(menu);
     await tester.pumpAndSettle();
 
-    final settings = find.text('Settings');
-    await tester.tap(settings);
+    await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOne);
@@ -116,10 +120,11 @@ void main() async {
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
@@ -141,10 +146,11 @@ void main() async {
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState()),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],

@@ -105,7 +105,7 @@ class _AppSearchState extends State<AppSearch> {
             isLabelVisible: widget.selected.isNotEmpty,
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: Selector<SettingsState, bool>(
-              selector: (p0, p1) => p1.hideWeight,
+              selector: (p0, settings) => settings.value.hideWeight,
               builder: (context, hideWeight, child) => PopupMenuButton(
                 icon: const Icon(Icons.more_vert),
                 tooltip: "Show menu",

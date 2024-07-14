@@ -1,3 +1,6 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,7 @@ import '../constants.dart';
 
 List<Widget> getWorkouts(
   String term,
-  SettingsState settings,
+  Setting settings,
   TextEditingController maxSetsController,
 ) {
   return [
@@ -21,14 +24,19 @@ List<Widget> getWorkouts(
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: false),
           onTap: () => selectAll(maxSetsController),
-          onChanged: (value) => settings.setMaxSets(int.tryParse(value) ?? 3),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  maxSets: Value(int.parse(value)),
+                ),
+              ),
         ),
       ),
     if ('plan trailing display'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: DropdownButtonFormField<PlanTrailing>(
-          value: settings.planTrailing,
+          value: PlanTrailing.values
+              .byName(settings.planTrailing.replaceFirst('PlanTrailing.', '')),
           decoration: const InputDecoration(
             labelStyle: TextStyle(),
             labelText: 'Plan trailing display',
@@ -79,47 +87,73 @@ List<Widget> getWorkouts(
               child: Text("None"),
             ),
           ],
-          onChanged: (value) => settings.setPlanTrailing(value!),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  planTrailing: Value(value.toString()),
+                ),
+              ),
         ),
       ),
     if ('group history'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Group history'),
         leading: const Icon(Icons.expand_more),
-        onTap: () => settings.setGroupHistory(!settings.groupHistory),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                groupHistory: Value(!settings.groupHistory),
+              ),
+            ),
         trailing: Switch(
           value: settings.groupHistory,
-          onChanged: (value) => settings.setGroupHistory(value),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  groupHistory: Value(value),
+                ),
+              ),
         ),
       ),
     if ('show units'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Show units'),
         leading: const Icon(Icons.scale_sharp),
-        onTap: () => settings.setUnits(!settings.showUnits),
+        onTap: () => db.settings
+            .update()
+            .write(SettingsCompanion(showUnits: Value(!settings.showUnits))),
         trailing: Switch(
           value: settings.showUnits,
-          onChanged: (value) => settings.setUnits(value),
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(showUnits: Value(value))),
         ),
       ),
     if ('hide weight'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Hide weight'),
         leading: const Icon(Icons.scale_outlined),
-        onTap: () => settings.setHideWeight(!settings.hideWeight),
+        onTap: () => db.settings
+            .update()
+            .write(SettingsCompanion(hideWeight: Value(!settings.hideWeight))),
         trailing: Switch(
           value: settings.hideWeight,
-          onChanged: (value) => settings.setHideWeight(value),
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(hideWeight: Value(value))),
         ),
       ),
     if ('hide history tab'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Hide history tab'),
         leading: const Icon(Icons.history),
-        onTap: () => settings.setHideHistory(!settings.hideHistoryTab),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                hideHistoryTab: Value(!settings.hideHistoryTab),
+              ),
+            ),
         trailing: Switch(
           value: settings.hideHistoryTab,
-          onChanged: (value) => settings.setHideHistory(value),
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(hideHistoryTab: Value(value))),
         ),
       ),
   ];
@@ -133,14 +167,14 @@ class SettingsWorkout extends StatefulWidget {
 }
 
 class _SettingsWorkoutState extends State<SettingsWorkout> {
-  late var settings = context.read<SettingsState>();
+  late var settings = context.read<SettingsState>().value;
 
   late final maxSetsController =
       TextEditingController(text: settings.maxSets.toString());
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>();
+    settings = context.watch<SettingsState>().value;
 
     return Scaffold(
       appBar: AppBar(

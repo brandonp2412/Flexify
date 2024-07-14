@@ -6,6 +6,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart' as app;
+import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
@@ -123,12 +124,20 @@ bool dark = true;
 
 Future<void> appWrapper() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final settingsState = SettingsState();
-  settingsState.setTheme(dark ? ThemeMode.light : ThemeMode.dark);
+  await app.db.settings.update().write(
+        SettingsCompanion(
+          themeMode: dark
+              ? Value(ThemeMode.light.toString())
+              : Value(ThemeMode.dark.toString()),
+          explainedPermissions: const Value(true),
+          restTimers: const Value(true),
+          systemColors: const Value(true),
+        ),
+      );
+  final settings = await (db.settings.select()..limit(1)).getSingle();
+  final settingsState = SettingsState(settings);
+
   dark = !dark;
-  settingsState.setExplained(true);
-  settingsState.setTimers(false);
-  settingsState.setSystem(false);
   runApp(app.appProviders(settingsState));
 }
 

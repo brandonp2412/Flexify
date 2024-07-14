@@ -139,7 +139,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
               TextField(
                 controller: inclineController,
                 decoration: InputDecoration(
-                  labelText: 'Incline',
+                  labelText: 'Incline %',
                   hintText: oldInclines,
                 ),
                 keyboardType: TextInputType.number,
@@ -179,7 +179,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     onTap: () => selectAll(bodyWeightController),
                   ),
                 ),
-                selector: (p0, p1) => p1.hideWeight,
+                selector: (context, settings) => settings.value.hideWeight,
               ),
             Selector<SettingsState, bool>(
               builder: (context, showUnits, child) => Visibility(
@@ -194,7 +194,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   cardio: cardio ?? false,
                 ),
               ),
-              selector: (p0, p1) => p1.showUnits,
+              selector: (context, settings) => settings.value.showUnits,
             ),
             Selector<SettingsState, String>(
               builder: (context, longDateFormat, child) => ListTile(
@@ -207,7 +207,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () => _selectDate(),
               ),
-              selector: (p0, p1) => p1.longDateFormat,
+              selector: (context, settings) => settings.value.longDateFormat,
             ),
           ],
         ),
@@ -236,7 +236,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   void initState() {
     super.initState();
-    final settings = context.read<SettingsState>();
+    final settings = context.read<SettingsState>().value;
 
     (db.gymSets.select()..where((u) => u.id.isIn(widget.ids)))
         .get()

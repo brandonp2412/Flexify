@@ -123,16 +123,17 @@ class _StrengthPageState extends State<StrengthPage> {
             }
 
             final format = context.select<SettingsState, String>(
-              (value) => value.shortDateFormat,
+              (settings) => settings.value.shortDateFormat,
             );
 
-            final curveLines = context
-                .select<SettingsState, bool>((value) => value.curveLines);
+            final curveLines = context.select<SettingsState, bool>(
+              (settings) => settings.value.curveLines,
+            );
 
             return ListView(
               children: [
                 Selector<SettingsState, bool>(
-                  selector: (p0, p1) => p1.hideWeight,
+                  selector: (context, settings) => settings.value.hideWeight,
                   builder: (context, hideWeight, child) => Visibility(
                     visible: widget.name != 'Weight',
                     child: DropdownButtonFormField(
@@ -212,7 +213,7 @@ class _StrengthPageState extends State<StrengthPage> {
                       },
                     ),
                   ),
-                  selector: (p0, p1) => p1.showUnits,
+                  selector: (context, settings) => settings.value.showUnits,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -222,7 +223,8 @@ class _StrengthPageState extends State<StrengthPage> {
                         child: ListTile(
                           title: const Text('Start date'),
                           subtitle: Selector<SettingsState, String>(
-                            selector: (p0, p1) => p1.shortDateFormat,
+                            selector: (p0, settings) =>
+                                settings.value.shortDateFormat,
                             builder: (context, value, child) {
                               if (startDate == null) return Text(value);
 
@@ -242,7 +244,8 @@ class _StrengthPageState extends State<StrengthPage> {
                         child: ListTile(
                           title: const Text('Stop date'),
                           subtitle: Selector<SettingsState, String>(
-                            selector: (p0, p1) => p1.shortDateFormat,
+                            selector: (p0, settings) =>
+                                settings.value.shortDateFormat,
                             builder: (context, value, child) {
                               if (endDate == null) return Text(value);
 

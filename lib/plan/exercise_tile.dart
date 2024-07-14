@@ -28,7 +28,7 @@ class ExerciseTile extends StatelessWidget {
           SizedBox(
             width: 64,
             child: Selector<SettingsState, int>(
-              selector: (p0, p1) => p1.maxSets,
+              selector: (context, settings) => settings.value.maxSets,
               builder: (context, value, child) => TextField(
                 controller: controllers[entry.key],
                 keyboardType:
