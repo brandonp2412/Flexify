@@ -97,6 +97,11 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                 .floor()
                 .toString()
                 .padLeft(2, '0');
+            final distance = toString(gymSet.distance);
+            final reps = toString(gymSet.reps);
+            final weight = toString(gymSet.weight);
+            String incline = '';
+            if (gymSet.incline != null) incline = '@ ${gymSet.incline}%';
 
             return ListTile(
               leading: showImages && gymSet.image != null
@@ -104,8 +109,8 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                   : null,
               title: Text(
                 gymSet.cardio
-                    ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
-                    : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
+                    ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
+                    : "$reps x $weight ${gymSet.unit}",
               ),
               subtitle: Selector<SettingsState, String>(
                 selector: (context, settings) => settings.value.longDateFormat,

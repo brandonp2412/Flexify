@@ -47,6 +47,11 @@ class _HistoryListState extends State<HistoryList> {
         final minutes = gymSet.duration.floor();
         final seconds =
             ((gymSet.duration * 60) % 60).floor().toString().padLeft(2, '0');
+        final distance = toString(gymSet.distance);
+        final reps = toString(gymSet.reps);
+        final weight = toString(gymSet.weight);
+        String incline = '';
+        if (gymSet.incline != null) incline = '@ ${gymSet.incline}%';
 
         return Column(
           children: [
@@ -68,8 +73,8 @@ class _HistoryListState extends State<HistoryList> {
               ),
               trailing: Text(
                 gymSet.cardio
-                    ? "${toString(gymSet.distance)} ${gymSet.unit} / $minutes:$seconds"
-                    : "${toString(gymSet.reps)} x ${toString(gymSet.weight)} ${gymSet.unit}",
+                    ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
+                    : "$reps x $weight ${gymSet.unit}",
                 style: const TextStyle(fontSize: 16),
               ),
               selected: widget.selected.contains(gymSet.id),
