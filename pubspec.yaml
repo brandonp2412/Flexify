@@ -72,7 +72,6 @@ msix_config:
   identity_name: FrisbeeSoftware.Flexify
   msix_version: 1.0.3.0
   logo_path: C:\Users\brandon\flexify\assets\ic_launcher.png
-  # trim_logo: false
-  # publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
-  # store: true
-  # capabilities: runFullTrust
+  trim_logo: false
+  publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
+  store: true
