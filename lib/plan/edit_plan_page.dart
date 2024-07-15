@@ -162,7 +162,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    if (widget.plan.id.present) showOff = false;
     setExercises();
     titleController.text = widget.plan.title.value ?? "";
 
@@ -175,16 +174,16 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ..addColumns([db.gymSets.name])
       ..groupBy([db.gymSets.name]);
 
-    if (widget.plan.id.present)
-      query = query
-        ..join([
-          leftOuterJoin(
-            db.planExercises,
-            db.planExercises.planId.equals(widget.plan.id.value) &
-                db.planExercises.exercise.equalsExp(db.gymSets.name),
-          ),
-        ])
-        ..addColumns(db.planExercises.$columns);
+    query = query
+      ..join([
+        leftOuterJoin(
+          db.planExercises,
+          db.planExercises.planId
+                  .equals(widget.plan.id.present ? widget.plan.id.value : 0) &
+              db.planExercises.exercise.equalsExp(db.gymSets.name),
+        ),
+      ])
+      ..addColumns(db.planExercises.$columns);
 
     query.get().then(
           (results) => setState(() {
