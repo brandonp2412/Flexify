@@ -236,11 +236,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
       await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
       await db.planExercises
           .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
+      await db.planExercises.insertAll(exercises);
     } else {
-      await db.into(db.plans).insert(newPlan);
+      final id = await db.into(db.plans).insert(newPlan);
+      await db.planExercises
+          .insertAll(exercises.map((pe) => pe.copyWith(planId: Value(id))));
     }
-
-    await db.planExercises.insertAll(exercises);
 
     if (!mounted) return;
     final planState = context.read<PlanState>();
