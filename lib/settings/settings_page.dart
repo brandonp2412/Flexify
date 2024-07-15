@@ -30,9 +30,10 @@ class _SettingsPageState extends State<SettingsPage> {
   final searchController = TextEditingController();
 
   late final Setting settings;
-  late final TextEditingController maxSetsController;
-  late final TextEditingController minutesController;
-  late final TextEditingController secondsController;
+  late final TextEditingController maxSets;
+  late final TextEditingController warmupSets;
+  late final TextEditingController minutes;
+  late final TextEditingController seconds;
 
   AudioPlayer? player;
 
@@ -44,15 +45,15 @@ class _SettingsPageState extends State<SettingsPage> {
       filtered.addAll(getAppearances(searchController.text, settings));
       filtered.addAll(getFormats(searchController.text, settings.value));
       filtered.addAll(
-        getWorkouts(searchController.text, settings.value, maxSetsController),
+        getWorkouts(searchController.text, settings.value, maxSets, warmupSets),
       );
       if (player != null)
         filtered.addAll(
           getTimers(
             searchController.text,
             settings.value,
-            minutesController,
-            secondsController,
+            minutes,
+            seconds,
             player!,
           ),
         );
@@ -165,7 +166,11 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void dispose() {
     searchController.dispose();
-    maxSetsController.dispose();
+    maxSets.dispose();
+    warmupSets.dispose();
+    minutes.dispose();
+    seconds.dispose();
+    player?.dispose();
 
     super.dispose();
   }
@@ -175,12 +180,12 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
 
     settings = context.read<SettingsState>().value;
-    maxSetsController =
-        TextEditingController(text: settings.maxSets.toString());
-    minutesController = TextEditingController(
+    maxSets = TextEditingController(text: settings.maxSets.toString());
+    warmupSets = TextEditingController(text: settings.warmupSets?.toString());
+    minutes = TextEditingController(
       text: Duration(milliseconds: settings.timerDuration).inMinutes.toString(),
     );
-    secondsController = TextEditingController(
+    seconds = TextEditingController(
       text: (Duration(milliseconds: settings.timerDuration).inSeconds % 60)
           .toString(),
     );

@@ -11,19 +11,38 @@ import '../constants.dart';
 List<Widget> getWorkouts(
   String term,
   Setting settings,
-  TextEditingController maxSetsController,
+  TextEditingController maxSets,
+  TextEditingController warmupSets,
 ) {
   return [
+    if ('warmup sets'.contains(term.toLowerCase()))
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: TextField(
+          controller: warmupSets,
+          decoration: const InputDecoration(
+            labelText: 'Warmup sets',
+            hintText: '0',
+          ),
+          keyboardType: const TextInputType.numberWithOptions(decimal: false),
+          onTap: () => selectAll(warmupSets),
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  warmupSets: Value(int.parse(value)),
+                ),
+              ),
+        ),
+      ),
     if ('sets per exercise'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: TextField(
-          controller: maxSetsController,
+          controller: maxSets,
           decoration: const InputDecoration(
             labelText: 'Sets per exercise',
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: false),
-          onTap: () => selectAll(maxSetsController),
+          onTap: () => selectAll(maxSets),
           onChanged: (value) => db.settings.update().write(
                 SettingsCompanion(
                   maxSets: Value(int.parse(value)),
@@ -169,8 +188,9 @@ class SettingsWorkout extends StatefulWidget {
 class _SettingsWorkoutState extends State<SettingsWorkout> {
   late var settings = context.read<SettingsState>().value;
 
-  late final maxSetsController =
-      TextEditingController(text: settings.maxSets.toString());
+  late final maxSets = TextEditingController(text: settings.maxSets.toString());
+  late final warmupSets =
+      TextEditingController(text: settings.warmupSets?.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +201,7 @@ class _SettingsWorkoutState extends State<SettingsWorkout> {
         title: const Text("Workouts"),
       ),
       body: ListView(
-        children: getWorkouts('', settings, maxSetsController),
+        children: getWorkouts('', settings, maxSets, warmupSets),
       ),
     );
   }
@@ -190,6 +210,6 @@ class _SettingsWorkoutState extends State<SettingsWorkout> {
   void dispose() {
     super.dispose();
 
-    maxSetsController.dispose();
+    maxSets.dispose();
   }
 }
