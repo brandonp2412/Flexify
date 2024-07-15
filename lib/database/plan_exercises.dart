@@ -8,4 +8,5 @@ class PlanExercises extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get maxSets => integer().nullable()();
   IntColumn get planId => integer().references(Plans, #id)();
+  IntColumn get warmupSets => integer().nullable()();
 }

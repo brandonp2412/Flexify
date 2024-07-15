@@ -21,8 +21,11 @@ class ExerciseTile extends StatefulWidget {
 }
 
 class _ExerciseTileState extends State<ExerciseTile> {
-  late final controller = TextEditingController(
+  late final maxSets = TextEditingController(
     text: widget.planExercise.maxSets.value?.toString(),
+  );
+  late final warmupSets = TextEditingController(
+    text: widget.planExercise.warmupSets.value?.toString(),
   );
 
   @override
@@ -38,18 +41,42 @@ class _ExerciseTileState extends State<ExerciseTile> {
               content: SingleChildScrollView(
                 child: material.Column(
                   children: [
-                    Selector<SettingsState, int>(
-                      selector: (context, settings) => settings.value.maxSets,
+                    Selector<SettingsState, int?>(
+                      selector: (context, settings) =>
+                          settings.value.warmupSets,
                       builder: (context, value, child) => TextField(
-                        controller: controller,
+                        controller: warmupSets,
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
                         ),
-                        onTap: () => selectAll(controller),
+                        onTap: () => selectAll(warmupSets),
                         onChanged: (value) {
                           final pe = widget.planExercise.copyWith(
                             enabled: const Value(true),
-                            maxSets: Value(int.tryParse(controller.text)),
+                            warmupSets: Value(int.tryParse(warmupSets.text)),
+                          );
+                          widget.onChange(pe);
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Warmup sets",
+                          border: const OutlineInputBorder(),
+                          hintText: (value ?? 0).toString(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Selector<SettingsState, int>(
+                      selector: (context, settings) => settings.value.maxSets,
+                      builder: (context, value, child) => TextField(
+                        controller: maxSets,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: false,
+                        ),
+                        onTap: () => selectAll(maxSets),
+                        onChanged: (value) {
+                          final pe = widget.planExercise.copyWith(
+                            enabled: const Value(true),
+                            maxSets: Value(int.tryParse(maxSets.text)),
                           );
                           widget.onChange(pe);
                         },

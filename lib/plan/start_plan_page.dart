@@ -41,6 +41,18 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
 
+  useBodyWeight() async {
+    final weightSet = await getBodyWeight();
+    if (weightSet == null && mounted)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No weight entered yet.'),
+        ),
+      );
+    else
+      weightController.text = toString(weightSet!.weight);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
@@ -104,17 +116,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
                       child: IconButton(
                         tooltip: "Use body weight",
                         icon: const Icon(Icons.scale),
-                        onPressed: () async {
-                          final weightSet = await getBodyWeight();
-                          if (weightSet == null && context.mounted)
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('No weight entered yet.'),
-                              ),
-                            );
-                          else
-                            weightController.text = toString(weightSet!.weight);
-                        },
+                        onPressed: useBodyWeight,
                       ),
                     ),
                   ),
@@ -282,8 +284,8 @@ class _StartPlanPageState extends State<StartPlanPage> {
 
     if (!settings.explainedPermissions &&
         settings.restTimers &&
-        mounted &&
-        !platformIsDesktop())
+        platformIsMobile() &&
+        mounted)
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -295,10 +297,12 @@ class _StartPlanPageState extends State<StartPlanPage> {
     final countIndex = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
-    int? restMs;
+    double? restMs;
+    int? warmupSets;
     if (countIndex != -1) {
       max = counts[countIndex].maxSets;
-      restMs = counts[countIndex].restMs;
+      restMs = counts[countIndex].restMs?.toDouble();
+      warmupSets = counts[countIndex].warmupSets;
     }
 
     final minutes = int.tryParse(minutesController.text);
@@ -315,34 +319,32 @@ class _StartPlanPageState extends State<StartPlanPage> {
       duration: drift.Value(duration),
       distance: drift.Value(double.parse(distanceController.text)),
       bodyWeight: drift.Value(bodyWeight),
-      restMs: drift.Value(restMs),
+      restMs: drift.Value(restMs?.toInt()),
       incline: drift.Value(int.tryParse(inclineController.text)),
       planId: drift.Value(widget.plan.id),
     );
 
-    if (settings.restTimers) {
-      final countIndex =
-          counts.indexWhere((element) => element.name == exercise);
-      var count = 0;
-      if (countIndex != -1) count = counts[countIndex].count;
-      count++;
+    var count = 0;
+    if (countIndex != -1) count = counts[countIndex].count;
+    count++;
 
-      final finishedPlan = count == (max ?? settings.maxSets) &&
-          selectedIndex == planExercises.length - 1;
-      if (!finishedPlan)
-        timerState.startTimer(
-          "$exercise ($count)",
-          restMs != null
-              ? Duration(milliseconds: restMs)
-              : Duration(milliseconds: settings.timerDuration),
-          settings.alarmSound,
-          settings.vibrate,
-        );
+    final finishedPlan = count == (max ?? settings.maxSets) &&
+        selectedIndex == planExercises.length - 1;
+    final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
+    restMs ??= settings.timerDuration.toDouble();
+    if (isWarmup) restMs *= 0.5;
 
-      final finishedExercise = count == (max ?? settings.maxSets) &&
-          selectedIndex < planExercises.length - 1;
-      if (finishedExercise) select(selectedIndex + 1);
-    }
+    if (!finishedPlan && settings.restTimers)
+      timerState.startTimer(
+        "$exercise ($count)",
+        Duration(milliseconds: restMs.toInt()),
+        settings.alarmSound,
+        settings.vibrate,
+      );
+
+    final finishedExercise = count == (max ?? settings.maxSets) &&
+        selectedIndex < planExercises.length - 1;
+    if (finishedExercise) select(selectedIndex + 1);
 
     db.into(db.gymSets).insert(gymSet);
   }

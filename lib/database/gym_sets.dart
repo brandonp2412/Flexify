@@ -105,6 +105,7 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
           countColumn,
           db.planExercises.maxSets,
           db.gymSets.restMs,
+          db.planExercises.warmupSets,
         ])
         ..join([
           innerJoin(
@@ -125,6 +126,7 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
                 name: resultRow.read(db.gymSets.name)!,
                 maxSets: resultRow.read(db.planExercises.maxSets),
                 restMs: resultRow.read(db.gymSets.restMs),
+                warmupSets: resultRow.read(db.planExercises.warmupSets)
               ),
             )
             .toList(),
@@ -197,11 +199,13 @@ typedef GymCount = ({
   String name,
   int? maxSets,
   int? restMs,
+  int? warmupSets,
 });
 
 class GymSets extends Table {
   RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();
+  TextColumn get category => text().nullable()();
   DateTimeColumn get created => dateTime()();
   RealColumn get distance => real().withDefault(const Constant(0.0))();
   RealColumn get duration => real().withDefault(const Constant(0.0))();
@@ -215,5 +219,4 @@ class GymSets extends Table {
   IntColumn get restMs => integer().nullable()();
   TextColumn get unit => text()();
   RealColumn get weight => real()();
-  TextColumn get category => text().nullable()();
 }

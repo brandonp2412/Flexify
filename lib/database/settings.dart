@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 
 class Settings extends Table {
   TextColumn get alarmSound => text()();
-
   TextColumn get cardioUnit => text()();
   BoolColumn get curveLines => boolean()();
   BoolColumn get explainedPermissions => boolean()();
@@ -10,10 +9,8 @@ class Settings extends Table {
   BoolColumn get hideHistoryTab => boolean()();
   BoolColumn get hideTimerTab => boolean()();
   BoolColumn get hideWeight => boolean()();
-
   IntColumn get id => integer().autoIncrement()();
   TextColumn get longDateFormat => text()();
-
   IntColumn get maxSets => integer()();
   TextColumn get planTrailing => text()();
   BoolColumn get restTimers => boolean()();
@@ -25,4 +22,5 @@ class Settings extends Table {
   TextColumn get themeMode => text()();
   IntColumn get timerDuration => integer()();
   BoolColumn get vibrate => boolean()();
+  IntColumn get warmupSets => integer().nullable()();
 }

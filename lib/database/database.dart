@@ -312,10 +312,17 @@ class AppDatabase extends _$AppDatabase {
         from19To20: (Migrator m, Schema20 schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.category);
         },
+        from20To21: (Migrator m, Schema21 schema) async {
+          await m.addColumn(schema.settings, schema.settings.warmupSets);
+          await m.addColumn(
+            schema.planExercises,
+            schema.planExercises.warmupSets,
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 20;
+  int get schemaVersion => 21;
 }
