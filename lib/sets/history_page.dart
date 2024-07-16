@@ -147,6 +147,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 onChange: (value) {
                   setState(() {
                     search = value;
+                    limit = 100;
                   });
                   setStream();
                 },
