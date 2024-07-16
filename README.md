@@ -16,7 +16,7 @@ Get fit with Flexify. Easily track your gym progression with offline records and
 - 📈 **Graphs**: Visualize your progress over time with intuitive graphs.
 - 🏃 **Cardio tracking**: Record your progress with cardio types.
 - ⚙️ **Highly customizable**: Toggle features on/off, swap between light/dark theme and much more.
-- ⏱️ **Automatic rest timers**: Stay focused with alarms after resting (Android + Linux only).
+- ⏱️ **Automatic rest timers**: Stay focused with alarms after resting.
 
 <a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href="https://f-droid.org/packages/com.presley.flexify"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
 
