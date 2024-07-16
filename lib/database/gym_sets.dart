@@ -96,7 +96,7 @@ Future<List<Rpm>> getRpms() async {
         ((created - LAG(created) OVER (PARTITION BY name ORDER BY created)) / 60.0) as time_diff,
         weight
       FROM gym_sets
-      WHERE created >= strftime('%s', 'now') - 60*60*24*7
+      WHERE created >= strftime('%s', 'now') - 60*60*24*30
     ),
     reps_per_min AS (
       SELECT
@@ -111,6 +111,7 @@ Future<List<Rpm>> getRpms() async {
       AVG(rpm) as rpm,
       weight
     FROM reps_per_min
+    WHERE rpm IS NOT NULL
     GROUP BY name, weight;
   """).get();
   return results
