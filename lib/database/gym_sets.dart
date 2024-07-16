@@ -97,6 +97,7 @@ Future<List<Rpm>> getRpms() async {
         weight
       FROM gym_sets
       WHERE created >= strftime('%s', 'now') - 60*60*24*30
+        AND cardio = false
     ),
     reps_per_min AS (
       SELECT

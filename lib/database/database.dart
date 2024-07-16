@@ -322,10 +322,16 @@ class AppDatabase extends _$AppDatabase {
         from21To22: (Migrator m, Schema22 schema) async {
           await m.addColumn(schema.settings, schema.settings.repEstimation);
         },
+        from22To23: (Migrator m, Schema23 schema) async {
+          await m.addColumn(
+            schema.settings,
+            schema.settings.durationEstimation,
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 22;
+  int get schemaVersion => 23;
 }

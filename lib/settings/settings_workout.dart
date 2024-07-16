@@ -191,6 +191,22 @@ List<Widget> getWorkouts(
               .write(SettingsCompanion(repEstimation: Value(value))),
         ),
       ),
+    if ('duration estimation'.contains(term.toLowerCase()))
+      ListTile(
+        title: const Text('Duration estimation'),
+        leading: const Icon(Icons.access_time),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                durationEstimation: Value(!settings.durationEstimation),
+              ),
+            ),
+        trailing: Switch(
+          value: settings.durationEstimation,
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(durationEstimation: Value(value))),
+        ),
+      ),
   ];
 }
 

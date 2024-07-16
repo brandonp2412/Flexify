@@ -223,25 +223,29 @@ class _StartPlanPageState extends State<StartPlanPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state != AppLifecycleState.resumed) return;
-    if (rpms == null || !mounted) return;
-    if (cardio == true) return;
+    if (rpms == null || !mounted || lastSaved == null) return;
+
     final settings = context.read<SettingsState>().value;
-    if (settings.repEstimation == false) return;
+    final difference = DateTime.now().difference(lastSaved!);
 
-    final weight = double.parse(weightController.text);
-    final closestRpm =
-        rpms!.where((rpm) => rpm.name == planExercises[selectedIndex]).reduce(
-              (rpm1, rpm2) =>
-                  (rpm1.weight - weight).abs() < (rpm2.weight - weight).abs()
-                      ? rpm1
-                      : rpm2,
-            );
+    if (cardio && settings.durationEstimation) {
+      minutesController.text = difference.inMinutes.toString();
+      secondsController.text = (difference.inSeconds % 60).toString();
+    } else if (!cardio && settings.repEstimation) {
+      final weight = double.parse(weightController.text);
+      final closestRpm =
+          rpms!.where((rpm) => rpm.name == planExercises[selectedIndex]).reduce(
+                (rpm1, rpm2) =>
+                    (rpm1.weight - weight).abs() < (rpm2.weight - weight).abs()
+                        ? rpm1
+                        : rpm2,
+              );
 
-    final minutes = DateTime.now().difference(lastSaved!).inMinutes;
-    final reps = minutes * closestRpm.rpm;
-    if (reps <= 0) return;
+      final reps = difference.inMinutes * closestRpm.rpm;
+      if (reps <= 0) return;
 
-    repsController.text = reps.toInt().toString();
+      repsController.text = reps.toInt().toString();
+    }
   }
 
   @override

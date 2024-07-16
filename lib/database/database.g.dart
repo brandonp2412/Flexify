@@ -1183,6 +1183,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("rep_estimation" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _durationEstimationMeta =
+      const VerificationMeta('durationEstimation');
+  @override
+  late final GeneratedColumn<bool> durationEstimation = GeneratedColumn<bool>(
+      'duration_estimation', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("duration_estimation" IN (0, 1))'),
+      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1207,7 +1217,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         timerDuration,
         vibrate,
         warmupSets,
-        repEstimation
+        repEstimation,
+        durationEstimation
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1384,6 +1395,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           repEstimation.isAcceptableOrUnknown(
               data['rep_estimation']!, _repEstimationMeta));
     }
+    if (data.containsKey('duration_estimation')) {
+      context.handle(
+          _durationEstimationMeta,
+          durationEstimation.isAcceptableOrUnknown(
+              data['duration_estimation']!, _durationEstimationMeta));
+    }
     return context;
   }
 
@@ -1439,6 +1456,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
       repEstimation: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}rep_estimation'])!,
+      durationEstimation: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}duration_estimation'])!,
     );
   }
 
@@ -1472,6 +1491,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool vibrate;
   final int? warmupSets;
   final bool repEstimation;
+  final bool durationEstimation;
   const Setting(
       {required this.alarmSound,
       required this.cardioUnit,
@@ -1495,7 +1515,8 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.timerDuration,
       required this.vibrate,
       this.warmupSets,
-      required this.repEstimation});
+      required this.repEstimation,
+      required this.durationEstimation});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1524,6 +1545,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       map['warmup_sets'] = Variable<int>(warmupSets);
     }
     map['rep_estimation'] = Variable<bool>(repEstimation);
+    map['duration_estimation'] = Variable<bool>(durationEstimation);
     return map;
   }
 
@@ -1554,6 +1576,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ? const Value.absent()
           : Value(warmupSets),
       repEstimation: Value(repEstimation),
+      durationEstimation: Value(durationEstimation),
     );
   }
 
@@ -1585,6 +1608,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       vibrate: serializer.fromJson<bool>(json['vibrate']),
       warmupSets: serializer.fromJson<int?>(json['warmupSets']),
       repEstimation: serializer.fromJson<bool>(json['repEstimation']),
+      durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
     );
   }
   @override
@@ -1614,6 +1638,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'vibrate': serializer.toJson<bool>(vibrate),
       'warmupSets': serializer.toJson<int?>(warmupSets),
       'repEstimation': serializer.toJson<bool>(repEstimation),
+      'durationEstimation': serializer.toJson<bool>(durationEstimation),
     };
   }
 
@@ -1640,7 +1665,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           int? timerDuration,
           bool? vibrate,
           Value<int?> warmupSets = const Value.absent(),
-          bool? repEstimation}) =>
+          bool? repEstimation,
+          bool? durationEstimation}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         cardioUnit: cardioUnit ?? this.cardioUnit,
@@ -1665,6 +1691,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         vibrate: vibrate ?? this.vibrate,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
         repEstimation: repEstimation ?? this.repEstimation,
+        durationEstimation: durationEstimation ?? this.durationEstimation,
       );
   @override
   String toString() {
@@ -1691,7 +1718,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
           ..write('warmupSets: $warmupSets, ')
-          ..write('repEstimation: $repEstimation')
+          ..write('repEstimation: $repEstimation, ')
+          ..write('durationEstimation: $durationEstimation')
           ..write(')'))
         .toString();
   }
@@ -1720,7 +1748,8 @@ class Setting extends DataClass implements Insertable<Setting> {
         timerDuration,
         vibrate,
         warmupSets,
-        repEstimation
+        repEstimation,
+        durationEstimation
       ]);
   @override
   bool operator ==(Object other) =>
@@ -1748,7 +1777,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.timerDuration == this.timerDuration &&
           other.vibrate == this.vibrate &&
           other.warmupSets == this.warmupSets &&
-          other.repEstimation == this.repEstimation);
+          other.repEstimation == this.repEstimation &&
+          other.durationEstimation == this.durationEstimation);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -1775,6 +1805,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> vibrate;
   final Value<int?> warmupSets;
   final Value<bool> repEstimation;
+  final Value<bool> durationEstimation;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.cardioUnit = const Value.absent(),
@@ -1799,6 +1830,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.vibrate = const Value.absent(),
     this.warmupSets = const Value.absent(),
     this.repEstimation = const Value.absent(),
+    this.durationEstimation = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
@@ -1824,6 +1856,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required bool vibrate,
     this.warmupSets = const Value.absent(),
     this.repEstimation = const Value.absent(),
+    this.durationEstimation = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -1867,6 +1900,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? vibrate,
     Expression<int>? warmupSets,
     Expression<bool>? repEstimation,
+    Expression<bool>? durationEstimation,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -1893,6 +1927,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (vibrate != null) 'vibrate': vibrate,
       if (warmupSets != null) 'warmup_sets': warmupSets,
       if (repEstimation != null) 'rep_estimation': repEstimation,
+      if (durationEstimation != null) 'duration_estimation': durationEstimation,
     });
   }
 
@@ -1919,7 +1954,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<int>? timerDuration,
       Value<bool>? vibrate,
       Value<int?>? warmupSets,
-      Value<bool>? repEstimation}) {
+      Value<bool>? repEstimation,
+      Value<bool>? durationEstimation}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       cardioUnit: cardioUnit ?? this.cardioUnit,
@@ -1944,6 +1980,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       vibrate: vibrate ?? this.vibrate,
       warmupSets: warmupSets ?? this.warmupSets,
       repEstimation: repEstimation ?? this.repEstimation,
+      durationEstimation: durationEstimation ?? this.durationEstimation,
     );
   }
 
@@ -2019,6 +2056,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (repEstimation.present) {
       map['rep_estimation'] = Variable<bool>(repEstimation.value);
     }
+    if (durationEstimation.present) {
+      map['duration_estimation'] = Variable<bool>(durationEstimation.value);
+    }
     return map;
   }
 
@@ -2047,7 +2087,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
           ..write('warmupSets: $warmupSets, ')
-          ..write('repEstimation: $repEstimation')
+          ..write('repEstimation: $repEstimation, ')
+          ..write('durationEstimation: $durationEstimation')
           ..write(')'))
         .toString();
   }
@@ -2900,6 +2941,7 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required bool vibrate,
   Value<int?> warmupSets,
   Value<bool> repEstimation,
+  Value<bool> durationEstimation,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
@@ -2925,6 +2967,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> vibrate,
   Value<int?> warmupSets,
   Value<bool> repEstimation,
+  Value<bool> durationEstimation,
 });
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -2970,6 +3013,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> vibrate = const Value.absent(),
             Value<int?> warmupSets = const Value.absent(),
             Value<bool> repEstimation = const Value.absent(),
+            Value<bool> durationEstimation = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
@@ -2995,6 +3039,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             vibrate: vibrate,
             warmupSets: warmupSets,
             repEstimation: repEstimation,
+            durationEstimation: durationEstimation,
           ),
           getInsertCompanionBuilder: ({
             required String alarmSound,
@@ -3020,6 +3065,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             required bool vibrate,
             Value<int?> warmupSets = const Value.absent(),
             Value<bool> repEstimation = const Value.absent(),
+            Value<bool> durationEstimation = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
@@ -3045,6 +3091,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             vibrate: vibrate,
             warmupSets: warmupSets,
             repEstimation: repEstimation,
+            durationEstimation: durationEstimation,
           ),
         ));
 }
@@ -3178,6 +3225,11 @@ class $$SettingsTableFilterComposer
       column: $state.table.repEstimation,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get durationEstimation => $state.composableBuilder(
+      column: $state.table.durationEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$SettingsTableOrderingComposer
@@ -3295,6 +3347,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get repEstimation => $state.composableBuilder(
       column: $state.table.repEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get durationEstimation => $state.composableBuilder(
+      column: $state.table.durationEstimation,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
