@@ -49,6 +49,7 @@ gh release create "$new_version" --notes "$changelog" \
     $apk/app-*-release.apk \
     $apk/flexify.apk \
     $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
+fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
 git pull --tags
 
 echo q | flutter run --release -d 'pixel 5'
