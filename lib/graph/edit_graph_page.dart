@@ -7,7 +7,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -37,7 +36,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit ${widget.name.toLowerCase()}"),
+        title: Text("Update all ${widget.name.toLowerCase()}"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -95,16 +94,33 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 });
               },
             ),
-            if (unit != null && cardio != null)
-              UnitSelector(
-                value: unit!,
-                cardio: cardio!,
-                onChanged: (value) {
-                  setState(() {
-                    unit = value;
-                  });
-                },
-              ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Unit'),
+              value: unit,
+              items: const [
+                DropdownMenuItem(
+                  value: 'kg',
+                  child: Text("kg"),
+                ),
+                DropdownMenuItem(
+                  value: 'lb',
+                  child: Text("lb"),
+                ),
+                DropdownMenuItem(
+                  value: 'km',
+                  child: Text("km"),
+                ),
+                DropdownMenuItem(
+                  value: 'mi',
+                  child: Text("mi"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  unit = value!;
+                });
+              },
+            ),
             if (cardio != null)
               ListTile(
                 leading: cardio!
@@ -235,8 +251,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
   void initState() {
     super.initState();
 
-    final settings = context.read<SettingsState>();
-
     (db.gymSets.select()
           ..where((tbl) => tbl.name.equals(widget.name))
           ..limit(1))
@@ -245,7 +259,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
           (gymSet) => setState(() {
             image = gymSet.image;
             cardio = gymSet.cardio;
-            unit = gymSet.unit;
             category = gymSet.category;
 
             if (gymSet.restMs != null) {
@@ -253,11 +266,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
               minutesController.text = duration.inMinutes.toString();
               secondsController.text = (duration.inSeconds % 60).toString();
             }
-
-            if (gymSet.cardio && (unit == 'kg' || unit == 'lb'))
-              unit = settings.value.cardioUnit;
-            else if (!gymSet.cardio && (unit == 'km' || unit == 'mi'))
-              unit = settings.value.strengthUnit;
           }),
         );
   }
@@ -317,7 +325,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
           );
         },
       );
-    else if (await mixedUnits() && mounted)
+    else if (unit != null && await mixedUnits() && mounted)
       await showDialog(
         context: context,
         builder: (BuildContext context) {
