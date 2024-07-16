@@ -2,21 +2,21 @@
 
 set -ex
 
-IFS='+.' read -r major minor patch build_number <<< "$(yq -r .version pubspec.yaml)"
+IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
 changelog_number=$((new_build_number * 10 + 3))
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 
-IFS='+.' read -r msix_major msix_minor msix_patch msix_zero <<< "$(yq -r .msix_config.msix_version pubspec.yaml)"
+IFS='+.' read -r msix_major msix_minor msix_patch msix_zero <<<"$(yq -r .msix_config.msix_version pubspec.yaml)"
 new_msix_patch=$((msix_patch + 1))
 new_msix_version="$msix_major.$msix_minor.$new_msix_patch+$msix_zero"
 
 changelog_file="fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 if ! [ -f $changelog_file ]; then
-    git --no-pager log --pretty=format:'%s' "$(git describe --tags --abbrev=0)"..HEAD |
-        awk '{print "- "$0}' >$changelog_file
+  git --no-pager log --pretty=format:'%s' "$(git describe --tags --abbrev=0)"..HEAD |
+    awk '{print "- "$0}' >$changelog_file
 fi
 
 nvim $changelog_file
@@ -42,15 +42,16 @@ $changelog"
 ./flutter/bin/flutter build apk --split-per-abi
 ./flutter/bin/flutter build apk
 ./flutter/bin/flutter build linux
+./flutter/bin/flutter build appbundle
 apk=build/app/outputs/flutter-apk
 (cd $apk/pipeline/linux/x64/release/bundle && zip -r flexify-linux.zip .)
 mv $apk/app-release.apk $apk/flexify.apk
 
 git push
 gh release create "$new_version" --notes "$changelog" \
-    $apk/app-*-release.apk \
-    $apk/flexify.apk \
-    $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
+  $apk/app-*-release.apk \
+  $apk/flexify.apk \
+  $apk/pipeline/linux/x64/release/bundle/flexify-linux.zip
 fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
 git pull --tags
 
