@@ -319,10 +319,13 @@ class AppDatabase extends _$AppDatabase {
             schema.planExercises.warmupSets,
           );
         },
+        from21To22: (Migrator m, Schema22 schema) async {
+          await m.addColumn(schema.settings, schema.settings.repEstimation);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 21;
+  int get schemaVersion => 22;
 }

@@ -175,6 +175,22 @@ List<Widget> getWorkouts(
               .write(SettingsCompanion(hideHistoryTab: Value(value))),
         ),
       ),
+    if ('rep estimation'.contains(term.toLowerCase()))
+      ListTile(
+        title: const Text('Rep estimation'),
+        leading: const Icon(Icons.repeat_outlined),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                repEstimation: Value(!settings.repEstimation),
+              ),
+            ),
+        trailing: Switch(
+          value: settings.repEstimation,
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(repEstimation: Value(value))),
+        ),
+      ),
   ];
 }
 

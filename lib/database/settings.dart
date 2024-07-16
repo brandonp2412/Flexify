@@ -23,4 +23,5 @@ class Settings extends Table {
   IntColumn get timerDuration => integer()();
   BoolColumn get vibrate => boolean()();
   IntColumn get warmupSets => integer().nullable()();
+  BoolColumn get repEstimation => boolean().withDefault(const Constant(true))();
 }

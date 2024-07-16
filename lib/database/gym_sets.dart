@@ -85,6 +85,45 @@ Stream<List<CardioData>> watchCardio({
   );
 }
 
+typedef Rpm = ({String name, double rpm, double weight});
+
+Future<List<Rpm>> getRpms() async {
+  final results = await db.customSelect("""
+    WITH time_diffs AS (
+      SELECT
+        name,
+        reps,
+        ((created - LAG(created) OVER (PARTITION BY name ORDER BY created)) / 60.0) as time_diff,
+        weight
+      FROM gym_sets
+      WHERE created >= strftime('%s', 'now') - 60*60*24*7
+    ),
+    reps_per_min AS (
+      SELECT
+        name,
+        (reps / time_diff) as rpm,
+        weight
+      FROM time_diffs
+      WHERE time_diff IS NOT NULL
+    )
+    SELECT
+      name,
+      AVG(rpm) as rpm,
+      weight
+    FROM reps_per_min
+    GROUP BY name, weight;
+  """).get();
+  return results
+      .map(
+        (result) => (
+          name: result.read<String>('name'),
+          rpm: result.read<double>('rpm'),
+          weight: result.read<double>('weight')
+        ),
+      )
+      .toList();
+}
+
 Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
   final countColumn = CustomExpression<int>(
     """

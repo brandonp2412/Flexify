@@ -22,7 +22,8 @@ class StartPlanPage extends StatefulWidget {
   createState() => _StartPlanPageState();
 }
 
-class _StartPlanPageState extends State<StartPlanPage> {
+class _StartPlanPageState extends State<StartPlanPage>
+    with WidgetsBindingObserver {
   final repsController = TextEditingController(text: "0.0");
   final weightController = TextEditingController(text: "0.0");
   final distanceController = TextEditingController(text: "0.0");
@@ -30,9 +31,13 @@ class _StartPlanPageState extends State<StartPlanPage> {
   final secondsController = TextEditingController(text: "0.0");
   final inclineController = TextEditingController(text: "0");
 
+  /// Used to show progress lines instantly on first render.
   bool first = true;
+
   int selectedIndex = 0;
   bool cardio = false;
+  DateTime? lastSaved;
+  List<Rpm>? rpms;
 
   late List<String> planExercises = widget.plan.exercises.split(',');
   late final Stream<List<GymCount>> countStream =
@@ -40,18 +45,6 @@ class _StartPlanPageState extends State<StartPlanPage> {
   late final PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
-
-  useBodyWeight() async {
-    final weightSet = await getBodyWeight();
-    if (weightSet == null && mounted)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No weight entered yet.'),
-        ),
-      );
-    else
-      weightController.text = toString(weightSet!.weight);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,6 +220,30 @@ class _StartPlanPageState extends State<StartPlanPage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state != AppLifecycleState.resumed) return;
+    if (rpms == null || !mounted) return;
+    final settings = context.read<SettingsState>().value;
+    if (settings.repEstimation == false) return;
+
+    final weight = double.parse(weightController.text);
+    final closestRpm =
+        rpms!.where((rpm) => rpm.name == planExercises[selectedIndex]).reduce(
+              (rpm1, rpm2) =>
+                  (rpm1.weight - weight).abs() < (rpm2.weight - weight).abs()
+                      ? rpm1
+                      : rpm2,
+            );
+
+    final minutes = DateTime.now().difference(lastSaved!).inMinutes;
+    final reps = minutes * closestRpm.rpm;
+    if (reps <= 0) return;
+
+    repsController.text = reps.toInt().toString();
+  }
+
+  @override
   void dispose() {
     repsController.dispose();
     weightController.dispose();
@@ -234,6 +251,7 @@ class _StartPlanPageState extends State<StartPlanPage> {
     minutesController.dispose();
     inclineController.dispose();
 
+    WidgetsBinding.instance.removeObserver(this);
     planState.removeListener(planChanged);
 
     super.dispose();
@@ -256,6 +274,16 @@ class _StartPlanPageState extends State<StartPlanPage> {
   void initState() {
     super.initState();
     planState.addListener(planChanged);
+    WidgetsBinding.instance.addObserver(this);
+
+    final settings = context.read<SettingsState>().value;
+    if (settings.repEstimation)
+      getRpms().then(
+        (value) => setState(() {
+          rpms = value;
+        }),
+      );
+
     select(0);
   }
 
@@ -347,6 +375,10 @@ class _StartPlanPageState extends State<StartPlanPage> {
     if (finishedExercise) select(selectedIndex + 1);
 
     db.into(db.gymSets).insert(gymSet);
+    if (!mounted) return;
+    setState(() {
+      lastSaved = DateTime.now();
+    });
   }
 
   Future<void> select(int index) async {
@@ -372,5 +404,17 @@ class _StartPlanPageState extends State<StartPlanPage> {
       else if (!cardio && (unit == 'km' || unit == 'mi'))
         unit = settings.strengthUnit;
     });
+  }
+
+  useBodyWeight() async {
+    final weightSet = await getBodyWeight();
+    if (weightSet == null && mounted)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No weight entered yet.'),
+        ),
+      );
+    else
+      weightController.text = toString(weightSet!.weight);
   }
 }

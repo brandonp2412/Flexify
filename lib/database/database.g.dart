@@ -1173,6 +1173,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
       'warmup_sets', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _repEstimationMeta =
+      const VerificationMeta('repEstimation');
+  @override
+  late final GeneratedColumn<bool> repEstimation = GeneratedColumn<bool>(
+      'rep_estimation', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("rep_estimation" IN (0, 1))'),
+      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1196,7 +1206,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         themeMode,
         timerDuration,
         vibrate,
-        warmupSets
+        warmupSets,
+        repEstimation
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1367,6 +1378,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           warmupSets.isAcceptableOrUnknown(
               data['warmup_sets']!, _warmupSetsMeta));
     }
+    if (data.containsKey('rep_estimation')) {
+      context.handle(
+          _repEstimationMeta,
+          repEstimation.isAcceptableOrUnknown(
+              data['rep_estimation']!, _repEstimationMeta));
+    }
     return context;
   }
 
@@ -1420,6 +1437,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}vibrate'])!,
       warmupSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
+      repEstimation: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}rep_estimation'])!,
     );
   }
 
@@ -1452,6 +1471,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final int timerDuration;
   final bool vibrate;
   final int? warmupSets;
+  final bool repEstimation;
   const Setting(
       {required this.alarmSound,
       required this.cardioUnit,
@@ -1474,7 +1494,8 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.themeMode,
       required this.timerDuration,
       required this.vibrate,
-      this.warmupSets});
+      this.warmupSets,
+      required this.repEstimation});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1502,6 +1523,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     if (!nullToAbsent || warmupSets != null) {
       map['warmup_sets'] = Variable<int>(warmupSets);
     }
+    map['rep_estimation'] = Variable<bool>(repEstimation);
     return map;
   }
 
@@ -1531,6 +1553,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       warmupSets: warmupSets == null && nullToAbsent
           ? const Value.absent()
           : Value(warmupSets),
+      repEstimation: Value(repEstimation),
     );
   }
 
@@ -1561,6 +1584,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       timerDuration: serializer.fromJson<int>(json['timerDuration']),
       vibrate: serializer.fromJson<bool>(json['vibrate']),
       warmupSets: serializer.fromJson<int?>(json['warmupSets']),
+      repEstimation: serializer.fromJson<bool>(json['repEstimation']),
     );
   }
   @override
@@ -1589,6 +1613,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'timerDuration': serializer.toJson<int>(timerDuration),
       'vibrate': serializer.toJson<bool>(vibrate),
       'warmupSets': serializer.toJson<int?>(warmupSets),
+      'repEstimation': serializer.toJson<bool>(repEstimation),
     };
   }
 
@@ -1614,7 +1639,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           String? themeMode,
           int? timerDuration,
           bool? vibrate,
-          Value<int?> warmupSets = const Value.absent()}) =>
+          Value<int?> warmupSets = const Value.absent(),
+          bool? repEstimation}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         cardioUnit: cardioUnit ?? this.cardioUnit,
@@ -1638,6 +1664,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         timerDuration: timerDuration ?? this.timerDuration,
         vibrate: vibrate ?? this.vibrate,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+        repEstimation: repEstimation ?? this.repEstimation,
       );
   @override
   String toString() {
@@ -1663,7 +1690,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
-          ..write('warmupSets: $warmupSets')
+          ..write('warmupSets: $warmupSets, ')
+          ..write('repEstimation: $repEstimation')
           ..write(')'))
         .toString();
   }
@@ -1691,7 +1719,8 @@ class Setting extends DataClass implements Insertable<Setting> {
         themeMode,
         timerDuration,
         vibrate,
-        warmupSets
+        warmupSets,
+        repEstimation
       ]);
   @override
   bool operator ==(Object other) =>
@@ -1718,7 +1747,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.themeMode == this.themeMode &&
           other.timerDuration == this.timerDuration &&
           other.vibrate == this.vibrate &&
-          other.warmupSets == this.warmupSets);
+          other.warmupSets == this.warmupSets &&
+          other.repEstimation == this.repEstimation);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -1744,6 +1774,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<int> timerDuration;
   final Value<bool> vibrate;
   final Value<int?> warmupSets;
+  final Value<bool> repEstimation;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.cardioUnit = const Value.absent(),
@@ -1767,6 +1798,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.timerDuration = const Value.absent(),
     this.vibrate = const Value.absent(),
     this.warmupSets = const Value.absent(),
+    this.repEstimation = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
@@ -1791,6 +1823,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required int timerDuration,
     required bool vibrate,
     this.warmupSets = const Value.absent(),
+    this.repEstimation = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -1833,6 +1866,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<int>? timerDuration,
     Expression<bool>? vibrate,
     Expression<int>? warmupSets,
+    Expression<bool>? repEstimation,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -1858,6 +1892,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (timerDuration != null) 'timer_duration': timerDuration,
       if (vibrate != null) 'vibrate': vibrate,
       if (warmupSets != null) 'warmup_sets': warmupSets,
+      if (repEstimation != null) 'rep_estimation': repEstimation,
     });
   }
 
@@ -1883,7 +1918,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<String>? themeMode,
       Value<int>? timerDuration,
       Value<bool>? vibrate,
-      Value<int?>? warmupSets}) {
+      Value<int?>? warmupSets,
+      Value<bool>? repEstimation}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       cardioUnit: cardioUnit ?? this.cardioUnit,
@@ -1907,6 +1943,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       timerDuration: timerDuration ?? this.timerDuration,
       vibrate: vibrate ?? this.vibrate,
       warmupSets: warmupSets ?? this.warmupSets,
+      repEstimation: repEstimation ?? this.repEstimation,
     );
   }
 
@@ -1979,6 +2016,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (warmupSets.present) {
       map['warmup_sets'] = Variable<int>(warmupSets.value);
     }
+    if (repEstimation.present) {
+      map['rep_estimation'] = Variable<bool>(repEstimation.value);
+    }
     return map;
   }
 
@@ -2006,7 +2046,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
-          ..write('warmupSets: $warmupSets')
+          ..write('warmupSets: $warmupSets, ')
+          ..write('repEstimation: $repEstimation')
           ..write(')'))
         .toString();
   }
@@ -2858,6 +2899,7 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required int timerDuration,
   required bool vibrate,
   Value<int?> warmupSets,
+  Value<bool> repEstimation,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
@@ -2882,6 +2924,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<int> timerDuration,
   Value<bool> vibrate,
   Value<int?> warmupSets,
+  Value<bool> repEstimation,
 });
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -2926,6 +2969,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<int> timerDuration = const Value.absent(),
             Value<bool> vibrate = const Value.absent(),
             Value<int?> warmupSets = const Value.absent(),
+            Value<bool> repEstimation = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
@@ -2950,6 +2994,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             timerDuration: timerDuration,
             vibrate: vibrate,
             warmupSets: warmupSets,
+            repEstimation: repEstimation,
           ),
           getInsertCompanionBuilder: ({
             required String alarmSound,
@@ -2974,6 +3019,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             required int timerDuration,
             required bool vibrate,
             Value<int?> warmupSets = const Value.absent(),
+            Value<bool> repEstimation = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
@@ -2998,6 +3044,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             timerDuration: timerDuration,
             vibrate: vibrate,
             warmupSets: warmupSets,
+            repEstimation: repEstimation,
           ),
         ));
 }
@@ -3126,6 +3173,11 @@ class $$SettingsTableFilterComposer
       column: $state.table.warmupSets,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get repEstimation => $state.composableBuilder(
+      column: $state.table.repEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$SettingsTableOrderingComposer
@@ -3238,6 +3290,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<int> get warmupSets => $state.composableBuilder(
       column: $state.table.warmupSets,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get repEstimation => $state.composableBuilder(
+      column: $state.table.repEstimation,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
