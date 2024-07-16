@@ -39,7 +39,7 @@ class ExerciseList extends StatelessWidget {
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
-        itemCount: exercises.length,
+        itemCount: exercises.length + 1,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, maxSets, planTrailing),
         onReorder: (oldIndex, newIndex) async {
@@ -60,7 +60,7 @@ class ExerciseList extends StatelessWidget {
       );
     else
       return ListView.builder(
-        itemCount: exercises.length,
+        itemCount: exercises.length + 1,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, maxSets, planTrailing),
       );
@@ -72,6 +72,7 @@ class ExerciseList extends StatelessWidget {
     int maxSets,
     PlanTrailing planTrailing,
   ) {
+    if (index >= exercises.length) return const SizedBox(height: 76);
     final exercise = exercises[index];
     final countIndex =
         counts?.indexWhere((element) => element.name == exercise);

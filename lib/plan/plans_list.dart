@@ -80,8 +80,10 @@ class PlansList extends StatelessWidget {
 
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
-        itemCount: plans.length,
+        itemCount: plans.length + 1,
         itemBuilder: (context, index) {
+          if (index >= plans.length) return const SizedBox(height: 50);
+
           final plan = plans[index];
           return PlanTile(
             key: Key(plan.id.toString()),
@@ -117,9 +119,11 @@ class PlansList extends StatelessWidget {
       );
     else
       return ListView.builder(
-        itemCount: plans.length,
+        itemCount: plans.length + 1,
         itemBuilder: (context, index) {
+          if (index >= plans.length) return const SizedBox(height: 50);
           final plan = plans[index];
+
           return PlanTile(
             key: Key(plan.id.toString()),
             plan: plan,
