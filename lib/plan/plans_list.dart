@@ -80,9 +80,10 @@ class PlansList extends StatelessWidget {
 
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
-        itemCount: plans.length + 1,
+        itemCount: plans.isNotEmpty ? plans.length + 1 : 0,
         itemBuilder: (context, index) {
-          if (index >= plans.length) return const SizedBox(height: 50);
+          if (index >= plans.length)
+            return const SizedBox(height: 50, key: Key('scroll-placeholder'));
 
           final plan = plans[index];
           return PlanTile(
@@ -117,24 +118,23 @@ class PlansList extends StatelessWidget {
           });
         },
       );
-    else
-      return ListView.builder(
-        itemCount: plans.length + 1,
-        itemBuilder: (context, index) {
-          if (index >= plans.length) return const SizedBox(height: 50);
-          final plan = plans[index];
 
-          return PlanTile(
-            key: Key(plan.id.toString()),
-            plan: plan,
-            weekday: weekday,
-            index: index,
-            navigatorKey: navigatorKey,
-            selected: selected,
-            onSelect: (id) => onSelect(id),
-            countStream: stream,
-          );
-        },
-      );
+    return ListView.builder(
+      itemCount: plans.length + 1,
+      itemBuilder: (context, index) {
+        if (index >= plans.length) return const SizedBox(height: 50);
+        final plan = plans[index];
+
+        return PlanTile(
+          plan: plan,
+          weekday: weekday,
+          index: index,
+          navigatorKey: navigatorKey,
+          selected: selected,
+          onSelect: (id) => onSelect(id),
+          countStream: stream,
+        );
+      },
+    );
   }
 }

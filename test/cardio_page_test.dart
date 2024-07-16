@@ -92,7 +92,7 @@ void main() async {
     final edit = find.byTooltip('Edit');
     await tester.tap(edit);
     await tester.pumpAndSettle();
-    expect(find.text('Edit run'), findsOne);
+    expect(find.text('Update all run'), findsOne);
 
     await db.close();
   });

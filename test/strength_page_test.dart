@@ -112,7 +112,7 @@ void main() async {
     final edit = find.byTooltip('Edit');
     await tester.tap(edit);
     await tester.pumpAndSettle();
-    expect(find.text('Edit dumbbell shoulder press'), findsOne);
+    expect(find.text('Update all dumbbell shoulder press'), findsOne);
 
     await db.close();
   });

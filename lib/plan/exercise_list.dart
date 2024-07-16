@@ -72,7 +72,11 @@ class ExerciseList extends StatelessWidget {
     int maxSets,
     PlanTrailing planTrailing,
   ) {
-    if (index >= exercises.length) return const SizedBox(height: 76);
+    if (index >= exercises.length)
+      return const SizedBox(
+        height: 76,
+        key: Key('scroll-placeholder'),
+      );
     final exercise = exercises[index];
     final countIndex =
         counts?.indexWhere((element) => element.name == exercise);
