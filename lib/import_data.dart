@@ -102,7 +102,7 @@ class ImportData extends StatelessWidget {
           weight = Value(row[3]);
 
         Value<bool> hidden;
-        Value<double> bodyWeight;
+        var bodyWeight = const Value(0.0);
         if (columns.elementAtOrNull(6) == 'hidden') {
           if (row.elementAtOrNull(6) is double)
             hidden = Value(row[6] == 1.0);
@@ -115,8 +115,6 @@ class ImportData extends StatelessWidget {
 
         if (columns.elementAtOrNull(7) == 'bodyWeight')
           bodyWeight = Value(double.tryParse(row.elementAtOrNull(7)) ?? 0);
-        else
-          bodyWeight = const Value(0);
 
         if (columns.elementAtOrNull(10) == 'hidden')
           hidden = Value(bool.parse(row[10]));
