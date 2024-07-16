@@ -25,10 +25,10 @@ echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
 dart analyze lib
 dart format --set-exit-if-changed lib
 ./flutter/bin/flutter test
-./migrate.sh
-./screenshots.sh "phoneScreenshots"
-./screenshots.sh "sevenInchScreenshots"
-./screenshots.sh "tenInchScreenshots"
+./scripts/migrate.sh
+./scripts/screenshots.sh "phoneScreenshots"
+./scripts/screenshots.sh "sevenInchScreenshots"
+./scripts/screenshots.sh "tenInchScreenshots"
 
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 git add pubspec.yaml
@@ -60,6 +60,6 @@ ssh macbook "
   cd flexify
   git pull
   security unlock-keychain -p $(pass macbook)
-  ./macos.sh || true
-  ./ios.sh
+  ./scripts/macos.sh || true
+  ./scripts/ios.sh
 "
