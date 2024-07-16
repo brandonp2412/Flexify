@@ -224,6 +224,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.didChangeAppLifecycleState(state);
     if (state != AppLifecycleState.resumed) return;
     if (rpms == null || !mounted) return;
+    if (cardio == true) return;
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation == false) return;
 
