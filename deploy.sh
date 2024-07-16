@@ -2,15 +2,16 @@
 
 set -ex
 
-# Sets the window title
-echo -ne "\\033]0;Deploying flexify...\\007"
-
-IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
+IFS='+.' read -r major minor patch build_number <<< "$(yq -r .version pubspec.yaml)"
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
 changelog_number=$((new_build_number * 10 + 3))
 new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
+
+IFS='+.' read -r msix_major msix_minor msix_patch msix_zero <<< "$(yq -r .msix_config.msix_version pubspec.yaml)"
+new_msix_patch=$((msix_patch + 1))
+new_msix_version="$msix_major.$msix_minor.$new_msix_patch+$msix_zero"
 
 changelog_file="fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 if ! [ -f $changelog_file ]; then
@@ -31,6 +32,7 @@ dart format --set-exit-if-changed lib
 ./scripts/screenshots.sh "tenInchScreenshots"
 
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
+yq -yi ".msix_config.msix_version |= \"$new_msix_version\"" pubspec.yaml
 git add pubspec.yaml
 git add fastlane/metadata
 git commit -m "$new_version 🚀
