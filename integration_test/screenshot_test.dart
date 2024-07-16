@@ -131,7 +131,7 @@ Future<void> appWrapper() async {
               : Value(ThemeMode.dark.toString()),
           explainedPermissions: const Value(true),
           restTimers: const Value(true),
-          systemColors: const Value(true),
+          systemColors: const Value(false),
         ),
       );
   final settings = await (db.settings.select()..limit(1)).getSingle();
