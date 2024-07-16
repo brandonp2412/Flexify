@@ -54,6 +54,7 @@ git pull --tags
 echo q | flutter run --release -d 'pixel 5'
 
 set +x
+# shellcheck disable=SC2029
 ssh macbook "
   set -e
   source .zprofile
