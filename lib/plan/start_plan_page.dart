@@ -292,17 +292,18 @@ class _StartPlanPageState extends State<StartPlanPage>
     select(0);
   }
 
-  void planChanged() {
-    final split = planState.plans
-        .firstWhere((element) => element.id == widget.plan.id)
-        .exercises
-        .split(',');
+  planChanged() {
+    final index =
+        planState.plans.indexWhere((plan) => plan.id == widget.plan.id);
+    if (index == -1) return Navigator.pop(context);
+
+    final plan = planState.plans[index];
+    final split = plan.exercises.split(',');
+
+    if (!mounted) return;
     setState(() {
       planExercises = split;
-      title = planState.plans
-          .firstWhere((plan) => plan.id == widget.plan.id)
-          .days
-          .replaceAll(',', ', ');
+      title = plan.days.replaceAll(',', ', ');
     });
   }
 
