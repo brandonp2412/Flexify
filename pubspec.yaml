@@ -66,6 +66,7 @@ flutter_launcher_icons:
     generate: true
     image_path: assets/ic_launcher.png
 msix_config:
+  msstore_appId: 9P13THVK7F69
   display_name: Flexify
   publisher_display_name: Frisbee Software
   identity_name: FrisbeeSoftware.Flexify
