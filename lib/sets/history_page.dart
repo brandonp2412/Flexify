@@ -247,7 +247,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           final settings = context.read<SettingsState>().value;
           final gymSets = await stream.first;
           var bodyWeight = 0.0;
-          if (!settings.hideWeight)
+          if (settings.showBodyWeight)
             bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
 
           GymSet gymSet = gymSets.firstOrNull ??

@@ -104,9 +104,10 @@ class _StartPlanPageState extends State<StartPlanPage>
                 decoration: InputDecoration(
                   labelText: 'Weight ($unit)',
                   suffixIcon: Selector<SettingsState, bool>(
-                    selector: (context, settings) => settings.value.hideWeight,
-                    builder: (context, hideWeight, child) => Visibility(
-                      visible: !hideWeight,
+                    selector: (context, settings) =>
+                        settings.value.showBodyWeight,
+                    builder: (context, showBodyWeight, child) => Visibility(
+                      visible: showBodyWeight,
                       child: IconButton(
                         tooltip: "Use body weight",
                         icon: const Icon(Icons.scale),
@@ -315,7 +316,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     final exercise = planExercises[selectedIndex];
     var bodyWeight = 0.0;
     final settings = context.read<SettingsState>().value;
-    if (!settings.hideWeight) bodyWeight = (await getBodyWeight())?.weight ?? 0;
+    if (settings.showBodyWeight)
+      bodyWeight = (await getBodyWeight())?.weight ?? 0;
 
     if (!settings.explainedPermissions &&
         settings.restTimers &&

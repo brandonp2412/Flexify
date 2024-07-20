@@ -145,34 +145,36 @@ List<Widget> getWorkouts(
               .write(SettingsCompanion(showUnits: Value(value))),
         ),
       ),
-    if ('hide weight'.contains(term.toLowerCase()))
+    if ('show weight'.contains(term.toLowerCase()))
       ListTile(
-        title: const Text('Hide weight'),
+        title: const Text('Show weight'),
         leading: const Icon(Icons.scale_outlined),
-        onTap: () => db.settings
-            .update()
-            .write(SettingsCompanion(hideWeight: Value(!settings.hideWeight))),
-        trailing: Switch(
-          value: settings.hideWeight,
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(hideWeight: Value(value))),
-        ),
-      ),
-    if ('hide history tab'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Hide history tab'),
-        leading: const Icon(Icons.history),
         onTap: () => db.settings.update().write(
               SettingsCompanion(
-                hideHistoryTab: Value(!settings.hideHistoryTab),
+                showBodyWeight: Value(!settings.showBodyWeight),
               ),
             ),
         trailing: Switch(
-          value: settings.hideHistoryTab,
+          value: settings.showBodyWeight,
           onChanged: (value) => db.settings
               .update()
-              .write(SettingsCompanion(hideHistoryTab: Value(value))),
+              .write(SettingsCompanion(showBodyWeight: Value(value))),
+        ),
+      ),
+    if ('show history tab'.contains(term.toLowerCase()))
+      ListTile(
+        title: const Text('Show history tab'),
+        leading: const Icon(Icons.history),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                showHistoryTab: Value(!settings.showHistoryTab),
+              ),
+            ),
+        trailing: Switch(
+          value: settings.showHistoryTab,
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(showHistoryTab: Value(value))),
         ),
       ),
     if ('rep estimation'.contains(term.toLowerCase()))

@@ -77,9 +77,9 @@ class AppDatabase extends _$AppDatabase {
             curveLines: false,
             explainedPermissions: false,
             groupHistory: true,
-            hideHistoryTab: false,
-            hideTimerTab: false,
-            hideWeight: false,
+            showHistoryTab: const Value(true),
+            showTimerTab: const Value(true),
+            showBodyWeight: const Value(true),
             strengthUnit: 'kg',
             systemColors: false,
           ),
@@ -328,10 +328,34 @@ class AppDatabase extends _$AppDatabase {
             schema.settings.durationEstimation,
           );
         },
+        from23To24: (Migrator m, Schema24 schema) async {
+          const hideWeight = CustomExpression<bool>('hide_weight');
+          const hideTimerTab = CustomExpression<bool>('hide_timer_tab');
+          const hideHistoryTab = CustomExpression<bool>('hide_history_tab');
+
+          final result = await (schema.settings.selectOnly()
+                ..addColumns([hideWeight, hideTimerTab, hideHistoryTab]))
+              .getSingle();
+
+          await m.addColumn(schema.settings, schema.settings.showBodyWeight);
+          await m.addColumn(schema.settings, schema.settings.showTimerTab);
+          await m.addColumn(schema.settings, schema.settings.showHistoryTab);
+
+          await schema.settings.update().write(
+                RawValuesInsertable(
+                  {
+                    'show_body_weight': Variable(!result.read(hideWeight)!),
+                    'show_timer_tab': Variable(!result.read(hideTimerTab)!),
+                    'show_history_tab': Variable(!result.read(hideHistoryTab)!),
+                  },
+                ),
+              );
+          await m.alterTable(TableMigration(schema.settings));
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 23;
+  int get schemaVersion => 24;
 }

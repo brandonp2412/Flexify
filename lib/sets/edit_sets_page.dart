@@ -170,8 +170,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
             ],
             if (nameController.text != 'Weight')
               Selector<SettingsState, bool>(
-                builder: (context, hideWeight, child) => Visibility(
-                  visible: !hideWeight,
+                builder: (context, showBodyWeight, child) => Visibility(
+                  visible: showBodyWeight,
                   child: TextField(
                     controller: bodyWeightController,
                     decoration: InputDecoration(
@@ -182,7 +182,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     onTap: () => selectAll(bodyWeightController),
                   ),
                 ),
-                selector: (context, settings) => settings.value.hideWeight,
+                selector: (context, settings) => settings.value.showBodyWeight,
               ),
             Selector<SettingsState, bool>(
               builder: (context, showUnits, child) => Visibility(

@@ -47,8 +47,8 @@ class _EditSetPageState extends State<EditSetPage> {
 
   @override
   Widget build(BuildContext context) {
-    final hideWeight = context.select<SettingsState, bool>(
-      (settings) => settings.value.hideWeight,
+    final showBodyWeight = context.select<SettingsState, bool>(
+      (settings) => settings.value.showBodyWeight,
     );
 
     return Scaffold(
@@ -119,7 +119,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     .getSingleOrNull();
                 if (last == null) return;
 
-                if (hideWeight)
+                if (showBodyWeight)
                   updateFields(
                     last.copyWith(
                       created: DateTime.now().toLocal(),
@@ -232,19 +232,16 @@ class _EditSetPageState extends State<EditSetPage> {
                 textInputAction: TextInputAction.next,
               ),
             ],
-            Selector<SettingsState, bool>(
-              builder: (context, hideWeight, child) => Visibility(
-                visible: !hideWeight,
-                child: TextField(
-                  controller: bodyWeightController,
-                  decoration: const InputDecoration(
-                    labelText: 'Body weight (during set)',
-                  ),
-                  keyboardType: TextInputType.number,
-                  onTap: () => selectAll(bodyWeightController),
+            Visibility(
+              visible: showBodyWeight,
+              child: TextField(
+                controller: bodyWeightController,
+                decoration: const InputDecoration(
+                  labelText: 'Body weight (during set)',
                 ),
+                keyboardType: TextInputType.number,
+                onTap: () => selectAll(bodyWeightController),
               ),
-              selector: (context, settings) => settings.value.hideWeight,
             ),
             Selector<SettingsState, bool>(
               builder: (context, showUnits, child) => Visibility(

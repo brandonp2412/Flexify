@@ -1043,33 +1043,36 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("group_history" IN (0, 1))'));
-  static const VerificationMeta _hideHistoryTabMeta =
-      const VerificationMeta('hideHistoryTab');
+  static const VerificationMeta _showHistoryTabMeta =
+      const VerificationMeta('showHistoryTab');
   @override
-  late final GeneratedColumn<bool> hideHistoryTab = GeneratedColumn<bool>(
-      'hide_history_tab', aliasedName, false,
+  late final GeneratedColumn<bool> showHistoryTab = GeneratedColumn<bool>(
+      'show_history_tab', aliasedName, false,
       type: DriftSqlType.bool,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("hide_history_tab" IN (0, 1))'));
-  static const VerificationMeta _hideTimerTabMeta =
-      const VerificationMeta('hideTimerTab');
+          'CHECK ("show_history_tab" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _showTimerTabMeta =
+      const VerificationMeta('showTimerTab');
   @override
-  late final GeneratedColumn<bool> hideTimerTab = GeneratedColumn<bool>(
-      'hide_timer_tab', aliasedName, false,
+  late final GeneratedColumn<bool> showTimerTab = GeneratedColumn<bool>(
+      'show_timer_tab', aliasedName, false,
       type: DriftSqlType.bool,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("hide_timer_tab" IN (0, 1))'));
-  static const VerificationMeta _hideWeightMeta =
-      const VerificationMeta('hideWeight');
+          'CHECK ("show_timer_tab" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _showBodyWeightMeta =
+      const VerificationMeta('showBodyWeight');
   @override
-  late final GeneratedColumn<bool> hideWeight = GeneratedColumn<bool>(
-      'hide_weight', aliasedName, false,
+  late final GeneratedColumn<bool> showBodyWeight = GeneratedColumn<bool>(
+      'show_body_weight', aliasedName, false,
       type: DriftSqlType.bool,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("hide_weight" IN (0, 1))'));
+          'CHECK ("show_body_weight" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1200,9 +1203,9 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         curveLines,
         explainedPermissions,
         groupHistory,
-        hideHistoryTab,
-        hideTimerTab,
-        hideWeight,
+        showHistoryTab,
+        showTimerTab,
+        showBodyWeight,
         id,
         longDateFormat,
         maxSets,
@@ -1270,29 +1273,23 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     } else if (isInserting) {
       context.missing(_groupHistoryMeta);
     }
-    if (data.containsKey('hide_history_tab')) {
+    if (data.containsKey('show_history_tab')) {
       context.handle(
-          _hideHistoryTabMeta,
-          hideHistoryTab.isAcceptableOrUnknown(
-              data['hide_history_tab']!, _hideHistoryTabMeta));
-    } else if (isInserting) {
-      context.missing(_hideHistoryTabMeta);
+          _showHistoryTabMeta,
+          showHistoryTab.isAcceptableOrUnknown(
+              data['show_history_tab']!, _showHistoryTabMeta));
     }
-    if (data.containsKey('hide_timer_tab')) {
+    if (data.containsKey('show_timer_tab')) {
       context.handle(
-          _hideTimerTabMeta,
-          hideTimerTab.isAcceptableOrUnknown(
-              data['hide_timer_tab']!, _hideTimerTabMeta));
-    } else if (isInserting) {
-      context.missing(_hideTimerTabMeta);
+          _showTimerTabMeta,
+          showTimerTab.isAcceptableOrUnknown(
+              data['show_timer_tab']!, _showTimerTabMeta));
     }
-    if (data.containsKey('hide_weight')) {
+    if (data.containsKey('show_body_weight')) {
       context.handle(
-          _hideWeightMeta,
-          hideWeight.isAcceptableOrUnknown(
-              data['hide_weight']!, _hideWeightMeta));
-    } else if (isInserting) {
-      context.missing(_hideWeightMeta);
+          _showBodyWeightMeta,
+          showBodyWeight.isAcceptableOrUnknown(
+              data['show_body_weight']!, _showBodyWeightMeta));
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -1420,12 +1417,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           DriftSqlType.bool, data['${effectivePrefix}explained_permissions'])!,
       groupHistory: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}group_history'])!,
-      hideHistoryTab: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}hide_history_tab'])!,
-      hideTimerTab: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}hide_timer_tab'])!,
-      hideWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}hide_weight'])!,
+      showHistoryTab: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_history_tab'])!,
+      showTimerTab: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_timer_tab'])!,
+      showBodyWeight: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_body_weight'])!,
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       longDateFormat: attachedDatabase.typeMapping.read(
@@ -1473,9 +1470,9 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool curveLines;
   final bool explainedPermissions;
   final bool groupHistory;
-  final bool hideHistoryTab;
-  final bool hideTimerTab;
-  final bool hideWeight;
+  final bool showHistoryTab;
+  final bool showTimerTab;
+  final bool showBodyWeight;
   final int id;
   final String longDateFormat;
   final int maxSets;
@@ -1498,9 +1495,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.curveLines,
       required this.explainedPermissions,
       required this.groupHistory,
-      required this.hideHistoryTab,
-      required this.hideTimerTab,
-      required this.hideWeight,
+      required this.showHistoryTab,
+      required this.showTimerTab,
+      required this.showBodyWeight,
       required this.id,
       required this.longDateFormat,
       required this.maxSets,
@@ -1525,9 +1522,9 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['curve_lines'] = Variable<bool>(curveLines);
     map['explained_permissions'] = Variable<bool>(explainedPermissions);
     map['group_history'] = Variable<bool>(groupHistory);
-    map['hide_history_tab'] = Variable<bool>(hideHistoryTab);
-    map['hide_timer_tab'] = Variable<bool>(hideTimerTab);
-    map['hide_weight'] = Variable<bool>(hideWeight);
+    map['show_history_tab'] = Variable<bool>(showHistoryTab);
+    map['show_timer_tab'] = Variable<bool>(showTimerTab);
+    map['show_body_weight'] = Variable<bool>(showBodyWeight);
     map['id'] = Variable<int>(id);
     map['long_date_format'] = Variable<String>(longDateFormat);
     map['max_sets'] = Variable<int>(maxSets);
@@ -1556,9 +1553,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       curveLines: Value(curveLines),
       explainedPermissions: Value(explainedPermissions),
       groupHistory: Value(groupHistory),
-      hideHistoryTab: Value(hideHistoryTab),
-      hideTimerTab: Value(hideTimerTab),
-      hideWeight: Value(hideWeight),
+      showHistoryTab: Value(showHistoryTab),
+      showTimerTab: Value(showTimerTab),
+      showBodyWeight: Value(showBodyWeight),
       id: Value(id),
       longDateFormat: Value(longDateFormat),
       maxSets: Value(maxSets),
@@ -1590,9 +1587,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       explainedPermissions:
           serializer.fromJson<bool>(json['explainedPermissions']),
       groupHistory: serializer.fromJson<bool>(json['groupHistory']),
-      hideHistoryTab: serializer.fromJson<bool>(json['hideHistoryTab']),
-      hideTimerTab: serializer.fromJson<bool>(json['hideTimerTab']),
-      hideWeight: serializer.fromJson<bool>(json['hideWeight']),
+      showHistoryTab: serializer.fromJson<bool>(json['showHistoryTab']),
+      showTimerTab: serializer.fromJson<bool>(json['showTimerTab']),
+      showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
@@ -1620,9 +1617,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       'curveLines': serializer.toJson<bool>(curveLines),
       'explainedPermissions': serializer.toJson<bool>(explainedPermissions),
       'groupHistory': serializer.toJson<bool>(groupHistory),
-      'hideHistoryTab': serializer.toJson<bool>(hideHistoryTab),
-      'hideTimerTab': serializer.toJson<bool>(hideTimerTab),
-      'hideWeight': serializer.toJson<bool>(hideWeight),
+      'showHistoryTab': serializer.toJson<bool>(showHistoryTab),
+      'showTimerTab': serializer.toJson<bool>(showTimerTab),
+      'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
       'id': serializer.toJson<int>(id),
       'longDateFormat': serializer.toJson<String>(longDateFormat),
       'maxSets': serializer.toJson<int>(maxSets),
@@ -1648,9 +1645,9 @@ class Setting extends DataClass implements Insertable<Setting> {
           bool? curveLines,
           bool? explainedPermissions,
           bool? groupHistory,
-          bool? hideHistoryTab,
-          bool? hideTimerTab,
-          bool? hideWeight,
+          bool? showHistoryTab,
+          bool? showTimerTab,
+          bool? showBodyWeight,
           int? id,
           String? longDateFormat,
           int? maxSets,
@@ -1673,9 +1670,9 @@ class Setting extends DataClass implements Insertable<Setting> {
         curveLines: curveLines ?? this.curveLines,
         explainedPermissions: explainedPermissions ?? this.explainedPermissions,
         groupHistory: groupHistory ?? this.groupHistory,
-        hideHistoryTab: hideHistoryTab ?? this.hideHistoryTab,
-        hideTimerTab: hideTimerTab ?? this.hideTimerTab,
-        hideWeight: hideWeight ?? this.hideWeight,
+        showHistoryTab: showHistoryTab ?? this.showHistoryTab,
+        showTimerTab: showTimerTab ?? this.showTimerTab,
+        showBodyWeight: showBodyWeight ?? this.showBodyWeight,
         id: id ?? this.id,
         longDateFormat: longDateFormat ?? this.longDateFormat,
         maxSets: maxSets ?? this.maxSets,
@@ -1701,9 +1698,9 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('curveLines: $curveLines, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('groupHistory: $groupHistory, ')
-          ..write('hideHistoryTab: $hideHistoryTab, ')
-          ..write('hideTimerTab: $hideTimerTab, ')
-          ..write('hideWeight: $hideWeight, ')
+          ..write('showHistoryTab: $showHistoryTab, ')
+          ..write('showTimerTab: $showTimerTab, ')
+          ..write('showBodyWeight: $showBodyWeight, ')
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
@@ -1731,9 +1728,9 @@ class Setting extends DataClass implements Insertable<Setting> {
         curveLines,
         explainedPermissions,
         groupHistory,
-        hideHistoryTab,
-        hideTimerTab,
-        hideWeight,
+        showHistoryTab,
+        showTimerTab,
+        showBodyWeight,
         id,
         longDateFormat,
         maxSets,
@@ -1760,9 +1757,9 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.curveLines == this.curveLines &&
           other.explainedPermissions == this.explainedPermissions &&
           other.groupHistory == this.groupHistory &&
-          other.hideHistoryTab == this.hideHistoryTab &&
-          other.hideTimerTab == this.hideTimerTab &&
-          other.hideWeight == this.hideWeight &&
+          other.showHistoryTab == this.showHistoryTab &&
+          other.showTimerTab == this.showTimerTab &&
+          other.showBodyWeight == this.showBodyWeight &&
           other.id == this.id &&
           other.longDateFormat == this.longDateFormat &&
           other.maxSets == this.maxSets &&
@@ -1787,9 +1784,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> curveLines;
   final Value<bool> explainedPermissions;
   final Value<bool> groupHistory;
-  final Value<bool> hideHistoryTab;
-  final Value<bool> hideTimerTab;
-  final Value<bool> hideWeight;
+  final Value<bool> showHistoryTab;
+  final Value<bool> showTimerTab;
+  final Value<bool> showBodyWeight;
   final Value<int> id;
   final Value<String> longDateFormat;
   final Value<int> maxSets;
@@ -1812,9 +1809,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.curveLines = const Value.absent(),
     this.explainedPermissions = const Value.absent(),
     this.groupHistory = const Value.absent(),
-    this.hideHistoryTab = const Value.absent(),
-    this.hideTimerTab = const Value.absent(),
-    this.hideWeight = const Value.absent(),
+    this.showHistoryTab = const Value.absent(),
+    this.showTimerTab = const Value.absent(),
+    this.showBodyWeight = const Value.absent(),
     this.id = const Value.absent(),
     this.longDateFormat = const Value.absent(),
     this.maxSets = const Value.absent(),
@@ -1838,9 +1835,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required bool curveLines,
     required bool explainedPermissions,
     required bool groupHistory,
-    required bool hideHistoryTab,
-    required bool hideTimerTab,
-    required bool hideWeight,
+    this.showHistoryTab = const Value.absent(),
+    this.showTimerTab = const Value.absent(),
+    this.showBodyWeight = const Value.absent(),
     this.id = const Value.absent(),
     required String longDateFormat,
     required int maxSets,
@@ -1862,9 +1859,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
         curveLines = Value(curveLines),
         explainedPermissions = Value(explainedPermissions),
         groupHistory = Value(groupHistory),
-        hideHistoryTab = Value(hideHistoryTab),
-        hideTimerTab = Value(hideTimerTab),
-        hideWeight = Value(hideWeight),
         longDateFormat = Value(longDateFormat),
         maxSets = Value(maxSets),
         planTrailing = Value(planTrailing),
@@ -1882,9 +1876,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? curveLines,
     Expression<bool>? explainedPermissions,
     Expression<bool>? groupHistory,
-    Expression<bool>? hideHistoryTab,
-    Expression<bool>? hideTimerTab,
-    Expression<bool>? hideWeight,
+    Expression<bool>? showHistoryTab,
+    Expression<bool>? showTimerTab,
+    Expression<bool>? showBodyWeight,
     Expression<int>? id,
     Expression<String>? longDateFormat,
     Expression<int>? maxSets,
@@ -1909,9 +1903,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (explainedPermissions != null)
         'explained_permissions': explainedPermissions,
       if (groupHistory != null) 'group_history': groupHistory,
-      if (hideHistoryTab != null) 'hide_history_tab': hideHistoryTab,
-      if (hideTimerTab != null) 'hide_timer_tab': hideTimerTab,
-      if (hideWeight != null) 'hide_weight': hideWeight,
+      if (showHistoryTab != null) 'show_history_tab': showHistoryTab,
+      if (showTimerTab != null) 'show_timer_tab': showTimerTab,
+      if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
       if (id != null) 'id': id,
       if (longDateFormat != null) 'long_date_format': longDateFormat,
       if (maxSets != null) 'max_sets': maxSets,
@@ -1937,9 +1931,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<bool>? curveLines,
       Value<bool>? explainedPermissions,
       Value<bool>? groupHistory,
-      Value<bool>? hideHistoryTab,
-      Value<bool>? hideTimerTab,
-      Value<bool>? hideWeight,
+      Value<bool>? showHistoryTab,
+      Value<bool>? showTimerTab,
+      Value<bool>? showBodyWeight,
       Value<int>? id,
       Value<String>? longDateFormat,
       Value<int>? maxSets,
@@ -1962,9 +1956,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       curveLines: curveLines ?? this.curveLines,
       explainedPermissions: explainedPermissions ?? this.explainedPermissions,
       groupHistory: groupHistory ?? this.groupHistory,
-      hideHistoryTab: hideHistoryTab ?? this.hideHistoryTab,
-      hideTimerTab: hideTimerTab ?? this.hideTimerTab,
-      hideWeight: hideWeight ?? this.hideWeight,
+      showHistoryTab: showHistoryTab ?? this.showHistoryTab,
+      showTimerTab: showTimerTab ?? this.showTimerTab,
+      showBodyWeight: showBodyWeight ?? this.showBodyWeight,
       id: id ?? this.id,
       longDateFormat: longDateFormat ?? this.longDateFormat,
       maxSets: maxSets ?? this.maxSets,
@@ -2002,14 +1996,14 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (groupHistory.present) {
       map['group_history'] = Variable<bool>(groupHistory.value);
     }
-    if (hideHistoryTab.present) {
-      map['hide_history_tab'] = Variable<bool>(hideHistoryTab.value);
+    if (showHistoryTab.present) {
+      map['show_history_tab'] = Variable<bool>(showHistoryTab.value);
     }
-    if (hideTimerTab.present) {
-      map['hide_timer_tab'] = Variable<bool>(hideTimerTab.value);
+    if (showTimerTab.present) {
+      map['show_timer_tab'] = Variable<bool>(showTimerTab.value);
     }
-    if (hideWeight.present) {
-      map['hide_weight'] = Variable<bool>(hideWeight.value);
+    if (showBodyWeight.present) {
+      map['show_body_weight'] = Variable<bool>(showBodyWeight.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -2070,9 +2064,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('curveLines: $curveLines, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('groupHistory: $groupHistory, ')
-          ..write('hideHistoryTab: $hideHistoryTab, ')
-          ..write('hideTimerTab: $hideTimerTab, ')
-          ..write('hideWeight: $hideWeight, ')
+          ..write('showHistoryTab: $showHistoryTab, ')
+          ..write('showTimerTab: $showTimerTab, ')
+          ..write('showBodyWeight: $showBodyWeight, ')
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
@@ -2923,9 +2917,9 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required bool curveLines,
   required bool explainedPermissions,
   required bool groupHistory,
-  required bool hideHistoryTab,
-  required bool hideTimerTab,
-  required bool hideWeight,
+  Value<bool> showHistoryTab,
+  Value<bool> showTimerTab,
+  Value<bool> showBodyWeight,
   Value<int> id,
   required String longDateFormat,
   required int maxSets,
@@ -2949,9 +2943,9 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> curveLines,
   Value<bool> explainedPermissions,
   Value<bool> groupHistory,
-  Value<bool> hideHistoryTab,
-  Value<bool> hideTimerTab,
-  Value<bool> hideWeight,
+  Value<bool> showHistoryTab,
+  Value<bool> showTimerTab,
+  Value<bool> showBodyWeight,
   Value<int> id,
   Value<String> longDateFormat,
   Value<int> maxSets,
@@ -2995,9 +2989,9 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> curveLines = const Value.absent(),
             Value<bool> explainedPermissions = const Value.absent(),
             Value<bool> groupHistory = const Value.absent(),
-            Value<bool> hideHistoryTab = const Value.absent(),
-            Value<bool> hideTimerTab = const Value.absent(),
-            Value<bool> hideWeight = const Value.absent(),
+            Value<bool> showHistoryTab = const Value.absent(),
+            Value<bool> showTimerTab = const Value.absent(),
+            Value<bool> showBodyWeight = const Value.absent(),
             Value<int> id = const Value.absent(),
             Value<String> longDateFormat = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
@@ -3021,9 +3015,9 @@ class $$SettingsTableTableManager extends RootTableManager<
             curveLines: curveLines,
             explainedPermissions: explainedPermissions,
             groupHistory: groupHistory,
-            hideHistoryTab: hideHistoryTab,
-            hideTimerTab: hideTimerTab,
-            hideWeight: hideWeight,
+            showHistoryTab: showHistoryTab,
+            showTimerTab: showTimerTab,
+            showBodyWeight: showBodyWeight,
             id: id,
             longDateFormat: longDateFormat,
             maxSets: maxSets,
@@ -3047,9 +3041,9 @@ class $$SettingsTableTableManager extends RootTableManager<
             required bool curveLines,
             required bool explainedPermissions,
             required bool groupHistory,
-            required bool hideHistoryTab,
-            required bool hideTimerTab,
-            required bool hideWeight,
+            Value<bool> showHistoryTab = const Value.absent(),
+            Value<bool> showTimerTab = const Value.absent(),
+            Value<bool> showBodyWeight = const Value.absent(),
             Value<int> id = const Value.absent(),
             required String longDateFormat,
             required int maxSets,
@@ -3073,9 +3067,9 @@ class $$SettingsTableTableManager extends RootTableManager<
             curveLines: curveLines,
             explainedPermissions: explainedPermissions,
             groupHistory: groupHistory,
-            hideHistoryTab: hideHistoryTab,
-            hideTimerTab: hideTimerTab,
-            hideWeight: hideWeight,
+            showHistoryTab: showHistoryTab,
+            showTimerTab: showTimerTab,
+            showBodyWeight: showBodyWeight,
             id: id,
             longDateFormat: longDateFormat,
             maxSets: maxSets,
@@ -3136,18 +3130,18 @@ class $$SettingsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<bool> get hideHistoryTab => $state.composableBuilder(
-      column: $state.table.hideHistoryTab,
+  ColumnFilters<bool> get showHistoryTab => $state.composableBuilder(
+      column: $state.table.showHistoryTab,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<bool> get hideTimerTab => $state.composableBuilder(
-      column: $state.table.hideTimerTab,
+  ColumnFilters<bool> get showTimerTab => $state.composableBuilder(
+      column: $state.table.showTimerTab,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<bool> get hideWeight => $state.composableBuilder(
-      column: $state.table.hideWeight,
+  ColumnFilters<bool> get showBodyWeight => $state.composableBuilder(
+      column: $state.table.showBodyWeight,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3260,18 +3254,18 @@ class $$SettingsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<bool> get hideHistoryTab => $state.composableBuilder(
-      column: $state.table.hideHistoryTab,
+  ColumnOrderings<bool> get showHistoryTab => $state.composableBuilder(
+      column: $state.table.showHistoryTab,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<bool> get hideTimerTab => $state.composableBuilder(
-      column: $state.table.hideTimerTab,
+  ColumnOrderings<bool> get showTimerTab => $state.composableBuilder(
+      column: $state.table.showTimerTab,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<bool> get hideWeight => $state.composableBuilder(
-      column: $state.table.hideWeight,
+  ColumnOrderings<bool> get showBodyWeight => $state.composableBuilder(
+      column: $state.table.showBodyWeight,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

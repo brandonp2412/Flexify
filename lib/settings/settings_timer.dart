@@ -111,22 +111,22 @@ List<Widget> getTimers(
               ),
         ),
       ),
-    if ('hide timer tab'.contains(term.toLowerCase()))
+    if ('show timer tab'.contains(term.toLowerCase()))
       ListTile(
-        title: const Text('Hide timer tab'),
-        leading: settings.hideTimerTab
-            ? const Icon(Icons.timer_outlined)
-            : const Icon(Icons.timer),
+        title: const Text('Show timer tab'),
+        leading: settings.showTimerTab
+            ? const Icon(Icons.timer)
+            : const Icon(Icons.timer_outlined),
         onTap: () => db.settings.update().write(
               SettingsCompanion(
-                hideTimerTab: Value(!settings.hideTimerTab),
+                showTimerTab: Value(!settings.showTimerTab),
               ),
             ),
         trailing: Switch(
-          value: settings.hideTimerTab,
+          value: settings.showTimerTab,
           onChanged: (value) => db.settings.update().write(
                 SettingsCompanion(
-                  hideTimerTab: Value(value),
+                  showTimerTab: Value(value),
                 ),
               ),
         ),

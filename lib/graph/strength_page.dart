@@ -133,8 +133,9 @@ class _StrengthPageState extends State<StrengthPage> {
             return ListView(
               children: [
                 Selector<SettingsState, bool>(
-                  selector: (context, settings) => settings.value.hideWeight,
-                  builder: (context, hideWeight, child) => Visibility(
+                  selector: (context, settings) =>
+                      settings.value.showBodyWeight,
+                  builder: (context, showBodyWeight, child) => Visibility(
                     visible: widget.name != 'Weight',
                     child: DropdownButtonFormField(
                       decoration: const InputDecoration(labelText: 'Metric'),
@@ -156,7 +157,7 @@ class _StrengthPageState extends State<StrengthPage> {
                           value: StrengthMetric.volume,
                           child: Text("Volume"),
                         ),
-                        if (!hideWeight)
+                        if (showBodyWeight)
                           const DropdownMenuItem(
                             value: StrengthMetric.relativeStrength,
                             child: Text("Relative strength"),

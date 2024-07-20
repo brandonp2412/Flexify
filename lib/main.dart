@@ -87,31 +87,31 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hideHistoryTab = context.select<SettingsState, bool>(
-      (settings) => settings.value.hideHistoryTab,
+    final showHistoryTab = context.select<SettingsState, bool>(
+      (settings) => settings.value.showHistoryTab,
     );
-    final hideTimerTab = context
-        .select<SettingsState, bool>((settings) => settings.value.hideTimerTab);
+    final showTimerTab = context
+        .select<SettingsState, bool>((settings) => settings.value.showTimerTab);
     var length = 4;
-    if (hideTimerTab) length--;
-    if (hideHistoryTab) length--;
+    if (!showTimerTab) length--;
+    if (!showHistoryTab) length--;
 
     return SafeArea(
       child: DefaultTabController(
         length: length,
         child: Scaffold(
-          bottomSheet: hideTimerTab ? null : const TimerProgressIndicator(),
+          bottomSheet: showTimerTab ? const TimerProgressIndicator() : null,
           body: TabBarView(
             children: [
-              if (!hideHistoryTab) const HistoryPage(),
+              if (showHistoryTab) const HistoryPage(),
               const PlansPage(),
               const GraphsPage(),
-              if (!hideTimerTab) const TimerPage(),
+              if (showTimerTab) const TimerPage(),
             ],
           ),
           bottomNavigationBar: TabBar(
             tabs: [
-              if (!hideHistoryTab)
+              if (showHistoryTab)
                 const Tab(
                   icon: Icon(Icons.history),
                   text: "History",
@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.insights),
                 text: "Graphs",
               ),
-              if (!hideTimerTab)
+              if (showTimerTab)
                 const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",
