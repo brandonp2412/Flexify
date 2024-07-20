@@ -172,9 +172,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void setExercises() {
     var query = db.gymSets.selectOnly()
       ..addColumns([db.gymSets.name])
-      ..groupBy([db.gymSets.name]);
-
-    query = query
+      ..groupBy([db.gymSets.name])
       ..join([
         leftOuterJoin(
           db.planExercises,
@@ -186,22 +184,36 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ..addColumns(db.planExercises.$columns);
 
     query.get().then(
-          (results) => setState(() {
-            exercises = [];
+      (results) {
+        List<PlanExercisesCompanion> enabledExercises = [];
+        List<PlanExercisesCompanion> disabledExercises = [];
 
-            for (final result in results) {
-              final pe = PlanExercisesCompanion(
-                planId: widget.plan.id,
-                id: Value.absentIfNull(result.read(db.planExercises.id)),
-                exercise: Value(result.read(db.gymSets.name)!),
-                enabled: Value(result.read(db.planExercises.enabled) ?? false),
-                maxSets: Value(result.read(db.planExercises.maxSets)),
-                warmupSets: Value(result.read(db.planExercises.warmupSets)),
-              );
-              exercises.add(pe);
-            }
-          }),
+        for (final result in results) {
+          final pe = PlanExercisesCompanion(
+            planId: widget.plan.id,
+            id: Value.absentIfNull(result.read(db.planExercises.id)),
+            exercise: Value(result.read(db.gymSets.name)!),
+            enabled: Value(result.read(db.planExercises.enabled) ?? false),
+            maxSets: Value(result.read(db.planExercises.maxSets)),
+            warmupSets: Value(result.read(db.planExercises.warmupSets)),
+          );
+          if (pe.enabled.value)
+            enabledExercises.add(pe);
+          else
+            disabledExercises.add(pe);
+        }
+
+        enabledExercises.sort(
+          (a, b) => widget.plan.exercises.value
+              .indexOf(a.exercise.value)
+              .compareTo(widget.plan.exercises.value.indexOf(b.exercise.value)),
         );
+
+        setState(() {
+          exercises = enabledExercises + disabledExercises;
+        });
+      },
+    );
   }
 
   Future<void> _save() async {
