@@ -1,1 +1,1 @@
-Auto deploy windows store
+Automatic windows deployment
