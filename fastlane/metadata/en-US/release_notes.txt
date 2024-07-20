@@ -1,1 +1,1 @@
-Auto release to windows
+Add script for submitting to microsoft store
