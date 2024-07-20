@@ -1,1 +1,1 @@
-- Use powershell instead of cmd in deploy.sh
+Auto deploy windows store
