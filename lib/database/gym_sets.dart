@@ -93,7 +93,7 @@ Future<List<Rpm>> getRpms() async {
       SELECT
         name,
         reps,
-        ((created - LAG(created) OVER (PARTITION BY name ORDER BY created)) / 60.0) as time_diff,
+        ((created - LAG(created) OVER (PARTITION BY name, weight ORDER BY created)) / 60.0) as time_diff,
         weight
       FROM gym_sets
       WHERE created >= strftime('%s', 'now') - 60*60*24*30
