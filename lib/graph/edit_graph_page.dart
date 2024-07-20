@@ -220,7 +220,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
             : Value(nameController.text),
         cardio: Value.absentIfNull(cardio),
         unit: Value.absentIfNull(unit),
-        restMs: Value.absentIfNull(duration?.inMilliseconds),
+        restMs: Value(duration?.inMilliseconds),
         image: Value.absentIfNull(image),
         category: Value.absentIfNull(category),
       ),
