@@ -1025,6 +1025,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("curve_lines" IN (0, 1))'));
+  static const VerificationMeta _durationEstimationMeta =
+      const VerificationMeta('durationEstimation');
+  @override
+  late final GeneratedColumn<bool> durationEstimation = GeneratedColumn<bool>(
+      'duration_estimation', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("duration_estimation" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _explainedPermissionsMeta =
       const VerificationMeta('explainedPermissions');
   @override
@@ -1043,36 +1053,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("group_history" IN (0, 1))'));
-  static const VerificationMeta _showHistoryTabMeta =
-      const VerificationMeta('showHistoryTab');
-  @override
-  late final GeneratedColumn<bool> showHistoryTab = GeneratedColumn<bool>(
-      'show_history_tab', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_history_tab" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showTimerTabMeta =
-      const VerificationMeta('showTimerTab');
-  @override
-  late final GeneratedColumn<bool> showTimerTab = GeneratedColumn<bool>(
-      'show_timer_tab', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_timer_tab" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showBodyWeightMeta =
-      const VerificationMeta('showBodyWeight');
-  @override
-  late final GeneratedColumn<bool> showBodyWeight = GeneratedColumn<bool>(
-      'show_body_weight', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_body_weight" IN (0, 1))'),
-      defaultValue: const Constant(true));
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1100,6 +1080,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<String> planTrailing = GeneratedColumn<String>(
       'plan_trailing', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _repEstimationMeta =
+      const VerificationMeta('repEstimation');
+  @override
+  late final GeneratedColumn<bool> repEstimation = GeneratedColumn<bool>(
+      'rep_estimation', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("rep_estimation" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _restTimersMeta =
       const VerificationMeta('restTimers');
   @override
@@ -1115,6 +1105,26 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
       'short_date_format', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _showBodyWeightMeta =
+      const VerificationMeta('showBodyWeight');
+  @override
+  late final GeneratedColumn<bool> showBodyWeight = GeneratedColumn<bool>(
+      'show_body_weight', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_body_weight" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _showHistoryTabMeta =
+      const VerificationMeta('showHistoryTab');
+  @override
+  late final GeneratedColumn<bool> showHistoryTab = GeneratedColumn<bool>(
+      'show_history_tab', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_history_tab" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _showImagesMeta =
       const VerificationMeta('showImages');
   @override
@@ -1124,6 +1134,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _showTimerTabMeta =
+      const VerificationMeta('showTimerTab');
+  @override
+  late final GeneratedColumn<bool> showTimerTab = GeneratedColumn<bool>(
+      'show_timer_tab', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_timer_tab" IN (0, 1))'),
       defaultValue: const Constant(true));
   static const VerificationMeta _showUnitsMeta =
       const VerificationMeta('showUnits');
@@ -1176,52 +1196,32 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
       'warmup_sets', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _repEstimationMeta =
-      const VerificationMeta('repEstimation');
-  @override
-  late final GeneratedColumn<bool> repEstimation = GeneratedColumn<bool>(
-      'rep_estimation', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("rep_estimation" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _durationEstimationMeta =
-      const VerificationMeta('durationEstimation');
-  @override
-  late final GeneratedColumn<bool> durationEstimation = GeneratedColumn<bool>(
-      'duration_estimation', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("duration_estimation" IN (0, 1))'),
-      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
         cardioUnit,
         curveLines,
+        durationEstimation,
         explainedPermissions,
         groupHistory,
-        showHistoryTab,
-        showTimerTab,
-        showBodyWeight,
         id,
         longDateFormat,
         maxSets,
         planTrailing,
+        repEstimation,
         restTimers,
         shortDateFormat,
+        showBodyWeight,
+        showHistoryTab,
         showImages,
+        showTimerTab,
         showUnits,
         strengthUnit,
         systemColors,
         themeMode,
         timerDuration,
         vibrate,
-        warmupSets,
-        repEstimation,
-        durationEstimation
+        warmupSets
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1257,6 +1257,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     } else if (isInserting) {
       context.missing(_curveLinesMeta);
     }
+    if (data.containsKey('duration_estimation')) {
+      context.handle(
+          _durationEstimationMeta,
+          durationEstimation.isAcceptableOrUnknown(
+              data['duration_estimation']!, _durationEstimationMeta));
+    }
     if (data.containsKey('explained_permissions')) {
       context.handle(
           _explainedPermissionsMeta,
@@ -1272,24 +1278,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
               data['group_history']!, _groupHistoryMeta));
     } else if (isInserting) {
       context.missing(_groupHistoryMeta);
-    }
-    if (data.containsKey('show_history_tab')) {
-      context.handle(
-          _showHistoryTabMeta,
-          showHistoryTab.isAcceptableOrUnknown(
-              data['show_history_tab']!, _showHistoryTabMeta));
-    }
-    if (data.containsKey('show_timer_tab')) {
-      context.handle(
-          _showTimerTabMeta,
-          showTimerTab.isAcceptableOrUnknown(
-              data['show_timer_tab']!, _showTimerTabMeta));
-    }
-    if (data.containsKey('show_body_weight')) {
-      context.handle(
-          _showBodyWeightMeta,
-          showBodyWeight.isAcceptableOrUnknown(
-              data['show_body_weight']!, _showBodyWeightMeta));
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -1316,6 +1304,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     } else if (isInserting) {
       context.missing(_planTrailingMeta);
     }
+    if (data.containsKey('rep_estimation')) {
+      context.handle(
+          _repEstimationMeta,
+          repEstimation.isAcceptableOrUnknown(
+              data['rep_estimation']!, _repEstimationMeta));
+    }
     if (data.containsKey('rest_timers')) {
       context.handle(
           _restTimersMeta,
@@ -1332,11 +1326,29 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     } else if (isInserting) {
       context.missing(_shortDateFormatMeta);
     }
+    if (data.containsKey('show_body_weight')) {
+      context.handle(
+          _showBodyWeightMeta,
+          showBodyWeight.isAcceptableOrUnknown(
+              data['show_body_weight']!, _showBodyWeightMeta));
+    }
+    if (data.containsKey('show_history_tab')) {
+      context.handle(
+          _showHistoryTabMeta,
+          showHistoryTab.isAcceptableOrUnknown(
+              data['show_history_tab']!, _showHistoryTabMeta));
+    }
     if (data.containsKey('show_images')) {
       context.handle(
           _showImagesMeta,
           showImages.isAcceptableOrUnknown(
               data['show_images']!, _showImagesMeta));
+    }
+    if (data.containsKey('show_timer_tab')) {
+      context.handle(
+          _showTimerTabMeta,
+          showTimerTab.isAcceptableOrUnknown(
+              data['show_timer_tab']!, _showTimerTabMeta));
     }
     if (data.containsKey('show_units')) {
       context.handle(_showUnitsMeta,
@@ -1386,18 +1398,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           warmupSets.isAcceptableOrUnknown(
               data['warmup_sets']!, _warmupSetsMeta));
     }
-    if (data.containsKey('rep_estimation')) {
-      context.handle(
-          _repEstimationMeta,
-          repEstimation.isAcceptableOrUnknown(
-              data['rep_estimation']!, _repEstimationMeta));
-    }
-    if (data.containsKey('duration_estimation')) {
-      context.handle(
-          _durationEstimationMeta,
-          durationEstimation.isAcceptableOrUnknown(
-              data['duration_estimation']!, _durationEstimationMeta));
-    }
     return context;
   }
 
@@ -1413,16 +1413,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
       curveLines: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}curve_lines'])!,
+      durationEstimation: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}duration_estimation'])!,
       explainedPermissions: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}explained_permissions'])!,
       groupHistory: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}group_history'])!,
-      showHistoryTab: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_history_tab'])!,
-      showTimerTab: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_timer_tab'])!,
-      showBodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_body_weight'])!,
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       longDateFormat: attachedDatabase.typeMapping.read(
@@ -1431,12 +1427,20 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
       planTrailing: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}plan_trailing'])!,
+      repEstimation: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}rep_estimation'])!,
       restTimers: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}rest_timers'])!,
       shortDateFormat: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
+      showBodyWeight: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_body_weight'])!,
+      showHistoryTab: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_history_tab'])!,
       showImages: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
+      showTimerTab: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_timer_tab'])!,
       showUnits: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
       strengthUnit: attachedDatabase.typeMapping
@@ -1451,10 +1455,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}vibrate'])!,
       warmupSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
-      repEstimation: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}rep_estimation'])!,
-      durationEstimation: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}duration_estimation'])!,
     );
   }
 
@@ -1468,18 +1468,20 @@ class Setting extends DataClass implements Insertable<Setting> {
   final String alarmSound;
   final String cardioUnit;
   final bool curveLines;
+  final bool durationEstimation;
   final bool explainedPermissions;
   final bool groupHistory;
-  final bool showHistoryTab;
-  final bool showTimerTab;
-  final bool showBodyWeight;
   final int id;
   final String longDateFormat;
   final int maxSets;
   final String planTrailing;
+  final bool repEstimation;
   final bool restTimers;
   final String shortDateFormat;
+  final bool showBodyWeight;
+  final bool showHistoryTab;
   final bool showImages;
+  final bool showTimerTab;
   final bool showUnits;
   final String strengthUnit;
   final bool systemColors;
@@ -1487,51 +1489,51 @@ class Setting extends DataClass implements Insertable<Setting> {
   final int timerDuration;
   final bool vibrate;
   final int? warmupSets;
-  final bool repEstimation;
-  final bool durationEstimation;
   const Setting(
       {required this.alarmSound,
       required this.cardioUnit,
       required this.curveLines,
+      required this.durationEstimation,
       required this.explainedPermissions,
       required this.groupHistory,
-      required this.showHistoryTab,
-      required this.showTimerTab,
-      required this.showBodyWeight,
       required this.id,
       required this.longDateFormat,
       required this.maxSets,
       required this.planTrailing,
+      required this.repEstimation,
       required this.restTimers,
       required this.shortDateFormat,
+      required this.showBodyWeight,
+      required this.showHistoryTab,
       required this.showImages,
+      required this.showTimerTab,
       required this.showUnits,
       required this.strengthUnit,
       required this.systemColors,
       required this.themeMode,
       required this.timerDuration,
       required this.vibrate,
-      this.warmupSets,
-      required this.repEstimation,
-      required this.durationEstimation});
+      this.warmupSets});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['alarm_sound'] = Variable<String>(alarmSound);
     map['cardio_unit'] = Variable<String>(cardioUnit);
     map['curve_lines'] = Variable<bool>(curveLines);
+    map['duration_estimation'] = Variable<bool>(durationEstimation);
     map['explained_permissions'] = Variable<bool>(explainedPermissions);
     map['group_history'] = Variable<bool>(groupHistory);
-    map['show_history_tab'] = Variable<bool>(showHistoryTab);
-    map['show_timer_tab'] = Variable<bool>(showTimerTab);
-    map['show_body_weight'] = Variable<bool>(showBodyWeight);
     map['id'] = Variable<int>(id);
     map['long_date_format'] = Variable<String>(longDateFormat);
     map['max_sets'] = Variable<int>(maxSets);
     map['plan_trailing'] = Variable<String>(planTrailing);
+    map['rep_estimation'] = Variable<bool>(repEstimation);
     map['rest_timers'] = Variable<bool>(restTimers);
     map['short_date_format'] = Variable<String>(shortDateFormat);
+    map['show_body_weight'] = Variable<bool>(showBodyWeight);
+    map['show_history_tab'] = Variable<bool>(showHistoryTab);
     map['show_images'] = Variable<bool>(showImages);
+    map['show_timer_tab'] = Variable<bool>(showTimerTab);
     map['show_units'] = Variable<bool>(showUnits);
     map['strength_unit'] = Variable<String>(strengthUnit);
     map['system_colors'] = Variable<bool>(systemColors);
@@ -1541,8 +1543,6 @@ class Setting extends DataClass implements Insertable<Setting> {
     if (!nullToAbsent || warmupSets != null) {
       map['warmup_sets'] = Variable<int>(warmupSets);
     }
-    map['rep_estimation'] = Variable<bool>(repEstimation);
-    map['duration_estimation'] = Variable<bool>(durationEstimation);
     return map;
   }
 
@@ -1551,18 +1551,20 @@ class Setting extends DataClass implements Insertable<Setting> {
       alarmSound: Value(alarmSound),
       cardioUnit: Value(cardioUnit),
       curveLines: Value(curveLines),
+      durationEstimation: Value(durationEstimation),
       explainedPermissions: Value(explainedPermissions),
       groupHistory: Value(groupHistory),
-      showHistoryTab: Value(showHistoryTab),
-      showTimerTab: Value(showTimerTab),
-      showBodyWeight: Value(showBodyWeight),
       id: Value(id),
       longDateFormat: Value(longDateFormat),
       maxSets: Value(maxSets),
       planTrailing: Value(planTrailing),
+      repEstimation: Value(repEstimation),
       restTimers: Value(restTimers),
       shortDateFormat: Value(shortDateFormat),
+      showBodyWeight: Value(showBodyWeight),
+      showHistoryTab: Value(showHistoryTab),
       showImages: Value(showImages),
+      showTimerTab: Value(showTimerTab),
       showUnits: Value(showUnits),
       strengthUnit: Value(strengthUnit),
       systemColors: Value(systemColors),
@@ -1572,8 +1574,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       warmupSets: warmupSets == null && nullToAbsent
           ? const Value.absent()
           : Value(warmupSets),
-      repEstimation: Value(repEstimation),
-      durationEstimation: Value(durationEstimation),
     );
   }
 
@@ -1584,19 +1584,21 @@ class Setting extends DataClass implements Insertable<Setting> {
       alarmSound: serializer.fromJson<String>(json['alarmSound']),
       cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
       curveLines: serializer.fromJson<bool>(json['curveLines']),
+      durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
       explainedPermissions:
           serializer.fromJson<bool>(json['explainedPermissions']),
       groupHistory: serializer.fromJson<bool>(json['groupHistory']),
-      showHistoryTab: serializer.fromJson<bool>(json['showHistoryTab']),
-      showTimerTab: serializer.fromJson<bool>(json['showTimerTab']),
-      showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
       planTrailing: serializer.fromJson<String>(json['planTrailing']),
+      repEstimation: serializer.fromJson<bool>(json['repEstimation']),
       restTimers: serializer.fromJson<bool>(json['restTimers']),
       shortDateFormat: serializer.fromJson<String>(json['shortDateFormat']),
+      showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
+      showHistoryTab: serializer.fromJson<bool>(json['showHistoryTab']),
       showImages: serializer.fromJson<bool>(json['showImages']),
+      showTimerTab: serializer.fromJson<bool>(json['showTimerTab']),
       showUnits: serializer.fromJson<bool>(json['showUnits']),
       strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
       systemColors: serializer.fromJson<bool>(json['systemColors']),
@@ -1604,8 +1606,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       timerDuration: serializer.fromJson<int>(json['timerDuration']),
       vibrate: serializer.fromJson<bool>(json['vibrate']),
       warmupSets: serializer.fromJson<int?>(json['warmupSets']),
-      repEstimation: serializer.fromJson<bool>(json['repEstimation']),
-      durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
     );
   }
   @override
@@ -1615,18 +1615,20 @@ class Setting extends DataClass implements Insertable<Setting> {
       'alarmSound': serializer.toJson<String>(alarmSound),
       'cardioUnit': serializer.toJson<String>(cardioUnit),
       'curveLines': serializer.toJson<bool>(curveLines),
+      'durationEstimation': serializer.toJson<bool>(durationEstimation),
       'explainedPermissions': serializer.toJson<bool>(explainedPermissions),
       'groupHistory': serializer.toJson<bool>(groupHistory),
-      'showHistoryTab': serializer.toJson<bool>(showHistoryTab),
-      'showTimerTab': serializer.toJson<bool>(showTimerTab),
-      'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
       'id': serializer.toJson<int>(id),
       'longDateFormat': serializer.toJson<String>(longDateFormat),
       'maxSets': serializer.toJson<int>(maxSets),
       'planTrailing': serializer.toJson<String>(planTrailing),
+      'repEstimation': serializer.toJson<bool>(repEstimation),
       'restTimers': serializer.toJson<bool>(restTimers),
       'shortDateFormat': serializer.toJson<String>(shortDateFormat),
+      'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
+      'showHistoryTab': serializer.toJson<bool>(showHistoryTab),
       'showImages': serializer.toJson<bool>(showImages),
+      'showTimerTab': serializer.toJson<bool>(showTimerTab),
       'showUnits': serializer.toJson<bool>(showUnits),
       'strengthUnit': serializer.toJson<String>(strengthUnit),
       'systemColors': serializer.toJson<bool>(systemColors),
@@ -1634,8 +1636,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       'timerDuration': serializer.toJson<int>(timerDuration),
       'vibrate': serializer.toJson<bool>(vibrate),
       'warmupSets': serializer.toJson<int?>(warmupSets),
-      'repEstimation': serializer.toJson<bool>(repEstimation),
-      'durationEstimation': serializer.toJson<bool>(durationEstimation),
     };
   }
 
@@ -1643,43 +1643,45 @@ class Setting extends DataClass implements Insertable<Setting> {
           {String? alarmSound,
           String? cardioUnit,
           bool? curveLines,
+          bool? durationEstimation,
           bool? explainedPermissions,
           bool? groupHistory,
-          bool? showHistoryTab,
-          bool? showTimerTab,
-          bool? showBodyWeight,
           int? id,
           String? longDateFormat,
           int? maxSets,
           String? planTrailing,
+          bool? repEstimation,
           bool? restTimers,
           String? shortDateFormat,
+          bool? showBodyWeight,
+          bool? showHistoryTab,
           bool? showImages,
+          bool? showTimerTab,
           bool? showUnits,
           String? strengthUnit,
           bool? systemColors,
           String? themeMode,
           int? timerDuration,
           bool? vibrate,
-          Value<int?> warmupSets = const Value.absent(),
-          bool? repEstimation,
-          bool? durationEstimation}) =>
+          Value<int?> warmupSets = const Value.absent()}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         cardioUnit: cardioUnit ?? this.cardioUnit,
         curveLines: curveLines ?? this.curveLines,
+        durationEstimation: durationEstimation ?? this.durationEstimation,
         explainedPermissions: explainedPermissions ?? this.explainedPermissions,
         groupHistory: groupHistory ?? this.groupHistory,
-        showHistoryTab: showHistoryTab ?? this.showHistoryTab,
-        showTimerTab: showTimerTab ?? this.showTimerTab,
-        showBodyWeight: showBodyWeight ?? this.showBodyWeight,
         id: id ?? this.id,
         longDateFormat: longDateFormat ?? this.longDateFormat,
         maxSets: maxSets ?? this.maxSets,
         planTrailing: planTrailing ?? this.planTrailing,
+        repEstimation: repEstimation ?? this.repEstimation,
         restTimers: restTimers ?? this.restTimers,
         shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+        showBodyWeight: showBodyWeight ?? this.showBodyWeight,
+        showHistoryTab: showHistoryTab ?? this.showHistoryTab,
         showImages: showImages ?? this.showImages,
+        showTimerTab: showTimerTab ?? this.showTimerTab,
         showUnits: showUnits ?? this.showUnits,
         strengthUnit: strengthUnit ?? this.strengthUnit,
         systemColors: systemColors ?? this.systemColors,
@@ -1687,8 +1689,6 @@ class Setting extends DataClass implements Insertable<Setting> {
         timerDuration: timerDuration ?? this.timerDuration,
         vibrate: vibrate ?? this.vibrate,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
-        repEstimation: repEstimation ?? this.repEstimation,
-        durationEstimation: durationEstimation ?? this.durationEstimation,
       );
   @override
   String toString() {
@@ -1696,27 +1696,27 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('alarmSound: $alarmSound, ')
           ..write('cardioUnit: $cardioUnit, ')
           ..write('curveLines: $curveLines, ')
+          ..write('durationEstimation: $durationEstimation, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('groupHistory: $groupHistory, ')
-          ..write('showHistoryTab: $showHistoryTab, ')
-          ..write('showTimerTab: $showTimerTab, ')
-          ..write('showBodyWeight: $showBodyWeight, ')
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
           ..write('planTrailing: $planTrailing, ')
+          ..write('repEstimation: $repEstimation, ')
           ..write('restTimers: $restTimers, ')
           ..write('shortDateFormat: $shortDateFormat, ')
+          ..write('showBodyWeight: $showBodyWeight, ')
+          ..write('showHistoryTab: $showHistoryTab, ')
           ..write('showImages: $showImages, ')
+          ..write('showTimerTab: $showTimerTab, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
-          ..write('warmupSets: $warmupSets, ')
-          ..write('repEstimation: $repEstimation, ')
-          ..write('durationEstimation: $durationEstimation')
+          ..write('warmupSets: $warmupSets')
           ..write(')'))
         .toString();
   }
@@ -1726,27 +1726,27 @@ class Setting extends DataClass implements Insertable<Setting> {
         alarmSound,
         cardioUnit,
         curveLines,
+        durationEstimation,
         explainedPermissions,
         groupHistory,
-        showHistoryTab,
-        showTimerTab,
-        showBodyWeight,
         id,
         longDateFormat,
         maxSets,
         planTrailing,
+        repEstimation,
         restTimers,
         shortDateFormat,
+        showBodyWeight,
+        showHistoryTab,
         showImages,
+        showTimerTab,
         showUnits,
         strengthUnit,
         systemColors,
         themeMode,
         timerDuration,
         vibrate,
-        warmupSets,
-        repEstimation,
-        durationEstimation
+        warmupSets
       ]);
   @override
   bool operator ==(Object other) =>
@@ -1755,45 +1755,47 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.alarmSound == this.alarmSound &&
           other.cardioUnit == this.cardioUnit &&
           other.curveLines == this.curveLines &&
+          other.durationEstimation == this.durationEstimation &&
           other.explainedPermissions == this.explainedPermissions &&
           other.groupHistory == this.groupHistory &&
-          other.showHistoryTab == this.showHistoryTab &&
-          other.showTimerTab == this.showTimerTab &&
-          other.showBodyWeight == this.showBodyWeight &&
           other.id == this.id &&
           other.longDateFormat == this.longDateFormat &&
           other.maxSets == this.maxSets &&
           other.planTrailing == this.planTrailing &&
+          other.repEstimation == this.repEstimation &&
           other.restTimers == this.restTimers &&
           other.shortDateFormat == this.shortDateFormat &&
+          other.showBodyWeight == this.showBodyWeight &&
+          other.showHistoryTab == this.showHistoryTab &&
           other.showImages == this.showImages &&
+          other.showTimerTab == this.showTimerTab &&
           other.showUnits == this.showUnits &&
           other.strengthUnit == this.strengthUnit &&
           other.systemColors == this.systemColors &&
           other.themeMode == this.themeMode &&
           other.timerDuration == this.timerDuration &&
           other.vibrate == this.vibrate &&
-          other.warmupSets == this.warmupSets &&
-          other.repEstimation == this.repEstimation &&
-          other.durationEstimation == this.durationEstimation);
+          other.warmupSets == this.warmupSets);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> alarmSound;
   final Value<String> cardioUnit;
   final Value<bool> curveLines;
+  final Value<bool> durationEstimation;
   final Value<bool> explainedPermissions;
   final Value<bool> groupHistory;
-  final Value<bool> showHistoryTab;
-  final Value<bool> showTimerTab;
-  final Value<bool> showBodyWeight;
   final Value<int> id;
   final Value<String> longDateFormat;
   final Value<int> maxSets;
   final Value<String> planTrailing;
+  final Value<bool> repEstimation;
   final Value<bool> restTimers;
   final Value<String> shortDateFormat;
+  final Value<bool> showBodyWeight;
+  final Value<bool> showHistoryTab;
   final Value<bool> showImages;
+  final Value<bool> showTimerTab;
   final Value<bool> showUnits;
   final Value<String> strengthUnit;
   final Value<bool> systemColors;
@@ -1801,24 +1803,24 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<int> timerDuration;
   final Value<bool> vibrate;
   final Value<int?> warmupSets;
-  final Value<bool> repEstimation;
-  final Value<bool> durationEstimation;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.cardioUnit = const Value.absent(),
     this.curveLines = const Value.absent(),
+    this.durationEstimation = const Value.absent(),
     this.explainedPermissions = const Value.absent(),
     this.groupHistory = const Value.absent(),
-    this.showHistoryTab = const Value.absent(),
-    this.showTimerTab = const Value.absent(),
-    this.showBodyWeight = const Value.absent(),
     this.id = const Value.absent(),
     this.longDateFormat = const Value.absent(),
     this.maxSets = const Value.absent(),
     this.planTrailing = const Value.absent(),
+    this.repEstimation = const Value.absent(),
     this.restTimers = const Value.absent(),
     this.shortDateFormat = const Value.absent(),
+    this.showBodyWeight = const Value.absent(),
+    this.showHistoryTab = const Value.absent(),
     this.showImages = const Value.absent(),
+    this.showTimerTab = const Value.absent(),
     this.showUnits = const Value.absent(),
     this.strengthUnit = const Value.absent(),
     this.systemColors = const Value.absent(),
@@ -1826,25 +1828,25 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.timerDuration = const Value.absent(),
     this.vibrate = const Value.absent(),
     this.warmupSets = const Value.absent(),
-    this.repEstimation = const Value.absent(),
-    this.durationEstimation = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
     required String cardioUnit,
     required bool curveLines,
+    this.durationEstimation = const Value.absent(),
     required bool explainedPermissions,
     required bool groupHistory,
-    this.showHistoryTab = const Value.absent(),
-    this.showTimerTab = const Value.absent(),
-    this.showBodyWeight = const Value.absent(),
     this.id = const Value.absent(),
     required String longDateFormat,
     required int maxSets,
     required String planTrailing,
+    this.repEstimation = const Value.absent(),
     required bool restTimers,
     required String shortDateFormat,
+    this.showBodyWeight = const Value.absent(),
+    this.showHistoryTab = const Value.absent(),
     this.showImages = const Value.absent(),
+    this.showTimerTab = const Value.absent(),
     required bool showUnits,
     required String strengthUnit,
     required bool systemColors,
@@ -1852,8 +1854,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required int timerDuration,
     required bool vibrate,
     this.warmupSets = const Value.absent(),
-    this.repEstimation = const Value.absent(),
-    this.durationEstimation = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -1874,18 +1874,20 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<String>? alarmSound,
     Expression<String>? cardioUnit,
     Expression<bool>? curveLines,
+    Expression<bool>? durationEstimation,
     Expression<bool>? explainedPermissions,
     Expression<bool>? groupHistory,
-    Expression<bool>? showHistoryTab,
-    Expression<bool>? showTimerTab,
-    Expression<bool>? showBodyWeight,
     Expression<int>? id,
     Expression<String>? longDateFormat,
     Expression<int>? maxSets,
     Expression<String>? planTrailing,
+    Expression<bool>? repEstimation,
     Expression<bool>? restTimers,
     Expression<String>? shortDateFormat,
+    Expression<bool>? showBodyWeight,
+    Expression<bool>? showHistoryTab,
     Expression<bool>? showImages,
+    Expression<bool>? showTimerTab,
     Expression<bool>? showUnits,
     Expression<String>? strengthUnit,
     Expression<bool>? systemColors,
@@ -1893,26 +1895,26 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<int>? timerDuration,
     Expression<bool>? vibrate,
     Expression<int>? warmupSets,
-    Expression<bool>? repEstimation,
-    Expression<bool>? durationEstimation,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
       if (cardioUnit != null) 'cardio_unit': cardioUnit,
       if (curveLines != null) 'curve_lines': curveLines,
+      if (durationEstimation != null) 'duration_estimation': durationEstimation,
       if (explainedPermissions != null)
         'explained_permissions': explainedPermissions,
       if (groupHistory != null) 'group_history': groupHistory,
-      if (showHistoryTab != null) 'show_history_tab': showHistoryTab,
-      if (showTimerTab != null) 'show_timer_tab': showTimerTab,
-      if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
       if (id != null) 'id': id,
       if (longDateFormat != null) 'long_date_format': longDateFormat,
       if (maxSets != null) 'max_sets': maxSets,
       if (planTrailing != null) 'plan_trailing': planTrailing,
+      if (repEstimation != null) 'rep_estimation': repEstimation,
       if (restTimers != null) 'rest_timers': restTimers,
       if (shortDateFormat != null) 'short_date_format': shortDateFormat,
+      if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
+      if (showHistoryTab != null) 'show_history_tab': showHistoryTab,
       if (showImages != null) 'show_images': showImages,
+      if (showTimerTab != null) 'show_timer_tab': showTimerTab,
       if (showUnits != null) 'show_units': showUnits,
       if (strengthUnit != null) 'strength_unit': strengthUnit,
       if (systemColors != null) 'system_colors': systemColors,
@@ -1920,8 +1922,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (timerDuration != null) 'timer_duration': timerDuration,
       if (vibrate != null) 'vibrate': vibrate,
       if (warmupSets != null) 'warmup_sets': warmupSets,
-      if (repEstimation != null) 'rep_estimation': repEstimation,
-      if (durationEstimation != null) 'duration_estimation': durationEstimation,
     });
   }
 
@@ -1929,43 +1929,45 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       {Value<String>? alarmSound,
       Value<String>? cardioUnit,
       Value<bool>? curveLines,
+      Value<bool>? durationEstimation,
       Value<bool>? explainedPermissions,
       Value<bool>? groupHistory,
-      Value<bool>? showHistoryTab,
-      Value<bool>? showTimerTab,
-      Value<bool>? showBodyWeight,
       Value<int>? id,
       Value<String>? longDateFormat,
       Value<int>? maxSets,
       Value<String>? planTrailing,
+      Value<bool>? repEstimation,
       Value<bool>? restTimers,
       Value<String>? shortDateFormat,
+      Value<bool>? showBodyWeight,
+      Value<bool>? showHistoryTab,
       Value<bool>? showImages,
+      Value<bool>? showTimerTab,
       Value<bool>? showUnits,
       Value<String>? strengthUnit,
       Value<bool>? systemColors,
       Value<String>? themeMode,
       Value<int>? timerDuration,
       Value<bool>? vibrate,
-      Value<int?>? warmupSets,
-      Value<bool>? repEstimation,
-      Value<bool>? durationEstimation}) {
+      Value<int?>? warmupSets}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       cardioUnit: cardioUnit ?? this.cardioUnit,
       curveLines: curveLines ?? this.curveLines,
+      durationEstimation: durationEstimation ?? this.durationEstimation,
       explainedPermissions: explainedPermissions ?? this.explainedPermissions,
       groupHistory: groupHistory ?? this.groupHistory,
-      showHistoryTab: showHistoryTab ?? this.showHistoryTab,
-      showTimerTab: showTimerTab ?? this.showTimerTab,
-      showBodyWeight: showBodyWeight ?? this.showBodyWeight,
       id: id ?? this.id,
       longDateFormat: longDateFormat ?? this.longDateFormat,
       maxSets: maxSets ?? this.maxSets,
       planTrailing: planTrailing ?? this.planTrailing,
+      repEstimation: repEstimation ?? this.repEstimation,
       restTimers: restTimers ?? this.restTimers,
       shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+      showBodyWeight: showBodyWeight ?? this.showBodyWeight,
+      showHistoryTab: showHistoryTab ?? this.showHistoryTab,
       showImages: showImages ?? this.showImages,
+      showTimerTab: showTimerTab ?? this.showTimerTab,
       showUnits: showUnits ?? this.showUnits,
       strengthUnit: strengthUnit ?? this.strengthUnit,
       systemColors: systemColors ?? this.systemColors,
@@ -1973,8 +1975,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       timerDuration: timerDuration ?? this.timerDuration,
       vibrate: vibrate ?? this.vibrate,
       warmupSets: warmupSets ?? this.warmupSets,
-      repEstimation: repEstimation ?? this.repEstimation,
-      durationEstimation: durationEstimation ?? this.durationEstimation,
     );
   }
 
@@ -1990,20 +1990,14 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (curveLines.present) {
       map['curve_lines'] = Variable<bool>(curveLines.value);
     }
+    if (durationEstimation.present) {
+      map['duration_estimation'] = Variable<bool>(durationEstimation.value);
+    }
     if (explainedPermissions.present) {
       map['explained_permissions'] = Variable<bool>(explainedPermissions.value);
     }
     if (groupHistory.present) {
       map['group_history'] = Variable<bool>(groupHistory.value);
-    }
-    if (showHistoryTab.present) {
-      map['show_history_tab'] = Variable<bool>(showHistoryTab.value);
-    }
-    if (showTimerTab.present) {
-      map['show_timer_tab'] = Variable<bool>(showTimerTab.value);
-    }
-    if (showBodyWeight.present) {
-      map['show_body_weight'] = Variable<bool>(showBodyWeight.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -2017,14 +2011,26 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (planTrailing.present) {
       map['plan_trailing'] = Variable<String>(planTrailing.value);
     }
+    if (repEstimation.present) {
+      map['rep_estimation'] = Variable<bool>(repEstimation.value);
+    }
     if (restTimers.present) {
       map['rest_timers'] = Variable<bool>(restTimers.value);
     }
     if (shortDateFormat.present) {
       map['short_date_format'] = Variable<String>(shortDateFormat.value);
     }
+    if (showBodyWeight.present) {
+      map['show_body_weight'] = Variable<bool>(showBodyWeight.value);
+    }
+    if (showHistoryTab.present) {
+      map['show_history_tab'] = Variable<bool>(showHistoryTab.value);
+    }
     if (showImages.present) {
       map['show_images'] = Variable<bool>(showImages.value);
+    }
+    if (showTimerTab.present) {
+      map['show_timer_tab'] = Variable<bool>(showTimerTab.value);
     }
     if (showUnits.present) {
       map['show_units'] = Variable<bool>(showUnits.value);
@@ -2047,12 +2053,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (warmupSets.present) {
       map['warmup_sets'] = Variable<int>(warmupSets.value);
     }
-    if (repEstimation.present) {
-      map['rep_estimation'] = Variable<bool>(repEstimation.value);
-    }
-    if (durationEstimation.present) {
-      map['duration_estimation'] = Variable<bool>(durationEstimation.value);
-    }
     return map;
   }
 
@@ -2062,27 +2062,27 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('alarmSound: $alarmSound, ')
           ..write('cardioUnit: $cardioUnit, ')
           ..write('curveLines: $curveLines, ')
+          ..write('durationEstimation: $durationEstimation, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('groupHistory: $groupHistory, ')
-          ..write('showHistoryTab: $showHistoryTab, ')
-          ..write('showTimerTab: $showTimerTab, ')
-          ..write('showBodyWeight: $showBodyWeight, ')
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
           ..write('planTrailing: $planTrailing, ')
+          ..write('repEstimation: $repEstimation, ')
           ..write('restTimers: $restTimers, ')
           ..write('shortDateFormat: $shortDateFormat, ')
+          ..write('showBodyWeight: $showBodyWeight, ')
+          ..write('showHistoryTab: $showHistoryTab, ')
           ..write('showImages: $showImages, ')
+          ..write('showTimerTab: $showTimerTab, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
-          ..write('warmupSets: $warmupSets, ')
-          ..write('repEstimation: $repEstimation, ')
-          ..write('durationEstimation: $durationEstimation')
+          ..write('warmupSets: $warmupSets')
           ..write(')'))
         .toString();
   }
@@ -2915,18 +2915,20 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required String alarmSound,
   required String cardioUnit,
   required bool curveLines,
+  Value<bool> durationEstimation,
   required bool explainedPermissions,
   required bool groupHistory,
-  Value<bool> showHistoryTab,
-  Value<bool> showTimerTab,
-  Value<bool> showBodyWeight,
   Value<int> id,
   required String longDateFormat,
   required int maxSets,
   required String planTrailing,
+  Value<bool> repEstimation,
   required bool restTimers,
   required String shortDateFormat,
+  Value<bool> showBodyWeight,
+  Value<bool> showHistoryTab,
   Value<bool> showImages,
+  Value<bool> showTimerTab,
   required bool showUnits,
   required String strengthUnit,
   required bool systemColors,
@@ -2934,25 +2936,25 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required int timerDuration,
   required bool vibrate,
   Value<int?> warmupSets,
-  Value<bool> repEstimation,
-  Value<bool> durationEstimation,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
   Value<String> cardioUnit,
   Value<bool> curveLines,
+  Value<bool> durationEstimation,
   Value<bool> explainedPermissions,
   Value<bool> groupHistory,
-  Value<bool> showHistoryTab,
-  Value<bool> showTimerTab,
-  Value<bool> showBodyWeight,
   Value<int> id,
   Value<String> longDateFormat,
   Value<int> maxSets,
   Value<String> planTrailing,
+  Value<bool> repEstimation,
   Value<bool> restTimers,
   Value<String> shortDateFormat,
+  Value<bool> showBodyWeight,
+  Value<bool> showHistoryTab,
   Value<bool> showImages,
+  Value<bool> showTimerTab,
   Value<bool> showUnits,
   Value<String> strengthUnit,
   Value<bool> systemColors,
@@ -2960,8 +2962,6 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<int> timerDuration,
   Value<bool> vibrate,
   Value<int?> warmupSets,
-  Value<bool> repEstimation,
-  Value<bool> durationEstimation,
 });
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -2987,18 +2987,20 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<String> alarmSound = const Value.absent(),
             Value<String> cardioUnit = const Value.absent(),
             Value<bool> curveLines = const Value.absent(),
+            Value<bool> durationEstimation = const Value.absent(),
             Value<bool> explainedPermissions = const Value.absent(),
             Value<bool> groupHistory = const Value.absent(),
-            Value<bool> showHistoryTab = const Value.absent(),
-            Value<bool> showTimerTab = const Value.absent(),
-            Value<bool> showBodyWeight = const Value.absent(),
             Value<int> id = const Value.absent(),
             Value<String> longDateFormat = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
             Value<String> planTrailing = const Value.absent(),
+            Value<bool> repEstimation = const Value.absent(),
             Value<bool> restTimers = const Value.absent(),
             Value<String> shortDateFormat = const Value.absent(),
+            Value<bool> showBodyWeight = const Value.absent(),
+            Value<bool> showHistoryTab = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
+            Value<bool> showTimerTab = const Value.absent(),
             Value<bool> showUnits = const Value.absent(),
             Value<String> strengthUnit = const Value.absent(),
             Value<bool> systemColors = const Value.absent(),
@@ -3006,25 +3008,25 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<int> timerDuration = const Value.absent(),
             Value<bool> vibrate = const Value.absent(),
             Value<int?> warmupSets = const Value.absent(),
-            Value<bool> repEstimation = const Value.absent(),
-            Value<bool> durationEstimation = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
             cardioUnit: cardioUnit,
             curveLines: curveLines,
+            durationEstimation: durationEstimation,
             explainedPermissions: explainedPermissions,
             groupHistory: groupHistory,
-            showHistoryTab: showHistoryTab,
-            showTimerTab: showTimerTab,
-            showBodyWeight: showBodyWeight,
             id: id,
             longDateFormat: longDateFormat,
             maxSets: maxSets,
             planTrailing: planTrailing,
+            repEstimation: repEstimation,
             restTimers: restTimers,
             shortDateFormat: shortDateFormat,
+            showBodyWeight: showBodyWeight,
+            showHistoryTab: showHistoryTab,
             showImages: showImages,
+            showTimerTab: showTimerTab,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
@@ -3032,25 +3034,25 @@ class $$SettingsTableTableManager extends RootTableManager<
             timerDuration: timerDuration,
             vibrate: vibrate,
             warmupSets: warmupSets,
-            repEstimation: repEstimation,
-            durationEstimation: durationEstimation,
           ),
           getInsertCompanionBuilder: ({
             required String alarmSound,
             required String cardioUnit,
             required bool curveLines,
+            Value<bool> durationEstimation = const Value.absent(),
             required bool explainedPermissions,
             required bool groupHistory,
-            Value<bool> showHistoryTab = const Value.absent(),
-            Value<bool> showTimerTab = const Value.absent(),
-            Value<bool> showBodyWeight = const Value.absent(),
             Value<int> id = const Value.absent(),
             required String longDateFormat,
             required int maxSets,
             required String planTrailing,
+            Value<bool> repEstimation = const Value.absent(),
             required bool restTimers,
             required String shortDateFormat,
+            Value<bool> showBodyWeight = const Value.absent(),
+            Value<bool> showHistoryTab = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
+            Value<bool> showTimerTab = const Value.absent(),
             required bool showUnits,
             required String strengthUnit,
             required bool systemColors,
@@ -3058,25 +3060,25 @@ class $$SettingsTableTableManager extends RootTableManager<
             required int timerDuration,
             required bool vibrate,
             Value<int?> warmupSets = const Value.absent(),
-            Value<bool> repEstimation = const Value.absent(),
-            Value<bool> durationEstimation = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
             cardioUnit: cardioUnit,
             curveLines: curveLines,
+            durationEstimation: durationEstimation,
             explainedPermissions: explainedPermissions,
             groupHistory: groupHistory,
-            showHistoryTab: showHistoryTab,
-            showTimerTab: showTimerTab,
-            showBodyWeight: showBodyWeight,
             id: id,
             longDateFormat: longDateFormat,
             maxSets: maxSets,
             planTrailing: planTrailing,
+            repEstimation: repEstimation,
             restTimers: restTimers,
             shortDateFormat: shortDateFormat,
+            showBodyWeight: showBodyWeight,
+            showHistoryTab: showHistoryTab,
             showImages: showImages,
+            showTimerTab: showTimerTab,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
@@ -3084,8 +3086,6 @@ class $$SettingsTableTableManager extends RootTableManager<
             timerDuration: timerDuration,
             vibrate: vibrate,
             warmupSets: warmupSets,
-            repEstimation: repEstimation,
-            durationEstimation: durationEstimation,
           ),
         ));
 }
@@ -3120,6 +3120,11 @@ class $$SettingsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<bool> get durationEstimation => $state.composableBuilder(
+      column: $state.table.durationEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<bool> get explainedPermissions => $state.composableBuilder(
       column: $state.table.explainedPermissions,
       builder: (column, joinBuilders) =>
@@ -3127,21 +3132,6 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get groupHistory => $state.composableBuilder(
       column: $state.table.groupHistory,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showHistoryTab => $state.composableBuilder(
-      column: $state.table.showHistoryTab,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showTimerTab => $state.composableBuilder(
-      column: $state.table.showTimerTab,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showBodyWeight => $state.composableBuilder(
-      column: $state.table.showBodyWeight,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3165,6 +3155,11 @@ class $$SettingsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<bool> get repEstimation => $state.composableBuilder(
+      column: $state.table.repEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<bool> get restTimers => $state.composableBuilder(
       column: $state.table.restTimers,
       builder: (column, joinBuilders) =>
@@ -3175,8 +3170,23 @@ class $$SettingsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<bool> get showBodyWeight => $state.composableBuilder(
+      column: $state.table.showBodyWeight,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get showHistoryTab => $state.composableBuilder(
+      column: $state.table.showHistoryTab,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<bool> get showImages => $state.composableBuilder(
       column: $state.table.showImages,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get showTimerTab => $state.composableBuilder(
+      column: $state.table.showTimerTab,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3214,16 +3224,6 @@ class $$SettingsTableFilterComposer
       column: $state.table.warmupSets,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get repEstimation => $state.composableBuilder(
-      column: $state.table.repEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get durationEstimation => $state.composableBuilder(
-      column: $state.table.durationEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$SettingsTableOrderingComposer
@@ -3244,6 +3244,11 @@ class $$SettingsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<bool> get durationEstimation => $state.composableBuilder(
+      column: $state.table.durationEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<bool> get explainedPermissions => $state.composableBuilder(
       column: $state.table.explainedPermissions,
       builder: (column, joinBuilders) =>
@@ -3251,21 +3256,6 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get groupHistory => $state.composableBuilder(
       column: $state.table.groupHistory,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showHistoryTab => $state.composableBuilder(
-      column: $state.table.showHistoryTab,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showTimerTab => $state.composableBuilder(
-      column: $state.table.showTimerTab,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showBodyWeight => $state.composableBuilder(
-      column: $state.table.showBodyWeight,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -3289,6 +3279,11 @@ class $$SettingsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<bool> get repEstimation => $state.composableBuilder(
+      column: $state.table.repEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<bool> get restTimers => $state.composableBuilder(
       column: $state.table.restTimers,
       builder: (column, joinBuilders) =>
@@ -3299,8 +3294,23 @@ class $$SettingsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<bool> get showBodyWeight => $state.composableBuilder(
+      column: $state.table.showBodyWeight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get showHistoryTab => $state.composableBuilder(
+      column: $state.table.showHistoryTab,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<bool> get showImages => $state.composableBuilder(
       column: $state.table.showImages,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get showTimerTab => $state.composableBuilder(
+      column: $state.table.showTimerTab,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -3336,16 +3346,6 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<int> get warmupSets => $state.composableBuilder(
       column: $state.table.warmupSets,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get repEstimation => $state.composableBuilder(
-      column: $state.table.repEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get durationEstimation => $state.composableBuilder(
-      column: $state.table.durationEstimation,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
