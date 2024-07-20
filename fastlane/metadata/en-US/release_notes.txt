@@ -1,1 +1,1 @@
-Add script for submitting to microsoft store
+- Use powershell instead of cmd in deploy.sh
