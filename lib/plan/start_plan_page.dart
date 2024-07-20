@@ -38,6 +38,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   bool cardio = false;
   DateTime? lastSaved;
   List<Rpm>? rpms;
+  String? category;
 
   late List<String> planExercises = widget.plan.exercises.split(',');
   late final Stream<List<GymCount>> countStream =
@@ -356,6 +357,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       restMs: drift.Value(restMs?.toInt()),
       incline: drift.Value(int.tryParse(inclineController.text)),
       planId: drift.Value(widget.plan.id),
+      category: drift.Value(category),
     );
 
     var count = 0;
@@ -404,6 +406,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       secondsController.text = ((last.duration * 60) % 60).floor().toString();
       inclineController.text = last.incline?.toString() ?? "";
       cardio = last.cardio;
+      category = last.category;
 
       if (cardio && (unit == 'kg' || unit == 'lb'))
         unit = settings.cardioUnit;
