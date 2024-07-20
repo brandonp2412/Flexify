@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -ex
 
 client_id=$(yq -r .clientId "$HOME/.config/msstore.yml")
 client_secret=$(yq -r .clientSecret "$HOME/.config/msstore.yml")
@@ -20,8 +20,8 @@ submission_response=$(curl -X POST "$api/v1.0/my/applications/$app_id/submission
   -H "Authorization: Bearer $access_token" \
   -H "Content-Type: application/json" \
   -H "Content-Length: 0")
-submission_id=$(echo "$submission_response" | jq .id)
-file_upload_url=$(echo "$submission_response" | jq .fileUploadUrl)
+submission_id=$(echo "$submission_response" | jq -r .id)
+file_upload_url=$(echo "$submission_response" | jq -r .fileUploadUrl)
 
 if [ -z "$submission_id" ]; then
   echo "Submission failed to create"
@@ -33,7 +33,7 @@ curl -X PUT "$file_upload_url" \
   -H "x-ms-blob-type: BlockBlob" \
   --data-binary "@$1"
 
-curl -X POST "$api/v1.0/my/applications/$app_id/submissions/commit" \
+curl -X POST "$api/v1.0/my/applications/$app_id/submissions/$submission_id/commit" \
   -H "Authorization: Bearer $access_token" \
   -H "Content-Type: application/json" \
   -H "Content-Length: 0"
