@@ -1,1 +1,1 @@
-Automatic deploy windows
+Auto release to windows
