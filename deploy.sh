@@ -66,7 +66,7 @@ flutter build linux
 docker start windows
 rsync -a --delete --exclude-from=.gitignore ./* .gitignore \
   "$HOME/windows/$project-source"
-sshpass -p gates ssh windows 'powershell -Command "cp -r -Force //host.lan/Data/flexify-source/* flexify; cd flexify; dart run msix:create; cp -r -Force build/windows/x64/runner/Release //host.lan/Data/flexify"'
+sshpass -p gates ssh windows 'powershell -Command "cp -r -Force //host.lan/Data/flexify-source/* flexify; cd flexify; dart run msix:create; cp -r -Force build/windows/x64/runner/Release/* //host.lan/Data/flexify"'
 sudo chown -R "$USER" "$HOME/windows/$project"
 mv "$HOME/windows/$project/$project.msix" "$HOME/windows/$project.msix"
 (cd "$HOME/windows/$project" && zip -r "$HOME/windows/$project-windows.zip" .)
