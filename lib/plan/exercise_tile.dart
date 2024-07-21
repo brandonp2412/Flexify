@@ -72,16 +72,18 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
                         ),
-                        onTap: () => selectAll(maxSets),
                         onChanged: (value) {
-                          final pe = widget.planExercise.copyWith(
-                            enabled: const Value(true),
-                            maxSets: Value(int.tryParse(maxSets.text)),
-                          );
-                          widget.onChange(pe);
+                          if (int.parse(maxSets.text) > 0 &&
+                              int.parse(maxSets.text) <= 20) {
+                            final pe = widget.planExercise.copyWith(
+                              enabled: const Value(true),
+                              maxSets: Value(int.parse(maxSets.text)),
+                            );
+                            widget.onChange(pe);
+                          }
                         },
                         decoration: InputDecoration(
-                          labelText: "Maximum sets",
+                          labelText: "Working sets (max: 20)",
                           border: const OutlineInputBorder(),
                           hintText: value.toString(),
                         ),

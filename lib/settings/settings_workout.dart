@@ -39,15 +39,19 @@ List<Widget> getWorkouts(
         child: TextField(
           controller: maxSets,
           decoration: const InputDecoration(
-            labelText: 'Sets per exercise',
+            labelText: 'Sets per exercise (max: 20)',
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: false),
           onTap: () => selectAll(maxSets),
-          onChanged: (value) => db.settings.update().write(
-                SettingsCompanion(
-                  maxSets: Value(int.parse(value)),
-                ),
-              ),
+          onChanged: (value) {
+            if (int.parse(value) > 0 && int.parse(value) <= 20) {
+              db.settings.update().write(
+                    SettingsCompanion(
+                      maxSets: Value(int.parse(value)),
+                    ),
+                  );
+            }
+          },
         ),
       ),
     if ('plan trailing display'.contains(term.toLowerCase()))
