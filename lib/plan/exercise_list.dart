@@ -89,20 +89,6 @@ class ExerciseList extends StatelessWidget {
       max = counts![countIndex].maxSets ?? maxSets;
     }
 
-    var setIndicators = <Widget>[];
-    for (int i = 0; i < max; i++) {
-      setIndicators.add(
-        CustomSetIndicator(
-          index: i,
-          count: count,
-          firstRender: firstRender,
-        ),
-      );
-      if (i < max - 1) {
-        setIndicators.add(const SizedBox(width: 6));
-      }
-    }
-
     Widget trailing = const SizedBox();
     switch (planTrailing) {
       case PlanTrailing.reorder:
@@ -176,9 +162,7 @@ class ExerciseList extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            children: setIndicators,
-          ),
+          CustomSetIndicator(count: count, max: max, firstRender: firstRender),
         ],
       ),
     );
