@@ -1,4 +1,5 @@
 import 'package:flexify/constants.dart';
+import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -88,6 +89,20 @@ class ExerciseList extends StatelessWidget {
       max = counts![countIndex].maxSets ?? maxSets;
     }
 
+    var setIndicators = <Widget>[];
+    for (int i = 0; i < max; i++) {
+      setIndicators.add(
+        CustomSetIndicator(
+          index: i,
+          count: count,
+          firstRender: firstRender,
+        ),
+      );
+      if (i < max - 1) {
+        setIndicators.add(const SizedBox(width: 6));
+      }
+    }
+
     Widget trailing = const SizedBox();
     switch (planTrailing) {
       case PlanTrailing.reorder:
@@ -161,15 +176,8 @@ class ExerciseList extends StatelessWidget {
               ],
             ),
           ),
-          TweenAnimationBuilder(
-            tween: Tween<double>(
-              begin: (count / max) - 1,
-              end: count / max,
-            ),
-            duration: Duration(milliseconds: firstRender ? 0 : 150),
-            builder: (context, value, child) => LinearProgressIndicator(
-              value: value,
-            ),
+          Row(
+            children: setIndicators,
           ),
         ],
       ),
