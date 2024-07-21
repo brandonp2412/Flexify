@@ -1,5 +1,0 @@
-- Make settings switches consistent
-- Increase accuracy of reps estimation
-- Allow clearing custom rest times per graph
-- Fix category being empty for plans
-- Fix plan editing order
