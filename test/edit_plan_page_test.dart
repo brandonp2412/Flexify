@@ -38,7 +38,16 @@ void main() async {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     expect(find.textContaining("Title"), findsOne);
+
+    await tester.tap(find.text('Monday'));
+    await tester.tap(find.text('Wednesday'));
+    await tester.tap(find.text('Sunday'));
+    await tester.enterText(find.byType(SearchBar), 'Squat');
+    await tester.tap(find.text('Squat'));
+    await tester.pumpAndSettle();
 
     final button = find.byTooltip("Save");
     expect(button, findsOne);
