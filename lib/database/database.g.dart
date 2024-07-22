@@ -1010,6 +1010,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
       'alarm_sound', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _automaticBackupsMeta =
+      const VerificationMeta('automaticBackups');
+  @override
+  late final GeneratedColumn<bool> automaticBackups = GeneratedColumn<bool>(
+      'automatic_backups', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("automatic_backups" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _cardioUnitMeta =
       const VerificationMeta('cardioUnit');
   @override
@@ -1199,6 +1209,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
+        automaticBackups,
         cardioUnit,
         curveLines,
         durationEstimation,
@@ -1240,6 +1251,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
               data['alarm_sound']!, _alarmSoundMeta));
     } else if (isInserting) {
       context.missing(_alarmSoundMeta);
+    }
+    if (data.containsKey('automatic_backups')) {
+      context.handle(
+          _automaticBackupsMeta,
+          automaticBackups.isAcceptableOrUnknown(
+              data['automatic_backups']!, _automaticBackupsMeta));
     }
     if (data.containsKey('cardio_unit')) {
       context.handle(
@@ -1409,6 +1426,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     return Setting(
       alarmSound: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
+      automaticBackups: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}automatic_backups'])!,
       cardioUnit: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
       curveLines: attachedDatabase.typeMapping
@@ -1466,6 +1485,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
 
 class Setting extends DataClass implements Insertable<Setting> {
   final String alarmSound;
+  final bool automaticBackups;
   final String cardioUnit;
   final bool curveLines;
   final bool durationEstimation;
@@ -1491,6 +1511,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final int? warmupSets;
   const Setting(
       {required this.alarmSound,
+      required this.automaticBackups,
       required this.cardioUnit,
       required this.curveLines,
       required this.durationEstimation,
@@ -1518,6 +1539,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['alarm_sound'] = Variable<String>(alarmSound);
+    map['automatic_backups'] = Variable<bool>(automaticBackups);
     map['cardio_unit'] = Variable<String>(cardioUnit);
     map['curve_lines'] = Variable<bool>(curveLines);
     map['duration_estimation'] = Variable<bool>(durationEstimation);
@@ -1549,6 +1571,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   SettingsCompanion toCompanion(bool nullToAbsent) {
     return SettingsCompanion(
       alarmSound: Value(alarmSound),
+      automaticBackups: Value(automaticBackups),
       cardioUnit: Value(cardioUnit),
       curveLines: Value(curveLines),
       durationEstimation: Value(durationEstimation),
@@ -1582,6 +1605,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Setting(
       alarmSound: serializer.fromJson<String>(json['alarmSound']),
+      automaticBackups: serializer.fromJson<bool>(json['automaticBackups']),
       cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
       curveLines: serializer.fromJson<bool>(json['curveLines']),
       durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
@@ -1613,6 +1637,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'alarmSound': serializer.toJson<String>(alarmSound),
+      'automaticBackups': serializer.toJson<bool>(automaticBackups),
       'cardioUnit': serializer.toJson<String>(cardioUnit),
       'curveLines': serializer.toJson<bool>(curveLines),
       'durationEstimation': serializer.toJson<bool>(durationEstimation),
@@ -1641,6 +1666,7 @@ class Setting extends DataClass implements Insertable<Setting> {
 
   Setting copyWith(
           {String? alarmSound,
+          bool? automaticBackups,
           String? cardioUnit,
           bool? curveLines,
           bool? durationEstimation,
@@ -1666,6 +1692,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           Value<int?> warmupSets = const Value.absent()}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
+        automaticBackups: automaticBackups ?? this.automaticBackups,
         cardioUnit: cardioUnit ?? this.cardioUnit,
         curveLines: curveLines ?? this.curveLines,
         durationEstimation: durationEstimation ?? this.durationEstimation,
@@ -1694,6 +1721,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   String toString() {
     return (StringBuffer('Setting(')
           ..write('alarmSound: $alarmSound, ')
+          ..write('automaticBackups: $automaticBackups, ')
           ..write('cardioUnit: $cardioUnit, ')
           ..write('curveLines: $curveLines, ')
           ..write('durationEstimation: $durationEstimation, ')
@@ -1724,6 +1752,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   @override
   int get hashCode => Object.hashAll([
         alarmSound,
+        automaticBackups,
         cardioUnit,
         curveLines,
         durationEstimation,
@@ -1753,6 +1782,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       identical(this, other) ||
       (other is Setting &&
           other.alarmSound == this.alarmSound &&
+          other.automaticBackups == this.automaticBackups &&
           other.cardioUnit == this.cardioUnit &&
           other.curveLines == this.curveLines &&
           other.durationEstimation == this.durationEstimation &&
@@ -1780,6 +1810,7 @@ class Setting extends DataClass implements Insertable<Setting> {
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> alarmSound;
+  final Value<bool> automaticBackups;
   final Value<String> cardioUnit;
   final Value<bool> curveLines;
   final Value<bool> durationEstimation;
@@ -1805,6 +1836,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<int?> warmupSets;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
+    this.automaticBackups = const Value.absent(),
     this.cardioUnit = const Value.absent(),
     this.curveLines = const Value.absent(),
     this.durationEstimation = const Value.absent(),
@@ -1831,6 +1863,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   });
   SettingsCompanion.insert({
     required String alarmSound,
+    this.automaticBackups = const Value.absent(),
     required String cardioUnit,
     required bool curveLines,
     this.durationEstimation = const Value.absent(),
@@ -1872,6 +1905,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
         vibrate = Value(vibrate);
   static Insertable<Setting> custom({
     Expression<String>? alarmSound,
+    Expression<bool>? automaticBackups,
     Expression<String>? cardioUnit,
     Expression<bool>? curveLines,
     Expression<bool>? durationEstimation,
@@ -1898,6 +1932,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
+      if (automaticBackups != null) 'automatic_backups': automaticBackups,
       if (cardioUnit != null) 'cardio_unit': cardioUnit,
       if (curveLines != null) 'curve_lines': curveLines,
       if (durationEstimation != null) 'duration_estimation': durationEstimation,
@@ -1927,6 +1962,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
 
   SettingsCompanion copyWith(
       {Value<String>? alarmSound,
+      Value<bool>? automaticBackups,
       Value<String>? cardioUnit,
       Value<bool>? curveLines,
       Value<bool>? durationEstimation,
@@ -1952,6 +1988,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<int?>? warmupSets}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
+      automaticBackups: automaticBackups ?? this.automaticBackups,
       cardioUnit: cardioUnit ?? this.cardioUnit,
       curveLines: curveLines ?? this.curveLines,
       durationEstimation: durationEstimation ?? this.durationEstimation,
@@ -1983,6 +2020,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     final map = <String, Expression>{};
     if (alarmSound.present) {
       map['alarm_sound'] = Variable<String>(alarmSound.value);
+    }
+    if (automaticBackups.present) {
+      map['automatic_backups'] = Variable<bool>(automaticBackups.value);
     }
     if (cardioUnit.present) {
       map['cardio_unit'] = Variable<String>(cardioUnit.value);
@@ -2060,6 +2100,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   String toString() {
     return (StringBuffer('SettingsCompanion(')
           ..write('alarmSound: $alarmSound, ')
+          ..write('automaticBackups: $automaticBackups, ')
           ..write('cardioUnit: $cardioUnit, ')
           ..write('curveLines: $curveLines, ')
           ..write('durationEstimation: $durationEstimation, ')
@@ -2913,6 +2954,7 @@ class $$GymSetsTableOrderingComposer
 
 typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required String alarmSound,
+  Value<bool> automaticBackups,
   required String cardioUnit,
   required bool curveLines,
   Value<bool> durationEstimation,
@@ -2939,6 +2981,7 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
+  Value<bool> automaticBackups,
   Value<String> cardioUnit,
   Value<bool> curveLines,
   Value<bool> durationEstimation,
@@ -2985,6 +3028,7 @@ class $$SettingsTableTableManager extends RootTableManager<
               $$SettingsTableProcessedTableManager(p),
           getUpdateCompanionBuilder: ({
             Value<String> alarmSound = const Value.absent(),
+            Value<bool> automaticBackups = const Value.absent(),
             Value<String> cardioUnit = const Value.absent(),
             Value<bool> curveLines = const Value.absent(),
             Value<bool> durationEstimation = const Value.absent(),
@@ -3011,6 +3055,7 @@ class $$SettingsTableTableManager extends RootTableManager<
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
+            automaticBackups: automaticBackups,
             cardioUnit: cardioUnit,
             curveLines: curveLines,
             durationEstimation: durationEstimation,
@@ -3037,6 +3082,7 @@ class $$SettingsTableTableManager extends RootTableManager<
           ),
           getInsertCompanionBuilder: ({
             required String alarmSound,
+            Value<bool> automaticBackups = const Value.absent(),
             required String cardioUnit,
             required bool curveLines,
             Value<bool> durationEstimation = const Value.absent(),
@@ -3063,6 +3109,7 @@ class $$SettingsTableTableManager extends RootTableManager<
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
+            automaticBackups: automaticBackups,
             cardioUnit: cardioUnit,
             curveLines: curveLines,
             durationEstimation: durationEstimation,
@@ -3107,6 +3154,11 @@ class $$SettingsTableFilterComposer
   $$SettingsTableFilterComposer(super.$state);
   ColumnFilters<String> get alarmSound => $state.composableBuilder(
       column: $state.table.alarmSound,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get automaticBackups => $state.composableBuilder(
+      column: $state.table.automaticBackups,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3231,6 +3283,11 @@ class $$SettingsTableOrderingComposer
   $$SettingsTableOrderingComposer(super.$state);
   ColumnOrderings<String> get alarmSound => $state.composableBuilder(
       column: $state.table.alarmSound,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get automaticBackups => $state.composableBuilder(
+      column: $state.table.automaticBackups,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
