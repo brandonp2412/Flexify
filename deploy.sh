@@ -14,7 +14,7 @@ IFS='+.' read -r msix_major msix_minor msix_patch msix_zero <<<"$(yq -r .msix_co
 new_msix_patch=$((msix_patch + 1))
 new_msix_version="$msix_major.$msix_minor.$new_msix_patch.$msix_zero"
 
-changelog_file="fastlane/metadata/android/en-AU/changelogs/$changelog_number.txt"
+changelog_file="fastlane/metadata/android/en-US/changelogs/$changelog_number.txt"
 if ! [ -f $changelog_file ]; then
   git --no-pager log --pretty=format:'%s' "$(git describe --tags --abbrev=0)"..HEAD |
     awk '{print "- "$0}' >$changelog_file
