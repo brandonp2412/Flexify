@@ -72,6 +72,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
                         ),
+                        onTap: () => selectAll(maxSets),
                         onChanged: (value) {
                           if (int.parse(maxSets.text) > 0 &&
                               int.parse(maxSets.text) <= 20) {
