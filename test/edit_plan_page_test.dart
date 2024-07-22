@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'mock_tests.dart';
 
 void main() async {
-  testWidgets('EditPlanPage inserts', (WidgetTester tester) async {
+  testWidgets('EditPlanPage updates', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
@@ -31,6 +31,7 @@ void main() async {
               exercises: Value('Bench press,Row,Bicep curl'),
               sequence: Value(1),
               title: Value('Test title'),
+              id: Value(1),
             ),
           ),
         ),
