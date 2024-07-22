@@ -31,6 +31,7 @@ dependencies:
     git:
       url: https://github.com/insertjokehere/flutter_msvcredist.git
       ref: main
+  fluttertoast: ^8.2.6
 dev_dependencies:
   integration_test:
     sdk: flutter

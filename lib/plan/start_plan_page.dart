@@ -11,6 +11,7 @@ import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class StartPlanPage extends StatefulWidget {
@@ -419,13 +420,9 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   useBodyWeight() async {
     final weightSet = await getBodyWeight();
-    if (weightSet == null && mounted)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No weight entered yet.'),
-        ),
-      );
+    if (weightSet == null)
+      Fluttertoast.showToast(msg: 'No weight entered yet.');
     else
-      weightController.text = toString(weightSet!.weight);
+      weightController.text = toString(weightSet.weight);
   }
 }

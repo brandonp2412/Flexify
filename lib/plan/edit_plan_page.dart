@@ -9,6 +9,7 @@ import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class EditPlanPage extends StatefulWidget {
@@ -221,17 +222,14 @@ class _EditPlanPageState extends State<EditPlanPage> {
     for (int i = 0; i < daySwitches.length; i++) {
       if (daySwitches[i]) days.add(weekdays[i]);
     }
+
     if (days.isEmpty && titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select days/title first')),
-      );
+      Fluttertoast.showToast(msg: 'Select days/title');
       return;
     }
 
-    if (exercises.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select exercises first')),
-      );
+    if (exercises.where((exercise) => exercise.enabled.value).isEmpty) {
+      Fluttertoast.showToast(msg: 'Select exercises');
       return;
     }
 
