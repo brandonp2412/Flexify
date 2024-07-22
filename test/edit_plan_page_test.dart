@@ -27,17 +27,26 @@ void main() async {
         child: const MaterialApp(
           home: EditPlanPage(
             plan: PlansCompanion(
-              days: Value('Monday,Tuesday,Wednesday'),
-              exercises: Value('Bench press,Row,Bicep curl'),
-              sequence: Value(1),
-              title: Value('Test title'),
+              days: Value(''),
+              exercises: Value(''),
+              sequence: Value(0),
+              title: Value(''),
             ),
           ),
         ),
       ),
     );
 
+    await tester.pumpAndSettle();
+
     expect(find.textContaining("Title"), findsOne);
+
+    await tester.tap(find.text('Monday'));
+    await tester.tap(find.text('Wednesday'));
+    await tester.tap(find.text('Sunday'));
+    await tester.enterText(find.byType(SearchBar), 'Squat');
+    await tester.tap(find.text('Squat'));
+    await tester.pumpAndSettle();
 
     final button = find.byTooltip("Save");
     expect(button, findsOne);

@@ -144,7 +144,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _save,
+        onPressed: save,
         tooltip: "Save",
         child: const Icon(Icons.save),
       ),
@@ -217,7 +217,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
   }
 
-  Future<void> _save() async {
+  Future<void> save() async {
     final days = [];
     for (int i = 0; i < daySwitches.length; i++) {
       if (daySwitches[i]) days.add(weekdays[i]);

@@ -63,10 +63,6 @@ class MainActivity : FlutterActivity() {
                     pick(args[0] as String)
                 }
 
-                "save" -> {
-                    save()
-                }
-
                 "getProgress" -> {
                     if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
                         result.success(
