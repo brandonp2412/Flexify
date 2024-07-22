@@ -10,6 +10,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class EditGraphPage extends StatefulWidget {
@@ -288,13 +289,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   save() async {
-    if (nameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name cannot be empty.')),
-      );
-      Navigator.pop(context);
-      return;
-    }
+    if (nameController.text.isEmpty)
+      return Fluttertoast.showToast(msg: 'Name cannot be empty');
 
     final count = await getCount();
 

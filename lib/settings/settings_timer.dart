@@ -79,11 +79,13 @@ List<Widget> getTimers(
         leading: settings.restTimers
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                restTimers: Value(!settings.restTimers),
-              ),
-            ),
+        onTap: () {
+          db.settings.update().write(
+                SettingsCompanion(
+                  restTimers: Value(!settings.restTimers),
+                ),
+              );
+        },
         trailing: Switch(
           value: settings.restTimers,
           onChanged: (value) => db.settings.update().write(
