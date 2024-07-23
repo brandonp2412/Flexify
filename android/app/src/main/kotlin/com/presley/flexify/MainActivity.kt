@@ -12,6 +12,7 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
+import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -38,6 +39,15 @@ class MainActivity : FlutterActivity() {
 
         override fun onServiceDisconnected(arg0: ComponentName) {
             timerBound = false
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val (automaticBackups, backupPath) = getSettings(context)
+        if (!automaticBackups) return;
+        if (backupPath != null) {
+            scheduleBackups(context, backupPath)
         }
     }
 
@@ -173,6 +183,7 @@ class MainActivity : FlutterActivity() {
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, takeFlags)
             Log.d("auto backup", "uri=$uri")
+            scheduleBackups(context, uri.path!!)
 
             val parentDir = filesDir.parentFile
             val dbFolder = File(parentDir, "app_flutter").absolutePath
@@ -185,31 +196,6 @@ class MainActivity : FlutterActivity() {
             }
             db.update("settings", values, null, null)
             db.close()
-
-            val intent = Intent(context, BackupReceiver::class.java).apply {
-                putExtra("dbPath", savedPath)
-                putExtra("backupPath", uri.toString())
-                setPackage(context.packageName)
-            }
-            sendBroadcast(intent)
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                context, 0, intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val calendar: Calendar = Calendar.getInstance().apply {
-                timeInMillis = System.currentTimeMillis()
-                add(Calendar.MINUTE, 15)
-            }
-
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                pendingIntent
-            )
         }
     }
 
