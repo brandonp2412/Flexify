@@ -254,6 +254,7 @@ class _CardioPageState extends State<CardioPage> {
                     child: lineChart(rows, format, context, spots, curveLines),
                   ),
                 ),
+                const SizedBox(height: 75),
               ],
             );
           },

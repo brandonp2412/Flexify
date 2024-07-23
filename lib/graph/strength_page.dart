@@ -72,6 +72,50 @@ class _StrengthPageState extends State<StrengthPage> {
     );
   }
 
+  touchLine(
+    FlTouchEvent event,
+    LineTouchResponse? touchResponse,
+    List<StrengthData> rows,
+  ) async {
+    if (event is ScaleUpdateDetails) return;
+    if (event is! FlPanDownEvent) return;
+    if (metric != StrengthMetric.bestWeight) return;
+
+    if (DateTime.now().difference(lastTap) <
+        const Duration(milliseconds: 300)) {
+      final index = touchResponse?.lineBarSpots?[0].spotIndex;
+      if (index == null) return;
+      final row = rows[index];
+      final gymSet = await (db.gymSets.select()
+            ..where(
+              (tbl) => tbl.created.equals(row.created),
+            )
+            ..where((tbl) => tbl.reps.equals(row.reps))
+            ..where(
+              (tbl) => tbl.weight.equals(row.value),
+            )
+            ..where(
+              (tbl) => tbl.name.equals(widget.name),
+            )
+            ..limit(1))
+          .getSingle();
+
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditSetPage(
+            gymSet: gymSet,
+          ),
+        ),
+      );
+    }
+
+    setState(() {
+      lastTap = DateTime.now();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -301,44 +345,8 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                         lineTouchData: LineTouchData(
                           enabled: true,
-                          touchCallback: (event, touchResponse) async {
-                            if (event is ScaleUpdateDetails) return;
-                            if (event is! FlPanDownEvent) return;
-                            if (metric != StrengthMetric.bestWeight) return;
-                            if (DateTime.now().difference(lastTap) <
-                                const Duration(milliseconds: 300)) {
-                              final index =
-                                  touchResponse?.lineBarSpots?[0].spotIndex;
-                              if (index == null) return;
-                              final row = rows[index];
-                              final gymSet = await (db.gymSets.select()
-                                    ..where(
-                                      (tbl) => tbl.created.equals(row.created),
-                                    )
-                                    ..where((tbl) => tbl.reps.equals(row.reps))
-                                    ..where(
-                                      (tbl) => tbl.weight.equals(row.value),
-                                    )
-                                    ..where(
-                                      (tbl) => tbl.name.equals(widget.name),
-                                    )
-                                    ..limit(1))
-                                  .getSingle();
-
-                              if (!context.mounted) return;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditSetPage(
-                                    gymSet: gymSet,
-                                  ),
-                                ),
-                              );
-                            }
-                            setState(() {
-                              lastTap = DateTime.now();
-                            });
-                          },
+                          touchCallback: (event, touchResponse) =>
+                              touchLine(event, touchResponse, rows),
                           touchTooltipData: tooltipData(context, rows, format),
                         ),
                         lineBarsData: [
@@ -354,6 +362,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 75),
               ],
             );
           },
