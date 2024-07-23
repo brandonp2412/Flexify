@@ -26,10 +26,10 @@ fun scheduleBackups(context: Context, backupPath: String) {
     }
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    alarmManager.setRepeating(
+    alarmManager.setInexactRepeating(
         AlarmManager.RTC_WAKEUP,
         calendar.timeInMillis,
-        AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+        AlarmManager.INTERVAL_DAY,
         pendingIntent
     )
 }
