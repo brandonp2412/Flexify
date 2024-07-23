@@ -1,7 +1,7 @@
 name: flexify
 description: Track gym progress, visualize graphs, enjoy offline support & timers
 publish_to: none
-version: 1.1.60+169
+version: 1.1.61+170
 environment:
   sdk: '>=3.2.6 <4.0.0'
 dependencies:
@@ -71,7 +71,7 @@ msix_config:
   display_name: Flexify
   publisher_display_name: Frisbee Software
   identity_name: FrisbeeSoftware.Flexify
-  msix_version: 1.0.14.0
+  msix_version: 1.0.15.0
   logo_path: assets/ic_launcher.png
   trim_logo: false
   publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
