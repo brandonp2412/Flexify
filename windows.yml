@@ -18,6 +18,6 @@ services:
     volumes:
       - $HOME/windows:/shared
       - $HOME/.ssh/id_rsa.pub:/shared/id_rsa.pub
-      - ./scripts/build-windows.ps1:/shared/build-windows.ps1
+      - ./scripts/build-windows.ps1:/shared/build-flexify.ps1
       - ./window/oem:/oem
     stop_grace_period: 2m
