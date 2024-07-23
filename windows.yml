@@ -1,0 +1,23 @@
+services:
+  windows:
+    image: dockurr/windows
+    container_name: windows
+    environment:
+      VERSION: "win11"
+      USERNAME: bill
+      PASSWORD: gates
+    devices:
+      - /dev/kvm
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 3389:3389/tcp
+      - 3389:3389/udp
+      - 42069:22
+    volumes:
+      - $HOME/windows:/shared
+      - $HOME/.ssh/id_rsa.pub:/shared/id_rsa.pub
+      - ./scripts/build-windows.ps1:/shared/build-windows.ps1
+      - ./window/oem:/oem
+    stop_grace_period: 2m
