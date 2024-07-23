@@ -6,6 +6,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/settings_appearance.dart';
 import 'package:flexify/settings/settings_data.dart';
 import 'package:flexify/settings/settings_formats.dart';
+import 'package:flexify/settings/settings_plans.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/settings_timer.dart';
 import 'package:flexify/settings/settings_workout.dart';
@@ -42,14 +43,17 @@ class _SettingsPageState extends State<SettingsPage> {
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
     if (searchController.text.isNotEmpty) {
-      filtered.addAll(getAppearances(searchController.text, settings));
-      filtered.addAll(getFormats(searchController.text, settings.value));
+      filtered.addAll(getAppearanceSettings(searchController.text, settings));
+      filtered.addAll(getFormatSettings(searchController.text, settings.value));
       filtered.addAll(
-        getWorkouts(searchController.text, settings.value, maxSets, warmupSets),
+        getWorkoutSettings(
+          searchController.text,
+          settings.value,
+        ),
       );
       if (player != null)
         filtered.addAll(
-          getTimers(
+          getTimerSettings(
             searchController.text,
             settings.value,
             minutes,
@@ -58,7 +62,15 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         );
       filtered
-          .addAll(getSettingsData(searchController.text, settings, context));
+          .addAll(getDataSettings(searchController.text, settings, context));
+      filtered.addAll(
+        getPlanSettings(
+          searchController.text,
+          settings.value,
+          maxSets,
+          warmupSets,
+        ),
+      );
     }
 
     if (filtered.isEmpty)
@@ -124,6 +136,15 @@ class _SettingsPageState extends State<SettingsPage> {
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => const SettingsFormat(),
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.calendar_today),
+                          title: const Text("Plans"),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsPlans(),
                             ),
                           ),
                         ),

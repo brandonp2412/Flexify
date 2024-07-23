@@ -27,7 +27,7 @@ void tapBackup(bool value) async {
   }
 }
 
-List<Widget> getSettingsData(
+List<Widget> getDataSettings(
   String term,
   SettingsState settings,
   BuildContext context,
@@ -75,7 +75,7 @@ class SettingsData extends StatelessWidget {
         title: const Text("Data management"),
       ),
       body: ListView(
-        children: getSettingsData('', settings, context),
+        children: getDataSettings('', settings, context),
       ),
     );
   }

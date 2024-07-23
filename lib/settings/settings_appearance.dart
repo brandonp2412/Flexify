@@ -5,7 +5,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-List<Widget> getAppearances(String term, SettingsState settings) {
+List<Widget> getAppearanceSettings(String term, SettingsState settings) {
   return [
     if ('theme'.contains(term.toLowerCase()))
       Padding(
@@ -116,7 +116,7 @@ class SettingsAppearance extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          children: getAppearances('', settings),
+          children: getAppearanceSettings('', settings),
         ),
       ),
     );

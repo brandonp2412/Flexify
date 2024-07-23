@@ -8,7 +8,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-List<Widget> getTimers(
+List<Widget> getTimerSettings(
   String term,
   Setting settings,
   TextEditingController minutesController,
@@ -192,7 +192,7 @@ class _SettingsTimerState extends State<SettingsTimer> {
         title: const Text("Timers"),
       ),
       body: ListView(
-        children: getTimers(
+        children: getTimerSettings(
           '',
           settings.value,
           minutesController,

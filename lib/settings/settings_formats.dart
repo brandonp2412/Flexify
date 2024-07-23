@@ -29,7 +29,7 @@ final List<String> shortFormats = [
   'M.d.yy',
 ];
 
-List<Widget> getFormats(String term, Setting settings) {
+List<Widget> getFormatSettings(String term, Setting settings) {
   return [
     if ('strength unit'.contains(term.toLowerCase()))
       Padding(
@@ -128,7 +128,7 @@ class SettingsFormat extends StatelessWidget {
         title: const Text("Formats"),
       ),
       body: ListView(
-        children: getFormats('', settings.value),
+        children: getFormatSettings('', settings.value),
       ),
     );
   }
