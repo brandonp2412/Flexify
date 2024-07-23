@@ -55,7 +55,7 @@ flutter build apk --split-per-abi
 adb -d install "$apk"/app-arm64-v8a-release.apk || true
 flutter build apk
 project=$(basename "$PWD")
-mv "$apk"/app-release.apk "$apk/$project.apk"
+mv -f "$apk"/app-release.apk "$apk/$project.apk"
 flutter build appbundle
 
 mkdir -p build/native_assets/linux
@@ -67,7 +67,7 @@ rsync -a --delete --exclude-from=.gitignore ./* .gitignore \
   "$HOME/windows/$project-source"
 ssh windows 'Powershell -ExecutionPolicy bypass -File //host.lan/Data/build-windows.ps1'
 sudo chown -R "$USER" "$HOME/windows/$project"
-mv "$HOME/windows/$project/$project.msix" "$HOME/windows/$project.msix"
+mv -f "$HOME/windows/$project/$project.msix" "$HOME/windows/$project.msix"
 (cd "$HOME/windows/$project" && zip -r "$HOME/windows/$project-windows.zip" .)
 
 git push
