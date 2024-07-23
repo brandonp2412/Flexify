@@ -4,6 +4,7 @@ class Settings extends Table {
   TextColumn get alarmSound => text()();
   BoolColumn get automaticBackups =>
       boolean().withDefault(const Constant(false))();
+  TextColumn get backupPath => text().nullable()();
   TextColumn get cardioUnit => text()();
   BoolColumn get curveLines => boolean()();
   BoolColumn get durationEstimation =>

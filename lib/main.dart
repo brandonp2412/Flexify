@@ -25,7 +25,8 @@ Future<void> main() async {
 
 AppDatabase db = AppDatabase();
 
-MethodChannel timerChannel = const MethodChannel("com.presley.flexify/timer");
+MethodChannel androidChannel =
+    const MethodChannel("com.presley.flexify/android");
 
 Widget appProviders(SettingsState settingsState) => MultiProvider(
       providers: [

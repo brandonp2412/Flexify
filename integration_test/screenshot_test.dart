@@ -221,9 +221,9 @@ void main() {
 
   setUpAll(() async {
     app.db = AppDatabase();
-    app.timerChannel = const MethodChannel("com.presley.flexify/timer");
+    app.androidChannel = const MethodChannel("com.presley.flexify/timer");
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(app.timerChannel, (message) => null);
+        .setMockMethodCallHandler(app.androidChannel, (message) => null);
 
     await app.db.delete(app.db.gymSets).go();
     await app.db.delete(app.db.plans).go();

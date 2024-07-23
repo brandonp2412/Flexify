@@ -13,7 +13,7 @@ class TimerState extends ChangeNotifier {
   final player = AudioPlayer();
 
   TimerState() {
-    timerChannel.setMethodCallHandler((call) async {
+    androidChannel.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
         final newTimer = NativeTimerWrapper(
           Duration(milliseconds: call.arguments[0]),
@@ -41,7 +41,7 @@ class TimerState extends ChangeNotifier {
       'vibrate': vibrate,
     };
     if (Platform.isAndroid) {
-      timerChannel.invokeMethod('add', args);
+      androidChannel.invokeMethod('add', args);
     } else {
       next?.cancel();
       next = Timer(const Duration(minutes: 1), () => notify(null, alarmSound));
@@ -75,7 +75,7 @@ class TimerState extends ChangeNotifier {
       'vibrate': vibrate,
     };
     if (Platform.isAndroid) {
-      await timerChannel.invokeMethod('timer', args);
+      await androidChannel.invokeMethod('timer', args);
     } else {
       next?.cancel();
       next = Timer(rest, () => notify(title, alarmSound));
@@ -106,7 +106,7 @@ class TimerState extends ChangeNotifier {
     if (!Platform.isAndroid)
       player.stop();
     else
-      timerChannel.invokeMethod('stop');
+      androidChannel.invokeMethod('stop');
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {

@@ -1,23 +1,25 @@
 package com.presley.flexify
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.documentfile.provider.DocumentFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : FlutterActivity() {
@@ -60,22 +62,6 @@ class MainActivity : FlutterActivity() {
                 "pick" -> {
                     val dbPath = call.argument<String>("dbPath")!!
                     pick(dbPath)
-                }
-
-                "getProgress" -> {
-                    if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
-                        result.success(
-                            intArrayOf(
-                                timerService?.flexifyTimer!!.getRemainingSeconds(),
-                                timerService?.flexifyTimer!!.getDurationSeconds()
-                            )
-                        )
-                    else result.success(intArrayOf(0, 0))
-                }
-
-                "pick" -> {
-                    val args = call.arguments as ArrayList<*>
-                    pick(args[0] as String)
                 }
 
                 "getProgress" -> {
@@ -179,32 +165,51 @@ class MainActivity : FlutterActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         data?.data?.also { uri ->
+            if (requestCode != WRITE_REQUEST_CODE) return
+
             val contentResolver = applicationContext.contentResolver
-            val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val takeFlags: Int =
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, takeFlags)
+            Log.d("auto backup", "uri=$uri")
 
-            if (requestCode == WRITE_REQUEST_CODE) {
-                channel?.invokeMethod("picked", uri.toString())
+            val parentDir = filesDir.parentFile
+            val dbFolder = File(parentDir, "app_flutter").absolutePath
+            Log.d("auto backup", "dbFolder=$dbFolder")
+            val dbPath = File(dbFolder, "flexify.sqlite").absolutePath;
+            val dbHelper = DatabaseHelper(context, dbPath)
+            val db = dbHelper.writableDatabase;
+
+            val values = ContentValues().apply {
+                put("backup_path", uri.path)
             }
-        }
-    }
+            db.update("settings", values, null, null)
+            db.close()
 
-    private fun save() {
-        val dbPath = sharedPrefs.getString("flutter.dbPath", null)
-        val backupPath = sharedPrefs.getString("flutter.backupPath", null)
-        val backupUri = Uri.parse(backupPath)
-        Log.d("MainActivity.save", "dbPath=$dbPath,backupUri=$backupUri")
-
-        val dbFile = File(dbPath!!)
-        val dir = DocumentFile.fromTreeUri(context, backupUri)
-        var file = dir?.findFile("flexify.sqlite")
-        if (file == null) file = dir?.createFile("application/x-sqlite3", "flexify.sqlite")
-        val outputStream = context.contentResolver.openOutputStream(file!!.uri)
-
-        dbFile.inputStream().use { input ->
-            outputStream?.use { output ->
-                input.copyTo(output)
+            val intent = Intent(context, BackupReceiver::class.java).apply {
+                putExtra("dbPath", savedPath)
+                putExtra("backupPath", uri.toString())
+                setPackage(context.packageName)
             }
+            sendBroadcast(intent)
+
+            val pendingIntent = PendingIntent.getBroadcast(
+                context, 0, intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                add(Calendar.MINUTE, 15)
+            }
+
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                pendingIntent
+            )
         }
     }
 

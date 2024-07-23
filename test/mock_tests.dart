@@ -5,6 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 mockTests() async {
   TestWidgetsFlutterBinding.ensureInitialized();
-  timerChannel = const MethodChannel("com.presley.flexify/timer");
+  androidChannel = const MethodChannel("com.presley.flexify/timer");
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
 }
