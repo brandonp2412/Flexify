@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
@@ -49,13 +48,29 @@ class MainActivity : FlutterActivity() {
         channel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "timer" -> {
-                    val title = call.argument<String>("title")
-                    val timestamp = call.argument<Long>("timestamp")
+                    val title = call.argument<String>("title")!!
+                    val timestamp = call.argument<Long>("timestamp")!!
                     val threeMinutesThirtySeconds = 210000
                     val restMs = call.argument<Int>("restMs") ?: threeMinutesThirtySeconds
-                    val alarmSound = call.argument<String>("alarmSound")
-                    val vibrate = call.argument<Boolean>("vibrate")
-                    timer(restMs, title!!, timestamp!!, alarmSound!!, vibrate!!)
+                    val alarmSound = call.argument<String>("alarmSound")!!
+                    val vibrate = call.argument<Boolean>("vibrate")!!
+                    timer(restMs, title, timestamp, alarmSound, vibrate)
+                }
+
+                "pick" -> {
+                    val dbPath = call.argument<String>("dbPath")!!
+                    pick(dbPath)
+                }
+
+                "getProgress" -> {
+                    if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
+                        result.success(
+                            intArrayOf(
+                                timerService?.flexifyTimer!!.getRemainingSeconds(),
+                                timerService?.flexifyTimer!!.getDurationSeconds()
+                            )
+                        )
+                    else result.success(intArrayOf(0, 0))
                 }
 
                 "pick" -> {
@@ -156,11 +171,6 @@ class MainActivity : FlutterActivity() {
     private fun pick(path: String) {
         Log.d("MainActivity.pick", "dbPath=$path")
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        sharedPrefs.edit().apply {
-            putString("flutter.dbPath", path)
-            commit()
-        }
-
         savedPath = path
         activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
     }
@@ -174,11 +184,7 @@ class MainActivity : FlutterActivity() {
             contentResolver.takePersistableUriPermission(uri, takeFlags)
 
             if (requestCode == WRITE_REQUEST_CODE) {
-                sharedPrefs.edit().apply {
-                    putString("flutter.backupPath", uri.toString())
-                    commit()
-                }
-                save()
+                channel?.invokeMethod("picked", uri.toString())
             }
         }
     }
@@ -212,7 +218,6 @@ class MainActivity : FlutterActivity() {
     }
 
     companion object {
-        lateinit var sharedPrefs: SharedPreferences
         const val FLUTTER_CHANNEL = "com.presley.flexify/android"
         const val WRITE_REQUEST_CODE = 43
         const val TICK_BROADCAST = "tick-event"

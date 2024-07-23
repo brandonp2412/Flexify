@@ -1,1 +1,1 @@
-- Change progress indicators for plans
+- Change progress bars in plans
