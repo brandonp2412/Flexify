@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import java.io.File
 import java.util.Calendar
@@ -16,8 +17,7 @@ class UpdateReceiver : BroadcastReceiver() {
             val dbFolder = File(parentDir, "app_flutter").absolutePath
             Log.d("auto backup", "dbFolder=$dbFolder")
             val dbPath = File(dbFolder, "flexify.sqlite").absolutePath;
-            val dbHelper = DatabaseHelper(context, dbPath)
-            val db = dbHelper.readableDatabase;
+            val db = SQLiteDatabase.openDatabase(dbPath, null, 0)
 
             var backupPath: String? = null
             var automaticBackups = false

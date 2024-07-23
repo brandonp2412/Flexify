@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -177,8 +178,7 @@ class MainActivity : FlutterActivity() {
             val dbFolder = File(parentDir, "app_flutter").absolutePath
             Log.d("auto backup", "dbFolder=$dbFolder")
             val dbPath = File(dbFolder, "flexify.sqlite").absolutePath;
-            val dbHelper = DatabaseHelper(context, dbPath)
-            val db = dbHelper.writableDatabase;
+            val db = SQLiteDatabase.openDatabase(dbPath, null, 0)
 
             val values = ContentValues().apply {
                 put("backup_path", uri.path)
