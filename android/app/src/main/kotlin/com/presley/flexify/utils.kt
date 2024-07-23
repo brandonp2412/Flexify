@@ -38,8 +38,10 @@ fun getSettings(context: Context): Pair<Boolean, String?> {
     val parentDir = context.filesDir.parentFile
     val dbFolder = File(parentDir, "app_flutter").absolutePath
     Log.d("auto backup", "dbFolder=$dbFolder")
-    val dbPath = File(dbFolder, "flexify.sqlite").absolutePath;
-    val db = SQLiteDatabase.openDatabase(dbPath, null, 0)
+    val dbFile = File(dbFolder, "flexify.sqlite");
+    if (!dbFile.exists()) return Pair(false, null)
+
+    val db = SQLiteDatabase.openDatabase(dbFile.absolutePath, null, 0)
 
     var backupPath: String? = null
     var automaticBackups = false
