@@ -2,6 +2,15 @@
 
 set -ex
 
+dart_version=$(grep -o 'schemaVersion => [0-9]*' lib/database/database.dart | cut -d ' ' -f 3)
+kotlin_db="android/app/src/main/kotlin/com/presley/flexify/DatabaseHelper.kt"
+sed -i "s/DATABASE_VERSION = [0-9]*/DATABASE_VERSION = $dart_version/" $kotlin_db
+
+if [ -n "$(git diff --stat $kotlin_db)" ]; then
+  git add $kotlin_db
+  git commit -m "Bumped kotlin db version"
+fi
+
 IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
