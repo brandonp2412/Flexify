@@ -5,7 +5,7 @@ import 'package:flexify/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
-  db = AppDatabase(executor: NativeDatabase.memory());
+  db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
   test('gym sets can be created', () async {
     final id = await db.gymSets.insertOne(

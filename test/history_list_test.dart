@@ -16,7 +16,7 @@ void main() async {
   await mockTests();
 
   testWidgets('HistoryList', (WidgetTester tester) async {
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(

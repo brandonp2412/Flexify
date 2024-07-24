@@ -220,7 +220,7 @@ void main() {
     throw "FLEXIFY_DEVICE_TYPE must be set, so integration test knows what screenshots to take";
 
   setUpAll(() async {
-    app.db = AppDatabase();
+    app.db = AppDatabase(logStatements: false);
     app.androidChannel = const MethodChannel("com.presley.flexify/timer");
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.androidChannel, (message) => null);

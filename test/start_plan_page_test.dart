@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -51,7 +51,7 @@ void main() async {
 
   testWidgets('StartPlanPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -85,7 +85,7 @@ void main() async {
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',

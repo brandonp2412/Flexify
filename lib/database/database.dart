@@ -10,7 +10,6 @@ import 'package:flexify/database/plans.dart';
 import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/database/settings.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -20,7 +19,7 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'database.g.dart';
 
-LazyDatabase openConnection() {
+LazyDatabase openConnection(bool logStatements) {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'flexify.sqlite'));
@@ -33,14 +32,17 @@ LazyDatabase openConnection() {
     sqlite3.tempDirectory = cachebase;
     return NativeDatabase.createInBackground(
       file,
-      logStatements: kDebugMode ? true : false,
+      logStatements: logStatements,
     );
   });
 }
 
 @DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase({QueryExecutor? executor}) : super(executor ?? openConnection());
+  final bool logStatements;
+
+  AppDatabase({QueryExecutor? executor, required this.logStatements})
+      : super(executor ?? openConnection(logStatements));
 
   @override
   MigrationStrategy get migration {

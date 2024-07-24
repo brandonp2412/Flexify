@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -39,7 +39,7 @@ void main() async {
 
   testWidgets('GraphsPage add button', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -63,7 +63,7 @@ void main() async {
 
   testWidgets('GraphsPage tap tile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -89,7 +89,7 @@ void main() async {
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -119,7 +119,7 @@ void main() async {
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -145,7 +145,7 @@ void main() async {
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(

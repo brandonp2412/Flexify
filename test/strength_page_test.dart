@@ -17,7 +17,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('StrengthPage displays', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(
@@ -68,7 +68,7 @@ void main() async {
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(
@@ -119,7 +119,7 @@ void main() async {
 
   testWidgets('StrengthPage selects metrics', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(

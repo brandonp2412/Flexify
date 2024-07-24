@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   render(WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -63,7 +63,7 @@ void main() async {
   testWidgets('SettingsPage shows images', (WidgetTester tester) async {
     TestWidgetsFlutterBinding.ensureInitialized();
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     await (db.settings.update())
         .write(const SettingsCompanion(showImages: Value(false)));
     final oldSettings = await (db.settings.select()..limit(1)).getSingle();

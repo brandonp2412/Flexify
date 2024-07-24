@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -39,7 +39,7 @@ void main() async {
 
   testWidgets('HistoryPage add button', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -63,7 +63,7 @@ void main() async {
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -102,7 +102,7 @@ void main() async {
 
   testWidgets('HistoryPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -131,7 +131,7 @@ void main() async {
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -170,7 +170,7 @@ void main() async {
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory());
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
