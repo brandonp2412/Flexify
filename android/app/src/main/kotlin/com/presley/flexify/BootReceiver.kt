@@ -8,8 +8,8 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             val (automaticBackups, backupPath) = getSettings(context)
-            if (!automaticBackups) return
-            scheduleBackups(context, backupPath!!)
+            if (!automaticBackups || backupPath == null) return
+            scheduleBackups(context)
         }
     }
 }

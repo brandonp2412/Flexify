@@ -1,8 +1,6 @@
 package com.presley.flexify
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.ContentValues
@@ -21,7 +19,6 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
-import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : FlutterActivity() {
@@ -45,9 +42,9 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val (automaticBackups, backupPath) = getSettings(context)
-        if (!automaticBackups) return;
+        if (!automaticBackups) return
         if (backupPath != null) {
-            scheduleBackups(context, backupPath)
+            scheduleBackups(context)
         }
     }
 
@@ -185,16 +182,16 @@ class MainActivity : FlutterActivity() {
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, takeFlags)
             Log.d("auto backup", "uri=$uri")
-            scheduleBackups(context, uri.path!!)
+            scheduleBackups(context)
 
             val parentDir = filesDir.parentFile
             val dbFolder = File(parentDir, "app_flutter").absolutePath
             Log.d("auto backup", "dbFolder=$dbFolder")
-            val dbPath = File(dbFolder, "flexify.sqlite").absolutePath;
+            val dbPath = File(dbFolder, "flexify.sqlite").absolutePath
             val db = SQLiteDatabase.openDatabase(dbPath, null, 0)
 
             val values = ContentValues().apply {
-                put("backup_path", uri.path)
+                put("backup_path", uri.toString())
             }
             db.update("settings", values, null, null)
             db.close()

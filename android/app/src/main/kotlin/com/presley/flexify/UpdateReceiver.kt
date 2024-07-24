@@ -8,8 +8,8 @@ class UpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.intent.action.MY_PACKAGE_REPLACED") {
             val (automaticBackups, backupPath) = getSettings(context)
-            if (!automaticBackups) return
-            scheduleBackups(context, backupPath!!)
+            if (!automaticBackups || backupPath == null) return
+            scheduleBackups(context)
         }
     }
 }

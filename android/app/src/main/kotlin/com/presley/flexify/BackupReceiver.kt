@@ -26,9 +26,7 @@ class BackupReceiver : BroadcastReceiver() {
         Log.d("BackupReceiver", "onReceive")
         if (context == null) return
 
-        val dbPath = intent!!.extras!!.getString("dbPath")
-        val backupPath = intent.extras!!.getString("backupPath")
-        Log.d("BackupReceiver", "dbPath=$dbPath,backupPath=$backupPath")
+        val (enabled, backupPath) = getSettings(context)
         val backupUri = Uri.parse(backupPath)
 
         val channelId = "backup_channel"
@@ -84,11 +82,14 @@ class BackupReceiver : BroadcastReceiver() {
             notificationBuilder.addAction(R.drawable.ic_baseline_stop_24, "Share", pendingShare)
 
         val outputStream = context.contentResolver.openOutputStream(file.uri)
-        val dbFile = File(dbPath!!)
+        val parentDir = context.filesDir.parentFile
+        val dbFolder = File(parentDir, "app_flutter").absolutePath
+        val dbFile = File(dbFolder, "flexify.sqlite")
+
         dbFile.inputStream().use { input ->
             outputStream?.use { output ->
                 input.copyTo(output)
-                notificationBuilder = notificationBuilder.setContentTitle("Finished")
+                notificationBuilder = notificationBuilder.setContentTitle("Backed up database")
                 notificationManager.notify(2, notificationBuilder.build())
             }
         }

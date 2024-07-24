@@ -9,9 +9,8 @@ import android.util.Log
 import java.io.File
 import java.util.Calendar
 
-fun scheduleBackups(context: Context, backupPath: String) {
+fun scheduleBackups(context: Context) {
     val backupIntent = Intent(context, BackupReceiver::class.java).apply {
-        putExtra("backupPath", backupPath)
         setPackage(context.packageName)
     }
 
@@ -29,7 +28,7 @@ fun scheduleBackups(context: Context, backupPath: String) {
     alarmManager.setInexactRepeating(
         AlarmManager.RTC_WAKEUP,
         calendar.timeInMillis,
-        AlarmManager.INTERVAL_DAY,
+        AlarmManager.INTERVAL_FIFTEEN_MINUTES,
         pendingIntent
     )
 }
@@ -38,7 +37,7 @@ fun getSettings(context: Context): Pair<Boolean, String?> {
     val parentDir = context.filesDir.parentFile
     val dbFolder = File(parentDir, "app_flutter").absolutePath
     Log.d("auto backup", "dbFolder=$dbFolder")
-    val dbFile = File(dbFolder, "flexify.sqlite");
+    val dbFile = File(dbFolder, "flexify.sqlite")
     if (!dbFile.exists()) return Pair(false, null)
 
     val db = SQLiteDatabase.openDatabase(dbFile.absolutePath, null, 0)
