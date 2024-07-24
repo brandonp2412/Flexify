@@ -8,7 +8,7 @@ case "$(uname -s)" in
   Linux*)
     echo "Launching $device_type..."
     $TERMINAL -t Hide emulator -avd "$device_type" -feature -Vulkan \
-      -no-boot-anim -noaudio &> /dev/null &
+      -no-boot-anim -noaudio -no-window &> /dev/null &
 
     while true; do  
       for device in $(adb devices | awk 'NR>1{print $1}' | grep emulator); do
