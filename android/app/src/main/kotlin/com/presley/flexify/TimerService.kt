@@ -47,7 +47,6 @@ class TimerService : Service() {
     var mainActivityVisible = true
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
-
     override fun onBind(intent: Intent): IBinder {
         return binder
     }
@@ -189,8 +188,8 @@ class TimerService : Service() {
         alarmSound = intent?.getStringExtra("alarmSound")
             ?: "android.resource://$packageName/${R.raw.argon}"
         shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
-        val duration = intent?.getIntExtra("milliseconds", 0) ?: (3 * 60 * 1000);
-        val timestamp = intent?.getLongExtra("timeStamp", 0) ?: 0;
+        val duration = intent?.getIntExtra("milliseconds", 0) ?: (3 * 60 * 1000)
+        val timestamp = intent?.getLongExtra("timeStamp", 0) ?: 0
         startTimer(duration.toLong(), timestamp)
     }
 
