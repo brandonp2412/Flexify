@@ -156,12 +156,14 @@ class MainActivity : FlutterActivity() {
                 timerConnection,
                 Context.BIND_AUTO_CREATE
             )
+        }.apply {
+            putExtra("milliseconds", durationMs)
+            putExtra("description", description)
+            putExtra("timeStamp", timeStamp)
+            putExtra("alarmSound", alarmSound)
+            putExtra("vibrate", vibrate)
         }
-        intent.putExtra("milliseconds", durationMs)
-        intent.putExtra("description", description)
-        intent.putExtra("timeStamp", timeStamp)
-        intent.putExtra("alarmSound", alarmSound)
-        intent.putExtra("vibrate", vibrate)
+
         context.startForegroundService(intent)
     }
 

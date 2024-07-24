@@ -185,13 +185,13 @@ class TimerService : Service() {
     }
 
     private fun onTimerStart(intent: Intent?) {
-        currentDescription = intent?.getStringExtra("description").toString()
+        currentDescription = intent?.getStringExtra("description") ?: "Alarm"
         alarmSound = intent?.getStringExtra("alarmSound")
+            ?: "android.resource://$packageName/${R.raw.argon}"
         shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
-        startTimer(
-            (intent?.getIntExtra("milliseconds", 0) ?: 0).toLong(),
-            intent?.getLongExtra("timeStamp", 0) ?: 0
-        )
+        val duration = intent?.getIntExtra("milliseconds", 0) ?: (3 * 60 * 1000);
+        val timestamp = intent?.getLongExtra("timeStamp", 0) ?: 0;
+        startTimer(duration.toLong(), timestamp)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -236,16 +236,20 @@ class TimerService : Service() {
     }
 
     private fun playSound() {
-        mediaPlayer = if (alarmSound?.isNotEmpty() == true)
-            MediaPlayer.create(applicationContext, Uri.parse(alarmSound)).apply {
-                start()
-                setOnCompletionListener { vibrator?.cancel() }
-            }
-        else
-            MediaPlayer.create(applicationContext, R.raw.argon).apply {
-                start()
-                setOnCompletionListener { vibrator?.cancel() }
-            }
+        try {
+            mediaPlayer = if (alarmSound?.isNotEmpty() == true)
+                MediaPlayer.create(applicationContext, Uri.parse(alarmSound)).apply {
+                    start()
+                    setOnCompletionListener { vibrator?.cancel() }
+                }
+            else
+                MediaPlayer.create(applicationContext, R.raw.argon).apply {
+                    start()
+                    setOnCompletionListener { vibrator?.cancel() }
+                }
+        } catch (e: Exception) {
+            Log.e("TimerService", "Invalid URI or non-existing file: $alarmSound", e)
+        }
     }
 
     private fun getProgress(timeLeftInSeconds: Int): NotificationCompat.Builder {
