@@ -8,6 +8,7 @@ import 'package:flexify/settings/settings_data.dart';
 import 'package:flexify/settings/settings_formats.dart';
 import 'package:flexify/settings/settings_plans.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/settings/settings_tabs.dart';
 import 'package:flexify/settings/settings_timer.dart';
 import 'package:flexify/settings/settings_workout.dart';
 import 'package:flutter/material.dart';
@@ -131,6 +132,15 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         ListTile(
+                          leading: const Icon(Icons.storage),
+                          title: const Text("Data management"),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsData(),
+                            ),
+                          ),
+                        ),
+                        ListTile(
                           leading: const Icon(Icons.format_bold),
                           title: const Text("Formats"),
                           onTap: () => Navigator.of(context).push(
@@ -149,11 +159,11 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         ListTile(
-                          leading: const Icon(Icons.fitness_center),
-                          title: const Text("Workouts"),
+                          leading: const Icon(Icons.tab_sharp),
+                          title: const Text("Tabs"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsWorkout(),
+                              builder: (context) => const SettingsTabs(),
                             ),
                           ),
                         ),
@@ -167,11 +177,11 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         ListTile(
-                          leading: const Icon(Icons.storage),
-                          title: const Text("Data management"),
+                          leading: const Icon(Icons.fitness_center),
+                          title: const Text("Workouts"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsData(),
+                              builder: (context) => const SettingsWorkout(),
                             ),
                           ),
                         ),

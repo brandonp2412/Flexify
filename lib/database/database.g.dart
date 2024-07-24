@@ -1131,16 +1131,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("show_body_weight" IN (0, 1))'),
       defaultValue: const Constant(true));
-  static const VerificationMeta _showHistoryTabMeta =
-      const VerificationMeta('showHistoryTab');
-  @override
-  late final GeneratedColumn<bool> showHistoryTab = GeneratedColumn<bool>(
-      'show_history_tab', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_history_tab" IN (0, 1))'),
-      defaultValue: const Constant(true));
   static const VerificationMeta _showImagesMeta =
       const VerificationMeta('showImages');
   @override
@@ -1150,16 +1140,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showTimerTabMeta =
-      const VerificationMeta('showTimerTab');
-  @override
-  late final GeneratedColumn<bool> showTimerTab = GeneratedColumn<bool>(
-      'show_timer_tab', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_timer_tab" IN (0, 1))'),
       defaultValue: const Constant(true));
   static const VerificationMeta _showUnitsMeta =
       const VerificationMeta('showUnits');
@@ -1185,6 +1165,14 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("system_colors" IN (0, 1))'));
+  static const VerificationMeta _tabsMeta = const VerificationMeta('tabs');
+  @override
+  late final GeneratedColumn<String> tabs = GeneratedColumn<String>(
+      'tabs', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue:
+          const Constant("HistoryPage,PlansPage,GraphsPage,TimerPage"));
   static const VerificationMeta _themeModeMeta =
       const VerificationMeta('themeMode');
   @override
@@ -1230,12 +1218,11 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         restTimers,
         shortDateFormat,
         showBodyWeight,
-        showHistoryTab,
         showImages,
-        showTimerTab,
         showUnits,
         strengthUnit,
         systemColors,
+        tabs,
         themeMode,
         timerDuration,
         vibrate,
@@ -1362,23 +1349,11 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           showBodyWeight.isAcceptableOrUnknown(
               data['show_body_weight']!, _showBodyWeightMeta));
     }
-    if (data.containsKey('show_history_tab')) {
-      context.handle(
-          _showHistoryTabMeta,
-          showHistoryTab.isAcceptableOrUnknown(
-              data['show_history_tab']!, _showHistoryTabMeta));
-    }
     if (data.containsKey('show_images')) {
       context.handle(
           _showImagesMeta,
           showImages.isAcceptableOrUnknown(
               data['show_images']!, _showImagesMeta));
-    }
-    if (data.containsKey('show_timer_tab')) {
-      context.handle(
-          _showTimerTabMeta,
-          showTimerTab.isAcceptableOrUnknown(
-              data['show_timer_tab']!, _showTimerTabMeta));
     }
     if (data.containsKey('show_units')) {
       context.handle(_showUnitsMeta,
@@ -1401,6 +1376,10 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
               data['system_colors']!, _systemColorsMeta));
     } else if (isInserting) {
       context.missing(_systemColorsMeta);
+    }
+    if (data.containsKey('tabs')) {
+      context.handle(
+          _tabsMeta, tabs.isAcceptableOrUnknown(data['tabs']!, _tabsMeta));
     }
     if (data.containsKey('theme_mode')) {
       context.handle(_themeModeMeta,
@@ -1469,18 +1448,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
       showBodyWeight: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_body_weight'])!,
-      showHistoryTab: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_history_tab'])!,
       showImages: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
-      showTimerTab: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_timer_tab'])!,
       showUnits: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
       strengthUnit: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
       systemColors: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}system_colors'])!,
+      tabs: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tabs'])!,
       themeMode: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}theme_mode'])!,
       timerDuration: attachedDatabase.typeMapping
@@ -1515,12 +1492,11 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool restTimers;
   final String shortDateFormat;
   final bool showBodyWeight;
-  final bool showHistoryTab;
   final bool showImages;
-  final bool showTimerTab;
   final bool showUnits;
   final String strengthUnit;
   final bool systemColors;
+  final String tabs;
   final String themeMode;
   final int timerDuration;
   final bool vibrate;
@@ -1542,12 +1518,11 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.restTimers,
       required this.shortDateFormat,
       required this.showBodyWeight,
-      required this.showHistoryTab,
       required this.showImages,
-      required this.showTimerTab,
       required this.showUnits,
       required this.strengthUnit,
       required this.systemColors,
+      required this.tabs,
       required this.themeMode,
       required this.timerDuration,
       required this.vibrate,
@@ -1573,12 +1548,11 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['rest_timers'] = Variable<bool>(restTimers);
     map['short_date_format'] = Variable<String>(shortDateFormat);
     map['show_body_weight'] = Variable<bool>(showBodyWeight);
-    map['show_history_tab'] = Variable<bool>(showHistoryTab);
     map['show_images'] = Variable<bool>(showImages);
-    map['show_timer_tab'] = Variable<bool>(showTimerTab);
     map['show_units'] = Variable<bool>(showUnits);
     map['strength_unit'] = Variable<String>(strengthUnit);
     map['system_colors'] = Variable<bool>(systemColors);
+    map['tabs'] = Variable<String>(tabs);
     map['theme_mode'] = Variable<String>(themeMode);
     map['timer_duration'] = Variable<int>(timerDuration);
     map['vibrate'] = Variable<bool>(vibrate);
@@ -1608,12 +1582,11 @@ class Setting extends DataClass implements Insertable<Setting> {
       restTimers: Value(restTimers),
       shortDateFormat: Value(shortDateFormat),
       showBodyWeight: Value(showBodyWeight),
-      showHistoryTab: Value(showHistoryTab),
       showImages: Value(showImages),
-      showTimerTab: Value(showTimerTab),
       showUnits: Value(showUnits),
       strengthUnit: Value(strengthUnit),
       systemColors: Value(systemColors),
+      tabs: Value(tabs),
       themeMode: Value(themeMode),
       timerDuration: Value(timerDuration),
       vibrate: Value(vibrate),
@@ -1644,12 +1617,11 @@ class Setting extends DataClass implements Insertable<Setting> {
       restTimers: serializer.fromJson<bool>(json['restTimers']),
       shortDateFormat: serializer.fromJson<String>(json['shortDateFormat']),
       showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
-      showHistoryTab: serializer.fromJson<bool>(json['showHistoryTab']),
       showImages: serializer.fromJson<bool>(json['showImages']),
-      showTimerTab: serializer.fromJson<bool>(json['showTimerTab']),
       showUnits: serializer.fromJson<bool>(json['showUnits']),
       strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
       systemColors: serializer.fromJson<bool>(json['systemColors']),
+      tabs: serializer.fromJson<String>(json['tabs']),
       themeMode: serializer.fromJson<String>(json['themeMode']),
       timerDuration: serializer.fromJson<int>(json['timerDuration']),
       vibrate: serializer.fromJson<bool>(json['vibrate']),
@@ -1676,12 +1648,11 @@ class Setting extends DataClass implements Insertable<Setting> {
       'restTimers': serializer.toJson<bool>(restTimers),
       'shortDateFormat': serializer.toJson<String>(shortDateFormat),
       'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
-      'showHistoryTab': serializer.toJson<bool>(showHistoryTab),
       'showImages': serializer.toJson<bool>(showImages),
-      'showTimerTab': serializer.toJson<bool>(showTimerTab),
       'showUnits': serializer.toJson<bool>(showUnits),
       'strengthUnit': serializer.toJson<String>(strengthUnit),
       'systemColors': serializer.toJson<bool>(systemColors),
+      'tabs': serializer.toJson<String>(tabs),
       'themeMode': serializer.toJson<String>(themeMode),
       'timerDuration': serializer.toJson<int>(timerDuration),
       'vibrate': serializer.toJson<bool>(vibrate),
@@ -1706,12 +1677,11 @@ class Setting extends DataClass implements Insertable<Setting> {
           bool? restTimers,
           String? shortDateFormat,
           bool? showBodyWeight,
-          bool? showHistoryTab,
           bool? showImages,
-          bool? showTimerTab,
           bool? showUnits,
           String? strengthUnit,
           bool? systemColors,
+          String? tabs,
           String? themeMode,
           int? timerDuration,
           bool? vibrate,
@@ -1733,12 +1703,11 @@ class Setting extends DataClass implements Insertable<Setting> {
         restTimers: restTimers ?? this.restTimers,
         shortDateFormat: shortDateFormat ?? this.shortDateFormat,
         showBodyWeight: showBodyWeight ?? this.showBodyWeight,
-        showHistoryTab: showHistoryTab ?? this.showHistoryTab,
         showImages: showImages ?? this.showImages,
-        showTimerTab: showTimerTab ?? this.showTimerTab,
         showUnits: showUnits ?? this.showUnits,
         strengthUnit: strengthUnit ?? this.strengthUnit,
         systemColors: systemColors ?? this.systemColors,
+        tabs: tabs ?? this.tabs,
         themeMode: themeMode ?? this.themeMode,
         timerDuration: timerDuration ?? this.timerDuration,
         vibrate: vibrate ?? this.vibrate,
@@ -1763,12 +1732,11 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('restTimers: $restTimers, ')
           ..write('shortDateFormat: $shortDateFormat, ')
           ..write('showBodyWeight: $showBodyWeight, ')
-          ..write('showHistoryTab: $showHistoryTab, ')
           ..write('showImages: $showImages, ')
-          ..write('showTimerTab: $showTimerTab, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
+          ..write('tabs: $tabs, ')
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
@@ -1795,12 +1763,11 @@ class Setting extends DataClass implements Insertable<Setting> {
         restTimers,
         shortDateFormat,
         showBodyWeight,
-        showHistoryTab,
         showImages,
-        showTimerTab,
         showUnits,
         strengthUnit,
         systemColors,
+        tabs,
         themeMode,
         timerDuration,
         vibrate,
@@ -1826,12 +1793,11 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.restTimers == this.restTimers &&
           other.shortDateFormat == this.shortDateFormat &&
           other.showBodyWeight == this.showBodyWeight &&
-          other.showHistoryTab == this.showHistoryTab &&
           other.showImages == this.showImages &&
-          other.showTimerTab == this.showTimerTab &&
           other.showUnits == this.showUnits &&
           other.strengthUnit == this.strengthUnit &&
           other.systemColors == this.systemColors &&
+          other.tabs == this.tabs &&
           other.themeMode == this.themeMode &&
           other.timerDuration == this.timerDuration &&
           other.vibrate == this.vibrate &&
@@ -1855,12 +1821,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> restTimers;
   final Value<String> shortDateFormat;
   final Value<bool> showBodyWeight;
-  final Value<bool> showHistoryTab;
   final Value<bool> showImages;
-  final Value<bool> showTimerTab;
   final Value<bool> showUnits;
   final Value<String> strengthUnit;
   final Value<bool> systemColors;
+  final Value<String> tabs;
   final Value<String> themeMode;
   final Value<int> timerDuration;
   final Value<bool> vibrate;
@@ -1882,12 +1847,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.restTimers = const Value.absent(),
     this.shortDateFormat = const Value.absent(),
     this.showBodyWeight = const Value.absent(),
-    this.showHistoryTab = const Value.absent(),
     this.showImages = const Value.absent(),
-    this.showTimerTab = const Value.absent(),
     this.showUnits = const Value.absent(),
     this.strengthUnit = const Value.absent(),
     this.systemColors = const Value.absent(),
+    this.tabs = const Value.absent(),
     this.themeMode = const Value.absent(),
     this.timerDuration = const Value.absent(),
     this.vibrate = const Value.absent(),
@@ -1910,12 +1874,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required bool restTimers,
     required String shortDateFormat,
     this.showBodyWeight = const Value.absent(),
-    this.showHistoryTab = const Value.absent(),
     this.showImages = const Value.absent(),
-    this.showTimerTab = const Value.absent(),
     required bool showUnits,
     required String strengthUnit,
     required bool systemColors,
+    this.tabs = const Value.absent(),
     required String themeMode,
     required int timerDuration,
     required bool vibrate,
@@ -1953,12 +1916,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? restTimers,
     Expression<String>? shortDateFormat,
     Expression<bool>? showBodyWeight,
-    Expression<bool>? showHistoryTab,
     Expression<bool>? showImages,
-    Expression<bool>? showTimerTab,
     Expression<bool>? showUnits,
     Expression<String>? strengthUnit,
     Expression<bool>? systemColors,
+    Expression<String>? tabs,
     Expression<String>? themeMode,
     Expression<int>? timerDuration,
     Expression<bool>? vibrate,
@@ -1982,12 +1944,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (restTimers != null) 'rest_timers': restTimers,
       if (shortDateFormat != null) 'short_date_format': shortDateFormat,
       if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
-      if (showHistoryTab != null) 'show_history_tab': showHistoryTab,
       if (showImages != null) 'show_images': showImages,
-      if (showTimerTab != null) 'show_timer_tab': showTimerTab,
       if (showUnits != null) 'show_units': showUnits,
       if (strengthUnit != null) 'strength_unit': strengthUnit,
       if (systemColors != null) 'system_colors': systemColors,
+      if (tabs != null) 'tabs': tabs,
       if (themeMode != null) 'theme_mode': themeMode,
       if (timerDuration != null) 'timer_duration': timerDuration,
       if (vibrate != null) 'vibrate': vibrate,
@@ -2012,12 +1973,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<bool>? restTimers,
       Value<String>? shortDateFormat,
       Value<bool>? showBodyWeight,
-      Value<bool>? showHistoryTab,
       Value<bool>? showImages,
-      Value<bool>? showTimerTab,
       Value<bool>? showUnits,
       Value<String>? strengthUnit,
       Value<bool>? systemColors,
+      Value<String>? tabs,
       Value<String>? themeMode,
       Value<int>? timerDuration,
       Value<bool>? vibrate,
@@ -2039,12 +1999,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       restTimers: restTimers ?? this.restTimers,
       shortDateFormat: shortDateFormat ?? this.shortDateFormat,
       showBodyWeight: showBodyWeight ?? this.showBodyWeight,
-      showHistoryTab: showHistoryTab ?? this.showHistoryTab,
       showImages: showImages ?? this.showImages,
-      showTimerTab: showTimerTab ?? this.showTimerTab,
       showUnits: showUnits ?? this.showUnits,
       strengthUnit: strengthUnit ?? this.strengthUnit,
       systemColors: systemColors ?? this.systemColors,
+      tabs: tabs ?? this.tabs,
       themeMode: themeMode ?? this.themeMode,
       timerDuration: timerDuration ?? this.timerDuration,
       vibrate: vibrate ?? this.vibrate,
@@ -2103,14 +2062,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (showBodyWeight.present) {
       map['show_body_weight'] = Variable<bool>(showBodyWeight.value);
     }
-    if (showHistoryTab.present) {
-      map['show_history_tab'] = Variable<bool>(showHistoryTab.value);
-    }
     if (showImages.present) {
       map['show_images'] = Variable<bool>(showImages.value);
-    }
-    if (showTimerTab.present) {
-      map['show_timer_tab'] = Variable<bool>(showTimerTab.value);
     }
     if (showUnits.present) {
       map['show_units'] = Variable<bool>(showUnits.value);
@@ -2120,6 +2073,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (systemColors.present) {
       map['system_colors'] = Variable<bool>(systemColors.value);
+    }
+    if (tabs.present) {
+      map['tabs'] = Variable<String>(tabs.value);
     }
     if (themeMode.present) {
       map['theme_mode'] = Variable<String>(themeMode.value);
@@ -2155,12 +2111,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('restTimers: $restTimers, ')
           ..write('shortDateFormat: $shortDateFormat, ')
           ..write('showBodyWeight: $showBodyWeight, ')
-          ..write('showHistoryTab: $showHistoryTab, ')
           ..write('showImages: $showImages, ')
-          ..write('showTimerTab: $showTimerTab, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
+          ..write('tabs: $tabs, ')
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
@@ -3010,12 +2965,11 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required bool restTimers,
   required String shortDateFormat,
   Value<bool> showBodyWeight,
-  Value<bool> showHistoryTab,
   Value<bool> showImages,
-  Value<bool> showTimerTab,
   required bool showUnits,
   required String strengthUnit,
   required bool systemColors,
+  Value<String> tabs,
   required String themeMode,
   required int timerDuration,
   required bool vibrate,
@@ -3038,12 +2992,11 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> restTimers,
   Value<String> shortDateFormat,
   Value<bool> showBodyWeight,
-  Value<bool> showHistoryTab,
   Value<bool> showImages,
-  Value<bool> showTimerTab,
   Value<bool> showUnits,
   Value<String> strengthUnit,
   Value<bool> systemColors,
+  Value<String> tabs,
   Value<String> themeMode,
   Value<int> timerDuration,
   Value<bool> vibrate,
@@ -3086,12 +3039,11 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> restTimers = const Value.absent(),
             Value<String> shortDateFormat = const Value.absent(),
             Value<bool> showBodyWeight = const Value.absent(),
-            Value<bool> showHistoryTab = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
-            Value<bool> showTimerTab = const Value.absent(),
             Value<bool> showUnits = const Value.absent(),
             Value<String> strengthUnit = const Value.absent(),
             Value<bool> systemColors = const Value.absent(),
+            Value<String> tabs = const Value.absent(),
             Value<String> themeMode = const Value.absent(),
             Value<int> timerDuration = const Value.absent(),
             Value<bool> vibrate = const Value.absent(),
@@ -3114,12 +3066,11 @@ class $$SettingsTableTableManager extends RootTableManager<
             restTimers: restTimers,
             shortDateFormat: shortDateFormat,
             showBodyWeight: showBodyWeight,
-            showHistoryTab: showHistoryTab,
             showImages: showImages,
-            showTimerTab: showTimerTab,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
+            tabs: tabs,
             themeMode: themeMode,
             timerDuration: timerDuration,
             vibrate: vibrate,
@@ -3142,12 +3093,11 @@ class $$SettingsTableTableManager extends RootTableManager<
             required bool restTimers,
             required String shortDateFormat,
             Value<bool> showBodyWeight = const Value.absent(),
-            Value<bool> showHistoryTab = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
-            Value<bool> showTimerTab = const Value.absent(),
             required bool showUnits,
             required String strengthUnit,
             required bool systemColors,
+            Value<String> tabs = const Value.absent(),
             required String themeMode,
             required int timerDuration,
             required bool vibrate,
@@ -3170,12 +3120,11 @@ class $$SettingsTableTableManager extends RootTableManager<
             restTimers: restTimers,
             shortDateFormat: shortDateFormat,
             showBodyWeight: showBodyWeight,
-            showHistoryTab: showHistoryTab,
             showImages: showImages,
-            showTimerTab: showTimerTab,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
+            tabs: tabs,
             themeMode: themeMode,
             timerDuration: timerDuration,
             vibrate: vibrate,
@@ -3279,18 +3228,8 @@ class $$SettingsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<bool> get showHistoryTab => $state.composableBuilder(
-      column: $state.table.showHistoryTab,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
   ColumnFilters<bool> get showImages => $state.composableBuilder(
       column: $state.table.showImages,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showTimerTab => $state.composableBuilder(
-      column: $state.table.showTimerTab,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3306,6 +3245,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get systemColors => $state.composableBuilder(
       column: $state.table.systemColors,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get tabs => $state.composableBuilder(
+      column: $state.table.tabs,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3413,18 +3357,8 @@ class $$SettingsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<bool> get showHistoryTab => $state.composableBuilder(
-      column: $state.table.showHistoryTab,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
   ColumnOrderings<bool> get showImages => $state.composableBuilder(
       column: $state.table.showImages,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showTimerTab => $state.composableBuilder(
-      column: $state.table.showTimerTab,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -3440,6 +3374,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get systemColors => $state.composableBuilder(
       column: $state.table.systemColors,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get tabs => $state.composableBuilder(
+      column: $state.table.tabs,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

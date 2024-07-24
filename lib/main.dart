@@ -88,49 +88,56 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showHistoryTab = context.select<SettingsState, bool>(
-      (settings) => settings.value.showHistoryTab,
-    );
-    final showTimerTab = context
-        .select<SettingsState, bool>((settings) => settings.value.showTimerTab);
-    var length = 4;
-    if (!showTimerTab) length--;
-    if (!showHistoryTab) length--;
+    final tabsSetting = context
+        .select<SettingsState, String>((settings) => settings.value.tabs);
+    final tabs = tabsSetting.split(',');
 
     return SafeArea(
       child: DefaultTabController(
-        length: length,
+        length: tabs.length,
         child: Scaffold(
-          bottomSheet: showTimerTab ? const TimerProgressIndicator() : null,
+          bottomSheet: tabs.contains('TimerPage')
+              ? const TimerProgressIndicator()
+              : null,
           body: TabBarView(
-            children: [
-              if (showHistoryTab) const HistoryPage(),
-              const PlansPage(),
-              const GraphsPage(),
-              if (showTimerTab) const TimerPage(),
-            ],
+            children: tabs.map((tab) {
+              if (tab == 'HistoryPage')
+                return const HistoryPage();
+              else if (tab == 'PlansPage')
+                return const PlansPage();
+              else if (tab == 'GraphsPage')
+                return const GraphsPage();
+              else if (tab == 'TimerPage')
+                return const TimerPage();
+              else
+                return ErrorWidget("Couldn't build tab content.");
+            }).toList(),
           ),
           bottomNavigationBar: TabBar(
-            tabs: [
-              if (showHistoryTab)
-                const Tab(
+            tabs: tabs.map((tab) {
+              if (tab == 'HistoryPage')
+                return const Tab(
                   icon: Icon(Icons.history),
                   text: "History",
-                ),
-              const Tab(
-                icon: Icon(Icons.calendar_today),
-                text: "Plans",
-              ),
-              const Tab(
-                icon: Icon(Icons.insights),
-                text: "Graphs",
-              ),
-              if (showTimerTab)
-                const Tab(
+                );
+              else if (tab == 'PlansPage')
+                return const Tab(
+                  icon: Icon(Icons.calendar_today),
+                  text: "Plans",
+                );
+              else if (tab == 'GraphsPage')
+                return const Tab(
+                  icon: Icon(Icons.insights),
+                  text: "Graphs",
+                );
+              else if (tab == 'TimerPage')
+                return const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",
-                ),
-            ],
+                );
+              else
+                return ErrorWidget("Couldn't build tab bottom bar.");
+            }).toList(),
           ),
         ),
       ),

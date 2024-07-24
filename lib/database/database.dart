@@ -77,8 +77,6 @@ class AppDatabase extends _$AppDatabase {
             curveLines: false,
             explainedPermissions: false,
             groupHistory: true,
-            showHistoryTab: const Value(true),
-            showTimerTab: const Value(true),
             showBodyWeight: const Value(true),
             strengthUnit: 'kg',
             systemColors: false,
@@ -358,10 +356,29 @@ class AppDatabase extends _$AppDatabase {
         from25To26: (Migrator m, Schema26 schema) async {
           await m.addColumn(schema.settings, schema.settings.backupPath);
         },
+        from26To27: (Migrator m, Schema27 schema) async {
+          var tabs = ['HistoryPage', 'PlansPage', 'GraphsPage', 'TimerPage'];
+          final settings =
+              await (schema.settings.select()..limit(1)).getSingle();
+
+          bool showTimer = settings.read('show_timer_tab');
+          if (!showTimer) tabs.remove('TimerPage');
+          bool showHistory = settings.read('show_history_tab');
+          if (!showHistory) tabs.remove('HistoryPage');
+
+          await m.addColumn(schema.settings, schema.settings.tabs);
+          await schema.settings.update().write(
+                RawValuesInsertable({
+                  'tabs': Variable(tabs.join(',')),
+                }),
+              );
+
+          await m.alterTable(TableMigration(schema.settings));
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 26;
+  int get schemaVersion => 27;
 }

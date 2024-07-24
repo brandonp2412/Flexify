@@ -58,22 +58,6 @@ List<Widget> getWorkoutSettings(
               .write(SettingsCompanion(showBodyWeight: Value(value))),
         ),
       ),
-    if ('show history tab'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Show history tab'),
-        leading: const Icon(Icons.history),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                showHistoryTab: Value(!settings.showHistoryTab),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.showHistoryTab,
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(showHistoryTab: Value(value))),
-        ),
-      ),
     if ('rep estimation'.contains(term.toLowerCase()))
       ListTile(
         title: const Text('Rep estimation'),

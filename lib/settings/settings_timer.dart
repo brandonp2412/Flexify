@@ -113,26 +113,6 @@ List<Widget> getTimerSettings(
               ),
         ),
       ),
-    if ('show timer tab'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Show timer tab'),
-        leading: settings.showTimerTab
-            ? const Icon(Icons.timer)
-            : const Icon(Icons.timer_outlined),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                showTimerTab: Value(!settings.showTimerTab),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.showTimerTab,
-          onChanged: (value) => db.settings.update().write(
-                SettingsCompanion(
-                  showTimerTab: Value(value),
-                ),
-              ),
-        ),
-      ),
     if ('alarm sound'.contains(term.toLowerCase()))
       TextButton.icon(
         onPressed: () async {
