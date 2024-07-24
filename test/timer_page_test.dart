@@ -14,7 +14,7 @@ import 'mock_tests.dart';
 
 void main() async {
   await mockTests();
-  db = AppDatabase(executor: NativeDatabase.memory());
+  db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
 
   testWidgets('TimerPage', (WidgetTester tester) async {
     final settings = await (db.settings.select()..limit(1)).getSingle();

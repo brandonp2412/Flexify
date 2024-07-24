@@ -17,7 +17,8 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
       final currentVersion =
-          AppDatabase(executor: NativeDatabase.memory()).schemaVersion;
+          AppDatabase(executor: NativeDatabase.memory(), logStatements: false)
+              .schemaVersion;
 
       for (int from = 1; from <= currentVersion; from++) {
         if (from == 8 || from == 9) continue;
@@ -25,7 +26,7 @@ void main() {
         for (int to = from + 1; to <= currentVersion; to++) {
           if (to == 8 || to == 9) continue;
           final connection = await verifier.startAt(from);
-          final db = AppDatabase(executor: connection);
+          final db = AppDatabase(executor: connection, logStatements: false);
           await verifier.migrateAndValidate(db, to);
           await db.close();
         }
@@ -59,7 +60,8 @@ void main() {
     ]);
     await oldDb.close();
 
-    final db = AppDatabase(executor: schema.newConnection());
+    final db =
+        AppDatabase(executor: schema.newConnection(), logStatements: false);
 
     await verifier.migrateAndValidate(db, 18);
     await db.close();
