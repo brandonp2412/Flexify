@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/graph/view_graph_page.dart';
@@ -79,41 +80,86 @@ class _StrengthPageState extends State<StrengthPage> {
   ) async {
     if (event is ScaleUpdateDetails) return;
     if (event is! FlPanDownEvent) return;
-    if (metric != StrengthMetric.bestWeight) return;
+    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+      return setState(() {
+        lastTap = DateTime.now();
+      });
 
-    if (DateTime.now().difference(lastTap) <
-        const Duration(milliseconds: 300)) {
-      final index = touchResponse?.lineBarSpots?[0].spotIndex;
-      if (index == null) return;
-      final row = rows[index];
-      final gymSet = await (db.gymSets.select()
-            ..where(
-              (tbl) => tbl.created.equals(row.created),
-            )
-            ..where((tbl) => tbl.reps.equals(row.reps))
-            ..where(
-              (tbl) => tbl.weight.equals(row.value),
-            )
-            ..where(
-              (tbl) => tbl.name.equals(widget.name),
-            )
-            ..limit(1))
-          .getSingle();
+    final index = touchResponse?.lineBarSpots?[0].spotIndex;
+    if (index == null) return;
+    final row = rows[index];
+    GymSet? gymSet;
 
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EditSetPage(
-            gymSet: gymSet,
-          ),
-        ),
-      );
+    switch (metric) {
+      case StrengthMetric.oneRepMax:
+        final ormExpression = db.gymSets.weight /
+            (const CustomExpression<double>('1.0278 - 0.0278 * reps'));
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    ormExpression.equals(row.value) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.volume:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.bestWeight:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.reps.equals(row.reps) &
+                    tbl.weight.equals(row.value) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.relativeStrength:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    ((tbl.weight / tbl.bodyWeight).equals(row.value) |
+                        (tbl.weight / tbl.bodyWeight).isNull()) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.bestReps:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.reps.equals(row.value) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
     }
 
-    setState(() {
-      lastTap = DateTime.now();
-    });
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditSetPage(
+          gymSet: gymSet!,
+        ),
+      ),
+    );
   }
 
   @override
