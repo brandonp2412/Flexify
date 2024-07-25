@@ -2,6 +2,8 @@
 
 set -ex
 
+export PUB_SUMMARY_ONLY=true
+
 IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
@@ -60,7 +62,7 @@ flutter build appbundle
 
 mkdir -p build/native_assets/linux
 flutter build linux
-(cd "$apk/pipeline/linux/x64/release/bundle" && zip -r "$project-linux.zip" .)
+(cd "$apk/pipeline/linux/x64/release/bundle" && zip --quiet -r "$project-linux.zip" .)
 
 docker start windows
 rsync -a --delete --exclude-from=.gitignore ./* .gitignore \
@@ -68,7 +70,7 @@ rsync -a --delete --exclude-from=.gitignore ./* .gitignore \
 ssh windows "Powershell -ExecutionPolicy bypass -File //host.lan/Data/build-flexify.ps1"
 sudo chown -R "$USER" "$HOME/windows/$project"
 mv -f "$HOME/windows/$project/$project.msix" "$HOME/windows/$project.msix"
-(cd "$HOME/windows/$project" && zip -r "$HOME/windows/$project-windows.zip" .)
+(cd "$HOME/windows/$project" && zip --quiet -r "$HOME/windows/$project-windows.zip" .)
 
 git push
 gh release create "$new_version" --notes "$changelog" \
