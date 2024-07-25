@@ -26,6 +26,7 @@ class EditSetPage extends StatefulWidget {
 class _EditSetPageState extends State<EditSetPage> {
   final repsController = TextEditingController();
   final weightController = TextEditingController();
+  final ormController = TextEditingController();
   final bodyWeightController = TextEditingController();
   final distanceController = TextEditingController();
   final minutesController = TextEditingController();
@@ -225,12 +226,20 @@ class _EditSetPageState extends State<EditSetPage> {
               TextField(
                 controller: weightController,
                 decoration: InputDecoration(
-                  labelText: name == 'Weight' ? 'Value ' : 'Weight ',
+                  labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(weightController),
                 textInputAction: TextInputAction.next,
               ),
+              if (widget.gymSet.id > 0)
+                TextField(
+                  controller: ormController,
+                  decoration: const InputDecoration(
+                    labelText: 'One rep max (estimate)',
+                  ),
+                  readOnly: true,
+                ),
             ],
             Visibility(
               visible: showBodyWeight,
@@ -458,6 +467,8 @@ class _EditSetPageState extends State<EditSetPage> {
       cardio = gymSet.cardio;
       restMs = gymSet.restMs;
       inclineController.text = gymSet.incline?.toString() ?? "";
+      ormController.text =
+          "${(gymSet.weight / (1.0278 - (0.0278 * gymSet.reps))).toStringAsFixed(2)} ${gymSet.unit}";
     });
   }
 
