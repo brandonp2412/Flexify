@@ -20,8 +20,12 @@ fun scheduleBackups(context: Context) {
     )
 
     val calendar: Calendar = Calendar.getInstance().apply {
-        timeInMillis = System.currentTimeMillis()
-        add(Calendar.MINUTE, 15)
+        set(Calendar.HOUR_OF_DAY, 2)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        if (timeInMillis < System.currentTimeMillis()) {
+            add(Calendar.DAY_OF_YEAR, 1)
+        }
     }
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
