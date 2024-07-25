@@ -49,17 +49,21 @@ fun openDb(context: Context): SQLiteDatabase? {
 fun getSettings(context: Context): Pair<Boolean, String?> {
     val db = openDb(context) ?: return Pair(false, null)
 
-    var backupPath: String? = null
-    var automaticBackups = false
-    val query = "SELECT backup_path, automatic_backups FROM settings"
-    val cursor = db.rawQuery(query, null)
+    try {
+        var backupPath: String? = null
+        var automaticBackups = false
+        val query = "SELECT backup_path, automatic_backups FROM settings"
+        val cursor = db.rawQuery(query, null)
 
-    if (cursor.moveToFirst()) {
-        backupPath = cursor.getString(cursor.getColumnIndexOrThrow("backup_path"))
-        automaticBackups = cursor.getInt(cursor.getColumnIndexOrThrow("automatic_backups")) == 1
+        if (cursor.moveToFirst()) {
+            backupPath = cursor.getString(cursor.getColumnIndexOrThrow("backup_path"))
+            automaticBackups = cursor.getInt(cursor.getColumnIndexOrThrow("automatic_backups")) == 1
+        }
+        cursor.close()
+        db.close()
+        return Pair(automaticBackups, backupPath)
     }
-    cursor.close()
-    db.close()
-
-    return Pair(automaticBackups, backupPath)
+    catch (e: Exception) {
+        return Pair(false, null)
+    }
 }
