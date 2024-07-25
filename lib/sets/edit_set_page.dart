@@ -238,7 +238,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   decoration: const InputDecoration(
                     labelText: 'One rep max (estimate)',
                   ),
-                  readOnly: true,
+                  enabled: false,
                 ),
             ],
             Visibility(
