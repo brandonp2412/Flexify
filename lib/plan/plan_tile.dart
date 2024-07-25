@@ -61,7 +61,7 @@ class PlanTile extends StatelessWidget {
 
               final index =
                   snapshot.data?.indexWhere((d) => d.planId == plan.id);
-              if (index == null) return const SizedBox();
+              if (index == -1 || index == null) return const SizedBox();
               final count = snapshot.data![index];
 
               if (planTrailing == PlanTrailing.count)

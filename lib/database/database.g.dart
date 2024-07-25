@@ -1051,6 +1051,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("duration_estimation" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _enableSoundMeta =
+      const VerificationMeta('enableSound');
+  @override
+  late final GeneratedColumn<bool> enableSound = GeneratedColumn<bool>(
+      'enable_sound', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("enable_sound" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _explainedPermissionsMeta =
       const VerificationMeta('explainedPermissions');
   @override
@@ -1208,6 +1218,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         cardioUnit,
         curveLines,
         durationEstimation,
+        enableSound,
         explainedPermissions,
         groupHistory,
         id,
@@ -1279,6 +1290,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           _durationEstimationMeta,
           durationEstimation.isAcceptableOrUnknown(
               data['duration_estimation']!, _durationEstimationMeta));
+    }
+    if (data.containsKey('enable_sound')) {
+      context.handle(
+          _enableSoundMeta,
+          enableSound.isAcceptableOrUnknown(
+              data['enable_sound']!, _enableSoundMeta));
     }
     if (data.containsKey('explained_permissions')) {
       context.handle(
@@ -1428,6 +1445,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}curve_lines'])!,
       durationEstimation: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}duration_estimation'])!,
+      enableSound: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}enable_sound'])!,
       explainedPermissions: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}explained_permissions'])!,
       groupHistory: attachedDatabase.typeMapping
@@ -1482,6 +1501,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final String cardioUnit;
   final bool curveLines;
   final bool durationEstimation;
+  final bool enableSound;
   final bool explainedPermissions;
   final bool groupHistory;
   final int id;
@@ -1508,6 +1528,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.cardioUnit,
       required this.curveLines,
       required this.durationEstimation,
+      required this.enableSound,
       required this.explainedPermissions,
       required this.groupHistory,
       required this.id,
@@ -1538,6 +1559,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['cardio_unit'] = Variable<String>(cardioUnit);
     map['curve_lines'] = Variable<bool>(curveLines);
     map['duration_estimation'] = Variable<bool>(durationEstimation);
+    map['enable_sound'] = Variable<bool>(enableSound);
     map['explained_permissions'] = Variable<bool>(explainedPermissions);
     map['group_history'] = Variable<bool>(groupHistory);
     map['id'] = Variable<int>(id);
@@ -1572,6 +1594,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       cardioUnit: Value(cardioUnit),
       curveLines: Value(curveLines),
       durationEstimation: Value(durationEstimation),
+      enableSound: Value(enableSound),
       explainedPermissions: Value(explainedPermissions),
       groupHistory: Value(groupHistory),
       id: Value(id),
@@ -1606,6 +1629,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
       curveLines: serializer.fromJson<bool>(json['curveLines']),
       durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
+      enableSound: serializer.fromJson<bool>(json['enableSound']),
       explainedPermissions:
           serializer.fromJson<bool>(json['explainedPermissions']),
       groupHistory: serializer.fromJson<bool>(json['groupHistory']),
@@ -1638,6 +1662,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'cardioUnit': serializer.toJson<String>(cardioUnit),
       'curveLines': serializer.toJson<bool>(curveLines),
       'durationEstimation': serializer.toJson<bool>(durationEstimation),
+      'enableSound': serializer.toJson<bool>(enableSound),
       'explainedPermissions': serializer.toJson<bool>(explainedPermissions),
       'groupHistory': serializer.toJson<bool>(groupHistory),
       'id': serializer.toJson<int>(id),
@@ -1667,6 +1692,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           String? cardioUnit,
           bool? curveLines,
           bool? durationEstimation,
+          bool? enableSound,
           bool? explainedPermissions,
           bool? groupHistory,
           int? id,
@@ -1693,6 +1719,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         cardioUnit: cardioUnit ?? this.cardioUnit,
         curveLines: curveLines ?? this.curveLines,
         durationEstimation: durationEstimation ?? this.durationEstimation,
+        enableSound: enableSound ?? this.enableSound,
         explainedPermissions: explainedPermissions ?? this.explainedPermissions,
         groupHistory: groupHistory ?? this.groupHistory,
         id: id ?? this.id,
@@ -1722,6 +1749,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('cardioUnit: $cardioUnit, ')
           ..write('curveLines: $curveLines, ')
           ..write('durationEstimation: $durationEstimation, ')
+          ..write('enableSound: $enableSound, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('groupHistory: $groupHistory, ')
           ..write('id: $id, ')
@@ -1753,6 +1781,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         cardioUnit,
         curveLines,
         durationEstimation,
+        enableSound,
         explainedPermissions,
         groupHistory,
         id,
@@ -1783,6 +1812,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.cardioUnit == this.cardioUnit &&
           other.curveLines == this.curveLines &&
           other.durationEstimation == this.durationEstimation &&
+          other.enableSound == this.enableSound &&
           other.explainedPermissions == this.explainedPermissions &&
           other.groupHistory == this.groupHistory &&
           other.id == this.id &&
@@ -1811,6 +1841,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> cardioUnit;
   final Value<bool> curveLines;
   final Value<bool> durationEstimation;
+  final Value<bool> enableSound;
   final Value<bool> explainedPermissions;
   final Value<bool> groupHistory;
   final Value<int> id;
@@ -1837,6 +1868,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.cardioUnit = const Value.absent(),
     this.curveLines = const Value.absent(),
     this.durationEstimation = const Value.absent(),
+    this.enableSound = const Value.absent(),
     this.explainedPermissions = const Value.absent(),
     this.groupHistory = const Value.absent(),
     this.id = const Value.absent(),
@@ -1864,6 +1896,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required String cardioUnit,
     required bool curveLines,
     this.durationEstimation = const Value.absent(),
+    this.enableSound = const Value.absent(),
     required bool explainedPermissions,
     required bool groupHistory,
     this.id = const Value.absent(),
@@ -1906,6 +1939,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<String>? cardioUnit,
     Expression<bool>? curveLines,
     Expression<bool>? durationEstimation,
+    Expression<bool>? enableSound,
     Expression<bool>? explainedPermissions,
     Expression<bool>? groupHistory,
     Expression<int>? id,
@@ -1933,6 +1967,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (cardioUnit != null) 'cardio_unit': cardioUnit,
       if (curveLines != null) 'curve_lines': curveLines,
       if (durationEstimation != null) 'duration_estimation': durationEstimation,
+      if (enableSound != null) 'enable_sound': enableSound,
       if (explainedPermissions != null)
         'explained_permissions': explainedPermissions,
       if (groupHistory != null) 'group_history': groupHistory,
@@ -1963,6 +1998,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<String>? cardioUnit,
       Value<bool>? curveLines,
       Value<bool>? durationEstimation,
+      Value<bool>? enableSound,
       Value<bool>? explainedPermissions,
       Value<bool>? groupHistory,
       Value<int>? id,
@@ -1989,6 +2025,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       cardioUnit: cardioUnit ?? this.cardioUnit,
       curveLines: curveLines ?? this.curveLines,
       durationEstimation: durationEstimation ?? this.durationEstimation,
+      enableSound: enableSound ?? this.enableSound,
       explainedPermissions: explainedPermissions ?? this.explainedPermissions,
       groupHistory: groupHistory ?? this.groupHistory,
       id: id ?? this.id,
@@ -2031,6 +2068,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (durationEstimation.present) {
       map['duration_estimation'] = Variable<bool>(durationEstimation.value);
+    }
+    if (enableSound.present) {
+      map['enable_sound'] = Variable<bool>(enableSound.value);
     }
     if (explainedPermissions.present) {
       map['explained_permissions'] = Variable<bool>(explainedPermissions.value);
@@ -2101,6 +2141,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('cardioUnit: $cardioUnit, ')
           ..write('curveLines: $curveLines, ')
           ..write('durationEstimation: $durationEstimation, ')
+          ..write('enableSound: $enableSound, ')
           ..write('explainedPermissions: $explainedPermissions, ')
           ..write('groupHistory: $groupHistory, ')
           ..write('id: $id, ')
@@ -2955,6 +2996,7 @@ typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
   required String cardioUnit,
   required bool curveLines,
   Value<bool> durationEstimation,
+  Value<bool> enableSound,
   required bool explainedPermissions,
   required bool groupHistory,
   Value<int> id,
@@ -2982,6 +3024,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> cardioUnit,
   Value<bool> curveLines,
   Value<bool> durationEstimation,
+  Value<bool> enableSound,
   Value<bool> explainedPermissions,
   Value<bool> groupHistory,
   Value<int> id,
@@ -3029,6 +3072,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<String> cardioUnit = const Value.absent(),
             Value<bool> curveLines = const Value.absent(),
             Value<bool> durationEstimation = const Value.absent(),
+            Value<bool> enableSound = const Value.absent(),
             Value<bool> explainedPermissions = const Value.absent(),
             Value<bool> groupHistory = const Value.absent(),
             Value<int> id = const Value.absent(),
@@ -3056,6 +3100,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             cardioUnit: cardioUnit,
             curveLines: curveLines,
             durationEstimation: durationEstimation,
+            enableSound: enableSound,
             explainedPermissions: explainedPermissions,
             groupHistory: groupHistory,
             id: id,
@@ -3083,6 +3128,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             required String cardioUnit,
             required bool curveLines,
             Value<bool> durationEstimation = const Value.absent(),
+            Value<bool> enableSound = const Value.absent(),
             required bool explainedPermissions,
             required bool groupHistory,
             Value<int> id = const Value.absent(),
@@ -3110,6 +3156,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             cardioUnit: cardioUnit,
             curveLines: curveLines,
             durationEstimation: durationEstimation,
+            enableSound: enableSound,
             explainedPermissions: explainedPermissions,
             groupHistory: groupHistory,
             id: id,
@@ -3175,6 +3222,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get durationEstimation => $state.composableBuilder(
       column: $state.table.durationEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get enableSound => $state.composableBuilder(
+      column: $state.table.enableSound,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3304,6 +3356,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get durationEstimation => $state.composableBuilder(
       column: $state.table.durationEstimation,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get enableSound => $state.composableBuilder(
+      column: $state.table.enableSound,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

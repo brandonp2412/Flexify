@@ -113,6 +113,24 @@ List<Widget> getTimerSettings(
               ),
         ),
       ),
+    if ('enable sound'.contains(term.toLowerCase()))
+      ListTile(
+        title: const Text('Enable sound'),
+        leading: const Icon(Icons.music_note_outlined),
+        onTap: () => db.settings.update().write(
+              SettingsCompanion(
+                enableSound: Value(!settings.enableSound),
+              ),
+            ),
+        trailing: Switch(
+          value: settings.enableSound,
+          onChanged: (value) => db.settings.update().write(
+                SettingsCompanion(
+                  enableSound: Value(value),
+                ),
+              ),
+        ),
+      ),
     if ('alarm sound'.contains(term.toLowerCase()))
       TextButton.icon(
         onPressed: () async {

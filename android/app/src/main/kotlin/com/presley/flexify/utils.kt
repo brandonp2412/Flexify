@@ -37,14 +37,17 @@ fun scheduleBackups(context: Context) {
     )
 }
 
-fun getSettings(context: Context): Pair<Boolean, String?> {
+fun openDb(context: Context): SQLiteDatabase? {
     val parentDir = context.filesDir.parentFile
     val dbFolder = File(parentDir, "app_flutter").absolutePath
     Log.d("auto backup", "dbFolder=$dbFolder")
     val dbFile = File(dbFolder, "flexify.sqlite")
-    if (!dbFile.exists()) return Pair(false, null)
+    if (!dbFile.exists()) return null
+    return SQLiteDatabase.openDatabase(dbFile.absolutePath, null, 0)
+}
 
-    val db = SQLiteDatabase.openDatabase(dbFile.absolutePath, null, 0)
+fun getSettings(context: Context): Pair<Boolean, String?> {
+    val db = openDb(context) ?: return Pair(false, null)
 
     var backupPath: String? = null
     var automaticBackups = false

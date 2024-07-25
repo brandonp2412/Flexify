@@ -184,12 +184,7 @@ class MainActivity : FlutterActivity() {
             Log.d("auto backup", "uri=$uri")
             scheduleBackups(context)
 
-            val parentDir = filesDir.parentFile
-            val dbFolder = File(parentDir, "app_flutter").absolutePath
-            Log.d("auto backup", "dbFolder=$dbFolder")
-            val dbPath = File(dbFolder, "flexify.sqlite").absolutePath
-            val db = SQLiteDatabase.openDatabase(dbPath, null, 0)
-
+            val db = openDb(context)!!
             val values = ContentValues().apply {
                 put("backup_path", uri.toString())
             }

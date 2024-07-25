@@ -235,6 +235,20 @@ class TimerService : Service() {
     }
 
     private fun playSound() {
+        val db = openDb(applicationContext)!!
+
+        var enableSound = true
+        val query = "SELECT enable_sound FROM settings"
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            enableSound = cursor.getInt(cursor.getColumnIndexOrThrow("enable_sound")) == 1
+        }
+        cursor.close()
+        db.close()
+
+        if (!enableSound) return
+
         try {
             mediaPlayer = if (alarmSound?.isNotEmpty() == true)
                 MediaPlayer.create(applicationContext, Uri.parse(alarmSound)).apply {

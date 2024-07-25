@@ -9,6 +9,7 @@ class Settings extends Table {
   BoolColumn get curveLines => boolean()();
   BoolColumn get durationEstimation =>
       boolean().withDefault(const Constant(true))();
+  BoolColumn get enableSound => boolean().withDefault(const Constant(true))();
   BoolColumn get explainedPermissions => boolean()();
   BoolColumn get groupHistory => boolean()();
   IntColumn get id => integer().autoIncrement()();
