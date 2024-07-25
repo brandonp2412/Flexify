@@ -39,23 +39,20 @@ void main() async {
       ),
     );
 
-    await tester.pumpAndSettle();
-
-    expect(find.textContaining("Title"), findsOne);
+    expect(find.text("Test title"), findsOne);
+    expect(find.text("Monday"), findsOne);
+    expect(find.text("Tuesday"), findsOne);
+    expect(find.text("Wednesday"), findsOne);
+    expect(find.byTooltip("Save"), findsOne);
 
     await tester.tap(find.text('Monday'));
-    await tester.tap(find.text('Wednesday'));
-    await tester.tap(find.text('Sunday'));
-    await tester.enterText(find.byType(SearchBar), 'Squat');
-    await tester.tap(find.text('Squat'));
+    await tester.tap(find.text('Thursday'));
+    await scroll(tester, find.text('Arnold press'));
+    await tester.tap(find.text('Arnold press'));
+    await tester.tap(find.text('Barbell biceps curl'));
+
+    await tester.tap(find.byTooltip("Save"));
     await tester.pumpAndSettle();
-
-    final button = find.byTooltip("Save");
-    expect(button, findsOne);
-
-    await tester.tap(button);
-    await tester.pumpAndSettle();
-
     expect(find.textContaining('Title'), findsNothing);
 
     await db.close();
@@ -65,6 +62,14 @@ void main() async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
+
+    const plan = PlansCompanion(
+      days: Value('Monday,Tuesday,Wednesday'),
+      exercises: Value('Arnold press,Back extension,Barbell bench press'),
+      sequence: Value(1),
+      title: Value('Test title'),
+    );
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -74,21 +79,17 @@ void main() async {
         ],
         child: const MaterialApp(
           home: EditPlanPage(
-            plan: PlansCompanion(
-              days: Value('Monday,Tuesday,Wednesday'),
-              exercises: Value('Bench press,Row,Bicep curl'),
-              sequence: Value(1),
-              title: Value('Test title'),
-            ),
+            plan: plan,
           ),
         ),
       ),
     );
 
-    await tester.enterText(find.byType(SearchBar), 'Squat');
+    await scroll(tester, find.text('Arnold press'));
+    await tester.enterText(find.byType(SearchBar), 'Back extension');
     await tester.pumpAndSettle();
-    expect(find.text('Squat'), findsOne);
-    expect(find.text('Dumbbell shoulder press'), findsNothing);
+    expect(find.text('Back extension'), findsNWidgets(2));
+    expect(find.text('Arnold press'), findsNothing);
 
     await db.close();
   });
