@@ -83,14 +83,14 @@ git pull
 if [[ $* == *-w* ]]; then
   echo "Skipping Windows store..."
 else
-  ./scripts/msstore.sh "$HOME/windows/$project.msix"
+  ./scripts/msstore.sh "$HOME/windows/$project.msix" || true
 fi
 
 if [[ $* == *-p* ]]; then
   echo "Skipping Google play..."
 else
   bundle exec fastlane supply --aab \
-    build/app/outputs/bundle/release/app-release.aab
+    build/app/outputs/bundle/release/app-release.aab || true
 fi
 
 if [[ $* == *-m* ]]; then
