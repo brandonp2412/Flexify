@@ -41,62 +41,71 @@ List<Widget> getAppearanceSettings(String term, SettingsState settings) {
     if ('system color scheme'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.only(top: 8.0),
+        child: Tooltip(
+          message: 'Use the primary color of your device for the app',
+          child: ListTile(
+            title: const Text('System color scheme'),
+            leading: settings.value.systemColors
+                ? const Icon(Icons.color_lens)
+                : const Icon(Icons.color_lens_outlined),
+            onTap: () => db.settings.update().write(
+                  SettingsCompanion(
+                    systemColors: Value(!settings.value.systemColors),
+                  ),
+                ),
+            trailing: Switch(
+              value: settings.value.systemColors,
+              onChanged: (value) => db.settings.update().write(
+                    SettingsCompanion(
+                      systemColors: Value(value),
+                    ),
+                  ),
+            ),
+          ),
+        ),
+      ),
+    if ('show images'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Pick/display images on the history page',
         child: ListTile(
-          title: const Text('System color scheme'),
-          leading: settings.value.systemColors
-              ? const Icon(Icons.color_lens)
-              : const Icon(Icons.color_lens_outlined),
+          title: const Text('Show images'),
+          leading: settings.value.showImages
+              ? const Icon(Icons.image)
+              : const Icon(Icons.image_outlined),
           onTap: () => db.settings.update().write(
                 SettingsCompanion(
-                  systemColors: Value(!settings.value.systemColors),
+                  showImages: Value(!settings.value.showImages),
                 ),
               ),
           trailing: Switch(
-            value: settings.value.systemColors,
+            value: settings.value.showImages,
             onChanged: (value) => db.settings.update().write(
                   SettingsCompanion(
-                    systemColors: Value(value),
+                    showImages: Value(value),
                   ),
                 ),
           ),
         ),
       ),
-    if ('show images'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Show images'),
-        leading: settings.value.showImages
-            ? const Icon(Icons.image)
-            : const Icon(Icons.image_outlined),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                showImages: Value(!settings.value.showImages),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.value.showImages,
-          onChanged: (value) => db.settings.update().write(
-                SettingsCompanion(
-                  showImages: Value(value),
-                ),
-              ),
-        ),
-      ),
     if ('curve line graphs'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Curve line graphs'),
-        leading: const Icon(Icons.insights),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                curveLines: Value(!settings.value.curveLines),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.value.curveLines,
-          onChanged: (value) => db.settings.update().write(
+      Tooltip(
+        message: 'Use wavy curves in the graphs page',
+        child: ListTile(
+          title: const Text('Curve line graphs'),
+          leading: const Icon(Icons.insights),
+          onTap: () => db.settings.update().write(
                 SettingsCompanion(
-                  curveLines: Value(value),
+                  curveLines: Value(!settings.value.curveLines),
                 ),
               ),
+          trailing: Switch(
+            value: settings.value.curveLines,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    curveLines: Value(value),
+                  ),
+                ),
+          ),
         ),
       ),
   ];

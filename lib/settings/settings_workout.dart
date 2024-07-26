@@ -11,83 +11,98 @@ List<Widget> getWorkoutSettings(
 ) {
   return [
     if ('group history'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Group history'),
-        leading: const Icon(Icons.expand_more),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                groupHistory: Value(!settings.groupHistory),
-              ),
-            ),
-        trailing: Switch(
-          value: settings.groupHistory,
-          onChanged: (value) => db.settings.update().write(
+      Tooltip(
+        message: 'Combine history entries by day',
+        child: ListTile(
+          title: const Text('Group history'),
+          leading: const Icon(Icons.expand_more),
+          onTap: () => db.settings.update().write(
                 SettingsCompanion(
-                  groupHistory: Value(value),
+                  groupHistory: Value(!settings.groupHistory),
                 ),
               ),
+          trailing: Switch(
+            value: settings.groupHistory,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    groupHistory: Value(value),
+                  ),
+                ),
+          ),
         ),
       ),
     if ('show units'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Show units'),
-        leading: const Icon(Icons.scale_sharp),
-        onTap: () => db.settings
-            .update()
-            .write(SettingsCompanion(showUnits: Value(!settings.showUnits))),
-        trailing: Switch(
-          value: settings.showUnits,
-          onChanged: (value) => db.settings
+      Tooltip(
+        message: 'Show km/mi,kg/lb for graphs/history/plans',
+        child: ListTile(
+          title: const Text('Show units'),
+          leading: const Icon(Icons.scale_sharp),
+          onTap: () => db.settings
               .update()
-              .write(SettingsCompanion(showUnits: Value(value))),
+              .write(SettingsCompanion(showUnits: Value(!settings.showUnits))),
+          trailing: Switch(
+            value: settings.showUnits,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(showUnits: Value(value))),
+          ),
         ),
       ),
     if ('show weight'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Show weight'),
-        leading: const Icon(Icons.scale_outlined),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                showBodyWeight: Value(!settings.showBodyWeight),
+      Tooltip(
+        message: 'Enable/disable tracking body weight',
+        child: ListTile(
+          title: const Text('Show body weight'),
+          leading: const Icon(Icons.scale_outlined),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  showBodyWeight: Value(!settings.showBodyWeight),
+                ),
               ),
-            ),
-        trailing: Switch(
-          value: settings.showBodyWeight,
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(showBodyWeight: Value(value))),
+          trailing: Switch(
+            value: settings.showBodyWeight,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(showBodyWeight: Value(value))),
+          ),
         ),
       ),
     if ('rep estimation'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Rep estimation'),
-        leading: const Icon(Icons.repeat_outlined),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                repEstimation: Value(!settings.repEstimation),
+      Tooltip(
+        message: 'Try to predict the # of reps you just did',
+        child: ListTile(
+          title: const Text('Rep estimation'),
+          leading: const Icon(Icons.repeat_outlined),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  repEstimation: Value(!settings.repEstimation),
+                ),
               ),
-            ),
-        trailing: Switch(
-          value: settings.repEstimation,
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(repEstimation: Value(value))),
+          trailing: Switch(
+            value: settings.repEstimation,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(repEstimation: Value(value))),
+          ),
         ),
       ),
     if ('duration estimation'.contains(term.toLowerCase()))
-      ListTile(
-        title: const Text('Duration estimation'),
-        leading: const Icon(Icons.access_time),
-        onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                durationEstimation: Value(!settings.durationEstimation),
+      Tooltip(
+        message: 'Try predict the duration of your cardio',
+        child: ListTile(
+          title: const Text('Duration estimation'),
+          leading: const Icon(Icons.access_time),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  durationEstimation: Value(!settings.durationEstimation),
+                ),
               ),
-            ),
-        trailing: Switch(
-          value: settings.durationEstimation,
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(durationEstimation: Value(value))),
+          trailing: Switch(
+            value: settings.durationEstimation,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(durationEstimation: Value(value))),
+          ),
         ),
       ),
   ];
