@@ -143,11 +143,9 @@ class GraphsPageState extends State<GraphsPage>
                 ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: gymSets.length + 1,
+                  itemCount: gymSets.length,
+                  padding: const EdgeInsets.only(bottom: 50),
                   itemBuilder: (context, index) {
-                    if (index >= gymSets.length)
-                      return const SizedBox(height: 50);
-
                     final gymSet = gymSets[index];
                     final previousGymSet =
                         index > 0 ? gymSets[index - 1] : null;

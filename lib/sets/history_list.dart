@@ -36,10 +36,10 @@ class _HistoryListState extends State<HistoryList> {
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return ListView.builder(
-      itemCount: widget.gymSets.length + 1,
+      itemCount: widget.gymSets.length,
+      padding: const EdgeInsets.only(bottom: 76),
       controller: scrollController,
       itemBuilder: (context, index) {
-        if (index >= widget.gymSets.length) return const SizedBox(height: 76);
         final gymSet = widget.gymSets[index];
         final previousGymSet = index > 0 ? widget.gymSets[index - 1] : null;
 

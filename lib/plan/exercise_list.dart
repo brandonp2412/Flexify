@@ -40,7 +40,8 @@ class ExerciseList extends StatelessWidget {
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
-        itemCount: exercises.length + 1,
+        itemCount: exercises.length,
+        padding: const EdgeInsets.only(bottom: 76),
         itemBuilder: (context, index) =>
             itemBuilder(context, index, maxSets, planTrailing),
         onReorder: (oldIndex, newIndex) async {
@@ -61,7 +62,8 @@ class ExerciseList extends StatelessWidget {
       );
     else
       return ListView.builder(
-        itemCount: exercises.length + 1,
+        padding: const EdgeInsets.only(bottom: 76),
+        itemCount: exercises.length,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, maxSets, planTrailing),
       );
@@ -73,11 +75,6 @@ class ExerciseList extends StatelessWidget {
     int maxSets,
     PlanTrailing planTrailing,
   ) {
-    if (index >= exercises.length)
-      return const SizedBox(
-        height: 76,
-        key: Key('scroll-placeholder'),
-      );
     final exercise = exercises[index];
     final countIndex =
         counts?.indexWhere((element) => element.name == exercise);
@@ -135,6 +132,7 @@ class ExerciseList extends StatelessWidget {
           context: context,
           builder: (context) {
             return ExerciseModal(
+              planId: plan.id,
               exercise: exercise,
               hasData: count > 0,
               onSelect: () => onSelect(index),

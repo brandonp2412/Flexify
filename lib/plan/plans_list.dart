@@ -80,11 +80,9 @@ class PlansList extends StatelessWidget {
 
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
-        itemCount: plans.isNotEmpty ? plans.length + 1 : 0,
+        itemCount: plans.length,
+        padding: const EdgeInsets.only(bottom: 50),
         itemBuilder: (context, index) {
-          if (index >= plans.length)
-            return const SizedBox(height: 50, key: Key('scroll-placeholder'));
-
           final plan = plans[index];
           return PlanTile(
             key: Key(plan.id.toString()),
@@ -120,9 +118,9 @@ class PlansList extends StatelessWidget {
       );
 
     return ListView.builder(
-      itemCount: plans.length + 1,
+      itemCount: plans.length,
+      padding: const EdgeInsets.only(bottom: 50),
       itemBuilder: (context, index) {
-        if (index >= plans.length) return const SizedBox(height: 50);
         final plan = plans[index];
 
         return PlanTile(

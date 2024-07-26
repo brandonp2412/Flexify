@@ -36,11 +36,10 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return ListView.builder(
-      itemCount: widget.historyDays.length + 1,
+      itemCount: widget.historyDays.length,
+      padding: const EdgeInsets.only(bottom: 76),
       controller: scrollController,
       itemBuilder: (context, index) {
-        if (index >= widget.historyDays.length)
-          return const SizedBox(height: 76);
         final history = widget.historyDays[index];
         final previousHistory =
             index > 0 ? widget.historyDays[index - 1] : null;
