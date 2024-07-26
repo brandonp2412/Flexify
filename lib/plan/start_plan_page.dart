@@ -371,9 +371,8 @@ class _StartPlanPageState extends State<StartPlanPage>
         selectedIndex == planExercises.length - 1;
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
-    if (isWarmup) restMs *= 0.5;
 
-    if (!finishedPlan && settings.restTimers)
+    if (!finishedPlan && !isWarmup && settings.restTimers)
       timerState.startTimer(
         "$exercise ($count)",
         Duration(milliseconds: restMs.toInt()),
