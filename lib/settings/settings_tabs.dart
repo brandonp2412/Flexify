@@ -2,8 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class SettingsTabs extends StatefulWidget {
@@ -42,9 +42,7 @@ class _SettingsTabsState extends State<SettingsTabs> {
 
   setTab(String name, bool enabled) {
     if (!enabled && tabs.where((tab) => tab.enabled == true).length == 1)
-      return Fluttertoast.showToast(
-        msg: 'Woops! If you did that, the app wouldn\'t work...',
-      );
+      return toast(context, 'You need at least one tab');
     final index = tabs.indexWhere((tappedTab) => tappedTab.name == name);
     setState(() {
       tabs[index] = (name: name, enabled: enabled);

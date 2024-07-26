@@ -7,9 +7,9 @@ import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class EditPlanPage extends StatefulWidget {
@@ -219,19 +219,14 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Future<void> save() async {
     final days = [];
-    for (int i = 0; i < daySwitches.length; i++) {
+    for (int i = 0; i < daySwitches.length; i++)
       if (daySwitches[i]) days.add(weekdays[i]);
-    }
 
-    if (days.isEmpty && titleController.text.isEmpty) {
-      Fluttertoast.showToast(msg: 'Select days/title');
-      return;
-    }
+    if (days.isEmpty && titleController.text.isEmpty)
+      return toast(context, 'Select days');
 
-    if (exercises.where((exercise) => exercise.enabled.value).isEmpty) {
-      Fluttertoast.showToast(msg: 'Select exercises');
-      return;
-    }
+    if (exercises.where((exercise) => exercise.enabled.value).isEmpty)
+      return toast(context, 'Select exercises');
 
     var newPlan = PlansCompanion.insert(
       days: days.join(','),

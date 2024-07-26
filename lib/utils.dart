@@ -7,6 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+void toast(BuildContext context, String message, [SnackBarAction? action]) {
+  final defaultAction = SnackBarAction(label: 'OK', onPressed: () {});
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      action: action ?? defaultAction,
+    ),
+  );
+}
+
 Future<GymSet?> getBodyWeight() async {
   final weightSet = await (db.gymSets.select()
         ..where((tbl) => tbl.name.equals('Weight'))
