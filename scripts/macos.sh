@@ -2,7 +2,6 @@
 
 set -e
 
-source "$HOME/.zprofile"
 cd "$HOME/flexify"
 git pull
 security unlock-keychain -p ''

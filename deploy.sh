@@ -97,12 +97,12 @@ if [[ $* == *-m* ]]; then
   echo "Skipping MacOS..."
 else
   set +x
-  ssh macos "./flexify/scripts/macos.sh"
+  ssh macos "cd flexify && git pull && ./scripts/macos.sh"
 fi
 
 if [[ $* == *-i* ]]; then
   echo "Skipping iOS..."
 else
   set +x
-  ssh macos "./flexify/scripts/ios.sh"
+  ssh macos "cd flexify && git pull && ./scripts/ios.sh"
 fi
