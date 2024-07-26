@@ -32,7 +32,7 @@ fun scheduleBackups(context: Context) {
     alarmManager.setInexactRepeating(
         AlarmManager.RTC_WAKEUP,
         calendar.timeInMillis,
-        AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+        AlarmManager.INTERVAL_DAY,
         pendingIntent
     )
 }
