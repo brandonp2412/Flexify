@@ -74,6 +74,30 @@ To get started with Flexify, follow these steps:
    ```bash
    flutter run
    ```
+   
+## Migrations
+
+If you edit any of the models in the `lib/database` directory you probably need to create migrations. E.g. assume the version starts at `1`.
+
+1. Bump the `schemaVersion`
+`lib/database/database.dart`
+```dart
+  int get schemaVersion => 2;
+```
+
+2. Run database migrations
+```sh
+./scripts/migrate.sh
+```
+
+3. Add the migration step
+`lib/database/database.dart`
+```dart
+from1To2: (Migrator m, Schema2 schema) async {
+  await m.addColumn(schema.myTable, schema.myTable.myColumn);
+},
+```
+
 
 ## Contributing
 
