@@ -67,10 +67,11 @@ flutter build linux
 docker start windows
 rsync -a --delete --exclude-from=.gitignore ./* .gitignore \
   "$HOME/windows/$project-source"
-ssh windows "Powershell -ExecutionPolicy bypass -File //host.lan/Data/build-flexify.ps1"
+ssh -o 'ConnectionAttempts 10' windows "Powershell -ExecutionPolicy bypass -File //host.lan/Data/build-flexify.ps1"
 sudo chown -R "$USER" "$HOME/windows/$project"
 mv -f "$HOME/windows/$project/$project.msix" "$HOME/windows/$project.msix"
 (cd "$HOME/windows/$project" && zip --quiet -r "$HOME/windows/$project-windows.zip" .)
+docker stop windows
 
 git push
 gh release create "$new_version" --notes "$changelog" \
