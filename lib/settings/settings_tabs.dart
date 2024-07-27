@@ -24,6 +24,7 @@ class _SettingsTabsState extends State<SettingsTabs> {
     (name: 'PlansPage', enabled: false),
     (name: 'GraphsPage', enabled: false),
     (name: 'TimerPage', enabled: false),
+    (name: 'SettingsPage', enabled: false),
   ];
 
   @override
@@ -120,6 +121,20 @@ class _SettingsTabsState extends State<SettingsTabs> {
                   onChanged: (value) => setTab(tab.name, value),
                 ),
                 title: const Text("Timer"),
+                trailing: ReorderableDragStartListener(
+                  index: index,
+                  child: const Icon(Icons.drag_handle),
+                ),
+              );
+            } else if (tab.name == 'SettingsPage') {
+              return ListTile(
+                key: Key(tab.name),
+                onTap: () => setTab(tab.name, !tab.enabled),
+                leading: Switch(
+                  value: tab.enabled,
+                  onChanged: (value) => setTab(tab.name, value),
+                ),
+                title: const Text("Settings"),
                 trailing: ReorderableDragStartListener(
                   index: index,
                   child: const Icon(Icons.drag_handle),

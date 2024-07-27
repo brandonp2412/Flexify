@@ -4,6 +4,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/history_page.dart';
+import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
@@ -110,6 +111,8 @@ class HomePage extends StatelessWidget {
                 return const GraphsPage();
               else if (tab == 'TimerPage')
                 return const TimerPage();
+              else if (tab == 'SettingsPage')
+                return const SettingsPage();
               else
                 return ErrorWidget("Couldn't build tab content.");
             }).toList(),
@@ -135,6 +138,11 @@ class HomePage extends StatelessWidget {
                 return const Tab(
                   icon: Icon(Icons.timer_outlined),
                   text: "Timer",
+                );
+              else if (tab == 'SettingsPage')
+                return const Tab(
+                  icon: Icon(Icons.settings),
+                  text: "Settings",
                 );
               else
                 return ErrorWidget("Couldn't build tab bottom bar.");
