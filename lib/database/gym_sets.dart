@@ -131,11 +131,11 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
   final countColumn = CustomExpression<int>(
     """
       COUNT(
-        CASE 
-          WHEN DATE(created, 'unixepoch', 'localtime') = 
-            DATE('now', 'localtime') AND hidden = 0 
-              AND gym_sets.plan_id = $planId
-          THEN 1 
+        CASE
+          WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
+               AND hidden = 0
+               AND gym_sets.plan_id = $planId
+          THEN 1
         END
       )
    """,
