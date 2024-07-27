@@ -14,13 +14,6 @@ import 'package:flexify/settings/settings_workout.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SettingsLine {
-  final String key;
-  final Widget widget;
-
-  SettingsLine({required this.key, required this.widget});
-}
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
