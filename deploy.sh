@@ -26,11 +26,10 @@ else
   set +x
   # shellcheck disable=SC2029
   ssh macbook "
-    set -e
+    set -ex
     source .zprofile 
     cd flexify
     git pull 
-    security unlock-keychain -p $(pass macbook)
     ./scripts/macos.sh || true
     ./scripts/ios.sh
   "
