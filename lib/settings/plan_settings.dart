@@ -129,14 +129,14 @@ List<Widget> getPlanSettings(
   ];
 }
 
-class SettingsPlans extends StatefulWidget {
-  const SettingsPlans({super.key});
+class PlanSettings extends StatefulWidget {
+  const PlanSettings({super.key});
 
   @override
-  State<SettingsPlans> createState() => _SettingsPlansState();
+  State<PlanSettings> createState() => _PlanSettingsState();
 }
 
-class _SettingsPlansState extends State<SettingsPlans> {
+class _PlanSettingsState extends State<PlanSettings> {
   late var settings = context.read<SettingsState>().value;
 
   late final maxSets = TextEditingController(text: settings.maxSets.toString());

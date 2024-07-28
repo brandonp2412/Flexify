@@ -111,8 +111,8 @@ List<Widget> getAppearanceSettings(String term, SettingsState settings) {
   ];
 }
 
-class SettingsAppearance extends StatelessWidget {
-  const SettingsAppearance({super.key});
+class AppearanceSettings extends StatelessWidget {
+  const AppearanceSettings({super.key});
 
   @override
   Widget build(BuildContext context) {

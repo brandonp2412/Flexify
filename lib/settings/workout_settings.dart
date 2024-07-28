@@ -108,14 +108,14 @@ List<Widget> getWorkoutSettings(
   ];
 }
 
-class SettingsWorkout extends StatefulWidget {
-  const SettingsWorkout({super.key});
+class WorkoutSettings extends StatefulWidget {
+  const WorkoutSettings({super.key});
 
   @override
-  State<SettingsWorkout> createState() => _SettingsWorkoutState();
+  State<WorkoutSettings> createState() => _WorkoutSettingsState();
 }
 
-class _SettingsWorkoutState extends State<SettingsWorkout> {
+class _WorkoutSettingsState extends State<WorkoutSettings> {
   late var settings = context.read<SettingsState>().value;
 
   late final maxSets = TextEditingController(text: settings.maxSets.toString());

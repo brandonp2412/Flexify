@@ -6,11 +6,11 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SettingsTabs extends StatefulWidget {
-  const SettingsTabs({super.key});
+class TabSettings extends StatefulWidget {
+  const TabSettings({super.key});
 
   @override
-  createState() => _SettingsTabsState();
+  createState() => _TabSettingsState();
 }
 
 typedef TabSetting = ({
@@ -18,7 +18,7 @@ typedef TabSetting = ({
   bool enabled,
 });
 
-class _SettingsTabsState extends State<SettingsTabs> {
+class _TabSettingsState extends State<TabSettings> {
   List<TabSetting> tabs = [
     (name: 'HistoryPage', enabled: false),
     (name: 'PlansPage', enabled: false),

@@ -63,8 +63,8 @@ List<Widget> getDataSettings(
   ];
 }
 
-class SettingsData extends StatelessWidget {
-  const SettingsData({super.key});
+class DataSettings extends StatelessWidget {
+  const DataSettings({super.key});
 
   @override
   Widget build(BuildContext context) {

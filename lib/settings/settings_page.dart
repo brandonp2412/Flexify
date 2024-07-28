@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/settings/settings_appearance.dart';
-import 'package:flexify/settings/settings_data.dart';
-import 'package:flexify/settings/settings_formats.dart';
-import 'package:flexify/settings/settings_plans.dart';
+import 'package:flexify/settings/appearance_settings.dart';
+import 'package:flexify/settings/data_settings.dart';
+import 'package:flexify/settings/format_settings.dart';
+import 'package:flexify/settings/plan_settings.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/settings/settings_tabs.dart';
-import 'package:flexify/settings/settings_timer.dart';
-import 'package:flexify/settings/settings_workout.dart';
+import 'package:flexify/settings/tab_settings.dart';
+import 'package:flexify/settings/timer_settings.dart';
+import 'package:flexify/settings/workout_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -120,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Appearance"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsAppearance(),
+                              builder: (context) => const AppearanceSettings(),
                             ),
                           ),
                         ),
@@ -129,7 +129,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Data management"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsData(),
+                              builder: (context) => const DataSettings(),
                             ),
                           ),
                         ),
@@ -138,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Formats"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsFormat(),
+                              builder: (context) => const FormatSettings(),
                             ),
                           ),
                         ),
@@ -147,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Plans"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsPlans(),
+                              builder: (context) => const PlanSettings(),
                             ),
                           ),
                         ),
@@ -156,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Tabs"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsTabs(),
+                              builder: (context) => const TabSettings(),
                             ),
                           ),
                         ),
@@ -165,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Timers"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsTimer(),
+                              builder: (context) => const TimerSettings(),
                             ),
                           ),
                         ),
@@ -174,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text("Workouts"),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const SettingsWorkout(),
+                              builder: (context) => const WorkoutSettings(),
                             ),
                           ),
                         ),

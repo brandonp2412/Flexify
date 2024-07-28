@@ -128,8 +128,8 @@ List<Widget> getFormatSettings(String term, Setting settings) {
   ];
 }
 
-class SettingsFormat extends StatelessWidget {
-  const SettingsFormat({super.key});
+class FormatSettings extends StatelessWidget {
+  const FormatSettings({super.key});
 
   @override
   Widget build(BuildContext context) {

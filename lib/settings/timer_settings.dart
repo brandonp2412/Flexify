@@ -174,14 +174,14 @@ List<Widget> getTimerSettings(
   ];
 }
 
-class SettingsTimer extends StatefulWidget {
-  const SettingsTimer({super.key});
+class TimerSettings extends StatefulWidget {
+  const TimerSettings({super.key});
 
   @override
-  State<SettingsTimer> createState() => _SettingsTimerState();
+  State<TimerSettings> createState() => _TimerSettingsState();
 }
 
-class _SettingsTimerState extends State<SettingsTimer> {
+class _TimerSettingsState extends State<TimerSettings> {
   late SettingsState settings = context.read<SettingsState>();
   late final minutesController = TextEditingController(
     text: (Duration(milliseconds: settings.value.timerDuration))
