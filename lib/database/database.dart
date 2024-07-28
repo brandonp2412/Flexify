@@ -10,10 +10,8 @@ import 'package:flexify/database/plans.dart';
 import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/database/settings.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
@@ -62,28 +60,7 @@ class AppDatabase extends _$AppDatabase {
           batch.insertAll(planExercises, defaultPlanExercises);
         });
 
-        await settings.insertOne(
-          SettingsCompanion.insert(
-            themeMode: material.ThemeMode.system.toString(),
-            planTrailing: PlanTrailing.reorder.toString(),
-            longDateFormat: 'dd/MM/yy',
-            shortDateFormat: 'd/M/yy',
-            timerDuration:
-                const Duration(minutes: 3, seconds: 30).inMilliseconds,
-            maxSets: 3,
-            vibrate: true,
-            restTimers: true,
-            showUnits: true,
-            alarmSound: '',
-            cardioUnit: 'km',
-            curveLines: false,
-            explainedPermissions: false,
-            groupHistory: true,
-            showBodyWeight: const Value(true),
-            strengthUnit: 'kg',
-            systemColors: false,
-          ),
-        );
+        await settings.insertOne(defaultSettings);
       },
       onUpgrade: stepByStep(
         from1To2: (m, schema) async {
@@ -128,12 +105,7 @@ class AppDatabase extends _$AppDatabase {
             ),
           );
         },
-        from6To7: (m, schema) async {
-          final prefs = await SharedPreferences.getInstance();
-          final dateFormat = prefs.getString('dateFormat');
-          if (dateFormat == null) return;
-          prefs.setString('longDateFormat', dateFormat);
-        },
+        from6To7: (m, schema) async {},
         from7To8: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.duration);
           await m.addColumn(schema.gymSets, schema.gymSets.distance);
@@ -141,13 +113,7 @@ class AppDatabase extends _$AppDatabase {
         },
         from8To10: (Migrator m, Schema10 schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.restMs);
-          final prefs = await SharedPreferences.getInstance();
           await m.addColumn(schema.gymSets, schema.gymSets.maxSets);
-          final maxSets = prefs.getInt('maxSets');
-          if (maxSets != null)
-            await m.database.customUpdate(
-              "UPDATE gym_sets SET max_sets = $maxSets",
-            );
         },
         from10To11: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.incline);
@@ -173,96 +139,32 @@ class AppDatabase extends _$AppDatabase {
             "UPDATE gym_sets SET max_sets = NULL WHERE max_sets = 3",
           );
         },
-        from14To15: (Migrator m, Schema15 schema) async {
-          final prefs = await SharedPreferences.getInstance();
-          final maxSets = prefs.getInt('maxSets');
-
-          if (maxSets != null)
-            await m.database.customUpdate(
-              "UPDATE gym_sets SET max_sets = NULL WHERE max_sets = $maxSets",
-            );
-        },
+        from14To15: (Migrator m, Schema15 schema) async {},
         from15To16: (Migrator m, Schema16 schema) async {
           await m.createTable(schema.settings);
-          material.ThemeMode themeMode = material.ThemeMode.system;
-          PlanTrailing planTrailing = PlanTrailing.reorder;
-          Duration timerDuration = const Duration(minutes: 3, seconds: 30);
-          int maxSets = 3;
-          String longDateFormat = 'dd/MM/yy';
-          String shortDateFormat = 'd/M/yy';
-          String? alarmSound;
-          String? cardioUnit;
-          String? strengthUnit;
-
-          bool vibrate = true;
-          bool restTimers = true;
-          bool showUnits = true;
-          bool systemColors = true;
-          bool explainedPermissions = false;
-          bool hideTimerTab = false;
-          bool hideHistoryTab = false;
-          bool curveLines = false;
-          bool hideWeight = false;
-          bool groupHistory = true;
-
-          final prefs = await SharedPreferences.getInstance();
-          alarmSound = prefs.getString('alarmSound');
-          cardioUnit = prefs.getString('cardioUnit');
-          strengthUnit = prefs.getString('strengthUnit');
-          longDateFormat = prefs.getString('longDateFormat') ?? "dd/MM/yy";
-          shortDateFormat = prefs.getString('shortDateFormat') ?? "d/M/yy";
-          maxSets = prefs.getInt('maxSets') ?? 3;
-
-          final duration = prefs.getInt('timerDuration');
-          if (duration != null)
-            timerDuration = Duration(milliseconds: duration);
-          else
-            timerDuration = const Duration(minutes: 3, seconds: 30);
-
-          final theme = prefs.getString('themeMode');
-          if (theme == material.ThemeMode.system.toString())
-            themeMode = material.ThemeMode.system;
-          else if (theme == material.ThemeMode.light.toString())
-            themeMode = material.ThemeMode.light;
-          else if (theme == material.ThemeMode.dark.toString())
-            themeMode = material.ThemeMode.dark;
-
-          final plan = prefs.getString('planTrailing');
-          for (final trailing in PlanTrailing.values)
-            if (plan == trailing.toString()) planTrailing = trailing;
-
-          systemColors = prefs.getBool("systemColors") ?? true;
-          restTimers = prefs.getBool("restTimers") ?? true;
-          showUnits = prefs.getBool("showUnits") ?? true;
-          hideTimerTab = prefs.getBool("hideTimerTab") ?? false;
-          hideHistoryTab = prefs.getBool("hideHistoryTab") ?? false;
-          explainedPermissions = prefs.getBool('explainedPermissions') ?? false;
-          curveLines = prefs.getBool('curveLines') ?? false;
-          vibrate = prefs.getBool('vibrate') ?? true;
-          hideWeight = prefs.getBool('hideWeight') ?? false;
-          groupHistory = prefs.getBool('groupHistory') ?? true;
-
           await schema.settings.insertOne(
             RawValuesInsertable({
-              'theme_mode': Variable(themeMode.toString()),
-              'plan_trailing': Variable(planTrailing.toString()),
-              'long_date_format': Variable(longDateFormat),
-              'short_date_format': Variable(shortDateFormat),
-              'timer_duration': Variable(timerDuration.inMilliseconds),
-              'max_sets': Variable(maxSets),
-              'vibrate': Variable(vibrate),
-              'rest_timers': Variable(restTimers),
-              'show_units': Variable(showUnits),
-              'alarm_sound': Variable(alarmSound ?? ''),
-              'cardio_unit': Variable(cardioUnit ?? 'km'),
-              'curve_lines': Variable(curveLines),
-              'explained_permissions': Variable(explainedPermissions),
-              'group_history': Variable(groupHistory),
-              'hide_history_tab': Variable(hideHistoryTab),
-              'hide_timer_tab': Variable(hideTimerTab),
-              'hide_weight': Variable(hideWeight),
-              'strength_unit': Variable(strengthUnit ?? 'kg'),
-              'system_colors': Variable(systemColors),
+              'theme_mode': const Variable('ThemeMode.system'),
+              'plan_trailing': const Variable('PlanTrailing.reorder'),
+              'long_date_format': const Variable('dd/MM/yy'),
+              'short_date_format': const Variable('d/M/yy'),
+              'timer_duration': Variable(
+                const Duration(minutes: 3, seconds: 30).inMilliseconds,
+              ),
+              'max_sets': const Variable(3),
+              'vibrate': const Variable(true),
+              'rest_timers': const Variable(true),
+              'show_units': const Variable(true),
+              'alarm_sound': const Variable(''),
+              'cardio_unit': const Variable('km'),
+              'curve_lines': const Variable(false),
+              'explained_permissions': const Variable(true),
+              'group_history': const Variable(true),
+              'hide_history_tab': const Variable(false),
+              'hide_timer_tab': const Variable(false),
+              'hide_weight': const Variable(false),
+              'strength_unit': const Variable('kg'),
+              'system_colors': const Variable(false),
             }),
           );
         },

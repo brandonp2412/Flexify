@@ -17,7 +17,6 @@ dependencies:
   fl_chart: ^0.68.0
   permission_handler: ^11.3.0
   provider: ^6.1.1
-  shared_preferences: ^2.2.2
   dynamic_color: ^1.7.0
   sqlite3: ^2.4.0
   file_picker: ^8.0.3

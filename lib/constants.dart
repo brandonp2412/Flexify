@@ -1,3 +1,7 @@
+import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flutter/material.dart';
+
 const weekdays = [
   'Monday',
   'Tuesday',
@@ -37,3 +41,23 @@ enum StrengthMetric {
   relativeStrength,
   bestReps,
 }
+
+final defaultSettings = SettingsCompanion.insert(
+  themeMode: ThemeMode.system.toString(),
+  planTrailing: PlanTrailing.reorder.toString(),
+  longDateFormat: 'dd/MM/yy',
+  shortDateFormat: 'd/M/yy',
+  timerDuration: const Duration(minutes: 3, seconds: 30).inMilliseconds,
+  maxSets: 3,
+  vibrate: true,
+  restTimers: true,
+  showUnits: true,
+  alarmSound: '',
+  cardioUnit: 'km',
+  curveLines: false,
+  explainedPermissions: false,
+  groupHistory: true,
+  showBodyWeight: const Value(true),
+  strengthUnit: 'kg',
+  systemColors: false,
+);

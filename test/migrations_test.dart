@@ -3,7 +3,6 @@ import 'package:drift/native.dart';
 import 'package:drift_dev/api/migrations.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'generated_migrations/schema.dart';
 import 'generated_migrations/schema_v17.dart' as v17;
@@ -14,7 +13,6 @@ void main() {
     () async {
       final verifier = SchemaVerifier(GeneratedHelper());
       TestWidgetsFlutterBinding.ensureInitialized();
-      SharedPreferences.setMockInitialValues({});
       driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
       final currentVersion =
           AppDatabase(executor: NativeDatabase.memory(), logStatements: false)
@@ -38,7 +36,6 @@ void main() {
   test('upgrade 17->18 with data', () async {
     final verifier = SchemaVerifier(GeneratedHelper());
     TestWidgetsFlutterBinding.ensureInitialized();
-    SharedPreferences.setMockInitialValues({});
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
 
     final schema = await verifier.schemaAt(17);
