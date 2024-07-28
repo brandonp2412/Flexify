@@ -173,7 +173,10 @@ class _EditSetPageState extends State<EditSetPage> {
               TextField(
                 controller: distanceController,
                 focusNode: distanceNode,
-                decoration: const InputDecoration(labelText: 'Distance'),
+                decoration: InputDecoration(
+                  labelText:
+                      unit == 'kcal' ? 'Amount ($unit)' : 'Distance ($unit)',
+                ),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(distanceController),
                 onSubmitted: (value) => selectAll(minutesController),

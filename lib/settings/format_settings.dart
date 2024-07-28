@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -32,48 +33,30 @@ final List<String> shortFormats = [
 List<Widget> getFormatSettings(String term, Setting settings) {
   return [
     if ('strength unit'.contains(term.toLowerCase()))
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Tooltip(
-          message: 'Default unit to use for strength training',
-          child: DropdownButtonFormField<String>(
-            value: settings.strengthUnit,
-            decoration: const InputDecoration(labelText: 'Strength unit'),
-            items: ['kg', 'lb'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    strengthUnit: Value(value!),
-                  ),
+      UnitSelector(
+        label: 'Strength unit',
+        value: settings.strengthUnit,
+        cardio: false,
+        onChanged: (value) {
+          db.settings.update().write(
+                SettingsCompanion(
+                  strengthUnit: Value(value!),
                 ),
-          ),
-        ),
+              );
+        },
       ),
     if ('cardio unit'.contains(term.toLowerCase()))
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Tooltip(
-          message: 'Default unit to use for cardio training',
-          child: DropdownButtonFormField<String>(
-            value: settings.cardioUnit,
-            decoration: const InputDecoration(labelText: 'Cardio unit'),
-            items: ['km', 'mi'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    cardioUnit: Value(value!),
-                  ),
+      UnitSelector(
+        label: 'Cardio unit',
+        value: settings.cardioUnit,
+        cardio: true,
+        onChanged: (value) {
+          db.settings.update().write(
+                SettingsCompanion(
+                  cardioUnit: Value(value!),
                 ),
-          ),
-        ),
+              );
+        },
       ),
     if ('long date format'.contains(term.toLowerCase()))
       Padding(

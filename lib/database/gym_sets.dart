@@ -68,9 +68,19 @@ Stream<List<CardioData>> watchCardio({
         var value = getValue(result, metric);
         final unit = result.read(db.gymSets.unit)!;
 
-        if (unit == 'km' && targetUnit == 'mi')
+        if (unit == 'km' && targetUnit == 'mi') {
           value /= 1.609;
-        else if (unit == 'mi' && targetUnit == 'km') value *= 1.609;
+        } else if (unit == 'mi' && targetUnit == 'km') {
+          value *= 1.609;
+        } else if (unit == 'm' && targetUnit == 'km') {
+          value /= 1000;
+        } else if (unit == 'km' && targetUnit == 'm') {
+          value *= 1000;
+        } else if (unit == 'm' && targetUnit == 'mi') {
+          value /= 1609.34;
+        } else if (unit == 'mi' && targetUnit == 'm') {
+          value *= 1609.34;
+        }
 
         list.add(
           CardioData(

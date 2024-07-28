@@ -53,14 +53,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   : const Icon(Icons.fitness_center),
               onTap: () {
                 setState(() {
-                  cardio = !cardio;
-                  if (cardio && unit == 'km')
+                  if (cardio)
                     unit = 'kg';
-                  else if (cardio && unit == 'mi')
-                    unit = 'lb';
-                  else if (!cardio && unit == 'kg')
+                  else
                     unit = 'km';
-                  else if (!cardio && unit == 'lb') unit = 'mi';
+                  cardio = !cardio;
                 });
               },
               trailing: Switch(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class UnitSelector extends StatelessWidget {
   final String value;
+  final String? label;
 
   final bool cardio;
   final Function(String?) onChanged;
@@ -10,35 +11,53 @@ class UnitSelector extends StatelessWidget {
     required this.value,
     required this.cardio,
     required this.onChanged,
+    this.label,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 8.0),
-        ListTile(
-          title: Text('Unit ($value)'),
-          leading: value == 'kg' || value == 'km'
-              ? const Icon(Icons.straighten)
-              : const Icon(Icons.square_foot),
-          onTap: onTap,
-          trailing: Switch(
-            value: value == 'kg' || value == 'km',
-            onChanged: (_) => onTap(),
+    if (cardio)
+      return DropdownButtonFormField(
+        decoration: InputDecoration(labelText: label ?? 'Unit'),
+        value: value,
+        items: const [
+          DropdownMenuItem(
+            value: 'km',
+            child: Text("Kilometers"),
           ),
+          DropdownMenuItem(
+            value: 'mi',
+            child: Text("Miles"),
+          ),
+          DropdownMenuItem(
+            value: 'm',
+            child: Text("Meters"),
+          ),
+          DropdownMenuItem(
+            value: 'kcal',
+            child: Text("Kilocalories"),
+          ),
+        ],
+        onChanged: (value) {
+          onChanged(value);
+        },
+      );
+    return DropdownButtonFormField(
+      decoration: InputDecoration(labelText: label ?? 'Unit'),
+      value: value,
+      items: const [
+        DropdownMenuItem(
+          value: 'kg',
+          child: Text("Kilograms"),
+        ),
+        DropdownMenuItem(
+          value: 'lb',
+          child: Text("Pounds"),
         ),
       ],
+      onChanged: (value) {
+        onChanged(value);
+      },
     );
-  }
-
-  void onTap() {
-    if (value == 'kg')
-      onChanged('lb');
-    else if (value == 'km')
-      onChanged('mi');
-    else if (value == 'lb')
-      onChanged('kg');
-    else if (value == 'mi') onChanged('km');
   }
 }
