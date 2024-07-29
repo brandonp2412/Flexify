@@ -103,9 +103,10 @@ class TimerState extends ChangeNotifier {
 
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
-    if (!Platform.isAndroid)
+    if (!Platform.isAndroid) {
       player.stop();
-    else
+      next?.cancel();
+    } else
       androidChannel.invokeMethod('stop');
   }
 
