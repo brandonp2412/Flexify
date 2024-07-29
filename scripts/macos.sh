@@ -3,6 +3,7 @@
 set -ex
 
 keychain initialize
+keychain add-certificates
 flutter build macos --release
 
 APP_NAME="build/macos/Build/Products/Release/Flexify.app"
@@ -18,4 +19,8 @@ xcrun productsign --sign "$INSTALLER_CERT_NAME" build/macos/unsigned.pkg "$PACKA
 rm -f build/macos/unsigned.pkg
 
 fastlane deliver --pkg build/macos/Flexify.pkg
+
+flutter build ipa
+fastlane deliver --ipa build/ios/ipa/flexify.ipa
+
 keychain use-login
