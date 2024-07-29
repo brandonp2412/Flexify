@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:drift_dev/api/migrations.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'generated_migrations/schema.dart';
@@ -25,7 +26,14 @@ void main() {
           if (to == 8 || to == 9) continue;
           final connection = await verifier.startAt(from);
           final db = AppDatabase(executor: connection, logStatements: false);
-          await verifier.migrateAndValidate(db, to);
+
+          try {
+            await verifier.migrateAndValidate(db, to);
+          } catch (error) {
+            debugPrint("from=$from,to=$to");
+            rethrow;
+          }
+
           await db.close();
         }
       }
