@@ -9,7 +9,6 @@ import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/plans.dart';
 import 'package:flexify/database/schema_versions.dart';
 import 'package:flexify/database/settings.dart';
-import 'package:flexify/utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
@@ -96,14 +95,6 @@ class AppDatabase extends _$AppDatabase {
         },
         from5To6: (m, schema) async {
           await m.addColumn(schema.gymSets, schema.gymSets.bodyWeight);
-          final bodyWeight = await getBodyWeight();
-          if (bodyWeight?.weight == null) return;
-
-          await (schema.gymSets.update()).write(
-            RawValuesInsertable(
-              {"body_weight": Variable(bodyWeight!.weight)},
-            ),
-          );
         },
         from6To7: (m, schema) async {},
         from7To8: (m, schema) async {
@@ -237,21 +228,24 @@ class AppDatabase extends _$AppDatabase {
 
           final result = await (schema.settings.selectOnly()
                 ..addColumns([hideWeight, hideTimerTab, hideHistoryTab]))
-              .getSingle();
+              .getSingleOrNull();
 
           await m.addColumn(schema.settings, schema.settings.showBodyWeight);
           await m.addColumn(schema.settings, schema.settings.showTimerTab);
           await m.addColumn(schema.settings, schema.settings.showHistoryTab);
 
-          await schema.settings.update().write(
-                RawValuesInsertable(
-                  {
-                    'show_body_weight': Variable(!result.read(hideWeight)!),
-                    'show_timer_tab': Variable(!result.read(hideTimerTab)!),
-                    'show_history_tab': Variable(!result.read(hideHistoryTab)!),
-                  },
-                ),
-              );
+          if (result != null)
+            await schema.settings.update().write(
+                  RawValuesInsertable(
+                    {
+                      'show_body_weight': Variable(!result.read(hideWeight)!),
+                      'show_timer_tab': Variable(!result.read(hideTimerTab)!),
+                      'show_history_tab':
+                          Variable(!result.read(hideHistoryTab)!),
+                    },
+                  ),
+                );
+
           await m.alterTable(TableMigration(schema.settings));
         },
         from24To25: (Migrator m, Schema25 schema) async {
@@ -263,12 +257,14 @@ class AppDatabase extends _$AppDatabase {
         from26To27: (Migrator m, Schema27 schema) async {
           var tabs = ['HistoryPage', 'PlansPage', 'GraphsPage', 'TimerPage'];
           final settings =
-              await (schema.settings.select()..limit(1)).getSingle();
+              await (schema.settings.select()..limit(1)).getSingleOrNull();
 
-          bool showTimer = settings.read('show_timer_tab');
-          if (!showTimer) tabs.remove('TimerPage');
-          bool showHistory = settings.read('show_history_tab');
-          if (!showHistory) tabs.remove('HistoryPage');
+          if (settings != null) {
+            bool showTimer = settings.read('show_timer_tab');
+            if (!showTimer) tabs.remove('TimerPage');
+            bool showHistory = settings.read('show_history_tab');
+            if (!showHistory) tabs.remove('HistoryPage');
+          }
 
           await m.addColumn(schema.settings, schema.settings.tabs);
           await schema.settings.update().write(

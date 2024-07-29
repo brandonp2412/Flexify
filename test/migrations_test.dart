@@ -30,7 +30,6 @@ void main() {
         }
       }
     },
-    skip: true,
   );
 
   test('upgrade 17->18 with data', () async {

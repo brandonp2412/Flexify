@@ -188,7 +188,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
               builder: (context, showUnits, child) => Visibility(
                 visible: showUnits,
                 child: UnitSelector(
-                  value: unit ?? 'kg',
+                  value: unit,
                   onChanged: (String? newValue) {
                     setState(() {
                       unit = newValue!;
@@ -236,7 +236,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _save,
+        onPressed: save,
         tooltip: "Save",
         child: const Icon(Icons.save),
       ),
@@ -309,7 +309,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
     }
   }
 
-  Future<void> _save() async {
+  Future<void> save() async {
     Navigator.pop(context);
     final reps = double.tryParse(repsController.text);
     final weight = double.tryParse(weightController.text);
@@ -339,7 +339,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
       category: Value.absentIfNull(category),
     );
 
-    (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(gymSet);
+    await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids)))
+        .write(gymSet);
   }
 
   Future<void> _selectDate() async {

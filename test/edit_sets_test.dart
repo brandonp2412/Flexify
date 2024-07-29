@@ -64,8 +64,6 @@ void main() async {
     expect(find.text("Edit 3 sets"), findsOne);
     expect(find.bySemanticsLabel('Name'), findsOne);
     expect(find.bySemanticsLabel('Reps'), findsOne);
-    final save = find.byTooltip("Save");
-    expect(save, findsOne);
 
     await tester.enterText(find.bySemanticsLabel('Name'), 'New name');
     await tester.pump();
@@ -73,8 +71,11 @@ void main() async {
     await tester.pump();
     await tester.enterText(find.bySemanticsLabel('Weight'), '200');
     await tester.pump();
-    await tester.tap(find.textContaining('Unit'));
-    await tester.tap(save);
+    await tester.tap(find.bySemanticsLabel('Unit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Pounds'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip("Save"));
     await tester.pumpAndSettle();
 
     expect(find.text("Edit 3 sets"), findsNothing);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UnitSelector extends StatelessWidget {
-  final String value;
+  final String? value;
   final String? label;
 
   final bool cardio;
@@ -21,6 +21,10 @@ class UnitSelector extends StatelessWidget {
         decoration: InputDecoration(labelText: label ?? 'Unit'),
         value: value,
         items: const [
+          DropdownMenuItem(
+            value: '',
+            child: Text(""),
+          ),
           DropdownMenuItem(
             value: 'km',
             child: Text("Kilometers"),
@@ -46,6 +50,10 @@ class UnitSelector extends StatelessWidget {
       decoration: InputDecoration(labelText: label ?? 'Unit'),
       value: value,
       items: const [
+        DropdownMenuItem(
+          value: null,
+          child: Text(""),
+        ),
         DropdownMenuItem(
           value: 'kg',
           child: Text("Kilograms"),
