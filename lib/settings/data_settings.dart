@@ -10,6 +10,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -24,6 +25,7 @@ void tapBackup(bool value) async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
     androidChannel.invokeMethod('pick', {'dbPath': dbPath});
+    await Permission.notification.request();
   }
 }
 
