@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
