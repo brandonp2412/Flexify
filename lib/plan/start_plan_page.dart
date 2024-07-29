@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -10,6 +10,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +40,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   DateTime? lastSaved;
   List<Rpm>? rpms;
   String? category;
+  String? image;
 
   late List<String> planExercises = widget.plan.exercises.split(',');
   late final Stream<List<GymCount>> countStream =
@@ -84,7 +86,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
+        child: material.Column(
           children: [
             if (!cardio) ...[
               TextField(
@@ -268,9 +270,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     return (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
-            (u) => drift.OrderingTerm(
+            (u) => OrderingTerm(
                   expression: u.created,
-                  mode: drift.OrderingMode.desc,
+                  mode: OrderingMode.desc,
                 ),
           ])
           ..limit(1))
@@ -348,18 +350,19 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
-      reps: double.parse(repsController.text),
-      weight: double.parse(weightController.text),
       unit: unit,
       created: DateTime.now().toLocal(),
-      cardio: drift.Value(cardio),
-      duration: drift.Value(duration),
-      distance: drift.Value(double.parse(distanceController.text)),
-      bodyWeight: drift.Value(bodyWeight),
-      restMs: drift.Value(restMs?.toInt()),
-      incline: drift.Value(int.tryParse(inclineController.text)),
-      planId: drift.Value(widget.plan.id),
-      category: drift.Value(category),
+      cardio: Value(cardio),
+      duration: Value(duration),
+      bodyWeight: Value(bodyWeight),
+      restMs: Value(restMs?.toInt()),
+      planId: Value(widget.plan.id),
+      category: Value(category),
+      image: Value(image),
+      reps: double.parse(repsController.text),
+      weight: double.parse(weightController.text),
+      incline: Value(int.tryParse(inclineController.text)),
+      distance: Value(double.parse(distanceController.text)),
     );
 
     var count = 0;
@@ -408,6 +411,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       inclineController.text = last.incline?.toString() ?? "";
       cardio = last.cardio;
       category = last.category;
+      image = last.image;
 
       if (cardio && (unit == 'kg' || unit == 'lb'))
         unit = settings.cardioUnit;
