@@ -46,6 +46,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 });
               },
             ),
+            const SizedBox(height: 8),
             ListTile(
               title: cardio ? const Text('Cardio') : const Text('Strength'),
               leading: cardio
