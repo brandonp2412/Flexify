@@ -25,12 +25,12 @@ class StartPlanPage extends StatefulWidget {
 
 class _StartPlanPageState extends State<StartPlanPage>
     with WidgetsBindingObserver {
-  final repsController = TextEditingController(text: "0.0");
-  final weightController = TextEditingController(text: "0.0");
-  final distanceController = TextEditingController(text: "0.0");
-  final minutesController = TextEditingController(text: "0.0");
-  final secondsController = TextEditingController(text: "0.0");
-  final inclineController = TextEditingController(text: "0");
+  final reps = TextEditingController(text: "0.0");
+  final weight = TextEditingController(text: "0.0");
+  final distance = TextEditingController(text: "0.0");
+  final minutes = TextEditingController(text: "0.0");
+  final seconds = TextEditingController(text: "0.0");
+  final incline = TextEditingController(text: "0");
 
   /// Used to show progress lines instantly on first render.
   bool first = true;
@@ -90,19 +90,19 @@ class _StartPlanPageState extends State<StartPlanPage>
           children: [
             if (!cardio) ...[
               TextField(
-                controller: repsController,
+                controller: reps,
                 decoration: const InputDecoration(labelText: 'Reps'),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (value) {
-                  selectAll(weightController);
+                  selectAll(weight);
                 },
                 onTap: () {
-                  selectAll(repsController);
+                  selectAll(reps);
                 },
               ),
               TextField(
-                controller: weightController,
+                controller: weight,
                 decoration: InputDecoration(
                   labelText: 'Weight ($unit)',
                   suffixIcon: Selector<SettingsState, bool>(
@@ -120,7 +120,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () {
-                  selectAll(weightController);
+                  selectAll(weight);
                 },
                 onSubmitted: (value) async => await save(timerState),
               ),
@@ -130,25 +130,25 @@ class _StartPlanPageState extends State<StartPlanPage>
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: minutesController,
+                      controller: minutes,
                       decoration: const InputDecoration(labelText: 'Minutes'),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(minutesController),
+                      onTap: () => selectAll(minutes),
                       textInputAction: TextInputAction.next,
-                      onSubmitted: (value) => selectAll(secondsController),
+                      onSubmitted: (value) => selectAll(seconds),
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      controller: secondsController,
+                      controller: seconds,
                       decoration: const InputDecoration(labelText: 'Seconds'),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(secondsController),
+                      onTap: () => selectAll(seconds),
                       textInputAction: TextInputAction.next,
-                      onSubmitted: (value) => selectAll(distanceController),
+                      onSubmitted: (value) => selectAll(distance),
                     ),
                   ),
                 ],
@@ -158,24 +158,24 @@ class _StartPlanPageState extends State<StartPlanPage>
                   Expanded(
                     child: TextField(
                       textInputAction: TextInputAction.next,
-                      controller: distanceController,
+                      controller: distance,
                       decoration: const InputDecoration(
                         labelText: 'Distance',
                       ),
                       keyboardType: TextInputType.number,
-                      onSubmitted: (value) => selectAll(inclineController),
+                      onSubmitted: (value) => selectAll(incline),
                       onTap: () {
-                        selectAll(distanceController);
+                        selectAll(distance);
                       },
                     ),
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      controller: inclineController,
+                      controller: incline,
                       decoration: const InputDecoration(labelText: 'Incline %'),
                       keyboardType: TextInputType.number,
-                      onTap: () => selectAll(inclineController),
+                      onTap: () => selectAll(incline),
                       onSubmitted: (value) => save(timerState),
                     ),
                   ),
@@ -233,32 +233,32 @@ class _StartPlanPageState extends State<StartPlanPage>
     final difference = DateTime.now().difference(lastSaved!);
 
     if (cardio && settings.durationEstimation) {
-      minutesController.text = difference.inMinutes.toString();
-      secondsController.text = (difference.inSeconds % 60).toString();
+      minutes.text = difference.inMinutes.toString();
+      seconds.text = (difference.inSeconds % 60).toString();
     } else if (!cardio && settings.repEstimation) {
-      final weight = double.parse(weightController.text);
+      final parsedWeight = double.parse(weight.text);
       final closestRpm =
           rpms!.where((rpm) => rpm.name == planExercises[selectedIndex]).reduce(
-                (rpm1, rpm2) =>
-                    (rpm1.weight - weight).abs() < (rpm2.weight - weight).abs()
-                        ? rpm1
-                        : rpm2,
+                (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
+                        (rpm2.weight - parsedWeight).abs()
+                    ? rpm1
+                    : rpm2,
               );
 
-      final reps = difference.inMinutes * closestRpm.rpm;
-      if (reps <= 0) return;
+      final estimatedReps = difference.inMinutes * closestRpm.rpm;
+      if (estimatedReps <= 0) return;
 
-      repsController.text = reps.toInt().toString();
+      reps.text = estimatedReps.toInt().toString();
     }
   }
 
   @override
   void dispose() {
-    repsController.dispose();
-    weightController.dispose();
-    distanceController.dispose();
-    minutesController.dispose();
-    inclineController.dispose();
+    reps.dispose();
+    weight.dispose();
+    distance.dispose();
+    minutes.dispose();
+    incline.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
     planState.removeListener(planChanged);
@@ -344,25 +344,24 @@ class _StartPlanPageState extends State<StartPlanPage>
       warmupSets = counts[countIndex].warmupSets;
     }
 
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
-
     var gymSet = GymSetsCompanion.insert(
       name: exercise,
       unit: unit,
       created: DateTime.now().toLocal(),
       cardio: Value(cardio),
-      duration: Value(duration),
+      duration: Value(
+        (int.tryParse(seconds.text) ?? 0) / 60 +
+            (int.tryParse(minutes.text) ?? 0),
+      ),
       bodyWeight: Value(bodyWeight),
       restMs: Value(restMs?.toInt()),
       planId: Value(widget.plan.id),
       category: Value(category),
       image: Value(image),
-      reps: double.parse(repsController.text),
-      weight: double.parse(weightController.text),
-      incline: Value(int.tryParse(inclineController.text)),
-      distance: Value(double.parse(distanceController.text)),
+      reps: double.parse(reps.text),
+      weight: double.parse(weight.text),
+      incline: Value(int.tryParse(incline.text)),
+      distance: Value(double.parse(distance.text)),
     );
 
     var count = 0;
@@ -403,12 +402,12 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     setState(() {
       unit = last.unit;
-      repsController.text = toString(last.reps);
-      weightController.text = toString(last.weight);
-      distanceController.text = toString(last.distance);
-      minutesController.text = last.duration.floor().toString();
-      secondsController.text = ((last.duration * 60) % 60).floor().toString();
-      inclineController.text = last.incline?.toString() ?? "";
+      reps.text = toString(last.reps);
+      weight.text = toString(last.weight);
+      distance.text = toString(last.distance);
+      minutes.text = last.duration.floor().toString();
+      seconds.text = ((last.duration * 60) % 60).floor().toString();
+      incline.text = last.incline?.toString() ?? "";
       cardio = last.cardio;
       category = last.category;
       image = last.image;
@@ -426,6 +425,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (weightSet == null)
       toast(context, 'No weight entered yet');
     else
-      weightController.text = toString(weightSet.weight);
+      weight.text = toString(weightSet.weight);
   }
 }
