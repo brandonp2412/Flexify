@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -18,11 +21,14 @@ class _AddExercisePageState extends State<AddExercisePage> {
   final TextEditingController nameController = TextEditingController();
   bool cardio = false;
 
-  late final settings = context.watch<SettingsState>();
+  late var settings = context.watch<SettingsState>();
   late String unit = settings.value.strengthUnit;
+  String? image;
 
   @override
   Widget build(BuildContext context) {
+    settings = context.watch<SettingsState>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add exercise'),
@@ -68,6 +74,40 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 }),
               ),
             ),
+            Visibility(
+              visible: settings.value.showImages,
+              child: material.Column(
+                children: [
+                  if (image == null)
+                    TextButton.icon(
+                      onPressed: pick,
+                      label: const Text('Image'),
+                      icon: const Icon(Icons.image),
+                    ),
+                  if (image != null) ...[
+                    const SizedBox(height: 8),
+                    Tooltip(
+                      message: 'Long-press to delete',
+                      child: GestureDetector(
+                        onTap: () => pick(),
+                        onLongPress: () => setState(() {
+                          image = null;
+                        }),
+                        child: Image.file(
+                          File(image!),
+                          errorBuilder: (context, error, stackTrace) =>
+                              TextButton.icon(
+                            label: const Text('Image error'),
+                            icon: const Icon(Icons.error),
+                            onPressed: () => pick(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -85,6 +125,15 @@ class _AddExercisePageState extends State<AddExercisePage> {
     super.dispose();
   }
 
+  void pick() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result?.files.single == null) return;
+
+    setState(() {
+      image = result?.files.single.path;
+    });
+  }
+
   Future<void> _save(String unit) async {
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -95,6 +144,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         unit: unit,
         cardio: Value(cardio),
         hidden: const Value(true),
+        image: Value(image),
       ),
     );
 
