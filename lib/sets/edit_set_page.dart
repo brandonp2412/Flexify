@@ -179,16 +179,21 @@ class _EditSetPageState extends State<EditSetPage> {
                 },
               ),
               if (!cardio) ...[
-                TextField(
+                TextFormField(
                   controller: reps,
                   focusNode: repsNode,
                   decoration: const InputDecoration(labelText: 'Reps'),
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(reps),
                   textInputAction: TextInputAction.next,
-                  onSubmitted: (_) => selectAll(weight),
+                  onFieldSubmitted: (_) => selectAll(weight),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required';
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
                 ),
-                TextField(
+                TextFormField(
                   controller: weight,
                   decoration: InputDecoration(
                     labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
@@ -196,6 +201,11 @@ class _EditSetPageState extends State<EditSetPage> {
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(weight),
                   textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required';
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
                 ),
                 if (widget.gymSet.id > 0)
                   TextField(
