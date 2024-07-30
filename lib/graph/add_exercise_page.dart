@@ -35,7 +35,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: material.Column(
+        child: ListView(
           children: [
             TextField(
               controller: nameController,

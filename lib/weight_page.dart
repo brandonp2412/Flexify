@@ -28,7 +28,7 @@ class _WeightPageState extends State<WeightPage> {
       body: Form(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 controller: valueController,
