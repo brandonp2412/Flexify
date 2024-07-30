@@ -178,6 +178,34 @@ class _EditSetPageState extends State<EditSetPage> {
                   );
                 },
               ),
+              if (!cardio) ...[
+                TextField(
+                  controller: reps,
+                  focusNode: repsNode,
+                  decoration: const InputDecoration(labelText: 'Reps'),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(reps),
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (_) => selectAll(weight),
+                ),
+                TextField(
+                  controller: weight,
+                  decoration: InputDecoration(
+                    labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
+                  ),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(weight),
+                  textInputAction: TextInputAction.next,
+                ),
+                if (widget.gymSet.id > 0)
+                  TextField(
+                    controller: oneRepMax,
+                    decoration: const InputDecoration(
+                      labelText: 'One rep max (estimate)',
+                    ),
+                    enabled: false,
+                  ),
+              ],
               if (cardio) ...[
                 TextFormField(
                   controller: distance,
