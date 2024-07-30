@@ -216,7 +216,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(bodyWeight),
                       validator: (value) {
-                        if (value == null) return null;
+                        if (value == null || value.isEmpty) return null;
                         if (double.tryParse(value) == null)
                           return 'Invalid number';
                         return null;
