@@ -31,6 +31,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   final minutes = TextEditingController(text: "0.0");
   final seconds = TextEditingController(text: "0.0");
   final incline = TextEditingController(text: "0");
+  final formKey = GlobalKey<FormState>();
 
   /// Used to show progress lines instantly on first render.
   bool first = true;
@@ -86,133 +87,177 @@ class _StartPlanPageState extends State<StartPlanPage>
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: material.Column(
-          children: [
-            if (!cardio) ...[
-              TextField(
-                controller: reps,
-                decoration: const InputDecoration(labelText: 'Reps'),
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                onSubmitted: (value) {
-                  selectAll(weight);
-                },
-                onTap: () {
-                  selectAll(reps);
-                },
-              ),
-              TextField(
-                controller: weight,
-                decoration: InputDecoration(
-                  labelText: 'Weight ($unit)',
-                  suffixIcon: Selector<SettingsState, bool>(
-                    selector: (context, settings) =>
-                        settings.value.showBodyWeight,
-                    builder: (context, showBodyWeight, child) => Visibility(
-                      visible: showBodyWeight,
-                      child: IconButton(
-                        tooltip: "Use body weight",
-                        icon: const Icon(Icons.scale),
-                        onPressed: useBodyWeight,
+        child: Form(
+          key: formKey,
+          child: material.Column(
+            children: [
+              if (!cardio) ...[
+                TextFormField(
+                  controller: reps,
+                  decoration: const InputDecoration(labelText: 'Reps'),
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (value) {
+                    selectAll(weight);
+                  },
+                  onTap: () {
+                    selectAll(reps);
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required';
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: weight,
+                  decoration: InputDecoration(
+                    labelText: 'Weight ($unit)',
+                    suffixIcon: Selector<SettingsState, bool>(
+                      selector: (context, settings) =>
+                          settings.value.showBodyWeight,
+                      builder: (context, showBodyWeight, child) => Visibility(
+                        visible: showBodyWeight,
+                        child: IconButton(
+                          tooltip: "Use body weight",
+                          icon: const Icon(Icons.scale),
+                          onPressed: useBodyWeight,
+                        ),
                       ),
                     ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onTap: () {
+                    selectAll(weight);
+                  },
+                  onFieldSubmitted: (value) async => await save(timerState),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required';
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
+                ),
+              ],
+              if (cardio) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: minutes,
+                        decoration: const InputDecoration(labelText: 'Minutes'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: false,
+                        ),
+                        onTap: () => selectAll(minutes),
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (value) => selectAll(seconds),
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty && seconds.text.isEmpty)
+                            return 'Required';
+                          if (int.tryParse(value) == null)
+                            return 'Invalid number';
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: TextFormField(
+                        controller: seconds,
+                        decoration: const InputDecoration(labelText: 'Seconds'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: false,
+                        ),
+                        onTap: () => selectAll(seconds),
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (value) => selectAll(distance),
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty && minutes.text.isEmpty)
+                            return 'Required';
+                          if (int.tryParse(value) == null)
+                            return 'Invalid number';
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        textInputAction: TextInputAction.next,
+                        controller: distance,
+                        decoration: const InputDecoration(
+                          labelText: 'Distance',
+                        ),
+                        keyboardType: TextInputType.number,
+                        onFieldSubmitted: (value) => selectAll(incline),
+                        onTap: () {
+                          selectAll(distance);
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) return null;
+                          if (double.tryParse(value) == null)
+                            return 'Invalid number';
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: TextFormField(
+                        controller: incline,
+                        decoration:
+                            const InputDecoration(labelText: 'Incline %'),
+                        keyboardType: TextInputType.number,
+                        onTap: () => selectAll(incline),
+                        onFieldSubmitted: (value) => save(timerState),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) return null;
+                          if (double.tryParse(value) == null)
+                            return 'Invalid number';
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              Selector<SettingsState, bool>(
+                selector: (context, settings) => settings.value.showUnits,
+                builder: (context, showUnits, child) => Visibility(
+                  visible: showUnits,
+                  child: UnitSelector(
+                    value: unit,
+                    cardio: cardio,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        unit = newValue!;
+                      });
+                    },
                   ),
                 ),
-                keyboardType: TextInputType.number,
-                onTap: () {
-                  selectAll(weight);
-                },
-                onSubmitted: (value) async => await save(timerState),
               ),
-            ],
-            if (cardio) ...[
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: minutes,
-                      decoration: const InputDecoration(labelText: 'Minutes'),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(minutes),
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (value) => selectAll(seconds),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: TextField(
-                      controller: seconds,
-                      decoration: const InputDecoration(labelText: 'Seconds'),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(seconds),
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (value) => selectAll(distance),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      textInputAction: TextInputAction.next,
-                      controller: distance,
-                      decoration: const InputDecoration(
-                        labelText: 'Distance',
-                      ),
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (value) => selectAll(incline),
-                      onTap: () {
-                        selectAll(distance);
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: TextField(
-                      controller: incline,
-                      decoration: const InputDecoration(labelText: 'Incline %'),
-                      keyboardType: TextInputType.number,
-                      onTap: () => selectAll(incline),
-                      onSubmitted: (value) => save(timerState),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            Selector<SettingsState, bool>(
-              selector: (context, settings) => settings.value.showUnits,
-              builder: (context, showUnits, child) => Visibility(
-                visible: showUnits,
-                child: UnitSelector(
-                  value: unit,
-                  cardio: cardio,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      unit = newValue!;
-                    });
+              Expanded(
+                child: StreamBuilder(
+                  stream: countStream,
+                  builder: (context, snapshot) {
+                    return ExerciseList(
+                      exercises: planExercises,
+                      selected: selectedIndex,
+                      onSelect: select,
+                      counts: snapshot.data,
+                      firstRender: first,
+                      plan: widget.plan,
+                    );
                   },
                 ),
               ),
-            ),
-            Expanded(
-              child: StreamBuilder(
-                stream: countStream,
-                builder: (context, snapshot) {
-                  return ExerciseList(
-                    exercises: planExercises,
-                    selected: selectedIndex,
-                    onSelect: select,
-                    counts: snapshot.data,
-                    firstRender: first,
-                    plan: widget.plan,
-                  );
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -358,10 +403,10 @@ class _StartPlanPageState extends State<StartPlanPage>
       planId: Value(widget.plan.id),
       category: Value(category),
       image: Value(image),
-      reps: double.parse(reps.text),
-      weight: double.parse(weight.text),
+      reps: double.tryParse(reps.text) ?? 0,
+      weight: double.tryParse(weight.text) ?? 0,
       incline: Value(int.tryParse(incline.text)),
-      distance: Value(double.parse(distance.text)),
+      distance: Value(double.tryParse(distance.text) ?? 0),
     );
 
     var count = 0;
