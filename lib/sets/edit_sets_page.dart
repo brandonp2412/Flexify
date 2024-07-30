@@ -130,7 +130,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         onTap: () => selectAll(minutes),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value == null) return null;
+                          if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
                             return 'Invalid number';
                           return null;
@@ -151,7 +151,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         onTap: () => selectAll(seconds),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
-                          if (value == null) return null;
+                          if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
                             return 'Invalid number';
                           return null;

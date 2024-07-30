@@ -191,7 +191,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   onFieldSubmitted: (value) => selectAll(minutes),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null) return null;
+                    if (value == null || value.isEmpty) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
                     return null;
                   },
@@ -209,7 +209,7 @@ class _EditSetPageState extends State<EditSetPage> {
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (value) => selectAll(seconds),
                         validator: (value) {
-                          if (value == null) return null;
+                          if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
                             return 'Invalid number';
                           return null;
@@ -228,7 +228,7 @@ class _EditSetPageState extends State<EditSetPage> {
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (value) => selectAll(incline),
                         validator: (value) {
-                          if (value == null) return null;
+                          if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
                             return 'Invalid number';
                           return null;
