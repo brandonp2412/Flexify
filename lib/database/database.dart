@@ -300,10 +300,24 @@ class AppDatabase extends _$AppDatabase {
             ),
           );
         },
+        from29To30: (Migrator m, Schema30 schema) async {
+          await m.createIndex(
+            Index(
+              'plan_exercises',
+              'CREATE INDEX IF NOT EXISTS plan_exercises_plan_id ON plan_exercises(plan_id)',
+            ),
+          );
+          await m.createIndex(
+            Index(
+              'gym_sets',
+              'CREATE INDEX IF NOT EXISTS gym_sets_plan_id ON gym_sets(plan_id)',
+            ),
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 29;
+  int get schemaVersion => 30;
 }
