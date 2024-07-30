@@ -278,10 +278,32 @@ class AppDatabase extends _$AppDatabase {
         from27To28: (Migrator m, Schema28 schema) async {
           await m.addColumn(schema.settings, schema.settings.enableSound);
         },
+        from28To29: (Migrator m, Schema29 schema) async {
+          await m.database
+              .customStatement('DROP INDEX IF EXISTS gym_sets_name_created');
+          await m.createIndex(
+            Index(
+              'gym_sets',
+              'CREATE INDEX IF NOT EXISTS gym_sets_name ON gym_sets(name)',
+            ),
+          );
+          await m.createIndex(
+            Index(
+              'gym_sets',
+              'CREATE INDEX IF NOT EXISTS gym_sets_created ON gym_sets(created)',
+            ),
+          );
+          await m.createIndex(
+            Index(
+              'gym_sets',
+              'CREATE INDEX IF NOT EXISTS gym_sets_hidden ON gym_sets(hidden)',
+            ),
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 28;
+  int get schemaVersion => 29;
 }

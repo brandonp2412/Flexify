@@ -469,38 +469,40 @@ class _StrengthPageState extends State<StrengthPage> {
       );
 
     setState(() {
-      graphStream = (db.selectOnly(db.gymSets)
-            ..addColumns([
-              db.gymSets.weight.max(),
-              volumeCol,
-              ormCol,
-              db.gymSets.created,
-              if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
-              if (metric != StrengthMetric.bestReps) db.gymSets.reps,
-              db.gymSets.unit,
-              relativeCol,
-            ])
-            ..where(db.gymSets.name.equals(widget.name))
-            ..where(db.gymSets.hidden.equals(false))
-            ..where(
-              db.gymSets.created.isBiggerOrEqualValue(startDate ?? DateTime(0)),
-            )
-            ..where(
-              db.gymSets.created.isSmallerThanValue(
-                endDate ??
-                    DateTime.now().toLocal().add(const Duration(days: 1)),
-              ),
-            )
-            ..orderBy([
-              OrderingTerm(
-                expression: createdCol,
-                mode: OrderingMode.desc,
-              ),
-            ])
-            ..limit(11)
-            ..groupBy([createdCol]))
-          .watch()
-          .map(
+      var query = (db.selectOnly(db.gymSets)
+        ..addColumns([
+          db.gymSets.weight.max(),
+          volumeCol,
+          ormCol,
+          db.gymSets.created,
+          if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+          if (metric != StrengthMetric.bestReps) db.gymSets.reps,
+          db.gymSets.unit,
+          relativeCol,
+        ])
+        ..where(db.gymSets.name.equals(widget.name))
+        ..where(db.gymSets.hidden.equals(false))
+        ..orderBy([
+          OrderingTerm(
+            expression: createdCol,
+            mode: OrderingMode.desc,
+          ),
+        ])
+        ..limit(11)
+        ..groupBy([createdCol]));
+
+      if (startDate != null)
+        query = query
+          ..where(
+            db.gymSets.created.isBiggerOrEqualValue(startDate!),
+          );
+      if (endDate != null)
+        query = query
+          ..where(
+            db.gymSets.created.isSmallerThanValue(endDate!),
+          );
+
+      graphStream = query.watch().map(
         (results) {
           List<StrengthData> list = [];
           for (final result in results.reversed) {
