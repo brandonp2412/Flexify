@@ -5,7 +5,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -20,14 +19,15 @@ class EditSetsPage extends StatefulWidget {
 }
 
 class _EditSetsPageState extends State<EditSetsPage> {
-  final repsController = TextEditingController();
-  final weightController = TextEditingController();
-  final bodyWeightController = TextEditingController();
-  final distanceController = TextEditingController();
-  final minutesController = TextEditingController();
-  final secondsController = TextEditingController();
-  final inclineController = TextEditingController();
-  final nameController = TextEditingController();
+  final reps = TextEditingController();
+  final weight = TextEditingController();
+  final bodyWeight = TextEditingController();
+  final distance = TextEditingController();
+  final minutes = TextEditingController();
+  final seconds = TextEditingController();
+  final incline = TextEditingController();
+  final name = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   String? unit;
   DateTime? created;
@@ -90,149 +90,192 @@ class _EditSetsPageState extends State<EditSetsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: material.Column(
-          children: [
-            TextField(
-              controller: nameController,
-              decoration:
-                  InputDecoration(labelText: "Name", hintText: oldNames),
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            if (cardio == true) ...[
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
               TextField(
-                controller: distanceController,
-                decoration: InputDecoration(
-                  labelText: 'Distance',
-                  hintText: oldDistances,
-                ),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(distanceController),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: minutesController,
-                      decoration: InputDecoration(
-                        labelText: 'Minutes',
-                        hintText: oldMinutes,
-                      ),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(minutesController),
-                      textInputAction: TextInputAction.next,
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: TextField(
-                      controller: secondsController,
-                      decoration: InputDecoration(
-                        labelText: 'Seconds',
-                        hintText: oldSeconds,
-                      ),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: false),
-                      onTap: () => selectAll(secondsController),
-                      textInputAction: TextInputAction.next,
-                    ),
-                  ),
-                ],
-              ),
-              TextField(
-                controller: inclineController,
-                decoration: InputDecoration(
-                  labelText: 'Incline %',
-                  hintText: oldInclines,
-                ),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(inclineController),
-              ),
-            ],
-            if (cardio == false || cardio == null) ...[
-              TextField(
-                controller: repsController,
+                controller: name,
                 decoration:
-                    InputDecoration(labelText: 'Reps', hintText: oldReps),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(repsController),
+                    InputDecoration(labelText: "Name", hintText: oldNames),
+                textCapitalization: TextCapitalization.sentences,
               ),
-              TextField(
-                controller: weightController,
-                decoration: InputDecoration(
-                  labelText:
-                      nameController.text == 'Weight' ? 'Value' : 'Weight',
-                  hintText: oldWeights,
+              if (cardio == true) ...[
+                TextFormField(
+                  controller: distance,
+                  decoration: InputDecoration(
+                    labelText: 'Distance',
+                    hintText: oldDistances,
+                  ),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(distance),
+                  validator: (value) {
+                    if (value == null) return null;
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                onTap: () => selectAll(weightController),
-              ),
-            ],
-            if (nameController.text != 'Weight')
-              Selector<SettingsState, bool>(
-                builder: (context, showBodyWeight, child) => Visibility(
-                  visible: showBodyWeight,
-                  child: TextField(
-                    controller: bodyWeightController,
-                    decoration: InputDecoration(
-                      labelText: 'Body weight',
-                      hintText: oldBodyWeights,
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: minutes,
+                        decoration: InputDecoration(
+                          labelText: 'Minutes',
+                          hintText: oldMinutes,
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: false,
+                        ),
+                        onTap: () => selectAll(minutes),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value == null) return null;
+                          if (int.tryParse(value) == null)
+                            return 'Invalid number';
+                          return null;
+                        },
+                      ),
                     ),
-                    keyboardType: TextInputType.number,
-                    onTap: () => selectAll(bodyWeightController),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: TextFormField(
+                        controller: seconds,
+                        decoration: InputDecoration(
+                          labelText: 'Seconds',
+                          hintText: oldSeconds,
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: false,
+                        ),
+                        onTap: () => selectAll(seconds),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value == null) return null;
+                          if (int.tryParse(value) == null)
+                            return 'Invalid number';
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                TextFormField(
+                  controller: incline,
+                  decoration: InputDecoration(
+                    labelText: 'Incline %',
+                    hintText: oldInclines,
+                  ),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(incline),
+                  validator: (value) {
+                    if (value == null) return null;
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
+                ),
+              ],
+              if (cardio == false || cardio == null) ...[
+                TextFormField(
+                  controller: reps,
+                  decoration:
+                      InputDecoration(labelText: 'Reps', hintText: oldReps),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(reps),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return null;
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: weight,
+                  decoration: InputDecoration(
+                    labelText: name.text == 'Weight' ? 'Value' : 'Weight',
+                    hintText: oldWeights,
+                  ),
+                  keyboardType: TextInputType.number,
+                  onTap: () => selectAll(weight),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return null;
+                    if (double.tryParse(value) == null) return 'Invalid number';
+                    return null;
+                  },
+                ),
+              ],
+              if (name.text != 'Weight')
+                Selector<SettingsState, bool>(
+                  builder: (context, showBodyWeight, child) => Visibility(
+                    visible: showBodyWeight,
+                    child: TextFormField(
+                      controller: bodyWeight,
+                      decoration: InputDecoration(
+                        labelText: 'Body weight',
+                        hintText: oldBodyWeights,
+                      ),
+                      keyboardType: TextInputType.number,
+                      onTap: () => selectAll(bodyWeight),
+                      validator: (value) {
+                        if (value == null) return null;
+                        if (double.tryParse(value) == null)
+                          return 'Invalid number';
+                        return null;
+                      },
+                    ),
+                  ),
+                  selector: (context, settings) =>
+                      settings.value.showBodyWeight,
+                ),
+              Selector<SettingsState, bool>(
+                builder: (context, showUnits, child) => Visibility(
+                  visible: showUnits,
+                  child: UnitSelector(
+                    value: unit,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        unit = newValue!;
+                      });
+                    },
+                    cardio: cardio ?? false,
                   ),
                 ),
-                selector: (context, settings) => settings.value.showBodyWeight,
+                selector: (context, settings) => settings.value.showUnits,
               ),
-            Selector<SettingsState, bool>(
-              builder: (context, showUnits, child) => Visibility(
-                visible: showUnits,
-                child: UnitSelector(
-                  value: unit,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      unit = newValue!;
-                    });
-                  },
-                  cardio: cardio ?? false,
+              DropdownButtonFormField(
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                  hintText: oldCategories,
                 ),
+                value: category,
+                items: categories
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    category = value!;
+                  });
+                },
               ),
-              selector: (context, settings) => settings.value.showUnits,
-            ),
-            DropdownButtonFormField(
-              decoration: InputDecoration(
-                labelText: 'Category',
-                hintText: oldCategories,
-              ),
-              value: category,
-              items: categories
-                  .map(
-                    (category) => DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  category = value!;
-                });
-              },
-            ),
-            Selector<SettingsState, String>(
-              builder: (context, longDateFormat, child) => ListTile(
-                title: const Text('Created Date'),
-                subtitle: Text(
-                  created != null
-                      ? DateFormat(longDateFormat).format(created!)
-                      : oldCreateds ?? "",
+              Selector<SettingsState, String>(
+                builder: (context, longDateFormat, child) => ListTile(
+                  title: const Text('Created Date'),
+                  subtitle: Text(
+                    created != null
+                        ? DateFormat(longDateFormat).format(created!)
+                        : oldCreateds ?? "",
+                  ),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: () => _selectDate(),
                 ),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () => _selectDate(),
+                selector: (context, settings) => settings.value.longDateFormat,
               ),
-              selector: (context, settings) => settings.value.longDateFormat,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -245,13 +288,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   @override
   void dispose() {
-    repsController.dispose();
-    weightController.dispose();
-    bodyWeightController.dispose();
-    distanceController.dispose();
-    minutesController.dispose();
-    secondsController.dispose();
-    inclineController.dispose();
+    reps.dispose();
+    weight.dispose();
+    bodyWeight.dispose();
+    distance.dispose();
+    minutes.dispose();
+    seconds.dispose();
+    incline.dispose();
 
     super.dispose();
   }
@@ -310,32 +353,28 @@ class _EditSetsPageState extends State<EditSetsPage> {
   }
 
   Future<void> save() async {
+    if (!formKey.currentState!.validate()) return;
+
     Navigator.pop(context);
-    final reps = double.tryParse(repsController.text);
-    final weight = double.tryParse(weightController.text);
-    final bodyWeight = double.tryParse(bodyWeightController.text);
-    final distance = double.tryParse(distanceController.text);
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-    final duration = (seconds ?? 0) / 60 + (minutes ?? 0);
-    final incline = int.tryParse(inclineController.text);
 
     final gymSet = GymSetsCompanion(
-      name: nameController.text.isNotEmpty
-          ? Value(nameController.text)
-          : const Value.absent(),
+      name: name.text.isNotEmpty ? Value(name.text) : const Value.absent(),
       unit: Value.absentIfNull(unit),
       created: Value.absentIfNull(created),
       cardio: Value.absentIfNull(cardio),
       restMs: Value.absentIfNull(restMs),
-      incline: Value.absentIfNull(incline),
-      reps: Value.absentIfNull(reps),
-      weight: Value.absentIfNull(weight),
-      bodyWeight: Value.absentIfNull(bodyWeight),
-      distance: Value.absentIfNull(distance),
-      duration: seconds == null && minutes == null
+      incline: Value.absentIfNull(int.tryParse(incline.text)),
+      reps: Value.absentIfNull(double.tryParse(reps.text)),
+      weight: Value.absentIfNull(double.tryParse(weight.text)),
+      bodyWeight: Value.absentIfNull(double.tryParse(bodyWeight.text)),
+      distance: Value.absentIfNull(double.tryParse(distance.text)),
+      duration: int.tryParse(seconds.text) == null &&
+              int.tryParse(minutes.text) == null
           ? const Value.absent()
-          : Value(duration),
+          : Value(
+              (int.tryParse(seconds.text) ?? 0) / 60 +
+                  (int.tryParse(minutes.text) ?? 0),
+            ),
       category: Value.absentIfNull(category),
     );
 
