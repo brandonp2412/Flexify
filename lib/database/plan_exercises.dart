@@ -4,6 +4,7 @@ import 'package:flexify/database/plans.dart';
 
 class PlanExercises extends Table {
   BoolColumn get enabled => boolean()();
+  BoolColumn get timers => boolean().withDefault(const Constant(true))();
   TextColumn get exercise => text().references(GymSets, #name)();
   IntColumn get id => integer().autoIncrement()();
   IntColumn get maxSets => integer().nullable()();

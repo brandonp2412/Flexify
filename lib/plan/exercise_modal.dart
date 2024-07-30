@@ -32,6 +32,7 @@ class ExerciseModal extends StatefulWidget {
 class _ExerciseModalState extends State<ExerciseModal> {
   final maxSets = TextEditingController();
   final warmupSets = TextEditingController();
+  bool timers = true;
 
   @override
   void initState() {
@@ -47,6 +48,10 @@ class _ExerciseModalState extends State<ExerciseModal> {
         .then((planExercise) {
       maxSets.text = planExercise.maxSets?.toString() ?? '';
       warmupSets.text = planExercise.warmupSets?.toString() ?? '';
+
+      setState(() {
+        timers = planExercise.timers;
+      });
     });
   }
 
@@ -62,86 +67,76 @@ class _ExerciseModalState extends State<ExerciseModal> {
 
             showDialog(
               context: context,
-              builder: (context) => AlertDialog.adaptive(
-                title: Text(widget.exercise),
-                content: SingleChildScrollView(
-                  child: material.Column(
-                    children: [
-                      Selector<SettingsState, int?>(
-                        selector: (context, settings) =>
-                            settings.value.warmupSets,
-                        builder: (context, value, child) => TextField(
-                          controller: warmupSets,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: false,
-                          ),
-                          onTap: () => selectAll(warmupSets),
-                          onChanged: (value) {
-                            (db.planExercises.update()
-                                  ..where(
-                                    (u) =>
-                                        u.planId.equals(widget.planId) &
-                                        u.exercise.equals(widget.exercise),
-                                  ))
-                                .write(
-                              PlanExercisesCompanion(
-                                warmupSets:
-                                    Value(int.tryParse(warmupSets.text)),
-                              ),
-                            );
-                          },
-                          decoration: InputDecoration(
-                            labelText: "Warmup sets",
-                            border: const OutlineInputBorder(),
-                            hintText: (value ?? 0).toString(),
+              builder: (context) {
+                return AlertDialog.adaptive(
+                  title: Text(widget.exercise),
+                  content: SingleChildScrollView(
+                    child: material.Column(
+                      children: [
+                        Selector<SettingsState, int?>(
+                          selector: (context, settings) =>
+                              settings.value.warmupSets,
+                          builder: (context, value, child) => TextField(
+                            controller: warmupSets,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: false,
+                            ),
+                            onTap: () => selectAll(warmupSets),
+                            onChanged: changeWarmup,
+                            decoration: InputDecoration(
+                              labelText: "Warmup sets",
+                              border: const OutlineInputBorder(),
+                              hintText: (value ?? 0).toString(),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Selector<SettingsState, int>(
-                        selector: (context, settings) => settings.value.maxSets,
-                        builder: (context, value, child) => TextField(
-                          controller: maxSets,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: false,
-                          ),
-                          onTap: () => selectAll(maxSets),
-                          onChanged: (value) {
-                            if (int.parse(maxSets.text) > 0 &&
-                                int.parse(maxSets.text) <= 20) {
-                              (db.planExercises.update()
-                                    ..where(
-                                      (u) =>
-                                          u.planId.equals(widget.planId) &
-                                          u.exercise.equals(widget.exercise),
-                                    ))
-                                  .write(
-                                PlanExercisesCompanion(
-                                  maxSets: Value(int.tryParse(maxSets.text)),
-                                ),
-                              );
-                            }
-                          },
-                          decoration: InputDecoration(
-                            labelText: "Working sets (max: 20)",
-                            border: const OutlineInputBorder(),
-                            hintText: value.toString(),
+                        const SizedBox(height: 16),
+                        Selector<SettingsState, int>(
+                          selector: (context, settings) =>
+                              settings.value.maxSets,
+                          builder: (context, value, child) => TextField(
+                            controller: maxSets,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: false,
+                            ),
+                            onTap: () => selectAll(maxSets),
+                            onChanged: changeMax,
+                            decoration: InputDecoration(
+                              labelText: "Working sets (max: 20)",
+                              border: const OutlineInputBorder(),
+                              hintText: value.toString(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        StatefulBuilder(
+                          builder: (context, setState) => ListTile(
+                            title: const Text('Rest timers'),
+                            trailing: Switch(
+                              value: timers,
+                              onChanged: (value) {
+                                setState(() {
+                                  timers = value;
+                                });
+                                changeTimers(value);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                actions: [
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    label: const Text("OK"),
-                    icon: const Icon(Icons.check),
-                  ),
-                ],
-              ),
+                  actions: [
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      label: const Text("OK"),
+                      icon: const Icon(Icons.check),
+                    ),
+                  ],
+                );
+              },
             );
           },
         ),
@@ -217,6 +212,50 @@ class _ExerciseModalState extends State<ExerciseModal> {
             },
           ),
       ],
+    );
+  }
+
+  void changeTimers(bool value) {
+    (db.planExercises.update()
+          ..where(
+            (u) =>
+                u.planId.equals(widget.planId) &
+                u.exercise.equals(widget.exercise),
+          ))
+        .write(
+      PlanExercisesCompanion(
+        timers: Value(value),
+      ),
+    );
+  }
+
+  void changeMax(value) {
+    if (int.parse(maxSets.text) > 0 && int.parse(maxSets.text) <= 20) {
+      (db.planExercises.update()
+            ..where(
+              (u) =>
+                  u.planId.equals(widget.planId) &
+                  u.exercise.equals(widget.exercise),
+            ))
+          .write(
+        PlanExercisesCompanion(
+          maxSets: Value(int.tryParse(maxSets.text)),
+        ),
+      );
+    }
+  }
+
+  void changeWarmup(value) {
+    (db.planExercises.update()
+          ..where(
+            (u) =>
+                u.planId.equals(widget.planId) &
+                u.exercise.equals(widget.exercise),
+          ))
+        .write(
+      PlanExercisesCompanion(
+        warmupSets: Value(int.tryParse(warmupSets.text)),
+      ),
     );
   }
 }

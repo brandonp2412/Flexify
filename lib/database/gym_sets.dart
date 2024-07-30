@@ -158,6 +158,7 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
           db.planExercises.maxSets,
           db.gymSets.restMs,
           db.planExercises.warmupSets,
+          db.planExercises.timers,
         ])
         ..join([
           innerJoin(
@@ -173,12 +174,13 @@ Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
       .map(
         (results) => results
             .map(
-              (resultRow) => (
-                count: resultRow.read<int>(countColumn)!,
-                name: resultRow.read(db.gymSets.name)!,
-                maxSets: resultRow.read(db.planExercises.maxSets),
-                restMs: resultRow.read(db.gymSets.restMs),
-                warmupSets: resultRow.read(db.planExercises.warmupSets)
+              (row) => (
+                count: row.read<int>(countColumn)!,
+                name: row.read(db.gymSets.name)!,
+                maxSets: row.read(db.planExercises.maxSets),
+                restMs: row.read(db.gymSets.restMs),
+                warmupSets: row.read(db.planExercises.warmupSets),
+                timers: row.read(db.planExercises.timers)!,
               ),
             )
             .toList(),
@@ -254,6 +256,7 @@ typedef GymCount = ({
   int? maxSets,
   int? restMs,
   int? warmupSets,
+  bool timers,
 });
 
 class GymSets extends Table {

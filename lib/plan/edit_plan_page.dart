@@ -197,6 +197,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             enabled: Value(result.read(db.planExercises.enabled) ?? false),
             maxSets: Value(result.read(db.planExercises.maxSets)),
             warmupSets: Value(result.read(db.planExercises.warmupSets)),
+            timers: Value(result.read(db.planExercises.timers) ?? true),
           );
           if (pe.enabled.value)
             enabledExercises.add(pe);

@@ -36,73 +36,95 @@ class _ExerciseTileState extends State<ExerciseTile> {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => AlertDialog.adaptive(
-              title: Text(widget.planExercise.exercise.value),
-              content: SingleChildScrollView(
-                child: material.Column(
-                  children: [
-                    Selector<SettingsState, int?>(
-                      selector: (context, settings) =>
-                          settings.value.warmupSets,
-                      builder: (context, value, child) => TextField(
-                        controller: warmupSets,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(warmupSets),
-                        onChanged: (value) {
-                          final pe = widget.planExercise.copyWith(
-                            enabled: const Value(true),
-                            warmupSets: Value(int.tryParse(warmupSets.text)),
-                          );
-                          widget.onChange(pe);
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Warmup sets",
-                          border: const OutlineInputBorder(),
-                          hintText: (value ?? 0).toString(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Selector<SettingsState, int>(
-                      selector: (context, settings) => settings.value.maxSets,
-                      builder: (context, value, child) => TextField(
-                        controller: maxSets,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(maxSets),
-                        onChanged: (value) {
-                          if (int.parse(maxSets.text) > 0 &&
-                              int.parse(maxSets.text) <= 20) {
+            builder: (context) {
+              bool timers = widget.planExercise.timers.value;
+
+              return AlertDialog.adaptive(
+                title: Text(widget.planExercise.exercise.value),
+                content: SingleChildScrollView(
+                  child: material.Column(
+                    children: [
+                      Selector<SettingsState, int?>(
+                        selector: (context, settings) =>
+                            settings.value.warmupSets,
+                        builder: (context, value, child) => TextField(
+                          controller: warmupSets,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                          ),
+                          onTap: () => selectAll(warmupSets),
+                          onChanged: (value) {
                             final pe = widget.planExercise.copyWith(
                               enabled: const Value(true),
-                              maxSets: Value(int.parse(maxSets.text)),
+                              warmupSets: Value(int.tryParse(warmupSets.text)),
                             );
                             widget.onChange(pe);
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Working sets (max: 20)",
-                          border: const OutlineInputBorder(),
-                          hintText: value.toString(),
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Warmup sets",
+                            border: const OutlineInputBorder(),
+                            hintText: (value ?? 0).toString(),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      Selector<SettingsState, int>(
+                        selector: (context, settings) => settings.value.maxSets,
+                        builder: (context, value, child) => TextField(
+                          controller: maxSets,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                          ),
+                          onTap: () => selectAll(maxSets),
+                          onChanged: (value) {
+                            if (int.parse(maxSets.text) > 0 &&
+                                int.parse(maxSets.text) <= 20) {
+                              final pe = widget.planExercise.copyWith(
+                                enabled: const Value(true),
+                                maxSets: Value(int.parse(maxSets.text)),
+                              );
+                              widget.onChange(pe);
+                            }
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Working sets (max: 20)",
+                            border: const OutlineInputBorder(),
+                            hintText: value.toString(),
+                          ),
+                        ),
+                      ),
+                      StatefulBuilder(
+                        builder: (context, setState) => ListTile(
+                          title: const Text('Rest timers'),
+                          trailing: Switch(
+                            value: timers,
+                            onChanged: (value) {
+                              setState(() {
+                                timers = value;
+                              });
+                              widget.onChange(
+                                widget.planExercise.copyWith(
+                                  timers: Value(value),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              actions: [
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  label: const Text("OK"),
-                  icon: const Icon(Icons.check),
-                ),
-              ],
-            ),
+                actions: [
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    label: const Text("OK"),
+                    icon: const Icon(Icons.check),
+                  ),
+                ],
+              );
+            },
           );
         },
       ),

@@ -376,15 +376,17 @@ class _StartPlanPageState extends State<StartPlanPage>
       );
 
     final counts = await countStream.first;
-    final countIndex = counts.indexWhere((element) => element.name == exercise);
+    final index = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
     double? restMs;
     int? warmupSets;
-    if (countIndex != -1) {
-      max = counts[countIndex].maxSets;
-      restMs = counts[countIndex].restMs?.toDouble();
-      warmupSets = counts[countIndex].warmupSets;
+    bool peTimers = true;
+    if (index != -1) {
+      max = counts[index].maxSets;
+      restMs = counts[index].restMs?.toDouble();
+      warmupSets = counts[index].warmupSets;
+      peTimers = counts[index].timers;
     }
 
     var gymSet = GymSetsCompanion.insert(
@@ -408,7 +410,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
 
     var count = 0;
-    if (countIndex != -1) count = counts[countIndex].count;
+    if (index != -1) count = counts[index].count;
     count++;
 
     final finishedPlan = count == (max ?? settings.maxSets) &&
@@ -416,7 +418,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
 
-    if (!finishedPlan && !isWarmup && settings.restTimers)
+    if (!finishedPlan && !isWarmup && settings.restTimers && peTimers)
       timerState.startTimer(
         "$exercise ($count)",
         Duration(milliseconds: restMs.toInt()),

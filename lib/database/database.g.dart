@@ -2181,6 +2181,15 @@ class $PlanExercisesTable extends PlanExercises
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("enabled" IN (0, 1))'));
+  static const VerificationMeta _timersMeta = const VerificationMeta('timers');
+  @override
+  late final GeneratedColumn<bool> timers = GeneratedColumn<bool>(
+      'timers', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("timers" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _exerciseMeta =
       const VerificationMeta('exercise');
   @override
@@ -2221,7 +2230,7 @@ class $PlanExercisesTable extends PlanExercises
       type: DriftSqlType.int, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [enabled, exercise, id, maxSets, planId, warmupSets];
+      [enabled, timers, exercise, id, maxSets, planId, warmupSets];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2237,6 +2246,10 @@ class $PlanExercisesTable extends PlanExercises
           enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta));
     } else if (isInserting) {
       context.missing(_enabledMeta);
+    }
+    if (data.containsKey('timers')) {
+      context.handle(_timersMeta,
+          timers.isAcceptableOrUnknown(data['timers']!, _timersMeta));
     }
     if (data.containsKey('exercise')) {
       context.handle(_exerciseMeta,
@@ -2274,6 +2287,8 @@ class $PlanExercisesTable extends PlanExercises
     return PlanExercise(
       enabled: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}enabled'])!,
+      timers: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}timers'])!,
       exercise: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}exercise'])!,
       id: attachedDatabase.typeMapping
@@ -2295,6 +2310,7 @@ class $PlanExercisesTable extends PlanExercises
 
 class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   final bool enabled;
+  final bool timers;
   final String exercise;
   final int id;
   final int? maxSets;
@@ -2302,6 +2318,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   final int? warmupSets;
   const PlanExercise(
       {required this.enabled,
+      required this.timers,
       required this.exercise,
       required this.id,
       this.maxSets,
@@ -2311,6 +2328,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['enabled'] = Variable<bool>(enabled);
+    map['timers'] = Variable<bool>(timers);
     map['exercise'] = Variable<String>(exercise);
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || maxSets != null) {
@@ -2326,6 +2344,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   PlanExercisesCompanion toCompanion(bool nullToAbsent) {
     return PlanExercisesCompanion(
       enabled: Value(enabled),
+      timers: Value(timers),
       exercise: Value(exercise),
       id: Value(id),
       maxSets: maxSets == null && nullToAbsent
@@ -2343,6 +2362,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlanExercise(
       enabled: serializer.fromJson<bool>(json['enabled']),
+      timers: serializer.fromJson<bool>(json['timers']),
       exercise: serializer.fromJson<String>(json['exercise']),
       id: serializer.fromJson<int>(json['id']),
       maxSets: serializer.fromJson<int?>(json['maxSets']),
@@ -2355,6 +2375,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'enabled': serializer.toJson<bool>(enabled),
+      'timers': serializer.toJson<bool>(timers),
       'exercise': serializer.toJson<String>(exercise),
       'id': serializer.toJson<int>(id),
       'maxSets': serializer.toJson<int?>(maxSets),
@@ -2365,6 +2386,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
 
   PlanExercise copyWith(
           {bool? enabled,
+          bool? timers,
           String? exercise,
           int? id,
           Value<int?> maxSets = const Value.absent(),
@@ -2372,6 +2394,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
           Value<int?> warmupSets = const Value.absent()}) =>
       PlanExercise(
         enabled: enabled ?? this.enabled,
+        timers: timers ?? this.timers,
         exercise: exercise ?? this.exercise,
         id: id ?? this.id,
         maxSets: maxSets.present ? maxSets.value : this.maxSets,
@@ -2382,6 +2405,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   String toString() {
     return (StringBuffer('PlanExercise(')
           ..write('enabled: $enabled, ')
+          ..write('timers: $timers, ')
           ..write('exercise: $exercise, ')
           ..write('id: $id, ')
           ..write('maxSets: $maxSets, ')
@@ -2393,12 +2417,13 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
 
   @override
   int get hashCode =>
-      Object.hash(enabled, exercise, id, maxSets, planId, warmupSets);
+      Object.hash(enabled, timers, exercise, id, maxSets, planId, warmupSets);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is PlanExercise &&
           other.enabled == this.enabled &&
+          other.timers == this.timers &&
           other.exercise == this.exercise &&
           other.id == this.id &&
           other.maxSets == this.maxSets &&
@@ -2408,6 +2433,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
 
 class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
   final Value<bool> enabled;
+  final Value<bool> timers;
   final Value<String> exercise;
   final Value<int> id;
   final Value<int?> maxSets;
@@ -2415,6 +2441,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
   final Value<int?> warmupSets;
   const PlanExercisesCompanion({
     this.enabled = const Value.absent(),
+    this.timers = const Value.absent(),
     this.exercise = const Value.absent(),
     this.id = const Value.absent(),
     this.maxSets = const Value.absent(),
@@ -2423,6 +2450,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
   });
   PlanExercisesCompanion.insert({
     required bool enabled,
+    this.timers = const Value.absent(),
     required String exercise,
     this.id = const Value.absent(),
     this.maxSets = const Value.absent(),
@@ -2433,6 +2461,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
         planId = Value(planId);
   static Insertable<PlanExercise> custom({
     Expression<bool>? enabled,
+    Expression<bool>? timers,
     Expression<String>? exercise,
     Expression<int>? id,
     Expression<int>? maxSets,
@@ -2441,6 +2470,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
   }) {
     return RawValuesInsertable({
       if (enabled != null) 'enabled': enabled,
+      if (timers != null) 'timers': timers,
       if (exercise != null) 'exercise': exercise,
       if (id != null) 'id': id,
       if (maxSets != null) 'max_sets': maxSets,
@@ -2451,6 +2481,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
 
   PlanExercisesCompanion copyWith(
       {Value<bool>? enabled,
+      Value<bool>? timers,
       Value<String>? exercise,
       Value<int>? id,
       Value<int?>? maxSets,
@@ -2458,6 +2489,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
       Value<int?>? warmupSets}) {
     return PlanExercisesCompanion(
       enabled: enabled ?? this.enabled,
+      timers: timers ?? this.timers,
       exercise: exercise ?? this.exercise,
       id: id ?? this.id,
       maxSets: maxSets ?? this.maxSets,
@@ -2471,6 +2503,9 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     final map = <String, Expression>{};
     if (enabled.present) {
       map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (timers.present) {
+      map['timers'] = Variable<bool>(timers.value);
     }
     if (exercise.present) {
       map['exercise'] = Variable<String>(exercise.value);
@@ -2494,6 +2529,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
   String toString() {
     return (StringBuffer('PlanExercisesCompanion(')
           ..write('enabled: $enabled, ')
+          ..write('timers: $timers, ')
           ..write('exercise: $exercise, ')
           ..write('id: $id, ')
           ..write('maxSets: $maxSets, ')
@@ -3463,6 +3499,7 @@ class $$SettingsTableOrderingComposer
 typedef $$PlanExercisesTableInsertCompanionBuilder = PlanExercisesCompanion
     Function({
   required bool enabled,
+  Value<bool> timers,
   required String exercise,
   Value<int> id,
   Value<int?> maxSets,
@@ -3472,6 +3509,7 @@ typedef $$PlanExercisesTableInsertCompanionBuilder = PlanExercisesCompanion
 typedef $$PlanExercisesTableUpdateCompanionBuilder = PlanExercisesCompanion
     Function({
   Value<bool> enabled,
+  Value<bool> timers,
   Value<String> exercise,
   Value<int> id,
   Value<int?> maxSets,
@@ -3500,6 +3538,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
               $$PlanExercisesTableProcessedTableManager(p),
           getUpdateCompanionBuilder: ({
             Value<bool> enabled = const Value.absent(),
+            Value<bool> timers = const Value.absent(),
             Value<String> exercise = const Value.absent(),
             Value<int> id = const Value.absent(),
             Value<int?> maxSets = const Value.absent(),
@@ -3508,6 +3547,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
           }) =>
               PlanExercisesCompanion(
             enabled: enabled,
+            timers: timers,
             exercise: exercise,
             id: id,
             maxSets: maxSets,
@@ -3516,6 +3556,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
           ),
           getInsertCompanionBuilder: ({
             required bool enabled,
+            Value<bool> timers = const Value.absent(),
             required String exercise,
             Value<int> id = const Value.absent(),
             Value<int?> maxSets = const Value.absent(),
@@ -3524,6 +3565,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
           }) =>
               PlanExercisesCompanion.insert(
             enabled: enabled,
+            timers: timers,
             exercise: exercise,
             id: id,
             maxSets: maxSets,
@@ -3550,6 +3592,11 @@ class $$PlanExercisesTableFilterComposer
   $$PlanExercisesTableFilterComposer(super.$state);
   ColumnFilters<bool> get enabled => $state.composableBuilder(
       column: $state.table.enabled,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get timers => $state.composableBuilder(
+      column: $state.table.timers,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3598,6 +3645,11 @@ class $$PlanExercisesTableOrderingComposer
   $$PlanExercisesTableOrderingComposer(super.$state);
   ColumnOrderings<bool> get enabled => $state.composableBuilder(
       column: $state.table.enabled,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get timers => $state.composableBuilder(
+      column: $state.table.timers,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

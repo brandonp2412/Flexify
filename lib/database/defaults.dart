@@ -92,6 +92,7 @@ final defaultPlanExercises = defaultPlans
           planId: plan.id.value,
           exercise: exercise.$1,
           enabled: exercises.contains(exercise.$1),
+          timers: const Value(true),
         ),
       );
     })

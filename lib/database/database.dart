@@ -314,10 +314,13 @@ class AppDatabase extends _$AppDatabase {
             ),
           );
         },
+        from30To31: (Migrator m, Schema31 schema) async {
+          await m.addColumn(schema.planExercises, schema.planExercises.timers);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 30;
+  int get schemaVersion => 31;
 }
