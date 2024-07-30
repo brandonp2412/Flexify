@@ -18,14 +18,14 @@ class _WeightPageState extends State<WeightPage> {
   final TextEditingController valueController = TextEditingController();
   String yesterdaysWeight = "";
   String? unit;
-
-  String testingUnusedField = "This is never used.";
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Enter Weight')),
       body: Form(
+        key: formKey,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: ListView(
@@ -34,8 +34,11 @@ class _WeightPageState extends State<WeightPage> {
                 controller: valueController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Weight'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter weight' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Required';
+                  if (double.tryParse(value) == null) return 'Invalid number';
+                  return null;
+                },
                 autofocus: true,
               ),
               Selector<SettingsState, String>(
@@ -61,6 +64,8 @@ class _WeightPageState extends State<WeightPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          if (!formKey.currentState!.validate()) return;
+
           final settings = context.read<SettingsState>().value;
           Navigator.pop(context);
 
