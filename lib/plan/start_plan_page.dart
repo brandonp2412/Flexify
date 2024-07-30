@@ -152,10 +152,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (value) => selectAll(seconds),
                         validator: (value) {
-                          if (value == null ||
-                              value.isEmpty && seconds.text.isEmpty)
-                            return 'Required';
-                          if (int.tryParse(value) == null)
+                          if (value?.isNotEmpty == true &&
+                              int.tryParse(value!) == null)
                             return 'Invalid number';
                           return null;
                         },
@@ -173,10 +171,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (value) => selectAll(distance),
                         validator: (value) {
-                          if (value == null ||
-                              value.isEmpty && minutes.text.isEmpty)
-                            return 'Required';
-                          if (int.tryParse(value) == null)
+                          if (value?.isNotEmpty == true &&
+                              int.tryParse(value!) == null)
                             return 'Invalid number';
                           return null;
                         },
@@ -357,6 +353,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> save(TimerState timerState) async {
+    if (!formKey.currentState!.validate()) return;
+
     setState(() {
       first = false;
     });
