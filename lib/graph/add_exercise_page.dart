@@ -24,6 +24,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   late var settings = context.watch<SettingsState>();
   late String unit = settings.value.strengthUnit;
   String? image;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,84 +36,89 @@ class _AddExercisePageState extends State<AddExercisePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-              textCapitalization: TextCapitalization.sentences,
-              autofocus: true,
-            ),
-            UnitSelector(
-              value: unit,
-              cardio: cardio,
-              onChanged: (String? newValue) {
-                setState(() {
-                  unit = newValue!;
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            ListTile(
-              title: cardio ? const Text('Cardio') : const Text('Strength'),
-              leading: cardio
-                  ? const Icon(Icons.sports_gymnastics)
-                  : const Icon(Icons.fitness_center),
-              onTap: () {
-                setState(() {
-                  if (cardio)
-                    unit = 'kg';
-                  else
-                    unit = 'km';
-                  cardio = !cardio;
-                });
-              },
-              trailing: Switch(
-                value: cardio,
-                onChanged: (value) => setState(() {
-                  cardio = value;
-                }),
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+                textCapitalization: TextCapitalization.sentences,
+                autofocus: true,
+                validator: (value) =>
+                    value?.isNotEmpty == true ? null : 'Required',
               ),
-            ),
-            Visibility(
-              visible: settings.value.showImages,
-              child: material.Column(
-                children: [
-                  if (image == null)
-                    TextButton.icon(
-                      onPressed: pick,
-                      label: const Text('Image'),
-                      icon: const Icon(Icons.image),
-                    ),
-                  if (image != null) ...[
-                    const SizedBox(height: 8),
-                    Tooltip(
-                      message: 'Long-press to delete',
-                      child: GestureDetector(
-                        onTap: () => pick(),
-                        onLongPress: () => setState(() {
-                          image = null;
-                        }),
-                        child: Image.file(
-                          File(image!),
-                          errorBuilder: (context, error, stackTrace) =>
-                              TextButton.icon(
-                            label: const Text('Image error'),
-                            icon: const Icon(Icons.error),
-                            onPressed: () => pick(),
+              UnitSelector(
+                value: unit,
+                cardio: cardio,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    unit = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              ListTile(
+                title: cardio ? const Text('Cardio') : const Text('Strength'),
+                leading: cardio
+                    ? const Icon(Icons.sports_gymnastics)
+                    : const Icon(Icons.fitness_center),
+                onTap: () {
+                  setState(() {
+                    if (cardio)
+                      unit = 'kg';
+                    else
+                      unit = 'km';
+                    cardio = !cardio;
+                  });
+                },
+                trailing: Switch(
+                  value: cardio,
+                  onChanged: (value) => setState(() {
+                    cardio = value;
+                  }),
+                ),
+              ),
+              Visibility(
+                visible: settings.value.showImages,
+                child: material.Column(
+                  children: [
+                    if (image == null)
+                      TextButton.icon(
+                        onPressed: pick,
+                        label: const Text('Image'),
+                        icon: const Icon(Icons.image),
+                      ),
+                    if (image != null) ...[
+                      const SizedBox(height: 8),
+                      Tooltip(
+                        message: 'Long-press to delete',
+                        child: GestureDetector(
+                          onTap: () => pick(),
+                          onLongPress: () => setState(() {
+                            image = null;
+                          }),
+                          child: Image.file(
+                            File(image!),
+                            errorBuilder: (context, error, stackTrace) =>
+                                TextButton.icon(
+                              label: const Text('Image error'),
+                              icon: const Icon(Icons.error),
+                              onPressed: () => pick(),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _save(unit),
+        onPressed: () => save(unit),
         tooltip: 'Save',
         child: const Icon(Icons.save),
       ),
@@ -134,7 +140,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
     });
   }
 
-  Future<void> _save(String unit) async {
+  Future<void> save(String unit) async {
+    if (!formKey.currentState!.validate()) return;
+
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
         created: DateTime.now().toLocal(),
