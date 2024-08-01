@@ -8,15 +8,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 abstract class TimerState extends ChangeNotifier {
-  String alarmSound = "";
-  bool vibrate = false;
+  String _alarmSound = "";
+  bool _vibrate = false;
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
 
   Future<TimerState> init() async => this;
 
   void _updateAlarmDetails(String pAlarmSound, bool pVibrate) {
-    alarmSound = pAlarmSound;
-    vibrate = pVibrate;
+    _alarmSound = pAlarmSound;
+    _vibrate = pVibrate;
   }
 
   Future<void> _addOneMinuteImpl();
@@ -32,7 +32,6 @@ abstract class TimerState extends ChangeNotifier {
 
   Future<void> _startTimerImpl(
     String title,
-    Duration rest,
   );
 
   Future<void> startTimer(
@@ -49,7 +48,7 @@ abstract class TimerState extends ChangeNotifier {
     );
     updateTimer(newTimer);
     _updateAlarmDetails(pAlarmSound, pVibrate);
-    await _startTimerImpl(title, rest);
+    await _startTimerImpl(title);
   }
 
   Future<void> _stopTimerImpl();
@@ -89,20 +88,20 @@ class AndroidTimerState extends TimerState {
   Future<void> _addOneMinuteImpl() async {
     final args = {
       'timestamp': nativeTimer.getTimeStamp(),
-      'alarmSound': alarmSound,
-      'vibrate': vibrate,
+      'alarmSound': _alarmSound,
+      'vibrate': _vibrate,
     };
     await androidChannel.invokeMethod('add', args);
   }
 
   @override
-  Future<void> _startTimerImpl(String title, Duration rest) async {
+  Future<void> _startTimerImpl(String title) async {
     final args = {
       'title': title,
       'timestamp': nativeTimer.getTimeStamp(),
-      'restMs': rest.inMilliseconds,
-      'alarmSound': alarmSound,
-      'vibrate': vibrate,
+      'restMs': nativeTimer.getDuration().inMilliseconds,
+      'alarmSound': _alarmSound,
+      'vibrate': _vibrate,
     };
     await androidChannel.invokeMethod('timer', args);
   }
@@ -130,6 +129,7 @@ class DartTimerState extends TimerState {
           label: 'Add 1 min',
         ),
       ],
+      defaultActionName: '',
     ),
   );
 
@@ -139,7 +139,7 @@ class DartTimerState extends TimerState {
         await stopTimer();
         break;
       case "add":
-        await addOneMinute(alarmSound, vibrate);
+        await addOneMinute(_alarmSound, _vibrate);
         break;
       default:
         if (!nativeTimer.isRunning()) await _stopTimerImpl();
@@ -176,8 +176,9 @@ class DartTimerState extends TimerState {
     next?.cancel();
   }
 
-  Future<void> notify(String? title, String? alarmSound) async {
+  Future<void> _notify(String? title, String? alarmSound) async {
     updateTimer(NativeTimerWrapper.emptyTimer());
+    next?.cancel();
     player.play(
       alarmSound?.isNotEmpty == true
           ? DeviceFileSource(alarmSound!)
@@ -185,30 +186,47 @@ class DartTimerState extends TimerState {
     );
 
     await notificationPlugin.show(
-        1, title ?? "Timer up", null, timerNotificationDetails,);
+      1,
+      title ?? "Timer up",
+      null,
+      timerNotificationDetails,
+    );
   }
 
-  @override
-  Future<void> _addOneMinuteImpl() async {
+  Future<void> _timerLoop(String? title) async {
+    if (!nativeTimer.isRunning() ||
+        nativeTimer.getRemaining().inMilliseconds <= 0)
+      return await _notify(title, _alarmSound);
+    final remaining = nativeTimer.getRemaining();
+    await notificationPlugin.show(
+      1,
+      title ?? "Rest timer",
+      '${remaining.inMinutes.toString().padLeft(2, '0')}:${remaining.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+      timerNotificationDetails,
+    );
+  }
+
+  Future<void> _startTimerLoop(String? title) async {
     next?.cancel();
-    next = Timer(
-      const Duration(minutes: 1),
-      () async => await notify(null, alarmSound),
+    await _timerLoop(title);
+    next = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) async => await _timerLoop(title),
     );
   }
 
   @override
-  Future<void> _startTimerImpl(
-    String title,
-    Duration rest,
-  ) async {
-    next?.cancel();
-    next = Timer(rest, () async => await notify(title, alarmSound));
+  Future<void> _addOneMinuteImpl() async => await _startTimerLoop(null);
+
+  @override
+  Future<void> _startTimerImpl(String title) async {
+    await _startTimerLoop(title);
   }
 
   @override
   Future<void> _stopTimerImpl() async {
     player.stop();
     next?.cancel();
+    await notificationPlugin.cancel(1);
   }
 }
