@@ -22,7 +22,7 @@ Future<void> main() async {
   final setting = await (db.settings.select()..limit(1)).getSingle();
   final settings = SettingsState(setting);
 
-  runApp(appProviders(settings));
+  runApp(appProviders(settings, await TimerState.getTimerState()));
 }
 
 AppDatabase db = AppDatabase(logStatements: kDebugMode);
@@ -30,10 +30,10 @@ AppDatabase db = AppDatabase(logStatements: kDebugMode);
 MethodChannel androidChannel =
     const MethodChannel("com.presley.flexify/android");
 
-Widget appProviders(SettingsState settingsState) => MultiProvider(
+Widget appProviders(SettingsState settingsState, TimerState timerState) => MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => settingsState),
-        ChangeNotifierProvider(create: (context) => TimerState()),
+        ChangeNotifierProvider(create: (context) => timerState),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
       child: const App(),

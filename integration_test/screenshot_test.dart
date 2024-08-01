@@ -138,7 +138,7 @@ Future<void> appWrapper() async {
   final settingsState = SettingsState(settings);
 
   dark = !dark;
-  runApp(app.appProviders(settingsState));
+  runApp(app.appProviders(settingsState, await TimerState.getTimerState()));
 }
 
 BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {
