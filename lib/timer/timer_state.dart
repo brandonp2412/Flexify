@@ -84,7 +84,8 @@ class AndroidTimerState extends TimerState {
   }
 
   @override
-  Future<void> startTimer(String title, Duration rest, String pAlarmSound, bool pVibrate) async {
+  Future<void> startTimer(
+      String title, Duration rest, String pAlarmSound, bool pVibrate) async {
     await super.startTimer(title, rest, pAlarmSound, pVibrate);
     final args = {
       'title': title,
@@ -124,8 +125,8 @@ class DartTimerState extends TimerState {
     ),
   );
 
-  Future<void> onNotificationPress(final NotificationResponse resp) async {
-    switch (resp.actionId) {
+  Future<void> onNotificationPress(String? actionId) async {
+    switch (actionId) {
       case "stop":
         await stopTimer();
         break;
@@ -143,7 +144,28 @@ class DartTimerState extends TimerState {
     const linuxSettings = LinuxInitializationSettings(
       defaultActionName: 'Open notification',
     );
-    const darwinSettings = DarwinInitializationSettings();
+    final darwinSettings = DarwinInitializationSettings(
+      notificationCategories: [
+        DarwinNotificationCategory(
+          'timerCategory',
+          actions: [
+            DarwinNotificationAction.plain(
+              'stop',
+              'Stop',
+              options: <DarwinNotificationActionOption>{
+                DarwinNotificationActionOption.destructive,
+              },
+            ),
+            DarwinNotificationAction.plain('add', 'Add 1 Min'),
+          ],
+          options: <DarwinNotificationCategoryOption>{
+            DarwinNotificationCategoryOption.allowAnnouncement,
+            DarwinNotificationCategoryOption.allowInCarPlay,
+            // DarwinNotificationCategoryOption.customDismissAction,
+          },
+        ),
+      ],
+    );
     final initSettings = InitializationSettings(
       linux: linuxSettings,
       macOS: darwinSettings,
@@ -156,7 +178,7 @@ class DartTimerState extends TimerState {
     await notificationPlugin.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (resp) async =>
-          await onNotificationPress(resp),
+          await onNotificationPress(resp.actionId),
     );
     return this;
   }
@@ -214,7 +236,12 @@ class DartTimerState extends TimerState {
   }
 
   @override
-  Future<void> startTimer(String title, Duration rest, String pAlarmSound, bool pVibrate) async {
+  Future<void> startTimer(
+    String title,
+    Duration rest,
+    String pAlarmSound,
+    bool pVibrate,
+  ) async {
     await super.startTimer(title, rest, pAlarmSound, pVibrate);
     await _startTimerLoop(null);
   }
