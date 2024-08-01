@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
@@ -200,6 +199,7 @@ class DartTimerState extends TimerState {
 
   Future<void> _startTimerLoop(String? title) async {
     next?.cancel();
+    await player.stop();
     await _timerLoop(title);
     next = Timer.periodic(
       const Duration(seconds: 1),
