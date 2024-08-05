@@ -22,10 +22,11 @@ class EditGraphPage extends StatefulWidget {
 }
 
 class _EditGraphPageState extends State<EditGraphPage> {
-  late final TextEditingController nameController =
+  late final TextEditingController name =
       TextEditingController(text: widget.name);
-  final TextEditingController minutesController = TextEditingController();
-  final TextEditingController secondsController = TextEditingController();
+  final TextEditingController minutes = TextEditingController();
+  final TextEditingController seconds = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   bool? cardio;
   String? unit;
@@ -40,149 +41,165 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            TextField(
-              controller: nameController,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: "New name"),
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: minutesController,
-                    textInputAction: TextInputAction.next,
-                    decoration:
-                        const InputDecoration(labelText: "Rest minutes"),
-                    keyboardType: material.TextInputType.number,
-                    onTap: () => selectAll(minutesController),
-                  ),
-                ),
-                const SizedBox(
-                  width: 8.0,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: secondsController,
-                    textInputAction: TextInputAction.next,
-                    decoration:
-                        const InputDecoration(labelText: "Rest seconds"),
-                    keyboardType: material.TextInputType.number,
-                    onTap: () {
-                      selectAll(secondsController);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Category'),
-              value: category,
-              items: categories
-                  .map(
-                    (category) => DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              TextField(
+                controller: name,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(labelText: "New name"),
+                textCapitalization: TextCapitalization.sentences,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: minutes,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          const InputDecoration(labelText: "Rest minutes"),
+                      keyboardType: material.TextInputType.number,
+                      onTap: () => selectAll(minutes),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return null;
+                        if (int.tryParse(value) == null)
+                          return 'Invalid number';
+                        return null;
+                      },
                     ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  category = value!;
-                });
-              },
-            ),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Unit'),
-              value: unit,
-              items: const [
-                DropdownMenuItem(
-                  value: 'kg',
-                  child: Text("kg"),
-                ),
-                DropdownMenuItem(
-                  value: 'lb',
-                  child: Text("lb"),
-                ),
-                DropdownMenuItem(
-                  value: 'km',
-                  child: Text("km"),
-                ),
-                DropdownMenuItem(
-                  value: 'mi',
-                  child: Text("mi"),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  unit = value!;
-                });
-              },
-            ),
-            if (cardio != null)
-              ListTile(
-                leading: cardio!
-                    ? const Icon(Icons.sports_gymnastics)
-                    : const Icon(Icons.fitness_center),
-                title: cardio! ? const Text('Cardio') : const Text('Strength'),
-                onTap: () {
+                  ),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: seconds,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          const InputDecoration(labelText: "Rest seconds"),
+                      keyboardType: material.TextInputType.number,
+                      onTap: () {
+                        selectAll(seconds);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return null;
+                        if (int.tryParse(value) == null)
+                          return 'Invalid number';
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              DropdownButtonFormField(
+                decoration: const InputDecoration(labelText: 'Category'),
+                value: category,
+                items: categories
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
                   setState(() {
-                    cardio = !cardio!;
-                    if (cardio!)
-                      unit = unit == 'kg' ? 'km' : 'mi';
-                    else
-                      unit = unit == 'km' ? 'kg' : 'lb';
+                    category = value!;
                   });
                 },
-                trailing: Switch(
-                  value: cardio!,
-                  onChanged: (value) => setState(() {
-                    cardio = value;
-                  }),
-                ),
               ),
-            Selector<SettingsState, bool>(
-              builder: (context, showImages, child) {
-                return Visibility(
-                  visible: showImages,
-                  child: material.Column(
-                    children: [
-                      if (image == null)
-                        TextButton.icon(
-                          onPressed: pick,
-                          label: const Text('Image'),
-                          icon: const Icon(Icons.image),
-                        ),
-                      if (image != null) ...[
-                        const SizedBox(height: 8),
-                        Tooltip(
-                          message: 'Long-press to delete',
-                          child: GestureDetector(
-                            onTap: () => pick(),
-                            onLongPress: () => setState(() {
-                              image = null;
-                            }),
-                            child: Image.file(
-                              File(image!),
-                              errorBuilder: (context, error, stackTrace) =>
-                                  TextButton.icon(
-                                label: const Text('Image error'),
-                                icon: const Icon(Icons.error),
-                                onPressed: () => pick(),
+              DropdownButtonFormField(
+                decoration: const InputDecoration(labelText: 'Unit'),
+                value: unit,
+                items: const [
+                  DropdownMenuItem(
+                    value: 'kg',
+                    child: Text("kg"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'lb',
+                    child: Text("lb"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'km',
+                    child: Text("km"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'mi',
+                    child: Text("mi"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    unit = value!;
+                  });
+                },
+              ),
+              if (cardio != null)
+                ListTile(
+                  leading: cardio!
+                      ? const Icon(Icons.sports_gymnastics)
+                      : const Icon(Icons.fitness_center),
+                  title:
+                      cardio! ? const Text('Cardio') : const Text('Strength'),
+                  onTap: () {
+                    setState(() {
+                      cardio = !cardio!;
+                      if (cardio!)
+                        unit = unit == 'kg' ? 'km' : 'mi';
+                      else
+                        unit = unit == 'km' ? 'kg' : 'lb';
+                    });
+                  },
+                  trailing: Switch(
+                    value: cardio!,
+                    onChanged: (value) => setState(() {
+                      cardio = value;
+                    }),
+                  ),
+                ),
+              Selector<SettingsState, bool>(
+                builder: (context, showImages, child) {
+                  return Visibility(
+                    visible: showImages,
+                    child: material.Column(
+                      children: [
+                        if (image == null)
+                          TextButton.icon(
+                            onPressed: pick,
+                            label: const Text('Image'),
+                            icon: const Icon(Icons.image),
+                          ),
+                        if (image != null) ...[
+                          const SizedBox(height: 8),
+                          Tooltip(
+                            message: 'Long-press to delete',
+                            child: GestureDetector(
+                              onTap: () => pick(),
+                              onLongPress: () => setState(() {
+                                image = null;
+                              }),
+                              child: Image.file(
+                                File(image!),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    TextButton.icon(
+                                  label: const Text('Image error'),
+                                  icon: const Icon(Icons.error),
+                                  onPressed: () => pick(),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
-                  ),
-                );
-              },
-              selector: (context, settings) => settings.value.showImages,
-            ),
-          ],
+                    ),
+                  );
+                },
+                selector: (context, settings) => settings.value.showImages,
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -195,29 +212,25 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   @override
   dispose() {
-    nameController.dispose();
-    minutesController.dispose();
-    secondsController.dispose();
+    name.dispose();
+    minutes.dispose();
+    seconds.dispose();
     super.dispose();
   }
 
   Future<void> doUpdate() async {
-    final minutes = int.tryParse(minutesController.text);
-    final seconds = int.tryParse(secondsController.text);
-
     Duration? duration;
-    if (minutes != null && minutes > 0 || seconds != null && seconds > 0)
+    if (int.tryParse(minutes.text) != null && int.tryParse(minutes.text)! > 0 ||
+        int.tryParse(seconds.text) != null && int.tryParse(seconds.text)! > 0)
       duration = Duration(
-        minutes: minutes ?? 0,
-        seconds: seconds ?? 0,
+        minutes: int.tryParse(minutes.text) ?? 0,
+        seconds: int.tryParse(seconds.text) ?? 0,
       );
 
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
       GymSetsCompanion(
-        name: nameController.text.isEmpty
-            ? const Value.absent()
-            : Value(nameController.text),
+        name: name.text.isEmpty ? const Value.absent() : Value(name.text),
         cardio: Value.absentIfNull(cardio),
         unit: Value.absentIfNull(unit),
         restMs: Value(duration?.inMilliseconds),
@@ -230,7 +243,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
       variables: [
         Variable.withString(widget.name),
-        Variable.withString(nameController.text),
+        Variable.withString(name.text),
       ],
       updates: {db.plans},
     );
@@ -242,7 +255,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Future<int> getCount() async {
     final result = await (db.gymSets.selectOnly()
           ..addColumns([db.gymSets.name.count()])
-          ..where(db.gymSets.name.equals(nameController.text)))
+          ..where(db.gymSets.name.equals(name.text)))
         .getSingle();
     return result.read(db.gymSets.name.count()) ?? 0;
   }
@@ -263,8 +276,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
             if (gymSet.restMs != null) {
               final duration = Duration(milliseconds: gymSet.restMs!);
-              minutesController.text = duration.inMinutes.toString();
-              secondsController.text = (duration.inSeconds % 60).toString();
+              minutes.text = duration.inMinutes.toString();
+              seconds.text = (duration.inSeconds % 60).toString();
             }
           }),
         );
@@ -273,7 +286,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Future<bool> mixedUnits() async {
     final result = await (db.gymSets.selectOnly(distinct: true)
           ..addColumns([db.gymSets.unit])
-          ..where(db.gymSets.name.equals(nameController.text)))
+          ..where(db.gymSets.name.equals(name.text)))
         .get();
     return result.length > 1;
   }
@@ -288,12 +301,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   save() async {
-    if (nameController.text.isEmpty)
-      return toast(context, 'Name cannot be empty');
+    if (!formKey.currentState!.validate()) return;
 
     final count = await getCount();
 
-    if (count > 0 && widget.name != nameController.text && mounted)
+    if (count > 0 && widget.name != name.text && mounted)
       await showDialog(
         context: context,
         builder: (BuildContext context) {
