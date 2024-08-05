@@ -94,24 +94,24 @@ class _EditSetPageState extends State<EditSetPage> {
     calculateCalories();
   }
 
+  void calculateCalories () {
+    setState(() {
+      if (selectedGymSet?.met != null) {
+        double calcWeight = unit == "kg" ?  double.parse(weight.text) : double.parse(weight.text) * poundToKg;
+        double calcBodyWeight = unit == "kg" ? double.parse(bodyWeight.text) : double.parse(bodyWeight.text) * poundToKg;
+        double metDependsOnWeight = cardio ? selectedGymSet!.met : selectedGymSet!.met * (1 + (calcWeight - defaultWeight) / defaultWeight);
+        // Assuming each rep takes approximately 5 seconds, each rep corresponds to 0.0139 hours. Therefore, we multiply the number of reps by 0.0139.
+        double repOrMinute = cardio ? double.parse(minutes.text) / 60 : double.parse(reps.text) * 0.00139;
+        met.text = (metDependsOnWeight * calcBodyWeight  * repOrMinute).toStringAsFixed(2);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final showBodyWeight = context.select<SettingsState, bool>(
       (settings) => settings.value.showBodyWeight,
     );
-
-    calculateCalories() {
-      setState(() {
-        if (selectedGymSet?.met != null) {
-          double weight = unit == "kg" ?  double.parse(weightController.text) : double.parse(weightController.text) * poundToKg;
-          double bodyWeight = unit == "kg" ? double.parse(bodyWeightController.text) : double.parse(bodyWeightController.text) * poundToKg;
-          double metDependsOnWeight = cardio ? selectedGymSet!.met : selectedGymSet!.met * (1 + (weight - defaultWeight) / defaultWeight);
-          // Assuming each rep takes approximately 5 seconds, each rep corresponds to 0.0139 hours. Therefore, we multiply the number of reps by 0.0139.
-          double repOrMinute = cardio ? double.parse(minutesController.text) / 60 : double.parse(repsController.text) * 0.00139;
-          metController.text = (metDependsOnWeight * bodyWeight  * repOrMinute).toStringAsFixed(2);
-        }
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -319,7 +319,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   textInputAction: TextInputAction.next,
                   onChanged: (value) {
                     calculateCalories();
-                  }
+                  },
                   validator: (value) {
                     if (value == null) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -334,7 +334,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     ),
                     onChanged: (value) {
                       calculateCalories();
-                    }
+                    },
                     enabled: false,
                   ),
               ],
