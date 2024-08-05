@@ -271,4 +271,5 @@ class GymSets extends Table {
   IntColumn get restMs => integer().nullable()();
   TextColumn get unit => text()();
   RealColumn get weight => real()();
+  RealColumn get met => real().withDefault(const Constant(0.0))();
 }

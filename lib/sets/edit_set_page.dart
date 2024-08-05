@@ -28,12 +28,16 @@ class _EditSetPageState extends State<EditSetPage> {
   final weightController = TextEditingController();
   final ormController = TextEditingController();
   final bodyWeightController = TextEditingController();
+  final metController = TextEditingController();
   final distanceController = TextEditingController();
   final minutesController = TextEditingController();
   final secondsController = TextEditingController();
   final inclineController = TextEditingController();
   final repsNode = FocusNode();
   final distanceNode = FocusNode();
+  // The average weight used in the exercise movements is assumed to be 10 kilograms, and the met value is updated according to the weight of the movement performed by the user.
+  final defaultWeight = 10.0;
+  final poundToKg = 2.02;
 
   late String unit;
   late DateTime created;
@@ -42,15 +46,32 @@ class _EditSetPageState extends State<EditSetPage> {
   int? restMs;
   String? image;
   String? category;
+  GymSet? selectedGymSet;
+
 
   TextEditingController? nameController;
   List<String> nameOptions = [];
+
+
 
   @override
   Widget build(BuildContext context) {
     final showBodyWeight = context.select<SettingsState, bool>(
       (settings) => settings.value.showBodyWeight,
     );
+
+    calculateCalories() {
+      setState(() {
+        if (selectedGymSet?.met != null) {
+          double weight = unit == "kg" ?  double.parse(weightController.text) : double.parse(weightController.text) * poundToKg;
+          double bodyWeight = unit == "kg" ? double.parse(bodyWeightController.text) : double.parse(bodyWeightController.text) * poundToKg;
+          double metDependsOnWeight = cardio ? selectedGymSet!.met : selectedGymSet!.met * (1 + (weight - defaultWeight) / defaultWeight);
+          // Assuming each rep takes approximately 5 seconds, each rep corresponds to 0.0139 hours. Therefore, we multiply the number of reps by 0.0139.
+          double repOrMinute = cardio ? double.parse(minutesController.text) / 60 : double.parse(repsController.text) * 0.00139;
+          metController.text = (metDependsOnWeight * bodyWeight  * repOrMinute).toStringAsFixed(2);
+        }
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -119,7 +140,6 @@ class _EditSetPageState extends State<EditSetPage> {
                       ..limit(1))
                     .getSingleOrNull();
                 if (last == null) return;
-
                 if (showBodyWeight)
                   updateFields(
                     last.copyWith(
@@ -143,6 +163,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   repsNode.requestFocus();
                   selectAll(repsController);
                 }
+                calculateCalories();
               },
               initialValue: TextEditingValue(text: name),
               fieldViewBuilder: (
@@ -225,6 +246,9 @@ class _EditSetPageState extends State<EditSetPage> {
                 onTap: () => selectAll(repsController),
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => selectAll(weightController),
+                onChanged: (value) {
+                  calculateCalories();
+                }
               ),
               TextField(
                 controller: weightController,
@@ -234,6 +258,9 @@ class _EditSetPageState extends State<EditSetPage> {
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(weightController),
                 textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                  calculateCalories();
+                },
               ),
               if (widget.gymSet.id > 0)
                 TextField(
@@ -242,6 +269,9 @@ class _EditSetPageState extends State<EditSetPage> {
                     labelText: 'One rep max (estimate)',
                   ),
                   enabled: false,
+                  onChanged: (value) {
+                    calculateCalories();
+                  }
                 ),
             ],
             Visibility(
@@ -253,6 +283,9 @@ class _EditSetPageState extends State<EditSetPage> {
                 ),
                 keyboardType: TextInputType.number,
                 onTap: () => selectAll(bodyWeightController),
+                onChanged: (value) {
+                  calculateCalories();
+                }
               ),
             ),
             Selector<SettingsState, bool>(
@@ -263,6 +296,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       unit = newValue!;
+                      calculateCalories();
                     });
                   },
                   cardio: cardio,
@@ -286,6 +320,13 @@ class _EditSetPageState extends State<EditSetPage> {
                   category = value!;
                 });
               },
+            ),
+            TextField(
+              controller: metController,
+              decoration: const InputDecoration(
+                labelText: 'Estimated Calories',
+              ),
+              readOnly: true,
             ),
             Selector<SettingsState, String>(
               builder: (context, longDateFormat, child) => ListTile(
@@ -352,6 +393,7 @@ class _EditSetPageState extends State<EditSetPage> {
     repsNode.dispose();
     weightController.dispose();
     bodyWeightController.dispose();
+    metController.dispose();
     distanceController.dispose();
     minutesController.dispose();
     inclineController.dispose();
@@ -454,7 +496,6 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void updateFields(GymSet gymSet) {
     nameController?.text = gymSet.name;
-
     setState(() {
       category = gymSet.category;
       image = gymSet.image;
@@ -472,6 +513,7 @@ class _EditSetPageState extends State<EditSetPage> {
       inclineController.text = gymSet.incline?.toString() ?? "";
       ormController.text =
           "${(gymSet.weight / (1.0278 - (0.0278 * gymSet.reps))).toStringAsFixed(2)} ${gymSet.unit}";
+      selectedGymSet = gymSet;
     });
   }
 
