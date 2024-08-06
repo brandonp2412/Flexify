@@ -234,7 +234,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         cardio: Value.absentIfNull(cardio),
         unit: Value.absentIfNull(unit),
         restMs: Value(duration?.inMilliseconds),
-        image: Value.absentIfNull(image),
+        image: Value(image),
         category: Value.absentIfNull(category),
       ),
     );
