@@ -197,6 +197,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
           db.gymSets.distance,
           db.gymSets.created.max(),
           db.gymSets.image,
+          db.gymSets.category,
         ])
         ..orderBy([
           OrderingTerm(
@@ -219,6 +220,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
                 distance: Value(result.read(db.gymSets.distance)!),
                 created: Value(result.read(db.gymSets.created.max())!),
                 image: Value(result.read(db.gymSets.image)),
+                category: Value(result.read(db.gymSets.category)),
               ),
             )
             .toList(),

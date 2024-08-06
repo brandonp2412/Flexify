@@ -5,6 +5,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/utils.dart';
@@ -29,6 +30,7 @@ class GraphsPageState extends State<GraphsPage>
   final Set<String> selected = {};
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   String search = '';
+  String? category;
 
   @override
   bool get wantKeepAlive => true;
@@ -63,12 +65,25 @@ class GraphsPageState extends State<GraphsPage>
           final gymSets = snapshot.data!.where((gymSet) {
             final name = gymSet.name.value.toLowerCase();
             final searchText = search.toLowerCase();
-            return name.contains(searchText);
+            if (category != null) {
+              return gymSet.category.value == category &&
+                  name.contains(searchText);
+            } else {
+              return name.contains(searchText);
+            }
           }).toList();
 
           return material.Column(
             children: [
               AppSearch(
+                filter: GraphsFilters(
+                  category: category,
+                  setCategory: (value) {
+                    setState(() {
+                      category = value;
+                    });
+                  },
+                ),
                 onShare: () async {
                   final selCopy = selected.toList();
                   setState(() {
