@@ -33,30 +33,36 @@ final List<String> shortFormats = [
 List<Widget> getFormatSettings(String term, Setting settings) {
   return [
     if ('strength unit'.contains(term.toLowerCase()))
-      UnitSelector(
-        label: 'Strength unit',
-        value: settings.strengthUnit,
-        cardio: false,
-        onChanged: (value) {
-          db.settings.update().write(
-                SettingsCompanion(
-                  strengthUnit: Value(value!),
-                ),
-              );
-        },
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: UnitSelector(
+          label: 'Strength unit',
+          value: settings.strengthUnit,
+          cardio: false,
+          onChanged: (value) {
+            db.settings.update().write(
+                  SettingsCompanion(
+                    strengthUnit: Value(value!),
+                  ),
+                );
+          },
+        ),
       ),
     if ('cardio unit'.contains(term.toLowerCase()))
-      UnitSelector(
-        label: 'Cardio unit',
-        value: settings.cardioUnit,
-        cardio: true,
-        onChanged: (value) {
-          db.settings.update().write(
-                SettingsCompanion(
-                  cardioUnit: Value(value!),
-                ),
-              );
-        },
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: UnitSelector(
+          label: 'Cardio unit',
+          value: settings.cardioUnit,
+          cardio: true,
+          onChanged: (value) {
+            db.settings.update().write(
+                  SettingsCompanion(
+                    cardioUnit: Value(value!),
+                  ),
+                );
+          },
+        ),
       ),
     if ('long date format'.contains(term.toLowerCase()))
       Padding(
