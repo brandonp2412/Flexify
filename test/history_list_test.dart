@@ -41,6 +41,7 @@ void main() async {
                   duration: 8,
                   distance: 9,
                   cardio: false,
+                  met: 10,
                 ),
               ],
               onNext: () {},

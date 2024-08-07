@@ -89,6 +89,7 @@ class AppDatabase extends _$AppDatabase {
                 'unit': Variable(set.unit.value),
                 'created': Variable(set.created.value),
                 'hidden': const Variable(true),
+                'met': Variable(set.met.value),
               }),
             ),
           );

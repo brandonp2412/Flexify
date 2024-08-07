@@ -28,6 +28,7 @@ class _EditSetPageState extends State<EditSetPage> {
   final weight = TextEditingController();
   final oneRepMax = TextEditingController();
   final bodyWeight = TextEditingController();
+  final met = TextEditingController();
   final distance = TextEditingController();
   final minutes = TextEditingController();
   final seconds = TextEditingController();
@@ -35,6 +36,9 @@ class _EditSetPageState extends State<EditSetPage> {
   final repsNode = FocusNode();
   final distanceNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  // The average weight used in the exercise movements is assumed to be 10 kilograms, and the met value is updated according to the weight of the movement performed by the user.
+  final defaultWeight = 10.0;
+  final poundToKg = 2.02;
 
   late String unit;
   late DateTime created;
@@ -43,6 +47,8 @@ class _EditSetPageState extends State<EditSetPage> {
   int? restMs;
   String? image;
   String? category;
+  GymSet? selectedGymSet;
+
 
   TextEditingController? nameController;
   List<String> nameOptions = [];
@@ -85,6 +91,20 @@ class _EditSetPageState extends State<EditSetPage> {
       repsNode.requestFocus();
       selectAll(reps);
     }
+    calculateCalories();
+  }
+
+  void calculateCalories () {
+    setState(() {
+      if (selectedGymSet?.met != null) {
+        double calcWeight = unit == "kg" ?  double.parse(weight.text) : double.parse(weight.text) * poundToKg;
+        double calcBodyWeight = unit == "kg" ? double.parse(bodyWeight.text) : double.parse(bodyWeight.text) * poundToKg;
+        double metDependsOnWeight = cardio ? selectedGymSet!.met : selectedGymSet!.met * (1 + (calcWeight - defaultWeight) / defaultWeight);
+        // Assuming each rep takes approximately 5 seconds, each rep corresponds to 0.0139 hours. Therefore, we multiply the number of reps by 0.0139.
+        double repOrMinute = cardio ? double.parse(minutes.text) / 60 : double.parse(reps.text) * 0.00139;
+        met.text = (metDependsOnWeight * calcBodyWeight  * repOrMinute).toStringAsFixed(2);
+      }
+    });
   }
 
   @override
@@ -187,6 +207,9 @@ class _EditSetPageState extends State<EditSetPage> {
                   onTap: () => selectAll(reps),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => selectAll(weight),
+                  onChanged: (value) {
+                    calculateCalories();
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Required';
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -294,6 +317,9 @@ class _EditSetPageState extends State<EditSetPage> {
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(weight),
                   textInputAction: TextInputAction.next,
+                  onChanged: (value) {
+                    calculateCalories();
+                  },
                   validator: (value) {
                     if (value == null) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -306,6 +332,9 @@ class _EditSetPageState extends State<EditSetPage> {
                     decoration: const InputDecoration(
                       labelText: 'One rep max (estimate)',
                     ),
+                    onChanged: (value) {
+                      calculateCalories();
+                    },
                     enabled: false,
                   ),
               ],
@@ -316,6 +345,9 @@ class _EditSetPageState extends State<EditSetPage> {
                   decoration: const InputDecoration(
                     labelText: 'Body weight (during set)',
                   ),
+                  onChanged: (value) {
+                    calculateCalories();
+                  },
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(bodyWeight),
                   validator: (value) {
@@ -333,6 +365,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         unit = newValue!;
+                        calculateCalories();
                       });
                     },
                     cardio: cardio,
@@ -356,6 +389,13 @@ class _EditSetPageState extends State<EditSetPage> {
                     category = value!;
                   });
                 },
+              ),
+              TextField(
+                controller: met,
+                decoration: const InputDecoration(
+                labelText: 'Estimated Calories',
+                ),
+                readOnly: true,
               ),
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) => ListTile(
@@ -423,6 +463,7 @@ class _EditSetPageState extends State<EditSetPage> {
     repsNode.dispose();
     weight.dispose();
     bodyWeight.dispose();
+    met.dispose();
     distance.dispose();
     minutes.dispose();
     incline.dispose();
@@ -524,7 +565,6 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void updateFields(GymSet gymSet) {
     nameController?.text = gymSet.name;
-
     setState(() {
       category = gymSet.category;
       image = gymSet.image;
@@ -542,6 +582,7 @@ class _EditSetPageState extends State<EditSetPage> {
       incline.text = gymSet.incline?.toString() ?? "";
       oneRepMax.text =
           "${(gymSet.weight / (1.0278 - (0.0278 * gymSet.reps))).toStringAsFixed(2)} ${gymSet.unit}";
+      selectedGymSet = gymSet;
     });
   }
 
