@@ -33,13 +33,6 @@ class NativeTimerWrapper {
         NativeTimerState.running,
       );
   bool isRunning() => state == NativeTimerState.running;
-  bool update() {
-    if (state == NativeTimerState.running &&
-        (getDuration() - getElapsed()).inMilliseconds <= 0) {
-      state == NativeTimerState.expired;
-    }
-    return state != NativeTimerState.running;
-  }
 
   static NativeTimerWrapper emptyTimer() => NativeTimerWrapper(
         Duration.zero,
