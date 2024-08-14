@@ -24,7 +24,8 @@ class GraphsPage extends StatefulWidget {
   createState() => GraphsPageState();
 }
 
-class GraphsPageState extends State<GraphsPage> {
+class GraphsPageState extends State<GraphsPage>
+    with AutomaticKeepAliveClientMixin {
   late final Stream<List<GymSetsCompanion>> stream = watchGraphs();
 
   final Set<String> selected = {};
@@ -33,7 +34,11 @@ class GraphsPageState extends State<GraphsPage> {
   String? category;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;

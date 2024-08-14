@@ -29,11 +29,16 @@ class HistoryPage extends StatefulWidget {
   createState() => HistoryPageState();
 }
 
-class HistoryPageState extends State<HistoryPage> {
+class HistoryPageState extends State<HistoryPage>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
