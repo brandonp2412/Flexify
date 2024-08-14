@@ -8,6 +8,7 @@ import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -36,8 +37,11 @@ class GraphsPageState extends State<GraphsPage> {
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
-        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
-        navigatorKey.currentState!.pop();
+        final tabController = DefaultTabController.of(context);
+        final settings = context.read<SettingsState>().value;
+        final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
+        if (tabController.index == graphsIndex)
+          navigatorKey.currentState!.pop();
       },
       child: Navigator(
         key: navigatorKey,

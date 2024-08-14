@@ -529,6 +529,7 @@ class _StrengthPageState extends State<StrengthPage> {
       );
     }
 
+    if (!mounted) return;
     setState(() {
       data = list;
     });

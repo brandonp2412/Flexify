@@ -5,6 +5,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_list.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -24,8 +25,10 @@ class PlansPageState extends State<PlansPage> {
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
-        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
-        navigatorKey.currentState!.pop();
+        final tabController = DefaultTabController.of(context);
+        final settings = context.read<SettingsState>().value;
+        final plansIndex = settings.tabs.split(',').indexOf('PlansPage');
+        if (tabController.index == plansIndex) navigatorKey.currentState!.pop();
       },
       child: Navigator(
         key: navigatorKey,

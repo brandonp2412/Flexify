@@ -37,8 +37,11 @@ class HistoryPageState extends State<HistoryPage> {
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
-        if (navigatorKey.currentState?.focusNode.hasFocus == false) return;
-        navigatorKey.currentState!.pop();
+        final tabController = DefaultTabController.of(context);
+        final settings = context.read<SettingsState>().value;
+        final historyIndex = settings.tabs.split(',').indexOf('HistoryPage');
+        if (tabController.index == historyIndex)
+          navigatorKey.currentState!.pop();
       },
       child: Navigator(
         key: navigatorKey,
