@@ -25,7 +25,7 @@ class StrengthPage extends StatefulWidget {
 
 class _StrengthPageState extends State<StrengthPage> {
   late String targetUnit = widget.unit;
-  late Stream<List<StrengthData>> graphStream;
+  List<StrengthData> data = [];
   StrengthMetric metric = StrengthMetric.bestWeight;
   Period period = Period.day;
   DateTime? startDate;
@@ -41,7 +41,6 @@ class _StrengthPageState extends State<StrengthPage> {
   Widget bottomTitleWidgets(
     double value,
     TitleMeta meta,
-    List<StrengthData> rows,
     String format,
   ) {
     const style = TextStyle(
@@ -54,11 +53,11 @@ class _StrengthPageState extends State<StrengthPage> {
     double labelWidth = 120;
     int labelCount = (screenWidth / labelWidth).floor();
     List<int> indices = List.generate(labelCount, (index) {
-      return ((rows.length - 1) * index / (labelCount - 1)).round();
+      return ((data.length - 1) * index / (labelCount - 1)).round();
     });
 
     if (indices.contains(value.toInt())) {
-      DateTime createdDate = rows[value.toInt()].created;
+      DateTime createdDate = data[value.toInt()].created;
       text = Text(
         DateFormat(format).format(createdDate),
         style: style,
@@ -76,7 +75,6 @@ class _StrengthPageState extends State<StrengthPage> {
   touchLine(
     FlTouchEvent event,
     LineTouchResponse? touchResponse,
-    List<StrengthData> rows,
   ) async {
     if (event is ScaleUpdateDetails) return;
     if (event is! FlPanDownEvent) return;
@@ -87,7 +85,7 @@ class _StrengthPageState extends State<StrengthPage> {
 
     final index = touchResponse?.lineBarSpots?[0].spotIndex;
     if (index == null) return;
-    final row = rows[index];
+    final row = data[index];
     GymSet? gymSet;
 
     switch (metric) {
@@ -192,24 +190,14 @@ class _StrengthPageState extends State<StrengthPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: StreamBuilder(
-          stream: graphStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const SizedBox();
-            if (snapshot.data?.isEmpty == true)
-              return ListTile(
-                title: Text("No data yet for ${widget.name}"),
-                subtitle: const Text("Complete some plans to view graphs here"),
-                contentPadding: EdgeInsets.zero,
-              );
-            if (snapshot.hasError)
-              return ErrorWidget(snapshot.error.toString());
+        child: Builder(
+          builder: (context) {
+            if (data.isEmpty)
+              return const ListTile(title: Text("No data yet."));
 
             List<FlSpot> spots = [];
-            final rows = snapshot.data!;
-
-            for (var index = 0; index < snapshot.data!.length; index++) {
-              spots.add(FlSpot(index.toDouble(), snapshot.data![index].value));
+            for (var index = 0; index < data.length; index++) {
+              spots.add(FlSpot(index.toDouble(), data[index].value));
             }
 
             final format = context.select<SettingsState, String>(
@@ -257,7 +245,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         setState(() {
                           metric = value!;
                         });
-                        setStream();
+                        setData();
                       },
                     ),
                   ),
@@ -287,7 +275,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     setState(() {
                       period = value!;
                     });
-                    setStream();
+                    setData();
                   },
                 ),
                 Selector<SettingsState, bool>(
@@ -300,7 +288,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         setState(() {
                           targetUnit = value!;
                         });
-                        setStream();
+                        setData();
                       },
                     ),
                   ),
@@ -383,7 +371,6 @@ class _StrengthPageState extends State<StrengthPage> {
                                   bottomTitleWidgets(
                                 value,
                                 meta,
-                                rows,
                                 format,
                               ),
                             ),
@@ -392,8 +379,8 @@ class _StrengthPageState extends State<StrengthPage> {
                         lineTouchData: LineTouchData(
                           enabled: true,
                           touchCallback: (event, touchResponse) =>
-                              touchLine(event, touchResponse, rows),
-                          touchTooltipData: tooltipData(context, rows, format),
+                              touchLine(event, touchResponse),
+                          touchTooltipData: tooltipData(context, format),
                         ),
                         lineBarsData: [
                           LineChartBarData(
@@ -447,11 +434,24 @@ class _StrengthPageState extends State<StrengthPage> {
   @override
   initState() {
     super.initState();
+    print('Init StrengthPage');
     if (widget.name == 'Weight') period = Period.week;
-    setStream();
+    setData();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final tabController = DefaultTabController.of(context);
+      final settings = context.read<SettingsState>().value;
+      final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
+      tabController.addListener(() {
+        if (tabController.indexIsChanging) return;
+        if (tabController.index != graphsIndex) return;
+        print('Setting data...');
+        setData();
+      });
+    });
   }
 
-  void setStream() {
+  Future<void> setData() async {
     Expression<String> createdCol = const CustomExpression<String>(
       "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
     );
@@ -468,82 +468,80 @@ class _StrengthPageState extends State<StrengthPage> {
         "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
       );
 
-    setState(() {
-      var query = (db.selectOnly(db.gymSets)
-        ..addColumns([
-          db.gymSets.weight.max(),
-          volumeCol,
-          ormCol,
-          db.gymSets.created,
-          if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
-          if (metric != StrengthMetric.bestReps) db.gymSets.reps,
-          db.gymSets.unit,
-          relativeCol,
-        ])
-        ..where(db.gymSets.name.equals(widget.name))
-        ..where(db.gymSets.hidden.equals(false))
-        ..orderBy([
-          OrderingTerm(
-            expression: createdCol,
-            mode: OrderingMode.desc,
-          ),
-        ])
-        ..limit(11)
-        ..groupBy([createdCol]));
+    var query = (db.selectOnly(db.gymSets)
+      ..addColumns([
+        db.gymSets.weight.max(),
+        volumeCol,
+        ormCol,
+        db.gymSets.created,
+        if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+        if (metric != StrengthMetric.bestReps) db.gymSets.reps,
+        db.gymSets.unit,
+        relativeCol,
+      ])
+      ..where(db.gymSets.name.equals(widget.name))
+      ..where(db.gymSets.hidden.equals(false))
+      ..orderBy([
+        OrderingTerm(
+          expression: createdCol,
+          mode: OrderingMode.desc,
+        ),
+      ])
+      ..limit(11)
+      ..groupBy([createdCol]));
 
-      if (startDate != null)
-        query = query
-          ..where(
-            db.gymSets.created.isBiggerOrEqualValue(startDate!),
-          );
-      if (endDate != null)
-        query = query
-          ..where(
-            db.gymSets.created.isSmallerThanValue(endDate!),
-          );
+    if (startDate != null)
+      query = query
+        ..where(
+          db.gymSets.created.isBiggerOrEqualValue(startDate!),
+        );
+    if (endDate != null)
+      query = query
+        ..where(
+          db.gymSets.created.isSmallerThanValue(endDate!),
+        );
 
-      graphStream = query.watch().map(
-        (results) {
-          List<StrengthData> list = [];
-          for (final result in results.reversed) {
-            final unit = result.read(db.gymSets.unit)!;
-            var value = getValue(result, metric);
+    final results = await query.get();
 
-            if (unit == 'lb' && targetUnit == 'kg') {
-              value *= 0.45359237;
-            } else if (unit == 'kg' && targetUnit == 'lb') {
-              value *= 2.20462262;
-            }
+    List<StrengthData> list = [];
+    for (final result in results.reversed) {
+      final unit = result.read(db.gymSets.unit)!;
+      var value = getValue(result, metric);
 
-            double reps = 0.0;
-            try {
-              reps = result.read(db.gymSets.reps)!;
-            } catch (_) {}
+      if (unit == 'lb' && targetUnit == 'kg') {
+        value *= 0.45359237;
+      } else if (unit == 'kg' && targetUnit == 'lb') {
+        value *= 2.20462262;
+      }
 
-            list.add(
-              StrengthData(
-                created: result.read(db.gymSets.created)!.toLocal(),
-                value: value,
-                unit: unit,
-                reps: reps,
-              ),
-            );
-          }
-          return list;
-        },
+      double reps = 0.0;
+      try {
+        reps = result.read(db.gymSets.reps)!;
+      } catch (_) {}
+
+      list.add(
+        StrengthData(
+          created: result.read(db.gymSets.created)!.toLocal(),
+          value: value,
+          unit: unit,
+          reps: reps,
+        ),
       );
+    }
+
+    setState(() {
+      data = list;
     });
   }
 
   LineTouchTooltipData tooltipData(
     BuildContext context,
-    List<StrengthData> rows,
     String format,
   ) {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
-        final row = rows.elementAt(touchedSpots.first.spotIndex);
+        final row = data.elementAt(touchedSpots.first.spotIndex);
         final created = DateFormat(format).format(row.created);
         final formatter = NumberFormat("#,###.00");
 
@@ -585,7 +583,7 @@ class _StrengthPageState extends State<StrengthPage> {
     setState(() {
       endDate = pickedDate;
     });
-    setStream();
+    setData();
   }
 
   Future<void> _selectStart() async {
@@ -601,6 +599,6 @@ class _StrengthPageState extends State<StrengthPage> {
     setState(() {
       startDate = pickedDate;
     });
-    setStream();
+    setData();
   }
 }
