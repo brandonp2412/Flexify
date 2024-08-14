@@ -434,7 +434,6 @@ class _StrengthPageState extends State<StrengthPage> {
   @override
   initState() {
     super.initState();
-    print('Init StrengthPage');
     if (widget.name == 'Weight') period = Period.week;
     setData();
 
@@ -445,7 +444,6 @@ class _StrengthPageState extends State<StrengthPage> {
       tabController.addListener(() {
         if (tabController.indexIsChanging) return;
         if (tabController.index != graphsIndex) return;
-        print('Setting data...');
         setData();
       });
     });
