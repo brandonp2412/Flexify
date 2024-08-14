@@ -123,7 +123,7 @@ void main() async {
     final gymSets = await (db.gymSets.select()
           ..where((u) => u.name.equals('Barbell bench press')))
         .get();
-    expect(gymSets.length, equals(1));
+    expect(gymSets.length, equals(2));
 
     await db.close();
   });

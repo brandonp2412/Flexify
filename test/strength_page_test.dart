@@ -49,9 +49,12 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: const MaterialApp(
-          home: StrengthPage(
-            name: 'Dumbbell shoulder press',
-            unit: 'kg',
+          home: DefaultTabController(
+            length: 1,
+            child: StrengthPage(
+              name: 'Dumbbell shoulder press',
+              unit: 'kg',
+            ),
           ),
         ),
       ),
@@ -100,9 +103,12 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: const MaterialApp(
-          home: StrengthPage(
-            name: 'Dumbbell shoulder press',
-            unit: 'kg',
+          home: DefaultTabController(
+            length: 1,
+            child: StrengthPage(
+              name: 'Dumbbell shoulder press',
+              unit: 'kg',
+            ),
           ),
         ),
       ),
@@ -151,9 +157,12 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: const MaterialApp(
-          home: StrengthPage(
-            name: 'Dumbbell shoulder press',
-            unit: 'kg',
+          home: DefaultTabController(
+            length: 1,
+            child: StrengthPage(
+              name: 'Dumbbell shoulder press',
+              unit: 'kg',
+            ),
           ),
         ),
       ),

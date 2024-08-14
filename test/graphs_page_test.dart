@@ -73,7 +73,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: const MaterialApp(
-          home: GraphsPage(),
+          home: DefaultTabController(length: 1, child: GraphsPage()),
         ),
       ),
     );

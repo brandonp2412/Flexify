@@ -318,8 +318,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
 
-    final last = planState.lastSets
-        .firstWhere((element) => element.name == planExercises[0]);
+    final lastIndex = planState.lastSets
+        .indexWhere((element) => element.name == planExercises[0]);
+    if (lastIndex == -1) return;
+    final last = planState.lastSets[lastIndex];
 
     unit = last.unit;
     reps.text = toString(last.reps);
