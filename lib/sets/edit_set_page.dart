@@ -300,14 +300,6 @@ class _EditSetPageState extends State<EditSetPage> {
                     return null;
                   },
                 ),
-                if (widget.gymSet.id > 0)
-                  TextField(
-                    controller: oneRepMax,
-                    decoration: const InputDecoration(
-                      labelText: 'One rep max (estimate)',
-                    ),
-                    enabled: false,
-                  ),
               ],
               Visibility(
                 visible: showBodyWeight,
