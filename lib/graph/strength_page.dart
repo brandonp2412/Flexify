@@ -3,8 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/strength_data.dart';
-import 'package:flexify/graph/view_graph_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -417,7 +417,7 @@ class _StrengthPageState extends State<StrengthPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ViewGraphPage(name: widget.name),
+            builder: (context) => GraphHistoryPage(name: widget.name),
           ),
         ),
         child: const Icon(Icons.history),
