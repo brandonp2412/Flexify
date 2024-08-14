@@ -59,7 +59,7 @@ Stream<List<CardioData>> watchCardio({
           ),
         ])
         ..limit(11)
-        ..groupBy([_getCreated(groupBy)]))
+        ..groupBy([getCreated(groupBy)]))
       .watch()
       .map(
     (results) {
@@ -179,7 +179,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
       );
 }
 
-Expression<String> _getCreated(Period groupBy) {
+Expression<String> getCreated(Period groupBy) {
   switch (groupBy) {
     case Period.day:
       return const CustomExpression<String>(

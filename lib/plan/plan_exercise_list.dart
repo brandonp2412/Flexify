@@ -1,7 +1,6 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_state.dart';
