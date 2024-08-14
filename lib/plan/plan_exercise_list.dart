@@ -10,20 +10,18 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ExerciseList extends StatelessWidget {
+class PlanExerciseList extends StatelessWidget {
   final List<String> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
-  final List<GymCount>? counts;
   final bool firstRender;
   final Plan plan;
 
-  const ExerciseList({
+  const PlanExerciseList({
     super.key,
     required this.exercises,
     required this.selected,
     required this.onSelect,
-    required this.counts,
     required this.firstRender,
     required this.plan,
   });
@@ -37,13 +35,16 @@ class ExerciseList extends StatelessWidget {
         settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
+    final planState = context.watch<PlanState>();
+    final counts =
+        planState.gymCounts.where((count) => count.planId == plan.id).toList();
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
         itemCount: exercises.length,
         padding: const EdgeInsets.only(bottom: 76),
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, maxSets, planTrailing),
+            itemBuilder(context, index, maxSets, planTrailing, counts),
         onReorder: (oldIndex, newIndex) async {
           if (oldIndex < newIndex) {
             newIndex--;
@@ -65,7 +66,7 @@ class ExerciseList extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 76),
         itemCount: exercises.length,
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, maxSets, planTrailing),
+            itemBuilder(context, index, maxSets, planTrailing, counts),
       );
   }
 
@@ -74,16 +75,16 @@ class ExerciseList extends StatelessWidget {
     int index,
     int maxSets,
     PlanTrailing planTrailing,
+    List<GymCount> counts,
   ) {
     final exercise = exercises[index];
-    final countIndex =
-        counts?.indexWhere((element) => element.name == exercise);
+    final countIndex = counts.indexWhere((element) => element.name == exercise);
     var count = 0;
     int max = maxSets;
 
-    if (countIndex != null && countIndex > -1 && counts != null) {
-      count = counts![countIndex].count;
-      max = counts![countIndex].maxSets ?? maxSets;
+    if (countIndex > -1) {
+      count = counts[countIndex].count;
+      max = counts[countIndex].maxSets ?? maxSets;
     }
 
     Widget trailing = const SizedBox();

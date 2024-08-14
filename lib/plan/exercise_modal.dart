@@ -4,6 +4,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -208,6 +209,9 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     ..limit(1))
                   .getSingle();
               await db.gymSets.deleteOne(gymSet);
+              if (!context.mounted) return;
+              final planState = context.read<PlanState>();
+              planState.updateGymCounts();
               widget.onSelect();
             },
           ),

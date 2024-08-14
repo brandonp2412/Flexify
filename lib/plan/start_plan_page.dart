@@ -4,7 +4,7 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/exercise_list.dart';
+import 'package:flexify/plan/plan_exercise_list.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -44,9 +44,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? image;
 
   late List<String> planExercises = widget.plan.exercises.split(',');
-  late final Stream<List<GymCount>> countStream =
-      watchCount(widget.plan.id, planExercises);
-  late final PlanState planState = context.read<PlanState>();
+  late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
 
@@ -54,7 +52,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Widget build(BuildContext context) {
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-
+    planState = context.watch<PlanState>();
     final timerState = context.read<TimerState>();
 
     return Scaffold(
@@ -238,18 +236,12 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ),
               ),
               Expanded(
-                child: StreamBuilder(
-                  stream: countStream,
-                  builder: (context, snapshot) {
-                    return ExerciseList(
-                      exercises: planExercises,
-                      selected: selectedIndex,
-                      onSelect: select,
-                      counts: snapshot.data,
-                      firstRender: first,
-                      plan: widget.plan,
-                    );
-                  },
+                child: PlanExerciseList(
+                  exercises: planExercises,
+                  selected: selectedIndex,
+                  onSelect: select,
+                  firstRender: first,
+                  plan: widget.plan,
                 ),
               ),
             ],
@@ -326,6 +318,20 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
 
+    final last = planState.lastSets
+        .firstWhere((element) => element.name == planExercises[0]);
+
+    unit = last.unit;
+    reps.text = toString(last.reps);
+    weight.text = toString(last.weight);
+    distance.text = toString(last.distance);
+    minutes.text = last.duration.floor().toString();
+    seconds.text = ((last.duration * 60) % 60).floor().toString();
+    incline.text = last.incline?.toString() ?? "";
+    cardio = last.cardio;
+    category = last.category;
+    image = last.image;
+
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation)
       getRpms().then(
@@ -333,8 +339,6 @@ class _StartPlanPageState extends State<StartPlanPage>
           rpms = value;
         }),
       );
-
-    select(0);
   }
 
   planChanged() {
@@ -375,7 +379,11 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
       );
 
-    final counts = await countStream.first;
+    if (!mounted) return;
+    final planState = context.read<PlanState>();
+    final counts = planState.gymCounts
+        .where((count) => count.planId == widget.plan.id)
+        .toList();
     final index = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
@@ -430,7 +438,8 @@ class _StartPlanPageState extends State<StartPlanPage>
         selectedIndex < planExercises.length - 1;
     if (finishedExercise) select(selectedIndex + 1);
 
-    db.into(db.gymSets).insert(gymSet);
+    await db.into(db.gymSets).insert(gymSet);
+    await planState.updateGymCounts();
     if (!mounted) return;
     setState(() {
       lastSaved = DateTime.now();

@@ -137,56 +137,6 @@ Future<List<Rpm>> getRpms() async {
       .toList();
 }
 
-Stream<List<GymCount>> watchCount(int planId, List<String> exercises) {
-  final countColumn = CustomExpression<int>(
-    """
-      COUNT(
-        CASE
-          WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
-               AND hidden = 0
-               AND gym_sets.plan_id = $planId
-          THEN 1
-        END
-      )
-   """,
-  );
-
-  return (db.selectOnly(db.planExercises)
-        ..addColumns([
-          db.gymSets.name,
-          countColumn,
-          db.planExercises.maxSets,
-          db.gymSets.restMs,
-          db.planExercises.warmupSets,
-          db.planExercises.timers,
-        ])
-        ..join([
-          innerJoin(
-            db.gymSets,
-            db.gymSets.name.equalsExp(db.planExercises.exercise),
-          ),
-        ])
-        ..where(
-          db.planExercises.planId.equals(planId) & db.planExercises.enabled,
-        )
-        ..groupBy([db.gymSets.name]))
-      .watch()
-      .map(
-        (results) => results
-            .map(
-              (row) => (
-                count: row.read<int>(countColumn)!,
-                name: row.read(db.gymSets.name)!,
-                maxSets: row.read(db.planExercises.maxSets),
-                restMs: row.read(db.gymSets.restMs),
-                warmupSets: row.read(db.planExercises.warmupSets),
-                timers: row.read(db.planExercises.timers)!,
-              ),
-            )
-            .toList(),
-      );
-}
-
 Stream<List<GymSetsCompanion>> watchGraphs() {
   return (db.gymSets.selectOnly()
         ..addColumns([
@@ -249,15 +199,6 @@ Expression<String> _getCreated(Period groupBy) {
       );
   }
 }
-
-typedef GymCount = ({
-  int count,
-  String name,
-  int? maxSets,
-  int? restMs,
-  int? warmupSets,
-  bool timers,
-});
 
 class GymSets extends Table {
   RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();

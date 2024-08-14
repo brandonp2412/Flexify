@@ -8,57 +8,13 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Count {
-  final int planId;
-  final int total;
-  final int maxSets;
-
-  Count({required this.planId, required this.total, required this.maxSets});
-}
-
 class PlansList extends StatelessWidget {
   final List<Plan> plans;
   final GlobalKey<NavigatorState> navigatorKey;
   final Set<int> selected;
   final Function(int) onSelect;
 
-  late final stream = (db.customSelect(
-    """
-      SELECT id, SUM(max_sets) AS max_sets, 
-        SUM(todays_count) AS todays_count FROM (
-          SELECT p.id, pe.exercise AS name, 
-            COALESCE(pe.max_sets, settings.max_sets) AS max_sets, 
-            COUNT(
-              CASE WHEN p.id = gs.plan_id 
-                AND DATE(created, 'unixepoch', 'localtime') = 
-                  DATE('now', 'localtime') 
-                AND hidden = 0 
-                THEN 1 
-              END
-            ) as todays_count
-          FROM plans p
-          LEFT JOIN plan_exercises pe ON p.id = pe.plan_id
-            AND pe.enabled = true
-          LEFT JOIN settings
-          LEFT JOIN gym_sets gs ON pe.exercise = gs.name
-          GROUP BY pe.exercise, p.id
-      ) 
-      GROUP BY id
-    """,
-    readsFrom: {db.plans, db.gymSets, db.planExercises, db.settings},
-  )).watch().map((rows) {
-    return rows
-        .map(
-          (row) => Count(
-            maxSets: row.read<int>('max_sets'),
-            planId: row.read<int>('id'),
-            total: row.read<int>('todays_count'),
-          ),
-        )
-        .toList();
-  });
-
-  PlansList({
+  const PlansList({
     super.key,
     required this.plans,
     required this.navigatorKey,
@@ -92,7 +48,6 @@ class PlansList extends StatelessWidget {
             navigatorKey: navigatorKey,
             selected: selected,
             onSelect: (id) => onSelect(id),
-            countStream: stream,
           );
         },
         onReorder: (int oldIndex, int newIndex) async {
@@ -130,7 +85,6 @@ class PlansList extends StatelessWidget {
           navigatorKey: navigatorKey,
           selected: selected,
           onSelect: (id) => onSelect(id),
-          countStream: stream,
         );
       },
     );

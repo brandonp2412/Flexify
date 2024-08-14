@@ -1,6 +1,6 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/plans_list.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,6 @@ class PlanTile extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final Function(int) onSelect;
   final Set<int> selected;
-  final Stream<List<Count>> countStream;
   const PlanTile({
     super.key,
     required this.plan,
@@ -23,7 +22,6 @@ class PlanTile extends StatelessWidget {
     required this.navigatorKey,
     required this.onSelect,
     required this.selected,
-    required this.countStream,
   });
 
   @override
@@ -52,43 +50,33 @@ class PlanTile extends StatelessWidget {
               child: const Icon(Icons.drag_handle),
             );
 
-          return StreamBuilder(
-            stream: countStream,
-            builder: (context, snapshot) {
-              if (snapshot.data == null ||
-                  snapshot.data!.isEmpty ||
-                  snapshot.hasError) return const SizedBox();
+          final planState = context.watch<PlanState>();
+          final count = planState.planCounts
+              .firstWhere((element) => element.planId == plan.id);
 
-              final index =
-                  snapshot.data?.indexWhere((d) => d.planId == plan.id);
-              if (index == -1 || index == null) return const SizedBox();
-              final count = snapshot.data![index];
+          if (planTrailing == PlanTrailing.count)
+            return Text(
+              "${count.total}",
+              style: const TextStyle(fontSize: 16),
+            );
 
-              if (planTrailing == PlanTrailing.count)
-                return Text(
-                  "${count.total}",
-                  style: const TextStyle(fontSize: 16),
-                );
-
-              if (planTrailing == PlanTrailing.percent)
-                return Text(
-                  "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
-                  style: const TextStyle(fontSize: 16),
-                );
-              else
-                return Text(
-                  "${count.total} / ${count.maxSets}",
-                  style: const TextStyle(fontSize: 16),
-                );
-            },
-          );
+          if (planTrailing == PlanTrailing.percent)
+            return Text(
+              "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
+              style: const TextStyle(fontSize: 16),
+            );
+          else
+            return Text(
+              "${count.total} / ${count.maxSets}",
+              style: const TextStyle(fontSize: 16),
+            );
         },
       ),
       selected: selected.contains(plan.id),
       onTap: () async {
         if (selected.isNotEmpty) return onSelect(plan.id);
 
-        await navigatorKey.currentState!.push(
+        navigatorKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => StartPlanPage(
               plan: plan,
