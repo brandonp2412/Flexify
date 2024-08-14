@@ -16,16 +16,11 @@ class PlansPage extends StatefulWidget {
   State<PlansPage> createState() => PlansPageState();
 }
 
-class PlansPageState extends State<PlansPage>
-    with AutomaticKeepAliveClientMixin {
+class PlansPageState extends State<PlansPage> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
     return NavigatorPopHandler(
       onPop: () {
         if (navigatorKey.currentState!.canPop() == false) return;
