@@ -2,13 +2,14 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
+import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
 
 const inclineAdjustedPace = CustomExpression<double>(
   "SUM(distance) * POW(1.1, AVG(incline)) / SUM(duration)",
 );
 
-double getValue(TypedResult row, CardioMetric metric) {
+double getCardio(TypedResult row, CardioMetric metric) {
   switch (metric) {
     case CardioMetric.pace:
       return row.read(db.gymSets.distance.sum() / db.gymSets.duration.sum()) ??
@@ -24,15 +25,115 @@ double getValue(TypedResult row, CardioMetric metric) {
   }
 }
 
-Stream<List<CardioData>> watchCardio({
-  Period groupBy = Period.day,
+final ormCol = db.gymSets.weight /
+    (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
+const volumeCol = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
+final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+
+Future<List<StrengthData>> getStrengthData({
+  required String targetUnit,
+  required String name,
+  required StrengthMetric metric,
+  required Period period,
+  required DateTime? startDate,
+  required DateTime? endDate,
+}) async {
+  Expression<String> createdCol = getCreated(period);
+
+  var query = (db.selectOnly(db.gymSets)
+    ..addColumns([
+      db.gymSets.weight.max(),
+      volumeCol,
+      ormCol,
+      db.gymSets.created,
+      if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+      if (metric != StrengthMetric.bestReps) db.gymSets.reps,
+      db.gymSets.unit,
+      relativeCol,
+    ])
+    ..where(db.gymSets.name.equals(name))
+    ..where(db.gymSets.hidden.equals(false))
+    ..orderBy([
+      OrderingTerm(
+        expression: createdCol,
+        mode: OrderingMode.desc,
+      ),
+    ])
+    ..limit(11)
+    ..groupBy([createdCol]));
+
+  if (startDate != null)
+    query = query
+      ..where(
+        db.gymSets.created.isBiggerOrEqualValue(startDate),
+      );
+  if (endDate != null)
+    query = query
+      ..where(
+        db.gymSets.created.isSmallerThanValue(endDate),
+      );
+
+  final results = await query.get();
+
+  List<StrengthData> list = [];
+  for (final result in results.reversed) {
+    final unit = result.read(db.gymSets.unit)!;
+    var value = getStrength(result, metric);
+
+    if (unit == 'lb' && targetUnit == 'kg') {
+      value *= 0.45359237;
+    } else if (unit == 'kg' && targetUnit == 'lb') {
+      value *= 2.20462262;
+    }
+
+    double reps = 0.0;
+    try {
+      reps = result.read(db.gymSets.reps)!;
+    } catch (_) {}
+
+    list.add(
+      StrengthData(
+        created: result.read(db.gymSets.created)!.toLocal(),
+        value: value,
+        unit: unit,
+        reps: reps,
+      ),
+    );
+  }
+
+  return list;
+}
+
+double getStrength(TypedResult row, StrengthMetric metric) {
+  switch (metric) {
+    case StrengthMetric.oneRepMax:
+      return row.read(ormCol)!;
+    case StrengthMetric.volume:
+      return row.read(volumeCol)!;
+    case StrengthMetric.relativeStrength:
+      return row.read(relativeCol) ?? 0;
+    case StrengthMetric.bestWeight:
+      return row.read(db.gymSets.weight.max())!;
+    case StrengthMetric.bestReps:
+      try {
+        return row.read(db.gymSets.reps.max())!;
+      } catch (error) {
+        return 0;
+      }
+  }
+}
+
+Future<List<CardioData>> getCardioData({
+  Period period = Period.day,
   String name = "",
   CardioMetric metric = CardioMetric.pace,
   String targetUnit = "km",
   DateTime? startDate,
   DateTime? endDate,
-}) {
-  return (db.selectOnly(db.gymSets)
+}) async {
+  Expression<String> createdCol = getCreated(period);
+
+  final results = await (db.selectOnly(db.gymSets)
         ..addColumns([
           db.gymSets.duration.sum(),
           db.gymSets.distance.sum(),
@@ -54,45 +155,44 @@ Stream<List<CardioData>> watchCardio({
         )
         ..orderBy([
           OrderingTerm(
-            expression: db.gymSets.created.date,
+            expression: createdCol,
             mode: OrderingMode.desc,
           ),
         ])
         ..limit(11)
-        ..groupBy([getCreated(groupBy)]))
-      .watch()
-      .map(
-    (results) {
-      List<CardioData> list = [];
-      for (final result in results.reversed) {
-        var value = getValue(result, metric);
-        final unit = result.read(db.gymSets.unit)!;
+        ..groupBy([createdCol]))
+      .get();
 
-        if (unit == 'km' && targetUnit == 'mi') {
-          value /= 1.609;
-        } else if (unit == 'mi' && targetUnit == 'km') {
-          value *= 1.609;
-        } else if (unit == 'm' && targetUnit == 'km') {
-          value /= 1000;
-        } else if (unit == 'km' && targetUnit == 'm') {
-          value *= 1000;
-        } else if (unit == 'm' && targetUnit == 'mi') {
-          value /= 1609.34;
-        } else if (unit == 'mi' && targetUnit == 'm') {
-          value *= 1609.34;
-        }
+  List<CardioData> list = [];
 
-        list.add(
-          CardioData(
-            created: result.read(db.gymSets.created)!,
-            value: double.parse(value.toStringAsFixed(2)),
-            unit: targetUnit,
-          ),
-        );
-      }
-      return list;
-    },
-  );
+  for (final result in results.reversed) {
+    var value = getCardio(result, metric);
+    final unit = result.read(db.gymSets.unit)!;
+
+    if (unit == 'km' && targetUnit == 'mi') {
+      value /= 1.609;
+    } else if (unit == 'mi' && targetUnit == 'km') {
+      value *= 1.609;
+    } else if (unit == 'm' && targetUnit == 'km') {
+      value /= 1000;
+    } else if (unit == 'km' && targetUnit == 'm') {
+      value *= 1000;
+    } else if (unit == 'm' && targetUnit == 'mi') {
+      value /= 1609.34;
+    } else if (unit == 'mi' && targetUnit == 'm') {
+      value *= 1609.34;
+    }
+
+    list.add(
+      CardioData(
+        created: result.read(db.gymSets.created)!.toLocal(),
+        value: double.parse(value.toStringAsFixed(2)),
+        unit: targetUnit,
+      ),
+    );
+  }
+
+  return list;
 }
 
 typedef Rpm = ({String name, double rpm, double weight});

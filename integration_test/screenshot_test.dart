@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart' as app;
@@ -317,9 +318,17 @@ void main() {
         screenshotName: '5_en-US',
         navigateToPage: (context) async => navigateTo(
           context: context,
-          page: const StrengthPage(
+          page: StrengthPage(
             name: screenshotExercise,
             unit: 'kg',
+            data: await getStrengthData(
+              targetUnit: 'kg',
+              name: 'Dumbbell shoulder press',
+              metric: StrengthMetric.bestWeight,
+              period: Period.day,
+              startDate: null,
+              endDate: null,
+            ),
           ),
         ),
         tabBarState: TabBarState.graphs,

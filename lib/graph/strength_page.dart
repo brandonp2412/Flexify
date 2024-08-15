@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/strength_data.dart';
@@ -16,27 +17,28 @@ import 'package:provider/provider.dart';
 class StrengthPage extends StatefulWidget {
   final String name;
   final String unit;
+  final List<StrengthData> data;
 
-  const StrengthPage({super.key, required this.name, required this.unit});
+  const StrengthPage({
+    super.key,
+    required this.name,
+    required this.unit,
+    required this.data,
+  });
 
   @override
   createState() => _StrengthPageState();
 }
 
 class _StrengthPageState extends State<StrengthPage> {
+  late List<StrengthData> data = widget.data;
   late String targetUnit = widget.unit;
-  List<StrengthData> data = [];
   StrengthMetric metric = StrengthMetric.bestWeight;
   Period period = Period.day;
   DateTime? startDate;
   DateTime? endDate;
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
-
-  final ormCol = db.gymSets.weight /
-      (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
-  final volumeCol =
-      const CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-  final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
+  TabController? tabController;
 
   Widget bottomTitleWidgets(
     double value,
@@ -69,94 +71,6 @@ class _StrengthPageState extends State<StrengthPage> {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: text,
-    );
-  }
-
-  touchLine(
-    FlTouchEvent event,
-    LineTouchResponse? touchResponse,
-  ) async {
-    if (event is ScaleUpdateDetails) return;
-    if (event is! FlPanDownEvent) return;
-    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
-      return setState(() {
-        lastTap = DateTime.now();
-      });
-
-    final index = touchResponse?.lineBarSpots?[0].spotIndex;
-    if (index == null) return;
-    final row = data[index];
-    GymSet? gymSet;
-
-    switch (metric) {
-      case StrengthMetric.oneRepMax:
-        final ormExpression = db.gymSets.weight /
-            (const CustomExpression<double>('1.0278 - 0.0278 * reps'));
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    ormExpression.equals(row.value) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
-        break;
-      case StrengthMetric.volume:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
-        break;
-      case StrengthMetric.bestWeight:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.reps.equals(row.reps) &
-                    tbl.weight.equals(row.value) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
-        break;
-      case StrengthMetric.relativeStrength:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    ((tbl.weight / tbl.bodyWeight).equals(row.value) |
-                        (tbl.weight / tbl.bodyWeight).isNull()) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
-        break;
-      case StrengthMetric.bestReps:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.reps.equals(row.value) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
-        break;
-    }
-
-    if (!mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditSetPage(
-          gymSet: gymSet!,
-        ),
-      ),
     );
   }
 
@@ -412,124 +326,42 @@ class _StrengthPageState extends State<StrengthPage> {
     );
   }
 
-  double getValue(TypedResult row, StrengthMetric metric) {
-    switch (metric) {
-      case StrengthMetric.oneRepMax:
-        return row.read(ormCol)!;
-      case StrengthMetric.volume:
-        return row.read(volumeCol)!;
-      case StrengthMetric.relativeStrength:
-        return row.read(relativeCol) ?? 0;
-      case StrengthMetric.bestWeight:
-        return row.read(db.gymSets.weight.max())!;
-      case StrengthMetric.bestReps:
-        try {
-          return row.read(db.gymSets.reps.max())!;
-        } catch (error) {
-          return 0;
-        }
-    }
-  }
-
   @override
   initState() {
     super.initState();
-    if (widget.name == 'Weight') period = Period.week;
-    setData();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final tabController = DefaultTabController.of(context);
-      final settings = context.read<SettingsState>().value;
-      final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-      tabController.addListener(() {
-        if (tabController.indexIsChanging) return;
-        if (tabController.index != graphsIndex) return;
-        setData();
-      });
+      tabController = DefaultTabController.of(context);
+      tabController?.addListener(tabListener);
     });
   }
 
+  void tabListener() {
+    final settings = context.read<SettingsState>().value;
+    final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
+    if (tabController!.indexIsChanging == true) return;
+    if (tabController!.index != graphsIndex) return;
+    setData();
+  }
+
+  @override
+  void dispose() {
+    tabController?.removeListener(tabListener);
+    super.dispose();
+  }
+
   Future<void> setData() async {
-    Expression<String> createdCol = const CustomExpression<String>(
-      "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
-    );
-    if (period == Period.month)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    else if (period == Period.week)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    else if (period == Period.year)
-      createdCol = const CustomExpression<String>(
-        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
-      );
-
-    var query = (db.selectOnly(db.gymSets)
-      ..addColumns([
-        db.gymSets.weight.max(),
-        volumeCol,
-        ormCol,
-        db.gymSets.created,
-        if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
-        if (metric != StrengthMetric.bestReps) db.gymSets.reps,
-        db.gymSets.unit,
-        relativeCol,
-      ])
-      ..where(db.gymSets.name.equals(widget.name))
-      ..where(db.gymSets.hidden.equals(false))
-      ..orderBy([
-        OrderingTerm(
-          expression: createdCol,
-          mode: OrderingMode.desc,
-        ),
-      ])
-      ..limit(11)
-      ..groupBy([createdCol]));
-
-    if (startDate != null)
-      query = query
-        ..where(
-          db.gymSets.created.isBiggerOrEqualValue(startDate!),
-        );
-    if (endDate != null)
-      query = query
-        ..where(
-          db.gymSets.created.isSmallerThanValue(endDate!),
-        );
-
-    final results = await query.get();
-
-    List<StrengthData> list = [];
-    for (final result in results.reversed) {
-      final unit = result.read(db.gymSets.unit)!;
-      var value = getValue(result, metric);
-
-      if (unit == 'lb' && targetUnit == 'kg') {
-        value *= 0.45359237;
-      } else if (unit == 'kg' && targetUnit == 'lb') {
-        value *= 2.20462262;
-      }
-
-      double reps = 0.0;
-      try {
-        reps = result.read(db.gymSets.reps)!;
-      } catch (_) {}
-
-      list.add(
-        StrengthData(
-          created: result.read(db.gymSets.created)!.toLocal(),
-          value: value,
-          unit: unit,
-          reps: reps,
-        ),
-      );
-    }
-
     if (!mounted) return;
+    final strengthData = await getStrengthData(
+      targetUnit: targetUnit,
+      name: widget.name,
+      metric: metric,
+      period: period,
+      startDate: startDate,
+      endDate: endDate,
+    );
     setState(() {
-      data = list;
+      data = strengthData;
     });
   }
 
@@ -566,6 +398,94 @@ class _StrengthPageState extends State<StrengthPage> {
           ),
         ];
       },
+    );
+  }
+
+  touchLine(
+    FlTouchEvent event,
+    LineTouchResponse? touchResponse,
+  ) async {
+    if (event is ScaleUpdateDetails) return;
+    if (event is! FlPanDownEvent) return;
+    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+      return setState(() {
+        lastTap = DateTime.now();
+      });
+
+    final index = touchResponse?.lineBarSpots?[0].spotIndex;
+    if (index == null) return;
+    final row = data[index];
+    GymSet? gymSet;
+
+    switch (metric) {
+      case StrengthMetric.oneRepMax:
+        final ormExpression = db.gymSets.weight /
+            (const CustomExpression<double>('1.0278 - 0.0278 * reps'));
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    ormExpression.equals(row.value) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.volume:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.bestWeight:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.reps.equals(row.reps) &
+                    tbl.weight.equals(row.value) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.relativeStrength:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    ((tbl.weight / tbl.bodyWeight).equals(row.value) |
+                        (tbl.weight / tbl.bodyWeight).isNull()) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+      case StrengthMetric.bestReps:
+        gymSet = await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.reps.equals(row.value) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
+        break;
+    }
+
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditSetPage(
+          gymSet: gymSet!,
+        ),
+      ),
     );
   }
 

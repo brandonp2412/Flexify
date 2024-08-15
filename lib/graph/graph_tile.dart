@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -60,24 +62,55 @@ class GraphTile extends StatelessWidget {
         trailing,
         style: const TextStyle(fontSize: 16),
       ),
-      onTap: () {
-        if (selected.isEmpty)
+      onTap: () async {
+        if (selected.isNotEmpty) {
+          onSelect(gymSet.name.value);
+          return;
+        }
+
+        if (gymSet.cardio.value) {
+          final data = await getCardioData(
+            targetUnit: gymSet.unit.value,
+            name: gymSet.name.value,
+            metric: CardioMetric.pace,
+            period: Period.day,
+            startDate: null,
+            endDate: null,
+          );
+          if (!context.mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => gymSet.cardio.value
-                  ? CardioPage(
-                      name: gymSet.name.value,
-                      unit: gymSet.unit.value,
-                    )
-                  : StrengthPage(
-                      name: gymSet.name.value,
-                      unit: gymSet.unit.value,
-                    ),
+              builder: (context) => CardioPage(
+                name: gymSet.name.value,
+                unit: gymSet.unit.value,
+                data: data,
+              ),
             ),
           );
-        else
-          onSelect(gymSet.name.value);
+          return;
+        }
+
+        final data = await getStrengthData(
+          targetUnit: gymSet.unit.value,
+          name: gymSet.name.value,
+          metric: StrengthMetric.bestWeight,
+          period: Period.day,
+          startDate: null,
+          endDate: null,
+        );
+        if (!context.mounted) return;
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StrengthPage(
+              name: gymSet.name.value,
+              unit: gymSet.unit.value,
+              data: data,
+            ),
+          ),
+        );
       },
       onLongPress: () {
         onSelect(gymSet.name.value);

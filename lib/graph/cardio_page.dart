@@ -13,20 +13,27 @@ import 'package:provider/provider.dart';
 class CardioPage extends StatefulWidget {
   final String name;
   final String unit;
-  const CardioPage({super.key, required this.name, required this.unit});
+  final List<CardioData> data;
+
+  const CardioPage({
+    super.key,
+    required this.name,
+    required this.unit,
+    required this.data,
+  });
 
   @override
   createState() => _CardioPageState();
 }
 
 class _CardioPageState extends State<CardioPage> {
+  late List<CardioData> data = widget.data;
   late String targetUnit = widget.unit;
-  late Stream<List<CardioData>> graphStream;
   CardioMetric metric = CardioMetric.pace;
   Period period = Period.day;
-
   DateTime? startDate;
   DateTime? endDate;
+  TabController? tabController;
 
   Widget bottomTitleWidgets(
     double value,
@@ -93,24 +100,13 @@ class _CardioPageState extends State<CardioPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: StreamBuilder(
-          stream: graphStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const SizedBox();
-            if (snapshot.data?.isEmpty == true)
-              return ListTile(
-                title: Text("No data yet for ${widget.name}"),
-                subtitle: const Text("Complete some plans to view graphs here"),
-                contentPadding: EdgeInsets.zero,
-              );
-            if (snapshot.hasError)
-              return ErrorWidget(snapshot.error.toString());
-
+        child: Builder(
+          builder: (context) {
             List<FlSpot> spots = [];
-            final rows = snapshot.data!;
+            final rows = data;
 
-            for (var index = 0; index < snapshot.data!.length; index++) {
-              final row = snapshot.data!.elementAt(index);
+            for (var index = 0; index < rows.length; index++) {
+              final row = rows.elementAt(index);
               final value = double.parse(row.value.toStringAsFixed(1));
               spots.add(FlSpot(index.toDouble(), value));
             }
@@ -153,7 +149,7 @@ class _CardioPageState extends State<CardioPage> {
                     setState(() {
                       metric = value!;
                     });
-                    setStream();
+                    setData();
                   },
                 ),
                 DropdownButtonFormField(
@@ -181,7 +177,7 @@ class _CardioPageState extends State<CardioPage> {
                     setState(() {
                       period = value!;
                     });
-                    setStream();
+                    setData();
                   },
                 ),
                 if (metric == CardioMetric.distance)
@@ -196,7 +192,7 @@ class _CardioPageState extends State<CardioPage> {
                           setState(() {
                             targetUnit = value!;
                           });
-                          setStream();
+                          setData();
                         },
                       ),
                     ),
@@ -247,13 +243,22 @@ class _CardioPageState extends State<CardioPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 350,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                    child: lineChart(rows, format, context, spots, curveLines),
+                if (rows.isEmpty)
+                  ListTile(
+                    title: Text("No data yet for ${widget.name}"),
+                    subtitle:
+                        const Text("Complete some plans to view graphs here"),
+                    contentPadding: EdgeInsets.zero,
                   ),
-                ),
+                if (rows.isNotEmpty)
+                  SizedBox(
+                    height: 350,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 32.0, top: 16.0),
+                      child:
+                          lineChart(rows, format, context, spots, curveLines),
+                    ),
+                  ),
                 const SizedBox(height: 75),
               ],
             );
@@ -274,7 +279,25 @@ class _CardioPageState extends State<CardioPage> {
   @override
   void initState() {
     super.initState();
-    setStream();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      tabController = DefaultTabController.of(context);
+      tabController?.addListener(tabListener);
+    });
+  }
+
+  void tabListener() {
+    final settings = context.read<SettingsState>().value;
+    final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
+    if (tabController!.indexIsChanging == true) return;
+    if (tabController!.index != graphsIndex) return;
+    setData();
+  }
+
+  @override
+  void dispose() {
+    tabController?.removeListener(tabListener);
+    super.dispose();
   }
 
   LineChart lineChart(
@@ -368,10 +391,10 @@ class _CardioPageState extends State<CardioPage> {
     );
   }
 
-  void setStream() {
-    graphStream = watchCardio(
+  void setData() async {
+    data = await getCardioData(
       endDate: endDate,
-      groupBy: period,
+      period: period,
       metric: metric,
       name: widget.name,
       startDate: startDate,
@@ -391,7 +414,7 @@ class _CardioPageState extends State<CardioPage> {
     setState(() {
       endDate = pickedDate;
     });
-    setStream();
+    setData();
   }
 
   Future<void> _selectStart() async {
@@ -406,6 +429,6 @@ class _CardioPageState extends State<CardioPage> {
     setState(() {
       startDate = pickedDate;
     });
-    setStream();
+    setData();
   }
 }

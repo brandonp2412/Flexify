@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart';
@@ -153,15 +155,47 @@ class _ExerciseModalState extends State<ExerciseModal> {
                 .getSingle();
 
             if (!context.mounted) return;
+
+            if (gymSet.cardio) {
+              final data = await getCardioData(
+                targetUnit: gymSet.unit,
+                name: gymSet.name,
+                metric: CardioMetric.pace,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              );
+              if (!context.mounted) return;
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CardioPage(
+                    name: widget.exercise,
+                    unit: gymSet.unit,
+                    data: data,
+                  ),
+                ),
+              );
+              return;
+            }
+
+            final data = await getStrengthData(
+              targetUnit: gymSet.unit,
+              name: gymSet.name,
+              metric: StrengthMetric.bestWeight,
+              period: Period.day,
+              startDate: null,
+              endDate: null,
+            );
+            if (!context.mounted) return;
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => gymSet.cardio
-                    ? CardioPage(name: widget.exercise, unit: gymSet.unit)
-                    : StrengthPage(
-                        name: widget.exercise,
-                        unit: gymSet.unit,
-                      ),
+                builder: (context) => StrengthPage(
+                  name: widget.exercise,
+                  unit: gymSet.unit,
+                  data: data,
+                ),
               ),
             );
           },

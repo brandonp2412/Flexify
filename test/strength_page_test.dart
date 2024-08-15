@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -48,12 +50,20 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
           home: DefaultTabController(
             length: 1,
             child: StrengthPage(
               name: 'Dumbbell shoulder press',
               unit: 'kg',
+              data: await getStrengthData(
+                targetUnit: 'kg',
+                name: 'Dumbbell shoulder press',
+                metric: StrengthMetric.bestWeight,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              ),
             ),
           ),
         ),
@@ -102,12 +112,20 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
           home: DefaultTabController(
             length: 1,
             child: StrengthPage(
               name: 'Dumbbell shoulder press',
               unit: 'kg',
+              data: await getStrengthData(
+                targetUnit: 'kg',
+                name: 'Dumbbell shoulder press',
+                metric: StrengthMetric.bestWeight,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              ),
             ),
           ),
         ),
@@ -156,12 +174,20 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
           home: DefaultTabController(
             length: 1,
             child: StrengthPage(
               name: 'Dumbbell shoulder press',
               unit: 'kg',
+              data: await getStrengthData(
+                targetUnit: 'kg',
+                name: 'Dumbbell shoulder press',
+                metric: StrengthMetric.bestWeight,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              ),
             ),
           ),
         ),
