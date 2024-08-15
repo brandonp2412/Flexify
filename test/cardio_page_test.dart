@@ -43,16 +43,19 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
-          home: CardioPage(
-            name: 'Run',
-            unit: 'km',
-            data: await getCardioData(
-              targetUnit: 'km',
+          home: DefaultTabController(
+            length: 1,
+            child: CardioPage(
               name: 'Run',
-              metric: CardioMetric.pace,
-              period: Period.day,
-              startDate: null,
-              endDate: null,
+              unit: 'km',
+              data: await getCardioData(
+                targetUnit: 'km',
+                name: 'Run',
+                metric: CardioMetric.pace,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              ),
             ),
           ),
         ),
@@ -96,16 +99,19 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
-          home: CardioPage(
-            name: 'Run',
-            unit: 'km',
-            data: await getCardioData(
-              targetUnit: 'km',
+          home: DefaultTabController(
+            length: 1,
+            child: CardioPage(
               name: 'Run',
-              metric: CardioMetric.pace,
-              period: Period.day,
-              startDate: null,
-              endDate: null,
+              unit: 'km',
+              data: await getCardioData(
+                targetUnit: 'km',
+                name: 'Run',
+                metric: CardioMetric.pace,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              ),
             ),
           ),
         ),
@@ -144,16 +150,19 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
-          home: CardioPage(
-            name: 'Run',
-            unit: 'km',
-            data: await getCardioData(
-              targetUnit: 'km',
+          home: DefaultTabController(
+            length: 1,
+            child: CardioPage(
               name: 'Run',
-              metric: CardioMetric.pace,
-              period: Period.day,
-              startDate: null,
-              endDate: null,
+              unit: 'km',
+              data: await getCardioData(
+                targetUnit: 'km',
+                name: 'Run',
+                metric: CardioMetric.pace,
+                period: Period.day,
+                startDate: null,
+                endDate: null,
+              ),
             ),
           ),
         ),
