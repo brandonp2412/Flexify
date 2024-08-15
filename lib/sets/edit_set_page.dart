@@ -286,20 +286,6 @@ class _EditSetPageState extends State<EditSetPage> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: weight,
-                  decoration: InputDecoration(
-                    labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
-                  ),
-                  keyboardType: TextInputType.number,
-                  onTap: () => selectAll(weight),
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
               ],
               Visibility(
                 visible: showBodyWeight,
