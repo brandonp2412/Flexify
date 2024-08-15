@@ -392,7 +392,7 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   void setData() async {
-    data = await getCardioData(
+    final cardio = await getCardioData(
       endDate: endDate,
       period: period,
       metric: metric,
@@ -400,6 +400,11 @@ class _CardioPageState extends State<CardioPage> {
       startDate: startDate,
       targetUnit: targetUnit,
     );
+
+    if (!mounted) return;
+    setState(() {
+      data = cardio;
+    });
   }
 
   Future<void> _selectEnd() async {
