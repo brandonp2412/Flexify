@@ -2,15 +2,15 @@
 
 apk=$PWD/build/app/outputs/flutter-apk
 
-flutter build apk --split-per-abi
+./flutter/bin/flutter build apk --split-per-abi
 adb -d install "$apk"/app-arm64-v8a-release.apk || true
-flutter build apk
+./flutter/bin/flutter build apk
 project=$(basename "$PWD")
 mv -f "$apk"/app-release.apk "$apk/$project.apk"
-flutter build appbundle
+./flutter/bin/flutter build appbundle
 
 mkdir -p build/native_assets/linux
-flutter build linux
+./flutter/bin/flutter build linux
 (cd "$apk/pipeline/linux/x64/release/bundle" && zip --quiet -r "$project-linux.zip" .)
 
 docker start windows
