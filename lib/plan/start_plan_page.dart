@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -372,7 +374,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     if (!settings.explainedPermissions &&
         settings.restTimers &&
-        platformIsMobile() &&
+        Platform.isAndroid &&
         mounted)
       await Navigator.push(
         context,
