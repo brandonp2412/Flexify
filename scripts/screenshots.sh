@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 device_type="${1:-phoneScreenshots}"
 
