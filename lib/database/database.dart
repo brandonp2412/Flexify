@@ -63,8 +63,33 @@ class AppDatabase extends _$AppDatabase {
       },
       onUpgrade: stepByStep(
         from1To2: (m, schema) async {
-          await m.alterTable(TableMigration(schema.gymSets));
-          await m.alterTable(TableMigration(schema.plans));
+          final gymSets = await schema.gymSets.select().get();
+          final plans = await schema.plans.select().get();
+          await m.drop(schema.gymSets);
+          await m.drop(schema.plans);
+          await m.create(schema.gymSets);
+          await m.create(schema.plans);
+
+          await schema.gymSets.insertAll(
+            gymSets.map(
+              (gymSet) => RawValuesInsertable({
+                'name': Variable(gymSet.read<String>('name')),
+                'reps': Variable(gymSet.read<double>('reps')),
+                'weight': Variable(gymSet.read<double>('weight')),
+                'unit': Variable(gymSet.read<String>('unit')),
+                'created': Variable(gymSet.read<DateTime>('created')),
+              }),
+            ),
+          );
+          await schema.plans.insertAll(
+            plans.map(
+              (plan) => RawValuesInsertable({
+                'exercises': Variable(plan.read<String>('workouts')),
+                'days': Variable(plan.read<String>('days')),
+              }),
+            ),
+          );
+
           await m.createIndex(
             Index(
               'GymSets',

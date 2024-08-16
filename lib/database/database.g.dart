@@ -178,6 +178,16 @@ class Plan extends DataClass implements Insertable<Plan> {
         sequence: sequence.present ? sequence.value : this.sequence,
         title: title.present ? title.value : this.title,
       );
+  Plan copyWithCompanion(PlansCompanion data) {
+    return Plan(
+      days: data.days.present ? data.days.value : this.days,
+      exercises: data.exercises.present ? data.exercises.value : this.exercises,
+      id: data.id.present ? data.id.value : this.id,
+      sequence: data.sequence.present ? data.sequence.value : this.sequence,
+      title: data.title.present ? data.title.value : this.title,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Plan(')
@@ -726,6 +736,28 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         unit: unit ?? this.unit,
         weight: weight ?? this.weight,
       );
+  GymSet copyWithCompanion(GymSetsCompanion data) {
+    return GymSet(
+      bodyWeight:
+          data.bodyWeight.present ? data.bodyWeight.value : this.bodyWeight,
+      cardio: data.cardio.present ? data.cardio.value : this.cardio,
+      category: data.category.present ? data.category.value : this.category,
+      created: data.created.present ? data.created.value : this.created,
+      distance: data.distance.present ? data.distance.value : this.distance,
+      duration: data.duration.present ? data.duration.value : this.duration,
+      hidden: data.hidden.present ? data.hidden.value : this.hidden,
+      id: data.id.present ? data.id.value : this.id,
+      image: data.image.present ? data.image.value : this.image,
+      incline: data.incline.present ? data.incline.value : this.incline,
+      name: data.name.present ? data.name.value : this.name,
+      planId: data.planId.present ? data.planId.value : this.planId,
+      reps: data.reps.present ? data.reps.value : this.reps,
+      restMs: data.restMs.present ? data.restMs.value : this.restMs,
+      unit: data.unit.present ? data.unit.value : this.unit,
+      weight: data.weight.present ? data.weight.value : this.weight,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('GymSet(')
@@ -1740,6 +1772,69 @@ class Setting extends DataClass implements Insertable<Setting> {
         vibrate: vibrate ?? this.vibrate,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
       );
+  Setting copyWithCompanion(SettingsCompanion data) {
+    return Setting(
+      alarmSound:
+          data.alarmSound.present ? data.alarmSound.value : this.alarmSound,
+      automaticBackups: data.automaticBackups.present
+          ? data.automaticBackups.value
+          : this.automaticBackups,
+      backupPath:
+          data.backupPath.present ? data.backupPath.value : this.backupPath,
+      cardioUnit:
+          data.cardioUnit.present ? data.cardioUnit.value : this.cardioUnit,
+      curveLines:
+          data.curveLines.present ? data.curveLines.value : this.curveLines,
+      durationEstimation: data.durationEstimation.present
+          ? data.durationEstimation.value
+          : this.durationEstimation,
+      enableSound:
+          data.enableSound.present ? data.enableSound.value : this.enableSound,
+      explainedPermissions: data.explainedPermissions.present
+          ? data.explainedPermissions.value
+          : this.explainedPermissions,
+      groupHistory: data.groupHistory.present
+          ? data.groupHistory.value
+          : this.groupHistory,
+      id: data.id.present ? data.id.value : this.id,
+      longDateFormat: data.longDateFormat.present
+          ? data.longDateFormat.value
+          : this.longDateFormat,
+      maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
+      planTrailing: data.planTrailing.present
+          ? data.planTrailing.value
+          : this.planTrailing,
+      repEstimation: data.repEstimation.present
+          ? data.repEstimation.value
+          : this.repEstimation,
+      restTimers:
+          data.restTimers.present ? data.restTimers.value : this.restTimers,
+      shortDateFormat: data.shortDateFormat.present
+          ? data.shortDateFormat.value
+          : this.shortDateFormat,
+      showBodyWeight: data.showBodyWeight.present
+          ? data.showBodyWeight.value
+          : this.showBodyWeight,
+      showImages:
+          data.showImages.present ? data.showImages.value : this.showImages,
+      showUnits: data.showUnits.present ? data.showUnits.value : this.showUnits,
+      strengthUnit: data.strengthUnit.present
+          ? data.strengthUnit.value
+          : this.strengthUnit,
+      systemColors: data.systemColors.present
+          ? data.systemColors.value
+          : this.systemColors,
+      tabs: data.tabs.present ? data.tabs.value : this.tabs,
+      themeMode: data.themeMode.present ? data.themeMode.value : this.themeMode,
+      timerDuration: data.timerDuration.present
+          ? data.timerDuration.value
+          : this.timerDuration,
+      vibrate: data.vibrate.present ? data.vibrate.value : this.vibrate,
+      warmupSets:
+          data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Setting(')
@@ -2401,6 +2496,19 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
         planId: planId ?? this.planId,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
       );
+  PlanExercise copyWithCompanion(PlanExercisesCompanion data) {
+    return PlanExercise(
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+      timers: data.timers.present ? data.timers.value : this.timers,
+      exercise: data.exercise.present ? data.exercise.value : this.exercise,
+      id: data.id.present ? data.id.value : this.id,
+      maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
+      planId: data.planId.present ? data.planId.value : this.planId,
+      warmupSets:
+          data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('PlanExercise(')
@@ -2542,7 +2650,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
-  _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $PlansTable plans = $PlansTable(this);
   late final $GymSetsTable gymSets = $GymSetsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
@@ -2555,7 +2663,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       [plans, gymSets, settings, planExercises];
 }
 
-typedef $$PlansTableInsertCompanionBuilder = PlansCompanion Function({
+typedef $$PlansTableCreateCompanionBuilder = PlansCompanion Function({
   required String days,
   required String exercises,
   Value<int> id,
@@ -2576,8 +2684,7 @@ class $$PlansTableTableManager extends RootTableManager<
     Plan,
     $$PlansTableFilterComposer,
     $$PlansTableOrderingComposer,
-    $$PlansTableProcessedTableManager,
-    $$PlansTableInsertCompanionBuilder,
+    $$PlansTableCreateCompanionBuilder,
     $$PlansTableUpdateCompanionBuilder> {
   $$PlansTableTableManager(_$AppDatabase db, $PlansTable table)
       : super(TableManagerState(
@@ -2587,8 +2694,7 @@ class $$PlansTableTableManager extends RootTableManager<
               $$PlansTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$PlansTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $$PlansTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> days = const Value.absent(),
             Value<String> exercises = const Value.absent(),
             Value<int> id = const Value.absent(),
@@ -2602,7 +2708,7 @@ class $$PlansTableTableManager extends RootTableManager<
             sequence: sequence,
             title: title,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String days,
             required String exercises,
             Value<int> id = const Value.absent(),
@@ -2617,18 +2723,6 @@ class $$PlansTableTableManager extends RootTableManager<
             title: title,
           ),
         ));
-}
-
-class $$PlansTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $PlansTable,
-    Plan,
-    $$PlansTableFilterComposer,
-    $$PlansTableOrderingComposer,
-    $$PlansTableProcessedTableManager,
-    $$PlansTableInsertCompanionBuilder,
-    $$PlansTableUpdateCompanionBuilder> {
-  $$PlansTableProcessedTableManager(super.$state);
 }
 
 class $$PlansTableFilterComposer
@@ -2702,7 +2796,7 @@ class $$PlansTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$GymSetsTableInsertCompanionBuilder = GymSetsCompanion Function({
+typedef $$GymSetsTableCreateCompanionBuilder = GymSetsCompanion Function({
   Value<double> bodyWeight,
   Value<bool> cardio,
   Value<String?> category,
@@ -2745,8 +2839,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
     GymSet,
     $$GymSetsTableFilterComposer,
     $$GymSetsTableOrderingComposer,
-    $$GymSetsTableProcessedTableManager,
-    $$GymSetsTableInsertCompanionBuilder,
+    $$GymSetsTableCreateCompanionBuilder,
     $$GymSetsTableUpdateCompanionBuilder> {
   $$GymSetsTableTableManager(_$AppDatabase db, $GymSetsTable table)
       : super(TableManagerState(
@@ -2756,8 +2849,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
               $$GymSetsTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$GymSetsTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $$GymSetsTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<double> bodyWeight = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
             Value<String?> category = const Value.absent(),
@@ -2793,7 +2885,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             unit: unit,
             weight: weight,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<double> bodyWeight = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
             Value<String?> category = const Value.absent(),
@@ -2830,18 +2922,6 @@ class $$GymSetsTableTableManager extends RootTableManager<
             weight: weight,
           ),
         ));
-}
-
-class $$GymSetsTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $GymSetsTable,
-    GymSet,
-    $$GymSetsTableFilterComposer,
-    $$GymSetsTableOrderingComposer,
-    $$GymSetsTableProcessedTableManager,
-    $$GymSetsTableInsertCompanionBuilder,
-    $$GymSetsTableUpdateCompanionBuilder> {
-  $$GymSetsTableProcessedTableManager(super.$state);
 }
 
 class $$GymSetsTableFilterComposer
@@ -3025,7 +3105,7 @@ class $$GymSetsTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$SettingsTableInsertCompanionBuilder = SettingsCompanion Function({
+typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   required String alarmSound,
   Value<bool> automaticBackups,
   Value<String?> backupPath,
@@ -3088,8 +3168,7 @@ class $$SettingsTableTableManager extends RootTableManager<
     Setting,
     $$SettingsTableFilterComposer,
     $$SettingsTableOrderingComposer,
-    $$SettingsTableProcessedTableManager,
-    $$SettingsTableInsertCompanionBuilder,
+    $$SettingsTableCreateCompanionBuilder,
     $$SettingsTableUpdateCompanionBuilder> {
   $$SettingsTableTableManager(_$AppDatabase db, $SettingsTable table)
       : super(TableManagerState(
@@ -3099,9 +3178,7 @@ class $$SettingsTableTableManager extends RootTableManager<
               $$SettingsTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$SettingsTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$SettingsTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> alarmSound = const Value.absent(),
             Value<bool> automaticBackups = const Value.absent(),
             Value<String?> backupPath = const Value.absent(),
@@ -3157,7 +3234,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             vibrate: vibrate,
             warmupSets: warmupSets,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String alarmSound,
             Value<bool> automaticBackups = const Value.absent(),
             Value<String?> backupPath = const Value.absent(),
@@ -3214,18 +3291,6 @@ class $$SettingsTableTableManager extends RootTableManager<
             warmupSets: warmupSets,
           ),
         ));
-}
-
-class $$SettingsTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $SettingsTable,
-    Setting,
-    $$SettingsTableFilterComposer,
-    $$SettingsTableOrderingComposer,
-    $$SettingsTableProcessedTableManager,
-    $$SettingsTableInsertCompanionBuilder,
-    $$SettingsTableUpdateCompanionBuilder> {
-  $$SettingsTableProcessedTableManager(super.$state);
 }
 
 class $$SettingsTableFilterComposer
@@ -3496,7 +3561,7 @@ class $$SettingsTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$PlanExercisesTableInsertCompanionBuilder = PlanExercisesCompanion
+typedef $$PlanExercisesTableCreateCompanionBuilder = PlanExercisesCompanion
     Function({
   required bool enabled,
   Value<bool> timers,
@@ -3523,8 +3588,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
     PlanExercise,
     $$PlanExercisesTableFilterComposer,
     $$PlanExercisesTableOrderingComposer,
-    $$PlanExercisesTableProcessedTableManager,
-    $$PlanExercisesTableInsertCompanionBuilder,
+    $$PlanExercisesTableCreateCompanionBuilder,
     $$PlanExercisesTableUpdateCompanionBuilder> {
   $$PlanExercisesTableTableManager(_$AppDatabase db, $PlanExercisesTable table)
       : super(TableManagerState(
@@ -3534,9 +3598,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
               $$PlanExercisesTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $$PlanExercisesTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$PlanExercisesTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<bool> enabled = const Value.absent(),
             Value<bool> timers = const Value.absent(),
             Value<String> exercise = const Value.absent(),
@@ -3554,7 +3616,7 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
             planId: planId,
             warmupSets: warmupSets,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required bool enabled,
             Value<bool> timers = const Value.absent(),
             required String exercise,
@@ -3573,18 +3635,6 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
             warmupSets: warmupSets,
           ),
         ));
-}
-
-class $$PlanExercisesTableProcessedTableManager extends ProcessedTableManager<
-    _$AppDatabase,
-    $PlanExercisesTable,
-    PlanExercise,
-    $$PlanExercisesTableFilterComposer,
-    $$PlanExercisesTableOrderingComposer,
-    $$PlanExercisesTableProcessedTableManager,
-    $$PlanExercisesTableInsertCompanionBuilder,
-    $$PlanExercisesTableUpdateCompanionBuilder> {
-  $$PlanExercisesTableProcessedTableManager(super.$state);
 }
 
 class $$PlanExercisesTableFilterComposer
@@ -3693,9 +3743,9 @@ class $$PlanExercisesTableOrderingComposer
   }
 }
 
-class _$AppDatabaseManager {
+class $AppDatabaseManager {
   final _$AppDatabase _db;
-  _$AppDatabaseManager(this._db);
+  $AppDatabaseManager(this._db);
   $$PlansTableTableManager get plans =>
       $$PlansTableTableManager(_db, _db.plans);
   $$GymSetsTableTableManager get gymSets =>
