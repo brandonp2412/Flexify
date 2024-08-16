@@ -265,13 +265,14 @@ class _CardioPageState extends State<CardioPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => GraphHistoryPage(name: widget.name),
           ),
         ),
-        child: const Icon(Icons.history),
+        icon: const Icon(Icons.history),
+        label: const Text("History"),
       ),
     );
   }

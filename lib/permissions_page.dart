@@ -100,7 +100,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if ((!ignore || !schedule) && settings.value.restTimers)
             showDialog(
@@ -143,8 +143,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 );
           }
         },
-        tooltip: "Confirm",
-        child: const Icon(Icons.check),
+        label: const Text("Confirm"),
+        icon: const Icon(Icons.check),
       ),
     );
   }

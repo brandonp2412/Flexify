@@ -387,10 +387,10 @@ class _EditSetPageState extends State<EditSetPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: save,
-        tooltip: "Save",
-        child: const Icon(Icons.save),
+        label: const Text("Save"),
+        icon: const Icon(Icons.save),
       ),
     );
   }

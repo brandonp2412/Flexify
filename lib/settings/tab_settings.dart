@@ -146,7 +146,7 @@ class _TabSettingsState extends State<TabSettings> {
           itemCount: tabs.length,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await (db.settings.update().write(
                 SettingsCompanion(
@@ -159,7 +159,8 @@ class _TabSettingsState extends State<TabSettings> {
                 ),
               ));
         },
-        child: const Icon(Icons.save),
+        icon: const Icon(Icons.save),
+        label: const Text("Save"),
       ),
     );
   }

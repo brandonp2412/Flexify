@@ -202,10 +202,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: save,
-        tooltip: "Update all records for this exercise",
-        child: const Icon(Icons.save),
+        label: const Text("Update"),
+        icon: const Icon(Icons.sync),
       ),
     );
   }

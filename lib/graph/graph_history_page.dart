@@ -16,6 +16,7 @@ class GraphHistoryPage extends StatefulWidget {
 class _GraphHistoryPageState extends State<GraphHistoryPage> {
   late Stream<List<GymSet>> stream;
   int limit = 20;
+  final scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
           return HistoryList(
+            scroll: scroll,
             gymSets: snapshot.data!,
             onSelect: (_) {},
             selected: const {},

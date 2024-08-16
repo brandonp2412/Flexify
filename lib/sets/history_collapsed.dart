@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class HistoryCollapsed extends StatefulWidget {
   final List<HistoryDay> historyDays;
-
+  final ScrollController scroll;
   final Function(int) onSelect;
   final Set<int> selected;
   final Function onNext;
@@ -20,6 +20,7 @@ class HistoryCollapsed extends StatefulWidget {
     required this.onSelect,
     required this.selected,
     required this.onNext,
+    required this.scroll,
   });
 
   @override
@@ -28,7 +29,6 @@ class HistoryCollapsed extends StatefulWidget {
 
 class _HistoryCollapsedState extends State<HistoryCollapsed> {
   bool goingNext = false;
-  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
     return ListView.builder(
       itemCount: widget.historyDays.length,
       padding: const EdgeInsets.only(bottom: 76),
-      controller: scrollController,
+      controller: widget.scroll,
       itemBuilder: (context, index) {
         final history = widget.historyDays[index];
         final previousHistory =
@@ -63,8 +63,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
   @override
   void dispose() {
     super.dispose();
-    scrollController.removeListener(scrollListener);
-    scrollController.dispose();
+    widget.scroll.removeListener(scrollListener);
   }
 
   List<Widget> historyChildren(
@@ -145,12 +144,12 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(scrollListener);
+    widget.scroll.addListener(scrollListener);
   }
 
   void scrollListener() {
-    if (scrollController.position.pixels <
-            scrollController.position.maxScrollExtent - 200 ||
+    if (widget.scroll.position.pixels <
+            widget.scroll.position.maxScrollExtent - 200 ||
         goingNext) return;
     setState(() {
       goingNext = true;

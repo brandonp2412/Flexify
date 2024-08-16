@@ -151,7 +151,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.push(
             context,
@@ -165,8 +165,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             ),
           );
         },
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
+        label: const Text('Add'),
+        icon: const Icon(Icons.add),
       ),
     );
   }

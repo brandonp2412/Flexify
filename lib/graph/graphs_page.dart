@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -32,6 +33,8 @@ class GraphsPageState extends State<GraphsPage>
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   String search = '';
   String? category;
+  final scroll = ScrollController();
+  bool extendFab = true;
 
   @override
   bool get wantKeepAlive => true;
@@ -163,6 +166,7 @@ class GraphsPageState extends State<GraphsPage>
               Expanded(
                 child: ListView.builder(
                   itemCount: gymSets.length,
+                  controller: scroll,
                   padding: const EdgeInsets.only(bottom: 50),
                   itemBuilder: (context, index) {
                     final gymSet = gymSets[index];
@@ -201,17 +205,16 @@ class GraphsPageState extends State<GraphsPage>
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddExercisePage(),
-            ),
-          );
-        },
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
+      floatingActionButton: AnimatedFab(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AddExercisePage(),
+          ),
+        ),
+        label: 'Add',
+        scroll: scroll,
+        icon: Icons.add,
       ),
     );
   }

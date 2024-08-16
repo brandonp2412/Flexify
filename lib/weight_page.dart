@@ -62,7 +62,7 @@ class _WeightPageState extends State<WeightPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           if (!formKey.currentState!.validate()) return;
 
@@ -84,8 +84,8 @@ class _WeightPageState extends State<WeightPage> {
             ),
           );
         },
-        tooltip: "Save today's weight",
-        child: const Icon(Icons.save),
+        label: const Text("Save"),
+        icon: const Icon(Icons.save),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class HistoryList extends StatefulWidget {
   final List<GymSet> gymSets;
+  final ScrollController scroll;
 
   final Function(int) onSelect;
   final Set<int> selected;
@@ -20,6 +21,7 @@ class HistoryList extends StatefulWidget {
     required this.onSelect,
     required this.selected,
     required this.onNext,
+    required this.scroll,
   });
 
   @override
@@ -28,7 +30,6 @@ class HistoryList extends StatefulWidget {
 
 class _HistoryListState extends State<HistoryList> {
   bool goingNext = false;
-  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class _HistoryListState extends State<HistoryList> {
     return ListView.builder(
       itemCount: widget.gymSets.length,
       padding: const EdgeInsets.only(bottom: 76),
-      controller: scrollController,
+      controller: widget.scroll,
       itemBuilder: (context, index) {
         final gymSet = widget.gymSets[index];
         final previousGymSet = index > 0 ? widget.gymSets[index - 1] : null;
@@ -104,19 +105,18 @@ class _HistoryListState extends State<HistoryList> {
   @override
   void dispose() {
     super.dispose();
-    scrollController.removeListener(scrollListener);
-    scrollController.dispose();
+    widget.scroll.removeListener(scrollListener);
   }
 
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(scrollListener);
+    widget.scroll.addListener(scrollListener);
   }
 
   void scrollListener() {
-    if (scrollController.position.pixels <
-            scrollController.position.maxScrollExtent - 200 ||
+    if (widget.scroll.position.pixels <
+            widget.scroll.position.maxScrollExtent - 200 ||
         goingNext) return;
     setState(() {
       goingNext = true;

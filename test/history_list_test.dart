@@ -28,6 +28,7 @@ void main() async {
         child: MaterialApp(
           home: Scaffold(
             body: HistoryList(
+              scroll: ScrollController(),
               gymSets: [
                 GymSet(
                   id: 1,

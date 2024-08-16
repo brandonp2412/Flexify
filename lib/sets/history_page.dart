@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/filters.dart';
@@ -77,6 +78,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   final repsLtController = TextEditingController();
   final weightGtController = TextEditingController();
   final weightLtController = TextEditingController();
+  final scroll = ScrollController();
 
   Set<int> selected = {};
   String search = '';
@@ -198,6 +200,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       if (groupHistory) {
                         final historyDays = getHistoryDays(snapshot.data!);
                         return HistoryCollapsed(
+                          scroll: scroll,
                           historyDays: historyDays,
                           onSelect: (id) {
                             if (selected.contains(id))
@@ -219,6 +222,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         );
                       } else
                         return HistoryList(
+                          scroll: scroll,
                           gymSets: snapshot.data!,
                           onSelect: (id) {
                             if (selected.contains(id))
@@ -245,47 +249,50 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final settings = context.read<SettingsState>().value;
-          final gymSets = await stream.first;
-          var bodyWeight = 0.0;
-          if (settings.showBodyWeight)
-            bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
+      floatingActionButton: AnimatedFab(
+        onTap: onAdd,
+        label: 'Add',
+        icon: Icons.add,
+        scroll: scroll,
+      ),
+    );
+  }
 
-          GymSet gymSet = gymSets.firstOrNull ??
-              GymSet(
-                id: 0,
-                bodyWeight: bodyWeight,
-                restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
-                name: '',
-                reps: 0,
-                created: DateTime.now().toLocal(),
-                unit: settings.strengthUnit,
-                weight: 0,
-                cardio: false,
-                duration: 0,
-                distance: 0,
-                hidden: false,
-              );
-          gymSet = gymSet.copyWith(
-            id: 0,
-            bodyWeight: bodyWeight,
-            created: DateTime.now().toLocal(),
-          );
+  void onAdd() async {
+    final settings = context.read<SettingsState>().value;
+    final gymSets = await stream.first;
+    var bodyWeight = 0.0;
+    if (settings.showBodyWeight)
+      bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
 
-          if (!context.mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditSetPage(
-                gymSet: gymSet,
-              ),
-            ),
-          );
-        },
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
+    GymSet gymSet = gymSets.firstOrNull ??
+        GymSet(
+          id: 0,
+          bodyWeight: bodyWeight,
+          restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
+          name: '',
+          reps: 0,
+          created: DateTime.now().toLocal(),
+          unit: settings.strengthUnit,
+          weight: 0,
+          cardio: false,
+          duration: 0,
+          distance: 0,
+          hidden: false,
+        );
+    gymSet = gymSet.copyWith(
+      id: 0,
+      bodyWeight: bodyWeight,
+      created: DateTime.now().toLocal(),
+    );
+
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditSetPage(
+          gymSet: gymSet,
+        ),
       ),
     );
   }
