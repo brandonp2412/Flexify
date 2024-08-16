@@ -2,12 +2,22 @@
 
 apk=$PWD/build/app/outputs/flutter-apk
 
+if [ -n "$(git status --porcelain flutter)" ]; then
+  echo "Flutter submodule has uncommitted changes."
+  exit 1
+fi
+
+docker run --rm -v $PWD:/project \
+  -v /home/brandon/.config/massive.jks:/home/brandon/.config/massive.jks \
+  mingc/android-build-box bash -c "./flutter/bin/flutter pub get
 ./flutter/bin/flutter build apk --split-per-abi
-adb -d install "$apk"/app-arm64-v8a-release.apk || true
 ./flutter/bin/flutter build apk
+./flutter/bin/flutter build appbundle
+"
+
+adb -d install "$apk"/app-arm64-v8a-release.apk || true
 project=$(basename "$PWD")
 mv -f "$apk"/app-release.apk "$apk/$project.apk"
-./flutter/bin/flutter build appbundle
 
 mkdir -p build/native_assets/linux
 ./flutter/bin/flutter build linux
