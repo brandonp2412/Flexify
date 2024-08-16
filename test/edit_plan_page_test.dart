@@ -43,7 +43,7 @@ void main() async {
     expect(find.text("Monday"), findsOne);
     expect(find.text("Tuesday"), findsOne);
     expect(find.text("Wednesday"), findsOne);
-    expect(find.byTooltip("Save"), findsOne);
+    expect(find.text("Save"), findsOne);
 
     await tester.tap(find.text('Monday'));
     await tester.tap(find.text('Thursday'));
@@ -51,7 +51,7 @@ void main() async {
     await tester.tap(find.text('Arnold press'));
     await tester.tap(find.text('Barbell biceps curl'));
 
-    await tester.tap(find.byTooltip("Save"));
+    await tester.tap(find.text("Save"));
     await tester.pumpAndSettle();
     expect(find.textContaining('Title'), findsNothing);
 

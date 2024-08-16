@@ -33,9 +33,7 @@ void main() async {
     expect(find.text("Add exercise"), findsOne);
     await tester.enterText(find.bySemanticsLabel('Name'), 'Bench press 2');
 
-    final button = find.byTooltip("Save");
-    expect(button, findsOne);
-    await tester.tap(button);
+    await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Add exercise'), findsNothing);
 

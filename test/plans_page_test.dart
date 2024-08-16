@@ -54,7 +54,7 @@ void main() async {
       ),
     );
 
-    final add = find.byTooltip('Add');
+    final add = find.text('Add');
     await tester.tap(add);
     await tester.pumpAndSettle();
 
@@ -82,7 +82,7 @@ void main() async {
     final tile = find.byType(ListTile).first;
     await tester.tap(tile);
     await tester.pumpAndSettle();
-    expect(find.byTooltip('Save'), findsOne);
+    expect(find.text('Save'), findsOne);
 
     await db.close();
   });

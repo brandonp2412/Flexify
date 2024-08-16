@@ -36,7 +36,7 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Missing permissions'), findsOne);
-    expect(find.byTooltip('Confirm'), findsOne);
+    expect(find.text('Confirm'), findsOne);
 
     await db.close();
   });

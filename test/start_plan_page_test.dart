@@ -116,7 +116,7 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('50'), findsOne);
 
-    final save = find.byTooltip('Save');
+    final save = find.text('Save');
     await tester.tap(save);
     await tester.pumpAndSettle();
 

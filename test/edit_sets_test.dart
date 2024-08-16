@@ -75,7 +75,7 @@ void main() async {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Pounds'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip("Save"));
+    await tester.tap(find.text("Update"));
     await tester.pumpAndSettle();
 
     expect(find.text("Edit 3 sets"), findsNothing);

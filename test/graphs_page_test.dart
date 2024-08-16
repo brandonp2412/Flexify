@@ -54,7 +54,7 @@ void main() async {
       ),
     );
 
-    final add = find.byTooltip('Add');
+    final add = find.text('Add');
     await tester.tap(add);
     await tester.pumpAndSettle();
 

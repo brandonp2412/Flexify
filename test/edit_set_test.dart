@@ -46,7 +46,7 @@ void main() async {
 
     expect(find.text("Bench press"), findsOne);
 
-    final button = find.byTooltip("Save");
+    final button = find.text("Save");
     expect(button, findsOne);
 
     await tester.tap(button);
@@ -90,7 +90,7 @@ void main() async {
 
     expect(find.text("Bench press"), findsNWidgets(2));
 
-    final button = find.byTooltip("Save");
+    final button = find.text("Save");
     expect(button, findsOne);
 
     await tester.tap(button);
