@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/day_selector.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_tile.dart';
@@ -87,19 +88,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             const SizedBox(
               height: 16.0,
             ),
-            Text('Days', style: Theme.of(context).textTheme.headlineSmall),
-            ...List.generate(
-              7,
-              (index) => SwitchListTile(
-                title: Text(weekdays[index]),
-                value: daySwitches[index],
-                onChanged: (value) {
-                  setState(() {
-                    daySwitches[index] = value;
-                  });
-                },
-              ),
-            ),
+            DaySelector(daySwitches: daySwitches),
             material.Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchBar(
