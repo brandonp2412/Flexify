@@ -1,10 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
-import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/gym_sets.dart';
-import 'package:flexify/graph/cardio_page.dart';
-import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/edit_set_page.dart';
@@ -140,63 +136,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
                   ],
                 );
               },
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.insights),
-          title: const Text('Graphs'),
-          onTap: () async {
-            Navigator.pop(context);
-
-            final gymSet = await (db.gymSets.select()
-                  ..where((tbl) => tbl.name.equals(widget.exercise))
-                  ..limit(1))
-                .getSingle();
-
-            if (!context.mounted) return;
-
-            if (gymSet.cardio) {
-              final data = await getCardioData(
-                targetUnit: gymSet.unit,
-                name: gymSet.name,
-                metric: CardioMetric.pace,
-                period: Period.day,
-                startDate: null,
-                endDate: null,
-              );
-              if (!context.mounted) return;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CardioPage(
-                    name: widget.exercise,
-                    unit: gymSet.unit,
-                    data: data,
-                  ),
-                ),
-              );
-              return;
-            }
-
-            final data = await getStrengthData(
-              targetUnit: gymSet.unit,
-              name: gymSet.name,
-              metric: StrengthMetric.bestWeight,
-              period: Period.day,
-              startDate: null,
-              endDate: null,
-            );
-            if (!context.mounted) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StrengthPage(
-                  name: widget.exercise,
-                  unit: gymSet.unit,
-                  data: data,
-                ),
-              ),
             );
           },
         ),
