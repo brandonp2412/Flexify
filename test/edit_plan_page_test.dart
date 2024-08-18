@@ -40,13 +40,13 @@ void main() async {
     );
 
     expect(find.text("Test title"), findsOne);
-    expect(find.text("Monday"), findsOne);
-    expect(find.text("Tuesday"), findsOne);
-    expect(find.text("Wednesday"), findsOne);
+    expect(find.text("Mon"), findsOne);
+    expect(find.text("Tue"), findsOne);
+    expect(find.text("Wed"), findsOne);
     expect(find.text("Save"), findsOne);
 
-    await tester.tap(find.text('Monday'));
-    await tester.tap(find.text('Thursday'));
+    await tester.tap(find.text('Mon'));
+    await tester.tap(find.text('Thu'));
     await scroll(tester, find.text('Arnold press'));
     await tester.tap(find.text('Arnold press'));
     await tester.tap(find.text('Barbell biceps curl'));
