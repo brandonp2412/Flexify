@@ -18,12 +18,14 @@ class _DaySelectorState extends State<DaySelector> {
         Expanded(
           child: TweenAnimationBuilder<Color?>(
             tween: ColorTween(
-              begin: Theme.of(context).colorScheme.surface,
+              begin: widget.daySwitches[i]
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.surfaceContainer,
               end: widget.daySwitches[i]
                   ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.surface,
+                  : Theme.of(context).colorScheme.surfaceContainer,
             ),
-            duration: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 150),
             curve: Curves.ease,
             builder: (BuildContext context, Color? color, Widget? child) {
               return TextButton(
@@ -31,7 +33,7 @@ class _DaySelectorState extends State<DaySelector> {
                   shape: const WidgetStatePropertyAll(
                     CircleBorder(),
                   ),
-                  minimumSize: const WidgetStatePropertyAll(Size(55, 55)),
+                  minimumSize: const WidgetStatePropertyAll(Size(54, 54)),
                   shadowColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.shadow,
                   ),
@@ -52,8 +54,8 @@ class _DaySelectorState extends State<DaySelector> {
                   style: TextStyle(
                     color: widget.daySwitches[i]
                         ? Theme.of(context).colorScheme.onPrimary
-                        : Colors.white,
-                    fontSize: 16.0,
+                        : Theme.of(context).colorScheme.inverseSurface,
+                    fontSize: 14.0,
                   ),
                 ),
               );
