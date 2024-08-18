@@ -185,6 +185,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   decoration: const InputDecoration(labelText: 'Reps'),
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(reps),
+                  onChanged: (value) => setORM(),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) => selectAll(weight),
                   validator: (value) {
@@ -201,6 +202,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(weight),
                   textInputAction: TextInputAction.next,
+                  onChanged: (value) => setORM(),
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Required';
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -500,27 +502,33 @@ class _EditSetPageState extends State<EditSetPage> {
     }
   }
 
+  void setORM() {
+    oneRepMax.text =
+        "${(double.parse(weight.text) / (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
+  }
+
   void updateFields(GymSet gymSet) {
     nameController?.text = gymSet.name;
+
+    reps.text = toString(gymSet.reps);
+    weight.text = toString(gymSet.weight);
+    bodyWeight.text = toString(gymSet.bodyWeight);
+    minutes.text = gymSet.duration.floor().toString();
+    seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
+    distance.text = toString(gymSet.distance);
+    incline.text = gymSet.incline?.toString() ?? "";
 
     setState(() {
       category = gymSet.category;
       image = gymSet.image;
       name = gymSet.name;
-      reps.text = toString(gymSet.reps);
-      weight.text = toString(gymSet.weight);
-      bodyWeight.text = toString(gymSet.bodyWeight);
-      minutes.text = gymSet.duration.floor().toString();
-      seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
-      distance.text = toString(gymSet.distance);
       unit = gymSet.unit;
       created = gymSet.created;
       cardio = gymSet.cardio;
       restMs = gymSet.restMs;
-      incline.text = gymSet.incline?.toString() ?? "";
-      oneRepMax.text =
-          "${(gymSet.weight / (1.0278 - (0.0278 * gymSet.reps))).toStringAsFixed(2)} ${gymSet.unit}";
     });
+
+    setORM();
   }
 
   Future<void> _selectDate() async {
