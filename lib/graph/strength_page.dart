@@ -316,11 +316,31 @@ class _StrengthPageState extends State<StrengthPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => GraphHistoryPage(name: widget.name),
-          ),
-        ),
+        onPressed: () async {
+          final gymSets = await (db.gymSets.select()
+                ..orderBy(
+                  [
+                    (u) => OrderingTerm(
+                          expression: u.created,
+                          mode: OrderingMode.desc,
+                        ),
+                  ],
+                )
+                ..where((tbl) => tbl.name.equals(widget.name))
+                ..where((tbl) => tbl.hidden.equals(false))
+                ..limit(20))
+              .get();
+          if (!context.mounted) return;
+
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => GraphHistoryPage(
+                name: widget.name,
+                gymSets: gymSets,
+              ),
+            ),
+          );
+        },
         icon: const Icon(Icons.history),
         label: const Text('History'),
       ),

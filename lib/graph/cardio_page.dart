@@ -1,9 +1,11 @@
+import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/graph_history_page.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
@@ -266,11 +268,31 @@ class _CardioPageState extends State<CardioPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => GraphHistoryPage(name: widget.name),
-          ),
-        ),
+        onPressed: () async {
+          final gymSets = await (db.gymSets.select()
+                ..orderBy(
+                  [
+                    (u) => OrderingTerm(
+                          expression: u.created,
+                          mode: OrderingMode.desc,
+                        ),
+                  ],
+                )
+                ..where((tbl) => tbl.name.equals(widget.name))
+                ..where((tbl) => tbl.hidden.equals(false))
+                ..limit(20))
+              .get();
+          if (!context.mounted) return;
+
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => GraphHistoryPage(
+                name: widget.name,
+                gymSets: gymSets,
+              ),
+            ),
+          );
+        },
         icon: const Icon(Icons.history),
         label: const Text("History"),
       ),
