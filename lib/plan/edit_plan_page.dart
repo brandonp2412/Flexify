@@ -89,8 +89,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               height: 16.0,
             ),
             DaySelector(daySwitches: daySwitches),
-            const SizedBox(height: 16.0),
-            const material.Divider(),
+            const SizedBox(height: 8),
             material.Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchBar(

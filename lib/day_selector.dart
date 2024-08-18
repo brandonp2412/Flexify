@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flexify/constants.dart';
+import 'package:flutter/material.dart';
 
 class DaySelector extends StatefulWidget {
   final List<bool> daySwitches;
@@ -13,9 +13,11 @@ class _DaySelectorState extends State<DaySelector> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
+
     for (int i = 0; i < weekdays.length; i++) {
       children.add(
-        Expanded(
+        Padding(
+          padding: const EdgeInsets.all(8.0),
           child: TweenAnimationBuilder<Color?>(
             tween: ColorTween(
               begin: widget.daySwitches[i]
@@ -64,6 +66,7 @@ class _DaySelectorState extends State<DaySelector> {
         ),
       );
     }
-    return Row(children: children);
+
+    return Wrap(children: children);
   }
 }
