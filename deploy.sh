@@ -24,7 +24,7 @@ if [[ $* == *-m* ]]; then
   echo "Skipping MacOS..."
 else
   set +x
-  rsync -a --exclude-from=.gitignore ./* .gitignore \
+  rsync -a --exclude-from=.gitignore ./* .git .gitignore \
     --exclude=flutter macos:~/flexify
   # shellcheck disable=SC2029
   ssh macos "
