@@ -27,9 +27,20 @@ class PlanTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget title = const Text("Daily");
-    if (plan.title?.isNotEmpty == true)
-      title = Text(plan.title!);
-    else if (plan.days.split(',').length < 7)
+    if (plan.title?.isNotEmpty == true) {
+      final today = plan.days.split(',').contains(weekday);
+      var color = Theme.of(context).textTheme.bodyLarge!.color;
+      if (selected.contains(plan.id))
+        color = Theme.of(context).colorScheme.primary;
+      title = Text(
+        plan.title!,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: today ? FontWeight.bold : null,
+              decoration: today ? TextDecoration.underline : null,
+              color: color,
+            ),
+      );
+    } else if (plan.days.split(',').length < 7)
       title = RichText(text: TextSpan(children: getChildren(context)));
 
     return ListTile(
