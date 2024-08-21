@@ -16,26 +16,26 @@ class _DaySelectorState extends State<DaySelector> {
 
     for (int i = 0; i < weekdays.length; i++) {
       children.add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TweenAnimationBuilder<Color?>(
-            tween: ColorTween(
-              begin: widget.daySwitches[i]
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.surfaceContainer,
-              end: widget.daySwitches[i]
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.surfaceContainer,
-            ),
-            duration: const Duration(milliseconds: 150),
-            curve: Curves.ease,
-            builder: (BuildContext context, Color? color, Widget? child) {
-              return TextButton(
+        TweenAnimationBuilder<Color?>(
+          tween: ColorTween(
+            begin: widget.daySwitches[i]
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.surfaceContainer,
+            end: widget.daySwitches[i]
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.surfaceContainer,
+          ),
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.ease,
+          builder: (BuildContext context, Color? color, Widget? child) {
+            return Expanded(
+              child: TextButton(
                 style: ButtonStyle(
                   shape: const WidgetStatePropertyAll(
                     CircleBorder(),
                   ),
                   minimumSize: const WidgetStatePropertyAll(Size(54, 54)),
+                  padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                   shadowColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.shadow,
                   ),
@@ -49,24 +49,33 @@ class _DaySelectorState extends State<DaySelector> {
                         : widget.daySwitches[i] = true;
                   });
                 },
-                child: Text(
-                  weekdays[i].length < 3
-                      ? weekdays[i]
-                      : weekdays[i].substring(0, 3),
-                  style: TextStyle(
-                    color: widget.daySwitches[i]
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.inverseSurface,
-                    fontSize: 14.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      weekdays[i].length < 3
+                          ? weekdays[i]
+                          : weekdays[i].substring(0, 3),
+                      style: TextStyle(
+                        color: widget.daySwitches[i]
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.inverseSurface,
+                        fontSize: 14.0,
+                      ),
+                    ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       );
     }
 
-    return Wrap(children: children);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: children,
+    );
   }
 }
