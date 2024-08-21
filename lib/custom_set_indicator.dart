@@ -24,6 +24,7 @@ class CustomSetIndicator extends StatelessWidget {
             ),
             height: 6,
             child: AnimatedFractionallySizedBox(
+              alignment: Alignment.centerLeft,
               widthFactor: count > i ? 1 : 0,
               duration: Duration(milliseconds: firstRender ? 0 : 250),
               curve: Curves.ease,
