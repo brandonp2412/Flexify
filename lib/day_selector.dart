@@ -34,7 +34,7 @@ class _DaySelectorState extends State<DaySelector> {
                   shape: const WidgetStatePropertyAll(
                     CircleBorder(),
                   ),
-                  minimumSize: const WidgetStatePropertyAll(Size(54, 54)),
+                  minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
                   padding: const WidgetStatePropertyAll(EdgeInsets.zero),
                   shadowColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.shadow,
