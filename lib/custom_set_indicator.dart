@@ -17,23 +17,16 @@ class CustomSetIndicator extends StatelessWidget {
     for (int i = 0; i < max; i++) {
       children.add(
         Expanded(
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.ease,
             decoration: BoxDecoration(
+              color: count > i
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outlineVariant,
               borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.outlineVariant,
             ),
             height: 6,
-            child: AnimatedFractionallySizedBox(
-              widthFactor: count > i ? 1 : 0,
-              duration: Duration(milliseconds: firstRender ? 0 : 250),
-              curve: Curves.ease,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
           ),
         ),
       );
