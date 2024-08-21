@@ -71,6 +71,9 @@ class _DaySelectorState extends State<DaySelector> {
           },
         ),
       );
+      if (i < weekdays.length - 1) {
+        children.add(const SizedBox(width: 4));
+      }
     }
 
     return Row(
