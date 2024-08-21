@@ -25,7 +25,7 @@ class _DaySelectorState extends State<DaySelector> {
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.surfaceContainer,
           ),
-          duration: const Duration(milliseconds: 150),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.ease,
           builder: (BuildContext context, Color? color, Widget? child) {
             return Expanded(
