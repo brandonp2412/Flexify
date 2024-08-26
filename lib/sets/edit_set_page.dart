@@ -283,7 +283,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   keyboardType: TextInputType.number,
                   onTap: () => selectAll(incline),
                   validator: (value) {
-                    if (value == null) return null;
+                    if (value == null || value.isEmpty) return null;
                     if (int.tryParse(value) == null) return 'Invalid number';
                     return null;
                   },
