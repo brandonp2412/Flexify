@@ -385,9 +385,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     if (!mounted) return;
     final planState = context.read<PlanState>();
-    final counts = planState.gymCounts
-        .where((count) => count.planId == widget.plan.id)
-        .toList();
+    final counts = planState.gymCounts;
     final index = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
@@ -443,7 +441,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (finishedExercise) select(selectedIndex + 1);
 
     await db.into(db.gymSets).insert(gymSet);
-    await planState.updateGymCounts();
+    await planState.updateGymCounts(widget.plan.id);
     if (!mounted) return;
     setState(() {
       lastSaved = DateTime.now();

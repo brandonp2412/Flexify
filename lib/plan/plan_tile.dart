@@ -86,6 +86,8 @@ class PlanTile extends StatelessWidget {
       selected: selected.contains(plan.id),
       onTap: () async {
         if (selected.isNotEmpty) return onSelect(plan.id);
+        final planState = context.read<PlanState>();
+        await planState.updateGymCounts(plan.id);
 
         navigatorKey.currentState!.push(
           MaterialPageRoute(

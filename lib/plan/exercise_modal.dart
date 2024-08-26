@@ -184,7 +184,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               await db.gymSets.deleteOne(gymSet);
               if (!context.mounted) return;
               final planState = context.read<PlanState>();
-              planState.updateGymCounts();
+              planState.updateGymCounts(widget.planId);
               widget.onSelect();
             },
           ),

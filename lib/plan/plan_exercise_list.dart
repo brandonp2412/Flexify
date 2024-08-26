@@ -35,8 +35,7 @@ class PlanExerciseList extends StatelessWidget {
       ),
     );
     final planState = context.watch<PlanState>();
-    final counts =
-        planState.gymCounts.where((count) => count.planId == plan.id).toList();
+    final counts = planState.gymCounts;
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(

@@ -20,7 +20,6 @@ typedef GymCount = ({
   int? restMs,
   int? warmupSets,
   bool timers,
-  int planId,
 });
 
 class PlanState extends ChangeNotifier {
@@ -31,7 +30,6 @@ class PlanState extends ChangeNotifier {
 
   PlanState() {
     updatePlans(null);
-    updateGymCounts();
     updatePlanCounts();
     updateDefaults();
   }
@@ -60,8 +58,8 @@ class PlanState extends ChangeNotifier {
     });
   }
 
-  Future<void> updateGymCounts() {
-    return getGymCounts().then((value) {
+  Future<void> updateGymCounts(int planId) {
+    return getGymCounts(planId).then((value) {
       gymCounts = value;
       notifyListeners();
     });
@@ -105,20 +103,21 @@ class PlanState extends ChangeNotifier {
     });
   }
 
-  Future<List<GymCount>> getGymCounts() async {
-    const countColumn = CustomExpression<int>(
+  Future<List<GymCount>> getGymCounts(int planId) async {
+    final countColumn = CustomExpression<int>(
       """
-        COUNT(
-          CASE
-            WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
-                 AND hidden = 0
-            THEN 1
-          END
-        )
-     """,
+      COUNT(
+        CASE
+          WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
+               AND hidden = 0
+               AND gym_sets.plan_id = $planId
+          THEN 1
+        END
+      )
+   """,
     );
 
-    return await (db.selectOnly(db.planExercises)
+    final results = await (db.selectOnly(db.planExercises)
           ..addColumns([
             db.gymSets.name,
             countColumn,
@@ -126,7 +125,6 @@ class PlanState extends ChangeNotifier {
             db.gymSets.restMs,
             db.planExercises.warmupSets,
             db.planExercises.timers,
-            db.planExercises.planId,
           ])
           ..join([
             innerJoin(
@@ -134,24 +132,23 @@ class PlanState extends ChangeNotifier {
               db.gymSets.name.equalsExp(db.planExercises.exercise),
             ),
           ])
-          ..where(db.planExercises.enabled)
-          ..groupBy([db.planExercises.planId, db.gymSets.name]))
-        .get()
-        .then(
-          (results) => results
-              .map(
-                (row) => (
-                  count: row.read<int>(countColumn)!,
-                  name: row.read(db.gymSets.name)!,
-                  maxSets: row.read(db.planExercises.maxSets),
-                  restMs: row.read(db.gymSets.restMs),
-                  warmupSets: row.read(db.planExercises.warmupSets),
-                  timers: row.read(db.planExercises.timers)!,
-                  planId: row.read(db.planExercises.planId)!,
-                ),
-              )
-              .toList(),
-        );
+          ..where(
+            db.planExercises.planId.equals(planId) & db.planExercises.enabled,
+          )
+          ..groupBy([db.gymSets.name]))
+        .get();
+    return results
+        .map(
+          (row) => (
+            count: row.read<int>(countColumn)!,
+            name: row.read(db.gymSets.name)!,
+            maxSets: row.read(db.planExercises.maxSets),
+            restMs: row.read(db.gymSets.restMs),
+            warmupSets: row.read(db.planExercises.warmupSets),
+            timers: row.read(db.planExercises.timers)!,
+          ),
+        )
+        .toList();
   }
 
   Future<List<Plan>> getPlans() async => await (db.select(db.plans)
