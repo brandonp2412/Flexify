@@ -37,17 +37,19 @@ class PlanState extends ChangeNotifier {
   }
 
   updateDefaults() async {
-    final value = await (db.gymSets.select(distinct: true)
+    final value = await (db.gymSets.select().join([])
           ..orderBy(
             [
-              (u) => OrderingTerm(
-                    expression: u.created,
-                    mode: OrderingMode.desc,
-                  ),
+              OrderingTerm(
+                expression: db.gymSets.created,
+                mode: OrderingMode.desc,
+              ),
             ],
-          ))
+          )
+          ..groupBy([db.gymSets.name])
+          ..addColumns(db.gymSets.$columns))
         .get();
-    lastSets = value;
+    lastSets = value.map((value) => value.readTable(db.gymSets)).toList();
     notifyListeners();
   }
 
