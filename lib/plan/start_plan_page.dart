@@ -72,6 +72,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               final plan = await (db.plans.select()
                     ..whereSamePrimaryKey(widget.plan))
                   .getSingle();
+              await planState.setExercises(plan.toCompanion(false));
               if (!context.mounted) return;
               await Navigator.push(
                 context,

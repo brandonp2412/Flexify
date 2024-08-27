@@ -24,10 +24,10 @@ class EditPlanPage extends StatefulWidget {
 
 class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> daySwitches;
+  late var exercises = context.read<PlanState>().exercises;
 
   bool showOff = true;
   String search = '';
-  List<PlanExercisesCompanion> exercises = [];
 
   final searchNode = FocusNode();
   final searchController = TextEditingController();
@@ -64,6 +64,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
+    exercises = context.select<PlanState, List<PlanExercisesCompanion>>(
+      (value) => value.exercises,
+    );
+
     var title = widget.plan.days.value.replaceAll(",", ", ");
     if (title.isNotEmpty)
       title = title[0].toUpperCase() + title.substring(1).toLowerCase();
@@ -107,7 +111,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
                           builder: (context) => const AddExercisePage(),
                         ),
                       );
-                      setExercises();
                     },
                     tooltip: 'Add exercise',
                   ),
@@ -154,59 +157,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    setExercises();
     titleController.text = widget.plan.title.value ?? "";
-
     final dayList = widget.plan.days.value.split(',');
     daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
-  }
-
-  void setExercises() {
-    var query = db.gymSets.selectOnly()
-      ..addColumns([db.gymSets.name])
-      ..groupBy([db.gymSets.name])
-      ..join([
-        leftOuterJoin(
-          db.planExercises,
-          db.planExercises.planId
-                  .equals(widget.plan.id.present ? widget.plan.id.value : 0) &
-              db.planExercises.exercise.equalsExp(db.gymSets.name),
-        ),
-      ])
-      ..addColumns(db.planExercises.$columns);
-
-    query.get().then(
-      (results) {
-        List<PlanExercisesCompanion> enabledExercises = [];
-        List<PlanExercisesCompanion> disabledExercises = [];
-
-        for (final result in results) {
-          final pe = PlanExercisesCompanion(
-            planId: widget.plan.id,
-            id: Value.absentIfNull(result.read(db.planExercises.id)),
-            exercise: Value(result.read(db.gymSets.name)!),
-            enabled: Value(result.read(db.planExercises.enabled) ?? false),
-            maxSets: Value(result.read(db.planExercises.maxSets)),
-            warmupSets: Value(result.read(db.planExercises.warmupSets)),
-            timers: Value(result.read(db.planExercises.timers) ?? true),
-          );
-          if (pe.enabled.value)
-            enabledExercises.add(pe);
-          else
-            disabledExercises.add(pe);
-        }
-
-        enabledExercises.sort(
-          (a, b) => widget.plan.exercises.value
-              .indexOf(a.exercise.value)
-              .compareTo(widget.plan.exercises.value.indexOf(b.exercise.value)),
-        );
-
-        setState(() {
-          exercises = enabledExercises + disabledExercises;
-        });
-      },
-    );
   }
 
   Future<void> save() async {

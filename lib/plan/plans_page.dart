@@ -119,18 +119,23 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               selected.addAll(filtered?.map((plan) => plan.id) ?? []);
             }),
             selected: selected,
-            onEdit: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditPlanPage(
-                  plan: planState!.plans
-                      .firstWhere(
-                        (element) => element.id == selected.first,
-                      )
-                      .toCompanion(false),
-                ),
-              ),
-            ),
+            onEdit: () async {
+              final plan = planState!.plans
+                  .firstWhere(
+                    (element) => element.id == selected.first,
+                  )
+                  .toCompanion(false);
+              await planState!.setExercises(plan);
+              if (context.mounted)
+                return Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditPlanPage(
+                      plan: plan,
+                    ),
+                  ),
+                );
+            },
           ),
           Expanded(
             child: PlansList(
@@ -153,17 +158,20 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const EditPlanPage(
-                plan: PlansCompanion(
-                  days: drift.Value(''),
-                  exercises: drift.Value(''),
+          const plan = PlansCompanion(
+            days: drift.Value(''),
+            exercises: drift.Value(''),
+          );
+          await planState!.setExercises(plan);
+          if (context.mounted)
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditPlanPage(
+                  plan: plan,
                 ),
               ),
-            ),
-          );
+            );
         },
         label: const Text('Add'),
         icon: const Icon(Icons.add),

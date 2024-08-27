@@ -27,11 +27,56 @@ class PlanState extends ChangeNotifier {
   List<GymCount> gymCounts = [];
   List<PlanCount> planCounts = [];
   List<GymSet> lastSets = [];
+  List<PlanExercisesCompanion> exercises = [];
 
   PlanState() {
     updatePlans(null);
     updatePlanCounts();
     updateDefaults();
+  }
+
+  Future<void> setExercises(PlansCompanion plan) async {
+    var query = db.gymSets.selectOnly()
+      ..addColumns([db.gymSets.name])
+      ..groupBy([db.gymSets.name])
+      ..join([
+        leftOuterJoin(
+          db.planExercises,
+          db.planExercises.planId.equals(plan.id.present ? plan.id.value : 0) &
+              db.planExercises.exercise.equalsExp(db.gymSets.name),
+        ),
+      ])
+      ..addColumns(db.planExercises.$columns);
+
+    final results = await query.get();
+
+    List<PlanExercisesCompanion> enabledExercises = [];
+    List<PlanExercisesCompanion> disabledExercises = [];
+
+    for (final result in results) {
+      final pe = PlanExercisesCompanion(
+        planId: plan.id,
+        id: Value.absentIfNull(result.read(db.planExercises.id)),
+        exercise: Value(result.read(db.gymSets.name)!),
+        enabled: Value(result.read(db.planExercises.enabled) ?? false),
+        maxSets: Value(result.read(db.planExercises.maxSets)),
+        warmupSets: Value(result.read(db.planExercises.warmupSets)),
+        timers: Value(result.read(db.planExercises.timers) ?? true),
+      );
+      if (pe.enabled.value)
+        enabledExercises.add(pe);
+      else
+        disabledExercises.add(pe);
+    }
+
+    enabledExercises.sort(
+      (a, b) => plan.exercises.value
+          .indexOf(a.exercise.value)
+          .compareTo(plan.exercises.value.indexOf(b.exercise.value)),
+    );
+
+    exercises = enabledExercises + disabledExercises;
+    notifyListeners();
   }
 
   updateDefaults() async {
