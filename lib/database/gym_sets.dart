@@ -25,8 +25,9 @@ double getCardio(TypedResult row, CardioMetric metric) {
   }
 }
 
-final ormCol = db.gymSets.weight /
-    (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps);
+final ormCol = (db.gymSets.weight /
+        (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps))
+    .max();
 const volumeCol = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
 final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 
