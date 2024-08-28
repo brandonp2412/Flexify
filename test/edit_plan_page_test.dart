@@ -17,23 +17,25 @@ void main() async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
+    final planState = PlanState();
+    const plan = PlansCompanion(
+      days: Value('Monday,Tuesday,Wednesday'),
+      exercises: Value('Arnold press,Back extension,Barbell bench press'),
+      sequence: Value(1),
+      title: Value('Test title'),
+      id: Value(1),
+    );
+    planState.setExercises(plan);
     await tester.pumpWidget(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
+          ChangeNotifierProvider(create: (context) => planState),
         ],
         child: const MaterialApp(
           home: EditPlanPage(
-            plan: PlansCompanion(
-              days: Value('Monday,Tuesday,Wednesday'),
-              exercises:
-                  Value('Arnold press,Back extension,Barbell bench press'),
-              sequence: Value(1),
-              title: Value('Test title'),
-              id: Value(1),
-            ),
+            plan: plan,
           ),
         ),
       ),
@@ -69,13 +71,15 @@ void main() async {
       sequence: Value(1),
       title: Value('Test title'),
     );
+    final planState = PlanState();
+    await planState.setExercises(plan);
 
     await tester.pumpWidget(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
+          ChangeNotifierProvider(create: (context) => planState),
         ],
         child: const MaterialApp(
           home: EditPlanPage(
