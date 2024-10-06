@@ -325,17 +325,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         .indexWhere((element) => element.name == planExercises[0]);
     if (lastIndex == -1) return;
     final last = planState.lastSets[lastIndex];
-
-    unit = last.unit;
-    reps.text = toString(last.reps);
-    weight.text = toString(last.weight);
-    distance.text = toString(last.distance);
-    minutes.text = last.duration.floor().toString();
-    seconds.text = ((last.duration * 60) % 60).floor().toString();
-    incline.text = last.incline?.toString() ?? "";
-    cardio = last.cardio;
-    category = last.category;
-    image = last.image;
+    _updateGymSetTextFields(last);
 
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation)
@@ -344,6 +334,25 @@ class _StartPlanPageState extends State<StartPlanPage>
           rpms = value;
         }),
       );
+  }
+
+  _updateGymSetTextFields(GymSet gymSet) {
+    unit = gymSet.unit;
+    reps.text = toString(gymSet.reps);
+    weight.text = toString(gymSet.weight);
+    distance.text = toString(gymSet.distance);
+    minutes.text = gymSet.duration.floor().toString();
+    seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
+    incline.text = gymSet.incline?.toString() ?? "";
+    cardio = gymSet.cardio;
+    category = gymSet.category;
+    image = gymSet.image;
+
+    final settings = context.read<SettingsState>().value;
+    if (cardio && (unit == 'kg' || unit == 'lb'))
+      unit = settings.cardioUnit;
+    else if (!cardio && (unit == 'km' || unit == 'mi'))
+      unit = settings.strengthUnit;
   }
 
   planChanged() {
@@ -400,7 +409,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       peTimers = counts[index].timers;
     }
 
-    var gymSet = GymSetsCompanion.insert(
+    var gymSetInsert = GymSetsCompanion.insert(
       name: exercise,
       unit: unit,
       created: DateTime.now().toLocal(),
@@ -441,10 +450,11 @@ class _StartPlanPageState extends State<StartPlanPage>
         selectedIndex < planExercises.length - 1;
     if (finishedExercise) select(selectedIndex + 1);
 
-    await db.into(db.gymSets).insert(gymSet);
+    var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await planState.updateGymCounts(widget.plan.id);
     if (!mounted) return;
     setState(() {
+      _updateGymSetTextFields(gymSet);
       lastSaved = DateTime.now();
     });
   }
@@ -458,21 +468,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (last == null) return;
 
     setState(() {
-      unit = last.unit;
-      reps.text = toString(last.reps);
-      weight.text = toString(last.weight);
-      distance.text = toString(last.distance);
-      minutes.text = last.duration.floor().toString();
-      seconds.text = ((last.duration * 60) % 60).floor().toString();
-      incline.text = last.incline?.toString() ?? "";
-      cardio = last.cardio;
-      category = last.category;
-      image = last.image;
-
-      if (cardio && (unit == 'kg' || unit == 'lb'))
-        unit = settings.cardioUnit;
-      else if (!cardio && (unit == 'km' || unit == 'mi'))
-        unit = settings.strengthUnit;
+      _updateGymSetTextFields(last);
     });
   }
 
