@@ -111,6 +111,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
                           builder: (context) => const AddExercisePage(),
                         ),
                       );
+                      if (!context.mounted) return;
+                      final planState = context.read<PlanState>();
+                      planState.setExercises(widget.plan);
                     },
                     tooltip: 'Add exercise',
                   ),
