@@ -33,7 +33,7 @@ echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
 if [[ $* == *-t* ]]; then
   echo "Skipping tests..."
 else
-  flutter test
+  ./flutter/bin/flutter test
   dart analyze lib
   dart format --set-exit-if-changed lib
   ./scripts/migrate.sh
