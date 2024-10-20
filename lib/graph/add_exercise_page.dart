@@ -153,9 +153,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
       hidden: const Value(true),
       image: Value(image),
     );
-    final id = await db.gymSets.insertOne(insert);
+    await db.gymSets.insertOne(insert);
     if (!mounted) return;
 
-    Navigator.pop(context, [id, insert]);
+    Navigator.pop(context, insert);
   }
 }

@@ -106,15 +106,15 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () async {
-                      List<dynamic>? result = await Navigator.of(context).push(
+                      GymSetsCompanion? gymSet =
+                          await Navigator.of(context).push(
                         material.MaterialPageRoute(
                           builder: (context) => const AddExercisePage(),
                         ),
                       );
-                      if (result == null || !context.mounted) return;
+                      if (gymSet == null || !context.mounted) return;
 
                       final planState = context.read<PlanState>();
-                      final [int id, GymSetsCompanion gymSet] = result;
                       planState.addExercise(gymSet);
                       setState(() {});
                     },
