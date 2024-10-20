@@ -35,6 +35,23 @@ class PlanState extends ChangeNotifier {
     updateDefaults();
   }
 
+  void addExercise(GymSetsCompanion gymSet) {
+    exercises.add(
+      PlanExercisesCompanion(
+        exercise: Value(gymSet.name.value),
+        enabled: const Value(true),
+      ),
+    );
+    exercises.sort((a, b) {
+      if (a.enabled.value != b.enabled.value) {
+        return b.enabled.value ? 1 : -1;
+      }
+
+      return a.exercise.value.compareTo(b.exercise.value);
+    });
+    notifyListeners();
+  }
+
   Future<void> setExercises(PlansCompanion plan) async {
     var query = db.gymSets.selectOnly()
       ..addColumns([db.gymSets.name])

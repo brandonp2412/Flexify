@@ -143,19 +143,19 @@ class _AddExercisePageState extends State<AddExercisePage> {
   Future<void> save(String unit) async {
     if (!formKey.currentState!.validate()) return;
 
-    await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        created: DateTime.now().toLocal(),
-        reps: 0,
-        weight: 0,
-        name: nameController.text,
-        unit: unit,
-        cardio: Value(cardio),
-        hidden: const Value(true),
-        image: Value(image),
-      ),
+    final insert = GymSetsCompanion.insert(
+      created: DateTime.now().toLocal(),
+      reps: 0,
+      weight: 0,
+      name: nameController.text,
+      unit: unit,
+      cardio: Value(cardio),
+      hidden: const Value(true),
+      image: Value(image),
     );
+    final id = await db.gymSets.insertOne(insert);
+    if (!mounted) return;
 
-    if (mounted) Navigator.pop(context);
+    Navigator.pop(context, [id, insert]);
   }
 }
