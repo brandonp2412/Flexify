@@ -106,14 +106,17 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () async {
-                      await Navigator.of(context).push(
+                      List<dynamic>? result = await Navigator.of(context).push(
                         material.MaterialPageRoute(
                           builder: (context) => const AddExercisePage(),
                         ),
                       );
-                      if (!context.mounted) return;
+                      if (result == null || !context.mounted) return;
+
                       final planState = context.read<PlanState>();
-                      planState.setExercises(widget.plan);
+                      final [int id, GymSetsCompanion gymSet] = result;
+                      planState.addExercise(gymSet);
+                      setState(() {});
                     },
                     tooltip: 'Add exercise',
                   ),
