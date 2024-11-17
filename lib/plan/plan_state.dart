@@ -97,19 +97,25 @@ class PlanState extends ChangeNotifier {
   }
 
   updateDefaults() async {
-    final value = await (db.gymSets.select().join([])
-          ..orderBy(
-            [
-              OrderingTerm(
-                expression: db.gymSets.created,
-                mode: OrderingMode.desc,
-              ),
-            ],
-          )
-          ..groupBy([db.gymSets.name])
-          ..addColumns(db.gymSets.$columns))
-        .get();
-    lastSets = value.map((value) => value.readTable(db.gymSets)).toList();
+    final latestCreated = db.gymSets.created.max();
+    final latestSets = Subquery(
+      db.select(db.gymSets).join([])
+        ..groupBy([db.gymSets.name])
+        ..addColumns([db.gymSets.name, latestCreated]),
+      'ls',
+    );
+    final query = db.select(db.gymSets).join(
+      [
+        innerJoin(
+          latestSets,
+          latestSets.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
+              latestSets.ref(latestCreated).equalsExp(db.gymSets.created),
+          useColumns: false,
+        ),
+      ],
+    );
+    final rows = await query.get();
+    lastSets = rows.map((rows) => rows.readTable(db.gymSets)).toList();
     notifyListeners();
   }
 
