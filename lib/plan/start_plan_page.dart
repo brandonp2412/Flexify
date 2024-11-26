@@ -463,7 +463,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     setState(() {
       selectedIndex = index;
     });
-    final settings = context.read<SettingsState>().value;
     final last = await getLast(planExercises[index]);
     if (last == null) return;
 
