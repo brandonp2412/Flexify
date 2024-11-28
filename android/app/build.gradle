@@ -79,6 +79,14 @@ android {
            signingConfig signingConfigs.release
        }
    }
+   // https://github.com/brandonp2412/Flexify/issues/125
+   dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
+
 }
 
 ext.abiCodes = ["x86_64": 1, "armeabi-v7a": 2, "arm64-v8a": 3]
