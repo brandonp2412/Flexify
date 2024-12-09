@@ -116,7 +116,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
                       final planState = context.read<PlanState>();
                       planState.addExercise(gymSet);
-                      setState(() {});
+                      setState(() {
+                        exercises = planState.exercises;
+                      });
                     },
                     tooltip: 'Add exercise',
                   ),
