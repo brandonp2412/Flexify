@@ -50,4 +50,5 @@ git commit -m "$new_version 🚀
 
 $changelog"
 
+git pull
 git push
