@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddExercisePage extends StatefulWidget {
-  const AddExercisePage({super.key});
+  final String? name;
+
+  const AddExercisePage({super.key, this.name});
 
   @override
   createState() => _AddExercisePageState();
@@ -25,6 +27,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
   late String unit = settings.value.strengthUnit;
   String? image;
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.name != null) nameController.text = widget.name!;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -33,34 +33,57 @@ class _EditPlanPageState extends State<EditPlanPage> {
   final searchController = TextEditingController();
   final titleController = TextEditingController();
 
-  Iterable<Widget> get tiles => exercises
-      .where(
-        (pe) {
-          if (showOff)
-            return pe.exercise.value
-                .toLowerCase()
-                .contains(search.toLowerCase());
-          if (pe.enabled.value)
-            return pe.exercise.value
-                .toLowerCase()
-                .contains(search.toLowerCase());
-          return false;
-        },
-      )
-      .toList()
-      .map(
-        (planExercise) => ExerciseTile(
-          planExercise: planExercise,
-          onChange: (value) {
-            final id = exercises
-                .indexWhere((pe) => pe.exercise == planExercise.exercise);
-            if (id == -1) return;
+  Iterable<Widget> get tiles {
+    final match = exercises.where(
+      (pe) {
+        if (showOff)
+          return pe.exercise.value.toLowerCase().contains(search.toLowerCase());
+        if (pe.enabled.value)
+          return pe.exercise.value.toLowerCase().contains(search.toLowerCase());
+        return false;
+      },
+    );
+
+    if (match.isEmpty)
+      return [
+        ListTile(
+          title: const Text("Nothing found"),
+          subtitle: Text("Tap to create $search"),
+          onTap: () async {
+            GymSetsCompanion? gymSet = await Navigator.of(context).push(
+              material.MaterialPageRoute(
+                builder: (context) => AddExercisePage(
+                  name: search,
+                ),
+              ),
+            );
+            if (gymSet == null || !mounted) return;
+
+            final planState = context.read<PlanState>();
+            planState.addExercise(gymSet);
             setState(() {
-              exercises[id] = value;
+              exercises = planState.exercises;
+              search = '';
             });
+            searchController.text = '';
           },
         ),
-      );
+      ];
+
+    return match.toList().map(
+          (planExercise) => ExerciseTile(
+            planExercise: planExercise,
+            onChange: (value) {
+              final id = exercises
+                  .indexWhere((pe) => pe.exercise == planExercise.exercise);
+              if (id == -1) return;
+              setState(() {
+                exercises[id] = value;
+              });
+            },
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,25 +126,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
                 hintText: 'Search exercises...',
                 trailing: [
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () async {
-                      GymSetsCompanion? gymSet =
-                          await Navigator.of(context).push(
-                        material.MaterialPageRoute(
-                          builder: (context) => const AddExercisePage(),
-                        ),
-                      );
-                      if (gymSet == null || !context.mounted) return;
-
-                      final planState = context.read<PlanState>();
-                      planState.addExercise(gymSet);
-                      setState(() {
-                        exercises = planState.exercises;
-                      });
-                    },
-                    tooltip: 'Add exercise',
-                  ),
                   IconButton(
                     icon: showOff
                         ? const Icon(Icons.visibility)
