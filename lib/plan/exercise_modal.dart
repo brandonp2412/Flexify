@@ -14,6 +14,7 @@ class ExerciseModal extends StatefulWidget {
   final String exercise;
   final bool hasData;
   final Function() onSelect;
+  final Function() onMax;
   final int planId;
 
   const ExerciseModal({
@@ -22,6 +23,7 @@ class ExerciseModal extends StatefulWidget {
     required this.hasData,
     required this.onSelect,
     required this.planId,
+    required this.onMax,
   });
 
   @override
@@ -219,6 +221,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
           maxSets: Value(int.tryParse(maxSets.text)),
         ),
       );
+      widget.onMax();
     }
   }
 

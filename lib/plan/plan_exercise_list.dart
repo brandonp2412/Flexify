@@ -13,6 +13,7 @@ class PlanExerciseList extends StatelessWidget {
   final List<String> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
+  final Function() onMax;
   final bool firstRender;
   final Plan plan;
 
@@ -23,6 +24,7 @@ class PlanExerciseList extends StatelessWidget {
     required this.onSelect,
     required this.firstRender,
     required this.plan,
+    required this.onMax,
   });
 
   @override
@@ -135,6 +137,7 @@ class PlanExerciseList extends StatelessWidget {
               exercise: exercise,
               hasData: count > 0,
               onSelect: () => onSelect(index),
+              onMax: onMax,
             );
           },
         );

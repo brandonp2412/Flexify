@@ -245,6 +245,10 @@ class _StartPlanPageState extends State<StartPlanPage>
                   onSelect: select,
                   firstRender: first,
                   plan: widget.plan,
+                  onMax: () {
+                    final planState = context.read<PlanState>();
+                    planState.updateGymCounts(widget.plan.id);
+                  },
                 ),
               ),
             ],
