@@ -44,8 +44,7 @@ fi
 
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 yq -yi ".msix_config.msix_version |= \"$new_msix_version\"" pubspec.yaml
-git add pubspec.yaml
-git add fastlane/metadata
+git add pubspec.yaml fastlane/metadata pubspec.lock
 git commit -m "$new_version 🚀
 
 $changelog"
