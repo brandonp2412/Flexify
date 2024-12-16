@@ -2,6 +2,8 @@
 
 set -ex
 
+git diff-files --quiet || exit 1
+
 export PUB_SUMMARY_ONLY=true
 
 ./scripts/tag-release.sh
