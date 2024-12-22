@@ -35,4 +35,4 @@ gh release create "$major.$minor.$patch" --notes "$changelog" \
   "$apk/pipeline/linux/x64/release/bundle/$project-linux.zip" \
   "$apk/$project.apk" \
   "$HOME/windows/$project-windows.zip"
-git pull
+git pull origin HEAD
