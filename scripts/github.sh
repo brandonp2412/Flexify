@@ -23,6 +23,9 @@ mv -f "$HOME/windows/$project/$project.msix" "$HOME/windows/$project.msix"
 (cd "$HOME/windows/$project" && zip --quiet -r "$HOME/windows/$project-windows.zip" .)
 docker stop windows
 
+git add pubspec.lock
+git commit -m 'Update pubspec.lock from windows build'
+
 IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 changelog_number=$((build_number * 10 + 3))
 changelog=$(cat fastlane/metadata/android/en-US/changelogs/$changelog_number.txt)
