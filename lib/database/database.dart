@@ -342,10 +342,22 @@ class AppDatabase extends _$AppDatabase {
         from30To31: (Migrator m, Schema31 schema) async {
           await m.addColumn(schema.planExercises, schema.planExercises.timers);
         },
+        from31To32: (Migrator m, Schema32 schema) async {
+          await schema.settings.update().write(
+                const RawValuesInsertable({
+                  'rep_estimation': Variable(false),
+                }),
+              );
+          await schema.settings.update().write(
+                const RawValuesInsertable({
+                  'duration_estimation': Variable(false),
+                }),
+              );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 31;
+  int get schemaVersion => 32;
 }
