@@ -433,7 +433,7 @@ class _EditSetPageState extends State<EditSetPage> {
     });
   }
 
-  save() {
+  save() async {
     if (!formKey.currentState!.validate()) return;
 
     Navigator.pop(context);
@@ -455,32 +455,34 @@ class _EditSetPageState extends State<EditSetPage> {
       category: Value(category),
     );
 
-    if (widget.gymSet.id > 0)
-      db.update(db.gymSets).replace(gymSet);
-    else {
-      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-      db.into(db.gymSets).insert(insert);
-      final settings = context.read<SettingsState>().value;
-      if (!settings.restTimers) return;
-      final timer = context.read<TimerState>();
-      if (restMs != null)
-        timer.startTimer(
-          name,
-          Duration(milliseconds: restMs!),
-          settings.alarmSound,
-          settings.vibrate,
-        );
-      else
-        timer.startTimer(
-          name,
-          Duration(milliseconds: settings.timerDuration),
-          settings.alarmSound,
-          settings.vibrate,
-        );
+    if (widget.gymSet.id > 0) {
+      await db.update(db.gymSets).replace(gymSet);
+      if (image != null)
+        (db.update(db.gymSets)..where((u) => u.name.equals(name)))
+            .write(GymSetsCompanion(image: Value(image)));
+      return;
     }
-    if (image != null)
-      (db.update(db.gymSets)..where((u) => u.name.equals(name)))
-          .write(GymSetsCompanion(image: Value(image)));
+
+    var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+    db.into(db.gymSets).insert(insert);
+    final settings = context.read<SettingsState>().value;
+    if (!settings.restTimers) return;
+
+    final timer = context.read<TimerState>();
+    if (restMs != null)
+      timer.startTimer(
+        name,
+        Duration(milliseconds: restMs!),
+        settings.alarmSound,
+        settings.vibrate,
+      );
+    else
+      timer.startTimer(
+        name,
+        Duration(milliseconds: settings.timerDuration),
+        settings.alarmSound,
+        settings.vibrate,
+      );
   }
 
   Future<void> selectTime(DateTime pickedDate) async {
