@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
@@ -500,7 +502,7 @@ class _StrengthPageState extends State<StrengthPage> {
     }
 
     if (!mounted) return;
-    Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditSetPage(
@@ -508,6 +510,7 @@ class _StrengthPageState extends State<StrengthPage> {
         ),
       ),
     );
+    Timer(kThemeAnimationDuration, setData);
   }
 
   Future<void> _selectEnd() async {
