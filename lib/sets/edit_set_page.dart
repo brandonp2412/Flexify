@@ -140,44 +140,7 @@ class _EditSetPageState extends State<EditSetPage> {
           key: formKey,
           child: ListView(
             children: [
-              Autocomplete<String>(
-                optionsBuilder: (textEditingValue) {
-                  return nameOptions.where(
-                    (option) => option
-                        .toLowerCase()
-                        .contains(textEditingValue.text.toLowerCase()),
-                  );
-                },
-                onSelected: (option) => onSelected(option, showBodyWeight),
-                initialValue: TextEditingValue(text: name),
-                fieldViewBuilder: (
-                  BuildContext context,
-                  TextEditingController textEditingController,
-                  FocusNode focusNode,
-                  VoidCallback onFieldSubmitted,
-                ) {
-                  nameController = textEditingController;
-                  return TextFormField(
-                    decoration: const InputDecoration(labelText: 'Name'),
-                    controller: textEditingController,
-                    textInputAction: TextInputAction.next,
-                    onTap: () {
-                      selectAll(textEditingController);
-                    },
-                    focusNode: focusNode,
-                    onFieldSubmitted: (String value) {
-                      onFieldSubmitted();
-                    },
-                    onChanged: (value) => setState(() {
-                      name = value;
-                    }),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) return 'Required';
-                      return null;
-                    },
-                  );
-                },
-              ),
+              autocomplete(showBodyWeight),
               if (!cardio) ...[
                 TextFormField(
                   controller: reps,
@@ -236,47 +199,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     return null;
                   },
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: minutes,
-                        decoration: const InputDecoration(labelText: 'Minutes'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(minutes),
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) => selectAll(seconds),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return null;
-                          if (int.tryParse(value) == null)
-                            return 'Invalid number';
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextFormField(
-                        controller: seconds,
-                        decoration: const InputDecoration(labelText: 'Seconds'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(seconds),
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) => selectAll(incline),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return null;
-                          if (int.tryParse(value) == null)
-                            return 'Invalid number';
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                duration(),
                 TextFormField(
                   controller: incline,
                   decoration: const InputDecoration(labelText: 'Incline %'),
@@ -346,45 +269,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 ),
                 selector: (context, settings) => settings.value.longDateFormat,
               ),
-              Selector<SettingsState, bool>(
-                builder: (context, showImages, child) {
-                  return Visibility(
-                    visible: showImages,
-                    child: material.Column(
-                      children: [
-                        if (image == null)
-                          TextButton.icon(
-                            onPressed: pick,
-                            label: const Text('Image'),
-                            icon: const Icon(Icons.image),
-                          ),
-                        if (image != null) ...[
-                          const SizedBox(height: 8),
-                          Tooltip(
-                            message: 'Long-press to delete',
-                            child: GestureDetector(
-                              onTap: () => pick(),
-                              onLongPress: () => setState(() {
-                                image = null;
-                              }),
-                              child: Image.file(
-                                File(image!),
-                                errorBuilder: (context, error, stackTrace) =>
-                                    TextButton.icon(
-                                  label: const Text('Image error'),
-                                  icon: const Icon(Icons.error),
-                                  onPressed: () => pick(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  );
-                },
-                selector: (context, settings) => settings.value.showImages,
-              ),
+              imageField(),
             ],
           ),
         ),
@@ -394,6 +279,131 @@ class _EditSetPageState extends State<EditSetPage> {
         label: const Text("Save"),
         icon: const Icon(Icons.save),
       ),
+    );
+  }
+
+  Selector<SettingsState, bool> imageField() {
+    return Selector<SettingsState, bool>(
+      builder: (context, showImages, child) {
+        return Visibility(
+          visible: showImages,
+          child: material.Column(
+            children: [
+              if (image == null)
+                TextButton.icon(
+                  onPressed: pick,
+                  label: const Text('Image'),
+                  icon: const Icon(Icons.image),
+                ),
+              if (image != null) ...[
+                const SizedBox(height: 8),
+                Tooltip(
+                  message: 'Long-press to delete',
+                  child: GestureDetector(
+                    onTap: () => pick(),
+                    onLongPress: () => setState(() {
+                      image = null;
+                    }),
+                    child: Image.file(
+                      File(image!),
+                      errorBuilder: (context, error, stackTrace) =>
+                          TextButton.icon(
+                        label: const Text('Image error'),
+                        icon: const Icon(Icons.error),
+                        onPressed: () => pick(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+      selector: (context, settings) => settings.value.showImages,
+    );
+  }
+
+  material.Row duration() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: minutes,
+            decoration: const InputDecoration(labelText: 'Minutes'),
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: false,
+            ),
+            onTap: () => selectAll(minutes),
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (value) => selectAll(seconds),
+            validator: (value) {
+              if (value == null || value.isEmpty) return null;
+              if (int.tryParse(value) == null) return 'Invalid number';
+              return null;
+            },
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Expanded(
+          child: TextFormField(
+            controller: seconds,
+            decoration: const InputDecoration(labelText: 'Seconds'),
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: false,
+            ),
+            onTap: () => selectAll(seconds),
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (value) => selectAll(incline),
+            validator: (value) {
+              if (value == null || value.isEmpty) return null;
+              if (int.tryParse(value) == null) return 'Invalid number';
+              return null;
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  material.Autocomplete<String> autocomplete(bool showBodyWeight) {
+    return Autocomplete<String>(
+      optionsBuilder: (textEditingValue) {
+        return nameOptions.where(
+          (option) => option
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase()),
+        );
+      },
+      onSelected: (option) => onSelected(option, showBodyWeight),
+      initialValue: TextEditingValue(text: name),
+      fieldViewBuilder: (
+        BuildContext context,
+        TextEditingController textEditingController,
+        FocusNode focusNode,
+        VoidCallback onFieldSubmitted,
+      ) {
+        nameController = textEditingController;
+        return TextFormField(
+          decoration: const InputDecoration(labelText: 'Name'),
+          controller: textEditingController,
+          textInputAction: TextInputAction.next,
+          onTap: () {
+            selectAll(textEditingController);
+          },
+          focusNode: focusNode,
+          onFieldSubmitted: (String value) {
+            onFieldSubmitted();
+          },
+          onChanged: (value) => setState(() {
+            name = value;
+          }),
+          validator: (value) {
+            if (value == null || value.isEmpty) return 'Required';
+            return null;
+          },
+        );
+      },
     );
   }
 
