@@ -75,9 +75,6 @@ class _StrengthPageState extends State<StrengthPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Builder(
           builder: (context) {
-            if (data.isEmpty)
-              return const ListTile(title: Text("No data yet."));
-
             List<FlSpot> spots = [];
             for (var index = 0; index < data.length; index++) {
               spots.add(FlSpot(index.toDouble(), data[index].value));
@@ -195,9 +192,12 @@ class _StrengthPageState extends State<StrengthPage> {
                               );
                             },
                           ),
-                          onLongPress: () => setState(() {
-                            startDate = null;
-                          }),
+                          onLongPress: () {
+                            setState(() {
+                              startDate = null;
+                            });
+                            setData();
+                          },
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () => _selectStart(),
                         ),
@@ -216,9 +216,12 @@ class _StrengthPageState extends State<StrengthPage> {
                               );
                             },
                           ),
-                          onLongPress: () => setState(() {
-                            endDate = null;
-                          }),
+                          onLongPress: () {
+                            setState(() {
+                              endDate = null;
+                            });
+                            setData();
+                          },
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () => _selectEnd(),
                         ),
@@ -228,18 +231,21 @@ class _StrengthPageState extends State<StrengthPage> {
                 ),
                 SizedBox(
                   height: 350,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                    child: FlexLine(
-                      data: data,
-                      context: context,
-                      curveLines: curveLines,
-                      format: format,
-                      spots: spots,
-                      tooltipData: tooltipData,
-                      touchLine: touchLine,
-                    ),
-                  ),
+                  child: data.isEmpty
+                      ? const ListTile(title: Text("No data yet."))
+                      : Padding(
+                          padding:
+                              const EdgeInsets.only(right: 32.0, top: 16.0),
+                          child: FlexLine(
+                            data: data,
+                            context: context,
+                            curveLines: curveLines,
+                            format: format,
+                            spots: spots,
+                            tooltipData: tooltipData,
+                            touchLine: touchLine,
+                          ),
+                        ),
                 ),
                 const SizedBox(height: 75),
               ],
