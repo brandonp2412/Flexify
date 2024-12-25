@@ -236,8 +236,7 @@ class GraphsPageState extends State<GraphsPage>
         },
       ),
       floatingActionButton: AnimatedFab(
-        onTap: () => Navigator.push(
-          context,
+        onTap: () => navigatorKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => const AddExercisePage(),
           ),
