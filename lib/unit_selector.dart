@@ -22,10 +22,6 @@ class UnitSelector extends StatelessWidget {
         value: value,
         items: const [
           DropdownMenuItem(
-            value: '',
-            child: Text(""),
-          ),
-          DropdownMenuItem(
             value: 'km',
             child: Text("Kilometers"),
           ),
@@ -50,10 +46,6 @@ class UnitSelector extends StatelessWidget {
       decoration: InputDecoration(labelText: label ?? 'Unit'),
       value: value,
       items: const [
-        DropdownMenuItem(
-          value: null,
-          child: Text(""),
-        ),
         DropdownMenuItem(
           value: 'kg',
           child: Text("Kilograms"),
