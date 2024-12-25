@@ -1132,6 +1132,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
       'max_sets', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _peekGraphMeta =
+      const VerificationMeta('peekGraph');
+  @override
+  late final GeneratedColumn<bool> peekGraph = GeneratedColumn<bool>(
+      'peek_graph', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("peek_graph" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _planTrailingMeta =
       const VerificationMeta('planTrailing');
   @override
@@ -1256,6 +1266,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         id,
         longDateFormat,
         maxSets,
+        peekGraph,
         planTrailing,
         repEstimation,
         restTimers,
@@ -1361,6 +1372,10 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
     } else if (isInserting) {
       context.missing(_maxSetsMeta);
+    }
+    if (data.containsKey('peek_graph')) {
+      context.handle(_peekGraphMeta,
+          peekGraph.isAcceptableOrUnknown(data['peek_graph']!, _peekGraphMeta));
     }
     if (data.containsKey('plan_trailing')) {
       context.handle(
@@ -1489,6 +1504,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           DriftSqlType.string, data['${effectivePrefix}long_date_format'])!,
       maxSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
+      peekGraph: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}peek_graph'])!,
       planTrailing: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}plan_trailing'])!,
       repEstimation: attachedDatabase.typeMapping
@@ -1539,6 +1556,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final int id;
   final String longDateFormat;
   final int maxSets;
+  final bool peekGraph;
   final String planTrailing;
   final bool repEstimation;
   final bool restTimers;
@@ -1566,6 +1584,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.id,
       required this.longDateFormat,
       required this.maxSets,
+      required this.peekGraph,
       required this.planTrailing,
       required this.repEstimation,
       required this.restTimers,
@@ -1597,6 +1616,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['id'] = Variable<int>(id);
     map['long_date_format'] = Variable<String>(longDateFormat);
     map['max_sets'] = Variable<int>(maxSets);
+    map['peek_graph'] = Variable<bool>(peekGraph);
     map['plan_trailing'] = Variable<String>(planTrailing);
     map['rep_estimation'] = Variable<bool>(repEstimation);
     map['rest_timers'] = Variable<bool>(restTimers);
@@ -1632,6 +1652,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       id: Value(id),
       longDateFormat: Value(longDateFormat),
       maxSets: Value(maxSets),
+      peekGraph: Value(peekGraph),
       planTrailing: Value(planTrailing),
       repEstimation: Value(repEstimation),
       restTimers: Value(restTimers),
@@ -1668,6 +1689,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
+      peekGraph: serializer.fromJson<bool>(json['peekGraph']),
       planTrailing: serializer.fromJson<String>(json['planTrailing']),
       repEstimation: serializer.fromJson<bool>(json['repEstimation']),
       restTimers: serializer.fromJson<bool>(json['restTimers']),
@@ -1700,6 +1722,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'id': serializer.toJson<int>(id),
       'longDateFormat': serializer.toJson<String>(longDateFormat),
       'maxSets': serializer.toJson<int>(maxSets),
+      'peekGraph': serializer.toJson<bool>(peekGraph),
       'planTrailing': serializer.toJson<String>(planTrailing),
       'repEstimation': serializer.toJson<bool>(repEstimation),
       'restTimers': serializer.toJson<bool>(restTimers),
@@ -1730,6 +1753,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           int? id,
           String? longDateFormat,
           int? maxSets,
+          bool? peekGraph,
           String? planTrailing,
           bool? repEstimation,
           bool? restTimers,
@@ -1757,6 +1781,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         id: id ?? this.id,
         longDateFormat: longDateFormat ?? this.longDateFormat,
         maxSets: maxSets ?? this.maxSets,
+        peekGraph: peekGraph ?? this.peekGraph,
         planTrailing: planTrailing ?? this.planTrailing,
         repEstimation: repEstimation ?? this.repEstimation,
         restTimers: restTimers ?? this.restTimers,
@@ -1801,6 +1826,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ? data.longDateFormat.value
           : this.longDateFormat,
       maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
+      peekGraph: data.peekGraph.present ? data.peekGraph.value : this.peekGraph,
       planTrailing: data.planTrailing.present
           ? data.planTrailing.value
           : this.planTrailing,
@@ -1850,6 +1876,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
+          ..write('peekGraph: $peekGraph, ')
           ..write('planTrailing: $planTrailing, ')
           ..write('repEstimation: $repEstimation, ')
           ..write('restTimers: $restTimers, ')
@@ -1882,6 +1909,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         id,
         longDateFormat,
         maxSets,
+        peekGraph,
         planTrailing,
         repEstimation,
         restTimers,
@@ -1913,6 +1941,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.id == this.id &&
           other.longDateFormat == this.longDateFormat &&
           other.maxSets == this.maxSets &&
+          other.peekGraph == this.peekGraph &&
           other.planTrailing == this.planTrailing &&
           other.repEstimation == this.repEstimation &&
           other.restTimers == this.restTimers &&
@@ -1942,6 +1971,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<int> id;
   final Value<String> longDateFormat;
   final Value<int> maxSets;
+  final Value<bool> peekGraph;
   final Value<String> planTrailing;
   final Value<bool> repEstimation;
   final Value<bool> restTimers;
@@ -1969,6 +1999,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.id = const Value.absent(),
     this.longDateFormat = const Value.absent(),
     this.maxSets = const Value.absent(),
+    this.peekGraph = const Value.absent(),
     this.planTrailing = const Value.absent(),
     this.repEstimation = const Value.absent(),
     this.restTimers = const Value.absent(),
@@ -1997,6 +2028,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.id = const Value.absent(),
     required String longDateFormat,
     required int maxSets,
+    this.peekGraph = const Value.absent(),
     required String planTrailing,
     this.repEstimation = const Value.absent(),
     required bool restTimers,
@@ -2040,6 +2072,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<int>? id,
     Expression<String>? longDateFormat,
     Expression<int>? maxSets,
+    Expression<bool>? peekGraph,
     Expression<String>? planTrailing,
     Expression<bool>? repEstimation,
     Expression<bool>? restTimers,
@@ -2069,6 +2102,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (id != null) 'id': id,
       if (longDateFormat != null) 'long_date_format': longDateFormat,
       if (maxSets != null) 'max_sets': maxSets,
+      if (peekGraph != null) 'peek_graph': peekGraph,
       if (planTrailing != null) 'plan_trailing': planTrailing,
       if (repEstimation != null) 'rep_estimation': repEstimation,
       if (restTimers != null) 'rest_timers': restTimers,
@@ -2099,6 +2133,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<int>? id,
       Value<String>? longDateFormat,
       Value<int>? maxSets,
+      Value<bool>? peekGraph,
       Value<String>? planTrailing,
       Value<bool>? repEstimation,
       Value<bool>? restTimers,
@@ -2126,6 +2161,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       id: id ?? this.id,
       longDateFormat: longDateFormat ?? this.longDateFormat,
       maxSets: maxSets ?? this.maxSets,
+      peekGraph: peekGraph ?? this.peekGraph,
       planTrailing: planTrailing ?? this.planTrailing,
       repEstimation: repEstimation ?? this.repEstimation,
       restTimers: restTimers ?? this.restTimers,
@@ -2181,6 +2217,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (maxSets.present) {
       map['max_sets'] = Variable<int>(maxSets.value);
+    }
+    if (peekGraph.present) {
+      map['peek_graph'] = Variable<bool>(peekGraph.value);
     }
     if (planTrailing.present) {
       map['plan_trailing'] = Variable<String>(planTrailing.value);
@@ -2242,6 +2281,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
+          ..write('peekGraph: $peekGraph, ')
           ..write('planTrailing: $planTrailing, ')
           ..write('repEstimation: $repEstimation, ')
           ..write('restTimers: $restTimers, ')
@@ -3118,6 +3158,7 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   Value<int> id,
   required String longDateFormat,
   required int maxSets,
+  Value<bool> peekGraph,
   required String planTrailing,
   Value<bool> repEstimation,
   required bool restTimers,
@@ -3146,6 +3187,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<int> id,
   Value<String> longDateFormat,
   Value<int> maxSets,
+  Value<bool> peekGraph,
   Value<String> planTrailing,
   Value<bool> repEstimation,
   Value<bool> restTimers,
@@ -3191,6 +3233,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> longDateFormat = const Value.absent(),
             Value<int> maxSets = const Value.absent(),
+            Value<bool> peekGraph = const Value.absent(),
             Value<String> planTrailing = const Value.absent(),
             Value<bool> repEstimation = const Value.absent(),
             Value<bool> restTimers = const Value.absent(),
@@ -3219,6 +3262,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             id: id,
             longDateFormat: longDateFormat,
             maxSets: maxSets,
+            peekGraph: peekGraph,
             planTrailing: planTrailing,
             repEstimation: repEstimation,
             restTimers: restTimers,
@@ -3247,6 +3291,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required String longDateFormat,
             required int maxSets,
+            Value<bool> peekGraph = const Value.absent(),
             required String planTrailing,
             Value<bool> repEstimation = const Value.absent(),
             required bool restTimers,
@@ -3275,6 +3320,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             id: id,
             longDateFormat: longDateFormat,
             maxSets: maxSets,
+            peekGraph: peekGraph,
             planTrailing: planTrailing,
             repEstimation: repEstimation,
             restTimers: restTimers,
@@ -3353,6 +3399,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<int> get maxSets => $state.composableBuilder(
       column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get peekGraph => $state.composableBuilder(
+      column: $state.table.peekGraph,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3487,6 +3538,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<int> get maxSets => $state.composableBuilder(
       column: $state.table.maxSets,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get peekGraph => $state.composableBuilder(
+      column: $state.table.peekGraph,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

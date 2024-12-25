@@ -1,11 +1,15 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
+import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -13,6 +17,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -85,6 +90,60 @@ class GraphsPageState extends State<GraphsPage>
     planState.updatePlans(null);
   }
 
+  LineTouchTooltipData tooltipData(
+    BuildContext context,
+    String format,
+    List<dynamic> data,
+    String unit,
+  ) {
+    return LineTouchTooltipData(
+      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
+      getTooltipItems: (touchedSpots) {
+        final row = data.elementAt(touchedSpots.first.spotIndex);
+        final created = DateFormat(format).format(row.created);
+
+        String text;
+        if (row is CardioData)
+          text = "${row.value} ${row.unit} / min";
+        else
+          text = "${row.reps} x ${row.value.toStringAsFixed(2)}$unit $created";
+
+        return [
+          LineTooltipItem(
+            text,
+            TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
+          ),
+        ];
+      },
+    );
+  }
+
+  Widget getPeek(GymSetsCompanion gymSet, List<dynamic> data) {
+    final settings = context.read<SettingsState>().value;
+    List<FlSpot> spots = [];
+    for (var index = 0; index < data.length; index++) {
+      spots.add(FlSpot(index.toDouble(), data[index].value));
+    }
+
+    return material.SizedBox(
+      height: 200,
+      child: material.Padding(
+        padding: const EdgeInsets.only(right: 48.0, top: 16.0, left: 48.0),
+        child: FlexLine(
+          data: data,
+          context: context,
+          curveLines: settings.curveLines,
+          format: settings.shortDateFormat,
+          spots: spots,
+          tooltipData: (context, format) =>
+              tooltipData(context, format, data, gymSet.unit.value),
+          hideBottom: true,
+          hideLeft: true,
+        ),
+      ),
+    );
+  }
+
   Scaffold graphsPage() {
     return Scaffold(
       body: StreamBuilder(
@@ -147,6 +206,28 @@ class GraphsPageState extends State<GraphsPage>
                     "Complete plans for your progress graphs to appear here.",
                   ),
                 ),
+              Selector<SettingsState, bool>(
+                selector: (context, settings) => settings.value.peekGraph,
+                builder: (BuildContext context, bool peekGraph, Widget? child) {
+                  if (!peekGraph) return const SizedBox();
+
+                  return FutureBuilder(
+                    builder: (context, snapshot) => snapshot.data != null
+                        ? getPeek(gymSets.first, snapshot.data!)
+                        : const SizedBox(),
+                    future: gymSets.first.cardio.value
+                        ? getCardioData(name: gymSets.first.name.value)
+                        : getStrengthData(
+                            targetUnit: gymSets.first.unit.value,
+                            name: gymSets.first.name.value,
+                            metric: StrengthMetric.bestWeight,
+                            period: Period.day,
+                            startDate: null,
+                            endDate: null,
+                          ),
+                  );
+                },
+              ),
               Expanded(
                 child: graphList(gymSets),
               ),

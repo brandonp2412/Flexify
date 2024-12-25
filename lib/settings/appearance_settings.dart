@@ -108,6 +108,27 @@ List<Widget> getAppearanceSettings(String term, SettingsState settings) {
           ),
         ),
       ),
+    if ('peek graph'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Show the first line graph on graphs page',
+        child: ListTile(
+          title: const Text('Peek graph'),
+          leading: const Icon(Icons.visibility_outlined),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  peekGraph: Value(!settings.value.peekGraph),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.value.peekGraph,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    peekGraph: Value(value),
+                  ),
+                ),
+          ),
+        ),
+      ),
   ];
 }
 

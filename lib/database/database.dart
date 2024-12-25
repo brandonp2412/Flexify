@@ -354,10 +354,13 @@ class AppDatabase extends _$AppDatabase {
                 }),
               );
         },
+        from32To33: (Migrator m, Schema33 schema) async {
+          await m.addColumn(schema.settings, schema.settings.peekGraph);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 32;
+  int get schemaVersion => 33;
 }

@@ -15,6 +15,7 @@ class Settings extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get longDateFormat => text()();
   IntColumn get maxSets => integer()();
+  BoolColumn get peekGraph => boolean().withDefault(const Constant(false))();
   TextColumn get planTrailing => text()();
   BoolColumn get repEstimation => boolean().withDefault(const Constant(true))();
   BoolColumn get restTimers => boolean()();

@@ -8,6 +8,8 @@ class FlexLine extends StatelessWidget {
   final List<FlSpot> spots;
   final bool curveLines;
   final List<dynamic> data;
+  final bool? hideBottom;
+  final bool? hideLeft;
 
   final LineTouchTooltipData Function(
     BuildContext context,
@@ -28,6 +30,8 @@ class FlexLine extends StatelessWidget {
     required this.tooltipData,
     required this.data,
     this.touchLine,
+    this.hideBottom,
+    this.hideLeft,
   });
 
   Widget bottomTitleWidgets(
@@ -75,15 +79,15 @@ class FlexLine extends StatelessWidget {
           rightTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
-          leftTitles: const AxisTitles(
+          leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
+              showTitles: hideLeft != true,
               reservedSize: 45,
             ),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
+              showTitles: hideBottom != true,
               reservedSize: 27,
               interval: 1,
               getTitlesWidget: (value, meta) => bottomTitleWidgets(
