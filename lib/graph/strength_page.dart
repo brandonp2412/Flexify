@@ -6,6 +6,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
@@ -41,40 +42,6 @@ class _StrengthPageState extends State<StrengthPage> {
   DateTime? endDate;
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
   TabController? tabController;
-
-  Widget bottomTitleWidgets(
-    double value,
-    TitleMeta meta,
-    String format,
-  ) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
-    Widget text;
-
-    double screenWidth = MediaQuery.of(context).size.width;
-    double labelWidth = 120;
-    int labelCount = (screenWidth / labelWidth).floor();
-    List<int> indices = List.generate(labelCount, (index) {
-      return ((data.length - 1) * index / (labelCount - 1)).round();
-    });
-
-    if (indices.contains(value.toInt())) {
-      DateTime createdDate = data[value.toInt()].created;
-      text = Text(
-        DateFormat(format).format(createdDate),
-        style: style,
-      );
-    } else {
-      text = const Text('', style: style);
-    }
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: text,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -263,51 +230,14 @@ class _StrengthPageState extends State<StrengthPage> {
                   height: 350,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                    child: LineChart(
-                      LineChartData(
-                        titlesData: FlTitlesData(
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          leftTitles: const AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 45,
-                            ),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 27,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) =>
-                                  bottomTitleWidgets(
-                                value,
-                                meta,
-                                format,
-                              ),
-                            ),
-                          ),
-                        ),
-                        lineTouchData: LineTouchData(
-                          enabled: true,
-                          touchCallback: (event, touchResponse) =>
-                              touchLine(event, touchResponse),
-                          touchTooltipData: tooltipData(context, format),
-                        ),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: spots,
-                            isCurved: curveLines,
-                            color: Theme.of(context).colorScheme.primary,
-                            barWidth: 3,
-                            isStrokeCapRound: true,
-                          ),
-                        ],
-                      ),
+                    child: FlexLine(
+                      data: data,
+                      context: context,
+                      curveLines: curveLines,
+                      format: format,
+                      spots: spots,
+                      tooltipData: tooltipData,
+                      touchLine: touchLine,
                     ),
                   ),
                 ),

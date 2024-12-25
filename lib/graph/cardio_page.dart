@@ -4,6 +4,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
+import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -37,40 +38,44 @@ class _CardioPageState extends State<CardioPage> {
   DateTime? endDate;
   TabController? tabController;
 
-  Widget bottomTitleWidgets(
-    double value,
-    TitleMeta meta,
-    List<CardioData> rows,
-    String format,
-  ) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
-    Widget text;
+  LineTouchTooltipData tooltipData(BuildContext context, String format) =>
+      LineTouchTooltipData(
+        getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
+        getTooltipItems: (touchedSpots) {
+          final row = data.elementAt(touchedSpots.first.spotIndex);
+          String text = row.value.toStringAsFixed(2);
+          final created = DateFormat(format).format(row.created);
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double labelWidth = 120;
-    int labelCount = (screenWidth / labelWidth).floor();
-    List<int> indices = List.generate(labelCount, (index) {
-      return ((rows.length - 1) * index / (labelCount - 1)).round();
-    });
+          switch (metric) {
+            case CardioMetric.pace:
+              text = "${row.value} ${row.unit} / min";
+              break;
+            case CardioMetric.duration:
+              final minutes = row.value.floor();
+              final seconds =
+                  ((row.value * 60) % 60).floor().toString().padLeft(2, '0');
+              text = "$minutes:$seconds";
+              break;
+            case CardioMetric.distance:
+              text += " ${row.unit}";
+              break;
+            case CardioMetric.incline:
+              text += "%";
+              break;
+            case CardioMetric.inclineAdjustedPace:
+              break;
+          }
 
-    if (indices.contains(value.toInt())) {
-      DateTime createdDate = rows[value.toInt()].created;
-      text = Text(
-        DateFormat(format).format(createdDate),
-        style: style,
+          return [
+            LineTooltipItem(
+              "$text\n$created",
+              TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+            ),
+          ];
+        },
       );
-    } else {
-      text = const Text('', style: style);
-    }
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: text,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,8 +262,14 @@ class _CardioPageState extends State<CardioPage> {
                     height: 350,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                      child:
-                          lineChart(rows, format, context, spots, curveLines),
+                      child: FlexLine(
+                        format: format,
+                        context: context,
+                        spots: spots,
+                        curveLines: curveLines,
+                        tooltipData: tooltipData,
+                        data: data,
+                      ),
                     ),
                   ),
                 const SizedBox(height: 75),
@@ -321,97 +332,6 @@ class _CardioPageState extends State<CardioPage> {
   void dispose() {
     tabController?.removeListener(tabListener);
     super.dispose();
-  }
-
-  LineChart lineChart(
-    List<CardioData> rows,
-    String format,
-    BuildContext context,
-    List<FlSpot> spots,
-    bool curveLines,
-  ) {
-    return LineChart(
-      LineChartData(
-        titlesData: FlTitlesData(
-          topTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          rightTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          leftTitles: const AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 45,
-            ),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 27,
-              interval: 1,
-              getTitlesWidget: (value, meta) => bottomTitleWidgets(
-                value,
-                meta,
-                rows,
-                format,
-              ),
-            ),
-          ),
-        ),
-        lineTouchData: LineTouchData(
-          enabled: true,
-          touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-            getTooltipItems: (touchedSpots) {
-              final row = rows.elementAt(touchedSpots.first.spotIndex);
-              String text = row.value.toStringAsFixed(2);
-              final created = DateFormat(format).format(row.created);
-
-              switch (metric) {
-                case CardioMetric.pace:
-                  text = "${row.value} ${row.unit} / min";
-                  break;
-                case CardioMetric.duration:
-                  final minutes = row.value.floor();
-                  final seconds = ((row.value * 60) % 60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  text = "$minutes:$seconds";
-                  break;
-                case CardioMetric.distance:
-                  text += " ${row.unit}";
-                  break;
-                case CardioMetric.incline:
-                  text += "%";
-                  break;
-                case CardioMetric.inclineAdjustedPace:
-                  break;
-              }
-
-              return [
-                LineTooltipItem(
-                  "$text\n$created",
-                  TextStyle(
-                    color: Theme.of(context).textTheme.bodyLarge!.color,
-                  ),
-                ),
-              ];
-            },
-          ),
-        ),
-        lineBarsData: [
-          LineChartBarData(
-            spots: spots,
-            isCurved: curveLines,
-            color: Theme.of(context).colorScheme.primary,
-            barWidth: 3,
-            isStrokeCapRound: true,
-          ),
-        ],
-      ),
-    );
   }
 
   void setData() async {
