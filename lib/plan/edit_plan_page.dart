@@ -124,6 +124,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   padding: EdgeInsets.all(8.0),
                   child: Icon(Icons.search),
                 ),
+                textCapitalization: TextCapitalization.sentences,
                 hintText: 'Search exercises...',
                 trailing: [
                   IconButton(
