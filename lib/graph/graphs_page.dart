@@ -61,6 +61,30 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
+  void onDelete() async {
+    final planState = context.read<PlanState>();
+    final selectedCopy = selected.toList();
+    setState(() {
+      selected.clear();
+    });
+
+    await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(selectedCopy)))
+        .go();
+
+    final plans = await db.plans.select().get();
+    for (final plan in plans) {
+      final exercises = plan.exercises.split(',');
+      exercises.removeWhere(
+        (exercise) => selectedCopy.contains(exercise),
+      );
+      final updatedExercises = exercises.join(',');
+      await db
+          .update(db.plans)
+          .replace(plan.copyWith(exercises: updatedExercises));
+    }
+    planState.updatePlans(null);
+  }
+
   Scaffold graphsPage() {
     return Scaffold(
       body: StreamBuilder(
@@ -91,24 +115,7 @@ class GraphsPageState extends State<GraphsPage>
                     });
                   },
                 ),
-                onShare: () async {
-                  final selCopy = selected.toList();
-                  setState(() {
-                    selected.clear();
-                  });
-                  final gymSets = (await stream.first)
-                      .where(
-                        (gymSet) => selCopy.contains(gymSet.name.value),
-                      )
-                      .toList();
-                  final summaries = gymSets
-                      .map(
-                        (gymSet) =>
-                            "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
-                      )
-                      .join(', ');
-                  await Share.share("I just did $summaries");
-                },
+                onShare: onShare,
                 onChange: (value) {
                   setState(() {
                     search = value;
@@ -117,30 +124,7 @@ class GraphsPageState extends State<GraphsPage>
                 onClear: () => setState(() {
                   selected.clear();
                 }),
-                onDelete: () async {
-                  final planState = context.read<PlanState>();
-                  final selectedCopy = selected.toList();
-                  setState(() {
-                    selected.clear();
-                  });
-
-                  await (db.delete(db.gymSets)
-                        ..where((tbl) => tbl.name.isIn(selectedCopy)))
-                      .go();
-
-                  final plans = await db.plans.select().get();
-                  for (final plan in plans) {
-                    final exercises = plan.exercises.split(',');
-                    exercises.removeWhere(
-                      (exercise) => selectedCopy.contains(exercise),
-                    );
-                    final updatedExercises = exercises.join(',');
-                    await db
-                        .update(db.plans)
-                        .replace(plan.copyWith(exercises: updatedExercises));
-                  }
-                  planState.updatePlans(null);
-                },
+                onDelete: onDelete,
                 onSelect: () => setState(() {
                   selected.addAll(
                     gymSets.map((gymSet) => gymSet.name.value),
@@ -164,42 +148,7 @@ class GraphsPageState extends State<GraphsPage>
                   ),
                 ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: gymSets.length,
-                  controller: scroll,
-                  padding: const EdgeInsets.only(bottom: 50),
-                  itemBuilder: (context, index) {
-                    final gymSet = gymSets[index];
-                    final previousGymSet =
-                        index > 0 ? gymSets[index - 1] : null;
-
-                    final previousCreated =
-                        previousGymSet?.created.value.toLocal();
-
-                    final showDivider = previousCreated != null &&
-                        !isSameDay(previousCreated, gymSet.created.value);
-
-                    return material.Column(
-                      children: [
-                        if (showDivider) const Divider(),
-                        GraphTile(
-                          selected: selected,
-                          gymSet: gymSet,
-                          onSelect: (name) {
-                            if (selected.contains(name))
-                              setState(() {
-                                selected.remove(name);
-                              });
-                            else
-                              setState(() {
-                                selected.add(name);
-                              });
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                child: graphList(gymSets),
               ),
             ],
           );
@@ -216,6 +165,62 @@ class GraphsPageState extends State<GraphsPage>
         scroll: scroll,
         icon: Icons.add,
       ),
+    );
+  }
+
+  onShare() async {
+    final selCopy = selected.toList();
+    setState(() {
+      selected.clear();
+    });
+    final gymSets = (await stream.first)
+        .where(
+          (gymSet) => selCopy.contains(gymSet.name.value),
+        )
+        .toList();
+    final summaries = gymSets
+        .map(
+          (gymSet) =>
+              "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
+        )
+        .join(', ');
+    await Share.share("I just did $summaries");
+  }
+
+  material.ListView graphList(List<GymSetsCompanion> gymSets) {
+    return ListView.builder(
+      itemCount: gymSets.length,
+      controller: scroll,
+      padding: const EdgeInsets.only(bottom: 50),
+      itemBuilder: (context, index) {
+        final gymSet = gymSets[index];
+        final previousGymSet = index > 0 ? gymSets[index - 1] : null;
+
+        final previousCreated = previousGymSet?.created.value.toLocal();
+
+        final showDivider = previousCreated != null &&
+            !isSameDay(previousCreated, gymSet.created.value);
+
+        return material.Column(
+          children: [
+            if (showDivider) const Divider(),
+            GraphTile(
+              selected: selected,
+              gymSet: gymSet,
+              onSelect: (name) {
+                if (selected.contains(name))
+                  setState(() {
+                    selected.remove(name);
+                  });
+                else
+                  setState(() {
+                    selected.add(name);
+                  });
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
