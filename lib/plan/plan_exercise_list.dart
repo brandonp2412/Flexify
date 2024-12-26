@@ -14,7 +14,6 @@ class PlanExerciseList extends StatelessWidget {
   final int selected;
   final Future<void> Function(int) onSelect;
   final Function() onMax;
-  final bool firstRender;
   final Plan plan;
 
   const PlanExerciseList({
@@ -22,7 +21,6 @@ class PlanExerciseList extends StatelessWidget {
     required this.exercises,
     required this.selected,
     required this.onSelect,
-    required this.firstRender,
     required this.plan,
     required this.onMax,
   });
@@ -162,7 +160,7 @@ class PlanExerciseList extends StatelessWidget {
               ],
             ),
           ),
-          CustomSetIndicator(count: count, max: max, firstRender: firstRender),
+          CustomSetIndicator(count: count, max: max),
         ],
       ),
     );

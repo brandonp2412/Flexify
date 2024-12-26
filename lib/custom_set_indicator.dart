@@ -4,12 +4,10 @@ class CustomSetIndicator extends StatelessWidget {
   const CustomSetIndicator({
     super.key,
     required this.count,
-    required this.firstRender,
     required this.max,
   });
   final int count;
   final int max;
-  final bool firstRender;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class CustomSetIndicator extends StatelessWidget {
             child: AnimatedFractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: count > i ? 1 : 0,
-              duration: Duration(milliseconds: firstRender ? 0 : 250),
+              duration: const Duration(milliseconds: 250),
               curve: Curves.ease,
               child: DecoratedBox(
                 decoration: BoxDecoration(

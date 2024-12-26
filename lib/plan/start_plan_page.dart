@@ -35,9 +35,6 @@ class _StartPlanPageState extends State<StartPlanPage>
   final incline = TextEditingController(text: "0");
   final formKey = GlobalKey<FormState>();
 
-  /// Used to show progress lines instantly on first render.
-  bool first = true;
-
   int selectedIndex = 0;
   bool cardio = false;
   DateTime? lastSaved;
@@ -243,7 +240,6 @@ class _StartPlanPageState extends State<StartPlanPage>
                   exercises: planExercises,
                   selected: selectedIndex,
                   onSelect: select,
-                  firstRender: first,
                   plan: widget.plan,
                   onMax: () {
                     final planState = context.read<PlanState>();
@@ -377,9 +373,6 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<void> save(TimerState timerState) async {
     if (!formKey.currentState!.validate()) return;
 
-    setState(() {
-      first = false;
-    });
     final exercise = planExercises[selectedIndex];
     var bodyWeight = 0.0;
     final settings = context.read<SettingsState>().value;
