@@ -194,7 +194,6 @@ class _CardioPageState extends State<CardioPage> {
                       visible: value,
                       child: UnitSelector(
                         value: targetUnit,
-                        cardio: true,
                         onChanged: (value) {
                           setState(() {
                             targetUnit = value!;

@@ -226,7 +226,6 @@ class _StartPlanPageState extends State<StartPlanPage>
                   visible: showUnits,
                   child: UnitSelector(
                     value: unit,
-                    cardio: cardio,
                     onChanged: (String? newValue) {
                       setState(() {
                         unit = newValue!;

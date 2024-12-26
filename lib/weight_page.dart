@@ -45,7 +45,6 @@ class _WeightPageState extends State<WeightPage> {
                 selector: (context, settings) => settings.value.strengthUnit,
                 builder: (context, value, child) => UnitSelector(
                   value: unit ?? value,
-                  cardio: false,
                   onChanged: (String? newValue) {
                     setState(() {
                       unit = newValue!;

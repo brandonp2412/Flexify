@@ -163,7 +163,6 @@ class _StrengthPageState extends State<StrengthPage> {
                     visible: showUnits,
                     child: UnitSelector(
                       value: targetUnit,
-                      cardio: false,
                       onChanged: (value) {
                         setState(() {
                           targetUnit = value!;

@@ -236,7 +236,6 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         unit = newValue!;
                       });
                     },
-                    cardio: cardio ?? false,
                   ),
                 ),
                 selector: (context, settings) => settings.value.showUnits,

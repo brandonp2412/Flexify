@@ -58,7 +58,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
               ),
               UnitSelector(
                 value: unit,
-                cardio: cardio,
                 onChanged: (String? newValue) {
                   setState(() {
                     unit = newValue!;

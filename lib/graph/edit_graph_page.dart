@@ -114,6 +114,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 value: unit,
                 items: const [
                   DropdownMenuItem(
+                    value: '',
+                    child: Text(""),
+                  ),
+                  DropdownMenuItem(
                     value: 'kg',
                     child: Text("kg"),
                   ),
@@ -146,6 +150,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   onTap: () {
                     setState(() {
                       cardio = !cardio!;
+                      if (unit == null || unit?.isEmpty == true) return;
                       if (cardio!)
                         unit = unit == 'kg' ? 'km' : 'mi';
                       else
