@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +41,7 @@ class _CardioPageState extends State<CardioPage> {
   DateTime? startDate;
   DateTime? endDate;
   TabController? tabController;
+  DateTime lastTap = DateTime(0);
 
   LineTouchTooltipData tooltipData(BuildContext context, String format) =>
       LineTouchTooltipData(
@@ -76,6 +81,40 @@ class _CardioPageState extends State<CardioPage> {
           ];
         },
       );
+
+  touchLine(
+    FlTouchEvent event,
+    LineTouchResponse? touchResponse,
+  ) async {
+    if (event is ScaleUpdateDetails) return;
+    if (event is! FlPanDownEvent) return;
+    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+      return setState(() {
+        lastTap = DateTime.now();
+      });
+
+    final index = touchResponse?.lineBarSpots?[0].spotIndex;
+    if (index == null) return;
+    final row = data[index];
+    GymSet? gymSet = await (db.gymSets.select()
+          ..where(
+            (tbl) =>
+                tbl.created.equals(row.created) & tbl.name.equals(widget.name),
+          )
+          ..limit(1))
+        .getSingle();
+
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditSetPage(
+          gymSet: gymSet,
+        ),
+      ),
+    );
+    Timer(kThemeAnimationDuration, setData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,6 +306,7 @@ class _CardioPageState extends State<CardioPage> {
                         spots: spots,
                         curveLines: curveLines,
                         tooltipData: tooltipData,
+                        touchLine: touchLine,
                         data: data,
                       ),
                     ),
