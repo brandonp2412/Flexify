@@ -54,6 +54,111 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState = context.watch<PlanState>();
     final timerState = context.read<TimerState>();
 
+    var durationFields = Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: minutes,
+            decoration: const InputDecoration(labelText: 'Minutes'),
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: false,
+            ),
+            onTap: () => selectAll(minutes),
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (value) => selectAll(seconds),
+            validator: (value) {
+              if (value?.isNotEmpty == true && int.tryParse(value!) == null)
+                return 'Invalid number';
+              return null;
+            },
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Expanded(
+          child: TextFormField(
+            controller: seconds,
+            decoration: const InputDecoration(labelText: 'Seconds'),
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: false,
+            ),
+            onTap: () => selectAll(seconds),
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (value) => selectAll(distance),
+            validator: (value) {
+              if (value?.isNotEmpty == true && int.tryParse(value!) == null)
+                return 'Invalid number';
+              return null;
+            },
+          ),
+        ),
+      ],
+    );
+
+    var distanceFields = Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            textInputAction: TextInputAction.next,
+            controller: distance,
+            decoration: const InputDecoration(
+              labelText: 'Distance',
+            ),
+            keyboardType: TextInputType.number,
+            onFieldSubmitted: (value) => selectAll(incline),
+            onTap: () {
+              selectAll(distance);
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) return null;
+              if (double.tryParse(value) == null) return 'Invalid number';
+              return null;
+            },
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Expanded(
+          child: TextFormField(
+            controller: incline,
+            decoration: const InputDecoration(labelText: 'Incline %'),
+            keyboardType: TextInputType.number,
+            onTap: () => selectAll(incline),
+            onFieldSubmitted: (value) => save(timerState),
+            validator: (value) {
+              if (value == null || value.isEmpty) return null;
+              if (double.tryParse(value) == null) return 'Invalid number';
+              return null;
+            },
+          ),
+        ),
+      ],
+    );
+    var weightField = TextFormField(
+      controller: weight,
+      decoration: InputDecoration(
+        labelText: 'Weight ($unit)',
+        suffixIcon: Selector<SettingsState, bool>(
+          selector: (context, settings) => settings.value.showBodyWeight,
+          builder: (context, showBodyWeight, child) => Visibility(
+            visible: showBodyWeight,
+            child: IconButton(
+              tooltip: "Use body weight",
+              icon: const Icon(Icons.scale),
+              onPressed: useBodyWeight,
+            ),
+          ),
+        ),
+      ),
+      keyboardType: TextInputType.number,
+      onTap: () {
+        selectAll(weight);
+      },
+      onFieldSubmitted: (value) async => await save(timerState),
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Required';
+        if (double.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -107,118 +212,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: weight,
-                  decoration: InputDecoration(
-                    labelText: 'Weight ($unit)',
-                    suffixIcon: Selector<SettingsState, bool>(
-                      selector: (context, settings) =>
-                          settings.value.showBodyWeight,
-                      builder: (context, showBodyWeight, child) => Visibility(
-                        visible: showBodyWeight,
-                        child: IconButton(
-                          tooltip: "Use body weight",
-                          icon: const Icon(Icons.scale),
-                          onPressed: useBodyWeight,
-                        ),
-                      ),
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                  onTap: () {
-                    selectAll(weight);
-                  },
-                  onFieldSubmitted: (value) async => await save(timerState),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
+                weightField,
               ],
               if (cardio) ...[
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: minutes,
-                        decoration: const InputDecoration(labelText: 'Minutes'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(minutes),
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) => selectAll(seconds),
-                        validator: (value) {
-                          if (value?.isNotEmpty == true &&
-                              int.tryParse(value!) == null)
-                            return 'Invalid number';
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextFormField(
-                        controller: seconds,
-                        decoration: const InputDecoration(labelText: 'Seconds'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(seconds),
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) => selectAll(distance),
-                        validator: (value) {
-                          if (value?.isNotEmpty == true &&
-                              int.tryParse(value!) == null)
-                            return 'Invalid number';
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        textInputAction: TextInputAction.next,
-                        controller: distance,
-                        decoration: const InputDecoration(
-                          labelText: 'Distance',
-                        ),
-                        keyboardType: TextInputType.number,
-                        onFieldSubmitted: (value) => selectAll(incline),
-                        onTap: () {
-                          selectAll(distance);
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return null;
-                          if (double.tryParse(value) == null)
-                            return 'Invalid number';
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextFormField(
-                        controller: incline,
-                        decoration:
-                            const InputDecoration(labelText: 'Incline %'),
-                        keyboardType: TextInputType.number,
-                        onTap: () => selectAll(incline),
-                        onFieldSubmitted: (value) => save(timerState),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return null;
-                          if (double.tryParse(value) == null)
-                            return 'Invalid number';
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                durationFields,
+                distanceFields,
               ],
               Selector<SettingsState, bool>(
                 selector: (context, settings) => settings.value.showUnits,
