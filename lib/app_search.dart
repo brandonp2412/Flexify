@@ -15,6 +15,8 @@ class AppSearch extends StatefulWidget {
   final Function onShare;
   final Function? onRefresh;
   final Widget? filter;
+  final String? confirmText;
+
   const AppSearch({
     super.key,
     required this.selected,
@@ -26,6 +28,7 @@ class AppSearch extends StatefulWidget {
     required this.onShare,
     this.onRefresh,
     this.filter,
+    this.confirmText,
   });
 
   @override
@@ -77,7 +80,8 @@ class _AppSearchState extends State<AppSearch> {
                     return AlertDialog(
                       title: const Text('Confirm Delete'),
                       content: Text(
-                        'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
+                        widget.confirmText ??
+                            'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
                       ),
                       actions: <Widget>[
                         TextButton(

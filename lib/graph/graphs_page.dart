@@ -40,6 +40,7 @@ class GraphsPageState extends State<GraphsPage>
   String? category;
   final scroll = ScrollController();
   bool extendFab = true;
+  int total = 0;
 
   @override
   bool get wantKeepAlive => true;
@@ -198,6 +199,7 @@ class GraphsPageState extends State<GraphsPage>
                     ),
                   ),
                 ),
+                confirmText: "This will delete $total records. Are you sure?",
               ),
               if (snapshot.data?.isEmpty == true)
                 const ListTile(
@@ -287,7 +289,7 @@ class GraphsPageState extends State<GraphsPage>
             GraphTile(
               selected: selected,
               gymSet: gymSet,
-              onSelect: (name) {
+              onSelect: (name) async {
                 if (selected.contains(name))
                   setState(() {
                     selected.remove(name);
@@ -296,6 +298,13 @@ class GraphsPageState extends State<GraphsPage>
                   setState(() {
                     selected.add(name);
                   });
+                final result = await (db.gymSets.selectOnly()
+                      ..addColumns([db.gymSets.name.count()])
+                      ..where(db.gymSets.name.isIn(selected)))
+                    .getSingle();
+                setState(() {
+                  total = result.read(db.gymSets.name.count()) ?? 0;
+                });
               },
             ),
           ],
