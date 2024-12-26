@@ -132,6 +132,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
       ],
     );
+
     var weightField = TextFormField(
       controller: weight,
       decoration: InputDecoration(
@@ -159,6 +160,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         return null;
       },
     );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
