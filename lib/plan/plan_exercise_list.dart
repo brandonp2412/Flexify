@@ -1,15 +1,18 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlanExerciseList extends StatelessWidget {
+class PlanExerciseList extends StatefulWidget {
   final List<String> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
@@ -26,6 +29,38 @@ class PlanExerciseList extends StatelessWidget {
   });
 
   @override
+  State<PlanExerciseList> createState() => _PlanExerciseListState();
+}
+
+class _PlanExerciseListState extends State<PlanExerciseList> {
+  DateTime lastTap = DateTime(0);
+
+  void tap(int index) async {
+    widget.onSelect(index);
+
+    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+      return setState(() {
+        lastTap = DateTime.now();
+      });
+
+    final gymSet = await (db.gymSets.select()
+          ..where((tbl) => tbl.name.equals(widget.exercises[index]))
+          ..orderBy(
+            [
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+            ],
+          )
+          ..limit(1))
+        .getSingle();
+    if (!mounted) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final maxSets = context
         .select<SettingsState, int>((settings) => settings.value.maxSets);
@@ -39,7 +74,7 @@ class PlanExerciseList extends StatelessWidget {
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
-        itemCount: exercises.length,
+        itemCount: widget.exercises.length,
         padding: const EdgeInsets.only(bottom: 76),
         itemBuilder: (context, index) =>
             itemBuilder(context, index, maxSets, planTrailing, counts),
@@ -48,12 +83,12 @@ class PlanExerciseList extends StatelessWidget {
             newIndex--;
           }
 
-          final temp = exercises[oldIndex];
-          exercises.removeAt(oldIndex);
-          exercises.insert(newIndex, temp);
-          await db
-              .update(db.plans)
-              .replace(plan.copyWith(exercises: exercises.join(',')));
+          final temp = widget.exercises[oldIndex];
+          widget.exercises.removeAt(oldIndex);
+          widget.exercises.insert(newIndex, temp);
+          await db.update(db.plans).replace(
+                widget.plan.copyWith(exercises: widget.exercises.join(',')),
+              );
           if (!context.mounted) return;
           final planState = context.read<PlanState>();
           planState.updatePlans(null);
@@ -62,7 +97,7 @@ class PlanExerciseList extends StatelessWidget {
     else
       return ListView.builder(
         padding: const EdgeInsets.only(bottom: 76),
-        itemCount: exercises.length,
+        itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, maxSets, planTrailing, counts),
       );
@@ -75,7 +110,7 @@ class PlanExerciseList extends StatelessWidget {
     PlanTrailing planTrailing,
     List<GymCount> counts,
   ) {
-    final exercise = exercises[index];
+    final exercise = widget.exercises[index];
     final countIndex = counts.indexWhere((element) => element.name == exercise);
     var count = 0;
     int max = maxSets;
@@ -131,29 +166,29 @@ class PlanExerciseList extends StatelessWidget {
           context: context,
           builder: (context) {
             return ExerciseModal(
-              planId: plan.id,
+              planId: widget.plan.id,
               exercise: exercise,
               hasData: count > 0,
-              onSelect: () => onSelect(index),
-              onMax: onMax,
+              onSelect: () => widget.onSelect(index),
+              onMax: widget.onMax,
             );
           },
         );
       },
-      child: Column(
+      child: material.Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
-            onTap: () => onSelect(index),
+            onTap: () => tap(index),
             trailing: trailing,
             title: Row(
               children: [
                 Radio(
-                  value: index == selected,
+                  value: index == widget.selected,
                   groupValue: true,
                   onChanged: (value) {
-                    onSelect(index);
+                    widget.onSelect(index);
                   },
                 ),
                 Flexible(child: Text(exercise)),
