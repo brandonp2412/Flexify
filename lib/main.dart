@@ -9,6 +9,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,6 +89,35 @@ class App extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  void hideTab(BuildContext context, String tab) {
+    final settings = context.read<SettingsState>();
+    final oldTabs = settings.value.tabs;
+    var tabs = settings.value.tabs.split(',');
+
+    if (tabs.length == 1) return toast(context, "Can't hide everything!");
+
+    tabs.remove(tab);
+    db.settings.update().write(
+          SettingsCompanion(
+            tabs: Value(tabs.join(',')),
+          ),
+        );
+    toast(
+      context,
+      'Hid $tab',
+      SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          db.settings.update().write(
+                SettingsCompanion(
+                  tabs: Value(oldTabs),
+                ),
+              );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tabsSetting = context
@@ -120,29 +150,44 @@ class HomePage extends StatelessWidget {
           bottomNavigationBar: TabBar(
             tabs: tabs.map((tab) {
               if (tab == 'HistoryPage')
-                return const Tab(
-                  icon: Icon(Icons.history),
-                  text: "History",
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'HistoryPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.history),
+                    text: "History",
+                  ),
                 );
               else if (tab == 'PlansPage')
-                return const Tab(
-                  icon: Icon(Icons.calendar_today),
-                  text: "Plans",
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'PlansPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.calendar_today),
+                    text: "Plans",
+                  ),
                 );
               else if (tab == 'GraphsPage')
-                return const Tab(
-                  icon: Icon(Icons.insights),
-                  text: "Graphs",
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'GraphsPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.insights),
+                    text: "Graphs",
+                  ),
                 );
               else if (tab == 'TimerPage')
-                return const Tab(
-                  icon: Icon(Icons.timer_outlined),
-                  text: "Timer",
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'TimerPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.timer_outlined),
+                    text: "Timer",
+                  ),
                 );
               else if (tab == 'SettingsPage')
-                return const Tab(
-                  icon: Icon(Icons.settings),
-                  text: "Settings",
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'SettingsPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.settings),
+                    text: "Settings",
+                  ),
                 );
               else
                 return ErrorWidget("Couldn't build tab bottom bar.");
