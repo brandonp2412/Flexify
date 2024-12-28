@@ -1,6 +1,6 @@
 # Flexify
 
-Get fit with Flexify. Easily track your gym progression with offline records and seamless graphs.
+Get fit with Flexify. Easily track your gym progression.
 
 <p float="left">
     <a href="https://github.com/brandonp2412/Flexify/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
@@ -48,6 +48,7 @@ Gym sets and plans can be imported into Flexify.
 ## Donations
 
 If you would like to support this project:
+
 - Bitcoin `bc1qzlte8featxzf7xvtp3rjv7qqtwkgpup8hu85gp`
 - Monero (XMR) `85tmLfWKbpd8nxQnUY878DDuFjmfcoCFXPWR7XYKLHBSbDZV8wxgoKYUtHtq1kHWJg4m14sdBXhYuUSbxEDA29d19XuREL5`
 - [GitHub sponsor](https://github.com/sponsors/brandonp2412)
@@ -74,30 +75,32 @@ To get started with Flexify, follow these steps:
    ```bash
    flutter run
    ```
-   
+
 ## Migrations
 
 If you edit any of the models in the `lib/database` directory you probably need to create migrations. E.g. assume the version starts at `1`.
 
 1. Bump the `schemaVersion`
-`lib/database/database.dart`
+   `lib/database/database.dart`
+
 ```dart
   int get schemaVersion => 2;
 ```
 
 2. Run database migrations
+
 ```sh
 ./scripts/migrate.sh
 ```
 
 3. Add the migration step
-`lib/database/database.dart`
+   `lib/database/database.dart`
+
 ```dart
 from1To2: (Migrator m, Schema2 schema) async {
   await m.addColumn(schema.myTable, schema.myTable.myColumn);
 },
 ```
-
 
 ## Contributing
 
@@ -106,4 +109,3 @@ Contributions to Flexify are welcomed and encouraged! Whether you want to report
 ## License
 
 Flexify is licensed under the [MIT License](LICENSE.md).
-
