@@ -6,8 +6,8 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/plan_exercise_list.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
@@ -235,7 +235,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ),
               ),
               Expanded(
-                child: PlanExerciseList(
+                child: StartList(
                   exercises: planExercises,
                   selected: selectedIndex,
                   onSelect: select,

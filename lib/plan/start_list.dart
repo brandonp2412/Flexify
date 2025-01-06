@@ -12,14 +12,14 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlanExerciseList extends StatefulWidget {
+class StartList extends StatefulWidget {
   final List<String> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
   final Function() onMax;
   final Plan plan;
 
-  const PlanExerciseList({
+  const StartList({
     super.key,
     required this.exercises,
     required this.selected,
@@ -29,18 +29,25 @@ class PlanExerciseList extends StatefulWidget {
   });
 
   @override
-  State<PlanExerciseList> createState() => _PlanExerciseListState();
+  State<StartList> createState() => _StartListState();
 }
 
-class _PlanExerciseListState extends State<PlanExerciseList> {
-  DateTime lastTap = DateTime(0);
+typedef Tapped = ({
+  int index,
+  DateTime dateTime,
+});
+
+class _StartListState extends State<StartList> {
+  Tapped lastTap = (index: 0, dateTime: DateTime(0));
 
   void tap(int index) async {
     widget.onSelect(index);
 
-    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+    if (DateTime.now().difference(lastTap.dateTime) >=
+            const Duration(milliseconds: 300) ||
+        index != lastTap.index)
       return setState(() {
-        lastTap = DateTime.now();
+        lastTap = (index: index, dateTime: DateTime.now());
       });
 
     final gymSet = await (db.gymSets.select()
