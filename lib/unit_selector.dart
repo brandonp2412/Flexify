@@ -20,27 +20,27 @@ class UnitSelector extends StatelessWidget {
       items: const [
         DropdownMenuItem(
           value: 'km',
-          child: Text("Kilometers"),
+          child: Text("Kilometers (km)"),
         ),
         DropdownMenuItem(
           value: 'mi',
-          child: Text("Miles"),
+          child: Text("Miles (mi)"),
         ),
         DropdownMenuItem(
           value: 'm',
-          child: Text("Meters"),
+          child: Text("Meters (m)"),
         ),
         DropdownMenuItem(
           value: 'kcal',
-          child: Text("Kilocalories"),
+          child: Text("Kilocalories (kcal)"),
         ),
         DropdownMenuItem(
           value: 'kg',
-          child: Text("Kilograms"),
+          child: Text("Kilograms (kg)"),
         ),
         DropdownMenuItem(
           value: 'lb',
-          child: Text("Pounds"),
+          child: Text("Pounds (lb)"),
         ),
       ],
       onChanged: (value) {
