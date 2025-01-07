@@ -73,7 +73,7 @@ void main() async {
     await tester.pump();
     await tester.tap(find.bySemanticsLabel('Unit'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Pounds'));
+    await tester.tap(find.text('Pounds (lb)'));
     await tester.pumpAndSettle();
     await tester.tap(find.text("Update"));
     await tester.pumpAndSettle();
