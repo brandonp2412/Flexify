@@ -26,10 +26,11 @@ if [[ $* == *-m* ]]; then
   echo "Skipping MacOS..."
 else
   set +x
+  ip=$(arp | grep "$MACBOOK_MAC" | cut -d ' ' -f 1)
   rsync -a --exclude-from=.gitignore ./* .git .gitignore \
-    --exclude=flutter macos:~/flexify
+    --exclude=flutter "$ip":~/flexify
   # shellcheck disable=SC2029
-  ssh macos "
+  ssh "$ip" "
     security unlock-keychain -p '$(pass macbook)'
     cd flexify
     ./scripts/macos.sh
