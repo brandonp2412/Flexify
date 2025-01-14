@@ -19,7 +19,6 @@ import 'plan/plans_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await (db.settings.select()..limit(1)).getSingle();
   final setting = await (db.settings.select()..limit(1)).getSingle();
   final settings = SettingsState(setting);
 
