@@ -70,6 +70,11 @@ class FlexLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> gradientColors = [
+      Theme.of(context).colorScheme.primary,
+      Theme.of(context).colorScheme.surface,
+    ];
+
     return LineChart(
       LineChartData(
         titlesData: FlTitlesData(
@@ -112,8 +117,20 @@ class FlexLine extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
             barWidth: 3,
             isStrokeCapRound: true,
+            dotData: const FlDotData(
+              show: false,
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: gradientColors
+                    .map((color) => color.withValues(alpha: 0.3))
+                    .toList(),
+              ),
+            ),
           ),
         ],
+        gridData: const FlGridData(show: false),
       ),
     );
   }
