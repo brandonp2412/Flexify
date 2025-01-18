@@ -92,7 +92,6 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   LineTouchTooltipData tooltipData(
-    BuildContext context,
     List<dynamic> data,
     String unit,
     String format,
@@ -131,10 +130,8 @@ class GraphsPageState extends State<GraphsPage>
         padding: const EdgeInsets.only(right: 48.0, top: 16.0, left: 48.0),
         child: FlexLine(
           data: data,
-          context: context,
           spots: spots,
-          tooltipData: (context) => tooltipData(
-            context,
+          tooltipData: () => tooltipData(
             data,
             gymSet.unit.value,
             format,

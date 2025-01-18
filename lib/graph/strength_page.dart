@@ -219,10 +219,9 @@ class _StrengthPageState extends State<StrengthPage> {
                               const EdgeInsets.only(right: 32.0, top: 16.0),
                           child: FlexLine(
                             data: data,
-                            context: context,
                             spots: spots,
-                            tooltipData: (context) =>
-                                tooltipData(context, settings.shortDateFormat),
+                            tooltipData: () =>
+                                tooltipData(settings.shortDateFormat),
                             touchLine: touchLine,
                           ),
                         ),
@@ -305,7 +304,6 @@ class _StrengthPageState extends State<StrengthPage> {
   }
 
   LineTouchTooltipData tooltipData(
-    BuildContext context,
     String format,
   ) {
     return LineTouchTooltipData(

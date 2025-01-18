@@ -5,15 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FlexLine extends StatelessWidget {
-  final BuildContext context;
   final List<FlSpot> spots;
   final List<dynamic> data;
   final bool? hideBottom;
   final bool? hideLeft;
 
-  final LineTouchTooltipData Function(
-    BuildContext context,
-  ) tooltipData;
+  final LineTouchTooltipData Function() tooltipData;
 
   final void Function(
     FlTouchEvent event,
@@ -22,7 +19,6 @@ class FlexLine extends StatelessWidget {
 
   const FlexLine({
     super.key,
-    required this.context,
     required this.spots,
     required this.tooltipData,
     required this.data,
@@ -35,6 +31,7 @@ class FlexLine extends StatelessWidget {
     double value,
     TitleMeta meta,
     String format,
+    BuildContext context,
   ) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
@@ -98,6 +95,7 @@ class FlexLine extends StatelessWidget {
                 value,
                 meta,
                 settings.shortDateFormat,
+                context,
               ),
             ),
           ),
@@ -107,7 +105,7 @@ class FlexLine extends StatelessWidget {
           touchCallback: touchLine != null
               ? (event, touchResponse) => touchLine!(event, touchResponse)
               : null,
-          touchTooltipData: tooltipData(context),
+          touchTooltipData: tooltipData(),
         ),
         lineBarsData: [
           LineChartBarData(

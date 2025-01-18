@@ -43,8 +43,7 @@ class _CardioPageState extends State<CardioPage> {
   TabController? tabController;
   DateTime lastTap = DateTime(0);
 
-  LineTouchTooltipData tooltipData(BuildContext context, String format) =>
-      LineTouchTooltipData(
+  LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
         getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
         getTooltipItems: (touchedSpots) {
           final row = data.elementAt(touchedSpots.first.spotIndex);
@@ -296,10 +295,9 @@ class _CardioPageState extends State<CardioPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                       child: FlexLine(
-                        context: context,
                         spots: spots,
-                        tooltipData: (context) =>
-                            tooltipData(context, settings.shortDateFormat),
+                        tooltipData: () =>
+                            tooltipData(settings.shortDateFormat),
                         touchLine: touchLine,
                         data: data,
                       ),
