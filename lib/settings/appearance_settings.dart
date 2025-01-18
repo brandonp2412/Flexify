@@ -1,5 +1,8 @@
 import 'package:drift/drift.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/graph/cardio_data.dart';
+import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -87,6 +90,27 @@ List<Widget> getAppearanceSettings(String term, SettingsState settings) {
           ),
         ),
       ),
+    if ('peek graph'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Show the first line graph on graphs page',
+        child: ListTile(
+          title: const Text('Peek graph'),
+          leading: const Icon(Icons.visibility_outlined),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  peekGraph: Value(!settings.value.peekGraph),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.value.peekGraph,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    peekGraph: Value(value),
+                  ),
+                ),
+          ),
+        ),
+      ),
     if ('curve line graphs'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Use wavy curves in the graphs page',
@@ -108,24 +132,33 @@ List<Widget> getAppearanceSettings(String term, SettingsState settings) {
           ),
         ),
       ),
-    if ('peek graph'.contains(term.toLowerCase()))
-      Tooltip(
-        message: 'Show the first line graph on graphs page',
-        child: ListTile(
-          title: const Text('Peek graph'),
-          leading: const Icon(Icons.visibility_outlined),
-          onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  peekGraph: Value(!settings.value.peekGraph),
-                ),
+    if ('graph'.contains(term.toLowerCase()))
+      SizedBox(
+        height: 250,
+        child: Padding(
+          padding: const EdgeInsets.all(64),
+          child: FlexLine(
+            hideBottom: true,
+            hideLeft: true,
+            spots: const [FlSpot(0, 0.13), FlSpot(1, 5), FlSpot(2, 2)],
+            tooltipData: () => const LineTouchTooltipData(),
+            data: [
+              CardioData(
+                created: DateTime.parse('2024-05-19 14:54:17.000'),
+                value: 0.13,
+                unit: 'km',
               ),
-          trailing: Switch(
-            value: settings.value.peekGraph,
-            onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    peekGraph: Value(value),
-                  ),
-                ),
+              CardioData(
+                created: DateTime.parse('2024-05-19 14:54:17.000'),
+                value: 0.13,
+                unit: 'km',
+              ),
+              CardioData(
+                created: DateTime.parse('2024-05-19 14:54:17.000'),
+                value: 0.13,
+                unit: 'km',
+              ),
+            ],
           ),
         ),
       ),
