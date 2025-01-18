@@ -120,7 +120,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget getPeek(GymSetsCompanion gymSet, List<dynamic> data) {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.watch<SettingsState>().value;
     List<FlSpot> spots = [];
     for (var index = 0; index < data.length; index++) {
       spots.add(FlSpot(index.toDouble(), data[index].value));
