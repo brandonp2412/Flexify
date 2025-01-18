@@ -157,12 +157,7 @@ class _CardioPageState extends State<CardioPage> {
               spots.add(FlSpot(index.toDouble(), value));
             }
 
-            final curveLines = context.select<SettingsState, bool>(
-              (settings) => settings.value.curveLines,
-            );
-            final format = context.select<SettingsState, String>(
-              (settings) => settings.value.shortDateFormat,
-            );
+            final settings = context.watch<SettingsState>().value;
 
             return ListView(
               children: [
@@ -301,11 +296,10 @@ class _CardioPageState extends State<CardioPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                       child: FlexLine(
-                        format: format,
                         context: context,
                         spots: spots,
-                        curveLines: curveLines,
-                        tooltipData: tooltipData,
+                        tooltipData: (context) =>
+                            tooltipData(context, settings.shortDateFormat),
                         touchLine: touchLine,
                         data: data,
                       ),

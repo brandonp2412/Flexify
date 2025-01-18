@@ -1,19 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FlexLine extends StatelessWidget {
-  final String format;
   final BuildContext context;
   final List<FlSpot> spots;
-  final bool curveLines;
   final List<dynamic> data;
   final bool? hideBottom;
   final bool? hideLeft;
 
   final LineTouchTooltipData Function(
     BuildContext context,
-    String format,
   ) tooltipData;
 
   final void Function(
@@ -23,10 +22,8 @@ class FlexLine extends StatelessWidget {
 
   const FlexLine({
     super.key,
-    required this.format,
     required this.context,
     required this.spots,
-    required this.curveLines,
     required this.tooltipData,
     required this.data,
     this.touchLine,
@@ -75,6 +72,8 @@ class FlexLine extends StatelessWidget {
       Theme.of(context).colorScheme.surface,
     ];
 
+    final settings = context.watch<SettingsState>().value;
+
     return LineChart(
       LineChartData(
         titlesData: FlTitlesData(
@@ -98,7 +97,7 @@ class FlexLine extends StatelessWidget {
               getTitlesWidget: (value, meta) => bottomTitleWidgets(
                 value,
                 meta,
-                format,
+                settings.shortDateFormat,
               ),
             ),
           ),
@@ -108,12 +107,12 @@ class FlexLine extends StatelessWidget {
           touchCallback: touchLine != null
               ? (event, touchResponse) => touchLine!(event, touchResponse)
               : null,
-          touchTooltipData: tooltipData(context, format),
+          touchTooltipData: tooltipData(context),
         ),
         lineBarsData: [
           LineChartBarData(
             spots: spots,
-            isCurved: curveLines,
+            isCurved: settings.curveLines,
             color: Theme.of(context).colorScheme.primary,
             barWidth: 3,
             isStrokeCapRound: true,

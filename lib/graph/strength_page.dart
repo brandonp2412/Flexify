@@ -45,6 +45,8 @@ class _StrengthPageState extends State<StrengthPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>().value;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
@@ -80,54 +82,42 @@ class _StrengthPageState extends State<StrengthPage> {
               spots.add(FlSpot(index.toDouble(), data[index].value));
             }
 
-            final format = context.select<SettingsState, String>(
-              (settings) => settings.value.shortDateFormat,
-            );
-
-            final curveLines = context.select<SettingsState, bool>(
-              (settings) => settings.value.curveLines,
-            );
-
             return ListView(
               children: [
-                Selector<SettingsState, bool>(
-                  selector: (context, settings) =>
-                      settings.value.showBodyWeight,
-                  builder: (context, showBodyWeight, child) => Visibility(
-                    visible: widget.name != 'Weight',
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: 'Metric'),
-                      value: metric,
-                      items: [
+                Visibility(
+                  visible: widget.name != 'Weight',
+                  child: DropdownButtonFormField(
+                    decoration: const InputDecoration(labelText: 'Metric'),
+                    value: metric,
+                    items: [
+                      const DropdownMenuItem(
+                        value: StrengthMetric.bestWeight,
+                        child: Text("Best weight"),
+                      ),
+                      const DropdownMenuItem(
+                        value: StrengthMetric.bestReps,
+                        child: Text("Best reps"),
+                      ),
+                      const DropdownMenuItem(
+                        value: StrengthMetric.oneRepMax,
+                        child: Text("One rep max"),
+                      ),
+                      const DropdownMenuItem(
+                        value: StrengthMetric.volume,
+                        child: Text("Volume"),
+                      ),
+                      if (settings.showBodyWeight)
                         const DropdownMenuItem(
-                          value: StrengthMetric.bestWeight,
-                          child: Text("Best weight"),
+                          value: StrengthMetric.relativeStrength,
+                          child: Text("Relative strength"),
                         ),
-                        const DropdownMenuItem(
-                          value: StrengthMetric.bestReps,
-                          child: Text("Best reps"),
-                        ),
-                        const DropdownMenuItem(
-                          value: StrengthMetric.oneRepMax,
-                          child: Text("One rep max"),
-                        ),
-                        const DropdownMenuItem(
-                          value: StrengthMetric.volume,
-                          child: Text("Volume"),
-                        ),
-                        if (showBodyWeight)
-                          const DropdownMenuItem(
-                            value: StrengthMetric.relativeStrength,
-                            child: Text("Relative strength"),
-                          ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          metric = value!;
-                        });
-                        setData();
-                      },
-                    ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        metric = value!;
+                      });
+                      setData();
+                    },
                   ),
                 ),
                 DropdownButtonFormField(
@@ -158,20 +148,17 @@ class _StrengthPageState extends State<StrengthPage> {
                     setData();
                   },
                 ),
-                Selector<SettingsState, bool>(
-                  builder: (context, showUnits, child) => Visibility(
-                    visible: showUnits,
-                    child: UnitSelector(
-                      value: targetUnit,
-                      onChanged: (value) {
-                        setState(() {
-                          targetUnit = value!;
-                        });
-                        setData();
-                      },
-                    ),
+                Visibility(
+                  visible: settings.showUnits,
+                  child: UnitSelector(
+                    value: targetUnit,
+                    onChanged: (value) {
+                      setState(() {
+                        targetUnit = value!;
+                      });
+                      setData();
+                    },
                   ),
-                  selector: (context, settings) => settings.value.showUnits,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -180,17 +167,12 @@ class _StrengthPageState extends State<StrengthPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text('Start date'),
-                          subtitle: Selector<SettingsState, String>(
-                            selector: (p0, settings) =>
-                                settings.value.shortDateFormat,
-                            builder: (context, value, child) {
-                              if (startDate == null) return Text(value);
-
-                              return Text(
-                                DateFormat(value).format(startDate!),
-                              );
-                            },
-                          ),
+                          subtitle: startDate == null
+                              ? Text(settings.shortDateFormat)
+                              : Text(
+                                  DateFormat(settings.shortDateFormat)
+                                      .format(startDate!),
+                                ),
                           onLongPress: () {
                             setState(() {
                               startDate = null;
@@ -238,10 +220,9 @@ class _StrengthPageState extends State<StrengthPage> {
                           child: FlexLine(
                             data: data,
                             context: context,
-                            curveLines: curveLines,
-                            format: format,
                             spots: spots,
-                            tooltipData: tooltipData,
+                            tooltipData: (context) =>
+                                tooltipData(context, settings.shortDateFormat),
                             touchLine: touchLine,
                           ),
                         ),

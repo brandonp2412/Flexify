@@ -93,9 +93,9 @@ class GraphsPageState extends State<GraphsPage>
 
   LineTouchTooltipData tooltipData(
     BuildContext context,
-    String format,
     List<dynamic> data,
     String unit,
+    String format,
   ) {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
@@ -119,8 +119,7 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  Widget getPeek(GymSetsCompanion gymSet, List<dynamic> data) {
-    final settings = context.watch<SettingsState>().value;
+  Widget getPeek(GymSetsCompanion gymSet, List<dynamic> data, String format) {
     List<FlSpot> spots = [];
     for (var index = 0; index < data.length; index++) {
       spots.add(FlSpot(index.toDouble(), data[index].value));
@@ -133,11 +132,13 @@ class GraphsPageState extends State<GraphsPage>
         child: FlexLine(
           data: data,
           context: context,
-          curveLines: settings.curveLines,
-          format: settings.shortDateFormat,
           spots: spots,
-          tooltipData: (context, format) =>
-              tooltipData(context, format, data, gymSet.unit.value),
+          tooltipData: (context) => tooltipData(
+            context,
+            data,
+            gymSet.unit.value,
+            format,
+          ),
           hideBottom: true,
           hideLeft: true,
         ),
@@ -208,14 +209,21 @@ class GraphsPageState extends State<GraphsPage>
                     "Complete plans for your progress graphs to appear here.",
                   ),
                 ),
-              Selector<SettingsState, bool>(
-                selector: (context, settings) => settings.value.peekGraph,
-                builder: (BuildContext context, bool peekGraph, Widget? child) {
-                  if (!peekGraph) return const SizedBox();
+              Consumer<SettingsState>(
+                builder: (
+                  BuildContext context,
+                  SettingsState settings,
+                  Widget? child,
+                ) {
+                  if (!settings.value.peekGraph) return const SizedBox();
 
                   return FutureBuilder(
                     builder: (context, snapshot) => snapshot.data != null
-                        ? getPeek(gymSets.first, snapshot.data!)
+                        ? getPeek(
+                            gymSets.first,
+                            snapshot.data!,
+                            settings.value.shortDateFormat,
+                          )
                         : const SizedBox(),
                     future: gymSets.first.cardio.value
                         ? getCardioData(name: gymSets.first.name.value)
