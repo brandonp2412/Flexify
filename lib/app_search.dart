@@ -41,7 +41,7 @@ class _AppSearchState extends State<AppSearch> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16),
       child: SearchBar(
         hintText: "Search...",
         controller: searchController,
