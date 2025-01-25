@@ -161,7 +161,7 @@ List<Widget> getAppearanceSettings(
       ),
     if ('graph'.contains(term.toLowerCase()))
       SizedBox(
-        height: 250,
+        height: MediaQuery.of(context).size.height * 0.3,
         child: Padding(
           padding: const EdgeInsets.all(64),
           child: FlexLine(
