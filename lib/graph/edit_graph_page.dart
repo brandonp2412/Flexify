@@ -92,21 +92,27 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   ),
                 ],
               ),
-              DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: 'Category'),
-                value: category,
-                items: categories
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    category = value!;
-                  });
+              Selector<SettingsState, bool>(
+                selector: (p0, settings) => settings.value.showCategories,
+                builder: (context, showCategories, child) {
+                  if (!showCategories) return const SizedBox();
+                  return DropdownButtonFormField(
+                    decoration: const InputDecoration(labelText: 'Category'),
+                    value: category,
+                    items: categories
+                        .map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        category = value!;
+                      });
+                    },
+                  );
                 },
               ),
               DropdownButtonFormField(

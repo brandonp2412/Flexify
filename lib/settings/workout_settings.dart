@@ -48,7 +48,7 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show weight'.contains(term.toLowerCase()))
+    if ('show body weight'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Enable/disable tracking body weight',
         child: ListTile(
@@ -64,6 +64,25 @@ List<Widget> getWorkoutSettings(
             onChanged: (value) => db.settings
                 .update()
                 .write(SettingsCompanion(showBodyWeight: Value(value))),
+          ),
+        ),
+      ),
+    if ('show categories'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Enable/disable workout categories',
+        child: ListTile(
+          title: const Text('Show categories'),
+          leading: const Icon(Icons.category),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  showCategories: Value(!settings.showCategories),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.showCategories,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(showCategories: Value(value))),
           ),
         ),
       ),

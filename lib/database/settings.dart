@@ -24,6 +24,8 @@ class Settings extends Table {
   TextColumn get shortDateFormat => text()();
   BoolColumn get showBodyWeight =>
       boolean().withDefault(const Constant(true))();
+  BoolColumn get showCategories =>
+      boolean().withDefault(const Constant(true))();
   BoolColumn get showImages => boolean().withDefault(const Constant(true))();
   BoolColumn get showUnits => boolean()();
   TextColumn get strengthUnit => text()();

@@ -60,6 +60,7 @@ final defaultSettings = SettingsCompanion.insert(
   showBodyWeight: const Value(true),
   strengthUnit: 'kg',
   systemColors: false,
+  showCategories: const Value(true),
 );
 
 const positiveReinforcement = [

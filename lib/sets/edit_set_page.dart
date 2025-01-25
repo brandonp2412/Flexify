@@ -246,21 +246,28 @@ class _EditSetPageState extends State<EditSetPage> {
                 ),
                 selector: (context, settings) => settings.value.showUnits,
               ),
-              DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: 'Category'),
-                value: category,
-                items: categories
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    category = value!;
-                  });
+              Selector<SettingsState, bool>(
+                selector: (p0, settings) => settings.value.showCategories,
+                builder: (context, showCategories, child) {
+                  if (showCategories)
+                    return DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: 'Category'),
+                      value: category,
+                      items: categories
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(category),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          category = value!;
+                        });
+                      },
+                    );
+                  return const SizedBox();
                 },
               ),
               Selector<SettingsState, String>(
