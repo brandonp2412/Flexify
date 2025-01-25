@@ -301,6 +301,49 @@ Expression<String> getCreated(Period groupBy) {
   }
 }
 
+Future<bool> isBest(GymSet gymSet) async {
+  if (gymSet.cardio) {
+    final best = await (db.gymSets.select()
+          ..addColumns([db.gymSets.distance.sum() / db.gymSets.duration.sum()])
+          ..orderBy([
+            (u) => OrderingTerm(
+                  expression:
+                      db.gymSets.distance.sum() / db.gymSets.duration.sum(),
+                  mode: OrderingMode.desc,
+                ),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+    if (best == null) return false;
+    return gymSet.distance / gymSet.duration > best.distance / best.duration;
+  } else {
+    final result = await (db.gymSets.selectOnly()
+          ..addColumns(
+            [db.gymSets.weight, db.gymSets.reps],
+          )
+          ..where(db.gymSets.id.isNotValue(gymSet.id))
+          ..orderBy([
+            OrderingTerm(
+              expression: db.gymSets.weight,
+              mode: OrderingMode.desc,
+            ),
+            OrderingTerm(
+              expression: db.gymSets.reps,
+              mode: OrderingMode.desc,
+            ),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+    if (result == null) return false;
+    final weight = result.read(db.gymSets.weight)!;
+    final reps = result.read(db.gymSets.reps)!;
+
+    if (gymSet.weight > weight) return true;
+    if (gymSet.weight == weight && gymSet.reps > reps) return true;
+    return false;
+  }
+}
+
 class GymSets extends Table {
   RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();

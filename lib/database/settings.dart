@@ -34,4 +34,5 @@ class Settings extends Table {
   BoolColumn get vibrate => boolean()();
   IntColumn get warmupSets => integer().nullable()();
   RealColumn get curveSmoothness => real().nullable()();
+  BoolColumn get notifications => boolean().withDefault(const Constant(true))();
 }

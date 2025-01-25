@@ -1258,6 +1258,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   late final GeneratedColumn<double> curveSmoothness = GeneratedColumn<double>(
       'curve_smoothness', aliasedName, true,
       type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _notificationsMeta =
+      const VerificationMeta('notifications');
+  @override
+  late final GeneratedColumn<bool> notifications = GeneratedColumn<bool>(
+      'notifications', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("notifications" IN (0, 1))'),
+      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1287,7 +1297,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         timerDuration,
         vibrate,
         warmupSets,
-        curveSmoothness
+        curveSmoothness,
+        notifications
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1484,6 +1495,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           curveSmoothness.isAcceptableOrUnknown(
               data['curve_smoothness']!, _curveSmoothnessMeta));
     }
+    if (data.containsKey('notifications')) {
+      context.handle(
+          _notificationsMeta,
+          notifications.isAcceptableOrUnknown(
+              data['notifications']!, _notificationsMeta));
+    }
     return context;
   }
 
@@ -1549,6 +1566,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
       curveSmoothness: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}curve_smoothness']),
+      notifications: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}notifications'])!,
     );
   }
 
@@ -1587,6 +1606,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool vibrate;
   final int? warmupSets;
   final double? curveSmoothness;
+  final bool notifications;
   const Setting(
       {required this.alarmSound,
       required this.automaticBackups,
@@ -1615,7 +1635,8 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.timerDuration,
       required this.vibrate,
       this.warmupSets,
-      this.curveSmoothness});
+      this.curveSmoothness,
+      required this.notifications});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1653,6 +1674,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     if (!nullToAbsent || curveSmoothness != null) {
       map['curve_smoothness'] = Variable<double>(curveSmoothness);
     }
+    map['notifications'] = Variable<bool>(notifications);
     return map;
   }
 
@@ -1692,6 +1714,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       curveSmoothness: curveSmoothness == null && nullToAbsent
           ? const Value.absent()
           : Value(curveSmoothness),
+      notifications: Value(notifications),
     );
   }
 
@@ -1728,6 +1751,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       vibrate: serializer.fromJson<bool>(json['vibrate']),
       warmupSets: serializer.fromJson<int?>(json['warmupSets']),
       curveSmoothness: serializer.fromJson<double?>(json['curveSmoothness']),
+      notifications: serializer.fromJson<bool>(json['notifications']),
     );
   }
   @override
@@ -1762,6 +1786,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'vibrate': serializer.toJson<bool>(vibrate),
       'warmupSets': serializer.toJson<int?>(warmupSets),
       'curveSmoothness': serializer.toJson<double?>(curveSmoothness),
+      'notifications': serializer.toJson<bool>(notifications),
     };
   }
 
@@ -1793,7 +1818,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           int? timerDuration,
           bool? vibrate,
           Value<int?> warmupSets = const Value.absent(),
-          Value<double?> curveSmoothness = const Value.absent()}) =>
+          Value<double?> curveSmoothness = const Value.absent(),
+          bool? notifications}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -1825,6 +1851,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         curveSmoothness: curveSmoothness.present
             ? curveSmoothness.value
             : this.curveSmoothness,
+        notifications: notifications ?? this.notifications,
       );
   Setting copyWithCompanion(SettingsCompanion data) {
     return Setting(
@@ -1890,6 +1917,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       curveSmoothness: data.curveSmoothness.present
           ? data.curveSmoothness.value
           : this.curveSmoothness,
+      notifications: data.notifications.present
+          ? data.notifications.value
+          : this.notifications,
     );
   }
 
@@ -1923,7 +1953,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
           ..write('warmupSets: $warmupSets, ')
-          ..write('curveSmoothness: $curveSmoothness')
+          ..write('curveSmoothness: $curveSmoothness, ')
+          ..write('notifications: $notifications')
           ..write(')'))
         .toString();
   }
@@ -1957,7 +1988,8 @@ class Setting extends DataClass implements Insertable<Setting> {
         timerDuration,
         vibrate,
         warmupSets,
-        curveSmoothness
+        curveSmoothness,
+        notifications
       ]);
   @override
   bool operator ==(Object other) =>
@@ -1990,7 +2022,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.timerDuration == this.timerDuration &&
           other.vibrate == this.vibrate &&
           other.warmupSets == this.warmupSets &&
-          other.curveSmoothness == this.curveSmoothness);
+          other.curveSmoothness == this.curveSmoothness &&
+          other.notifications == this.notifications);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -2022,6 +2055,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> vibrate;
   final Value<int?> warmupSets;
   final Value<double?> curveSmoothness;
+  final Value<bool> notifications;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.automaticBackups = const Value.absent(),
@@ -2051,6 +2085,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.vibrate = const Value.absent(),
     this.warmupSets = const Value.absent(),
     this.curveSmoothness = const Value.absent(),
+    this.notifications = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
@@ -2081,6 +2116,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required bool vibrate,
     this.warmupSets = const Value.absent(),
     this.curveSmoothness = const Value.absent(),
+    this.notifications = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -2126,6 +2162,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? vibrate,
     Expression<int>? warmupSets,
     Expression<double>? curveSmoothness,
+    Expression<bool>? notifications,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -2157,6 +2194,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (vibrate != null) 'vibrate': vibrate,
       if (warmupSets != null) 'warmup_sets': warmupSets,
       if (curveSmoothness != null) 'curve_smoothness': curveSmoothness,
+      if (notifications != null) 'notifications': notifications,
     });
   }
 
@@ -2188,7 +2226,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<int>? timerDuration,
       Value<bool>? vibrate,
       Value<int?>? warmupSets,
-      Value<double?>? curveSmoothness}) {
+      Value<double?>? curveSmoothness,
+      Value<bool>? notifications}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2218,6 +2257,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       vibrate: vibrate ?? this.vibrate,
       warmupSets: warmupSets ?? this.warmupSets,
       curveSmoothness: curveSmoothness ?? this.curveSmoothness,
+      notifications: notifications ?? this.notifications,
     );
   }
 
@@ -2308,6 +2348,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (curveSmoothness.present) {
       map['curve_smoothness'] = Variable<double>(curveSmoothness.value);
     }
+    if (notifications.present) {
+      map['notifications'] = Variable<bool>(notifications.value);
+    }
     return map;
   }
 
@@ -2341,7 +2384,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
           ..write('warmupSets: $warmupSets, ')
-          ..write('curveSmoothness: $curveSmoothness')
+          ..write('curveSmoothness: $curveSmoothness, ')
+          ..write('notifications: $notifications')
           ..write(')'))
         .toString();
   }
@@ -3220,6 +3264,7 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   required bool vibrate,
   Value<int?> warmupSets,
   Value<double?> curveSmoothness,
+  Value<bool> notifications,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
@@ -3250,6 +3295,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> vibrate,
   Value<int?> warmupSets,
   Value<double?> curveSmoothness,
+  Value<bool> notifications,
 });
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -3297,6 +3343,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> vibrate = const Value.absent(),
             Value<int?> warmupSets = const Value.absent(),
             Value<double?> curveSmoothness = const Value.absent(),
+            Value<bool> notifications = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
@@ -3327,6 +3374,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             vibrate: vibrate,
             warmupSets: warmupSets,
             curveSmoothness: curveSmoothness,
+            notifications: notifications,
           ),
           createCompanionCallback: ({
             required String alarmSound,
@@ -3357,6 +3405,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             required bool vibrate,
             Value<int?> warmupSets = const Value.absent(),
             Value<double?> curveSmoothness = const Value.absent(),
+            Value<bool> notifications = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
@@ -3387,6 +3436,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             vibrate: vibrate,
             warmupSets: warmupSets,
             curveSmoothness: curveSmoothness,
+            notifications: notifications,
           ),
         ));
 }
@@ -3533,6 +3583,11 @@ class $$SettingsTableFilterComposer
       column: $state.table.curveSmoothness,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get notifications => $state.composableBuilder(
+      column: $state.table.notifications,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$SettingsTableOrderingComposer
@@ -3675,6 +3730,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<double> get curveSmoothness => $state.composableBuilder(
       column: $state.table.curveSmoothness,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get notifications => $state.composableBuilder(
+      column: $state.table.notifications,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }

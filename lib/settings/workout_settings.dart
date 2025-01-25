@@ -67,6 +67,25 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
+    if ('notifications'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Write nice messages when a new record is hit',
+        child: ListTile(
+          title: const Text('Notifications'),
+          leading: const Icon(Icons.notifications),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  notifications: Value(!settings.notifications),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.notifications,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(notifications: Value(value))),
+          ),
+        ),
+      ),
     if ('rep estimation'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Try to predict the # of reps you just did',

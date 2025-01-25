@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -464,6 +466,17 @@ class _EditSetPageState extends State<EditSetPage> {
       category: Value(category),
     );
 
+    final settings = context.read<SettingsState>().value;
+    if (settings.notifications) {
+      final best = await isBest(gymSet);
+      if (best) {
+        final random = Random();
+        final randomMessage =
+            positiveReinforcement[random.nextInt(positiveReinforcement.length)];
+        if (mounted) toast(context, randomMessage);
+      }
+    }
+
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
       if (image != null)
@@ -474,9 +487,8 @@ class _EditSetPageState extends State<EditSetPage> {
 
     var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
     db.into(db.gymSets).insert(insert);
-    final settings = context.read<SettingsState>().value;
-    if (!settings.restTimers) return;
 
+    if (!settings.restTimers) return;
     final timer = context.read<TimerState>();
     if (restMs != null)
       timer.startTimer(

@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -453,6 +455,15 @@ class _StartPlanPageState extends State<StartPlanPage>
       lastSaved = DateTime.now();
     });
     if (finishedExercise) await select(selectedIndex + 1);
+
+    if (!settings.notifications) return;
+
+    final best = await isBest(gymSet);
+    if (!best) return;
+    final random = Random();
+    final randomMessage =
+        positiveReinforcement[random.nextInt(positiveReinforcement.length)];
+    if (mounted) toast(context, randomMessage);
   }
 
   Future<void> select(int index) async {
