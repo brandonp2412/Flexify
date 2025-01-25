@@ -249,7 +249,7 @@ class _StrengthPageState extends State<StrengthPage> {
               .get();
           if (!context.mounted) return;
 
-          Navigator.of(context).push(
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => GraphHistoryPage(
                 name: widget.name,
@@ -257,6 +257,7 @@ class _StrengthPageState extends State<StrengthPage> {
               ),
             ),
           );
+          Timer(kThemeAnimationDuration, setData);
         },
         icon: const Icon(Icons.history),
         label: const Text('History'),
