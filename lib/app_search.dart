@@ -84,14 +84,16 @@ class _AppSearchState extends State<AppSearch> {
                             'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
                       ),
                       actions: <Widget>[
-                        TextButton(
-                          child: const Text('Cancel'),
+                        TextButton.icon(
+                          label: const Text('Cancel'),
+                          icon: const Icon(Icons.cancel),
                           onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
-                        TextButton(
-                          child: const Text('Delete'),
+                        TextButton.icon(
+                          label: const Text('Delete'),
+                          icon: const Icon(Icons.delete),
                           onPressed: () async {
                             Navigator.pop(context);
                             widget.onDelete();

@@ -34,14 +34,16 @@ class DeleteRecordsButton extends StatelessWidget {
                             'Are you sure you want to delete all graphs? This action is not reversible.',
                           ),
                           actions: <Widget>[
-                            TextButton(
-                              child: const Text('Cancel'),
+                            TextButton.icon(
+                              label: const Text('Cancel'),
+                              icon: const Icon(Icons.cancel),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
                             ),
-                            TextButton(
-                              child: const Text('Delete'),
+                            TextButton.icon(
+                              label: const Text('Delete'),
+                              icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 Navigator.pop(context);
                                 await db.delete(db.gymSets).go();
@@ -69,14 +71,16 @@ class DeleteRecordsButton extends StatelessWidget {
                             'Are you sure you want to delete all plans? This action is not reversible.',
                           ),
                           actions: <Widget>[
-                            TextButton(
-                              child: const Text('Cancel'),
+                            TextButton.icon(
+                              label: const Text('Cancel'),
+                              icon: const Icon(Icons.cancel),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
                             ),
-                            TextButton(
-                              child: const Text('Delete'),
+                            TextButton.icon(
+                              label: const Text('Delete'),
+                              icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 final planState = pageContext.read<PlanState>();
                                 Navigator.pop(context);

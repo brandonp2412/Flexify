@@ -320,14 +320,16 @@ class _EditGraphPageState extends State<EditGraphPage> {
               'Your new name exists already for $count records. Are you sure?',
             ),
             actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
+              TextButton.icon(
+                label: const Text('Cancel'),
+                icon: const Icon(Icons.cancel),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
-              TextButton(
-                child: const Text('Confirm'),
+              TextButton.icon(
+                label: const Text('Confirm'),
+                icon: const Icon(Icons.check),
                 onPressed: () async {
                   Navigator.pop(context);
                   await doUpdate();
@@ -347,14 +349,16 @@ class _EditGraphPageState extends State<EditGraphPage> {
               'Not all of your records are the same unit. Are you sure?',
             ),
             actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
+              TextButton.icon(
+                label: const Text('Cancel'),
+                icon: const Icon(Icons.cancel),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
-              TextButton(
-                child: const Text('Confirm'),
+              TextButton.icon(
+                label: const Text('Confirm'),
+                icon: const Icon(Icons.check),
                 onPressed: () async {
                   Navigator.pop(context);
                   await doUpdate();
