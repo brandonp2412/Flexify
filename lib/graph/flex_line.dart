@@ -114,6 +114,7 @@ class FlexLine extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
             barWidth: 3,
             isStrokeCapRound: true,
+            curveSmoothness: settings.curveSmoothness ?? 0.35,
             dotData: const FlDotData(
               show: false,
             ),

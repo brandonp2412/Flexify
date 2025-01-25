@@ -357,10 +357,13 @@ class AppDatabase extends _$AppDatabase {
         from32To33: (Migrator m, Schema33 schema) async {
           await m.addColumn(schema.settings, schema.settings.peekGraph);
         },
+        from33To34: (Migrator m, Schema34 schema) async {
+          await m.addColumn(schema.settings, schema.settings.curveSmoothness);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 33;
+  int get schemaVersion => 34;
 }

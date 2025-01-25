@@ -37,7 +37,8 @@ class _SettingsPageState extends State<SettingsPage> {
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
     if (searchController.text.isNotEmpty) {
-      filtered.addAll(getAppearanceSettings(searchController.text, settings));
+      filtered.addAll(
+          getAppearanceSettings(context, searchController.text, settings));
       filtered.addAll(getFormatSettings(searchController.text, settings.value));
       filtered.addAll(
         getWorkoutSettings(

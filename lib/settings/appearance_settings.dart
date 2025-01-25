@@ -5,10 +5,15 @@ import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-List<Widget> getAppearanceSettings(String term, SettingsState settings) {
+List<Widget> getAppearanceSettings(
+  BuildContext context,
+  String term,
+  SettingsState settings,
+) {
   return [
     if ('theme'.contains(term.toLowerCase()))
       Padding(
@@ -132,6 +137,28 @@ List<Widget> getAppearanceSettings(String term, SettingsState settings) {
           ),
         ),
       ),
+    if ('curve smoothness'.contains(term.toLowerCase()))
+      material.Column(
+        children: [
+          Slider(
+            value: settings.value.curveSmoothness ?? 0.35,
+            onChanged: (value) {
+              db.settings.update().write(
+                    SettingsCompanion(
+                      curveSmoothness: Value(value),
+                    ),
+                  );
+            },
+          ),
+          material.Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              "Curve smoothness",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        ],
+      ),
     if ('graph'.contains(term.toLowerCase()))
       SizedBox(
         height: 250,
@@ -179,7 +206,7 @@ class AppearanceSettings extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          children: getAppearanceSettings('', settings),
+          children: getAppearanceSettings(context, '', settings),
         ),
       ),
     );
