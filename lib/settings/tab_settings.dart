@@ -158,6 +158,7 @@ class _TabSettingsState extends State<TabSettings> {
                   ),
                 ),
               ));
+          if (context.mounted) Navigator.of(context).pop();
         },
         icon: const Icon(Icons.save),
         label: const Text("Save"),
