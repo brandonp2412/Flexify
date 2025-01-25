@@ -125,7 +125,7 @@ class GraphsPageState extends State<GraphsPage>
     }
 
     return material.SizedBox(
-      height: 200,
+      height: MediaQuery.of(context).size.height * 0.15,
       child: material.Padding(
         padding: const EdgeInsets.only(right: 48.0, top: 16.0, left: 48.0),
         child: FlexLine(
