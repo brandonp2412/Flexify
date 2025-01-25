@@ -359,10 +359,9 @@ class AppDatabase extends _$AppDatabase {
         },
         from33To34: (Migrator m, Schema34 schema) async {
           await m.addColumn(schema.settings, schema.settings.curveSmoothness);
-        },
-        from34To35: (Migrator m, Schema35 schema) async {
           await m.addColumn(schema.settings, schema.settings.notifications);
         },
+        from34To35: (Migrator m, Schema35 schema) async {},
         from35To36: (Migrator m, Schema36 schema) async {
           await m.addColumn(schema.settings, schema.settings.showCategories);
         },
