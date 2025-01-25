@@ -7,6 +7,7 @@ class Settings extends Table {
   TextColumn get backupPath => text().nullable()();
   TextColumn get cardioUnit => text()();
   BoolColumn get curveLines => boolean()();
+  RealColumn get curveSmoothness => real().nullable()();
   BoolColumn get durationEstimation =>
       boolean().withDefault(const Constant(true))();
   BoolColumn get enableSound => boolean().withDefault(const Constant(true))();
@@ -15,6 +16,7 @@ class Settings extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get longDateFormat => text()();
   IntColumn get maxSets => integer()();
+  BoolColumn get notifications => boolean().withDefault(const Constant(true))();
   BoolColumn get peekGraph => boolean().withDefault(const Constant(false))();
   TextColumn get planTrailing => text()();
   BoolColumn get repEstimation => boolean().withDefault(const Constant(true))();
@@ -33,6 +35,4 @@ class Settings extends Table {
   IntColumn get timerDuration => integer()();
   BoolColumn get vibrate => boolean()();
   IntColumn get warmupSets => integer().nullable()();
-  RealColumn get curveSmoothness => real().nullable()();
-  BoolColumn get notifications => boolean().withDefault(const Constant(true))();
 }
