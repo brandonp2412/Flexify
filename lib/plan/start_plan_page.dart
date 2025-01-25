@@ -444,7 +444,6 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     final finishedExercise = count == (max ?? settings.maxSets) &&
         selectedIndex < planExercises.length - 1;
-    if (finishedExercise) select(selectedIndex + 1);
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await planState.updateGymCounts(widget.plan.id);
@@ -453,6 +452,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       _updateGymSetTextFields(gymSet);
       lastSaved = DateTime.now();
     });
+    if (finishedExercise) await select(selectedIndex + 1);
   }
 
   Future<void> select(int index) async {
