@@ -300,6 +300,13 @@ class Settings extends Table with TableInfo {
   late final GeneratedColumn<double> curveSmoothness = GeneratedColumn<double>(
       'curve_smoothness', aliasedName, true,
       type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<bool> notifications = GeneratedColumn<bool>(
+      'notifications', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("notifications" IN (0, 1))'),
+      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -329,7 +336,8 @@ class Settings extends Table with TableInfo {
         timerDuration,
         vibrate,
         warmupSets,
-        curveSmoothness
+        curveSmoothness,
+        notifications
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
