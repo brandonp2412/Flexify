@@ -199,12 +199,21 @@ class GraphsPageState extends State<GraphsPage>
                 ),
                 confirmText: "This will delete $total records. Are you sure?",
               ),
-              if (snapshot.data?.isEmpty == true)
-                const ListTile(
-                  title: Text("No data yet."),
+              if (gymSets.isEmpty)
+                ListTile(
+                  title: const Text("No graphs found."),
                   subtitle: Text(
-                    "Complete plans for your progress graphs to appear here.",
+                    "Create an exercise called $search?",
                   ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddExercisePage(
+                          name: search,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               Consumer<SettingsState>(
                 builder: (
@@ -213,6 +222,7 @@ class GraphsPageState extends State<GraphsPage>
                   Widget? child,
                 ) {
                   if (!settings.value.peekGraph) return const SizedBox();
+                  if (gymSets.firstOrNull == null) return const SizedBox();
 
                   return FutureBuilder(
                     builder: (context, snapshot) => snapshot.data != null
