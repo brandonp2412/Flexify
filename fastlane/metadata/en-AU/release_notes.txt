@@ -10,4 +10,4 @@
 - Blend system nav with app themes
 - Preview graph below appearance settings
 - Fix curve setting not applying to graph peek
-- Make graphs look sexy 😎
+- Make graphs look nicer
