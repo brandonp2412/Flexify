@@ -37,7 +37,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
           showDialog(
             context: context,
             builder: (context) {
-              bool timers = widget.planExercise.timers.value;
+              bool timers = widget.planExercise.timers.present
+                  ? widget.planExercise.timers.value
+                  : true;
 
               return AlertDialog.adaptive(
                 title: Text(widget.planExercise.exercise.value),
