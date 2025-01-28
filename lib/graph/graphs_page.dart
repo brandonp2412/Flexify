@@ -201,9 +201,9 @@ class GraphsPageState extends State<GraphsPage>
               ),
               if (gymSets.isEmpty)
                 ListTile(
-                  title: const Text("No graphs found."),
+                  title: const Text("No graphs found"),
                   subtitle: Text(
-                    "Create an exercise called $search?",
+                    "Tap to create an exercise called $search",
                   ),
                   onTap: () {
                     Navigator.of(context).push(
