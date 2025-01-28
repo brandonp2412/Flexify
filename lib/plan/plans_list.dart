@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -13,6 +14,7 @@ class PlansList extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final Set<int> selected;
   final Function(int) onSelect;
+  final String search;
 
   const PlansList({
     super.key,
@@ -20,16 +22,35 @@ class PlansList extends StatelessWidget {
     required this.navigatorKey,
     required this.selected,
     required this.onSelect,
+    required this.search,
   });
 
   @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
+    final planState = context.watch<PlanState>();
 
     if (plans.isEmpty)
-      return const ListTile(
-        title: Text("No plans yet."),
-        subtitle: Text("Tap the plus button in the bottom right to add plans."),
+      return ListTile(
+        title: const Text("No plans found"),
+        subtitle: Text("Tap to create $search"),
+        onTap: () async {
+          final plan = PlansCompanion(
+            days: const drift.Value(''),
+            exercises: const drift.Value(''),
+            title: drift.Value(search),
+          );
+          await planState.setExercises(plan);
+          if (context.mounted)
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditPlanPage(
+                  plan: plan,
+                ),
+              ),
+            );
+        },
       );
 
     final settings = context.read<SettingsState>();

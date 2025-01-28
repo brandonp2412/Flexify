@@ -142,6 +142,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               plans: filtered ?? [],
               navigatorKey: widget.navigatorKey,
               selected: selected,
+              search: search,
               onSelect: (id) {
                 if (selected.contains(id))
                   setState(() {
