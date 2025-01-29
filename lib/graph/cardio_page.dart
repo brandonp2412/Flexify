@@ -291,7 +291,7 @@ class _CardioPageState extends State<CardioPage> {
                   ),
                 if (rows.isNotEmpty)
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.47,
+                    height: MediaQuery.of(context).size.height * 0.40,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                       child: FlexLine(
