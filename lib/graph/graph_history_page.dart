@@ -38,7 +38,6 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
             return ListTile(
               title: Text("No data yet for ${widget.name}"),
               subtitle: const Text("Enter some data to view graphs here"),
-              contentPadding: EdgeInsets.zero,
             );
 
           return HistoryList(
