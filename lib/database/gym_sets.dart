@@ -243,18 +243,18 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
         ..addColumns([
           db.gymSets.name,
           db.gymSets.unit,
-          db.gymSets.weight,
+          db.gymSets.weight.max(),
           db.gymSets.reps,
           db.gymSets.cardio,
           db.gymSets.duration,
           db.gymSets.distance,
-          db.gymSets.created.max(),
+          db.gymSets.created,
           db.gymSets.image,
           db.gymSets.category,
         ])
         ..orderBy([
           OrderingTerm(
-            expression: db.gymSets.created.max(),
+            expression: db.gymSets.created,
             mode: OrderingMode.desc,
           ),
         ])
@@ -265,13 +265,13 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
             .map(
               (result) => GymSetsCompanion(
                 name: Value(result.read(db.gymSets.name)!),
-                weight: Value(result.read(db.gymSets.weight)!),
+                weight: Value(result.read(db.gymSets.weight.max())!),
                 unit: Value(result.read(db.gymSets.unit)!),
                 reps: Value(result.read(db.gymSets.reps)!),
                 cardio: Value(result.read(db.gymSets.cardio)!),
                 duration: Value(result.read(db.gymSets.duration)!),
                 distance: Value(result.read(db.gymSets.distance)!),
-                created: Value(result.read(db.gymSets.created.max())!),
+                created: Value(result.read(db.gymSets.created)!),
                 image: Value(result.read(db.gymSets.image)),
                 category: Value(result.read(db.gymSets.category)),
               ),
