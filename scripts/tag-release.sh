@@ -44,7 +44,8 @@ fi
 
 yq -yi ".version |= \"$new_flutter_version\"" pubspec.yaml
 yq -yi ".msix_config.msix_version |= \"$new_msix_version\"" pubspec.yaml
-git add pubspec.yaml fastlane/metadata pubspec.lock
+awk -F'=' '{$NF++; print}' OFS='=' fastlane/metadata/en-AU/privacy_url.txt > tmp && mv tmp fastlane/metadata/en-AU/privacy_url.txt
+git add pubspec.yaml fastlane/metadata pubspec.lock fastlane/metadata/en-AU/privacy_url.txt
 git commit -m "$new_version 🚀
 
 $changelog"
