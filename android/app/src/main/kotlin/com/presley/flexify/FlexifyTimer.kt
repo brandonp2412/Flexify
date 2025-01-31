@@ -140,7 +140,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
             context,
             0,
             intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val alarmManager = getAlarmManager(context)
         if (incorrectPermissions(context, alarmManager)) return

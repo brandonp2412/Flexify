@@ -137,6 +137,11 @@ class MainActivity : FlutterActivity() {
     override fun onDestroy() {
         super.onDestroy()
         applicationContext.unregisterReceiver(tickReceiver)
+
+        if (timerBound) {
+            unbindService(timerConnection)
+            timerBound = false
+        }
     }
 
     private fun timer(
