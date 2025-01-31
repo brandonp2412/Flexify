@@ -49,7 +49,7 @@ class GraphsPageState extends State<GraphsPage>
   Widget build(BuildContext context) {
     super.build(context);
     return NavigatorPopHandler(
-      onPop: () {
+      onPopWithResult: (result) {
         if (navigatorKey.currentState!.canPop() == false) return;
         final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;

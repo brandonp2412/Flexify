@@ -90,7 +90,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             value: value,
             strokeWidth: 20,
             backgroundColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.25),
             valueColor: AlwaysStoppedAnimation<Color>(
               Theme.of(context).colorScheme.primary,
             ),

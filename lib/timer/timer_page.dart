@@ -20,7 +20,7 @@ class TimerPageState extends State<TimerPage> {
     final timerState = context.watch<TimerState>();
 
     return NavigatorPopHandler(
-      onPop: () {
+      onPopWithResult: (result) {
         if (navigatorKey.currentState!.canPop() == false) return;
         final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
