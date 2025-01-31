@@ -39,6 +39,7 @@ void main() async {
               onSelect: (value) {},
               selected: const {},
               navigatorKey: GlobalKey(),
+              search: '',
             ),
           ),
         ),
