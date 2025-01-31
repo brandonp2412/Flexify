@@ -121,15 +121,11 @@ enum TabBarState { history, plans, graphs, timer }
 
 const screenshotExercise = "Dumbbell shoulder press";
 
-bool dark = true;
-
 Future<void> appWrapper() async {
   WidgetsFlutterBinding.ensureInitialized();
   await app.db.settings.update().write(
         SettingsCompanion(
-          themeMode: dark
-              ? Value(ThemeMode.light.toString())
-              : Value(ThemeMode.dark.toString()),
+          themeMode: Value(ThemeMode.dark.toString()),
           explainedPermissions: const Value(true),
           restTimers: const Value(true),
           systemColors: const Value(false),
@@ -138,7 +134,6 @@ Future<void> appWrapper() async {
   final settings = await (db.settings.select()..limit(1)).getSingle();
   final settingsState = SettingsState(settings);
 
-  dark = !dark;
   runApp(app.appProviders(settingsState));
 }
 
