@@ -8,7 +8,6 @@ adb -d install "$apk"/app-arm64-v8a-release.apk || true
 mv -f "$apk"/app-release.apk "$apk/flexify.apk"
 ./flutter/bin/flutter build appbundle
 
-mkdir -p build/native_assets/linux
 ./flutter/bin/flutter build linux
 (cd "$apk/pipeline/linux/x64/release/bundle" && zip --quiet -r "flexify-linux.zip" .)
 
