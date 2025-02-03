@@ -34,6 +34,7 @@ class _EditSetPageState extends State<EditSetPage> {
   final minutes = TextEditingController();
   final seconds = TextEditingController();
   final incline = TextEditingController();
+  final notes = TextEditingController();
   final repsNode = FocusNode();
   final distanceNode = FocusNode();
   final formKey = GlobalKey<FormState>();
@@ -270,6 +271,11 @@ class _EditSetPageState extends State<EditSetPage> {
                   return const SizedBox();
                 },
               ),
+              TextField(
+                maxLines: 3,
+                decoration: const InputDecoration(labelText: 'Notes'),
+                controller: notes,
+              ),
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) => ListTile(
                   title: const Text('Created date'),
@@ -472,6 +478,7 @@ class _EditSetPageState extends State<EditSetPage> {
       restMs: Value(restMs),
       incline: Value(int.tryParse(incline.text)),
       image: Value(image),
+      notes: Value(notes.text),
       category: Value(category),
     );
 
@@ -549,6 +556,7 @@ class _EditSetPageState extends State<EditSetPage> {
     seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
     distance.text = toString(gymSet.distance);
     incline.text = gymSet.incline?.toString() ?? "";
+    if (widget.gymSet.id > 0) notes.text = gymSet.notes ?? '';
 
     setState(() {
       category = gymSet.category;

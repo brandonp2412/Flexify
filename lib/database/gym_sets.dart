@@ -9,6 +9,12 @@ const inclineAdjustedPace = CustomExpression<double>(
   "SUM(distance) * POW(1.1, AVG(incline)) / SUM(duration)",
 );
 
+const volumeCol = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
+
+final ormCol = (db.gymSets.weight /
+        (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps))
+    .max();
+final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 double getCardio(TypedResult row, CardioMetric metric) {
   switch (metric) {
     case CardioMetric.pace:
@@ -22,105 +28,6 @@ double getCardio(TypedResult row, CardioMetric metric) {
       return row.read(db.gymSets.incline.avg())!;
     case CardioMetric.inclineAdjustedPace:
       return row.read(inclineAdjustedPace)!;
-  }
-}
-
-final ormCol = (db.gymSets.weight /
-        (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps))
-    .max();
-const volumeCol = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
-final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
-
-Future<List<StrengthData>> getStrengthData({
-  required String targetUnit,
-  required String name,
-  required StrengthMetric metric,
-  required Period period,
-  required DateTime? startDate,
-  required DateTime? endDate,
-}) async {
-  Expression<String> createdCol = getCreated(period);
-
-  var query = (db.selectOnly(db.gymSets)
-    ..addColumns([
-      db.gymSets.weight.max(),
-      volumeCol,
-      ormCol,
-      db.gymSets.created,
-      if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
-      if (metric != StrengthMetric.bestReps) db.gymSets.reps,
-      db.gymSets.unit,
-      relativeCol,
-    ])
-    ..where(db.gymSets.name.equals(name))
-    ..where(db.gymSets.hidden.equals(false))
-    ..orderBy([
-      OrderingTerm(
-        expression: createdCol,
-        mode: OrderingMode.desc,
-      ),
-    ])
-    ..limit(11)
-    ..groupBy([createdCol]));
-
-  if (startDate != null)
-    query = query
-      ..where(
-        db.gymSets.created.isBiggerOrEqualValue(startDate),
-      );
-  if (endDate != null)
-    query = query
-      ..where(
-        db.gymSets.created.isSmallerThanValue(endDate),
-      );
-
-  final results = await query.get();
-
-  List<StrengthData> list = [];
-  for (final result in results.reversed) {
-    final unit = result.read(db.gymSets.unit)!;
-    var value = getStrength(result, metric);
-
-    if (unit == 'lb' && targetUnit == 'kg') {
-      value *= 0.45359237;
-    } else if (unit == 'kg' && targetUnit == 'lb') {
-      value *= 2.20462262;
-    }
-
-    double reps = 0.0;
-    try {
-      reps = result.read(db.gymSets.reps)!;
-    } catch (_) {}
-
-    list.add(
-      StrengthData(
-        created: result.read(db.gymSets.created)!.toLocal(),
-        value: value,
-        unit: unit,
-        reps: reps,
-      ),
-    );
-  }
-
-  return list;
-}
-
-double getStrength(TypedResult row, StrengthMetric metric) {
-  switch (metric) {
-    case StrengthMetric.oneRepMax:
-      return row.read(ormCol)!;
-    case StrengthMetric.volume:
-      return row.read(volumeCol)!;
-    case StrengthMetric.relativeStrength:
-      return row.read(relativeCol) ?? 0;
-    case StrengthMetric.bestWeight:
-      return row.read(db.gymSets.weight.max())!;
-    case StrengthMetric.bestReps:
-      try {
-        return row.read(db.gymSets.reps.max())!;
-      } catch (error) {
-        return 0;
-      }
   }
 }
 
@@ -196,7 +103,26 @@ Future<List<CardioData>> getCardioData({
   return list;
 }
 
-typedef Rpm = ({String name, double rpm, double weight});
+Expression<String> getCreated(Period groupBy) {
+  switch (groupBy) {
+    case Period.day:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.week:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.month:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
+      );
+    case Period.year:
+      return const CustomExpression<String>(
+        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
+      );
+  }
+}
 
 Future<List<Rpm>> getRpms() async {
   final results = await db.customSelect("""
@@ -280,25 +206,97 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
       );
 }
 
-Expression<String> getCreated(Period groupBy) {
-  switch (groupBy) {
-    case Period.day:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%d', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    case Period.week:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y-%m-%W', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    case Period.month:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y-%m', DATE(created, 'unixepoch', 'localtime'))",
-      );
-    case Period.year:
-      return const CustomExpression<String>(
-        "STRFTIME('%Y', DATE(created, 'unixepoch', 'localtime'))",
-      );
+double getStrength(TypedResult row, StrengthMetric metric) {
+  switch (metric) {
+    case StrengthMetric.oneRepMax:
+      return row.read(ormCol)!;
+    case StrengthMetric.volume:
+      return row.read(volumeCol)!;
+    case StrengthMetric.relativeStrength:
+      return row.read(relativeCol) ?? 0;
+    case StrengthMetric.bestWeight:
+      return row.read(db.gymSets.weight.max())!;
+    case StrengthMetric.bestReps:
+      try {
+        return row.read(db.gymSets.reps.max())!;
+      } catch (error) {
+        return 0;
+      }
   }
+}
+
+Future<List<StrengthData>> getStrengthData({
+  required String targetUnit,
+  required String name,
+  required StrengthMetric metric,
+  required Period period,
+  required DateTime? startDate,
+  required DateTime? endDate,
+}) async {
+  Expression<String> createdCol = getCreated(period);
+
+  var query = (db.selectOnly(db.gymSets)
+    ..addColumns([
+      db.gymSets.weight.max(),
+      volumeCol,
+      ormCol,
+      db.gymSets.created,
+      if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+      if (metric != StrengthMetric.bestReps) db.gymSets.reps,
+      db.gymSets.unit,
+      relativeCol,
+    ])
+    ..where(db.gymSets.name.equals(name))
+    ..where(db.gymSets.hidden.equals(false))
+    ..orderBy([
+      OrderingTerm(
+        expression: createdCol,
+        mode: OrderingMode.desc,
+      ),
+    ])
+    ..limit(11)
+    ..groupBy([createdCol]));
+
+  if (startDate != null)
+    query = query
+      ..where(
+        db.gymSets.created.isBiggerOrEqualValue(startDate),
+      );
+  if (endDate != null)
+    query = query
+      ..where(
+        db.gymSets.created.isSmallerThanValue(endDate),
+      );
+
+  final results = await query.get();
+
+  List<StrengthData> list = [];
+  for (final result in results.reversed) {
+    final unit = result.read(db.gymSets.unit)!;
+    var value = getStrength(result, metric);
+
+    if (unit == 'lb' && targetUnit == 'kg') {
+      value *= 0.45359237;
+    } else if (unit == 'kg' && targetUnit == 'lb') {
+      value *= 2.20462262;
+    }
+
+    double reps = 0.0;
+    try {
+      reps = result.read(db.gymSets.reps)!;
+    } catch (_) {}
+
+    list.add(
+      StrengthData(
+        created: result.read(db.gymSets.created)!.toLocal(),
+        value: value,
+        unit: unit,
+        reps: reps,
+      ),
+    );
+  }
+
+  return list;
 }
 
 Future<bool> isBest(GymSet gymSet) async {
@@ -344,6 +342,8 @@ Future<bool> isBest(GymSet gymSet) async {
   }
 }
 
+typedef Rpm = ({String name, double rpm, double weight});
+
 class GymSets extends Table {
   RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();
   BoolColumn get cardio => boolean().withDefault(const Constant(false))();
@@ -356,6 +356,7 @@ class GymSets extends Table {
   TextColumn get image => text().nullable()();
   IntColumn get incline => integer().nullable()();
   TextColumn get name => text()();
+  TextColumn get notes => text().nullable()();
   IntColumn get planId => integer().nullable()();
   RealColumn get reps => real()();
   IntColumn get restMs => integer().nullable()();

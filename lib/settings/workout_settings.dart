@@ -86,6 +86,25 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
+    if ('show notes'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Record details of your lift in a text area',
+        child: ListTile(
+          title: const Text('Show notes'),
+          leading: const Icon(Icons.note_alt_outlined),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  showNotes: Value(!settings.showNotes),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.showNotes,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(showNotes: Value(value))),
+          ),
+        ),
+      ),
     if ('notifications'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Write nice messages when a new record is hit',

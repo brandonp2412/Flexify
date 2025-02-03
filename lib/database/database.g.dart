@@ -383,6 +383,11 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
   @override
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
@@ -421,6 +426,7 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
         image,
         incline,
         name,
+        notes,
         planId,
         reps,
         restMs,
@@ -486,6 +492,10 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
     if (data.containsKey('plan_id')) {
       context.handle(_planIdMeta,
           planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
@@ -543,6 +553,8 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
           .read(DriftSqlType.int, data['${effectivePrefix}incline']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       planId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}plan_id']),
       reps: attachedDatabase.typeMapping
@@ -574,6 +586,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final String? image;
   final int? incline;
   final String name;
+  final String? notes;
   final int? planId;
   final double reps;
   final int? restMs;
@@ -591,6 +604,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       this.image,
       this.incline,
       required this.name,
+      this.notes,
       this.planId,
       required this.reps,
       this.restMs,
@@ -616,6 +630,9 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       map['incline'] = Variable<int>(incline);
     }
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
     if (!nullToAbsent || planId != null) {
       map['plan_id'] = Variable<int>(planId);
     }
@@ -646,6 +663,8 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ? const Value.absent()
           : Value(incline),
       name: Value(name),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       planId:
           planId == null && nullToAbsent ? const Value.absent() : Value(planId),
       reps: Value(reps),
@@ -671,6 +690,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       image: serializer.fromJson<String?>(json['image']),
       incline: serializer.fromJson<int?>(json['incline']),
       name: serializer.fromJson<String>(json['name']),
+      notes: serializer.fromJson<String?>(json['notes']),
       planId: serializer.fromJson<int?>(json['planId']),
       reps: serializer.fromJson<double>(json['reps']),
       restMs: serializer.fromJson<int?>(json['restMs']),
@@ -693,6 +713,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       'image': serializer.toJson<String?>(image),
       'incline': serializer.toJson<int?>(incline),
       'name': serializer.toJson<String>(name),
+      'notes': serializer.toJson<String?>(notes),
       'planId': serializer.toJson<int?>(planId),
       'reps': serializer.toJson<double>(reps),
       'restMs': serializer.toJson<int?>(restMs),
@@ -713,6 +734,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           Value<String?> image = const Value.absent(),
           Value<int?> incline = const Value.absent(),
           String? name,
+          Value<String?> notes = const Value.absent(),
           Value<int?> planId = const Value.absent(),
           double? reps,
           Value<int?> restMs = const Value.absent(),
@@ -730,6 +752,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
         image: image.present ? image.value : this.image,
         incline: incline.present ? incline.value : this.incline,
         name: name ?? this.name,
+        notes: notes.present ? notes.value : this.notes,
         planId: planId.present ? planId.value : this.planId,
         reps: reps ?? this.reps,
         restMs: restMs.present ? restMs.value : this.restMs,
@@ -750,6 +773,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       image: data.image.present ? data.image.value : this.image,
       incline: data.incline.present ? data.incline.value : this.incline,
       name: data.name.present ? data.name.value : this.name,
+      notes: data.notes.present ? data.notes.value : this.notes,
       planId: data.planId.present ? data.planId.value : this.planId,
       reps: data.reps.present ? data.reps.value : this.reps,
       restMs: data.restMs.present ? data.restMs.value : this.restMs,
@@ -772,6 +796,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           ..write('image: $image, ')
           ..write('incline: $incline, ')
           ..write('name: $name, ')
+          ..write('notes: $notes, ')
           ..write('planId: $planId, ')
           ..write('reps: $reps, ')
           ..write('restMs: $restMs, ')
@@ -794,6 +819,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       image,
       incline,
       name,
+      notes,
       planId,
       reps,
       restMs,
@@ -814,6 +840,7 @@ class GymSet extends DataClass implements Insertable<GymSet> {
           other.image == this.image &&
           other.incline == this.incline &&
           other.name == this.name &&
+          other.notes == this.notes &&
           other.planId == this.planId &&
           other.reps == this.reps &&
           other.restMs == this.restMs &&
@@ -833,6 +860,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
   final Value<String?> image;
   final Value<int?> incline;
   final Value<String> name;
+  final Value<String?> notes;
   final Value<int?> planId;
   final Value<double> reps;
   final Value<int?> restMs;
@@ -850,6 +878,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.image = const Value.absent(),
     this.incline = const Value.absent(),
     this.name = const Value.absent(),
+    this.notes = const Value.absent(),
     this.planId = const Value.absent(),
     this.reps = const Value.absent(),
     this.restMs = const Value.absent(),
@@ -868,6 +897,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.image = const Value.absent(),
     this.incline = const Value.absent(),
     required String name,
+    this.notes = const Value.absent(),
     this.planId = const Value.absent(),
     required double reps,
     this.restMs = const Value.absent(),
@@ -890,6 +920,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     Expression<String>? image,
     Expression<int>? incline,
     Expression<String>? name,
+    Expression<String>? notes,
     Expression<int>? planId,
     Expression<double>? reps,
     Expression<int>? restMs,
@@ -908,6 +939,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       if (image != null) 'image': image,
       if (incline != null) 'incline': incline,
       if (name != null) 'name': name,
+      if (notes != null) 'notes': notes,
       if (planId != null) 'plan_id': planId,
       if (reps != null) 'reps': reps,
       if (restMs != null) 'rest_ms': restMs,
@@ -928,6 +960,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       Value<String?>? image,
       Value<int?>? incline,
       Value<String>? name,
+      Value<String?>? notes,
       Value<int?>? planId,
       Value<double>? reps,
       Value<int?>? restMs,
@@ -945,6 +978,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
       image: image ?? this.image,
       incline: incline ?? this.incline,
       name: name ?? this.name,
+      notes: notes ?? this.notes,
       planId: planId ?? this.planId,
       reps: reps ?? this.reps,
       restMs: restMs ?? this.restMs,
@@ -989,6 +1023,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
     if (planId.present) {
       map['plan_id'] = Variable<int>(planId.value);
     }
@@ -1021,6 +1058,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
           ..write('image: $image, ')
           ..write('incline: $incline, ')
           ..write('name: $name, ')
+          ..write('notes: $notes, ')
           ..write('planId: $planId, ')
           ..write('reps: $reps, ')
           ..write('restMs: $restMs, ')
@@ -1219,6 +1257,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _showNotesMeta =
+      const VerificationMeta('showNotes');
+  @override
+  late final GeneratedColumn<bool> showNotes = GeneratedColumn<bool>(
+      'show_notes', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("show_notes" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _showUnitsMeta =
       const VerificationMeta('showUnits');
   @override
@@ -1302,6 +1350,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         showBodyWeight,
         showCategories,
         showImages,
+        showNotes,
         showUnits,
         strengthUnit,
         systemColors,
@@ -1466,6 +1515,10 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           showImages.isAcceptableOrUnknown(
               data['show_images']!, _showImagesMeta));
     }
+    if (data.containsKey('show_notes')) {
+      context.handle(_showNotesMeta,
+          showNotes.isAcceptableOrUnknown(data['show_notes']!, _showNotesMeta));
+    }
     if (data.containsKey('show_units')) {
       context.handle(_showUnitsMeta,
           showUnits.isAcceptableOrUnknown(data['show_units']!, _showUnitsMeta));
@@ -1571,6 +1624,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}show_categories'])!,
       showImages: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
+      showNotes: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}show_notes'])!,
       showUnits: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
       strengthUnit: attachedDatabase.typeMapping
@@ -1619,6 +1674,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool showBodyWeight;
   final bool showCategories;
   final bool showImages;
+  final bool showNotes;
   final bool showUnits;
   final String strengthUnit;
   final bool systemColors;
@@ -1650,6 +1706,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.showBodyWeight,
       required this.showCategories,
       required this.showImages,
+      required this.showNotes,
       required this.showUnits,
       required this.strengthUnit,
       required this.systemColors,
@@ -1687,6 +1744,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['show_body_weight'] = Variable<bool>(showBodyWeight);
     map['show_categories'] = Variable<bool>(showCategories);
     map['show_images'] = Variable<bool>(showImages);
+    map['show_notes'] = Variable<bool>(showNotes);
     map['show_units'] = Variable<bool>(showUnits);
     map['strength_unit'] = Variable<String>(strengthUnit);
     map['system_colors'] = Variable<bool>(systemColors);
@@ -1728,6 +1786,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       showBodyWeight: Value(showBodyWeight),
       showCategories: Value(showCategories),
       showImages: Value(showImages),
+      showNotes: Value(showNotes),
       showUnits: Value(showUnits),
       strengthUnit: Value(strengthUnit),
       systemColors: Value(systemColors),
@@ -1768,6 +1827,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
       showCategories: serializer.fromJson<bool>(json['showCategories']),
       showImages: serializer.fromJson<bool>(json['showImages']),
+      showNotes: serializer.fromJson<bool>(json['showNotes']),
       showUnits: serializer.fromJson<bool>(json['showUnits']),
       strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
       systemColors: serializer.fromJson<bool>(json['systemColors']),
@@ -1804,6 +1864,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
       'showCategories': serializer.toJson<bool>(showCategories),
       'showImages': serializer.toJson<bool>(showImages),
+      'showNotes': serializer.toJson<bool>(showNotes),
       'showUnits': serializer.toJson<bool>(showUnits),
       'strengthUnit': serializer.toJson<String>(strengthUnit),
       'systemColors': serializer.toJson<bool>(systemColors),
@@ -1838,6 +1899,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           bool? showBodyWeight,
           bool? showCategories,
           bool? showImages,
+          bool? showNotes,
           bool? showUnits,
           String? strengthUnit,
           bool? systemColors,
@@ -1871,6 +1933,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         showBodyWeight: showBodyWeight ?? this.showBodyWeight,
         showCategories: showCategories ?? this.showCategories,
         showImages: showImages ?? this.showImages,
+        showNotes: showNotes ?? this.showNotes,
         showUnits: showUnits ?? this.showUnits,
         strengthUnit: strengthUnit ?? this.strengthUnit,
         systemColors: systemColors ?? this.systemColors,
@@ -1935,6 +1998,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           : this.showCategories,
       showImages:
           data.showImages.present ? data.showImages.value : this.showImages,
+      showNotes: data.showNotes.present ? data.showNotes.value : this.showNotes,
       showUnits: data.showUnits.present ? data.showUnits.value : this.showUnits,
       strengthUnit: data.strengthUnit.present
           ? data.strengthUnit.value
@@ -1978,6 +2042,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('showBodyWeight: $showBodyWeight, ')
           ..write('showCategories: $showCategories, ')
           ..write('showImages: $showImages, ')
+          ..write('showNotes: $showNotes, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
@@ -2014,6 +2079,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         showBodyWeight,
         showCategories,
         showImages,
+        showNotes,
         showUnits,
         strengthUnit,
         systemColors,
@@ -2049,6 +2115,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.showBodyWeight == this.showBodyWeight &&
           other.showCategories == this.showCategories &&
           other.showImages == this.showImages &&
+          other.showNotes == this.showNotes &&
           other.showUnits == this.showUnits &&
           other.strengthUnit == this.strengthUnit &&
           other.systemColors == this.systemColors &&
@@ -2082,6 +2149,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> showBodyWeight;
   final Value<bool> showCategories;
   final Value<bool> showImages;
+  final Value<bool> showNotes;
   final Value<bool> showUnits;
   final Value<String> strengthUnit;
   final Value<bool> systemColors;
@@ -2113,6 +2181,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.showBodyWeight = const Value.absent(),
     this.showCategories = const Value.absent(),
     this.showImages = const Value.absent(),
+    this.showNotes = const Value.absent(),
     this.showUnits = const Value.absent(),
     this.strengthUnit = const Value.absent(),
     this.systemColors = const Value.absent(),
@@ -2145,6 +2214,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.showBodyWeight = const Value.absent(),
     this.showCategories = const Value.absent(),
     this.showImages = const Value.absent(),
+    this.showNotes = const Value.absent(),
     required bool showUnits,
     required String strengthUnit,
     required bool systemColors,
@@ -2192,6 +2262,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? showBodyWeight,
     Expression<bool>? showCategories,
     Expression<bool>? showImages,
+    Expression<bool>? showNotes,
     Expression<bool>? showUnits,
     Expression<String>? strengthUnit,
     Expression<bool>? systemColors,
@@ -2225,6 +2296,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
       if (showCategories != null) 'show_categories': showCategories,
       if (showImages != null) 'show_images': showImages,
+      if (showNotes != null) 'show_notes': showNotes,
       if (showUnits != null) 'show_units': showUnits,
       if (strengthUnit != null) 'strength_unit': strengthUnit,
       if (systemColors != null) 'system_colors': systemColors,
@@ -2259,6 +2331,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<bool>? showBodyWeight,
       Value<bool>? showCategories,
       Value<bool>? showImages,
+      Value<bool>? showNotes,
       Value<bool>? showUnits,
       Value<String>? strengthUnit,
       Value<bool>? systemColors,
@@ -2290,6 +2363,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       showBodyWeight: showBodyWeight ?? this.showBodyWeight,
       showCategories: showCategories ?? this.showCategories,
       showImages: showImages ?? this.showImages,
+      showNotes: showNotes ?? this.showNotes,
       showUnits: showUnits ?? this.showUnits,
       strengthUnit: strengthUnit ?? this.strengthUnit,
       systemColors: systemColors ?? this.systemColors,
@@ -2370,6 +2444,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (showImages.present) {
       map['show_images'] = Variable<bool>(showImages.value);
     }
+    if (showNotes.present) {
+      map['show_notes'] = Variable<bool>(showNotes.value);
+    }
     if (showUnits.present) {
       map['show_units'] = Variable<bool>(showUnits.value);
     }
@@ -2422,6 +2499,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('showBodyWeight: $showBodyWeight, ')
           ..write('showCategories: $showCategories, ')
           ..write('showImages: $showImages, ')
+          ..write('showNotes: $showNotes, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
@@ -2982,6 +3060,7 @@ typedef $$GymSetsTableCreateCompanionBuilder = GymSetsCompanion Function({
   Value<String?> image,
   Value<int?> incline,
   required String name,
+  Value<String?> notes,
   Value<int?> planId,
   required double reps,
   Value<int?> restMs,
@@ -3000,6 +3079,7 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<String?> image,
   Value<int?> incline,
   Value<String> name,
+  Value<String?> notes,
   Value<int?> planId,
   Value<double> reps,
   Value<int?> restMs,
@@ -3035,6 +3115,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<String?> image = const Value.absent(),
             Value<int?> incline = const Value.absent(),
             Value<String> name = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
             Value<int?> planId = const Value.absent(),
             Value<double> reps = const Value.absent(),
             Value<int?> restMs = const Value.absent(),
@@ -3053,6 +3134,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             image: image,
             incline: incline,
             name: name,
+            notes: notes,
             planId: planId,
             reps: reps,
             restMs: restMs,
@@ -3071,6 +3153,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             Value<String?> image = const Value.absent(),
             Value<int?> incline = const Value.absent(),
             required String name,
+            Value<String?> notes = const Value.absent(),
             Value<int?> planId = const Value.absent(),
             required double reps,
             Value<int?> restMs = const Value.absent(),
@@ -3089,6 +3172,7 @@ class $$GymSetsTableTableManager extends RootTableManager<
             image: image,
             incline: incline,
             name: name,
+            notes: notes,
             planId: planId,
             reps: reps,
             restMs: restMs,
@@ -3153,6 +3237,11 @@ class $$GymSetsTableFilterComposer
 
   ColumnFilters<String> get name => $state.composableBuilder(
       column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get notes => $state.composableBuilder(
+      column: $state.table.notes,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3253,6 +3342,11 @@ class $$GymSetsTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get notes => $state.composableBuilder(
+      column: $state.table.notes,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<int> get planId => $state.composableBuilder(
       column: $state.table.planId,
       builder: (column, joinBuilders) =>
@@ -3302,6 +3396,7 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   Value<bool> showBodyWeight,
   Value<bool> showCategories,
   Value<bool> showImages,
+  Value<bool> showNotes,
   required bool showUnits,
   required String strengthUnit,
   required bool systemColors,
@@ -3334,6 +3429,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> showBodyWeight,
   Value<bool> showCategories,
   Value<bool> showImages,
+  Value<bool> showNotes,
   Value<bool> showUnits,
   Value<String> strengthUnit,
   Value<bool> systemColors,
@@ -3383,6 +3479,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> showBodyWeight = const Value.absent(),
             Value<bool> showCategories = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
+            Value<bool> showNotes = const Value.absent(),
             Value<bool> showUnits = const Value.absent(),
             Value<String> strengthUnit = const Value.absent(),
             Value<bool> systemColors = const Value.absent(),
@@ -3415,6 +3512,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             showBodyWeight: showBodyWeight,
             showCategories: showCategories,
             showImages: showImages,
+            showNotes: showNotes,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
@@ -3447,6 +3545,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> showBodyWeight = const Value.absent(),
             Value<bool> showCategories = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
+            Value<bool> showNotes = const Value.absent(),
             required bool showUnits,
             required String strengthUnit,
             required bool systemColors,
@@ -3479,6 +3578,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             showBodyWeight: showBodyWeight,
             showCategories: showCategories,
             showImages: showImages,
+            showNotes: showNotes,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
@@ -3601,6 +3701,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get showImages => $state.composableBuilder(
       column: $state.table.showImages,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get showNotes => $state.composableBuilder(
+      column: $state.table.showNotes,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3755,6 +3860,11 @@ class $$SettingsTableOrderingComposer
 
   ColumnOrderings<bool> get showImages => $state.composableBuilder(
       column: $state.table.showImages,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get showNotes => $state.composableBuilder(
+      column: $state.table.showNotes,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

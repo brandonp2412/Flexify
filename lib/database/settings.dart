@@ -27,6 +27,7 @@ class Settings extends Table {
   BoolColumn get showCategories =>
       boolean().withDefault(const Constant(true))();
   BoolColumn get showImages => boolean().withDefault(const Constant(true))();
+  BoolColumn get showNotes => boolean().withDefault(const Constant(true))();
   BoolColumn get showUnits => boolean()();
   TextColumn get strengthUnit => text()();
   BoolColumn get systemColors => boolean()();
