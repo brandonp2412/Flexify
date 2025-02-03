@@ -271,10 +271,16 @@ class _EditSetPageState extends State<EditSetPage> {
                   return const SizedBox();
                 },
               ),
-              TextField(
-                maxLines: 3,
-                decoration: const InputDecoration(labelText: 'Notes'),
-                controller: notes,
+              Selector<SettingsState, bool>(
+                builder: (context, showNotes, child) => Visibility(
+                  visible: showNotes,
+                  child: TextField(
+                    maxLines: 3,
+                    decoration: const InputDecoration(labelText: 'Notes'),
+                    controller: notes,
+                  ),
+                ),
+                selector: (p0, settingsState) => settingsState.value.showNotes,
               ),
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) => ListTile(
