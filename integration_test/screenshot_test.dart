@@ -211,9 +211,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding binding =
       IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  const deviceType = String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
-  if (deviceType.isEmpty)
-    throw "FLEXIFY_DEVICE_TYPE must be set, so integration test knows what screenshots to take";
+  var deviceType = const String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
+  if (deviceType.isEmpty) deviceType = 'phoneScreenshots';
 
   setUpAll(() async {
     app.db = AppDatabase(logStatements: false);
