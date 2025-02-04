@@ -147,21 +147,23 @@ class _EditSetPageState extends State<EditSetPage> {
             children: [
               autocomplete(showBodyWeight),
               if (!cardio) ...[
-                TextFormField(
-                  controller: reps,
-                  focusNode: repsNode,
-                  decoration: const InputDecoration(labelText: 'Reps'),
-                  keyboardType: TextInputType.number,
-                  onTap: () => selectAll(reps),
-                  onChanged: (value) => setORM(),
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (_) => selectAll(weight),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
+                if (name != 'Weight')
+                  TextFormField(
+                    controller: reps,
+                    focusNode: repsNode,
+                    decoration: const InputDecoration(labelText: 'Reps'),
+                    keyboardType: TextInputType.number,
+                    onTap: () => selectAll(reps),
+                    onChanged: (value) => setORM(),
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => selectAll(weight),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return 'Required';
+                      if (double.tryParse(value) == null)
+                        return 'Invalid number';
+                      return null;
+                    },
+                  ),
                 TextFormField(
                   controller: weight,
                   decoration: InputDecoration(
@@ -177,7 +179,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     return null;
                   },
                 ),
-                if (widget.gymSet.id > 0)
+                if (widget.gymSet.id > 0 && name != 'Weight')
                   TextField(
                     controller: oneRepMax,
                     decoration: const InputDecoration(
@@ -218,7 +220,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 ),
               ],
               Visibility(
-                visible: showBodyWeight,
+                visible: showBodyWeight && name != 'Weight',
                 child: TextFormField(
                   controller: bodyWeight,
                   decoration: const InputDecoration(
@@ -250,13 +252,14 @@ class _EditSetPageState extends State<EditSetPage> {
               Selector<SettingsState, bool>(
                 selector: (p0, settings) => settings.value.showCategories,
                 builder: (context, showCategories, child) {
-                  if (showCategories)
+                  if (showCategories && name != 'Weight')
                     return StreamBuilder(
                       stream: categoriesStream,
                       builder: (context, snapshot) {
                         return Autocomplete<String>(
                           initialValue: TextEditingValue(
-                              text: widget.gymSet.category ?? ""),
+                            text: widget.gymSet.category ?? "",
+                          ),
                           optionsBuilder: (TextEditingValue textEditingValue) {
                             if (snapshot.data == null) return [];
                             if (textEditingValue.text == '') {
@@ -264,7 +267,8 @@ class _EditSetPageState extends State<EditSetPage> {
                             }
                             return snapshot.data!.where((String option) {
                               return option.toLowerCase().contains(
-                                  textEditingValue.text.toLowerCase());
+                                    textEditingValue.text.toLowerCase(),
+                                  );
                             });
                           },
                           onSelected: (String selection) {
