@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart' as drift;
+import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -18,7 +21,17 @@ class _WeightPageState extends State<WeightPage> {
   final TextEditingController valueController = TextEditingController();
   String yesterdaysWeight = "";
   String? unit;
+  String? image;
   final formKey = GlobalKey<FormState>();
+
+  void pick() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result?.files.single == null) return;
+
+    setState(() {
+      image = result?.files.single.path;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +70,45 @@ class _WeightPageState extends State<WeightPage> {
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
+              Selector<SettingsState, bool>(
+                builder: (context, showImages, child) {
+                  return Visibility(
+                    visible: showImages,
+                    child: Column(
+                      children: [
+                        if (image == null)
+                          TextButton.icon(
+                            onPressed: pick,
+                            label: const Text('Image'),
+                            icon: const Icon(Icons.image),
+                          ),
+                        if (image != null) ...[
+                          const SizedBox(height: 8),
+                          Tooltip(
+                            message: 'Long-press to delete',
+                            child: GestureDetector(
+                              onTap: () => pick(),
+                              onLongPress: () => setState(() {
+                                image = null;
+                              }),
+                              child: Image.file(
+                                File(image!),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    TextButton.icon(
+                                  label: const Text('Image error'),
+                                  icon: const Icon(Icons.error),
+                                  onPressed: () => pick(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  );
+                },
+                selector: (context, settings) => settings.value.showImages,
+              ),
             ],
           ),
         ),
@@ -75,6 +127,7 @@ class _WeightPageState extends State<WeightPage> {
               reps: 1,
               unit: unit ?? settings.strengthUnit,
               weight: double.parse(valueController.text),
+              image: drift.Value(image),
             ),
           );
           (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
