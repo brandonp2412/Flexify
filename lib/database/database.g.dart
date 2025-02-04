@@ -2930,22 +2930,164 @@ typedef $$PlansTableUpdateCompanionBuilder = PlansCompanion Function({
   Value<String?> title,
 });
 
+final class $$PlansTableReferences
+    extends BaseReferences<_$AppDatabase, $PlansTable, Plan> {
+  $$PlansTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
+      _planExercisesRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.planExercises,
+              aliasName:
+                  $_aliasNameGenerator(db.plans.id, db.planExercises.planId));
+
+  $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
+    final manager = $$PlanExercisesTableTableManager($_db, $_db.planExercises)
+        .filter((f) => f.planId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_planExercisesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$PlansTableFilterComposer extends Composer<_$AppDatabase, $PlansTable> {
+  $$PlansTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get days => $composableBuilder(
+      column: $table.days, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get exercises => $composableBuilder(
+      column: $table.exercises, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get sequence => $composableBuilder(
+      column: $table.sequence, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> planExercisesRefs(
+      Expression<bool> Function($$PlanExercisesTableFilterComposer f) f) {
+    final $$PlanExercisesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.planExercises,
+        getReferencedColumn: (t) => t.planId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlanExercisesTableFilterComposer(
+              $db: $db,
+              $table: $db.planExercises,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$PlansTableOrderingComposer
+    extends Composer<_$AppDatabase, $PlansTable> {
+  $$PlansTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get days => $composableBuilder(
+      column: $table.days, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get exercises => $composableBuilder(
+      column: $table.exercises, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get sequence => $composableBuilder(
+      column: $table.sequence, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PlansTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PlansTable> {
+  $$PlansTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get days =>
+      $composableBuilder(column: $table.days, builder: (column) => column);
+
+  GeneratedColumn<String> get exercises =>
+      $composableBuilder(column: $table.exercises, builder: (column) => column);
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get sequence =>
+      $composableBuilder(column: $table.sequence, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  Expression<T> planExercisesRefs<T extends Object>(
+      Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f) {
+    final $$PlanExercisesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.planExercises,
+        getReferencedColumn: (t) => t.planId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlanExercisesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.planExercises,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$PlansTableTableManager extends RootTableManager<
     _$AppDatabase,
     $PlansTable,
     Plan,
     $$PlansTableFilterComposer,
     $$PlansTableOrderingComposer,
+    $$PlansTableAnnotationComposer,
     $$PlansTableCreateCompanionBuilder,
-    $$PlansTableUpdateCompanionBuilder> {
+    $$PlansTableUpdateCompanionBuilder,
+    (Plan, $$PlansTableReferences),
+    Plan,
+    PrefetchHooks Function({bool planExercisesRefs})> {
   $$PlansTableTableManager(_$AppDatabase db, $PlansTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$PlansTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$PlansTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$PlansTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlansTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlansTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> days = const Value.absent(),
             Value<String> exercises = const Value.absent(),
@@ -2974,80 +3116,50 @@ class $$PlansTableTableManager extends RootTableManager<
             sequence: sequence,
             title: title,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$PlansTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({planExercisesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (planExercisesRefs) db.planExercises
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (planExercisesRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$PlansTableReferences._planExercisesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlansTableReferences(db, table, p0)
+                                .planExercisesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.planId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$PlansTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $PlansTable> {
-  $$PlansTableFilterComposer(super.$state);
-  ColumnFilters<String> get days => $state.composableBuilder(
-      column: $state.table.days,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get exercises => $state.composableBuilder(
-      column: $state.table.exercises,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get sequence => $state.composableBuilder(
-      column: $state.table.sequence,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter planExercisesRefs(
-      ComposableFilter Function($$PlanExercisesTableFilterComposer f) f) {
-    final $$PlanExercisesTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.planExercises,
-        getReferencedColumn: (t) => t.planId,
-        builder: (joinBuilder, parentComposers) =>
-            $$PlanExercisesTableFilterComposer(ComposerState($state.db,
-                $state.db.planExercises, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$PlansTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $PlansTable> {
-  $$PlansTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get days => $state.composableBuilder(
-      column: $state.table.days,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get exercises => $state.composableBuilder(
-      column: $state.table.exercises,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get sequence => $state.composableBuilder(
-      column: $state.table.sequence,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$PlansTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PlansTable,
+    Plan,
+    $$PlansTableFilterComposer,
+    $$PlansTableOrderingComposer,
+    $$PlansTableAnnotationComposer,
+    $$PlansTableCreateCompanionBuilder,
+    $$PlansTableUpdateCompanionBuilder,
+    (Plan, $$PlansTableReferences),
+    Plan,
+    PrefetchHooks Function({bool planExercisesRefs})>;
 typedef $$GymSetsTableCreateCompanionBuilder = GymSetsCompanion Function({
   Value<double> bodyWeight,
   Value<bool> cardio,
@@ -3087,22 +3199,274 @@ typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
   Value<double> weight,
 });
 
+final class $$GymSetsTableReferences
+    extends BaseReferences<_$AppDatabase, $GymSetsTable, GymSet> {
+  $$GymSetsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
+      _planExercisesRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.planExercises,
+              aliasName: $_aliasNameGenerator(
+                  db.gymSets.name, db.planExercises.exercise));
+
+  $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
+    final manager = $$PlanExercisesTableTableManager($_db, $_db.planExercises)
+        .filter(
+            (f) => f.exercise.name.sqlEquals($_itemColumn<String>('name')!));
+
+    final cache = $_typedResult.readTableOrNull(_planExercisesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$GymSetsTableFilterComposer
+    extends Composer<_$AppDatabase, $GymSetsTable> {
+  $$GymSetsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<double> get bodyWeight => $composableBuilder(
+      column: $table.bodyWeight, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get cardio => $composableBuilder(
+      column: $table.cardio, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get created => $composableBuilder(
+      column: $table.created, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get distance => $composableBuilder(
+      column: $table.distance, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hidden => $composableBuilder(
+      column: $table.hidden, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get image => $composableBuilder(
+      column: $table.image, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get incline => $composableBuilder(
+      column: $table.incline, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get planId => $composableBuilder(
+      column: $table.planId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get reps => $composableBuilder(
+      column: $table.reps, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get restMs => $composableBuilder(
+      column: $table.restMs, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get unit => $composableBuilder(
+      column: $table.unit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> planExercisesRefs(
+      Expression<bool> Function($$PlanExercisesTableFilterComposer f) f) {
+    final $$PlanExercisesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.name,
+        referencedTable: $db.planExercises,
+        getReferencedColumn: (t) => t.exercise,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlanExercisesTableFilterComposer(
+              $db: $db,
+              $table: $db.planExercises,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$GymSetsTableOrderingComposer
+    extends Composer<_$AppDatabase, $GymSetsTable> {
+  $$GymSetsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<double> get bodyWeight => $composableBuilder(
+      column: $table.bodyWeight, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get cardio => $composableBuilder(
+      column: $table.cardio, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get created => $composableBuilder(
+      column: $table.created, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get distance => $composableBuilder(
+      column: $table.distance, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hidden => $composableBuilder(
+      column: $table.hidden, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get image => $composableBuilder(
+      column: $table.image, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get incline => $composableBuilder(
+      column: $table.incline, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get planId => $composableBuilder(
+      column: $table.planId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get reps => $composableBuilder(
+      column: $table.reps, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get restMs => $composableBuilder(
+      column: $table.restMs, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get unit => $composableBuilder(
+      column: $table.unit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get weight => $composableBuilder(
+      column: $table.weight, builder: (column) => ColumnOrderings(column));
+}
+
+class $$GymSetsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GymSetsTable> {
+  $$GymSetsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<double> get bodyWeight => $composableBuilder(
+      column: $table.bodyWeight, builder: (column) => column);
+
+  GeneratedColumn<bool> get cardio =>
+      $composableBuilder(column: $table.cardio, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get created =>
+      $composableBuilder(column: $table.created, builder: (column) => column);
+
+  GeneratedColumn<double> get distance =>
+      $composableBuilder(column: $table.distance, builder: (column) => column);
+
+  GeneratedColumn<double> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
+  GeneratedColumn<bool> get hidden =>
+      $composableBuilder(column: $table.hidden, builder: (column) => column);
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get image =>
+      $composableBuilder(column: $table.image, builder: (column) => column);
+
+  GeneratedColumn<int> get incline =>
+      $composableBuilder(column: $table.incline, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<int> get planId =>
+      $composableBuilder(column: $table.planId, builder: (column) => column);
+
+  GeneratedColumn<double> get reps =>
+      $composableBuilder(column: $table.reps, builder: (column) => column);
+
+  GeneratedColumn<int> get restMs =>
+      $composableBuilder(column: $table.restMs, builder: (column) => column);
+
+  GeneratedColumn<String> get unit =>
+      $composableBuilder(column: $table.unit, builder: (column) => column);
+
+  GeneratedColumn<double> get weight =>
+      $composableBuilder(column: $table.weight, builder: (column) => column);
+
+  Expression<T> planExercisesRefs<T extends Object>(
+      Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f) {
+    final $$PlanExercisesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.name,
+        referencedTable: $db.planExercises,
+        getReferencedColumn: (t) => t.exercise,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlanExercisesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.planExercises,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$GymSetsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $GymSetsTable,
     GymSet,
     $$GymSetsTableFilterComposer,
     $$GymSetsTableOrderingComposer,
+    $$GymSetsTableAnnotationComposer,
     $$GymSetsTableCreateCompanionBuilder,
-    $$GymSetsTableUpdateCompanionBuilder> {
+    $$GymSetsTableUpdateCompanionBuilder,
+    (GymSet, $$GymSetsTableReferences),
+    GymSet,
+    PrefetchHooks Function({bool planExercisesRefs})> {
   $$GymSetsTableTableManager(_$AppDatabase db, $GymSetsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$GymSetsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$GymSetsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$GymSetsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GymSetsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GymSetsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<double> bodyWeight = const Value.absent(),
             Value<bool> cardio = const Value.absent(),
@@ -3179,200 +3543,50 @@ class $$GymSetsTableTableManager extends RootTableManager<
             unit: unit,
             weight: weight,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$GymSetsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({planExercisesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (planExercisesRefs) db.planExercises
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (planExercisesRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$GymSetsTableReferences
+                            ._planExercisesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$GymSetsTableReferences(db, table, p0)
+                                .planExercisesRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.exercise == item.name),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$GymSetsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $GymSetsTable> {
-  $$GymSetsTableFilterComposer(super.$state);
-  ColumnFilters<double> get bodyWeight => $state.composableBuilder(
-      column: $state.table.bodyWeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get cardio => $state.composableBuilder(
-      column: $state.table.cardio,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get category => $state.composableBuilder(
-      column: $state.table.category,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get created => $state.composableBuilder(
-      column: $state.table.created,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get distance => $state.composableBuilder(
-      column: $state.table.distance,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get duration => $state.composableBuilder(
-      column: $state.table.duration,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get hidden => $state.composableBuilder(
-      column: $state.table.hidden,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get image => $state.composableBuilder(
-      column: $state.table.image,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get incline => $state.composableBuilder(
-      column: $state.table.incline,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get notes => $state.composableBuilder(
-      column: $state.table.notes,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get planId => $state.composableBuilder(
-      column: $state.table.planId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get reps => $state.composableBuilder(
-      column: $state.table.reps,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get restMs => $state.composableBuilder(
-      column: $state.table.restMs,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get unit => $state.composableBuilder(
-      column: $state.table.unit,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get weight => $state.composableBuilder(
-      column: $state.table.weight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter planExercisesRefs(
-      ComposableFilter Function($$PlanExercisesTableFilterComposer f) f) {
-    final $$PlanExercisesTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.name,
-        referencedTable: $state.db.planExercises,
-        getReferencedColumn: (t) => t.exercise,
-        builder: (joinBuilder, parentComposers) =>
-            $$PlanExercisesTableFilterComposer(ComposerState($state.db,
-                $state.db.planExercises, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$GymSetsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $GymSetsTable> {
-  $$GymSetsTableOrderingComposer(super.$state);
-  ColumnOrderings<double> get bodyWeight => $state.composableBuilder(
-      column: $state.table.bodyWeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get cardio => $state.composableBuilder(
-      column: $state.table.cardio,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get category => $state.composableBuilder(
-      column: $state.table.category,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get created => $state.composableBuilder(
-      column: $state.table.created,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get distance => $state.composableBuilder(
-      column: $state.table.distance,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get duration => $state.composableBuilder(
-      column: $state.table.duration,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get hidden => $state.composableBuilder(
-      column: $state.table.hidden,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get image => $state.composableBuilder(
-      column: $state.table.image,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get incline => $state.composableBuilder(
-      column: $state.table.incline,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get notes => $state.composableBuilder(
-      column: $state.table.notes,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get planId => $state.composableBuilder(
-      column: $state.table.planId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get reps => $state.composableBuilder(
-      column: $state.table.reps,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get restMs => $state.composableBuilder(
-      column: $state.table.restMs,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get unit => $state.composableBuilder(
-      column: $state.table.unit,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get weight => $state.composableBuilder(
-      column: $state.table.weight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$GymSetsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $GymSetsTable,
+    GymSet,
+    $$GymSetsTableFilterComposer,
+    $$GymSetsTableOrderingComposer,
+    $$GymSetsTableAnnotationComposer,
+    $$GymSetsTableCreateCompanionBuilder,
+    $$GymSetsTableUpdateCompanionBuilder,
+    (GymSet, $$GymSetsTableReferences),
+    GymSet,
+    PrefetchHooks Function({bool planExercisesRefs})>;
 typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   required String alarmSound,
   Value<bool> automaticBackups,
@@ -3440,22 +3654,360 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<int?> warmupSets,
 });
 
+class $$SettingsTableFilterComposer
+    extends Composer<_$AppDatabase, $SettingsTable> {
+  $$SettingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get alarmSound => $composableBuilder(
+      column: $table.alarmSound, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get automaticBackups => $composableBuilder(
+      column: $table.automaticBackups,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get backupPath => $composableBuilder(
+      column: $table.backupPath, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cardioUnit => $composableBuilder(
+      column: $table.cardioUnit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get curveLines => $composableBuilder(
+      column: $table.curveLines, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get curveSmoothness => $composableBuilder(
+      column: $table.curveSmoothness,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get durationEstimation => $composableBuilder(
+      column: $table.durationEstimation,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get enableSound => $composableBuilder(
+      column: $table.enableSound, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get explainedPermissions => $composableBuilder(
+      column: $table.explainedPermissions,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get groupHistory => $composableBuilder(
+      column: $table.groupHistory, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get longDateFormat => $composableBuilder(
+      column: $table.longDateFormat,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxSets => $composableBuilder(
+      column: $table.maxSets, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get notifications => $composableBuilder(
+      column: $table.notifications, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get peekGraph => $composableBuilder(
+      column: $table.peekGraph, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get planTrailing => $composableBuilder(
+      column: $table.planTrailing, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get repEstimation => $composableBuilder(
+      column: $table.repEstimation, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get restTimers => $composableBuilder(
+      column: $table.restTimers, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shortDateFormat => $composableBuilder(
+      column: $table.shortDateFormat,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showBodyWeight => $composableBuilder(
+      column: $table.showBodyWeight,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showCategories => $composableBuilder(
+      column: $table.showCategories,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showImages => $composableBuilder(
+      column: $table.showImages, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showNotes => $composableBuilder(
+      column: $table.showNotes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showUnits => $composableBuilder(
+      column: $table.showUnits, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get strengthUnit => $composableBuilder(
+      column: $table.strengthUnit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get systemColors => $composableBuilder(
+      column: $table.systemColors, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tabs => $composableBuilder(
+      column: $table.tabs, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get themeMode => $composableBuilder(
+      column: $table.themeMode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timerDuration => $composableBuilder(
+      column: $table.timerDuration, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get vibrate => $composableBuilder(
+      column: $table.vibrate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get warmupSets => $composableBuilder(
+      column: $table.warmupSets, builder: (column) => ColumnFilters(column));
+}
+
+class $$SettingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $SettingsTable> {
+  $$SettingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get alarmSound => $composableBuilder(
+      column: $table.alarmSound, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get automaticBackups => $composableBuilder(
+      column: $table.automaticBackups,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get backupPath => $composableBuilder(
+      column: $table.backupPath, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cardioUnit => $composableBuilder(
+      column: $table.cardioUnit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get curveLines => $composableBuilder(
+      column: $table.curveLines, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get curveSmoothness => $composableBuilder(
+      column: $table.curveSmoothness,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get durationEstimation => $composableBuilder(
+      column: $table.durationEstimation,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get enableSound => $composableBuilder(
+      column: $table.enableSound, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get explainedPermissions => $composableBuilder(
+      column: $table.explainedPermissions,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get groupHistory => $composableBuilder(
+      column: $table.groupHistory,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get longDateFormat => $composableBuilder(
+      column: $table.longDateFormat,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxSets => $composableBuilder(
+      column: $table.maxSets, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get notifications => $composableBuilder(
+      column: $table.notifications,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get peekGraph => $composableBuilder(
+      column: $table.peekGraph, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get planTrailing => $composableBuilder(
+      column: $table.planTrailing,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get repEstimation => $composableBuilder(
+      column: $table.repEstimation,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get restTimers => $composableBuilder(
+      column: $table.restTimers, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shortDateFormat => $composableBuilder(
+      column: $table.shortDateFormat,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showBodyWeight => $composableBuilder(
+      column: $table.showBodyWeight,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showCategories => $composableBuilder(
+      column: $table.showCategories,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showImages => $composableBuilder(
+      column: $table.showImages, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showNotes => $composableBuilder(
+      column: $table.showNotes, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showUnits => $composableBuilder(
+      column: $table.showUnits, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get strengthUnit => $composableBuilder(
+      column: $table.strengthUnit,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get systemColors => $composableBuilder(
+      column: $table.systemColors,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tabs => $composableBuilder(
+      column: $table.tabs, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get themeMode => $composableBuilder(
+      column: $table.themeMode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timerDuration => $composableBuilder(
+      column: $table.timerDuration,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get vibrate => $composableBuilder(
+      column: $table.vibrate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get warmupSets => $composableBuilder(
+      column: $table.warmupSets, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SettingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SettingsTable> {
+  $$SettingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get alarmSound => $composableBuilder(
+      column: $table.alarmSound, builder: (column) => column);
+
+  GeneratedColumn<bool> get automaticBackups => $composableBuilder(
+      column: $table.automaticBackups, builder: (column) => column);
+
+  GeneratedColumn<String> get backupPath => $composableBuilder(
+      column: $table.backupPath, builder: (column) => column);
+
+  GeneratedColumn<String> get cardioUnit => $composableBuilder(
+      column: $table.cardioUnit, builder: (column) => column);
+
+  GeneratedColumn<bool> get curveLines => $composableBuilder(
+      column: $table.curveLines, builder: (column) => column);
+
+  GeneratedColumn<double> get curveSmoothness => $composableBuilder(
+      column: $table.curveSmoothness, builder: (column) => column);
+
+  GeneratedColumn<bool> get durationEstimation => $composableBuilder(
+      column: $table.durationEstimation, builder: (column) => column);
+
+  GeneratedColumn<bool> get enableSound => $composableBuilder(
+      column: $table.enableSound, builder: (column) => column);
+
+  GeneratedColumn<bool> get explainedPermissions => $composableBuilder(
+      column: $table.explainedPermissions, builder: (column) => column);
+
+  GeneratedColumn<bool> get groupHistory => $composableBuilder(
+      column: $table.groupHistory, builder: (column) => column);
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get longDateFormat => $composableBuilder(
+      column: $table.longDateFormat, builder: (column) => column);
+
+  GeneratedColumn<int> get maxSets =>
+      $composableBuilder(column: $table.maxSets, builder: (column) => column);
+
+  GeneratedColumn<bool> get notifications => $composableBuilder(
+      column: $table.notifications, builder: (column) => column);
+
+  GeneratedColumn<bool> get peekGraph =>
+      $composableBuilder(column: $table.peekGraph, builder: (column) => column);
+
+  GeneratedColumn<String> get planTrailing => $composableBuilder(
+      column: $table.planTrailing, builder: (column) => column);
+
+  GeneratedColumn<bool> get repEstimation => $composableBuilder(
+      column: $table.repEstimation, builder: (column) => column);
+
+  GeneratedColumn<bool> get restTimers => $composableBuilder(
+      column: $table.restTimers, builder: (column) => column);
+
+  GeneratedColumn<String> get shortDateFormat => $composableBuilder(
+      column: $table.shortDateFormat, builder: (column) => column);
+
+  GeneratedColumn<bool> get showBodyWeight => $composableBuilder(
+      column: $table.showBodyWeight, builder: (column) => column);
+
+  GeneratedColumn<bool> get showCategories => $composableBuilder(
+      column: $table.showCategories, builder: (column) => column);
+
+  GeneratedColumn<bool> get showImages => $composableBuilder(
+      column: $table.showImages, builder: (column) => column);
+
+  GeneratedColumn<bool> get showNotes =>
+      $composableBuilder(column: $table.showNotes, builder: (column) => column);
+
+  GeneratedColumn<bool> get showUnits =>
+      $composableBuilder(column: $table.showUnits, builder: (column) => column);
+
+  GeneratedColumn<String> get strengthUnit => $composableBuilder(
+      column: $table.strengthUnit, builder: (column) => column);
+
+  GeneratedColumn<bool> get systemColors => $composableBuilder(
+      column: $table.systemColors, builder: (column) => column);
+
+  GeneratedColumn<String> get tabs =>
+      $composableBuilder(column: $table.tabs, builder: (column) => column);
+
+  GeneratedColumn<String> get themeMode =>
+      $composableBuilder(column: $table.themeMode, builder: (column) => column);
+
+  GeneratedColumn<int> get timerDuration => $composableBuilder(
+      column: $table.timerDuration, builder: (column) => column);
+
+  GeneratedColumn<bool> get vibrate =>
+      $composableBuilder(column: $table.vibrate, builder: (column) => column);
+
+  GeneratedColumn<int> get warmupSets => $composableBuilder(
+      column: $table.warmupSets, builder: (column) => column);
+}
+
 class $$SettingsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $SettingsTable,
     Setting,
     $$SettingsTableFilterComposer,
     $$SettingsTableOrderingComposer,
+    $$SettingsTableAnnotationComposer,
     $$SettingsTableCreateCompanionBuilder,
-    $$SettingsTableUpdateCompanionBuilder> {
+    $$SettingsTableUpdateCompanionBuilder,
+    (Setting, BaseReferences<_$AppDatabase, $SettingsTable, Setting>),
+    Setting,
+    PrefetchHooks Function()> {
   $$SettingsTableTableManager(_$AppDatabase db, $SettingsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$SettingsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$SettingsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$SettingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SettingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SettingsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> alarmSound = const Value.absent(),
             Value<bool> automaticBackups = const Value.absent(),
@@ -3588,327 +4140,25 @@ class $$SettingsTableTableManager extends RootTableManager<
             vibrate: vibrate,
             warmupSets: warmupSets,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$SettingsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $SettingsTable> {
-  $$SettingsTableFilterComposer(super.$state);
-  ColumnFilters<String> get alarmSound => $state.composableBuilder(
-      column: $state.table.alarmSound,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get automaticBackups => $state.composableBuilder(
-      column: $state.table.automaticBackups,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get backupPath => $state.composableBuilder(
-      column: $state.table.backupPath,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get cardioUnit => $state.composableBuilder(
-      column: $state.table.cardioUnit,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get curveLines => $state.composableBuilder(
-      column: $state.table.curveLines,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get curveSmoothness => $state.composableBuilder(
-      column: $state.table.curveSmoothness,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get durationEstimation => $state.composableBuilder(
-      column: $state.table.durationEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get enableSound => $state.composableBuilder(
-      column: $state.table.enableSound,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get explainedPermissions => $state.composableBuilder(
-      column: $state.table.explainedPermissions,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get groupHistory => $state.composableBuilder(
-      column: $state.table.groupHistory,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get longDateFormat => $state.composableBuilder(
-      column: $state.table.longDateFormat,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get maxSets => $state.composableBuilder(
-      column: $state.table.maxSets,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get notifications => $state.composableBuilder(
-      column: $state.table.notifications,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get peekGraph => $state.composableBuilder(
-      column: $state.table.peekGraph,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get planTrailing => $state.composableBuilder(
-      column: $state.table.planTrailing,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get repEstimation => $state.composableBuilder(
-      column: $state.table.repEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get restTimers => $state.composableBuilder(
-      column: $state.table.restTimers,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get shortDateFormat => $state.composableBuilder(
-      column: $state.table.shortDateFormat,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showBodyWeight => $state.composableBuilder(
-      column: $state.table.showBodyWeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showCategories => $state.composableBuilder(
-      column: $state.table.showCategories,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showImages => $state.composableBuilder(
-      column: $state.table.showImages,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showNotes => $state.composableBuilder(
-      column: $state.table.showNotes,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get showUnits => $state.composableBuilder(
-      column: $state.table.showUnits,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get strengthUnit => $state.composableBuilder(
-      column: $state.table.strengthUnit,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get systemColors => $state.composableBuilder(
-      column: $state.table.systemColors,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get tabs => $state.composableBuilder(
-      column: $state.table.tabs,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get themeMode => $state.composableBuilder(
-      column: $state.table.themeMode,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get timerDuration => $state.composableBuilder(
-      column: $state.table.timerDuration,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get vibrate => $state.composableBuilder(
-      column: $state.table.vibrate,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get warmupSets => $state.composableBuilder(
-      column: $state.table.warmupSets,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$SettingsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $SettingsTable> {
-  $$SettingsTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get alarmSound => $state.composableBuilder(
-      column: $state.table.alarmSound,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get automaticBackups => $state.composableBuilder(
-      column: $state.table.automaticBackups,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get backupPath => $state.composableBuilder(
-      column: $state.table.backupPath,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get cardioUnit => $state.composableBuilder(
-      column: $state.table.cardioUnit,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get curveLines => $state.composableBuilder(
-      column: $state.table.curveLines,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get curveSmoothness => $state.composableBuilder(
-      column: $state.table.curveSmoothness,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get durationEstimation => $state.composableBuilder(
-      column: $state.table.durationEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get enableSound => $state.composableBuilder(
-      column: $state.table.enableSound,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get explainedPermissions => $state.composableBuilder(
-      column: $state.table.explainedPermissions,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get groupHistory => $state.composableBuilder(
-      column: $state.table.groupHistory,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get longDateFormat => $state.composableBuilder(
-      column: $state.table.longDateFormat,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get maxSets => $state.composableBuilder(
-      column: $state.table.maxSets,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get notifications => $state.composableBuilder(
-      column: $state.table.notifications,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get peekGraph => $state.composableBuilder(
-      column: $state.table.peekGraph,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get planTrailing => $state.composableBuilder(
-      column: $state.table.planTrailing,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get repEstimation => $state.composableBuilder(
-      column: $state.table.repEstimation,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get restTimers => $state.composableBuilder(
-      column: $state.table.restTimers,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get shortDateFormat => $state.composableBuilder(
-      column: $state.table.shortDateFormat,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showBodyWeight => $state.composableBuilder(
-      column: $state.table.showBodyWeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showCategories => $state.composableBuilder(
-      column: $state.table.showCategories,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showImages => $state.composableBuilder(
-      column: $state.table.showImages,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showNotes => $state.composableBuilder(
-      column: $state.table.showNotes,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get showUnits => $state.composableBuilder(
-      column: $state.table.showUnits,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get strengthUnit => $state.composableBuilder(
-      column: $state.table.strengthUnit,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get systemColors => $state.composableBuilder(
-      column: $state.table.systemColors,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get tabs => $state.composableBuilder(
-      column: $state.table.tabs,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get themeMode => $state.composableBuilder(
-      column: $state.table.themeMode,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get timerDuration => $state.composableBuilder(
-      column: $state.table.timerDuration,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get vibrate => $state.composableBuilder(
-      column: $state.table.vibrate,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get warmupSets => $state.composableBuilder(
-      column: $state.table.warmupSets,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$SettingsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SettingsTable,
+    Setting,
+    $$SettingsTableFilterComposer,
+    $$SettingsTableOrderingComposer,
+    $$SettingsTableAnnotationComposer,
+    $$SettingsTableCreateCompanionBuilder,
+    $$SettingsTableUpdateCompanionBuilder,
+    (Setting, BaseReferences<_$AppDatabase, $SettingsTable, Setting>),
+    Setting,
+    PrefetchHooks Function()>;
 typedef $$PlanExercisesTableCreateCompanionBuilder = PlanExercisesCompanion
     Function({
   required bool enabled,
@@ -3930,22 +4180,258 @@ typedef $$PlanExercisesTableUpdateCompanionBuilder = PlanExercisesCompanion
   Value<int?> warmupSets,
 });
 
+final class $$PlanExercisesTableReferences
+    extends BaseReferences<_$AppDatabase, $PlanExercisesTable, PlanExercise> {
+  $$PlanExercisesTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $GymSetsTable _exerciseTable(_$AppDatabase db) =>
+      db.gymSets.createAlias(
+          $_aliasNameGenerator(db.planExercises.exercise, db.gymSets.name));
+
+  $$GymSetsTableProcessedTableManager get exercise {
+    final $_column = $_itemColumn<String>('exercise')!;
+
+    final manager = $$GymSetsTableTableManager($_db, $_db.gymSets)
+        .filter((f) => f.name.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_exerciseTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $PlansTable _planIdTable(_$AppDatabase db) => db.plans
+      .createAlias($_aliasNameGenerator(db.planExercises.planId, db.plans.id));
+
+  $$PlansTableProcessedTableManager get planId {
+    final $_column = $_itemColumn<int>('plan_id')!;
+
+    final manager = $$PlansTableTableManager($_db, $_db.plans)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_planIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$PlanExercisesTableFilterComposer
+    extends Composer<_$AppDatabase, $PlanExercisesTable> {
+  $$PlanExercisesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<bool> get enabled => $composableBuilder(
+      column: $table.enabled, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get timers => $composableBuilder(
+      column: $table.timers, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxSets => $composableBuilder(
+      column: $table.maxSets, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get warmupSets => $composableBuilder(
+      column: $table.warmupSets, builder: (column) => ColumnFilters(column));
+
+  $$GymSetsTableFilterComposer get exercise {
+    final $$GymSetsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exercise,
+        referencedTable: $db.gymSets,
+        getReferencedColumn: (t) => t.name,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$GymSetsTableFilterComposer(
+              $db: $db,
+              $table: $db.gymSets,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlansTableFilterComposer get planId {
+    final $$PlansTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $db.plans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlansTableFilterComposer(
+              $db: $db,
+              $table: $db.plans,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PlanExercisesTableOrderingComposer
+    extends Composer<_$AppDatabase, $PlanExercisesTable> {
+  $$PlanExercisesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<bool> get enabled => $composableBuilder(
+      column: $table.enabled, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get timers => $composableBuilder(
+      column: $table.timers, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxSets => $composableBuilder(
+      column: $table.maxSets, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get warmupSets => $composableBuilder(
+      column: $table.warmupSets, builder: (column) => ColumnOrderings(column));
+
+  $$GymSetsTableOrderingComposer get exercise {
+    final $$GymSetsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exercise,
+        referencedTable: $db.gymSets,
+        getReferencedColumn: (t) => t.name,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$GymSetsTableOrderingComposer(
+              $db: $db,
+              $table: $db.gymSets,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlansTableOrderingComposer get planId {
+    final $$PlansTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $db.plans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlansTableOrderingComposer(
+              $db: $db,
+              $table: $db.plans,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PlanExercisesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PlanExercisesTable> {
+  $$PlanExercisesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => column);
+
+  GeneratedColumn<bool> get timers =>
+      $composableBuilder(column: $table.timers, builder: (column) => column);
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get maxSets =>
+      $composableBuilder(column: $table.maxSets, builder: (column) => column);
+
+  GeneratedColumn<int> get warmupSets => $composableBuilder(
+      column: $table.warmupSets, builder: (column) => column);
+
+  $$GymSetsTableAnnotationComposer get exercise {
+    final $$GymSetsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exercise,
+        referencedTable: $db.gymSets,
+        getReferencedColumn: (t) => t.name,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$GymSetsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.gymSets,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlansTableAnnotationComposer get planId {
+    final $$PlansTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.planId,
+        referencedTable: $db.plans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlansTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plans,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
 class $$PlanExercisesTableTableManager extends RootTableManager<
     _$AppDatabase,
     $PlanExercisesTable,
     PlanExercise,
     $$PlanExercisesTableFilterComposer,
     $$PlanExercisesTableOrderingComposer,
+    $$PlanExercisesTableAnnotationComposer,
     $$PlanExercisesTableCreateCompanionBuilder,
-    $$PlanExercisesTableUpdateCompanionBuilder> {
+    $$PlanExercisesTableUpdateCompanionBuilder,
+    (PlanExercise, $$PlanExercisesTableReferences),
+    PlanExercise,
+    PrefetchHooks Function({bool exercise, bool planId})> {
   $$PlanExercisesTableTableManager(_$AppDatabase db, $PlanExercisesTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$PlanExercisesTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$PlanExercisesTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$PlanExercisesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlanExercisesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlanExercisesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<bool> enabled = const Value.absent(),
             Value<bool> timers = const Value.absent(),
@@ -3982,114 +4468,72 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
             planId: planId,
             warmupSets: warmupSets,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$PlanExercisesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({exercise = false, planId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (exercise) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.exercise,
+                    referencedTable:
+                        $$PlanExercisesTableReferences._exerciseTable(db),
+                    referencedColumn:
+                        $$PlanExercisesTableReferences._exerciseTable(db).name,
+                  ) as T;
+                }
+                if (planId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.planId,
+                    referencedTable:
+                        $$PlanExercisesTableReferences._planIdTable(db),
+                    referencedColumn:
+                        $$PlanExercisesTableReferences._planIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
-class $$PlanExercisesTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $PlanExercisesTable> {
-  $$PlanExercisesTableFilterComposer(super.$state);
-  ColumnFilters<bool> get enabled => $state.composableBuilder(
-      column: $state.table.enabled,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get timers => $state.composableBuilder(
-      column: $state.table.timers,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get maxSets => $state.composableBuilder(
-      column: $state.table.maxSets,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get warmupSets => $state.composableBuilder(
-      column: $state.table.warmupSets,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$GymSetsTableFilterComposer get exercise {
-    final $$GymSetsTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.exercise,
-        referencedTable: $state.db.gymSets,
-        getReferencedColumn: (t) => t.name,
-        builder: (joinBuilder, parentComposers) => $$GymSetsTableFilterComposer(
-            ComposerState(
-                $state.db, $state.db.gymSets, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$PlansTableFilterComposer get planId {
-    final $$PlansTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.planId,
-        referencedTable: $state.db.plans,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) => $$PlansTableFilterComposer(
-            ComposerState(
-                $state.db, $state.db.plans, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
-class $$PlanExercisesTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $PlanExercisesTable> {
-  $$PlanExercisesTableOrderingComposer(super.$state);
-  ColumnOrderings<bool> get enabled => $state.composableBuilder(
-      column: $state.table.enabled,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get timers => $state.composableBuilder(
-      column: $state.table.timers,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get maxSets => $state.composableBuilder(
-      column: $state.table.maxSets,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get warmupSets => $state.composableBuilder(
-      column: $state.table.warmupSets,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$GymSetsTableOrderingComposer get exercise {
-    final $$GymSetsTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.exercise,
-        referencedTable: $state.db.gymSets,
-        getReferencedColumn: (t) => t.name,
-        builder: (joinBuilder, parentComposers) =>
-            $$GymSetsTableOrderingComposer(ComposerState(
-                $state.db, $state.db.gymSets, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$PlansTableOrderingComposer get planId {
-    final $$PlansTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.planId,
-        referencedTable: $state.db.plans,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) => $$PlansTableOrderingComposer(
-            ComposerState(
-                $state.db, $state.db.plans, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
+typedef $$PlanExercisesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PlanExercisesTable,
+    PlanExercise,
+    $$PlanExercisesTableFilterComposer,
+    $$PlanExercisesTableOrderingComposer,
+    $$PlanExercisesTableAnnotationComposer,
+    $$PlanExercisesTableCreateCompanionBuilder,
+    $$PlanExercisesTableUpdateCompanionBuilder,
+    (PlanExercise, $$PlanExercisesTableReferences),
+    PlanExercise,
+    PrefetchHooks Function({bool exercise, bool planId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
