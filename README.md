@@ -5,7 +5,6 @@ Get fit with Flexify. Easily track your gym progression.
 <p float="left">
     <a href="https://github.com/brandonp2412/Flexify/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
     <a href="#"><img alt="Release downloads" src="https://img.shields.io/github/downloads/brandonp2412/Flexify/total.svg?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
-    <a href="#"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
 </p>
 
 ## Features
@@ -17,7 +16,9 @@ Get fit with Flexify. Easily track your gym progression.
 - ⚙️ **Highly customizable**: Toggle features on/off, swap between light/dark theme and much more.
 - ⏱️ **Automatic rest timers**: Stay focused with alarms after resting.
 
-<a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href="https://f-droid.org/packages/com.presley.flexify"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
+<a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+<a href="https://f-droid.org/packages/com.presley.flexify"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
+
 <a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="75"/></a>
 <a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&amp;itscg=30200"><img src="docs/download-apple.svg" alt="Download on the App Store" height="75"></a>
 
