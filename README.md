@@ -9,12 +9,12 @@ Get fit with Flexify. Easily track your gym progression.
 
 ## Features
 
-- 💪 **Track gym progress**: Log your reps and weights with ease.
+- 💪 **Strength**: Log your reps and weights with ease.
 - 📵 **Offline**: Flexify doesn't use the internet at all.
 - 📈 **Graphs**: Visualize your progress over time with intuitive graphs.
-- 🏃 **Cardio tracking**: Record your progress with cardio types.
-- ⚙️ **Highly customizable**: Toggle features on/off, swap between light/dark theme and much more.
-- ⏱️ **Automatic rest timers**: Stay focused with alarms after resting.
+- 🏃 **Cardio**: Record your progress with cardio types.
+- ⚙️ **Custom**: Toggle features on/off, swap between light/dark theme and much more.
+- ⏱️ **Timers**: Stay focused with alarms after resting.
 
 <a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 <a href="https://f-droid.org/packages/com.presley.flexify"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
@@ -103,7 +103,7 @@ from1To2: (Migrator m, Schema2 schema) async {
 
 ## Contributing
 
-Contributions to Flexify are welcomed and encouraged! Whether you want to report a bug, suggest a feature, or submit a pull request, please feel free to contribute. For major changes, please open an issue first to discuss the proposed changes.
+All issues and pull requests are welcome. We don't care what style it's in, we don't care what your variable names are.
 
 ## License
 
