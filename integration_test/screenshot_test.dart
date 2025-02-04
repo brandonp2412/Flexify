@@ -205,6 +205,7 @@ GymSetsCompanion generateGymSetCompanion(
       weight: weight,
       unit: "kg",
       created: date ?? DateTime.now(),
+      category: Value("Arms"),
     );
 
 void main() {

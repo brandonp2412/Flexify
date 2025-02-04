@@ -24,6 +24,7 @@ void main() async {
         weight: 90,
         unit: 'kg',
         created: DateTime.now(),
+        category: Value("Chest"),
       ),
       GymSetsCompanion.insert(
         name: 'Shoulder press',
@@ -31,6 +32,7 @@ void main() async {
         weight: 60,
         unit: 'kg',
         created: DateTime.now(),
+        category: Value("Shoulders"),
       ),
       GymSetsCompanion.insert(
         name: 'Deadlift',
@@ -38,6 +40,7 @@ void main() async {
         weight: 100,
         unit: 'kg',
         created: DateTime.now(),
+        category: Value("Legs"),
       ),
     ]));
 
