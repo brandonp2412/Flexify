@@ -1,4 +1,3 @@
-import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +33,8 @@ class _GraphsFiltersState extends State<GraphsFilters> {
                 child: DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Category'),
                   value: widget.category,
-                  items: snapshot.data?.map(
+                  items: snapshot.data
+                      ?.map(
                         (category) => DropdownMenuItem(
                           value: category,
                           child: Text(category),

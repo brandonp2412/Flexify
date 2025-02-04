@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -101,9 +100,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     stream: categoriesStream,
                     builder: (context, snapshot) {
                       return DropdownButtonFormField(
-                        decoration: const InputDecoration(labelText: 'Category'),
+                        decoration:
+                            const InputDecoration(labelText: 'Category'),
                         value: category,
-                        items: snapshot.data?.map(
+                        items: snapshot.data
+                            ?.map(
                               (category) => DropdownMenuItem(
                                 value: category,
                                 child: Text(category),

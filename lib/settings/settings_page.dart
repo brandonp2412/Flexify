@@ -38,7 +38,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final settings = context.watch<SettingsState>();
     if (searchController.text.isNotEmpty) {
       filtered.addAll(
-          getAppearanceSettings(context, searchController.text, settings));
+        getAppearanceSettings(context, searchController.text, settings),
+      );
       filtered.addAll(getFormatSettings(searchController.text, settings.value));
       filtered.addAll(
         getWorkoutSettings(

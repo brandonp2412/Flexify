@@ -200,7 +200,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
       await db.planExercises
           .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
       await db.planExercises.insertAll(
-          exercises.map((pe) => pe.copyWith(planId: widget.plan.id)));
+        exercises.map((pe) => pe.copyWith(planId: widget.plan.id)),
+      );
     } else {
       final id = await db.into(db.plans).insert(newPlan);
       await db.planExercises
