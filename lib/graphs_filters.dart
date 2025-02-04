@@ -1,4 +1,5 @@
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flutter/material.dart';
 
 class GraphsFilters extends StatefulWidget {
@@ -24,39 +25,43 @@ class _GraphsFiltersState extends State<GraphsFilters> {
       count: filtersCount,
       isLabelVisible: filtersCount > 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
-      child: PopupMenuButton(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            child: DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Category'),
-              value: widget.category,
-              items: categories
-                  .map(
-                    (category) => DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                widget.setCategory(value);
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          PopupMenuItem(
-            child: ListTile(
-              leading: const Icon(Icons.clear_all),
-              title: const Text("Clear"),
-              onTap: () async {
-                widget.setCategory(null);
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
-        tooltip: "Filter",
-        icon: const Icon(Icons.filter_list),
+      child: StreamBuilder(
+        stream: categoriesStream,
+        builder: (context, snapshot) {
+          return PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: DropdownButtonFormField(
+                  decoration: const InputDecoration(labelText: 'Category'),
+                  value: widget.category,
+                  items: snapshot.data?.map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    widget.setCategory(value);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.clear_all),
+                  title: const Text("Clear"),
+                  onTap: () async {
+                    widget.setCategory(null);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+            tooltip: "Filter",
+            icon: const Icon(Icons.filter_list),
+          );
+        },
       ),
     );
   }

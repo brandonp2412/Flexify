@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
@@ -242,24 +242,29 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 ),
                 selector: (context, settings) => settings.value.showUnits,
               ),
-              DropdownButtonFormField(
-                decoration: InputDecoration(
-                  labelText: 'Category',
-                  hintText: oldCategories,
-                ),
-                value: category,
-                items: categories
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    category = value!;
-                  });
+              StreamBuilder(
+                stream: categoriesStream,
+                builder: (context, snapshot) {
+                  return DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Category',
+                      hintText: oldCategories,
+                    ),
+                    value: category,
+                    items: snapshot.data
+                        ?.map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        category = value!;
+                      });
+                    },
+                  );
                 },
               ),
               Selector<SettingsState, String>(

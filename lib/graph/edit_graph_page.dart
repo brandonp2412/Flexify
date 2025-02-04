@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -96,21 +97,25 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 selector: (p0, settings) => settings.value.showCategories,
                 builder: (context, showCategories, child) {
                   if (!showCategories) return const SizedBox();
-                  return DropdownButtonFormField(
-                    decoration: const InputDecoration(labelText: 'Category'),
-                    value: category,
-                    items: categories
-                        .map(
-                          (category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(category),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        category = value!;
-                      });
+                  return StreamBuilder(
+                    stream: categoriesStream,
+                    builder: (context, snapshot) {
+                      return DropdownButtonFormField(
+                        decoration: const InputDecoration(labelText: 'Category'),
+                        value: category,
+                        items: snapshot.data?.map(
+                              (category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(category),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            category = value!;
+                          });
+                        },
+                      );
                     },
                   );
                 },

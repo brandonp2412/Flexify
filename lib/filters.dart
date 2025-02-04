@@ -1,5 +1,6 @@
-import 'package:flexify/constants.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -64,212 +65,221 @@ class _FiltersState extends State<Filters> {
       count: filtersCount,
       isLabelVisible: filtersCount > 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
-      child: PopupMenuButton(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            child: DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Category'),
-              value: widget.category,
-              items: categories
-                  .map(
-                    (category) => DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                widget.setCategory(value);
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          PopupMenuItem(
-            child: ListTile(
-              leading: const Icon(Icons.repeat),
-              title: const Text('Reps'),
-              subtitle: reps != null ? Text(reps) : null,
-              onTap: () {
-                Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Reps filter"),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          TextField(
-                            onChanged: (value) => widget.setStream(),
-                            controller: widget.repsGtController,
-                            decoration: const InputDecoration(
-                              labelText: "Greater than",
-                            ),
-                            keyboardType: TextInputType.number,
+      child: StreamBuilder(
+        stream: categoriesStream,
+        builder: (context, snapshot) {
+          return PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: DropdownButtonFormField(
+                  decoration: const InputDecoration(labelText: 'Category'),
+                  value: widget.category,
+                  items: snapshot.data
+                      ?.map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    widget.setCategory(value);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.repeat),
+                  title: const Text('Reps'),
+                  subtitle: reps != null ? Text(reps) : null,
+                  onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Reps filter"),
+                        content: SingleChildScrollView(
+                          child: material.Column(
+                            children: [
+                              TextField(
+                                onChanged: (value) => widget.setStream(),
+                                controller: widget.repsGtController,
+                                decoration: const InputDecoration(
+                                  labelText: "Greater than",
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                              TextField(
+                                onChanged: (value) => widget.setStream(),
+                                controller: widget.repsLtController,
+                                decoration: const InputDecoration(
+                                  labelText: "Less than",
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ],
                           ),
-                          TextField(
-                            onChanged: (value) => widget.setStream(),
-                            controller: widget.repsLtController,
-                            decoration:
-                                const InputDecoration(labelText: "Less than"),
-                            keyboardType: TextInputType.number,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Clear'),
+                            onPressed: () async {
+                              widget.repsGtController.text = '';
+                              widget.repsLtController.text = '';
+                              widget.setStream();
+                              Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
                           ),
                         ],
                       ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Clear'),
-                        onPressed: () async {
-                          widget.repsGtController.text = '';
-                          widget.repsLtController.text = '';
-                          widget.setStream();
-                          Navigator.pop(context);
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          PopupMenuItem(
-            child: ListTile(
-              leading: const Icon(Icons.scale),
-              title: const Text('Weight'),
-              subtitle: weight != null ? Text(weight) : null,
-              onTap: () {
-                Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Weight filter"),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          TextField(
-                            onChanged: (value) => widget.setStream(),
-                            controller: widget.weightGtController,
-                            decoration: const InputDecoration(
-                              labelText: "Greater than",
-                            ),
-                            keyboardType: TextInputType.number,
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.scale),
+                  title: const Text('Weight'),
+                  subtitle: weight != null ? Text(weight) : null,
+                  onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Weight filter"),
+                        content: SingleChildScrollView(
+                          child: material.Column(
+                            children: [
+                              TextField(
+                                onChanged: (value) => widget.setStream(),
+                                controller: widget.weightGtController,
+                                decoration: const InputDecoration(
+                                  labelText: "Greater than",
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                              TextField(
+                                onChanged: (value) => widget.setStream(),
+                                controller: widget.weightLtController,
+                                decoration: const InputDecoration(
+                                  labelText: "Less than",
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ],
                           ),
-                          TextField(
-                            onChanged: (value) => widget.setStream(),
-                            controller: widget.weightLtController,
-                            decoration:
-                                const InputDecoration(labelText: "Less than"),
-                            keyboardType: TextInputType.number,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Clear'),
+                            onPressed: () async {
+                              widget.weightGtController.text = '';
+                              widget.weightLtController.text = '';
+                              widget.setStream();
+                              Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
                           ),
                         ],
                       ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Clear'),
-                        onPressed: () async {
-                          widget.weightGtController.text = '';
-                          widget.weightLtController.text = '';
-                          widget.setStream();
-                          Navigator.pop(context);
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.calendar_today),
+                  title: const Text("Start date"),
+                  onLongPress: () {
+                    widget.setStart(null);
+                    Navigator.pop(context);
+                  },
+                  subtitle: Selector<SettingsState, String>(
+                    selector: (p0, settings) => settings.value.shortDateFormat,
+                    builder: (context, shortDateFormat, child) =>
+                        widget.startDate != null
+                            ? Text(
+                                DateFormat(shortDateFormat)
+                                    .format(widget.startDate!),
+                              )
+                            : Text(shortDateFormat),
                   ),
-                );
-              },
-            ),
-          ),
-          PopupMenuItem(
-            child: ListTile(
-              leading: const Icon(Icons.calendar_today),
-              title: const Text("Start date"),
-              onLongPress: () {
-                widget.setStart(null);
-                Navigator.pop(context);
-              },
-              subtitle: Selector<SettingsState, String>(
-                selector: (p0, settings) => settings.value.shortDateFormat,
-                builder: (context, shortDateFormat, child) =>
-                    widget.startDate != null
-                        ? Text(
-                            DateFormat(shortDateFormat)
-                                .format(widget.startDate!),
-                          )
-                        : Text(shortDateFormat),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: widget.startDate,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (pickedDate != null)
+                      widget.setStart(pickedDate.toLocal());
+                  },
+                ),
               ),
-              onTap: () async {
-                Navigator.pop(context);
-                final DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: widget.startDate,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                );
-                if (pickedDate != null) widget.setStart(pickedDate.toLocal());
-              },
-            ),
-          ),
-          PopupMenuItem(
-            child: ListTile(
-              leading: const Icon(Icons.calendar_month),
-              title: const Text("End date"),
-              subtitle: Selector<SettingsState, String>(
-                selector: (p0, settings) => settings.value.shortDateFormat,
-                builder: (context, shortDateFormat, child) =>
-                    widget.endDate != null
-                        ? Text(
-                            DateFormat(shortDateFormat).format(widget.endDate!),
-                          )
-                        : Text(shortDateFormat),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.calendar_month),
+                  title: const Text("End date"),
+                  subtitle: Selector<SettingsState, String>(
+                    selector: (p0, settings) => settings.value.shortDateFormat,
+                    builder: (context, shortDateFormat, child) =>
+                        widget.endDate != null
+                            ? Text(
+                                DateFormat(shortDateFormat)
+                                    .format(widget.endDate!),
+                              )
+                            : Text(shortDateFormat),
+                  ),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: widget.endDate,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (pickedDate != null) widget.setEnd(pickedDate.toLocal());
+                  },
+                  onLongPress: () {
+                    widget.setEnd(null);
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-              onTap: () async {
-                Navigator.pop(context);
-                final DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: widget.endDate,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                );
-                if (pickedDate != null) widget.setEnd(pickedDate.toLocal());
-              },
-              onLongPress: () {
-                widget.setEnd(null);
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          PopupMenuItem(
-            child: ListTile(
-              leading: const Icon(Icons.clear_all),
-              title: const Text("Clear"),
-              onTap: () async {
-                widget.repsGtController.text = '';
-                widget.repsLtController.text = '';
-                widget.weightGtController.text = '';
-                widget.weightLtController.text = '';
-                widget.setStart(null);
-                widget.setEnd(null);
-                widget.setCategory(null);
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
-        tooltip: "Filter",
-        icon: const Icon(Icons.filter_list),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.clear_all),
+                  title: const Text("Clear"),
+                  onTap: () async {
+                    widget.repsGtController.text = '';
+                    widget.repsLtController.text = '';
+                    widget.weightGtController.text = '';
+                    widget.weightLtController.text = '';
+                    widget.setStart(null);
+                    widget.setEnd(null);
+                    widget.setCategory(null);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+            tooltip: "Filter",
+            icon: const Icon(Icons.filter_list),
+          );
+        },
       ),
     );
   }

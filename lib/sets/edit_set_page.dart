@@ -251,21 +251,45 @@ class _EditSetPageState extends State<EditSetPage> {
                 selector: (p0, settings) => settings.value.showCategories,
                 builder: (context, showCategories, child) {
                   if (showCategories)
-                    return DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: 'Category'),
-                      value: category,
-                      items: categories
-                          .map(
-                            (category) => DropdownMenuItem(
-                              value: category,
-                              child: Text(category),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          category = value!;
-                        });
+                    return StreamBuilder(
+                      stream: categoriesStream,
+                      builder: (context, snapshot) {
+                        return Autocomplete<String>(
+                          initialValue: TextEditingValue(
+                              text: widget.gymSet.category ?? ""),
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            if (snapshot.data == null) return [];
+                            if (textEditingValue.text == '') {
+                              return snapshot.data!;
+                            }
+                            return snapshot.data!.where((String option) {
+                              return option.toLowerCase().contains(
+                                  textEditingValue.text.toLowerCase());
+                            });
+                          },
+                          onSelected: (String selection) {
+                            setState(() {
+                              category = selection;
+                            });
+                          },
+                          fieldViewBuilder: (
+                            BuildContext context,
+                            TextEditingController textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted,
+                          ) {
+                            return TextFormField(
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: 'Category',
+                              ),
+                              onChanged: (value) => setState(() {
+                                category = value;
+                              }),
+                            );
+                          },
+                        );
                       },
                     );
                   return const SizedBox();
