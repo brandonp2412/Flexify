@@ -368,5 +368,6 @@ final categoriesStream = (db.gymSets.selectOnly(distinct: true)
       ..addColumns([db.gymSets.category]))
     .watch()
     .map(
-      (results) => results.map((result) => result.read(db.gymSets.category)!),
+      (results) =>
+          results.map((result) => result.read(db.gymSets.category) ?? ""),
     );
