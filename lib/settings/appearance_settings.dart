@@ -142,6 +142,8 @@ List<Widget> getAppearanceSettings(
         children: [
           Slider(
             value: settings.value.curveSmoothness ?? 0.35,
+            inactiveColor:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.24),
             onChanged: (value) {
               db.settings.update().write(
                     SettingsCompanion(
