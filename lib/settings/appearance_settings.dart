@@ -140,6 +140,13 @@ List<Widget> getAppearanceSettings(
     if ('curve smoothness'.contains(term.toLowerCase()))
       material.Column(
         children: [
+          material.Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              "Curve smoothness",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
           Slider(
             value: settings.value.curveSmoothness ?? 0.35,
             inactiveColor:
@@ -151,13 +158,6 @@ List<Widget> getAppearanceSettings(
                     ),
                   );
             },
-          ),
-          material.Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              "Curve smoothness",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
           ),
         ],
       ),
