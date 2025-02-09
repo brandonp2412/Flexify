@@ -27,6 +27,8 @@ class BackupReceiver : BroadcastReceiver() {
         if (context == null) return
 
         val (enabled, backupPath) = getSettings(context)
+        if (!enabled) return;
+
         val backupUri = Uri.parse(backupPath)
 
         val channelId = "backup_channel"
