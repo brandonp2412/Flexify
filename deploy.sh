@@ -27,12 +27,11 @@ if [[ $* == *-m* ]]; then
 else
   set +x
   ip=$(arp | grep "$MACBOOK_MAC" | cut -d ' ' -f 1)
-  rsync -a --exclude-from=.gitignore ./* .git .gitignore \
-    --exclude=flutter "$ip":~/flexify
   # shellcheck disable=SC2029
   ssh "$ip" "
     security unlock-keychain -p '$(pass macbook)'
     cd flexify
+    git pull
     ./scripts/macos.sh
   "
 fi
