@@ -79,7 +79,6 @@ class App extends StatelessWidget {
         ),
         themeMode: themeMode,
         home: const HomePage(),
-        debugShowCheckedModeBanner: false,
       ),
     );
   }
