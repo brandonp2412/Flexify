@@ -1,6 +1,6 @@
 # Flexify
 
-Flex on people with this swanky, lightning-quick app!
+Flex on people with this swanky, lightning-quick gym tracker!
 
 <p float="left">
     <a href="https://github.com/brandonp2412/Flexify/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/brandonp2412/flexify?style=for-the-badge&logoColor=d3bcfd&labelColor=d3bcfd&color=151218"></a>
