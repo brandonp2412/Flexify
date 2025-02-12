@@ -373,85 +373,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 icon: const Icon(Icons.check),
                 onPressed: () async {
                   Navigator.pop(context);
-                  if (unit == 'kg')
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight * 0.45359237, 
-                        unit = 'kg'
-                      WHERE name = ? AND unit = 'lb';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                  else if (unit == 'lb')
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight * 2.20462262, 
-                        unit = 'lb'
-                      WHERE name = ? AND unit = 'kg';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                  else if (unit == 'km') {
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight * 1.609, 
-                        unit = 'km'
-                      WHERE name = ? AND unit = 'mi';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight / 1000, 
-                        unit = 'km'
-                      WHERE name = ? AND unit = 'm';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                  } else if (unit == 'mi') {
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight / 1.609, 
-                        unit = 'mi'
-                      WHERE name = ? AND unit = 'km';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight / 1609.34, 
-                        unit = 'mi'
-                      WHERE name = ? AND unit = 'm';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                  } else if (unit == 'm') {
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight * 1000, 
-                        unit = 'm'
-                      WHERE name = ? AND unit = 'km';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                    await db.customUpdate(
-                      '''
-                      UPDATE gym_sets SET weight = weight * 1609.34, 
-                        unit = 'm'
-                      WHERE name = ? AND unit = 'mi';
-                    ''',
-                      updates: {db.gymSets},
-                      variables: [Variable(widget.name)],
-                    );
-                  }
-
+                  await convertUnits();
                   await doUpdate();
                 },
               ),
@@ -463,6 +385,87 @@ class _EditGraphPageState extends State<EditGraphPage> {
       await doUpdate();
 
     if (!mounted) return;
-    Navigator.pop(context);
+    Navigator.pop(context, name.text);
+  }
+
+  Future<void> convertUnits() async {
+    if (unit == 'kg')
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight * 0.45359237, 
+          unit = 'kg'
+        WHERE name = ? AND unit = 'lb';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+    else if (unit == 'lb')
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight * 2.20462262, 
+          unit = 'lb'
+        WHERE name = ? AND unit = 'kg';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+    else if (unit == 'km') {
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight * 1.609, 
+          unit = 'km'
+        WHERE name = ? AND unit = 'mi';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight / 1000, 
+          unit = 'km'
+        WHERE name = ? AND unit = 'm';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+    } else if (unit == 'mi') {
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight / 1.609, 
+          unit = 'mi'
+        WHERE name = ? AND unit = 'km';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight / 1609.34, 
+          unit = 'mi'
+        WHERE name = ? AND unit = 'm';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+    } else if (unit == 'm') {
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight * 1000, 
+          unit = 'm'
+        WHERE name = ? AND unit = 'km';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+      await db.customUpdate(
+        '''
+        UPDATE gym_sets SET weight = weight * 1609.34, 
+          unit = 'm'
+        WHERE name = ? AND unit = 'mi';
+      ''',
+        updates: {db.gymSets},
+        variables: [Variable(widget.name)],
+      );
+    }
   }
 }
