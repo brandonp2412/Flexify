@@ -77,16 +77,13 @@ class _HistoryListState extends State<HistoryList> {
         )
         .toList();
 
-    // Additions don't occur from this page, so we have to wait first.
-    Future.delayed(const Duration(milliseconds: 40)).then((_) {
-      for (var setToAdd in setsToAdd) {
-        final insertIndex = widget.gymSets.indexOf(setToAdd);
-        if (insertIndex >= 0 && insertIndex <= _currentSets.length) {
-          _currentSets.insert(insertIndex, setToAdd);
-          _listKey.currentState?.insertItem(insertIndex);
-        }
+    for (var setToAdd in setsToAdd) {
+      final insertIndex = widget.gymSets.indexOf(setToAdd);
+      if (insertIndex >= 0 && insertIndex <= _currentSets.length) {
+        _currentSets.insert(insertIndex, setToAdd);
+        _listKey.currentState?.insertItem(insertIndex, duration: Duration.zero);
       }
-    });
+    }
   }
 
   Widget _buildItem(
