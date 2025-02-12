@@ -36,6 +36,7 @@ class StrengthPage extends StatefulWidget {
 class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> data = widget.data;
   late String targetUnit = widget.unit;
+  late String name = widget.name;
   StrengthMetric metric = StrengthMetric.bestWeight;
   Period period = Period.day;
   DateTime? startDate;
@@ -49,7 +50,7 @@ class _StrengthPageState extends State<StrengthPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
+        title: Text(name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -58,15 +59,19 @@ class _StrengthPageState extends State<StrengthPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              String? newName = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditGraphPage(
-                    name: widget.name,
+                    name: name,
                   ),
                 ),
               );
+              if (mounted && newName != null)
+                setState(() {
+                  name = newName;
+                });
             },
             icon: const Icon(Icons.edit),
             tooltip: "Edit",
@@ -85,7 +90,7 @@ class _StrengthPageState extends State<StrengthPage> {
             return ListView(
               children: [
                 Visibility(
-                  visible: widget.name != 'Weight',
+                  visible: name != 'Weight',
                   child: DropdownButtonFormField(
                     decoration: const InputDecoration(labelText: 'Metric'),
                     value: metric,
@@ -243,7 +248,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                   ],
                 )
-                ..where((tbl) => tbl.name.equals(widget.name))
+                ..where((tbl) => tbl.name.equals(name))
                 ..where((tbl) => tbl.hidden.equals(false))
                 ..limit(20))
               .get();
@@ -252,7 +257,7 @@ class _StrengthPageState extends State<StrengthPage> {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => GraphHistoryPage(
-                name: widget.name,
+                name: name,
                 gymSets: gymSets,
               ),
             ),
