@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 class TimerCircularProgressIndicator extends StatefulWidget {
   const TimerCircularProgressIndicator({super.key});
-
   @override
   State<TimerCircularProgressIndicator> createState() =>
       _TimerCircularProgressIndicatorState();
@@ -15,6 +14,8 @@ class TimerCircularProgressIndicator extends StatefulWidget {
 class _TimerCircularProgressIndicatorState
     extends State<TimerCircularProgressIndicator> {
   bool starting = true;
+  bool stopping = false;
+  double lastValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,8 @@ class _TimerCircularProgressIndicatorState
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
 
-        if (duration > Duration.zero && remaining > Duration.zero && starting)
+        // Opening animation
+        if (duration > Duration.zero && remaining > Duration.zero && starting) {
           return TweenAnimationBuilder(
             key: UniqueKey(),
             tween: Tween<double>(
@@ -43,12 +45,15 @@ class _TimerCircularProgressIndicatorState
               timerState: timerState,
             ),
           );
+        }
 
+        // Normal countdown
         if (duration > Duration.zero && remaining > Duration.zero) {
+          lastValue = 1 - (elapsed.inMilliseconds / duration.inMilliseconds);
           return TweenAnimationBuilder(
             key: UniqueKey(),
             tween: Tween<double>(
-              begin: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
+              begin: lastValue,
               end: 0,
             ),
             duration: remaining,
@@ -60,14 +65,29 @@ class _TimerCircularProgressIndicatorState
           );
         }
 
-        // Reset after stopping.
-        if (!starting)
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted)
+        // Closing animation
+        if (!starting && !stopping) {
+          stopping = true;
+          return TweenAnimationBuilder(
+            key: UniqueKey(),
+            tween: Tween<double>(
+              begin: lastValue,
+              end: 0,
+            ),
+            duration: const Duration(milliseconds: 300),
+            onEnd: () {
               setState(() {
+                stopping = false;
                 starting = true;
               });
-          });
+            },
+            builder: (context, value, child) =>
+                _TimerCircularProgressIndicatorTile(
+              value: value,
+              timerState: timerState,
+            ),
+          );
+        }
 
         return _TimerCircularProgressIndicatorTile(
           value: 0,
