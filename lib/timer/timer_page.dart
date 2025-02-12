@@ -24,9 +24,8 @@ class TimerPageState extends State<TimerPage> {
         if (navigatorKey.currentState!.canPop() == false) return;
         final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
-        final historyIndex = settings.tabs.split(',').indexOf('HistoryPage');
-        if (tabController.index == historyIndex)
-          navigatorKey.currentState!.pop();
+        final timerIndex = settings.tabs.split(',').indexOf('TimerPage');
+        if (tabController.index == timerIndex) navigatorKey.currentState!.pop();
       },
       child: Navigator(
         key: navigatorKey,
