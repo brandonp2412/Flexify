@@ -31,7 +31,7 @@ class _TimerCircularProgressIndicatorState
             key: UniqueKey(),
             tween: Tween<double>(
               begin: 0,
-              end: 1,
+              end: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
             ),
             duration: const Duration(milliseconds: 300),
             onEnd: () {
