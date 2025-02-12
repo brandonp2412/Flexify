@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -14,31 +12,10 @@ class TimerCircularProgressIndicator extends StatefulWidget {
 }
 
 class _TimerCircularProgressIndicatorState
-    extends State<TimerCircularProgressIndicator>
-    with SingleTickerProviderStateMixin {
+    extends State<TimerCircularProgressIndicator> {
   bool starting = true;
   bool stopping = false;
   double lastValue = 0;
-  late AnimationController _textShakeController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textShakeController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-  }
-
-  @override
-  void dispose() {
-    _textShakeController.dispose();
-    super.dispose();
-  }
-
-  void triggerShake() {
-    if (lastValue >= 0.9) _textShakeController.forward(from: 0);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +26,7 @@ class _TimerCircularProgressIndicatorState
         final remaining = timerState.nativeTimer.getRemaining();
 
         // Opening animation
-        if (duration > Duration.zero &&
-            remaining > Duration.zero &&
-            starting &&
-            elapsed == Duration.zero) {
+        if (duration > Duration.zero && remaining > Duration.zero && starting) {
           return TweenAnimationBuilder(
             key: UniqueKey(),
             tween: Tween<double>(
@@ -69,8 +43,6 @@ class _TimerCircularProgressIndicatorState
                 _TimerCircularProgressIndicatorTile(
               value: value,
               timerState: timerState,
-              textShakeController: _textShakeController,
-              onAddMinute: value >= 0.9 ? triggerShake : null,
             ),
           );
         }
@@ -89,8 +61,6 @@ class _TimerCircularProgressIndicatorState
                 _TimerCircularProgressIndicatorTile(
               value: value,
               timerState: timerState,
-              textShakeController: _textShakeController,
-              onAddMinute: value >= 0.9 ? triggerShake : null,
             ),
           );
         }
@@ -115,27 +85,13 @@ class _TimerCircularProgressIndicatorState
                 _TimerCircularProgressIndicatorTile(
               value: value,
               timerState: timerState,
-              textShakeController: _textShakeController,
-              onAddMinute: value >= 0.9 ? triggerShake : null,
             ),
           );
-        }
-
-        if (!starting) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              setState(() {
-                starting = true;
-              });
-            }
-          });
         }
 
         return _TimerCircularProgressIndicatorTile(
           value: 0,
           timerState: timerState,
-          textShakeController: _textShakeController,
-          onAddMinute: null,
         );
       },
     );
@@ -175,14 +131,10 @@ class TimerProgressIndicator extends StatelessWidget {
 class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   final double value;
   final TimerState timerState;
-  final AnimationController textShakeController;
-  final VoidCallback? onAddMinute;
 
   const _TimerCircularProgressIndicatorTile({
     required this.value,
     required this.timerState,
-    required this.textShakeController,
-    required this.onAddMinute,
   });
 
   @override
@@ -207,23 +159,13 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 32.0),
-            AnimatedBuilder(
-              animation: textShakeController,
-              builder: (context, child) {
-                final sineValue = sin(textShakeController.value * 3 * pi) * 5;
-                return Transform.translate(
-                  offset: Offset(0, sineValue),
-                  child: child,
-                );
-              },
-              child: Text(
-                generateTitleText(timerState.nativeTimer.getRemaining()),
-                style: TextStyle(
-                  fontSize: 50.0,
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: FontWeight.bold,
-                ),
+            const SizedBox(height: 20.0),
+            Text(
+              generateTitleText(timerState.nativeTimer.getRemaining()),
+              style: TextStyle(
+                fontSize: 50.0,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+                fontWeight: FontWeight.bold,
               ),
             ),
             TextButton(
@@ -234,9 +176,8 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                   settings.alarmSound,
                   settings.vibrate,
                 );
-                if (onAddMinute != null) onAddMinute!();
               },
-              child: const Text('+1 min'),
+              child: const Text('+1 minute'),
             ),
           ],
         ),
