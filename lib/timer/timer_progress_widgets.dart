@@ -4,8 +4,17 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TimerCircularProgressIndicator extends StatelessWidget {
+class TimerCircularProgressIndicator extends StatefulWidget {
   const TimerCircularProgressIndicator({super.key});
+
+  @override
+  State<TimerCircularProgressIndicator> createState() =>
+      _TimerCircularProgressIndicatorState();
+}
+
+class _TimerCircularProgressIndicatorState
+    extends State<TimerCircularProgressIndicator> {
+  bool starting = true;
 
   @override
   Widget build(BuildContext context) {
@@ -15,24 +24,55 @@ class TimerCircularProgressIndicator extends StatelessWidget {
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
 
-        return duration > Duration.zero && remaining > Duration.zero
-            ? TweenAnimationBuilder(
-                key: UniqueKey(),
-                tween: Tween<double>(
-                  begin: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
-                  end: 0,
-                ),
-                duration: remaining,
-                builder: (context, value, child) =>
-                    _TimerCircularProgressIndicatorTile(
-                  value: value,
-                  timerState: timerState,
-                ),
-              )
-            : _TimerCircularProgressIndicatorTile(
-                value: 0,
-                timerState: timerState,
-              );
+        if (duration > Duration.zero && remaining > Duration.zero && starting)
+          return TweenAnimationBuilder(
+            key: UniqueKey(),
+            tween: Tween<double>(
+              begin: 0,
+              end: 1,
+            ),
+            duration: const Duration(milliseconds: 300),
+            onEnd: () {
+              setState(() {
+                starting = false;
+              });
+            },
+            builder: (context, value, child) =>
+                _TimerCircularProgressIndicatorTile(
+              value: value,
+              timerState: timerState,
+            ),
+          );
+
+        if (duration > Duration.zero && remaining > Duration.zero) {
+          return TweenAnimationBuilder(
+            key: UniqueKey(),
+            tween: Tween<double>(
+              begin: 1 - (elapsed.inMilliseconds / duration.inMilliseconds),
+              end: 0,
+            ),
+            duration: remaining,
+            builder: (context, value, child) =>
+                _TimerCircularProgressIndicatorTile(
+              value: value,
+              timerState: timerState,
+            ),
+          );
+        }
+
+        // Reset after stopping.
+        if (!starting)
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted)
+              setState(() {
+                starting = true;
+              });
+          });
+
+        return _TimerCircularProgressIndicatorTile(
+          value: 0,
+          timerState: timerState,
+        );
       },
     );
   }
@@ -99,7 +139,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 32.0),
+            const SizedBox(height: 23.0),
             Text(
               generateTitleText(timerState.nativeTimer.getRemaining()),
               style: TextStyle(
@@ -117,7 +157,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                   settings.vibrate,
                 );
               },
-              child: const Text('+1 min'),
+              child: const Text('+1 minute'),
             ),
           ],
         ),
