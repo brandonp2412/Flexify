@@ -6,8 +6,10 @@ import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final List<String> longFormats = [
+  'timeago',
   'dd/MM/yy',
   'dd/MM/yy h:mm a',
   'dd/MM/yy H:mm',
@@ -67,23 +69,32 @@ List<Widget> getFormatSettings(String term, Setting settings) {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Tooltip(
           message: 'Used where space is abundant',
-          child: DropdownButtonFormField<String>(
-            value: settings.longDateFormat,
-            items: longFormats.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    longDateFormat: Value(value!),
-                  ),
+          child: Builder(
+            builder: (context) {
+              var format = timeago.format(DateTime.now());
+
+              if (settings.longDateFormat != 'timeago')
+                format =
+                    DateFormat(settings.longDateFormat).format(DateTime.now());
+
+              return DropdownButtonFormField<String>(
+                value: settings.longDateFormat,
+                items: longFormats.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) => db.settings.update().write(
+                      SettingsCompanion(
+                        longDateFormat: Value(value!),
+                      ),
+                    ),
+                decoration: InputDecoration(
+                  labelText: 'Long date format ($format)',
                 ),
-            decoration: InputDecoration(
-              labelText:
-                  'Long date format (${DateFormat(settings.longDateFormat).format(DateTime.now())})',
-            ),
+              );
+            },
           ),
         ),
       ),

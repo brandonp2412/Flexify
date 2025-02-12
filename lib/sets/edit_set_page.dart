@@ -15,6 +15,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class EditSetPage extends StatefulWidget {
   final GymSet gymSet;
@@ -313,7 +314,11 @@ class _EditSetPageState extends State<EditSetPage> {
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) => ListTile(
                   title: const Text('Created date'),
-                  subtitle: Text(DateFormat(longDateFormat).format(created)),
+                  subtitle: Text(
+                    longDateFormat == 'timeago'
+                        ? timeago.format(created)
+                        : DateFormat(longDateFormat).format(created),
+                  ),
                   trailing: const Icon(Icons.calendar_today),
                   onTap: () => _selectDate(),
                 ),

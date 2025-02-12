@@ -8,6 +8,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class EditSetsPage extends StatefulWidget {
   final List<int> ids;
@@ -268,16 +269,21 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 },
               ),
               Selector<SettingsState, String>(
-                builder: (context, longDateFormat, child) => ListTile(
-                  title: const Text('Created Date'),
-                  subtitle: Text(
-                    created != null
-                        ? DateFormat(longDateFormat).format(created!)
-                        : oldCreateds ?? "",
-                  ),
-                  trailing: const Icon(Icons.calendar_today),
-                  onTap: () => _selectDate(),
-                ),
+                builder: (context, longDateFormat, child) {
+                  var subtitle = oldCreateds ?? "";
+
+                  if (longDateFormat == 'timeago' && created != null)
+                    subtitle = timeago.format(created!);
+                  else if (longDateFormat != 'timeago' && created != null)
+                    subtitle = DateFormat(longDateFormat).format(created!);
+
+                  return ListTile(
+                    title: const Text('Created Date'),
+                    subtitle: Text(subtitle),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () => _selectDate(),
+                  );
+                },
                 selector: (context, settings) => settings.value.longDateFormat,
               ),
             ],

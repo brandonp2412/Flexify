@@ -34,7 +34,7 @@ enum StrengthMetric {
 final defaultSettings = SettingsCompanion.insert(
   themeMode: ThemeMode.system.toString(),
   planTrailing: PlanTrailing.reorder.toString(),
-  longDateFormat: 'dd/MM/yy',
+  longDateFormat: 'timeago',
   shortDateFormat: 'd/M/yy',
   timerDuration: const Duration(minutes: 3, seconds: 30).inMilliseconds,
   maxSets: 3,

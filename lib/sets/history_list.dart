@@ -7,6 +7,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class HistoryList extends StatefulWidget {
   final List<GymSet> gymSets;
@@ -70,8 +71,10 @@ class _HistoryListState extends State<HistoryList> {
               title: Text(gymSet.name),
               subtitle: Selector<SettingsState, String>(
                 selector: (context, settings) => settings.value.longDateFormat,
-                builder: (context, value, child) => Text(
-                  DateFormat(value).format(gymSet.created),
+                builder: (context, dateFormat, child) => Text(
+                  dateFormat == 'timeago'
+                      ? timeago.format(gymSet.created)
+                      : DateFormat(dateFormat).format(gymSet.created),
                 ),
               ),
               trailing: Text(

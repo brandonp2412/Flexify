@@ -10,6 +10,7 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class GraphTile extends StatelessWidget {
   final GymSetsCompanion gymSet;
@@ -54,8 +55,10 @@ class GraphTile extends StatelessWidget {
       title: Text(gymSet.name.value),
       subtitle: Selector<SettingsState, String>(
         selector: (context, settings) => settings.value.longDateFormat,
-        builder: (context, value, child) => Text(
-          DateFormat(value).format(gymSet.created.value),
+        builder: (context, dateFormat, child) => Text(
+          dateFormat == 'timeago'
+              ? timeago.format(gymSet.created.value)
+              : DateFormat(dateFormat).format(gymSet.created.value),
         ),
       ),
       trailing: Text(
