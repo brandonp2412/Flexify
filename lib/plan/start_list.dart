@@ -132,7 +132,10 @@ class _StartListState extends State<StartList> {
       case PlanTrailing.reorder:
         trailing = ReorderableDragStartListener(
           index: index,
-          child: const Icon(Icons.drag_handle),
+          child: const Icon(
+            Icons.drag_handle,
+            size: 32,
+          ),
         );
         break;
 
