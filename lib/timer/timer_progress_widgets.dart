@@ -13,7 +13,6 @@ class TimerCircularProgressIndicator extends StatefulWidget {
 
 class _TimerCircularProgressIndicatorState
     extends State<TimerCircularProgressIndicator> {
-  bool starting = true;
   bool stopping = false;
   double lastValue = 0;
 
@@ -26,7 +25,9 @@ class _TimerCircularProgressIndicatorState
         final remaining = timerState.nativeTimer.getRemaining();
 
         // Opening animation
-        if (duration > Duration.zero && remaining > Duration.zero && starting) {
+        if (duration > Duration.zero &&
+            remaining > Duration.zero &&
+            timerState.starting) {
           return TweenAnimationBuilder(
             key: UniqueKey(),
             tween: Tween<double>(
@@ -35,9 +36,7 @@ class _TimerCircularProgressIndicatorState
             ),
             duration: const Duration(milliseconds: 300),
             onEnd: () {
-              setState(() {
-                starting = false;
-              });
+              timerState.setStarting(false);
             },
             builder: (context, value, child) =>
                 _TimerCircularProgressIndicatorTile(
@@ -66,7 +65,7 @@ class _TimerCircularProgressIndicatorState
         }
 
         // Closing animation
-        if (!starting && !stopping) {
+        if (!timerState.starting && !stopping) {
           stopping = true;
           return TweenAnimationBuilder(
             key: UniqueKey(),
@@ -78,8 +77,8 @@ class _TimerCircularProgressIndicatorState
             onEnd: () {
               setState(() {
                 stopping = false;
-                starting = true;
               });
+              timerState.setStarting(true);
             },
             builder: (context, value, child) =>
                 _TimerCircularProgressIndicatorTile(

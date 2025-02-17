@@ -11,6 +11,7 @@ class TimerState extends ChangeNotifier {
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
   Timer? next;
   final player = AudioPlayer();
+  bool starting = false;
 
   TimerState() {
     androidChannel.setMethodCallHandler((call) async {
@@ -25,6 +26,11 @@ class TimerState extends ChangeNotifier {
         updateTimer(newTimer);
       }
     });
+  }
+
+  void setStarting(bool value) {
+    starting = value;
+    notifyListeners();
   }
 
   Future<void> addOneMinute(
