@@ -45,7 +45,9 @@ class _WeightPageState extends State<WeightPage> {
             children: [
               TextFormField(
                 controller: valueController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 decoration: const InputDecoration(labelText: 'Weight'),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Required';

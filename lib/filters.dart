@@ -108,7 +108,9 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true,
+                                ),
                               ),
                               TextField(
                                 onChanged: (value) => widget.setStream(),
@@ -116,7 +118,9 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true,
+                                ),
                               ),
                             ],
                           ),
@@ -163,7 +167,9 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true,
+                                ),
                               ),
                               TextField(
                                 onChanged: (value) => widget.setStream(),
@@ -171,7 +177,9 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true,
+                                ),
                               ),
                             ],
                           ),

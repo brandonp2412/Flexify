@@ -153,7 +153,9 @@ class _EditSetPageState extends State<EditSetPage> {
                     controller: reps,
                     focusNode: repsNode,
                     decoration: const InputDecoration(labelText: 'Reps'),
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     onTap: () => selectAll(reps),
                     onChanged: (value) => setORM(),
                     textInputAction: TextInputAction.next,
@@ -170,7 +172,9 @@ class _EditSetPageState extends State<EditSetPage> {
                   decoration: InputDecoration(
                     labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(weight),
                   textInputAction: TextInputAction.next,
                   onChanged: (value) => setORM(),
@@ -197,7 +201,9 @@ class _EditSetPageState extends State<EditSetPage> {
                     labelText:
                         unit == 'kcal' ? 'Amount ($unit)' : 'Distance ($unit)',
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(distance),
                   onFieldSubmitted: (value) => selectAll(minutes),
                   textInputAction: TextInputAction.next,
@@ -211,7 +217,9 @@ class _EditSetPageState extends State<EditSetPage> {
                 TextFormField(
                   controller: incline,
                   decoration: const InputDecoration(labelText: 'Incline %'),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(incline),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
@@ -227,7 +235,9 @@ class _EditSetPageState extends State<EditSetPage> {
                   decoration: const InputDecoration(
                     labelText: 'Body weight (during set)',
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(bodyWeight),
                   validator: (value) {
                     if (value == null) return null;

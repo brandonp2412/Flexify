@@ -105,7 +105,9 @@ class _StartPlanPageState extends State<StartPlanPage>
             decoration: const InputDecoration(
               labelText: 'Distance',
             ),
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(
+              decimal: true,
+            ),
             onFieldSubmitted: (value) => selectAll(incline),
             onTap: () {
               selectAll(distance);
@@ -122,7 +124,9 @@ class _StartPlanPageState extends State<StartPlanPage>
           child: TextFormField(
             controller: incline,
             decoration: const InputDecoration(labelText: 'Incline %'),
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(
+              decimal: true,
+            ),
             onTap: () => selectAll(incline),
             onFieldSubmitted: (value) => save(timerState),
             validator: (value) {
@@ -151,7 +155,9 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ),
       ),
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.numberWithOptions(
+        decimal: true,
+      ),
       onTap: () {
         selectAll(weight);
       },
@@ -202,7 +208,9 @@ class _StartPlanPageState extends State<StartPlanPage>
                 TextFormField(
                   controller: reps,
                   decoration: const InputDecoration(labelText: 'Reps'),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (value) {
                     selectAll(weight);

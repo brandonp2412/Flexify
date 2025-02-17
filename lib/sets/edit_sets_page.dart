@@ -110,7 +110,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     labelText: 'Distance',
                     hintText: oldDistances,
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(distance),
                   validator: (value) {
                     if (value == null) return null;
@@ -169,7 +171,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     labelText: 'Incline %',
                     hintText: oldInclines,
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(incline),
                   validator: (value) {
                     if (value == null) return null;
@@ -183,7 +187,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   controller: reps,
                   decoration:
                       InputDecoration(labelText: 'Reps', hintText: oldReps),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(reps),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
@@ -197,7 +203,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     labelText: name.text == 'Weight' ? 'Value' : 'Weight',
                     hintText: oldWeights,
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onTap: () => selectAll(weight),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
@@ -216,7 +224,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         labelText: 'Body weight',
                         hintText: oldBodyWeights,
                       ),
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       onTap: () => selectAll(bodyWeight),
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
