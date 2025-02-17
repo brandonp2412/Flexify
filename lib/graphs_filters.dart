@@ -49,7 +49,7 @@ class _GraphsFiltersState extends State<GraphsFilters> {
               ),
               PopupMenuItem(
                 child: ListTile(
-                  leading: const Icon(Icons.clear_all),
+                  leading: const Icon(Icons.clear),
                   title: const Text("Clear"),
                   onTap: () async {
                     widget.setCategory(null);

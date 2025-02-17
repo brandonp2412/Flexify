@@ -269,7 +269,7 @@ class _FiltersState extends State<Filters> {
               ),
               PopupMenuItem(
                 child: ListTile(
-                  leading: const Icon(Icons.clear_all),
+                  leading: const Icon(Icons.clear),
                   title: const Text("Clear"),
                   onTap: () async {
                     widget.repsGtController.text = '';
