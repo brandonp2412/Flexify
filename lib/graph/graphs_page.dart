@@ -10,6 +10,7 @@ import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/global_progress_page.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -199,7 +200,8 @@ class GraphsPageState extends State<GraphsPage>
                 ),
                 confirmText: "This will delete $total records. Are you sure?",
               ),
-              if (gymSets.isEmpty)
+              if (gymSets.isEmpty &&
+                  !'global progress'.contains(search.toLowerCase()))
                 ListTile(
                   title: const Text("No graphs found"),
                   subtitle: Text(
@@ -285,12 +287,31 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   material.ListView graphList(List<GymSetsCompanion> gymSets) {
+    var itemCount = gymSets.length;
+    final showGlobal =
+        'global graphs'.contains(search.toLowerCase()) && category == null;
+    if (showGlobal) itemCount++;
+
     return ListView.builder(
-      itemCount: gymSets.length,
+      itemCount: itemCount,
       controller: scroll,
       padding: const EdgeInsets.only(bottom: 50),
       itemBuilder: (context, index) {
-        final gymSet = gymSets[index];
+        if (index == 0 && showGlobal)
+          return ListTile(
+            leading: Icon(Icons.language),
+            title: Text("Global progress"),
+            subtitle: Text("A chart grouped by category"),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => GlobalProgressPage(),
+              ),
+            ),
+          );
+
+        final gymSet = gymSets.elementAtOrNull(index);
+        if (gymSet == null) return SizedBox();
+
         final previousGymSet = index > 0 ? gymSets[index - 1] : null;
 
         final previousCreated = previousGymSet?.created.value.toLocal();

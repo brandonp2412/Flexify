@@ -299,6 +299,89 @@ Future<List<StrengthData>> getStrengthData({
   return list;
 }
 
+Future<List<String?>> getCategories() {
+  return (db.selectOnly(db.gymSets)
+        ..addColumns([db.gymSets.category])
+        ..where(db.gymSets.category.isNotNull())
+        ..groupBy([db.gymSets.category]))
+      .map((result) => result.read(db.gymSets.category))
+      .get();
+}
+
+Future<List<StrengthData>> getGlobalData({
+  required String targetUnit,
+  required StrengthMetric metric,
+  required Period period,
+  required DateTime? startDate,
+  required DateTime? endDate,
+}) async {
+  Expression<String> createdCol = getCreated(period);
+
+  var query = (db.selectOnly(db.gymSets)
+    ..addColumns([
+      db.gymSets.weight.max(),
+      volumeCol,
+      ormCol,
+      db.gymSets.created,
+      if (metric == StrengthMetric.bestReps) db.gymSets.reps.max(),
+      if (metric != StrengthMetric.bestReps) db.gymSets.reps,
+      db.gymSets.unit,
+      relativeCol,
+      db.gymSets.category,
+    ])
+    ..where(db.gymSets.hidden.equals(false) & db.gymSets.category.isNotNull())
+    ..orderBy([
+      OrderingTerm(
+        expression: createdCol,
+        mode: OrderingMode.desc,
+      ),
+    ])
+    ..limit(100)
+    ..groupBy([db.gymSets.category, createdCol]));
+
+  if (startDate != null)
+    query = query
+      ..where(
+        db.gymSets.created.isBiggerOrEqualValue(startDate),
+      );
+  if (endDate != null)
+    query = query
+      ..where(
+        db.gymSets.created.isSmallerThanValue(endDate),
+      );
+
+  final results = await query.get();
+
+  List<StrengthData> list = [];
+  for (final result in results.reversed) {
+    final unit = result.read(db.gymSets.unit)!;
+    var value = getStrength(result, metric);
+
+    if (unit == 'lb' && targetUnit == 'kg') {
+      value *= 0.45359237;
+    } else if (unit == 'kg' && targetUnit == 'lb') {
+      value *= 2.20462262;
+    }
+
+    double reps = 0.0;
+    try {
+      reps = result.read(db.gymSets.reps)!;
+    } catch (_) {}
+
+    list.add(
+      StrengthData(
+        created: result.read(db.gymSets.created)!.toLocal(),
+        value: value,
+        unit: unit,
+        reps: reps,
+        category: result.read(db.gymSets.category),
+      ),
+    );
+  }
+
+  return list;
+}
+
 Future<bool> isBest(GymSet gymSet) async {
   if (gymSet.cardio) {
     final best = await (db.gymSets.select()
