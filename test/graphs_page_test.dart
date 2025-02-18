@@ -61,7 +61,8 @@ void main() async {
     await db.close();
   });
 
-  testWidgets('GraphsPage tap tile', (WidgetTester tester) async {
+  testWidgets('GraphsPage taps barbell bench press',
+      (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
     final settings = await (db.settings.select()..limit(1)).getSingle();
@@ -79,10 +80,34 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    final tile = find.byType(ListTile).first;
-    await tester.tap(tile);
+    await tester.tap(find.text('Barbell bench press'));
     await tester.pumpAndSettle();
-    expect(find.byTooltip('Edit'), findsOne);
+    expect(find.text('Best weight'), findsOne);
+
+    await db.close();
+  });
+
+  testWidgets('GraphsPage taps global progress', (WidgetTester tester) async {
+    await mockTests();
+    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: const MaterialApp(
+          home: DefaultTabController(length: 1, child: GraphsPage()),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Global progress'));
+    await tester.pumpAndSettle();
+    expect(find.text('Best weight'), findsOne);
 
     await db.close();
   });
@@ -135,8 +160,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    final tile = find.byType(ListTile).first;
-    await tester.longPress(tile);
+    await tester.longPress(find.text('Barbell bent-over row'));
     await tester.pumpAndSettle();
     expect(find.text('1'), findsOne);
 
@@ -161,9 +185,8 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    final tile = find.byType(ListTile).first;
 
-    await tester.longPress(tile);
+    await tester.longPress(find.text('Back extension'));
     await tester.pumpAndSettle();
 
     final delete = find.byTooltip('Delete selected');
@@ -174,7 +197,7 @@ void main() async {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Search...'), findsOne);
+    expect(find.text('Back extension'), findsNothing);
 
     await db.close();
   });

@@ -36,6 +36,6 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('00:00'), findsOne);
-    expect(find.text('+1 min'), findsOne);
+    expect(find.text('+1 minute'), findsOne);
   });
 }
