@@ -308,6 +308,7 @@ class GraphsPageState extends State<GraphsPage>
               ),
             ),
           );
+        if (showGlobal) index--;
 
         final gymSet = gymSets.elementAtOrNull(index);
         if (gymSet == null) return SizedBox();
