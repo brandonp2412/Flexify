@@ -36,7 +36,7 @@ class DeleteRecordsButton extends StatelessWidget {
                           actions: <Widget>[
                             TextButton.icon(
                               label: const Text('Cancel'),
-                              icon: const Icon(Icons.cancel),
+                              icon: const Icon(Icons.close),
                               onPressed: () {
                                 Navigator.pop(context);
                               },
@@ -73,7 +73,7 @@ class DeleteRecordsButton extends StatelessWidget {
                           actions: <Widget>[
                             TextButton.icon(
                               label: const Text('Cancel'),
-                              icon: const Icon(Icons.cancel),
+                              icon: const Icon(Icons.close),
                               onPressed: () {
                                 Navigator.pop(context);
                               },

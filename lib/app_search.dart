@@ -86,7 +86,7 @@ class _AppSearchState extends State<AppSearch> {
                       actions: <Widget>[
                         TextButton.icon(
                           label: const Text('Cancel'),
-                          icon: const Icon(Icons.cancel),
+                          icon: const Icon(Icons.close),
                           onPressed: () {
                             Navigator.pop(context);
                           },

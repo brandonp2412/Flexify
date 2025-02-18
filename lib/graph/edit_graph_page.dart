@@ -334,7 +334,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
             actions: <Widget>[
               TextButton.icon(
                 label: const Text('Cancel'),
-                icon: const Icon(Icons.cancel),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -363,7 +363,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
             actions: <Widget>[
               TextButton.icon(
                 label: const Text('Cancel'),
-                icon: const Icon(Icons.cancel),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   Navigator.pop(context);
                 },
