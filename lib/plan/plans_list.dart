@@ -58,7 +58,7 @@ class PlansList extends StatelessWidget {
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
         itemCount: plans.length,
-        padding: const EdgeInsets.only(bottom: 50),
+        padding: const EdgeInsets.only(bottom: 50, top: 8),
         itemBuilder: (context, index) {
           final plan = plans[index];
           return PlanTile(

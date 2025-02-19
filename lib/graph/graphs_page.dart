@@ -295,7 +295,7 @@ class GraphsPageState extends State<GraphsPage>
     return ListView.builder(
       itemCount: itemCount,
       controller: scroll,
-      padding: const EdgeInsets.only(bottom: 50),
+      padding: const EdgeInsets.only(bottom: 50, top: 8),
       itemBuilder: (context, index) {
         if (index == 0 && showGlobal)
           return ListTile(
