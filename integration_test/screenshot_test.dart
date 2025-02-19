@@ -129,6 +129,7 @@ Future<void> appWrapper() async {
           explainedPermissions: const Value(true),
           restTimers: const Value(true),
           systemColors: const Value(false),
+          curveLines: const Value(true),
         ),
       );
   final settings = await (db.settings.select()..limit(1)).getSingle();
