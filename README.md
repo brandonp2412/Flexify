@@ -35,6 +35,13 @@ Flex on people with this swanky, lightning-quick gym tracker!
     <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" height="600">
 </p>
 
+## Donations
+
+Donating to Flexify is directly correlated with Gains
+- Bitcoin `bc1qzlte8featxzf7xvtp3rjv7qqtwkgpup8hu85gp`
+- Monero (XMR) `85tmLfWKbpd8nxQnUY878DDuFjmfcoCFXPWR7XYKLHBSbDZV8wxgoKYUtHtq1kHWJg4m14sdBXhYuUSbxEDA29d19XuREL5`
+- [GitHub sponsor](https://github.com/sponsors/brandonp2412)
+
 ## Migration from [Massive](https://github.com/brandonp2412/Massive)
 
 Gym sets and plans can be imported into Flexify.
@@ -43,14 +50,6 @@ Gym sets and plans can be imported into Flexify.
     <img src="docs/export-massive.png" height="600">
     <img src="docs/import-flexify.png" height="600">
 </p>
-
-## Donations
-
-If you would like to support this project:
-
-- Bitcoin `bc1qzlte8featxzf7xvtp3rjv7qqtwkgpup8hu85gp`
-- Monero (XMR) `85tmLfWKbpd8nxQnUY878DDuFjmfcoCFXPWR7XYKLHBSbDZV8wxgoKYUtHtq1kHWJg4m14sdBXhYuUSbxEDA29d19XuREL5`
-- [GitHub sponsor](https://github.com/sponsors/brandonp2412)
 
 ## Getting Started
 
