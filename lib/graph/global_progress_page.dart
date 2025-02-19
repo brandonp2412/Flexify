@@ -265,7 +265,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.40,
               child: data.isEmpty
-                  ? const ListTile(title: Text("No data yet."))
+                  ? const SizedBox()
                   : Padding(
                       padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                       child: lineChart,
