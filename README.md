@@ -37,7 +37,7 @@ Flex on people with this swanky, lightning-quick gym tracker!
 
 ## Donations
 
-Donating to Flexify is directly correlated with Gains
+Contributing to Flexify is directly correlated with Gains
 - Bitcoin `bc1qzlte8featxzf7xvtp3rjv7qqtwkgpup8hu85gp`
 - Monero (XMR) `85tmLfWKbpd8nxQnUY878DDuFjmfcoCFXPWR7XYKLHBSbDZV8wxgoKYUtHtq1kHWJg4m14sdBXhYuUSbxEDA29d19XuREL5`
 - [GitHub sponsor](https://github.com/sponsors/brandonp2412)
