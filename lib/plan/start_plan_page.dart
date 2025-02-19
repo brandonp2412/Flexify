@@ -31,6 +31,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     with WidgetsBindingObserver {
   final reps = TextEditingController(text: "0.0");
   final weight = TextEditingController(text: "0.0");
+  final notes = TextEditingController(text: "");
   final distance = TextEditingController(text: "0.0");
   final minutes = TextEditingController(text: "0.0");
   final seconds = TextEditingController(text: "0.0");
@@ -169,6 +170,14 @@ class _StartPlanPageState extends State<StartPlanPage>
       },
     );
 
+    var notesField = TextFormField(
+      controller: notes,
+      maxLines: 3,
+      decoration: InputDecoration(
+        labelText: 'Notes',
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -242,6 +251,13 @@ class _StartPlanPageState extends State<StartPlanPage>
                       });
                     },
                   ),
+                ),
+              ),
+              Selector<SettingsState, bool>(
+                selector: (context, settings) => settings.value.showNotes,
+                builder: (context, showNotes, child) => Visibility(
+                  visible: showNotes,
+                  child: notesField,
                 ),
               ),
               Expanded(
@@ -433,6 +449,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       weight: double.tryParse(weight.text) ?? 0,
       incline: Value(int.tryParse(incline.text)),
       distance: Value(double.tryParse(distance.text) ?? 0),
+      notes: Value(notes.text),
     );
 
     var count = 0;
