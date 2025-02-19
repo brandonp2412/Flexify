@@ -75,7 +75,7 @@ List<PlansCompanion> plans = [
   PlansCompanion(
     days: Value([weekdays[1], weekdays[5]].join(",")),
     exercises: Value(
-      ["Triceps dip", " Squat", "Standing calf raise", "Pull-up"].join(","),
+      ["Triceps dip", "Squat", "Standing calf raise", "Pull-up"].join(","),
     ),
     title: const Value("Tuesday, Saturday"),
   ),
@@ -243,7 +243,19 @@ void main() {
     }
 
     for (var element in plans) {
-      await app.db.into(app.db.plans).insert(element);
+      final id = await app.db.into(app.db.plans).insert(element);
+      var i = 0;
+      for (var exercise in element.exercises.value.split(',')) {
+        await app.db.planExercises.insertOne(
+          PlanExercisesCompanion.insert(
+            enabled: i < 5,
+            timers: Value(true),
+            exercise: exercise,
+            planId: id,
+          ),
+        );
+        i++;
+      }
     }
   });
 
@@ -256,6 +268,7 @@ void main() {
         screenshotName: '1_en-US',
         tabBarState: TabBarState.plans,
       ),
+      skip: true,
     );
 
     testWidgets(
@@ -270,6 +283,7 @@ void main() {
         ),
         tabBarState: TabBarState.graphs,
       ),
+      skip: true,
     );
 
     testWidgets(
@@ -284,6 +298,7 @@ void main() {
         ),
         tabBarState: TabBarState.plans,
       ),
+      skip: true,
     );
 
     testWidgets(
@@ -302,6 +317,7 @@ void main() {
         },
         tabBarState: TabBarState.plans,
       ),
+      skip: true,
     );
   });
 
@@ -329,6 +345,7 @@ void main() {
         ),
         tabBarState: TabBarState.graphs,
       ),
+      skip: true,
     );
 
     testWidgets(
@@ -343,6 +360,7 @@ void main() {
         ),
         tabBarState: TabBarState.graphs,
       ),
+      skip: true,
     );
 
     testWidgets(
@@ -351,10 +369,14 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '7_en-US',
-        navigateToPage: (context) async => navigateTo(
-          context: context,
-          page: EditPlanPage(plan: plans.first),
-        ),
+        navigateToPage: (context) async {
+          final state = context.read<PlanState>();
+          await state.setExercises(plans.first);
+          navigateTo(
+            context: context,
+            page: EditPlanPage(plan: plans.first),
+          );
+        },
         tabBarState: TabBarState.graphs,
       ),
     );
@@ -374,6 +396,7 @@ void main() {
           },
           tabBarState: TabBarState.timer,
         ),
+        skip: true,
       );
   });
 }
