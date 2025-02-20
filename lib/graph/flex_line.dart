@@ -118,6 +118,7 @@ class FlexLine extends StatelessWidget {
             dotData: const FlDotData(
               show: false,
             ),
+            preventCurveOverShooting: true,
             belowBarData: BarAreaData(
               show: true,
               gradient: LinearGradient(
