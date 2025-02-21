@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeleteRecordsButton extends StatelessWidget {
@@ -88,6 +93,51 @@ class DeleteRecordsButton extends StatelessWidget {
                                 planState.updatePlans(null);
                                 if (!pageContext.mounted) return;
                                 Navigator.pop(pageContext);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.storage),
+                  title: const Text('Database'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirm Delete'),
+                          content: const Text(
+                            'Are you sure you want to delete your database? This action is not reversible and will destroy all your data.',
+                          ),
+                          actions: <Widget>[
+                            TextButton.icon(
+                              label: const Text('Cancel'),
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            TextButton.icon(
+                              label: const Text('Delete'),
+                              icon: const Icon(Icons.delete),
+                              onPressed: () async {
+                                final dbFolder =
+                                    await getApplicationDocumentsDirectory();
+                                final file = File(
+                                  p.join(dbFolder.path, 'flexify.sqlite'),
+                                );
+                                await db.close();
+                                await db.executor.close();
+                                await file.delete();
+                                if (Platform.isAndroid || Platform.isIOS)
+                                  SystemNavigator.pop();
+                                if (Platform.isWindows || Platform.isMacOS)
+                                  exit(0);
                               },
                             ),
                           ],

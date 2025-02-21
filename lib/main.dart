@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/failed_migrations_page.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/history_page.dart';
@@ -19,9 +20,16 @@ import 'plan/plans_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final setting = await (db.settings.select()..limit(1)).getSingle();
-  final settings = SettingsState(setting);
 
+  Setting setting;
+
+  try {
+    setting = await (db.settings.select()..limit(1)).getSingle();
+  } catch (error) {
+    return runApp(FailedMigrationsPage(error: error));
+  }
+
+  final settings = SettingsState(setting);
   runApp(appProviders(settings));
 }
 
