@@ -242,15 +242,19 @@ void main() {
           );
     }
 
-    for (var element in plans) {
-      final id = await app.db.into(app.db.plans).insert(element);
+    for (var plan in plans) {
+      final id = await app.db.into(app.db.plans).insert(plan);
       var i = 0;
-      for (var exercise in element.exercises.value.split(',')) {
+      final gymSets = await (db.gymSets.selectOnly()
+            ..addColumns([db.gymSets.name])
+            ..groupBy([db.gymSets.name]))
+          .get();
+      for (var result in gymSets) {
         await app.db.planExercises.insertOne(
           PlanExercisesCompanion.insert(
-            enabled: i < 5,
+            enabled: i % 2 == 0,
             timers: Value(true),
-            exercise: exercise,
+            exercise: result.read(db.gymSets.name)!,
             planId: id,
           ),
         );
@@ -365,10 +369,11 @@ void main() {
         screenshotName: '7_en-US',
         navigateToPage: (context) async {
           final state = context.read<PlanState>();
-          await state.setExercises(plans.first);
+          final plan = await (db.plans.select()..limit(1)).getSingle();
+          await state.setExercises(plan.toCompanion(false));
           navigateTo(
             context: context,
-            page: EditPlanPage(plan: plans.first),
+            page: EditPlanPage(plan: plan.toCompanion(false)),
           );
         },
         tabBarState: TabBarState.graphs,
