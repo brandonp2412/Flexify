@@ -42,15 +42,6 @@ Contributing to Flexify is directly correlated with Gains
 - Monero (XMR) `85tmLfWKbpd8nxQnUY878DDuFjmfcoCFXPWR7XYKLHBSbDZV8wxgoKYUtHtq1kHWJg4m14sdBXhYuUSbxEDA29d19XuREL5`
 - [GitHub sponsor](https://github.com/sponsors/brandonp2412)
 
-## Migration from [Massive](https://github.com/brandonp2412/Massive)
-
-Gym sets and plans can be imported into Flexify.
-
-<p float="left">
-    <img src="docs/export-massive.png" height="600">
-    <img src="docs/import-flexify.png" height="600">
-</p>
-
 ## Getting Started
 
 To get started with Flexify, follow these steps:
