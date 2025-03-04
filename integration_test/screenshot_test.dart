@@ -268,7 +268,6 @@ void main() {
         screenshotName: '1_en-US',
         tabBarState: TabBarState.plans,
       ),
-      skip: true,
     );
 
     testWidgets(
@@ -283,7 +282,6 @@ void main() {
         ),
         tabBarState: TabBarState.graphs,
       ),
-      skip: true,
     );
 
     testWidgets(
@@ -298,7 +296,6 @@ void main() {
         ),
         tabBarState: TabBarState.plans,
       ),
-      skip: true,
     );
 
     testWidgets(
@@ -317,7 +314,6 @@ void main() {
         },
         tabBarState: TabBarState.plans,
       ),
-      skip: true,
     );
   });
 
@@ -345,7 +341,6 @@ void main() {
         ),
         tabBarState: TabBarState.graphs,
       ),
-      skip: true,
     );
 
     testWidgets(
@@ -360,7 +355,6 @@ void main() {
         ),
         tabBarState: TabBarState.graphs,
       ),
-      skip: true,
     );
 
     testWidgets(
@@ -396,7 +390,6 @@ void main() {
           },
           tabBarState: TabBarState.timer,
         ),
-        skip: true,
       );
   });
 }

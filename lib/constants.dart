@@ -43,7 +43,7 @@ final defaultSettings = SettingsCompanion.insert(
   showUnits: true,
   alarmSound: '',
   cardioUnit: 'km',
-  curveLines: false,
+  curveLines: true,
   explainedPermissions: false,
   groupHistory: true,
   showBodyWeight: const Value(true),
