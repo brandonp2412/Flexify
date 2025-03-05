@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 apk=$PWD/build/app/outputs/flutter-apk
 
 ./flutter/bin/flutter build apk --split-per-abi
