@@ -3130,7 +3130,7 @@ class $$PlansTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (planExercisesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Plan, $PlansTable, PlanExercise>(
                         currentTable: table,
                         referencedTable:
                             $$PlansTableReferences._planExercisesRefsTable(db),
@@ -3557,7 +3557,8 @@ class $$GymSetsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (planExercisesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<GymSet, $GymSetsTable,
+                            PlanExercise>(
                         currentTable: table,
                         referencedTable: $$GymSetsTableReferences
                             ._planExercisesRefsTable(db),
