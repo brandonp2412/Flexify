@@ -130,84 +130,75 @@ class HomePage extends StatelessWidget {
         .select<SettingsState, String>((settings) => settings.value.tabs);
     final tabs = tabsSetting.split(',');
 
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-        statusBarColor: Theme.of(context).colorScheme.surface,
-        statusBarIconBrightness: Theme.of(context).brightness == Brightness.dark
-            ? Brightness.light
-            : Brightness.dark,
-      ),
-      child: DefaultTabController(
-        length: tabs.length,
-        child: SafeArea(
-          child: Scaffold(
-            bottomSheet: tabs.contains('TimerPage')
-                ? const TimerProgressIndicator()
-                : null,
-            body: TabBarView(
-              children: tabs.map((tab) {
-                if (tab == 'HistoryPage')
-                  return const HistoryPage();
-                else if (tab == 'PlansPage')
-                  return const PlansPage();
-                else if (tab == 'GraphsPage')
-                  return const GraphsPage();
-                else if (tab == 'TimerPage')
-                  return const TimerPage();
-                else if (tab == 'SettingsPage')
-                  return const SettingsPage();
-                else
-                  return ErrorWidget("Couldn't build tab content.");
-              }).toList(),
-            ),
-            bottomNavigationBar: TabBar(
-              dividerColor: Theme.of(context).colorScheme.surface,
-              tabs: tabs.map((tab) {
-                if (tab == 'HistoryPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'HistoryPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.history),
-                      text: "History",
-                    ),
-                  );
-                else if (tab == 'PlansPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'PlansPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.calendar_today),
-                      text: "Plans",
-                    ),
-                  );
-                else if (tab == 'GraphsPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'GraphsPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.insights),
-                      text: "Graphs",
-                    ),
-                  );
-                else if (tab == 'TimerPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'TimerPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.timer_outlined),
-                      text: "Timer",
-                    ),
-                  );
-                else if (tab == 'SettingsPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'SettingsPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.settings),
-                      text: "Settings",
-                    ),
-                  );
-                else
-                  return ErrorWidget("Couldn't build tab bottom bar.");
-              }).toList(),
-            ),
+    return DefaultTabController(
+      length: tabs.length,
+      child: SafeArea(
+        child: Scaffold(
+          bottomSheet: tabs.contains('TimerPage')
+              ? const TimerProgressIndicator()
+              : null,
+          body: TabBarView(
+            children: tabs.map((tab) {
+              if (tab == 'HistoryPage')
+                return const HistoryPage();
+              else if (tab == 'PlansPage')
+                return const PlansPage();
+              else if (tab == 'GraphsPage')
+                return const GraphsPage();
+              else if (tab == 'TimerPage')
+                return const TimerPage();
+              else if (tab == 'SettingsPage')
+                return const SettingsPage();
+              else
+                return ErrorWidget("Couldn't build tab content.");
+            }).toList(),
+          ),
+          bottomNavigationBar: TabBar(
+            dividerColor: Theme.of(context).colorScheme.surface,
+            tabs: tabs.map((tab) {
+              if (tab == 'HistoryPage')
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'HistoryPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.history),
+                    text: "History",
+                  ),
+                );
+              else if (tab == 'PlansPage')
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'PlansPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.calendar_today),
+                    text: "Plans",
+                  ),
+                );
+              else if (tab == 'GraphsPage')
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'GraphsPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.insights),
+                    text: "Graphs",
+                  ),
+                );
+              else if (tab == 'TimerPage')
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'TimerPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.timer_outlined),
+                    text: "Timer",
+                  ),
+                );
+              else if (tab == 'SettingsPage')
+                return GestureDetector(
+                  onLongPress: () => hideTab(context, 'SettingsPage'),
+                  child: const Tab(
+                    icon: Icon(Icons.settings),
+                    text: "Settings",
+                  ),
+                );
+              else
+                return ErrorWidget("Couldn't build tab bottom bar.");
+            }).toList(),
           ),
         ),
       ),
