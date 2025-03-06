@@ -23,8 +23,11 @@ mv -f "$HOME/windows/flexify/flexify.msix" "$HOME/windows/flexify.msix"
 (cd "$HOME/windows/flexify" && zip --quiet -r "$HOME/windows/flexify-windows.zip" .)
 docker stop windows
 
-git add pubspec.lock
-git commit -m 'Update pubspec.lock from windows build'
+
+if [ -n "$(git diff --stat pubspec.lock)" ]; then
+  git add pubspec.lock
+  git commit -m 'Update pubspec.lock from windows build'
+fi
 
 IFS='+.' read -r major minor patch build_number <<<"$(yq -r .version pubspec.yaml)"
 changelog_number=$((build_number * 10 + 3))
