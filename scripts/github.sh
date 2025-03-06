@@ -14,6 +14,7 @@ mv -f "$apk"/app-release.apk "$apk/flexify.apk"
 (cd "$apk/pipeline/linux/x64/release/bundle" && zip --quiet -r "flexify-linux.zip" .)
 
 docker start windows
+cp scripts/build-windows.ps1 "$HOME/windows/build-flexify.ps1"
 rsync -a --delete --exclude-from=.gitignore ./* .gitignore \
   "$HOME/windows/flexify-source"
 while ! ssh windows exit; do sleep 1; done
