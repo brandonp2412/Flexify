@@ -184,7 +184,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     return null;
                   },
                 ),
-                if (widget.gymSet.id > 0 && name != 'Weight')
+                if (name != 'Weight')
                   TextField(
                     controller: oneRepMax,
                     decoration: const InputDecoration(
@@ -591,8 +591,12 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   void setORM() {
-    oneRepMax.text =
-        "${(double.parse(weight.text) / (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
+    if (double.parse(weight.text) > 0)
+      oneRepMax.text =
+          "${(double.parse(weight.text) / (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
+    else
+      oneRepMax.text =
+          "${(double.parse(weight.text) * (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
   }
 
   void updateFields(GymSet gymSet) {

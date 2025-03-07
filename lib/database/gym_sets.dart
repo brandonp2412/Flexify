@@ -11,9 +11,9 @@ const inclineAdjustedPace = CustomExpression<double>(
 
 const volumeCol = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
 
-final ormCol = (db.gymSets.weight /
-        (const Variable(1.0278) - const Variable(0.0278) * db.gymSets.reps))
-    .max();
+final ormCol = CustomExpression<double>(
+  'MAX(CASE WHEN weight >= 0 THEN weight / (1.0278 - 0.0278 * reps) ELSE weight * (1.0278 - 0.0278 * reps) END)',
+);
 final relativeCol = db.gymSets.weight.max() / db.gymSets.bodyWeight;
 double getCardio(TypedResult row, CardioMetric metric) {
   switch (metric) {
