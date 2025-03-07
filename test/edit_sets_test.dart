@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('EditGymSets', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    db = AppDatabase(NativeDatabase.memory());
 
     await (db.gymSets.insertAll([
       GymSetsCompanion.insert(

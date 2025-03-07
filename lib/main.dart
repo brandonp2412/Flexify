@@ -11,7 +11,6 @@ import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +32,7 @@ Future<void> main() async {
   runApp(appProviders(settings));
 }
 
-AppDatabase db = AppDatabase(logStatements: kDebugMode);
+AppDatabase db = AppDatabase();
 
 MethodChannel androidChannel =
     const MethodChannel("com.presley.flexify/android");

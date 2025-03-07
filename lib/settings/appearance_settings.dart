@@ -95,6 +95,29 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
+    if ('show global progress'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Add a graph entry charting your progress by category',
+        child: ListTile(
+          title: const Text('Show global progress'),
+          leading: settings.value.showGlobalProgress
+              ? const Icon(Icons.public)
+              : const Icon(Icons.public_off),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  showGlobalProgress: Value(!settings.value.showGlobalProgress),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.value.showGlobalProgress,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    showGlobalProgress: Value(value),
+                  ),
+                ),
+          ),
+        ),
+      ),
     if ('peek graph'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Show the first line graph on graphs page',

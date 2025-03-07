@@ -20,8 +20,7 @@ void main() async {
   testWidgets('CardioPage displays', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(
-      executor: NativeDatabase.memory(),
-      logStatements: false,
+      NativeDatabase.memory(),
     );
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
@@ -76,8 +75,7 @@ void main() async {
   testWidgets('CardioPage edits', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(
-      executor: NativeDatabase.memory(),
-      logStatements: false,
+      NativeDatabase.memory(),
     );
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
@@ -129,7 +127,7 @@ void main() async {
 
   testWidgets('CardioPage selects metrics', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    db = AppDatabase(NativeDatabase.memory());
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(

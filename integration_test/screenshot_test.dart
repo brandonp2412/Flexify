@@ -217,7 +217,7 @@ void main() {
   if (deviceType.isEmpty) deviceType = 'phoneScreenshots';
 
   setUpAll(() async {
-    app.db = AppDatabase(logStatements: false);
+    app.db = AppDatabase();
     app.androidChannel = const MethodChannel("com.presley.flexify/timer");
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.androidChannel, (message) => null);

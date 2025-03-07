@@ -1267,6 +1267,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("show_notes" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _showGlobalProgressMeta =
+      const VerificationMeta('showGlobalProgress');
+  @override
+  late final GeneratedColumn<bool> showGlobalProgress = GeneratedColumn<bool>(
+      'show_global_progress', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_global_progress" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _showUnitsMeta =
       const VerificationMeta('showUnits');
   @override
@@ -1351,6 +1361,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         showCategories,
         showImages,
         showNotes,
+        showGlobalProgress,
         showUnits,
         strengthUnit,
         systemColors,
@@ -1519,6 +1530,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       context.handle(_showNotesMeta,
           showNotes.isAcceptableOrUnknown(data['show_notes']!, _showNotesMeta));
     }
+    if (data.containsKey('show_global_progress')) {
+      context.handle(
+          _showGlobalProgressMeta,
+          showGlobalProgress.isAcceptableOrUnknown(
+              data['show_global_progress']!, _showGlobalProgressMeta));
+    }
     if (data.containsKey('show_units')) {
       context.handle(_showUnitsMeta,
           showUnits.isAcceptableOrUnknown(data['show_units']!, _showUnitsMeta));
@@ -1626,6 +1643,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
       showNotes: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_notes'])!,
+      showGlobalProgress: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}show_global_progress'])!,
       showUnits: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
       strengthUnit: attachedDatabase.typeMapping
@@ -1675,6 +1694,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool showCategories;
   final bool showImages;
   final bool showNotes;
+  final bool showGlobalProgress;
   final bool showUnits;
   final String strengthUnit;
   final bool systemColors;
@@ -1707,6 +1727,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.showCategories,
       required this.showImages,
       required this.showNotes,
+      required this.showGlobalProgress,
       required this.showUnits,
       required this.strengthUnit,
       required this.systemColors,
@@ -1745,6 +1766,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['show_categories'] = Variable<bool>(showCategories);
     map['show_images'] = Variable<bool>(showImages);
     map['show_notes'] = Variable<bool>(showNotes);
+    map['show_global_progress'] = Variable<bool>(showGlobalProgress);
     map['show_units'] = Variable<bool>(showUnits);
     map['strength_unit'] = Variable<String>(strengthUnit);
     map['system_colors'] = Variable<bool>(systemColors);
@@ -1787,6 +1809,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       showCategories: Value(showCategories),
       showImages: Value(showImages),
       showNotes: Value(showNotes),
+      showGlobalProgress: Value(showGlobalProgress),
       showUnits: Value(showUnits),
       strengthUnit: Value(strengthUnit),
       systemColors: Value(systemColors),
@@ -1828,6 +1851,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       showCategories: serializer.fromJson<bool>(json['showCategories']),
       showImages: serializer.fromJson<bool>(json['showImages']),
       showNotes: serializer.fromJson<bool>(json['showNotes']),
+      showGlobalProgress: serializer.fromJson<bool>(json['showGlobalProgress']),
       showUnits: serializer.fromJson<bool>(json['showUnits']),
       strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
       systemColors: serializer.fromJson<bool>(json['systemColors']),
@@ -1865,6 +1889,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'showCategories': serializer.toJson<bool>(showCategories),
       'showImages': serializer.toJson<bool>(showImages),
       'showNotes': serializer.toJson<bool>(showNotes),
+      'showGlobalProgress': serializer.toJson<bool>(showGlobalProgress),
       'showUnits': serializer.toJson<bool>(showUnits),
       'strengthUnit': serializer.toJson<String>(strengthUnit),
       'systemColors': serializer.toJson<bool>(systemColors),
@@ -1900,6 +1925,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           bool? showCategories,
           bool? showImages,
           bool? showNotes,
+          bool? showGlobalProgress,
           bool? showUnits,
           String? strengthUnit,
           bool? systemColors,
@@ -1934,6 +1960,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         showCategories: showCategories ?? this.showCategories,
         showImages: showImages ?? this.showImages,
         showNotes: showNotes ?? this.showNotes,
+        showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
         showUnits: showUnits ?? this.showUnits,
         strengthUnit: strengthUnit ?? this.strengthUnit,
         systemColors: systemColors ?? this.systemColors,
@@ -1999,6 +2026,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       showImages:
           data.showImages.present ? data.showImages.value : this.showImages,
       showNotes: data.showNotes.present ? data.showNotes.value : this.showNotes,
+      showGlobalProgress: data.showGlobalProgress.present
+          ? data.showGlobalProgress.value
+          : this.showGlobalProgress,
       showUnits: data.showUnits.present ? data.showUnits.value : this.showUnits,
       strengthUnit: data.strengthUnit.present
           ? data.strengthUnit.value
@@ -2043,6 +2073,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('showCategories: $showCategories, ')
           ..write('showImages: $showImages, ')
           ..write('showNotes: $showNotes, ')
+          ..write('showGlobalProgress: $showGlobalProgress, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
@@ -2080,6 +2111,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         showCategories,
         showImages,
         showNotes,
+        showGlobalProgress,
         showUnits,
         strengthUnit,
         systemColors,
@@ -2116,6 +2148,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.showCategories == this.showCategories &&
           other.showImages == this.showImages &&
           other.showNotes == this.showNotes &&
+          other.showGlobalProgress == this.showGlobalProgress &&
           other.showUnits == this.showUnits &&
           other.strengthUnit == this.strengthUnit &&
           other.systemColors == this.systemColors &&
@@ -2150,6 +2183,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> showCategories;
   final Value<bool> showImages;
   final Value<bool> showNotes;
+  final Value<bool> showGlobalProgress;
   final Value<bool> showUnits;
   final Value<String> strengthUnit;
   final Value<bool> systemColors;
@@ -2182,6 +2216,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.showCategories = const Value.absent(),
     this.showImages = const Value.absent(),
     this.showNotes = const Value.absent(),
+    this.showGlobalProgress = const Value.absent(),
     this.showUnits = const Value.absent(),
     this.strengthUnit = const Value.absent(),
     this.systemColors = const Value.absent(),
@@ -2215,6 +2250,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.showCategories = const Value.absent(),
     this.showImages = const Value.absent(),
     this.showNotes = const Value.absent(),
+    this.showGlobalProgress = const Value.absent(),
     required bool showUnits,
     required String strengthUnit,
     required bool systemColors,
@@ -2263,6 +2299,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? showCategories,
     Expression<bool>? showImages,
     Expression<bool>? showNotes,
+    Expression<bool>? showGlobalProgress,
     Expression<bool>? showUnits,
     Expression<String>? strengthUnit,
     Expression<bool>? systemColors,
@@ -2297,6 +2334,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (showCategories != null) 'show_categories': showCategories,
       if (showImages != null) 'show_images': showImages,
       if (showNotes != null) 'show_notes': showNotes,
+      if (showGlobalProgress != null)
+        'show_global_progress': showGlobalProgress,
       if (showUnits != null) 'show_units': showUnits,
       if (strengthUnit != null) 'strength_unit': strengthUnit,
       if (systemColors != null) 'system_colors': systemColors,
@@ -2332,6 +2371,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<bool>? showCategories,
       Value<bool>? showImages,
       Value<bool>? showNotes,
+      Value<bool>? showGlobalProgress,
       Value<bool>? showUnits,
       Value<String>? strengthUnit,
       Value<bool>? systemColors,
@@ -2364,6 +2404,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       showCategories: showCategories ?? this.showCategories,
       showImages: showImages ?? this.showImages,
       showNotes: showNotes ?? this.showNotes,
+      showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
       showUnits: showUnits ?? this.showUnits,
       strengthUnit: strengthUnit ?? this.strengthUnit,
       systemColors: systemColors ?? this.systemColors,
@@ -2447,6 +2488,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (showNotes.present) {
       map['show_notes'] = Variable<bool>(showNotes.value);
     }
+    if (showGlobalProgress.present) {
+      map['show_global_progress'] = Variable<bool>(showGlobalProgress.value);
+    }
     if (showUnits.present) {
       map['show_units'] = Variable<bool>(showUnits.value);
     }
@@ -2500,6 +2544,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('showCategories: $showCategories, ')
           ..write('showImages: $showImages, ')
           ..write('showNotes: $showNotes, ')
+          ..write('showGlobalProgress: $showGlobalProgress, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
@@ -3612,6 +3657,7 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   Value<bool> showCategories,
   Value<bool> showImages,
   Value<bool> showNotes,
+  Value<bool> showGlobalProgress,
   required bool showUnits,
   required String strengthUnit,
   required bool systemColors,
@@ -3645,6 +3691,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> showCategories,
   Value<bool> showImages,
   Value<bool> showNotes,
+  Value<bool> showGlobalProgress,
   Value<bool> showUnits,
   Value<String> strengthUnit,
   Value<bool> systemColors,
@@ -3740,6 +3787,10 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get showNotes => $composableBuilder(
       column: $table.showNotes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showGlobalProgress => $composableBuilder(
+      column: $table.showGlobalProgress,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<bool> get showUnits => $composableBuilder(
       column: $table.showUnits, builder: (column) => ColumnFilters(column));
@@ -3856,6 +3907,10 @@ class $$SettingsTableOrderingComposer
   ColumnOrderings<bool> get showNotes => $composableBuilder(
       column: $table.showNotes, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get showGlobalProgress => $composableBuilder(
+      column: $table.showGlobalProgress,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<bool> get showUnits => $composableBuilder(
       column: $table.showUnits, builder: (column) => ColumnOrderings(column));
 
@@ -3962,6 +4017,9 @@ class $$SettingsTableAnnotationComposer
   GeneratedColumn<bool> get showNotes =>
       $composableBuilder(column: $table.showNotes, builder: (column) => column);
 
+  GeneratedColumn<bool> get showGlobalProgress => $composableBuilder(
+      column: $table.showGlobalProgress, builder: (column) => column);
+
   GeneratedColumn<bool> get showUnits =>
       $composableBuilder(column: $table.showUnits, builder: (column) => column);
 
@@ -4033,6 +4091,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> showCategories = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
             Value<bool> showNotes = const Value.absent(),
+            Value<bool> showGlobalProgress = const Value.absent(),
             Value<bool> showUnits = const Value.absent(),
             Value<String> strengthUnit = const Value.absent(),
             Value<bool> systemColors = const Value.absent(),
@@ -4066,6 +4125,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             showCategories: showCategories,
             showImages: showImages,
             showNotes: showNotes,
+            showGlobalProgress: showGlobalProgress,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,
@@ -4099,6 +4159,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> showCategories = const Value.absent(),
             Value<bool> showImages = const Value.absent(),
             Value<bool> showNotes = const Value.absent(),
+            Value<bool> showGlobalProgress = const Value.absent(),
             required bool showUnits,
             required String strengthUnit,
             required bool systemColors,
@@ -4132,6 +4193,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             showCategories: showCategories,
             showImages: showImages,
             showNotes: showNotes,
+            showGlobalProgress: showGlobalProgress,
             showUnits: showUnits,
             strengthUnit: strengthUnit,
             systemColors: systemColors,

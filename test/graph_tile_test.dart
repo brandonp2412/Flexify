@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('GraphTile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(

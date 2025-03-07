@@ -14,7 +14,7 @@ import 'mock_tests.dart';
 
 void main() async {
   testWidgets('AddExercise', (WidgetTester tester) async {
-    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await mockTests();
     await tester.pumpWidget(

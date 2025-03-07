@@ -15,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('EditPlanPage updates', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final planState = PlanState();
     const plan = PlansCompanion(
@@ -62,7 +62,7 @@ void main() async {
 
   testWidgets('EditPlanPage searches', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(executor: NativeDatabase.memory(), logStatements: false);
+    db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
 
     const plan = PlansCompanion(

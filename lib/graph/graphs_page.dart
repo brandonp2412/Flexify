@@ -247,8 +247,12 @@ class GraphsPageState extends State<GraphsPage>
                   );
                 },
               ),
-              Expanded(
-                child: graphList(gymSets),
+              Selector<SettingsState, bool>(
+                selector: (p0, settingsState) =>
+                    settingsState.value.showGlobalProgress,
+                builder: (context, value, child) => Expanded(
+                  child: graphList(gymSets, value),
+                ),
               ),
             ],
           );
@@ -286,10 +290,46 @@ class GraphsPageState extends State<GraphsPage>
     await Share.share("I just did $summaries");
   }
 
-  material.ListView graphList(List<GymSetsCompanion> gymSets) {
+  void longPressGlobal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.visibility_off),
+              title: Text('Hide global progress'),
+              onTap: () {
+                db.settings.update().write(
+                      SettingsCompanion(
+                        showGlobalProgress: Value(false),
+                      ),
+                    );
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.clear),
+              title: Text('Cancel'),
+              onTap: () {
+                Navigator.pop(context);
+                // Add logic to show info
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  material.ListView graphList(
+    List<GymSetsCompanion> gymSets,
+    bool showGlobalProgress,
+  ) {
     var itemCount = gymSets.length;
-    final showGlobal =
-        'global graphs'.contains(search.toLowerCase()) && category == null;
+    final showGlobal = 'global graphs'.contains(search.toLowerCase()) &&
+        category == null &&
+        showGlobalProgress;
     if (showGlobal) itemCount++;
 
     return ListView.builder(
@@ -307,6 +347,7 @@ class GraphsPageState extends State<GraphsPage>
                 builder: (context) => GlobalProgressPage(),
               ),
             ),
+            onLongPress: longPressGlobal,
           );
         if (showGlobal) index--;
 
