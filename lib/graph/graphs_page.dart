@@ -363,7 +363,21 @@ class GraphsPageState extends State<GraphsPage>
 
         return material.Column(
           children: [
-            if (showDivider) const Divider(),
+            if (showDivider)
+              material.Row(
+                children: [
+                  material.Expanded(child: const Divider()),
+                  const Icon(Icons.today),
+                  const SizedBox(width: 4),
+                  Selector<SettingsState, String>(
+                    selector: (p0, p1) => p1.value.shortDateFormat,
+                    builder: (context, format, child) =>
+                        Text(DateFormat(format).format(previousCreated)),
+                  ),
+                  const SizedBox(width: 4),
+                  material.Expanded(child: const Divider()),
+                ],
+              ),
             GraphTile(
               selected: selected,
               gymSet: gymSet,
