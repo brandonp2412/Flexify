@@ -245,7 +245,7 @@ class _StrengthPageState extends State<StrengthPage> {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.40,
+                  height: MediaQuery.of(context).size.height * 0.35,
                   child: data.isEmpty
                       ? const ListTile(title: Text("No data yet."))
                       : Padding(
