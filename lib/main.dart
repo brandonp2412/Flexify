@@ -111,14 +111,15 @@ class _HomePageState extends State<HomePage> {
         db.metadata.insertOne(
           MetadataCompanion(buildNumber: Value(int.parse(info.buildNumber))),
         );
+      else
+        db.metadata.update().write(
+              MetadataCompanion(
+                buildNumber: Value(int.parse(info.buildNumber)),
+              ),
+            );
 
       if (int.parse(info.buildNumber) == metadata?.buildNumber) return null;
 
-      db.metadata.update().write(
-            MetadataCompanion(
-              buildNumber: Value(int.parse(info.buildNumber)),
-            ),
-          );
       if (mounted)
         toast(
           context,
