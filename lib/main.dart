@@ -7,12 +7,14 @@ import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/settings/whats_new.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'plan/plans_page.dart';
@@ -91,8 +93,48 @@ class App extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    final packageInfo = PackageInfo.fromPlatform();
+    packageInfo.then((info) async {
+      final metadata = await (db.metadata.select()..limit(1)).getSingleOrNull();
+      if (metadata == null) {
+        return db.metadata.insertOne(
+          MetadataCompanion(buildNumber: Value(int.parse(info.buildNumber))),
+        );
+      }
+
+      if (int.parse(info.buildNumber) == metadata.buildNumber) return null;
+
+      db.metadata.update().write(
+            MetadataCompanion(
+              buildNumber: Value(int.parse(info.buildNumber)),
+            ),
+          );
+      if (mounted)
+        toast(
+          context,
+          "New version ${info.version}",
+          SnackBarAction(
+            label: 'See whats new',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => WhatsNew(),
+              ),
+            ),
+          ),
+        );
+    });
+  }
 
   void hideTab(BuildContext context, String tab) {
     final settings = context.read<SettingsState>();

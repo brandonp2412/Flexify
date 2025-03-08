@@ -6,6 +6,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/metadata.dart';
 import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/plans.dart';
 import 'package:flexify/database/settings.dart';
@@ -35,7 +36,7 @@ LazyDatabase openConnection() {
   });
 }
 
-@DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises])
+@DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises, Metadata])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? openConnection());
 
@@ -375,10 +376,13 @@ class AppDatabase extends _$AppDatabase {
             schema.settings.showGlobalProgress,
           );
         },
+        from39To40: (Migrator m, Schema40 schema) async {
+          await m.createTable(schema.metadata);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 39;
+  int get schemaVersion => 40;
 }

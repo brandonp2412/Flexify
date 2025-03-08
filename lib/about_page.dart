@@ -1,3 +1,4 @@
+import 'package:flexify/settings/whats_new.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -21,6 +22,28 @@ class AboutPage extends StatelessWidget {
             child: Image(
               image: AssetImage('assets/ic_launcher.png'),
               height: 150,
+            ),
+          ),
+          ListTile(
+            title: const Text("Donate"),
+            leading: const Icon(Icons.favorite_outline),
+            subtitle: FutureBuilder(
+              future: packageInfo,
+              builder: (context, snapshot) =>
+                  const Text("Help support this project"),
+            ),
+            onTap: () async {
+              const url = 'https://github.com/sponsors/brandonp2412';
+              if (await canLaunchUrlString(url)) await launchUrlString(url);
+            },
+          ),
+          ListTile(
+            title: const Text("Whats new?"),
+            leading: const Icon(Icons.change_circle_outlined),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => WhatsNew(),
+              ),
             ),
           ),
           ListTile(
@@ -71,19 +94,6 @@ class AboutPage extends StatelessWidget {
             ),
             onTap: () async {
               const url = 'https://github.com/brandonp2412/Flexify';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
-            },
-          ),
-          ListTile(
-            title: const Text("Donate"),
-            leading: const Icon(Icons.favorite_outline),
-            subtitle: FutureBuilder(
-              future: packageInfo,
-              builder: (context, snapshot) =>
-                  const Text("Help support this project"),
-            ),
-            onTap: () async {
-              const url = 'https://github.com/sponsors/brandonp2412';
               if (await canLaunchUrlString(url)) await launchUrlString(url);
             },
           ),
