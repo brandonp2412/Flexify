@@ -134,7 +134,22 @@ class _HistoryListState extends State<HistoryList> {
 
     return Column(
       children: [
-        if (showDivider) const Divider(),
+        if (showDivider)
+          Row(
+            children: [
+              const Expanded(child: Divider()),
+              const Icon(Icons.today),
+              const SizedBox(width: 4),
+              Selector<SettingsState, String>(
+                selector: (context, settings) => settings.value.shortDateFormat,
+                builder: (context, value, child) => Text(
+                  DateFormat(value).format(previousGymSet.created),
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Expanded(child: Divider()),
+            ],
+          ),
         ListTile(
           leading: showImages && gymSet.image != null
               ? Image.file(

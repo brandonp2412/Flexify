@@ -79,12 +79,15 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
         Row(
           children: [
             const Expanded(child: Divider()),
+            const Icon(Icons.today),
+            const SizedBox(width: 4),
             Selector<SettingsState, String>(
               selector: (context, settings) => settings.value.shortDateFormat,
               builder: (context, value, child) => Text(
                 DateFormat(value).format(previousHistory!.day),
               ),
             ),
+            const SizedBox(width: 4),
             const Expanded(child: Divider()),
           ],
         ),
