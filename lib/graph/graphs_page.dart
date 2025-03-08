@@ -243,6 +243,7 @@ class GraphsPageState extends State<GraphsPage>
                             period: Period.day,
                             startDate: null,
                             endDate: null,
+                            limit: 21,
                           ),
                   );
                 },

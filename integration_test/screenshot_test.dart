@@ -340,6 +340,7 @@ void main() {
               period: Period.day,
               startDate: null,
               endDate: null,
+              limit: 11,
             ),
           ),
         ),

@@ -232,6 +232,7 @@ Future<List<StrengthData>> getStrengthData({
   required Period period,
   required DateTime? startDate,
   required DateTime? endDate,
+  required int limit,
 }) async {
   Expression<String> createdCol = getCreated(period);
 
@@ -254,7 +255,7 @@ Future<List<StrengthData>> getStrengthData({
         mode: OrderingMode.desc,
       ),
     ])
-    ..limit(11)
+    ..limit(limit)
     ..groupBy([createdCol]));
 
   if (startDate != null)

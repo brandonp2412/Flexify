@@ -13,6 +13,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/unit_selector.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,8 @@ class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> data = widget.data;
   late String targetUnit = widget.unit;
   late String name = widget.name;
+
+  int limit = 21;
   StrengthMetric metric = StrengthMetric.bestWeight;
   Period period = Period.day;
   DateTime? startDate;
@@ -215,6 +218,32 @@ class _StrengthPageState extends State<StrengthPage> {
                     ],
                   ),
                 ),
+                material.Column(
+                  children: [
+                    material.Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text(
+                        "Limit ($limit)",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                    Slider(
+                      value: limit.toDouble(),
+                      inactiveColor: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.24),
+                      min: 10,
+                      max: 100,
+                      onChanged: (value) {
+                        setState(() {
+                          limit = value.toInt();
+                        });
+                        setData();
+                      },
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.40,
                   child: data.isEmpty
@@ -303,6 +332,7 @@ class _StrengthPageState extends State<StrengthPage> {
       period: period,
       startDate: startDate,
       endDate: endDate,
+      limit: limit,
     );
     setState(() {
       data = strengthData;
