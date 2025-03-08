@@ -92,7 +92,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
           ],
         ),
       ExpansionTile(
-        title: Text(history.name),
+        title: Text("${history.name} (${history.gymSets.length})"),
         shape: const Border.symmetric(),
         children: history.gymSets.map(
           (gymSet) {
