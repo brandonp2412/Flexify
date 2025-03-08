@@ -107,13 +107,12 @@ class _HomePageState extends State<HomePage> {
     final packageInfo = PackageInfo.fromPlatform();
     packageInfo.then((info) async {
       final metadata = await (db.metadata.select()..limit(1)).getSingleOrNull();
-      if (metadata == null) {
-        return db.metadata.insertOne(
+      if (metadata == null)
+        db.metadata.insertOne(
           MetadataCompanion(buildNumber: Value(int.parse(info.buildNumber))),
         );
-      }
 
-      if (int.parse(info.buildNumber) == metadata.buildNumber) return null;
+      if (int.parse(info.buildNumber) == metadata?.buildNumber) return null;
 
       db.metadata.update().write(
             MetadataCompanion(
