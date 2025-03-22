@@ -89,7 +89,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Bench press'));
+    await tester.tap(find.textContaining('Bench press'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('1 x 90 kg'));
@@ -157,7 +157,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Bench press'));
+    await tester.tap(find.textContaining('Bench press'));
     await tester.pumpAndSettle();
 
     await tester.longPress(find.text('1 x 90 kg'));
@@ -196,7 +196,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Bench press'));
+    await tester.tap(find.textContaining('Bench press'));
     await tester.pumpAndSettle();
 
     await tester.longPress(find.text('1 x 90 kg'));
