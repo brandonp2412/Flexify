@@ -359,6 +359,14 @@ class _StartPlanPageState extends State<StartPlanPage>
           rpms = value;
         }),
       );
+    if (settings.strengthUnit != 'last-entry' && !cardio)
+      setState(() {
+        unit = settings.strengthUnit;
+      });
+    else if (settings.cardioUnit != 'last-entry' && cardio)
+      setState(() {
+        unit = settings.cardioUnit;
+      });
   }
 
   _updateGymSetTextFields(GymSet gymSet) {

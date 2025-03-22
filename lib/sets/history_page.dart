@@ -273,7 +273,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           name: '',
           reps: 0,
           created: DateTime.now().toLocal(),
-          unit: settings.strengthUnit,
+          unit: 'kg',
           weight: 0,
           cardio: false,
           duration: 0,
@@ -285,6 +285,15 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       bodyWeight: bodyWeight,
       created: DateTime.now().toLocal(),
     );
+
+    if (settings.strengthUnit != 'last-entry' && !gymSet.cardio)
+      gymSet = gymSet.copyWith(
+        unit: settings.strengthUnit,
+      );
+    else if (settings.cardioUnit != 'last-entry' && gymSet.cardio)
+      gymSet = gymSet.copyWith(
+        unit: settings.cardioUnit,
+      );
 
     if (!mounted) return;
     Navigator.push(

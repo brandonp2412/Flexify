@@ -24,7 +24,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
   bool cardio = false;
 
   late var settings = context.watch<SettingsState>();
-  late String unit = settings.value.strengthUnit;
+  late String unit = settings.value.strengthUnit == 'last-entry'
+      ? 'kg'
+      : settings.value.strengthUnit;
   String? image;
   final formKey = GlobalKey<FormState>();
 
@@ -149,6 +151,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   Future<void> save(String unit) async {
     if (!formKey.currentState!.validate()) return;
+
+    if (settings.value.strengthUnit != 'last-entry' && !cardio)
+      unit = settings.value.strengthUnit;
+    else if (settings.value.cardioUnit != 'last-entry' && cardio)
+      unit = settings.value.cardioUnit;
 
     final insert = GymSetsCompanion.insert(
       created: DateTime.now().toLocal(),

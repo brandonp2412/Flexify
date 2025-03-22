@@ -40,6 +40,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
         child: UnitSelector(
           label: 'Strength unit',
           value: settings.strengthUnit,
+          settings: true,
           onChanged: (value) {
             db.settings.update().write(
                   SettingsCompanion(
@@ -55,6 +56,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
         child: UnitSelector(
           label: 'Cardio unit',
           value: settings.cardioUnit,
+          settings: true,
           onChanged: (value) {
             db.settings.update().write(
                   SettingsCompanion(

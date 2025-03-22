@@ -379,10 +379,18 @@ class AppDatabase extends _$AppDatabase {
         from39To40: (Migrator m, Schema40 schema) async {
           await m.createTable(schema.metadata);
         },
+        from40To41: (Migrator m, Schema41 schema) async {
+          await schema.settings.update().write(
+                RawValuesInsertable({
+                  'strength_unit': Variable("last-entry"),
+                  'cardio_unit': Variable("last-entry"),
+                }),
+              );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 40;
+  int get schemaVersion => 41;
 }

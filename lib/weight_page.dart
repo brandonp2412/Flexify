@@ -122,12 +122,15 @@ class _WeightPageState extends State<WeightPage> {
           final settings = context.read<SettingsState>().value;
           Navigator.pop(context);
 
+          if (settings.strengthUnit != 'last-entry')
+            unit = settings.strengthUnit;
+
           db.gymSets.insertOne(
             GymSetsCompanion.insert(
               created: DateTime.now().toLocal(),
               name: "Weight",
               reps: 1,
-              unit: unit ?? settings.strengthUnit,
+              unit: unit ?? 'kg',
               weight: double.parse(valueController.text),
               image: drift.Value(image),
             ),
