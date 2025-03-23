@@ -1,0 +1,3 @@
+- Stop backup receiver if automatic backups are off
+- Remove rsync from deploy.sh to macos
+- Use zsh in macos.sh

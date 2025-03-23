@@ -1,0 +1,2 @@
+- Add ability to hide global progress
+- Fix one-rep-max calculations for negatives

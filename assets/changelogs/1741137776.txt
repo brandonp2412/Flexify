@@ -1,0 +1,3 @@
+- Enable exercises on screenshot for plans
+- Curve graphs by default
+- Handle failed migrations

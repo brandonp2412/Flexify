@@ -1,0 +1,1 @@
+- Fix editing # of working sets from plan

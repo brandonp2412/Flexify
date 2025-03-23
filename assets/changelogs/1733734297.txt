@@ -1,0 +1,3 @@
+- Fix plan exercises resetting
+- Replace + button with search entry for new plans
+- Remove dependency info block for f-droid

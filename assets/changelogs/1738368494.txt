@@ -1,0 +1,9 @@
+- Take all screenshots on dark mode
+- Put get it on the X badges in a row
+- Fix some obscure android errors
+- Tap to create on plans
+- Update wording on graphs page none found
+- Show best exercises from graphs page
+- Fix zero padding on graph history page no data yet
+- Shorten graph heights
+- Fix graph peek bug

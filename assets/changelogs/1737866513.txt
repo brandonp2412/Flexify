@@ -1,0 +1,1 @@
+- Fix bugs with adding exercises via plans

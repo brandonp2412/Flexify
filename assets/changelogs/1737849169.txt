@@ -1,0 +1,13 @@
+- Change graph heights
+- Add setting to hide categories
+- Use icon buttons for delete modals
+- Add notifications to new records
+- Add curve smoothness setting
+- Increase padding in search bar
+- Update graphs after editing from history peek
+- Fix setting reps/weight after finishing an exercise
+- Go back after saving tab settings
+- Blend system nav with app themes
+- Preview graph below appearance settings
+- Fix curve setting not applying to graph peek
+- Make graphs look sexy 😎

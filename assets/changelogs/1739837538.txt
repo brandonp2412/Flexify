@@ -1,0 +1,11 @@
+- Add global graphs
+- Update fastlane icon.png
+- Make exercise drag handles bigger
+- Swap weird clear icons
+- Make sure iOS has decimal options for number inputs
+- Prevent timer animation every time you swap tabs
+- Make app icon dark theme
+- Animate addition/removal in history list
+- Add relative time option for date
+- Fix system back on timer page
+- Fix graph name being wrong after update
