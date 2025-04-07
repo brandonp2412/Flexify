@@ -53,7 +53,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void onSelected(String option, bool showBodyWeight) async {
     final last = await (db.gymSets.select()
-          ..where((tbl) => tbl.name.equals(option))
+          ..where((tbl) => tbl.name.equals(option) & tbl.hidden.equals(false))
           ..orderBy(
             [
               (u) => OrderingTerm(
@@ -64,20 +64,18 @@ class _EditSetPageState extends State<EditSetPage> {
           )
           ..limit(1))
         .getSingleOrNull();
-    if (last == null) return;
+    if (last == null)
+      return setState(() {
+        name = option;
+      });
 
     if (showBodyWeight)
-      updateFields(
-        last.copyWith(
-          created: DateTime.now().toLocal(),
-        ),
-      );
+      updateFields(last);
     else {
       final bodyWeight = await getBodyWeight();
       updateFields(
         last.copyWith(
           bodyWeight: bodyWeight?.weight,
-          created: DateTime.now().toLocal(),
         ),
       );
     }
@@ -488,7 +486,12 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void initState() {
     super.initState();
+
     updateFields(widget.gymSet);
+    setState(() {
+      created = widget.gymSet.created;
+    });
+
     (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
         .get()
         .then((results) {
@@ -616,7 +619,6 @@ class _EditSetPageState extends State<EditSetPage> {
       image = gymSet.image;
       name = gymSet.name;
       unit = gymSet.unit;
-      created = gymSet.created;
       cardio = gymSet.cardio;
       restMs = gymSet.restMs;
     });
