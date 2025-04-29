@@ -31,6 +31,12 @@ class BackupReceiver : BroadcastReceiver() {
 
         val backupUri = Uri.parse(backupPath)
 
+        val dir = DocumentFile.fromTreeUri(context, backupUri)
+        if (dir == null) return;
+
+        val fileName = generateBackupFileName()
+        if (dir.findFile(fileName) != null) return; /* backup already been done */
+
         val channelId = "backup_channel"
         var notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.baseline_arrow_downward_24)
@@ -55,12 +61,7 @@ class BackupReceiver : BroadcastReceiver() {
             return
         }
 
-        val dir = DocumentFile.fromTreeUri(context, backupUri)
-        val currentDate = LocalDate.now() // Get today's date
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd") // Define the pattern
-        val yyyyMMdd = formatter.format(currentDate)
-        val fileName = "flexify-${yyyyMMdd}.sqlite"
-        val file = dir!!.createFile("application/x-sqlite3", fileName)!!
+        val file = dir.createFile("application/x-sqlite3", fileName)!!
         Log.d("BackupReceiver", "file.uri=${file.uri}")
         notificationBuilder = notificationBuilder.setContentText(file.name)
 
@@ -95,5 +96,12 @@ class BackupReceiver : BroadcastReceiver() {
                 notificationManager.notify(2, notificationBuilder.build())
             }
         }
+    }
+
+    private fun generateBackupFileName(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val yyyyMMdd = formatter.format(currentDate)
+        return "flexify-${yyyyMMdd}.sqlite"
     }
 }
