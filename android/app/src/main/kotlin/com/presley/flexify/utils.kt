@@ -25,6 +25,7 @@ fun scheduleBackups(context: Context) {
         set(Calendar.SECOND, 0)
         if (timeInMillis < System.currentTimeMillis()) {
             add(Calendar.DAY_OF_YEAR, 1)
+            pendingIntent.send()
         }
     }
 
