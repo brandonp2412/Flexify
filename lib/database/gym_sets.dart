@@ -389,8 +389,11 @@ Future<bool> isBest(GymSet gymSet) async {
           ..addColumns([db.gymSets.distance.sum() / db.gymSets.duration.sum()])
           ..orderBy([
             (u) => OrderingTerm(
-                  expression:
-                      db.gymSets.distance.sum() / db.gymSets.duration.sum(),
+                  expression: u.weight,
+                  mode: OrderingMode.desc,
+                ),
+            (u) => OrderingTerm(
+                  expression: u.reps,
                   mode: OrderingMode.desc,
                 ),
           ])
