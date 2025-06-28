@@ -329,6 +329,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void setStream() {
+    final searchTerms = search.toLowerCase().split(" ")
+      .where((term) => !term.isEmpty);
+
     var query = (db.gymSets.select()
       ..orderBy(
         [
@@ -337,8 +340,13 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 mode: OrderingMode.desc,
               ),
         ],
-      )
-      ..where((tbl) => tbl.name.contains(search.toLowerCase()))
+      ));
+
+    for (final term in searchTerms) {
+      query = query..where((tbl) => tbl.name.contains(term));
+    }
+    
+    query = (query
       ..where((tbl) => tbl.hidden.equals(false))
       ..limit(limit));
 
