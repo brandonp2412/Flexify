@@ -152,16 +152,22 @@ class GraphsPageState extends State<GraphsPage>
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
 
-          final gymSets = snapshot.data!.where((gymSet) {
-            final name = gymSet.name.value.toLowerCase();
-            final searchText = search.toLowerCase();
-            if (category != null) {
-              return gymSet.category.value == category &&
-                  name.contains(searchText);
-            } else {
-              return name.contains(searchText);
-            }
-          }).toList();
+          final searchTerms = search.toLowerCase().split(" ")
+            .where((term) => !term.isEmpty);
+          var snapshotStream = snapshot.data!
+            .where((gymSet) {
+              if (category != null) {
+                return gymSet.category.value == category;
+              }
+              return true;
+            });
+
+          for (final term in searchTerms) {
+            snapshotStream = snapshotStream
+              .where((gymSet) => gymSet.name.value.contains(term));
+          }
+
+          final gymSets = snapshotStream.toList();
 
           return material.Column(
             children: [

@@ -340,15 +340,13 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 mode: OrderingMode.desc,
               ),
         ],
-      ));
+      )
+      ..where((tbl) => tbl.hidden.equals(false))
+      ..limit(limit));
 
     for (final term in searchTerms) {
       query = query..where((tbl) => tbl.name.contains(term));
     }
-    
-    query = (query
-      ..where((tbl) => tbl.hidden.equals(false))
-      ..limit(limit));
 
     if (category != null)
       query = query..where((tbl) => tbl.category.equals(category!));
