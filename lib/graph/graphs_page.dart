@@ -164,7 +164,7 @@ class GraphsPageState extends State<GraphsPage>
 
           for (final term in searchTerms) {
             snapshotStream = snapshotStream
-              .where((gymSet) => gymSet.name.value.contains(term));
+              .where((gymSet) => gymSet.name.value.toLowerCase().contains(term));
           }
 
           final gymSets = snapshotStream.toList();

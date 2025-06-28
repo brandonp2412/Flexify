@@ -64,14 +64,25 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final searchTerms = search.toLowerCase().split(" ")
+            .where((term) => !term.isEmpty);
+    List<Plan>? filtered;
     planState = context.watch<PlanState>();
-    final filtered = planState?.plans
-        .where(
-          (element) =>
-              element.days.toLowerCase().contains(search.toLowerCase()) ||
-              element.exercises.toLowerCase().contains(search.toLowerCase()),
-        )
-        .toList();
+
+
+    if (planState != null) {
+      Iterable<Plan> planPartialFilter = planState!.plans;
+  
+      for (final term in searchTerms) {
+        planPartialFilter = planPartialFilter
+          .where(
+            (element) =>
+                element.days.toLowerCase().contains(term.toLowerCase()) ||
+                element.exercises.toLowerCase().contains(term.toLowerCase()),
+          );
+      }
+      filtered = planPartialFilter.toList();
+    }
 
     return Scaffold(
       body: Column(
