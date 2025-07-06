@@ -432,11 +432,15 @@ class _EditSetPageState extends State<EditSetPage> {
   material.Autocomplete<String> autocomplete(bool showBodyWeight) {
     return Autocomplete<String>(
       optionsBuilder: (textEditingValue) {
-        return nameOptions.where(
-          (option) => option
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase()),
-        );
+        final searchTerms = textEditingValue.text.toLowerCase().split(" ")
+            .where((term) => !term.isEmpty);
+        Iterable<String> options = nameOptions;
+
+        for (final term in searchTerms) {
+          options = options
+            .where((option) => option.toLowerCase().contains(term));
+        }
+        return options;
       },
       onSelected: (option) => onSelected(option, showBodyWeight),
       initialValue: TextEditingValue(text: name),
