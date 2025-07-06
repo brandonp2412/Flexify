@@ -218,7 +218,6 @@ class MainActivity : FlutterActivity() {
     private fun requestTimerPermissions() {
         val permissions = mutableListOf<String>()
         
-        // Check notification permission for Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -229,7 +228,6 @@ class MainActivity : FlutterActivity() {
             }
         }
         
-        // Request permissions if needed
         if (permissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -238,12 +236,9 @@ class MainActivity : FlutterActivity() {
             )
         }
         
-        // Request battery optimization exemption
-        // We need to bind to the service first if not already bound
         if (timerBound && timerService != null) {
             timerService?.battery()
         } else {
-            // Create a temporary service just to request battery optimization
             val intent = Intent(context, TimerService::class.java)
             bindService(intent, object : ServiceConnection {
                 override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
