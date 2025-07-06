@@ -329,8 +329,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void setStream() {
-    final searchTerms = search.toLowerCase().split(" ")
-      .where((term) => !term.isEmpty);
+    final searchTerms =
+        search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
 
     var query = (db.gymSets.select()
       ..orderBy(

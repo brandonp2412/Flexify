@@ -64,22 +64,20 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final searchTerms = search.toLowerCase().split(" ")
-            .where((term) => !term.isEmpty);
+    final searchTerms =
+        search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
     List<Plan>? filtered;
     planState = context.watch<PlanState>();
 
-
     if (planState != null) {
       Iterable<Plan> planPartialFilter = planState!.plans;
-  
+
       for (final term in searchTerms) {
-        planPartialFilter = planPartialFilter
-          .where(
-            (element) =>
-                element.days.toLowerCase().contains(term.toLowerCase()) ||
-                element.exercises.toLowerCase().contains(term.toLowerCase()),
-          );
+        planPartialFilter = planPartialFilter.where(
+          (element) =>
+              element.days.toLowerCase().contains(term.toLowerCase()) ||
+              element.exercises.toLowerCase().contains(term.toLowerCase()),
+        );
       }
       filtered = planPartialFilter.toList();
     }
@@ -101,7 +99,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                     .split(',')
                     .map((exercise) => "- $exercise")
                     .join('\n');
-                
+
                 return "$daysList:\n$exercisesList";
               }).join('\n\n');
 
