@@ -97,8 +97,17 @@ class _TimerCircularProgressIndicatorState
   }
 }
 
-class TimerProgressIndicator extends StatelessWidget {
+class TimerProgressIndicator extends StatefulWidget {
   const TimerProgressIndicator({super.key});
+
+  @override
+  State<TimerProgressIndicator> createState() => _TimerProgressIndicatorState();
+}
+
+class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
+  Duration? lastDuration;
+  DateTime? lastTimestamp;
+  GlobalKey? animationKey;
 
   @override
   Widget build(BuildContext context) {
@@ -108,18 +117,40 @@ class TimerProgressIndicator extends StatelessWidget {
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
 
+        if (duration == Duration.zero || remaining == Duration.zero) {
+          lastDuration = null;
+          lastTimestamp = null;
+          animationKey = null;
+          return const SizedBox.shrink();
+        }
+
+        final currentProgress = elapsed.inMilliseconds / duration.inMilliseconds;
+        
+        // Check if this is a new timer (different duration or significant timestamp change)
+        final isNewTimer = lastDuration != duration || 
+                          (lastTimestamp != null && 
+                           timerState.nativeTimer.timeStamp.difference(lastTimestamp!).inSeconds.abs() > 1);
+        
+        if (isNewTimer) {
+          lastDuration = duration;
+          lastTimestamp = timerState.nativeTimer.timeStamp;
+          animationKey = GlobalKey();
+        }
+
         return Visibility(
-          visible: duration > Duration.zero && remaining > Duration.zero,
-          child: TweenAnimationBuilder(
-            key: UniqueKey(),
+          visible: true,
+          child: TweenAnimationBuilder<double>(
+            key: animationKey,
             tween: Tween<double>(
-              begin: 1,
-              end: elapsed.inMilliseconds / duration.inMilliseconds,
+              begin: 1.0 - currentProgress,
+              end: 0.0,
             ),
             duration: remaining,
-            builder: (context, value, child) => LinearProgressIndicator(
-              value: value,
-            ),
+            builder: (context, value, child) {
+              return LinearProgressIndicator(
+                value: value,
+              );
+            },
           ),
         );
       },
