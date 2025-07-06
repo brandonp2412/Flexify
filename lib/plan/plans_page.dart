@@ -84,12 +84,15 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   )
                   .toList();
 
-              final summaries = plans
-                  .map(
-                    (plan) =>
-                        """${plan.days.split(',').join(', ')}:\n${plan.exercises.split(',').map((exercise) => "- $exercise").join('\n')}""",
-                  )
-                  .join('\n\n');
+              final summaries = plans.map((plan) {
+                final daysList = plan.days.split(',').join(', ');
+                final exercisesList = plan.exercises
+                    .split(',')
+                    .map((exercise) => "- $exercise")
+                    .join('\n');
+                
+                return "$daysList:\n$exercisesList";
+              }).join('\n\n');
 
               await Share.share(summaries);
               setState(() {
