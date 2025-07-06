@@ -149,8 +149,8 @@ class GraphsPageState extends State<GraphsPage>
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
+          if (!snapshot.hasData) return const SizedBox();
 
           final gymSets = snapshot.data!.where((gymSet) {
             final name = gymSet.name.value.toLowerCase();
