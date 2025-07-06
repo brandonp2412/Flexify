@@ -169,7 +169,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
         ..addColumns([
           db.gymSets.name,
           db.gymSets.unit,
-          db.gymSets.weight.max(),
+          db.gymSets.weight,
           db.gymSets.reps,
           db.gymSets.cardio,
           db.gymSets.duration,
@@ -191,7 +191,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
             .map(
               (result) => GymSetsCompanion(
                 name: Value(result.read(db.gymSets.name)!),
-                weight: Value(result.read(db.gymSets.weight.max())!),
+                weight: Value(result.read(db.gymSets.weight)!),
                 unit: Value(result.read(db.gymSets.unit)!),
                 reps: Value(result.read(db.gymSets.reps)!),
                 cardio: Value(result.read(db.gymSets.cardio)!),
