@@ -315,6 +315,7 @@ Future<List<StrengthData>> getGlobalData({
   required Period period,
   required DateTime? startDate,
   required DateTime? endDate,
+  required int limit,
 }) async {
   Expression<String> createdCol = getCreated(period);
 
@@ -337,7 +338,7 @@ Future<List<StrengthData>> getGlobalData({
         mode: OrderingMode.desc,
       ),
     ])
-    ..limit(100)
+    ..limit(limit)
     ..groupBy([db.gymSets.category, createdCol]));
 
   if (startDate != null)

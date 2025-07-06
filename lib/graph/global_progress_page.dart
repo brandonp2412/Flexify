@@ -23,11 +23,32 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
   DateTime? startDate;
   DateTime? endDate;
   String targetUnit = 'kg';
+  int limit = 100;
+  TabController? tabController;
 
   @override
   void initState() {
     super.initState();
     setData();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      tabController = DefaultTabController.of(context);
+      tabController?.addListener(tabListener);
+    });
+  }
+
+  void tabListener() {
+    final settings = context.read<SettingsState>().value;
+    final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
+    if (tabController!.indexIsChanging == true) return;
+    if (tabController!.index != graphsIndex) return;
+    setData();
+  }
+
+  @override
+  void dispose() {
+    tabController?.removeListener(tabListener);
+    super.dispose();
   }
 
   void setData() async {
@@ -37,6 +58,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       period: period,
       startDate: startDate,
       endDate: endDate,
+      limit: limit,
     );
     final newCategories = await getCategories();
     setState(() {
@@ -69,16 +91,20 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
     final chartColors = generateChartColors(context, categories.length);
     List<LineChartBarData> lineBarsData = [];
+
+    final allDates = data.map((d) => d.created).toSet().toList()..sort();
+    final dateToXMap = <DateTime, double>{};
+    for (int i = 0; i < allDates.length; i++) {
+      dateToXMap[allDates[i]] = i.toDouble();
+    }
+
     var index = 0;
     for (final category in categories) {
+      final categoryData = data.where((d) => d.category == category).toList();
       lineBarsData.add(
         LineChartBarData(
-          spots: data
-              .where((d) => d.category == category)
-              .toList()
-              .asMap()
-              .entries
-              .map((entry) => FlSpot(entry.key.toDouble(), entry.value.value))
+          spots: categoryData
+              .map((d) => FlSpot(dateToXMap[d.created]!, d.value))
               .toList(),
           isCurved: settings.curveLines,
           color: chartColors[index],
@@ -262,6 +288,32 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                 ],
               ),
             ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(
+                    "Limit ($limit)",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+                Slider(
+                  value: limit.toDouble(),
+                  inactiveColor: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.24),
+                  min: 10,
+                  max: 200,
+                  onChanged: (value) {
+                    setState(() {
+                      limit = value.toInt();
+                    });
+                    setData();
+                  },
+                ),
+              ],
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.40,
               child: data.isEmpty
@@ -294,15 +346,15 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             ),
             SizedBox(height: 8),
             Wrap(
-              spacing: 16.0, // Space between radio-category pairs
-              runSpacing: 8.0, // Space between rows
+              spacing: 16.0,
+              runSpacing: 8.0,
               alignment: WrapAlignment.center,
               children: chartColors
                   .asMap()
                   .entries
                   .map(
                     (entry) => SizedBox(
-                      width: 120, // Adjust this width based on your needs
+                      width: 120,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -368,13 +420,21 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
+        final allDates = data.map((d) => d.created).toSet().toList()..sort();
+        final xToDateMap = <double, DateTime>{};
+        for (int i = 0; i < allDates.length; i++) {
+          xToDateMap[i.toDouble()] = allDates[i];
+        }
+
         return touchedSpots.map((spot) {
           var category = categories[spot.barIndex];
           final color = chartColors[spot.barIndex];
-          final categoryData =
-              data.where((d) => d.category == category).toList();
+          final touchedDate = xToDateMap[spot.x];
 
-          final row = categoryData[spot.spotIndex];
+          final row = data.firstWhere(
+            (d) => d.category == category && d.created == touchedDate,
+          );
+
           final formatter = NumberFormat("#,###.00");
           category ??= "None";
 
@@ -395,7 +455,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
           }
 
           return LineTooltipItem(
-            value,
+            "$category\n$value\n${DateFormat(format).format(row.created)}",
             Theme.of(context).textTheme.labelLarge!.copyWith(color: color),
           );
         }).toList();
