@@ -167,7 +167,6 @@ class TimerService : Service() {
             startForeground(ONGOING_ID, getProgress(flexifyTimer.getRemainingSeconds()).build())
         }
 
-        battery()
         Log.d("TimerService", "onTimerStart seconds=${flexifyTimer.getDurationSeconds()}")
 
         timerRunnable = object : Runnable {
@@ -441,4 +440,3 @@ class TimerService : Service() {
         const val FINISHED_ID = 1
     }
 }
-

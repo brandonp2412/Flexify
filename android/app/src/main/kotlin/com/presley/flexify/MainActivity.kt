@@ -1,5 +1,6 @@
 package com.presley.flexify
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -8,12 +9,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -101,6 +104,11 @@ class MainActivity : FlutterActivity() {
                     val intent = Intent(TimerService.STOP_BROADCAST)
                     intent.setPackage(applicationContext.packageName)
                     sendBroadcast(intent)
+                }
+
+                "requestTimerPermissions" -> {
+                    requestTimerPermissions()
+                    result.success(true)
                 }
 
                 else -> {
@@ -207,9 +215,52 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    private fun requestTimerPermissions() {
+        val permissions = mutableListOf<String>()
+        
+        // Check notification permission for Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+        
+        // Request permissions if needed
+        if (permissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissions.toTypedArray(),
+                TIMER_PERMISSION_REQUEST_CODE
+            )
+        }
+        
+        // Request battery optimization exemption
+        // We need to bind to the service first if not already bound
+        if (timerBound && timerService != null) {
+            timerService?.battery()
+        } else {
+            // Create a temporary service just to request battery optimization
+            val intent = Intent(context, TimerService::class.java)
+            bindService(intent, object : ServiceConnection {
+                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                    val binder = service as TimerService.LocalBinder
+                    binder.getService().battery()
+                    unbindService(this)
+                }
+                
+                override fun onServiceDisconnected(name: ComponentName?) {}
+            }, Context.BIND_AUTO_CREATE)
+        }
+    }
+
     companion object {
         const val FLUTTER_CHANNEL = "com.presley.flexify/android"
         const val WRITE_REQUEST_CODE = 43
+        const val TIMER_PERMISSION_REQUEST_CODE = 44
         const val TICK_BROADCAST = "tick-event"
     }
 }

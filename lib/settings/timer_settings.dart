@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -84,20 +85,34 @@ List<Widget> getTimerSettings(
           leading: settings.restTimers
               ? const Icon(Icons.timer)
               : const Icon(Icons.timer_outlined),
-          onTap: () {
+          onTap: () async {
+            final newValue = !settings.restTimers;
+            
+            // Request permissions when enabling timers
+            if (newValue) {
+              await androidChannel.invokeMethod('requestTimerPermissions');
+            }
+            
             db.settings.update().write(
                   SettingsCompanion(
-                    restTimers: Value(!settings.restTimers),
+                    restTimers: Value(newValue),
                   ),
                 );
           },
           trailing: Switch(
             value: settings.restTimers,
-            onChanged: (value) => db.settings.update().write(
+            onChanged: (value) async {
+              // Request permissions when enabling timers
+              if (value) {
+                await androidChannel.invokeMethod('requestTimerPermissions');
+              }
+              
+              db.settings.update().write(
                   SettingsCompanion(
                     restTimers: Value(value),
                   ),
-                ),
+                );
+            },
           ),
         ),
       ),
