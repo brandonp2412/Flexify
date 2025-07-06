@@ -124,13 +124,18 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
           return const SizedBox.shrink();
         }
 
-        final currentProgress = elapsed.inMilliseconds / duration.inMilliseconds;
-        
+        final currentProgress =
+            elapsed.inMilliseconds / duration.inMilliseconds;
+
         // Check if this is a new timer (different duration or significant timestamp change)
-        final isNewTimer = lastDuration != duration || 
-                          (lastTimestamp != null && 
-                           timerState.nativeTimer.timeStamp.difference(lastTimestamp!).inSeconds.abs() > 1);
-        
+        final isNewTimer = lastDuration != duration ||
+            (lastTimestamp != null &&
+                timerState.nativeTimer.timeStamp
+                        .difference(lastTimestamp!)
+                        .inSeconds
+                        .abs() >
+                    1);
+
         if (isNewTimer) {
           lastDuration = duration;
           lastTimestamp = timerState.nativeTimer.timeStamp;
