@@ -61,7 +61,7 @@ jobs:
         id: version
         run: |
           # Read current version
-          current_version=$(yq -r .version pubspec.yaml)
+          current_version=$(yq e '.version' pubspec.yaml)
           IFS='+.' read -r major minor patch build_number <<< "$current_version"
           
           # Calculate new versions
@@ -72,7 +72,7 @@ jobs:
           new_version="$major.$minor.$new_patch"
           
           # Calculate MSIX version
-          current_msix_version=$(yq -r .msix_config.msix_version pubspec.yaml)
+          current_msix_version=$(yq e '.msix_config.msix_version' pubspec.yaml)
           IFS='.' read -r msix_major msix_minor msix_patch msix_zero <<< "$current_msix_version"
           new_msix_patch=$((msix_patch + 1))
           new_msix_version="$msix_major.$msix_minor.$new_msix_patch.$msix_zero"
@@ -117,8 +117,8 @@ jobs:
 
       - name: Update versions in pubspec.yaml
         run: |
-          yq -yi ".version |= \"${{ steps.version.outputs.flutter_version }}\"" pubspec.yaml
-          yq -yi ".msix_config.msix_version |= \"${{ steps.version.outputs.msix_version }}\"" pubspec.yaml
+          yq e ".version |= \"${{ steps.version.outputs.flutter_version }}\"" -i pubspec.yaml
+          yq e ".msix_config.msix_version |= \"${{ steps.version.outputs.msix_version }}\"" -i pubspec.yaml
 
       - name: Copy changelogs
         run: |
