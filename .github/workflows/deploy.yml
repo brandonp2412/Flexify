@@ -1,0 +1,400 @@
+name: Deploy Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_windows_store:
+        description: 'Skip Windows Store deployment'
+        required: false
+        default: false
+        type: boolean
+      skip_google_play:
+        description: 'Skip Google Play deployment'
+        required: false
+        default: false
+        type: boolean
+      skip_macos:
+        description: 'Skip macOS deployment'
+        required: false
+        default: false
+        type: boolean
+      skip_tests:
+        description: 'Skip tests and screenshots'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PUB_SUMMARY_ONLY: true
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      flutter_version: ${{ steps.version.outputs.flutter_version }}
+      msix_version: ${{ steps.version.outputs.msix_version }}
+      changelog_number: ${{ steps.version.outputs.changelog_number }}
+      changelog: ${{ steps.version.outputs.changelog }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Check for uncommitted changes
+        run: |
+          if ! git diff-files --quiet; then
+            echo "Error: There are uncommitted changes"
+            exit 1
+          fi
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Calculate new version
+        id: version
+        run: |
+          # Read current version
+          current_version=$(yq -r .version pubspec.yaml)
+          IFS='+.' read -r major minor patch build_number <<< "$current_version"
+          
+          # Calculate new versions
+          new_patch=$((patch + 1))
+          new_build_number=$((build_number + 1))
+          changelog_number=$((new_build_number * 10 + 3))
+          new_flutter_version="$major.$minor.$new_patch+$new_build_number"
+          new_version="$major.$minor.$new_patch"
+          
+          # Calculate MSIX version
+          current_msix_version=$(yq -r .msix_config.msix_version pubspec.yaml)
+          IFS='.' read -r msix_major msix_minor msix_patch msix_zero <<< "$current_msix_version"
+          new_msix_patch=$((msix_patch + 1))
+          new_msix_version="$msix_major.$msix_minor.$new_msix_patch.$msix_zero"
+          
+          echo "version=$new_version" >> $GITHUB_OUTPUT
+          echo "flutter_version=$new_flutter_version" >> $GITHUB_OUTPUT
+          echo "msix_version=$new_msix_version" >> $GITHUB_OUTPUT
+          echo "changelog_number=$changelog_number" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          changelog_file="fastlane/metadata/android/en-US/changelogs/${{ steps.version.outputs.changelog_number }}.txt"
+          
+          if [ ! -f "$changelog_file" ]; then
+            mkdir -p "$(dirname "$changelog_file")"
+            git --no-pager log --pretty=format:'%s' "$(git describe --tags --abbrev=0)"..HEAD | \
+              awk '{print "- "$0}' > "$changelog_file"
+          fi
+          
+          changelog=$(cat "$changelog_file")
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$changelog" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # Also create the en-AU release notes
+          mkdir -p fastlane/metadata/en-AU
+          echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Run tests and analysis
+        if: ${{ !inputs.skip_tests }}
+        run: |
+          flutter test
+          dart analyze lib
+          dart format --set-exit-if-changed lib
+
+      - name: Update versions in pubspec.yaml
+        run: |
+          yq -yi ".version |= \"${{ steps.version.outputs.flutter_version }}\"" pubspec.yaml
+          yq -yi ".msix_config.msix_version |= \"${{ steps.version.outputs.msix_version }}\"" pubspec.yaml
+
+      - name: Copy changelogs
+        run: |
+          # Create destination directory if it doesn't exist
+          mkdir -p assets/changelogs
+          
+          # Process each text file in source directory
+          for file in fastlane/metadata/android/en-US/changelogs/*.txt; do
+            if [ -f "$file" ]; then
+              # Get modification time in Unix timestamp format
+              timestamp=$(stat -c "%Y" "$file")
+              # Copy file with timestamp filename
+              cp "$file" "assets/changelogs/$timestamp.txt"
+              echo "Copied $(basename "$file") to $timestamp.txt"
+            fi
+          done
+
+      - name: Commit version bump
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pubspec.yaml fastlane/metadata pubspec.lock assets
+          git commit -m "${{ steps.version.outputs.version }} 🚀
+
+          ${{ steps.changelog.outputs.changelog }}"
+          git push
+
+  build-android:
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Build APK (split per ABI)
+        run: flutter build apk --split-per-abi
+
+      - name: Build APK (universal)
+        run: flutter build apk
+
+      - name: Build App Bundle
+        run: flutter build appbundle
+
+      - name: Rename universal APK
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-builds
+          path: |
+            build/app/outputs/flutter-apk/app-*-release.apk
+            build/app/outputs/flutter-apk/flexify.apk
+            build/app/outputs/bundle/release/app-release.aab
+
+  build-linux:
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+
+      - name: Build Linux
+        run: flutter build linux
+
+      - name: Create Linux zip
+        run: |
+          cd build/linux/x64/release/bundle
+          zip -r flexify-linux.zip .
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-builds
+          path: build/linux/x64/release/bundle/flexify-linux.zip
+
+  build-windows:
+    needs: prepare-release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Build Windows
+        run: flutter build windows
+
+      - name: Build MSIX
+        run: flutter pub run msix:create
+
+      - name: Create Windows zip
+        run: |
+          Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: |
+            build/windows/x64/runner/Release/flexify.msix
+            flexify-windows.zip
+
+  build-macos:
+    needs: prepare-release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Build macOS
+        run: flutter build macos --release
+
+      - name: Build iOS
+        run: flutter build ipa
+
+      - name: Upload macOS/iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-builds
+          path: |
+            build/macos/Build/Products/Release/Flexify.app
+            build/ios/ipa/flexify.ipa
+
+  create-github-release:
+    needs: [prepare-release, build-android, build-linux, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.prepare-release.outputs.version }}
+          name: ${{ needs.prepare-release.outputs.version }}
+          body: ${{ needs.prepare-release.outputs.changelog }}
+          files: |
+            android-builds/app-*-release.apk
+            android-builds/flexify.apk
+            linux-builds/flexify-linux.zip
+            windows-builds/flexify-windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-windows-store:
+    needs: [prepare-release, build-windows]
+    runs-on: windows-latest
+    if: ${{ !inputs.skip_windows_store }}
+    steps:
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-builds
+
+      - name: Install Microsoft Store CLI
+        run: |
+          # Install msstore CLI tool
+          # This would need to be configured with proper credentials
+          echo "Windows Store deployment would happen here"
+          echo "msstore publish -id ${{ secrets.MSSTORE_APP_ID }} flexify.msix"
+
+  deploy-google-play:
+    needs: [prepare-release, build-android]
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_google_play }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: android-builds
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Deploy to Google Play
+        run: |
+          bundle exec fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
+        env:
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+
+  deploy-macos-appstore:
+    needs: [prepare-release, build-macos]
+    runs-on: macos-latest
+    if: ${{ !inputs.skip_macos }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-builds
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Build and sign macOS package
+        run: |
+          APP_NAME="build/macos/Build/Products/Release/Flexify.app"
+          PACKAGE_NAME="build/macos/Flexify.pkg"
+          
+          # Create unsigned package
+          xcrun productbuild --component "$APP_NAME" /Applications/ build/macos/unsigned.pkg
+          
+          # Sign package (requires proper certificates in secrets)
+          xcrun productsign --sign "${{ secrets.INSTALLER_CERT_NAME }}" build/macos/unsigned.pkg "$PACKAGE_NAME"
+          rm -f build/macos/unsigned.pkg
+
+      - name: Deploy to Mac App Store
+        run: |
+          bundle exec fastlane deliver --pkg build/macos/Flexify.pkg
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+
+      - name: Deploy to iOS App Store
+        run: |
+          bundle exec fastlane deliver --ipa build/ios/ipa/flexify.ipa
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
