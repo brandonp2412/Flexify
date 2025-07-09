@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:integration_test/integration_test_driver_extended.dart';
 
 Future<void> main() async => await integrationDriver(
@@ -7,10 +8,15 @@ Future<void> main() async => await integrationDriver(
         if (deviceType == null || deviceType.isEmpty)
           throw "FLEXIFY_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
         final isIos = Platform.environment["FLEXIFY_IS_IOS"];
-        final isWeb = Platform.environment["FLUTTER_WEB"] == "true" || 
-                     args?.toString().contains("chrome") == true ||
-                     args?.toString().contains("web") == true;
-        
+
+        // Enhanced web detection - check for web environment variables and Chrome device
+        final isWeb = Platform.environment["FLUTTER_WEB"] == "true" ||
+            args?.toString().contains("chrome") == true ||
+            args?.toString().contains("web") == true ||
+            Platform.environment["FLUTTER_DRIVER_DEVICE"] == "chrome" ||
+            Platform.environment["FLUTTER_DRIVER_DEVICE"]?.contains("chrome") ==
+                true;
+
         File imgFile;
         if (isWeb) {
           // For web/Chrome screenshots, save directly to screenshots directory

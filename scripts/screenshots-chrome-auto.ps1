@@ -32,8 +32,9 @@ if (-not $chromeDriverRunning) {
     Write-Host "ChromeDriver is already running on port 4444"
 }
 
-# Set environment variable for device type
+# Set environment variables for device type and Chrome detection
 $env:FLEXIFY_DEVICE_TYPE = $deviceType
+$env:FLUTTER_DRIVER_DEVICE = "chrome"
 
 try {
     # Run Flutter drive command targeting Chrome

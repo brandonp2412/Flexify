@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -245,21 +243,38 @@ void main() {
 
     for (var plan in plans) {
       final id = await app.db.into(app.db.plans).insert(plan);
-      var i = 0;
-      final gymSets = await (db.gymSets.selectOnly()
-            ..addColumns([db.gymSets.name])
-            ..groupBy([db.gymSets.name]))
-          .get();
-      for (var result in gymSets) {
-        await app.db.planExercises.insertOne(
-          PlanExercisesCompanion.insert(
-            enabled: i % 2 == 0,
-            timers: Value(true),
-            exercise: result.read(db.gymSets.name)!,
-            planId: id,
-          ),
-        );
-        i++;
+      final exercisesList = plan.exercises.value.split(',');
+
+      for (final exercise in exercisesList) {
+        // Only create plan_exercises for exercises that exist in gym_sets
+        final gymSetExists = await (db.gymSets.select()
+              ..where((tbl) => tbl.name.equals(exercise))
+              ..limit(1))
+            .getSingleOrNull();
+
+        if (gymSetExists != null) {
+          await app.db.planExercises.insertOne(
+            PlanExercisesCompanion.insert(
+              enabled: true, // Enable all exercises
+              timers: Value(true),
+              exercise: exercise,
+              planId: id,
+            ),
+          );
+        } else {
+          // Create a gym set for exercises that don't exist
+          await app.db.into(app.db.gymSets).insert(
+                generateGymSetCompanion(exercise, 50.0),
+              );
+          await app.db.planExercises.insertOne(
+            PlanExercisesCompanion.insert(
+              enabled: true,
+              timers: Value(true),
+              exercise: exercise,
+              planId: id,
+            ),
+          );
+        }
       }
     }
   });
@@ -303,32 +318,30 @@ void main() {
       ),
     );
 
-    // Skip StartPlanPage test on web as it may have platform-specific behavior
-    if (!kIsWeb)
-      testWidgets(
-        "StartPlanPage",
-        (tester) async => await generateScreenshot(
-          binding: binding,
-          tester: tester,
-          screenshotName: '4_en-US',
-          navigateToPage: (context) async {
-            // Get the first plan directly from the database
-            final plan = await (db.plans.select()..limit(1)).getSingle();
-            
-            // Ensure the PlanState is updated with gym counts for this plan
-            final planState = context.read<PlanState>();
-            await planState.updateGymCounts(plan.id);
-            
-            navigateTo(
-              context: context,
-              page: StartPlanPage(
-                plan: plan,
-              ),
-            );
-          },
-          tabBarState: TabBarState.plans,
-        ),
-      );
+    testWidgets(
+      "StartPlanPage",
+      (tester) async => await generateScreenshot(
+        binding: binding,
+        tester: tester,
+        screenshotName: '4_en-US',
+        navigateToPage: (context) async {
+          // Get the first plan directly from the database
+          final plan = await (db.plans.select()..limit(1)).getSingle();
+
+          // Ensure the PlanState is updated with gym counts for this plan
+          final planState = context.read<PlanState>();
+          await planState.updateGymCounts(plan.id);
+
+          navigateTo(
+            context: context,
+            page: StartPlanPage(
+              plan: plan,
+            ),
+          );
+        },
+        tabBarState: TabBarState.plans,
+      ),
+    );
   });
 
   group("Generate extra screenshots", () {
@@ -392,7 +405,7 @@ void main() {
     );
 
     // Skip timer test on web as it may have platform-specific behavior
-    if (Platform.isAndroid || (!kIsWeb))
+    if (!kIsWeb)
       testWidgets(
         "TimerPage",
         (tester) async => await generateScreenshot(
