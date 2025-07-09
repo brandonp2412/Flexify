@@ -8,21 +8,39 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
+          cache: true
+
+      - name: Enable Windows desktop support
+        run: flutter config --enable-windows-desktop
+
+      - name: Check if running on Windows
+        id: check_os
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]] || [[ "$(uname -s)" == MINGW* ]] || [[ "$(uname -s)" == CYGWIN* ]] || [[ "$(uname -s)" == MSYS* ]]; then
+            echo "is_windows=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_windows=false" >> $GITHUB_OUTPUT
+            echo "Warning: Not running on Windows, skipping Windows build"
+          fi
 
       - name: Build Windows
+        if: steps.check_os.outputs.is_windows == 'true'
         run: flutter build windows
 
       - name: Archive Release files
+        if: steps.check_os.outputs.is_windows == 'true'
         run: |
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
 
       - name: Upload zip
+        if: steps.check_os.outputs.is_windows == 'true'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -30,3 +48,9 @@ jobs:
           asset_name: Windows zip
           tag: ${{ github.ref }}
           overwrite: false
+
+      - name: Skip build (not Windows)
+        if: steps.check_os.outputs.is_windows == 'false'
+        run: |
+          echo "Skipping Windows build because this is not running on Windows"
+          echo "This is expected when testing with 'act' on non-Windows systems"
