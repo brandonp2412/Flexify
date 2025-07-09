@@ -4,16 +4,28 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class TimerState extends ChangeNotifier {
   NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
   Timer? next;
-  final player = AudioPlayer();
+  AudioPlayer? player;
   bool starting = false;
 
   TimerState() {
+    // Only create AudioPlayer on supported platforms
+    if (!kIsWeb) {
+      try {
+        player = AudioPlayer();
+      } catch (e) {
+        // Handle case where AudioPlayer creation fails
+        print('Failed to create AudioPlayer: $e');
+        player = null;
+      }
+    }
+
     androidChannel.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
         final newTimer = NativeTimerWrapper(
@@ -46,7 +58,7 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       androidChannel.invokeMethod('add', args);
     } else {
       next?.cancel();
@@ -80,7 +92,7 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       await androidChannel.invokeMethod('timer', args);
     } else {
       next?.cancel();
@@ -89,11 +101,15 @@ class TimerState extends ChangeNotifier {
   }
 
   notify(String? title, String? alarmSound) async {
-    player.play(
-      alarmSound?.isNotEmpty == true
-          ? DeviceFileSource(alarmSound!)
-          : AssetSource('argon.mp3'),
-    );
+    // Only play audio on supported platforms
+    if (player != null) {
+      player!.play(
+        alarmSound?.isNotEmpty == true
+            ? DeviceFileSource(alarmSound!)
+            : AssetSource('argon.mp3'),
+      );
+    }
+    
     const linuxSettings =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
     const darwinSettings = DarwinInitializationSettings();
@@ -109,11 +125,12 @@ class TimerState extends ChangeNotifier {
 
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
-    if (!Platform.isAndroid) {
-      player.stop();
+    if (kIsWeb || !Platform.isAndroid) {
+      player?.stop();
       next?.cancel();
-    } else
+    } else {
       androidChannel.invokeMethod('stop');
+    }
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {

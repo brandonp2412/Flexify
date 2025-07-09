@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flexify/about_page.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/appearance_settings.dart';
@@ -80,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: const Text('Settings'),
         actions: [
-          if (!Platform.isIOS && !Platform.isMacOS)
+          if (!kIsWeb && !Platform.isIOS && !Platform.isMacOS)
             IconButton(
               onPressed: () async {
                 Navigator.push(
@@ -215,6 +216,16 @@ class _SettingsPageState extends State<SettingsPage> {
       text: (Duration(milliseconds: settings.timerDuration).inSeconds % 60)
           .toString(),
     );
-    player = AudioPlayer();
+    
+    // Only create AudioPlayer on supported platforms
+    if (!kIsWeb) {
+      try {
+        player = AudioPlayer();
+      } catch (e) {
+        // Handle case where AudioPlayer creation fails
+        print('Failed to create AudioPlayer: $e');
+        player = null;
+      }
+    }
   }
 }

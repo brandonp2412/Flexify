@@ -5,6 +5,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -208,7 +209,23 @@ class _TimerSettingsState extends State<TimerSettings> {
             .toString(),
   );
 
-  AudioPlayer player = AudioPlayer();
+  AudioPlayer? player;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // Only create AudioPlayer on supported platforms
+    if (!kIsWeb) {
+      try {
+        player = AudioPlayer();
+      } catch (e) {
+        // Handle case where AudioPlayer creation fails
+        print('Failed to create AudioPlayer: $e');
+        player = null;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,13 +236,20 @@ class _TimerSettingsState extends State<TimerSettings> {
         title: const Text("Timers"),
       ),
       body: ListView(
-        children: getTimerSettings(
-          '',
-          settings.value,
-          minutesController,
-          secondsController,
-          player,
-        ),
+        children: player != null
+            ? getTimerSettings(
+                '',
+                settings.value,
+                minutesController,
+                secondsController,
+                player!,
+              )
+            : [
+                const ListTile(
+                  title: Text("Timer settings"),
+                  subtitle: Text("Audio features not available on web"),
+                ),
+              ],
       ),
     );
   }
@@ -236,7 +260,7 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     minutesController.dispose();
     secondsController.dispose();
-    player.stop();
-    player.dispose();
+    player?.stop();
+    player?.dispose();
   }
 }

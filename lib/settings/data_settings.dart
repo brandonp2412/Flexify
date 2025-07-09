@@ -7,6 +7,7 @@ import 'package:flexify/export_data.dart';
 import 'package:flexify/import_data.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -47,7 +48,7 @@ List<Widget> getDataSettings(
           onChanged: (value) => tapBackup(value),
         ),
       ),
-    if ('share database'.contains(term.toLowerCase()) && !Platform.isLinux)
+    if ('share database'.contains(term.toLowerCase()) && !kIsWeb && !Platform.isLinux)
       TextButton.icon(
         onPressed: () async {
           final dbFolder = await getApplicationDocumentsDirectory();
