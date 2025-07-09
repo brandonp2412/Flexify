@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -27,33 +28,76 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>flexify</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = null;
+    const serviceWorkerVersion = "782937200";
   </script>
+  <!-- Load sql.js for drift web support -->
+  <script>
+    window.sqlJsConfig = {
+      locateFile: file => `https://unpkg.com/sql.js@1.8.0/dist/${file}`
+    };
+  </script>
+  <script src="https://unpkg.com/sql.js@1.8.0/dist/sql-wasm.js"></script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
+
 <body>
   <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
+    window.addEventListener('load', function (ev) {
+      // Initialize sql.js first, then start Flutter
+      if (typeof initSqlJs !== 'undefined') {
+        initSqlJs(window.sqlJsConfig).then(function (SQL) {
+          window.SQL = SQL;
+          console.log('sql.js loaded successfully');
+
+          // Now start Flutter
+          _flutter.loader.loadEntrypoint({
+            serviceWorker: {
+              serviceWorkerVersion: serviceWorkerVersion,
+            },
+            onEntrypointLoaded: function (engineInitializer) {
+              engineInitializer.initializeEngine().then(function (appRunner) {
+                appRunner.runApp();
+              });
+            }
           });
-        }
-      });
+        }).catch(function (err) {
+          console.error('Failed to load sql.js:', err);
+          // Start Flutter anyway, but it might fail
+          _flutter.loader.loadEntrypoint({
+            serviceWorker: {
+              serviceWorkerVersion: serviceWorkerVersion,
+            },
+            onEntrypointLoaded: function (engineInitializer) {
+              engineInitializer.initializeEngine().then(function (appRunner) {
+                appRunner.runApp();
+              });
+            }
+          });
+        });
+      } else {
+        console.error('initSqlJs not found');
+        // Start Flutter anyway
+        _flutter.loader.loadEntrypoint({
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
+          onEntrypointLoaded: function (engineInitializer) {
+            engineInitializer.initializeEngine().then(function (appRunner) {
+              appRunner.runApp();
+            });
+          }
+        });
+      }
     });
   </script>
 </body>
+
 </html>

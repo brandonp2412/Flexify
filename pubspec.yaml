@@ -31,6 +31,7 @@ dependencies:
       url: https://github.com/insertjokehere/flutter_msvcredist.git
       ref: main
   timeago: ^3.2.2
+  sqlite3_web: ^0.1.2
 dev_dependencies:
   integration_test:
     sdk: flutter
