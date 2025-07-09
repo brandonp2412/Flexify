@@ -10,7 +10,8 @@ import 'package:flexify/database/settings.dart';
 import 'package:flutter/foundation.dart';
 
 // Import the connection functions
-import 'database_connection_web.dart' if (dart.library.io) 'database_connection_native.dart';
+import 'database_connection_web.dart'
+    if (dart.library.io) 'database_connection_native.dart';
 
 part 'database.g.dart';
 

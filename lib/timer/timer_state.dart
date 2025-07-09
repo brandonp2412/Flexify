@@ -109,7 +109,7 @@ class TimerState extends ChangeNotifier {
             : AssetSource('argon.mp3'),
       );
     }
-    
+
     const linuxSettings =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
     const darwinSettings = DarwinInitializationSettings();

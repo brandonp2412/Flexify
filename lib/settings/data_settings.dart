@@ -48,7 +48,9 @@ List<Widget> getDataSettings(
           onChanged: (value) => tapBackup(value),
         ),
       ),
-    if ('share database'.contains(term.toLowerCase()) && !kIsWeb && !Platform.isLinux)
+    if ('share database'.contains(term.toLowerCase()) &&
+        !kIsWeb &&
+        !Platform.isLinux)
       TextButton.icon(
         onPressed: () async {
           final dbFolder = await getApplicationDocumentsDirectory();

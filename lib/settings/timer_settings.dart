@@ -214,7 +214,7 @@ class _TimerSettingsState extends State<TimerSettings> {
   @override
   void initState() {
     super.initState();
-    
+
     // Only create AudioPlayer on supported platforms
     if (!kIsWeb) {
       try {

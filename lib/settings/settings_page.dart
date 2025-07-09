@@ -216,7 +216,7 @@ class _SettingsPageState extends State<SettingsPage> {
       text: (Duration(milliseconds: settings.timerDuration).inSeconds % 60)
           .toString(),
     );
-    
+
     // Only create AudioPlayer on supported platforms
     if (!kIsWeb) {
       try {
