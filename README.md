@@ -65,6 +65,43 @@ To get started with Flexify, follow these steps:
    flutter run
    ```
 
+## ChromeDriver Setup
+
+For automated screenshot testing, you'll need to download ChromeDriver:
+
+### Windows
+
+1. **Download ChromeDriver**: Download the latest ChromeDriver for Windows:
+   ```bash
+   curl -L -o chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.85/win64/chromedriver-win64.zip"
+   ```
+
+2. **Extract**: Extract the downloaded zip file:
+   ```bash
+   tar -xf chromedriver.zip
+   ```
+
+### macOS/Linux
+
+1. **Download ChromeDriver**: Download the appropriate version for your system:
+   ```bash
+   # For macOS (Intel)
+   curl -L -o chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.85/mac-x64/chromedriver-mac-x64.zip"
+   
+   # For macOS (Apple Silicon)
+   curl -L -o chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.85/mac-arm64/chromedriver-mac-arm64.zip"
+   
+   # For Linux
+   curl -L -o chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.85/linux64/chromedriver-linux64.zip"
+   ```
+
+2. **Extract**: Extract the downloaded zip file:
+   ```bash
+   unzip chromedriver.zip
+   ```
+
+**Note**: ChromeDriver files are excluded from git due to their size. You'll need to download them locally for screenshot testing to work.
+
 ## Migrations
 
 If you edit any of the models in the `lib/database` directory you probably need to create migrations. E.g. assume the version starts at `1`.

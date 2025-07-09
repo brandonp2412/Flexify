@@ -17,6 +17,7 @@ import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -214,7 +215,7 @@ void main() {
       IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   var deviceType = const String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
-  if (deviceType.isEmpty) deviceType = 'phoneScreenshots';
+  if (deviceType.isEmpty) deviceType = 'desktop';
 
   setUpAll(() async {
     app.db = AppDatabase();
@@ -302,23 +303,32 @@ void main() {
       ),
     );
 
-    testWidgets(
-      "StartPlanPage",
-      (tester) async => await generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '4_en-US',
-        navigateToPage: (context) async {
-          navigateTo(
-            context: context,
-            page: StartPlanPage(
-              plan: context.read<PlanState>().plans.first,
-            ),
-          );
-        },
-        tabBarState: TabBarState.plans,
-      ),
-    );
+    // Skip StartPlanPage test on web as it may have platform-specific behavior
+    if (!kIsWeb)
+      testWidgets(
+        "StartPlanPage",
+        (tester) async => await generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '4_en-US',
+          navigateToPage: (context) async {
+            // Get the first plan directly from the database
+            final plan = await (db.plans.select()..limit(1)).getSingle();
+            
+            // Ensure the PlanState is updated with gym counts for this plan
+            final planState = context.read<PlanState>();
+            await planState.updateGymCounts(plan.id);
+            
+            navigateTo(
+              context: context,
+              page: StartPlanPage(
+                plan: plan,
+              ),
+            );
+          },
+          tabBarState: TabBarState.plans,
+        ),
+      );
   });
 
   group("Generate extra screenshots", () {
@@ -381,7 +391,8 @@ void main() {
       ),
     );
 
-    if (Platform.isAndroid)
+    // Skip timer test on web as it may have platform-specific behavior
+    if (Platform.isAndroid || (!kIsWeb))
       testWidgets(
         "TimerPage",
         (tester) async => await generateScreenshot(

@@ -49,4 +49,8 @@ android/fastlane/report.xml
 # FVM Version Cache
 .fvm/
 
+# ChromeDriver files (too large for git)
+chromedriver.zip
+chromedriver-win64/
+
 coverage/
