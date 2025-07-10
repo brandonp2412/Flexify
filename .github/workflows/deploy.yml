@@ -258,8 +258,16 @@ jobs:
           ruby-version: "3.0"
           bundler-cache: true
 
+      - name: Create Google Play JSON key file
+        run: |
+          echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
+
       - name: Deploy to Google Play
         run: |
-          bundle exec fastlane supply --aab android-builds/app-release.aab
-        env:
-          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+          bundle exec fastlane supply \
+            --aab bundle/release/app-release.aab \
+            --json_key google-play-key.json \
+            --package_name com.presley.flexify \
+            --track production \
+            --skip_upload_images \
+            --skip_upload_screenshots
