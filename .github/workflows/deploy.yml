@@ -195,43 +195,8 @@ jobs:
             build/windows/x64/runner/Release/flexify.msix
             flexify-windows.zip
 
-  build-macos:
-    needs: prepare-release
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          cache: true
-
-      - name: Build macOS
-        run: flutter build macos --release
-        env:
-          CODE_SIGN_IDENTITY: ""
-          CODE_SIGNING_REQUIRED: "NO"
-          CODE_SIGNING_ALLOWED: "NO"
-
-      - name: Build iOS
-        run: flutter build ipa --export-method development
-        continue-on-error: true
-
-      - name: Upload macOS/iOS artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-builds
-          path: |
-            build/macos/Build/Products/Release/Flexify.app
-            build/ios/ipa/flexify.ipa
-
   create-github-release:
-    needs:
-      [prepare-release, build-android, build-linux, build-windows, build-macos]
+    needs: [prepare-release, build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -241,11 +206,6 @@ jobs:
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
-
-      - name: Create macOS zip
-        run: |
-          cd macos-builds
-          zip -r flexify-macos.zip Flexify.app
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -258,7 +218,6 @@ jobs:
             android-builds/flexify.apk
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
-            macos-builds/flexify-macos.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -303,49 +262,3 @@ jobs:
           bundle exec fastlane supply --aab android-builds/app-release.aab
         env:
           GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
-
-  deploy-macos-appstore:
-    needs: [prepare-release, build-macos]
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Download macOS artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: macos-builds
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.0"
-          bundler-cache: true
-
-      - name: Build and sign macOS package
-        run: |
-          APP_NAME="build/macos/Build/Products/Release/Flexify.app"
-          PACKAGE_NAME="build/macos/Flexify.pkg"
-
-          # Create unsigned package
-          xcrun productbuild --component "$APP_NAME" /Applications/ build/macos/unsigned.pkg
-
-          # Sign package (requires proper certificates in secrets)
-          xcrun productsign --sign "${{ secrets.INSTALLER_CERT_NAME }}" build/macos/unsigned.pkg "$PACKAGE_NAME"
-          rm -f build/macos/unsigned.pkg
-
-      - name: Deploy to Mac App Store
-        run: |
-          bundle exec fastlane deliver --pkg build/macos/Flexify.pkg
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-
-      - name: Deploy to iOS App Store
-        run: |
-          bundle exec fastlane deliver --ipa build/ios/ipa/flexify.ipa
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
