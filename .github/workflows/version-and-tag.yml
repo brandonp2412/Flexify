@@ -116,3 +116,10 @@ jobs:
           git tag "${{ steps.version.outputs.version }}"
           git push origin main
           git push origin "${{ steps.version.outputs.version }}"
+
+      - name: Trigger deploy workflow
+        if: ${{ !env.ACT }}
+        run: |
+          gh workflow run deploy.yml --field tag="${{ steps.version.outputs.version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

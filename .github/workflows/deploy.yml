@@ -1,7 +1,12 @@
 name: Deploy Release
 
 on:
-  create:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to deploy"
+        required: true
+        type: string
   push:
     tags:
       - "*"
@@ -12,7 +17,7 @@ env:
 jobs:
   prepare-release:
     runs-on: ubuntu-latest
-    if: github.ref_type == 'tag'
+    if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'
     outputs:
       version: ${{ steps.version.outputs.version }}
       flutter_version: ${{ steps.version.outputs.flutter_version }}
@@ -34,8 +39,13 @@ jobs:
       - name: Extract version from tag
         id: version
         run: |
-          # Get version from tag
-          tag_version="${GITHUB_REF#refs/tags/}"
+          # Get version from tag or workflow input
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            tag_version="${{ github.event.inputs.tag }}"
+            git checkout "refs/tags/$tag_version"
+          else
+            tag_version="${GITHUB_REF#refs/tags/}"
+          fi
           echo "version=$tag_version" >> $GITHUB_OUTPUT
 
           # Read current version info from pubspec.yaml
