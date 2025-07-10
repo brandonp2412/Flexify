@@ -9,7 +9,7 @@ on:
         type: string
   push:
     tags:
-      - "*"
+      - "[0-9]+.[0-9]+.[0-9]+"
 
 env:
   PUB_SUMMARY_ONLY: true
@@ -219,24 +219,40 @@ jobs:
             android-builds/bundle/release/app-release.aab
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
+            windows-builds/flexify.msix
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-windows-store:
     needs: [prepare-release, build-windows]
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
         with:
           name: windows-builds
 
-      - name: Install Microsoft Store CLI
-        run: |
-          # Install msstore CLI tool
-          # This would need to be configured with proper credentials
-          echo "Windows Store deployment would happen here"
-          echo "msstore publish -id ${{ secrets.MSSTORE_APP_ID }} flexify.msix"
+      - name: Configure Store Credentials
+        uses: microsoft/store-submission@v1
+        with:
+          command: configure
+          type: win32
+          seller-id: ${{ secrets.SELLER_ID }}
+          product-id: ${{ secrets.PRODUCT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Update Draft Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: update
+          product-update: '{"packages":[{"packageUrl":"${{ github.server_url }}/${{ github.repository }}/releases/download/${{ needs.prepare-release.outputs.version }}/flexify.msix","languages":["en"],"architectures":["X64"],"isSilentInstall":false}]}'
+
+      - name: Publish Submission
+        uses: microsoft/store-submission@v1
+        with:
+          command: publish
 
   deploy-google-play:
     needs: [prepare-release, build-android]
