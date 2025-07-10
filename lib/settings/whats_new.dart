@@ -58,19 +58,33 @@ class _WhatsNewState extends State<WhatsNew> {
     });
 
     // Load content for each file
-    final result = await Future.wait(
-      changelogFiles.map((path) async {
+    final result = <Changelog>[];
+    for (final path in changelogFiles) {
+      try {
         final content = await rootBundle.loadString(path);
         final filename = path.split('/').last.replaceAll('.txt', '');
-        return Changelog(
-          name: filename,
-          created: DateFormat.yMMMd().format(
-            DateTime.fromMillisecondsSinceEpoch(int.parse(filename) * 1000),
+
+        // Skip files with invalid numeric filenames
+        final timestamp = int.tryParse(filename);
+        if (timestamp == null || filename.isEmpty) {
+          print('Skipping invalid changelog file: $path');
+          continue;
+        }
+
+        result.add(
+          Changelog(
+            name: filename,
+            created: DateFormat.yMMMd().format(
+              DateTime.fromMillisecondsSinceEpoch(timestamp * 1000),
+            ),
+            content: content,
           ),
-          content: content,
         );
-      }),
-    );
+      } catch (e) {
+        print('Error loading changelog file $path: $e');
+        // Skip this file and continue with others
+      }
+    }
 
     return result;
   }

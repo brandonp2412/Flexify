@@ -95,13 +95,22 @@ jobs:
 
           # Process each text file in source directory
           for file in fastlane/metadata/android/en-US/changelogs/*.txt; do
-            if [ -f "$file" ]; then
-              # Get modification time in Unix timestamp format
-              timestamp=$(stat -c "%Y" "$file")
-              # Copy file with timestamp filename
-              cp "$file" "assets/changelogs/$timestamp.txt"
-              echo "Copied $(basename "$file") to $timestamp.txt"
-            fi
+            # Skip if not a regular file or is the glob pattern itself
+            [ -f "$file" ] || continue
+            [ "$(basename "$file")" != "*.txt" ] || continue
+            
+            # Get modification time in Unix timestamp format
+            timestamp=$(stat -c "%Y" "$file")
+            
+            # Skip if timestamp is invalid
+            [ -n "$timestamp" ] && [ "$timestamp" -gt 0 ] || {
+              echo "Skipping file with invalid timestamp: $file"
+              continue
+            }
+            
+            # Copy file with timestamp filename
+            cp "$file" "assets/changelogs/$timestamp.txt"
+            echo "Copied $(basename "$file") to $timestamp.txt"
           done
 
       - name: Commit version bump and create tag
