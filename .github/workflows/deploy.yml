@@ -146,7 +146,7 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 
       - name: Build Linux
         run: flutter build linux
@@ -211,10 +211,10 @@ jobs:
           cache: true
 
       - name: Build macOS
-        run: flutter build macos --release
+        run: flutter build macos --release --no-codesign
 
       - name: Build iOS
-        run: flutter build ipa
+        run: flutter build ipa --export-method development
 
       - name: Upload macOS/iOS artifacts
         uses: actions/upload-artifact@v4
@@ -225,7 +225,8 @@ jobs:
             build/ios/ipa/flexify.ipa
 
   create-github-release:
-    needs: [prepare-release, build-android, build-linux, build-windows]
+    needs:
+      [prepare-release, build-android, build-linux, build-windows, build-macos]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -235,6 +236,11 @@ jobs:
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
+
+      - name: Create macOS zip
+        run: |
+          cd macos-builds
+          zip -r flexify-macos.zip Flexify.app
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -247,6 +253,7 @@ jobs:
             android-builds/flexify.apk
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
+            macos-builds/flexify-macos.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -288,7 +295,7 @@ jobs:
 
       - name: Deploy to Google Play
         run: |
-          bundle exec fastlane supply --aab build/app/outputs/bundle/release/app-release.aab
+          bundle exec fastlane supply --aab android-builds/app-release.aab
         env:
           GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
 
