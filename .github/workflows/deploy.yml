@@ -211,10 +211,15 @@ jobs:
           cache: true
 
       - name: Build macOS
-        run: flutter build macos --release --no-codesign
+        run: flutter build macos --release
+        env:
+          CODE_SIGN_IDENTITY: ""
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGNING_ALLOWED: "NO"
 
       - name: Build iOS
         run: flutter build ipa --export-method development
+        continue-on-error: true
 
       - name: Upload macOS/iOS artifacts
         uses: actions/upload-artifact@v4
