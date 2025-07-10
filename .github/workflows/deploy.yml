@@ -1,6 +1,7 @@
 name: Deploy Release
 
 on:
+  create:
   push:
     tags:
       - "*"
@@ -11,6 +12,7 @@ env:
 jobs:
   prepare-release:
     runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
     outputs:
       version: ${{ steps.version.outputs.version }}
       flutter_version: ${{ steps.version.outputs.flutter_version }}
