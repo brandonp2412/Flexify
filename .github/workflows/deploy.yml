@@ -214,9 +214,9 @@ jobs:
           name: ${{ needs.prepare-release.outputs.version }}
           body: ${{ needs.prepare-release.outputs.changelog }}
           files: |
-            android-builds/app-*-release.apk
-            android-builds/flexify.apk
-            linux-builds/flexify-linux.zip
+            android-builds/build/app/outputs/flutter-apk/app-*-release.apk
+            android-builds/build/app/outputs/flutter-apk/flexify.apk
+            linux-builds/build/linux/x64/release/bundle/flexify-linux.zip
             windows-builds/flexify-windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
