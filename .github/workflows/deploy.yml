@@ -224,7 +224,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-windows-store:
-    needs: [prepare-release, build-windows, create-github-release]
+    needs: [prepare-release, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Download Windows artifacts
@@ -247,7 +247,7 @@ jobs:
         uses: microsoft/store-submission@v1
         with:
           command: update
-          product-update: '{"packages":[{"packageUrl":"${{ github.server_url }}/${{ github.repository }}/releases/download/${{ needs.prepare-release.outputs.version }}/flexify.msix","languages":["en"],"architectures":["X64"],"isSilentInstall":false}]}'
+          product-update: '{"packages":[{"packageUrl":"./flexify.msix","languages":["en"],"architectures":["X64"],"isSilentInstall":false}]}'
 
       - name: Publish Submission
         uses: microsoft/store-submission@v1
