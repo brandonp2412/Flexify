@@ -253,7 +253,7 @@ jobs:
 
       - name: Publish to Microsoft Store
         run: |
-          msstore publish --inputDirectory windows-builds --appId ${{ secrets.PRODUCT_ID }}
+          msstore publish --inputDirectory build --appId ${{ secrets.PRODUCT_ID }}
 
   deploy-google-play:
     needs: [prepare-release, build-android]
