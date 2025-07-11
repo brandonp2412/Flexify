@@ -232,6 +232,13 @@ jobs:
         with:
           name: windows-builds
 
+      - name: List downloaded files
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "Looking for MSIX files:"
+          find . -name "*.msix" -type f
+
       - name: Configure Store Credentials
         uses: microsoft/store-submission@v1
         with:
