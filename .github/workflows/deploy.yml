@@ -246,7 +246,7 @@ jobs:
 
       - name: Publish to Microsoft Store
         run: |
-          msstore publish --productId ${{ secrets.PRODUCT_ID }} --packagePath "flexify.msix"
+          msstore publish --inputDirectory windows-builds --appId ${{ secrets.PRODUCT_ID }}
 
   deploy-google-play:
     needs: [prepare-release, build-android]
