@@ -224,7 +224,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-windows-store:
-    needs: [prepare-release, build-windows]
+    needs: [prepare-release, build-windows, create-github-release]
     runs-on: ubuntu-latest
     steps:
       - name: Download Windows artifacts
