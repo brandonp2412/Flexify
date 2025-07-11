@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:drift/drift.dart';
@@ -14,6 +13,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -400,7 +400,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     if (!settings.explainedPermissions &&
         settings.restTimers &&
-        Platform.isAndroid &&
+        !kIsWeb &&
         mounted) {
       await Navigator.push(
         context,

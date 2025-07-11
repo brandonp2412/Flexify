@@ -7,7 +7,6 @@ import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -164,10 +163,6 @@ class _StartListState extends State<StartList> {
         trailing = const SizedBox();
         break;
     }
-
-    // Desktop platform automatically puts the trailing reorder button.
-    if (platformIsDesktop() && planTrailing == PlanTrailing.reorder)
-      trailing = const SizedBox();
 
     return GestureDetector(
       key: Key(exercise),

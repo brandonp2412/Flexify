@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -56,15 +55,14 @@ DateTime parseDate(String dateString) {
   throw FormatException('Invalid date format: $dateString');
 }
 
-bool platformIsDesktop() =>
-    Platform.isLinux || Platform.isWindows || Platform.isMacOS;
-
 Future<bool> requestNotificationPermission() async {
   if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
     return true;
-  if (platformIsDesktop()) return true;
-  final permission = await Permission.notification.request();
-  return permission.isGranted;
+  if (!kIsWeb) {
+    final permission = await Permission.notification.request();
+    return permission.isGranted;
+  }
+  return true;
 }
 
 void selectAll(TextEditingController controller) => controller.selection =
