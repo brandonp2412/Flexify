@@ -225,7 +225,7 @@ jobs:
 
   deploy-windows-store:
     needs: [prepare-release, build-windows]
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
@@ -237,11 +237,6 @@ jobs:
         with:
           dotnet-version: "9.0.x"
 
-      - name: Install libsecret for credential management
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libsecret-1-dev
-
       - name: Setup Microsoft Store CLI
         uses: microsoft/setup-msstore-cli@v1
 
@@ -251,7 +246,7 @@ jobs:
 
       - name: Publish to Microsoft Store
         run: |
-          msstore publish --productId ${{ secrets.PRODUCT_ID }} --packagePath "windows-builds/flexify.msix"
+          msstore publish --productId ${{ secrets.PRODUCT_ID }} --packagePath "flexify.msix"
 
   deploy-google-play:
     needs: [prepare-release, build-android]
