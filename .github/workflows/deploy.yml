@@ -232,13 +232,6 @@ jobs:
         with:
           name: windows-builds
 
-      - name: List downloaded files (debug)
-        run: |
-          echo "Current directory contents:"
-          dir
-          echo "Looking for .msix files:"
-          dir *.msix /s
-
       - name: Setup .NET 9.0
         uses: actions/setup-dotnet@v4
         with:
