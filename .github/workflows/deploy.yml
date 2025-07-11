@@ -232,6 +232,11 @@ jobs:
         with:
           name: windows-builds
 
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
       - name: Setup Microsoft Store CLI
         uses: microsoft/setup-msstore-cli@v1
 
