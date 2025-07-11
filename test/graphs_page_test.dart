@@ -65,6 +65,20 @@ void main() async {
       (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+
+    // Add non-hidden workout data for the test
+    await db.gymSets.insertOne(
+      GymSetsCompanion.insert(
+        name: 'Barbell bench press',
+        reps: 10,
+        weight: 100,
+        unit: 'kg',
+        created: DateTime.now().toLocal(),
+        hidden: const Value(false),
+        category: const Value('Chest'),
+      ),
+    );
+
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -145,6 +159,20 @@ void main() async {
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+
+    // Add non-hidden workout data for the test
+    await db.gymSets.insertOne(
+      GymSetsCompanion.insert(
+        name: 'Barbell bent-over row',
+        reps: 8,
+        weight: 80,
+        unit: 'kg',
+        created: DateTime.now().toLocal(),
+        hidden: const Value(false),
+        category: const Value('Back'),
+      ),
+    );
+
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -170,6 +198,20 @@ void main() async {
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+
+    // Add non-hidden workout data for the test
+    await db.gymSets.insertOne(
+      GymSetsCompanion.insert(
+        name: 'Back extension',
+        reps: 12,
+        weight: 50,
+        unit: 'kg',
+        created: DateTime.now().toLocal(),
+        hidden: const Value(false),
+        category: const Value('Back'),
+      ),
+    );
+
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
