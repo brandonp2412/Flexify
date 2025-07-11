@@ -13,6 +13,8 @@ on:
 
 env:
   PUB_SUMMARY_ONLY: true
+  # Lock Kotlin version for reproducible builds
+  KOTLIN_VERSION: "2.1.0"
 
 jobs:
   prepare-release:
@@ -84,11 +86,29 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          cache: true
+      - name: Setup Flutter from submodule
+        run: |
+          # Initialize and update the flutter submodule
+          git submodule update --init --recursive flutter
+          # Add flutter to PATH
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          # Disable analytics
+          flutter/bin/flutter config --no-analytics
+          # Get flutter version for reproducibility
+          flutter/bin/flutter --version
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Log build environment for reproducibility
+        run: |
+          echo "=== Build Environment ==="
+          echo "Kotlin version: $KOTLIN_VERSION"
+          echo "Flutter version:"
+          flutter --version
+          echo "Java version:"
+          java -version
+          echo "========================="
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -137,11 +157,19 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          cache: true
+      - name: Setup Flutter from submodule
+        run: |
+          # Initialize and update the flutter submodule
+          git submodule update --init --recursive flutter
+          # Add flutter to PATH
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          # Disable analytics
+          flutter/bin/flutter config --no-analytics
+          # Get flutter version for reproducibility
+          flutter/bin/flutter --version
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
 
       - name: Install Linux dependencies
         run: |
@@ -171,11 +199,19 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          cache: true
+      - name: Setup Flutter from submodule
+        run: |
+          # Initialize and update the flutter submodule
+          git submodule update --init --recursive flutter
+          # Add flutter to PATH
+          echo "${{ github.workspace }}\flutter\bin" >> $env:GITHUB_PATH
+          # Disable analytics
+          flutter\bin\flutter config --no-analytics
+          # Get flutter version for reproducibility
+          flutter\bin\flutter --version
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
 
       - name: Build Windows
         run: flutter build windows
