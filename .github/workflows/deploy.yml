@@ -232,34 +232,16 @@ jobs:
         with:
           name: windows-builds
 
-      - name: List downloaded files
+      - name: Setup Microsoft Store CLI
+        uses: microsoft/setup-msstore-cli@v1
+
+      - name: Configure Microsoft Store CLI
         run: |
-          echo "Current directory contents:"
-          ls -la
-          echo "Looking for MSIX files:"
-          find . -name "*.msix" -type f
+          msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
 
-      - name: Configure Store Credentials
-        uses: microsoft/store-submission@v1
-        with:
-          command: configure
-          type: win32
-          seller-id: ${{ secrets.SELLER_ID }}
-          product-id: ${{ secrets.PRODUCT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
-
-      - name: Update Draft Submission
-        uses: microsoft/store-submission@v1
-        with:
-          command: update
-          product-update: '{"packages":[{"packageUrl":"./flexify.msix","languages":["en"],"architectures":["X64"],"isSilentInstall":false}]}'
-
-      - name: Publish Submission
-        uses: microsoft/store-submission@v1
-        with:
-          command: publish
+      - name: Publish to Microsoft Store
+        run: |
+          msstore publish --productId ${{ secrets.PRODUCT_ID }} --packagePath "windows-builds/flexify.msix"
 
   deploy-google-play:
     needs: [prepare-release, build-android]
