@@ -322,7 +322,7 @@ jobs:
             android-builds/bundle/release/app-release.aab
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
-            windows-builds/flexify.msix
+            windows-builds/build/windows/x64/runner/Release/flexify.msix
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -335,6 +335,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: windows-builds
+          path: build/windows/x64/runner/Release
 
       - name: Setup .NET 9.0
         if: ${{ env.ACT != 'true' }}
@@ -354,7 +355,7 @@ jobs:
       - name: Publish to Microsoft Store
         if: ${{ env.ACT != 'true' }}
         run: |
-          msstore publish --inputDirectory build --appId ${{ secrets.PRODUCT_ID }}
+          msstore publish --inputDirectory . --appId ${{ secrets.PRODUCT_ID }}
 
   deploy-google-play:
     needs: [version-and-prepare, build-android]
