@@ -65,9 +65,17 @@ android {
         excludes += ['META-INF/LICENSE.txt']
         excludes += ['META-INF/NOTICE']
         excludes += ['META-INF/NOTICE.txt']
+        excludes += ['LICENSE-junit.txt']
+        excludes += ['META-INF/services/U1.a']
+        excludes += ['META-INF/services/U1.b']
+        excludes += ['META-INF/services/X1.a']
+        excludes += ['META-INF/services/X1.b']
         // Ensure deterministic ordering
         pickFirsts += ['**/libc++_shared.so']
         pickFirsts += ['**/libjsc.so']
+        // Exclude problematic directories
+        excludes += ['androidx/**']
+        excludes += ['junit/**']
     }
 
    signingConfigs {
@@ -131,6 +139,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.documentfile:documentfile:1.0.1'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.0"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }
