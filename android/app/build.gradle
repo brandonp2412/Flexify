@@ -57,6 +57,19 @@ android {
         versionName flutterVersionName
     }
 
+    // Reproducible builds configuration
+    packagingOptions {
+        // Exclude files that can cause reproducibility issues
+        excludes += ['META-INF/DEPENDENCIES']
+        excludes += ['META-INF/LICENSE']
+        excludes += ['META-INF/LICENSE.txt']
+        excludes += ['META-INF/NOTICE']
+        excludes += ['META-INF/NOTICE.txt']
+        // Ensure deterministic ordering
+        pickFirsts += ['**/libc++_shared.so']
+        pickFirsts += ['**/libjsc.so']
+    }
+
    signingConfigs {
        release {
            keyAlias keystoreProperties['keyAlias']
@@ -70,14 +83,20 @@ android {
            if (keystorePropertiesFile.exists()) {
                signingConfig signingConfigs.release
            }
+           // Reproducible builds
+           buildConfigField "long", "BUILD_TIME", "0L"
        }
        debug {
            if (keystorePropertiesFile.exists()) {
                signingConfig signingConfigs.release
            }
+           // Reproducible builds
+           buildConfigField "long", "BUILD_TIME", "0L"
        }
        release {
            signingConfig signingConfigs.release
+           // Reproducible builds
+           buildConfigField "long", "BUILD_TIME", "0L"
        }
    }
    // https://github.com/brandonp2412/Flexify/issues/125

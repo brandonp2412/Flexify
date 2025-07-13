@@ -1,0 +1,28 @@
+# Reproducible analysis options for F-Droid builds
+# This ensures consistent code analysis and generation
+
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated_plugin_registrant.dart"
+    - "build/**"
+    - ".dart_tool/**"
+
+  language:
+    strict-casts: false
+    strict-inference: false
+    strict-raw-types: false
+
+linter:
+  rules:
+    # Disable rules that can cause non-deterministic outputs
+    prefer_relative_imports: false
+    sort_pub_dependencies: false
+
+    # Enable rules for consistent code style
+    always_declare_return_types: true
+    prefer_single_quotes: true
+    require_trailing_commas: true
