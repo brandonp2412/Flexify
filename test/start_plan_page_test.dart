@@ -95,13 +95,44 @@ void main() async {
     final plan =
         await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
 
+    // Create plan exercises entries - this is required for the save logic to work
+    await db.planExercises.insertAll([
+      PlanExercisesCompanion.insert(
+        planId: plan.id,
+        exercise: 'Barbell bench press',
+        enabled: true,
+      ),
+      PlanExercisesCompanion.insert(
+        planId: plan.id,
+        exercise: 'Barbell bent-over row',
+        enabled: true,
+      ),
+      PlanExercisesCompanion.insert(
+        planId: plan.id,
+        exercise: 'Crunch',
+        enabled: true,
+      ),
+    ]);
+
     final settings = await (db.settings.select()..limit(1)).getSingle();
+
+    // Update settings to prevent permissions page navigation during test
+    await db.settings.update().write(
+          SettingsCompanion(explainedPermissions: Value(true)),
+        );
+    final updatedSettings = await (db.settings.select()..limit(1)).getSingle();
+
+    final planState = PlanState();
+    await planState.updateGymCounts(plan.id);
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(
+            create: (context) => SettingsState(updatedSettings),
+          ),
           ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
+          ChangeNotifierProvider.value(value: planState),
         ],
         child: MaterialApp(
           home: StartPlanPage(
@@ -123,6 +154,8 @@ void main() async {
     final gymSets = await (db.gymSets.select()
           ..where((u) => u.name.equals('Barbell bench press')))
         .get();
+
+    // Should have 2 gym sets: 1 default hidden + 1 newly created
     expect(gymSets.length, equals(2));
 
     await db.close();

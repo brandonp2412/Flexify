@@ -1,0 +1,1 @@
+- Fix build directory reference in deploy-windows pipeline

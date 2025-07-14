@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:drift/drift.dart';
@@ -14,6 +13,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,135 +57,12 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState = context.watch<PlanState>();
     final timerState = context.read<TimerState>();
 
-    var durationFields = Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: minutes,
-            decoration: const InputDecoration(labelText: 'Minutes'),
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: false,
-            ),
-            onTap: () => selectAll(minutes),
-            textInputAction: TextInputAction.next,
-            onFieldSubmitted: (value) => selectAll(seconds),
-            validator: (value) {
-              if (value?.isNotEmpty == true && int.tryParse(value!) == null)
-                return 'Invalid number';
-              return null;
-            },
-          ),
-        ),
-        const SizedBox(width: 8.0),
-        Expanded(
-          child: TextFormField(
-            controller: seconds,
-            decoration: const InputDecoration(labelText: 'Seconds'),
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: false,
-            ),
-            onTap: () => selectAll(seconds),
-            textInputAction: TextInputAction.next,
-            onFieldSubmitted: (value) => selectAll(distance),
-            validator: (value) {
-              if (value?.isNotEmpty == true && int.tryParse(value!) == null)
-                return 'Invalid number';
-              return null;
-            },
-          ),
-        ),
-      ],
-    );
-
-    var distanceFields = Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.next,
-            controller: distance,
-            decoration: const InputDecoration(
-              labelText: 'Distance',
-            ),
-            keyboardType: TextInputType.numberWithOptions(
-              decimal: true,
-            ),
-            onFieldSubmitted: (value) => selectAll(incline),
-            onTap: () {
-              selectAll(distance);
-            },
-            validator: (value) {
-              if (value == null || value.isEmpty) return null;
-              if (double.tryParse(value) == null) return 'Invalid number';
-              return null;
-            },
-          ),
-        ),
-        const SizedBox(width: 8.0),
-        Expanded(
-          child: TextFormField(
-            controller: incline,
-            decoration: const InputDecoration(labelText: 'Incline %'),
-            keyboardType: TextInputType.numberWithOptions(
-              decimal: true,
-            ),
-            onTap: () => selectAll(incline),
-            onFieldSubmitted: (value) => save(timerState),
-            validator: (value) {
-              if (value == null || value.isEmpty) return null;
-              if (double.tryParse(value) == null) return 'Invalid number';
-              return null;
-            },
-          ),
-        ),
-      ],
-    );
-
-    var weightField = TextFormField(
-      controller: weight,
-      decoration: InputDecoration(
-        labelText: 'Weight ($unit)',
-        suffixIcon: Selector<SettingsState, bool>(
-          selector: (context, settings) => settings.value.showBodyWeight,
-          builder: (context, showBodyWeight, child) => Visibility(
-            visible: showBodyWeight,
-            child: IconButton(
-              tooltip: "Use body weight",
-              icon: const Icon(Icons.scale),
-              onPressed: useBodyWeight,
-            ),
-          ),
-        ),
-      ),
-      keyboardType: TextInputType.numberWithOptions(
-        decimal: true,
-      ),
-      onTap: () {
-        selectAll(weight);
-      },
-      onFieldSubmitted: (value) async => await save(timerState),
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Required';
-        if (double.tryParse(value) == null) return 'Invalid number';
-        return null;
-      },
-    );
-
-    var notesField = TextFormField(
-      controller: notes,
-      maxLines: 3,
-      decoration: InputDecoration(
-        labelText: 'Notes',
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
@@ -213,53 +90,10 @@ class _StartPlanPageState extends State<StartPlanPage>
           key: formKey,
           child: material.Column(
             children: [
-              if (!cardio) ...[
-                TextFormField(
-                  controller: reps,
-                  decoration: const InputDecoration(labelText: 'Reps'),
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (value) {
-                    selectAll(weight);
-                  },
-                  onTap: () {
-                    selectAll(reps);
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
-                weightField,
-              ],
-              if (cardio) ...[
-                durationFields,
-                distanceFields,
-              ],
-              Selector<SettingsState, bool>(
-                selector: (context, settings) => settings.value.showUnits,
-                builder: (context, showUnits, child) => Visibility(
-                  visible: showUnits,
-                  child: UnitSelector(
-                    value: unit,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        unit = newValue!;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              Selector<SettingsState, bool>(
-                selector: (context, settings) => settings.value.showNotes,
-                builder: (context, showNotes, child) => Visibility(
-                  visible: showNotes,
-                  child: notesField,
-                ),
-              ),
+              if (!cardio) ..._buildStrengthFields(timerState),
+              if (cardio) ..._buildCardioFields(timerState),
+              _buildUnitSelector(),
+              _buildNotesField(),
               Expanded(
                 child: StartList(
                   exercises: planExercises,
@@ -280,6 +114,158 @@ class _StartPlanPageState extends State<StartPlanPage>
         onPressed: () async => await save(timerState),
         label: const Text("Save"),
         icon: const Icon(Icons.save),
+      ),
+    );
+  }
+
+  List<Widget> _buildStrengthFields(TimerState timerState) {
+    return [
+      TextFormField(
+        controller: reps,
+        decoration: const InputDecoration(labelText: 'Reps'),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (value) => selectAll(weight),
+        onTap: () => selectAll(reps),
+        validator: (value) {
+          if (value == null || value.isEmpty) return 'Required';
+          if (double.tryParse(value) == null) return 'Invalid number';
+          return null;
+        },
+      ),
+      TextFormField(
+        controller: weight,
+        decoration: InputDecoration(
+          labelText: 'Weight ($unit)',
+          suffixIcon: Selector<SettingsState, bool>(
+            selector: (context, settings) => settings.value.showBodyWeight,
+            builder: (context, showBodyWeight, child) => Visibility(
+              visible: showBodyWeight,
+              child: IconButton(
+                tooltip: "Use body weight",
+                icon: const Icon(Icons.scale),
+                onPressed: useBodyWeight,
+              ),
+            ),
+          ),
+        ),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onTap: () => selectAll(weight),
+        onFieldSubmitted: (value) async => await save(timerState),
+        validator: (value) {
+          if (value == null || value.isEmpty) return 'Required';
+          if (double.tryParse(value) == null) return 'Invalid number';
+          return null;
+        },
+      ),
+    ];
+  }
+
+  List<Widget> _buildCardioFields(TimerState timerState) {
+    return [
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: minutes,
+              decoration: const InputDecoration(labelText: 'Minutes'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: false),
+              onTap: () => selectAll(minutes),
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (value) => selectAll(seconds),
+              validator: (value) {
+                if (value?.isNotEmpty == true && int.tryParse(value!) == null)
+                  return 'Invalid number';
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: TextFormField(
+              controller: seconds,
+              decoration: const InputDecoration(labelText: 'Seconds'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: false),
+              onTap: () => selectAll(seconds),
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (value) => selectAll(distance),
+              validator: (value) {
+                if (value?.isNotEmpty == true && int.tryParse(value!) == null)
+                  return 'Invalid number';
+                return null;
+              },
+            ),
+          ),
+        ],
+      ),
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              textInputAction: TextInputAction.next,
+              controller: distance,
+              decoration: const InputDecoration(labelText: 'Distance'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              onFieldSubmitted: (value) => selectAll(incline),
+              onTap: () => selectAll(distance),
+              validator: (value) {
+                if (value == null || value.isEmpty) return null;
+                if (double.tryParse(value) == null) return 'Invalid number';
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: TextFormField(
+              controller: incline,
+              decoration: const InputDecoration(labelText: 'Incline %'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              onTap: () => selectAll(incline),
+              onFieldSubmitted: (value) => save(timerState),
+              validator: (value) {
+                if (value == null || value.isEmpty) return null;
+                if (double.tryParse(value) == null) return 'Invalid number';
+                return null;
+              },
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  Widget _buildUnitSelector() {
+    return Selector<SettingsState, bool>(
+      selector: (context, settings) => settings.value.showUnits,
+      builder: (context, showUnits, child) => Visibility(
+        visible: showUnits,
+        child: UnitSelector(
+          value: unit,
+          onChanged: (String? newValue) {
+            setState(() {
+              unit = newValue!;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotesField() {
+    return Selector<SettingsState, bool>(
+      selector: (context, settings) => settings.value.showNotes,
+      builder: (context, showNotes, child) => Visibility(
+        visible: showNotes,
+        child: TextFormField(
+          controller: notes,
+          maxLines: 3,
+          decoration: const InputDecoration(labelText: 'Notes'),
+        ),
       ),
     );
   }
@@ -320,6 +306,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     distance.dispose();
     minutes.dispose();
     incline.dispose();
+    notes.dispose();
+    seconds.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
     planState.removeListener(planChanged);
@@ -348,28 +336,24 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     final lastIndex = planState.lastSets
         .indexWhere((element) => element.name == planExercises[0]);
-    if (lastIndex == -1) return;
-    final last = planState.lastSets[lastIndex];
-    _updateGymSetTextFields(last);
+    if (lastIndex != -1) {
+      final last = planState.lastSets[lastIndex];
+      _updateGymSetTextFields(last);
+    }
 
     final settings = context.read<SettingsState>().value;
-    if (settings.repEstimation)
-      getRpms().then(
-        (value) => setState(() {
-          rpms = value;
-        }),
-      );
-    if (settings.strengthUnit != 'last-entry' && !cardio)
-      setState(() {
-        unit = settings.strengthUnit;
-      });
-    else if (settings.cardioUnit != 'last-entry' && cardio)
-      setState(() {
-        unit = settings.cardioUnit;
-      });
+    if (settings.repEstimation) {
+      getRpms().then((value) => setState(() => rpms = value));
+    }
+
+    if (settings.strengthUnit != 'last-entry' && !cardio) {
+      setState(() => unit = settings.strengthUnit);
+    } else if (settings.cardioUnit != 'last-entry' && cardio) {
+      setState(() => unit = settings.cardioUnit);
+    }
   }
 
-  _updateGymSetTextFields(GymSet gymSet) {
+  void _updateGymSetTextFields(GymSet gymSet) {
     unit = gymSet.unit;
     reps.text = toString(gymSet.reps);
     weight.text = toString(gymSet.weight);
@@ -382,13 +366,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     image = gymSet.image;
 
     final settings = context.read<SettingsState>().value;
-    if (cardio && (unit == 'kg' || unit == 'lb'))
+    if (cardio && (unit == 'kg' || unit == 'lb')) {
       unit = settings.cardioUnit;
-    else if (!cardio && (unit == 'km' || unit == 'mi'))
+    } else if (!cardio && (unit == 'km' || unit == 'mi')) {
       unit = settings.strengthUnit;
+    }
   }
 
-  planChanged() {
+  void planChanged() {
     final index =
         planState.plans.indexWhere((plan) => plan.id == widget.plan.id);
     if (index == -1) return Navigator.pop(context);
@@ -409,19 +394,21 @@ class _StartPlanPageState extends State<StartPlanPage>
     final exercise = planExercises[selectedIndex];
     var bodyWeight = 0.0;
     final settings = context.read<SettingsState>().value;
-    if (settings.showBodyWeight)
+    if (settings.showBodyWeight) {
       bodyWeight = (await getBodyWeight())?.weight ?? 0;
+    }
 
     if (!settings.explainedPermissions &&
         settings.restTimers &&
-        Platform.isAndroid &&
-        mounted)
+        !kIsWeb &&
+        mounted) {
       await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const PermissionsPage(),
         ),
       );
+    }
 
     if (!mounted) return;
     final planState = context.read<PlanState>();
@@ -469,13 +456,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
 
-    if (!finishedPlan && !isWarmup && settings.restTimers && peTimers)
+    if (!finishedPlan && !isWarmup && settings.restTimers && peTimers) {
       timerState.startTimer(
         "$exercise ($count)",
         Duration(milliseconds: restMs.toInt()),
         settings.alarmSound,
         settings.vibrate,
       );
+    }
 
     final finishedExercise = count == (max ?? settings.maxSets) &&
         selectedIndex < planExercises.length - 1;
@@ -500,23 +488,20 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> select(int index) async {
-    setState(() {
-      selectedIndex = index;
-    });
+    setState(() => selectedIndex = index);
     final last = await getLast(planExercises[index]);
     if (last == null) return;
 
-    setState(() {
-      _updateGymSetTextFields(last);
-    });
+    setState(() => _updateGymSetTextFields(last));
   }
 
-  useBodyWeight() async {
+  void useBodyWeight() async {
     final weightSet = await getBodyWeight();
     if (!mounted) return;
-    if (weightSet == null)
+    if (weightSet == null) {
       toast(context, 'No weight entered yet');
-    else
+    } else {
       weight.text = toString(weightSet.weight);
+    }
   }
 }

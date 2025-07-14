@@ -1,0 +1,4 @@
+- Update pubspec.lock
+- Setup msstore deployment
+- Configure google play releases
+- Delete .actrc and MIGRATION_GUIDE.md

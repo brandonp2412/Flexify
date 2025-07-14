@@ -1,0 +1,4 @@
+- Fix GitHub release file paths to include Android APKs
+- 2.0.27 🚀
+- Update pubspec.lock
+- Remove macOS/iOS builds from GitHub Actions workflow

@@ -15,7 +15,6 @@ import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -404,22 +403,20 @@ void main() {
       ),
     );
 
-    // Skip timer test on web as it may have platform-specific behavior
-    if (!kIsWeb)
-      testWidgets(
-        "TimerPage",
-        (tester) async => await generateScreenshot(
-          binding: binding,
-          tester: tester,
-          screenshotName: '8_en-US',
-          skipSettle: true,
-          navigateToPage: (context) async {
-            await context.read<TimerState>().addOneMinute('', true);
-            await tester.pump();
-            await tester.pump(const Duration(seconds: 7));
-          },
-          tabBarState: TabBarState.timer,
-        ),
-      );
+    testWidgets(
+      "TimerPage",
+      (tester) async => await generateScreenshot(
+        binding: binding,
+        tester: tester,
+        screenshotName: '8_en-US',
+        skipSettle: true,
+        navigateToPage: (context) async {
+          await context.read<TimerState>().addOneMinute('', true);
+          await tester.pump();
+          await tester.pump(const Duration(seconds: 7));
+        },
+        tabBarState: TabBarState.timer,
+      ),
+    );
   });
 }
