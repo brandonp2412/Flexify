@@ -111,6 +111,11 @@ class MainActivity : FlutterActivity() {
                     result.success(true)
                 }
 
+                "previewVibration" -> {
+                    previewVibration()
+                    result.success(true)
+                }
+
                 else -> {
                     result.notImplemented()
                 }
@@ -249,6 +254,30 @@ class MainActivity : FlutterActivity() {
                 
                 override fun onServiceDisconnected(name: ComponentName?) {}
             }, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    private fun previewVibration() {
+        Log.d("MainActivity", "Preview vibration requested")
+        
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as android.os.VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            getSystemService(VIBRATOR_SERVICE) as android.os.Vibrator
+        }
+        
+        if (vibrator.hasVibrator()) {
+            try {
+                val pattern = longArrayOf(0, 500, 200, 300)
+                vibrator.vibrate(android.os.VibrationEffect.createWaveform(pattern, -1))
+                Log.d("MainActivity", "Preview vibration triggered successfully")
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Failed to trigger preview vibration", e)
+            }
+        } else {
+            Log.w("MainActivity", "Device does not support vibration")
         }
     }
 

@@ -88,7 +88,6 @@ List<Widget> getTimerSettings(
           onTap: () async {
             final newValue = !settings.restTimers;
 
-            // Request permissions when enabling timers
             if (newValue) {
               await androidChannel.invokeMethod('requestTimerPermissions');
             }
@@ -102,7 +101,6 @@ List<Widget> getTimerSettings(
           trailing: Switch(
             value: settings.restTimers,
             onChanged: (value) async {
-              // Request permissions when enabling timers
               if (value) {
                 await androidChannel.invokeMethod('requestTimerPermissions');
               }
@@ -122,18 +120,37 @@ List<Widget> getTimerSettings(
         child: ListTile(
           title: const Text('Vibrate'),
           leading: const Icon(Icons.vibration),
-          onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  vibrate: Value(!settings.vibrate),
-                ),
-              ),
+          onTap: () async {
+            final newValue = !settings.vibrate;
+            await db.settings.update().write(
+                  SettingsCompanion(
+                    vibrate: Value(newValue),
+                  ),
+                );
+            if (newValue) {
+              try {
+                await androidChannel.invokeMethod('previewVibration');
+              } catch (e) {
+                print('Failed to trigger preview vibration: $e');
+              }
+            }
+          },
           trailing: Switch(
             value: settings.vibrate,
-            onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    vibrate: Value(value),
-                  ),
-                ),
+            onChanged: (value) async {
+              await db.settings.update().write(
+                    SettingsCompanion(
+                      vibrate: Value(value),
+                    ),
+                  );
+              if (value) {
+                try {
+                  await androidChannel.invokeMethod('previewVibration');
+                } catch (e) {
+                  print('Failed to trigger preview vibration: $e');
+                }
+              }
+            },
           ),
         ),
       ),
@@ -215,12 +232,10 @@ class _TimerSettingsState extends State<TimerSettings> {
   void initState() {
     super.initState();
 
-    // Only create AudioPlayer on supported platforms
     if (!kIsWeb) {
       try {
         player = AudioPlayer();
       } catch (e) {
-        // Handle case where AudioPlayer creation fails
         print('Failed to create AudioPlayer: $e');
         player = null;
       }
