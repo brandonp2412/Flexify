@@ -11,6 +11,7 @@ const inclineAdjustedPace = CustomExpression<double>(
 
 const volumeCol = CustomExpression<double>("ROUND(SUM(weight * reps), 2)");
 
+// Brzycki formula https://en.wikipedia.org/wiki/One-repetition_maximum#cite_ref-6
 final ormCol = CustomExpression<double>(
   'MAX(CASE WHEN weight >= 0 THEN weight / (1.0278 - 0.0278 * reps) ELSE weight * (1.0278 - 0.0278 * reps) END)',
 );
