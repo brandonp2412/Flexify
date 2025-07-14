@@ -18,8 +18,8 @@ class WeightPage extends StatefulWidget {
 }
 
 class _WeightPageState extends State<WeightPage> {
-  final TextEditingController valueController = TextEditingController();
-  String yesterdaysWeight = "";
+  final TextEditingController ctrl = TextEditingController();
+  String prev = "";
   String? unit;
   String? image;
   final formKey = GlobalKey<FormState>();
@@ -44,7 +44,7 @@ class _WeightPageState extends State<WeightPage> {
           child: ListView(
             children: [
               TextFormField(
-                controller: valueController,
+                controller: ctrl,
                 keyboardType: TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -68,7 +68,7 @@ class _WeightPageState extends State<WeightPage> {
                 ),
               ),
               TextFormField(
-                controller: TextEditingController(text: yesterdaysWeight),
+                controller: TextEditingController(text: prev),
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
@@ -131,13 +131,13 @@ class _WeightPageState extends State<WeightPage> {
               name: "Weight",
               reps: 1,
               unit: unit ?? 'kg',
-              weight: double.parse(valueController.text),
+              weight: double.parse(ctrl.text),
               image: drift.Value(image),
             ),
           );
           (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
             GymSetsCompanion(
-              bodyWeight: drift.Value(double.parse(valueController.text)),
+              bodyWeight: drift.Value(double.parse(ctrl.text)),
             ),
           );
         },
@@ -149,7 +149,7 @@ class _WeightPageState extends State<WeightPage> {
 
   @override
   void dispose() {
-    valueController.dispose();
+    ctrl.dispose();
     super.dispose();
   }
 
@@ -160,8 +160,7 @@ class _WeightPageState extends State<WeightPage> {
 
     getBodyWeight().then(
       (value) => setState(() {
-        yesterdaysWeight =
-            "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
+        prev = "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
         unit = value?.unit;
       }),
     );

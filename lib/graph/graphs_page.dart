@@ -36,7 +36,7 @@ class GraphsPageState extends State<GraphsPage>
   late final Stream<List<GymSetsCompanion>> stream = watchGraphs();
 
   final Set<String> selected = {};
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   String search = '';
   String? category;
   final scroll = ScrollController();
@@ -51,15 +51,14 @@ class GraphsPageState extends State<GraphsPage>
     super.build(context);
     return NavigatorPopHandler(
       onPopWithResult: (result) {
-        if (navigatorKey.currentState!.canPop() == false) return;
+        if (navKey.currentState!.canPop() == false) return;
         final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-        if (tabController.index == graphsIndex)
-          navigatorKey.currentState!.pop();
+        if (tabController.index == graphsIndex) navKey.currentState!.pop();
       },
       child: Navigator(
-        key: navigatorKey,
+        key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => graphsPage(),
           settings: settings,
@@ -69,27 +68,24 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   void onDelete() async {
-    final planState = context.read<PlanState>();
-    final selectedCopy = selected.toList();
+    final state = context.read<PlanState>();
+    final copy = selected.toList();
     setState(() {
       selected.clear();
     });
 
-    await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(selectedCopy)))
-        .go();
+    await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(copy))).go();
 
     final plans = await db.plans.select().get();
     for (final plan in plans) {
       final exercises = plan.exercises.split(',');
       exercises.removeWhere(
-        (exercise) => selectedCopy.contains(exercise),
+        (exercise) => copy.contains(exercise),
       );
-      final updatedExercises = exercises.join(',');
-      await db
-          .update(db.plans)
-          .replace(plan.copyWith(exercises: updatedExercises));
+      final updated = exercises.join(',');
+      await db.update(db.plans).replace(plan.copyWith(exercises: updated));
     }
-    planState.updatePlans(null);
+    state.updatePlans(null);
   }
 
   LineTouchTooltipData tooltipData(
@@ -152,22 +148,22 @@ class GraphsPageState extends State<GraphsPage>
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
           if (!snapshot.hasData) return const SizedBox();
 
-          final searchTerms =
+          final terms =
               search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
-          var snapshotStream = snapshot.data!.where((gymSet) {
+          var stream = snapshot.data!.where((gymSet) {
             if (category != null) {
               return gymSet.category.value == category;
             }
             return true;
           });
 
-          for (final term in searchTerms) {
-            snapshotStream = snapshotStream.where(
+          for (final term in terms) {
+            stream = stream.where(
               (gymSet) => gymSet.name.value.toLowerCase().contains(term),
             );
           }
 
-          final gymSets = snapshotStream.toList();
+          final gymSets = stream.toList();
 
           return material.Column(
             children: [
@@ -266,7 +262,7 @@ class GraphsPageState extends State<GraphsPage>
         },
       ),
       floatingActionButton: AnimatedFab(
-        onTap: () => navigatorKey.currentState!.push(
+        onTap: () => navKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => const AddExercisePage(),
           ),
@@ -279,22 +275,22 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   onShare() async {
-    final selCopy = selected.toList();
+    final copy = selected.toList();
     setState(() {
       selected.clear();
     });
-    final gymSets = (await stream.first)
+    final sets = (await stream.first)
         .where(
-          (gymSet) => selCopy.contains(gymSet.name.value),
+          (gymSet) => copy.contains(gymSet.name.value),
         )
         .toList();
-    final summaries = gymSets
+    final text = sets
         .map(
           (gymSet) =>
               "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
         )
         .join(', ');
-    await Share.share("I just did $summaries");
+    await Share.share("I just did $text");
   }
 
   void longPressGlobal() {
@@ -357,19 +353,19 @@ class GraphsPageState extends State<GraphsPage>
           );
         if (showGlobal) index--;
 
-        final gymSet = gymSets.elementAtOrNull(index);
-        if (gymSet == null) return SizedBox();
+        final set = gymSets.elementAtOrNull(index);
+        if (set == null) return SizedBox();
 
-        final previousGymSet = index > 0 ? gymSets[index - 1] : null;
+        final prev = index > 0 ? gymSets[index - 1] : null;
 
-        final previousCreated = previousGymSet?.created.value.toLocal();
+        final created = prev?.created.value.toLocal();
 
-        final showDivider = previousCreated != null &&
-            !isSameDay(previousCreated, gymSet.created.value);
+        final divider =
+            created != null && !isSameDay(created, set.created.value);
 
         return material.Column(
           children: [
-            if (showDivider)
+            if (divider)
               material.Row(
                 children: [
                   material.Expanded(child: const Divider()),
@@ -378,7 +374,7 @@ class GraphsPageState extends State<GraphsPage>
                   Selector<SettingsState, String>(
                     selector: (p0, p1) => p1.value.shortDateFormat,
                     builder: (context, format, child) =>
-                        Text(DateFormat(format).format(previousCreated)),
+                        Text(DateFormat(format).format(created)),
                   ),
                   const SizedBox(width: 4),
                   material.Expanded(child: const Divider()),
@@ -386,7 +382,7 @@ class GraphsPageState extends State<GraphsPage>
               ),
             GraphTile(
               selected: selected,
-              gymSet: gymSet,
+              gymSet: set,
               onSelect: (name) async {
                 if (selected.contains(name))
                   setState(() {

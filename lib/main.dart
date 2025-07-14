@@ -30,8 +30,8 @@ Future<void> main() async {
     return runApp(FailedMigrationsPage(error: error));
   }
 
-  final settings = SettingsState(setting);
-  runApp(appProviders(settings));
+  final state = SettingsState(setting);
+  runApp(appProviders(state));
 }
 
 AppDatabase db = AppDatabase();
@@ -39,9 +39,9 @@ AppDatabase db = AppDatabase();
 MethodChannel androidChannel =
     const MethodChannel("com.presley.flexify/android");
 
-Widget appProviders(SettingsState settingsState) => MultiProvider(
+Widget appProviders(SettingsState state) => MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => settingsState),
+        ChangeNotifierProvider(create: (context) => state),
         ChangeNotifierProvider(create: (context) => TimerState()),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
@@ -53,16 +53,16 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final systemColors = context.select<SettingsState, bool>(
+    final colors = context.select<SettingsState, bool>(
       (settings) => settings.value.systemColors,
     );
-    final themeMode = context.select<SettingsState, ThemeMode>(
+    final mode = context.select<SettingsState, ThemeMode>(
       (settings) => ThemeMode.values
           .byName(settings.value.themeMode.replaceFirst('ThemeMode.', '')),
     );
 
-    final defaultTheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
-    final defaultDark = ColorScheme.fromSeed(
+    final light = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
+    final dark = ColorScheme.fromSeed(
       seedColor: Colors.deepPurple,
       brightness: Brightness.dark,
     );
@@ -71,7 +71,7 @@ class App extends StatelessWidget {
       builder: (lightDynamic, darkDynamic) => MaterialApp(
         title: 'Flexify',
         theme: ThemeData(
-          colorScheme: systemColors ? lightDynamic : defaultTheme,
+          colorScheme: colors ? lightDynamic : light,
           fontFamily: 'Manrope',
           useMaterial3: true,
           inputDecorationTheme: const InputDecorationTheme(
@@ -79,14 +79,14 @@ class App extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(
-          colorScheme: systemColors ? darkDynamic : defaultDark,
+          colorScheme: colors ? darkDynamic : dark,
           fontFamily: 'Manrope',
           useMaterial3: true,
           inputDecorationTheme: const InputDecorationTheme(
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
         ),
-        themeMode: themeMode,
+        themeMode: mode,
         home: const HomePage(),
       ),
     );
@@ -104,26 +104,26 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final packageInfo = PackageInfo.fromPlatform();
-    packageInfo.then((info) async {
-      final metadata = await (db.metadata.select()..limit(1)).getSingleOrNull();
-      if (metadata == null)
+    final info = PackageInfo.fromPlatform();
+    info.then((pkg) async {
+      final meta = await (db.metadata.select()..limit(1)).getSingleOrNull();
+      if (meta == null)
         db.metadata.insertOne(
-          MetadataCompanion(buildNumber: Value(int.parse(info.buildNumber))),
+          MetadataCompanion(buildNumber: Value(int.parse(pkg.buildNumber))),
         );
       else
         db.metadata.update().write(
               MetadataCompanion(
-                buildNumber: Value(int.parse(info.buildNumber)),
+                buildNumber: Value(int.parse(pkg.buildNumber)),
               ),
             );
 
-      if (int.parse(info.buildNumber) == metadata?.buildNumber) return null;
+      if (int.parse(pkg.buildNumber) == meta?.buildNumber) return null;
 
       if (mounted)
         toast(
           context,
-          "New version ${info.version}",
+          "New version ${pkg.version}",
           SnackBarAction(
             label: 'See whats new',
             onPressed: () => Navigator.of(context).push(
@@ -137,9 +137,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void hideTab(BuildContext context, String tab) {
-    final settings = context.read<SettingsState>();
-    final oldTabs = settings.value.tabs;
-    var tabs = settings.value.tabs.split(',');
+    final state = context.read<SettingsState>();
+    final old = state.value.tabs;
+    var tabs = state.value.tabs.split(',');
 
     if (tabs.length == 1) return toast(context, "Can't hide everything!");
 
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           db.settings.update().write(
                 SettingsCompanion(
-                  tabs: Value(oldTabs),
+                  tabs: Value(old),
                 ),
               );
         },
@@ -167,9 +167,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final tabsSetting = context
+    final setting = context
         .select<SettingsState, String>((settings) => settings.value.tabs);
-    final tabs = tabsSetting.split(',');
+    final tabs = setting.split(',');
 
     return DefaultTabController(
       length: tabs.length,

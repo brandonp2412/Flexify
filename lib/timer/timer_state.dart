@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class TimerState extends ChangeNotifier {
-  NativeTimerWrapper nativeTimer = NativeTimerWrapper.emptyTimer();
+  NativeTimerWrapper timer = NativeTimerWrapper.emptyTimer();
   Timer? next;
   AudioPlayer? player;
   bool starting = false;
@@ -46,7 +46,7 @@ class TimerState extends ChangeNotifier {
     String alarmSound,
     bool vibrate,
   ) async {
-    final newTimer = nativeTimer.increaseDuration(
+    final newTimer = timer.increaseDuration(
       const Duration(minutes: 1),
     );
     updateTimer(newTimer);
@@ -130,7 +130,7 @@ class TimerState extends ChangeNotifier {
   }
 
   void updateTimer(NativeTimerWrapper newTimer) {
-    nativeTimer = newTimer;
+    timer = newTimer;
     notifyListeners();
   }
 }

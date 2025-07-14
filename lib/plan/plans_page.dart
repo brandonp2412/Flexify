@@ -19,7 +19,7 @@ class PlansPage extends StatefulWidget {
 
 class PlansPageState extends State<PlansPage>
     with AutomaticKeepAliveClientMixin {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   @override
   bool get wantKeepAlive => true;
@@ -29,17 +29,17 @@ class PlansPageState extends State<PlansPage>
     super.build(context);
     return NavigatorPopHandler(
       onPopWithResult: (result) {
-        if (navigatorKey.currentState!.canPop() == false) return;
+        if (navKey.currentState!.canPop() == false) return;
         final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final plansIndex = settings.tabs.split(',').indexOf('PlansPage');
-        if (tabController.index == plansIndex) navigatorKey.currentState!.pop();
+        if (tabController.index == plansIndex) navKey.currentState!.pop();
       },
       child: Navigator(
-        key: navigatorKey,
+        key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _PlansPageWidget(
-            navigatorKey: navigatorKey,
+            navigatorKey: navKey,
           ),
           settings: settings,
         ),
@@ -58,28 +58,28 @@ class _PlansPageWidget extends StatefulWidget {
 }
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
-  PlanState? planState;
+  PlanState? state;
   final Set<int> selected = {};
   String search = '';
 
   @override
   Widget build(BuildContext context) {
-    final searchTerms =
+    final terms =
         search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
     List<Plan>? filtered;
-    planState = context.watch<PlanState>();
+    state = context.watch<PlanState>();
 
-    if (planState != null) {
-      Iterable<Plan> planPartialFilter = planState!.plans;
+    if (state != null) {
+      Iterable<Plan> filter = state!.plans;
 
-      for (final term in searchTerms) {
-        planPartialFilter = planPartialFilter.where(
+      for (final term in terms) {
+        filter = filter.where(
           (element) =>
               element.days.toLowerCase().contains(term.toLowerCase()) ||
               element.exercises.toLowerCase().contains(term.toLowerCase()),
         );
       }
-      filtered = planPartialFilter.toList();
+      filtered = filter.toList();
     }
 
     return Scaffold(
@@ -87,20 +87,20 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         children: [
           AppSearch(
             onShare: () async {
-              final plans = (planState?.plans)!
+              final plans = (state?.plans)!
                   .where(
                     (plan) => selected.contains(plan.id),
                   )
                   .toList();
 
               final summaries = plans.map((plan) {
-                final daysList = plan.days.split(',').join(', ');
-                final exercisesList = plan.exercises
+                final days = plan.days.split(',').join(', ');
+                final exercises = plan.exercises
                     .split(',')
                     .map((exercise) => "- $exercise")
                     .join('\n');
 
-                return "$daysList:\n$exercisesList";
+                return "$days:\n$exercises";
               }).join('\n\n');
 
               await Share.share(summaries);
@@ -117,27 +117,27 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               selected.clear();
             }),
             onDelete: () async {
-              final planState = context.read<PlanState>();
-              final selectedCopy = selected.toList();
+              final state = context.read<PlanState>();
+              final copy = selected.toList();
               setState(() {
                 selected.clear();
               });
-              await db.plans.deleteWhere((tbl) => tbl.id.isIn(selectedCopy));
-              planState.updatePlans(null);
+              await db.plans.deleteWhere((tbl) => tbl.id.isIn(copy));
+              state.updatePlans(null);
               await db.planExercises
-                  .deleteWhere((tbl) => tbl.planId.isIn(selectedCopy));
+                  .deleteWhere((tbl) => tbl.planId.isIn(copy));
             },
             onSelect: () => setState(() {
               selected.addAll(filtered?.map((plan) => plan.id) ?? []);
             }),
             selected: selected,
             onEdit: () async {
-              final plan = planState!.plans
+              final plan = state!.plans
                   .firstWhere(
                     (element) => element.id == selected.first,
                   )
                   .toCompanion(false);
-              await planState!.setExercises(plan);
+              await state!.setExercises(plan);
               if (context.mounted)
                 return Navigator.push(
                   context,
@@ -175,7 +175,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             days: drift.Value(''),
             exercises: drift.Value(''),
           );
-          await planState!.setExercises(plan);
+          await state!.setExercises(plan);
           if (context.mounted)
             await Navigator.push(
               context,

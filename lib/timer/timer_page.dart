@@ -67,7 +67,7 @@ class _TimerPageWidget extends StatelessWidget {
         child: TimerCircularProgressIndicator(),
       ),
       floatingActionButton: Visibility(
-        visible: timerState.nativeTimer.isRunning(),
+        visible: timerState.timer.isRunning(),
         child: FloatingActionButton.extended(
           onPressed: () async => await timerState.stopTimer(),
           icon: const Icon(Icons.stop),

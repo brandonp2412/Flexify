@@ -32,7 +32,7 @@ class HistoryPage extends StatefulWidget {
 
 class HistoryPageState extends State<HistoryPage>
     with AutomaticKeepAliveClientMixin {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   @override
   bool get wantKeepAlive => true;
@@ -42,18 +42,17 @@ class HistoryPageState extends State<HistoryPage>
     super.build(context);
     return NavigatorPopHandler(
       onPopWithResult: (result) {
-        if (navigatorKey.currentState!.canPop() == false) return;
+        if (navKey.currentState!.canPop() == false) return;
         final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final historyIndex = settings.tabs.split(',').indexOf('HistoryPage');
-        if (tabController.index == historyIndex)
-          navigatorKey.currentState!.pop();
+        if (tabController.index == historyIndex) navKey.currentState!.pop();
       },
       child: Navigator(
-        key: navigatorKey,
+        key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _HistoryPageWidget(
-            navigatorKey: navigatorKey,
+            navigatorKey: navKey,
           ),
           settings: settings,
         ),
@@ -74,10 +73,10 @@ class _HistoryPageWidget extends StatefulWidget {
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   late Stream<List<GymSet>> stream;
 
-  final repsGtController = TextEditingController();
-  final repsLtController = TextEditingController();
-  final weightGtController = TextEditingController();
-  final weightLtController = TextEditingController();
+  final repsGt = TextEditingController();
+  final repsLt = TextEditingController();
+  final weightGt = TextEditingController();
+  final weightLt = TextEditingController();
   final scroll = ScrollController();
 
   Set<int> selected = {};
@@ -97,10 +96,10 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
             children: [
               AppSearch(
                 filter: Filters(
-                  repsGtController: repsGtController,
-                  repsLtController: repsLtController,
-                  weightGtController: weightGtController,
-                  weightLtController: weightLtController,
+                  repsGtController: repsGt,
+                  repsLtController: repsLt,
+                  weightGtController: weightGt,
+                  weightLtController: weightLt,
                   setStream: () {
                     setState(() {
                       limit = 100;
@@ -329,7 +328,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void setStream() {
-    final searchTerms =
+    final terms =
         search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
 
     var query = (db.gymSets.select()
@@ -344,7 +343,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       ..where((tbl) => tbl.hidden.equals(false))
       ..limit(limit));
 
-    for (final term in searchTerms) {
+    for (final term in terms) {
       query = query..where((tbl) => tbl.name.contains(term));
     }
 
@@ -356,39 +355,39 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     if (endDate != null)
       query = query
         ..where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
-    if (repsGtController.text.isNotEmpty)
+    if (repsGt.text.isNotEmpty)
       query = query
         ..where(
           (tbl) =>
               tbl.reps.isBiggerThanValue(
-                double.tryParse(repsGtController.text) ?? 0,
+                double.tryParse(repsGt.text) ?? 0,
               ) &
               tbl.cardio.equals(false),
         );
-    if (repsLtController.text.isNotEmpty)
+    if (repsLt.text.isNotEmpty)
       query = query
         ..where(
           (tbl) =>
               tbl.reps.isSmallerThanValue(
-                double.tryParse(repsLtController.text) ?? 0,
+                double.tryParse(repsLt.text) ?? 0,
               ) &
               tbl.cardio.equals(false),
         );
-    if (weightGtController.text.isNotEmpty)
+    if (weightGt.text.isNotEmpty)
       query = query
         ..where(
           (tbl) =>
               tbl.weight.isBiggerThanValue(
-                double.tryParse(weightGtController.text) ?? 0,
+                double.tryParse(weightGt.text) ?? 0,
               ) &
               tbl.cardio.equals(false),
         );
-    if (weightLtController.text.isNotEmpty)
+    if (weightLt.text.isNotEmpty)
       query = query
         ..where(
           (tbl) =>
               tbl.weight.isSmallerThanValue(
-                double.tryParse(weightLtController.text) ?? 0,
+                double.tryParse(weightLt.text) ?? 0,
               ) &
               tbl.cardio.equals(false),
         );

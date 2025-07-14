@@ -20,9 +20,9 @@ class _TimerCircularProgressIndicatorState
   Widget build(BuildContext context) {
     return Consumer<TimerState>(
       builder: (context, timerState, child) {
-        final duration = timerState.nativeTimer.getDuration();
-        final elapsed = timerState.nativeTimer.getElapsed();
-        final remaining = timerState.nativeTimer.getRemaining();
+        final duration = timerState.timer.getDuration();
+        final elapsed = timerState.timer.getElapsed();
+        final remaining = timerState.timer.getRemaining();
 
         if (duration > Duration.zero &&
             remaining > Duration.zero &&
@@ -110,9 +110,9 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
   Widget build(BuildContext context) {
     return Consumer<TimerState>(
       builder: (context, timerState, child) {
-        final duration = timerState.nativeTimer.getDuration();
-        final elapsed = timerState.nativeTimer.getElapsed();
-        final remaining = timerState.nativeTimer.getRemaining();
+        final duration = timerState.timer.getDuration();
+        final elapsed = timerState.timer.getElapsed();
+        final remaining = timerState.timer.getRemaining();
 
         if (duration == Duration.zero || remaining == Duration.zero) {
           lastDuration = null;
@@ -126,7 +126,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
 
         final isNewTimer = lastDuration != duration ||
             (lastTimestamp != null &&
-                timerState.nativeTimer.timeStamp
+                timerState.timer.timeStamp
                         .difference(lastTimestamp!)
                         .inSeconds
                         .abs() >
@@ -134,7 +134,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
 
         if (isNewTimer) {
           lastDuration = duration;
-          lastTimestamp = timerState.nativeTimer.timeStamp;
+          lastTimestamp = timerState.timer.timeStamp;
           animationKey = GlobalKey();
         }
 
@@ -192,7 +192,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: 20.0),
             Text(
-              generateTitleText(timerState.nativeTimer.getRemaining()),
+              generateTitleText(timerState.timer.getRemaining()),
               style: TextStyle(
                 fontSize: 50.0,
                 color: Theme.of(context).textTheme.bodyLarge!.color,

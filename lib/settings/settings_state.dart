@@ -9,8 +9,8 @@ class SettingsState extends ChangeNotifier {
   late Setting value;
   StreamSubscription? subscription;
 
-  SettingsState(Setting settings) {
-    value = settings;
+  SettingsState(Setting setting) {
+    value = setting;
     init();
   }
 

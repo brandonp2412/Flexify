@@ -30,8 +30,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
   String search = '';
 
   final searchNode = FocusNode();
-  final searchController = TextEditingController();
-  final titleController = TextEditingController();
+  final searchCtrl = TextEditingController();
+  final titleCtrl = TextEditingController();
 
   Iterable<Widget> get tiles {
     final match = exercises.where(
@@ -59,23 +59,23 @@ class _EditPlanPageState extends State<EditPlanPage> {
             );
             if (gymSet == null || !mounted) return;
 
-            final planState = context.read<PlanState>();
-            planState.addExercise(gymSet);
+            final state = context.read<PlanState>();
+            state.addExercise(gymSet);
             setState(() {
-              exercises = planState.exercises;
+              exercises = state.exercises;
               search = '';
             });
-            searchController.text = '';
+            searchCtrl.text = '';
           },
         ),
       ];
 
     return match.toList().map(
-          (planExercise) => ExerciseTile(
-            planExercise: planExercise,
+          (pe) => ExerciseTile(
+            planExercise: pe,
             onChange: (value) {
               final id = exercises
-                  .indexWhere((pe) => pe.exercise == planExercise.exercise);
+                  .indexWhere((exercise) => exercise.exercise == pe.exercise);
               if (id == -1) return;
               setState(() {
                 exercises[id] = value;
@@ -109,7 +109,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               decoration: const material.InputDecoration(
                 labelText: 'Title (optional)',
               ),
-              controller: titleController,
+              controller: titleCtrl,
               textCapitalization: TextCapitalization.sentences,
             ),
             const SizedBox(
@@ -161,8 +161,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
   @override
   void dispose() {
     searchNode.dispose();
-    searchController.dispose();
-    titleController.dispose();
+    searchCtrl.dispose();
+    titleCtrl.dispose();
     super.dispose();
   }
 
@@ -170,9 +170,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    titleController.text = widget.plan.title.value ?? "";
-    final dayList = widget.plan.days.value.split(',');
-    daySwitches = weekdays.map((day) => dayList.contains(day)).toList();
+    titleCtrl.text = widget.plan.title.value ?? "";
+    final list = widget.plan.days.value.split(',');
+    daySwitches = weekdays.map((day) => list.contains(day)).toList();
   }
 
   Future<void> save() async {
@@ -180,7 +180,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     for (int i = 0; i < daySwitches.length; i++)
       if (daySwitches[i]) days.add(weekdays[i]);
 
-    if (days.isEmpty && titleController.text.isEmpty)
+    if (days.isEmpty && titleCtrl.text.isEmpty)
       return toast(context, 'Select days');
 
     if (exercises.where((exercise) => exercise.enabled.value).isEmpty)
@@ -192,7 +192,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
           .where((element) => element.enabled.value)
           .map((element) => element.exercise.value)
           .join(','),
-      title: Value(titleController.text),
+      title: Value(titleCtrl.text),
     );
 
     if (widget.plan.id.present) {
@@ -209,8 +209,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
     }
 
     if (!mounted) return;
-    final planState = context.read<PlanState>();
-    planState.updatePlans(null);
+    final state = context.read<PlanState>();
+    state.updatePlans(null);
     Navigator.pop(context);
   }
 }

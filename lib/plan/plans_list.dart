@@ -28,7 +28,7 @@ class PlansList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
-    final planState = context.watch<PlanState>();
+    final state = context.watch<PlanState>();
 
     if (plans.isEmpty)
       return ListTile(
@@ -40,7 +40,7 @@ class PlansList extends StatelessWidget {
             exercises: const drift.Value(''),
             title: drift.Value(search),
           );
-          await planState.setExercises(plan);
+          await state.setExercises(plan);
           if (context.mounted)
             await Navigator.push(
               context,
@@ -71,23 +71,23 @@ class PlansList extends StatelessWidget {
             onSelect: (id) => onSelect(id),
           );
         },
-        onReorder: (int oldIndex, int newIndex) async {
-          if (oldIndex < newIndex) {
-            newIndex--;
+        onReorder: (int old, int idx) async {
+          if (old < idx) {
+            idx--;
           }
 
-          final temp = plans[oldIndex];
-          plans.removeAt(oldIndex);
-          plans.insert(newIndex, temp);
+          final temp = plans[old];
+          plans.removeAt(old);
+          plans.insert(idx, temp);
 
-          final planState = context.read<PlanState>();
-          planState.updatePlans(plans);
+          final state = context.read<PlanState>();
+          state.updatePlans(plans);
           await db.transaction(() async {
             for (int i = 0; i < plans.length; i++) {
               final plan = plans[i];
-              final updatedPlan =
+              final updated =
                   plan.toCompanion(false).copyWith(sequence: drift.Value(i));
-              await db.update(db.plans).replace(updatedPlan);
+              await db.update(db.plans).replace(updated);
             }
           });
         },

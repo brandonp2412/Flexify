@@ -36,7 +36,7 @@ class AppSearch extends StatefulWidget {
 }
 
 class _AppSearchState extends State<AppSearch> {
-  final TextEditingController searchController = TextEditingController();
+  final TextEditingController ctrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +44,29 @@ class _AppSearchState extends State<AppSearch> {
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: SearchBar(
         hintText: "Search...",
-        controller: searchController,
+        controller: ctrl,
         padding: WidgetStateProperty.all(
           const EdgeInsets.only(right: 8.0),
         ),
         textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
-        leading:
-            widget.selected.isEmpty && searchController.text.isEmpty == true
-                ? const Padding(
-                    padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                    child: Icon(Icons.search),
-                  )
-                : IconButton(
-                    onPressed: () {
-                      widget.onClear();
-                      searchController.text = '';
-                      widget.onChange('');
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 8.0,
-                    ),
-                  ),
+        leading: widget.selected.isEmpty && ctrl.text.isEmpty == true
+            ? const Padding(
+                padding: EdgeInsets.only(left: 16.0, right: 8.0),
+                child: Icon(Icons.search),
+              )
+            : IconButton(
+                onPressed: () {
+                  widget.onClear();
+                  ctrl.text = '';
+                  widget.onChange('');
+                },
+                icon: const Icon(Icons.arrow_back),
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  right: 8.0,
+                ),
+              ),
         trailing: [
           if (widget.selected.isNotEmpty)
             IconButton(
@@ -196,7 +195,7 @@ class _AppSearchState extends State<AppSearch> {
 
   @override
   void dispose() {
-    searchController.dispose();
+    ctrl.dispose();
     super.dispose();
   }
 }

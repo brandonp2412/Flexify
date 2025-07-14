@@ -67,8 +67,8 @@ class PlanState extends ChangeNotifier {
 
     final results = await query.get();
 
-    List<PlanExercisesCompanion> enabledExercises = [];
-    List<PlanExercisesCompanion> disabledExercises = [];
+    List<PlanExercisesCompanion> enabled = [];
+    List<PlanExercisesCompanion> disabled = [];
 
     for (final result in results) {
       final pe = PlanExercisesCompanion(
@@ -81,35 +81,35 @@ class PlanState extends ChangeNotifier {
         timers: Value(result.read(db.planExercises.timers) ?? true),
       );
       if (pe.enabled.value)
-        enabledExercises.add(pe);
+        enabled.add(pe);
       else
-        disabledExercises.add(pe);
+        disabled.add(pe);
     }
 
-    enabledExercises.sort(
+    enabled.sort(
       (a, b) => plan.exercises.value
           .indexOf(a.exercise.value)
           .compareTo(plan.exercises.value.indexOf(b.exercise.value)),
     );
 
-    exercises = enabledExercises + disabledExercises;
+    exercises = enabled + disabled;
     notifyListeners();
   }
 
   updateDefaults() async {
-    final latestCreated = db.gymSets.created.max();
-    final latestSets = Subquery(
+    final latest = db.gymSets.created.max();
+    final sub = Subquery(
       db.select(db.gymSets).join([])
         ..groupBy([db.gymSets.name])
-        ..addColumns([db.gymSets.name, latestCreated]),
+        ..addColumns([db.gymSets.name, latest]),
       'ls',
     );
     final query = db.select(db.gymSets).join(
       [
         innerJoin(
-          latestSets,
-          latestSets.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
-              latestSets.ref(latestCreated).equalsExp(db.gymSets.created),
+          sub,
+          sub.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
+              sub.ref(latest).equalsExp(db.gymSets.created),
           useColumns: false,
         ),
       ],
@@ -172,7 +172,7 @@ class PlanState extends ChangeNotifier {
   }
 
   Future<List<GymCount>> getGymCounts(int planId) async {
-    final countColumn = CustomExpression<int>(
+    final count = CustomExpression<int>(
       """
       COUNT(
         CASE
@@ -188,7 +188,7 @@ class PlanState extends ChangeNotifier {
     final results = await (db.selectOnly(db.planExercises)
           ..addColumns([
             db.gymSets.name,
-            countColumn,
+            count,
             db.planExercises.maxSets,
             db.gymSets.restMs,
             db.planExercises.warmupSets,
@@ -208,7 +208,7 @@ class PlanState extends ChangeNotifier {
     return results
         .map(
           (row) => (
-            count: row.read<int>(countColumn)!,
+            count: row.read<int>(count)!,
             name: row.read(db.gymSets.name)!,
             maxSets: row.read(db.planExercises.maxSets),
             restMs: row.read(db.gymSets.restMs),

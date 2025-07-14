@@ -40,7 +40,7 @@ Future<List<CardioData>> getCardioData({
   DateTime? startDate,
   DateTime? endDate,
 }) async {
-  Expression<String> createdCol = getCreated(period);
+  Expression<String> col = getCreated(period);
 
   final results = await (db.selectOnly(db.gymSets)
         ..addColumns([
@@ -64,12 +64,12 @@ Future<List<CardioData>> getCardioData({
         )
         ..orderBy([
           OrderingTerm(
-            expression: createdCol,
+            expression: col,
             mode: OrderingMode.desc,
           ),
         ])
         ..limit(11)
-        ..groupBy([createdCol]))
+        ..groupBy([col]))
       .get();
 
   List<CardioData> list = [];
@@ -235,7 +235,7 @@ Future<List<StrengthData>> getStrengthData({
   required DateTime? endDate,
   required int limit,
 }) async {
-  Expression<String> createdCol = getCreated(period);
+  Expression<String> col = getCreated(period);
 
   var query = (db.selectOnly(db.gymSets)
     ..addColumns([
@@ -252,12 +252,12 @@ Future<List<StrengthData>> getStrengthData({
     ..where(db.gymSets.hidden.equals(false))
     ..orderBy([
       OrderingTerm(
-        expression: createdCol,
+        expression: col,
         mode: OrderingMode.desc,
       ),
     ])
     ..limit(limit)
-    ..groupBy([createdCol]));
+    ..groupBy([col]));
 
   if (startDate != null)
     query = query
@@ -318,7 +318,7 @@ Future<List<StrengthData>> getGlobalData({
   required DateTime? endDate,
   required int limit,
 }) async {
-  Expression<String> createdCol = getCreated(period);
+  Expression<String> col = getCreated(period);
 
   var query = (db.selectOnly(db.gymSets)
     ..addColumns([
@@ -335,12 +335,12 @@ Future<List<StrengthData>> getGlobalData({
     ..where(db.gymSets.hidden.equals(false) & db.gymSets.category.isNotNull())
     ..orderBy([
       OrderingTerm(
-        expression: createdCol,
+        expression: col,
         mode: OrderingMode.desc,
       ),
     ])
     ..limit(limit)
-    ..groupBy([db.gymSets.category, createdCol]));
+    ..groupBy([db.gymSets.category, col]));
 
   if (startDate != null)
     query = query

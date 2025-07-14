@@ -75,8 +75,8 @@ class _StartListState extends State<StartList> {
         settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
-    final planState = context.watch<PlanState>();
-    final counts = planState.gymCounts;
+    final state = context.watch<PlanState>();
+    final counts = state.gymCounts;
 
     if (planTrailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
@@ -96,8 +96,8 @@ class _StartListState extends State<StartList> {
                 widget.plan.copyWith(exercises: widget.exercises.join(',')),
               );
           if (!context.mounted) return;
-          final planState = context.read<PlanState>();
-          planState.updatePlans(null);
+          final state = context.read<PlanState>();
+          state.updatePlans(null);
         },
       );
     else
@@ -117,13 +117,13 @@ class _StartListState extends State<StartList> {
     List<GymCount> counts,
   ) {
     final exercise = widget.exercises[index];
-    final countIndex = counts.indexWhere((element) => element.name == exercise);
+    final idx = counts.indexWhere((element) => element.name == exercise);
     var count = 0;
     int max = maxSets;
 
-    if (countIndex > -1) {
-      count = counts[countIndex].count;
-      max = counts[countIndex].maxSets ?? maxSets;
+    if (idx > -1) {
+      count = counts[idx].count;
+      max = counts[idx].maxSets ?? maxSets;
     }
 
     Widget trailing = const SizedBox();

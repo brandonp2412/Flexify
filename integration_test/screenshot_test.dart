@@ -140,11 +140,11 @@ BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {
   switch (tabBarState) {
     case TabBarState.plans:
       return (tester.state(find.byType(PlansPage)) as PlansPageState)
-          .navigatorKey
+          .navKey
           .currentContext!;
     case TabBarState.graphs:
       return (tester.state(find.byType(GraphsPage)) as GraphsPageState)
-          .navigatorKey
+          .navKey
           .currentContext!;
     case TabBarState.timer:
       return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
