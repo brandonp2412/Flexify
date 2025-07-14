@@ -217,6 +217,78 @@ void main() {
     );
   });
 
+  test(
+      'migration from v5 to v15 preserves data through multiple schema changes',
+      () async {
+    final testDate = DateTime(2024, 1, 1);
+
+    final oldPlansData = <v5.PlansData>[
+      v5.PlansData(
+        id: 1,
+        sequence: 1,
+        exercises: 'Overhead Press,Rows',
+        days: 'Monday,Thursday',
+        title: 'Upper Body Strength',
+      ),
+    ];
+
+    final oldGymSetsData = <v5.GymSetsData>[
+      v5.GymSetsData(
+        id: 1,
+        name: 'Overhead Press',
+        reps: 6.0,
+        weight: 50.0,
+        unit: 'kg',
+        created: testDate,
+        hidden: false,
+      ),
+      v5.GymSetsData(
+        id: 2,
+        name: 'Rows',
+        reps: 8.0,
+        weight: 60.0,
+        unit: 'kg',
+        created: testDate,
+        hidden: true,
+      ),
+    ];
+
+    await verifier.testWithDataIntegrity(
+      oldVersion: 5,
+      newVersion: 15,
+      createOld: v5.DatabaseAtV5.new,
+      createNew: v15.DatabaseAtV15.new,
+      openTestedDatabase: AppDatabase.new,
+      createItems: (batch, oldDb) {
+        batch.insertAll(oldDb.plans, oldPlansData);
+        batch.insertAll(oldDb.gymSets, oldGymSetsData);
+      },
+      validateItems: (newDb) async {
+        final plans = await newDb.select(newDb.plans).get();
+        expect(plans.length, 1);
+        expect(plans.first.title, 'Upper Body Strength');
+        expect(plans.first.exercises, 'Overhead Press,Rows');
+        expect(plans.first.sequence, 1);
+
+        final gymSets = await newDb.select(newDb.gymSets).get();
+        expect(gymSets.length, 2);
+
+        final overheadPress =
+            gymSets.firstWhere((set) => set.name == 'Overhead Press');
+        expect(overheadPress.weight, 50.0);
+        expect(overheadPress.hidden, false);
+        expect(overheadPress.bodyWeight, 0.0); // Added in v6
+        expect(overheadPress.cardio, false); // Added in v8
+
+        final rows = gymSets.firstWhere((set) => set.name == 'Rows');
+        expect(rows.weight, 60.0);
+        expect(rows.hidden, true);
+        expect(rows.bodyWeight, 0.0);
+        expect(rows.cardio, false);
+      },
+    );
+  });
+
   test('migration from v15 to v16 adds settings table', () async {
     final oldPlansData = <v15.PlansData>[
       v15.PlansData(
@@ -376,6 +448,130 @@ void main() {
         expect(planExercises[0].maxSets, 3);
         expect(planExercises[1].exercise, 'Squats');
         expect(planExercises[1].maxSets, 4);
+      },
+    );
+  });
+
+  test('migration from v18 to current version preserves all data', () async {
+    final testDate = DateTime(2024, 1, 1);
+
+    final oldPlansData = <v18.PlansData>[
+      v18.PlansData(
+        id: 1,
+        sequence: 1,
+        exercises: 'Deadlift,Romanian Deadlift',
+        days: 'Tuesday,Friday',
+        title: 'Deadlift Day',
+      ),
+    ];
+
+    final oldGymSetsData = <v18.GymSetsData>[
+      v18.GymSetsData(
+        id: 1,
+        name: 'Deadlift',
+        reps: 5.0,
+        weight: 120.0,
+        unit: 'kg',
+        created: testDate,
+        hidden: false,
+        bodyWeight: 75.0,
+        duration: 0.0,
+        distance: 0.0,
+        cardio: false,
+        restMs: 180000, // 3 minutes
+        incline: null,
+        planId: 1,
+      ),
+      v18.GymSetsData(
+        id: 2,
+        name: 'Romanian Deadlift',
+        reps: 8.0,
+        weight: 80.0,
+        unit: 'kg',
+        created: testDate,
+        hidden: false,
+        bodyWeight: 75.0,
+        duration: 0.0,
+        distance: 0.0,
+        cardio: false,
+        restMs: 120000, // 2 minutes
+        incline: null,
+        planId: 1,
+      ),
+    ];
+
+    final oldPlanExercisesData = <v18.PlanExercisesData>[
+      v18.PlanExercisesData(
+        id: 1,
+        planId: 1,
+        exercise: 'Deadlift',
+        enabled: true,
+        maxSets: 3,
+      ),
+      v18.PlanExercisesData(
+        id: 2,
+        planId: 1,
+        exercise: 'Romanian Deadlift',
+        enabled: true,
+        maxSets: 4,
+      ),
+    ];
+
+    await verifier.testWithDataIntegrity(
+      oldVersion: 18,
+      newVersion: 41,
+      createOld: v18.DatabaseAtV18.new,
+      createNew: AppDatabase.new,
+      openTestedDatabase: AppDatabase.new,
+      createItems: (batch, oldDb) {
+        batch.insertAll(oldDb.plans, oldPlansData);
+        batch.insertAll(oldDb.gymSets, oldGymSetsData);
+        batch.insertAll(oldDb.planExercises, oldPlanExercisesData);
+      },
+      validateItems: (newDb) async {
+        final plans = await newDb.select(newDb.plans).get();
+        expect(plans.length, 1);
+        expect(plans.first.title, 'Deadlift Day');
+        expect(plans.first.exercises, 'Deadlift,Romanian Deadlift');
+        expect(plans.first.sequence, 1);
+
+        final gymSets = await newDb.select(newDb.gymSets).get();
+        expect(gymSets.length, 2);
+
+        final deadlift = gymSets.firstWhere((set) => set.name == 'Deadlift');
+        expect(deadlift.weight, 120.0);
+        expect(deadlift.reps, 5.0);
+        expect(deadlift.bodyWeight, 75.0);
+        expect(deadlift.restMs, 180000);
+        expect(deadlift.planId, 1);
+        expect(deadlift.cardio, false);
+
+        final romanianDeadlift =
+            gymSets.firstWhere((set) => set.name == 'Romanian Deadlift');
+        expect(romanianDeadlift.weight, 80.0);
+        expect(romanianDeadlift.reps, 8.0);
+        expect(romanianDeadlift.restMs, 120000);
+
+        final planExercises = await newDb.select(newDb.planExercises).get();
+        expect(planExercises.length, 2);
+        expect(
+          planExercises
+              .any((pe) => pe.exercise == 'Deadlift' && pe.maxSets == 3),
+          true,
+        );
+        expect(
+          planExercises.any(
+            (pe) => pe.exercise == 'Romanian Deadlift' && pe.maxSets == 4,
+          ),
+          true,
+        );
+
+        // Verify settings table exists (added in v16)
+        final settings = await newDb.select(newDb.settings).get();
+        expect(
+          settings.length,
+          0,
+        );
       },
     );
   });
