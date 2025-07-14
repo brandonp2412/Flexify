@@ -66,7 +66,6 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
-    // Add non-hidden workout data for the test
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
         name: 'Barbell bench press',
@@ -160,7 +159,6 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
-    // Add non-hidden workout data for the test
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
         name: 'Barbell bent-over row',
@@ -199,7 +197,6 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
-    // Add non-hidden workout data for the test
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
         name: 'Back extension',

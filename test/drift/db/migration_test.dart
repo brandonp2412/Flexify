@@ -4,8 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'generated/schema.dart';
 
+import 'generated/schema.dart';
 import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
 
@@ -45,8 +45,6 @@ void main() {
   // TODO: This generated template shows how these tests could be written. Adopt
   // it to your own needs when testing migrations with data integrity.
   test('migration from v1 to v2 does not corrupt data', () async {
-    // Add data to insert into the old database, and the expected rows after the
-    // migration.
     // TODO: Fill these lists
     final oldPlansData = <v1.PlansData>[];
     final expectedNewPlansData = <v2.PlansData>[];

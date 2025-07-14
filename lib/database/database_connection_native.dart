@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +26,6 @@ LazyDatabase createNativeConnection() {
   });
 }
 
-// Stub for web function to avoid compilation errors
 LazyDatabase createWebConnection() {
   throw UnsupportedError('Web connection not supported on native platforms');
 }

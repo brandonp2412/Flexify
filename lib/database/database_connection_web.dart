@@ -12,7 +12,6 @@ LazyDatabase createWebConnection() {
   });
 }
 
-// Stub for native function to avoid compilation errors
 LazyDatabase createNativeConnection() {
   throw UnsupportedError('Native connection not supported on web');
 }
