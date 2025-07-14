@@ -14,12 +14,10 @@ class TimerState extends ChangeNotifier {
   bool starting = false;
 
   TimerState() {
-    // Only create AudioPlayer on supported platforms
     if (!kIsWeb) {
       try {
         player = AudioPlayer();
       } catch (e) {
-        // Handle case where AudioPlayer creation fails
         print('Failed to create AudioPlayer: $e');
         player = null;
       }
@@ -100,7 +98,6 @@ class TimerState extends ChangeNotifier {
   }
 
   notify(String? title, String? alarmSound) async {
-    // Only play audio on supported platforms
     if (player != null) {
       player!.play(
         alarmSound?.isNotEmpty == true

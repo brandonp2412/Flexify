@@ -24,7 +24,6 @@ class _TimerCircularProgressIndicatorState
         final elapsed = timerState.nativeTimer.getElapsed();
         final remaining = timerState.nativeTimer.getRemaining();
 
-        // Opening animation
         if (duration > Duration.zero &&
             remaining > Duration.zero &&
             timerState.starting) {
@@ -46,7 +45,6 @@ class _TimerCircularProgressIndicatorState
           );
         }
 
-        // Normal countdown
         if (duration > Duration.zero && remaining > Duration.zero) {
           lastValue = 1 - (elapsed.inMilliseconds / duration.inMilliseconds);
           return TweenAnimationBuilder(
@@ -64,7 +62,6 @@ class _TimerCircularProgressIndicatorState
           );
         }
 
-        // Closing animation
         if (!timerState.starting && !stopping) {
           stopping = true;
           return TweenAnimationBuilder(
@@ -127,7 +124,6 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
         final currentProgress =
             elapsed.inMilliseconds / duration.inMilliseconds;
 
-        // Check if this is a new timer (different duration or significant timestamp change)
         final isNewTimer = lastDuration != duration ||
             (lastTimestamp != null &&
                 timerState.nativeTimer.timeStamp

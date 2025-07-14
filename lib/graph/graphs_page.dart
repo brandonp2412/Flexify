@@ -320,7 +320,6 @@ class GraphsPageState extends State<GraphsPage>
               title: Text('Cancel'),
               onTap: () {
                 Navigator.pop(context);
-                // Add logic to show info
               },
             ),
           ],

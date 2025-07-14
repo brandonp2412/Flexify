@@ -45,14 +45,12 @@ class _HistoryListState extends State<HistoryList> {
   void didUpdateWidget(HistoryList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // Create a list of sets to remove
     final setsToRemove = _currentSets
         .where(
           (oldSet) => !widget.gymSets.contains(oldSet),
         )
         .toList();
 
-    // Handle removals
     for (var setToRemove in setsToRemove) {
       final index = _currentSets.indexOf(setToRemove);
       if (index != -1) {
@@ -70,7 +68,6 @@ class _HistoryListState extends State<HistoryList> {
       }
     }
 
-    // Create a list of sets to add
     final setsToAdd = widget.gymSets
         .where(
           (newSet) => !_currentSets.contains(newSet),
@@ -92,13 +89,11 @@ class _HistoryListState extends State<HistoryList> {
     int index,
     bool showImages,
   ) {
-    // For removal animation we want to slide up, for insertion we want to slide down from top
     final offsetAnimation = Tween<Offset>(
-      begin: const Offset(0.0, -1.0), // Start from top for insertion
-      end: const Offset(0.0, 0.0), // End at normal position
+      begin: const Offset(0.0, -1.0),
+      end: const Offset(0.0, 0.0),
     ).chain(CurveTween(curve: Curves.easeInOut)).animate(animation);
 
-    // Custom size transition that slides up when removing
     final sizeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,

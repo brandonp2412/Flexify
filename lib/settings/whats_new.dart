@@ -45,26 +45,21 @@ class _WhatsNewState extends State<WhatsNew> {
         .where((key) => key.startsWith('assets/changelogs/'))
         .toList();
 
-    // Sort by numeric filename
     changelogFiles.sort((a, b) {
-      // Extract filename without extension
       final aName = a.split('/').last.split('.').first;
       final bName = b.split('/').last.split('.').first;
 
-      // Parse to integers and compare
       final aNum = int.tryParse(aName) ?? 0;
       final bNum = int.tryParse(bName) ?? 0;
-      return bNum.compareTo(aNum); // Descending order
+      return bNum.compareTo(aNum);
     });
 
-    // Load content for each file
     final result = <Changelog>[];
     for (final path in changelogFiles) {
       try {
         final content = await rootBundle.loadString(path);
         final filename = path.split('/').last.replaceAll('.txt', '');
 
-        // Skip files with invalid numeric filenames
         final timestamp = int.tryParse(filename);
         if (timestamp == null || filename.isEmpty) {
           print('Skipping invalid changelog file: $path');
@@ -82,7 +77,6 @@ class _WhatsNewState extends State<WhatsNew> {
         );
       } catch (e) {
         print('Error loading changelog file $path: $e');
-        // Skip this file and continue with others
       }
     }
 
