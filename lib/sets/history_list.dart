@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HistoryList extends StatefulWidget {
-  final List<GymSet> gymSets;
+  final List<GymSet> sets;
   final ScrollController scroll;
   final Function(int) onSelect;
   final Set<int> selected;
@@ -18,7 +18,7 @@ class HistoryList extends StatefulWidget {
 
   const HistoryList({
     super.key,
-    required this.gymSets,
+    required this.sets,
     required this.onSelect,
     required this.selected,
     required this.onNext,
@@ -31,31 +31,31 @@ class HistoryList extends StatefulWidget {
 
 class _HistoryListState extends State<HistoryList> {
   bool goingNext = false;
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  List<GymSet> _currentSets = [];
+  final GlobalKey<AnimatedListState> _key = GlobalKey<AnimatedListState>();
+  List<GymSet> _current = [];
 
   @override
   void initState() {
     super.initState();
     widget.scroll.addListener(scrollListener);
-    _currentSets = List.from(widget.gymSets);
+    _current = List.from(widget.sets);
   }
 
   @override
   void didUpdateWidget(HistoryList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    final setsToRemove = _currentSets
+    final toRemove = _current
         .where(
-          (oldSet) => !widget.gymSets.contains(oldSet),
+          (oldSet) => !widget.sets.contains(oldSet),
         )
         .toList();
 
-    for (var setToRemove in setsToRemove) {
-      final index = _currentSets.indexOf(setToRemove);
+    for (var setToRemove in toRemove) {
+      final index = _current.indexOf(setToRemove);
       if (index != -1) {
-        final removedSet = _currentSets.removeAt(index);
-        _listKey.currentState?.removeItem(
+        final removedSet = _current.removeAt(index);
+        _key.currentState?.removeItem(
           index,
           (context, animation) => _buildItem(
             removedSet,
@@ -68,17 +68,17 @@ class _HistoryListState extends State<HistoryList> {
       }
     }
 
-    final setsToAdd = widget.gymSets
+    final toAdd = widget.sets
         .where(
-          (newSet) => !_currentSets.contains(newSet),
+          (newSet) => !_current.contains(newSet),
         )
         .toList();
 
-    for (var setToAdd in setsToAdd) {
-      final insertIndex = widget.gymSets.indexOf(setToAdd);
-      if (insertIndex >= 0 && insertIndex <= _currentSets.length) {
-        _currentSets.insert(insertIndex, setToAdd);
-        _listKey.currentState?.insertItem(insertIndex, duration: Duration.zero);
+    for (var setToAdd in toAdd) {
+      final insertIndex = widget.sets.indexOf(setToAdd);
+      if (insertIndex >= 0 && insertIndex <= _current.length) {
+        _current.insert(insertIndex, setToAdd);
+        _key.currentState?.insertItem(insertIndex, duration: Duration.zero);
       }
     }
   }
@@ -112,7 +112,7 @@ class _HistoryListState extends State<HistoryList> {
   }
 
   Widget _buildListItem(GymSet gymSet, int index, bool showImages) {
-    final previousGymSet = index > 0 ? _currentSets[index - 1] : null;
+    final previousGymSet = index > 0 ? _current[index - 1] : null;
     final bool showDivider = previousGymSet != null &&
         !isSameDay(gymSet.created, previousGymSet.created);
 
@@ -193,12 +193,12 @@ class _HistoryListState extends State<HistoryList> {
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return AnimatedList(
-      key: _listKey,
-      initialItemCount: _currentSets.length,
+      key: _key,
+      initialItemCount: _current.length,
       padding: const EdgeInsets.only(bottom: 76, top: 8),
       controller: widget.scroll,
       itemBuilder: (context, index, animation) {
-        return _buildItem(_currentSets[index], animation, index, showImages);
+        return _buildItem(_current[index], animation, index, showImages);
       },
     );
   }

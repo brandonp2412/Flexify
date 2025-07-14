@@ -22,13 +22,13 @@ class EditSetsPage extends StatefulWidget {
 class _EditSetsPageState extends State<EditSetsPage> {
   final reps = TextEditingController();
   final weight = TextEditingController();
-  final bodyWeight = TextEditingController();
+  final body = TextEditingController();
   final distance = TextEditingController();
   final minutes = TextEditingController();
   final seconds = TextEditingController();
   final incline = TextEditingController();
   final name = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
 
   String? unit;
   DateTime? created;
@@ -38,13 +38,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
   String? oldNames;
   String? oldReps;
   String? oldWeights;
-  String? oldBodyWeights;
-  String? oldCreateds;
-  String? oldDistances;
-  String? oldMinutes;
-  String? oldSeconds;
-  String? oldInclines;
-  String? oldCategories;
+  String? oldBody;
+  String? oldCreated;
+  String? oldDist;
+  String? oldMin;
+  String? oldSec;
+  String? oldInc;
+  String? oldCat;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: formKey,
+          key: key,
           child: ListView(
             children: [
               TextField(
@@ -108,7 +108,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   controller: distance,
                   decoration: InputDecoration(
                     labelText: 'Distance',
-                    hintText: oldDistances,
+                    hintText: oldDist,
                   ),
                   keyboardType: TextInputType.numberWithOptions(
                     decimal: true,
@@ -127,7 +127,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         controller: minutes,
                         decoration: InputDecoration(
                           labelText: 'Minutes',
-                          hintText: oldMinutes,
+                          hintText: oldMin,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
@@ -148,7 +148,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         controller: seconds,
                         decoration: InputDecoration(
                           labelText: 'Seconds',
-                          hintText: oldSeconds,
+                          hintText: oldSec,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
@@ -169,7 +169,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   controller: incline,
                   decoration: InputDecoration(
                     labelText: 'Incline %',
-                    hintText: oldInclines,
+                    hintText: oldInc,
                   ),
                   keyboardType: TextInputType.numberWithOptions(
                     decimal: true,
@@ -219,15 +219,15 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   builder: (context, showBodyWeight, child) => Visibility(
                     visible: showBodyWeight,
                     child: TextFormField(
-                      controller: bodyWeight,
+                      controller: body,
                       decoration: InputDecoration(
                         labelText: 'Body weight',
-                        hintText: oldBodyWeights,
+                        hintText: oldBody,
                       ),
                       keyboardType: TextInputType.numberWithOptions(
                         decimal: true,
                       ),
-                      onTap: () => selectAll(bodyWeight),
+                      onTap: () => selectAll(body),
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
                         if (double.tryParse(value) == null)
@@ -259,7 +259,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   return DropdownButtonFormField(
                     decoration: InputDecoration(
                       labelText: 'Category',
-                      hintText: oldCategories,
+                      hintText: oldCat,
                     ),
                     value: category,
                     items: snapshot.data
@@ -280,7 +280,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
               ),
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) {
-                  var subtitle = oldCreateds ?? "";
+                  var subtitle = oldCreated ?? "";
 
                   if (longDateFormat == 'timeago' && created != null)
                     subtitle = timeago.format(created!);
@@ -312,7 +312,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   void dispose() {
     reps.dispose();
     weight.dispose();
-    bodyWeight.dispose();
+    body.dispose();
     distance.dispose();
     minutes.dispose();
     seconds.dispose();
@@ -336,21 +336,20 @@ class _EditSetsPageState extends State<EditSetsPage> {
         oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
         oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
         oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-        oldBodyWeights = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-        oldCreateds = gymSets
+        oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+        oldCreated = gymSets
             .map(
               (gymSet) =>
                   DateFormat(settings.longDateFormat).format(gymSet.created),
             )
             .join(', ');
-        oldDistances = gymSets.map((gymSet) => gymSet.distance).join(', ');
-        oldMinutes =
-            gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
-        oldSeconds = gymSets
+        oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
+        oldMin = gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
+        oldSec = gymSets
             .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
             .join(', ');
-        oldInclines = gymSets.map((gymSet) => gymSet.incline).join(', ');
-        oldCategories = gymSets.map((gymSet) => gymSet.category).join(', ');
+        oldInc = gymSets.map((gymSet) => gymSet.incline).join(', ');
+        oldCat = gymSets.map((gymSet) => gymSet.category).join(', ');
       });
     });
   }
@@ -375,7 +374,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   }
 
   Future<void> save() async {
-    if (!formKey.currentState!.validate()) return;
+    if (!key.currentState!.validate()) return;
 
     Navigator.pop(context);
 
@@ -388,7 +387,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
       incline: Value.absentIfNull(int.tryParse(incline.text)),
       reps: Value.absentIfNull(double.tryParse(reps.text)),
       weight: Value.absentIfNull(double.tryParse(weight.text)),
-      bodyWeight: Value.absentIfNull(double.tryParse(bodyWeight.text)),
+      bodyWeight: Value.absentIfNull(double.tryParse(body.text)),
       distance: Value.absentIfNull(double.tryParse(distance.text)),
       duration: int.tryParse(seconds.text) == null &&
               int.tryParse(minutes.text) == null

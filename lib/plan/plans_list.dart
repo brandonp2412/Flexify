@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class PlansList extends StatelessWidget {
   final List<Plan> plans;
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState> navKey;
   final Set<int> selected;
   final Function(int) onSelect;
   final String search;
@@ -19,7 +19,7 @@ class PlansList extends StatelessWidget {
   const PlansList({
     super.key,
     required this.plans,
-    required this.navigatorKey,
+    required this.navKey,
     required this.selected,
     required this.onSelect,
     required this.search,
@@ -66,7 +66,7 @@ class PlansList extends StatelessWidget {
             plan: plan,
             weekday: weekday,
             index: index,
-            navigatorKey: navigatorKey,
+            navigatorKey: navKey,
             selected: selected,
             onSelect: (id) => onSelect(id),
           );
@@ -103,7 +103,7 @@ class PlansList extends StatelessWidget {
           plan: plan,
           weekday: weekday,
           index: index,
-          navigatorKey: navigatorKey,
+          navigatorKey: navKey,
           selected: selected,
           onSelect: (id) => onSelect(id),
         );

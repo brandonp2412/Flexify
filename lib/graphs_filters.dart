@@ -16,13 +16,13 @@ class GraphsFilters extends StatefulWidget {
 }
 
 class _GraphsFiltersState extends State<GraphsFilters> {
-  int get filtersCount => (widget.category != null ? 1 : 0);
+  int get count => (widget.category != null ? 1 : 0);
 
   @override
   Widget build(BuildContext context) {
     return Badge.count(
-      count: filtersCount,
-      isLabelVisible: filtersCount > 0,
+      count: count,
+      isLabelVisible: count > 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: StreamBuilder(
         stream: categoriesStream,

@@ -175,8 +175,8 @@ class WorkoutSettings extends StatefulWidget {
 class _WorkoutSettingsState extends State<WorkoutSettings> {
   late var settings = context.read<SettingsState>().value;
 
-  late final maxSets = TextEditingController(text: settings.maxSets.toString());
-  late final warmupSets =
+  late final max = TextEditingController(text: settings.maxSets.toString());
+  late final warmup =
       TextEditingController(text: settings.warmupSets?.toString());
 
   @override
@@ -197,6 +197,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
   void dispose() {
     super.dispose();
 
-    maxSets.dispose();
+    max.dispose();
+    warmup.dispose();
   }
 }

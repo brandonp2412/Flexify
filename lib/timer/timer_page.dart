@@ -13,7 +13,7 @@ class TimerPage extends StatefulWidget {
 }
 
 class TimerPageState extends State<TimerPage> {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +21,14 @@ class TimerPageState extends State<TimerPage> {
 
     return NavigatorPopHandler(
       onPopWithResult: (result) {
-        if (navigatorKey.currentState!.canPop() == false) return;
-        final tabController = DefaultTabController.of(context);
+        if (navKey.currentState!.canPop() == false) return;
+        final ctrl = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
-        final timerIndex = settings.tabs.split(',').indexOf('TimerPage');
-        if (tabController.index == timerIndex) navigatorKey.currentState!.pop();
+        final index = settings.tabs.split(',').indexOf('TimerPage');
+        if (ctrl.index == index) navKey.currentState!.pop();
       },
       child: Navigator(
-        key: navigatorKey,
+        key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _TimerPageWidget(timerState: timerState),
           settings: settings,

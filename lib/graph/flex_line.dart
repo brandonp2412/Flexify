@@ -39,17 +39,17 @@ class FlexLine extends StatelessWidget {
     );
     Widget text;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double labelWidth = 120;
-    int labelCount = (screenWidth / labelWidth).floor();
-    List<int> indices = List.generate(labelCount, (index) {
-      return ((data.length - 1) * index / (labelCount - 1)).round();
+    double screen = MediaQuery.of(context).size.width;
+    double label = 120;
+    int count = (screen / label).floor();
+    List<int> indices = List.generate(count, (index) {
+      return ((data.length - 1) * index / (count - 1)).round();
     });
 
     if (indices.contains(value.toInt())) {
-      DateTime createdDate = data[value.toInt()].created;
+      DateTime created = data[value.toInt()].created;
       text = Text(
-        DateFormat(format).format(createdDate),
+        DateFormat(format).format(created),
         style: style,
       );
     } else {
@@ -64,7 +64,7 @@ class FlexLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Color> gradientColors = [
+    List<Color> colors = [
       Theme.of(context).colorScheme.primary,
       Theme.of(context).colorScheme.surface,
     ];
@@ -122,7 +122,7 @@ class FlexLine extends StatelessWidget {
             belowBarData: BarAreaData(
               show: true,
               gradient: LinearGradient(
-                colors: gradientColors
+                colors: colors
                     .map((color) => color.withValues(alpha: 0.3))
                     .toList(),
               ),

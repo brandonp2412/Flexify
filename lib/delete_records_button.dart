@@ -9,11 +9,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeleteRecordsButton extends StatelessWidget {
-  final BuildContext pageContext;
+  final BuildContext ctx;
 
   const DeleteRecordsButton({
     super.key,
-    required this.pageContext,
+    required this.ctx,
   });
 
   @override
@@ -54,8 +54,8 @@ class DeleteRecordsButton extends StatelessWidget {
                                 await (db.delete(db.gymSets)
                                       ..where((u) => u.hidden.equals(false)))
                                     .go();
-                                if (!pageContext.mounted) return;
-                                Navigator.pop(pageContext);
+                                if (!ctx.mounted) return;
+                                Navigator.pop(ctx);
                               },
                             ),
                           ],
@@ -89,12 +89,12 @@ class DeleteRecordsButton extends StatelessWidget {
                               label: const Text('Delete'),
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
-                                final planState = pageContext.read<PlanState>();
+                                final planState = ctx.read<PlanState>();
                                 Navigator.pop(context);
                                 await db.delete(db.plans).go();
                                 planState.updatePlans(null);
-                                if (!pageContext.mounted) return;
-                                Navigator.pop(pageContext);
+                                if (!ctx.mounted) return;
+                                Navigator.pop(ctx);
                               },
                             ),
                           ],

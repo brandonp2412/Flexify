@@ -25,14 +25,14 @@ class TimerState extends ChangeNotifier {
 
     androidChannel.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
-        final newTimer = NativeTimerWrapper(
+        final timer = NativeTimerWrapper(
           Duration(milliseconds: call.arguments[0]),
           Duration(milliseconds: call.arguments[1]),
           DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
           NativeTimerState.values[call.arguments[3] as int],
         );
 
-        updateTimer(newTimer);
+        updateTimer(timer);
       }
     });
   }
@@ -46,12 +46,12 @@ class TimerState extends ChangeNotifier {
     String alarmSound,
     bool vibrate,
   ) async {
-    final newTimer = timer.increaseDuration(
+    final updated = timer.increaseDuration(
       const Duration(minutes: 1),
     );
-    updateTimer(newTimer);
+    updateTimer(updated);
     final args = {
-      'timestamp': newTimer.getTimeStamp(),
+      'timestamp': updated.getTimeStamp(),
       'alarmSound': alarmSound,
       'vibrate': vibrate,
     };
@@ -106,16 +106,16 @@ class TimerState extends ChangeNotifier {
       );
     }
 
-    const linuxSettings =
+    const linux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
-    const darwinSettings = DarwinInitializationSettings();
-    const initSettings = InitializationSettings(
-      linux: linuxSettings,
-      macOS: darwinSettings,
-      iOS: darwinSettings,
+    const darwin = DarwinInitializationSettings();
+    const init = InitializationSettings(
+      linux: linux,
+      macOS: darwin,
+      iOS: darwin,
     );
     final plugin = FlutterLocalNotificationsPlugin();
-    await plugin.initialize(initSettings);
+    await plugin.initialize(init);
     await plugin.show(1, title ?? "Timer up", null, null);
   }
 
@@ -129,8 +129,8 @@ class TimerState extends ChangeNotifier {
     }
   }
 
-  void updateTimer(NativeTimerWrapper newTimer) {
-    timer = newTimer;
+  void updateTimer(NativeTimerWrapper updated) {
+    timer = updated;
     notifyListeners();
   }
 }

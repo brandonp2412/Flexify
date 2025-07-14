@@ -30,16 +30,16 @@ class PlansPageState extends State<PlansPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (navKey.currentState!.canPop() == false) return;
-        final tabController = DefaultTabController.of(context);
+        final ctrl = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
-        final plansIndex = settings.tabs.split(',').indexOf('PlansPage');
-        if (tabController.index == plansIndex) navKey.currentState!.pop();
+        final index = settings.tabs.split(',').indexOf('PlansPage');
+        if (ctrl.index == index) navKey.currentState!.pop();
       },
       child: Navigator(
         key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _PlansPageWidget(
-            navigatorKey: navKey,
+            navKey: navKey,
           ),
           settings: settings,
         ),
@@ -49,9 +49,9 @@ class PlansPageState extends State<PlansPage>
 }
 
 class _PlansPageWidget extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState> navKey;
 
-  const _PlansPageWidget({required this.navigatorKey});
+  const _PlansPageWidget({required this.navKey});
 
   @override
   createState() => _PlansPageWidgetState();
@@ -152,7 +152,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           Expanded(
             child: PlansList(
               plans: filtered ?? [],
-              navigatorKey: widget.navigatorKey,
+              navKey: widget.navKey,
               selected: selected,
               search: search,
               onSelect: (id) {

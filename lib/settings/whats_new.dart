@@ -30,9 +30,9 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
   void setChangelogs() async {
-    final newChangelogs = await getChangelogFiles(context);
+    final logs = await getChangelogFiles(context);
     setState(() {
-      changelogs = newChangelogs;
+      changelogs = logs;
     });
   }
 
@@ -41,11 +41,11 @@ class _WhatsNewState extends State<WhatsNew> {
         await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
 
-    final changelogFiles = manifestMap.keys
+    final files = manifestMap.keys
         .where((key) => key.startsWith('assets/changelogs/'))
         .toList();
 
-    changelogFiles.sort((a, b) {
+    files.sort((a, b) {
       final aName = a.split('/').last.split('.').first;
       final bName = b.split('/').last.split('.').first;
 
@@ -55,7 +55,7 @@ class _WhatsNewState extends State<WhatsNew> {
     });
 
     final result = <Changelog>[];
-    for (final path in changelogFiles) {
+    for (final path in files) {
       try {
         final content = await rootBundle.loadString(path);
         final filename = path.split('/').last.replaceAll('.txt', '');

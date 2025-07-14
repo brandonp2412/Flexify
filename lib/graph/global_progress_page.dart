@@ -53,11 +53,11 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
   void setData() async {
     final newData = await getGlobalData(
-      targetUnit: targetUnit,
+      target: targetUnit,
       metric: metric,
       period: period,
-      startDate: startDate,
-      endDate: endDate,
+      start: startDate,
+      end: endDate,
       limit: limit,
     );
     final newCategories = await getCategories();

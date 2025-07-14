@@ -48,30 +48,30 @@ class PlanTile extends StatelessWidget {
       subtitle: Text(plan.exercises.split(',').join(', ')),
       trailing: Builder(
         builder: (context) {
-          final planTrailing = context.select<SettingsState, PlanTrailing>(
+          final trailing = context.select<SettingsState, PlanTrailing>(
             (settings) => PlanTrailing.values.byName(
               settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
             ),
           );
-          if (planTrailing == PlanTrailing.none) return const SizedBox();
+          if (trailing == PlanTrailing.none) return const SizedBox();
 
-          if (planTrailing == PlanTrailing.reorder)
+          if (trailing == PlanTrailing.reorder)
             return ReorderableDragStartListener(
               index: index,
               child: const Icon(Icons.drag_handle),
             );
 
-          final planState = context.watch<PlanState>();
-          final count = planState.planCounts
+          final state = context.watch<PlanState>();
+          final count = state.planCounts
               .firstWhere((element) => element.planId == plan.id);
 
-          if (planTrailing == PlanTrailing.count)
+          if (trailing == PlanTrailing.count)
             return Text(
               "${count.total}",
               style: const TextStyle(fontSize: 16),
             );
 
-          if (planTrailing == PlanTrailing.percent)
+          if (trailing == PlanTrailing.percent)
             return Text(
               "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
               style: const TextStyle(fontSize: 16),
@@ -86,8 +86,8 @@ class PlanTile extends StatelessWidget {
       selected: selected.contains(plan.id),
       onTap: () async {
         if (selected.isNotEmpty) return onSelect(plan.id);
-        final planState = context.read<PlanState>();
-        await planState.updateGymCounts(plan.id);
+        final state = context.read<PlanState>();
+        await state.updateGymCounts(plan.id);
 
         navigatorKey.currentState!.push(
           MaterialPageRoute(

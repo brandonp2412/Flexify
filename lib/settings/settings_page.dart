@@ -23,7 +23,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final searchController = TextEditingController();
+  final searchCtrl = TextEditingController();
 
   late final Setting settings;
   late final TextEditingController maxSets;
@@ -37,32 +37,31 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
-    if (searchController.text.isNotEmpty) {
+    if (searchCtrl.text.isNotEmpty) {
       filtered.addAll(
-        getAppearanceSettings(context, searchController.text, settings),
+        getAppearanceSettings(context, searchCtrl.text, settings),
       );
-      filtered.addAll(getFormatSettings(searchController.text, settings.value));
+      filtered.addAll(getFormatSettings(searchCtrl.text, settings.value));
       filtered.addAll(
         getWorkoutSettings(
-          searchController.text,
+          searchCtrl.text,
           settings.value,
         ),
       );
       if (player != null)
         filtered.addAll(
           getTimerSettings(
-            searchController.text,
+            searchCtrl.text,
             settings.value,
             minutes,
             seconds,
             player!,
           ),
         );
-      filtered
-          .addAll(getDataSettings(searchController.text, settings, context));
+      filtered.addAll(getDataSettings(searchCtrl.text, settings, context));
       filtered.addAll(
         getPlanSettings(
-          searchController.text,
+          searchCtrl.text,
           settings.value,
           maxSets,
           warmupSets,
@@ -101,7 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             SearchBar(
               hintText: "Search...",
-              controller: searchController,
+              controller: searchCtrl,
               padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
               ),
@@ -115,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Expanded(
               child: ListView(
-                children: searchController.text.isNotEmpty
+                children: searchCtrl.text.isNotEmpty
                     ? filtered
                     : [
                         ListTile(
@@ -192,7 +191,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    searchController.dispose();
+    searchCtrl.dispose();
     maxSets.dispose();
     warmupSets.dispose();
     minutes.dispose();

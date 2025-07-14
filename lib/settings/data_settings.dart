@@ -61,10 +61,9 @@ List<Widget> getDataSettings(
         icon: const Icon(Icons.share),
       ),
     if ('export data'.contains(term.toLowerCase())) const ExportData(),
-    if ('import data'.contains(term.toLowerCase()))
-      ImportData(pageContext: context),
+    if ('import data'.contains(term.toLowerCase())) ImportData(ctx: context),
     if ('delete records'.contains(term.toLowerCase()))
-      DeleteRecordsButton(pageContext: context),
+      DeleteRecordsButton(ctx: context),
   ];
 }
 

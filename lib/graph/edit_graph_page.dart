@@ -26,7 +26,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       TextEditingController(text: widget.name);
   final TextEditingController minutes = TextEditingController();
   final TextEditingController seconds = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
 
   bool? cardio;
   String? unit;
@@ -42,7 +42,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
-          key: formKey,
+          key: key,
           child: ListView(
             children: [
               TextField(
@@ -318,7 +318,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   save() async {
-    if (!formKey.currentState!.validate()) return;
+    if (!key.currentState!.validate()) return;
 
     final count = await getCount();
 

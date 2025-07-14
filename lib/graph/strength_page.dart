@@ -36,16 +36,16 @@ class StrengthPage extends StatefulWidget {
 
 class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> data = widget.data;
-  late String targetUnit = widget.unit;
+  late String target = widget.unit;
   late String name = widget.name;
 
   int limit = 21;
   StrengthMetric metric = StrengthMetric.bestWeight;
   Period period = Period.day;
-  DateTime? startDate;
-  DateTime? endDate;
+  DateTime? start;
+  DateTime? end;
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
-  TabController? tabController;
+  TabController? ctrl;
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +159,10 @@ class _StrengthPageState extends State<StrengthPage> {
                 Visibility(
                   visible: settings.showUnits,
                   child: UnitSelector(
-                    value: targetUnit,
+                    value: target,
                     onChanged: (value) {
                       setState(() {
-                        targetUnit = value!;
+                        target = value!;
                       });
                       setData();
                     },
@@ -175,15 +175,15 @@ class _StrengthPageState extends State<StrengthPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text('Start date'),
-                          subtitle: startDate == null
+                          subtitle: start == null
                               ? Text(settings.shortDateFormat)
                               : Text(
                                   DateFormat(settings.shortDateFormat)
-                                      .format(startDate!),
+                                      .format(start!),
                                 ),
                           onLongPress: () {
                             setState(() {
-                              startDate = null;
+                              start = null;
                             });
                             setData();
                           },
@@ -198,16 +198,16 @@ class _StrengthPageState extends State<StrengthPage> {
                             selector: (p0, settings) =>
                                 settings.value.shortDateFormat,
                             builder: (context, value, child) {
-                              if (endDate == null) return Text(value);
+                              if (end == null) return Text(value);
 
                               return Text(
-                                DateFormat(value).format(endDate!),
+                                DateFormat(value).format(end!),
                               );
                             },
                           ),
                           onLongPress: () {
                             setState(() {
-                              endDate = null;
+                              end = null;
                             });
                             setData();
                           },
@@ -304,34 +304,34 @@ class _StrengthPageState extends State<StrengthPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      tabController = DefaultTabController.of(context);
-      tabController?.addListener(tabListener);
+      ctrl = DefaultTabController.of(context);
+      ctrl?.addListener(tabListener);
     });
   }
 
   void tabListener() {
     final settings = context.read<SettingsState>().value;
     final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-    if (tabController!.indexIsChanging == true) return;
-    if (tabController!.index != graphsIndex) return;
+    if (ctrl!.indexIsChanging == true) return;
+    if (ctrl!.index != graphsIndex) return;
     setData();
   }
 
   @override
   void dispose() {
-    tabController?.removeListener(tabListener);
+    ctrl?.removeListener(tabListener);
     super.dispose();
   }
 
   Future<void> setData() async {
     if (!mounted) return;
     final strengthData = await getStrengthData(
-      targetUnit: targetUnit,
+      target: target,
       name: widget.name,
       metric: metric,
       period: period,
-      startDate: startDate,
-      endDate: endDate,
+      start: start,
+      end: end,
       limit: limit,
     );
     setState(() {
@@ -350,7 +350,7 @@ class _StrengthPageState extends State<StrengthPage> {
         final formatter = NumberFormat("#,###.00");
 
         String text =
-            "${row.reps} x ${row.value.toStringAsFixed(2)}$targetUnit $created";
+            "${row.reps} x ${row.value.toStringAsFixed(2)}$target $created";
         switch (metric) {
           case StrengthMetric.bestReps:
           case StrengthMetric.relativeStrength:
@@ -358,7 +358,7 @@ class _StrengthPageState extends State<StrengthPage> {
             break;
           case StrengthMetric.volume:
           case StrengthMetric.oneRepMax:
-            text = "${formatter.format(row.value)}$targetUnit $created";
+            text = "${formatter.format(row.value)}$target $created";
             break;
           case StrengthMetric.bestWeight:
             break;
@@ -466,7 +466,7 @@ class _StrengthPageState extends State<StrengthPage> {
   Future<void> _selectEnd() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: endDate,
+      initialDate: end,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -474,7 +474,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (pickedDate == null) return;
 
     setState(() {
-      endDate = pickedDate;
+      end = pickedDate;
     });
     setData();
   }
@@ -482,7 +482,7 @@ class _StrengthPageState extends State<StrengthPage> {
   Future<void> _selectStart() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: startDate,
+      initialDate: start,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
@@ -490,7 +490,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (pickedDate == null) return;
 
     setState(() {
-      startDate = pickedDate;
+      start = pickedDate;
     });
     setData();
   }

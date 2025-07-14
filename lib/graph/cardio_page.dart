@@ -35,12 +35,12 @@ class CardioPage extends StatefulWidget {
 
 class _CardioPageState extends State<CardioPage> {
   late List<CardioData> data = widget.data;
-  late String targetUnit = widget.unit;
+  late String target = widget.unit;
   CardioMetric metric = CardioMetric.pace;
   Period period = Period.day;
-  DateTime? startDate;
-  DateTime? endDate;
-  TabController? tabController;
+  DateTime? start;
+  DateTime? end;
+  TabController? ctrl;
   DateTime lastTap = DateTime(0);
 
   LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
@@ -83,7 +83,7 @@ class _CardioPageState extends State<CardioPage> {
 
   touchLine(
     FlTouchEvent event,
-    LineTouchResponse? touchResponse,
+    LineTouchResponse? response,
   ) async {
     if (event is ScaleUpdateDetails) return;
     if (event is! FlPanDownEvent) return;
@@ -92,7 +92,7 @@ class _CardioPageState extends State<CardioPage> {
         lastTap = DateTime.now();
       });
 
-    final index = touchResponse?.lineBarSpots?[0].spotIndex;
+    final index = response?.lineBarSpots?[0].spotIndex;
     if (index == null) return;
     final row = data[index];
     GymSet? gymSet = await (db.gymSets.select()
@@ -226,10 +226,10 @@ class _CardioPageState extends State<CardioPage> {
                     builder: (context, value, child) => Visibility(
                       visible: value,
                       child: UnitSelector(
-                        value: targetUnit,
+                        value: target,
                         onChanged: (value) {
                           setState(() {
-                            targetUnit = value!;
+                            target = value!;
                           });
                           setData();
                         },
@@ -245,15 +245,15 @@ class _CardioPageState extends State<CardioPage> {
                           selector: (p0, settings) =>
                               settings.value.shortDateFormat,
                           builder: (context, value, child) {
-                            if (startDate == null) return Text(value);
+                            if (start == null) return Text(value);
 
                             return Text(
-                              DateFormat(value).format(startDate!),
+                              DateFormat(value).format(start!),
                             );
                           },
                         ),
                         onLongPress: () => setState(() {
-                          startDate = null;
+                          start = null;
                         }),
                         trailing: const Icon(Icons.calendar_today),
                         onTap: () => _selectStart(),
@@ -266,15 +266,15 @@ class _CardioPageState extends State<CardioPage> {
                           selector: (context, settings) =>
                               settings.value.shortDateFormat,
                           builder: (context, value, child) {
-                            if (endDate == null) return Text(value);
+                            if (end == null) return Text(value);
 
                             return Text(
-                              DateFormat(value).format(endDate!),
+                              DateFormat(value).format(end!),
                             );
                           },
                         ),
                         onLongPress: () => setState(() {
-                          endDate = null;
+                          end = null;
                         }),
                         trailing: const Icon(Icons.calendar_today),
                         onTap: () => _selectEnd(),
@@ -347,33 +347,33 @@ class _CardioPageState extends State<CardioPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      tabController = DefaultTabController.of(context);
-      tabController?.addListener(tabListener);
+      ctrl = DefaultTabController.of(context);
+      ctrl?.addListener(tabListener);
     });
   }
 
   void tabListener() {
     final settings = context.read<SettingsState>().value;
-    final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-    if (tabController!.indexIsChanging == true) return;
-    if (tabController!.index != graphsIndex) return;
+    final index = settings.tabs.split(',').indexOf('GraphsPage');
+    if (ctrl!.indexIsChanging == true) return;
+    if (ctrl!.index != index) return;
     setData();
   }
 
   @override
   void dispose() {
-    tabController?.removeListener(tabListener);
+    ctrl?.removeListener(tabListener);
     super.dispose();
   }
 
   void setData() async {
     final cardio = await getCardioData(
-      endDate: endDate,
+      end: end,
       period: period,
       metric: metric,
       name: widget.name,
-      startDate: startDate,
-      targetUnit: targetUnit,
+      start: start,
+      target: target,
     );
 
     if (!mounted) return;
@@ -383,31 +383,31 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   Future<void> _selectEnd() async {
-    final DateTime? pickedDate = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: endDate,
+      initialDate: end,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate == null) return;
+    if (picked == null) return;
     setState(() {
-      endDate = pickedDate;
+      end = picked;
     });
     setData();
   }
 
   Future<void> _selectStart() async {
-    final DateTime? pickedDate = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: startDate,
+      initialDate: start,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate == null) return;
+    if (picked == null) return;
     setState(() {
-      startDate = pickedDate;
+      start = picked;
     });
     setData();
   }

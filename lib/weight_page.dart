@@ -22,7 +22,7 @@ class _WeightPageState extends State<WeightPage> {
   String prev = "";
   String? unit;
   String? image;
-  final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
 
   void pick() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -38,7 +38,7 @@ class _WeightPageState extends State<WeightPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Enter Weight')),
       body: Form(
-        key: formKey,
+        key: key,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: ListView(
@@ -117,7 +117,7 @@ class _WeightPageState extends State<WeightPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          if (!formKey.currentState!.validate()) return;
+          if (!key.currentState!.validate()) return;
 
           final settings = context.read<SettingsState>().value;
           Navigator.pop(context);

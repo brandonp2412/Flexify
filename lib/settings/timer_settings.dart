@@ -12,8 +12,8 @@ import 'package:provider/provider.dart';
 List<Widget> getTimerSettings(
   String term,
   Setting settings,
-  TextEditingController minutesController,
-  TextEditingController secondsController,
+  TextEditingController minCtrl,
+  TextEditingController secCtrl,
   AudioPlayer player,
 ) {
   return [
@@ -29,9 +29,9 @@ List<Widget> getTimerSettings(
                   decoration: const InputDecoration(
                     labelText: 'Rest minutes',
                   ),
-                  controller: minutesController,
+                  controller: minCtrl,
                   keyboardType: TextInputType.number,
-                  onTap: () => selectAll(minutesController),
+                  onTap: () => selectAll(minCtrl),
                   onChanged: (value) => db.settings.update().write(
                         SettingsCompanion(
                           timerDuration: Value(
@@ -55,9 +55,9 @@ List<Widget> getTimerSettings(
                   decoration: const InputDecoration(
                     labelText: 'seconds',
                   ),
-                  controller: secondsController,
+                  controller: secCtrl,
                   keyboardType: TextInputType.number,
-                  onTap: () => selectAll(secondsController),
+                  onTap: () => selectAll(secCtrl),
                   onChanged: (value) => db.settings.update().write(
                         SettingsCompanion(
                           timerDuration: Value(
@@ -215,12 +215,12 @@ class TimerSettings extends StatefulWidget {
 
 class _TimerSettingsState extends State<TimerSettings> {
   late SettingsState settings = context.read<SettingsState>();
-  late final minutesController = TextEditingController(
+  late final minCtrl = TextEditingController(
     text: (Duration(milliseconds: settings.value.timerDuration))
         .inMinutes
         .toString(),
   );
-  late final secondsController = TextEditingController(
+  late final secCtrl = TextEditingController(
     text:
         ((Duration(milliseconds: settings.value.timerDuration)).inSeconds % 60)
             .toString(),
@@ -255,8 +255,8 @@ class _TimerSettingsState extends State<TimerSettings> {
             ? getTimerSettings(
                 '',
                 settings.value,
-                minutesController,
-                secondsController,
+                minCtrl,
+                secCtrl,
                 player!,
               )
             : [
@@ -273,8 +273,8 @@ class _TimerSettingsState extends State<TimerSettings> {
   void dispose() {
     super.dispose();
 
-    minutesController.dispose();
-    secondsController.dispose();
+    minCtrl.dispose();
+    secCtrl.dispose();
     player?.stop();
     player?.dispose();
   }

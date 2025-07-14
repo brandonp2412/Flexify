@@ -36,9 +36,9 @@ Future<List<CardioData>> getCardioData({
   Period period = Period.day,
   String name = "",
   CardioMetric metric = CardioMetric.pace,
-  String targetUnit = "km",
-  DateTime? startDate,
-  DateTime? endDate,
+  String target = "km",
+  DateTime? start,
+  DateTime? end,
 }) async {
   Expression<String> col = getCreated(period);
 
@@ -55,11 +55,11 @@ Future<List<CardioData>> getCardioData({
         ..where(db.gymSets.name.equals(name))
         ..where(db.gymSets.hidden.equals(false))
         ..where(
-          db.gymSets.created.isBiggerOrEqualValue(startDate ?? DateTime(0)),
+          db.gymSets.created.isBiggerOrEqualValue(start ?? DateTime(0)),
         )
         ..where(
           db.gymSets.created.isSmallerThanValue(
-            endDate ?? DateTime.now().toLocal().add(const Duration(days: 1)),
+            end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
           ),
         )
         ..orderBy([
@@ -78,17 +78,17 @@ Future<List<CardioData>> getCardioData({
     var value = getCardio(result, metric);
     final unit = result.read(db.gymSets.unit)!;
 
-    if (unit == 'km' && targetUnit == 'mi') {
+    if (unit == 'km' && target == 'mi') {
       value /= 1.609;
-    } else if (unit == 'mi' && targetUnit == 'km') {
+    } else if (unit == 'mi' && target == 'km') {
       value *= 1.609;
-    } else if (unit == 'm' && targetUnit == 'km') {
+    } else if (unit == 'm' && target == 'km') {
       value /= 1000;
-    } else if (unit == 'km' && targetUnit == 'm') {
+    } else if (unit == 'km' && target == 'm') {
       value *= 1000;
-    } else if (unit == 'm' && targetUnit == 'mi') {
+    } else if (unit == 'm' && target == 'mi') {
       value /= 1609.34;
-    } else if (unit == 'mi' && targetUnit == 'm') {
+    } else if (unit == 'mi' && target == 'm') {
       value *= 1609.34;
     }
 
@@ -96,7 +96,7 @@ Future<List<CardioData>> getCardioData({
       CardioData(
         created: result.read(db.gymSets.created)!.toLocal(),
         value: double.parse(value.toStringAsFixed(2)),
-        unit: targetUnit,
+        unit: target,
       ),
     );
   }
@@ -227,12 +227,12 @@ double getStrength(TypedResult row, StrengthMetric metric) {
 }
 
 Future<List<StrengthData>> getStrengthData({
-  required String targetUnit,
+  required String target,
   required String name,
   required StrengthMetric metric,
   required Period period,
-  required DateTime? startDate,
-  required DateTime? endDate,
+  required DateTime? start,
+  required DateTime? end,
   required int limit,
 }) async {
   Expression<String> col = getCreated(period);
@@ -259,15 +259,15 @@ Future<List<StrengthData>> getStrengthData({
     ..limit(limit)
     ..groupBy([col]));
 
-  if (startDate != null)
+  if (start != null)
     query = query
       ..where(
-        db.gymSets.created.isBiggerOrEqualValue(startDate),
+        db.gymSets.created.isBiggerOrEqualValue(start),
       );
-  if (endDate != null)
+  if (end != null)
     query = query
       ..where(
-        db.gymSets.created.isSmallerThanValue(endDate),
+        db.gymSets.created.isSmallerThanValue(end),
       );
 
   final results = await query.get();
@@ -277,9 +277,9 @@ Future<List<StrengthData>> getStrengthData({
     final unit = result.read(db.gymSets.unit)!;
     var value = getStrength(result, metric);
 
-    if (unit == 'lb' && targetUnit == 'kg') {
+    if (unit == 'lb' && target == 'kg') {
       value *= 0.45359237;
-    } else if (unit == 'kg' && targetUnit == 'lb') {
+    } else if (unit == 'kg' && target == 'lb') {
       value *= 2.20462262;
     }
 
@@ -311,11 +311,11 @@ Future<List<String?>> getCategories() {
 }
 
 Future<List<StrengthData>> getGlobalData({
-  required String targetUnit,
+  required String target,
   required StrengthMetric metric,
   required Period period,
-  required DateTime? startDate,
-  required DateTime? endDate,
+  required DateTime? start,
+  required DateTime? end,
   required int limit,
 }) async {
   Expression<String> col = getCreated(period);
@@ -342,15 +342,15 @@ Future<List<StrengthData>> getGlobalData({
     ..limit(limit)
     ..groupBy([db.gymSets.category, col]));
 
-  if (startDate != null)
+  if (start != null)
     query = query
       ..where(
-        db.gymSets.created.isBiggerOrEqualValue(startDate),
+        db.gymSets.created.isBiggerOrEqualValue(start),
       );
-  if (endDate != null)
+  if (end != null)
     query = query
       ..where(
-        db.gymSets.created.isSmallerThanValue(endDate),
+        db.gymSets.created.isSmallerThanValue(end),
       );
 
   final results = await query.get();
@@ -360,9 +360,9 @@ Future<List<StrengthData>> getGlobalData({
     final unit = result.read(db.gymSets.unit)!;
     var value = getStrength(result, metric);
 
-    if (unit == 'lb' && targetUnit == 'kg') {
+    if (unit == 'lb' && target == 'kg') {
       value *= 0.45359237;
-    } else if (unit == 'kg' && targetUnit == 'lb') {
+    } else if (unit == 'kg' && target == 'lb') {
       value *= 2.20462262;
     }
 

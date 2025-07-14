@@ -126,7 +126,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
 
         final isNewTimer = lastDuration != duration ||
             (lastTimestamp != null &&
-                timerState.timer.timeStamp
+                timerState.timer.stamp
                         .difference(lastTimestamp!)
                         .inSeconds
                         .abs() >
@@ -134,7 +134,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
 
         if (isNewTimer) {
           lastDuration = duration;
-          lastTimestamp = timerState.timer.timeStamp;
+          lastTimestamp = timerState.timer.stamp;
           animationKey = GlobalKey();
         }
 

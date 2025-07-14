@@ -73,12 +73,12 @@ class GraphTile extends StatelessWidget {
 
         if (gymSet.cardio.value) {
           final data = await getCardioData(
-            targetUnit: gymSet.unit.value,
+            target: gymSet.unit.value,
             name: gymSet.name.value,
             metric: CardioMetric.pace,
             period: Period.day,
-            startDate: null,
-            endDate: null,
+            start: null,
+            end: null,
           );
           if (!context.mounted) return;
           Navigator.push(
@@ -95,12 +95,12 @@ class GraphTile extends StatelessWidget {
         }
 
         final data = await getStrengthData(
-          targetUnit: gymSet.unit.value,
+          target: gymSet.unit.value,
           name: gymSet.name.value,
           metric: StrengthMetric.bestWeight,
           period: Period.day,
-          startDate: null,
-          endDate: null,
+          start: null,
+          end: null,
           limit: 21,
         );
         if (!context.mounted) return;

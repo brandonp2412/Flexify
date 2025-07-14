@@ -21,10 +21,10 @@ class GraphHistoryPage extends StatefulWidget {
 }
 
 class _GraphHistoryPageState extends State<GraphHistoryPage> {
-  late List<GymSet> gymSets = widget.gymSets;
+  late List<GymSet> sets = widget.gymSets;
   int limit = 20;
   final scroll = ScrollController();
-  TabController? tabController;
+  TabController? ctrl;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
       ),
       body: Builder(
         builder: (context) {
-          if (gymSets.isEmpty)
+          if (sets.isEmpty)
             return ListTile(
               title: Text("No data yet for ${widget.name}"),
               subtitle: const Text("Enter some data to view graphs here"),
@@ -42,14 +42,14 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
 
           return HistoryList(
             scroll: scroll,
-            gymSets: gymSets,
+            sets: sets,
             onSelect: (_) {},
             selected: const {},
             onNext: () {
               setState(() {
                 limit += 10;
               });
-              setGymSets();
+              setSets();
             },
           );
         },
@@ -59,7 +59,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
 
   @override
   void dispose() {
-    tabController?.removeListener(tabListener);
+    ctrl?.removeListener(tabListener);
     super.dispose();
   }
 
@@ -68,13 +68,13 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      tabController = DefaultTabController.of(context);
-      tabController?.addListener(tabListener);
+      ctrl = DefaultTabController.of(context);
+      ctrl?.addListener(tabListener);
     });
   }
 
-  void setGymSets() async {
-    final newGymSets = await (db.gymSets.select()
+  void setSets() async {
+    final result = await (db.gymSets.select()
           ..orderBy(
             [
               (u) => OrderingTerm(
@@ -88,15 +88,15 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           ..limit(limit))
         .get();
     setState(() {
-      gymSets = newGymSets;
+      sets = result;
     });
   }
 
   void tabListener() {
     final settings = context.read<SettingsState>().value;
-    final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-    if (tabController!.indexIsChanging == true) return;
-    if (tabController!.index != graphsIndex) return;
-    setGymSets();
+    final index = settings.tabs.split(',').indexOf('GraphsPage');
+    if (ctrl!.indexIsChanging == true) return;
+    if (ctrl!.index != index) return;
+    setSets();
   }
 }

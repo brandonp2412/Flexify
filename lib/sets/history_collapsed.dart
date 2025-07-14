@@ -10,14 +10,14 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HistoryCollapsed extends StatefulWidget {
-  final List<HistoryDay> historyDays;
+  final List<HistoryDay> days;
   final ScrollController scroll;
   final Function(int) onSelect;
   final Set<int> selected;
   final Function onNext;
   const HistoryCollapsed({
     super.key,
-    required this.historyDays,
+    required this.days,
     required this.onSelect,
     required this.selected,
     required this.onNext,
@@ -37,21 +37,20 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return ListView.builder(
-      itemCount: widget.historyDays.length,
+      itemCount: widget.days.length,
       padding: const EdgeInsets.only(bottom: 76),
       controller: widget.scroll,
       itemBuilder: (context, index) {
-        final history = widget.historyDays[index];
-        final previousHistory =
-            index > 0 ? widget.historyDays[index - 1] : null;
+        final history = widget.days[index];
+        final prev = index > 0 ? widget.days[index - 1] : null;
 
-        final bool showDivider = previousHistory != null &&
-            !isSameDay(history.day, previousHistory.day);
+        final bool showDivider =
+            prev != null && !isSameDay(history.day, prev.day);
 
         return Column(
           children: historyChildren(
             showDivider,
-            previousHistory,
+            prev,
             history,
             context,
             showImages,
@@ -69,7 +68,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
 
   List<Widget> historyChildren(
     bool showDivider,
-    HistoryDay? previousHistory,
+    HistoryDay? prev,
     HistoryDay history,
     BuildContext context,
     bool showImages,
@@ -84,7 +83,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             Selector<SettingsState, String>(
               selector: (context, settings) => settings.value.shortDateFormat,
               builder: (context, value, child) => Text(
-                DateFormat(value).format(previousHistory!.day),
+                DateFormat(value).format(prev!.day),
               ),
             ),
             const SizedBox(width: 4),

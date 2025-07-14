@@ -23,13 +23,13 @@ class EditPlanPage extends StatefulWidget {
 }
 
 class _EditPlanPageState extends State<EditPlanPage> {
-  late List<bool> daySwitches;
+  late List<bool> days;
   late var exercises = context.read<PlanState>().exercises;
 
   bool showOff = true;
   String search = '';
 
-  final searchNode = FocusNode();
+  final node = FocusNode();
   final searchCtrl = TextEditingController();
   final titleCtrl = TextEditingController();
 
@@ -115,7 +115,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             const SizedBox(
               height: 16.0,
             ),
-            DaySelector(daySwitches: daySwitches),
+            DaySelector(daySwitches: days),
             const SizedBox(height: 8),
             material.Padding(
               padding: const EdgeInsets.all(8.0),
@@ -160,7 +160,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   void dispose() {
-    searchNode.dispose();
+    node.dispose();
     searchCtrl.dispose();
     titleCtrl.dispose();
     super.dispose();
@@ -172,22 +172,22 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     titleCtrl.text = widget.plan.title.value ?? "";
     final list = widget.plan.days.value.split(',');
-    daySwitches = weekdays.map((day) => list.contains(day)).toList();
+    days = weekdays.map((day) => list.contains(day)).toList();
   }
 
   Future<void> save() async {
-    final days = [];
-    for (int i = 0; i < daySwitches.length; i++)
-      if (daySwitches[i]) days.add(weekdays[i]);
+    final selected = [];
+    for (int i = 0; i < days.length; i++)
+      if (days[i]) selected.add(weekdays[i]);
 
-    if (days.isEmpty && titleCtrl.text.isEmpty)
+    if (selected.isEmpty && titleCtrl.text.isEmpty)
       return toast(context, 'Select days');
 
     if (exercises.where((exercise) => exercise.enabled.value).isEmpty)
       return toast(context, 'Select exercises');
 
     var newPlan = PlansCompanion.insert(
-      days: days.join(','),
+      days: selected.join(','),
       exercises: exercises
           .where((element) => element.enabled.value)
           .map((element) => element.exercise.value)

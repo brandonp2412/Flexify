@@ -10,7 +10,7 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final packageInfo = PackageInfo.fromPlatform();
+    final info = PackageInfo.fromPlatform();
     return Scaffold(
       appBar: AppBar(
         title: const Text("About"),
@@ -28,7 +28,7 @@ class AboutPage extends StatelessWidget {
             title: const Text("Donate"),
             leading: const Icon(Icons.favorite_outline),
             subtitle: FutureBuilder(
-              future: packageInfo,
+              future: info,
               builder: (context, snapshot) =>
                   const Text("Help support this project"),
             ),
@@ -50,7 +50,7 @@ class AboutPage extends StatelessWidget {
             leading: const Icon(Icons.info_outline),
             title: const Text("Version"),
             subtitle: FutureBuilder(
-              future: packageInfo,
+              future: info,
               builder: (context, snapshot) =>
                   Text(snapshot.data?.version ?? "1.0.0"),
             ),
@@ -63,7 +63,7 @@ class AboutPage extends StatelessWidget {
             title: const Text("Author"),
             leading: const Icon(Icons.person),
             subtitle: FutureBuilder(
-              future: packageInfo,
+              future: info,
               builder: (context, snapshot) => const Text("Brandon Presley"),
             ),
             onTap: () async {
@@ -75,7 +75,7 @@ class AboutPage extends StatelessWidget {
             title: const Text("License"),
             leading: const Icon(Icons.balance),
             subtitle: FutureBuilder(
-              future: packageInfo,
+              future: info,
               builder: (context, snapshot) => const Text("MIT"),
             ),
             onTap: () async {
@@ -88,7 +88,7 @@ class AboutPage extends StatelessWidget {
             title: const Text("Source code"),
             leading: const Icon(Icons.code),
             subtitle: FutureBuilder(
-              future: packageInfo,
+              future: info,
               builder: (context, snapshot) =>
                   const Text("Check it out on GitHub"),
             ),

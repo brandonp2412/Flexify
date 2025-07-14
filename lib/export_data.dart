@@ -30,7 +30,7 @@ class ExportData extends StatelessWidget {
                     Navigator.pop(context);
                     if (!await requestNotificationPermission()) return;
                     final gymSets = await db.gymSets.select().get();
-                    final List<List<dynamic>> csvData = [
+                    final List<List<dynamic>> data = [
                       [
                         'id',
                         'name',
@@ -47,7 +47,7 @@ class ExportData extends StatelessWidget {
                       ]
                     ];
                     for (var gymSet in gymSets) {
-                      csvData.add([
+                      data.add([
                         gymSet.id,
                         gymSet.name,
                         gymSet.reps,
@@ -63,7 +63,7 @@ class ExportData extends StatelessWidget {
                       ]);
                     }
                     final csv =
-                        const ListToCsvConverter(eol: "\n").convert(csvData);
+                        const ListToCsvConverter(eol: "\n").convert(data);
                     final bytes = Uint8List.fromList(csv.codeUnits);
                     await FilePicker.platform.saveFile(
                       fileName: 'graphs.csv',
@@ -77,11 +77,11 @@ class ExportData extends StatelessWidget {
                   onTap: () async {
                     Navigator.pop(context);
                     final plans = await db.plans.select().get();
-                    final List<List<dynamic>> csvData = [
+                    final List<List<dynamic>> data = [
                       ['id', 'days', 'exercises', 'title', 'sequence'],
                     ];
                     for (var plan in plans) {
-                      csvData.add([
+                      data.add([
                         plan.id,
                         plan.days,
                         plan.exercises,
@@ -93,7 +93,7 @@ class ExportData extends StatelessWidget {
                     if (!await requestNotificationPermission()) return;
 
                     final csv =
-                        const ListToCsvConverter(eol: "\n").convert(csvData);
+                        const ListToCsvConverter(eol: "\n").convert(data);
                     final bytes = Uint8List.fromList(csv.codeUnits);
                     await FilePicker.platform.saveFile(
                       fileName: 'plans.csv',

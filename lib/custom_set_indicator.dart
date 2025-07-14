@@ -11,9 +11,9 @@ class CustomSetIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [];
+    List<Widget> items = [];
     for (int i = 0; i < max; i++) {
-      children.add(
+      items.add(
         Expanded(
           child: Container(
             decoration: BoxDecoration(
@@ -37,9 +37,9 @@ class CustomSetIndicator extends StatelessWidget {
         ),
       );
       if (i < max - 1) {
-        children.add(const SizedBox(width: 6));
+        items.add(const SizedBox(width: 6));
       }
     }
-    return Row(children: children);
+    return Row(children: items);
   }
 }

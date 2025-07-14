@@ -6,10 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Filters extends StatefulWidget {
-  final TextEditingController repsGtController;
-  final TextEditingController repsLtController;
-  final TextEditingController weightGtController;
-  final TextEditingController weightLtController;
+  final TextEditingController repsGtCtrl;
+  final TextEditingController repsLtCtrl;
+  final TextEditingController weightGtCtrl;
+  final TextEditingController weightLtCtrl;
   final String? category;
   final Function(String?) setCategory;
   final DateTime? startDate;
@@ -20,10 +20,10 @@ class Filters extends StatefulWidget {
 
   const Filters({
     super.key,
-    required this.repsGtController,
-    required this.repsLtController,
-    required this.weightGtController,
-    required this.weightLtController,
+    required this.repsGtCtrl,
+    required this.repsLtCtrl,
+    required this.weightGtCtrl,
+    required this.weightLtCtrl,
     required this.setStart,
     required this.setEnd,
     required this.setStream,
@@ -42,24 +42,24 @@ class _FiltersState extends State<Filters> {
       (widget.startDate != null ? 1 : 0) +
       (widget.endDate != null ? 1 : 0) +
       (widget.category != null ? 1 : 0) +
-      (widget.weightGtController.text.isNotEmpty ? 1 : 0) +
-      (widget.weightLtController.text.isNotEmpty ? 1 : 0) +
-      (widget.repsLtController.text.isNotEmpty ? 1 : 0) +
-      (widget.repsGtController.text.isNotEmpty ? 1 : 0);
+      (widget.weightGtCtrl.text.isNotEmpty ? 1 : 0) +
+      (widget.weightLtCtrl.text.isNotEmpty ? 1 : 0) +
+      (widget.repsLtCtrl.text.isNotEmpty ? 1 : 0) +
+      (widget.repsGtCtrl.text.isNotEmpty ? 1 : 0);
 
   @override
   Widget build(BuildContext context) {
     String? reps;
-    if (widget.repsGtController.text.isNotEmpty)
-      reps = '> ${widget.repsGtController.text} ';
-    if (widget.repsLtController.text.isNotEmpty)
-      reps = '${reps ?? ''}< ${widget.repsLtController.text}';
+    if (widget.repsGtCtrl.text.isNotEmpty)
+      reps = '> ${widget.repsGtCtrl.text} ';
+    if (widget.repsLtCtrl.text.isNotEmpty)
+      reps = '${reps ?? ''}< ${widget.repsLtCtrl.text}';
 
     String? weight;
-    if (widget.weightGtController.text.isNotEmpty)
-      weight = '> ${widget.weightGtController.text} ';
-    if (widget.weightLtController.text.isNotEmpty)
-      weight = '${weight ?? ''}< ${widget.weightLtController.text}';
+    if (widget.weightGtCtrl.text.isNotEmpty)
+      weight = '> ${widget.weightGtCtrl.text} ';
+    if (widget.weightLtCtrl.text.isNotEmpty)
+      weight = '${weight ?? ''}< ${widget.weightLtCtrl.text}';
 
     return Badge.count(
       count: filtersCount,
@@ -104,7 +104,7 @@ class _FiltersState extends State<Filters> {
                             children: [
                               TextField(
                                 onChanged: (value) => widget.setStream(),
-                                controller: widget.repsGtController,
+                                controller: widget.repsGtCtrl,
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
@@ -114,7 +114,7 @@ class _FiltersState extends State<Filters> {
                               ),
                               TextField(
                                 onChanged: (value) => widget.setStream(),
-                                controller: widget.repsLtController,
+                                controller: widget.repsLtCtrl,
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
@@ -129,8 +129,8 @@ class _FiltersState extends State<Filters> {
                           TextButton(
                             child: const Text('Clear'),
                             onPressed: () async {
-                              widget.repsGtController.text = '';
-                              widget.repsLtController.text = '';
+                              widget.repsGtCtrl.text = '';
+                              widget.repsLtCtrl.text = '';
                               widget.setStream();
                               Navigator.pop(context);
                             },
@@ -163,7 +163,7 @@ class _FiltersState extends State<Filters> {
                             children: [
                               TextField(
                                 onChanged: (value) => widget.setStream(),
-                                controller: widget.weightGtController,
+                                controller: widget.weightGtCtrl,
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
@@ -173,7 +173,7 @@ class _FiltersState extends State<Filters> {
                               ),
                               TextField(
                                 onChanged: (value) => widget.setStream(),
-                                controller: widget.weightLtController,
+                                controller: widget.weightLtCtrl,
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
@@ -188,8 +188,8 @@ class _FiltersState extends State<Filters> {
                           TextButton(
                             child: const Text('Clear'),
                             onPressed: () async {
-                              widget.weightGtController.text = '';
-                              widget.weightLtController.text = '';
+                              widget.weightGtCtrl.text = '';
+                              widget.weightLtCtrl.text = '';
                               widget.setStream();
                               Navigator.pop(context);
                             },
@@ -272,10 +272,10 @@ class _FiltersState extends State<Filters> {
                   leading: const Icon(Icons.clear),
                   title: const Text("Clear"),
                   onTap: () async {
-                    widget.repsGtController.text = '';
-                    widget.repsLtController.text = '';
-                    widget.weightGtController.text = '';
-                    widget.weightLtController.text = '';
+                    widget.repsGtCtrl.text = '';
+                    widget.repsLtCtrl.text = '';
+                    widget.weightGtCtrl.text = '';
+                    widget.weightLtCtrl.text = '';
                     widget.setStart(null);
                     widget.setEnd(null);
                     widget.setCategory(null);

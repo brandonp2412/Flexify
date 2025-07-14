@@ -31,8 +31,8 @@ class ExerciseModal extends StatefulWidget {
 }
 
 class _ExerciseModalState extends State<ExerciseModal> {
-  final maxSets = TextEditingController();
-  final warmupSets = TextEditingController();
+  final max = TextEditingController();
+  final warmup = TextEditingController();
   bool timers = true;
 
   @override
@@ -47,8 +47,8 @@ class _ExerciseModalState extends State<ExerciseModal> {
           ))
         .getSingle()
         .then((planExercise) {
-      maxSets.text = planExercise.maxSets?.toString() ?? '';
-      warmupSets.text = planExercise.warmupSets?.toString() ?? '';
+      max.text = planExercise.maxSets?.toString() ?? '';
+      warmup.text = planExercise.warmupSets?.toString() ?? '';
 
       setState(() {
         timers = planExercise.timers;
@@ -78,11 +78,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           selector: (context, settings) =>
                               settings.value.warmupSets,
                           builder: (context, value, child) => TextField(
-                            controller: warmupSets,
+                            controller: warmup,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(warmupSets),
+                            onTap: () => selectAll(warmup),
                             onChanged: changeWarmup,
                             decoration: InputDecoration(
                               labelText: "Warmup sets",
@@ -96,11 +96,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           selector: (context, settings) =>
                               settings.value.maxSets,
                           builder: (context, value, child) => TextField(
-                            controller: maxSets,
+                            controller: max,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(maxSets),
+                            onTap: () => selectAll(max),
                             onChanged: changeMax,
                             decoration: InputDecoration(
                               labelText: "Working sets (max: 20)",
@@ -209,7 +209,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
   }
 
   void changeMax(value) {
-    if (int.parse(maxSets.text) > 0 && int.parse(maxSets.text) <= 20) {
+    if (int.parse(max.text) > 0 && int.parse(max.text) <= 20) {
       (db.planExercises.update()
             ..where(
               (u) =>
@@ -218,7 +218,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
             ))
           .write(
         PlanExercisesCompanion(
-          maxSets: Value(int.tryParse(maxSets.text)),
+          maxSets: Value(int.tryParse(max.text)),
         ),
       );
       widget.onMax();
@@ -234,7 +234,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
           ))
         .write(
       PlanExercisesCompanion(
-        warmupSets: Value(int.tryParse(warmupSets.text)),
+        warmupSets: Value(int.tryParse(warmup.text)),
       ),
     );
   }

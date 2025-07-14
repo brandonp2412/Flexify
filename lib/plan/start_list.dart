@@ -68,9 +68,9 @@ class _StartListState extends State<StartList> {
 
   @override
   Widget build(BuildContext context) {
-    final maxSets = context
+    final max = context
         .select<SettingsState, int>((settings) => settings.value.maxSets);
-    final planTrailing = context.select<SettingsState, PlanTrailing>(
+    final trailing = context.select<SettingsState, PlanTrailing>(
       (settings) => PlanTrailing.values.byName(
         settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
@@ -78,12 +78,12 @@ class _StartListState extends State<StartList> {
     final state = context.watch<PlanState>();
     final counts = state.gymCounts;
 
-    if (planTrailing == PlanTrailing.reorder)
+    if (trailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
         itemCount: widget.exercises.length,
         padding: const EdgeInsets.only(bottom: 76),
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, maxSets, planTrailing, counts),
+            itemBuilder(context, index, max, trailing, counts),
         onReorder: (oldIndex, newIndex) async {
           if (oldIndex < newIndex) {
             newIndex--;
@@ -105,7 +105,7 @@ class _StartListState extends State<StartList> {
         padding: const EdgeInsets.only(bottom: 76),
         itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, maxSets, planTrailing, counts),
+            itemBuilder(context, index, max, trailing, counts),
       );
   }
 
@@ -113,7 +113,7 @@ class _StartListState extends State<StartList> {
     BuildContext context,
     int index,
     int maxSets,
-    PlanTrailing planTrailing,
+    PlanTrailing trailing,
     List<GymCount> counts,
   ) {
     final exercise = widget.exercises[index];
@@ -126,10 +126,10 @@ class _StartListState extends State<StartList> {
       max = counts[idx].maxSets ?? maxSets;
     }
 
-    Widget trailing = const SizedBox();
-    switch (planTrailing) {
+    Widget trail = const SizedBox();
+    switch (trailing) {
       case PlanTrailing.reorder:
-        trailing = ReorderableDragStartListener(
+        trail = ReorderableDragStartListener(
           index: index,
           child: const Icon(
             Icons.drag_handle,
@@ -139,28 +139,28 @@ class _StartListState extends State<StartList> {
         break;
 
       case PlanTrailing.ratio:
-        trailing = Text(
+        trail = Text(
           "$count / $max",
           style: const TextStyle(fontSize: 16),
         );
         break;
 
       case PlanTrailing.count:
-        trailing = Text(
+        trail = Text(
           count.toString(),
           style: const TextStyle(fontSize: 16),
         );
         break;
 
       case PlanTrailing.percent:
-        trailing = Text(
+        trail = Text(
           "${(count / max * 100).toStringAsFixed(2)}%",
           style: const TextStyle(fontSize: 16),
         );
         break;
 
       case PlanTrailing.none:
-        trailing = const SizedBox();
+        trail = const SizedBox();
         break;
     }
 
@@ -186,7 +186,7 @@ class _StartListState extends State<StartList> {
         children: [
           ListTile(
             onTap: () => tap(index),
-            trailing: trailing,
+            trailing: trail,
             title: Row(
               children: [
                 Radio(

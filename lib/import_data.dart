@@ -14,11 +14,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class ImportData extends StatelessWidget {
-  final BuildContext pageContext;
+  final BuildContext ctx;
 
   const ImportData({
     super.key,
-    required this.pageContext,
+    required this.ctx,
   });
 
   @override
@@ -67,11 +67,11 @@ class ImportData extends StatelessWidget {
     db = AppDatabase();
     await (db.settings.update())
         .write(const SettingsCompanion(alarmSound: Value('')));
-    if (!pageContext.mounted) return;
-    final settingsState = pageContext.read<SettingsState>();
+    if (!ctx.mounted) return;
+    final settingsState = ctx.read<SettingsState>();
     await settingsState.init();
-    if (!pageContext.mounted) return;
-    Navigator.pushNamedAndRemoveUntil(pageContext, '/', (_) => false);
+    if (!ctx.mounted) return;
+    Navigator.pushNamedAndRemoveUntil(ctx, '/', (_) => false);
   }
 
   importGraphs(BuildContext context) async {
@@ -151,8 +151,8 @@ class ImportData extends StatelessWidget {
       (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
           .write(GymSetsCompanion(bodyWeight: Value(weightSet.weight)));
 
-    if (!pageContext.mounted) return;
-    Navigator.pop(pageContext);
+    if (!ctx.mounted) return;
+    Navigator.pop(ctx);
   }
 
   importPlans(BuildContext context) async {
@@ -181,8 +181,8 @@ class ImportData extends StatelessWidget {
 
     await db.plans.deleteAll();
     await db.plans.insertAll(plans);
-    if (!pageContext.mounted) return;
-    pageContext.read<PlanState>().updatePlans(null);
-    Navigator.pop(pageContext);
+    if (!ctx.mounted) return;
+    ctx.read<PlanState>().updatePlans(null);
+    Navigator.pop(ctx);
   }
 }

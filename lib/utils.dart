@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void toast(BuildContext context, String message, [SnackBarAction? action]) {
-  final defaultAction = SnackBarAction(label: 'OK', onPressed: () {});
+  final def = SnackBarAction(label: 'OK', onPressed: () {});
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -16,20 +16,20 @@ void toast(BuildContext context, String message, [SnackBarAction? action]) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
       ),
-      action: action ?? defaultAction,
+      action: action ?? def,
     ),
   );
 }
 
 Future<GymSet?> getBodyWeight() async {
-  final weightSet = await (db.gymSets.select()
+  final set = await (db.gymSets.select()
         ..where((tbl) => tbl.name.equals('Weight'))
         ..orderBy(
           [(u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc)],
         )
         ..limit(1))
       .getSingleOrNull();
-  return weightSet;
+  return set;
 }
 
 bool isSameDay(DateTime date1, DateTime date2) {
@@ -39,16 +39,16 @@ bool isSameDay(DateTime date1, DateTime date2) {
 }
 
 DateTime parseDate(String dateString) {
-  List<String> formats = [
+  List<String> fmts = [
     'dd.MM.yyyy',
     'yyyy-MM-ddTHH:mm',
     'yyyy-MM-ddTHH:mm:ss.SSS',
     'yyyy-MM-ddTHH:mm:ss',
   ];
 
-  for (String format in formats) {
+  for (String fmt in fmts) {
     try {
-      return DateFormat(format).parse(dateString.replaceAll('Z', ''));
+      return DateFormat(fmt).parse(dateString.replaceAll('Z', ''));
     } catch (_) {}
   }
 
@@ -69,8 +69,8 @@ void selectAll(TextEditingController controller) => controller.selection =
     TextSelection(baseOffset: 0, extentOffset: controller.text.length);
 
 String toString(double value) {
-  final string = value.toStringAsFixed(2);
-  if (string.endsWith('.0')) return string.substring(0, string.length - 2);
-  if (string.endsWith('.00')) return string.substring(0, string.length - 3);
-  return string;
+  final str = value.toStringAsFixed(2);
+  if (str.endsWith('.0')) return str.substring(0, str.length - 2);
+  if (str.endsWith('.00')) return str.substring(0, str.length - 3);
+  return str;
 }

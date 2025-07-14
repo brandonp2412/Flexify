@@ -36,7 +36,7 @@ class FailedMigrationsPage extends StatelessWidget {
               ),
               SizedBox(height: 16),
               ExportData(),
-              DeleteRecordsButton(pageContext: context),
+              DeleteRecordsButton(ctx: context),
               TextButton.icon(
                 onPressed: () async {
                   final url = Uri(

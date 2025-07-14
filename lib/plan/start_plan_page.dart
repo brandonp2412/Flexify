@@ -36,9 +36,9 @@ class _StartPlanPageState extends State<StartPlanPage>
   final minutes = TextEditingController(text: "0.0");
   final seconds = TextEditingController(text: "0.0");
   final incline = TextEditingController(text: "0");
-  final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
 
-  int selectedIndex = 0;
+  int selected = 0;
   bool cardio = false;
   DateTime? lastSaved;
   List<Rpm>? rpms;
@@ -55,7 +55,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     state = context.watch<PlanState>();
-    final timerState = context.read<TimerState>();
+    final timer = context.read<TimerState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -87,17 +87,17 @@ class _StartPlanPageState extends State<StartPlanPage>
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
-          key: formKey,
+          key: key,
           child: material.Column(
             children: [
-              if (!cardio) ..._buildStrengthFields(timerState),
-              if (cardio) ..._buildCardioFields(timerState),
+              if (!cardio) ..._buildStrengthFields(timer),
+              if (cardio) ..._buildCardioFields(timer),
               _buildUnitSelector(),
               _buildNotesField(),
               Expanded(
                 child: StartList(
                   exercises: exercises,
-                  selected: selectedIndex,
+                  selected: selected,
                   onSelect: select,
                   plan: widget.plan,
                   onMax: () {
@@ -111,14 +111,14 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async => await save(timerState),
+        onPressed: () async => await save(timer),
         label: const Text("Save"),
         icon: const Icon(Icons.save),
       ),
     );
   }
 
-  List<Widget> _buildStrengthFields(TimerState timerState) {
+  List<Widget> _buildStrengthFields(TimerState timer) {
     return [
       TextFormField(
         controller: reps,
@@ -151,7 +151,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(weight),
-        onFieldSubmitted: (value) async => await save(timerState),
+        onFieldSubmitted: (value) async => await save(timer),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
           if (double.tryParse(value) == null) return 'Invalid number';
@@ -161,7 +161,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  List<Widget> _buildCardioFields(TimerState timerState) {
+  List<Widget> _buildCardioFields(TimerState timer) {
     return [
       Row(
         children: [
@@ -226,7 +226,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               onTap: () => selectAll(incline),
-              onFieldSubmitted: (value) => save(timerState),
+              onFieldSubmitted: (value) => save(timer),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
                 if (double.tryParse(value) == null) return 'Invalid number';
@@ -285,7 +285,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     } else if (!cardio && settings.repEstimation) {
       final parsedWeight = double.parse(weight.text);
       final closestRpm =
-          rpms!.where((rpm) => rpm.name == exercises[selectedIndex]).reduce(
+          rpms!.where((rpm) => rpm.name == exercises[selected]).reduce(
                 (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
                         (rpm2.weight - parsedWeight).abs()
                     ? rpm1
@@ -388,9 +388,9 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> save(TimerState timerState) async {
-    if (!formKey.currentState!.validate()) return;
+    if (!key.currentState!.validate()) return;
 
-    final exercise = exercises[selectedIndex];
+    final exercise = exercises[selected];
     var bodyWeight = 0.0;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
@@ -450,8 +450,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index != -1) count = counts[index].count;
     count++;
 
-    final finishedPlan = count == (max ?? settings.maxSets) &&
-        selectedIndex == exercises.length - 1;
+    final finishedPlan =
+        count == (max ?? settings.maxSets) && selected == exercises.length - 1;
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
 
@@ -464,8 +464,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       );
     }
 
-    final finishedExercise = count == (max ?? settings.maxSets) &&
-        selectedIndex < exercises.length - 1;
+    final finishedExercise =
+        count == (max ?? settings.maxSets) && selected < exercises.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await state.updateGymCounts(widget.plan.id);
@@ -474,7 +474,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       _updateGymSetTextFields(gymSet);
       lastSaved = DateTime.now();
     });
-    if (finishedExercise) await select(selectedIndex + 1);
+    if (finishedExercise) await select(selected + 1);
 
     if (!settings.notifications) return;
 
@@ -487,7 +487,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> select(int index) async {
-    setState(() => selectedIndex = index);
+    setState(() => selected = index);
     final last = await getLast(exercises[index]);
     if (last == null) return;
 

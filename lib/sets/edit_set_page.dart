@@ -29,16 +29,16 @@ class EditSetPage extends StatefulWidget {
 class _EditSetPageState extends State<EditSetPage> {
   final reps = TextEditingController();
   final weight = TextEditingController();
-  final oneRepMax = TextEditingController();
-  final bodyWeight = TextEditingController();
+  final orm = TextEditingController();
+  final body = TextEditingController();
   final distance = TextEditingController();
   final minutes = TextEditingController();
   final seconds = TextEditingController();
   final incline = TextEditingController();
   final notes = TextEditingController();
   final repsNode = FocusNode();
-  final distanceNode = FocusNode();
-  final formKey = GlobalKey<FormState>();
+  final distNode = FocusNode();
+  final key = GlobalKey<FormState>();
 
   late String unit;
   late DateTime created;
@@ -48,8 +48,8 @@ class _EditSetPageState extends State<EditSetPage> {
   String? image;
   String? category;
 
-  TextEditingController? nameController;
-  List<String> nameOptions = [];
+  TextEditingController? nameCtrl;
+  List<String> options = [];
 
   void onSelected(String option, bool showBodyWeight) async {
     final last = await (db.gymSets.select()
@@ -81,7 +81,7 @@ class _EditSetPageState extends State<EditSetPage> {
     }
 
     if (cardio) {
-      distanceNode.requestFocus();
+      distNode.requestFocus();
       selectAll(distance);
     } else {
       repsNode.requestFocus();
@@ -141,7 +141,7 @@ class _EditSetPageState extends State<EditSetPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: formKey,
+          key: key,
           child: ListView(
             children: [
               autocomplete(showBodyWeight),
@@ -184,7 +184,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 ),
                 if (name != 'Weight')
                   TextField(
-                    controller: oneRepMax,
+                    controller: orm,
                     decoration: const InputDecoration(
                       labelText: 'One rep max (estimate)',
                     ),
@@ -194,7 +194,7 @@ class _EditSetPageState extends State<EditSetPage> {
               if (cardio) ...[
                 TextFormField(
                   controller: distance,
-                  focusNode: distanceNode,
+                  focusNode: distNode,
                   decoration: InputDecoration(
                     labelText:
                         unit == 'kcal' ? 'Amount ($unit)' : 'Distance ($unit)',
@@ -229,14 +229,14 @@ class _EditSetPageState extends State<EditSetPage> {
               Visibility(
                 visible: showBodyWeight && name != 'Weight',
                 child: TextFormField(
-                  controller: bodyWeight,
+                  controller: body,
                   decoration: const InputDecoration(
                     labelText: 'Body weight (during set)',
                   ),
                   keyboardType: TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onTap: () => selectAll(bodyWeight),
+                  onTap: () => selectAll(body),
                   validator: (value) {
                     if (value == null) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -436,13 +436,12 @@ class _EditSetPageState extends State<EditSetPage> {
             .toLowerCase()
             .split(" ")
             .where((term) => term.isNotEmpty);
-        Iterable<String> options = nameOptions;
+        Iterable<String> opts = options;
 
         for (final term in searchTerms) {
-          options =
-              options.where((option) => option.toLowerCase().contains(term));
+          opts = opts.where((option) => option.toLowerCase().contains(term));
         }
-        return options;
+        return opts;
       },
       onSelected: (option) => onSelected(option, showBodyWeight),
       initialValue: TextEditingValue(text: name),
@@ -452,7 +451,7 @@ class _EditSetPageState extends State<EditSetPage> {
         FocusNode focusNode,
         VoidCallback onFieldSubmitted,
       ) {
-        nameController = textEditingController;
+        nameCtrl = textEditingController;
         return TextFormField(
           decoration: const InputDecoration(labelText: 'Name'),
           controller: textEditingController,
@@ -481,7 +480,7 @@ class _EditSetPageState extends State<EditSetPage> {
     reps.dispose();
     repsNode.dispose();
     weight.dispose();
-    bodyWeight.dispose();
+    body.dispose();
     distance.dispose();
     minutes.dispose();
     incline.dispose();
@@ -503,7 +502,7 @@ class _EditSetPageState extends State<EditSetPage> {
         .then((results) {
       final names = results.map((result) => result.read(db.gymSets.name)!);
       setState(() {
-        nameOptions = names.toList();
+        options = names.toList();
       });
     });
   }
@@ -518,7 +517,7 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   save() async {
-    if (!formKey.currentState!.validate()) return;
+    if (!key.currentState!.validate()) return;
 
     Navigator.pop(context);
 
@@ -528,7 +527,7 @@ class _EditSetPageState extends State<EditSetPage> {
       created: created,
       reps: double.tryParse(reps.text),
       weight: double.tryParse(weight.text),
-      bodyWeight: double.tryParse(bodyWeight.text),
+      bodyWeight: double.tryParse(body.text),
       distance: double.tryParse(distance.text),
       duration: (int.tryParse(seconds.text) ?? 0) / 60 +
           (int.tryParse(minutes.text) ?? 0),
@@ -601,19 +600,19 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void setORM() {
     if (double.parse(weight.text) > 0)
-      oneRepMax.text =
+      orm.text =
           "${(double.parse(weight.text) / (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
     else
-      oneRepMax.text =
+      orm.text =
           "${(double.parse(weight.text) * (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
   }
 
   void updateFields(GymSet gymSet) {
-    nameController?.text = gymSet.name;
+    nameCtrl?.text = gymSet.name;
 
     reps.text = toString(gymSet.reps);
     weight.text = toString(gymSet.weight);
-    bodyWeight.text = toString(gymSet.bodyWeight);
+    body.text = toString(gymSet.bodyWeight);
     minutes.text = gymSet.duration.floor().toString();
     seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
     distance.text = toString(gymSet.distance);

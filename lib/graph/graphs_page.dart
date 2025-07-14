@@ -239,12 +239,12 @@ class GraphsPageState extends State<GraphsPage>
                     future: gymSets.first.cardio.value
                         ? getCardioData(name: gymSets.first.name.value)
                         : getStrengthData(
-                            targetUnit: gymSets.first.unit.value,
+                            target: gymSets.first.unit.value,
                             name: gymSets.first.name.value,
                             metric: StrengthMetric.bestWeight,
                             period: Period.day,
-                            startDate: null,
-                            endDate: null,
+                            start: null,
+                            end: null,
                             limit: 21,
                           ),
                   );

@@ -3,33 +3,33 @@ enum NativeTimerState { running, paused, expired }
 class NativeTimerWrapper {
   final NativeTimerState state;
 
-  final Duration totalTimerDuration;
+  final Duration total;
 
-  final Duration elapsedTimerDuration;
+  final Duration elapsed;
 
-  final DateTime timeStamp;
+  final DateTime stamp;
 
   NativeTimerWrapper(
-    this.totalTimerDuration,
-    this.elapsedTimerDuration,
-    this.timeStamp,
+    this.total,
+    this.elapsed,
+    this.stamp,
     this.state,
   );
 
-  Duration getDuration() => totalTimerDuration;
+  Duration getDuration() => total;
 
-  Duration getElapsed() => totalTimerDuration != Duration.zero
-      ? DateTime.now().difference(timeStamp) + elapsedTimerDuration
+  Duration getElapsed() => total != Duration.zero
+      ? DateTime.now().difference(stamp) + elapsed
       : Duration.zero;
 
   Duration getRemaining() => getDuration() - getElapsed();
 
-  int getTimeStamp() => timeStamp.millisecondsSinceEpoch;
+  int getTimeStamp() => stamp.millisecondsSinceEpoch;
 
   NativeTimerWrapper increaseDuration(Duration increase) => NativeTimerWrapper(
-        totalTimerDuration + increase,
-        isRunning() ? elapsedTimerDuration : Duration.zero,
-        isRunning() ? timeStamp : DateTime.now(),
+        total + increase,
+        isRunning() ? elapsed : Duration.zero,
+        isRunning() ? stamp : DateTime.now(),
         NativeTimerState.running,
       );
   bool isRunning() => state == NativeTimerState.running;

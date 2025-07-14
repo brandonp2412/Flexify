@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-final List<String> longFormats = [
+final List<String> long = [
   'timeago',
   'dd/MM/yy',
   'dd/MM/yy h:mm a',
@@ -23,7 +23,7 @@ final List<String> longFormats = [
   'MMM d (EEE) h:mm a',
 ];
 
-final List<String> shortFormats = [
+final List<String> short = [
   'd/M/yy',
   'M/d/yy',
   'd-M-yy',
@@ -81,7 +81,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
 
               return DropdownButtonFormField<String>(
                 value: settings.longDateFormat,
-                items: longFormats.map((String value) {
+                items: long.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -107,7 +107,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
           message: 'For where space is cramped (Graph lines)',
           child: DropdownButtonFormField<String>(
             value: settings.shortDateFormat,
-            items: shortFormats.map((String value) {
+            items: short.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),

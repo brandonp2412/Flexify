@@ -20,7 +20,7 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController nameCtrl = TextEditingController();
   bool cardio = false;
 
   late var settings = context.watch<SettingsState>();
@@ -28,12 +28,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
       ? 'kg'
       : settings.value.strengthUnit;
   String? image;
-  final formKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    if (widget.name != null) nameController.text = widget.name!;
+    if (widget.name != null) nameCtrl.text = widget.name!;
   }
 
   @override
@@ -47,11 +47,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: formKey,
+          key: key,
           child: ListView(
             children: [
               TextFormField(
-                controller: nameController,
+                controller: nameCtrl,
                 decoration: const InputDecoration(labelText: 'Name'),
                 textCapitalization: TextCapitalization.sentences,
                 autofocus: true,
@@ -136,7 +136,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   void dispose() {
-    nameController.dispose();
+    nameCtrl.dispose();
     super.dispose();
   }
 
@@ -150,7 +150,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   }
 
   Future<void> save(String unit) async {
-    if (!formKey.currentState!.validate()) return;
+    if (!key.currentState!.validate()) return;
 
     if (settings.value.strengthUnit != 'last-entry' && !cardio)
       unit = settings.value.strengthUnit;
@@ -161,7 +161,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       created: DateTime.now().toLocal(),
       reps: 0,
       weight: 0,
-      name: nameController.text,
+      name: nameCtrl.text,
       unit: unit,
       cardio: Value(cardio),
       hidden: const Value(true),

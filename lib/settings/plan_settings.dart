@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 List<Widget> getPlanSettings(
   String term,
   Setting settings,
-  TextEditingController maxSets,
-  TextEditingController warmupSets,
+  TextEditingController max,
+  TextEditingController warmup,
 ) {
   return [
     if ('warmup sets'.contains(term.toLowerCase()))
@@ -20,13 +20,13 @@ List<Widget> getPlanSettings(
         child: Tooltip(
           message: 'Warmup sets have no rest timers',
           child: TextField(
-            controller: warmupSets,
+            controller: warmup,
             decoration: const InputDecoration(
               labelText: 'Warmup sets',
               hintText: '0',
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
-            onTap: () => selectAll(warmupSets),
+            onTap: () => selectAll(warmup),
             onChanged: (value) => db.settings.update().write(
                   SettingsCompanion(
                     warmupSets: Value(int.parse(value)),
@@ -41,12 +41,12 @@ List<Widget> getPlanSettings(
         child: Tooltip(
           message: 'Default # of exercises in a plan',
           child: TextField(
-            controller: maxSets,
+            controller: max,
             decoration: const InputDecoration(
               labelText: 'Sets per exercise (max: 20)',
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
-            onTap: () => selectAll(maxSets),
+            onTap: () => selectAll(max),
             onChanged: (value) {
               if (int.parse(value) > 0 && int.parse(value) <= 20) {
                 db.settings.update().write(
@@ -139,9 +139,9 @@ class PlanSettings extends StatefulWidget {
 class _PlanSettingsState extends State<PlanSettings> {
   late var settings = context.read<SettingsState>().value;
 
-  late final maxSets = TextEditingController(text: settings.maxSets.toString());
+  late final max = TextEditingController(text: settings.maxSets.toString());
 
-  late final warmupSets =
+  late final warmup =
       TextEditingController(text: settings.warmupSets?.toString());
 
   @override
@@ -155,7 +155,7 @@ class _PlanSettingsState extends State<PlanSettings> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          children: getPlanSettings('', settings, maxSets, warmupSets),
+          children: getPlanSettings('', settings, max, warmup),
         ),
       ),
     );

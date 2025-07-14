@@ -12,10 +12,10 @@ class DaySelector extends StatefulWidget {
 class _DaySelectorState extends State<DaySelector> {
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [];
+    List<Widget> items = [];
 
     for (int i = 0; i < weekdays.length; i++) {
-      children.add(
+      items.add(
         TweenAnimationBuilder<Color?>(
           tween: ColorTween(
             begin: widget.daySwitches[i]
@@ -72,13 +72,13 @@ class _DaySelectorState extends State<DaySelector> {
         ),
       );
       if (i < weekdays.length - 1) {
-        children.add(const SizedBox(width: 4));
+        items.add(const SizedBox(width: 4));
       }
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: children,
+      children: items,
     );
   }
 }

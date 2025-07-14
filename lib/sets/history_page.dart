@@ -96,10 +96,10 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
             children: [
               AppSearch(
                 filter: Filters(
-                  repsGtController: repsGt,
-                  repsLtController: repsLt,
-                  weightGtController: weightGt,
-                  weightLtController: weightLt,
+                  repsGtCtrl: repsGt,
+                  repsLtCtrl: repsLt,
+                  weightGtCtrl: weightGt,
+                  weightLtCtrl: weightLt,
                   setStream: () {
                     setState(() {
                       limit = 100;
@@ -200,7 +200,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         final historyDays = getHistoryDays(snapshot.data!);
                         return HistoryCollapsed(
                           scroll: scroll,
-                          historyDays: historyDays,
+                          days: historyDays,
                           onSelect: (id) {
                             if (selected.contains(id))
                               setState(() {
@@ -222,7 +222,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       } else
                         return HistoryList(
                           scroll: scroll,
-                          gymSets: snapshot.data!,
+                          sets: snapshot.data!,
                           onSelect: (id) {
                             if (selected.contains(id))
                               setState(() {

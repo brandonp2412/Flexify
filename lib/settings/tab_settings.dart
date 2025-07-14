@@ -33,12 +33,10 @@ class _TabSettingsState extends State<TabSettings> {
     final settings = context.read<SettingsState>();
     final tabSplit = settings.value.tabs.split(',');
 
-    final enabledTabs =
-        tabSplit.map((tab) => (name: tab, enabled: true)).toList();
-    final disabledTabs =
-        tabs.where((tab) => !tabSplit.contains(tab.name)).toList();
+    final enabled = tabSplit.map((tab) => (name: tab, enabled: true)).toList();
+    final disabled = tabs.where((tab) => !tabSplit.contains(tab.name)).toList();
 
-    tabs = enabledTabs + disabledTabs;
+    tabs = enabled + disabled;
   }
 
   setTab(String name, bool enabled) {
