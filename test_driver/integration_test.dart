@@ -9,7 +9,6 @@ Future<void> main() async => await integrationDriver(
           throw "FLEXIFY_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
         final isIos = Platform.environment["FLEXIFY_IS_IOS"];
 
-        // Enhanced web detection - check for web environment variables and Chrome device
         final isWeb = Platform.environment["FLUTTER_WEB"] == "true" ||
             args?.toString().contains("chrome") == true ||
             args?.toString().contains("web") == true ||
@@ -19,7 +18,6 @@ Future<void> main() async => await integrationDriver(
 
         File imgFile;
         if (isWeb) {
-          // For web/Chrome screenshots, save directly to screenshots directory
           imgFile = await File(
             'fastlane/screenshots/$deviceType-$name.png',
           ).create(recursive: true);

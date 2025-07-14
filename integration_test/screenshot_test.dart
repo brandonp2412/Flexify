@@ -245,7 +245,6 @@ void main() {
       final exercisesList = plan.exercises.value.split(',');
 
       for (final exercise in exercisesList) {
-        // Only create plan_exercises for exercises that exist in gym_sets
         final gymSetExists = await (db.gymSets.select()
               ..where((tbl) => tbl.name.equals(exercise))
               ..limit(1))
@@ -254,14 +253,13 @@ void main() {
         if (gymSetExists != null) {
           await app.db.planExercises.insertOne(
             PlanExercisesCompanion.insert(
-              enabled: true, // Enable all exercises
+              enabled: true,
               timers: Value(true),
               exercise: exercise,
               planId: id,
             ),
           );
         } else {
-          // Create a gym set for exercises that don't exist
           await app.db.into(app.db.gymSets).insert(
                 generateGymSetCompanion(exercise, 50.0),
               );
@@ -324,10 +322,8 @@ void main() {
         tester: tester,
         screenshotName: '4_en-US',
         navigateToPage: (context) async {
-          // Get the first plan directly from the database
           final plan = await (db.plans.select()..limit(1)).getSingle();
 
-          // Ensure the PlanState is updated with gym counts for this plan
           final planState = context.read<PlanState>();
           await planState.updateGymCounts(plan.id);
 
