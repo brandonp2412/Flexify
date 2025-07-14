@@ -27,7 +27,7 @@ class BackupReceiver : BroadcastReceiver() {
         if (context == null) return
 
         val (enabled, backupPath) = getSettings(context)
-        if (!enabled) return;
+        if (!enabled || backupPath == null) return
 
         val backupUri = Uri.parse(backupPath)
 
@@ -61,7 +61,11 @@ class BackupReceiver : BroadcastReceiver() {
             return
         }
 
-        val file = dir.createFile("application/x-sqlite3", fileName)!!
+        val file = dir.createFile("application/x-sqlite3", fileName)
+        if (file == null) {
+            Log.e("BackupReceiver", "Failed to create backup file")
+            return
+        }
         Log.d("BackupReceiver", "file.uri=${file.uri}")
         notificationBuilder = notificationBuilder.setContentText(file.name)
 
@@ -84,17 +88,37 @@ class BackupReceiver : BroadcastReceiver() {
         notificationBuilder =
             notificationBuilder.addAction(R.drawable.ic_baseline_stop_24, "Share", pendingShare)
 
-        val outputStream = context.contentResolver.openOutputStream(file.uri)
-        val parentDir = context.filesDir.parentFile
-        val dbFolder = File(parentDir, "app_flutter").absolutePath
-        val dbFile = File(dbFolder, "flexify.sqlite")
-
-        dbFile.inputStream().use { input ->
-            outputStream?.use { output ->
-                input.copyTo(output)
-                notificationBuilder = notificationBuilder.setContentTitle("Backed up database")
-                notificationManager.notify(2, notificationBuilder.build())
+        try {
+            val outputStream = context.contentResolver.openOutputStream(file.uri)
+            if (outputStream == null) {
+                Log.e("BackupReceiver", "Failed to open output stream")
+                return
             }
+
+            val parentDir = context.filesDir.parentFile
+            if (parentDir == null) {
+                Log.e("BackupReceiver", "Failed to get parent directory")
+                return
+            }
+
+            val dbFolder = File(parentDir, "app_flutter").absolutePath
+            val dbFile = File(dbFolder, "flexify.sqlite")
+            
+            if (!dbFile.exists()) {
+                Log.e("BackupReceiver", "Database file does not exist: ${dbFile.absolutePath}")
+                return
+            }
+
+            dbFile.inputStream().use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                    notificationBuilder = notificationBuilder.setContentTitle("Backed up database")
+                    notificationManager.notify(2, notificationBuilder.build())
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("BackupReceiver", "Error during backup: ${e.message}", e)
+            return
         }
     }
 
