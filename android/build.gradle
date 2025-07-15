@@ -23,6 +23,18 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(':app')
+    
+    // Enable buildConfig for all Android modules to fix audioplayers_android issue
+    project.plugins.whenPluginAdded { plugin ->
+        if (plugin.class.name.contains('com.android.build.gradle.LibraryPlugin') ||
+            plugin.class.name.contains('com.android.build.gradle.AppPlugin')) {
+            project.android {
+                buildFeatures {
+                    buildConfig true
+                }
+            }
+        }
+    }
 }
 
 tasks.register("clean", Delete) {
