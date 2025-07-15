@@ -95,254 +95,310 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.gymSet.id > 0 ? widget.gymSet.name : 'Add set',
-        ),
-        actions: [
-          if (widget.gymSet.id > 0)
-            IconButton(
+      appBar: buildAppBar(),
+      body: buildBody(showBodyWeight),
+      floatingActionButton: buildSaveButton(),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      title: Text(
+        widget.gymSet.id > 0 ? widget.gymSet.name : 'Add set',
+      ),
+      actions: [
+        if (widget.gymSet.id > 0) buildDeleteButton(),
+      ],
+    );
+  }
+
+  Widget buildDeleteButton() {
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: () => showDeleteDialog(),
+    );
+  }
+
+  Future<void> showDeleteDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: Text(
+            'Are you sure you want to delete ${widget.gymSet.name}?',
+          ),
+          actions: [
+            TextButton.icon(
+              label: const Text('Cancel'),
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.pop(dialogContext),
+            ),
+            TextButton.icon(
+              label: const Text('Delete'),
               icon: const Icon(Icons.delete),
               onPressed: () async {
-                await showDialog(
-                  context: context,
-                  builder: (BuildContext dialogContext) {
-                    return AlertDialog(
-                      title: const Text('Confirm Delete'),
-                      content: Text(
-                        'Are you sure you want to delete ${widget.gymSet.name}?',
-                      ),
-                      actions: <Widget>[
-                        TextButton.icon(
-                          label: const Text('Cancel'),
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            Navigator.pop(dialogContext);
-                          },
-                        ),
-                        TextButton.icon(
-                          label: const Text('Delete'),
-                          icon: const Icon(Icons.delete),
-                          onPressed: () async {
-                            Navigator.pop(dialogContext);
-                            await db.delete(db.gymSets).delete(widget.gymSet);
-                            if (context.mounted) Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+                Navigator.pop(dialogContext);
+                await db.delete(db.gymSets).delete(widget.gymSet);
+                if (context.mounted) Navigator.pop(context);
               },
             ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: key,
-          child: ListView(
-            children: [
-              autocomplete(showBodyWeight),
-              if (!cardio) ...[
-                if (name != 'Weight')
-                  TextFormField(
-                    controller: reps,
-                    focusNode: repsNode,
-                    decoration: const InputDecoration(labelText: 'Reps'),
-                    keyboardType: TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    onTap: () => selectAll(reps),
-                    onChanged: (value) => setORM(),
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (_) => selectAll(weight),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) return 'Required';
-                      if (double.tryParse(value) == null)
-                        return 'Invalid number';
-                      return null;
-                    },
-                  ),
-                TextFormField(
-                  controller: weight,
-                  decoration: InputDecoration(
-                    labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(weight),
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) => setORM(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
-                if (name != 'Weight')
-                  TextField(
-                    controller: orm,
-                    decoration: const InputDecoration(
-                      labelText: 'One rep max (estimate)',
-                    ),
-                    enabled: false,
-                  ),
-              ],
-              if (cardio) ...[
-                TextFormField(
-                  controller: distance,
-                  focusNode: distNode,
-                  decoration: InputDecoration(
-                    labelText:
-                        unit == 'kcal' ? 'Amount ($unit)' : 'Distance ($unit)',
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(distance),
-                  onFieldSubmitted: (value) => selectAll(minutes),
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
-                duration(),
-                TextFormField(
-                  controller: incline,
-                  decoration: const InputDecoration(labelText: 'Incline %'),
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(incline),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return null;
-                    if (int.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
-              ],
-              Visibility(
-                visible: showBodyWeight && name != 'Weight',
-                child: TextFormField(
-                  controller: body,
-                  decoration: const InputDecoration(
-                    labelText: 'Body weight (during set)',
-                  ),
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(body),
-                  validator: (value) {
-                    if (value == null) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
-              ),
-              Selector<SettingsState, bool>(
-                builder: (context, showUnits, child) => Visibility(
-                  visible: showUnits,
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Unit'),
-                    value: unit,
-                    items: _getUnitItems(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        unit = newValue!;
-                      });
-                    },
-                  ),
-                ),
-                selector: (context, settings) => settings.value.showUnits,
-              ),
-              Selector<SettingsState, bool>(
-                selector: (p0, settings) => settings.value.showCategories,
-                builder: (context, showCategories, child) {
-                  if (showCategories && name != 'Weight')
-                    return StreamBuilder(
-                      stream: categoriesStream,
-                      builder: (context, snapshot) {
-                        return Autocomplete<String>(
-                          initialValue: TextEditingValue(
-                            text: widget.gymSet.category ?? "",
-                          ),
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            if (snapshot.data == null) return [];
-                            if (textEditingValue.text == '') {
-                              return snapshot.data!;
-                            }
-                            return snapshot.data!.where((String option) {
-                              return option.toLowerCase().contains(
-                                    textEditingValue.text.toLowerCase(),
-                                  );
-                            });
-                          },
-                          onSelected: (String selection) {
-                            setState(() {
-                              category = selection;
-                            });
-                          },
-                          fieldViewBuilder: (
-                            BuildContext context,
-                            TextEditingController textEditingController,
-                            FocusNode focusNode,
-                            VoidCallback onFieldSubmitted,
-                          ) {
-                            return TextFormField(
-                              controller: textEditingController,
-                              focusNode: focusNode,
-                              decoration: InputDecoration(
-                                labelText: 'Category',
-                              ),
-                              onChanged: (value) => setState(() {
-                                category = value;
-                              }),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  return const SizedBox();
-                },
-              ),
-              Selector<SettingsState, bool>(
-                builder: (context, showNotes, child) => Visibility(
-                  visible: showNotes,
-                  child: TextField(
-                    maxLines: 3,
-                    decoration: const InputDecoration(labelText: 'Notes'),
-                    controller: notes,
-                  ),
-                ),
-                selector: (p0, settingsState) => settingsState.value.showNotes,
-              ),
-              Selector<SettingsState, String>(
-                builder: (context, longDateFormat, child) => ListTile(
-                  title: const Text('Created date'),
-                  subtitle: Text(
-                    longDateFormat == 'timeago'
-                        ? timeago.format(created)
-                        : DateFormat(longDateFormat).format(created),
-                  ),
-                  trailing: const Icon(Icons.calendar_today),
-                  onTap: () => _selectDate(),
-                ),
-                selector: (context, settings) => settings.value.longDateFormat,
-              ),
-              imageField(),
-            ],
-          ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildBody(bool showBodyWeight) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: key,
+        child: ListView(
+          children: [
+            autocomplete(showBodyWeight),
+            ...exerciseFields(),
+            bodyFields(showBodyWeight),
+            unitSelector(),
+            categorySelector(),
+            notesField(),
+            dateSelector(),
+            imageField(),
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: save,
-        label: const Text("Save"),
-        icon: const Icon(Icons.save),
+    );
+  }
+
+  List<Widget> exerciseFields() {
+    if (cardio) {
+      return buildCardioFields();
+    } else {
+      return buildStrengthFields();
+    }
+  }
+
+  List<Widget> buildStrengthFields() {
+    return [
+      if (name != 'Weight') buildRepsField(),
+      buildWeightField(),
+      if (name != 'Weight') buildORMField(),
+    ];
+  }
+
+  Widget buildRepsField() {
+    return TextFormField(
+      controller: reps,
+      focusNode: repsNode,
+      decoration: const InputDecoration(labelText: 'Reps'),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onTap: () => selectAll(reps),
+      onChanged: (value) => setORM(),
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => selectAll(weight),
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Required';
+        if (double.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
+  }
+
+  Widget buildWeightField() {
+    return TextFormField(
+      controller: weight,
+      decoration: InputDecoration(
+        labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
       ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onTap: () => selectAll(weight),
+      textInputAction: TextInputAction.next,
+      onChanged: (value) => setORM(),
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Required';
+        if (double.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
+  }
+
+  Widget buildORMField() {
+    return TextField(
+      controller: orm,
+      decoration: const InputDecoration(
+        labelText: 'One rep max (estimate)',
+      ),
+      enabled: false,
+    );
+  }
+
+  List<Widget> buildCardioFields() {
+    return [
+      buildDistanceField(),
+      duration(),
+      buildInclineField(),
+    ];
+  }
+
+  Widget buildDistanceField() {
+    return TextFormField(
+      controller: distance,
+      focusNode: distNode,
+      decoration: InputDecoration(
+        labelText: unit == 'kcal' ? 'Amount ($unit)' : 'Distance ($unit)',
+      ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onTap: () => selectAll(distance),
+      onFieldSubmitted: (value) => selectAll(minutes),
+      textInputAction: TextInputAction.next,
+      validator: (value) {
+        if (value == null || value.isEmpty) return null;
+        if (double.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
+  }
+
+  Widget buildInclineField() {
+    return TextFormField(
+      controller: incline,
+      decoration: const InputDecoration(labelText: 'Incline %'),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onTap: () => selectAll(incline),
+      validator: (value) {
+        if (value == null || value.isEmpty) return null;
+        if (int.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
+  }
+
+  Widget bodyFields(bool showBodyWeight) {
+    return Visibility(
+      visible: showBodyWeight && name != 'Weight',
+      child: TextFormField(
+        controller: body,
+        decoration: const InputDecoration(
+          labelText: 'Body weight (during set)',
+        ),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onTap: () => selectAll(body),
+        validator: (value) {
+          if (value == null) return null;
+          if (double.tryParse(value) == null) return 'Invalid number';
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget unitSelector() {
+    return Selector<SettingsState, bool>(
+      builder: (context, showUnits, child) => Visibility(
+        visible: showUnits,
+        child: DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Unit'),
+          value: unit,
+          items: getUnitItems(),
+          onChanged: (String? newValue) {
+            setState(() {
+              unit = newValue!;
+            });
+          },
+        ),
+      ),
+      selector: (context, settings) => settings.value.showUnits,
+    );
+  }
+
+  Widget categorySelector() {
+    return Selector<SettingsState, bool>(
+      selector: (context, settings) => settings.value.showCategories,
+      builder: (context, showCategories, child) {
+        if (!showCategories || name == 'Weight') {
+          return const SizedBox();
+        }
+
+        return StreamBuilder(
+          stream: categoriesStream,
+          builder: (context, snapshot) {
+            return Autocomplete<String>(
+              initialValue: TextEditingValue(
+                text: widget.gymSet.category ?? "",
+              ),
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (snapshot.data == null) return [];
+                if (textEditingValue.text == '') {
+                  return snapshot.data!;
+                }
+                return snapshot.data!.where((String option) {
+                  return option.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      );
+                });
+              },
+              onSelected: (String selection) {
+                setState(() {
+                  category = selection;
+                });
+              },
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextFormField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(labelText: 'Category'),
+                  onChanged: (value) => setState(() {
+                    category = value;
+                  }),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget notesField() {
+    return Selector<SettingsState, bool>(
+      builder: (context, showNotes, child) => Visibility(
+        visible: showNotes,
+        child: TextField(
+          maxLines: 3,
+          decoration: const InputDecoration(labelText: 'Notes'),
+          controller: notes,
+        ),
+      ),
+      selector: (context, settingsState) => settingsState.value.showNotes,
+    );
+  }
+
+  Widget dateSelector() {
+    return Selector<SettingsState, String>(
+      builder: (context, longDateFormat, child) => ListTile(
+        title: const Text('Created date'),
+        subtitle: Text(
+          longDateFormat == 'timeago'
+              ? timeago.format(created)
+              : DateFormat(longDateFormat).format(created),
+        ),
+        trailing: const Icon(Icons.calendar_today),
+        onTap: () => selectDate(),
+      ),
+      selector: (context, settings) => settings.value.longDateFormat,
+    );
+  }
+
+  Widget buildSaveButton() {
+    return FloatingActionButton.extended(
+      onPressed: save,
+      label: const Text("Save"),
+      icon: const Icon(Icons.save),
     );
   }
 
@@ -608,7 +664,7 @@ class _EditSetPageState extends State<EditSetPage> {
           "${(double.parse(weight.text) * (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
   }
 
-  List<DropdownMenuItem<String>> _getUnitItems() {
+  List<DropdownMenuItem<String>> getUnitItems() {
     if (cardio) {
       return const [
         DropdownMenuItem(
@@ -670,7 +726,7 @@ class _EditSetPageState extends State<EditSetPage> {
     setORM();
   }
 
-  Future<void> _selectDate() async {
+  Future<void> selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: created,
