@@ -25,8 +25,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install yq
         run: |
@@ -135,7 +135,7 @@ jobs:
           git push origin main
           git push origin "${{ steps.version.outputs.version }}"
 
-  build-android:
+  generate-screenshots:
     needs: version-and-prepare
     runs-on: ubuntu-latest
     steps:
@@ -143,6 +143,120 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup headless display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb x11-utils
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Install Chrome for web screenshots
+        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Accept Android SDK licenses
+        run: yes | flutter doctor --android-licenses
+
+      - name: Install Android system image
+        run: |
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
+
+      - name: Create and start Android emulator
+        run: |
+          echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
+            -n phoneScreenshots \
+            -k "system-images;android-30;google_apis;x86_64" \
+            --force
+          
+          echo "Starting emulator..."
+          $ANDROID_HOME/emulator/emulator -avd phoneScreenshots -no-window -no-audio -no-boot-anim &
+          
+          # Wait for emulator to be ready with timeout
+          timeout=300
+          counter=0
+          while [ $counter -lt $timeout ]; do
+            if $ANDROID_HOME/platform-tools/adb shell getprop sys.boot_completed 2>/dev/null | grep -q "1"; then
+              echo "Emulator is ready"
+              break
+            fi
+            echo "Waiting for emulator... ($counter/$timeout)"
+            sleep 5
+            counter=$((counter + 5))
+          done
+          
+          if [ $counter -ge $timeout ]; then
+            echo "Emulator failed to start within timeout"
+            exit 1
+          fi
+
+      - name: Generate Android screenshots
+        run: |
+          export TERMINAL="xterm"
+          export FLEXIFY_DEVICE_TYPE="phoneScreenshots"
+          chmod +x scripts/screenshots.sh
+          ./scripts/screenshots.sh phoneScreenshots
+
+      - name: Generate web screenshots
+        run: |
+          export CHROME_EXECUTABLE=$(which google-chrome-stable)
+          export FLEXIFY_DEVICE_TYPE="web"
+          flutter drive --profile --driver=test_driver/integration_test.dart \
+            --target=integration_test/screenshot_test.dart \
+            --dart-define=FLEXIFY_DEVICE_TYPE=web \
+            -d web-server --web-renderer html
+
+      - name: Commit screenshots
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "Update screenshots"
+          else
+            echo "No screenshot changes to commit"
+          fi
+
+      - name: Upload screenshot artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: |
+            test_driver/screenshots/
+            integration_test/screenshots/
+
+  build-android:
+    needs: [version-and-prepare, generate-screenshots]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull latest changes
         run: git pull origin main
@@ -163,12 +277,10 @@ jobs:
           java-version: "17"
 
       - name: Decode Android keystore
-        if: ${{ env.ACT != 'true' }}
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
 
       - name: Create key.properties
-        if: ${{ env.ACT != 'true' }}
         run: |
           echo "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
@@ -182,7 +294,6 @@ jobs:
         run: flutter build apk
 
       - name: Build App Bundle
-        if: ${{ env.ACT != 'true' }}
         run: flutter build appbundle
 
       - name: Rename universal APK
@@ -198,13 +309,14 @@ jobs:
             build/app/outputs/bundle/release/app-release.aab
 
   build-linux:
-    needs: version-and-prepare
+    needs: [version-and-prepare, generate-screenshots]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull latest changes
         run: git pull origin main
@@ -238,13 +350,14 @@ jobs:
           path: build/linux/x64/release/bundle/flexify-linux.zip
 
   build-windows:
-    needs: version-and-prepare
+    needs: [version-and-prepare, generate-screenshots]
     runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull latest changes
         run: git pull origin main
@@ -273,21 +386,15 @@ jobs:
             flexify-windows.zip
 
   create-github-release:
-    needs: [version-and-prepare, build-android, build-linux, build-windows]
+    needs: [version-and-prepare, generate-screenshots, build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        if: ${{ env.ACT != 'true' }}
         uses: actions/checkout@v4
         with:
           ref: main
 
-      - name: Pull latest changes
-        if: ${{ env.ACT != 'true' }}
-        run: git pull origin main
-
       - name: Download all artifacts
-        if: ${{ env.ACT != 'true' }}
         uses: actions/download-artifact@v4
 
       - name: Create GitHub Release
@@ -311,48 +418,36 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        if: ${{ env.ACT != 'true' }}
         uses: actions/checkout@v4
         with:
           ref: main
 
-      - name: Pull latest changes
-        if: ${{ env.ACT != 'true' }}
-        run: git pull origin main
-
       - name: Setup Flutter from submodule
-        if: ${{ env.ACT != 'true' }}
         run: |
           git submodule update --init --recursive flutter
           echo "${{ github.workspace }}\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
-        if: ${{ env.ACT != 'true' }}
         run: flutter pub get
 
       - name: Download Windows artifacts
-        if: ${{ env.ACT != 'true' }}
         uses: actions/download-artifact@v4
         with:
           name: windows-builds
 
       - name: Build MSIX
-        if: ${{ env.ACT != 'true' }}
         run: flutter pub run msix:create
 
       - name: Setup .NET 9.0
-        if: ${{ env.ACT != 'true' }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "9.0.x"
 
       - name: Setup Microsoft Store CLI
-        if: ${{ env.ACT != 'true' }}
         uses: microsoft/setup-msstore-cli@v1
 
       - name: Configure Microsoft Store CLI
-        if: ${{ env.ACT != 'true' }}
         run: |
           msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
 
@@ -366,30 +461,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        if: ${{ env.ACT != 'true' }}
         uses: actions/checkout@v4
         with:
           ref: main
 
-      - name: Pull latest changes
-        if: ${{ env.ACT != 'true' }}
-        run: git pull origin main
-
       - name: Download Android artifacts
-        if: ${{ env.ACT != 'true' }}
         uses: actions/download-artifact@v4
         with:
           name: android-builds
 
       - name: Setup Ruby
-        if: ${{ env.ACT != 'true' }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.0"
           bundler-cache: true
 
       - name: Create Google Play JSON key file
-        if: ${{ env.ACT != 'true' }}
         run: |
           echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
 
