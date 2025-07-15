@@ -266,18 +266,14 @@ jobs:
         run: |
           git submodule update --init --recursive flutter
           echo "${{ github.workspace }}\flutter\bin" >> $env:GITHUB_PATH
-          flutter\bin\flutter config --no-analytics
-          flutter\bin\flutter --version
+          flutter config --no-analytics
+          flutter --version
 
       - name: Get Flutter dependencies
         run: flutter pub get
 
       - name: Build Windows
         run: flutter build windows
-
-      - name: Build MSIX
-        if: ${{ env.ACT != 'true' }}
-        run: flutter pub run msix:create
 
       - name: Create Windows zip
         run: |
@@ -288,7 +284,6 @@ jobs:
         with:
           name: windows-builds
           path: |
-            build/windows/x64/runner/Release/flexify.msix
             flexify-windows.zip
 
   create-github-release:
@@ -322,7 +317,6 @@ jobs:
             android-builds/bundle/release/app-release.aab
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
-            windows-builds/build/windows/x64/runner/Release/flexify.msix
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -330,12 +324,37 @@ jobs:
     needs: [version-and-prepare, build-windows]
     runs-on: windows-latest
     steps:
+      - name: Checkout code
+        if: ${{ env.ACT != 'true' }}
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Pull latest changes
+        if: ${{ env.ACT != 'true' }}
+        run: git pull origin main
+
+      - name: Setup Flutter from submodule
+        if: ${{ env.ACT != 'true' }}
+        run: |
+          git submodule update --init --recursive flutter
+          echo "${{ github.workspace }}\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          flutter config --no-analytics
+          flutter --version
+
+      - name: Get Flutter dependencies
+        if: ${{ env.ACT != 'true' }}
+        run: flutter pub get
+
       - name: Download Windows artifacts
         if: ${{ env.ACT != 'true' }}
         uses: actions/download-artifact@v4
         with:
           name: windows-builds
-          path: build/windows/x64/runner/Release
+
+      - name: Build MSIX
+        if: ${{ env.ACT != 'true' }}
+        run: flutter pub run msix:create
 
       - name: Setup .NET 9.0
         if: ${{ env.ACT != 'true' }}
@@ -355,7 +374,7 @@ jobs:
       - name: Publish to Microsoft Store
         if: ${{ env.ACT != 'true' }}
         run: |
-          msstore publish --inputDirectory . --appId ${{ secrets.PRODUCT_ID }}
+          msstore publish build/windows/x64/runner/Release/flexify.msix --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }}
 
   deploy-google-play:
     needs: [version-and-prepare, build-android]
