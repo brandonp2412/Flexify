@@ -7,7 +7,6 @@ on:
       - "pubspec.yaml"
       - "fastlane/metadata/**"
       - "assets/changelogs/**"
-      - ".github/workflows/**"
 
 env:
   PUB_SUMMARY_ONLY: true
