@@ -57,132 +57,286 @@ class ImportData extends StatelessWidget {
 
   importDatabase(BuildContext context) async {
     Navigator.pop(context);
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
 
-    File sourceFile = File(result.files.single.path!);
-    final dbFolder = await getApplicationDocumentsDirectory();
-    await db.close();
-    await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
-    db = AppDatabase();
-    await (db.settings.update())
-        .write(const SettingsCompanion(alarmSound: Value('')));
-    if (!ctx.mounted) return;
-    final settingsState = ctx.read<SettingsState>();
-    await settingsState.init();
-    if (!ctx.mounted) return;
-    Navigator.pushNamedAndRemoveUntil(ctx, '/', (_) => false);
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result == null) return;
+
+      File sourceFile = File(result.files.single.path!);
+
+      if (!await sourceFile.exists()) {
+        throw Exception('Selected file does not exist');
+      }
+
+      final dbFolder = await getApplicationDocumentsDirectory();
+      await db.close();
+      await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
+      db = AppDatabase();
+
+      await (db.settings.update())
+          .write(const SettingsCompanion(alarmSound: Value('')));
+
+      if (!ctx.mounted) return;
+      final settingsState = ctx.read<SettingsState>();
+      await settingsState.init();
+
+      if (!ctx.mounted) return;
+      Navigator.pushNamedAndRemoveUntil(ctx, '/', (_) => false);
+    } catch (e) {
+      if (!ctx.mounted) return;
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text('Failed to import database: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
   }
 
   importGraphs(BuildContext context) async {
     Navigator.pop(context);
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
 
-    File file = File(result.files.single.path!);
-    var csv = await file.readAsString();
-    List<List<dynamic>> rows = const CsvToListConverter(eol: "\n").convert(csv);
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result == null) return;
 
-    if (rows.length <= 1) return;
+      File file = File(result.files.single.path!);
 
-    final columns = rows.first;
+      if (!await file.exists()) {
+        throw Exception('Selected file does not exist');
+      }
 
-    final gymSets = rows.skip(1).map(
-      (row) {
-        Value<double> reps;
-        if (row[2] is String)
-          reps = Value(double.parse(row[2]));
-        else
-          reps = Value(row[2]);
+      var csv = await file.readAsString();
+      List<List<dynamic>> rows =
+          const CsvToListConverter(eol: "\n").convert(csv);
 
-        Value<double> weight;
-        if (row[3] is String)
-          weight = Value(double.parse(row[3]));
-        else
-          weight = Value(row[3]);
+      if (rows.isEmpty) {
+        throw Exception('CSV file is empty');
+      }
 
-        Value<bool> hidden;
-        var bodyWeight = const Value(0.0);
-        if (columns.elementAtOrNull(6) == 'hidden') {
-          if (row.elementAtOrNull(6) is double)
-            hidden = Value(row[6] == 1.0);
-          else
-            hidden = Value(row[6] == "1");
-        } else {
-          hidden = const Value(false);
-          bodyWeight = Value(row.elementAtOrNull(6) ?? 0);
-        }
+      if (rows.length <= 1) {
+        throw Exception('CSV file must contain at least one data row');
+      }
 
-        if (columns.elementAtOrNull(7) == 'bodyWeight')
-          bodyWeight = Value(double.tryParse(row.elementAtOrNull(7)) ?? 0);
+      final columns = rows.first;
 
-        if (columns.elementAtOrNull(10) == 'hidden')
-          hidden = Value(bool.parse(row[10]));
+      final gymSets = rows.skip(1).map(
+        (row) {
+          try {
+            if (row.length < 6) {
+              throw Exception('Row has insufficient columns: ${row.length}');
+            }
 
-        return GymSetsCompanion(
-          name: Value(row[1]),
-          reps: reps,
-          weight: weight,
-          created: Value(parseDate(row[4])),
-          unit: Value(row[5]),
-          hidden: hidden,
-          bodyWeight: bodyWeight,
-          duration: columns.elementAtOrNull(7) == 'duration'
-              ? Value(row[7])
-              : const Value(0),
-          distance: columns.elementAtOrNull(8) == 'distance'
-              ? Value(row[8])
-              : const Value(0),
-          cardio: columns.elementAtOrNull(9) == 'cardio'
-              ? Value(bool.parse(row[9]))
-              : const Value(false),
-          incline: columns.elementAtOrNull(11) == 'incline'
-              ? Value(int.tryParse(row[9]))
-              : const Value(null),
-        );
-      },
-    );
+            Value<double> reps;
+            if (row[2] is String) {
+              final parsedReps = double.tryParse(row[2]);
+              if (parsedReps == null) {
+                throw Exception('Invalid reps value: ${row[2]}');
+              }
+              reps = Value(parsedReps);
+            } else if (row[2] is num) {
+              reps = Value(row[2].toDouble());
+            } else {
+              throw Exception('Invalid reps data type: ${row[2].runtimeType}');
+            }
 
-    await db.gymSets.deleteAll();
-    await db.gymSets.insertAll(gymSets);
+            Value<double> weight;
+            if (row[3] is String) {
+              final parsedWeight = double.tryParse(row[3]);
+              if (parsedWeight == null) {
+                throw Exception('Invalid weight value: ${row[3]}');
+              }
+              weight = Value(parsedWeight);
+            } else if (row[3] is num) {
+              weight = Value(row[3].toDouble());
+            } else {
+              throw Exception(
+                'Invalid weight data type: ${row[3].runtimeType}',
+              );
+            }
 
-    final weightSet = await getBodyWeight();
-    if (weightSet != null)
-      (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
-          .write(GymSetsCompanion(bodyWeight: Value(weightSet.weight)));
+            Value<bool> hidden;
+            var bodyWeight = const Value(0.0);
+            if (columns.elementAtOrNull(6) == 'hidden') {
+              if (row.elementAtOrNull(6) is double)
+                hidden = Value(row[6] == 1.0);
+              else
+                hidden = Value(row[6] == "1");
+            } else {
+              hidden = const Value(false);
+              final bodyWeightValue = row.elementAtOrNull(6);
+              if (bodyWeightValue is num) {
+                bodyWeight = Value(bodyWeightValue.toDouble());
+              } else if (bodyWeightValue is String) {
+                bodyWeight = Value(double.tryParse(bodyWeightValue) ?? 0.0);
+              } else {
+                bodyWeight = const Value(0.0);
+              }
+            }
 
-    if (!ctx.mounted) return;
-    Navigator.pop(ctx);
+            if (columns.elementAtOrNull(7) == 'bodyWeight') {
+              final bodyWeightValue = row.elementAtOrNull(7);
+              if (bodyWeightValue != null) {
+                bodyWeight =
+                    Value(double.tryParse(bodyWeightValue.toString()) ?? 0);
+              }
+            }
+
+            if (columns.elementAtOrNull(10) == 'hidden') {
+              final hiddenValue = row.elementAtOrNull(10);
+              if (hiddenValue != null) {
+                try {
+                  hidden = Value(bool.parse(hiddenValue.toString()));
+                } catch (e) {
+                  hidden = const Value(false);
+                }
+              }
+            }
+
+            return GymSetsCompanion(
+              name: Value(row[1]?.toString() ?? ''),
+              reps: reps,
+              weight: weight,
+              created: Value(parseDate(row[4])),
+              unit: Value(row[5]?.toString() ?? ''),
+              hidden: hidden,
+              bodyWeight: bodyWeight,
+              duration: columns.elementAtOrNull(7) == 'duration'
+                  ? Value(double.tryParse(row[7]?.toString() ?? '0') ?? 0)
+                  : const Value(0),
+              distance: columns.elementAtOrNull(8) == 'distance'
+                  ? Value(double.tryParse(row[8]?.toString() ?? '0') ?? 0)
+                  : const Value(0),
+              cardio: columns.elementAtOrNull(9) == 'cardio'
+                  ? Value(parseBool(row[9]))
+                  : const Value(false),
+              incline: columns.elementAtOrNull(11) == 'incline'
+                  ? Value(int.tryParse(row[11]?.toString() ?? ''))
+                  : const Value(null),
+            );
+          } catch (e) {
+            throw Exception(
+              'Error processing row ${rows.indexOf(row) + 1}: $e',
+            );
+          }
+        },
+      );
+
+      await db.gymSets.deleteAll();
+      await db.gymSets.insertAll(gymSets);
+
+      final weightSet = await getBodyWeight();
+      if (weightSet != null)
+        (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
+            .write(GymSetsCompanion(bodyWeight: Value(weightSet.weight)));
+
+      if (!ctx.mounted) return;
+      Navigator.pop(ctx);
+
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        const SnackBar(
+          content: Text('Graphs data imported successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!ctx.mounted) return;
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text('Failed to import graphs: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
   }
 
   importPlans(BuildContext context) async {
     Navigator.pop(context);
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
 
-    File file = File(result.files.single.path!);
-    var csv = await file.readAsString();
-    List<List<dynamic>> rows = const CsvToListConverter(eol: "\n").convert(csv);
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result == null) return;
 
-    if (rows.length <= 1) return;
-    List<PlansCompanion> plans = [];
-    for (final row in rows.skip(1)) {
-      var sequence = row.elementAtOrNull(4);
-      if (sequence is String) sequence = 0;
-      plans.add(
-        PlansCompanion(
-          days: Value(row[1]),
-          exercises: Value(row[2]),
-          title: Value(row.elementAtOrNull(3)),
-          sequence: Value(sequence),
+      File file = File(result.files.single.path!);
+
+      if (!await file.exists()) {
+        throw Exception('Selected file does not exist');
+      }
+
+      var csv = await file.readAsString();
+      List<List<dynamic>> rows =
+          const CsvToListConverter(eol: "\n").convert(csv);
+
+      if (rows.isEmpty) {
+        throw Exception('CSV file is empty');
+      }
+
+      if (rows.length <= 1) {
+        throw Exception('CSV file must contain at least one data row');
+      }
+
+      List<PlansCompanion> plans = [];
+      for (final row in rows.skip(1)) {
+        try {
+          if (row.length < 3) {
+            throw Exception('Row has insufficient columns: ${row.length}');
+          }
+
+          var sequence = row.elementAtOrNull(4);
+          if (sequence is String) {
+            final parsedSequence = int.tryParse(sequence);
+            sequence = parsedSequence ?? 0;
+          } else if (sequence is! int) {
+            sequence = 0;
+          }
+
+          plans.add(
+            PlansCompanion(
+              days: Value(row[1]?.toString() ?? ''),
+              exercises: Value(row[2]?.toString() ?? ''),
+              title: Value(row.elementAtOrNull(3)?.toString()),
+              sequence: Value(sequence),
+            ),
+          );
+        } catch (e) {
+          throw Exception('Error processing row ${rows.indexOf(row) + 1}: $e');
+        }
+      }
+
+      await db.plans.deleteAll();
+      await db.plans.insertAll(plans);
+
+      if (!ctx.mounted) return;
+      ctx.read<PlanState>().updatePlans(null);
+      Navigator.pop(ctx);
+
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        const SnackBar(
+          content: Text('Plans imported successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!ctx.mounted) return;
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text('Failed to import plans: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
         ),
       );
     }
+  }
 
-    await db.plans.deleteAll();
-    await db.plans.insertAll(plans);
-    if (!ctx.mounted) return;
-    ctx.read<PlanState>().updatePlans(null);
-    Navigator.pop(ctx);
+  bool parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is String) {
+      final lower = value.toLowerCase();
+      return lower == 'true' || lower == '1';
+    }
+    if (value is num) return value != 0;
+    return false;
   }
 }
