@@ -188,46 +188,29 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | flutter doctor --android-licenses
 
-      - name: Install Android system image
+      - name: Enable KVM group perms
         run: |
-          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
-
-      - name: Create and start Android emulator
-        if: ${{ env.ACT != 'true' }}
-        run: |
-          echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
-            -n phoneScreenshots \
-            -k "system-images;android-30;google_apis;x86_64" \
-            --force
-
-          echo "Starting emulator..."
-          $ANDROID_HOME/emulator/emulator -avd phoneScreenshots -no-window -no-audio -no-boot-anim &
-
-          # Wait for emulator to be ready with timeout
-          timeout=300
-          counter=0
-          while [ $counter -lt $timeout ]; do
-            if $ANDROID_HOME/platform-tools/adb shell getprop sys.boot_completed 2>/dev/null | grep -q "1"; then
-              echo "Emulator is ready"
-              break
-            fi
-            echo "Waiting for emulator... ($counter/$timeout)"
-            sleep 5
-            counter=$((counter + 5))
-          done
-
-          if [ $counter -ge $timeout ]; then
-            echo "Emulator failed to start within timeout"
-            exit 1
-          fi
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Generate Android screenshots
         if: ${{ env.ACT != 'true' }}
-        run: |
-          export TERMINAL="xterm"
-          export FLEXIFY_DEVICE_TYPE="phoneScreenshots"
-          chmod +x scripts/screenshots.sh
-          ./scripts/screenshots.sh phoneScreenshots
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          profile: pixel_5
+          avd-name: phoneScreenshots
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            export FLEXIFY_DEVICE_TYPE="phoneScreenshots"
+            flutter drive --profile --driver=test_driver/integration_test.dart \
+              --target=integration_test/screenshot_test.dart \
+              --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots \
+              -d phoneScreenshots
 
       - name: Generate web screenshots
         run: |
