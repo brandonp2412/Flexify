@@ -94,6 +94,13 @@ jobs:
           channel: "stable"
           cache: true
 
+      - name: Fix Flutter cache permissions
+        run: |
+          if [ -d "$FLUTTER_ROOT" ]; then
+            sudo chown -R $(whoami) "$FLUTTER_ROOT" || true
+            sudo chmod -R u+w "$FLUTTER_ROOT" || true
+          fi
+
       - name: Run tests and analysis
         run: |
           flutter test
@@ -186,15 +193,16 @@ jobs:
           echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
 
       - name: Create and start Android emulator
+        if: ${{ env.ACT != 'true' }}
         run: |
           echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
             -n phoneScreenshots \
             -k "system-images;android-30;google_apis;x86_64" \
             --force
-          
+
           echo "Starting emulator..."
           $ANDROID_HOME/emulator/emulator -avd phoneScreenshots -no-window -no-audio -no-boot-anim &
-          
+
           # Wait for emulator to be ready with timeout
           timeout=300
           counter=0
@@ -207,13 +215,14 @@ jobs:
             sleep 5
             counter=$((counter + 5))
           done
-          
+
           if [ $counter -ge $timeout ]; then
             echo "Emulator failed to start within timeout"
             exit 1
           fi
 
       - name: Generate Android screenshots
+        if: ${{ env.ACT != 'true' }}
         run: |
           export TERMINAL="xterm"
           export FLEXIFY_DEVICE_TYPE="phoneScreenshots"
@@ -227,7 +236,7 @@ jobs:
           flutter drive --profile --driver=test_driver/integration_test.dart \
             --target=integration_test/screenshot_test.dart \
             --dart-define=FLEXIFY_DEVICE_TYPE=web \
-            -d web-server --web-renderer html
+            -d web-server
 
       - name: Commit screenshots
         run: |
@@ -386,7 +395,14 @@ jobs:
             flexify-windows.zip
 
   create-github-release:
-    needs: [version-and-prepare, generate-screenshots, build-android, build-linux, build-windows]
+    needs:
+      [
+        version-and-prepare,
+        generate-screenshots,
+        build-android,
+        build-linux,
+        build-windows,
+      ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
