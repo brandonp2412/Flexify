@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,8 +57,24 @@ class _WeightPageState extends State<WeightPage> {
               ),
               Selector<SettingsState, String>(
                 selector: (context, settings) => settings.value.strengthUnit,
-                builder: (context, value, child) => UnitSelector(
+                builder: (context, value, child) =>
+                    DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Unit'),
                   value: unit ?? value,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'kg',
+                      child: Text("Kilograms (kg)"),
+                    ),
+                    DropdownMenuItem(
+                      value: 'lb',
+                      child: Text("Pounds (lb)"),
+                    ),
+                    DropdownMenuItem(
+                      value: 'stone',
+                      child: Text("Stone"),
+                    ),
+                  ],
                   onChanged: (String? newValue) {
                     setState(() {
                       unit = newValue!;

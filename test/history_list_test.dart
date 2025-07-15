@@ -29,7 +29,7 @@ void main() async {
           home: Scaffold(
             body: HistoryList(
               scroll: ScrollController(),
-              gymSets: [
+              sets: [
                 GymSet(
                   id: 1,
                   name: 'Bench press',

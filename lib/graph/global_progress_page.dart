@@ -3,7 +3,6 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -230,11 +229,26 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
               child: Column(
                 children: [
                   SizedBox(height: 8),
-                  UnitSelector(
+                  DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: 'Unit'),
                     value: targetUnit,
-                    onChanged: (value) {
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'kg',
+                        child: Text("Kilograms (kg)"),
+                      ),
+                      DropdownMenuItem(
+                        value: 'lb',
+                        child: Text("Pounds (lb)"),
+                      ),
+                      DropdownMenuItem(
+                        value: 'stone',
+                        child: Text("Stone"),
+                      ),
+                    ],
+                    onChanged: (String? newValue) {
                       setState(() {
-                        targetUnit = value!;
+                        targetUnit = newValue!;
                       });
                       setData();
                     },

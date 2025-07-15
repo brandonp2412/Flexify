@@ -9,7 +9,6 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -247,8 +246,10 @@ class _EditSetPageState extends State<EditSetPage> {
               Selector<SettingsState, bool>(
                 builder: (context, showUnits, child) => Visibility(
                   visible: showUnits,
-                  child: UnitSelector(
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: 'Unit'),
                     value: unit,
+                    items: _getUnitItems(),
                     onChanged: (String? newValue) {
                       setState(() {
                         unit = newValue!;
@@ -605,6 +606,46 @@ class _EditSetPageState extends State<EditSetPage> {
     else
       orm.text =
           "${(double.parse(weight.text) * (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
+  }
+
+  List<DropdownMenuItem<String>> _getUnitItems() {
+    if (cardio) {
+      // Cardio units: distance and energy
+      return const [
+        DropdownMenuItem(
+          value: 'km',
+          child: Text("Kilometers (km)"),
+        ),
+        DropdownMenuItem(
+          value: 'mi',
+          child: Text("Miles (mi)"),
+        ),
+        DropdownMenuItem(
+          value: 'm',
+          child: Text("Meters (m)"),
+        ),
+        DropdownMenuItem(
+          value: 'kcal',
+          child: Text("Kilocalories (kcal)"),
+        ),
+      ];
+    } else {
+      // Strength units: weight
+      return const [
+        DropdownMenuItem(
+          value: 'kg',
+          child: Text("Kilograms (kg)"),
+        ),
+        DropdownMenuItem(
+          value: 'lb',
+          child: Text("Pounds (lb)"),
+        ),
+        DropdownMenuItem(
+          value: 'stone',
+          child: Text("Stone"),
+        ),
+      ];
+    }
   }
 
   void updateFields(GymSet gymSet) {

@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,8 +57,23 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 validator: (value) =>
                     value?.isNotEmpty == true ? null : 'Required',
               ),
-              UnitSelector(
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: 'Unit'),
                 value: unit,
+                items: const [
+                  DropdownMenuItem(
+                    value: 'kg',
+                    child: Text("Kilograms (kg)"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'lb',
+                    child: Text("Pounds (lb)"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'stone',
+                    child: Text("Stone"),
+                  ),
+                ],
                 onChanged: (String? newValue) {
                   setState(() {
                     unit = newValue!;

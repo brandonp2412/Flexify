@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -37,10 +36,27 @@ List<Widget> getFormatSettings(String term, Setting settings) {
     if ('strength unit'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: UnitSelector(
-          label: 'Strength unit',
+        child: DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Strength unit'),
           value: settings.strengthUnit,
-          settings: true,
+          items: const [
+            DropdownMenuItem(
+              value: "last-entry",
+              child: Text("Last entry"),
+            ),
+            DropdownMenuItem(
+              value: 'kg',
+              child: Text("Kilograms (kg)"),
+            ),
+            DropdownMenuItem(
+              value: 'lb',
+              child: Text("Pounds (lb)"),
+            ),
+            DropdownMenuItem(
+              value: 'stone',
+              child: Text("Stone"),
+            ),
+          ],
           onChanged: (value) {
             db.settings.update().write(
                   SettingsCompanion(
@@ -53,10 +69,31 @@ List<Widget> getFormatSettings(String term, Setting settings) {
     if ('cardio unit'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: UnitSelector(
-          label: 'Cardio unit',
+        child: DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Cardio unit'),
           value: settings.cardioUnit,
-          settings: true,
+          items: const [
+            DropdownMenuItem(
+              value: "last-entry",
+              child: Text("Last entry"),
+            ),
+            DropdownMenuItem(
+              value: 'km',
+              child: Text("Kilometers (km)"),
+            ),
+            DropdownMenuItem(
+              value: 'mi',
+              child: Text("Miles (mi)"),
+            ),
+            DropdownMenuItem(
+              value: 'm',
+              child: Text("Meters (m)"),
+            ),
+            DropdownMenuItem(
+              value: 'kcal',
+              child: Text("Kilocalories (kcal)"),
+            ),
+          ],
           onChanged: (value) {
             db.settings.update().write(
                   SettingsCompanion(

@@ -12,7 +12,6 @@ import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -225,8 +224,23 @@ class _CardioPageState extends State<CardioPage> {
                     selector: (p0, p1) => p1.value.showUnits,
                     builder: (context, value, child) => Visibility(
                       visible: value,
-                      child: UnitSelector(
+                      child: DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(labelText: 'Unit'),
                         value: target,
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'km',
+                            child: Text("Kilometers (km)"),
+                          ),
+                          DropdownMenuItem(
+                            value: 'mi',
+                            child: Text("Miles (mi)"),
+                          ),
+                          DropdownMenuItem(
+                            value: 'm',
+                            child: Text("Meters (m)"),
+                          ),
+                        ],
                         onChanged: (value) {
                           setState(() {
                             target = value!;

@@ -3,7 +3,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -242,8 +241,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
               Selector<SettingsState, bool>(
                 builder: (context, showUnits, child) => Visibility(
                   visible: showUnits,
-                  child: UnitSelector(
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: 'Unit'),
                     value: unit,
+                    items: _getUnitItems(),
                     onChanged: (String? newValue) {
                       setState(() {
                         unit = newValue!;
@@ -306,6 +307,46 @@ class _EditSetsPageState extends State<EditSetsPage> {
         icon: const Icon(Icons.sync),
       ),
     );
+  }
+
+  List<DropdownMenuItem<String>> _getUnitItems() {
+    if (cardio == true) {
+      // Cardio units: distance and energy
+      return const [
+        DropdownMenuItem(
+          value: 'km',
+          child: Text("Kilometers (km)"),
+        ),
+        DropdownMenuItem(
+          value: 'mi',
+          child: Text("Miles (mi)"),
+        ),
+        DropdownMenuItem(
+          value: 'm',
+          child: Text("Meters (m)"),
+        ),
+        DropdownMenuItem(
+          value: 'kcal',
+          child: Text("Kilocalories (kcal)"),
+        ),
+      ];
+    } else {
+      // Strength units: weight
+      return const [
+        DropdownMenuItem(
+          value: 'kg',
+          child: Text("Kilograms (kg)"),
+        ),
+        DropdownMenuItem(
+          value: 'lb',
+          child: Text("Pounds (lb)"),
+        ),
+        DropdownMenuItem(
+          value: 'stone',
+          child: Text("Stone"),
+        ),
+      ];
+    }
   }
 
   @override

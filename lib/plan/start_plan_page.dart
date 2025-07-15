@@ -11,7 +11,6 @@ import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/unit_selector.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
@@ -244,8 +243,10 @@ class _StartPlanPageState extends State<StartPlanPage>
       selector: (context, settings) => settings.value.showUnits,
       builder: (context, showUnits, child) => Visibility(
         visible: showUnits,
-        child: UnitSelector(
+        child: DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Unit'),
           value: unit,
+          items: _getUnitItems(),
           onChanged: (String? newValue) {
             setState(() {
               unit = newValue!;
@@ -268,6 +269,46 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
       ),
     );
+  }
+
+  List<DropdownMenuItem<String>> _getUnitItems() {
+    if (cardio) {
+      // Cardio units: distance and energy
+      return const [
+        DropdownMenuItem(
+          value: 'km',
+          child: Text("Kilometers (km)"),
+        ),
+        DropdownMenuItem(
+          value: 'mi',
+          child: Text("Miles (mi)"),
+        ),
+        DropdownMenuItem(
+          value: 'm',
+          child: Text("Meters (m)"),
+        ),
+        DropdownMenuItem(
+          value: 'kcal',
+          child: Text("Kilocalories (kcal)"),
+        ),
+      ];
+    } else {
+      // Strength units: weight
+      return const [
+        DropdownMenuItem(
+          value: 'kg',
+          child: Text("Kilograms (kg)"),
+        ),
+        DropdownMenuItem(
+          value: 'lb',
+          child: Text("Pounds (lb)"),
+        ),
+        DropdownMenuItem(
+          value: 'stone',
+          child: Text("Stone"),
+        ),
+      ];
+    }
   }
 
   @override
