@@ -140,7 +140,7 @@ class _EditSetPageState extends State<EditSetPage> {
               onPressed: () async {
                 Navigator.pop(dialogContext);
                 await db.delete(db.gymSets).delete(widget.gymSet);
-                if (context.mounted) Navigator.pop(context);
+                if (mounted) Navigator.pop(context);
               },
             ),
           ],
