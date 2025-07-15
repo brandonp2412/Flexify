@@ -131,45 +131,6 @@ jobs:
             echo "Copied $(basename "$file") to $timestamp.txt"
           done
 
-      - name: Commit version bump and create tag
-        if: ${{ env.ACT != 'true' }}
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add pubspec.yaml fastlane/metadata pubspec.lock assets
-          git commit -m "Release ${{ steps.version.outputs.version }}"
-          git tag "${{ steps.version.outputs.version }}"
-          git push origin main
-          git push origin "${{ steps.version.outputs.version }}"
-
-  generate-screenshots:
-    needs: version-and-prepare
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Flutter from submodule
-        run: |
-          git submodule update --init --recursive flutter
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
-          flutter/bin/flutter config --no-analytics
-
-      - name: Get Flutter dependencies
-        run: flutter pub get
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "17"
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Setup headless display
         run: |
           sudo apt-get update
@@ -184,6 +145,15 @@ jobs:
           sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: Accept Android SDK licenses
         run: yes | flutter doctor --android-licenses
@@ -218,27 +188,19 @@ jobs:
             --dart-define=FLEXIFY_DEVICE_TYPE=web \
             -d web-server
 
-      - name: Commit screenshots
+      - name: Commit version bump, screenshots and create tag
+        if: ${{ env.ACT != 'true' }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .
-          if ! git diff --staged --quiet; then
-            git commit -m "Update screenshots"
-          else
-            echo "No screenshot changes to commit"
-          fi
-
-      - name: Upload screenshot artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: |
-            test_driver/screenshots/
-            integration_test/screenshots/
+          git add pubspec.yaml fastlane/metadata pubspec.lock assets
+          git commit -m "Release ${{ steps.version.outputs.version }}"
+          git tag "${{ steps.version.outputs.version }}"
+          git push origin main
+          git push origin "${{ steps.version.outputs.version }}"
 
   build-android:
-    needs: [version-and-prepare, generate-screenshots]
+    needs: [version-and-prepare]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -298,7 +260,7 @@ jobs:
             build/app/outputs/bundle/release/app-release.aab
 
   build-linux:
-    needs: [version-and-prepare, generate-screenshots]
+    needs: [version-and-prepare]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -339,7 +301,7 @@ jobs:
           path: build/linux/x64/release/bundle/flexify-linux.zip
 
   build-windows:
-    needs: [version-and-prepare, generate-screenshots]
+    needs: [version-and-prepare]
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -375,14 +337,7 @@ jobs:
             flexify-windows.zip
 
   create-github-release:
-    needs:
-      [
-        version-and-prepare,
-        generate-screenshots,
-        build-android,
-        build-linux,
-        build-windows,
-      ]
+    needs: [version-and-prepare, build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
