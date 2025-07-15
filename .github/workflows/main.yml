@@ -207,7 +207,7 @@ jobs:
           disable-animations: true
           script: |
             export FLEXIFY_DEVICE_TYPE="phoneScreenshots"
-            flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots -d phoneScreenshots
+            flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots -d emulator-5554
 
       - name: Generate web screenshots
         run: |
