@@ -610,7 +610,6 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<DropdownMenuItem<String>> _getUnitItems() {
     if (cardio) {
-      // Cardio units: distance and energy
       return const [
         DropdownMenuItem(
           value: 'km',
@@ -630,7 +629,6 @@ class _EditSetPageState extends State<EditSetPage> {
         ),
       ];
     } else {
-      // Strength units: weight
       return const [
         DropdownMenuItem(
           value: 'kg',
