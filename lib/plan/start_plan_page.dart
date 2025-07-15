@@ -89,10 +89,10 @@ class _StartPlanPageState extends State<StartPlanPage>
           key: key,
           child: material.Column(
             children: [
-              if (!cardio) ..._buildStrengthFields(timer),
-              if (cardio) ..._buildCardioFields(timer),
-              _buildUnitSelector(),
-              _buildNotesField(),
+              if (!cardio) ...strengthFields(timer),
+              if (cardio) ...cardioFields(timer),
+              unitSelector(),
+              notesField(),
               Expanded(
                 child: StartList(
                   exercises: exercises,
@@ -117,7 +117,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
-  List<Widget> _buildStrengthFields(TimerState timer) {
+  List<Widget> strengthFields(TimerState timer) {
     return [
       TextFormField(
         controller: reps,
@@ -160,7 +160,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  List<Widget> _buildCardioFields(TimerState timer) {
+  List<Widget> cardioFields(TimerState timer) {
     return [
       Row(
         children: [
@@ -238,7 +238,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  Widget _buildUnitSelector() {
+  Widget unitSelector() {
     return Selector<SettingsState, bool>(
       selector: (context, settings) => settings.value.showUnits,
       builder: (context, showUnits, child) => Visibility(
@@ -257,7 +257,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
-  Widget _buildNotesField() {
+  Widget notesField() {
     return Selector<SettingsState, bool>(
       selector: (context, settings) => settings.value.showNotes,
       builder: (context, showNotes, child) => Visibility(
