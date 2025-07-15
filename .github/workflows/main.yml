@@ -152,20 +152,9 @@ jobs:
           git submodule update --init --recursive flutter
           echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
           flutter/bin/flutter config --no-analytics
-          flutter/bin/flutter --version
 
       - name: Get Flutter dependencies
         run: flutter pub get
-
-      - name: Log build environment for reproducibility
-        run: |
-          echo "=== Build Environment ==="
-          echo "Kotlin version: $KOTLIN_VERSION"
-          echo "Flutter version:"
-          flutter --version
-          echo "Java version:"
-          java -version
-          echo "========================="
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -225,7 +214,6 @@ jobs:
           git submodule update --init --recursive flutter
           echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
           flutter/bin/flutter config --no-analytics
-          flutter/bin/flutter --version
 
       - name: Get Flutter dependencies
         run: flutter pub get
@@ -265,8 +253,7 @@ jobs:
         run: |
           git submodule update --init --recursive flutter
           echo "${{ github.workspace }}\flutter\bin" >> $env:GITHUB_PATH
-          flutter config --no-analytics
-          flutter --version
+          flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
         run: flutter pub get
@@ -338,8 +325,7 @@ jobs:
         run: |
           git submodule update --init --recursive flutter
           echo "${{ github.workspace }}\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          flutter config --no-analytics
-          flutter --version
+          flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
         if: ${{ env.ACT != 'true' }}
