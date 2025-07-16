@@ -211,24 +211,13 @@ jobs:
           script: |
             flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots -d emulator-5554
 
-      - name: Install ChromeDriver
-        run: |
-          # Download and install ChromeDriver
-          CHROME_VERSION=$(google-chrome-stable --version | grep -oP '\d+\.\d+\.\d+\.\d+')
-          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*.*}")
-          wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
-          sudo unzip /tmp/chromedriver.zip -d /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
+      - uses: nanasess/setup-chromedriver@v2
 
       - name: Start ChromeDriver
         run: |
-          # Start ChromeDriver in the background
-          chromedriver --port=4444 &
-          # Wait for ChromeDriver to start
-          sleep 5
-          # Verify ChromeDriver is running
-          curl -f http://localhost:4444/status || exit 1
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
 
       - name: Generate web screenshots
         run: |
@@ -240,17 +229,12 @@ jobs:
             --dart-define=FLEXIFY_DEVICE_TYPE=web \
             -d chrome
 
-      - name: Stop ChromeDriver
-        run: |
-          # Kill ChromeDriver process
-          pkill -f chromedriver || true
-
       - name: Commit version bump, screenshots and create tag
         if: ${{ env.ACT != 'true' }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add pubspec.yaml fastlane pubspec.lock assets
+          git add pubspec.yaml fastlane/metadata fastlane/screenshots pubspec.lock assets
           git commit -m "Release ${{ steps.version.outputs.version }}"
           git tag "${{ steps.version.outputs.version }}"
           git push origin main
