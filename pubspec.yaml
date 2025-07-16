@@ -3,44 +3,44 @@ description: Track gym progress, visualize graphs, enjoy offline support & timer
 publish_to: none
 version: 2.0.48+263
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ">=3.2.6 <4.0.0"
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  drift: ^2.15.0
-  sqlite3_flutter_libs: ^0.5.20
+  drift: ^2.28.0
+  sqlite3_flutter_libs: ^0.5.36
   path_provider: ^2.1.2
   path: ^1.8.3
   csv: ^6.0.0
   intl: ^0.20.2
   fl_chart: ^0.70.2
-  permission_handler: ^11.3.0
+  permission_handler: ^12.0.1
   provider: ^6.1.1
   dynamic_color: ^1.7.0
   sqlite3: ^2.4.0
-  file_picker: ^8.0.3
-  share_plus: ^10.1.4
-  audioplayers: ^6.0.0
+  file_picker: ^10.2.0
+  share_plus: ^11.0.0
+  audioplayers: ^6.5.0
   package_info_plus: ^8.0.0
   url_launcher: ^6.2.6
   badges: ^3.1.2
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications: ^19.3.0
   msvcredist:
     git:
       url: https://github.com/insertjokehere/flutter_msvcredist.git
       ref: main
   timeago: ^3.2.2
-  sqlite3_web: ^0.1.2
+  sqlite3_web: ^0.3.1
 dev_dependencies:
   integration_test:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
-  drift_dev: ^2.15.0
-  build_runner: ^2.4.8
-  flutter_launcher_icons: ^0.14.3
+  flutter_lints: ^6.0.0
+  drift_dev: ^2.28.0
+  build_runner: ^2.5.4
+  flutter_launcher_icons: ^0.14.4
   msix:
     git:
       url: https://github.com/insertjokehere/msix.git
@@ -58,8 +58,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: assets/ic_launcher.png
-    background_color: '#hexcode'
-    theme_color: '#hexcode'
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
   windows:
     generate: true
     image_path: assets/ic_launcher.png
