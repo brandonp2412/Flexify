@@ -213,14 +213,13 @@ jobs:
 
       - uses: nanasess/setup-chromedriver@v2
 
-      - name: Start ChromeDriver
+      - name: Generate web screenshots
+        env:
+          FLEXIFY_DEVICE_TYPE: web
         run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub --port=4444 &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-
-      - name: Generate web screenshots
-        run: |
           export CHROME_EXECUTABLE=$(which google-chrome-stable)
           export FLEXIFY_DEVICE_TYPE="web"
           export FLUTTER_WEB="true"
