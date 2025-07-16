@@ -211,14 +211,39 @@ jobs:
           script: |
             flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots -d emulator-5554
 
+      - name: Install ChromeDriver
+        run: |
+          # Download and install ChromeDriver
+          CHROME_VERSION=$(google-chrome-stable --version | grep -oP '\d+\.\d+\.\d+\.\d+')
+          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*.*}")
+          wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          sudo unzip /tmp/chromedriver.zip -d /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
+
+      - name: Start ChromeDriver
+        run: |
+          # Start ChromeDriver in the background
+          chromedriver --port=4444 &
+          # Wait for ChromeDriver to start
+          sleep 5
+          # Verify ChromeDriver is running
+          curl -f http://localhost:4444/status || exit 1
+
       - name: Generate web screenshots
         run: |
           export CHROME_EXECUTABLE=$(which google-chrome-stable)
           export FLEXIFY_DEVICE_TYPE="web"
+          export FLUTTER_WEB="true"
           flutter drive --profile --driver=test_driver/integration_test.dart \
             --target=integration_test/screenshot_test.dart \
             --dart-define=FLEXIFY_DEVICE_TYPE=web \
-            -d web-server
+            -d chrome
+
+      - name: Stop ChromeDriver
+        run: |
+          # Kill ChromeDriver process
+          pkill -f chromedriver || true
 
       - name: Commit version bump, screenshots and create tag
         if: ${{ env.ACT != 'true' }}
