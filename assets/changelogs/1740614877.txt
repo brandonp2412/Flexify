@@ -1,7 +1,0 @@
-- Add notes to plan activation
-- Prevent graph lines going out of bounds
-- Remove "No data yet" from global progress
-- Remove white line below searchbar on scroll
-- Move clear button from dropdown to left of search bar
-- Fix screenshot of edit plan
-- Curve line graphs in screenshots

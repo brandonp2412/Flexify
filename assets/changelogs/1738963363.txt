@@ -1,3 +1,0 @@
-- Add image picking to weight
-- Hide irrelevant fields on weight entries
-- Make categories dynamic

@@ -1,1 +1,0 @@
-- Fix status bars on android 15

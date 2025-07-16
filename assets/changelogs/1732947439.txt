@@ -1,2 +1,0 @@
-- Fix initial reps/weight being zero on plans
-- Remove leading zeros after saving plans

@@ -1,2 +1,0 @@
-- Lazily get counts for plan exercises
-- Make sure gym_sets has index
