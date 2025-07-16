@@ -60,26 +60,56 @@ jobs:
         run: |
           changelog_file="fastlane/metadata/android/en-US/changelogs/${{ steps.version.outputs.changelog_number }}.txt"
 
-          if [ ! -f "$changelog_file" ]; then
-            mkdir -p "$(dirname "$changelog_file")"
-            
-            last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-            if [ -n "$last_tag" ]; then
-              git --no-pager log --pretty=format:'%s' "$last_tag"..HEAD | \
-                sort -u | \
-                grep -v "^Merge " | \
-                grep -v "^${{ steps.version.outputs.version }}" | \
-                head -10 | \
-                awk '{print "• "$0}' > "$changelog_file"
-            else
-              echo "• Initial release" > "$changelog_file"
-            fi
-            
-            if [ ! -s "$changelog_file" ] || ! grep -q "•" "$changelog_file"; then
-              echo "• Bug fixes and improvements" > "$changelog_file"
-            fi
+          # Use existing changelog if it exists
+          if [ -f "$changelog_file" ]; then
+            echo "Using existing changelog file: $changelog_file"
+            cat "$changelog_file"
+            changelog=$(cat "$changelog_file")
+            echo "changelog<<EOF" >> $GITHUB_OUTPUT
+            echo "$changelog" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            mkdir -p fastlane/metadata/en-AU
+            echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
+            exit 0
           fi
 
+          # Generate new changelog
+          mkdir -p "$(dirname "$changelog_file")"
+
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$last_tag" ]; then
+            echo "• Initial release" > "$changelog_file"
+            echo "Generated initial release changelog"
+            cat "$changelog_file"
+            changelog=$(cat "$changelog_file")
+            echo "changelog<<EOF" >> $GITHUB_OUTPUT
+            echo "$changelog" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            mkdir -p fastlane/metadata/en-AU
+            echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
+            exit 0
+          fi
+
+          # Generate changelog from git commits
+          git --no-pager log --pretty=format:'%s' "$last_tag"..HEAD | \
+            sort -u | \
+            grep -v "^Merge " | \
+            grep -v "^Release " | \
+            grep -v "^${{ steps.version.outputs.version }}" | \
+            grep -v "^Bump " | \
+            grep -v "^Update " | \
+            head -10 | \
+            awk '{print "• "$0}' > "$changelog_file"
+
+          # Use fallback if file is empty or has no bullet points
+          if [ ! -s "$changelog_file" ] || ! grep -q "•" "$changelog_file"; then
+            echo "• Bug fixes and improvements" > "$changelog_file"
+            echo "Used fallback changelog content"
+          else
+            echo "Generated changelog from git commits"
+          fi
+
+          cat "$changelog_file"
           changelog=$(cat "$changelog_file")
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$changelog" >> $GITHUB_OUTPUT
@@ -120,15 +150,16 @@ jobs:
             [ -f "$file" ] || continue
             [ "$(basename "$file")" != "*.txt" ] || continue
             
-            timestamp=$(stat -c "%Y" "$file")
+            filename=$(basename "$file")
+            target_file="assets/changelogs/$filename"
             
-            [ -n "$timestamp" ] && [ "$timestamp" -gt 0 ] || {
-              echo "Skipping file with invalid timestamp: $file"
-              continue
-            }
-            
-            cp "$file" "assets/changelogs/$timestamp.txt"
-            echo "Copied $(basename "$file") to $timestamp.txt"
+            # Only copy if the target doesn't exist or content is different
+            if [ ! -f "$target_file" ] || ! cmp -s "$file" "$target_file"; then
+              cp "$file" "$target_file"
+              echo "Copied $filename to assets/changelogs/"
+            else
+              echo "Skipped $filename (already exists with same content)"
+            fi
           done
 
       - name: Setup headless display
