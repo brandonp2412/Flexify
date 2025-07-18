@@ -118,18 +118,11 @@ jobs:
           mkdir -p fastlane/metadata/en-AU
           echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          cache: true
-
-      - name: Fix Flutter cache permissions
+      - name: Setup Flutter from submodule
         run: |
-          if [ -d "$FLUTTER_ROOT" ]; then
-            sudo chown -R $(whoami) "$FLUTTER_ROOT" || true
-            sudo chmod -R u+w "$FLUTTER_ROOT" || true
-          fi
+          git submodule update --init --recursive flutter
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter config --no-analytics
 
       - name: Run tests and analysis
         run: |
@@ -161,14 +154,6 @@ jobs:
               echo "Skipped $filename (already exists with same content)"
             fi
           done
-
-      - name: Setup headless display
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb x11-utils
-          export DISPLAY=:99
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -353,7 +338,7 @@ jobs:
             flexify-windows.zip
 
   create-github-release:
-    needs: [version-and-prepare, build-android, build-linux, build-windows]
+    needs: [build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -374,14 +359,13 @@ jobs:
           files: |
             android-builds/flutter-apk/app-*-release.apk
             android-builds/flutter-apk/flexify.apk
-            android-builds/bundle/release/app-release.aab
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-windows-store:
-    needs: [version-and-prepare, build-windows]
+    needs: [build-windows]
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -397,11 +381,6 @@ jobs:
 
       - name: Get Flutter dependencies
         run: flutter pub get
-
-      - name: Download Windows artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: windows-builds
 
       - name: Build MSIX
         run: flutter pub run msix:create
@@ -424,7 +403,7 @@ jobs:
           msstore publish build/windows/x64/runner/Release/flexify.msix --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }}
 
   deploy-google-play:
-    needs: [version-and-prepare, build-android]
+    needs: [build-android]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
