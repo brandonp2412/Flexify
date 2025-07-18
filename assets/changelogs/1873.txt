@@ -1,0 +1,6 @@
+- Add validation
+- Improve performance for large databases
+- Make add exercise & weight page scrollable
+- Add image to new exercise page
+- Fix add exercise padding
+- Request notifications when enabling automatic backups

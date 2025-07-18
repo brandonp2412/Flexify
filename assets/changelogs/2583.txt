@@ -1,0 +1,9 @@
+• Add error handling to data importing
+• Add more data migration tests
+• Delete comments
+• Enable build config in android/app/build.gradle
+• Fix linting issue in edit_set_page
+• Remove underscore prefixes in some methods of start plan page
+• Remove unit selector and fix tests
+• Shorten all variable names
+• Split out everything in edit set page more

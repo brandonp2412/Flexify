@@ -1,0 +1,3 @@
+- Preview custom alarm sound when setting it
+- Refactor cardio graphs
+- Add share database button to settings

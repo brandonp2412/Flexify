@@ -1,0 +1,10 @@
+- Fix tests
+- Add best reps metric
+- Rename AppGroupBy -> Period
+- Improve performance of cardio graphs
+- Increase versionCode on universal releases
+- Fix adding minutes from timer page
+- Comment out fastlane supply
+- Use local time where relevant
+- Refactor settings logic
+- Refactor code

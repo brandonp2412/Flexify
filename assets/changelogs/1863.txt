@@ -1,0 +1,3 @@
+- Fix images not being set from plans
+- Fix desktop timers still firing
+- Add kcal, meters to distance unit

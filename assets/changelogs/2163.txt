@@ -1,0 +1,5 @@
+- Round weights
+- Fix tab navigation being behind the system nav
+- Move curve smoothness label before slider
+- Fix track color missing with system colors
+- Normalize units when changing them from graphs

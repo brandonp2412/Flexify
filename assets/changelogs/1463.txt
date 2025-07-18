@@ -1,0 +1,2 @@
+- Edit # of exercises on plans instead of graphs
+- Improve app performance

@@ -1,0 +1,11 @@
+- Fix usage of yq in .deploy.yml
+- Fix linting issues
+- Remove avoid print linting rule
+- Run dart format
+- Run workflows on main
+- Add github workflows
+- Fix GitHub workflows to handle act testing
+- Fix most of the desktop screenshot generations
+- Add setup for running integration tests for chrome
+- Fix settings page on web
+- Fix running on web

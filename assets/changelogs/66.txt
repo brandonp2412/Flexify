@@ -1,0 +1,6 @@
+- Remove tags from deploy.sh
+- Add delete button to edit gym set page
+- Edit graph points by double tapping
+- Move date settings helper text into the label
+- Add short date format setting
+- Refactor line graphs

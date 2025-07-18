@@ -1,0 +1,5 @@
+- Fix deploy.sh
+- Remove windows + macos workflow run after deploy
+- Fix blank page after importing databases
+- Add units to cardio graphs
+- Reorganize lib folder

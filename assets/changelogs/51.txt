@@ -1,0 +1,1 @@
+Split apks per architecture

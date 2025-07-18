@@ -1,0 +1,2 @@
+- Fix msstore publish command
+- Guarantee gym sets before testing them in graphs page

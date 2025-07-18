@@ -1,0 +1,3 @@
+- Fix automatic backups
+- Fix inconsistent alarm crashes
+- Improve reps estimation accuracy

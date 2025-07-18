@@ -1,0 +1,3 @@
+- Treat cardio duration as minutes:seconds
+- Fix max sets all being 3 per exercise
+- Enable rest timers for Linux

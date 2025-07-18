@@ -1,0 +1,5 @@
+- Fix screenshot tests
+- Make data importing more robust
+- Clear plans before importing
+- Prevent opening graph point on pinch
+- Put release mode on my phone after deploying

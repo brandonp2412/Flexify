@@ -1,0 +1,4 @@
+- Fix broken save when rest timers are enabled
+- Fix names of import/export data files
+- Refactor exercise list
+- Fix release notes

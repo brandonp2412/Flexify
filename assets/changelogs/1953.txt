@@ -1,0 +1,3 @@
+- Animate progress bars left to right
+- Highlight todays plan with custom titles
+- Compress day selector on plan editor

@@ -1,0 +1,1 @@
+Fix saving plan with timers disabled

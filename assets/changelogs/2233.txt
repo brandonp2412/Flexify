@@ -1,0 +1,4 @@
+- Enable exercises on screenshot for plans
+- Curve graphs by default
+- Update README.md
+- Handle failed migrations

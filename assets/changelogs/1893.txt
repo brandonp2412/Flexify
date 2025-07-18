@@ -1,0 +1,4 @@
+- Fix back navigation sometimes not working
+- Hide one rep max estimates on cardio exercises
+- Improve performance of strength page
+- Improve plans performance

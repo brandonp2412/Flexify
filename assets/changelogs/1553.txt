@@ -1,0 +1,2 @@
+- Enable timers on ios
+- Fix finished timers on macos

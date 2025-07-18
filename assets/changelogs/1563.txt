@@ -1,0 +1,3 @@
+- Add categories
+- Add incline & adjusted pace graphs
+- Remove duplicated tiles in timer settings

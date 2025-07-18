@@ -1,0 +1,5 @@
+- Fix app crashes after 1.1.36
+- Use search bar and add visibility toggle to plans
+- Enable rest timers on desktop platforms
+- Make timers run on desktop
+- Revert work on desktop timers

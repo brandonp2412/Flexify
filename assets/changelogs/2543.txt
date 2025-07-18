@@ -1,0 +1,2 @@
+- Use flutter submodule and specify kotlin version
+- Fix deploy-windows-store

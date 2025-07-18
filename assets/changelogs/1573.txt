@@ -1,0 +1,4 @@
+- Add warmup sets
+- Change style of exercise list in plans
+- Fix max sets
+- Only show incline for non-zero values

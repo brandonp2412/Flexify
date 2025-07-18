@@ -1,0 +1,2 @@
+- Customize progress bars on plans
+- Add automatic backups

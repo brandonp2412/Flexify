@@ -1,0 +1,4 @@
+- Add stop button to finished timers
+- Fix created dates on history page for new sets
+- Fix alarms not stopping
+- Replace redundant usage of MaterialStateProperty

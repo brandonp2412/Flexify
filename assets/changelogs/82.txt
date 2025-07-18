@@ -1,0 +1,8 @@
+- Add hide history tab setting
+- Change automatic backups
+- Fix name not updating for edit gym set
+- Add automatic backups
+- Fix new gym sets having invalid IDs and createds
+- Format code in import_data
+- Fix jank when adding a new gym set
+- Use file_picker for export/import data

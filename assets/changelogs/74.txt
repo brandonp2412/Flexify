@@ -1,0 +1,5 @@
+- Add support for units in cardio
+- Fix grouping by week for cardio lines
+- Fix grouping by weeks for graph
+- Fix grouping by week
+- Refactor plans

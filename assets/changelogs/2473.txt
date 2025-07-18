@@ -1,0 +1,10 @@
+- Fix unit tests
+- Fix deploying to windows store
+- Add debug step to list downloaded files in Windows Store deployment
+- Fix Windows Store deployment: use local MSIX file instead of GitHub release URL
+- Fix Windows Store deployment: ensure GitHub release is created before Windows Store deployment
+- Update desktop screenshots
+- Fix all automated screenshots for desktop
+- Update pubspec.lock
+- Add script for updating chromedriver
+- Fix what's new page

@@ -1,0 +1,2 @@
+- Merge branch 'main' of github.com:brandonp2412/Flexify
+- Preview vibration when toggling the timer setting

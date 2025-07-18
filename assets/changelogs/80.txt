@@ -1,0 +1,4 @@
+- Paginate gym sets on history
+- Capitalize search bar sentences
+- Use the last entered gym set as the default
+- Order graphs by created date

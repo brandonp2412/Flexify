@@ -1,0 +1,5 @@
+- Improve plans edit performance
+- Fix one-rep-max graphs
+- Fix plan counts being global
+- Allow incline to be empty
+- Improve start-up performance

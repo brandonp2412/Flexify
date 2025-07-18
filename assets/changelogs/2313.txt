@@ -1,0 +1,7 @@
+- Prevent deleting exercise presets
+- Override default units with the setting
+- Make graph slightly shorter
+- Add limit slider to graphs
+- Say # of sets in collapsed history
+- Improve style of day dividers for history
+- Label dividers on graphs page

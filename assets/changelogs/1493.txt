@@ -1,0 +1,3 @@
+- Gracefully handle errors in image loading
+- Remove add/remove buttons from image editor
+- Leave image alone if user cancels file picker

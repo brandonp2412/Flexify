@@ -1,0 +1,5 @@
+- Upgrade flutter to 3.24.0
+- Use extended floating action buttons
+- Fix deployment to github & f-droid repro
+- Prevent showing permissions page on ios
+- Fix cardio graphs not instantly updating

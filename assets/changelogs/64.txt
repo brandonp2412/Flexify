@@ -1,0 +1,7 @@
+- Include all commit messages in release notes
+- Rename export/import data files
+- Refactor plans page
+- Add edit icon for graphs page
+- Add setting for curved line graphs
+- Make line graphs curved
+- Fix tooltips on line graphs

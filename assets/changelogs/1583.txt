@@ -1,0 +1,4 @@
+- Add rep estimation
+- Add duration estimation
+- Add missing warmup setting
+- Fix windows package

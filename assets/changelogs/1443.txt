@@ -1,0 +1,1 @@
+Fix counting plan progress

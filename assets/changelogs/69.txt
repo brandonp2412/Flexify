@@ -1,0 +1,9 @@
+- Ensure Y values are 2dp for cardio line
+- Add edit button to top right of plans
+- Add history suffix to graph history title
+- Add cardio types
+- Refactor view graph page
+- Fix searching for import/export data in settings
+- Refactor start_plan_page
+- Refactor plans page
+- Test saving plans

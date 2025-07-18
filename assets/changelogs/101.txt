@@ -1,0 +1,2 @@
+- Require -p flag for deploy.sh to send to google play
+- Simplify count query for plans

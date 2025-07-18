@@ -1,0 +1,5 @@
+- Improve graph performance
+- Remove "Weight" from cardio edit
+- Fix back navigation sometimes not working
+- Hide one rep max estimates on cardio exercises
+- Improve plans performance
