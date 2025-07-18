@@ -170,13 +170,6 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           echo "DISPLAY=:99" >> $GITHUB_ENV
 
-      - name: Install Chrome for web screenshots
-        run: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -210,23 +203,6 @@ jobs:
           disable-animations: true
           script: |
             flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots -d emulator-5554
-
-      - uses: nanasess/setup-chromedriver@v2
-
-      - name: Generate web screenshots
-        env:
-          FLEXIFY_DEVICE_TYPE: web
-        run: |
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub --port=4444 &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-          export CHROME_EXECUTABLE=$(which google-chrome-stable)
-          export FLEXIFY_DEVICE_TYPE="web"
-          export FLUTTER_WEB="true"
-          flutter drive --profile --driver=test_driver/integration_test.dart \
-            --target=integration_test/screenshot_test.dart \
-            --dart-define=FLEXIFY_DEVICE_TYPE=web \
-            -d chrome
 
       - name: Commit version bump, screenshots and create tag
         if: ${{ env.ACT != 'true' }}
