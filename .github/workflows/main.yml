@@ -220,11 +220,11 @@ jobs:
           cd ..
           mv ${{ github.event.repository.name }} /home/brandon/flexify
 
-      - name: Setup Flutter from submodule
+      - name: Setup Flutter from submodule and get dependencies
+        working-directory: /home/brandon/flexify
         run: |
-          cd /home/brandon/flexify
           git submodule update --init --recursive flutter
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          echo "/home/brandon/flexify/flutter/bin" >> $GITHUB_PATH
           export PUB_CACHE=$(pwd)/.pub-cache
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get
@@ -236,13 +236,13 @@ jobs:
           java-version: "17"
 
       - name: Decode Android keystore
+        working-directory: /home/brandon/flexify
         run: |
-          cd /home/brandon/flexify
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
 
       - name: Build android
+        working-directory: /home/brandon/flexify
         run: |
-          cd /home/brandon/flexify
           echo "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
