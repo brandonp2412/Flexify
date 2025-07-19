@@ -210,9 +210,6 @@ jobs:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull latest changes
-        run: git pull origin main
-
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
@@ -270,9 +267,6 @@ jobs:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull latest changes
-        run: git pull origin main
-
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
@@ -310,9 +304,6 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Pull latest changes
-        run: git pull origin main
 
       - name: Setup Flutter from submodule
         run: |
