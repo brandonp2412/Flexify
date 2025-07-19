@@ -252,9 +252,6 @@ jobs:
           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
           flutter build appbundle
 
-      - name: Rename universal APK
-        run: 
-
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
