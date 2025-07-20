@@ -253,15 +253,16 @@ jobs:
           flutter build apk
           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
           flutter build appbundle
+          mv build/app/outputs ${{ github.event.repository.name }}
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-builds
           path: |
-            /home/brandon/flexify/build/app/outputs/flutter-apk/app-*-release.apk
-            /home/brandon/flexify/build/app/outputs/flutter-apk/flexify.apk
-            /home/brandon/flexify/build/app/outputs/bundle/release/app-release.aab
+            outputs/flutter-apk/app-*-release.apk
+            outputs/flutter-apk/flexify.apk
+            outputs/bundle/release/app-release.aab
 
   build-linux:
     needs: [version-and-prepare]
