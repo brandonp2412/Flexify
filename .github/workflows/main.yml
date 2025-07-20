@@ -253,7 +253,7 @@ jobs:
           flutter build apk
           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
           flutter build appbundle
-          mv build/app/outputs ${{ github.event.repository.name }}
+          mv build/app/outputs "${GITHUB_WORKSPACE}/outputs"
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
