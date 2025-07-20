@@ -339,7 +339,7 @@ jobs:
             flexify-windows.zip
 
   create-github-release:
-    needs: [build-android, build-linux, build-windows]
+    needs: [version-and-prepare ,build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
