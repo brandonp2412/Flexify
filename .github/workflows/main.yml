@@ -260,9 +260,9 @@ jobs:
         with:
           name: android-builds
           path: |
-            outputs/flutter-apk/app-*-release.apk
-            outputs/flutter-apk/flexify.apk
-            outputs/bundle/release/app-release.aab
+           build/app/outputs/flutter-apk/app-*-release.apk
+           build/app/outputs/flutter-apk/flexify.apk
+           build/app/outputs/bundle/release/app-release.aab
 
   build-linux:
     needs: [version-and-prepare]
