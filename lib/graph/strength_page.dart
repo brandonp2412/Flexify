@@ -363,8 +363,7 @@ class _StrengthPageState extends State<StrengthPage> {
         final created = DateFormat(format).format(row.created);
         final formatter = NumberFormat("#,###.00");
 
-        String text =
-            "${row.reps} x ${row.value.toStringAsFixed(2)}$target $created";
+        String text = "${row.value.toStringAsFixed(2)}$target $created";
         switch (metric) {
           case StrengthMetric.bestReps:
           case StrengthMetric.relativeStrength:
@@ -388,7 +387,7 @@ class _StrengthPageState extends State<StrengthPage> {
     );
   }
 
-  touchLine(
+  Future<void> touchLine(
     FlTouchEvent event,
     LineTouchResponse? touchResponse,
   ) async {
@@ -433,7 +432,6 @@ class _StrengthPageState extends State<StrengthPage> {
               ..where(
                 (tbl) =>
                     tbl.created.equals(row.created) &
-                    tbl.reps.equals(row.reps) &
                     tbl.weight.equals(row.value) &
                     tbl.name.equals(widget.name),
               )
