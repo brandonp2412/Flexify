@@ -39,6 +39,7 @@ class _EditSetPageState extends State<EditSetPage> {
   final distNode = FocusNode();
   final key = GlobalKey<FormState>();
 
+  var categoryCtrl = TextEditingController();
   late String unit;
   late DateTime created;
   late bool cardio;
@@ -348,6 +349,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 FocusNode focusNode,
                 VoidCallback onFieldSubmitted,
               ) {
+                categoryCtrl = textEditingController;
                 return TextFormField(
                   controller: textEditingController,
                   focusNode: focusNode,
@@ -573,7 +575,7 @@ class _EditSetPageState extends State<EditSetPage> {
     });
   }
 
-  save() async {
+  Future<void> save() async {
     if (!key.currentState!.validate()) return;
 
     Navigator.pop(context);
@@ -712,6 +714,7 @@ class _EditSetPageState extends State<EditSetPage> {
     seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
     distance.text = toString(gymSet.distance);
     incline.text = gymSet.incline?.toString() ?? "";
+    categoryCtrl.text = gymSet.category?.toString() ?? "";
     if (widget.gymSet.id > 0) notes.text = gymSet.notes ?? '';
 
     setState(() {
