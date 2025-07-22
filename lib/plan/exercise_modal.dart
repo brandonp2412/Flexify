@@ -208,24 +208,22 @@ class _ExerciseModalState extends State<ExerciseModal> {
     );
   }
 
-  void changeMax(value) {
-    if (int.parse(max.text) > 0 && int.parse(max.text) <= 20) {
-      (db.planExercises.update()
-            ..where(
-              (u) =>
-                  u.planId.equals(widget.planId) &
-                  u.exercise.equals(widget.exercise),
-            ))
-          .write(
-        PlanExercisesCompanion(
-          maxSets: Value(int.tryParse(max.text)),
-        ),
-      );
-      widget.onMax();
-    }
+  void changeMax(String value) {
+    (db.planExercises.update()
+          ..where(
+            (u) =>
+                u.planId.equals(widget.planId) &
+                u.exercise.equals(widget.exercise),
+          ))
+        .write(
+      PlanExercisesCompanion(
+        maxSets: Value(int.tryParse(max.text)),
+      ),
+    );
+    widget.onMax();
   }
 
-  void changeWarmup(value) {
+  void changeWarmup(String value) {
     (db.planExercises.update()
           ..where(
             (u) =>
