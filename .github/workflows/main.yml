@@ -8,6 +8,12 @@ on:
       - "fastlane/metadata/**"
       - "assets/changelogs/**"
 
+# Add permissions for GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 env:
   PUB_SUMMARY_ONLY: true
   KOTLIN_VERSION: "2.1.0"
@@ -341,6 +347,49 @@ jobs:
           name: windows-builds
           path: |
             flexify-windows.zip
+
+  # New job for building and deploying Flutter Web to GitHub Pages
+  build-and-deploy-web:
+    needs: [version-and-prepare]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Enable web support
+        run: flutter config --enable-web
+
+      - name: Build Flutter web
+        run: |
+          flutter build web --release --base-href /${{ github.event.repository.name }}/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build/web
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   create-github-release:
     needs: [version-and-prepare ,build-android, build-linux, build-windows]
