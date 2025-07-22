@@ -136,23 +136,27 @@ jobs:
           yq e ".version |= \"${{ steps.version.outputs.flutter_version }}\"" -i pubspec.yaml
           yq e ".msix_config.msix_version |= \"${{ steps.version.outputs.msix_version }}\"" -i pubspec.yaml
 
-      - name: Copy changelogs
+      - name: Copy changelogs with timestamps
         run: |
           mkdir -p assets/changelogs
 
           for file in fastlane/metadata/android/en-US/changelogs/*.txt; do
             [ -f "$file" ] || continue
-            [ "$(basename "$file")" != "*.txt" ] || continue
-            
-            filename=$(basename "$file")
-            target_file="assets/changelogs/$filename"
-            
-            # Only copy if the target doesn't exist or content is different
+
+            # Try birth time first
+            timestamp=$(stat --format="%W" "$file")
+            if [ "$timestamp" -eq 0 ]; then
+              timestamp=$(stat --format="%Y" "$file")
+            fi
+
+            target_file="assets/changelogs/$timestamp.txt"
+
+            # Copy only if file doesn't exist or differs
             if [ ! -f "$target_file" ] || ! cmp -s "$file" "$target_file"; then
               cp "$file" "$target_file"
-              echo "Copied $filename to assets/changelogs/"
+              echo "Copied $(basename "$file") to $timestamp.txt"
             else
-              echo "Skipped $filename (already exists with same content)"
+              echo "Skipped $(basename "$file") (already exists with same content)"
             fi
           done
 
