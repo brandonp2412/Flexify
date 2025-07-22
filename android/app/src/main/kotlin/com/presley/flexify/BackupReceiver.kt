@@ -17,8 +17,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class BackupReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -30,12 +28,13 @@ class BackupReceiver : BroadcastReceiver() {
         if (!enabled || backupPath == null) return
 
         val backupUri = Uri.parse(backupPath)
-
         val dir = DocumentFile.fromTreeUri(context, backupUri)
-        if (dir == null) return;
+        if (dir == null) return
 
-        val fileName = generateBackupFileName()
-        if (dir.findFile(fileName) != null) return; /* backup already been done */
+        val fileName = "flexify.sqlite"
+
+        // Delete existing backup if it exists
+        dir.findFile(fileName)?.delete()
 
         val channelId = "backup_channel"
         var notificationBuilder = NotificationCompat.Builder(context, channelId)
@@ -57,15 +56,14 @@ class BackupReceiver : BroadcastReceiver() {
                 context,
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+        ) return
 
         val file = dir.createFile("application/x-sqlite3", fileName)
         if (file == null) {
             Log.e("BackupReceiver", "Failed to create backup file")
             return
         }
+
         Log.d("BackupReceiver", "file.uri=${file.uri}")
         notificationBuilder = notificationBuilder.setContentText(file.name)
 
@@ -102,8 +100,8 @@ class BackupReceiver : BroadcastReceiver() {
             }
 
             val dbFolder = File(parentDir, "app_flutter").absolutePath
-            val dbFile = File(dbFolder, "flexify.sqlite")
-            
+            val dbFile = File(dbFolder, fileName)
+
             if (!dbFile.exists()) {
                 Log.e("BackupReceiver", "Database file does not exist: ${dbFile.absolutePath}")
                 return
@@ -118,14 +116,6 @@ class BackupReceiver : BroadcastReceiver() {
             }
         } catch (e: Exception) {
             Log.e("BackupReceiver", "Error during backup: ${e.message}", e)
-            return
         }
-    }
-
-    private fun generateBackupFileName(): String {
-        val currentDate = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val yyyyMMdd = formatter.format(currentDate)
-        return "flexify-${yyyyMMdd}.sqlite"
     }
 }
