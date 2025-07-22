@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -170,16 +172,25 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double circleSize = 300;
+    const double strokeWidth = 20;
+    const double buttonSize = 24;
+
+    final angle = (-math.pi / 2) - (2 * math.pi * (1 - value));
+    final radius = (circleSize / 2);
+    final buttonX = radius * math.cos(angle);
+    final buttonY = radius * math.sin(angle);
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         SizedBox(
-          height: 300,
-          width: 300,
+          height: circleSize,
+          width: circleSize,
           child: CircularProgressIndicator(
             strokeCap: StrokeCap.round,
             value: value,
-            strokeWidth: 20,
+            strokeWidth: strokeWidth,
             backgroundColor:
                 Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.25),
             valueColor: AlwaysStoppedAnimation<Color>(
@@ -187,6 +198,31 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             ),
           ),
         ),
+        // Circle button at the end of the progress
+        if (value > 0)
+          Transform.translate(
+            offset: Offset(buttonX, buttonY),
+            child: Container(
+              width: buttonSize,
+              height: buttonSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Icon(
+                Icons.circle,
+                color: Theme.of(context).colorScheme.onPrimary,
+                size: 12,
+              ),
+            ),
+          ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
