@@ -8,6 +8,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -55,21 +56,41 @@ class ImportData extends StatelessWidget {
     );
   }
 
-  importDatabase(BuildContext context) async {
+  Future<void> importDatabase(BuildContext context) async {
     Navigator.pop(context);
 
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
-      if (result == null) return;
-
-      File sourceFile = File(result.files.single.path!);
-
-      if (!await sourceFile.exists()) {
-        throw Exception('Selected file does not exist');
+      if (kIsWeb) {
+        await _importDatabaseWeb(context);
+      } else {
+        await _importDatabaseNative(context);
       }
+    } catch (e) {
+      if (!ctx.mounted) return;
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text('Failed to import database: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
 
-      final dbFolder = await getApplicationDocumentsDirectory();
-      await db.close();
+  Future<void> _importDatabaseNative(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    File sourceFile = File(result.files.single.path!);
+
+    if (!await sourceFile.exists()) {
+      throw Exception('Selected file does not exist');
+    }
+
+    final dbFolder = await getApplicationDocumentsDirectory();
+    await db.close();
+
+    try {
       await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
       db = AppDatabase();
 
@@ -83,33 +104,50 @@ class ImportData extends StatelessWidget {
       if (!ctx.mounted) return;
       Navigator.pushNamedAndRemoveUntil(ctx, '/', (_) => false);
     } catch (e) {
-      if (!ctx.mounted) return;
-      ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text('Failed to import database: ${e.toString()}'),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 5),
-        ),
-      );
+      db = AppDatabase();
+      rethrow;
     }
   }
 
-  importGraphs(BuildContext context) async {
+  Future<void> _importDatabaseWeb(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    Uint8List? fileBytes = result.files.single.bytes;
+    if (fileBytes == null) {
+      throw Exception('Could not read file data');
+    }
+
+    throw Exception(
+      'Database import on web requires manual data migration. Please export your data as CSV files and import those instead.',
+    );
+  }
+
+  Future<void> importGraphs(BuildContext context) async {
     Navigator.pop(context);
 
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result == null) return;
 
-      File file = File(result.files.single.path!);
+      String csvContent;
 
-      if (!await file.exists()) {
-        throw Exception('Selected file does not exist');
+      if (kIsWeb) {
+        Uint8List? fileBytes = result.files.single.bytes;
+        if (fileBytes == null) {
+          throw Exception('Could not read file data');
+        }
+        csvContent = String.fromCharCodes(fileBytes);
+      } else {
+        File file = File(result.files.single.path!);
+        if (!await file.exists()) {
+          throw Exception('Selected file does not exist');
+        }
+        csvContent = await file.readAsString();
       }
 
-      var csv = await file.readAsString();
       List<List<dynamic>> rows =
-          const CsvToListConverter(eol: "\n").convert(csv);
+          const CsvToListConverter(eol: "\n").convert(csvContent);
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
@@ -252,22 +290,31 @@ class ImportData extends StatelessWidget {
     }
   }
 
-  importPlans(BuildContext context) async {
+  Future<void> importPlans(BuildContext context) async {
     Navigator.pop(context);
 
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result == null) return;
 
-      File file = File(result.files.single.path!);
+      String csvContent;
 
-      if (!await file.exists()) {
-        throw Exception('Selected file does not exist');
+      if (kIsWeb) {
+        Uint8List? fileBytes = result.files.single.bytes;
+        if (fileBytes == null) {
+          throw Exception('Could not read file data');
+        }
+        csvContent = String.fromCharCodes(fileBytes);
+      } else {
+        File file = File(result.files.single.path!);
+        if (!await file.exists()) {
+          throw Exception('Selected file does not exist');
+        }
+        csvContent = await file.readAsString();
       }
 
-      var csv = await file.readAsString();
       List<List<dynamic>> rows =
-          const CsvToListConverter(eol: "\n").convert(csv);
+          const CsvToListConverter(eol: "\n").convert(csvContent);
 
       if (rows.isEmpty) {
         throw Exception('CSV file is empty');
