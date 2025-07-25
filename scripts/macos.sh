@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-source $HOME/.zprofile
-source $HOME/.zshrc
-
 set -ex
 
 flutter build macos --release
