@@ -578,8 +578,6 @@ class _EditSetPageState extends State<EditSetPage> {
   Future<void> save() async {
     if (!key.currentState!.validate()) return;
 
-    Navigator.pop(context);
-
     final gymSet = widget.gymSet.copyWith(
       name: name,
       unit: unit,
@@ -610,15 +608,19 @@ class _EditSetPageState extends State<EditSetPage> {
     }
 
     if (widget.gymSet.id > 0) {
-      await db.update(db.gymSets).replace(gymSet);
+      await db
+          .update(db.gymSets)
+          .replace(gymSet.copyWith(created: DateTime.now().toLocal()));
       if (image != null)
         (db.update(db.gymSets)..where((u) => u.name.equals(name)))
             .write(GymSetsCompanion(image: Value(image)));
-      return;
+    } else {
+      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+      db.into(db.gymSets).insert(insert);
     }
 
-    var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-    db.into(db.gymSets).insert(insert);
+    if (!mounted) return;
+    Navigator.pop(context);
 
     if (!settings.restTimers || !mounted) return;
     final timer = context.read<TimerState>();
