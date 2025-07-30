@@ -76,11 +76,12 @@ class _CardioPageState extends State<CardioPage> {
                 color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),
+            if (touchedSpots.length > 1) null,
           ];
         },
       );
 
-  touchLine(
+  Future<void> touchLine(
     FlTouchEvent event,
     LineTouchResponse? response,
   ) async {

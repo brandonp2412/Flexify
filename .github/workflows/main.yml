@@ -8,7 +8,6 @@ on:
       - "fastlane/metadata/**"
       - "assets/changelogs/**"
 
-# Add permissions for GitHub Pages
 permissions:
   contents: write
   pages: write

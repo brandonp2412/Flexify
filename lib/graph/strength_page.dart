@@ -382,6 +382,7 @@ class _StrengthPageState extends State<StrengthPage> {
             text,
             TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
           ),
+          if (touchedSpots.length > 1) null,
         ];
       },
     );

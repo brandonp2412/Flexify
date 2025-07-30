@@ -110,6 +110,7 @@ class GraphsPageState extends State<GraphsPage>
             text,
             TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
           ),
+          if (touchedSpots.length > 1) null,
         ];
       },
     );
@@ -274,7 +275,7 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  onShare() async {
+  Future<void> onShare() async {
     final copy = selected.toList();
     setState(() {
       selected.clear();
