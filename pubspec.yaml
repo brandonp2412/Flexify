@@ -14,7 +14,7 @@ dependencies:
   path: ^1.8.3
   csv: ^6.0.0
   intl: ^0.20.2
-  fl_chart: ^0.70.2
+  fl_chart: ^1.0.0
   permission_handler: ^12.0.1
   provider: ^6.1.1
   dynamic_color: ^1.7.0
