@@ -19,7 +19,8 @@ class Settings extends Table {
   BoolColumn get notifications => boolean().withDefault(const Constant(true))();
   BoolColumn get peekGraph => boolean().withDefault(const Constant(false))();
   TextColumn get planTrailing => text()();
-  BoolColumn get repEstimation => boolean().withDefault(const Constant(true))();
+  BoolColumn get repEstimation =>
+      boolean().withDefault(const Constant(false))();
   BoolColumn get restTimers => boolean()();
   TextColumn get shortDateFormat => text()();
   BoolColumn get showBodyWeight =>

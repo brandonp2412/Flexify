@@ -333,7 +333,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                     : rpm2,
               );
 
-      final estimatedReps = difference.inMinutes * closestRpm.rpm;
+      final estimatedReps =
+          (difference.inMinutes * closestRpm.rpm).clamp(1, 50);
       if (estimatedReps <= 0) return;
 
       reps.text = estimatedReps.toInt().toString();

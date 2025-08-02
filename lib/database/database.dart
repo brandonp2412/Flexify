@@ -375,10 +375,18 @@ class AppDatabase extends _$AppDatabase {
                 }),
               );
         },
+        from41To42: (Migrator m, Schema42 schema) async {
+          await m.alterTable(TableMigration(schema.settings));
+          await schema.settings.update().write(
+                const RawValuesInsertable({
+                  'rep_estimation': Variable(false),
+                }),
+              );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 41;
+  int get schemaVersion => 42;
 }

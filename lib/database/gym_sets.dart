@@ -152,6 +152,7 @@ Future<List<Rpm>> getRpms() async {
       weight
     FROM reps_per_min
     WHERE rpm IS NOT NULL
+      AND rpm BETWEEN 0.1 AND 10
     GROUP BY name, weight;
   """).get();
   return results
