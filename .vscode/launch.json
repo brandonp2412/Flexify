@@ -6,6 +6,9 @@
             "name": "flexify",
             "request": "launch",
             "type": "dart",
+            "args": [
+                "--web-experimental-hot-reload"
+            ]
         },
         {
             "name": "flexify (profile mode)",

@@ -181,6 +181,14 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
     final buttonX = radius * math.cos(angle);
     final buttonY = radius * math.sin(angle);
 
+    Color lighten(Color color, [double amount = .1]) {
+      assert(amount >= 0 && amount <= 1);
+      final hsl = HSLColor.fromColor(color);
+      final hslLight =
+          hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+      return hslLight.toColor();
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -207,7 +215,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               height: buttonSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.primary,
+                color: lighten(Theme.of(context).colorScheme.primary),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.2),
