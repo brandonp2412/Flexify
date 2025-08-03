@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/swap_workout.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -188,6 +189,26 @@ class _ExerciseModalState extends State<ExerciseModal> {
               final planState = context.read<PlanState>();
               planState.updateGymCounts(widget.planId);
               widget.onSelect();
+            },
+          ),
+        if (!widget.hasData)
+          ListTile(
+            leading: const Icon(Icons.swap_horiz),
+            title: const Text('Swap'),
+            onTap: () async {
+              Navigator.pop(context);
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SwapWorkout(
+                    exercise: widget.exercise,
+                    planId: widget.planId,
+                  ),
+                ),
+              );
+              if (result == true) {
+                widget.onSelect();
+              }
             },
           ),
       ],
