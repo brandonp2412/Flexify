@@ -102,7 +102,10 @@ class ImportData extends StatelessWidget {
       await settingsState.init();
 
       if (!ctx.mounted) return;
-      Navigator.pushNamedAndRemoveUntil(ctx, '/', (_) => false);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(ctx, rootNavigator: true)
+            .pushNamedAndRemoveUntil('/', (_) => false);
+      });
     } catch (e) {
       db = AppDatabase();
       rethrow;
