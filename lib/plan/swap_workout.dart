@@ -17,10 +17,18 @@ class SwapWorkout extends StatefulWidget {
 
 class _SwapWorkoutState extends State<SwapWorkout> {
   late Stream<List<String>> _distinctExercises;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text;
+      });
+    });
+
     _distinctExercises = (db.gymSets.selectOnly(distinct: true)
           ..addColumns([db.gymSets.name])
           ..orderBy([
@@ -32,70 +40,115 @@ class _SwapWorkoutState extends State<SwapWorkout> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Swap Workout'),
       ),
-      body: StreamBuilder<List<String>>(
-        stream: _distinctExercises,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Search Exercises',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<String>>(
+              stream: _distinctExercises,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          final exercises = snapshot.data!;
-          return ListView.builder(
-            itemCount: exercises.length,
-            itemBuilder: (context, index) {
-              final exercise = exercises[index];
-              return ListTile(
-                title: Text(exercise),
-                onTap: () async {
-                  await (db.planExercises.update()
-                        ..where(
-                          (tbl) =>
-                              tbl.planId.equals(widget.planId) &
-                              tbl.exercise.equals(widget.exercise),
-                        ))
-                      .write(
-                    PlanExercisesCompanion(
-                      exercise: drift.Value(exercise),
-                    ),
-                  );
+                final exercises = snapshot.data!
+                    .where(
+                      (name) => name
+                          .toLowerCase()
+                          .contains(_searchQuery.toLowerCase()),
+                    )
+                    .toList();
 
-                  final updatedPlanExercises = await (db.planExercises.select()
-                        ..where(
-                          (tbl) =>
-                              tbl.planId.equals(widget.planId) &
-                              tbl.enabled.equals(true),
-                        ))
-                      .get();
+                return ListView.builder(
+                  itemCount: exercises.length,
+                  itemBuilder: (context, index) {
+                    final exercise = exercises[index];
+                    return ListTile(
+                      title: Text(exercise),
+                      onTap: () async {
+                        await (db.planExercises.update()
+                              ..where(
+                                (tbl) =>
+                                    tbl.planId.equals(widget.planId) &
+                                    tbl.exercise.equals(widget.exercise),
+                              ))
+                            .write(
+                          PlanExercisesCompanion(
+                            enabled: drift.Value(false),
+                          ),
+                        );
 
-                  final newExercisesString =
-                      updatedPlanExercises.map((pe) => pe.exercise).join(',');
+                        await (db.planExercises.update()
+                              ..where(
+                                (tbl) =>
+                                    tbl.planId.equals(widget.planId) &
+                                    tbl.exercise.equals(exercise),
+                              ))
+                            .write(
+                          PlanExercisesCompanion(
+                            enabled: drift.Value(true),
+                          ),
+                        );
 
-                  await (db.plans.update()
-                        ..where((tbl) => tbl.id.equals(widget.planId)))
-                      .write(
-                    PlansCompanion(
-                      exercises: drift.Value(newExercisesString),
-                    ),
-                  );
+                        final plan = await (db.plans.select()
+                              ..where((tbl) => tbl.id.equals(widget.planId)))
+                            .getSingle();
 
-                  if (!context.mounted) return;
+                        final exercisesList = plan.exercises.split(',');
+                        final oldExerciseIndex =
+                            exercisesList.indexOf(widget.exercise);
 
-                  final state = context.read<PlanState>();
-                  state.updatePlans(null);
-                  Navigator.pop(context, true);
-                },
-              );
-            },
-          );
-        },
+                        if (oldExerciseIndex != -1) {
+                          exercisesList[oldExerciseIndex] = exercise;
+                        }
+
+                        final newExercisesString = exercisesList.join(',');
+
+                        await (db.plans.update()
+                              ..where((tbl) => tbl.id.equals(widget.planId)))
+                            .write(
+                          PlansCompanion(
+                            exercises: drift.Value(newExercisesString),
+                          ),
+                        );
+
+                        if (!context.mounted) return;
+
+                        final state = context.read<PlanState>();
+                        state.updatePlans(null);
+                        Navigator.pop(context, true);
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
