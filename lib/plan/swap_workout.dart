@@ -49,7 +49,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Swap Workout'),
+        title: const Text('Swap workout'),
       ),
       body: Column(
         children: [
