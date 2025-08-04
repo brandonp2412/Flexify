@@ -213,7 +213,7 @@ class _EditSetPageState extends State<EditSetPage> {
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(weight),
-      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (value) => save(),
       onChanged: (value) => setORM(),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Required';
