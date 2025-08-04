@@ -1,10 +1,9 @@
-Flexify is your ultimate gym companion, meticulously crafted with Flutter technology. 
+Flex on people with Flexify
 
-Effortlessly track your gym progress, log workouts, sets, reps, and weights with seamless ease. 
-No internet? No worries. Flexify operates offline, ensuring uninterrupted focus on your fitness journey. 
-Visualize your progress over time with intuitive graphs, empowering you to identify areas for improvement and celebrate milestones. 
-Get started today and elevate your fitness game with Flexify. 
+Log your workouts quickly - our app is incredibly fast.
+No internet? No worries. We don't use the web at all.
+Visualize your progress with snappy and beautiful graphs.
+Customize everything. Any feature you don't like can be toggled off in settings.
+You don't need to compromise on speed for beauty, get both with Flexify.
 
-Join our vibrant community on GitHub, where contributions are always welcomed and encouraged. 
-Flexify is licensed under the MIT License, empowering developers to innovate and enhance the app further. 
-Download Flexify now and embark on a journey to unlock your full fitness potential.
+Notice a bug? Create an issue on https://github.com/brandonp2412/Flexify
