@@ -6,4 +6,4 @@ Visualize your progress with snappy and beautiful graphs.
 Customize everything. Any feature you don't like can be toggled off in settings.
 You don't need to compromise on speed for beauty, get both with Flexify.
 
-Notice a bug? Create an issue on https://github.com/brandonp2412/Flexify
+Notice a bug? Create an issue on https://github.com/brandonp2412/Flexify/issues
