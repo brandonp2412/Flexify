@@ -108,7 +108,8 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
-                                keyboardType: const TextInputType.numberWithOptions(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
@@ -118,7 +119,8 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
-                                keyboardType: const TextInputType.numberWithOptions(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
@@ -167,7 +169,8 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
-                                keyboardType: const TextInputType.numberWithOptions(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
@@ -177,7 +180,8 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
-                                keyboardType: const TextInputType.numberWithOptions(
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
