@@ -143,7 +143,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                             "${toString(gymSet.reps)}x${toString(gymSet.weight)}${gymSet.unit} ${gymSet.name}",
                       )
                       .join(', ');
-                  await Share.share("I just did $summaries");
+                  await SharePlus.instance
+                      .share(ShareParams(text: "I just did $summaries"));
                   setState(() {
                     selected.clear();
                   });

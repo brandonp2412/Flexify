@@ -103,7 +103,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 return "$days:\n$exercises";
               }).join('\n\n');
 
-              await Share.share(summaries);
+              await SharePlus.instance.share(ShareParams(text: summaries));
               setState(() {
                 selected.clear();
               });

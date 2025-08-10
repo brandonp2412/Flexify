@@ -291,7 +291,7 @@ class GraphsPageState extends State<GraphsPage>
               "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
         )
         .join(', ');
-    await Share.share("I just did $text");
+    await SharePlus.instance.share(ShareParams(text: "I just did $text"));
   }
 
   void longPressGlobal() {
