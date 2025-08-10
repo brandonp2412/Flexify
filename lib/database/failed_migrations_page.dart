@@ -13,14 +13,14 @@ class FailedMigrationsPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Failed migrations"),
-          leading: Icon(Icons.error),
+          title: const Text("Failed migrations"),
+          leading: const Icon(Icons.error),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              ListTile(
+              const ListTile(
                 title: Text(
                   "Something went wrong when creating/upgrading your database. Usually this can be fixed by deleting & re-creating your records.",
                 ),
@@ -29,13 +29,13 @@ class FailedMigrationsPage extends StatelessWidget {
                 height: 300,
                 child: SingleChildScrollView(
                   child: ListTile(
-                    title: Text("Error message:"),
+                    title: const Text("Error message:"),
                     subtitle: Text(error.toString()),
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              ExportData(),
+              const SizedBox(height: 16),
+              const ExportData(),
               DeleteRecordsButton(ctx: context),
               TextButton.icon(
                 onPressed: () async {
@@ -51,7 +51,7 @@ class FailedMigrationsPage extends StatelessWidget {
 
                   if (await canLaunchUrlString(url)) await launchUrlString(url);
                 },
-                label: Text("Create issue"),
+                label: const Text("Create issue"),
                 icon: Image.asset(
                   "assets/github-mark.png",
                   height: 24,

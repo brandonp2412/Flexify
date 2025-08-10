@@ -109,7 +109,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     labelText: 'Distance',
                     hintText: oldDist,
                   ),
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
                   onTap: () => selectAll(distance),
@@ -170,7 +170,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     labelText: 'Incline %',
                     hintText: oldInc,
                   ),
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
                   onTap: () => selectAll(incline),
@@ -186,7 +186,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   controller: reps,
                   decoration:
                       InputDecoration(labelText: 'Reps', hintText: oldReps),
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
                   onTap: () => selectAll(reps),
@@ -202,7 +202,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     labelText: name.text == 'Weight' ? 'Value' : 'Weight',
                     hintText: oldWeights,
                   ),
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
                   onTap: () => selectAll(weight),
@@ -223,7 +223,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         labelText: 'Body weight',
                         hintText: oldBody,
                       ),
-                      keyboardType: TextInputType.numberWithOptions(
+                      keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
                       onTap: () => selectAll(body),

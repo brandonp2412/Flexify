@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             label: 'See whats new',
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => WhatsNew(),
+                builder: (context) => const WhatsNew(),
               ),
             ),
           ),

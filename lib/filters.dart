@@ -108,7 +108,7 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
-                                keyboardType: TextInputType.numberWithOptions(
+                                keyboardType: const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
@@ -118,7 +118,7 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
-                                keyboardType: TextInputType.numberWithOptions(
+                                keyboardType: const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
@@ -167,7 +167,7 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Greater than",
                                 ),
-                                keyboardType: TextInputType.numberWithOptions(
+                                keyboardType: const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),
@@ -177,7 +177,7 @@ class _FiltersState extends State<Filters> {
                                 decoration: const InputDecoration(
                                   labelText: "Less than",
                                 ),
-                                keyboardType: TextInputType.numberWithOptions(
+                                keyboardType: const TextInputType.numberWithOptions(
                                   decimal: true,
                                 ),
                               ),

@@ -120,11 +120,11 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
     var lineChart = LineChart(
       LineChartData(
-        titlesData: FlTitlesData(
-          topTitles: const AxisTitles(
+        titlesData: const FlTitlesData(
+          topTitles: AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
-          rightTitles: const AxisTitles(
+          rightTitles: AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
           leftTitles: AxisTitles(
@@ -150,10 +150,10 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Global progress"),
+        title: const Text("Global progress"),
         actions: [
           IconButton(
-            icon: Icon(Icons.language),
+            icon: const Icon(Icons.language),
             onPressed: () {},
           ),
         ],
@@ -228,7 +228,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
               visible: settings.showUnits,
               child: Column(
                 children: [
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
                     value: targetUnit,
@@ -256,7 +256,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                 ],
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
@@ -337,7 +337,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                       child: lineChart,
                     ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -358,7 +358,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Wrap(
               spacing: 16.0,
               runSpacing: 8.0,

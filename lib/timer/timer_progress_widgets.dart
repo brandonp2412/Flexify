@@ -177,7 +177,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
     const double buttonSize = 24;
 
     final angle = (-math.pi / 2) - (2 * math.pi * (1 - value));
-    final radius = (circleSize / 2);
+    const radius = (circleSize / 2);
     final buttonX = radius * math.cos(angle);
     final buttonY = radius * math.sin(angle);
 

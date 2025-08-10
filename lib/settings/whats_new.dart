@@ -87,7 +87,7 @@ class _WhatsNewState extends State<WhatsNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("What's new?"),
+        title: const Text("What's new?"),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) => ListTile(
@@ -97,12 +97,12 @@ class _WhatsNewState extends State<WhatsNew> {
         itemCount: changelogs.length,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.favorite_outline),
+        icon: const Icon(Icons.favorite_outline),
         onPressed: () async {
           const url = 'https://github.com/sponsors/brandonp2412';
           if (await canLaunchUrlString(url)) await launchUrlString(url);
         },
-        label: Text("Donate"),
+        label: const Text("Donate"),
       ),
     );
   }

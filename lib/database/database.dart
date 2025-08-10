@@ -369,7 +369,7 @@ class AppDatabase extends _$AppDatabase {
         },
         from40To41: (Migrator m, Schema41 schema) async {
           await schema.settings.update().write(
-                RawValuesInsertable({
+                const RawValuesInsertable({
                   'strength_unit': Variable("last-entry"),
                   'cardio_unit': Variable("last-entry"),
                 }),

@@ -301,11 +301,11 @@ class GraphsPageState extends State<GraphsPage>
         return Wrap(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.visibility_off),
-              title: Text('Hide global progress'),
+              leading: const Icon(Icons.visibility_off),
+              title: const Text('Hide global progress'),
               onTap: () {
                 db.settings.update().write(
-                      SettingsCompanion(
+                      const SettingsCompanion(
                         showGlobalProgress: Value(false),
                       ),
                     );
@@ -313,8 +313,8 @@ class GraphsPageState extends State<GraphsPage>
               },
             ),
             ListTile(
-              leading: Icon(Icons.clear),
-              title: Text('Cancel'),
+              leading: const Icon(Icons.clear),
+              title: const Text('Cancel'),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -342,12 +342,12 @@ class GraphsPageState extends State<GraphsPage>
       itemBuilder: (context, index) {
         if (index == 0 && showGlobal)
           return ListTile(
-            leading: Icon(Icons.language),
-            title: Text("Global progress"),
-            subtitle: Text("A chart grouped by category"),
+            leading: const Icon(Icons.language),
+            title: const Text("Global progress"),
+            subtitle: const Text("A chart grouped by category"),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => GlobalProgressPage(),
+                builder: (context) => const GlobalProgressPage(),
               ),
             ),
             onLongPress: longPressGlobal,
@@ -355,7 +355,7 @@ class GraphsPageState extends State<GraphsPage>
         if (showGlobal) index--;
 
         final set = gymSets.elementAtOrNull(index);
-        if (set == null) return SizedBox();
+        if (set == null) return const SizedBox();
 
         final prev = index > 0 ? gymSets[index - 1] : null;
 
@@ -369,7 +369,7 @@ class GraphsPageState extends State<GraphsPage>
             if (divider)
               material.Row(
                 children: [
-                  material.Expanded(child: const Divider()),
+                  const material.Expanded(child: Divider()),
                   const Icon(Icons.today),
                   const SizedBox(width: 4),
                   Selector<SettingsState, String>(
@@ -378,7 +378,7 @@ class GraphsPageState extends State<GraphsPage>
                         Text(DateFormat(format).format(created)),
                   ),
                   const SizedBox(width: 4),
-                  material.Expanded(child: const Divider()),
+                  const material.Expanded(child: Divider()),
                 ],
               ),
             GraphTile(

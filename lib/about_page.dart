@@ -42,7 +42,7 @@ class AboutPage extends StatelessWidget {
             leading: const Icon(Icons.change_circle_outlined),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => WhatsNew(),
+                builder: (context) => const WhatsNew(),
               ),
             ),
           ),

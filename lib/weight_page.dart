@@ -44,7 +44,7 @@ class _WeightPageState extends State<WeightPage> {
             children: [
               TextFormField(
                 controller: ctrl,
-                keyboardType: TextInputType.numberWithOptions(
+                keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
                 decoration: const InputDecoration(labelText: 'Weight'),

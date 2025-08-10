@@ -97,7 +97,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                                     tbl.exercise.equals(widget.exercise),
                               ))
                             .write(
-                          PlanExercisesCompanion(
+                          const PlanExercisesCompanion(
                             enabled: drift.Value(false),
                           ),
                         );
@@ -109,7 +109,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                                     tbl.exercise.equals(exercise),
                               ))
                             .write(
-                          PlanExercisesCompanion(
+                          const PlanExercisesCompanion(
                             enabled: drift.Value(true),
                           ),
                         );
