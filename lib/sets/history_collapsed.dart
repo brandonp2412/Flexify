@@ -107,10 +107,33 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             if (gymSet.incline != null && gymSet.incline! > 0)
               incline = '@ ${gymSet.incline}%';
 
+            Widget? leading = AnimatedScale(
+              duration: const Duration(milliseconds: 150),
+              scale: widget.selected.isNotEmpty ? 1.0 : 0.0,
+              child: Visibility(
+                visible: widget.selected.isNotEmpty,
+                child: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Checkbox(
+                    value: widget.selected.contains(gymSet.id),
+                    onChanged: (value) {
+                      widget.onSelect(gymSet.id);
+                    },
+                  ),
+                ),
+              ),
+            );
+
+            if (widget.selected.isEmpty && showImages && gymSet.image != null)
+              leading = Image.file(
+                File(gymSet.image!),
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.error),
+              );
+
             return ListTile(
-              leading: showImages && gymSet.image != null
-                  ? Image.file(File(gymSet.image!))
-                  : null,
+              leading: leading,
               title: Text(
                 gymSet.cardio
                     ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"

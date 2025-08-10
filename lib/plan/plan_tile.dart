@@ -29,23 +29,38 @@ class PlanTile extends StatelessWidget {
     Widget title = const Text("Daily");
     if (plan.title?.isNotEmpty == true) {
       final today = plan.days.split(',').contains(weekday);
-      var color = Theme.of(context).textTheme.bodyLarge!.color;
-      if (selected.contains(plan.id))
-        color = Theme.of(context).colorScheme.primary;
       title = Text(
         plan.title!,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: today ? FontWeight.bold : null,
               decoration: today ? TextDecoration.underline : null,
-              color: color,
             ),
       );
     } else if (plan.days.split(',').length < 7)
       title = RichText(text: TextSpan(children: getChildren(context)));
 
+    Widget? leading = AnimatedScale(
+      duration: const Duration(milliseconds: 150),
+      scale: selected.isNotEmpty ? 1.0 : 0.0,
+      child: Visibility(
+        visible: selected.isNotEmpty,
+        child: SizedBox(
+          height: 24,
+          width: 24,
+          child: Checkbox(
+            value: selected.contains(plan.id),
+            onChanged: (value) {
+              onSelect(plan.id);
+            },
+          ),
+        ),
+      ),
+    );
+
     return ListTile(
       title: title,
       subtitle: Text(plan.exercises.split(',').join(', ')),
+      leading: leading,
       trailing: Builder(
         builder: (context) {
           final trailing = context.select<SettingsState, PlanTrailing>(
@@ -83,7 +98,6 @@ class PlanTile extends StatelessWidget {
             );
         },
       ),
-      selected: selected.contains(plan.id),
       onTap: () async {
         if (selected.isNotEmpty) return onSelect(plan.id);
         final state = context.read<PlanState>();
@@ -106,10 +120,6 @@ class PlanTile extends StatelessWidget {
   List<InlineSpan> getChildren(BuildContext context) {
     List<InlineSpan> result = [];
 
-    var color = Theme.of(context).textTheme.bodyLarge!.color;
-    if (selected.contains(plan.id))
-      color = Theme.of(context).colorScheme.primary;
-
     final split = plan.days.split(',');
     for (int index = 0; index < split.length; index++) {
       final day = split[index];
@@ -120,7 +130,6 @@ class PlanTile extends StatelessWidget {
                 fontWeight: weekday == day.trim() ? FontWeight.bold : null,
                 decoration:
                     weekday == day.trim() ? TextDecoration.underline : null,
-                color: color,
               ),
         ),
       );

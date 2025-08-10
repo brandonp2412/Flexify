@@ -43,15 +43,32 @@ class GraphTile extends StatelessWidget {
           "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}";
     }
 
+    Widget? leading = AnimatedScale(
+      duration: const Duration(milliseconds: 150),
+      scale: selected.isNotEmpty ? 1.0 : 0.0,
+      child: Visibility(
+        visible: selected.isNotEmpty,
+        child: SizedBox(
+          height: 24,
+          width: 24,
+          child: Checkbox(
+            value: selected.contains(gymSet.name.value),
+            onChanged: (value) {
+              onSelect(gymSet.name.value);
+            },
+          ),
+        ),
+      ),
+    );
+
+    if (selected.isEmpty && showImages && gymSet.image.value != null)
+      leading = Image.file(
+        File(gymSet.image.value!),
+        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+      );
+
     return ListTile(
-      leading: showImages && gymSet.image.value != null
-          ? Image.file(
-              File(gymSet.image.value!),
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.error),
-            )
-          : null,
-      selected: selected.contains(gymSet.name.value),
+      leading: leading,
       title: Text(gymSet.name.value),
       subtitle: Selector<SettingsState, String>(
         selector: (context, settings) => settings.value.longDateFormat,
