@@ -225,12 +225,12 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Create brandon user directory structure (match F-Droid)
         run: |
           sudo mkdir -p /home/brandon
           sudo chown $USER -R /home/brandon
-      
+
       - name: Move project to F-Droid location
         run: |
           cd ..
@@ -270,9 +270,9 @@ jobs:
         with:
           name: android-builds
           path: |
-           build/app/outputs/flutter-apk/app-*-release.apk
-           build/app/outputs/flutter-apk/flexify.apk
-           build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-*-release.apk
+            build/app/outputs/flutter-apk/flexify.apk
+            build/app/outputs/bundle/release/app-release.aab
 
   build-linux:
     needs: [version-and-prepare]
@@ -391,7 +391,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   create-github-release:
-    needs: [version-and-prepare ,build-android, build-linux, build-windows]
+    needs: [version-and-prepare, build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -473,7 +473,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.4"
           bundler-cache: true
 
       - name: Create Google Play JSON key file
