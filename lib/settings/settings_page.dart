@@ -10,6 +10,7 @@ import 'package:flexify/settings/plan_settings.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/tab_settings.dart';
 import 'package:flexify/settings/timer_settings.dart';
+import 'package:flexify/settings/update_settings.dart';
 import 'package:flexify/settings/workout_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -177,6 +178,15 @@ class _SettingsPageState extends State<SettingsPage> {
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => const WorkoutSettings(),
+                            ),
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.sync),
+                          title: const Text("Updates"),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const UpdateSettings(),
                             ),
                           ),
                         ),
