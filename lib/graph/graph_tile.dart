@@ -43,32 +43,51 @@ class GraphTile extends StatelessWidget {
           "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}";
     }
 
-    Widget? leading = AnimatedScale(
-      duration: const Duration(milliseconds: 150),
-      scale: selected.isNotEmpty ? 1.0 : 0.0,
-      child: Visibility(
-        visible: selected.isNotEmpty,
-        child: SizedBox(
-          height: 24,
-          width: 24,
-          child: Checkbox(
-            value: selected.contains(gymSet.name.value),
-            onChanged: (value) {
-              onSelect(gymSet.name.value);
-            },
-          ),
-        ),
+    Widget? leading = SizedBox(
+      height: 24,
+      width: 24,
+      child: Checkbox(
+        value: selected.contains(gymSet.name.value),
+        onChanged: (value) {
+          onSelect(gymSet.name.value);
+        },
       ),
     );
 
-    if (selected.isEmpty && showImages && gymSet.image.value != null)
+    if (selected.isEmpty &&
+        showImages &&
+        gymSet.image.value?.isNotEmpty == true) {
       leading = Image.file(
         File(gymSet.image.value!),
         errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
       );
+    } else if (selected.isEmpty) {
+      leading = Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            gymSet.name.value.isNotEmpty
+                ? gymSet.name.value[0].toUpperCase()
+                : '?',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'monospace',
+            ),
+          ),
+        ),
+      );
+    }
 
     return ListTile(
       leading: leading,
+      selected: selected.contains(gymSet.name.value),
       title: Text(gymSet.name.value),
       subtitle: Selector<SettingsState, String>(
         selector: (context, settings) => settings.value.longDateFormat,

@@ -127,29 +127,43 @@ class _HistoryListState extends State<HistoryList> {
       incline = '@ ${gymSet.incline}%';
     }
 
-    Widget? leading = AnimatedScale(
-      duration: const Duration(milliseconds: 150),
-      scale: widget.selected.isNotEmpty ? 1.0 : 0.0,
-      child: Visibility(
-        visible: widget.selected.isNotEmpty,
-        child: SizedBox(
-          height: 24,
-          width: 24,
-          child: Checkbox(
-            value: widget.selected.contains(gymSet.id),
-            onChanged: (value) {
-              widget.onSelect(gymSet.id);
-            },
-          ),
-        ),
+    Widget? leading = SizedBox(
+      height: 24,
+      width: 24,
+      child: Checkbox(
+        value: widget.selected.contains(gymSet.id),
+        onChanged: (value) {
+          widget.onSelect(gymSet.id);
+        },
       ),
     );
 
-    if (widget.selected.isEmpty && showImages && gymSet.image != null)
+    if (widget.selected.isEmpty && showImages && gymSet.image != null) {
       leading = Image.file(
         File(gymSet.image!),
         errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
       );
+    } else if (widget.selected.isEmpty) {
+      leading = Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            gymSet.name.isNotEmpty ? gymSet.name[0].toUpperCase() : '?',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'monospace',
+            ),
+          ),
+        ),
+      );
+    }
 
     return Column(
       children: [
@@ -172,6 +186,7 @@ class _HistoryListState extends State<HistoryList> {
         ListTile(
           leading: leading,
           title: Text(gymSet.name),
+          selected: widget.selected.contains(gymSet.id),
           subtitle: Selector<SettingsState, String>(
             selector: (context, settings) => settings.value.longDateFormat,
             builder: (context, dateFormat, child) => Text(

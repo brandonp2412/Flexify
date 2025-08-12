@@ -34,33 +34,51 @@ class PlanTile extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: today ? FontWeight.bold : null,
               decoration: today ? TextDecoration.underline : null,
+              color: selected.contains(plan.id)
+                  ? Theme.of(context).colorScheme.primary
+                  : null,
             ),
       );
     } else if (plan.days.split(',').length < 7)
       title = RichText(text: TextSpan(children: getChildren(context)));
 
-    Widget? leading = AnimatedScale(
-      duration: const Duration(milliseconds: 150),
-      scale: selected.isNotEmpty ? 1.0 : 0.0,
-      child: Visibility(
-        visible: selected.isNotEmpty,
-        child: SizedBox(
-          height: 24,
-          width: 24,
-          child: Checkbox(
-            value: selected.contains(plan.id),
-            onChanged: (value) {
-              onSelect(plan.id);
-            },
-          ),
-        ),
+    Widget? leading = SizedBox(
+      height: 24,
+      width: 24,
+      child: Checkbox(
+        value: selected.contains(plan.id),
+        onChanged: (value) {
+          onSelect(plan.id);
+        },
       ),
     );
+
+    if (selected.isEmpty)
+      leading = Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            plan.days.isNotEmpty ? plan.days[0].toUpperCase() : '?',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'monospace',
+            ),
+          ),
+        ),
+      );
 
     return ListTile(
       title: title,
       subtitle: Text(plan.exercises.split(',').join(', ')),
       leading: leading,
+      selected: selected.contains(plan.id),
       trailing: Builder(
         builder: (context) {
           final trailing = context.select<SettingsState, PlanTrailing>(
@@ -130,6 +148,9 @@ class PlanTile extends StatelessWidget {
                 fontWeight: weekday == day.trim() ? FontWeight.bold : null,
                 decoration:
                     weekday == day.trim() ? TextDecoration.underline : null,
+                color: selected.contains(plan.id)
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
               ),
         ),
       );
