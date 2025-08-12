@@ -10,75 +10,110 @@ class DaySelector extends StatefulWidget {
 }
 
 class _DaySelectorState extends State<DaySelector> {
+  void _toggleDay(int index) {
+    setState(() {
+      widget.daySwitches[index] = !widget.daySwitches[index];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Widget> items = [];
+    final colorScheme = Theme.of(context).colorScheme;
 
-    for (int i = 0; i < weekdays.length; i++) {
-      items.add(
-        TweenAnimationBuilder<Color?>(
-          tween: ColorTween(
-            begin: widget.daySwitches[i]
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.surfaceContainer,
-            end: widget.daySwitches[i]
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.surfaceContainer,
-          ),
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.ease,
-          builder: (BuildContext context, Color? color, Widget? child) {
-            return Expanded(
-              child: TextButton(
-                style: ButtonStyle(
-                  shape: const WidgetStatePropertyAll(
-                    CircleBorder(),
-                  ),
-                  minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
-                  padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-                  shadowColor: WidgetStatePropertyAll(
-                    Theme.of(context).colorScheme.shadow,
-                  ),
-                  elevation: const WidgetStatePropertyAll(4.0),
-                  backgroundColor: WidgetStatePropertyAll(color),
-                ),
-                onPressed: () {
-                  setState(() {
-                    widget.daySwitches[i]
-                        ? widget.daySwitches[i] = false
-                        : widget.daySwitches[i] = true;
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      weekdays[i].length < 3
-                          ? weekdays[i]
-                          : weekdays[i].substring(0, 3),
-                      style: TextStyle(
-                        color: widget.daySwitches[i]
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.inverseSurface,
-                        fontSize: 14.0,
+    return Row(
+      children: List.generate(weekdays.length, (index) {
+        final isSelected = widget.daySwitches[index];
+        final dayLabel = weekdays[index].length < 3
+            ? weekdays[index]
+            : weekdays[index].substring(0, 3);
+
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              height: 48,
+              decoration: BoxDecoration(
+                gradient: isSelected
+                    ? RadialGradient(
+                        center: Alignment.center,
+                        radius: 0.8,
+                        colors: [
+                          colorScheme.primary,
+                          colorScheme.primary.withOpacity(0.7),
+                          colorScheme.primary.withOpacity(0.9),
+                        ],
+                        stops: const [0.0, 0.7, 1.0],
+                      )
+                    : RadialGradient(
+                        center: Alignment.center,
+                        radius: 0.8,
+                        colors: [
+                          colorScheme.surface,
+                          colorScheme.surfaceContainer,
+                          colorScheme.surfaceContainerHighest,
+                        ],
+                        stops: const [0.0, 0.6, 1.0],
                       ),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isSelected
+                      ? colorScheme.primary.withOpacity(0.7)
+                      : colorScheme.outline.withOpacity(0.3),
+                  width: isSelected ? 2 : 1,
+                ),
+                boxShadow: [
+                  if (isSelected) ...[
+                    BoxShadow(
+                      color: colorScheme.primary.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ] else ...[
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                    BoxShadow(
+                      color: Colors.white.withOpacity(0.3),
+                      blurRadius: 1,
+                      offset: const Offset(0, -1),
+                    ),
+                  ],
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => _toggleDay(index),
+                  child: Center(
+                    child: AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 200),
+                      style: TextStyle(
+                        color: isSelected
+                            ? colorScheme.onPrimary
+                            : colorScheme.onSurface,
+                        fontSize: 14,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w500,
+                      ),
+                      child: Text(dayLabel),
                     ),
                   ),
                 ),
               ),
-            );
-          },
-        ),
-      );
-      if (i < weekdays.length - 1) {
-        items.add(const SizedBox(width: 4));
-      }
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: items,
+            ),
+          ),
+        );
+      }),
     );
   }
 }
