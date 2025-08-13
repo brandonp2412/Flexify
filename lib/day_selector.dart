@@ -35,59 +35,17 @@ class _DaySelectorState extends State<DaySelector> {
               curve: Curves.easeOutCubic,
               height: 48,
               decoration: BoxDecoration(
-                gradient: isSelected
-                    ? RadialGradient(
-                        center: Alignment.center,
-                        radius: 0.8,
-                        colors: [
-                          colorScheme.primary,
-                          colorScheme.primary.withOpacity(0.7),
-                          colorScheme.primary.withOpacity(0.9),
-                        ],
-                        stops: const [0.0, 0.7, 1.0],
-                      )
-                    : RadialGradient(
-                        center: Alignment.center,
-                        radius: 0.8,
-                        colors: [
-                          colorScheme.surface,
-                          colorScheme.surfaceContainer,
-                          colorScheme.surfaceContainerHighest,
-                        ],
-                        stops: const [0.0, 0.8, 1.0],
-                      ),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected
-                      ? colorScheme.primary.withOpacity(0.7)
-                      : colorScheme.outline.withOpacity(0.3),
+                      ? colorScheme.primary.withAlpha(
+                          (colorScheme.primary.a * 0.7 * 255.0).round() & 0xff,
+                        )
+                      : colorScheme.outline.withAlpha(
+                          (colorScheme.outline.a * 0.3 * 255.0).round() & 0xff,
+                        ),
                   width: isSelected ? 2 : 1,
                 ),
-                boxShadow: [
-                  if (isSelected) ...[
-                    BoxShadow(
-                      color: colorScheme.primary.withOpacity(0.2),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 2,
-                      offset: const Offset(0, 1),
-                    ),
-                  ] else ...[
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 2,
-                      offset: const Offset(0, 1),
-                    ),
-                    BoxShadow(
-                      color: Colors.white.withOpacity(0.3),
-                      blurRadius: 1,
-                      offset: const Offset(0, -1),
-                    ),
-                  ],
-                ],
               ),
               child: Material(
                 color: Colors.transparent,
@@ -98,9 +56,7 @@ class _DaySelectorState extends State<DaySelector> {
                     child: AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 200),
                       style: TextStyle(
-                        color: isSelected
-                            ? colorScheme.onPrimary
-                            : colorScheme.onSurface,
+                        color: colorScheme.onSurface,
                         fontSize: 14,
                         fontWeight:
                             isSelected ? FontWeight.w600 : FontWeight.w500,
