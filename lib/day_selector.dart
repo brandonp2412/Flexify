@@ -54,7 +54,7 @@ class _DaySelectorState extends State<DaySelector> {
                           colorScheme.surfaceContainer,
                           colorScheme.surfaceContainerHighest,
                         ],
-                        stops: const [0.0, 0.6, 1.0],
+                        stops: const [0.0, 0.8, 1.0],
                       ),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
