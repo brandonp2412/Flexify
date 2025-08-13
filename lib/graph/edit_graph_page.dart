@@ -126,7 +126,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 value: unit,
                 items: const [
                   DropdownMenuItem(
-                    value: '',
+                    value: null,
                     child: Text(""),
                   ),
                   DropdownMenuItem(
@@ -148,7 +148,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 ],
                 onChanged: (value) {
                   setState(() {
-                    unit = value!;
+                    unit = value;
                   });
                 },
               ),
