@@ -165,6 +165,14 @@ class _HistoryListState extends State<HistoryList> {
       );
     }
 
+    leading = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 150),
+      transitionBuilder: (child, animation) {
+        return ScaleTransition(scale: animation, child: child);
+      },
+      child: leading,
+    );
+
     return Column(
       children: [
         if (showDivider)

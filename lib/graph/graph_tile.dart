@@ -85,6 +85,14 @@ class GraphTile extends StatelessWidget {
       );
     }
 
+    leading = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 150),
+      transitionBuilder: (child, animation) {
+        return ScaleTransition(scale: animation, child: child);
+      },
+      child: leading,
+    );
+
     return ListTile(
       leading: leading,
       selected: selected.contains(gymSet.name.value),

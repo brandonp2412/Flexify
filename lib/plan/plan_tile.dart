@@ -74,6 +74,14 @@ class PlanTile extends StatelessWidget {
         ),
       );
 
+    leading = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 150),
+      transitionBuilder: (child, animation) {
+        return ScaleTransition(scale: animation, child: child);
+      },
+      child: leading,
+    );
+
     return ListTile(
       title: title,
       subtitle: Text(plan.exercises.split(',').join(', ')),
