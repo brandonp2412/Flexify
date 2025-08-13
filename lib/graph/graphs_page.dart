@@ -96,7 +96,7 @@ class GraphsPageState extends State<GraphsPage>
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
-        final row = data.elementAt(touchedSpots.first.spotIndex);
+        final row = data.elementAt(touchedSpots.last.spotIndex);
         final created = DateFormat(format).format(row.created);
 
         String text;

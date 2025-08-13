@@ -45,7 +45,7 @@ class _CardioPageState extends State<CardioPage> {
   LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
         getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
         getTooltipItems: (touchedSpots) {
-          final row = data.elementAt(touchedSpots.first.spotIndex);
+          final row = data.elementAt(touchedSpots.last.spotIndex);
           String text = row.value.toStringAsFixed(2);
           final created = DateFormat(format).format(row.created);
 
