@@ -13,7 +13,7 @@ Flex on people with this swanky, lightning-quick gym tracker!
 - 📵 **Offline**: Flexify doesn't use the internet at all.
 - 📈 **Graphs**: Visualize your progress over time with intuitive graphs.
 - 🏃 **Cardio**: Record your progress with cardio types.
-- ⚙️ **Custom**: Toggle features on/off, swap between light/dark theme and much more.
+- ⚙️ **Custom**: Toggle features on/off and swap between light/dark theme.
 - ⏱️ **Timers**: Stay focused with alarms after resting.
 
 <a href='https://play.google.com/store/apps/details?id=com.presley.flexify'><img alt='Get it on Google Play' height="75" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
