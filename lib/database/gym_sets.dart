@@ -455,7 +455,8 @@ class GymSets extends Table {
 }
 
 final categoriesStream = (db.gymSets.selectOnly(distinct: true)
-      ..addColumns([db.gymSets.category]))
+      ..addColumns([db.gymSets.category])
+      ..where(db.gymSets.category.isNotNull()))
     .watch()
     .map(
       (results) =>
