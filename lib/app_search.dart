@@ -40,6 +40,54 @@ class _AppSearchState extends State<AppSearch> {
 
   @override
   Widget build(BuildContext context) {
+    Widget trailingMain;
+
+    if (widget.selected.isNotEmpty) {
+      trailingMain = IconButton(
+        key: const ValueKey('deleteButton'),
+        icon: const Icon(Icons.delete),
+        tooltip: "Delete selected",
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Confirm Delete'),
+                content: Text(
+                  widget.confirmText ??
+                      'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
+                ),
+                actions: <Widget>[
+                  TextButton.icon(
+                    label: const Text('Cancel'),
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  TextButton.icon(
+                    label: const Text('Delete'),
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      widget.onDelete();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    } else if (widget.filter != null) {
+      trailingMain = KeyedSubtree(
+        key: const ValueKey('filterWidget'),
+        child: widget.filter!,
+      );
+    } else {
+      trailingMain = const SizedBox.shrink(key: ValueKey('emptyWidget'));
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: SearchBar(
@@ -50,61 +98,35 @@ class _AppSearchState extends State<AppSearch> {
         ),
         textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
-        leading: widget.selected.isEmpty && ctrl.text.isEmpty == true
-            ? const Padding(
-                padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                child: Icon(Icons.search),
-              )
-            : IconButton(
-                onPressed: () {
-                  widget.onClear();
-                  ctrl.text = '';
-                  widget.onChange('');
-                },
-                icon: const Icon(Icons.arrow_back),
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  right: 8.0,
-                ),
-              ),
-        trailing: [
-          if (widget.selected.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.delete),
-              tooltip: "Delete selected",
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Confirm Delete'),
-                      content: Text(
-                        widget.confirmText ??
-                            'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
-                      ),
-                      actions: <Widget>[
-                        TextButton.icon(
-                          label: const Text('Cancel'),
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        TextButton.icon(
-                          label: const Text('Delete'),
-                          icon: const Icon(Icons.delete),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            widget.onDelete();
-                          },
-                        ),
-                      ],
-                    );
+        leading: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 150),
+          transitionBuilder: (child, animation) =>
+              ScaleTransition(scale: animation, child: child),
+          child: widget.selected.isEmpty && ctrl.text.isEmpty == true
+              ? const Padding(
+                  padding: EdgeInsets.only(left: 16.0, right: 8.0),
+                  child: Icon(Icons.search),
+                )
+              : IconButton(
+                  onPressed: () {
+                    widget.onClear();
+                    ctrl.text = '';
+                    widget.onChange('');
                   },
-                );
-              },
-            ),
-          if (widget.selected.isEmpty && widget.filter != null) widget.filter!,
+                  icon: const Icon(Icons.arrow_back),
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 8.0,
+                  ),
+                ),
+        ),
+        trailing: [
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            child: trailingMain,
+            transitionBuilder: (child, animation) =>
+                ScaleTransition(scale: animation, child: child),
+          ),
           Badge.count(
             count: widget.selected.length,
             isLabelVisible: widget.selected.isNotEmpty,
