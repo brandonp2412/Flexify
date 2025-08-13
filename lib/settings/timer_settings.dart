@@ -117,34 +117,6 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
-    if ('alarm sound'.contains(term.toLowerCase()))
-      Tooltip(
-        message: 'Music to play at the end of a rest timer',
-        child: TextButton.icon(
-          onPressed: () async {
-            final result =
-                await FilePicker.platform.pickFiles(type: FileType.audio);
-            if (result == null || result.files.single.path == null) return;
-            db.settings.update().write(
-                  SettingsCompanion(
-                    alarmSound: Value(result.files.single.path!),
-                  ),
-                );
-            player.play(DeviceFileSource(result.files.single.path!));
-          },
-          onLongPress: () {
-            db.settings.update().write(
-                  const SettingsCompanion(
-                    alarmSound: Value(''),
-                  ),
-                );
-          },
-          icon: const Icon(Icons.music_note),
-          label: settings.alarmSound.isEmpty
-              ? const Text("Alarm sound")
-              : Text(settings.alarmSound.split('/').last),
-        ),
-      ),
     if ('rest minutes seconds'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.all(16),
@@ -217,6 +189,34 @@ List<Widget> getTimerSettings(
               ),
             ],
           ),
+        ),
+      ),
+    if ('alarm sound'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Music to play at the end of a rest timer',
+        child: TextButton.icon(
+          onPressed: () async {
+            final result =
+                await FilePicker.platform.pickFiles(type: FileType.audio);
+            if (result == null || result.files.single.path == null) return;
+            db.settings.update().write(
+                  SettingsCompanion(
+                    alarmSound: Value(result.files.single.path!),
+                  ),
+                );
+            player.play(DeviceFileSource(result.files.single.path!));
+          },
+          onLongPress: () {
+            db.settings.update().write(
+                  const SettingsCompanion(
+                    alarmSound: Value(''),
+                  ),
+                );
+          },
+          icon: const Icon(Icons.music_note),
+          label: settings.alarmSound.isEmpty
+              ? const Text("Alarm sound")
+              : Text(settings.alarmSound.split('/').last),
         ),
       ),
   ];
