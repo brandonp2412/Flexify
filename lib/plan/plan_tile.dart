@@ -63,7 +63,9 @@ class PlanTile extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            plan.days.isNotEmpty ? plan.days[0].toUpperCase() : '?',
+            plan.title?.isNotEmpty == true
+                ? plan.title![0]
+                : plan.days[0].toUpperCase(),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
