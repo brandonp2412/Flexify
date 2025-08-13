@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' as drift;
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
@@ -59,8 +60,10 @@ class _PlansPageWidget extends StatefulWidget {
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
   PlanState? state;
-  final Set<int> selected = {};
   String search = '';
+
+  final Set<int> selected = {};
+  final scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +154,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           ),
           Expanded(
             child: PlansList(
+              scroll: scroll,
               plans: filtered ?? [],
               navKey: widget.navKey,
               selected: selected,
@@ -169,8 +173,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
+      floatingActionButton: AnimatedFab(
+        onTap: () async {
           const plan = PlansCompanion(
             days: drift.Value(''),
             exercises: drift.Value(''),
@@ -186,8 +190,9 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               ),
             );
         },
-        label: const Text('Add'),
-        icon: const Icon(Icons.add),
+        label: 'Add',
+        icon: Icons.add,
+        scroll: scroll,
       ),
     );
   }

@@ -15,6 +15,7 @@ class PlansList extends StatelessWidget {
   final Set<int> selected;
   final Function(int) onSelect;
   final String search;
+  final ScrollController scroll;
 
   const PlansList({
     super.key,
@@ -23,6 +24,7 @@ class PlansList extends StatelessWidget {
     required this.selected,
     required this.onSelect,
     required this.search,
+    required this.scroll,
   });
 
   @override
@@ -57,6 +59,7 @@ class PlansList extends StatelessWidget {
 
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
+        scrollController: scroll,
         itemCount: plans.length,
         padding: const EdgeInsets.only(bottom: 50, top: 8),
         itemBuilder: (context, index) {
@@ -94,6 +97,7 @@ class PlansList extends StatelessWidget {
       );
 
     return ListView.builder(
+      controller: scroll,
       itemCount: plans.length,
       padding: const EdgeInsets.only(bottom: 50),
       itemBuilder: (context, index) {
