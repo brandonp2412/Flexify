@@ -145,7 +145,7 @@ class GraphTile extends StatelessWidget {
           period: Period.day,
           start: null,
           end: null,
-          limit: 21,
+          limit: 20,
         );
         if (!context.mounted) return;
 

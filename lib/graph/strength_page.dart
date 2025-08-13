@@ -38,7 +38,7 @@ class _StrengthPageState extends State<StrengthPage> {
   late String target = widget.unit;
   late String name = widget.name;
 
-  int limit = 21;
+  int limit = 20;
   StrengthMetric metric = StrengthMetric.bestWeight;
   Period period = Period.day;
   DateTime? start;
