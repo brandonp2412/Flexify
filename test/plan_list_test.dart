@@ -18,6 +18,7 @@ void main() async {
   testWidgets('PlanList', (WidgetTester tester) async {
     db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
+    final scroll = ScrollController();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -28,6 +29,7 @@ void main() async {
         child: MaterialApp(
           home: Scaffold(
             body: PlansList(
+              scroll: scroll,
               plans: const [
                 Plan(
                   days: "Monday",
