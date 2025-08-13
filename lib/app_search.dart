@@ -111,80 +111,101 @@ class _AppSearchState extends State<AppSearch> {
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: Selector<SettingsState, bool>(
               selector: (p0, settings) => settings.value.showBodyWeight,
-              builder: (context, showBodyWeight, child) => PopupMenuButton(
+              builder: (context, showBodyWeight, child) => IconButton(
                 icon: const Icon(Icons.more_vert),
                 tooltip: "Show menu",
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: ListTile(
-                      leading: const Icon(Icons.done_all),
-                      title: const Text('Select all'),
-                      onTap: () async {
-                        Navigator.pop(context);
-                        widget.onSelect();
-                      },
-                    ),
-                  ),
-                  if (widget.selected.isNotEmpty) ...[
-                    PopupMenuItem(
-                      child: ListTile(
-                        leading: const Icon(Icons.edit),
-                        title: const Text('Edit'),
-                        onTap: () async {
-                          await widget.onEdit();
-                          if (!context.mounted) return;
-                          Navigator.pop(context);
-                        },
+                onPressed: () async {
+                  final RenderBox button =
+                      context.findRenderObject() as RenderBox;
+                  final RenderBox overlay = Navigator.of(context)
+                      .overlay!
+                      .context
+                      .findRenderObject() as RenderBox;
+                  final RelativeRect position = RelativeRect.fromRect(
+                    Rect.fromPoints(
+                      button.localToGlobal(Offset.zero, ancestor: overlay),
+                      button.localToGlobal(
+                        button.size.bottomRight(Offset.zero),
+                        ancestor: overlay,
                       ),
                     ),
-                    PopupMenuItem(
-                      child: ListTile(
-                        leading: const Icon(Icons.share),
-                        title: const Text('Share'),
-                        onTap: () async {
-                          await widget.onShare();
-                          if (!context.mounted) return;
-                          Navigator.pop(context);
-                        },
+                    Offset.zero & overlay.size,
+                  );
+
+                  await showMenu(
+                    context: context,
+                    position: position,
+                    items: [
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.done_all),
+                          title: const Text('Select all'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            widget.onSelect();
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                  if (widget.selected.isEmpty && showBodyWeight)
-                    PopupMenuItem(
-                      child: ListTile(
-                        leading: const Icon(Icons.scale),
-                        title: const Text('Weight'),
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const WeightPage(),
-                            ),
-                          );
-                          if (!context.mounted) return;
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  if (widget.selected.isEmpty)
-                    PopupMenuItem(
-                      child: ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: const Text('Settings'),
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsPage(),
-                            ),
-                          );
-                          if (!context.mounted) return;
-                          Navigator.pop(context);
-                          if (widget.onRefresh != null) widget.onRefresh!();
-                        },
-                      ),
-                    ),
-                ],
+                      if (widget.selected.isNotEmpty) ...[
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.edit),
+                            title: const Text('Edit'),
+                            onTap: () async {
+                              await widget.onEdit();
+                              if (!context.mounted) return;
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.share),
+                            title: const Text('Share'),
+                            onTap: () async {
+                              await widget.onShare();
+                              if (!context.mounted) return;
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                      ],
+                      if (widget.selected.isEmpty && showBodyWeight)
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.scale),
+                            title: const Text('Weight'),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const WeightPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      if (widget.selected.isEmpty)
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.settings),
+                            title: const Text('Settings'),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SettingsPage(),
+                                ),
+                              );
+                              if (widget.onRefresh != null) widget.onRefresh!();
+                            },
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
