@@ -56,6 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
             minutes,
             seconds,
             player!,
+            context,
           ),
         );
       filtered.addAll(getDataSettings(searchCtrl.text, settings, context));
