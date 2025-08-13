@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 
 import 'plan/plans_page.dart';
 
-Future<void> main() async {
+Future<void> main({bool hideChangelog = false}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Setting setting;
@@ -31,7 +31,7 @@ Future<void> main() async {
   }
 
   final state = SettingsState(setting);
-  runApp(appProviders(state));
+  runApp(appProviders(state, hideChangelog: hideChangelog));
 }
 
 AppDatabase db = AppDatabase();
@@ -39,17 +39,19 @@ AppDatabase db = AppDatabase();
 MethodChannel androidChannel =
     const MethodChannel("com.presley.flexify/android");
 
-Widget appProviders(SettingsState state) => MultiProvider(
+Widget appProviders(SettingsState state, {required bool hideChangelog}) =>
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => state),
         ChangeNotifierProvider(create: (context) => TimerState()),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
-      child: const App(),
+      child: App(hideChangelog: hideChangelog),
     );
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final bool hideChangelog;
+  const App({super.key, required this.hideChangelog});
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +89,15 @@ class App extends StatelessWidget {
           ),
         ),
         themeMode: mode,
-        home: const HomePage(),
+        home: HomePage(hideChangelog: hideChangelog),
       ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final bool hideChangelog;
+  const HomePage({super.key, required this.hideChangelog});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -104,6 +107,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    if (widget.hideChangelog) return;
+
     final info = PackageInfo.fromPlatform();
     info.then((pkg) async {
       final meta = await (db.metadata.select()..limit(1)).getSingleOrNull();
@@ -125,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           context,
           "New version ${pkg.version}",
           SnackBarAction(
-            label: 'See whats new',
+            label: 'Changes',
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const WhatsNew(),
