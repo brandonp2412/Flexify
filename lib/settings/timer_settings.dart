@@ -337,7 +337,8 @@ class _TimerSettingsState extends State<TimerSettings> {
     );
 
     setState(() {
-      exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
+      exercisesWithCustomTimers
+          .removeWhere((e) => e.name.value == exerciseName);
       minuteControllers.remove(exerciseName);
       secondControllers.remove(exerciseName);
     });
@@ -372,7 +373,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                       .textTheme
                       .bodyMedium
                       ?.color
-                      ?.withOpacity(0.7),
+                      ?.withAlpha((255 * 0.7).round()),
                 ),
           ),
           const SizedBox(height: 16),
