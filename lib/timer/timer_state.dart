@@ -129,6 +129,16 @@ class TimerState extends ChangeNotifier {
     }
   }
 
+  void setTimer(int total, int progress) {
+    timer = NativeTimerWrapper(
+      Duration(seconds: total),
+      Duration(seconds: progress),
+      DateTime.now(),
+      NativeTimerState.running,
+    );
+    notifyListeners();
+  }
+
   void updateTimer(NativeTimerWrapper updated) {
     timer = updated;
     notifyListeners();

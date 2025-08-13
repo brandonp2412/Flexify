@@ -204,7 +204,7 @@ GymSetsCompanion generateGymSetCompanion(
       weight: weight,
       unit: "kg",
       created: date ?? DateTime.now(),
-      category: Value("Arms"),
+      category: const Value("Arms"),
     );
 
 void main() {
@@ -254,7 +254,7 @@ void main() {
           await app.db.planExercises.insertOne(
             PlanExercisesCompanion.insert(
               enabled: true,
-              timers: Value(true),
+              timers: const Value(true),
               exercise: exercise,
               planId: id,
             ),
@@ -266,7 +266,7 @@ void main() {
           await app.db.planExercises.insertOne(
             PlanExercisesCompanion.insert(
               enabled: true,
-              timers: Value(true),
+              timers: const Value(true),
               exercise: exercise,
               planId: id,
             ),
@@ -407,7 +407,7 @@ void main() {
         screenshotName: '8_en-US',
         skipSettle: true,
         navigateToPage: (context) async {
-          await context.read<TimerState>().addOneMinute('', true);
+          context.read<TimerState>().setTimer(60, 7);
           await tester.pump();
           await tester.pump(const Duration(seconds: 7));
         },

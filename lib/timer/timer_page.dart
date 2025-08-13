@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
-  const TimerPage({super.key});
+  final int? total;
+  final int? progress;
+
+  const TimerPage({super.key, this.total, this.progress});
 
   @override
   createState() => TimerPageState();
@@ -30,7 +33,11 @@ class TimerPageState extends State<TimerPage> {
       child: Navigator(
         key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => _TimerPageWidget(timerState: timerState),
+          builder: (context) => _TimerPageWidget(
+            timerState: timerState,
+            total: widget.total,
+            progress: widget.progress,
+          ),
           settings: settings,
         ),
       ),
@@ -39,14 +46,22 @@ class TimerPageState extends State<TimerPage> {
 }
 
 class _TimerPageWidget extends StatelessWidget {
+  final TimerState timerState;
+  final int? total;
+  final int? progress;
+
   const _TimerPageWidget({
     required this.timerState,
+    this.total,
+    this.progress,
   });
-
-  final TimerState timerState;
 
   @override
   Widget build(BuildContext context) {
+    if (total != null && progress != null) {
+      timerState.setTimer(total!, progress!);
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
