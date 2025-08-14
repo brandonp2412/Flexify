@@ -1,0 +1,66 @@
+name: Deploy to Google Play
+
+on:
+  schedule:
+    - cron: '0 0 */2 * *'  # Every 2 days at midnight UTC
+  workflow_dispatch:       # Optional manual trigger
+
+jobs:
+  deploy-google-play:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0  # Required to access tags
+
+      - name: Get latest commit hash
+        id: get_commit
+        run: echo "commit_hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Get last deployed commit hash from tag
+        id: get_tag
+        run: |
+          if git rev-parse last-deployed >/dev/null 2>&1; then
+            echo "last_commit=$(git rev-parse last-deployed)" >> $GITHUB_OUTPUT
+          else
+            echo "last_commit=none" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Skip if already deployed
+        if: steps.get_commit.outputs.commit_hash == steps.get_tag.outputs.last_commit
+        run: |
+          echo "Commit already deployed. Skipping."
+          exit 0
+
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: android-builds
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Create Google Play JSON key file
+        run: echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
+
+      - name: Deploy to Google Play
+        run: |
+          bundle exec fastlane supply \
+            --aab bundle/release/app-release.aab \
+            --json_key google-play-key.json \
+            --package_name com.presley.flexify \
+            --track production
+
+      - name: Tag latest commit as deployed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f last-deployed ${{ steps.get_commit.outputs.commit_hash }}
+          git push origin refs/tags/last-deployed --force

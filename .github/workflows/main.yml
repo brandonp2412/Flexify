@@ -185,7 +185,6 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Generate Android screenshots
-        if: ${{ env.ACT != 'true' }}
         uses: reactivecircus/android-emulator-runner@v2
         env:
           FLEXIFY_DEVICE_TYPE: phoneScreenshots
@@ -201,7 +200,6 @@ jobs:
             flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart --dart-define=FLEXIFY_DEVICE_TYPE=phoneScreenshots -d emulator-5554
 
       - name: Commit version bump, screenshots and create tag
-        if: ${{ env.ACT != 'true' }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -348,7 +346,6 @@ jobs:
           path: |
             flexify-windows.zip
 
-  # New job for building and deploying Flutter Web to GitHub Pages
   build-and-deploy-web:
     needs: [version-and-prepare]
     runs-on: ubuntu-latest
@@ -404,7 +401,6 @@ jobs:
         uses: actions/download-artifact@v4
 
       - name: Create GitHub Release
-        if: ${{ env.ACT != 'true' }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.version-and-prepare.outputs.version }}
@@ -453,41 +449,5 @@ jobs:
           msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
 
       - name: Publish to Microsoft Store
-        if: ${{ env.ACT != 'true' }}
         run: |
           msstore publish build/windows/x64/runner/Release/flexify.msix --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }}
-
-  deploy-google-play:
-    needs: [build-android]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Download Android artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: android-builds
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-          bundler-cache: true
-
-      - name: Create Google Play JSON key file
-        run: |
-          echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
-
-      - name: Deploy to Google Play
-        if: ${{ env.ACT != 'true' }}
-        run: |
-          bundle exec fastlane supply \
-            --aab bundle/release/app-release.aab \
-            --json_key google-play-key.json \
-            --package_name com.presley.flexify \
-            --track production \
-            --skip_upload_images \
-            --skip_upload_screenshots
