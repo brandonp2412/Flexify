@@ -33,7 +33,7 @@ Flex on people with this swanky, lightning-quick gym tracker!
   <tr>
     <td align="center">
       <a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct">
-         <img src="./docs/download-msstore.svg" style="height: 75px !important"/>
+         <img src="./docs/download-msstore.svg" width="200"/>
       </a>
     </td>
     <td align="center">
