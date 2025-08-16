@@ -106,30 +106,35 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 visible: settings.value.showImages,
                 child: material.Column(
                   children: [
-                    if (image == null)
-                      TextButton.icon(
-                        onPressed: pick,
-                        label: const Text('Image'),
-                        icon: const Icon(Icons.image),
-                      ),
+                    material.Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton.icon(
+                          onPressed: pick,
+                          label: const Text('Image'),
+                          icon: const Icon(Icons.image),
+                        ),
+                        if (image != null)
+                          TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                image = null;
+                              });
+                            },
+                            label: const Text("Delete"),
+                            icon: const Icon(Icons.delete),
+                          ),
+                      ],
+                    ),
                     if (image != null) ...[
                       const SizedBox(height: 8),
-                      Tooltip(
-                        message: 'Long-press to delete',
-                        child: GestureDetector(
-                          onTap: () => pick(),
-                          onLongPress: () => setState(() {
-                            image = null;
-                          }),
-                          child: Image.file(
-                            File(image!),
-                            errorBuilder: (context, error, stackTrace) =>
-                                TextButton.icon(
-                              label: const Text('Image error'),
-                              icon: const Icon(Icons.error),
-                              onPressed: () => pick(),
-                            ),
-                          ),
+                      Image.file(
+                        File(image!),
+                        errorBuilder: (context, error, stackTrace) =>
+                            TextButton.icon(
+                          label: const Text('Image error'),
+                          icon: const Icon(Icons.error),
+                          onPressed: () => pick(),
                         ),
                       ),
                     ],
