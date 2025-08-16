@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 0  # Required to access tags
+          fetch-depth: 0
 
       - name: Get latest commit hash
         id: get_commit
@@ -34,10 +34,45 @@ jobs:
           echo "Commit already deployed. Skipping."
           exit 0
 
-      - name: Download Android artifacts
-        uses: actions/download-artifact@v4
+      - name: Get latest release
+        id: get_release
+        uses: actions/github-script@v7
         with:
-          name: android-builds
+          script: |
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 1
+            });
+            
+            if (releases.length === 0) {
+              core.setFailed('No releases found');
+              return;
+            }
+            
+            const latestRelease = releases[0];
+            core.setOutput('release_id', latestRelease.id);
+            core.setOutput('tag_name', latestRelease.tag_name);
+            
+            // Find the AAB file in release assets
+            const aabAsset = latestRelease.assets.find(asset => 
+              asset.name.includes('app-') && asset.name.endsWith('-release.aab')
+            );
+            
+            if (!aabAsset) {
+              core.setFailed('No AAB file found in latest release');
+              return;
+            }
+            
+            core.setOutput('aab_download_url', aabAsset.browser_download_url);
+            core.setOutput('aab_name', aabAsset.name);
+
+      - name: Download AAB from release
+        run: |
+          mkdir -p bundle/release
+          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -o "bundle/release/${{ steps.get_release.outputs.aab_name }}" \
+            "${{ steps.get_release.outputs.aab_download_url }}"
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -51,7 +86,7 @@ jobs:
       - name: Deploy to Google Play
         run: |
           bundle exec fastlane supply \
-            --aab bundle/release/app-release.aab \
+            --aab "bundle/release/${{ steps.get_release.outputs.aab_name }}" \
             --json_key google-play-key.json \
             --package_name com.presley.flexify \
             --track production
