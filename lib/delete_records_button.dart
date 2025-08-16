@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
@@ -136,9 +137,12 @@ class DeleteRecordsButton extends StatelessWidget {
                                 await db.close();
                                 await db.executor.close();
                                 await file.delete();
-                                if (Platform.isAndroid || Platform.isIOS)
+                                if (defaultTargetPlatform ==
+                                        TargetPlatform.iOS ||
+                                    defaultTargetPlatform ==
+                                        TargetPlatform.android)
                                   SystemNavigator.pop();
-                                if (Platform.isWindows || Platform.isMacOS)
+                                else
                                   exit(0);
                               },
                             ),

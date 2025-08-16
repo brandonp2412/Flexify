@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -246,7 +247,8 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 final settings = context.read<SettingsState>().value;
-                await requestNotificationPermission();
+                if (defaultTargetPlatform != TargetPlatform.linux)
+                  await requestNotificationPermission();
                 await timerState.addOneMinute(
                   settings.alarmSound,
                   settings.vibrate,
