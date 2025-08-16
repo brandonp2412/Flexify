@@ -193,19 +193,48 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        SizedBox(
-          height: circleSize,
-          width: circleSize,
-          child: CircularProgressIndicator(
-            strokeCap: StrokeCap.round,
-            value: value,
-            strokeWidth: strokeWidth,
-            backgroundColor:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.25),
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Theme.of(context).colorScheme.primary,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: circleSize + 20,
+              height: circleSize + 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: lighten(Theme.of(context).colorScheme.surface, .3),
+                  width: 2,
+                ),
+              ),
             ),
-          ),
+            Container(
+              width: circleSize - 20,
+              height: circleSize - 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: lighten(Theme.of(context).colorScheme.surface, .3),
+                  width: 2,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: circleSize,
+              width: circleSize,
+              child: CircularProgressIndicator(
+                strokeCap: StrokeCap.round,
+                value: value,
+                strokeWidth: strokeWidth,
+                backgroundColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.25),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
         ),
         // Circle button at the end of the progress
         if (value > 0)
