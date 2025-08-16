@@ -54,23 +54,26 @@ class PlanTile extends StatelessWidget {
     );
 
     if (selected.isEmpty)
-      leading = Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Text(
-            plan.title?.isNotEmpty == true
-                ? plan.title![0]
-                : plan.days[0].toUpperCase(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'monospace',
+      leading = GestureDetector(
+        onTap: () => onSelect(plan.id),
+        child: Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Text(
+              plan.title?.isNotEmpty == true
+                  ? plan.title![0]
+                  : plan.days[0].toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'monospace',
+              ),
             ),
           ),
         ),

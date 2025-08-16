@@ -57,28 +57,34 @@ class GraphTile extends StatelessWidget {
     if (selected.isEmpty &&
         showImages &&
         gymSet.image.value?.isNotEmpty == true) {
-      leading = Image.file(
-        File(gymSet.image.value!),
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+      leading = GestureDetector(
+        onTap: () => onSelect(gymSet.name.value),
+        child: Image.file(
+          File(gymSet.image.value!),
+          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+        ),
       );
     } else if (selected.isEmpty) {
-      leading = Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Text(
-            gymSet.name.value.isNotEmpty
-                ? gymSet.name.value[0].toUpperCase()
-                : '?',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'monospace',
+      leading = GestureDetector(
+        onTap: () => onSelect(gymSet.name.value),
+        child: Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Text(
+              gymSet.name.value.isNotEmpty
+                  ? gymSet.name.value[0].toUpperCase()
+                  : '?',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'monospace',
+              ),
             ),
           ),
         ),

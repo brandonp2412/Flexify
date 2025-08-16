@@ -119,27 +119,35 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             );
 
             if (widget.selected.isEmpty && showImages && gymSet.image != null) {
-              leading = Image.file(
-                File(gymSet.image!),
-                errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.error),
+              leading = GestureDetector(
+                onTap: () => widget.onSelect(gymSet.id),
+                child: Image.file(
+                  File(gymSet.image!),
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.error),
+                ),
               );
             } else if (widget.selected.isEmpty) {
-              leading = Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    gymSet.name.isNotEmpty ? gymSet.name[0].toUpperCase() : '?',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'monospace',
+              leading = GestureDetector(
+                onTap: () => widget.onSelect(gymSet.id),
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      gymSet.name.isNotEmpty
+                          ? gymSet.name[0].toUpperCase()
+                          : '?',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'monospace',
+                      ),
                     ),
                   ),
                 ),
