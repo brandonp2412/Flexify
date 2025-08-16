@@ -1,0 +1,4 @@
+• Add exercise swap to plans
+• Add search for swapping workout
+• Add unit test for swap workout widget
+• Fix importing database on desktop

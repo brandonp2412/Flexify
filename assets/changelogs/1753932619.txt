@@ -1,0 +1,2 @@
+• Fix exercise updating after editing from plans
+• Fix tooltip on first/last data points

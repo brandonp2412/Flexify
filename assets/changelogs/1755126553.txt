@@ -1,0 +1,10 @@
+• Allow configuring of per-exercise rest timers from settings page
+• Animate buttons on search bars
+• Animate checkboxes on select
+• Animate fab on plans page
+• Fix bug when editing units for a graph
+• Fix first/last tooltip on hover graphs
+• Fix leading icons for plans with titles
+• Fix plan list test
+• Fix removing custom timers on settings page
+• Make day selector darker

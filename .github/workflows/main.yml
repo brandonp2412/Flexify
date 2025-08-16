@@ -65,38 +65,9 @@ jobs:
         id: changelog
         run: |
           changelog_file="fastlane/metadata/android/en-US/changelogs/${{ steps.version.outputs.changelog_number }}.txt"
-
-          # Use existing changelog if it exists
-          if [ -f "$changelog_file" ]; then
-            echo "Using existing changelog file: $changelog_file"
-            cat "$changelog_file"
-            changelog=$(cat "$changelog_file")
-            echo "changelog<<EOF" >> $GITHUB_OUTPUT
-            echo "$changelog" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-            mkdir -p fastlane/metadata/en-AU
-            echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
-            exit 0
-          fi
-
-          # Generate new changelog
           mkdir -p "$(dirname "$changelog_file")"
-
           last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$last_tag" ]; then
-            echo "• Initial release" > "$changelog_file"
-            echo "Generated initial release changelog"
-            cat "$changelog_file"
-            changelog=$(cat "$changelog_file")
-            echo "changelog<<EOF" >> $GITHUB_OUTPUT
-            echo "$changelog" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-            mkdir -p fastlane/metadata/en-AU
-            echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
-            exit 0
-          fi
 
-          # Generate changelog from git commits
           git --no-pager log --pretty=format:'%s' "$last_tag"..HEAD | \
             sort -u | \
             grep -v "^Merge " | \
@@ -106,14 +77,6 @@ jobs:
             grep -v "^Update " | \
             head -10 | \
             awk '{print "• "$0}' > "$changelog_file"
-
-          # Use fallback if file is empty or has no bullet points
-          if [ ! -s "$changelog_file" ] || ! grep -q "•" "$changelog_file"; then
-            echo "• Bug fixes and improvements" > "$changelog_file"
-            echo "Used fallback changelog content"
-          else
-            echo "Generated changelog from git commits"
-          fi
 
           cat "$changelog_file"
           changelog=$(cat "$changelog_file")
@@ -149,21 +112,11 @@ jobs:
           for file in fastlane/metadata/android/en-US/changelogs/*.txt; do
             [ -f "$file" ] || continue
 
-            # Try birth time first
             timestamp=$(stat --format="%W" "$file")
-            if [ "$timestamp" -eq 0 ]; then
-              timestamp=$(stat --format="%Y" "$file")
-            fi
-
             target_file="assets/changelogs/$timestamp.txt"
 
-            # Copy only if file doesn't exist or differs
-            if [ ! -f "$target_file" ] || ! cmp -s "$file" "$target_file"; then
-              cp "$file" "$target_file"
-              echo "Copied $(basename "$file") to $timestamp.txt"
-            else
-              echo "Skipped $(basename "$file") (already exists with same content)"
-            fi
+            cp "$file" "$target_file"
+            echo "Copied $(basename "$file") to $timestamp.txt"
           done
 
       - name: Setup Java

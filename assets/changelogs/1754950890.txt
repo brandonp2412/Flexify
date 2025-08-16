@@ -1,0 +1,3 @@
+• Allow manual triggering of github workflow
+• Downgrade to ruby 3.3 for deploy-google-play
+• Fix publisher name in pubspec.yaml

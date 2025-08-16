@@ -1,0 +1,4 @@
+• Fix reps changing by default
+• Lighten the end of timer button
+• Upgrade flutter dependencies
+• Upgrade flutter to 3.32.8
