@@ -81,13 +81,18 @@ class _TimerPageWidget extends StatelessWidget {
       body: const Center(
         child: TimerCircularProgressIndicator(),
       ),
-      floatingActionButton: Visibility(
-        visible: timerState.timer.isRunning(),
-        child: FloatingActionButton.extended(
-          onPressed: () async => await timerState.stopTimer(),
-          icon: const Icon(Icons.stop),
-          label: const Text("Stop"),
-        ),
+      floatingActionButton: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 150),
+        transitionBuilder: (child, animation) {
+          return ScaleTransition(scale: animation, child: child);
+        },
+        child: timerState.timer.isRunning()
+            ? FloatingActionButton.extended(
+                onPressed: () async => await timerState.stopTimer(),
+                icon: const Icon(Icons.stop),
+                label: const Text("Stop"),
+              )
+            : const SizedBox(),
       ),
     );
   }
