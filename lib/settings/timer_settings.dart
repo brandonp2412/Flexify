@@ -194,29 +194,40 @@ List<Widget> getTimerSettings(
     if ('alarm sound'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Music to play at the end of a rest timer',
-        child: TextButton.icon(
-          onPressed: () async {
-            final result =
-                await FilePicker.platform.pickFiles(type: FileType.audio);
-            if (result == null || result.files.single.path == null) return;
-            db.settings.update().write(
-                  SettingsCompanion(
-                    alarmSound: Value(result.files.single.path!),
-                  ),
-                );
-            player.play(DeviceFileSource(result.files.single.path!));
-          },
-          onLongPress: () {
-            db.settings.update().write(
-                  const SettingsCompanion(
-                    alarmSound: Value(''),
-                  ),
-                );
-          },
-          icon: const Icon(Icons.music_note),
-          label: settings.alarmSound.isEmpty
-              ? const Text("Alarm sound")
-              : Text(settings.alarmSound.split('/').last),
+        child: material.Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            TextButton.icon(
+              onPressed: () async {
+                final result =
+                    await FilePicker.platform.pickFiles(type: FileType.audio);
+                if (result == null || result.files.single.path == null) return;
+                db.settings.update().write(
+                      SettingsCompanion(
+                        alarmSound: Value(result.files.single.path!),
+                      ),
+                    );
+                player.play(DeviceFileSource(result.files.single.path!));
+              },
+              icon: const Icon(Icons.music_note),
+              label: settings.alarmSound.isEmpty
+                  ? const Text("Alarm sound")
+                  : Text(settings.alarmSound.split('/').last),
+            ),
+            if (settings.alarmSound.isNotEmpty)
+              TextButton.icon(
+                onPressed: () {
+                  db.settings.update().write(
+                        const SettingsCompanion(
+                          alarmSound: Value(''),
+                        ),
+                      );
+                },
+                label: const Text("Delete"),
+                icon: const Icon(Icons.delete),
+              ),
+          ],
         ),
       ),
   ];
