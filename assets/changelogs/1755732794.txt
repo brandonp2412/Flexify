@@ -1,0 +1,10 @@
+• Add mild outline to timer circle
+• Fix +1 minute on linux
+• Fix changelogs
+• Fix github readme styling [skip ci]
+• Fix msstore width badge [skip ci]
+• Limit frequency of google play deployments [skip ci]
+• Make badges bigger [skip ci]
+• Make badges consistent [skip ci]
+• Revert "Fix msstore width badge [skip ci]"
+• Use github release instead of artifact [skip ci]
