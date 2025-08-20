@@ -40,16 +40,16 @@ class _EditSetPageState extends State<EditSetPage> {
   final key = GlobalKey<FormState>();
 
   var categoryCtrl = TextEditingController();
-  late String unit;
-  late DateTime created;
-  late bool cardio;
-  late String name;
+  DateTime created = DateTime.now().toLocal();
+  TextEditingController? nameCtrl;
+  List<String> options = [];
   int? restMs;
   String? image;
   String? category;
 
-  TextEditingController? nameCtrl;
-  List<String> options = [];
+  late String unit;
+  late bool cardio;
+  late String name;
 
   void onSelected(String option, bool showBodyWeight) async {
     final last = await (db.gymSets.select()
@@ -608,9 +608,7 @@ class _EditSetPageState extends State<EditSetPage> {
     }
 
     if (widget.gymSet.id > 0) {
-      await db
-          .update(db.gymSets)
-          .replace(gymSet.copyWith(created: DateTime.now().toLocal()));
+      await db.update(db.gymSets).replace(gymSet);
       if (image != null)
         (db.update(db.gymSets)..where((u) => u.name.equals(name)))
             .write(GymSetsCompanion(image: Value(image)));

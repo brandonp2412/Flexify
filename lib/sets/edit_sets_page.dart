@@ -378,12 +378,19 @@ class _EditSetsPageState extends State<EditSetsPage> {
         oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
         oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
         oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-        oldCreated = gymSets
-            .map(
-              (gymSet) =>
-                  DateFormat(settings.longDateFormat).format(gymSet.created),
-            )
-            .join(', ');
+        if (settings.longDateFormat == 'timeago')
+          oldCreated = gymSets
+              .map(
+                (gymSet) => timeago.format(gymSet.created),
+              )
+              .join(', ');
+        else
+          oldCreated = gymSets
+              .map(
+                (gymSet) =>
+                    DateFormat(settings.longDateFormat).format(gymSet.created),
+              )
+              .join(', ');
         oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
         oldMin = gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
         oldSec = gymSets

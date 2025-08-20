@@ -110,8 +110,6 @@ jobs:
           mkdir -p assets/changelogs
 
           for file in fastlane/metadata/android/en-US/changelogs/*.txt; do
-            [ -f "$file" ] || continue
-
             timestamp=$(stat --format="%W" "$file")
             target_file="assets/changelogs/$timestamp.txt"
 
