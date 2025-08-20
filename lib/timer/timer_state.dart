@@ -113,6 +113,7 @@ class TimerState extends ChangeNotifier {
       linux: linux,
       macOS: darwin,
       iOS: darwin,
+      android: AndroidInitializationSettings('ic_launcher'),
     );
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(init);
