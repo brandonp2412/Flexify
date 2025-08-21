@@ -208,7 +208,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
-          generate_release_notes: true
+          body_path: fastlane/metadata/en-AU/release_notes.txt
           files: |
             android-builds/flutter-apk/app-*-release.apk
             android-builds/flutter-apk/flexify.apk
