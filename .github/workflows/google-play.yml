@@ -41,7 +41,7 @@ jobs:
       - uses: robinraju/release-downloader@v1
         with:
           latest: true
-          fileName: bundle/release/app-release.aab
+          fileName: app-release.aab
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -55,7 +55,7 @@ jobs:
       - name: Deploy to Google Play
         run: |
           bundle exec fastlane supply \
-            --aab bundle/release/app-release.aab \
+            --aab app-release.aab \
             --json_key google-play-key.json \
             --package_name com.presley.flexify \
             --track production
