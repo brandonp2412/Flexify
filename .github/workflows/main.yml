@@ -212,6 +212,7 @@ jobs:
           files: |
             android-builds/flutter-apk/app-*-release.apk
             android-builds/flutter-apk/flexify.apk
+            android-builds/bundle/release/app-release.aab
             linux-builds/flexify-linux.zip
             windows-builds/flexify-windows.zip
         env:
