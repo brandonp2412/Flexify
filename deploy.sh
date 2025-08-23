@@ -129,7 +129,6 @@ fi
 
 export PATH="$PWD/flutter/bin:$PATH"
 chmod +x flutter/bin/* # Ensure executables are runnable
-flutter/bin/flutter config --no-analytics # Disable analytics as in main.yml
 
 # Run tests and analysis
 print_step "Running tests and analysis"
@@ -162,7 +161,7 @@ for file in fastlane/metadata/android/en-US/changelogs/*.txt; do
             timestamp=$(stat --format="%W" "$file")
         fi
         target_file="assets/changelogs/$timestamp.txt"
-        cp -v "$file" "$target_file"
+        cp "$file" "$target_file"
     fi
 done
 
