@@ -220,37 +220,6 @@ class GraphsPageState extends State<GraphsPage>
                     );
                   },
                 ),
-              Consumer<SettingsState>(
-                builder: (
-                  BuildContext context,
-                  SettingsState settings,
-                  Widget? child,
-                ) {
-                  if (!settings.value.peekGraph) return const SizedBox();
-                  if (gymSets.firstOrNull == null) return const SizedBox();
-
-                  return FutureBuilder(
-                    builder: (context, snapshot) => snapshot.data != null
-                        ? getPeek(
-                            gymSets.first,
-                            snapshot.data!,
-                            settings.value.shortDateFormat,
-                          )
-                        : const SizedBox(),
-                    future: gymSets.first.cardio.value
-                        ? getCardioData(name: gymSets.first.name.value)
-                        : getStrengthData(
-                            target: gymSets.first.unit.value,
-                            name: gymSets.first.name.value,
-                            metric: StrengthMetric.bestWeight,
-                            period: Period.day,
-                            start: null,
-                            end: null,
-                            limit: 20,
-                          ),
-                  );
-                },
-              ),
               Selector<SettingsState, bool>(
                 selector: (p0, settingsState) =>
                     settingsState.value.showGlobalProgress,
@@ -335,11 +304,50 @@ class GraphsPageState extends State<GraphsPage>
         showGlobalProgress;
     if (showGlobal) itemCount++;
 
+    final settings = context.read<SettingsState>().value;
+    final showPeekGraph = settings.peekGraph && gymSets.firstOrNull != null;
+    if (showPeekGraph) itemCount++;
+
     return ListView.builder(
       itemCount: itemCount,
       controller: scroll,
       padding: const EdgeInsets.only(bottom: 50, top: 8),
       itemBuilder: (context, index) {
+        if (index == 0 && showPeekGraph) {
+          return Consumer<SettingsState>(
+            builder: (
+              BuildContext context,
+              SettingsState settings,
+              Widget? child,
+            ) {
+              if (!settings.value.peekGraph) return const SizedBox();
+              if (gymSets.firstOrNull == null) return const SizedBox();
+
+              return FutureBuilder(
+                builder: (context, snapshot) => snapshot.data != null
+                    ? getPeek(
+                        gymSets.first,
+                        snapshot.data!,
+                        settings.value.shortDateFormat,
+                      )
+                    : const SizedBox(),
+                future: gymSets.first.cardio.value
+                    ? getCardioData(name: gymSets.first.name.value)
+                    : getStrengthData(
+                        target: gymSets.first.unit.value,
+                        name: gymSets.first.name.value,
+                        metric: StrengthMetric.bestWeight,
+                        period: Period.day,
+                        start: null,
+                        end: null,
+                        limit: 20,
+                      ),
+              );
+            },
+          );
+        }
+        if (showPeekGraph) index--;
+
         if (index == 0 && showGlobal)
           return ListTile(
             leading: const Icon(Icons.language),
