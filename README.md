@@ -22,6 +22,7 @@ Flex on people with this swanky, lightning-quick gym tracker!
 <a href="https://f-droid.org/packages/com.presley.flexify">
   <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" style="height: 86px !important">
 </a>
+
 <a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct">
    <img src="./docs/download-msstore.svg" style="height: 86px !important"/>
 </a>
