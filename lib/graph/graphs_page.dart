@@ -313,7 +313,26 @@ class GraphsPageState extends State<GraphsPage>
       controller: scroll,
       padding: const EdgeInsets.only(bottom: 50, top: 8),
       itemBuilder: (context, index) {
-        if (index == 0 && showPeekGraph) {
+        int currentGymSetIndex = index;
+
+        if (showGlobal) {
+          if (index == 0) {
+            return ListTile(
+              leading: const Icon(Icons.language),
+              title: const Text("Global progress"),
+              subtitle: const Text("A chart grouped by category"),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const GlobalProgressPage(),
+                ),
+              ),
+              onLongPress: longPressGlobal,
+            );
+          }
+          currentGymSetIndex--;
+        }
+
+        if (showPeekGraph && currentGymSetIndex == 1) {
           return Consumer<SettingsState>(
             builder: (
               BuildContext context,
@@ -346,26 +365,16 @@ class GraphsPageState extends State<GraphsPage>
             },
           );
         }
-        if (showPeekGraph) index--;
 
-        if (index == 0 && showGlobal)
-          return ListTile(
-            leading: const Icon(Icons.language),
-            title: const Text("Global progress"),
-            subtitle: const Text("A chart grouped by category"),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const GlobalProgressPage(),
-              ),
-            ),
-            onLongPress: longPressGlobal,
-          );
-        if (showGlobal) index--;
+        if (showPeekGraph && currentGymSetIndex > 1) {
+          currentGymSetIndex--;
+        }
 
-        final set = gymSets.elementAtOrNull(index);
+        final set = gymSets.elementAtOrNull(currentGymSetIndex);
         if (set == null) return const SizedBox();
 
-        final prev = index > 0 ? gymSets[index - 1] : null;
+        final prev =
+            currentGymSetIndex > 0 ? gymSets[currentGymSetIndex - 1] : null;
 
         final created = prev?.created.value.toLocal();
 
