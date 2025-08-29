@@ -17,17 +17,17 @@ Flex on people with this swanky, lightning-quick gym tracker!
 - ⚙️ **Custom**: Toggle features on/off and swap between light/dark theme.
 
 <a href="https://play.google.com/store/apps/details?id=com.presley.flexify">
-  <img alt="Get it on Google Play" style="height: 86px !important" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"/>
+  <img alt="Get it on Google Play" style="height: 80px !important" src="./docs/get-it-on-google-play.png"/>
 </a>
 <a href="https://f-droid.org/packages/com.presley.flexify">
-  <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" style="height: 86px !important">
+  <img src="./docs/get-it-on-fdroid.png" alt="Get it on F-Droid" style="height: 80px !important">
 </a>
 
 <a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct">
-   <img src="./docs/download-msstore.svg" style="height: 86px !important"/>
+   <img src="./docs/download-msstore.svg" style="height: 80px !important"/>
 </a>
 <a href="https://apps.apple.com/us/app/flexify/id6503730178?itsct=apps_box_badge&itscg=30200">
-  <img src="docs/download-apple.svg" alt="Download on the App Store" style="height: 86px !important">
+  <img src="docs/download-apple.svg" alt="Download on the App Store" style="height: 80px !important">
 </a>
 
 ## Screenshots
