@@ -182,9 +182,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
               ),
               if (snapshot.data?.isEmpty == true)
                 const ListTile(
-                  title: Text("No entries yet."),
+                  title: Text("No entries yet"),
                   subtitle: Text(
-                    "Start inserting data for records to appear here.",
+                    "Complete some sets to see them here",
                   ),
                 ),
               if (snapshot.hasError)

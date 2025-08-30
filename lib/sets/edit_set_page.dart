@@ -158,12 +158,19 @@ class _EditSetPageState extends State<EditSetPage> {
         child: ListView(
           children: [
             autocomplete(showBodyWeight),
+            SizedBox(height: 8.0),
             ...exerciseFields(),
+            SizedBox(height: 8.0),
             bodyFields(showBodyWeight),
+            SizedBox(height: 8.0),
             unitSelector(),
+            SizedBox(height: 8.0),
             categorySelector(),
+            SizedBox(height: 8.0),
             notesField(),
+            SizedBox(height: 8.0),
             dateSelector(),
+            SizedBox(height: 8.0),
             imageField(),
           ],
         ),
@@ -182,7 +189,9 @@ class _EditSetPageState extends State<EditSetPage> {
   List<Widget> buildStrengthFields() {
     return [
       if (name != 'Weight') buildRepsField(),
+      SizedBox(height: 8.0),
       buildWeightField(),
+      SizedBox(height: 8.0),
       if (name != 'Weight') buildORMField(),
     ];
   }
@@ -191,7 +200,7 @@ class _EditSetPageState extends State<EditSetPage> {
     return TextFormField(
       controller: reps,
       focusNode: repsNode,
-      decoration: const InputDecoration(labelText: 'Reps'),
+      decoration: const InputDecoration(labelText: 'Reps', hintText: '10'),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(reps),
       onChanged: (value) => setORM(),
@@ -210,6 +219,7 @@ class _EditSetPageState extends State<EditSetPage> {
       controller: weight,
       decoration: InputDecoration(
         labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
+        hintText: '60',
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(weight),
@@ -228,6 +238,7 @@ class _EditSetPageState extends State<EditSetPage> {
       controller: orm,
       decoration: const InputDecoration(
         labelText: 'One rep max (estimate)',
+        hintText: '80.02 kg',
       ),
       enabled: false,
     );
@@ -236,7 +247,9 @@ class _EditSetPageState extends State<EditSetPage> {
   List<Widget> buildCardioFields() {
     return [
       buildDistanceField(),
+      SizedBox(height: 8.0),
       duration(),
+      SizedBox(height: 8.0),
       buildInclineField(),
     ];
   }
@@ -279,8 +292,9 @@ class _EditSetPageState extends State<EditSetPage> {
       visible: showBodyWeight && name != 'Weight',
       child: TextFormField(
         controller: body,
-        decoration: const InputDecoration(
-          labelText: 'Body weight (during set)',
+        decoration: InputDecoration(
+          labelText: 'Body weight ($unit)',
+          hintText: '70',
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(body),
@@ -299,7 +313,7 @@ class _EditSetPageState extends State<EditSetPage> {
         visible: showUnits,
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Unit'),
-          value: unit,
+          initialValue: unit,
           items: getUnitItems(),
           onChanged: (String? newValue) {
             setState(() {
@@ -353,7 +367,10 @@ class _EditSetPageState extends State<EditSetPage> {
                 return TextFormField(
                   controller: textEditingController,
                   focusNode: focusNode,
-                  decoration: const InputDecoration(labelText: 'Category'),
+                  decoration: const InputDecoration(
+                    labelText: 'Category',
+                    hintText: 'Chest',
+                  ),
                   onChanged: (value) => setState(() {
                     category = value;
                   }),
@@ -372,7 +389,10 @@ class _EditSetPageState extends State<EditSetPage> {
         visible: showNotes,
         child: TextField(
           maxLines: 3,
-          decoration: const InputDecoration(labelText: 'Notes'),
+          decoration: const InputDecoration(
+            labelText: 'Notes',
+            hintText: 'Plant your feet. Set your back and shoulders.',
+          ),
           controller: notes,
         ),
       ),
@@ -512,7 +532,8 @@ class _EditSetPageState extends State<EditSetPage> {
       ) {
         nameCtrl = textEditingController;
         return TextFormField(
-          decoration: const InputDecoration(labelText: 'Name'),
+          decoration:
+              const InputDecoration(labelText: 'Name', hintText: 'Bench press'),
           controller: textEditingController,
           textInputAction: TextInputAction.next,
           onTap: () {
@@ -658,7 +679,10 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   void setORM() {
-    if (double.parse(weight.text) > 0)
+    final parsedReps = double.tryParse(reps.text);
+    final parsedWeight = double.tryParse(weight.text);
+    if (parsedReps == null || parsedWeight == null) return;
+    if (parsedReps > 0)
       orm.text =
           "${(double.parse(weight.text) / (1.0278 - (0.0278 * double.parse(reps.text)))).toStringAsFixed(2)} $unit";
     else
@@ -706,16 +730,18 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void updateFields(GymSet gymSet) {
     nameCtrl?.text = gymSet.name;
-
-    reps.text = toString(gymSet.reps);
-    weight.text = toString(gymSet.weight);
-    body.text = toString(gymSet.bodyWeight);
-    minutes.text = gymSet.duration.floor().toString();
-    seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
-    distance.text = toString(gymSet.distance);
-    incline.text = gymSet.incline?.toString() ?? "";
-    categoryCtrl.text = gymSet.category?.toString() ?? "";
-    if (widget.gymSet.id > 0) notes.text = gymSet.notes ?? '';
+    if (gymSet.id != 0) {
+      reps.text = toString(gymSet.reps);
+      weight.text = toString(gymSet.weight);
+      setORM();
+      body.text = toString(gymSet.bodyWeight);
+      minutes.text = gymSet.duration.floor().toString();
+      seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
+      distance.text = toString(gymSet.distance);
+      incline.text = gymSet.incline?.toString() ?? "";
+      categoryCtrl.text = gymSet.category?.toString() ?? "";
+      notes.text = gymSet.notes ?? '';
+    }
 
     setState(() {
       category = gymSet.category;
@@ -725,8 +751,6 @@ class _EditSetPageState extends State<EditSetPage> {
       cardio = gymSet.cardio;
       restMs = gymSet.restMs;
     });
-
-    setORM();
   }
 
   Future<void> selectDate() async {
