@@ -300,7 +300,8 @@ class _EditSetPageState extends State<EditSetPage> {
         onTap: () => selectAll(body),
         validator: (value) {
           if (value == null) return null;
-          if (double.tryParse(value) == null) return 'Invalid number';
+          if (value.isNotEmpty && double.tryParse(value) == null)
+            return 'Invalid number';
           return null;
         },
       ),
@@ -730,6 +731,15 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void updateFields(GymSet gymSet) {
     nameCtrl?.text = gymSet.name;
+    setState(() {
+      category = gymSet.category;
+      image = gymSet.image;
+      name = gymSet.name;
+      unit = gymSet.unit;
+      cardio = gymSet.cardio;
+      restMs = gymSet.restMs;
+    });
+
     if (gymSet.id != 0) {
       reps.text = toString(gymSet.reps);
       weight.text = toString(gymSet.weight);
@@ -742,15 +752,6 @@ class _EditSetPageState extends State<EditSetPage> {
       categoryCtrl.text = gymSet.category?.toString() ?? "";
       notes.text = gymSet.notes ?? '';
     }
-
-    setState(() {
-      category = gymSet.category;
-      image = gymSet.image;
-      name = gymSet.name;
-      unit = gymSet.unit;
-      cardio = gymSet.cardio;
-      restMs = gymSet.restMs;
-    });
   }
 
   Future<void> selectDate() async {

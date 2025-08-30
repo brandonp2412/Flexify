@@ -44,7 +44,14 @@ void main() async {
       ),
     );
 
-    expect(find.text("Bench press"), findsOne);
+    expect(find.bySemanticsLabel("Name"), findsOne);
+    final reps = find.bySemanticsLabel('Reps');
+    final weight = find.bySemanticsLabel('Weight (kg)');
+    expect(reps, findsOne);
+    expect(weight, findsOne);
+
+    await tester.enterText(reps, '10');
+    await tester.enterText(weight, '50');
 
     final button = find.text("Save");
     expect(button, findsOne);
@@ -88,7 +95,7 @@ void main() async {
       ),
     );
 
-    expect(find.text("Bench press"), findsNWidgets(2));
+    expect(find.text("Bench press"), findsNWidgets(3));
 
     final button = find.text("Save");
     expect(button, findsOne);
