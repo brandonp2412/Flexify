@@ -338,5 +338,5 @@ print_success "Web build completed"
 
 echo ""
 print_success "All done! 🎉"
-echo git push
-echo git push --tags
+git push
+git push --tags
