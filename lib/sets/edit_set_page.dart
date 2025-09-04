@@ -740,18 +740,21 @@ class _EditSetPageState extends State<EditSetPage> {
       restMs = gymSet.restMs;
     });
 
-    if (gymSet.id != 0) {
-      reps.text = toString(gymSet.reps);
-      weight.text = toString(gymSet.weight);
-      setORM();
-      body.text = toString(gymSet.bodyWeight);
+    if (gymSet.reps != 0) reps.text = toString(gymSet.reps);
+    if (gymSet.weight != 0) weight.text = toString(gymSet.weight);
+    setORM();
+    if (gymSet.bodyWeight != 0) body.text = toString(gymSet.bodyWeight);
+    if (gymSet.duration != 0) {
       minutes.text = gymSet.duration.floor().toString();
       seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
-      distance.text = toString(gymSet.distance);
-      incline.text = gymSet.incline?.toString() ?? "";
-      categoryCtrl.text = gymSet.category?.toString() ?? "";
-      notes.text = gymSet.notes ?? '';
     }
+    if (gymSet.distance != 0) distance.text = toString(gymSet.distance);
+    if (gymSet.incline != null && gymSet.incline != 0)
+      incline.text = gymSet.incline.toString();
+    if (gymSet.category != null && gymSet.category!.isNotEmpty)
+      categoryCtrl.text = gymSet.category!;
+    if (gymSet.notes != null && gymSet.notes!.isNotEmpty)
+      notes.text = gymSet.notes!;
   }
 
   Future<void> selectDate() async {
