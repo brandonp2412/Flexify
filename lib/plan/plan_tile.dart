@@ -108,8 +108,13 @@ class PlanTile extends StatelessWidget {
             );
 
           final state = context.watch<PlanState>();
-          final count = state.planCounts
-              .firstWhere((element) => element.planId == plan.id);
+          final idx = state.planCounts
+              .indexWhere((element) => element.planId == plan.id);
+          PlanCount count;
+          if (idx != -1)
+            count = state.planCounts[idx];
+          else
+            return SizedBox();
 
           if (trailing == PlanTrailing.count)
             return Text(

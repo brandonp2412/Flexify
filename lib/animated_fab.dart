@@ -47,7 +47,9 @@ class _AnimatedFabState extends State<AnimatedFab> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 72),
+      padding: EdgeInsets.only(
+        bottom: kToolbarHeight + 32 + 16,
+      ),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,

@@ -267,28 +267,31 @@ class GraphsPageState extends State<GraphsPage>
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.visibility_off),
-              title: const Text('Hide global progress'),
-              onTap: () {
-                db.settings.update().write(
-                      const SettingsCompanion(
-                        showGlobalProgress: Value(false),
-                      ),
-                    );
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.clear),
-              title: const Text('Cancel'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+        return material.Padding(
+          padding: const EdgeInsets.only(bottom: kToolbarHeight + 48),
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.visibility_off),
+                title: const Text('Hide global progress'),
+                onTap: () {
+                  db.settings.update().write(
+                        const SettingsCompanion(
+                          showGlobalProgress: Value(false),
+                        ),
+                      );
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.clear),
+                title: const Text('Cancel'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         );
       },
     );

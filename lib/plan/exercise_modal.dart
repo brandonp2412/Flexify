@@ -59,159 +59,164 @@ class _ExerciseModalState extends State<ExerciseModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: <Widget>[
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Settings'),
-          onTap: () async {
-            Navigator.pop(context);
+    return material.Padding(
+      padding: const EdgeInsets.only(bottom: kToolbarHeight + 48),
+      child: Wrap(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () async {
+              Navigator.pop(context);
 
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog.adaptive(
-                  title: Text(widget.exercise),
-                  content: SingleChildScrollView(
-                    child: material.Column(
-                      children: [
-                        Selector<SettingsState, int?>(
-                          selector: (context, settings) =>
-                              settings.value.warmupSets,
-                          builder: (context, value, child) => TextField(
-                            controller: warmup,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: false,
-                            ),
-                            onTap: () => selectAll(warmup),
-                            onChanged: changeWarmup,
-                            decoration: InputDecoration(
-                              labelText: "Warmup sets",
-                              border: const OutlineInputBorder(),
-                              hintText: (value ?? 0).toString(),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Selector<SettingsState, int>(
-                          selector: (context, settings) =>
-                              settings.value.maxSets,
-                          builder: (context, value, child) => TextField(
-                            controller: max,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: false,
-                            ),
-                            onTap: () => selectAll(max),
-                            onChanged: changeMax,
-                            decoration: InputDecoration(
-                              labelText: "Working sets (max: 20)",
-                              border: const OutlineInputBorder(),
-                              hintText: value.toString(),
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog.adaptive(
+                    title: Text(widget.exercise),
+                    content: SingleChildScrollView(
+                      child: material.Column(
+                        children: [
+                          Selector<SettingsState, int?>(
+                            selector: (context, settings) =>
+                                settings.value.warmupSets,
+                            builder: (context, value, child) => TextField(
+                              controller: warmup,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                decimal: false,
+                              ),
+                              onTap: () => selectAll(warmup),
+                              onChanged: changeWarmup,
+                              decoration: InputDecoration(
+                                labelText: "Warmup sets",
+                                border: const OutlineInputBorder(),
+                                hintText: (value ?? 0).toString(),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        StatefulBuilder(
-                          builder: (context, setState) => ListTile(
-                            title: const Text('Rest timers'),
-                            trailing: Switch(
-                              value: timers,
-                              onChanged: (value) {
-                                setState(() {
-                                  timers = value;
-                                });
-                                changeTimers(value);
-                              },
+                          const SizedBox(height: 16),
+                          Selector<SettingsState, int>(
+                            selector: (context, settings) =>
+                                settings.value.maxSets,
+                            builder: (context, value, child) => TextField(
+                              controller: max,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                decimal: false,
+                              ),
+                              onTap: () => selectAll(max),
+                              onChanged: changeMax,
+                              decoration: InputDecoration(
+                                labelText: "Working sets (max: 20)",
+                                border: const OutlineInputBorder(),
+                                hintText: value.toString(),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          StatefulBuilder(
+                            builder: (context, setState) => ListTile(
+                              title: const Text('Rest timers'),
+                              trailing: Switch(
+                                value: timers,
+                                onChanged: (value) {
+                                  setState(() {
+                                    timers = value;
+                                  });
+                                  changeTimers(value);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    actions: [
+                      TextButton.icon(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        label: const Text("OK"),
+                        icon: const Icon(Icons.check),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          if (widget.hasData)
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Edit'),
+              onTap: () async {
+                Navigator.pop(context);
+                final gymSet = await (db.select(db.gymSets)
+                      ..where((r) => db.gymSets.name.equals(widget.exercise))
+                      ..orderBy([
+                        (u) => drift.OrderingTerm(
+                              expression: u.created,
+                              mode: drift.OrderingMode.desc,
+                            ),
+                      ])
+                      ..limit(1))
+                    .getSingle();
+                if (!context.mounted) return;
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditSetPage(gymSet: gymSet),
                   ),
-                  actions: [
-                    TextButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      label: const Text("OK"),
-                      icon: const Icon(Icons.check),
-                    ),
-                  ],
                 );
-              },
-            );
-          },
-        ),
-        if (widget.hasData)
-          ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Edit'),
-            onTap: () async {
-              Navigator.pop(context);
-              final gymSet = await (db.select(db.gymSets)
-                    ..where((r) => db.gymSets.name.equals(widget.exercise))
-                    ..orderBy([
-                      (u) => drift.OrderingTerm(
-                            expression: u.created,
-                            mode: drift.OrderingMode.desc,
-                          ),
-                    ])
-                    ..limit(1))
-                  .getSingle();
-              if (!context.mounted) return;
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditSetPage(gymSet: gymSet),
-                ),
-              );
-              widget.onSelect();
-            },
-          ),
-        if (widget.hasData)
-          ListTile(
-            leading: const Icon(Icons.undo),
-            title: const Text('Undo'),
-            onTap: () async {
-              Navigator.pop(context);
-              final gymSet = await (db.select(db.gymSets)
-                    ..where((r) => db.gymSets.name.equals(widget.exercise))
-                    ..orderBy([
-                      (u) => drift.OrderingTerm(
-                            expression: u.created,
-                            mode: drift.OrderingMode.desc,
-                          ),
-                    ])
-                    ..limit(1))
-                  .getSingle();
-              await db.gymSets.deleteOne(gymSet);
-              if (!context.mounted) return;
-              final planState = context.read<PlanState>();
-              planState.updateGymCounts(widget.planId);
-              widget.onSelect();
-            },
-          ),
-        if (!widget.hasData)
-          ListTile(
-            leading: const Icon(Icons.swap_horiz),
-            title: const Text('Swap'),
-            onTap: () async {
-              Navigator.pop(context);
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SwapWorkout(
-                    exercise: widget.exercise,
-                    planId: widget.planId,
-                  ),
-                ),
-              );
-              if (result == true) {
                 widget.onSelect();
-              }
-            },
-          ),
-      ],
+              },
+            ),
+          if (widget.hasData)
+            ListTile(
+              leading: const Icon(Icons.undo),
+              title: const Text('Undo'),
+              onTap: () async {
+                Navigator.pop(context);
+                final gymSet = await (db.select(db.gymSets)
+                      ..where((r) => db.gymSets.name.equals(widget.exercise))
+                      ..orderBy([
+                        (u) => drift.OrderingTerm(
+                              expression: u.created,
+                              mode: drift.OrderingMode.desc,
+                            ),
+                      ])
+                      ..limit(1))
+                    .getSingle();
+                await db.gymSets.deleteOne(gymSet);
+                if (!context.mounted) return;
+                final planState = context.read<PlanState>();
+                planState.updateGymCounts(widget.planId);
+                widget.onSelect();
+              },
+            ),
+          if (!widget.hasData)
+            ListTile(
+              leading: const Icon(Icons.swap_horiz),
+              title: const Text('Swap'),
+              onTap: () async {
+                Navigator.pop(context);
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SwapWorkout(
+                      exercise: widget.exercise,
+                      planId: widget.planId,
+                    ),
+                  ),
+                );
+                if (result == true) {
+                  widget.onSelect();
+                }
+              },
+            ),
+        ],
+      ),
     );
   }
 
