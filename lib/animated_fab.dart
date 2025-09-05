@@ -47,7 +47,7 @@ class _AnimatedFabState extends State<AnimatedFab> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      padding: EdgeInsets.only(bottom: 72),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
