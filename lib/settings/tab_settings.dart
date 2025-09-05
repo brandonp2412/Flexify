@@ -3,6 +3,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +40,7 @@ class _TabSettingsState extends State<TabSettings> {
     tabs = enabled + disabled;
   }
 
-  setTab(String name, bool enabled) {
+  void setTab(String name, bool enabled) {
     if (!enabled && tabs.where((tab) => tab.enabled == true).length == 1)
       return toast(context, 'You need at least one tab');
     final index = tabs.indexWhere((tappedTab) => tappedTab.name == name);
@@ -50,98 +51,116 @@ class _TabSettingsState extends State<TabSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>();
     return Scaffold(
       appBar: AppBar(title: const Text("Tabs")),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: ReorderableListView.builder(
-          onReorder: (oldIndex, newIndex) {
-            if (oldIndex < newIndex) {
-              newIndex--;
-            }
+        child: material.Column(
+          children: [
+            SwitchListTile(
+              title: const Text("Scrollable Tabs"),
+              value: settings.value.scrollableTabs,
+              onChanged: (value) {
+                db.settings.update().write(
+                      SettingsCompanion(
+                        scrollableTabs: Value(value),
+                      ),
+                    );
+              },
+            ),
+            Expanded(
+              child: ReorderableListView.builder(
+                onReorder: (oldIndex, newIndex) {
+                  if (oldIndex < newIndex) {
+                    newIndex--;
+                  }
 
-            final temp = tabs[oldIndex];
-            setState(() {
-              tabs.removeAt(oldIndex);
-              tabs.insert(newIndex, temp);
-            });
-          },
-          itemBuilder: (context, index) {
-            final tab = tabs[index];
-            if (tab.name == 'HistoryPage') {
-              return ListTile(
-                key: Key(tab.name),
-                onTap: () => setTab(tab.name, !tab.enabled),
-                leading: Switch(
-                  value: tab.enabled,
-                  onChanged: (value) => setTab(tab.name, value),
-                ),
-                title: const Text("History"),
-                trailing: ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(Icons.drag_handle),
-                ),
-              );
-            } else if (tab.name == 'PlansPage') {
-              return ListTile(
-                key: Key(tab.name),
-                onTap: () => setTab(tab.name, !tab.enabled),
-                leading: Switch(
-                  value: tab.enabled,
-                  onChanged: (value) => setTab(tab.name, value),
-                ),
-                title: const Text("Plans"),
-                trailing: ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(Icons.drag_handle),
-                ),
-              );
-            } else if (tab.name == 'GraphsPage') {
-              return ListTile(
-                key: Key(tab.name),
-                onTap: () => setTab(tab.name, !tab.enabled),
-                leading: Switch(
-                  value: tab.enabled,
-                  onChanged: (value) => setTab(tab.name, value),
-                ),
-                title: const Text("Graphs"),
-                trailing: ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(Icons.drag_handle),
-                ),
-              );
-            } else if (tab.name == 'TimerPage') {
-              return ListTile(
-                key: Key(tab.name),
-                onTap: () => setTab(tab.name, !tab.enabled),
-                leading: Switch(
-                  value: tab.enabled,
-                  onChanged: (value) => setTab(tab.name, value),
-                ),
-                title: const Text("Timer"),
-                trailing: ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(Icons.drag_handle),
-                ),
-              );
-            } else if (tab.name == 'SettingsPage') {
-              return ListTile(
-                key: Key(tab.name),
-                onTap: () => setTab(tab.name, !tab.enabled),
-                leading: Switch(
-                  value: tab.enabled,
-                  onChanged: (value) => setTab(tab.name, value),
-                ),
-                title: const Text("Settings"),
-                trailing: ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(Icons.drag_handle),
-                ),
-              );
-            } else
-              return ErrorWidget("Invalid tab settings.");
-          },
-          itemCount: tabs.length,
+                  final temp = tabs[oldIndex];
+                  setState(() {
+                    tabs.removeAt(oldIndex);
+                    tabs.insert(newIndex, temp);
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final tab = tabs[index];
+                  if (tab.name == 'HistoryPage') {
+                    return ListTile(
+                      key: Key(tab.name),
+                      onTap: () => setTab(tab.name, !tab.enabled),
+                      leading: Switch(
+                        value: tab.enabled,
+                        onChanged: (value) => setTab(tab.name, value),
+                      ),
+                      title: const Text("History"),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  } else if (tab.name == 'PlansPage') {
+                    return ListTile(
+                      key: Key(tab.name),
+                      onTap: () => setTab(tab.name, !tab.enabled),
+                      leading: Switch(
+                        value: tab.enabled,
+                        onChanged: (value) => setTab(tab.name, value),
+                      ),
+                      title: const Text("Plans"),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  } else if (tab.name == 'GraphsPage') {
+                    return ListTile(
+                      key: Key(tab.name),
+                      onTap: () => setTab(tab.name, !tab.enabled),
+                      leading: Switch(
+                        value: tab.enabled,
+                        onChanged: (value) => setTab(tab.name, value),
+                      ),
+                      title: const Text("Graphs"),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  } else if (tab.name == 'TimerPage') {
+                    return ListTile(
+                      key: Key(tab.name),
+                      onTap: () => setTab(tab.name, !tab.enabled),
+                      leading: Switch(
+                        value: tab.enabled,
+                        onChanged: (value) => setTab(tab.name, value),
+                      ),
+                      title: const Text("Timer"),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  } else if (tab.name == 'SettingsPage') {
+                    return ListTile(
+                      key: Key(tab.name),
+                      onTap: () => setTab(tab.name, !tab.enabled),
+                      leading: Switch(
+                        value: tab.enabled,
+                        onChanged: (value) => setTab(tab.name, value),
+                      ),
+                      title: const Text("Settings"),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  } else
+                    return ErrorWidget("Invalid tab settings.");
+                },
+                itemCount: tabs.length,
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

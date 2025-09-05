@@ -5181,6 +5181,213 @@ i1.GeneratedColumn<bool> _column_82(String aliasedName) =>
         defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
             'CHECK ("rep_estimation" IN (0, 1))'),
         defaultValue: const CustomExpression('0'));
+
+final class Schema43 extends i0.VersionedSchema {
+  Schema43({required super.database}) : super(version: 43);
+  @override
+  late final List<i1.DatabaseSchemaEntity> entities = [
+    plans,
+    gymSets,
+    settings,
+    planExercises,
+    metadata,
+  ];
+  late final Shape3 plans = Shape3(
+      source: i0.VersionedTable(
+        entityName: 'plans',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_2,
+          _column_1,
+          _column_0,
+          _column_8,
+          _column_9,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape30 gymSets = Shape30(
+      source: i0.VersionedTable(
+        entityName: 'gym_sets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_62,
+          _column_63,
+          _column_45,
+          _column_7,
+          _column_64,
+          _column_65,
+          _column_66,
+          _column_0,
+          _column_43,
+          _column_17,
+          _column_3,
+          _column_67,
+          _column_39,
+          _column_4,
+          _column_18,
+          _column_6,
+          _column_5,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape33 settings = Shape33(
+      source: i0.VersionedTable(
+        entityName: 'settings',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_36,
+          _column_68,
+          _column_53,
+          _column_37,
+          _column_33,
+          _column_58,
+          _column_69,
+          _column_70,
+          _column_30,
+          _column_35,
+          _column_0,
+          _column_22,
+          _column_25,
+          _column_71,
+          _column_72,
+          _column_21,
+          _column_82,
+          _column_27,
+          _column_23,
+          _column_74,
+          _column_75,
+          _column_76,
+          _column_77,
+          _column_80,
+          _column_28,
+          _column_38,
+          _column_29,
+          _column_78,
+          _column_20,
+          _column_24,
+          _column_26,
+          _column_46,
+          _column_83,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape25 planExercises = Shape25(
+      source: i0.VersionedTable(
+        entityName: 'plan_exercises',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_42,
+          _column_79,
+          _column_41,
+          _column_0,
+          _column_19,
+          _column_40,
+          _column_46,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape32 metadata = Shape32(
+      source: i0.VersionedTable(
+        entityName: 'metadata',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_81,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+}
+
+class Shape33 extends i0.VersionedTable {
+  Shape33({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get alarmSound =>
+      columnsByName['alarm_sound']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get automaticBackups =>
+      columnsByName['automatic_backups']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get backupPath =>
+      columnsByName['backup_path']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get cardioUnit =>
+      columnsByName['cardio_unit']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get curveLines =>
+      columnsByName['curve_lines']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<double> get curveSmoothness =>
+      columnsByName['curve_smoothness']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<bool> get durationEstimation =>
+      columnsByName['duration_estimation']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get enableSound =>
+      columnsByName['enable_sound']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get explainedPermissions =>
+      columnsByName['explained_permissions']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get groupHistory =>
+      columnsByName['group_history']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get longDateFormat =>
+      columnsByName['long_date_format']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get maxSets =>
+      columnsByName['max_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get notifications =>
+      columnsByName['notifications']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get peekGraph =>
+      columnsByName['peek_graph']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get planTrailing =>
+      columnsByName['plan_trailing']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get repEstimation =>
+      columnsByName['rep_estimation']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get restTimers =>
+      columnsByName['rest_timers']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get shortDateFormat =>
+      columnsByName['short_date_format']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get showBodyWeight =>
+      columnsByName['show_body_weight']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get showCategories =>
+      columnsByName['show_categories']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get showImages =>
+      columnsByName['show_images']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get showNotes =>
+      columnsByName['show_notes']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get showGlobalProgress =>
+      columnsByName['show_global_progress']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get showUnits =>
+      columnsByName['show_units']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get strengthUnit =>
+      columnsByName['strength_unit']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get systemColors =>
+      columnsByName['system_colors']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get tabs =>
+      columnsByName['tabs']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get themeMode =>
+      columnsByName['theme_mode']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get timerDuration =>
+      columnsByName['timer_duration']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get vibrate =>
+      columnsByName['vibrate']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get warmupSets =>
+      columnsByName['warmup_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get scrollableTabs =>
+      columnsByName['scrollable_tabs']! as i1.GeneratedColumn<bool>;
+}
+
+i1.GeneratedColumn<bool> _column_83(String aliasedName) =>
+    i1.GeneratedColumn<bool>('scrollable_tabs', aliasedName, false,
+        type: i1.DriftSqlType.bool,
+        defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
+            'CHECK ("scrollable_tabs" IN (0, 1))'),
+        defaultValue: const CustomExpression('1'));
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,
@@ -5222,6 +5429,7 @@ i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema40 schema) from39To40,
   required Future<void> Function(i1.Migrator m, Schema41 schema) from40To41,
   required Future<void> Function(i1.Migrator m, Schema42 schema) from41To42,
+  required Future<void> Function(i1.Migrator m, Schema43 schema) from42To43,
 }) {
   return (currentVersion, database) async {
     switch (currentVersion) {
@@ -5425,6 +5633,11 @@ i0.MigrationStepWithVersion migrationSteps({
         final migrator = i1.Migrator(database, schema);
         await from41To42(migrator, schema);
         return 42;
+      case 42:
+        final schema = Schema43(database: database);
+        final migrator = i1.Migrator(database, schema);
+        await from42To43(migrator, schema);
+        return 43;
       default:
         throw ArgumentError.value('Unknown migration from $currentVersion');
     }
@@ -5472,6 +5685,7 @@ i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, Schema40 schema) from39To40,
   required Future<void> Function(i1.Migrator m, Schema41 schema) from40To41,
   required Future<void> Function(i1.Migrator m, Schema42 schema) from41To42,
+  required Future<void> Function(i1.Migrator m, Schema43 schema) from42To43,
 }) =>
     i0.VersionedSchema.stepByStepHelper(
         step: migrationSteps(
@@ -5515,4 +5729,5 @@ i1.OnUpgrade stepByStep({
       from39To40: from39To40,
       from40To41: from40To41,
       from41To42: from41To42,
+      from42To43: from42To43,
     ));

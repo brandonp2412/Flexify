@@ -44,13 +44,21 @@ class TestFlutterLocalNotificationsPlatform
 
   @override
   Future<void> periodicallyShow(
-      int id, String? title, String? body, RepeatInterval repeatInterval) {
+    int id,
+    String? title,
+    String? body,
+    RepeatInterval repeatInterval,
+  ) {
     return Future.value();
   }
 
   @override
   Future<void> periodicallyShowWithDuration(
-      int id, String? title, String? body, Duration repeatDurationInterval) {
+    int id,
+    String? title,
+    String? body,
+    Duration repeatDurationInterval,
+  ) {
     return Future.value();
   }
 
@@ -104,6 +112,7 @@ void main() {
         peekGraph: false,
         planTrailing: 'PlanTrailing.reorder',
         repEstimation: true,
+        scrollableTabs: false,
       ),
     );
 
@@ -202,6 +211,7 @@ void main() {
         peekGraph: false,
         planTrailing: 'PlanTrailing.reorder',
         repEstimation: true,
+        scrollableTabs: false,
       ),
     );
 

@@ -70,27 +70,52 @@ class App extends StatelessWidget {
     );
 
     return DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) => MaterialApp(
-        title: 'Flexify',
-        theme: ThemeData(
-          colorScheme: colors ? lightDynamic : light,
-          fontFamily: 'Manrope',
-          useMaterial3: true,
-          inputDecorationTheme: const InputDecorationTheme(
-            floatingLabelBehavior: FloatingLabelBehavior.always,
+      builder: (lightDynamic, darkDynamic) {
+        final settings = context.watch<SettingsState>();
+        final currentBrightness =
+            settings.value.themeMode == 'ThemeMode.dark' ||
+                    (settings.value.themeMode == 'ThemeMode.system' &&
+                        MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark)
+                ? Brightness.dark
+                : Brightness.light;
+
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarIconBrightness: currentBrightness == Brightness.dark
+                ? Brightness.light
+                : Brightness.dark,
+            systemNavigationBarIconBrightness:
+                currentBrightness == Brightness.dark
+                    ? Brightness.light
+                    : Brightness.dark,
+            statusBarColor: Colors.transparent,
+            systemNavigationBarColor: Colors.transparent,
           ),
-        ),
-        darkTheme: ThemeData(
-          colorScheme: colors ? darkDynamic : dark,
-          fontFamily: 'Manrope',
-          useMaterial3: true,
-          inputDecorationTheme: const InputDecorationTheme(
-            floatingLabelBehavior: FloatingLabelBehavior.always,
+        );
+
+        return MaterialApp(
+          title: 'Flexify',
+          theme: ThemeData(
+            colorScheme: colors ? lightDynamic : light,
+            fontFamily: 'Manrope',
+            useMaterial3: true,
+            inputDecorationTheme: const InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
           ),
-        ),
-        themeMode: mode,
-        home: HomePage(hideChangelog: hideChangelog),
-      ),
+          darkTheme: ThemeData(
+            colorScheme: colors ? darkDynamic : dark,
+            fontFamily: 'Manrope',
+            useMaterial3: true,
+            inputDecorationTheme: const InputDecorationTheme(
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+          themeMode: mode,
+          home: HomePage(hideChangelog: hideChangelog),
+        );
+      },
     );
   }
 }
@@ -175,15 +200,23 @@ class _HomePageState extends State<HomePage> {
     final setting = context
         .select<SettingsState, String>((settings) => settings.value.tabs);
     final tabs = setting.split(',');
+    final scrollableTabs = context.select<SettingsState, bool>(
+      (settings) => settings.value.scrollableTabs,
+    );
 
     return DefaultTabController(
       length: tabs.length,
-      child: SafeArea(
-        child: Scaffold(
-          bottomSheet: tabs.contains('TimerPage')
-              ? const TimerProgressIndicator()
-              : null,
-          body: TabBarView(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        extendBody: true,
+        bottomSheet:
+            tabs.contains('TimerPage') ? const TimerProgressIndicator() : null,
+        body: SafeArea(
+          bottom: false,
+          child: TabBarView(
+            physics: scrollableTabs
+                ? const AlwaysScrollableScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
             children: tabs.map((tab) {
               if (tab == 'HistoryPage')
                 return const HistoryPage();
@@ -199,52 +232,58 @@ class _HomePageState extends State<HomePage> {
                 return ErrorWidget("Couldn't build tab content.");
             }).toList(),
           ),
-          bottomNavigationBar: TabBar(
-            dividerColor: Theme.of(context).colorScheme.surface,
-            tabs: tabs.map((tab) {
-              if (tab == 'HistoryPage')
-                return GestureDetector(
-                  onLongPress: () => hideTab(context, 'HistoryPage'),
-                  child: const Tab(
-                    icon: Icon(Icons.history),
-                    text: "History",
-                  ),
-                );
-              else if (tab == 'PlansPage')
-                return GestureDetector(
-                  onLongPress: () => hideTab(context, 'PlansPage'),
-                  child: const Tab(
-                    icon: Icon(Icons.calendar_today),
-                    text: "Plans",
-                  ),
-                );
-              else if (tab == 'GraphsPage')
-                return GestureDetector(
-                  onLongPress: () => hideTab(context, 'GraphsPage'),
-                  child: const Tab(
-                    icon: Icon(Icons.insights),
-                    text: "Graphs",
-                  ),
-                );
-              else if (tab == 'TimerPage')
-                return GestureDetector(
-                  onLongPress: () => hideTab(context, 'TimerPage'),
-                  child: const Tab(
-                    icon: Icon(Icons.timer_outlined),
-                    text: "Timer",
-                  ),
-                );
-              else if (tab == 'SettingsPage')
-                return GestureDetector(
-                  onLongPress: () => hideTab(context, 'SettingsPage'),
-                  child: const Tab(
-                    icon: Icon(Icons.settings),
-                    text: "Settings",
-                  ),
-                );
-              else
-                return ErrorWidget("Couldn't build tab bottom bar.");
-            }).toList(),
+        ),
+        bottomNavigationBar: Material(
+          color: Theme.of(context).colorScheme.surface,
+          child: SafeArea(
+            top: false,
+            child: TabBar(
+              dividerColor: Colors.transparent,
+              tabs: tabs.map((tab) {
+                if (tab == 'HistoryPage')
+                  return GestureDetector(
+                    onLongPress: () => hideTab(context, 'HistoryPage'),
+                    child: const Tab(
+                      icon: Icon(Icons.history),
+                      text: "History",
+                    ),
+                  );
+                else if (tab == 'PlansPage')
+                  return GestureDetector(
+                    onLongPress: () => hideTab(context, 'PlansPage'),
+                    child: const Tab(
+                      icon: Icon(Icons.calendar_today),
+                      text: "Plans",
+                    ),
+                  );
+                else if (tab == 'GraphsPage')
+                  return GestureDetector(
+                    onLongPress: () => hideTab(context, 'GraphsPage'),
+                    child: const Tab(
+                      icon: Icon(Icons.insights),
+                      text: "Graphs",
+                    ),
+                  );
+                else if (tab == 'TimerPage')
+                  return GestureDetector(
+                    onLongPress: () => hideTab(context, 'TimerPage'),
+                    child: const Tab(
+                      icon: Icon(Icons.timer_outlined),
+                      text: "Timer",
+                    ),
+                  );
+                else if (tab == 'SettingsPage')
+                  return GestureDetector(
+                    onLongPress: () => hideTab(context, 'SettingsPage'),
+                    child: const Tab(
+                      icon: Icon(Icons.settings),
+                      text: "Settings",
+                    ),
+                  );
+                else
+                  return ErrorWidget("Couldn't build tab bottom bar.");
+              }).toList(),
+            ),
           ),
         ),
       ),

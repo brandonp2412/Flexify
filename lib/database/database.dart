@@ -383,10 +383,13 @@ class AppDatabase extends _$AppDatabase {
                 }),
               );
         },
+        from42To43: (Migrator m, Schema43 schema) async {
+          await m.addColumn(schema.settings, schema.settings.scrollableTabs);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 42;
+  int get schemaVersion => 43;
 }
