@@ -1,3 +1,2 @@
 • Downgrade agp to 8.11.1
-• Draw behind system UI & toggle scrolling of tabs
 • Fix pre-populating reps/weight
