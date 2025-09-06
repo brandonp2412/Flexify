@@ -46,25 +46,20 @@ class _AnimatedFabState extends State<AnimatedFab> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: kToolbarHeight + 32 + 16,
-      ),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        width: extended ? 100 : 56,
-        height: 56,
-        child: FloatingActionButton.extended(
-          onPressed: () => widget.onTap(),
-          label: AnimatedOpacity(
-            duration: const Duration(milliseconds: 200),
-            opacity: extended ? 1.0 : 0.0,
-            child: Text(widget.label),
-          ),
-          icon: Icon(widget.icon),
-          isExtended: extended,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      width: extended ? 100 : 56,
+      height: 56,
+      child: FloatingActionButton.extended(
+        onPressed: () => widget.onTap(),
+        label: AnimatedOpacity(
+          duration: const Duration(milliseconds: 200),
+          opacity: extended ? 1.0 : 0.0,
+          child: Text(widget.label),
         ),
+        icon: Icon(widget.icon),
+        isExtended: extended,
       ),
     );
   }

@@ -212,7 +212,6 @@ class _HomePageState extends State<HomePage> {
         bottomSheet:
             tabs.contains('TimerPage') ? const TimerProgressIndicator() : null,
         body: SafeArea(
-          bottom: false,
           child: TabBarView(
             physics: scrollableTabs
                 ? const AlwaysScrollableScrollPhysics()
