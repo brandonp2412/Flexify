@@ -99,76 +99,90 @@ class GraphTile extends StatelessWidget {
       child: leading,
     );
 
-    return ListTile(
-      leading: leading,
-      selected: selected.contains(gymSet.name.value),
-      title: Text(gymSet.name.value),
-      subtitle: Selector<SettingsState, String>(
-        selector: (context, settings) => settings.value.longDateFormat,
-        builder: (context, dateFormat, child) => Text(
-          dateFormat == 'timeago'
-              ? timeago.format(gymSet.created.value)
-              : DateFormat(dateFormat).format(gymSet.created.value),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: selected.contains(gymSet.name.value)
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+            : Colors.transparent,
+        border: Border.all(
+          color: selected.contains(gymSet.name.value)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+              : Colors.transparent,
+          width: 1,
         ),
       ),
-      trailing: Text(
-        trailing,
-        style: const TextStyle(fontSize: 16),
-      ),
-      onTap: () async {
-        if (selected.isNotEmpty) {
-          onSelect(gymSet.name.value);
-          return;
-        }
+      child: ListTile(
+        leading: leading,
+        title: Text(gymSet.name.value),
+        subtitle: Selector<SettingsState, String>(
+          selector: (context, settings) => settings.value.longDateFormat,
+          builder: (context, dateFormat, child) => Text(
+            dateFormat == 'timeago'
+                ? timeago.format(gymSet.created.value)
+                : DateFormat(dateFormat).format(gymSet.created.value),
+          ),
+        ),
+        trailing: Text(
+          trailing,
+          style: const TextStyle(fontSize: 16),
+        ),
+        onTap: () async {
+          if (selected.isNotEmpty) {
+            onSelect(gymSet.name.value);
+            return;
+          }
 
-        if (gymSet.cardio.value) {
-          final data = await getCardioData(
+          if (gymSet.cardio.value) {
+            final data = await getCardioData(
+              target: gymSet.unit.value,
+              name: gymSet.name.value,
+              metric: CardioMetric.pace,
+              period: Period.day,
+              start: null,
+              end: null,
+            );
+            if (!context.mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CardioPage(
+                  name: gymSet.name.value,
+                  unit: gymSet.unit.value,
+                  data: data,
+                ),
+              ),
+            );
+            return;
+          }
+
+          final data = await getStrengthData(
             target: gymSet.unit.value,
             name: gymSet.name.value,
-            metric: CardioMetric.pace,
+            metric: StrengthMetric.bestWeight,
             period: Period.day,
             start: null,
             end: null,
+            limit: 20,
           );
           if (!context.mounted) return;
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CardioPage(
+              builder: (context) => StrengthPage(
                 name: gymSet.name.value,
                 unit: gymSet.unit.value,
                 data: data,
               ),
             ),
           );
-          return;
-        }
-
-        final data = await getStrengthData(
-          target: gymSet.unit.value,
-          name: gymSet.name.value,
-          metric: StrengthMetric.bestWeight,
-          period: Period.day,
-          start: null,
-          end: null,
-          limit: 20,
-        );
-        if (!context.mounted) return;
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StrengthPage(
-              name: gymSet.name.value,
-              unit: gymSet.unit.value,
-              data: data,
-            ),
-          ),
-        );
-      },
-      onLongPress: () {
-        onSelect(gymSet.name.value);
-      },
+        },
+        onLongPress: () {
+          onSelect(gymSet.name.value);
+        },
+      ),
     );
   }
 }

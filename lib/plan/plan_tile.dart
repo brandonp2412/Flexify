@@ -3,6 +3,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,9 +35,6 @@ class PlanTile extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: today ? FontWeight.bold : null,
               decoration: today ? TextDecoration.underline : null,
-              color: selected.contains(plan.id)
-                  ? Theme.of(context).colorScheme.primary
-                  : null,
             ),
       );
     } else if (plan.days.split(',').length < 7)
@@ -87,69 +85,87 @@ class PlanTile extends StatelessWidget {
       child: leading,
     );
 
-    return ListTile(
-      title: title,
-      subtitle: Text(plan.exercises.split(',').join(', ')),
-      leading: leading,
-      selected: selected.contains(plan.id),
-      trailing: Builder(
-        builder: (context) {
-          final trailing = context.select<SettingsState, PlanTrailing>(
-            (settings) => PlanTrailing.values.byName(
-              settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: selected.contains(plan.id)
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+            : Colors.transparent,
+        border: Border.all(
+          color: selected.contains(plan.id)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+              : Colors.transparent,
+          width: 1,
+        ),
+      ),
+      child: ListTile(
+        title: title,
+        subtitle: Text(plan.exercises.split(',').join(', ')),
+        leading: leading,
+        trailing: Builder(
+          builder: (context) {
+            final trailing = context.select<SettingsState, PlanTrailing>(
+              (settings) => PlanTrailing.values.byName(
+                settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
+              ),
+            );
+            if (trailing == PlanTrailing.none) return const SizedBox();
+            if (trailing == PlanTrailing.reorder &&
+                defaultTargetPlatform ==
+                    TargetPlatform.linux) if (trailing == PlanTrailing.reorder)
+              return SizedBox();
+            else if (trailing == PlanTrailing.reorder &&
+                defaultTargetPlatform == TargetPlatform.android)
+              return ReorderableDragStartListener(
+                index: index,
+                child: const Icon(Icons.drag_handle),
+              );
+
+            final state = context.watch<PlanState>();
+            final idx = state.planCounts
+                .indexWhere((element) => element.planId == plan.id);
+            PlanCount count;
+            if (idx != -1)
+              count = state.planCounts[idx];
+            else
+              return SizedBox();
+
+            if (trailing == PlanTrailing.count)
+              return Text(
+                "${count.total}",
+                style: const TextStyle(fontSize: 16),
+              );
+
+            if (trailing == PlanTrailing.percent)
+              return Text(
+                "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
+                style: const TextStyle(fontSize: 16),
+              );
+            else
+              return Text(
+                "${count.total} / ${count.maxSets}",
+                style: const TextStyle(fontSize: 16),
+              );
+          },
+        ),
+        onTap: () async {
+          if (selected.isNotEmpty) return onSelect(plan.id);
+          final state = context.read<PlanState>();
+          await state.updateGymCounts(plan.id);
+
+          navigatorKey.currentState!.push(
+            MaterialPageRoute(
+              builder: (context) => StartPlanPage(
+                plan: plan,
+              ),
             ),
           );
-          if (trailing == PlanTrailing.none) return const SizedBox();
-
-          if (trailing == PlanTrailing.reorder)
-            return ReorderableDragStartListener(
-              index: index,
-              child: const Icon(Icons.drag_handle),
-            );
-
-          final state = context.watch<PlanState>();
-          final idx = state.planCounts
-              .indexWhere((element) => element.planId == plan.id);
-          PlanCount count;
-          if (idx != -1)
-            count = state.planCounts[idx];
-          else
-            return SizedBox();
-
-          if (trailing == PlanTrailing.count)
-            return Text(
-              "${count.total}",
-              style: const TextStyle(fontSize: 16),
-            );
-
-          if (trailing == PlanTrailing.percent)
-            return Text(
-              "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
-              style: const TextStyle(fontSize: 16),
-            );
-          else
-            return Text(
-              "${count.total} / ${count.maxSets}",
-              style: const TextStyle(fontSize: 16),
-            );
+        },
+        onLongPress: () {
+          onSelect(plan.id);
         },
       ),
-      onTap: () async {
-        if (selected.isNotEmpty) return onSelect(plan.id);
-        final state = context.read<PlanState>();
-        await state.updateGymCounts(plan.id);
-
-        navigatorKey.currentState!.push(
-          MaterialPageRoute(
-            builder: (context) => StartPlanPage(
-              plan: plan,
-            ),
-          ),
-        );
-      },
-      onLongPress: () {
-        onSelect(plan.id);
-      },
     );
   }
 
@@ -166,9 +182,6 @@ class PlanTile extends StatelessWidget {
                 fontWeight: weekday == day.trim() ? FontWeight.bold : null,
                 decoration:
                     weekday == day.trim() ? TextDecoration.underline : null,
-                color: selected.contains(plan.id)
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
               ),
         ),
       );

@@ -197,37 +197,51 @@ class _HistoryListState extends State<HistoryList> {
               const Expanded(child: Divider()),
             ],
           ),
-        ListTile(
-          leading: leading,
-          title: Text(gymSet.name),
-          selected: widget.selected.contains(gymSet.id),
-          subtitle: Selector<SettingsState, String>(
-            selector: (context, settings) => settings.value.longDateFormat,
-            builder: (context, dateFormat, child) => Text(
-              dateFormat == 'timeago'
-                  ? timeago.format(gymSet.created)
-                  : DateFormat(dateFormat).format(gymSet.created),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: widget.selected.contains(gymSet.id)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+                : Colors.transparent,
+            border: Border.all(
+              color: widget.selected.contains(gymSet.id)
+                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+                  : Colors.transparent,
+              width: 1,
             ),
           ),
-          trailing: Text(
-            gymSet.cardio
-                ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
-                : "$reps x $weight ${gymSet.unit}",
-            style: const TextStyle(fontSize: 16),
+          child: ListTile(
+            leading: leading,
+            title: Text(gymSet.name),
+            subtitle: Selector<SettingsState, String>(
+              selector: (context, settings) => settings.value.longDateFormat,
+              builder: (context, dateFormat, child) => Text(
+                dateFormat == 'timeago'
+                    ? timeago.format(gymSet.created)
+                    : DateFormat(dateFormat).format(gymSet.created),
+              ),
+            ),
+            trailing: Text(
+              gymSet.cardio
+                  ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
+                  : "$reps x $weight ${gymSet.unit}",
+              style: const TextStyle(fontSize: 16),
+            ),
+            onLongPress: () => widget.onSelect(gymSet.id),
+            onTap: () {
+              if (widget.selected.isNotEmpty) {
+                widget.onSelect(gymSet.id);
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditSetPage(gymSet: gymSet),
+                  ),
+                );
+              }
+            },
           ),
-          onLongPress: () => widget.onSelect(gymSet.id),
-          onTap: () {
-            if (widget.selected.isNotEmpty) {
-              widget.onSelect(gymSet.id);
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditSetPage(gymSet: gymSet),
-                ),
-              );
-            }
-          },
         ),
       ],
     );
