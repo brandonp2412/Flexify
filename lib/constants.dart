@@ -39,7 +39,7 @@ final defaultSettings = SettingsCompanion.insert(
   timerDuration: const Duration(minutes: 3, seconds: 30).inMilliseconds,
   maxSets: 3,
   vibrate: true,
-  restTimers: true,
+  restTimers: false,
   showUnits: true,
   alarmSound: '',
   cardioUnit: 'km',
