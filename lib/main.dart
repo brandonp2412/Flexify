@@ -195,11 +195,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     var tabs = state.value.tabs.split(',');
 
     if (tabs.length == 1) return toast(context, "Can't hide everything!");
-    controller.removeListener(listener);
-    controller.dispose();
-    controller = TabController(length: tabs.length - 1, vsync: this);
-    controller.addListener(listener);
-
     tabs.remove(tab);
     db.settings.update().write(
           SettingsCompanion(
@@ -230,6 +225,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final scrollableTabs = context.select<SettingsState, bool>(
       (settings) => settings.value.scrollableTabs,
     );
+
+    if (tabs.length != controller.length) {
+      controller.animation?.removeListener(listener);
+      controller.dispose();
+      controller = TabController(length: tabs.length, vsync: this);
+      controller.animation?.addListener(listener);
+      if (index >= tabs.length) index = tabs.length - 1;
+      controller.index = index;
+    }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
