@@ -112,8 +112,7 @@ class PlanTile extends StatelessWidget {
             );
             if (trailing == PlanTrailing.none) return const SizedBox();
             if (trailing == PlanTrailing.reorder &&
-                defaultTargetPlatform ==
-                    TargetPlatform.linux) if (trailing == PlanTrailing.reorder)
+                defaultTargetPlatform == TargetPlatform.linux)
               return SizedBox();
             else if (trailing == PlanTrailing.reorder &&
                 defaultTargetPlatform == TargetPlatform.android)
