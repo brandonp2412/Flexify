@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void listener() {
     setState(() {
-      index = controller.index;
+      index = controller.animation!.value.round();
     });
   }
 
@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final setting = context.read<SettingsState>().value.tabs;
     final tabs = setting.split(',');
     controller = TabController(length: tabs.length, vsync: this);
-    controller.addListener(listener);
+    controller.animation?.addListener(listener);
 
     if (widget.hideChangelog) return;
 
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.removeListener(listener);
+    controller.animation?.removeListener(listener);
     controller.dispose();
     super.dispose();
   }
