@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -102,7 +103,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       return DropdownButtonFormField(
                         decoration:
                             const InputDecoration(labelText: 'Category'),
-                        value: category,
+                        initialValue: category,
                         items: snapshot.data
                             ?.map(
                               (category) => DropdownMenuItem(
@@ -123,7 +124,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
               ),
               DropdownButtonFormField(
                 decoration: const InputDecoration(labelText: 'Unit'),
-                value: unit,
+                initialValue: unit,
                 items: const [
                   DropdownMenuItem(
                     value: null,
@@ -224,7 +225,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: save,
         label: const Text("Update"),
         icon: const Icon(Icons.sync),
@@ -322,7 +323,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     });
   }
 
-  save() async {
+  Future<void> save() async {
     if (!key.currentState!.validate()) return;
 
     final count = await getCount();

@@ -232,14 +232,14 @@ class GraphsPageState extends State<GraphsPage>
         },
       ),
       floatingActionButton: AnimatedFab(
-        onTap: () => navKey.currentState!.push(
+        onPressed: () => navKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => const AddExercisePage(),
           ),
         ),
-        label: 'Add',
+        label: Text('Add'),
         scroll: scroll,
-        icon: Icons.add,
+        icon: Icon(Icons.add),
       ),
     );
   }

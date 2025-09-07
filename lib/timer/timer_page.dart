@@ -1,3 +1,4 @@
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
@@ -87,7 +88,7 @@ class _TimerPageWidget extends StatelessWidget {
           return ScaleTransition(scale: animation, child: child);
         },
         child: timerState.timer.isRunning()
-            ? FloatingActionButton.extended(
+            ? AnimatedFab(
                 onPressed: () async => await timerState.stopTimer(),
                 icon: const Icon(Icons.stop),
                 label: const Text("Stop"),

@@ -112,7 +112,8 @@ class _HistoryListState extends State<HistoryList> {
   }
 
   Widget _buildListItem(GymSet gymSet, int index, bool showImages) {
-    final previousGymSet = index > 0 ? _current[index - 1] : null;
+    final previousGymSet =
+        index > 0 ? _current.elementAtOrNull(index - 1) : null;
     final bool showDivider = previousGymSet != null &&
         !isSameDay(gymSet.created, previousGymSet.created);
 

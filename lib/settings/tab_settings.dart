@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -163,7 +164,7 @@ class _TabSettingsState extends State<TabSettings> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: () async {
           await (db.settings.update().write(
                 SettingsCompanion(

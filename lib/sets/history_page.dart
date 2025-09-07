@@ -250,9 +250,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
         },
       ),
       floatingActionButton: AnimatedFab(
-        onTap: onAdd,
-        label: 'Add',
-        icon: Icons.add,
+        onPressed: onAdd,
+        label: Text('Add'),
+        icon: Icon(Icons.add),
         scroll: scroll,
       ),
     );

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AnimatedFab extends StatefulWidget {
-  final Function onTap;
-  final String label;
-  final ScrollController scroll;
-  final IconData icon;
+  final Function onPressed;
+  final Widget label;
+  final ScrollController? scroll;
+  final Widget? icon;
 
   const AnimatedFab({
     super.key,
-    required this.onTap,
+    required this.onPressed,
     required this.label,
-    required this.scroll,
+    this.scroll,
     required this.icon,
   });
 
@@ -24,17 +24,17 @@ class _AnimatedFabState extends State<AnimatedFab> {
   @override
   void initState() {
     super.initState();
-    widget.scroll.addListener(onScroll);
+    widget.scroll?.addListener(onScroll);
   }
 
   @override
   void dispose() {
-    widget.scroll.removeListener(onScroll);
+    widget.scroll?.removeListener(onScroll);
     super.dispose();
   }
 
   void onScroll() {
-    if (widget.scroll.position.atEdge && widget.scroll.position.pixels == 0)
+    if (widget.scroll!.position.atEdge && widget.scroll!.position.pixels == 0)
       setState(() {
         extended = true;
       });
@@ -46,20 +46,23 @@ class _AnimatedFabState extends State<AnimatedFab> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      width: extended ? 100 : 56,
-      height: 56,
-      child: FloatingActionButton.extended(
-        onPressed: () => widget.onTap(),
-        label: AnimatedOpacity(
-          duration: const Duration(milliseconds: 200),
-          opacity: extended ? 1.0 : 0.0,
-          child: Text(widget.label),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 96),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        width: extended ? 100 : 56,
+        height: 56,
+        child: FloatingActionButton.extended(
+          onPressed: () => widget.onPressed(),
+          label: AnimatedOpacity(
+            duration: const Duration(milliseconds: 200),
+            opacity: extended ? 1.0 : 0.0,
+            child: widget.label,
+          ),
+          icon: widget.icon,
+          isExtended: extended,
         ),
-        icon: Icon(widget.icon),
-        isExtended: extended,
       ),
     );
   }

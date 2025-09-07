@@ -174,7 +174,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         ],
       ),
       floatingActionButton: AnimatedFab(
-        onTap: () async {
+        onPressed: () async {
           const plan = PlansCompanion(
             days: drift.Value(''),
             exercises: drift.Value(''),
@@ -190,8 +190,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               ),
             );
         },
-        label: 'Add',
-        icon: Icons.add,
+        label: Text('Add'),
+        icon: Icon(Icons.add),
         scroll: scroll,
       ),
     );

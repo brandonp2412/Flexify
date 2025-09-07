@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:drift/drift.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -109,7 +110,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: () async => await save(timer),
         label: const Text("Save"),
         icon: const Icon(Icons.save),
@@ -245,7 +246,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         visible: showUnits,
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Unit'),
-          value: unit,
+          initialValue: unit,
           items: _getUnitItems(),
           onChanged: (String? newValue) {
             setState(() {

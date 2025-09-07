@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -95,7 +96,7 @@ class _StrengthPageState extends State<StrengthPage> {
                   visible: name != 'Weight',
                   child: DropdownButtonFormField(
                     decoration: const InputDecoration(labelText: 'Metric'),
-                    value: metric,
+                    initialValue: metric,
                     items: [
                       const DropdownMenuItem(
                         value: StrengthMetric.bestWeight,
@@ -129,7 +130,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 ),
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Period'),
-                  value: period,
+                  initialValue: period,
                   items: const [
                     DropdownMenuItem(
                       value: Period.day,
@@ -159,7 +160,7 @@ class _StrengthPageState extends State<StrengthPage> {
                   visible: settings.showUnits,
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
-                    value: target,
+                    initialValue: target,
                     items: const [
                       DropdownMenuItem(
                         value: 'kg',
@@ -280,7 +281,7 @@ class _StrengthPageState extends State<StrengthPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: () async {
           final gymSets = await (db.gymSets.select()
                 ..orderBy(

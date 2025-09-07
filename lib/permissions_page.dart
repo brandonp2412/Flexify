@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -100,7 +101,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: () {
           if ((!ignore || !schedule) && settings.value.restTimers)
             showDialog(

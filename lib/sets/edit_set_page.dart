@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -418,7 +419,7 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget buildSaveButton() {
-    return FloatingActionButton.extended(
+    return AnimatedFab(
       onPressed: save,
       label: const Text("Save"),
       icon: const Icon(Icons.save),

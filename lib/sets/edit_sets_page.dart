@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -243,7 +244,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   visible: showUnits,
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
-                    value: unit,
+                    initialValue: unit,
                     items: _getUnitItems(),
                     onChanged: (String? newValue) {
                       setState(() {
@@ -262,7 +263,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       labelText: 'Category',
                       hintText: oldCat,
                     ),
-                    value: category,
+                    initialValue: category,
                     items: snapshot.data
                         ?.map(
                           (category) => DropdownMenuItem(
@@ -301,7 +302,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: save,
         label: const Text("Update"),
         icon: const Icon(Icons.sync),

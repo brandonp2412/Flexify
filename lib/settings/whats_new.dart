@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flexify/animated_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -96,7 +97,7 @@ class _WhatsNewState extends State<WhatsNew> {
         ),
         itemCount: changelogs.length,
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         icon: const Icon(Icons.favorite_outline),
         onPressed: () async {
           const url = 'https://github.com/sponsors/brandonp2412';

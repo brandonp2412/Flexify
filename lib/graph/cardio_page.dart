@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -162,7 +163,7 @@ class _CardioPageState extends State<CardioPage> {
               children: [
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Metric'),
-                  value: metric,
+                  initialValue: metric,
                   items: const [
                     DropdownMenuItem(
                       value: CardioMetric.pace,
@@ -194,7 +195,7 @@ class _CardioPageState extends State<CardioPage> {
                 ),
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Period'),
-                  value: period,
+                  initialValue: period,
                   items: const [
                     DropdownMenuItem(
                       value: Period.day,
@@ -227,7 +228,7 @@ class _CardioPageState extends State<CardioPage> {
                       visible: value,
                       child: DropdownButtonFormField<String>(
                         decoration: const InputDecoration(labelText: 'Unit'),
-                        value: target,
+                        initialValue: target,
                         items: const [
                           DropdownMenuItem(
                             value: 'km',
@@ -324,7 +325,7 @@ class _CardioPageState extends State<CardioPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: AnimatedFab(
         onPressed: () async {
           final gymSets = await (db.gymSets.select()
                 ..orderBy(

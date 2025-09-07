@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/failed_migrations_page.dart';
 import 'package:flexify/graph/graphs_page.dart';
@@ -128,10 +129,25 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late TabController controller;
+  int index = 0;
+
+  void listener() {
+    setState(() {
+      index = controller.index;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
+    final setting = context.read<SettingsState>().value.tabs;
+    final tabs = setting.split(',');
+    controller = TabController(length: tabs.length, vsync: this);
+    controller.addListener(listener);
+
     if (widget.hideChangelog) return;
 
     final info = PackageInfo.fromPlatform();
@@ -166,12 +182,23 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
+  void dispose() {
+    controller.removeListener(listener);
+    controller.dispose();
+    super.dispose();
+  }
+
   void hideTab(BuildContext context, String tab) {
     final state = context.read<SettingsState>();
     final old = state.value.tabs;
     var tabs = state.value.tabs.split(',');
 
     if (tabs.length == 1) return toast(context, "Can't hide everything!");
+    controller.removeListener(listener);
+    controller.dispose();
+    controller = TabController(length: tabs.length - 1, vsync: this);
+    controller.addListener(listener);
 
     tabs.remove(tab);
     db.settings.update().write(
@@ -204,86 +231,60 @@ class _HomePageState extends State<HomePage> {
       (settings) => settings.value.scrollableTabs,
     );
 
-    return DefaultTabController(
-      length: tabs.length,
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        extendBody: true,
-        bottomSheet:
-            tabs.contains('TimerPage') ? const TimerProgressIndicator() : null,
-        body: SafeArea(
-          child: TabBarView(
-            physics: scrollableTabs
-                ? const AlwaysScrollableScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
-            children: tabs.map((tab) {
-              if (tab == 'HistoryPage')
-                return const HistoryPage();
-              else if (tab == 'PlansPage')
-                return const PlansPage();
-              else if (tab == 'GraphsPage')
-                return const GraphsPage();
-              else if (tab == 'TimerPage')
-                return const TimerPage();
-              else if (tab == 'SettingsPage')
-                return const SettingsPage();
-              else
-                return ErrorWidget("Couldn't build tab content.");
-            }).toList(),
-          ),
-        ),
-        bottomNavigationBar: Material(
-          color: Theme.of(context).colorScheme.surface,
-          child: SafeArea(
-            top: false,
-            child: TabBar(
-              dividerColor: Colors.transparent,
-              tabs: tabs.map((tab) {
+    // Update tab controller if tabs changed
+    if (controller.length != tabs.length) {
+      controller.dispose();
+      controller = TabController(length: tabs.length, vsync: this);
+      index = 0;
+    }
+
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      bottomSheet:
+          tabs.contains('TimerPage') ? const TimerProgressIndicator() : null,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Main content
+            TabBarView(
+              controller: controller,
+              physics: scrollableTabs
+                  ? const AlwaysScrollableScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
+              children: tabs.map((tab) {
                 if (tab == 'HistoryPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'HistoryPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.history),
-                      text: "History",
-                    ),
-                  );
+                  return const HistoryPage();
                 else if (tab == 'PlansPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'PlansPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.calendar_today),
-                      text: "Plans",
-                    ),
-                  );
+                  return const PlansPage();
                 else if (tab == 'GraphsPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'GraphsPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.insights),
-                      text: "Graphs",
-                    ),
-                  );
+                  return const GraphsPage();
                 else if (tab == 'TimerPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'TimerPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.timer_outlined),
-                      text: "Timer",
-                    ),
-                  );
+                  return const TimerPage();
                 else if (tab == 'SettingsPage')
-                  return GestureDetector(
-                    onLongPress: () => hideTab(context, 'SettingsPage'),
-                    child: const Tab(
-                      icon: Icon(Icons.settings),
-                      text: "Settings",
-                    ),
-                  );
+                  return const SettingsPage();
                 else
-                  return ErrorWidget("Couldn't build tab bottom bar.");
+                  return ErrorWidget("Couldn't build tab content.");
               }).toList(),
             ),
-          ),
+            // Floating droplet navigation
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: BottomNav(
+                tabs: tabs,
+                currentIndex: index,
+                onTap: (index) {
+                  controller.animateTo(index);
+                  setState(() {
+                    this.index = index;
+                  });
+                },
+                onLongPress: hideTab,
+              ),
+            ),
+          ],
         ),
       ),
     );
