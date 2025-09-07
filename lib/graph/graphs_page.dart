@@ -265,6 +265,7 @@ class GraphsPageState extends State<GraphsPage>
 
   void longPressGlobal() {
     showModalBottomSheet(
+      useRootNavigator: true,
       context: context,
       builder: (BuildContext context) {
         return Wrap(

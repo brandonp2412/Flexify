@@ -20,6 +20,7 @@ class ExportData extends StatelessWidget {
       onPressed: () {
         showModalBottomSheet(
           context: context,
+          useRootNavigator: true,
           builder: (context) {
             return Wrap(
               children: <Widget>[

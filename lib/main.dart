@@ -231,13 +231,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       (settings) => settings.value.scrollableTabs,
     );
 
-    // Update tab controller if tabs changed
-    if (controller.length != tabs.length) {
-      controller.dispose();
-      controller = TabController(length: tabs.length, vsync: this);
-      index = 0;
-    }
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -246,7 +239,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: SafeArea(
         child: Stack(
           children: [
-            // Main content
             TabBarView(
               controller: controller,
               physics: scrollableTabs
@@ -267,7 +259,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   return ErrorWidget("Couldn't build tab content.");
               }).toList(),
             ),
-            // Floating droplet navigation
             Positioned(
               bottom: 0,
               left: 0,

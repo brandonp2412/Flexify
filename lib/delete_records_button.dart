@@ -22,6 +22,7 @@ class DeleteRecordsButton extends StatelessWidget {
     return TextButton.icon(
       onPressed: () {
         showModalBottomSheet(
+          useRootNavigator: true,
           context: context,
           builder: (context) {
             return Wrap(

@@ -168,6 +168,7 @@ class _StartListState extends State<StartList> {
       key: Key(exercise),
       onLongPressStart: (details) async {
         showModalBottomSheet(
+          useRootNavigator: true,
           context: context,
           builder: (context) {
             return ExerciseModal(
