@@ -620,6 +620,18 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     final settings = context.read<SettingsState>().value;
+    if (widget.gymSet.id > 0) {
+      await db.update(db.gymSets).replace(gymSet);
+      if (image != null)
+        (db.update(db.gymSets)..where((u) => u.name.equals(name)))
+            .write(GymSetsCompanion(image: Value(image)));
+      if (!mounted) return;
+      return Navigator.of(context).pop();
+    } else {
+      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+      db.into(db.gymSets).insert(insert);
+    }
+
     if (settings.notifications) {
       final best = await isBest(gymSet);
       if (best) {
@@ -629,19 +641,6 @@ class _EditSetPageState extends State<EditSetPage> {
         if (mounted) toast(context, randomMessage);
       }
     }
-
-    if (widget.gymSet.id > 0) {
-      await db.update(db.gymSets).replace(gymSet);
-      if (image != null)
-        (db.update(db.gymSets)..where((u) => u.name.equals(name)))
-            .write(GymSetsCompanion(image: Value(image)));
-    } else {
-      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-      db.into(db.gymSets).insert(insert);
-    }
-
-    if (!mounted) return;
-    Navigator.pop(context);
 
     if (!settings.restTimers || !mounted) return;
     final timer = context.read<TimerState>();
@@ -659,6 +658,8 @@ class _EditSetPageState extends State<EditSetPage> {
         settings.alarmSound,
         settings.vibrate,
       );
+    if (!mounted) return;
+    return Navigator.of(context).pop();
   }
 
   Future<void> selectTime(DateTime pickedDate) async {
