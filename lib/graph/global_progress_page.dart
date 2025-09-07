@@ -39,8 +39,8 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
   void tabListener() {
     final settings = context.read<SettingsState>().value;
     final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-    if (tabController!.indexIsChanging == true) return;
-    if (tabController!.index != graphsIndex) return;
+    if (tabController?.indexIsChanging == true) return;
+    if (tabController?.index != graphsIndex) return;
     setData();
   }
 
@@ -164,7 +164,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
           children: [
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: 'Metric'),
-              value: metric,
+              initialValue: metric,
               items: [
                 const DropdownMenuItem(
                   value: StrengthMetric.bestWeight,
@@ -198,7 +198,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             const SizedBox(height: 8),
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: 'Period'),
-              value: period,
+              initialValue: period,
               items: const [
                 DropdownMenuItem(
                   value: Period.day,
@@ -231,7 +231,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
-                    value: targetUnit,
+                    initialValue: targetUnit,
                     items: const [
                       DropdownMenuItem(
                         value: 'kg',
