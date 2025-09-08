@@ -202,7 +202,7 @@ class _EditSetPageState extends State<EditSetPage> {
     return TextFormField(
       controller: reps,
       focusNode: repsNode,
-      decoration: const InputDecoration(labelText: 'Reps', hintText: '10'),
+      decoration: const InputDecoration(labelText: 'Reps'),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(reps),
       onChanged: (value) => setORM(),
@@ -221,7 +221,6 @@ class _EditSetPageState extends State<EditSetPage> {
       controller: weight,
       decoration: InputDecoration(
         labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
-        hintText: '60',
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(weight),
@@ -240,7 +239,6 @@ class _EditSetPageState extends State<EditSetPage> {
       controller: orm,
       decoration: const InputDecoration(
         labelText: 'One rep max (estimate)',
-        hintText: '80.02 kg',
       ),
       enabled: false,
     );
@@ -296,7 +294,6 @@ class _EditSetPageState extends State<EditSetPage> {
         controller: body,
         decoration: InputDecoration(
           labelText: 'Body weight ($unit)',
-          hintText: '70',
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(body),
@@ -372,7 +369,6 @@ class _EditSetPageState extends State<EditSetPage> {
                   focusNode: focusNode,
                   decoration: const InputDecoration(
                     labelText: 'Category',
-                    hintText: 'Chest',
                   ),
                   onChanged: (value) => setState(() {
                     category = value;
@@ -394,7 +390,6 @@ class _EditSetPageState extends State<EditSetPage> {
           maxLines: 3,
           decoration: const InputDecoration(
             labelText: 'Notes',
-            hintText: 'Plant your feet. Set your back and shoulders.',
           ),
           controller: notes,
         ),
@@ -535,8 +530,7 @@ class _EditSetPageState extends State<EditSetPage> {
       ) {
         nameCtrl = textEditingController;
         return TextFormField(
-          decoration:
-              const InputDecoration(labelText: 'Name', hintText: 'Bench press'),
+          decoration: const InputDecoration(labelText: 'Name'),
           controller: textEditingController,
           textInputAction: TextInputAction.next,
           onTap: () {
