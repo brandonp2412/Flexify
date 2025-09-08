@@ -238,8 +238,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      bottomSheet:
-          tabs.contains('TimerPage') ? const TimerProgressIndicator() : null,
+      bottomSheet: tabs.contains('TimerPage')
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48.0),
+              child: const TimerProgressIndicator(),
+            )
+          : null,
       body: SafeArea(
         child: Stack(
           children: [
