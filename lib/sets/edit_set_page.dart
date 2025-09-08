@@ -8,6 +8,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -620,16 +621,19 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     final settings = context.read<SettingsState>().value;
+    final planState = context.read<PlanState>();
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
       if (image != null)
         (db.update(db.gymSets)..where((u) => u.name.equals(name)))
             .write(GymSetsCompanion(image: Value(image)));
       if (!mounted) return;
+      planState.updateDefaults();
       return Navigator.of(context).pop();
     } else {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-      db.into(db.gymSets).insert(insert);
+      await db.into(db.gymSets).insert(insert);
+      planState.updateDefaults();
     }
 
     if (settings.notifications) {

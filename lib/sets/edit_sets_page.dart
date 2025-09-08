@@ -3,6 +3,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -425,6 +426,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   Future<void> save() async {
     if (!key.currentState!.validate()) return;
 
+    final planState = context.read<PlanState>();
     Navigator.pop(context);
 
     final gymSet = GymSetsCompanion(
@@ -450,6 +452,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
     await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids)))
         .write(gymSet);
+    planState.updateDefaults();
   }
 
   Future<void> _selectDate() async {

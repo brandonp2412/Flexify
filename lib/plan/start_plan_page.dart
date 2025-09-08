@@ -512,6 +512,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await state.updateGymCounts(widget.plan.id);
+    await state.updateDefaults();
     if (!mounted) return;
     setState(() {
       _updateGymSetTextFields(gymSet);
