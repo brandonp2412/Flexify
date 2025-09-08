@@ -45,7 +45,7 @@ final defaultSettings = SettingsCompanion.insert(
   cardioUnit: 'km',
   curveLines: true,
   explainedPermissions: false,
-  groupHistory: true,
+  groupHistory: false,
   showBodyWeight: const Value(true),
   strengthUnit: 'kg',
   systemColors: false,
