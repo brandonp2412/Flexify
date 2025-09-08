@@ -173,7 +173,6 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .onPrimary,
-                                              fontWeight: FontWeight.w600,
                                             ),
                                         maxLines: 1,
                                         textAlign: TextAlign.center,
