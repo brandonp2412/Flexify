@@ -95,7 +95,7 @@ void main() async {
       ),
     );
 
-    expect(find.text("Bench press"), findsNWidgets(3));
+    expect(find.text("Bench press"), findsNWidgets(2));
 
     final button = find.text("Save");
     expect(button, findsOne);

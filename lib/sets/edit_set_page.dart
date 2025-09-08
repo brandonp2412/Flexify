@@ -640,7 +640,8 @@ class _EditSetPageState extends State<EditSetPage> {
       }
     }
 
-    if (!settings.restTimers || !mounted) return;
+    if (!settings.restTimers && mounted) return Navigator.of(context).pop();
+    if (!mounted) return;
     final timer = context.read<TimerState>();
     if (restMs != null)
       timer.startTimer(
