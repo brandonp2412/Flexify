@@ -6,6 +6,7 @@ import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/swap_workout.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
@@ -189,6 +190,8 @@ class _ExerciseModalState extends State<ExerciseModal> {
               final planState = context.read<PlanState>();
               planState.updateGymCounts(widget.planId);
               widget.onSelect();
+              final timerState = context.read<TimerState>();
+              timerState.stopTimer();
             },
           ),
         if (!widget.hasData)
