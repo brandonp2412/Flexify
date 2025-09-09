@@ -112,6 +112,7 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
 
                 return Expanded(
                   child: GestureDetector(
+                    key: Key(tab),
                     onTap: () => widget.onTap(index),
                     onLongPress: widget.onLongPress != null
                         ? () => widget.onLongPress!(context, tab)

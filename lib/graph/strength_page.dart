@@ -45,7 +45,6 @@ class _StrengthPageState extends State<StrengthPage> {
   DateTime? start;
   DateTime? end;
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
-  TabController? ctrl;
 
   @override
   Widget build(BuildContext context) {
@@ -312,30 +311,6 @@ class _StrengthPageState extends State<StrengthPage> {
         label: const Text('History'),
       ),
     );
-  }
-
-  @override
-  initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ctrl = DefaultTabController.of(context);
-      ctrl?.addListener(tabListener);
-    });
-  }
-
-  void tabListener() {
-    final settings = context.read<SettingsState>().value;
-    final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-    if (ctrl!.indexIsChanging == true) return;
-    if (ctrl!.index != graphsIndex) return;
-    setData();
-  }
-
-  @override
-  void dispose() {
-    ctrl?.removeListener(tabListener);
-    super.dispose();
   }
 
   Future<void> setData() async {

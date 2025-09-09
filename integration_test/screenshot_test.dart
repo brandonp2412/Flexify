@@ -115,7 +115,7 @@ List<PlansCompanion> plans = [
   ),
 ];
 
-enum TabBarState { history, plans, graphs, timer }
+enum TabBarState { historyPage, plansPage, graphsPage, timerPage }
 
 const screenshotExercise = "Dumbbell shoulder press";
 
@@ -138,24 +138,24 @@ Future<void> appWrapper() async {
 
 BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {
   switch (tabBarState) {
-    case TabBarState.plans:
+    case TabBarState.plansPage:
       return (tester.state(find.byType(PlansPage)) as PlansPageState)
           .navKey
           .currentContext!;
-    case TabBarState.graphs:
+    case TabBarState.graphsPage:
       return (tester.state(find.byType(GraphsPage)) as GraphsPageState)
           .navKey
           .currentContext!;
-    case TabBarState.timer:
+    case TabBarState.timerPage:
       return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
-    case TabBarState.history:
+    case TabBarState.historyPage:
       return (tester.state(find.byType(HistoryPage)) as HistoryPageState)
           .context;
     case null:
       break;
   }
 
-  return tester.element(find.byType(TabBarView));
+  return tester.element(find.byType(MaterialApp));
 }
 
 void navigateTo({required BuildContext context, required Widget page}) {
@@ -177,8 +177,7 @@ Future<void> generateScreenshot({
   await appWrapper();
   await tester.pumpAndSettle();
 
-  final controllerState = getBuildContext(tester, null);
-  DefaultTabController.of(controllerState).index = tabBarState.index;
+  await tester.tap(find.byKey(Key(tabBarState.name)));
   await tester.pumpAndSettle();
 
   if (navigateToPage != null) {
@@ -283,7 +282,7 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '1_en-US',
-        tabBarState: TabBarState.plans,
+        tabBarState: TabBarState.plansPage,
       ),
     );
 
@@ -297,7 +296,7 @@ void main() {
           context: context,
           page: const GraphsPage(),
         ),
-        tabBarState: TabBarState.graphs,
+        tabBarState: TabBarState.graphsPage,
       ),
     );
 
@@ -311,7 +310,7 @@ void main() {
           context: context,
           page: const SettingsPage(),
         ),
-        tabBarState: TabBarState.plans,
+        tabBarState: TabBarState.plansPage,
       ),
     );
 
@@ -334,7 +333,7 @@ void main() {
             ),
           );
         },
-        tabBarState: TabBarState.plans,
+        tabBarState: TabBarState.plansPage,
       ),
     );
   });
@@ -362,7 +361,7 @@ void main() {
             ),
           ),
         ),
-        tabBarState: TabBarState.graphs,
+        tabBarState: TabBarState.graphsPage,
       ),
     );
 
@@ -376,7 +375,7 @@ void main() {
           context: context,
           page: const HistoryPage(),
         ),
-        tabBarState: TabBarState.graphs,
+        tabBarState: TabBarState.historyPage,
       ),
     );
 
@@ -395,7 +394,7 @@ void main() {
             page: EditPlanPage(plan: plan.toCompanion(false)),
           );
         },
-        tabBarState: TabBarState.graphs,
+        tabBarState: TabBarState.graphsPage,
       ),
     );
 
@@ -411,7 +410,7 @@ void main() {
           await tester.pump();
           await tester.pump(const Duration(seconds: 7));
         },
-        tabBarState: TabBarState.timer,
+        tabBarState: TabBarState.timerPage,
       ),
     );
   });
