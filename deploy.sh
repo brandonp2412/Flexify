@@ -184,71 +184,94 @@ else
     android_available=false
 fi
 
-generate_all_screenshots() {
-    local emulator_id=""
-    local emulator_pid=""
+generate_screenshots() {
+    local avd_name=$1
+    local device_type=$2
+
+    print_step "Generating screenshots for AVD '$avd_name' (device type: $device_type)"
     
-    # Check if any emulator is already running
-    running_emulator=$(adb devices | grep "emulator-" | grep "device$" | head -1 | awk '{print $1}')
-    
-    if [ -n "$running_emulator" ]; then
-        print_step "Using existing running emulator: $running_emulator"
-        emulator_id="$running_emulator"
-    else
-        # Start one emulator for all screenshots (use the first available AVD)
-        available_avd=$(emulator -list-avds | head -1)
-        if [ -z "$available_avd" ]; then
-            print_error "No AVDs available for screenshot generation"
-            return 1
-        fi
-        
-        print_step "Starting emulator with AVD: $available_avd"
-        emulator -avd "$available_avd" -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
-        emulator_pid=$!
-        
-        # Wait for it to boot
-        timeout=300
-        elapsed=0
-        while [ $elapsed -lt $timeout ]; do
-            emulator_id=$(adb devices | grep "emulator-" | grep "device$" | head -1 | awk '{print $1}')
-            if [ -n "$emulator_id" ]; then
-                print_success "Emulator booted with ID: $emulator_id"
-                break
-            fi
-            sleep 5
-            elapsed=$((elapsed + 5))
-        done
-        
-        if [ -z "$emulator_id" ]; then
-            print_error "Failed to start emulator"
-            kill $emulator_pid 2>/dev/null || true
-            return 1
-        fi
+    if ! command -v emulator &> /dev/null || ! emulator -list-avds | grep -q "^$avd_name$"; then
+        print_warning "AVD '$avd_name' not found"
+        echo "Available AVDs:"
+        emulator -list-avds 2>/dev/null || echo "None found"
+        return 1
     fi
     
-    # Generate screenshots for each device type using the same emulator
-    for device_config in "phoneScreenshots" "sevenInchScreenshots" "tenInchScreenshots"; do
-        print_step "Generating screenshots for $device_config"
-        export FLEXIFY_DEVICE_TYPE="$device_config"
+    # Kill any existing emulators to avoid conflicts
+    cleanup_emulators
+    
+    print_step "Starting emulator '$avd_name'"
+    emulator -avd "$avd_name" -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
+    emulator_pid=$!
+    
+    # Wait for emulator to appear and get its ID
+    echo "Waiting for emulator to boot..."
+    timeout=300
+    elapsed=0
+    emulator_id=""
+    
+    while [ $elapsed -lt $timeout ]; do
+        # Get any emulator that's now running (should be ours since we killed others)
+        emulator_id=$(adb devices | grep "emulator-" | grep "device$" | awk '{print $1}' | head -1)
         
-        if flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart -d "$emulator_id"; then
-            print_success "Screenshots generated for $device_config"
-        else
-            print_error "Screenshot generation failed for $device_config"
+        if [ -n "$emulator_id" ]; then
+            print_success "Emulator '$avd_name' booted with ID: $emulator_id"
+            break
         fi
+        
+        # Check if process died
+        if ! kill -0 "$emulator_pid" 2>/dev/null; then
+            print_error "Emulator process died during startup"
+            exit 1
+        fi
+        
+        sleep 5
+        elapsed=$((elapsed + 5))
+        echo "Waiting... ($elapsed/${timeout}s)"
     done
     
-    # Only kill if we started it
-    if [ -n "$emulator_pid" ]; then
-        print_step "Stopping emulator"
-        adb -s "$emulator_id" emu kill 2>/dev/null || kill $emulator_pid 2>/dev/null || true
+    if [ -z "$emulator_id" ]; then
+        print_error "Emulator '$avd_name' failed to boot within timeout"
+        kill $emulator_pid 2>/dev/null || true
+        exit 1
     fi
+    
+    # Wait for system to settle
+    echo "Waiting for system to settle..."
+    sleep 15
+    
+    # Verify emulator is still available
+    if ! adb devices | grep -q "$emulator_id.*device"; then
+        print_error "Emulator $emulator_id disappeared"
+        kill $emulator_pid 2>/dev/null || true
+        exit 1
+    fi
+    
+    print_step "Running screenshot tests on $emulator_id for device type '$device_type'"
+    export FLEXIFY_DEVICE_TYPE="$device_type"
+    
+    if flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart -d "$emulator_id"; then
+        print_success "Screenshots generated successfully for '$avd_name'"
+    else
+        print_error "Screenshot generation failed for '$avd_name'"
+        adb -s "$emulator_id" emu kill 2>/dev/null || kill $emulator_pid 2>/dev/null || true
+        exit 1
+    fi
+    
+    print_step "Stopping emulator '$avd_name'"
+    adb -s "$emulator_id" emu kill 2>/dev/null || kill $emulator_pid 2>/dev/null || true
+    
+    # Wait for shutdown
+    sleep 5
+    print_success "Emulator '$avd_name' stopped"
 }
 
 if [[ "$*" == *"-n"* ]]; then
     print_warning "Skipping screenshots"
 elif [ "$android_available" = true ]; then
-    generate_all_screenshots
+    generate_screenshots phoneScreenshots
+    generate_screenshots sevenInchScreenshots
+    generate_screenshots tenInchScreenshots
 else
     print_warning "Android SDK not properly configured. Skipping screenshot generation."
     echo "Make sure Android SDK and emulator tools are in your PATH"
