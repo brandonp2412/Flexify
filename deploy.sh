@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e  # Exit on any error
+set -ex  # Exit on any error
 
 echo "🚀 Starting Flexify local build and version process..."
 
@@ -186,9 +186,8 @@ fi
 
 generate_screenshots() {
     local avd_name=$1
-    local device_type=$2
 
-    print_step "Generating screenshots for AVD '$avd_name' (device type: $device_type)"
+    print_step "Generating screenshots for AVD '$avd_name'"
     
     if ! command -v emulator &> /dev/null || ! emulator -list-avds | grep -q "^$avd_name$"; then
         print_warning "AVD '$avd_name' not found"
@@ -196,9 +195,6 @@ generate_screenshots() {
         emulator -list-avds 2>/dev/null || echo "None found"
         return 1
     fi
-    
-    # Kill any existing emulators to avoid conflicts
-    cleanup_emulators
     
     print_step "Starting emulator '$avd_name'"
     emulator -avd "$avd_name" -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
@@ -247,10 +243,12 @@ generate_screenshots() {
         exit 1
     fi
     
-    print_step "Running screenshot tests on $emulator_id for device type '$device_type'"
-    export FLEXIFY_DEVICE_TYPE="$device_type"
+    print_step "Running screenshot tests on $emulator_id for device type '$avd_name'"
+    export FLEXIFY_DEVICE_TYPE="$avd_name"
     
-    if flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart -d "$emulator_id"; then
+    if flutter drive --profile --driver=test_driver/integration_test.dart \
+        --dart-define=FLEXIFY_DEVICE_TYPE=$avd_name \
+        --target=integration_test/screenshot_test.dart -d "$emulator_id"; then
         print_success "Screenshots generated successfully for '$avd_name'"
     else
         print_error "Screenshot generation failed for '$avd_name'"
