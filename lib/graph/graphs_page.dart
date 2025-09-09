@@ -223,8 +223,8 @@ class GraphsPageState extends State<GraphsPage>
               Selector<SettingsState, bool>(
                 selector: (p0, settingsState) =>
                     settingsState.value.showGlobalProgress,
-                builder: (context, value, child) => Expanded(
-                  child: graphList(gymSets, value),
+                builder: (context, showGlobal, child) => Expanded(
+                  child: graphList(gymSets, showGlobal),
                 ),
               ),
             ],
@@ -318,16 +318,19 @@ class GraphsPageState extends State<GraphsPage>
 
         if (showGlobal) {
           if (index == 0) {
-            return ListTile(
-              leading: const Icon(Icons.language),
-              title: const Text("Global progress"),
-              subtitle: const Text("A chart grouped by category"),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const GlobalProgressPage(),
+            return material.Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+              child: ListTile(
+                leading: const Icon(Icons.language),
+                title: const Text("Global progress"),
+                subtitle: const Text("A chart grouped by category"),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const GlobalProgressPage(),
+                  ),
                 ),
+                onLongPress: longPressGlobal,
               ),
-              onLongPress: longPressGlobal,
             );
           }
           currentGymSetIndex--;
