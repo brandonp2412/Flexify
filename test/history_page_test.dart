@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'mock_tests.dart';
 
 void main() async {
-  testWidgets('HistoryPage lists items', (WidgetTester tester) async {
+  testWidgets('HistoryPage loads', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
@@ -32,14 +32,39 @@ void main() async {
 
     await tester.pumpAndSettle();
     expect(find.text('Search...'), findsOne);
-    expect(find.byType(ListTile), findsWidgets);
+    expect(find.text('No entries yet'), findsOne);
 
     await db.close();
   });
 
-  testWidgets('HistoryPage add button', (WidgetTester tester) async {
+  testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+
+    await db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 1,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 4,
+        weight: 80,
+        unit: 'kg',
+        created: DateTime.now().subtract(const Duration(minutes: 3)),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 8,
+        weight: 70,
+        unit: 'kg',
+        created: DateTime.now().subtract(const Duration(minutes: 6)),
+      ),
+    ]);
+
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -54,9 +79,12 @@ void main() async {
       ),
     );
 
-    final add = find.text('Add');
-    await tester.tap(add);
     await tester.pumpAndSettle();
+    expect(find.text('Search...'), findsOne);
+    expect(find.text('Bench press'), findsNWidgets(3));
+    expect(find.text('1 x 90 kg'), findsOne);
+    expect(find.text('4 x 80 kg'), findsOne);
+    expect(find.text('8 x 70 kg'), findsOne);
 
     await db.close();
   });
@@ -71,6 +99,7 @@ void main() async {
         weight: 90,
         unit: 'kg',
         created: DateTime.now(),
+        cardio: Value(false),
       ),
     ]);
 
@@ -91,10 +120,8 @@ void main() async {
     await tester.pumpAndSettle();
     await tester.tap(find.textContaining('Bench press'));
     await tester.pumpAndSettle();
-
-    await tester.tap(find.text('1 x 90 kg'));
-    await tester.pumpAndSettle();
-
+    expect(find.textContaining('Weight (kg)'), findsOne);
+    expect(find.textContaining('Reps'), findsOne);
     expect(find.textContaining('Name'), findsOne);
 
     await db.close();
@@ -157,13 +184,10 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.tap(find.textContaining('Bench press'));
-    await tester.pumpAndSettle();
-
     await tester.longPress(find.text('1 x 90 kg'));
     await tester.pumpAndSettle();
 
-    expect(find.text('1'), findsOne);
+    expect(find.byTooltip('Delete selected'), findsOne);
 
     await db.close();
   });
@@ -196,9 +220,6 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.tap(find.textContaining('Bench press'));
-    await tester.pumpAndSettle();
-
     await tester.longPress(find.text('1 x 90 kg'));
     await tester.pumpAndSettle();
 

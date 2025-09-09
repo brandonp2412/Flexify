@@ -22,14 +22,14 @@ void toast(BuildContext context, String message, [SnackBarAction? action]) {
 }
 
 Future<GymSet?> getBodyWeight() async {
-  final set = await (db.gymSets.select()
+  final gymSet = await (db.gymSets.select()
         ..where((tbl) => tbl.name.equals('Weight'))
         ..orderBy(
           [(u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc)],
         )
         ..limit(1))
       .getSingleOrNull();
-  return set;
+  return gymSet;
 }
 
 bool isSameDay(DateTime date1, DateTime date2) {
