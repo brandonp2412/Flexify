@@ -115,8 +115,6 @@ List<PlansCompanion> plans = [
   ),
 ];
 
-enum TabBarState { historyPage, plansPage, graphsPage, timerPage }
-
 const screenshotExercise = "Dumbbell shoulder press";
 
 Future<void> appWrapper() async {
@@ -136,23 +134,21 @@ Future<void> appWrapper() async {
   runApp(app.appProviders(settingsState, hideChangelog: true));
 }
 
-BuildContext getBuildContext(WidgetTester tester, TabBarState? tabBarState) {
+BuildContext getBuildContext(WidgetTester tester, String tabBarState) {
   switch (tabBarState) {
-    case TabBarState.plansPage:
+    case 'PlansPage':
       return (tester.state(find.byType(PlansPage)) as PlansPageState)
           .navKey
           .currentContext!;
-    case TabBarState.graphsPage:
+    case 'GraphsPage':
       return (tester.state(find.byType(GraphsPage)) as GraphsPageState)
           .navKey
           .currentContext!;
-    case TabBarState.timerPage:
+    case 'TimerPage':
       return (tester.state(find.byType(TimerPage)) as TimerPageState).context;
-    case TabBarState.historyPage:
+    case 'HistoryPage':
       return (tester.state(find.byType(HistoryPage)) as HistoryPageState)
           .context;
-    case null:
-      break;
   }
 
   return tester.element(find.byType(MaterialApp));
@@ -170,14 +166,14 @@ Future<void> generateScreenshot({
   required IntegrationTestWidgetsFlutterBinding binding,
   required WidgetTester tester,
   required String screenshotName,
-  required TabBarState tabBarState,
+  required String tabBarState,
   Future<void> Function(BuildContext context)? navigateToPage,
   bool skipSettle = false,
 }) async {
   await appWrapper();
   await tester.pumpAndSettle();
 
-  await tester.tap(find.byKey(Key(tabBarState.name)));
+  await tester.tap(find.byKey(Key(tabBarState)));
   await tester.pumpAndSettle();
 
   if (navigateToPage != null) {
@@ -282,7 +278,7 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '1_en-US',
-        tabBarState: TabBarState.plansPage,
+        tabBarState: 'PlansPage',
       ),
     );
 
@@ -296,7 +292,7 @@ void main() {
           context: context,
           page: const GraphsPage(),
         ),
-        tabBarState: TabBarState.graphsPage,
+        tabBarState: 'GraphsPage',
       ),
     );
 
@@ -310,7 +306,7 @@ void main() {
           context: context,
           page: const SettingsPage(),
         ),
-        tabBarState: TabBarState.plansPage,
+        tabBarState: 'PlansPage',
       ),
     );
 
@@ -333,7 +329,7 @@ void main() {
             ),
           );
         },
-        tabBarState: TabBarState.plansPage,
+        tabBarState: 'PlansPage',
       ),
     );
   });
@@ -361,7 +357,7 @@ void main() {
             ),
           ),
         ),
-        tabBarState: TabBarState.graphsPage,
+        tabBarState: 'GraphsPage',
       ),
     );
 
@@ -375,7 +371,7 @@ void main() {
           context: context,
           page: const HistoryPage(),
         ),
-        tabBarState: TabBarState.historyPage,
+        tabBarState: 'HistoryPage',
       ),
     );
 
@@ -394,7 +390,7 @@ void main() {
             page: EditPlanPage(plan: plan.toCompanion(false)),
           );
         },
-        tabBarState: TabBarState.graphsPage,
+        tabBarState: 'GraphsPage',
       ),
     );
 
@@ -410,7 +406,7 @@ void main() {
           await tester.pump();
           await tester.pump(const Duration(seconds: 7));
         },
-        tabBarState: TabBarState.timerPage,
+        tabBarState: 'TimerPage',
       ),
     );
   });

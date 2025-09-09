@@ -127,18 +127,6 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                             : Theme.of(context).colorScheme.surfaceContainerLow,
                         borderRadius:
                             BorderRadius.circular(isSelected ? 25 : 18),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withValues(alpha: 0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ]
-                            : null,
                       ),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       child: Column(

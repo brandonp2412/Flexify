@@ -215,6 +215,7 @@ generate_screenshots() {
         if [ $elapsed -ge $timeout ]; then
             print_error "Emulator '$avd_name' failed to boot within timeout"
             kill $emulator_pid 2>/dev/null || true
+            exit 1
         else
             # Wait a bit more for the system to settle
             echo "Waiting for system to settle..."
@@ -227,7 +228,8 @@ generate_screenshots() {
             if flutter drive --profile --driver=test_driver/integration_test.dart --target=integration_test/screenshot_test.dart -d emulator-5554; then
                 print_success "Screenshots generated successfully for '$avd_name'"
             else
-                print_warning "Screenshot generation failed for '$avd_name'"
+                print_error "Screenshot generation failed for '$avd_name'"
+                exit 1
             fi
             
             # Stop the emulator
@@ -317,6 +319,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "  Ubuntu/Debian: sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev"
         echo "  Fedora: sudo dnf install clang cmake ninja-build pkgconfig gtk3-devel xz-devel"
         echo "  Arch: sudo pacman -S clang cmake ninja pkgconfig gtk3 xz"
+        exit 1
     else
         echo "Building for Linux..."
         flutter build linux
