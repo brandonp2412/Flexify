@@ -157,24 +157,44 @@ class _EditSetPageState extends State<EditSetPage> {
       padding: const EdgeInsets.all(16.0),
       child: Form(
         key: key,
-        child: ListView(
-          children: [
-            autocomplete(showBodyWeight),
-            SizedBox(height: 8.0),
-            ...exerciseFields(),
-            SizedBox(height: 8.0),
-            bodyFields(showBodyWeight),
-            SizedBox(height: 8.0),
-            unitSelector(),
-            SizedBox(height: 8.0),
-            categorySelector(),
-            SizedBox(height: 8.0),
-            notesField(),
-            SizedBox(height: 8.0),
-            dateSelector(),
-            SizedBox(height: 8.0),
-            imageField(),
-          ],
+        child: Consumer<SettingsState>(
+          builder: (context, settingsState, child) {
+            final settings = settingsState.value;
+            final showUnits = settings.showUnits;
+            final showCategories = settings.showCategories;
+            final showNotes = settings.showNotes;
+            final showImages = settings.showImages;
+
+            return ListView(
+              children: [
+                autocomplete(showBodyWeight),
+                const SizedBox(height: 8.0),
+                ...exerciseFields(),
+                const SizedBox(height: 8.0),
+                if (showBodyWeight && name != 'Weight') ...[
+                  bodyFields(showBodyWeight),
+                  const SizedBox(height: 8.0),
+                ],
+                if (showUnits) ...[
+                  unitSelector(),
+                  const SizedBox(height: 8.0),
+                ],
+                if (showCategories && name != 'Weight') ...[
+                  categorySelector(),
+                  const SizedBox(height: 8.0),
+                ],
+                if (showNotes) ...[
+                  notesField(),
+                  const SizedBox(height: 8.0),
+                ],
+                dateSelector(),
+                if (showImages) ...[
+                  const SizedBox(height: 8.0),
+                  imageField(),
+                ],
+              ],
+            );
+          },
         ),
       ),
     );
