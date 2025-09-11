@@ -104,10 +104,32 @@ class TimerProgressIndicator extends StatefulWidget {
   State<TimerProgressIndicator> createState() => _TimerProgressIndicatorState();
 }
 
-class _TimerProgressIndicatorState extends State<TimerProgressIndicator> {
+class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
+    with WidgetsBindingObserver {
   Duration? lastDuration;
   DateTime? lastTimestamp;
   GlobalKey? animationKey;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        animationKey = GlobalKey();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
