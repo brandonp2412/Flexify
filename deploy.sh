@@ -351,4 +351,4 @@ echo ""
 print_success "All done! 🎉"
 git pull origin main
 git push
-git push --tags
+git push "$new_version"
