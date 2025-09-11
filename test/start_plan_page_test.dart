@@ -113,12 +113,10 @@ void main() async {
       ),
     ]);
 
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-
     await db.settings.update().write(
           SettingsCompanion(explainedPermissions: Value(true)),
         );
-    final updatedSettings = await (db.settings.select()..limit(1)).getSingle();
+    final settings = await (db.settings.select()..limit(1)).getSingle();
 
     final planState = PlanState();
     await planState.updateGymCounts(plan.id);
@@ -127,7 +125,7 @@ void main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => SettingsState(updatedSettings),
+            create: (context) => SettingsState(settings),
           ),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider.value(value: planState),

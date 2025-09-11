@@ -21,6 +21,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
+import '../test/mock_tab_controller.dart';
+
 Map<String, double> exercisesToPopulateTestDB = {
   "Barbell bench press": 90,
   "Barbell bent-over row": 82.5,
@@ -290,7 +292,7 @@ void main() {
         screenshotName: '2_en-US',
         navigateToPage: (context) async => navigateTo(
           context: context,
-          page: const GraphsPage(),
+          page: GraphsPage(tabController: MockTabController()),
         ),
         tabBarState: 'GraphsPage',
       ),
@@ -322,6 +324,7 @@ void main() {
           final planState = context.read<PlanState>();
           await planState.updateGymCounts(plan.id);
 
+          if (!context.mounted) return;
           navigateTo(
             context: context,
             page: StartPlanPage(
@@ -369,7 +372,7 @@ void main() {
         screenshotName: '6_en-US',
         navigateToPage: (context) async => navigateTo(
           context: context,
-          page: const HistoryPage(),
+          page: HistoryPage(tabController: MockTabController()),
         ),
         tabBarState: 'HistoryPage',
       ),
@@ -385,6 +388,7 @@ void main() {
           final state = context.read<PlanState>();
           final plan = await (db.plans.select()..limit(1)).getSingle();
           await state.setExercises(plan.toCompanion(false));
+          if (!context.mounted) return;
           navigateTo(
             context: context,
             page: EditPlanPage(plan: plan.toCompanion(false)),
@@ -404,6 +408,7 @@ void main() {
         navigateToPage: (context) async {
           context.read<TimerState>().setTimer(60, 7);
           await tester.pump();
+          if (!context.mounted) return;
           await tester.pump(const Duration(seconds: 7));
         },
         tabBarState: 'TimerPage',

@@ -41,7 +41,9 @@ class _StartListState extends State<StartList> {
 
   void tap(int index, List<GymCount> counts) async {
     widget.onSelect(index);
-    if (counts[index].count == 0) return;
+    final count = counts.elementAtOrNull(index);
+    if (count == null) return;
+    if (counts.elementAtOrNull(index)?.count == 0) return;
 
     if (DateTime.now().difference(lastTap.dateTime) >=
             const Duration(milliseconds: 300) ||

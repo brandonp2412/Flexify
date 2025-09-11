@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
 
 void main() async {
@@ -24,8 +25,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: GraphsPage(),
+        child: MaterialApp(
+          home: GraphsPage(tabController: MockTabController()),
         ),
       ),
     );
@@ -48,8 +49,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: GraphsPage(),
+        child: MaterialApp(
+          home: GraphsPage(tabController: MockTabController()),
         ),
       ),
     );
@@ -86,8 +87,11 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: DefaultTabController(length: 1, child: GraphsPage()),
+        child: MaterialApp(
+          home: DefaultTabController(
+            length: 1,
+            child: GraphsPage(tabController: MockTabController()),
+          ),
         ),
       ),
     );
@@ -111,8 +115,11 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: DefaultTabController(length: 1, child: GraphsPage()),
+        child: MaterialApp(
+          home: DefaultTabController(
+            length: 1,
+            child: GraphsPage(tabController: MockTabController()),
+          ),
         ),
       ),
     );
@@ -136,8 +143,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: GraphsPage(),
+        child: MaterialApp(
+          home: GraphsPage(tabController: MockTabController()),
         ),
       ),
     );
@@ -179,8 +186,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: GraphsPage(),
+        child: MaterialApp(
+          home: GraphsPage(tabController: MockTabController()),
         ),
       ),
     );
@@ -217,8 +224,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: GraphsPage(),
+        child: MaterialApp(
+          home: GraphsPage(tabController: MockTabController()),
         ),
       ),
     );
