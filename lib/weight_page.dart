@@ -56,6 +56,7 @@ class _WeightPageState extends State<WeightPage> {
                 },
                 autofocus: true,
               ),
+              const SizedBox(height: 8),
               Selector<SettingsState, String>(
                 selector: (context, settings) => settings.value.strengthUnit,
                 builder: (context, value, child) =>
@@ -83,11 +84,13 @@ class _WeightPageState extends State<WeightPage> {
                   },
                 ),
               ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: TextEditingController(text: prev),
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
+              const SizedBox(height: 8),
               Selector<SettingsState, bool>(
                 builder: (context, showImages, child) {
                   return Visibility(
