@@ -39,8 +39,9 @@ typedef Tapped = ({
 class _StartListState extends State<StartList> {
   Tapped lastTap = (index: 0, dateTime: DateTime(0));
 
-  void tap(int index) async {
+  void tap(int index, List<GymCount> counts) async {
     widget.onSelect(index);
+    if (counts[index].count == 0) return;
 
     if (DateTime.now().difference(lastTap.dateTime) >=
             const Duration(milliseconds: 300) ||
@@ -186,7 +187,7 @@ class _StartListState extends State<StartList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
-            onTap: () => tap(index),
+            onTap: () => tap(index, counts),
             trailing: trail,
             title: Row(
               children: [
