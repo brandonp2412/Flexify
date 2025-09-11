@@ -24,7 +24,9 @@ class HistoryDay {
 }
 
 class HistoryPage extends StatefulWidget {
-  const HistoryPage({super.key});
+  final TabController tabController;
+
+  const HistoryPage({super.key, required this.tabController});
 
   @override
   createState() => HistoryPageState();
@@ -43,10 +45,10 @@ class HistoryPageState extends State<HistoryPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (navKey.currentState!.canPop() == false) return;
-        final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final historyIndex = settings.tabs.split(',').indexOf('HistoryPage');
-        if (tabController.index == historyIndex) navKey.currentState!.pop();
+        if (widget.tabController.index == historyIndex)
+          navKey.currentState!.pop();
       },
       child: Navigator(
         key: navKey,

@@ -254,11 +254,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   : const NeverScrollableScrollPhysics(),
               children: tabs.map((tab) {
                 if (tab == 'HistoryPage')
-                  return const HistoryPage();
+                  return HistoryPage(tabController: controller);
                 else if (tab == 'PlansPage')
-                  return const PlansPage();
+                  return PlansPage(tabController: controller);
                 else if (tab == 'GraphsPage')
-                  return const GraphsPage();
+                  return GraphsPage(tabController: controller);
                 else if (tab == 'TimerPage')
                   return const TimerPage();
                 else if (tab == 'SettingsPage')

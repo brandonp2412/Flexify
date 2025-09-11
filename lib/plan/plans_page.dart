@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PlansPage extends StatefulWidget {
-  const PlansPage({super.key});
+  final TabController tabController;
+
+  const PlansPage({super.key, required this.tabController});
 
   @override
   State<PlansPage> createState() => PlansPageState();
@@ -31,10 +33,9 @@ class PlansPageState extends State<PlansPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (navKey.currentState!.canPop() == false) return;
-        final ctrl = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final index = settings.tabs.split(',').indexOf('PlansPage');
-        if (ctrl.index == index) navKey.currentState!.pop();
+        if (widget.tabController.index == index) navKey.currentState!.pop();
       },
       child: Navigator(
         key: navKey,

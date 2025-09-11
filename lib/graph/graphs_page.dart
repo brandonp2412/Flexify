@@ -25,7 +25,9 @@ import 'package:share_plus/share_plus.dart';
 import 'graph_tile.dart';
 
 class GraphsPage extends StatefulWidget {
-  const GraphsPage({super.key});
+  final TabController tabController;
+
+  const GraphsPage({super.key, required this.tabController});
 
   @override
   createState() => GraphsPageState();
@@ -52,10 +54,10 @@ class GraphsPageState extends State<GraphsPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (navKey.currentState!.canPop() == false) return;
-        final tabController = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-        if (tabController.index == graphsIndex) navKey.currentState!.pop();
+        if (widget.tabController.index == graphsIndex)
+          Navigator.of(navKey.currentContext!).pop();
       },
       child: Navigator(
         key: navKey,
