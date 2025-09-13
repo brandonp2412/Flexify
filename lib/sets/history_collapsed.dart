@@ -38,7 +38,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
 
     return ListView.builder(
       itemCount: widget.days.length,
-      padding: const EdgeInsets.only(bottom: 76, top: 8),
+      padding: const EdgeInsets.only(bottom: 96, top: 8),
       controller: widget.scroll,
       itemBuilder: (context, index) {
         final history = widget.days[index];

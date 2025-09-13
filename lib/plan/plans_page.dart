@@ -172,7 +172,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               },
             ),
           ),
-          SizedBox(height: 120),
         ],
       ),
       floatingActionButton: AnimatedFab(

@@ -247,7 +247,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     },
                   ),
                 ),
-              SizedBox(height: 96),
             ],
           );
         },

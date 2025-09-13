@@ -61,7 +61,7 @@ class PlansList extends StatelessWidget {
       return ReorderableListView.builder(
         scrollController: scroll,
         itemCount: plans.length,
-        padding: const EdgeInsets.only(bottom: 50, top: 16),
+        padding: const EdgeInsets.only(bottom: 96, top: 16),
         itemBuilder: (context, index) {
           final plan = plans[index];
           return PlanTile(
@@ -99,7 +99,7 @@ class PlansList extends StatelessWidget {
     return ListView.builder(
       controller: scroll,
       itemCount: plans.length,
-      padding: const EdgeInsets.only(bottom: 50, top: 8),
+      padding: const EdgeInsets.only(bottom: 96, top: 8),
       itemBuilder: (context, index) {
         final plan = plans[index];
 

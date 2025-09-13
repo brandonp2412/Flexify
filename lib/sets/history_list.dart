@@ -256,7 +256,7 @@ class _HistoryListState extends State<HistoryList> {
     return AnimatedList(
       key: _key,
       initialItemCount: _current.length,
-      padding: const EdgeInsets.only(bottom: 76, top: 8),
+      padding: const EdgeInsets.only(bottom: 96, top: 8),
       controller: widget.scroll,
       itemBuilder: (context, index, animation) {
         return _buildItem(_current[index], animation, index, showImages);

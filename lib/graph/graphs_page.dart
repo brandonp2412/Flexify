@@ -229,7 +229,6 @@ class GraphsPageState extends State<GraphsPage>
                   child: graphList(gymSets, showGlobal),
                 ),
               ),
-              SizedBox(height: 120),
             ],
           );
         },
@@ -304,7 +303,7 @@ class GraphsPageState extends State<GraphsPage>
     List<GymSetsCompanion> gymSets,
     bool showGlobalProgress,
   ) {
-    var itemCount = gymSets.length;
+    var itemCount = gymSets.length + 1;
     final showGlobal = 'global graphs'.contains(search.toLowerCase()) &&
         category == null &&
         showGlobalProgress;
@@ -319,7 +318,7 @@ class GraphsPageState extends State<GraphsPage>
       controller: scroll,
       padding: const EdgeInsets.only(bottom: 50, top: 8),
       itemBuilder: (context, index) {
-        int currentGymSetIndex = index;
+        int currentIdx = index;
 
         if (showGlobal) {
           if (index == 0) {
@@ -338,10 +337,10 @@ class GraphsPageState extends State<GraphsPage>
               ),
             );
           }
-          currentGymSetIndex--;
+          currentIdx--;
         }
 
-        if (showPeekGraph && currentGymSetIndex == 1) {
+        if (showPeekGraph && currentIdx == 1) {
           return Consumer<SettingsState>(
             builder: (
               BuildContext context,
@@ -375,15 +374,16 @@ class GraphsPageState extends State<GraphsPage>
           );
         }
 
-        if (showPeekGraph && currentGymSetIndex > 1) {
-          currentGymSetIndex--;
+        if (index == itemCount - 1) return const SizedBox(height: 96);
+
+        if (showPeekGraph && currentIdx > 1) {
+          currentIdx--;
         }
 
-        final set = gymSets.elementAtOrNull(currentGymSetIndex);
+        final set = gymSets.elementAtOrNull(currentIdx);
         if (set == null) return const SizedBox();
 
-        final prev =
-            currentGymSetIndex > 0 ? gymSets[currentGymSetIndex - 1] : null;
+        final prev = currentIdx > 0 ? gymSets[currentIdx - 1] : null;
 
         final created = prev?.created.value.toLocal();
 
