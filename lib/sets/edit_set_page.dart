@@ -636,6 +636,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
     final settings = context.read<SettingsState>().value;
     final planState = context.read<PlanState>();
+
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
       if (image != null)
@@ -762,7 +763,7 @@ class _EditSetPageState extends State<EditSetPage> {
     });
 
     if (gymSet.reps != 0) reps.text = toString(gymSet.reps);
-    if (gymSet.weight != 0) weight.text = toString(gymSet.weight);
+    weight.text = toString(gymSet.weight);
     setORM();
     if (gymSet.bodyWeight != 0) body.text = toString(gymSet.bodyWeight);
     if (gymSet.duration != 0) {
