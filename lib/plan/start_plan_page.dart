@@ -85,7 +85,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 104),
         child: Form(
           key: key,
           child: material.Column(

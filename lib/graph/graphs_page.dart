@@ -229,6 +229,7 @@ class GraphsPageState extends State<GraphsPage>
                   child: graphList(gymSets, showGlobal),
                 ),
               ),
+              SizedBox(height: 120),
             ],
           );
         },
