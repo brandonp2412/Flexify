@@ -30,24 +30,26 @@ class ImportData extends StatelessWidget {
           useRootNavigator: true,
           context: context,
           builder: (context) {
-            return Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: const Icon(Icons.insights),
-                  title: const Text('Graphs'),
-                  onTap: () => importGraphs(context),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.event),
-                  title: const Text('Plans'),
-                  onTap: () => importPlans(context),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.storage),
-                  title: const Text('Database'),
-                  onTap: () => importDatabase(context),
-                ),
-              ],
+            return SafeArea(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.insights),
+                    title: const Text('Graphs'),
+                    onTap: () => importGraphs(context),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.event),
+                    title: const Text('Plans'),
+                    onTap: () => importPlans(context),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.storage),
+                    title: const Text('Database'),
+                    onTap: () => importDatabase(context),
+                  ),
+                ],
+              ),
             );
           },
         );

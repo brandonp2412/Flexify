@@ -174,12 +174,14 @@ class _StartListState extends State<StartList> {
           useRootNavigator: true,
           context: context,
           builder: (context) {
-            return ExerciseModal(
-              planId: widget.plan.id,
-              exercise: exercise,
-              hasData: count > 0,
-              onSelect: () => widget.onSelect(index),
-              onMax: widget.onMax,
+            return SafeArea(
+              child: ExerciseModal(
+                planId: widget.plan.id,
+                exercise: exercise,
+                hasData: count > 0,
+                onSelect: () => widget.onSelect(index),
+                onMax: widget.onMax,
+              ),
             );
           },
         );
