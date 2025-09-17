@@ -406,6 +406,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     cardio = gymSet.cardio;
     category = gymSet.category;
     image = gymSet.image;
+    notes.text = gymSet.notes ?? "";
 
     final settings = context.read<SettingsState>().value;
     if (cardio && (unit == 'kg' || unit == 'lb')) {
