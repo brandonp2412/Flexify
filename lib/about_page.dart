@@ -12,6 +12,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final info = PackageInfo.fromPlatform();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("About"),
       ),

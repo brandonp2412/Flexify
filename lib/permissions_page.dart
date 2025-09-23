@@ -24,6 +24,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
     final settings = context.watch<SettingsState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Missing permissions"),
       ),

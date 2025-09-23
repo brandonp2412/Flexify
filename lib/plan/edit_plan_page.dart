@@ -99,6 +99,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
       title = "Add plan";
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(title),
       ),

@@ -91,6 +91,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {

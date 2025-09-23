@@ -36,6 +36,7 @@ class _WeightPageState extends State<WeightPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('Enter Weight')),
       body: Form(
         key: key,

@@ -19,7 +19,7 @@ List<Widget> getAppearanceSettings(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: DropdownButtonFormField<ThemeMode>(
-          value: ThemeMode.values
+          initialValue: ThemeMode.values
               .byName(settings.value.themeMode.replaceFirst('ThemeMode.', '')),
           decoration: const InputDecoration(
             labelStyle: TextStyle(),
@@ -225,6 +225,7 @@ class AppearanceSettings extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Appearance"),
       ),

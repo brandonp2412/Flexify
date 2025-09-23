@@ -184,6 +184,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
     settings = context.watch<SettingsState>().value;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Workouts"),
       ),

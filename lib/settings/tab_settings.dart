@@ -54,6 +54,7 @@ class _TabSettingsState extends State<TabSettings> {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text("Tabs")),
       body: Padding(
         padding: const EdgeInsets.all(8),

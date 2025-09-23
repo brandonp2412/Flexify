@@ -78,6 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ];
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Settings'),
         actions: [

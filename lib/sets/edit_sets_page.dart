@@ -50,6 +50,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           'Edit ${widget.ids.length} sets',

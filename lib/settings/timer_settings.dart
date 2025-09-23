@@ -481,6 +481,7 @@ class _TimerSettingsState extends State<TimerSettings> {
     final settings = context.watch<SettingsState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Timers"),
       ),

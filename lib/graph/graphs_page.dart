@@ -145,6 +145,7 @@ class GraphsPageState extends State<GraphsPage>
 
   Scaffold graphsPage() {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {

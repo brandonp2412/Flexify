@@ -1,24 +1,14 @@
 import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/failed_migrations_page.dart';
-import 'package:flexify/graph/graphs_page.dart';
+import 'package:flexify/home_page.dart';
 import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/sets/history_page.dart';
-import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/settings/whats_new.dart';
-import 'package:flexify/timer/timer_page.dart';
-import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-
-import 'plan/plans_page.dart';
 
 Future<void> main({bool hideChangelog = false}) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -117,175 +107,6 @@ class App extends StatelessWidget {
           home: HomePage(hideChangelog: hideChangelog),
         );
       },
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  final bool hideChangelog;
-  const HomePage({super.key, required this.hideChangelog});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  late TabController controller;
-  int index = 0;
-
-  void listener() {
-    setState(() {
-      index = controller.animation!.value.round();
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    final setting = context.read<SettingsState>().value.tabs;
-    final tabs = setting.split(',');
-    controller = TabController(length: tabs.length, vsync: this);
-    controller.animation?.addListener(listener);
-
-    if (widget.hideChangelog) return;
-
-    final info = PackageInfo.fromPlatform();
-    info.then((pkg) async {
-      final meta = await (db.metadata.select()..limit(1)).getSingleOrNull();
-      if (meta == null)
-        db.metadata.insertOne(
-          MetadataCompanion(buildNumber: Value(int.parse(pkg.buildNumber))),
-        );
-      else
-        db.metadata.update().write(
-              MetadataCompanion(
-                buildNumber: Value(int.parse(pkg.buildNumber)),
-              ),
-            );
-
-      if (int.parse(pkg.buildNumber) == meta?.buildNumber) return null;
-
-      if (mounted)
-        toast(
-          context,
-          "New version ${pkg.version}",
-          SnackBarAction(
-            label: 'Changes',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const WhatsNew(),
-              ),
-            ),
-          ),
-        );
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.animation?.removeListener(listener);
-    controller.dispose();
-    super.dispose();
-  }
-
-  void hideTab(BuildContext context, String tab) {
-    final state = context.read<SettingsState>();
-    final old = state.value.tabs;
-    var tabs = state.value.tabs.split(',');
-
-    if (tabs.length == 1) return toast(context, "Can't hide everything!");
-    tabs.remove(tab);
-    db.settings.update().write(
-          SettingsCompanion(
-            tabs: Value(tabs.join(',')),
-          ),
-        );
-    toast(
-      context,
-      'Hid $tab',
-      SnackBarAction(
-        label: 'Undo',
-        onPressed: () {
-          db.settings.update().write(
-                SettingsCompanion(
-                  tabs: Value(old),
-                ),
-              );
-        },
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final setting = context
-        .select<SettingsState, String>((settings) => settings.value.tabs);
-    final tabs = setting.split(',');
-    final scrollableTabs = context.select<SettingsState, bool>(
-      (settings) => settings.value.scrollableTabs,
-    );
-
-    if (tabs.length != controller.length) {
-      controller.animation?.removeListener(listener);
-      controller.dispose();
-      controller = TabController(length: tabs.length, vsync: this);
-      controller.animation?.addListener(listener);
-      if (index >= tabs.length) index = tabs.length - 1;
-      controller.index = index;
-    }
-
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      bottomSheet: tabs.contains('TimerPage')
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 48.0),
-              child: const TimerProgressIndicator(),
-            )
-          : null,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            TabBarView(
-              controller: controller,
-              physics: scrollableTabs
-                  ? const AlwaysScrollableScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
-              children: tabs.map((tab) {
-                if (tab == 'HistoryPage')
-                  return HistoryPage(tabController: controller);
-                else if (tab == 'PlansPage')
-                  return PlansPage(tabController: controller);
-                else if (tab == 'GraphsPage')
-                  return GraphsPage(tabController: controller);
-                else if (tab == 'TimerPage')
-                  return const TimerPage();
-                else if (tab == 'SettingsPage')
-                  return const SettingsPage();
-                else
-                  return ErrorWidget("Couldn't build tab content.");
-              }).toList(),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: BottomNav(
-                tabs: tabs,
-                currentIndex: index,
-                onTap: (index) {
-                  controller.animateTo(index);
-                  setState(() {
-                    this.index = index;
-                  });
-                },
-                onLongPress: hideTab,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

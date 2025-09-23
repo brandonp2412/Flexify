@@ -48,6 +48,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Swap workout'),
       ),

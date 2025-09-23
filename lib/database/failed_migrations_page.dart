@@ -12,6 +12,7 @@ class FailedMigrationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Failed migrations"),
           leading: const Icon(Icons.error),

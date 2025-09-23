@@ -38,7 +38,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Strength unit'),
-          value: settings.strengthUnit,
+          initialValue: settings.strengthUnit,
           items: const [
             DropdownMenuItem(
               value: "last-entry",
@@ -71,7 +71,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Cardio unit'),
-          value: settings.cardioUnit,
+          initialValue: settings.cardioUnit,
           items: const [
             DropdownMenuItem(
               value: "last-entry",
@@ -117,7 +117,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
                     DateFormat(settings.longDateFormat).format(DateTime.now());
 
               return DropdownButtonFormField<String>(
-                value: settings.longDateFormat,
+                initialValue: settings.longDateFormat,
                 items: long.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -143,7 +143,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
         child: Tooltip(
           message: 'For where space is cramped (Graph lines)',
           child: DropdownButtonFormField<String>(
-            value: settings.shortDateFormat,
+            initialValue: settings.shortDateFormat,
             items: short.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -173,6 +173,7 @@ class FormatSettings extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Formats"),
       ),

@@ -51,6 +51,7 @@ class _StrengthPageState extends State<StrengthPage> {
     final settings = context.watch<SettingsState>().value;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(name),
         leading: IconButton(

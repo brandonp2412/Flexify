@@ -149,6 +149,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Global progress"),
         actions: [

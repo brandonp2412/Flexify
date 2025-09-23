@@ -65,7 +65,7 @@ List<Widget> getPlanSettings(
         child: Tooltip(
           message: 'Right side of list displays in Plans + Plan view',
           child: DropdownButtonFormField<PlanTrailing>(
-            value: PlanTrailing.values.byName(
+            initialValue: PlanTrailing.values.byName(
               settings.planTrailing.replaceFirst('PlanTrailing.', ''),
             ),
             decoration: const InputDecoration(
@@ -149,6 +149,7 @@ class _PlanSettingsState extends State<PlanSettings> {
     settings = context.watch<SettingsState>().value;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Plans"),
       ),

@@ -29,6 +29,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.name),
       ),

@@ -87,6 +87,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           AppSearch(

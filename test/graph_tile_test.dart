@@ -26,6 +26,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: GraphTile(
               onSelect: (value) => null,
               selected: const {},

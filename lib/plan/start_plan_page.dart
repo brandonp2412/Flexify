@@ -58,6 +58,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final timerState = context.read<TimerState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(title),
         leading: IconButton(

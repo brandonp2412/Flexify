@@ -75,6 +75,7 @@ class DataSettings extends StatelessWidget {
     final settings = context.watch<SettingsState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Data management"),
       ),

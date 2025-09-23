@@ -41,6 +41,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
     settings = context.watch<SettingsState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Add exercise'),
       ),

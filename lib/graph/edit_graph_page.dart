@@ -37,6 +37,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Update all ${widget.name.toLowerCase()}"),
       ),
