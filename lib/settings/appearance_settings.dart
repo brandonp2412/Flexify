@@ -193,7 +193,20 @@ List<Widget> getAppearanceSettings(
             hideBottom: true,
             hideLeft: true,
             spots: const [FlSpot(0, 0.13), FlSpot(1, 5), FlSpot(2, 2)],
-            tooltipData: () => const LineTouchTooltipData(),
+            tooltipData: () => LineTouchTooltipData(
+              getTooltipColor: (touchedSpot) =>
+                  Theme.of(context).colorScheme.surface,
+              getTooltipItems: (touchedSpots) => touchedSpots
+                  .map(
+                    (spot) => LineTooltipItem(
+                      spot.y.toStringAsFixed(2),
+                      TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
             data: [
               CardioData(
                 created: DateTime.parse('2024-05-19 14:54:17.000'),
