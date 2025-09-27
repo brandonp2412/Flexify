@@ -25,13 +25,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController controller;
-  int index = 0;
-
-  void listener() {
-    setState(() {
-      index = controller.animation!.value.round();
-    });
-  }
 
   @override
   void initState() {
@@ -40,7 +33,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final setting = context.read<SettingsState>().value.tabs;
     final tabs = setting.split(',');
     controller = TabController(length: tabs.length, vsync: this);
-    controller.animation?.addListener(listener);
 
     if (widget.hideChangelog) return;
 
@@ -78,7 +70,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.animation?.removeListener(listener);
     controller.dispose();
     super.dispose();
   }
@@ -121,12 +112,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     if (tabs.length != controller.length) {
-      controller.animation?.removeListener(listener);
       controller.dispose();
       controller = TabController(length: tabs.length, vsync: this);
-      controller.animation?.addListener(listener);
-      if (index >= tabs.length) index = tabs.length - 1;
-      controller.index = index;
+      if (controller.index >= tabs.length) controller.index = tabs.length - 1;
     }
 
     return Scaffold(
@@ -168,16 +156,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               bottom: 0,
               left: 0,
               right: 0,
-              child: BottomNav(
-                tabs: tabs,
-                currentIndex: index,
-                onTap: (index) {
-                  controller.animateTo(index);
-                  setState(() {
-                    this.index = index;
-                  });
+              child: ValueListenableBuilder(
+                valueListenable: controller.animation!,
+                builder: (context, value, child) {
+                  return BottomNav(
+                    tabs: tabs,
+                    currentIndex: value.round(),
+                    onTap: (index) {
+                      controller.animateTo(index);
+                    },
+                    onLongPress: hideTab,
+                  );
                 },
-                onLongPress: hideTab,
               ),
             ),
           ],

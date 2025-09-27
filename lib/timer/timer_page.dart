@@ -16,11 +16,16 @@ class TimerPage extends StatefulWidget {
   createState() => TimerPageState();
 }
 
-class TimerPageState extends State<TimerPage> {
+class TimerPageState extends State<TimerPage>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final timerState = context.watch<TimerState>();
 
     return NavigatorPopHandler(

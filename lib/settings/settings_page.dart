@@ -22,7 +22,8 @@ class SettingsPage extends StatefulWidget {
   createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage>
+    with AutomaticKeepAliveClientMixin {
   final searchCtrl = TextEditingController();
 
   late final Setting settings;
@@ -34,7 +35,11 @@ class _SettingsPageState extends State<SettingsPage> {
   AudioPlayer? player;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
     if (searchCtrl.text.isNotEmpty) {
