@@ -133,7 +133,7 @@ Future<void> appWrapper() async {
   final settings = await (db.settings.select()..limit(1)).getSingle();
   final settingsState = SettingsState(settings);
 
-  runApp(app.appProviders(settingsState, hideChangelog: true));
+  runApp(app.appProviders(settingsState));
 }
 
 BuildContext getBuildContext(WidgetTester tester, String tabBarState) {

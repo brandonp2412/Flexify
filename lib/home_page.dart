@@ -16,8 +16,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  final bool hideChangelog;
-  const HomePage({super.key, required this.hideChangelog});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -34,13 +33,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final tabs = setting.split(',');
     controller = TabController(length: tabs.length, vsync: this);
 
-    if (widget.hideChangelog) return;
-
     final info = PackageInfo.fromPlatform();
     info.then((pkg) async {
       final meta = await (db.metadata.select()..limit(1)).getSingleOrNull();
       if (meta == null)
-        db.metadata.insertOne(
+        return db.metadata.insertOne(
           MetadataCompanion(buildNumber: Value(int.parse(pkg.buildNumber))),
         );
       else
@@ -50,7 +47,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             );
 
-      if (int.parse(pkg.buildNumber) == meta?.buildNumber) return null;
+      if (int.parse(pkg.buildNumber) == meta.buildNumber) return null;
 
       if (mounted)
         toast(

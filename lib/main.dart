@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-Future<void> main({bool hideChangelog = false}) async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Setting setting;
@@ -22,7 +22,7 @@ Future<void> main({bool hideChangelog = false}) async {
   }
 
   final state = SettingsState(setting);
-  runApp(appProviders(state, hideChangelog: hideChangelog));
+  runApp(appProviders(state));
 }
 
 AppDatabase db = AppDatabase();
@@ -30,19 +30,17 @@ AppDatabase db = AppDatabase();
 MethodChannel androidChannel =
     const MethodChannel("com.presley.flexify/android");
 
-Widget appProviders(SettingsState state, {required bool hideChangelog}) =>
-    MultiProvider(
+Widget appProviders(SettingsState state) => MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => state),
         ChangeNotifierProvider(create: (context) => TimerState()),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],
-      child: App(hideChangelog: hideChangelog),
+      child: App(),
     );
 
 class App extends StatelessWidget {
-  final bool hideChangelog;
-  const App({super.key, required this.hideChangelog});
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +102,7 @@ class App extends StatelessWidget {
             ),
           ),
           themeMode: mode,
-          home: HomePage(hideChangelog: hideChangelog),
+          home: HomePage(),
         );
       },
     );
