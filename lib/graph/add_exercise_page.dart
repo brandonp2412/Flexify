@@ -75,6 +75,14 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     value: 'stone',
                     child: Text("Stone"),
                   ),
+                  DropdownMenuItem(
+                    value: 'km',
+                    child: Text("Kilometers (km)"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'mi',
+                    child: Text("Miles (mi)"),
+                  ),
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
