@@ -273,43 +273,36 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   List<DropdownMenuItem<String>> _getUnitItems() {
-    if (cardio) {
-      // Cardio units: distance and energy
-      return const [
-        DropdownMenuItem(
-          value: 'km',
-          child: Text("Kilometers (km)"),
-        ),
-        DropdownMenuItem(
-          value: 'mi',
-          child: Text("Miles (mi)"),
-        ),
-        DropdownMenuItem(
-          value: 'm',
-          child: Text("Meters (m)"),
-        ),
-        DropdownMenuItem(
-          value: 'kcal',
-          child: Text("Kilocalories (kcal)"),
-        ),
-      ];
-    } else {
-      // Strength units: weight
-      return const [
-        DropdownMenuItem(
-          value: 'kg',
-          child: Text("Kilograms (kg)"),
-        ),
-        DropdownMenuItem(
-          value: 'lb',
-          child: Text("Pounds (lb)"),
-        ),
-        DropdownMenuItem(
-          value: 'stone',
-          child: Text("Stone"),
-        ),
-      ];
-    }
+    return const [
+      DropdownMenuItem(
+        value: 'kg',
+        child: Text("Kilograms (kg)"),
+      ),
+      DropdownMenuItem(
+        value: 'lb',
+        child: Text("Pounds (lb)"),
+      ),
+      DropdownMenuItem(
+        value: 'stone',
+        child: Text("Stone"),
+      ),
+      DropdownMenuItem(
+        value: 'km',
+        child: Text("Kilometers (km)"),
+      ),
+      DropdownMenuItem(
+        value: 'mi',
+        child: Text("Miles (mi)"),
+      ),
+      DropdownMenuItem(
+        value: 'm',
+        child: Text("Meters (m)"),
+      ),
+      DropdownMenuItem(
+        value: 'kcal',
+        child: Text("Kilocalories (kcal)"),
+      ),
+    ];
   }
 
   @override
