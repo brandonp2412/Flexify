@@ -2,10 +2,12 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 List<Widget> getWorkoutSettings(
+  BuildContext context,
   String term,
   Setting settings,
 ) {
@@ -111,11 +113,15 @@ List<Widget> getWorkoutSettings(
         child: ListTile(
           title: const Text('Notifications'),
           leading: const Icon(Icons.notifications),
-          onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  notifications: Value(!settings.notifications),
-                ),
-              ),
+          onTap: () {
+            db.settings.update().write(
+                  SettingsCompanion(
+                    notifications: Value(!settings.notifications),
+                  ),
+                );
+            if (!settings.notifications)
+              toast(context, 'Positive messages appear now like this!');
+          },
           trailing: Switch(
             value: settings.notifications,
             onChanged: (value) => db.settings
@@ -189,7 +195,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
         title: const Text("Workouts"),
       ),
       body: ListView(
-        children: getWorkoutSettings('', settings),
+        children: getWorkoutSettings(context, '', settings),
       ),
     );
   }

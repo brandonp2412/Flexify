@@ -49,6 +49,7 @@ class _SettingsPageState extends State<SettingsPage>
       filtered.addAll(getFormatSettings(searchCtrl.text, settings.value));
       filtered.addAll(
         getWorkoutSettings(
+          context,
           searchCtrl.text,
           settings.value,
         ),
