@@ -60,16 +60,29 @@ class _TabSettingsState extends State<TabSettings> {
         padding: const EdgeInsets.all(8),
         child: material.Column(
           children: [
-            SwitchListTile(
-              title: const Text("Scrollable Tabs"),
-              value: settings.value.scrollableTabs,
-              onChanged: (value) {
-                db.settings.update().write(
-                      SettingsCompanion(
-                        scrollableTabs: Value(value),
-                      ),
-                    );
-              },
+            ListTile(
+              title: material.Row(
+                children: [
+                  const Icon(Icons.swipe),
+                  SizedBox(width: 8),
+                  const Text("Swipe between tabs"),
+                ],
+              ),
+              onTap: () => db.settings.update().write(
+                    SettingsCompanion(
+                      scrollableTabs: Value(!settings.value.scrollableTabs),
+                    ),
+                  ),
+              leading: Switch(
+                value: settings.value.scrollableTabs,
+                onChanged: (value) {
+                  db.settings.update().write(
+                        SettingsCompanion(
+                          scrollableTabs: Value(value),
+                        ),
+                      );
+                },
+              ),
             ),
             Expanded(
               child: ReorderableListView.builder(
@@ -94,7 +107,13 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: const Text("History"),
+                      title: material.Row(
+                        children: [
+                          const Icon(Icons.history),
+                          SizedBox(width: 8),
+                          const Text("History"),
+                        ],
+                      ),
                       trailing: ReorderableDragStartListener(
                         index: index,
                         child: const Icon(Icons.drag_handle),
@@ -108,7 +127,13 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: const Text("Plans"),
+                      title: material.Row(
+                        children: [
+                          const Icon(Icons.calendar_today_outlined),
+                          SizedBox(width: 8),
+                          const Text("Plans"),
+                        ],
+                      ),
                       trailing: ReorderableDragStartListener(
                         index: index,
                         child: const Icon(Icons.drag_handle),
@@ -122,7 +147,13 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: const Text("Graphs"),
+                      title: material.Row(
+                        children: [
+                          const Icon(Icons.insights_rounded),
+                          SizedBox(width: 8),
+                          const Text("Graphs"),
+                        ],
+                      ),
                       trailing: ReorderableDragStartListener(
                         index: index,
                         child: const Icon(Icons.drag_handle),
@@ -136,7 +167,13 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: const Text("Timer"),
+                      title: material.Row(
+                        children: [
+                          const Icon(Icons.timer),
+                          SizedBox(width: 8),
+                          const Text("Timer"),
+                        ],
+                      ),
                       trailing: ReorderableDragStartListener(
                         index: index,
                         child: const Icon(Icons.drag_handle),
@@ -150,7 +187,13 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: const Text("Settings"),
+                      title: material.Row(
+                        children: [
+                          const Icon(Icons.settings),
+                          SizedBox(width: 8),
+                          const Text("Settings"),
+                        ],
+                      ),
                       trailing: ReorderableDragStartListener(
                         index: index,
                         child: const Icon(Icons.drag_handle),
