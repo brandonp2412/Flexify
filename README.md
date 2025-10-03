@@ -127,10 +127,6 @@ from1To2: (Migrator m, Schema2 schema) async {
 },
 ```
 
-## Contributing
-
-All issues and pull requests are welcome. We don't care what style it's in, we don't care what your variable names are.
-
 ## License
 
 Flexify is licensed under the [MIT License](LICENSE.md).
