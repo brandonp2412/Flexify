@@ -193,7 +193,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
       exercises: exercises
           .where((element) => element.enabled.value)
           .map((element) => element.exercise.value)
-          .join(','),
+          .join('~'),
       title: Value(titleCtrl.text),
     );
 

@@ -45,7 +45,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? category;
   String? image;
 
-  late List<String> exercises = widget.plan.exercises.split(',');
+  late List<String> exercises = widget.plan.exercises.split('~');
   late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
@@ -416,7 +416,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index == -1) return Navigator.pop(context);
 
     final plan = planState.plans[index];
-    final split = plan.exercises.split(',');
+    final split = plan.exercises.split('~');
 
     if (!mounted) return;
     setState(() {
