@@ -119,7 +119,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                               ..where((tbl) => tbl.id.equals(widget.planId)))
                             .getSingle();
 
-                        final exercisesList = plan.exercises.split(',');
+                        final exercisesList = plan.exercises.split('~');
                         final oldExerciseIndex =
                             exercisesList.indexOf(widget.exercise);
 
