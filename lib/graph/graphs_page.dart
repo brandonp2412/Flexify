@@ -80,7 +80,7 @@ class GraphsPageState extends State<GraphsPage>
 
     final plans = await db.plans.select().get();
     for (final plan in plans) {
-      final exercises = plan.exercises.split(',');
+      final exercises = plan.exercises.split('~');
       exercises.removeWhere(
         (exercise) => copy.contains(exercise),
       );

@@ -101,7 +101,7 @@ class PlanTile extends StatelessWidget {
       ),
       child: ListTile(
         title: title,
-        subtitle: Text(plan.exercises.split(',').join(', ')),
+        subtitle: Text(plan.exercises.split('~').join(', ')),
         leading: leading,
         trailing: Builder(
           builder: (context) {
