@@ -202,22 +202,53 @@ class _StartPlanPageState extends State<StartPlanPage>
       ),
       Row(
         children: [
-          Expanded(
-            child: TextFormField(
-              textInputAction: TextInputAction.next,
-              controller: distance,
-              decoration: const InputDecoration(labelText: 'Distance'),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              onFieldSubmitted: (value) => selectAll(incline),
-              onTap: () => selectAll(distance),
-              validator: (value) {
-                if (value == null || value.isEmpty) return null;
-                if (double.tryParse(value) == null) return 'Invalid number';
-                return null;
-              },
+          if (unit == 'kg' || unit == 'lb' || unit == 'stone')
+            material.Expanded(
+              child: TextFormField(
+                controller: weight,
+                decoration: InputDecoration(
+                  labelText: 'Weight ($unit)',
+                  suffixIcon: Selector<SettingsState, bool>(
+                    selector: (context, settings) =>
+                        settings.value.showBodyWeight,
+                    builder: (context, showBodyWeight, child) => Visibility(
+                      visible: showBodyWeight,
+                      child: IconButton(
+                        tooltip: "Use body weight",
+                        icon: const Icon(Icons.scale),
+                        onPressed: useBodyWeight,
+                      ),
+                    ),
+                  ),
+                ),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onTap: () => selectAll(weight),
+                onFieldSubmitted: (value) async => await save(timerState),
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Required';
+                  if (double.tryParse(value) == null) return 'Invalid number';
+                  return null;
+                },
+              ),
+            )
+          else
+            Expanded(
+              child: TextFormField(
+                textInputAction: TextInputAction.next,
+                controller: distance,
+                decoration: const InputDecoration(labelText: 'Distance'),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onFieldSubmitted: (value) => selectAll(incline),
+                onTap: () => selectAll(distance),
+                validator: (value) {
+                  if (value == null || value.isEmpty) return null;
+                  if (double.tryParse(value) == null) return 'Invalid number';
+                  return null;
+                },
+              ),
             ),
-          ),
           const SizedBox(width: 8.0),
           Expanded(
             child: TextFormField(
@@ -401,13 +432,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     category = gymSet.category;
     image = gymSet.image;
     notes.text = gymSet.notes ?? "";
-
-    final settings = context.read<SettingsState>().value;
-    if (cardio && (unit == 'kg' || unit == 'lb')) {
-      unit = settings.cardioUnit;
-    } else if (!cardio && (unit == 'km' || unit == 'mi')) {
-      unit = settings.strengthUnit;
-    }
   }
 
   void planChanged() {
