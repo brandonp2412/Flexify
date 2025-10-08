@@ -78,11 +78,11 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                     startX + (endX - startX) * _slideAnimation.value;
 
                 return Positioned(
-                  left: currentX + (tabWidth - 80) / 2,
+                  left: currentX + 4,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    width: 80,
+                    width: tabWidth - 8,
                     height: 80,
                     decoration: BoxDecoration(
                       color: Theme.of(context)
