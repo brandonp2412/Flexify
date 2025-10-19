@@ -386,10 +386,29 @@ class AppDatabase extends _$AppDatabase {
         from42To43: (Migrator m, Schema43 schema) async {
           await m.addColumn(schema.settings, schema.settings.scrollableTabs);
         },
+        from43To44: (Migrator m, Schema44 schema) async {
+          final plans = await (schema.plans.select()).get();
+          await batch(
+            (b) {
+              for (final plan in plans) {
+                final planId = plan.read<int>('id');
+
+                String sql;
+                sql = '''
+                DELETE FROM plan_exercises
+                WHERE plan_id = $planId
+                AND enabled = false;
+                ''';
+
+                b.customStatement(sql);
+              }
+            },
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 43;
+  int get schemaVersion => 44;
 }
