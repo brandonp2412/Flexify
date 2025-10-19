@@ -45,7 +45,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? category;
   String? image;
 
-  late List<String> exercises = widget.plan.exercises.split('~');
+  late List<String> exercises = [];
   late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
@@ -56,6 +56,12 @@ class _StartPlanPageState extends State<StartPlanPage>
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     planState = context.watch<PlanState>();
     final timerState = context.read<TimerState>();
+
+    if (exercises.isEmpty) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -370,6 +376,28 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
 
+    planState = context.read<PlanState>();
+    unit = context.read<SettingsState>().value.strengthUnit;
+    title = widget.plan.title?.isNotEmpty == true
+        ? widget.plan.title!
+        : widget.plan.days.replaceAll(",", ", ");
+
+    _loadExercises();
+  }
+
+  Future<void> _loadExercises() async {
+    List<String> temp = [];
+    await planState.setExercises(widget.plan.toCompanion(false));
+    temp = planState.exercises
+        .where((pe) => pe.enabled.value)
+        .map((exercise) => exercise.exercise.value)
+        .toList();
+    setState(() {
+      exercises = temp;
+    });
+
+    if (!mounted) return;
+
     final lastIndex = planState.lastSets
         .indexWhere((element) => element.name == exercises[0]);
     if (lastIndex != -1) {
@@ -416,7 +444,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index == -1) return Navigator.pop(context);
 
     final plan = planState.plans[index];
-    final split = plan.exercises.split('~');
+    final split = planState.exercises
+        .where((pe) => pe.enabled.value)
+        .map((exercise) => exercise.exercise.value)
+        .toList();
 
     if (!mounted) return;
     setState(() {

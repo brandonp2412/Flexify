@@ -15,6 +15,7 @@ class PlanTile extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final Function(int) onSelect;
   final Set<int> selected;
+  final String exercises;
   const PlanTile({
     super.key,
     required this.plan,
@@ -23,6 +24,7 @@ class PlanTile extends StatelessWidget {
     required this.navigatorKey,
     required this.onSelect,
     required this.selected,
+    required this.exercises,
   });
 
   @override
@@ -101,7 +103,7 @@ class PlanTile extends StatelessWidget {
       ),
       child: ListTile(
         title: title,
-        subtitle: Text(plan.exercises.split('~').join(', ')),
+        subtitle: Text(exercises),
         leading: leading,
         trailing: Builder(
           builder: (context) {

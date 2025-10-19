@@ -80,12 +80,9 @@ class GraphsPageState extends State<GraphsPage>
 
     final plans = await db.plans.select().get();
     for (final plan in plans) {
-      final exercises = plan.exercises.split('~');
-      exercises.removeWhere(
-        (exercise) => copy.contains(exercise),
-      );
-      final updated = exercises.join(',');
-      await db.update(db.plans).replace(plan.copyWith(exercises: updated));
+      db
+          .delete(db.planExercises)
+          .where((x) => x.planId.equals(plan.id) & x.exercise.isIn(copy));
     }
     state.updatePlans(null);
   }

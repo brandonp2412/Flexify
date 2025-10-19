@@ -47,6 +47,8 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<PlanState>();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -119,7 +121,12 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                               ..where((tbl) => tbl.id.equals(widget.planId)))
                             .getSingle();
 
-                        final exercisesList = plan.exercises.split('~');
+                        late List<String> exercisesList;
+                        await state.setExercises(plan.toCompanion(false));
+                        exercisesList = state.exercises
+                            .where((pe) => pe.enabled.value)
+                            .map((exercise) => exercise.exercise.value)
+                            .toList();
                         final oldExerciseIndex =
                             exercisesList.indexOf(widget.exercise);
 
@@ -139,7 +146,6 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
                         if (!context.mounted) return;
 
-                        final state = context.read<PlanState>();
                         state.updatePlans(null);
                         Navigator.pop(context, true);
                       },
