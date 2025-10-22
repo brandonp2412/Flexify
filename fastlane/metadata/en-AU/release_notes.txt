@@ -1,2 +1,1 @@
-• Fix distance field showing for cardio sets with a weight unit
-• Fix history list display for cardio exercises with a weight
+
