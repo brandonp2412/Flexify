@@ -17,11 +17,55 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
+    await (db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 2,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+        category: Value("Chest"),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Barbell row',
+        reps: 5,
+        weight: 60,
+        unit: 'kg',
+        created: DateTime.now(),
+        category: Value("Shoulders"),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Squat',
+        reps: 7,
+        weight: 100,
+        unit: 'kg',
+        created: DateTime.now(),
+        category: Value("Legs"),
+      ),
+    ]));
+
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
       exercises: 'Bench press,Barbell row,Squat',
     );
     final id = await (db.plans.insertOne(planCompanion));
+    await db.planExercises.insertAll([
+      PlanExercisesCompanion.insert(
+        planId: id,
+        exercise: 'Bench press',
+        enabled: true,
+      ),
+      PlanExercisesCompanion.insert(
+        planId: id,
+        exercise: 'Barbell row',
+        enabled: true,
+      ),
+      PlanExercisesCompanion.insert(
+        planId: id,
+        exercise: 'Squat',
+        enabled: true,
+      ),
+    ]);
     final plan =
         await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
 
@@ -40,6 +84,8 @@ void main() async {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     expect(find.textContaining("Monday, tuesday, wednesday"), findsOne);
     expect(find.textContaining("Bench press"), findsOne);
@@ -53,11 +99,57 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
+    await (db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 2,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+        category: Value("Chest"),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Barbell row',
+        reps: 5,
+        weight: 60,
+        unit: 'kg',
+        created: DateTime.now(),
+        category: Value("Shoulders"),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Squat',
+        reps: 7,
+        weight: 100,
+        unit: 'kg',
+        created: DateTime.now(),
+        category: Value("Legs"),
+      ),
+    ]));
+
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
       exercises: 'Bench press,Barbell row,Squat',
     );
     final id = await (db.plans.insertOne(planCompanion));
+
+    await db.planExercises.insertAll([
+      PlanExercisesCompanion.insert(
+        planId: id,
+        exercise: 'Bench press',
+        enabled: true,
+      ),
+      PlanExercisesCompanion.insert(
+        planId: id,
+        exercise: 'Barbell row',
+        enabled: true,
+      ),
+      PlanExercisesCompanion.insert(
+        planId: id,
+        exercise: 'Squat',
+        enabled: true,
+      ),
+    ]);
+
     final plan =
         await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
 
@@ -76,6 +168,8 @@ void main() async {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('Barbell row'));
     await tester.pumpAndSettle();
@@ -137,6 +231,8 @@ void main() async {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
