@@ -9,7 +9,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlansList extends StatelessWidget {
+class PlansList extends StatefulWidget {
   final List<Plan> plans;
   final GlobalKey<NavigatorState> navKey;
   final Set<int> selected;
@@ -28,19 +28,66 @@ class PlansList extends StatelessWidget {
   });
 
   @override
+  State<PlansList> createState() => _PlansListState();
+}
+
+class _PlansListState extends State<PlansList> {
+  Map<int, String>? exercisesMap;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExercises();
+  }
+
+  @override
+  void didUpdateWidget(PlansList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.plans != oldWidget.plans) {
+      _loadExercises();
+    }
+  }
+
+  Future<void> _loadExercises() async {
+    final tempMap = <int, String>{};
+
+    // 1. Iterate through plans and generate the exercise summary string.
+    for (final plan in widget.plans) {
+      // 2. Query PlanExercises table directly for the current plan ID.
+      // This is the essential part: querying the DB for the summary without
+      // touching the PlanState's 'exercises' list or calling notifyListeners.
+      final planExercises = await (db.planExercises.select()
+            ..where(
+              (tbl) => tbl.planId.equals(plan.id) & tbl.enabled.equals(true),
+            ))
+          .get();
+
+      tempMap[plan.id] =
+          planExercises.map((pe) => pe.exercise).toList().join(', ');
+    }
+
+    // 3. Update the UI only once all data is ready
+    if (mounted) {
+      setState(() {
+        exercisesMap = tempMap;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
     final state = context.watch<PlanState>();
 
-    if (plans.isEmpty)
+    if (widget.plans.isEmpty)
       return ListTile(
         title: const Text("No plans found"),
-        subtitle: Text("Tap to create $search"),
+        subtitle: Text("Tap to create ${widget.search}"),
         onTap: () async {
           final plan = PlansCompanion(
             days: const drift.Value(''),
             exercises: const drift.Value(''),
-            title: drift.Value(search),
+            title: drift.Value(widget.search),
           );
           await state.setExercises(plan);
           if (context.mounted)
@@ -59,19 +106,21 @@ class PlansList extends StatelessWidget {
 
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
-        scrollController: scroll,
-        itemCount: plans.length,
+        scrollController: widget.scroll,
+        itemCount: widget.plans.length,
         padding: const EdgeInsets.only(bottom: 96, top: 16),
         itemBuilder: (context, index) {
-          final plan = plans[index];
+          final plan = widget.plans[index];
+
           return PlanTile(
             key: Key(plan.id.toString()),
             plan: plan,
             weekday: weekday,
             index: index,
-            navigatorKey: navKey,
-            selected: selected,
-            onSelect: (id) => onSelect(id),
+            navigatorKey: widget.navKey,
+            selected: widget.selected,
+            exercises: exercisesMap![plan.id] ?? '',
+            onSelect: (id) => widget.onSelect(id),
           );
         },
         onReorder: (int old, int idx) async {
@@ -79,15 +128,16 @@ class PlansList extends StatelessWidget {
             idx--;
           }
 
-          final temp = plans[old];
-          plans.removeAt(old);
-          plans.insert(idx, temp);
+          final temp = widget.plans[old];
+          widget.plans.removeAt(old);
+          widget.plans.insert(idx, temp);
 
           final state = context.read<PlanState>();
-          state.updatePlans(plans);
+          state.updatePlans(widget.plans);
+          await _loadExercises();
           await db.transaction(() async {
-            for (int i = 0; i < plans.length; i++) {
-              final plan = plans[i];
+            for (int i = 0; i < widget.plans.length; i++) {
+              final plan = widget.plans[i];
               final updated =
                   plan.toCompanion(false).copyWith(sequence: drift.Value(i));
               await db.update(db.plans).replace(updated);
@@ -97,19 +147,20 @@ class PlansList extends StatelessWidget {
       );
 
     return ListView.builder(
-      controller: scroll,
-      itemCount: plans.length,
+      controller: widget.scroll,
+      itemCount: widget.plans.length,
       padding: const EdgeInsets.only(bottom: 96, top: 8),
       itemBuilder: (context, index) {
-        final plan = plans[index];
+        final plan = widget.plans[index];
 
         return PlanTile(
           plan: plan,
           weekday: weekday,
           index: index,
-          navigatorKey: navKey,
-          selected: selected,
-          onSelect: (id) => onSelect(id),
+          navigatorKey: widget.navKey,
+          selected: widget.selected,
+          exercises: exercisesMap![plan.id] ?? '',
+          onSelect: (id) => widget.onSelect(id),
         );
       },
     );

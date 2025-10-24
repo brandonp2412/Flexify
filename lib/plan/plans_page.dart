@@ -98,10 +98,11 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   )
                   .toList();
 
-              final summaries = plans.map((plan) {
+              final summaries = plans.map((plan) async {
                 final days = plan.days.split(',').join(', ');
-                final exercises = plan.exercises
-                    .split(',')
+                await state?.setExercises(plan.toCompanion(false));
+                final exercises = state?.exercises
+                    .where((pe) => pe.enabled.value)
                     .map((exercise) => "- $exercise")
                     .join('\n');
 
