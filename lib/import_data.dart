@@ -357,9 +357,35 @@ class ImportData extends StatelessWidget {
           throw Exception('Error processing row ${rows.indexOf(row) + 1}: $e');
         }
       }
-
+      List<PlanExercisesCompanion> planExercisesToInsert = [];
       await db.plans.deleteAll();
-      await db.plans.insertAll(plans);
+      await db.planExercises.deleteAll();
+      final allExercises = (await db.gymSets.select().get())
+          .map((gymSet) => gymSet.name)
+          .toSet()
+          .toList();
+      for (var planCompanion in plans) {
+        // Insert the Plan and get the auto-generated ID
+        String exercises = planCompanion.exercises.value;
+        planCompanion = planCompanion.copyWith(exercises: const Value(''));
+        final newPlanId = await db.plans.insertOne(planCompanion);
+
+        // 4. Create and insert PlanExercises records for the newly created Plan
+        planExercisesToInsert.addAll(
+          exercises
+              .split(',')
+              .where((exercise) => allExercises.contains(exercise))
+              .map((exerciseName) {
+            return PlanExercisesCompanion(
+              planId: Value(newPlanId),
+              exercise: Value(exerciseName.trim()),
+              enabled: const Value(true),
+            );
+          }).toList(),
+        );
+      }
+
+      await db.planExercises.insertAll(planExercisesToInsert);
 
       if (!ctx.mounted) return;
       ctx.read<PlanState>().updatePlans(null);

@@ -119,7 +119,7 @@ class _PlansListState extends State<PlansList> {
             index: index,
             navigatorKey: widget.navKey,
             selected: widget.selected,
-            exercises: exercisesMap![plan.id] ?? '',
+            exercises: exercisesMap?[plan.id] ?? '',
             onSelect: (id) => widget.onSelect(id),
           );
         },
@@ -159,7 +159,7 @@ class _PlansListState extends State<PlansList> {
           index: index,
           navigatorKey: widget.navKey,
           selected: widget.selected,
-          exercises: exercisesMap![plan.id] ?? '',
+          exercises: exercisesMap?[plan.id] ?? '',
           onSelect: (id) => widget.onSelect(id),
         );
       },
