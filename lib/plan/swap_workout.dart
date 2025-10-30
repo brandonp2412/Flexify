@@ -117,33 +117,6 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                           ),
                         );
 
-                        final plan = await (db.plans.select()
-                              ..where((tbl) => tbl.id.equals(widget.planId)))
-                            .getSingle();
-
-                        late List<String> exercisesList;
-                        await state.setExercises(plan.toCompanion(false));
-                        exercisesList = state.exercises
-                            .where((pe) => pe.enabled.value)
-                            .map((exercise) => exercise.exercise.value)
-                            .toList();
-                        final oldExerciseIndex =
-                            exercisesList.indexOf(widget.exercise);
-
-                        if (oldExerciseIndex != -1) {
-                          exercisesList[oldExerciseIndex] = exercise;
-                        }
-
-                        final newExercisesString = exercisesList.join(',');
-
-                        await (db.plans.update()
-                              ..where((tbl) => tbl.id.equals(widget.planId)))
-                            .write(
-                          PlansCompanion(
-                            exercises: drift.Value(newExercisesString),
-                          ),
-                        );
-
                         if (!context.mounted) return;
 
                         state.updatePlans(null);

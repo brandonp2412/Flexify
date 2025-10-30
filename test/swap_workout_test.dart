@@ -17,8 +17,10 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
-    final plans = await (db.plans.select()).get();
-    final exercise = plans.first.exercises.split(',').first;
+    final plan = await (db.plans.select()..limit(1)).getSingle();
+    final planExercises = await (db.planExercises.select()
+          ..where((u) => u.planId.equals(plan.id)))
+        .get();
 
     await tester.pumpWidget(
       MultiProvider(
@@ -29,7 +31,10 @@ void main() async {
         ],
         child: MaterialApp(
           home: Scaffold(
-            body: SwapWorkout(exercise: exercise, planId: plans.first.id),
+            body: SwapWorkout(
+              exercise: planExercises.first.exercise,
+              planId: plan.id,
+            ),
           ),
         ),
       ),

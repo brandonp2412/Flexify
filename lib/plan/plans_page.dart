@@ -62,29 +62,58 @@ class _PlansPageWidget extends StatefulWidget {
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
   PlanState? state;
   String search = '';
+  List<Plan>? filtered;
 
   final Set<int> selected = {};
   final scroll = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
-    final terms =
-        search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
-    List<Plan>? filtered;
-    state = context.watch<PlanState>();
+  void initState() {
+    super.initState();
+    state = context.read<PlanState>();
+    state?.addListener(_onPlansStateChanged);
+    _filterPlans();
+  }
 
-    if (state != null) {
-      Iterable<Plan> filter = state!.plans;
+  @override
+  void dispose() {
+    state?.removeListener(_onPlansStateChanged);
+    super.dispose();
+  }
 
-      for (final term in terms) {
-        filter = filter.where(
-          (element) =>
-              element.days.toLowerCase().contains(term.toLowerCase()) ||
-              element.exercises.toLowerCase().contains(term.toLowerCase()),
-        );
+  void _onPlansStateChanged() {
+    _filterPlans();
+  }
+
+  Future<void> _filterPlans() async {
+    if (state == null) return;
+
+    final allPlans = state!.plans;
+    List<Plan> tempFiltered = [];
+
+    for (final plan in allPlans) {
+      bool matches = plan.days.toLowerCase().contains(search.toLowerCase());
+      if (!matches && search.isNotEmpty) {
+        final planExercises = await (db.planExercises.select()
+              ..where(
+                (tbl) =>
+                    tbl.planId.equals(plan.id) & tbl.exercise.like('%$search%'),
+              ))
+            .get();
+        matches = planExercises.isNotEmpty;
       }
-      filtered = filter.toList();
+      if (matches) {
+        tempFiltered.add(plan);
+      }
     }
+    setState(() {
+      filtered = tempFiltered;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    state = context.watch<PlanState>(); // Watch for changes to rebuild
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -98,18 +127,21 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   )
                   .toList();
 
-              final summaries = plans.map((plan) async {
-                final days = plan.days.split(',').join(', ');
-                await state?.setExercises(plan.toCompanion(false));
-                final exercises = state?.exercises
-                    .where((pe) => pe.enabled.value)
-                    .map((exercise) => "- $exercise")
-                    .join('\n');
+              final summaries = await Future.wait(
+                plans.map((plan) async {
+                  final days = plan.days.split(',').join(', ');
+                  await state?.setExercises(plan.toCompanion(false));
+                  final exercises = state?.exercises
+                      .where((pe) => pe.enabled.value)
+                      .map((pe) => "- ${pe.exercise.value}")
+                      .join('\n');
 
-                return "$days:\n$exercises";
-              }).join('\n\n');
+                  return "$days:\n$exercises";
+                }),
+              );
 
-              await SharePlus.instance.share(ShareParams(text: summaries));
+              await SharePlus.instance
+                  .share(ShareParams(text: summaries.join('\n\n')));
               setState(() {
                 selected.clear();
               });
@@ -117,6 +149,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             onChange: (value) {
               setState(() {
                 search = value;
+                _filterPlans(); // Re-filter when search changes
               });
             },
             onClear: () => setState(() {
@@ -180,7 +213,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         onPressed: () async {
           const plan = PlansCompanion(
             days: drift.Value(''),
-            exercises: drift.Value(''),
           );
           await state!.setExercises(plan);
           if (context.mounted)
@@ -198,10 +230,5 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         scroll: scroll,
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 }
