@@ -66,38 +66,28 @@ const defaultPlans = [
   PlansCompanion(
     id: Value(1),
     days: Value('Monday'),
-    exercises: Value(
-      'Deadlift,Lat pull-down,Barbell bent-over row,Barbell biceps curl',
-    ),
   ),
   PlansCompanion(
     id: Value(2),
     days: Value('Wednesday'),
-    exercises: Value(
-      'Barbell bench press,Barbell shoulder press,Chest fly,Dumbbell lateral raise,Triceps extension',
-    ),
   ),
   PlansCompanion(
     id: Value(3),
     days: Value('Friday'),
-    exercises: Value('Squat,Leg press,Leg curl,Seated calf raise'),
   ),
 ];
 
 final defaultPlanExercises = defaultPlans
-    .map((plan) {
-      final exercises = plan.exercises.value.split(',');
-      return defaultExercises
-          .where((exercise) => exercises.contains(exercise.$1))
-          .map(
-            (exercise) => PlanExercisesCompanion.insert(
-              planId: plan.id.value,
-              exercise: exercise.$1,
-              enabled: exercises.contains(exercise.$1),
-              timers: const Value(true),
-            ),
-          );
-    })
+    .map(
+      (plan) => defaultExercises.map(
+        (exercise) => PlanExercisesCompanion.insert(
+          planId: plan.id.value,
+          exercise: exercise.$1,
+          enabled: true,
+          timers: const Value(true),
+        ),
+      ),
+    )
     .toList()
     .expand(
       (element) => element,

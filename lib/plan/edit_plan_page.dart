@@ -190,7 +190,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),
-      exercises: '',
       title: Value(titleCtrl.text),
     );
 

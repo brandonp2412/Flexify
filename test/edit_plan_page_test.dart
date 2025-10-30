@@ -18,13 +18,36 @@ void main() async {
     db = AppDatabase(NativeDatabase.memory());
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final planState = PlanState();
+
     const plan = PlansCompanion(
       days: Value('Monday,Tuesday,Wednesday'),
-      exercises: Value('Arnold press,Back extension,Barbell bench press'),
       sequence: Value(1),
       title: Value('Test title'),
       id: Value(1),
     );
+    final planExercises = [
+      PlanExercisesCompanion.insert(
+        enabled: true,
+        exercise: 'Arnold press',
+        planId: 1,
+      ),
+      PlanExercisesCompanion.insert(
+        enabled: true,
+        exercise: 'Back extension',
+        planId: 1,
+      ),
+      PlanExercisesCompanion.insert(
+        enabled: true,
+        exercise: 'Barbell bench press',
+        planId: 1,
+      ),
+    ];
+
+    await db.plans.deleteAll();
+    await db.planExercises.deleteAll();
+    await db.plans.insertOne(plan);
+    await db.planExercises.insertAll(planExercises);
+
     planState.setExercises(plan);
     await tester.pumpWidget(
       MultiProvider(
@@ -67,10 +90,31 @@ void main() async {
 
     const plan = PlansCompanion(
       days: Value('Monday,Tuesday,Wednesday'),
-      exercises: Value('Arnold press,Back extension,Barbell bench press'),
       sequence: Value(1),
       title: Value('Test title'),
+      id: Value(1),
     );
+    final planExercises = [
+      PlanExercisesCompanion.insert(
+        enabled: true,
+        exercise: 'Arnold press',
+        planId: 1,
+      ),
+      PlanExercisesCompanion.insert(
+        enabled: true,
+        exercise: 'Back extension',
+        planId: 1,
+      ),
+      PlanExercisesCompanion.insert(
+        enabled: true,
+        exercise: 'Barbell bench press',
+        planId: 1,
+      ),
+    ];
+
+    await db.plans.insertOne(plan);
+    await db.planExercises.insertAll(planExercises);
+
     final planState = PlanState();
     await planState.setExercises(plan);
 

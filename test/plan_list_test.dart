@@ -19,8 +19,8 @@ void main() async {
     db = AppDatabase(NativeDatabase.memory());
     final planId = await db.plans.insertOne(
       PlansCompanion.insert(
+        id: Value(1),
         days: 'Monday',
-        exercises: 'Bench press',
       ),
     );
 
@@ -49,7 +49,6 @@ void main() async {
                   days: "Monday",
                   id: planId,
                   sequence: 2,
-                  exercises: "Bench press",
                 ),
               ],
               onSelect: (value) {},

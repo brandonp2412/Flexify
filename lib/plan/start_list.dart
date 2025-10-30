@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StartList extends StatefulWidget {
-  final List<String> exercises;
+  final List<PlanExercise> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
   final Function() onMax;
@@ -53,7 +53,7 @@ class _StartListState extends State<StartList> {
       });
 
     final gymSet = await (db.gymSets.select()
-          ..where((tbl) => tbl.name.equals(widget.exercises[index]))
+          ..where((tbl) => tbl.name.equals(widget.exercises[index].exercise))
           ..orderBy(
             [
               (u) =>
@@ -95,9 +95,23 @@ class _StartListState extends State<StartList> {
           final temp = widget.exercises[oldIndex];
           widget.exercises.removeAt(oldIndex);
           widget.exercises.insert(newIndex, temp);
-          await db.update(db.plans).replace(
-                widget.plan.copyWith(exercises: widget.exercises.join(',')),
+
+          await (db.delete(db.planExercises)
+                ..where((u) => u.planId.equals(widget.plan.id)))
+              .go();
+
+          await db.batch((batch) {
+            for (int i = 0; i < widget.exercises.length; i++) {
+              final exercise = widget.exercises[i];
+              batch.insert(
+                db.planExercises,
+                exercise.copyWith(
+                  id: null, // Set id to null for auto-increment
+                  planId: widget.plan.id,
+                ),
               );
+            }
+          });
           if (!context.mounted) return;
           final state = context.read<PlanState>();
           state.updatePlans(null);
@@ -120,7 +134,8 @@ class _StartListState extends State<StartList> {
     List<GymCount> counts,
   ) {
     final exercise = widget.exercises[index];
-    final idx = counts.indexWhere((element) => element.name == exercise);
+    final idx =
+        counts.indexWhere((element) => element.name == exercise.exercise);
     var count = 0;
     int max = maxSets;
 
@@ -168,7 +183,7 @@ class _StartListState extends State<StartList> {
     }
 
     return GestureDetector(
-      key: Key(exercise),
+      key: Key(exercise.exercise),
       onLongPressStart: (details) async {
         showModalBottomSheet(
           useRootNavigator: true,
@@ -177,7 +192,7 @@ class _StartListState extends State<StartList> {
             return SafeArea(
               child: ExerciseModal(
                 planId: widget.plan.id,
-                exercise: exercise,
+                exercise: exercise.exercise,
                 hasData: count > 0,
                 onSelect: () => widget.onSelect(index),
                 onMax: widget.onMax,
@@ -202,7 +217,7 @@ class _StartListState extends State<StartList> {
                     widget.onSelect(index);
                   },
                 ),
-                Flexible(child: Text(exercise)),
+                Flexible(child: Text(exercise.exercise)),
               ],
             ),
           ),

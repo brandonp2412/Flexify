@@ -86,17 +86,13 @@ class PlanState extends ChangeNotifier {
         disabled.add(pe);
     }
 
-    enabled.sort(
-      (a, b) => plan.exercises.value
-          .indexOf(a.exercise.value)
-          .compareTo(plan.exercises.value.indexOf(b.exercise.value)),
-    );
+    enabled.sort();
 
     exercises = enabled + disabled;
     notifyListeners();
   }
 
-  updateDefaults() async {
+  Future<void> updateDefaults() async {
     final latest = db.gymSets.created.max();
     final sub = Subquery(
       db.select(db.gymSets).join([])
@@ -119,7 +115,7 @@ class PlanState extends ChangeNotifier {
     notifyListeners();
   }
 
-  updatePlanCounts() {
+  void updatePlanCounts() {
     getPlanCounts().then((value) {
       planCounts = value;
       notifyListeners();

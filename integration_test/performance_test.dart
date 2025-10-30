@@ -27,9 +27,6 @@ Future<void> appWrapper() async {
 }
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding binding =
-      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   setUpAll(() async {
     app.db = AppDatabase();
     app.androidChannel = const MethodChannel("com.presley.flexify/timer");

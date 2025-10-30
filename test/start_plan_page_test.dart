@@ -46,7 +46,6 @@ void main() async {
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
-      exercises: 'Bench press,Barbell row,Squat',
     );
     final id = await (db.plans.insertOne(planCompanion));
     await db.planExercises.insertAll([
@@ -128,7 +127,6 @@ void main() async {
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
-      exercises: 'Bench press,Barbell row,Squat',
     );
     final id = await (db.plans.insertOne(planCompanion));
 
@@ -183,7 +181,6 @@ void main() async {
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
-      exercises: 'Barbell bench press,Barbell bent-over row,Crunch',
     );
     final id = await (db.plans.insertOne(planCompanion));
     final plan =

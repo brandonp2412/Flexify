@@ -405,10 +405,13 @@ class AppDatabase extends _$AppDatabase {
             },
           );
         },
+        from44To45: (Migrator m, Schema45 schema) async {
+          await m.alterTable(TableMigration(schema.plans));
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 44;
+  int get schemaVersion => 45;
 }

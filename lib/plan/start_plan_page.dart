@@ -45,7 +45,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? category;
   String? image;
 
-  late List<String> exercises = [];
+  late List<PlanExercise> exercises = [];
   late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
@@ -326,7 +326,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     } else if (!cardio && settings.repEstimation) {
       final parsedWeight = double.parse(weight.text);
       final closestRpm =
-          rpms!.where((rpm) => rpm.name == exercises[selected]).reduce(
+          rpms!.where((rpm) => rpm.name == exercises[selected].exercise).reduce(
                 (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
                         (rpm2.weight - parsedWeight).abs()
                     ? rpm1
@@ -386,11 +386,20 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> _loadExercises() async {
-    List<String> temp = [];
     await planState.setExercises(widget.plan.toCompanion(false));
-    temp = planState.exercises
+    final temp = planState.exercises
         .where((pe) => pe.enabled.value)
-        .map((exercise) => exercise.exercise.value)
+        .map(
+          (pe) => PlanExercise(
+            id: pe.id.value,
+            planId: pe.planId.value,
+            exercise: pe.exercise.value,
+            enabled: pe.enabled.value,
+            maxSets: pe.maxSets.value,
+            warmupSets: pe.warmupSets.value,
+            timers: pe.timers.value,
+          ),
+        )
         .toList();
     setState(() {
       exercises = temp;
@@ -399,7 +408,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!mounted) return;
 
     final lastIndex = planState.lastSets
-        .indexWhere((element) => element.name == exercises[0]);
+        .indexWhere((element) => element.name == exercises[0].exercise);
     if (lastIndex != -1) {
       final last = planState.lastSets[lastIndex];
       _updateGymSetTextFields(last);
@@ -446,7 +455,17 @@ class _StartPlanPageState extends State<StartPlanPage>
     final plan = planState.plans[index];
     final split = planState.exercises
         .where((pe) => pe.enabled.value)
-        .map((exercise) => exercise.exercise.value)
+        .map(
+          (pe) => PlanExercise(
+            id: pe.id.value,
+            planId: pe.planId.value,
+            exercise: pe.exercise.value,
+            enabled: pe.enabled.value,
+            maxSets: pe.maxSets.value,
+            warmupSets: pe.warmupSets.value,
+            timers: pe.timers.value,
+          ),
+        )
         .toList();
 
     if (!mounted) return;
@@ -459,7 +478,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<void> save(TimerState timerState) async {
     if (!key.currentState!.validate()) return;
 
-    final exercise = exercises[selected];
+    final exercise = exercises[selected].exercise;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
@@ -561,7 +580,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> select(int index) async {
     setState(() => selected = index);
-    final last = await getLast(exercises[index]);
+    final last = await getLast(exercises[index].exercise);
     if (last == null) return;
 
     setState(() => _updateGymSetTextFields(last));

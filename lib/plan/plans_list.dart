@@ -32,52 +32,16 @@ class PlansList extends StatefulWidget {
 }
 
 class _PlansListState extends State<PlansList> {
-  Map<int, String>? exercisesMap;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadExercises();
-  }
-
-  @override
-  void didUpdateWidget(PlansList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.plans != oldWidget.plans) {
-      _loadExercises();
-    }
-  }
-
-  Future<void> _loadExercises() async {
-    final tempMap = <int, String>{};
-
-    // 1. Iterate through plans and generate the exercise summary string.
-    for (final plan in widget.plans) {
-      // 2. Query PlanExercises table directly for the current plan ID.
-      // This is the essential part: querying the DB for the summary without
-      // touching the PlanState's 'exercises' list or calling notifyListeners.
-      final planExercises = await (db.planExercises.select()
-            ..where(
-              (tbl) => tbl.planId.equals(plan.id) & tbl.enabled.equals(true),
-            ))
-          .get();
-
-      tempMap[plan.id] =
-          planExercises.map((pe) => pe.exercise).toList().join(', ');
-    }
-
-    // 3. Update the UI only once all data is ready
-    if (mounted) {
-      setState(() {
-        exercisesMap = tempMap;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
     final state = context.watch<PlanState>();
+
+    final filteredPlans = widget.plans.where((plan) {
+      final term = widget.search.toLowerCase();
+      return plan.title?.toLowerCase().contains(term) == true ||
+          plan.days.toLowerCase().contains(term);
+    }).toList();
 
     if (widget.plans.isEmpty)
       return ListTile(
@@ -86,7 +50,6 @@ class _PlansListState extends State<PlansList> {
         onTap: () async {
           final plan = PlansCompanion(
             days: const drift.Value(''),
-            exercises: const drift.Value(''),
             title: drift.Value(widget.search),
           );
           await state.setExercises(plan);
@@ -107,10 +70,10 @@ class _PlansListState extends State<PlansList> {
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
         scrollController: widget.scroll,
-        itemCount: widget.plans.length,
+        itemCount: filteredPlans.length,
         padding: const EdgeInsets.only(bottom: 96, top: 16),
         itemBuilder: (context, index) {
-          final plan = widget.plans[index];
+          final plan = filteredPlans[index];
 
           return PlanTile(
             key: Key(plan.id.toString()),
@@ -119,7 +82,6 @@ class _PlansListState extends State<PlansList> {
             index: index,
             navigatorKey: widget.navKey,
             selected: widget.selected,
-            exercises: exercisesMap?[plan.id] ?? '',
             onSelect: (id) => widget.onSelect(id),
           );
         },
@@ -128,16 +90,15 @@ class _PlansListState extends State<PlansList> {
             idx--;
           }
 
-          final temp = widget.plans[old];
-          widget.plans.removeAt(old);
-          widget.plans.insert(idx, temp);
+          final temp = filteredPlans[old];
+          filteredPlans.removeAt(old);
+          filteredPlans.insert(idx, temp);
 
           final state = context.read<PlanState>();
-          state.updatePlans(widget.plans);
-          await _loadExercises();
+          state.updatePlans(filteredPlans);
           await db.transaction(() async {
-            for (int i = 0; i < widget.plans.length; i++) {
-              final plan = widget.plans[i];
+            for (int i = 0; i < filteredPlans.length; i++) {
+              final plan = filteredPlans[i];
               final updated =
                   plan.toCompanion(false).copyWith(sequence: drift.Value(i));
               await db.update(db.plans).replace(updated);
@@ -148,10 +109,10 @@ class _PlansListState extends State<PlansList> {
 
     return ListView.builder(
       controller: widget.scroll,
-      itemCount: widget.plans.length,
+      itemCount: filteredPlans.length,
       padding: const EdgeInsets.only(bottom: 96, top: 8),
       itemBuilder: (context, index) {
-        final plan = widget.plans[index];
+        final plan = filteredPlans[index];
 
         return PlanTile(
           plan: plan,
@@ -159,7 +120,6 @@ class _PlansListState extends State<PlansList> {
           index: index,
           navigatorKey: widget.navKey,
           selected: widget.selected,
-          exercises: exercisesMap?[plan.id] ?? '',
           onSelect: (id) => widget.onSelect(id),
         );
       },
