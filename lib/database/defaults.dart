@@ -87,14 +87,16 @@ const defaultPlans = [
 final defaultPlanExercises = defaultPlans
     .map((plan) {
       final exercises = plan.exercises.value.split(',');
-      return defaultExercises.map(
-        (exercise) => PlanExercisesCompanion.insert(
-          planId: plan.id.value,
-          exercise: exercise.$1,
-          enabled: exercises.contains(exercise.$1),
-          timers: const Value(true),
-        ),
-      );
+      return defaultExercises
+          .where((exercise) => exercises.contains(exercise.$1))
+          .map(
+            (exercise) => PlanExercisesCompanion.insert(
+              planId: plan.id.value,
+              exercise: exercise.$1,
+              enabled: exercises.contains(exercise.$1),
+              timers: const Value(true),
+            ),
+          );
     })
     .toList()
     .expand(

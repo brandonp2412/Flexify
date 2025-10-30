@@ -5388,6 +5388,137 @@ i1.GeneratedColumn<bool> _column_83(String aliasedName) =>
         defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
             'CHECK ("scrollable_tabs" IN (0, 1))'),
         defaultValue: const CustomExpression('1'));
+
+final class Schema44 extends i0.VersionedSchema {
+  Schema44({required super.database}) : super(version: 44);
+  @override
+  late final List<i1.DatabaseSchemaEntity> entities = [
+    plans,
+    gymSets,
+    settings,
+    planExercises,
+    metadata,
+  ];
+  late final Shape3 plans = Shape3(
+      source: i0.VersionedTable(
+        entityName: 'plans',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_2,
+          _column_1,
+          _column_0,
+          _column_8,
+          _column_9,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape30 gymSets = Shape30(
+      source: i0.VersionedTable(
+        entityName: 'gym_sets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_62,
+          _column_63,
+          _column_45,
+          _column_7,
+          _column_64,
+          _column_65,
+          _column_66,
+          _column_0,
+          _column_43,
+          _column_17,
+          _column_3,
+          _column_67,
+          _column_39,
+          _column_4,
+          _column_18,
+          _column_6,
+          _column_5,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape33 settings = Shape33(
+      source: i0.VersionedTable(
+        entityName: 'settings',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_36,
+          _column_68,
+          _column_53,
+          _column_37,
+          _column_33,
+          _column_58,
+          _column_69,
+          _column_70,
+          _column_30,
+          _column_35,
+          _column_0,
+          _column_22,
+          _column_25,
+          _column_71,
+          _column_72,
+          _column_21,
+          _column_82,
+          _column_27,
+          _column_23,
+          _column_74,
+          _column_75,
+          _column_76,
+          _column_77,
+          _column_80,
+          _column_28,
+          _column_38,
+          _column_29,
+          _column_78,
+          _column_20,
+          _column_24,
+          _column_26,
+          _column_46,
+          _column_83,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape25 planExercises = Shape25(
+      source: i0.VersionedTable(
+        entityName: 'plan_exercises',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_42,
+          _column_79,
+          _column_41,
+          _column_0,
+          _column_19,
+          _column_40,
+          _column_46,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape32 metadata = Shape32(
+      source: i0.VersionedTable(
+        entityName: 'metadata',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_81,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+}
+
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,
@@ -5430,6 +5561,7 @@ i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema41 schema) from40To41,
   required Future<void> Function(i1.Migrator m, Schema42 schema) from41To42,
   required Future<void> Function(i1.Migrator m, Schema43 schema) from42To43,
+  required Future<void> Function(i1.Migrator m, Schema44 schema) from43To44,
 }) {
   return (currentVersion, database) async {
     switch (currentVersion) {
@@ -5638,6 +5770,11 @@ i0.MigrationStepWithVersion migrationSteps({
         final migrator = i1.Migrator(database, schema);
         await from42To43(migrator, schema);
         return 43;
+      case 43:
+        final schema = Schema44(database: database);
+        final migrator = i1.Migrator(database, schema);
+        await from43To44(migrator, schema);
+        return 44;
       default:
         throw ArgumentError.value('Unknown migration from $currentVersion');
     }
@@ -5686,6 +5823,7 @@ i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, Schema41 schema) from40To41,
   required Future<void> Function(i1.Migrator m, Schema42 schema) from41To42,
   required Future<void> Function(i1.Migrator m, Schema43 schema) from42To43,
+  required Future<void> Function(i1.Migrator m, Schema44 schema) from43To44,
 }) =>
     i0.VersionedSchema.stepByStepHelper(
         step: migrationSteps(
@@ -5730,4 +5868,5 @@ i1.OnUpgrade stepByStep({
       from40To41: from40To41,
       from41To42: from41To42,
       from42To43: from42To43,
+      from43To44: from43To44,
     ));
