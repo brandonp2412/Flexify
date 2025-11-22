@@ -17,6 +17,8 @@ void main() async {
 
   testWidgets('PlanList', (WidgetTester tester) async {
     db = AppDatabase(NativeDatabase.memory());
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
     final planId = await db.plans.insertOne(
       PlansCompanion.insert(
         id: Value(1),

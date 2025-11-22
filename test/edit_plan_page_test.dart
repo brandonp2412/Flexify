@@ -112,6 +112,8 @@ void main() async {
       ),
     ];
 
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
     await db.plans.insertOne(plan);
     await db.planExercises.insertAll(planExercises);
 

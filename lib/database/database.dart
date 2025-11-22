@@ -190,7 +190,7 @@ class AppDatabase extends _$AppDatabase {
 
             for (final exercise in exercises) {
               final index = gymSets.indexWhere(
-                (gymSet) => gymSet.read(schema.gymSets.name) == exercise,
+                (gymSet) => gymSet.read(schema.gymSets.name) == exercise.trim(),
               );
               if (index == -1) continue;
 
