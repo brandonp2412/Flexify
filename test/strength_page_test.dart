@@ -20,6 +20,8 @@ void main() async {
   testWidgets('StrengthPage displays', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(
@@ -83,6 +85,8 @@ void main() async {
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(
@@ -146,6 +150,8 @@ void main() async {
   testWidgets('StrengthPage selects metrics', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await db.into(db.gymSets).insert(

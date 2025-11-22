@@ -86,7 +86,7 @@ class PlanState extends ChangeNotifier {
         disabled.add(pe);
     }
 
-    enabled.sort();
+    enabled.sort((a, b) => a.exercise.value.compareTo(b.exercise.value));
 
     exercises = enabled + disabled;
     notifyListeners();

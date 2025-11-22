@@ -7,6 +7,11 @@ import 'package:flutter_test/flutter_test.dart';
 void main() async {
   db = AppDatabase(NativeDatabase.memory());
 
+  setUp(() async {
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
+  });
+
   test('plans can be created', () async {
     final id = await db.plans.insertOne(
       PlansCompanion.insert(

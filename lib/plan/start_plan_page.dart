@@ -437,6 +437,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     });
 
     if (!mounted) return;
+    if (exercises.isEmpty) return;
 
     final lastIndex = planState.lastSets
         .indexWhere((element) => element.name == exercises[0].exercise);
