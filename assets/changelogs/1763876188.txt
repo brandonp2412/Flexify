@@ -1,4 +1,3 @@
-• Fix error importing data
 • fix importing of data by inserting planExercises records and update plans_list.dart to use null-safe aware operator
 • fix issue #206 by updating the way exercises are stored and splitted
 • Fix loaders flicking into view

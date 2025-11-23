@@ -71,48 +71,108 @@ List<SetInfo> graphData = [
   SetInfo(36, 6, 1),
 ];
 
+List<PlanExercisesCompanion> planExercises = [
+  PlanExercisesCompanion.insert(
+    planId: 1,
+    enabled: true,
+    exercise: 'Triceps dip',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 1,
+    enabled: true,
+    exercise: 'Squat',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 1,
+    enabled: true,
+    exercise: 'Standing calf raise',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 1,
+    enabled: true,
+    exercise: 'Pull-up',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 2,
+    enabled: true,
+    exercise: 'Barbell bench press',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 2,
+    enabled: true,
+    exercise: 'Barbell bent-over row',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 2,
+    enabled: true,
+    exercise: 'Dumbbell lateral raise',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 2,
+    enabled: true,
+    exercise: 'Barbell biceps curl',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 3,
+    enabled: true,
+    exercise: 'Barbell shoulder press',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 3,
+    enabled: true,
+    exercise: 'Crunch',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 3,
+    enabled: true,
+    exercise: 'Chin-up',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 3,
+    enabled: true,
+    exercise: 'Romanian deadlift',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 4,
+    enabled: true,
+    exercise: 'Barbell shoulder press',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 4,
+    enabled: true,
+    exercise: 'Neck curl',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 4,
+    enabled: true,
+    exercise: 'Chin-up',
+  ),
+  PlanExercisesCompanion.insert(
+    planId: 4,
+    enabled: true,
+    exercise: 'Romanian deadlift',
+  ),
+];
+
 List<PlansCompanion> plans = [
-  PlansCompanion(
-    days: Value([weekdays[1], weekdays[5]].join(",")),
-    exercises: Value(
-      ["Triceps dip", "Squat", "Standing calf raise", "Pull-up"].join(","),
-    ),
+  PlansCompanion.insert(
+    id: Value(1),
+    days: 'Tuesday,Saturday',
     title: const Value("Tuesday, Saturday"),
   ),
   PlansCompanion(
-    days: Value([weekdays[2], weekdays[6]].join(",")),
-    exercises: Value(
-      [
-        "Barbell bench press",
-        "Barbell bent-over row",
-        "Dumbbell lateral raise",
-        "Barbell biceps curl",
-      ].join(","),
-    ),
+    id: Value(2),
+    days: Value('Wednesday,Sunday'),
     title: const Value("Wednesday, Sunday"),
   ),
   PlansCompanion(
-    days: Value(weekdays[0]),
-    exercises: Value(
-      [
-        "Barbell shoulder press",
-        "Crunch",
-        "Chin-up",
-        "Romanian deadlift",
-      ].join(","),
-    ),
+    id: Value(3),
+    days: Value('Monday'),
     title: const Value("Monday"),
   ),
   PlansCompanion(
-    days: Value(weekdays[3]),
-    exercises: Value(
-      [
-        "Barbell shoulder press",
-        "Neck curl",
-        "Chin-up",
-        "Romanian deadlift",
-      ].join(","),
-    ),
+    id: Value(4),
+    days: Value('Thursday'),
     title: const Value("Thursday"),
   ),
 ];
@@ -180,7 +240,7 @@ Future<void> generateScreenshot({
 
   if (navigateToPage != null) {
     final navState = getBuildContext(tester, tabBarState);
-    await navigateToPage(navState);
+    if (navState.mounted) await navigateToPage(navState);
   }
 
   skipSettle ? await tester.pump() : await tester.pumpAndSettle();
@@ -237,40 +297,8 @@ void main() {
           );
     }
 
-    for (var plan in plans) {
-      final id = await app.db.into(app.db.plans).insert(plan);
-      final exercisesList = plan.exercises.value.split(',');
-
-      for (final exercise in exercisesList) {
-        final gymSetExists = await (db.gymSets.select()
-              ..where((tbl) => tbl.name.equals(exercise))
-              ..limit(1))
-            .getSingleOrNull();
-
-        if (gymSetExists != null) {
-          await app.db.planExercises.insertOne(
-            PlanExercisesCompanion.insert(
-              enabled: true,
-              timers: const Value(true),
-              exercise: exercise,
-              planId: id,
-            ),
-          );
-        } else {
-          await app.db.into(app.db.gymSets).insert(
-                generateGymSetCompanion(exercise, 50.0),
-              );
-          await app.db.planExercises.insertOne(
-            PlanExercisesCompanion.insert(
-              enabled: true,
-              timers: const Value(true),
-              exercise: exercise,
-              planId: id,
-            ),
-          );
-        }
-      }
-    }
+    await db.plans.insertAll(plans);
+    await db.planExercises.insertAll(planExercises);
   });
 
   group("Generate default screenshots ", () {
@@ -321,6 +349,7 @@ void main() {
         navigateToPage: (context) async {
           final plan = await (db.plans.select()..limit(1)).getSingle();
 
+          if (!context.mounted) return;
           final planState = context.read<PlanState>();
           await planState.updateGymCounts(plan.id);
 
@@ -344,22 +373,25 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '5_en-US',
-        navigateToPage: (context) async => navigateTo(
-          context: context,
-          page: StrengthPage(
-            name: screenshotExercise,
-            unit: 'kg',
-            data: await getStrengthData(
-              target: 'kg',
-              name: 'Dumbbell shoulder press',
-              metric: StrengthMetric.bestWeight,
-              period: Period.day,
-              start: null,
-              end: null,
-              limit: 11,
+        navigateToPage: (context) async {
+          navigateTo(
+            // ignore: use_build_context_synchronously
+            context: context,
+            page: StrengthPage(
+              name: screenshotExercise,
+              unit: 'kg',
+              data: await getStrengthData(
+                target: 'kg',
+                name: 'Dumbbell shoulder press',
+                metric: StrengthMetric.bestWeight,
+                period: Period.day,
+                start: null,
+                end: null,
+                limit: 11,
+              ),
             ),
-          ),
-        ),
+          );
+        },
         tabBarState: 'GraphsPage',
       ),
     );

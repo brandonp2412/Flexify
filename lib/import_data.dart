@@ -103,6 +103,9 @@ class ImportData extends StatelessWidget {
       if (!ctx.mounted) return;
       final settingsState = ctx.read<SettingsState>();
       await settingsState.init();
+      // if (!ctx.mounted) return;
+      // final planState = ctx.read<PlanState>();
+      // planState.updatePlans(null);
 
       if (!ctx.mounted) return;
       Navigator.of(ctx, rootNavigator: true)
@@ -317,47 +320,47 @@ class ImportData extends StatelessWidget {
         csvContent = await file.readAsString();
       }
 
-      List<List<dynamic>> rows =
+      List<List<dynamic>> csvList =
           const CsvToListConverter(eol: "\n").convert(csvContent);
 
-      if (rows.isEmpty) {
+      if (csvList.isEmpty) {
         throw Exception('CSV file is empty');
       }
 
-      if (rows.length <= 1) {
+      if (csvList.length <= 1) {
         throw Exception('CSV file must contain at least one data row');
       }
 
-      List<PlansCompanion> plans = [];
-      for (final row in rows.skip(1)) {
-        try {
-          if (row.length < 3) {
-            throw Exception('Row has insufficient columns: ${row.length}');
-          }
+      List<PlansCompanion> plansToInsert = [];
+      List<PlanExercisesCompanion> planExercisesToInsert = [];
 
-          var sequence = row.elementAtOrNull(4);
-          if (sequence is String) {
-            final parsedSequence = int.tryParse(sequence);
-            sequence = parsedSequence ?? 0;
-          } else if (sequence is! int) {
-            sequence = 0;
-          }
-
-          plans.add(
-            PlansCompanion(
-              days: Value(row[1]?.toString() ?? ''),
-              exercises: Value(row[2]?.toString() ?? ''),
-              title: Value(row.elementAtOrNull(3)?.toString()),
-              sequence: Value(sequence),
-            ),
-          );
-        } catch (e) {
-          throw Exception('Error processing row ${rows.indexOf(row) + 1}: $e');
-        }
+      for (final row in csvList.skip(1)) {
+        plansToInsert.add(
+          PlansCompanion.insert(
+            id: Value(int.parse(row[0].toString())),
+            days: row[1].toString(),
+            title: Value(row[2].toString()),
+            sequence: Value(int.parse(row[3].toString())),
+          ),
+        );
+        final exerciseNames = row[4].toString().split(';');
+        planExercisesToInsert.addAll(
+          exerciseNames.map((exerciseName) {
+            return PlanExercisesCompanion.insert(
+              planId: int.parse(row[0].toString()),
+              exercise: exerciseName,
+              enabled: true,
+              timers: const Value(true),
+            );
+          }),
+        );
       }
 
       await db.plans.deleteAll();
-      await db.plans.insertAll(plans);
+      await db.planExercises.deleteAll();
+
+      await db.plans.insertAll(plansToInsert);
+      await db.planExercises.insertAll(planExercisesToInsert);
 
       if (!ctx.mounted) return;
       ctx.read<PlanState>().updatePlans(null);

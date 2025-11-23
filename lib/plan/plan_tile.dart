@@ -1,5 +1,7 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -7,14 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlanTile extends StatelessWidget {
+class PlanTile extends StatefulWidget {
   final Plan plan;
-
   final String weekday;
   final int index;
   final GlobalKey<NavigatorState> navigatorKey;
   final Function(int) onSelect;
   final Set<int> selected;
+
   const PlanTile({
     super.key,
     required this.plan,
@@ -26,34 +28,55 @@ class PlanTile extends StatelessWidget {
   });
 
   @override
+  State<PlanTile> createState() => _PlanTileState();
+}
+
+class _PlanTileState extends State<PlanTile> {
+  late Future<List<String>> _exercisesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _exercisesFuture = _getExercises();
+  }
+
+  Future<List<String>> _getExercises() async {
+    final planExercises = await (db.planExercises.select()
+          ..where((tbl) => tbl.planId.equals(widget.plan.id))
+          ..where((tbl) => tbl.enabled.equals(true)))
+        .get();
+    return planExercises.map((e) => e.exercise).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget title = const Text("Daily");
-    if (plan.title?.isNotEmpty == true) {
-      final today = plan.days.split(',').contains(weekday);
+    if (widget.plan.title?.isNotEmpty == true) {
+      final today = widget.plan.days.split(',').contains(widget.weekday);
       title = Text(
-        plan.title!,
+        widget.plan.title!,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: today ? FontWeight.bold : null,
               decoration: today ? TextDecoration.underline : null,
             ),
       );
-    } else if (plan.days.split(',').length < 7)
-      title = RichText(text: TextSpan(children: getChildren(context)));
+    } else if (widget.plan.days.split(',').length < 7)
+      title = RichText(text: TextSpan(children: _getChildren(context)));
 
     Widget? leading = SizedBox(
       height: 24,
       width: 24,
       child: Checkbox(
-        value: selected.contains(plan.id),
+        value: widget.selected.contains(widget.plan.id),
         onChanged: (value) {
-          onSelect(plan.id);
+          widget.onSelect(widget.plan.id);
         },
       ),
     );
 
-    if (selected.isEmpty)
+    if (widget.selected.isEmpty)
       leading = GestureDetector(
-        onTap: () => onSelect(plan.id),
+        onTap: () => widget.onSelect(widget.plan.id),
         child: Container(
           width: 24,
           height: 24,
@@ -63,9 +86,9 @@ class PlanTile extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              plan.title?.isNotEmpty == true
-                  ? plan.title![0]
-                  : plan.days[0].toUpperCase(),
+              widget.plan.title?.isNotEmpty == true
+                  ? widget.plan.title![0]
+                  : widget.plan.days[0].toUpperCase(),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -89,11 +112,11 @@ class PlanTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: selected.contains(plan.id)
+        color: widget.selected.contains(widget.plan.id)
             ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
             : Colors.transparent,
         border: Border.all(
-          color: selected.contains(plan.id)
+          color: widget.selected.contains(widget.plan.id)
               ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
               : Colors.transparent,
           width: 1,
@@ -101,7 +124,17 @@ class PlanTile extends StatelessWidget {
       ),
       child: ListTile(
         title: title,
-        subtitle: Text(plan.exercises.split(',').join(', ')),
+        subtitle: FutureBuilder(
+          future: _exercisesFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.join(', '));
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            return const Text('Loading exercises...');
+          },
+        ),
         leading: leading,
         trailing: Builder(
           builder: (context) {
@@ -113,22 +146,22 @@ class PlanTile extends StatelessWidget {
             if (trailing == PlanTrailing.none) return const SizedBox();
             if (trailing == PlanTrailing.reorder &&
                 defaultTargetPlatform == TargetPlatform.linux)
-              return SizedBox();
+              return const SizedBox();
             else if (trailing == PlanTrailing.reorder &&
                 defaultTargetPlatform == TargetPlatform.android)
               return ReorderableDragStartListener(
-                index: index,
+                index: widget.index,
                 child: const Icon(Icons.drag_handle),
               );
 
             final state = context.watch<PlanState>();
             final idx = state.planCounts
-                .indexWhere((element) => element.planId == plan.id);
+                .indexWhere((element) => element.planId == widget.plan.id);
             PlanCount count;
             if (idx != -1)
               count = state.planCounts[idx];
             else
-              return SizedBox();
+              return const SizedBox();
 
             if (trailing == PlanTrailing.count)
               return Text(
@@ -149,38 +182,41 @@ class PlanTile extends StatelessWidget {
           },
         ),
         onTap: () async {
-          if (selected.isNotEmpty) return onSelect(plan.id);
+          if (widget.selected.isNotEmpty)
+            return widget.onSelect(widget.plan.id);
           final state = context.read<PlanState>();
-          await state.updateGymCounts(plan.id);
+          await state.updateGymCounts(widget.plan.id);
 
-          navigatorKey.currentState!.push(
+          widget.navigatorKey.currentState!.push(
             MaterialPageRoute(
               builder: (context) => StartPlanPage(
-                plan: plan,
+                plan: widget.plan,
               ),
             ),
           );
         },
         onLongPress: () {
-          onSelect(plan.id);
+          widget.onSelect(widget.plan.id);
         },
       ),
     );
   }
 
-  List<InlineSpan> getChildren(BuildContext context) {
+  List<InlineSpan> _getChildren(BuildContext context) {
     List<InlineSpan> result = [];
 
-    final split = plan.days.split(',');
+    final split = widget.plan.days.split(',');
     for (int index = 0; index < split.length; index++) {
       final day = split[index];
       result.add(
         TextSpan(
           text: day.trim(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: weekday == day.trim() ? FontWeight.bold : null,
-                decoration:
-                    weekday == day.trim() ? TextDecoration.underline : null,
+                fontWeight:
+                    widget.weekday == day.trim() ? FontWeight.bold : null,
+                decoration: widget.weekday == day.trim()
+                    ? TextDecoration.underline
+                    : null,
               ),
         ),
       );

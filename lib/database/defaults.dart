@@ -66,40 +66,45 @@ const defaultPlans = [
   PlansCompanion(
     id: Value(1),
     days: Value('Monday'),
-    exercises: Value(
-      'Deadlift,Lat pull-down,Barbell bent-over row,Barbell biceps curl',
-    ),
   ),
   PlansCompanion(
     id: Value(2),
     days: Value('Wednesday'),
-    exercises: Value(
-      'Barbell bench press,Barbell shoulder press,Chest fly,Dumbbell lateral raise,Triceps extension',
-    ),
   ),
   PlansCompanion(
     id: Value(3),
     days: Value('Friday'),
-    exercises: Value('Squat,Leg press,Leg curl,Seated calf raise'),
   ),
 ];
 
-final defaultPlanExercises = defaultPlans
-    .map((plan) {
-      final exercises = plan.exercises.value.split(',');
-      return defaultExercises.map(
-        (exercise) => PlanExercisesCompanion.insert(
-          planId: plan.id.value,
-          exercise: exercise.$1,
-          enabled: exercises.contains(exercise.$1),
-          timers: const Value(true),
-        ),
-      );
-    })
-    .toList()
-    .expand(
-      (element) => element,
-    );
+final defaultPlanExercises = [
+  ...['Barbell bench press', 'Squat', 'Lat pull-down', 'Leg press'].map(
+    (e) => PlanExercisesCompanion.insert(
+      planId: 1,
+      exercise: e,
+      enabled: true,
+    ),
+  ),
+  ...[
+    'Deadlift',
+    'Overhead triceps extension',
+    'Dumbbell biceps curl',
+    'Barbell bent-over row',
+  ].map(
+    (e) => PlanExercisesCompanion.insert(
+      planId: 2,
+      exercise: e,
+      enabled: true,
+    ),
+  ),
+  ...['Leg press', 'Pull-up', 'Push-up', 'Crunch'].map(
+    (e) => PlanExercisesCompanion.insert(
+      planId: 3,
+      exercise: e,
+      enabled: true,
+    ),
+  ),
+];
 
 final defaultSets = defaultExercises.map(
   (exercise) => GymSetsCompanion(

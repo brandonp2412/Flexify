@@ -7,36 +7,38 @@ import 'package:flutter_test/flutter_test.dart';
 void main() async {
   db = AppDatabase(NativeDatabase.memory());
 
+  setUp(() async {
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
+  });
+
   test('plans can be created', () async {
     final id = await db.plans.insertOne(
       PlansCompanion.insert(
         days: "Monday,Tuesday,Wednesday",
-        exercises: "Bench press,Rows,Bicep curls",
       ),
     );
     expect(id, greaterThan(0));
   });
 
   test('plans can be read', () async {
-    final id = await db.plans.insertOne(
+    await db.plans.insertOne(
       PlansCompanion.insert(
+        id: Value(1),
         days: "Monday,Tuesday,Wednesday",
-        exercises: "Bench press,Rows,Bicep curls",
       ),
     );
     final plan = await (db.plans.select()
-          ..where((u) => u.id.equals(id))
+          ..where((u) => u.id.equals(1))
           ..limit(1))
         .getSingle();
     expect(plan.days, "Monday,Tuesday,Wednesday");
-    expect(plan.exercises, "Bench press,Rows,Bicep curls");
   });
 
   test('plans can be updated', () async {
     final id = await db.plans.insertOne(
       PlansCompanion.insert(
         days: "Monday,Tuesday,Wednesday",
-        exercises: "Bench press,Rows,Bicep curls",
       ),
     );
     final plan = await (db.plans.select()
@@ -46,7 +48,6 @@ void main() async {
     await (db.plans.update()..where((u) => u.id.equals(id))).write(
       plan.copyWith(
         days: 'Thursday,Friday',
-        exercises: 'Chin-up,Deadlift,Squat',
       ),
     );
     final updatedPlan = await (db.plans.select()
@@ -54,14 +55,12 @@ void main() async {
           ..limit(1))
         .getSingle();
     expect(updatedPlan.days, 'Thursday,Friday');
-    expect(updatedPlan.exercises, 'Chin-up,Deadlift,Squat');
   });
 
   test('plans can be deleted', () async {
     final id = await db.plans.insertOne(
       PlansCompanion.insert(
         days: "Monday,Tuesday,Wednesday",
-        exercises: "Bench press,Rows,Bicep curls",
       ),
     );
     await (db.plans.deleteWhere((tbl) => tbl.id.equals(id)));

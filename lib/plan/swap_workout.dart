@@ -47,6 +47,8 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<PlanState>();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -73,7 +75,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const SizedBox();
                 }
 
                 final exercises = snapshot.data!
@@ -115,31 +117,8 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                           ),
                         );
 
-                        final plan = await (db.plans.select()
-                              ..where((tbl) => tbl.id.equals(widget.planId)))
-                            .getSingle();
-
-                        final exercisesList = plan.exercises.split(',');
-                        final oldExerciseIndex =
-                            exercisesList.indexOf(widget.exercise);
-
-                        if (oldExerciseIndex != -1) {
-                          exercisesList[oldExerciseIndex] = exercise;
-                        }
-
-                        final newExercisesString = exercisesList.join(',');
-
-                        await (db.plans.update()
-                              ..where((tbl) => tbl.id.equals(widget.planId)))
-                            .write(
-                          PlansCompanion(
-                            exercises: drift.Value(newExercisesString),
-                          ),
-                        );
-
                         if (!context.mounted) return;
 
-                        final state = context.read<PlanState>();
                         state.updatePlans(null);
                         Navigator.pop(context, true);
                       },

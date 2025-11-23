@@ -190,10 +190,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),
-      exercises: exercises
-          .where((element) => element.enabled.value)
-          .map((element) => element.exercise.value)
-          .join(','),
       title: Value(titleCtrl.text),
     );
 
@@ -206,8 +202,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
       );
     } else {
       final id = await db.into(db.plans).insert(newPlan);
-      await db.planExercises
-          .insertAll(exercises.map((pe) => pe.copyWith(planId: Value(id))));
+      await db.planExercises.insertAll(
+        exercises
+            .where((element) => element.enabled.value)
+            .map((pe) => pe.copyWith(planId: Value(id))),
+      );
     }
 
     if (!mounted) return;

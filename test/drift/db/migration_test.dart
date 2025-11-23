@@ -532,7 +532,6 @@ void main() {
         final plans = await newDb.select(newDb.plans).get();
         expect(plans.length, 1);
         expect(plans.first.title, 'Deadlift Day');
-        expect(plans.first.exercises, 'Deadlift,Romanian Deadlift');
         expect(plans.first.sequence, 1);
 
         final gymSets = await newDb.select(newDb.gymSets).get();

@@ -9,7 +9,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlansList extends StatelessWidget {
+class PlansList extends StatefulWidget {
   final List<Plan> plans;
   final GlobalKey<NavigatorState> navKey;
   final Set<int> selected;
@@ -28,19 +28,29 @@ class PlansList extends StatelessWidget {
   });
 
   @override
+  State<PlansList> createState() => _PlansListState();
+}
+
+class _PlansListState extends State<PlansList> {
+  @override
   Widget build(BuildContext context) {
     final weekday = weekdays[DateTime.now().weekday - 1];
     final state = context.watch<PlanState>();
 
-    if (plans.isEmpty)
+    final filteredPlans = widget.plans.where((plan) {
+      final term = widget.search.toLowerCase();
+      return plan.title?.toLowerCase().contains(term) == true ||
+          plan.days.toLowerCase().contains(term);
+    }).toList();
+
+    if (widget.plans.isEmpty)
       return ListTile(
         title: const Text("No plans found"),
-        subtitle: Text("Tap to create $search"),
+        subtitle: Text("Tap to create ${widget.search}"),
         onTap: () async {
           final plan = PlansCompanion(
             days: const drift.Value(''),
-            exercises: const drift.Value(''),
-            title: drift.Value(search),
+            title: drift.Value(widget.search),
           );
           await state.setExercises(plan);
           if (context.mounted)
@@ -59,19 +69,20 @@ class PlansList extends StatelessWidget {
 
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
-        scrollController: scroll,
-        itemCount: plans.length,
+        scrollController: widget.scroll,
+        itemCount: filteredPlans.length,
         padding: const EdgeInsets.only(bottom: 96, top: 16),
         itemBuilder: (context, index) {
-          final plan = plans[index];
+          final plan = filteredPlans[index];
+
           return PlanTile(
             key: Key(plan.id.toString()),
             plan: plan,
             weekday: weekday,
             index: index,
-            navigatorKey: navKey,
-            selected: selected,
-            onSelect: (id) => onSelect(id),
+            navigatorKey: widget.navKey,
+            selected: widget.selected,
+            onSelect: (id) => widget.onSelect(id),
           );
         },
         onReorder: (int old, int idx) async {
@@ -79,15 +90,15 @@ class PlansList extends StatelessWidget {
             idx--;
           }
 
-          final temp = plans[old];
-          plans.removeAt(old);
-          plans.insert(idx, temp);
+          final temp = filteredPlans[old];
+          filteredPlans.removeAt(old);
+          filteredPlans.insert(idx, temp);
 
           final state = context.read<PlanState>();
-          state.updatePlans(plans);
+          state.updatePlans(filteredPlans);
           await db.transaction(() async {
-            for (int i = 0; i < plans.length; i++) {
-              final plan = plans[i];
+            for (int i = 0; i < filteredPlans.length; i++) {
+              final plan = filteredPlans[i];
               final updated =
                   plan.toCompanion(false).copyWith(sequence: drift.Value(i));
               await db.update(db.plans).replace(updated);
@@ -97,19 +108,19 @@ class PlansList extends StatelessWidget {
       );
 
     return ListView.builder(
-      controller: scroll,
-      itemCount: plans.length,
+      controller: widget.scroll,
+      itemCount: filteredPlans.length,
       padding: const EdgeInsets.only(bottom: 96, top: 8),
       itemBuilder: (context, index) {
-        final plan = plans[index];
+        final plan = filteredPlans[index];
 
         return PlanTile(
           plan: plan,
           weekday: weekday,
           index: index,
-          navigatorKey: navKey,
-          selected: selected,
-          onSelect: (id) => onSelect(id),
+          navigatorKey: widget.navKey,
+          selected: widget.selected,
+          onSelect: (id) => widget.onSelect(id),
         );
       },
     );

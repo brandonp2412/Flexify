@@ -17,6 +17,22 @@ void main() async {
 
   testWidgets('PlanList', (WidgetTester tester) async {
     db = AppDatabase(NativeDatabase.memory());
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
+    final planId = await db.plans.insertOne(
+      PlansCompanion.insert(
+        id: Value(1),
+        days: 'Monday',
+      ),
+    );
+
+    await db.planExercises.insertOne(
+      PlanExercisesCompanion.insert(
+        planId: planId,
+        exercise: 'Bench press',
+        enabled: true,
+      ),
+    );
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final scroll = ScrollController();
     await tester.pumpWidget(
@@ -30,12 +46,11 @@ void main() async {
           home: Scaffold(
             body: PlansList(
               scroll: scroll,
-              plans: const [
+              plans: [
                 Plan(
                   days: "Monday",
-                  id: 1,
+                  id: planId,
                   sequence: 2,
-                  exercises: "Bench press",
                 ),
               ],
               onSelect: (value) {},

@@ -80,15 +80,18 @@ class ExportData extends StatelessWidget {
                       Navigator.pop(context);
                       final plans = await db.plans.select().get();
                       final List<List<dynamic>> data = [
-                        ['id', 'days', 'exercises', 'title', 'sequence'],
+                        ['id', 'days', 'title', 'sequence', 'exercises'],
                       ];
                       for (var plan in plans) {
+                        final planExercises = await (db.planExercises.select()
+                              ..where((u) => u.planId.equals(plan.id)))
+                            .get();
                         data.add([
                           plan.id,
                           plan.days,
-                          plan.exercises,
                           plan.title ?? '',
                           plan.sequence ?? '',
+                          planExercises.map((e) => e.exercise).join(';'),
                         ]);
                       }
 
@@ -100,6 +103,8 @@ class ExportData extends StatelessWidget {
                       await FilePicker.platform.saveFile(
                         fileName: 'plans.csv',
                         bytes: bytes,
+                        type: FileType.custom,
+                        allowedExtensions: ['csv'],
                       );
                     },
                   ),
@@ -115,6 +120,8 @@ class ExportData extends StatelessWidget {
                       final result = await FilePicker.platform.saveFile(
                         fileName: 'flexify.sqlite',
                         bytes: bytes,
+                        type: FileType.custom,
+                        allowedExtensions: ['sqlite'],
                       );
                       if (Platform.isMacOS ||
                           Platform.isWindows ||

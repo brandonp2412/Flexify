@@ -97,7 +97,7 @@ class TimerState extends ChangeNotifier {
     }
   }
 
-  notify(String? title, String? alarmSound) async {
+  Future<void> notify(String? title, String? alarmSound) async {
     if (player != null) {
       player!.play(
         alarmSound?.isNotEmpty == true
@@ -114,6 +114,12 @@ class TimerState extends ChangeNotifier {
       macOS: darwin,
       iOS: darwin,
       android: AndroidInitializationSettings('ic_launcher'),
+      windows: WindowsInitializationSettings(
+        appName: 'Flexify',
+        appUserModelId: 'com.presley.flexify',
+        guid: '550e8400-e29b-41d4-a716-446655440000',
+        iconPath: 'assets/ic_launcher.png',
+      ),
     );
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(init);

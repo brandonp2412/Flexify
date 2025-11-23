@@ -13,5 +13,5 @@ class GeneratedHelper implements SchemaInstantiationHelper {
     }
   }
 
-  static const versions = <int>[];
+  static const versions = const [];
 }

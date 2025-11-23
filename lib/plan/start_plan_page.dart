@@ -45,7 +45,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? category;
   String? image;
 
-  late List<String> exercises = widget.plan.exercises.split(',');
+  late List<PlanExercise> exercises = [];
   late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
@@ -56,6 +56,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     planState = context.watch<PlanState>();
     final timerState = context.read<TimerState>();
+
+    if (exercises.isEmpty) {
+      return const SizedBox();
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -351,7 +355,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     } else if (!cardio && settings.repEstimation) {
       final parsedWeight = double.parse(weight.text);
       final closestRpm =
-          rpms!.where((rpm) => rpm.name == exercises[selected]).reduce(
+          rpms!.where((rpm) => rpm.name == exercises[selected].exercise).reduce(
                 (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
                         (rpm2.weight - parsedWeight).abs()
                     ? rpm1
@@ -401,8 +405,40 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
 
+    planState = context.read<PlanState>();
+    unit = context.read<SettingsState>().value.strengthUnit;
+    title = widget.plan.title?.isNotEmpty == true
+        ? widget.plan.title!
+        : widget.plan.days.replaceAll(",", ", ");
+
+    _loadExercises();
+  }
+
+  Future<void> _loadExercises() async {
+    await planState.setExercises(widget.plan.toCompanion(false));
+    final temp = planState.exercises
+        .where((pe) => pe.enabled.value)
+        .map(
+          (pe) => PlanExercise(
+            id: pe.id.value,
+            planId: pe.planId.value,
+            exercise: pe.exercise.value,
+            enabled: pe.enabled.value,
+            maxSets: pe.maxSets.value,
+            warmupSets: pe.warmupSets.value,
+            timers: pe.timers.value,
+          ),
+        )
+        .toList();
+    setState(() {
+      exercises = temp;
+    });
+
+    if (!mounted) return;
+    if (exercises.isEmpty) return;
+
     final lastIndex = planState.lastSets
-        .indexWhere((element) => element.name == exercises[0]);
+        .indexWhere((element) => element.name == exercises[0].exercise);
     if (lastIndex != -1) {
       final last = planState.lastSets[lastIndex];
       _updateGymSetTextFields(last);
@@ -440,7 +476,20 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index == -1) return Navigator.pop(context);
 
     final plan = planState.plans[index];
-    final split = plan.exercises.split(',');
+    final split = planState.exercises
+        .where((pe) => pe.enabled.value)
+        .map(
+          (pe) => PlanExercise(
+            id: pe.id.value,
+            planId: pe.planId.value,
+            exercise: pe.exercise.value,
+            enabled: pe.enabled.value,
+            maxSets: pe.maxSets.value,
+            warmupSets: pe.warmupSets.value,
+            timers: pe.timers.value,
+          ),
+        )
+        .toList();
 
     if (!mounted) return;
     setState(() {
@@ -452,7 +501,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<void> save(TimerState timerState) async {
     if (!key.currentState!.validate()) return;
 
-    final exercise = exercises[selected];
+    final exercise = exercises[selected].exercise;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
@@ -554,7 +603,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> select(int index) async {
     setState(() => selected = index);
-    final last = await getLast(exercises[index]);
+    final last = await getLast(exercises[index].exercise);
     if (last == null) return;
 
     setState(() => _updateGymSetTextFields(last));
