@@ -180,6 +180,14 @@ class _HistoryListState extends State<HistoryList> {
       child: leading,
     );
 
+    String trailing = "$reps x $weight ${gymSet.unit}";
+    if (gymSet.cardio &&
+        (gymSet.unit == 'kg' || gymSet.unit == 'lb' || gymSet.unit == 'stone'))
+      trailing = "$weight ${gymSet.unit} / $minutes:$seconds $incline";
+    else if (gymSet.cardio &&
+        (gymSet.unit == 'km' || gymSet.unit == 'mi' || gymSet.unit == 'kcal'))
+      trailing = "$distance ${gymSet.unit} / $minutes:$seconds $incline";
+
     return Column(
       children: [
         if (showDivider)
@@ -224,9 +232,7 @@ class _HistoryListState extends State<HistoryList> {
               ),
             ),
             trailing: Text(
-              gymSet.cardio
-                  ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
-                  : "$reps x $weight ${gymSet.unit}",
+              trailing,
               style: const TextStyle(fontSize: 16),
             ),
             onLongPress: () => widget.onSelect(gymSet.id),

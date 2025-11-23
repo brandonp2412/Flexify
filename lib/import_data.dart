@@ -108,10 +108,8 @@ class ImportData extends StatelessWidget {
       // planState.updatePlans(null);
 
       if (!ctx.mounted) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(ctx, rootNavigator: true)
-            .pushNamedAndRemoveUntil('/', (_) => false);
-      });
+      Navigator.of(ctx, rootNavigator: true)
+          .pushNamedAndRemoveUntil('/', (_) => false);
     } catch (e) {
       db = AppDatabase();
       rethrow;

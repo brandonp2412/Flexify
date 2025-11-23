@@ -276,6 +276,8 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget buildDistanceField() {
+    if (unit == 'kg' || unit == 'lb' || unit == 'stone')
+      return buildWeightField();
     return TextFormField(
       controller: distance,
       focusNode: distNode,
@@ -715,41 +717,36 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   List<DropdownMenuItem<String>> getUnitItems() {
-    if (cardio) {
-      return const [
-        DropdownMenuItem(
-          value: 'km',
-          child: Text("Kilometers (km)"),
-        ),
-        DropdownMenuItem(
-          value: 'mi',
-          child: Text("Miles (mi)"),
-        ),
-        DropdownMenuItem(
-          value: 'm',
-          child: Text("Meters (m)"),
-        ),
-        DropdownMenuItem(
-          value: 'kcal',
-          child: Text("Kilocalories (kcal)"),
-        ),
-      ];
-    } else {
-      return const [
-        DropdownMenuItem(
-          value: 'kg',
-          child: Text("Kilograms (kg)"),
-        ),
-        DropdownMenuItem(
-          value: 'lb',
-          child: Text("Pounds (lb)"),
-        ),
-        DropdownMenuItem(
-          value: 'stone',
-          child: Text("Stone"),
-        ),
-      ];
-    }
+    return const [
+      DropdownMenuItem(
+        value: 'kg',
+        child: Text("Kilograms (kg)"),
+      ),
+      DropdownMenuItem(
+        value: 'lb',
+        child: Text("Pounds (lb)"),
+      ),
+      DropdownMenuItem(
+        value: 'stone',
+        child: Text("Stone"),
+      ),
+      DropdownMenuItem(
+        value: 'km',
+        child: Text("Kilometers (km)"),
+      ),
+      DropdownMenuItem(
+        value: 'mi',
+        child: Text("Miles (mi)"),
+      ),
+      DropdownMenuItem(
+        value: 'm',
+        child: Text("Meters (m)"),
+      ),
+      DropdownMenuItem(
+        value: 'kcal',
+        child: Text("Kilocalories (kcal)"),
+      ),
+    ];
   }
 
   void updateFields(GymSet gymSet) {
