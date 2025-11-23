@@ -1,0 +1,2 @@
+• Show preview of notifications
+• Show weight field if cardio unit is a weight type on plans
