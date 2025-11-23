@@ -75,7 +75,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const SizedBox();
                 }
 
                 final exercises = snapshot.data!
