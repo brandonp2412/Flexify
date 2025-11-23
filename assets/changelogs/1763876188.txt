@@ -1,0 +1,8 @@
+• fix importing of data by inserting planExercises records and update plans_list.dart to use null-safe aware operator
+• fix issue #206 by updating the way exercises are stored and splitted
+• Fix loaders flicking into view
+• Fix migration breaking plan exercises
+• Modify the logic for inclusion of exercises in a plan by creating PlanExercises records only for selected exercises and not storing them in Plan.Exercises column
+• Pause work for trip
+• Perform data migration for existing data such that only those exercises are removed from the plan for which PlanExercises.enabled = false
+• update test files to make sure all tests are passing
