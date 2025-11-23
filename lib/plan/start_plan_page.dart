@@ -58,9 +58,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final timerState = context.read<TimerState>();
 
     if (exercises.isEmpty) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const SizedBox();
     }
 
     return Scaffold(
