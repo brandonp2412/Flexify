@@ -53,17 +53,9 @@ class PlanState extends ChangeNotifier {
   }
 
   Future<void> setExercises(PlansCompanion plan) async {
-    var query = db.gymSets.selectOnly()
-      ..addColumns([db.gymSets.name])
-      ..groupBy([db.gymSets.name])
-      ..join([
-        leftOuterJoin(
-          db.planExercises,
-          db.planExercises.planId.equals(plan.id.present ? plan.id.value : 0) &
-              db.planExercises.exercise.equalsExp(db.gymSets.name),
-        ),
-      ])
-      ..addColumns(db.planExercises.$columns);
+    var query = db.select(db.planExercises)
+      ..where((tbl) => tbl.planId.equals(plan.id.present ? plan.id.value : 0))
+      ..orderBy([(tbl) => OrderingTerm(expression: tbl.sequence)]);
 
     final results = await query.get();
 
@@ -71,23 +63,12 @@ class PlanState extends ChangeNotifier {
     List<PlanExercisesCompanion> disabled = [];
 
     for (final result in results) {
-      final pe = PlanExercisesCompanion(
-        planId: plan.id,
-        id: Value.absentIfNull(result.read(db.planExercises.id)),
-        exercise: Value(result.read(db.gymSets.name)!),
-        enabled: Value(result.read(db.planExercises.enabled) ?? false),
-        maxSets: Value(result.read(db.planExercises.maxSets)),
-        warmupSets: Value(result.read(db.planExercises.warmupSets)),
-        timers: Value(result.read(db.planExercises.timers) ?? true),
-        sequence: Value(result.read(db.planExercises.sequence) ?? 0),
-      );
+      final pe = result.toCompanion(false);
       if (pe.enabled.value)
         enabled.add(pe);
       else
         disabled.add(pe);
     }
-
-    enabled.sort((a, b) => a.sequence.value.compareTo(b.sequence.value));
 
     exercises = enabled + disabled;
     notifyListeners();
