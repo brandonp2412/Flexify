@@ -106,6 +106,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         tempFiltered.add(plan);
       }
     }
+
     setState(() {
       filtered = tempFiltered;
     });

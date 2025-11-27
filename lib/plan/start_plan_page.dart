@@ -427,9 +427,11 @@ class _StartPlanPageState extends State<StartPlanPage>
             maxSets: pe.maxSets.value,
             warmupSets: pe.warmupSets.value,
             timers: pe.timers.value,
+            sequence: pe.sequence.value,
           ),
         )
-        .toList();
+        .toList()
+      ..sort((p1, p2) => p1.sequence.compareTo(p2.sequence));
     setState(() {
       exercises = temp;
     });
@@ -487,9 +489,11 @@ class _StartPlanPageState extends State<StartPlanPage>
             maxSets: pe.maxSets.value,
             warmupSets: pe.warmupSets.value,
             timers: pe.timers.value,
+            sequence: pe.sequence.value,
           ),
         )
-        .toList();
+        .toList()
+      ..sort((p1, p2) => p1.sequence.compareTo(p2.sequence));
 
     if (!mounted) return;
     setState(() {

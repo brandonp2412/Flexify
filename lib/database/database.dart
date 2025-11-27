@@ -408,10 +408,25 @@ class AppDatabase extends _$AppDatabase {
         from44To45: (Migrator m, Schema45 schema) async {
           await m.alterTable(TableMigration(schema.plans));
         },
+        from45To46: (Migrator m, Schema46 schema) async {
+          await m.addColumn(
+            schema.planExercises,
+            schema.planExercises.sequence,
+          );
+          await schema.database.customStatement('''
+            UPDATE plan_exercises 
+            SET sequence = (
+              SELECT COUNT(*) 
+              FROM plan_exercises pe2 
+              WHERE pe2.plan_id = plan_exercises.plan_id 
+                AND pe2.id < plan_exercises.id
+            )
+          ''');
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 45;
+  int get schemaVersion => 46;
 }

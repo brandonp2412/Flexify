@@ -5660,6 +5660,159 @@ class Shape34 extends i0.VersionedTable {
       columnsByName['title']! as i1.GeneratedColumn<String>;
 }
 
+final class Schema46 extends i0.VersionedSchema {
+  Schema46({required super.database}) : super(version: 46);
+  @override
+  late final List<i1.DatabaseSchemaEntity> entities = [
+    plans,
+    gymSets,
+    settings,
+    planExercises,
+    metadata,
+  ];
+  late final Shape34 plans = Shape34(
+      source: i0.VersionedTable(
+        entityName: 'plans',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_2,
+          _column_0,
+          _column_8,
+          _column_9,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape30 gymSets = Shape30(
+      source: i0.VersionedTable(
+        entityName: 'gym_sets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_62,
+          _column_63,
+          _column_45,
+          _column_7,
+          _column_64,
+          _column_65,
+          _column_66,
+          _column_0,
+          _column_43,
+          _column_17,
+          _column_3,
+          _column_67,
+          _column_39,
+          _column_4,
+          _column_18,
+          _column_6,
+          _column_5,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape33 settings = Shape33(
+      source: i0.VersionedTable(
+        entityName: 'settings',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_36,
+          _column_68,
+          _column_53,
+          _column_37,
+          _column_33,
+          _column_58,
+          _column_69,
+          _column_70,
+          _column_30,
+          _column_35,
+          _column_0,
+          _column_22,
+          _column_25,
+          _column_71,
+          _column_72,
+          _column_21,
+          _column_82,
+          _column_27,
+          _column_23,
+          _column_74,
+          _column_75,
+          _column_76,
+          _column_77,
+          _column_80,
+          _column_28,
+          _column_38,
+          _column_29,
+          _column_78,
+          _column_20,
+          _column_24,
+          _column_26,
+          _column_46,
+          _column_83,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape35 planExercises = Shape35(
+      source: i0.VersionedTable(
+        entityName: 'plan_exercises',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_42,
+          _column_79,
+          _column_41,
+          _column_0,
+          _column_19,
+          _column_40,
+          _column_46,
+          _column_84,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape32 metadata = Shape32(
+      source: i0.VersionedTable(
+        entityName: 'metadata',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_81,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+}
+
+class Shape35 extends i0.VersionedTable {
+  Shape35({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<bool> get enabled =>
+      columnsByName['enabled']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get timers =>
+      columnsByName['timers']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get exercise =>
+      columnsByName['exercise']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get maxSets =>
+      columnsByName['max_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get planId =>
+      columnsByName['plan_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get warmupSets =>
+      columnsByName['warmup_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get sequence =>
+      columnsByName['sequence']! as i1.GeneratedColumn<int>;
+}
+
+i1.GeneratedColumn<int> _column_84(String aliasedName) =>
+    i1.GeneratedColumn<int>('sequence', aliasedName, false,
+        type: i1.DriftSqlType.int, defaultValue: const CustomExpression('0'));
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,
@@ -5704,6 +5857,7 @@ i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema43 schema) from42To43,
   required Future<void> Function(i1.Migrator m, Schema44 schema) from43To44,
   required Future<void> Function(i1.Migrator m, Schema45 schema) from44To45,
+  required Future<void> Function(i1.Migrator m, Schema46 schema) from45To46,
 }) {
   return (currentVersion, database) async {
     switch (currentVersion) {
@@ -5922,6 +6076,11 @@ i0.MigrationStepWithVersion migrationSteps({
         final migrator = i1.Migrator(database, schema);
         await from44To45(migrator, schema);
         return 45;
+      case 45:
+        final schema = Schema46(database: database);
+        final migrator = i1.Migrator(database, schema);
+        await from45To46(migrator, schema);
+        return 46;
       default:
         throw ArgumentError.value('Unknown migration from $currentVersion');
     }
@@ -5972,6 +6131,7 @@ i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, Schema43 schema) from42To43,
   required Future<void> Function(i1.Migrator m, Schema44 schema) from43To44,
   required Future<void> Function(i1.Migrator m, Schema45 schema) from44To45,
+  required Future<void> Function(i1.Migrator m, Schema46 schema) from45To46,
 }) =>
     i0.VersionedSchema.stepByStepHelper(
         step: migrationSteps(
@@ -6018,4 +6178,5 @@ i1.OnUpgrade stepByStep({
       from42To43: from42To43,
       from43To44: from43To44,
       from44To45: from44To45,
+      from45To46: from45To46,
     ));

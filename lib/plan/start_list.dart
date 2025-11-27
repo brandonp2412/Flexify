@@ -92,28 +92,22 @@ class _StartListState extends State<StartList> {
             newIndex--;
           }
 
-          final temp = widget.exercises[oldIndex];
-          widget.exercises.removeAt(oldIndex);
-          widget.exercises.insert(newIndex, temp);
-
-          await (db.delete(db.planExercises)
-                ..where((u) => u.planId.equals(widget.plan.id)))
-              .go();
+          final item = widget.exercises.removeAt(oldIndex);
+          widget.exercises.insert(newIndex, item);
 
           await db.batch((batch) {
-            for (int i = 0; i < widget.exercises.length; i++) {
-              final exercise = widget.exercises[i];
-              batch.insert(
+            for (var i = 0; i < widget.exercises.length; i++) {
+              batch.update(
                 db.planExercises,
-                exercise.copyWith(
-                  id: null, // Set id to null for auto-increment
-                  planId: widget.plan.id,
-                ),
+                PlanExercisesCompanion(sequence: Value(i)),
+                where: (pe) => pe.id.equals(widget.exercises[i].id),
               );
             }
           });
+
           if (!context.mounted) return;
           final state = context.read<PlanState>();
+          state.setExercises(widget.plan.toCompanion(false));
           state.updatePlans(null);
         },
       );

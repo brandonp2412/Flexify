@@ -32,20 +32,25 @@ class PlanTile extends StatefulWidget {
 }
 
 class _PlanTileState extends State<PlanTile> {
-  late Future<List<String>> _exercisesFuture;
+  late Stream<List<PlanExercise>> _exercisesStream;
 
   @override
   void initState() {
     super.initState();
-    _exercisesFuture = _getExercises();
+    _exercisesStream = _getExercises();
   }
 
-  Future<List<String>> _getExercises() async {
-    final planExercises = await (db.planExercises.select()
+  Stream<List<PlanExercise>> _getExercises() {
+    return (db.planExercises.select()
           ..where((tbl) => tbl.planId.equals(widget.plan.id))
-          ..where((tbl) => tbl.enabled.equals(true)))
-        .get();
-    return planExercises.map((e) => e.exercise).toList();
+          ..where((tbl) => tbl.enabled.equals(true))
+          ..orderBy(
+            [
+              (u) =>
+                  OrderingTerm(expression: u.sequence, mode: OrderingMode.asc),
+            ],
+          ))
+        .watch();
   }
 
   @override
@@ -124,11 +129,11 @@ class _PlanTileState extends State<PlanTile> {
       ),
       child: ListTile(
         title: title,
-        subtitle: FutureBuilder(
-          future: _exercisesFuture,
+        subtitle: StreamBuilder(
+          stream: _exercisesStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data!.join(', '));
+              return Text(snapshot.data!.map((e) => e.exercise).join(', '));
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }

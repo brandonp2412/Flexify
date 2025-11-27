@@ -79,6 +79,7 @@ class PlanState extends ChangeNotifier {
         maxSets: Value(result.read(db.planExercises.maxSets)),
         warmupSets: Value(result.read(db.planExercises.warmupSets)),
         timers: Value(result.read(db.planExercises.timers) ?? true),
+        sequence: Value(result.read(db.planExercises.sequence) ?? 0),
       );
       if (pe.enabled.value)
         enabled.add(pe);
@@ -86,7 +87,7 @@ class PlanState extends ChangeNotifier {
         disabled.add(pe);
     }
 
-    enabled.sort((a, b) => a.exercise.value.compareTo(b.exercise.value));
+    enabled.sort((a, b) => a.sequence.value.compareTo(b.sequence.value));
 
     exercises = enabled + disabled;
     notifyListeners();
