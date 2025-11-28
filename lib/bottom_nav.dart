@@ -60,6 +60,8 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme;
+
     return Container(
       color: Colors.transparent,
       child: Padding(
@@ -85,16 +87,10 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                     width: tabWidth - 8,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withValues(alpha: 0.1),
+                      color: color.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(25),
                       border: Border.all(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.3),
+                        color: color.primary.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -123,8 +119,8 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                       height: 80,
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.surfaceContainerLow,
+                            ? color.primary
+                            : color.surfaceContainerLow,
                         borderRadius:
                             BorderRadius.circular(isSelected ? 25 : 18),
                       ),
@@ -139,35 +135,25 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                             child: Icon(
                               _getIconForTab(tab),
                               color: isSelected
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.onSurface,
+                                  ? color.onPrimary
+                                  : color.onSurface,
                               size: 24,
                             ),
                           ),
-                          AnimatedOpacity(
-                            opacity: isSelected ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 300),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              height: isSelected ? 20 : 0,
-                              child: isSelected
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 4),
-                                      child: Text(
-                                        _getLabelForTab(tab),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            ),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              _getLabelForTab(tab),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                    color: isSelected
+                                        ? color.onPrimary
+                                        : color.onSurface,
+                                  ),
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ],
@@ -194,10 +180,7 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                         isMovingRight
                             ? Icons.keyboard_arrow_right
                             : Icons.keyboard_arrow_left,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.6),
+                        color: color.primary.withValues(alpha: 0.6),
                         size: 20,
                       ),
                     ),
