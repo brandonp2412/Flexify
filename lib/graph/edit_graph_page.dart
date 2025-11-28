@@ -263,13 +263,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ),
     );
 
-    await db.customUpdate(
-      'UPDATE plans SET exercises = REPLACE(exercises, ?, ?)',
-      variables: [
-        Variable.withString(widget.name),
-        Variable.withString(name.text),
-      ],
-      updates: {db.plans},
+    await (db.planExercises.update()
+          ..where((tbl) => tbl.exercise.equals(widget.name)))
+        .write(
+      PlanExercisesCompanion(
+        exercise: name.text.isEmpty ? const Value.absent() : Value(name.text),
+      ),
     );
 
     if (!mounted) return;
