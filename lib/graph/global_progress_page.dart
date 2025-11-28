@@ -470,7 +470,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
           }
 
           return LineTooltipItem(
-            "$category\n$value\n${DateFormat(format).format(row.created)}",
+            value,
             Theme.of(context).textTheme.labelLarge!.copyWith(color: color),
           );
         }).toList();
