@@ -45,7 +45,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? category;
   String? image;
 
-  late List<PlanExercise> exercises = [];
+  late Stream<List<PlanExercise>> stream;
   late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
@@ -56,10 +56,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     planState = context.watch<PlanState>();
     final timerState = context.read<TimerState>();
-
-    if (exercises.isEmpty) {
-      return const SizedBox();
-    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -100,13 +96,21 @@ class _StartPlanPageState extends State<StartPlanPage>
               unitSelector(),
               notesField(),
               Expanded(
-                child: StartList(
-                  exercises: exercises,
-                  selected: selected,
-                  onSelect: select,
-                  plan: widget.plan,
-                  onMax: () {
-                    planState.updateGymCounts(widget.plan.id);
+                child: StreamBuilder(
+                  stream: stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data == null)
+                      return SizedBox();
+
+                    return StartList(
+                      exercises: snapshot.data!,
+                      selected: selected,
+                      onSelect: select,
+                      plan: widget.plan,
+                      onMax: () {
+                        planState.updateGymCounts(widget.plan.id);
+                      },
+                    );
                   },
                 ),
               ),
@@ -354,19 +358,22 @@ class _StartPlanPageState extends State<StartPlanPage>
       seconds.text = (difference.inSeconds % 60).toString();
     } else if (!cardio && settings.repEstimation) {
       final parsedWeight = double.parse(weight.text);
-      final closestRpm =
-          rpms!.where((rpm) => rpm.name == exercises[selected].exercise).reduce(
-                (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
-                        (rpm2.weight - parsedWeight).abs()
-                    ? rpm1
-                    : rpm2,
-              );
+      stream.first.then((planExercises) {
+        final closestRpm = rpms!
+            .where((rpm) => rpm.name == planExercises[selected].exercise)
+            .reduce(
+              (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
+                      (rpm2.weight - parsedWeight).abs()
+                  ? rpm1
+                  : rpm2,
+            );
 
-      final estimatedReps =
-          (difference.inMinutes * closestRpm.rpm).clamp(1, 50);
-      if (estimatedReps <= 0) return;
+        final estimatedReps =
+            (difference.inMinutes * closestRpm.rpm).clamp(1, 50);
+        if (estimatedReps <= 0) return;
 
-      reps.text = estimatedReps.toInt().toString();
+        reps.text = estimatedReps.toInt().toString();
+      });
     }
   }
 
@@ -415,37 +422,32 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> _loadExercises() async {
-    await planState.setExercises(widget.plan.toCompanion(false));
-    final temp = planState.exercises
-        .where((pe) => pe.enabled.value)
-        .map(
-          (pe) => PlanExercise(
-            id: pe.id.value,
-            planId: pe.planId.value,
-            exercise: pe.exercise.value,
-            enabled: pe.enabled.value,
-            maxSets: pe.maxSets.value,
-            warmupSets: pe.warmupSets.value,
-            timers: pe.timers.value,
-            sequence: pe.sequence.value,
-          ),
-        )
-        .toList()
-      ..sort((p1, p2) => p1.sequence.compareTo(p2.sequence));
     setState(() {
-      exercises = temp;
+      stream = (db.planExercises.select()
+            ..where(
+              (pe) =>
+                  pe.planId.equals(widget.plan.id) & pe.enabled.equals(true),
+            )
+            ..orderBy(
+              [
+                (u) => OrderingTerm(
+                      expression: u.sequence,
+                      mode: OrderingMode.asc,
+                    ),
+              ],
+            ))
+          .watch();
     });
 
-    if (!mounted) return;
-    if (exercises.isEmpty) return;
-
+    final first = await stream.first;
     final lastIndex = planState.lastSets
-        .indexWhere((element) => element.name == exercises[0].exercise);
+        .indexWhere((element) => element.name == first[0].exercise);
     if (lastIndex != -1) {
       final last = planState.lastSets[lastIndex];
       _updateGymSetTextFields(last);
     }
 
+    if (!mounted) return;
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation) {
       getRpms().then((value) => setState(() => rpms = value));
@@ -478,26 +480,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index == -1) return Navigator.pop(context);
 
     final plan = planState.plans[index];
-    final split = planState.exercises
-        .where((pe) => pe.enabled.value)
-        .map(
-          (pe) => PlanExercise(
-            id: pe.id.value,
-            planId: pe.planId.value,
-            exercise: pe.exercise.value,
-            enabled: pe.enabled.value,
-            maxSets: pe.maxSets.value,
-            warmupSets: pe.warmupSets.value,
-            timers: pe.timers.value,
-            sequence: pe.sequence.value,
-          ),
-        )
-        .toList()
-      ..sort((p1, p2) => p1.sequence.compareTo(p2.sequence));
 
     if (!mounted) return;
     setState(() {
-      exercises = split;
       title = plan.days.replaceAll(',', ', ');
     });
   }
@@ -505,7 +490,10 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<void> save(TimerState timerState) async {
     if (!key.currentState!.validate()) return;
 
-    final exercise = exercises[selected].exercise;
+    final first = await stream.first;
+    if (!mounted) return;
+
+    final exercise = first[selected].exercise;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
@@ -569,7 +557,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     count++;
 
     final finishedPlan =
-        count == (max ?? settings.maxSets) && selected == exercises.length - 1;
+        count == (max ?? settings.maxSets) && selected == first.length - 1;
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
 
@@ -583,7 +571,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     final finishedExercise =
-        count == (max ?? settings.maxSets) && selected < exercises.length - 1;
+        count == (max ?? settings.maxSets) && selected < first.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await planState.updateGymCounts(widget.plan.id);
@@ -607,8 +595,9 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> select(int index) async {
     setState(() => selected = index);
-    final last = await getLast(exercises[index].exercise);
-    if (last == null) return;
+    final first = await stream.first;
+    final last = await getLast(first[index].exercise);
+    if (last == null || !mounted) return;
 
     setState(() => _updateGymSetTextFields(last));
   }
