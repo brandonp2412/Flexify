@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PlansList extends StatefulWidget {
-  final List<Plan> plans;
+  final List<Plan>? plans;
   final GlobalKey<NavigatorState> navKey;
   final Set<int> selected;
   final Function(int) onSelect;
@@ -34,36 +34,40 @@ class PlansList extends StatefulWidget {
 class _PlansListState extends State<PlansList> {
   @override
   Widget build(BuildContext context) {
-    final weekday = weekdays[DateTime.now().weekday - 1];
     final state = context.watch<PlanState>();
 
-    final filteredPlans = widget.plans.where((plan) {
+    final noneFound = ListTile(
+      title: const Text("No plans found"),
+      subtitle: Text("Tap to create ${widget.search}"),
+      onTap: () async {
+        final plan = PlansCompanion(
+          days: const drift.Value(''),
+          title: drift.Value(widget.search),
+        );
+        await state.setExercises(plan);
+        if (context.mounted)
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditPlanPage(
+                plan: plan,
+              ),
+            ),
+          );
+      },
+    );
+
+    if (widget.plans == null) return noneFound;
+
+    final weekday = weekdays[DateTime.now().weekday - 1];
+
+    final filteredPlans = widget.plans!.where((plan) {
       final term = widget.search.toLowerCase();
       return plan.title?.toLowerCase().contains(term) == true ||
           plan.days.toLowerCase().contains(term);
     }).toList();
 
-    if (widget.plans.isEmpty)
-      return ListTile(
-        title: const Text("No plans found"),
-        subtitle: Text("Tap to create ${widget.search}"),
-        onTap: () async {
-          final plan = PlansCompanion(
-            days: const drift.Value(''),
-            title: drift.Value(widget.search),
-          );
-          await state.setExercises(plan);
-          if (context.mounted)
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditPlanPage(
-                  plan: plan,
-                ),
-              ),
-            );
-        },
-      );
+    if (widget.plans!.isEmpty || filteredPlans.isEmpty) return noneFound;
 
     final settings = context.read<SettingsState>();
 

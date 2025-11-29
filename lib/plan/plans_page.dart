@@ -192,7 +192,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           Expanded(
             child: PlansList(
               scroll: scroll,
-              plans: filtered ?? [],
+              plans: filtered,
               navKey: widget.navKey,
               selected: selected,
               search: search,
