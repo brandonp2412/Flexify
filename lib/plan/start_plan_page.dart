@@ -468,8 +468,9 @@ class _StartPlanPageState extends State<StartPlanPage>
             ))
           .watch();
       countStream = (db.gymSets.selectOnly()
+            ..where(db.gymSets.planId.equals(widget.plan.id))
             ..addColumns(
-              [db.gymSets.created.max(), ...db.gymSets.$columns, countColumn],
+              [...db.gymSets.$columns, countColumn],
             )
             ..groupBy([db.gymSets.name]))
           .watch()
