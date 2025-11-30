@@ -55,54 +55,52 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     planState = context.watch<PlanState>();
-    final timerState = context.read<TimerState>();
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(title),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final plan = await (db.plans.select()
-                    ..whereSamePrimaryKey(widget.plan))
-                  .getSingle();
-              await planState.setExercises(plan.toCompanion(false));
-              if (!context.mounted) return;
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      EditPlanPage(plan: plan.toCompanion(false)),
-                ),
-              );
-            },
-            icon: const Icon(Icons.edit),
+    return material.StreamBuilder(
+      stream: stream,
+      builder: (context, snapshot) {
+        if (snapshot.data == null) return SizedBox();
+
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: Text(title),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  final plan = await (db.plans.select()
+                        ..whereSamePrimaryKey(widget.plan))
+                      .getSingle();
+                  await planState.setExercises(plan.toCompanion(false));
+                  if (!context.mounted) return;
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditPlanPage(plan: plan.toCompanion(false)),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.edit),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 104),
-        child: Form(
-          key: key,
-          child: material.Column(
-            children: [
-              if (!cardio) ...strengthFields(timerState),
-              if (cardio) ...cardioFields(timerState),
-              unitSelector(),
-              notesField(),
-              Expanded(
-                child: StreamBuilder(
-                  stream: stream,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData || snapshot.data == null)
-                      return SizedBox();
-
-                    return StartList(
+          body: Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 104),
+            child: Form(
+              key: key,
+              child: material.Column(
+                children: [
+                  if (!cardio) ...strengthFields(snapshot),
+                  if (cardio) ...cardioFields(snapshot),
+                  unitSelector(),
+                  notesField(),
+                  Expanded(
+                    child: StartList(
                       exercises: snapshot.data!,
                       selected: selected,
                       onSelect: select,
@@ -110,23 +108,23 @@ class _StartPlanPageState extends State<StartPlanPage>
                       onMax: () {
                         planState.updateGymCounts(widget.plan.id);
                       },
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-      floatingActionButton: AnimatedFab(
-        onPressed: () async => await save(timerState),
-        label: const Text("Save"),
-        icon: const Icon(Icons.save),
-      ),
+          floatingActionButton: AnimatedFab(
+            onPressed: () async => await save(snapshot),
+            label: const Text("Save"),
+            icon: const Icon(Icons.save),
+          ),
+        );
+      },
     );
   }
 
-  List<Widget> strengthFields(TimerState timerState) {
+  List<Widget> strengthFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
     return [
       TextFormField(
         controller: reps,
@@ -159,7 +157,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(weight),
-        onFieldSubmitted: (value) async => await save(timerState),
+        onFieldSubmitted: (value) async => await save(snapshot),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
           if (double.tryParse(value) == null) return 'Invalid number';
@@ -169,7 +167,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  List<Widget> cardioFields(TimerState timerState) {
+  List<Widget> cardioFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
     return [
       Row(
         children: [
@@ -232,7 +230,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 onTap: () => selectAll(weight),
-                onFieldSubmitted: (value) async => await save(timerState),
+                onFieldSubmitted: (value) async => await save(snapshot),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Required';
                   if (double.tryParse(value) == null) return 'Invalid number';
@@ -265,7 +263,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               onTap: () => selectAll(incline),
-              onFieldSubmitted: (value) => save(timerState),
+              onFieldSubmitted: (value) => save(snapshot),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
                 if (double.tryParse(value) == null) return 'Invalid number';
@@ -444,7 +442,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         .indexWhere((element) => element.name == first[0].exercise);
     if (lastIndex != -1) {
       final last = planState.lastSets[lastIndex];
-      _updateGymSetTextFields(last);
+      if (mounted) _updateGymSetTextFields(last);
     }
 
     if (!mounted) return;
@@ -487,13 +485,12 @@ class _StartPlanPageState extends State<StartPlanPage>
     });
   }
 
-  Future<void> save(TimerState timerState) async {
+  Future<void> save(AsyncSnapshot<List<PlanExercise>> snapshot) async {
     if (!key.currentState!.validate()) return;
 
-    final first = await stream.first;
     if (!mounted) return;
 
-    final exercise = first[selected].exercise;
+    final exercise = snapshot.data![selected].exercise;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
@@ -556,12 +553,13 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index != -1) count = counts[index].count;
     count++;
 
-    final finishedPlan =
-        count == (max ?? settings.maxSets) && selected == first.length - 1;
+    final finishedPlan = count == (max ?? settings.maxSets) &&
+        selected == snapshot.data!.length - 1;
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
 
     if (!finishedPlan && !isWarmup && settings.restTimers && peTimers) {
+      final timerState = context.read<TimerState>();
       timerState.startTimer(
         "$exercise ($count)",
         Duration(milliseconds: restMs.toInt()),
@@ -570,8 +568,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       );
     }
 
-    final finishedExercise =
-        count == (max ?? settings.maxSets) && selected < first.length - 1;
+    final finishedExercise = count == (max ?? settings.maxSets) &&
+        selected < snapshot.data!.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await planState.updateGymCounts(widget.plan.id);

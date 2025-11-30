@@ -191,16 +191,19 @@ void main() async {
         planId: plan.id,
         exercise: 'Barbell bench press',
         enabled: true,
+        sequence: Value(0),
       ),
       PlanExercisesCompanion.insert(
         planId: plan.id,
         exercise: 'Barbell bent-over row',
         enabled: true,
+        sequence: Value(1),
       ),
       PlanExercisesCompanion.insert(
         planId: plan.id,
         exercise: 'Crunch',
         enabled: true,
+        sequence: Value(2),
       ),
     ]);
 
