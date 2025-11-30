@@ -15,11 +15,7 @@ class PlanCount {
 
 typedef GymCount = ({
   int count,
-  String name,
-  int? maxSets,
-  int? restMs,
-  int? warmupSets,
-  bool timers,
+  GymSet gymSet,
 });
 
 class PlanState extends ChangeNotifier {
@@ -123,13 +119,6 @@ class PlanState extends ChangeNotifier {
     });
   }
 
-  Future<void> updateGymCounts(int planId) {
-    return getGymCounts(planId).then((value) {
-      gymCounts = value;
-      notifyListeners();
-    });
-  }
-
   Future<List<PlanCount>> getPlanCounts() async {
     return (db.customSelect(
       """
@@ -166,54 +155,6 @@ class PlanState extends ChangeNotifier {
           )
           .toList();
     });
-  }
-
-  Future<List<GymCount>> getGymCounts(int planId) async {
-    final count = CustomExpression<int>(
-      """
-      COUNT(
-        CASE
-          WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
-               AND hidden = 0
-               AND gym_sets.plan_id = $planId
-          THEN 1
-        END
-      )
-   """,
-    );
-
-    final results = await (db.selectOnly(db.planExercises)
-          ..addColumns([
-            db.gymSets.name,
-            count,
-            db.planExercises.maxSets,
-            db.gymSets.restMs,
-            db.planExercises.warmupSets,
-            db.planExercises.timers,
-          ])
-          ..join([
-            innerJoin(
-              db.gymSets,
-              db.gymSets.name.equalsExp(db.planExercises.exercise),
-            ),
-          ])
-          ..where(
-            db.planExercises.planId.equals(planId) & db.planExercises.enabled,
-          )
-          ..groupBy([db.gymSets.name]))
-        .get();
-    return results
-        .map(
-          (row) => (
-            count: row.read<int>(count)!,
-            name: row.read(db.gymSets.name)!,
-            maxSets: row.read(db.planExercises.maxSets),
-            restMs: row.read(db.gymSets.restMs),
-            warmupSets: row.read(db.planExercises.warmupSets),
-            timers: row.read(db.planExercises.timers)!,
-          ),
-        )
-        .toList();
   }
 
   Future<List<Plan>> getPlans() async => await (db.select(db.plans)

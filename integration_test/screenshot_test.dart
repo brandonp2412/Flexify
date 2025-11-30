@@ -350,10 +350,6 @@ void main() {
           final plan = await (db.plans.select()..limit(1)).getSingle();
 
           if (!context.mounted) return;
-          final planState = context.read<PlanState>();
-          await planState.updateGymCounts(plan.id);
-
-          if (!context.mounted) return;
           navigateTo(
             context: context,
             page: StartPlanPage(

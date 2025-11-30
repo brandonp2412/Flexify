@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' as drift;
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/swap_workout.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -16,7 +15,6 @@ class ExerciseModal extends StatefulWidget {
   final String exercise;
   final bool hasData;
   final Function() onSelect;
-  final Function() onMax;
   final int planId;
 
   const ExerciseModal({
@@ -25,7 +23,6 @@ class ExerciseModal extends StatefulWidget {
     required this.hasData,
     required this.onSelect,
     required this.planId,
-    required this.onMax,
   });
 
   @override
@@ -187,8 +184,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
                   .getSingle();
               await db.gymSets.deleteOne(gymSet);
               if (!context.mounted) return;
-              final planState = context.read<PlanState>();
-              planState.updateGymCounts(widget.planId);
               widget.onSelect();
               final timerState = context.read<TimerState>();
               timerState.stopTimer();
@@ -244,7 +239,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
         maxSets: Value(int.tryParse(max.text)),
       ),
     );
-    widget.onMax();
   }
 
   void changeWarmup(String value) {

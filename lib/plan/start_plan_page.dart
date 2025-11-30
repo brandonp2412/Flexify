@@ -45,10 +45,24 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? category;
   String? image;
 
-  late Stream<List<PlanExercise>> stream;
+  late Stream<List<PlanExercise>> exerciseStream;
+  late Stream<List<GymCount>> countStream;
   late PlanState planState = context.read<PlanState>();
   late String unit = context.read<SettingsState>().value.strengthUnit;
   late String title = widget.plan.days.replaceAll(",", ", ");
+
+  late final countColumn = CustomExpression<int>(
+    """
+      COUNT(
+        CASE
+          WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
+               AND hidden = 0
+               AND gym_sets.plan_id = ${widget.plan.id}
+          THEN 1
+        END
+      )
+   """,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -57,74 +71,89 @@ class _StartPlanPageState extends State<StartPlanPage>
     planState = context.watch<PlanState>();
 
     return material.StreamBuilder(
-      stream: stream,
-      builder: (context, snapshot) {
-        if (snapshot.data == null) return SizedBox();
+      stream: countStream,
+      builder: (context, countSnapshot) {
+        if (countSnapshot.data == null) return SizedBox();
 
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: Text(title),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  final plan = await (db.plans.select()
-                        ..whereSamePrimaryKey(widget.plan))
-                      .getSingle();
-                  await planState.setExercises(plan.toCompanion(false));
-                  if (!context.mounted) return;
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditPlanPage(plan: plan.toCompanion(false)),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.edit),
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 104),
-            child: Form(
-              key: key,
-              child: material.Column(
-                children: [
-                  if (!cardio) ...strengthFields(snapshot),
-                  if (cardio) ...cardioFields(snapshot),
-                  unitSelector(),
-                  notesField(),
-                  Expanded(
-                    child: StartList(
-                      exercises: snapshot.data!,
-                      selected: selected,
-                      onSelect: select,
-                      plan: widget.plan,
-                      onMax: () {
-                        planState.updateGymCounts(widget.plan.id);
-                      },
-                    ),
+        return material.StreamBuilder(
+          stream: exerciseStream,
+          builder: (context, exerciseSnapshot) {
+            if (exerciseSnapshot.data == null) return SizedBox();
+
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: AppBar(
+                title: Text(title),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      final plan = await (db.plans.select()
+                            ..whereSamePrimaryKey(widget.plan))
+                          .getSingle();
+                      await planState.setExercises(plan.toCompanion(false));
+                      if (!context.mounted) return;
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditPlanPage(plan: plan.toCompanion(false)),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.edit),
                   ),
                 ],
               ),
-            ),
-          ),
-          floatingActionButton: AnimatedFab(
-            onPressed: () async => await save(snapshot),
-            label: const Text("Save"),
-            icon: const Icon(Icons.save),
-          ),
+              body: Padding(
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16, bottom: 104),
+                child: Form(
+                  key: key,
+                  child: material.Column(
+                    children: [
+                      if (!cardio)
+                        ...strengthFields(
+                          exerciseSnapshot,
+                          countSnapshot.data!,
+                        ),
+                      if (cardio)
+                        ...cardioFields(exerciseSnapshot, countSnapshot.data!),
+                      unitSelector(),
+                      notesField(),
+                      Expanded(
+                        child: StartList(
+                          exercises: exerciseSnapshot.data!,
+                          counts: countSnapshot.data!,
+                          selected: selected,
+                          onSelect: select,
+                          plan: widget.plan,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              floatingActionButton: AnimatedFab(
+                onPressed: () async =>
+                    await save(exerciseSnapshot, countSnapshot.data!),
+                label: const Text("Save"),
+                icon: const Icon(Icons.save),
+              ),
+            );
+          },
         );
       },
     );
   }
 
-  List<Widget> strengthFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
+  List<Widget> strengthFields(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) {
     return [
       TextFormField(
         controller: reps,
@@ -157,7 +186,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(weight),
-        onFieldSubmitted: (value) async => await save(snapshot),
+        onFieldSubmitted: (value) async => await save(snapshot, counts),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
           if (double.tryParse(value) == null) return 'Invalid number';
@@ -167,7 +196,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  List<Widget> cardioFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
+  List<Widget> cardioFields(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) {
     return [
       Row(
         children: [
@@ -230,7 +262,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 onTap: () => selectAll(weight),
-                onFieldSubmitted: (value) async => await save(snapshot),
+                onFieldSubmitted: (value) async => await save(snapshot, counts),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Required';
                   if (double.tryParse(value) == null) return 'Invalid number';
@@ -263,7 +295,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               onTap: () => selectAll(incline),
-              onFieldSubmitted: (value) => save(snapshot),
+              onFieldSubmitted: (value) => save(snapshot, counts),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
                 if (double.tryParse(value) == null) return 'Invalid number';
@@ -356,7 +388,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       seconds.text = (difference.inSeconds % 60).toString();
     } else if (!cardio && settings.repEstimation) {
       final parsedWeight = double.parse(weight.text);
-      stream.first.then((planExercises) {
+      exerciseStream.first.then((planExercises) {
         final closestRpm = rpms!
             .where((rpm) => rpm.name == planExercises[selected].exercise)
             .reduce(
@@ -421,7 +453,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> _loadExercises() async {
     setState(() {
-      stream = (db.planExercises.select()
+      exerciseStream = (db.planExercises.select()
             ..where(
               (pe) =>
                   pe.planId.equals(widget.plan.id) & pe.enabled.equals(true),
@@ -435,14 +467,42 @@ class _StartPlanPageState extends State<StartPlanPage>
               ],
             ))
           .watch();
+      countStream = (db.gymSets.selectOnly()
+            ..addColumns(
+              [db.gymSets.created.max(), ...db.gymSets.$columns, countColumn],
+            )
+            ..groupBy([db.gymSets.name]))
+          .watch()
+          .map(
+            (results) => results
+                .map(
+                  (result) => (
+                    gymSet: GymSet(
+                      bodyWeight: result.read(db.gymSets.bodyWeight)!,
+                      cardio: result.read(db.gymSets.cardio)!,
+                      created: result.read(db.gymSets.created)!,
+                      distance: result.read(db.gymSets.distance)!,
+                      duration: result.read(db.gymSets.duration)!,
+                      hidden: result.read(db.gymSets.hidden)!,
+                      id: result.read(db.gymSets.id)!,
+                      name: result.read(db.gymSets.name)!,
+                      reps: result.read(db.gymSets.reps)!,
+                      unit: result.read(db.gymSets.unit)!,
+                      weight: result.read(db.gymSets.weight)!,
+                    ),
+                    count: result.read(countColumn)!,
+                  ),
+                )
+                .toList(),
+          );
     });
 
-    final first = await stream.first;
-    final lastIndex = planState.lastSets
-        .indexWhere((element) => element.name == first[0].exercise);
-    if (lastIndex != -1) {
-      final last = planState.lastSets[lastIndex];
-      if (mounted) _updateGymSetTextFields(last);
+    final exercise = (await exerciseStream.first).first.exercise;
+    final counts = await countStream.first;
+    final index =
+        counts.indexWhere((element) => element.gymSet.name == exercise);
+    if (index != -1) {
+      if (mounted) _updateGymSetTextFields(counts[index].gymSet);
     }
 
     if (!mounted) return;
@@ -485,19 +545,22 @@ class _StartPlanPageState extends State<StartPlanPage>
     });
   }
 
-  Future<void> save(AsyncSnapshot<List<PlanExercise>> snapshot) async {
+  Future<void> save(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) async {
     if (!key.currentState!.validate()) return;
 
     if (!mounted) return;
 
-    final exercise = snapshot.data![selected].exercise;
+    final pe = snapshot.data![selected];
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
       bodyWeight = (await getBodyWeight())?.weight;
     }
     if (settings.showBodyWeight && bodyWeight == null) {
-      final lastSet = await getLast(exercise);
+      final lastSet = await getLast(pe.exercise);
       bodyWeight = lastSet?.bodyWeight;
     }
 
@@ -514,22 +577,17 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     if (!mounted) return;
-    final counts = planState.gymCounts;
-    final index = counts.indexWhere((element) => element.name == exercise);
+    final index =
+        counts.indexWhere((element) => element.gymSet.name == pe.exercise);
+    var gymSet = counts.elementAtOrNull(index)?.gymSet;
 
-    int? max;
-    double? restMs;
-    int? warmupSets;
-    bool peTimers = true;
-    if (index != -1) {
-      max = counts[index].maxSets;
-      restMs = counts[index].restMs?.toDouble();
-      warmupSets = counts[index].warmupSets;
-      peTimers = counts[index].timers;
-    }
+    final max = pe.maxSets;
+    int? restMs = gymSet?.restMs;
+    final warmupSets = pe.warmupSets;
+    final peTimers = pe.timers;
 
     var gymSetInsert = GymSetsCompanion.insert(
-      name: exercise,
+      name: pe.exercise,
       unit: unit,
       created: DateTime.now().toLocal(),
       cardio: Value(cardio),
@@ -556,12 +614,12 @@ class _StartPlanPageState extends State<StartPlanPage>
     final finishedPlan = count == (max ?? settings.maxSets) &&
         selected == snapshot.data!.length - 1;
     final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
-    restMs ??= settings.timerDuration.toDouble();
+    restMs ??= settings.timerDuration;
 
     if (!finishedPlan && !isWarmup && settings.restTimers && peTimers) {
       final timerState = context.read<TimerState>();
       timerState.startTimer(
-        "$exercise ($count)",
+        "$pe ($count)",
         Duration(milliseconds: restMs.toInt()),
         settings.alarmSound,
         settings.vibrate,
@@ -571,12 +629,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     final finishedExercise = count == (max ?? settings.maxSets) &&
         selected < snapshot.data!.length - 1;
 
-    var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
-    await planState.updateGymCounts(widget.plan.id);
-    await planState.updateDefaults();
+    gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     if (!mounted) return;
     setState(() {
-      _updateGymSetTextFields(gymSet);
+      _updateGymSetTextFields(gymSet!);
       lastSaved = DateTime.now();
     });
     if (finishedExercise) await select(selected + 1);
@@ -593,7 +649,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> select(int index) async {
     setState(() => selected = index);
-    final first = await stream.first;
+    final first = await exerciseStream.first;
     final last = await getLast(first[index].exercise);
     if (last == null || !mounted) return;
 

@@ -13,9 +13,9 @@ import 'package:provider/provider.dart';
 
 class StartList extends StatefulWidget {
   final List<PlanExercise> exercises;
+  final List<GymCount> counts;
   final int selected;
   final Future<void> Function(int) onSelect;
-  final Function() onMax;
   final Plan plan;
 
   const StartList({
@@ -24,7 +24,7 @@ class StartList extends StatefulWidget {
     required this.selected,
     required this.onSelect,
     required this.plan,
-    required this.onMax,
+    required this.counts,
   });
 
   @override
@@ -39,11 +39,11 @@ typedef Tapped = ({
 class _StartListState extends State<StartList> {
   Tapped lastTap = (index: 0, dateTime: DateTime(0));
 
-  void tap(int index, List<GymCount> counts) async {
+  void tap(int index) async {
     widget.onSelect(index);
-    final count = counts.elementAtOrNull(index);
+    final count = widget.counts.elementAtOrNull(index);
     if (count == null) return;
-    if (counts.elementAtOrNull(index)?.count == 0) return;
+    if (widget.counts.elementAtOrNull(index)?.count == 0) return;
 
     if (DateTime.now().difference(lastTap.dateTime) >=
             const Duration(milliseconds: 300) ||
@@ -78,15 +78,13 @@ class _StartListState extends State<StartList> {
         settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
-    final state = context.watch<PlanState>();
-    final counts = state.gymCounts;
 
     if (trailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
         itemCount: widget.exercises.length,
         padding: const EdgeInsets.only(bottom: 76),
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, max, trailing, counts),
+            itemBuilder(context, index, max, trailing),
         onReorder: (oldIndex, newIndex) async {
           if (oldIndex < newIndex) {
             newIndex--;
@@ -116,33 +114,32 @@ class _StartListState extends State<StartList> {
         padding: const EdgeInsets.only(bottom: 76),
         itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, max, trailing, counts),
+            itemBuilder(context, index, max, trailing),
       );
   }
 
   Widget itemBuilder(
     BuildContext context,
-    int index,
+    int exerciseIdx,
     int maxSets,
     PlanTrailing trailing,
-    List<GymCount> counts,
   ) {
-    final exercise = widget.exercises[index];
-    final idx =
-        counts.indexWhere((element) => element.name == exercise.exercise);
+    final exercise = widget.exercises[exerciseIdx];
+    final countIdx = widget.counts
+        .indexWhere((element) => element.gymSet.name == exercise.exercise);
     var count = 0;
     int max = maxSets;
 
-    if (idx > -1) {
-      count = counts[idx].count;
-      max = counts[idx].maxSets ?? maxSets;
+    if (countIdx > -1) {
+      count = widget.counts[countIdx].count;
+      max = widget.exercises[exerciseIdx].maxSets ?? maxSets;
     }
 
     Widget trail = const SizedBox();
     switch (trailing) {
       case PlanTrailing.reorder:
         trail = ReorderableDragStartListener(
-          index: index,
+          index: exerciseIdx,
           child: const Icon(
             Icons.drag_handle,
             size: 32,
@@ -188,8 +185,7 @@ class _StartListState extends State<StartList> {
                 planId: widget.plan.id,
                 exercise: exercise.exercise,
                 hasData: count > 0,
-                onSelect: () => widget.onSelect(index),
-                onMax: widget.onMax,
+                onSelect: () => widget.onSelect(exerciseIdx),
               ),
             );
           },
@@ -200,15 +196,15 @@ class _StartListState extends State<StartList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
-            onTap: () => tap(index, counts),
+            onTap: () => tap(exerciseIdx),
             trailing: trail,
             title: Row(
               children: [
                 Radio(
-                  value: index == widget.selected,
+                  value: exerciseIdx == widget.selected,
                   groupValue: true,
                   onChanged: (value) {
-                    widget.onSelect(index);
+                    widget.onSelect(exerciseIdx);
                   },
                 ),
                 Flexible(child: Text(exercise.exercise)),

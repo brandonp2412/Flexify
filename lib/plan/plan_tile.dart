@@ -189,8 +189,6 @@ class _PlanTileState extends State<PlanTile> {
         onTap: () async {
           if (widget.selected.isNotEmpty)
             return widget.onSelect(widget.plan.id);
-          final state = context.read<PlanState>();
-          await state.updateGymCounts(widget.plan.id);
 
           widget.navigatorKey.currentState!.push(
             MaterialPageRoute(

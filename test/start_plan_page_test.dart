@@ -213,7 +213,6 @@ void main() async {
     final settings = await (db.settings.select()..limit(1)).getSingle();
 
     final planState = PlanState();
-    await planState.updateGymCounts(plan.id);
 
     await tester.pumpWidget(
       MultiProvider(
