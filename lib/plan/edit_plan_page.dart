@@ -148,7 +148,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
             ),
             const SizedBox(height: 8),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
-            const SizedBox(height: 76),
+            const SizedBox(height: 176),
           ],
         ),
       ),
