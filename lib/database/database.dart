@@ -345,8 +345,12 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(schema.settings, schema.settings.peekGraph);
         },
         from33To34: (Migrator m, Schema34 schema) async {
-          await m.addColumn(schema.settings, schema.settings.curveSmoothness);
-          await m.addColumn(schema.settings, schema.settings.notifications);
+          await m
+              .addColumn(schema.settings, schema.settings.curveSmoothness)
+              .catchError((e) {});
+          await m
+              .addColumn(schema.settings, schema.settings.notifications)
+              .catchError((e) {});
         },
         from34To35: (Migrator m, Schema35 schema) async {},
         from35To36: (Migrator m, Schema36 schema) async {
