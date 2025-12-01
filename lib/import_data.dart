@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
@@ -138,143 +139,101 @@ class ImportData extends StatelessWidget {
       if (result == null) return;
 
       String csvContent;
-
       if (kIsWeb) {
-        Uint8List? fileBytes = result.files.single.bytes;
-        if (fileBytes == null) {
-          throw Exception('Could not read file data');
-        }
+        final fileBytes = result.files.single.bytes;
+        if (fileBytes == null) throw Exception('Could not read file data');
         csvContent = String.fromCharCodes(fileBytes);
       } else {
-        File file = File(result.files.single.path!);
-        if (!await file.exists()) {
+        final file = File(result.files.single.path!);
+        if (!await file.exists())
           throw Exception('Selected file does not exist');
+
+        try {
+          csvContent = await file.readAsString();
+        } on FormatException {
+          csvContent = await file.readAsString(encoding: latin1);
         }
-        csvContent = await file.readAsString();
       }
 
-      List<List<dynamic>> rows =
-          const CsvToListConverter(eol: "\n").convert(csvContent);
+      final rows = const CsvToListConverter(eol: "\n").convert(csvContent);
 
-      if (rows.isEmpty) {
-        throw Exception('CSV file is empty');
-      }
-
-      if (rows.length <= 1) {
+      if (rows.isEmpty) throw Exception('CSV file is empty');
+      if (rows.length <= 1)
         throw Exception('CSV file must contain at least one data row');
-      }
 
       final columns = rows.first;
 
-      final gymSets = rows.skip(1).map(
-        (row) {
-          try {
-            if (row.length < 6) {
-              throw Exception('Row has insufficient columns: ${row.length}');
-            }
+      final gymSets = rows.skip(1).map((row) {
+        if (row.length < 6) {
+          throw Exception(
+              'Row ${rows.indexOf(row) + 1} has insufficient columns: ${row.length}');
+        }
 
-            Value<double> reps;
-            if (row[2] is String) {
-              final parsedReps = double.tryParse(row[2]);
-              if (parsedReps == null) {
-                throw Exception('Invalid reps value: ${row[2]}');
-              }
-              reps = Value(parsedReps);
-            } else if (row[2] is num) {
-              reps = Value(row[2].toDouble());
-            } else {
-              throw Exception('Invalid reps data type: ${row[2].runtimeType}');
-            }
+        final reps = _parseDouble(row[2], 'reps', rows.indexOf(row) + 1);
+        final weight = _parseDouble(row[3], 'weight', rows.indexOf(row) + 1);
 
-            Value<double> weight;
-            if (row[3] is String) {
-              final parsedWeight = double.tryParse(row[3]);
-              if (parsedWeight == null) {
-                throw Exception('Invalid weight value: ${row[3]}');
-              }
-              weight = Value(parsedWeight);
-            } else if (row[3] is num) {
-              weight = Value(row[3].toDouble());
-            } else {
-              throw Exception(
-                'Invalid weight data type: ${row[3].runtimeType}',
-              );
-            }
+        Value<bool> hidden;
+        var bodyWeight = const Value(0.0);
 
-            Value<bool> hidden;
-            var bodyWeight = const Value(0.0);
-            if (columns.elementAtOrNull(6) == 'hidden') {
-              if (row.elementAtOrNull(6) is double)
-                hidden = Value(row[6] == 1.0);
-              else
-                hidden = Value(row[6] == "1");
-            } else {
-              hidden = const Value(false);
-              final bodyWeightValue = row.elementAtOrNull(6);
-              if (bodyWeightValue is num) {
-                bodyWeight = Value(bodyWeightValue.toDouble());
-              } else if (bodyWeightValue is String) {
-                bodyWeight = Value(double.tryParse(bodyWeightValue) ?? 0.0);
-              } else {
-                bodyWeight = const Value(0.0);
-              }
-            }
-
-            if (columns.elementAtOrNull(7) == 'bodyWeight') {
-              final bodyWeightValue = row.elementAtOrNull(7);
-              if (bodyWeightValue != null) {
-                bodyWeight =
-                    Value(double.tryParse(bodyWeightValue.toString()) ?? 0);
-              }
-            }
-
-            if (columns.elementAtOrNull(10) == 'hidden') {
-              final hiddenValue = row.elementAtOrNull(10);
-              if (hiddenValue != null) {
-                try {
-                  hidden = Value(bool.parse(hiddenValue.toString()));
-                } catch (e) {
-                  hidden = const Value(false);
-                }
-              }
-            }
-
-            return GymSetsCompanion(
-              name: Value(row[1]?.toString() ?? ''),
-              reps: reps,
-              weight: weight,
-              created: Value(parseDate(row[4])),
-              unit: Value(row[5]?.toString() ?? ''),
-              hidden: hidden,
-              bodyWeight: bodyWeight,
-              duration: columns.elementAtOrNull(7) == 'duration'
-                  ? Value(double.tryParse(row[7]?.toString() ?? '0') ?? 0)
-                  : const Value(0),
-              distance: columns.elementAtOrNull(8) == 'distance'
-                  ? Value(double.tryParse(row[8]?.toString() ?? '0') ?? 0)
-                  : const Value(0),
-              cardio: columns.elementAtOrNull(9) == 'cardio'
-                  ? Value(parseBool(row[9]))
-                  : const Value(false),
-              incline: columns.elementAtOrNull(11) == 'incline'
-                  ? Value(int.tryParse(row[11]?.toString() ?? ''))
-                  : const Value(null),
-            );
-          } catch (e) {
-            throw Exception(
-              'Error processing row ${rows.indexOf(row) + 1}: $e',
-            );
+        if (columns.elementAtOrNull(6) == 'hidden') {
+          hidden = Value(
+              row.elementAtOrNull(6) == 1.0 || row.elementAtOrNull(6) == "1");
+        } else {
+          hidden = const Value(false);
+          final bodyWeightValue = row.elementAtOrNull(6);
+          if (bodyWeightValue is num) {
+            bodyWeight = Value(bodyWeightValue.toDouble());
+          } else if (bodyWeightValue is String) {
+            bodyWeight = Value(double.tryParse(bodyWeightValue) ?? 0.0);
           }
-        },
-      );
+        }
+
+        if (columns.elementAtOrNull(7) == 'bodyWeight') {
+          final bodyWeightValue = row.elementAtOrNull(7);
+          if (bodyWeightValue != null) {
+            bodyWeight =
+                Value(double.tryParse(bodyWeightValue.toString()) ?? 0);
+          }
+        }
+
+        if (columns.elementAtOrNull(10) == 'hidden') {
+          final hiddenValue = row.elementAtOrNull(10);
+          if (hiddenValue != null) {
+            hidden = Value(hiddenValue.toString().toLowerCase() == 'true');
+          }
+        }
+
+        return GymSetsCompanion(
+          name: Value(row[1]?.toString() ?? ''),
+          reps: reps,
+          weight: weight,
+          created: Value(parseDate(row[4])),
+          unit: Value(row[5]?.toString() ?? ''),
+          hidden: hidden,
+          bodyWeight: bodyWeight,
+          duration: columns.elementAtOrNull(7) == 'duration'
+              ? Value(double.tryParse(row[7]?.toString() ?? '0') ?? 0)
+              : const Value(0),
+          distance: columns.elementAtOrNull(8) == 'distance'
+              ? Value(double.tryParse(row[8]?.toString() ?? '0') ?? 0)
+              : const Value(0),
+          cardio: columns.elementAtOrNull(9) == 'cardio'
+              ? Value(parseBool(row[9]))
+              : const Value(false),
+          incline: columns.elementAtOrNull(11) == 'incline'
+              ? Value(int.tryParse(row[11]?.toString() ?? ''))
+              : const Value(null),
+        );
+      });
 
       await db.gymSets.deleteAll();
       await db.gymSets.insertAll(gymSets);
 
       final weightSet = await getBodyWeight();
-      if (weightSet != null)
+      if (weightSet != null) {
         (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
             .write(GymSetsCompanion(bodyWeight: Value(weightSet.weight)));
+      }
 
       if (!ctx.mounted) return;
       Navigator.pop(ctx);
@@ -297,6 +256,19 @@ class ImportData extends StatelessWidget {
     }
   }
 
+  Value<double> _parseDouble(dynamic value, String fieldName, int rowNumber) {
+    if (value is num) return Value(value.toDouble());
+    if (value is String) {
+      final parsed = double.tryParse(value);
+      if (parsed == null) {
+        throw Exception('Invalid $fieldName value in row $rowNumber: $value');
+      }
+      return Value(parsed);
+    }
+    throw Exception(
+        'Invalid $fieldName data type in row $rowNumber: ${value.runtimeType}');
+  }
+
   Future<void> importPlans(BuildContext context) async {
     Navigator.pop(context);
 
@@ -305,34 +277,30 @@ class ImportData extends StatelessWidget {
       if (result == null) return;
 
       String csvContent;
-
       if (kIsWeb) {
-        Uint8List? fileBytes = result.files.single.bytes;
-        if (fileBytes == null) {
-          throw Exception('Could not read file data');
-        }
+        final fileBytes = result.files.single.bytes;
+        if (fileBytes == null) throw Exception('Could not read file data');
         csvContent = String.fromCharCodes(fileBytes);
       } else {
-        File file = File(result.files.single.path!);
-        if (!await file.exists()) {
+        final file = File(result.files.single.path!);
+        if (!await file.exists())
           throw Exception('Selected file does not exist');
+
+        try {
+          csvContent = await file.readAsString();
+        } on FormatException {
+          csvContent = await file.readAsString(encoding: latin1);
         }
-        csvContent = await file.readAsString();
       }
 
-      List<List<dynamic>> csvList =
-          const CsvToListConverter(eol: "\n").convert(csvContent);
+      final csvList = const CsvToListConverter(eol: "\n").convert(csvContent);
 
-      if (csvList.isEmpty) {
-        throw Exception('CSV file is empty');
-      }
-
-      if (csvList.length <= 1) {
+      if (csvList.isEmpty) throw Exception('CSV file is empty');
+      if (csvList.length <= 1)
         throw Exception('CSV file must contain at least one data row');
-      }
 
-      List<PlansCompanion> plansToInsert = [];
-      List<PlanExercisesCompanion> planExercisesToInsert = [];
+      final plansToInsert = <PlansCompanion>[];
+      final planExercisesToInsert = <PlanExercisesCompanion>[];
 
       for (final row in csvList.skip(1)) {
         plansToInsert.add(
@@ -343,6 +311,7 @@ class ImportData extends StatelessWidget {
             sequence: Value(int.parse(row[3].toString())),
           ),
         );
+
         final exerciseNames = row[4].toString().split(';');
         planExercisesToInsert.addAll(
           exerciseNames.map((exerciseName) {
@@ -358,7 +327,6 @@ class ImportData extends StatelessWidget {
 
       await db.plans.deleteAll();
       await db.planExercises.deleteAll();
-
       await db.plans.insertAll(plansToInsert);
       await db.planExercises.insertAll(planExercisesToInsert);
 
