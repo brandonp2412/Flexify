@@ -1,2 +1,1 @@
-• Allow adding curve smoothness to fail
-• Fix importing plans/graphs from Windows
+
