@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flexify/animated_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -38,18 +35,17 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
   Future<List<Changelog>> getChangelogFiles(BuildContext context) async {
-    final manifestContent =
-        await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
-    final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
+    final manifest =
+        await AssetManifest.loadFromAssetBundle(DefaultAssetBundle.of(context));
 
-    final files = manifestMap.keys
+    final files = manifest
+        .listAssets()
         .where((key) => key.startsWith('assets/changelogs/'))
         .toList();
 
     files.sort((a, b) {
       final aName = a.split('/').last.split('.').first;
       final bName = b.split('/').last.split('.').first;
-
       final aNum = int.tryParse(aName) ?? 0;
       final bNum = int.tryParse(bName) ?? 0;
       return bNum.compareTo(aNum);
@@ -60,13 +56,11 @@ class _WhatsNewState extends State<WhatsNew> {
       try {
         final content = await rootBundle.loadString(path);
         final filename = path.split('/').last.replaceAll('.txt', '');
-
         final timestamp = int.tryParse(filename);
         if (timestamp == null || filename.isEmpty) {
           print('Skipping invalid changelog file: $path');
           continue;
         }
-
         result.add(
           Changelog(
             name: filename,
@@ -80,14 +74,12 @@ class _WhatsNewState extends State<WhatsNew> {
         print('Error loading changelog file $path: $e');
       }
     }
-
     return result;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("What's new?"),
       ),
@@ -98,7 +90,7 @@ class _WhatsNewState extends State<WhatsNew> {
         ),
         itemCount: changelogs.length,
       ),
-      floatingActionButton: AnimatedFab(
+      floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.favorite_outline),
         onPressed: () async {
           const url = 'https://github.com/sponsors/brandonp2412';
