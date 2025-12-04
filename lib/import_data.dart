@@ -144,14 +144,17 @@ class ImportData extends StatelessWidget {
         if (fileBytes == null) throw Exception('Could not read file data');
         csvContent = String.fromCharCodes(fileBytes);
       } else {
-        final file = File(result.files.single.path!);
-        if (!await file.exists())
-          throw Exception('Selected file does not exist');
-
+        Uint8List fileBytes;
+        if (result.files.single.bytes != null) {
+          fileBytes = result.files.single.bytes!;
+        } else {
+          final file = File(result.files.single.path!);
+          fileBytes = await file.readAsBytes();
+        }
         try {
-          csvContent = await file.readAsString();
-        } on FormatException {
-          csvContent = await file.readAsString(encoding: latin1);
+          csvContent = utf8.decode(fileBytes, allowMalformed: false);
+        } catch (e) {
+          csvContent = latin1.decode(fileBytes);
         }
       }
 
@@ -166,7 +169,8 @@ class ImportData extends StatelessWidget {
       final gymSets = rows.skip(1).map((row) {
         if (row.length < 6) {
           throw Exception(
-              'Row ${rows.indexOf(row) + 1} has insufficient columns: ${row.length}');
+            'Row ${rows.indexOf(row) + 1} has insufficient columns: ${row.length}',
+          );
         }
 
         final reps = _parseDouble(row[2], 'reps', rows.indexOf(row) + 1);
@@ -177,7 +181,8 @@ class ImportData extends StatelessWidget {
 
         if (columns.elementAtOrNull(6) == 'hidden') {
           hidden = Value(
-              row.elementAtOrNull(6) == 1.0 || row.elementAtOrNull(6) == "1");
+            row.elementAtOrNull(6) == 1.0 || row.elementAtOrNull(6) == "1",
+          );
         } else {
           hidden = const Value(false);
           final bodyWeightValue = row.elementAtOrNull(6);
@@ -266,7 +271,8 @@ class ImportData extends StatelessWidget {
       return Value(parsed);
     }
     throw Exception(
-        'Invalid $fieldName data type in row $rowNumber: ${value.runtimeType}');
+      'Invalid $fieldName data type in row $rowNumber: ${value.runtimeType}',
+    );
   }
 
   Future<void> importPlans(BuildContext context) async {
@@ -282,14 +288,17 @@ class ImportData extends StatelessWidget {
         if (fileBytes == null) throw Exception('Could not read file data');
         csvContent = String.fromCharCodes(fileBytes);
       } else {
-        final file = File(result.files.single.path!);
-        if (!await file.exists())
-          throw Exception('Selected file does not exist');
-
+        Uint8List fileBytes;
+        if (result.files.single.bytes != null) {
+          fileBytes = result.files.single.bytes!;
+        } else {
+          final file = File(result.files.single.path!);
+          fileBytes = await file.readAsBytes();
+        }
         try {
-          csvContent = await file.readAsString();
-        } on FormatException {
-          csvContent = await file.readAsString(encoding: latin1);
+          csvContent = utf8.decode(fileBytes, allowMalformed: false);
+        } catch (e) {
+          csvContent = latin1.decode(fileBytes);
         }
       }
 
