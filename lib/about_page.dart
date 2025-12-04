@@ -35,11 +35,12 @@ class AboutPage extends StatelessWidget {
             ),
             onTap: () async {
               const url = 'https://github.com/sponsors/brandonp2412';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
             title: const Text("Whats new?"),
+            subtitle: const Text("See our release notes"),
             leading: const Icon(Icons.change_circle_outlined),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
