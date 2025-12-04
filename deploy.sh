@@ -300,27 +300,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo "Checking Linux dependencies..."
-    missing_deps=()
-
-    if ! command -v clang &>/dev/null; then missing_deps+=("clang"); fi
-    if ! command -v cmake &>/dev/null; then missing_deps+=("cmake"); fi
-    if ! command -v ninja &>/dev/null; then missing_deps+=("ninja-build"); fi
-    if ! pkg-config --exists gtk+-3.0 &>/dev/null; then missing_deps+=("libgtk-3-dev"); fi
-    if ! pkg-config --exists liblzma &>/dev/null; then missing_deps+=("liblzma-dev"); fi
-
-    if [ ${#missing_deps[@]} -ne 0 ]; then
-        print_error "Missing Linux dependencies: ${missing_deps[*]}"
-        echo "Please install them using your package manager, e.g.:"
-        echo "  Ubuntu/Debian: sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev"
-        echo "  Fedora: sudo dnf install clang cmake ninja-build pkgconfig gtk3-devel xz-devel"
-        echo "  Arch: sudo pacman -S clang cmake ninja pkgconfig gtk3 xz"
-        exit 1
-    else
-        echo "Building for Linux..."
-        flutter build linux
-        print_success "Linux build completed"
-    fi
+    echo "Building for Linux..."
+    flutter build linux
+    print_success "Linux build completed"
 fi
 
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
