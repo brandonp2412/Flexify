@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex  # Exit on any error
+set -ex # Exit on any error
 
 echo "🚀 Starting Flexify local build and version process..."
 
@@ -29,7 +29,7 @@ print_error() {
 }
 
 # Check if yq is installed and is the correct version (mikefarah's Go version)
-if ! command -v yq &> /dev/null; then
+if ! command -v yq &>/dev/null; then
     print_step "Installing yq (Go version by mikefarah)"
     if [[ "$OSTYPE" == "darwin"* ]]; then
         brew install yq
@@ -55,7 +55,7 @@ fi
 # Calculate new version
 print_step "Calculating new version"
 current_version=$(yq e '.version' pubspec.yaml)
-IFS='+.' read -r major minor patch build_number <<< "$current_version"
+IFS='+.' read -r major minor patch build_number <<<"$current_version"
 
 new_patch=$((patch + 1))
 new_build_number=$((build_number + 1))
@@ -64,7 +64,7 @@ new_flutter_version="$major.$minor.$new_patch+$new_build_number"
 new_version="$major.$minor.$new_patch"
 
 current_msix_version=$(yq e '.msix_config.msix_version' pubspec.yaml)
-IFS='.' read -r msix_major msix_minor msix_patch msix_zero <<< "$current_msix_version"
+IFS='.' read -r msix_major msix_minor msix_patch msix_zero <<<"$current_msix_version"
 new_msix_patch=$((msix_patch + 1))
 new_msix_version="$msix_major.$msix_minor.$new_msix_patch.$msix_zero"
 
@@ -83,39 +83,27 @@ if [ -f "$changelog_file" ]; then
     cat "$changelog_file"
     changelog=$(cat "$changelog_file")
     mkdir -p fastlane/metadata/en-AU
-    echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
+    echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
 else
-    # Generate new changelog
     mkdir -p "$(dirname "$changelog_file")"
-    
     last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-    if [ -z "$last_tag" ]; then
-        echo "• Initial release" > "$changelog_file"
-        print_success "Generated initial release changelog"
-        cat "$changelog_file"
-        changelog=$(cat "$changelog_file")
-        mkdir -p fastlane/metadata/en-AU
-        echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
-    else
-        # Generate changelog from git commits
-        print_step "Generating changelog from git commits since $last_tag"
-        git --no-pager log --pretty=format:'%s' "$last_tag"..HEAD | \
-            sort -u | \
-            grep -v "^Merge " | \
-            grep -v "^Release " | \
-            grep -v "^Bump " | \
-            grep -v "^Update " | \
-            grep -v "^[0-9]\+\.[0-9]\+\.[0-9]\+" | \
-            head -10 | \
-            sed 's/^/• /' > "$changelog_file"
-        
-        changelog=$(cat "$changelog_file")
-        mkdir -p fastlane/metadata/en-AU
-        echo "$changelog" > fastlane/metadata/en-AU/release_notes.txt
-        
-        print_success "Generated changelog:"
-        cat "$changelog_file"
-    fi
+
+    # Generate changelog from git commits
+    print_step "Generating changelog from git commits since $last_tag"
+    git --no-pager log --pretty=format:'%s' "$last_tag"..HEAD |
+        sort -u |
+        grep -v "^Merge " |
+        grep -v "^Release " |
+        grep -v "^Bump " |
+        grep -v "^Update " |
+        grep -v "^[0-9]\+\.[0-9]\+\.[0-9]\+" |
+        head -10 |
+        sed 's/^/• /' >"$changelog_file"
+
+    changelog=$(cat "$changelog_file")
+    mkdir -p fastlane/metadata/en-AU
+    echo "$changelog" >fastlane/metadata/en-AU/release_notes.txt
+    nvim "$changelog_file"
 fi
 
 # Setup Flutter
@@ -168,9 +156,9 @@ done
 # Check if Android emulator is available for screenshots
 print_step "Checking for Android emulator"
 echo "Checking Flutter availability..."
-if command -v flutter &> /dev/null; then
+if command -v flutter &>/dev/null; then
     echo "Flutter found, checking Android setup..."
-    
+
     # Check if Android SDK is available without hanging on licenses
     if flutter doctor | grep -q "Android toolchain" && ! flutter doctor | grep -q "\[!\].*Android toolchain"; then
         echo "Android toolchain appears to be configured"
@@ -188,64 +176,64 @@ generate_screenshots() {
     local avd_name=$1
 
     print_step "Generating screenshots for AVD '$avd_name'"
-    
-    if ! command -v emulator &> /dev/null || ! emulator -list-avds | grep -q "^$avd_name$"; then
+
+    if ! command -v emulator &>/dev/null || ! emulator -list-avds | grep -q "^$avd_name$"; then
         print_warning "AVD '$avd_name' not found"
         echo "Available AVDs:"
         emulator -list-avds 2>/dev/null || echo "None found"
         return 1
     fi
-    
+
     print_step "Starting emulator '$avd_name'"
     emulator -avd "$avd_name" -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
     emulator_pid=$!
-    
+
     # Wait for emulator to appear and get its ID
     echo "Waiting for emulator to boot..."
     timeout=300
     elapsed=0
     emulator_id=""
-    
+
     while [ $elapsed -lt $timeout ]; do
         # Get any emulator that's now running (should be ours since we killed others)
         emulator_id=$(adb devices | grep "emulator-" | grep "device$" | awk '{print $1}' | head -1)
-        
+
         if [ -n "$emulator_id" ]; then
             print_success "Emulator '$avd_name' booted with ID: $emulator_id"
             break
         fi
-        
+
         # Check if process died
         if ! kill -0 "$emulator_pid" 2>/dev/null; then
             print_error "Emulator process died during startup"
             exit 1
         fi
-        
+
         sleep 5
         elapsed=$((elapsed + 5))
         echo "Waiting... ($elapsed/${timeout}s)"
     done
-    
+
     if [ -z "$emulator_id" ]; then
         print_error "Emulator '$avd_name' failed to boot within timeout"
         kill $emulator_pid 2>/dev/null || true
         exit 1
     fi
-    
+
     # Wait for system to settle
     echo "Waiting for system to settle..."
     sleep 15
-    
+
     # Verify emulator is still available
     if ! adb devices | grep -q "$emulator_id.*device"; then
         print_error "Emulator $emulator_id disappeared"
         kill $emulator_pid 2>/dev/null || true
         exit 1
     fi
-    
+
     print_step "Running screenshot tests on $emulator_id for device type '$avd_name'"
     export FLEXIFY_DEVICE_TYPE="$avd_name"
-    
+
     if flutter drive --profile --driver=test_driver/integration_test.dart \
         --dart-define=FLEXIFY_DEVICE_TYPE=$avd_name \
         --target=integration_test/screenshot_test.dart -d "$emulator_id"; then
@@ -255,10 +243,10 @@ generate_screenshots() {
         adb -s "$emulator_id" emu kill 2>/dev/null || kill $emulator_pid 2>/dev/null || true
         exit 1
     fi
-    
+
     print_step "Stopping emulator '$avd_name'"
     adb -s "$emulator_id" emu kill 2>/dev/null || kill $emulator_pid 2>/dev/null || true
-    
+
     # Wait for shutdown
     sleep 5
     print_success "Emulator '$avd_name' stopped"
@@ -283,11 +271,11 @@ if ! git diff --quiet HEAD -- pubspec.yaml fastlane/metadata pubspec.lock assets
     git add pubspec.yaml fastlane/metadata pubspec.lock assets
     git commit -m "Release $new_version"
     print_success "Committed version bump"
-    
+
     # Create tag
     git tag "$new_version"
     print_success "Created tag: $new_version"
-    
+
     echo ""
     print_step "Next steps:"
     echo "1. Push changes: git push origin main"
@@ -314,13 +302,13 @@ fi
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Checking Linux dependencies..."
     missing_deps=()
-    
-    if ! command -v clang &> /dev/null; then missing_deps+=("clang"); fi
-    if ! command -v cmake &> /dev/null; then missing_deps+=("cmake"); fi
-    if ! command -v ninja &> /dev/null; then missing_deps+=("ninja-build"); fi
-    if ! pkg-config --exists gtk+-3.0 &> /dev/null; then missing_deps+=("libgtk-3-dev"); fi
-    if ! pkg-config --exists liblzma &> /dev/null; then missing_deps+=("liblzma-dev"); fi
-    
+
+    if ! command -v clang &>/dev/null; then missing_deps+=("clang"); fi
+    if ! command -v cmake &>/dev/null; then missing_deps+=("cmake"); fi
+    if ! command -v ninja &>/dev/null; then missing_deps+=("ninja-build"); fi
+    if ! pkg-config --exists gtk+-3.0 &>/dev/null; then missing_deps+=("libgtk-3-dev"); fi
+    if ! pkg-config --exists liblzma &>/dev/null; then missing_deps+=("liblzma-dev"); fi
+
     if [ ${#missing_deps[@]} -ne 0 ]; then
         print_error "Missing Linux dependencies: ${missing_deps[*]}"
         echo "Please install them using your package manager, e.g.:"
