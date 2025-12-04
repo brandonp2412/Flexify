@@ -660,7 +660,7 @@ class _EditSetPageState extends State<EditSetPage> {
         final random = Random();
         final randomMessage =
             positiveReinforcement[random.nextInt(positiveReinforcement.length)];
-        if (mounted) toast(context, randomMessage);
+        if (mounted) toast(randomMessage);
       }
     }
 

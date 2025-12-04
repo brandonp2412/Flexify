@@ -120,7 +120,7 @@ List<Widget> getWorkoutSettings(
                   ),
                 );
             if (!settings.notifications)
-              toast(context, 'Positive messages appear now like this!');
+              toast('Positive messages appear now like this!');
           },
           trailing: Switch(
             value: settings.notifications,

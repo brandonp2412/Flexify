@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -84,6 +86,7 @@ class App extends StatelessWidget {
         );
 
         return MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessenger,
           title: 'Flexify',
           theme: ThemeData(
             colorScheme: colors ? lightDynamic : light,

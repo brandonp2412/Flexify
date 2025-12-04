@@ -51,9 +51,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
       if (mounted)
         toast(
-          context,
           "New version ${pkg.version}",
-          SnackBarAction(
+          action: SnackBarAction(
             label: 'Changes',
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
@@ -76,7 +75,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final old = state.value.tabs;
     var tabs = state.value.tabs.split(',');
 
-    if (tabs.length == 1) return toast(context, "Can't hide everything!");
+    if (tabs.length == 1) return toast("Can't hide everything!");
     tabs.remove(tab);
     db.settings.update().write(
           SettingsCompanion(
@@ -84,9 +83,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         );
     toast(
-      context,
       'Hid $tab',
-      SnackBarAction(
+      action: SnackBarAction(
         label: 'Undo',
         onPressed: () {
           db.settings.update().write(

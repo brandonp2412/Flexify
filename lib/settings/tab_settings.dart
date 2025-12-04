@@ -43,7 +43,7 @@ class _TabSettingsState extends State<TabSettings> {
 
   void setTab(String name, bool enabled) {
     if (!enabled && tabs.where((tab) => tab.enabled == true).length == 1)
-      return toast(context, 'You need at least one tab');
+      return toast('You need at least one tab');
     final index = tabs.indexWhere((tappedTab) => tappedTab.name == name);
     setState(() {
       tabs[index] = (name: name, enabled: enabled);

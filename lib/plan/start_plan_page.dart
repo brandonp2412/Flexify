@@ -588,7 +588,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final random = Random();
     final randomMessage =
         positiveReinforcement[random.nextInt(positiveReinforcement.length)];
-    if (mounted && random.nextDouble() < 0.3) toast(context, randomMessage);
+    if (mounted && random.nextDouble() < 0.3) toast(randomMessage);
   }
 
   Future<void> select(int index) async {
@@ -604,7 +604,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final weightSet = await getBodyWeight();
     if (!mounted) return;
     if (weightSet == null) {
-      toast(context, 'No weight entered yet');
+      toast('No weight entered yet');
     } else {
       weight.text = toString(weightSet.weight);
     }

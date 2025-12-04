@@ -6,17 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-void toast(BuildContext context, String message, [SnackBarAction? action]) {
-  final def = SnackBarAction(label: 'OK', onPressed: () {});
-
-  ScaffoldMessenger.of(context).showSnackBar(
+void toast(String message, {SnackBarAction? action, Duration? duration}) {
+  rootScaffoldMessenger.currentState!.showSnackBar(
     SnackBar(
       content: Text(message),
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-      action: action ?? def,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      action: action,
+      duration: duration ?? const Duration(seconds: 4),
     ),
   );
 }

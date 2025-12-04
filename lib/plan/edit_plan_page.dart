@@ -182,11 +182,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
     for (int i = 0; i < days.length; i++)
       if (days[i]) selected.add(weekdays[i]);
 
-    if (selected.isEmpty && titleCtrl.text.isEmpty)
-      return toast(context, 'Select days');
+    if (selected.isEmpty && titleCtrl.text.isEmpty) return toast('Select days');
 
     if (exercises.where((exercise) => exercise.enabled.value).isEmpty)
-      return toast(context, 'Select exercises');
+      return toast('Select exercises');
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),
