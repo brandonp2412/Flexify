@@ -436,14 +436,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           .watch();
     });
 
-    final first = await stream.first;
-    final lastIndex = planState.lastSets
-        .indexWhere((element) => element.name == first[0].exercise);
-    if (lastIndex != -1) {
-      final last = planState.lastSets[lastIndex];
-      if (mounted) _updateGymSetTextFields(last);
-    }
-
+    select(0);
     if (!mounted) return;
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation) {
