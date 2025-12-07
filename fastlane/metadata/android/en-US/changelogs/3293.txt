@@ -1,7 +1,5 @@
 • Fix exporting plan csvs
-• Fix importing latin1 encoded files
+• Fix importing files from windows
 • Improve error handling
 • Keep timer progress even if timer page is hidden
-• Manually specify changelog
-• Remove dependency checking in deploy.sh
 • Select first exercise correctly in plans
