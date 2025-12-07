@@ -84,7 +84,9 @@ class ExportData extends StatelessWidget {
                       ];
                       for (var plan in plans) {
                         final planExercises = await (db.planExercises.select()
-                              ..where((u) => u.planId.equals(plan.id)))
+                              ..where(
+                                (u) => u.planId.equals(plan.id) & u.enabled,
+                              ))
                             .get();
                         data.add([
                           plan.id,

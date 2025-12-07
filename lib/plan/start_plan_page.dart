@@ -423,8 +423,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     setState(() {
       stream = (db.planExercises.select()
             ..where(
-              (pe) =>
-                  pe.planId.equals(widget.plan.id) & pe.enabled.equals(true),
+              (pe) => pe.planId.equals(widget.plan.id) & pe.enabled,
             )
             ..orderBy(
               [

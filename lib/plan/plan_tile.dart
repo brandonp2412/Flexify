@@ -42,8 +42,7 @@ class _PlanTileState extends State<PlanTile> {
 
   Stream<List<PlanExercise>> _getExercises() {
     return (db.planExercises.select()
-          ..where((tbl) => tbl.planId.equals(widget.plan.id))
-          ..where((tbl) => tbl.enabled.equals(true))
+          ..where((tbl) => tbl.planId.equals(widget.plan.id) & tbl.enabled)
           ..orderBy(
             [
               (u) =>
