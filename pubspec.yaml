@@ -9,7 +9,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   drift: ^2.28.1
-  sqlite3_flutter_libs: ^0.5.39
   path_provider: ^2.1.2
   path: ^1.8.3
   csv: ^6.0.0
@@ -18,7 +17,8 @@ dependencies:
   permission_handler: ^12.0.1
   provider: ^6.1.1
   dynamic_color: ^1.7.0
-  sqlite3: ^2.4.0
+  drift_sqflite: ^2.0.1
+  sqflite: ^2.4.2
   file_picker: ^10.2.0
   share_plus: ^11.0.0
   audioplayers: ^6.5.0
