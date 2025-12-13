@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
 
 void main() async {
@@ -28,6 +29,7 @@ void main() async {
           home: Scaffold(
             resizeToAvoidBottomInset: false,
             body: GraphTile(
+              tabCtrl: MockTabController(),
               onSelect: (value) => null,
               selected: const {},
               gymSet: GymSetsCompanion(

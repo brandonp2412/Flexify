@@ -378,6 +378,7 @@ void main() {
             // ignore: use_build_context_synchronously
             context: context,
             page: StrengthPage(
+              tabCtrl: MockTabController(),
               name: screenshotExercise,
               unit: 'kg',
               data: await getStrengthData(

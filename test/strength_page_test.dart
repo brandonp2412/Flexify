@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import '../integration_test/screenshot_test.dart';
+import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
 
 void main() async {
@@ -56,6 +57,7 @@ void main() async {
           home: DefaultTabController(
             length: 1,
             child: StrengthPage(
+              tabCtrl: MockTabController(),
               name: 'Dumbbell shoulder press',
               unit: 'kg',
               data: await getStrengthData(
@@ -121,6 +123,7 @@ void main() async {
           home: DefaultTabController(
             length: 1,
             child: StrengthPage(
+              tabCtrl: MockTabController(),
               name: 'Dumbbell shoulder press',
               unit: 'kg',
               data: await getStrengthData(
@@ -186,6 +189,7 @@ void main() async {
           home: DefaultTabController(
             length: 1,
             child: StrengthPage(
+              tabCtrl: MockTabController(),
               name: 'Dumbbell shoulder press',
               unit: 'kg',
               data: await getStrengthData(
