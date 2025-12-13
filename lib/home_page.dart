@@ -116,9 +116,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       extendBody: true,
-      bottomSheet: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48.0),
-        child: const TimerProgressIndicator(),
+      bottomSheet: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 48.0),
+          child: const TimerProgressIndicator(),
+        ),
       ),
       body: SafeArea(
         child: Stack(
