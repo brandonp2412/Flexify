@@ -16,12 +16,14 @@ class GraphTile extends StatelessWidget {
   final GymSetsCompanion gymSet;
   final Set<String> selected;
   final Function(String) onSelect;
+  final TabController tabCtrl;
 
   const GraphTile({
     super.key,
     required this.selected,
     required this.onSelect,
     required this.gymSet,
+    required this.tabCtrl,
   });
 
   @override
@@ -175,6 +177,7 @@ class GraphTile extends StatelessWidget {
                 name: gymSet.name.value,
                 unit: gymSet.unit.value,
                 data: data,
+                tabCtrl: tabCtrl,
               ),
             ),
           );

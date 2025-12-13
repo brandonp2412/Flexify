@@ -22,12 +22,14 @@ class StrengthPage extends StatefulWidget {
   final String name;
   final String unit;
   final List<StrengthData> data;
+  final TabController tabCtrl;
 
   const StrengthPage({
     super.key,
     required this.name,
     required this.unit,
     required this.data,
+    required this.tabCtrl,
   });
 
   @override
@@ -45,6 +47,23 @@ class _StrengthPageState extends State<StrengthPage> {
   DateTime? start;
   DateTime? end;
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.tabCtrl.addListener(onTabChanged);
+  }
+
+  void onTabChanged() {
+    if (!widget.tabCtrl.indexIsChanging && mounted) {
+      final tabs = context.read<SettingsState>().value.tabs.split(',');
+      final graphsIndex = tabs.indexOf('GraphsPage');
+
+      if (graphsIndex != -1 && widget.tabCtrl.index == graphsIndex) {
+        setData();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
