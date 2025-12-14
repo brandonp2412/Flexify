@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ class FlexLine extends StatelessWidget {
   final bool? hideBottom;
   final bool? hideLeft;
   final bool? showTrendLine; // New parameter to control trend line visibility
+  final bool timeBasedXAxis; // New flag to indicate time-based X axis
   final LineTouchTooltipData Function() tooltipData;
   final void Function(
     FlTouchEvent event,
@@ -25,6 +28,7 @@ class FlexLine extends StatelessWidget {
     this.hideBottom,
     this.hideLeft,
     this.showTrendLine = true, // Default to showing trend line
+    this.timeBasedXAxis = false,
   });
 
   // Calculate linear regression trend line
@@ -68,19 +72,53 @@ class FlexLine extends StatelessWidget {
     Widget text;
     double screen = MediaQuery.of(context).size.width;
     double label = 120;
-    int count = (screen / label).floor();
-    List<int> indices = List.generate(count, (index) {
-      return ((data.length - 1) * index / (count - 1)).round();
-    });
+    int count = max(2, (screen / label).floor());
 
-    if (indices.contains(value.toInt())) {
-      DateTime created = data[value.toInt()].created;
-      text = Text(
-        DateFormat(format).format(created),
-        style: style,
-      );
+    if (timeBasedXAxis) {
+      // For time-based X axis the 'value' parameter is the timestamp in ms
+      if (spots.isEmpty) {
+        text = const Text('', style: style);
+      } else {
+        // Find nearest spot to this value
+        int nearestIndex = -1;
+        double minDiff = 2;
+        for (int i = 0; i < spots.length; i++) {
+          final d = (spots[i].x - value).abs();
+          if (d < minDiff) {
+            minDiff = d;
+            nearestIndex = i;
+          }
+        }
+
+        // Define a tolerance so we only show labels at sampled positions
+        final range = spots.last.x - spots.first.x;
+        final spacing = range / (count - 1);
+        if (minDiff <= spacing / 2 &&
+            nearestIndex >= 0 &&
+            nearestIndex < data.length) {
+          DateTime created = data[nearestIndex].created;
+          text = Text(
+            DateFormat(format).format(created),
+            style: style,
+          );
+        } else {
+          text = const Text('', style: style);
+        }
+      }
     } else {
-      text = const Text('', style: style);
+      List<int> indices = List.generate(count, (index) {
+        return ((data.length - 1) * index / (count - 1)).round();
+      });
+
+      if (indices.contains(value.toInt())) {
+        DateTime created = data[value.toInt()].created;
+        text = Text(
+          DateFormat(format).format(created),
+          style: style,
+        );
+      } else {
+        text = const Text('', style: style);
+      }
     }
 
     return SideTitleWidget(
@@ -143,6 +181,17 @@ class FlexLine extends StatelessWidget {
       );
     }
 
+    // Determine interval for bottom titles
+    double? bottomInterval;
+    if (timeBasedXAxis && spots.length > 1) {
+      double screen = MediaQuery.of(context).size.width;
+      double label = 120;
+      int count = max(2, (screen / label).floor());
+      bottomInterval = (spots.last.x - spots.first.x) / (count - 1);
+    } else {
+      bottomInterval = 1;
+    }
+
     return LineChart(
       LineChartData(
         titlesData: FlTitlesData(
@@ -162,7 +211,7 @@ class FlexLine extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: hideBottom != true,
               reservedSize: 27,
-              interval: 1,
+              interval: bottomInterval,
               getTitlesWidget: (value, meta) => bottomTitleWidgets(
                 value,
                 meta,

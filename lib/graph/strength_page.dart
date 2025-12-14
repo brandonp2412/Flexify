@@ -49,23 +49,6 @@ class _StrengthPageState extends State<StrengthPage> {
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
   @override
-  void initState() {
-    super.initState();
-    widget.tabCtrl.addListener(onTabChanged);
-  }
-
-  void onTabChanged() {
-    if (!widget.tabCtrl.indexIsChanging && mounted) {
-      final tabs = context.read<SettingsState>().value.tabs.split(',');
-      final graphsIndex = tabs.indexOf('GraphsPage');
-
-      if (graphsIndex != -1 && widget.tabCtrl.index == graphsIndex) {
-        setData();
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>().value;
 
@@ -113,41 +96,38 @@ class _StrengthPageState extends State<StrengthPage> {
               children: [
                 Visibility(
                   visible: name != 'Weight',
-                  child: material.Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: 'Metric'),
-                      initialValue: metric,
-                      items: [
+                  child: DropdownButtonFormField(
+                    decoration: const InputDecoration(labelText: 'Metric'),
+                    initialValue: metric,
+                    items: [
+                      const DropdownMenuItem(
+                        value: StrengthMetric.bestWeight,
+                        child: Text("Best weight"),
+                      ),
+                      const DropdownMenuItem(
+                        value: StrengthMetric.bestReps,
+                        child: Text("Best reps"),
+                      ),
+                      const DropdownMenuItem(
+                        value: StrengthMetric.oneRepMax,
+                        child: Text("One rep max"),
+                      ),
+                      const DropdownMenuItem(
+                        value: StrengthMetric.volume,
+                        child: Text("Volume"),
+                      ),
+                      if (settings.showBodyWeight)
                         const DropdownMenuItem(
-                          value: StrengthMetric.bestWeight,
-                          child: Text("Best weight"),
+                          value: StrengthMetric.relativeStrength,
+                          child: Text("Relative strength"),
                         ),
-                        const DropdownMenuItem(
-                          value: StrengthMetric.bestReps,
-                          child: Text("Best reps"),
-                        ),
-                        const DropdownMenuItem(
-                          value: StrengthMetric.oneRepMax,
-                          child: Text("One rep max"),
-                        ),
-                        const DropdownMenuItem(
-                          value: StrengthMetric.volume,
-                          child: Text("Volume"),
-                        ),
-                        if (settings.showBodyWeight)
-                          const DropdownMenuItem(
-                            value: StrengthMetric.relativeStrength,
-                            child: Text("Relative strength"),
-                          ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          metric = value!;
-                        });
-                        setData();
-                      },
-                    ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        metric = value!;
+                      });
+                      setData();
+                    },
                   ),
                 ),
                 DropdownButtonFormField(
@@ -178,90 +158,91 @@ class _StrengthPageState extends State<StrengthPage> {
                     setData();
                   },
                 ),
-                SizedBox(height: 8),
                 Visibility(
                   visible: settings.showUnits,
-                  child: material.Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: 'Unit'),
-                      initialValue: target,
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'kg',
-                          child: Text("Kilograms (kg)"),
-                        ),
-                        DropdownMenuItem(
-                          value: 'lb',
-                          child: Text("Pounds (lb)"),
-                        ),
-                        DropdownMenuItem(
-                          value: 'stone',
-                          child: Text("Stone"),
-                        ),
-                      ],
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          target = newValue!;
-                        });
-                        setData();
-                      },
-                    ),
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: 'Unit'),
+                    initialValue: target,
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'kg',
+                        child: Text("Kilograms (kg)"),
+                      ),
+                      DropdownMenuItem(
+                        value: 'lb',
+                        child: Text("Pounds (lb)"),
+                      ),
+                      DropdownMenuItem(
+                        value: 'stone',
+                        child: Text("Stone"),
+                      ),
+                    ],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        target = newValue!;
+                      });
+                      setData();
+                    },
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title: const Text('Start date'),
-                        subtitle: start == null
-                            ? Text(settings.shortDateFormat)
-                            : Text(
-                                DateFormat(settings.shortDateFormat)
-                                    .format(start!),
-                              ),
-                        onLongPress: () {
-                          setState(() {
-                            start = null;
-                          });
-                          setData();
-                        },
-                        trailing: const Icon(Icons.calendar_today),
-                        onTap: () => _selectStart(),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        title: const Text('Stop date'),
-                        subtitle: Selector<SettingsState, String>(
-                          selector: (p0, settings) =>
-                              settings.value.shortDateFormat,
-                          builder: (context, value, child) {
-                            if (end == null) return Text(value);
-
-                            return Text(
-                              DateFormat(value).format(end!),
-                            );
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          title: const Text('Start date'),
+                          subtitle: start == null
+                              ? Text(settings.shortDateFormat)
+                              : Text(
+                                  DateFormat(settings.shortDateFormat)
+                                      .format(start!),
+                                ),
+                          onLongPress: () {
+                            setState(() {
+                              start = null;
+                            });
+                            setData();
                           },
+                          trailing: const Icon(Icons.calendar_today),
+                          onTap: () => _selectStart(),
                         ),
-                        onLongPress: () {
-                          setState(() {
-                            end = null;
-                          });
-                          setData();
-                        },
-                        trailing: const Icon(Icons.calendar_today),
-                        onTap: () => _selectEnd(),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: ListTile(
+                          title: const Text('Stop date'),
+                          subtitle: Selector<SettingsState, String>(
+                            selector: (p0, settings) =>
+                                settings.value.shortDateFormat,
+                            builder: (context, value, child) {
+                              if (end == null) return Text(value);
+
+                              return Text(
+                                DateFormat(value).format(end!),
+                              );
+                            },
+                          ),
+                          onLongPress: () {
+                            setState(() {
+                              end = null;
+                            });
+                            setData();
+                          },
+                          trailing: const Icon(Icons.calendar_today),
+                          onTap: () => _selectEnd(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 8),
                 material.Column(
                   children: [
-                    Text(
-                      "Limit ($limit)",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    material.Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text(
+                        "Limit ($limit)",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                     ),
                     Slider(
                       value: limit.toDouble(),
@@ -296,7 +277,7 @@ class _StrengthPageState extends State<StrengthPage> {
                           ),
                         ),
                 ),
-                const SizedBox(height: 200),
+                const SizedBox(height: 75),
               ],
             );
           },
@@ -357,34 +338,31 @@ class _StrengthPageState extends State<StrengthPage> {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
-        return touchedSpots.map((spot) {
-          // Only show tooltip for the first line (index 0 = actual data)
-          // Return null for trend line (index 1)
-          if (spot.barIndex != 0) return null;
+        final row = data.elementAt(touchedSpots.last.spotIndex);
+        final created = DateFormat(format).format(row.created);
+        final formatter = NumberFormat("#,###.00");
 
-          final row = data.elementAt(spot.spotIndex);
-          final created = DateFormat(format).format(row.created);
-          final formatter = NumberFormat("#,###.00");
+        String text = "${row.value.toStringAsFixed(2)}$target $created";
+        switch (metric) {
+          case StrengthMetric.bestReps:
+          case StrengthMetric.relativeStrength:
+            text = "${row.value.toStringAsFixed(2)} $created";
+            break;
+          case StrengthMetric.volume:
+          case StrengthMetric.oneRepMax:
+            text = "${formatter.format(row.value)}$target $created";
+            break;
+          case StrengthMetric.bestWeight:
+            break;
+        }
 
-          String text = "${row.value.toStringAsFixed(2)}$target $created";
-          switch (metric) {
-            case StrengthMetric.bestReps:
-            case StrengthMetric.relativeStrength:
-              text = "${row.value.toStringAsFixed(2)} $created";
-              break;
-            case StrengthMetric.volume:
-            case StrengthMetric.oneRepMax:
-              text = "${formatter.format(row.value)}$target $created";
-              break;
-            case StrengthMetric.bestWeight:
-              break;
-          }
-
-          return LineTooltipItem(
+        return [
+          LineTooltipItem(
             text,
             TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
-          );
-        }).toList();
+          ),
+          if (touchedSpots.length > 1) null,
+        ];
       },
     );
   }

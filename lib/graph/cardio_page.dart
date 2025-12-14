@@ -42,6 +42,7 @@ class _CardioPageState extends State<CardioPage> {
   DateTime? end;
   TabController? ctrl;
   DateTime lastTap = DateTime(0);
+  bool useTimeBasedXAxis = false;
 
   LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
         getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
@@ -156,7 +157,11 @@ class _CardioPageState extends State<CardioPage> {
             for (var index = 0; index < rows.length; index++) {
               final row = rows.elementAt(index);
               final value = double.parse(row.value.toStringAsFixed(1));
-              spots.add(FlSpot(index.toDouble(), value));
+              if (useTimeBasedXAxis) {
+                spots.add(FlSpot(row.created.millisecondsSinceEpoch.toDouble(), value));
+              } else {
+                spots.add(FlSpot(index.toDouble(), value));
+              }
             }
 
             final settings = context.watch<SettingsState>().value;
@@ -306,6 +311,13 @@ class _CardioPageState extends State<CardioPage> {
                   ],
                 ),
                 SizedBox(height: 8),
+                SwitchListTile(
+                  title: const Text('Use time-based X axis'),
+                  value: useTimeBasedXAxis,
+                  onChanged: (val) => setState(() {
+                    useTimeBasedXAxis = val;
+                  }),
+                ),
                 if (rows.isEmpty)
                   ListTile(
                     title: Text("No data yet for ${widget.name}"),
@@ -324,6 +336,7 @@ class _CardioPageState extends State<CardioPage> {
                             tooltipData(settings.shortDateFormat),
                         touchLine: touchLine,
                         data: data,
+                        timeBasedXAxis: useTimeBasedXAxis,
                       ),
                     ),
                   ),
