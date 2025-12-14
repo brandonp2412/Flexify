@@ -357,31 +357,34 @@ class _StrengthPageState extends State<StrengthPage> {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
-        final row = data.elementAt(touchedSpots.last.spotIndex);
-        final created = DateFormat(format).format(row.created);
-        final formatter = NumberFormat("#,###.00");
+        return touchedSpots.map((spot) {
+          // Only show tooltip for the first line (index 0 = actual data)
+          // Return null for trend line (index 1)
+          if (spot.barIndex != 0) return null;
 
-        String text = "${row.value.toStringAsFixed(2)}$target $created";
-        switch (metric) {
-          case StrengthMetric.bestReps:
-          case StrengthMetric.relativeStrength:
-            text = "${row.value.toStringAsFixed(2)} $created";
-            break;
-          case StrengthMetric.volume:
-          case StrengthMetric.oneRepMax:
-            text = "${formatter.format(row.value)}$target $created";
-            break;
-          case StrengthMetric.bestWeight:
-            break;
-        }
+          final row = data.elementAt(spot.spotIndex);
+          final created = DateFormat(format).format(row.created);
+          final formatter = NumberFormat("#,###.00");
 
-        return [
-          LineTooltipItem(
+          String text = "${row.value.toStringAsFixed(2)}$target $created";
+          switch (metric) {
+            case StrengthMetric.bestReps:
+            case StrengthMetric.relativeStrength:
+              text = "${row.value.toStringAsFixed(2)} $created";
+              break;
+            case StrengthMetric.volume:
+            case StrengthMetric.oneRepMax:
+              text = "${formatter.format(row.value)}$target $created";
+              break;
+            case StrengthMetric.bestWeight:
+              break;
+          }
+
+          return LineTooltipItem(
             text,
             TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
-          ),
-          if (touchedSpots.length > 1) null,
-        ];
+          );
+        }).toList();
       },
     );
   }

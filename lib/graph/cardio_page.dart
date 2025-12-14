@@ -46,39 +46,40 @@ class _CardioPageState extends State<CardioPage> {
   LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
         getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
         getTooltipItems: (touchedSpots) {
-          final row = data.elementAt(touchedSpots.last.spotIndex);
-          String text = row.value.toStringAsFixed(2);
-          final created = DateFormat(format).format(row.created);
+          return touchedSpots.map((spot) {
+            // Only show tooltip for the first line (index 0 = actual data)
+            // Return null for trend line (index 1)
+            if (spot.barIndex != 0) return null;
 
-          switch (metric) {
-            case CardioMetric.pace:
-              text = "${row.value} ${row.unit} / min";
-              break;
-            case CardioMetric.duration:
-              final minutes = row.value.floor();
-              final seconds =
-                  ((row.value * 60) % 60).floor().toString().padLeft(2, '0');
-              text = "$minutes:$seconds";
-              break;
-            case CardioMetric.distance:
-              text += " ${row.unit}";
-              break;
-            case CardioMetric.incline:
-              text += "%";
-              break;
-            case CardioMetric.inclineAdjustedPace:
-              break;
-          }
-
-          return [
-            LineTooltipItem(
+            final row = data.elementAt(spot.spotIndex);
+            String text = row.value.toStringAsFixed(2);
+            final created = DateFormat(format).format(row.created);
+            switch (metric) {
+              case CardioMetric.pace:
+                text = "${row.value} ${row.unit} / min";
+                break;
+              case CardioMetric.duration:
+                final minutes = row.value.floor();
+                final seconds =
+                    ((row.value * 60) % 60).floor().toString().padLeft(2, '0');
+                text = "$minutes:$seconds";
+                break;
+              case CardioMetric.distance:
+                text += " ${row.unit}";
+                break;
+              case CardioMetric.incline:
+                text += "%";
+                break;
+              case CardioMetric.inclineAdjustedPace:
+                break;
+            }
+            return LineTooltipItem(
               "$text\n$created",
               TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
-            ),
-            if (touchedSpots.length > 1) null,
-          ];
+            );
+          }).toList();
         },
       );
 
