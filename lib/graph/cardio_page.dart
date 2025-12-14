@@ -194,6 +194,7 @@ class _CardioPageState extends State<CardioPage> {
                     setData();
                   },
                 ),
+                SizedBox(height: 8),
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Period'),
                   initialValue: period,
@@ -222,34 +223,38 @@ class _CardioPageState extends State<CardioPage> {
                     setData();
                   },
                 ),
+                SizedBox(height: 8),
                 if (metric == CardioMetric.distance)
                   Selector<SettingsState, bool>(
                     selector: (p0, p1) => p1.value.showUnits,
                     builder: (context, value, child) => Visibility(
                       visible: value,
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(labelText: 'Unit'),
-                        initialValue: target,
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'km',
-                            child: Text("Kilometers (km)"),
-                          ),
-                          DropdownMenuItem(
-                            value: 'mi',
-                            child: Text("Miles (mi)"),
-                          ),
-                          DropdownMenuItem(
-                            value: 'm',
-                            child: Text("Meters (m)"),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            target = value!;
-                          });
-                          setData();
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(labelText: 'Unit'),
+                          initialValue: target,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'km',
+                              child: Text("Kilometers (km)"),
+                            ),
+                            DropdownMenuItem(
+                              value: 'mi',
+                              child: Text("Miles (mi)"),
+                            ),
+                            DropdownMenuItem(
+                              value: 'm',
+                              child: Text("Meters (m)"),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              target = value!;
+                            });
+                            setData();
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -299,6 +304,7 @@ class _CardioPageState extends State<CardioPage> {
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
                 if (rows.isEmpty)
                   ListTile(
                     title: Text("No data yet for ${widget.name}"),
@@ -320,7 +326,7 @@ class _CardioPageState extends State<CardioPage> {
                       ),
                     ),
                   ),
-                const SizedBox(height: 75),
+                const SizedBox(height: 200),
               ],
             );
           },
