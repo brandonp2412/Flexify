@@ -39,6 +39,7 @@ class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> data = widget.data;
   late String target = widget.unit;
   late String name = widget.name;
+  bool useTimeBasedXAxis = false;
 
   int limit = 20;
   StrengthMetric metric = StrengthMetric.bestWeight;
@@ -118,7 +119,11 @@ class _StrengthPageState extends State<StrengthPage> {
           builder: (context) {
             List<FlSpot> spots = [];
             for (var index = 0; index < data.length; index++) {
-              spots.add(FlSpot(index.toDouble(), data[index].value));
+              if (useTimeBasedXAxis) {
+                spots.add(FlSpot(data[index].created.millisecondsSinceEpoch.toDouble(), data[index].value));
+              } else {
+                spots.add(FlSpot(index.toDouble(), data[index].value));
+              }
             }
 
             return ListView(
@@ -264,6 +269,13 @@ class _StrengthPageState extends State<StrengthPage> {
                     ],
                   ),
                 ),
+                SwitchListTile(
+                  title: const Text('Use time-based X axis'),
+                  value: useTimeBasedXAxis,
+                  onChanged: (val) => setState(() {
+                    useTimeBasedXAxis = val;
+                  }),
+                ),
                 material.Column(
                   children: [
                     material.Padding(
@@ -303,6 +315,7 @@ class _StrengthPageState extends State<StrengthPage> {
                             tooltipData: () =>
                                 tooltipData(settings.shortDateFormat),
                             touchLine: touchLine,
+                            timeBasedXAxis: useTimeBasedXAxis,
                           ),
                         ),
                 ),
