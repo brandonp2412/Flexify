@@ -12,6 +12,7 @@ final List<String> long = [
   'dd/MM/yy',
   'dd/MM/yy h:mm a',
   'dd/MM/yy H:mm',
+  'dd.MM.yyyy H:mm',
   'EEE h:mm a',
   'yyyy-MM-dd',
   'yyyy-MM-dd h:mm a',
@@ -20,6 +21,7 @@ final List<String> long = [
   'yyyy.MM.dd h:mm a',
   'yyyy.MM.dd H:mm',
   'MMM d (EEE) h:mm a',
+  'EEE, dd.MM.yyyy H:mm',
 ];
 
 final List<String> short = [
@@ -29,6 +31,7 @@ final List<String> short = [
   'M-d-yy',
   'd.M.yy',
   'M.d.yy',
+  'dd.MM.yy',
 ];
 
 List<Widget> getFormatSettings(String term, Setting settings) {
