@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -63,6 +62,36 @@ class _StrengthPageState extends State<StrengthPage> {
           },
         ),
         actions: [
+          IconButton(
+            onPressed: () async {
+              final gymSets = await (db.gymSets.select()
+                ..orderBy(
+                  [
+                        (u) => OrderingTerm(
+                      expression: u.created,
+                      mode: OrderingMode.desc,
+                    ),
+                  ],
+                )
+                ..where((tbl) => tbl.name.equals(name))
+                ..where((tbl) => tbl.hidden.equals(false))
+                ..limit(20))
+                  .get();
+              if (!context.mounted) return;
+
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => GraphHistoryPage(
+                    name: name,
+                    gymSets: gymSets,
+                  ),
+                ),
+              );
+              Timer(kThemeAnimationDuration, setData);
+            },
+            icon: const Icon(Icons.history),
+            tooltip: "History",
+          ),
           IconButton(
             onPressed: () async {
               String? newName = await Navigator.push(
@@ -282,36 +311,6 @@ class _StrengthPageState extends State<StrengthPage> {
             );
           },
         ),
-      ),
-      floatingActionButton: AnimatedFab(
-        onPressed: () async {
-          final gymSets = await (db.gymSets.select()
-                ..orderBy(
-                  [
-                    (u) => OrderingTerm(
-                          expression: u.created,
-                          mode: OrderingMode.desc,
-                        ),
-                  ],
-                )
-                ..where((tbl) => tbl.name.equals(name))
-                ..where((tbl) => tbl.hidden.equals(false))
-                ..limit(20))
-              .get();
-          if (!context.mounted) return;
-
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => GraphHistoryPage(
-                name: name,
-                gymSets: gymSets,
-              ),
-            ),
-          );
-          Timer(kThemeAnimationDuration, setData);
-        },
-        icon: const Icon(Icons.history),
-        label: const Text('History'),
       ),
     );
   }
