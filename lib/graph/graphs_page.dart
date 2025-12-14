@@ -425,6 +425,7 @@ class GraphsPageState extends State<GraphsPage>
                   total = result.read(db.gymSets.name.count()) ?? 0;
                 });
               },
+              tabCtrl: widget.tabController,
             ),
           ],
         );

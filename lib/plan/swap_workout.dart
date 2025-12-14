@@ -93,18 +93,21 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                     return ListTile(
                       title: Text(exercise),
                       onTap: () async {
-                        await (db.planExercises.delete()
+                        final old = await (db.planExercises.select()
                               ..where(
                                 (tbl) =>
                                     tbl.planId.equals(widget.planId) &
                                     tbl.exercise.equals(widget.exercise),
-                              ))
-                            .go();
+                              )
+                              ..limit(1))
+                            .getSingle();
+                        await db.planExercises.deleteOne(old);
                         await db.planExercises.insertOne(
                           PlanExercisesCompanion.insert(
                             enabled: true,
                             exercise: exercise,
                             planId: widget.planId,
+                            sequence: drift.Value(old.sequence),
                           ),
                         );
 

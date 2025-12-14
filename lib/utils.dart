@@ -14,6 +14,7 @@ void toast(String message, {SnackBarAction? action, Duration? duration}) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       action: action,
       duration: duration ?? const Duration(seconds: 4),
+      persist: false,
     ),
   );
 }
