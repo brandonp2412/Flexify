@@ -2,4 +2,3 @@
 • Fix toasts never dismissing
 • Fix tooltips on graphs
 • Maintain order when swapping an exercise
-• Upgrade ndk version
