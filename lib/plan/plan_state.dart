@@ -138,11 +138,10 @@ class PlanState extends ChangeNotifier {
             SELECT p.id, pe.exercise AS name,
               COALESCE(pe.max_sets, settings.max_sets) AS max_sets,
               COUNT(
-                CASE WHEN p.id = gs.plan_id
-                  AND DATE(created, 'unixepoch', 'localtime') =
-                    DATE('now', 'localtime')
-                  AND hidden = 0
-                  THEN 1
+                CASE WHEN gs.id IS NOT NULL
+                  AND DATE(gs.created, 'unixepoch', 'localtime') = DATE('now', 'localtime')
+                  AND gs.hidden = 0
+                THEN 1
                 END
               ) as todays_count
             FROM plans p
@@ -150,10 +149,11 @@ class PlanState extends ChangeNotifier {
               AND pe.enabled = true
             LEFT JOIN settings
             LEFT JOIN gym_sets gs ON pe.exercise = gs.name
+              AND gs.plan_id = p.id
             GROUP BY pe.exercise, p.id
         )
         GROUP BY id
-      """,
+    """,
       readsFrom: {db.plans, db.gymSets, db.planExercises, db.settings},
     )).get().then((rows) {
       return rows
