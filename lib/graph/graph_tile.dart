@@ -152,6 +152,7 @@ class GraphTile extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => CardioPage(
+                  tabCtrl: tabCtrl,
                   name: gymSet.name.value,
                   unit: gymSet.unit.value,
                   data: data,

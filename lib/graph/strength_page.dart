@@ -49,6 +49,25 @@ class _StrengthPageState extends State<StrengthPage> {
   DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
 
   @override
+  void initState() {
+    super.initState();
+    widget.tabCtrl.addListener(_onTabChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.tabCtrl.removeListener(_onTabChanged);
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    final settings = context.read<SettingsState>().value;
+    if (widget.tabCtrl.index == settings.tabs.indexOf('GraphsPage')) {
+      setData();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>().value;
 
@@ -66,17 +85,17 @@ class _StrengthPageState extends State<StrengthPage> {
           IconButton(
             onPressed: () async {
               final gymSets = await (db.gymSets.select()
-                ..orderBy(
-                  [
+                    ..orderBy(
+                      [
                         (u) => OrderingTerm(
-                      expression: u.created,
-                      mode: OrderingMode.desc,
-                    ),
-                  ],
-                )
-                ..where((tbl) => tbl.name.equals(name))
-                ..where((tbl) => tbl.hidden.equals(false))
-                ..limit(20))
+                              expression: u.created,
+                              mode: OrderingMode.desc,
+                            ),
+                      ],
+                    )
+                    ..where((tbl) => tbl.name.equals(name))
+                    ..where((tbl) => tbl.hidden.equals(false))
+                    ..limit(20))
                   .get();
               if (!context.mounted) return;
 
@@ -120,7 +139,12 @@ class _StrengthPageState extends State<StrengthPage> {
             List<FlSpot> spots = [];
             for (var index = 0; index < data.length; index++) {
               if (useTimeBasedXAxis) {
-                spots.add(FlSpot(data[index].created.millisecondsSinceEpoch.toDouble(), data[index].value));
+                spots.add(
+                  FlSpot(
+                    data[index].created.millisecondsSinceEpoch.toDouble(),
+                    data[index].value,
+                  ),
+                );
               } else {
                 spots.add(FlSpot(index.toDouble(), data[index].value));
               }

@@ -20,12 +20,14 @@ class CardioPage extends StatefulWidget {
   final String name;
   final String unit;
   final List<CardioData> data;
+  final TabController tabCtrl;
 
   const CardioPage({
     super.key,
     required this.name,
     required this.unit,
     required this.data,
+    required this.tabCtrl,
   });
 
   @override
@@ -42,6 +44,25 @@ class _CardioPageState extends State<CardioPage> {
   TabController? ctrl;
   DateTime lastTap = DateTime(0);
   bool useTimeBasedXAxis = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.tabCtrl.addListener(_onTabChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.tabCtrl.removeListener(_onTabChanged);
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    final settings = context.read<SettingsState>().value;
+    if (widget.tabCtrl.index == settings.tabs.indexOf('GraphsPage')) {
+      setData();
+    }
+  }
 
   LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
         getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
@@ -133,17 +154,17 @@ class _CardioPageState extends State<CardioPage> {
           IconButton(
             onPressed: () async {
               final gymSets = await (db.gymSets.select()
-                ..orderBy(
-                  [
+                    ..orderBy(
+                      [
                         (u) => OrderingTerm(
-                      expression: u.created,
-                      mode: OrderingMode.desc,
-                    ),
-                  ],
-                )
-                ..where((tbl) => tbl.name.equals(widget.name))
-                ..where((tbl) => tbl.hidden.equals(false))
-                ..limit(20))
+                              expression: u.created,
+                              mode: OrderingMode.desc,
+                            ),
+                      ],
+                    )
+                    ..where((tbl) => tbl.name.equals(widget.name))
+                    ..where((tbl) => tbl.hidden.equals(false))
+                    ..limit(20))
                   .get();
               if (!context.mounted) return;
 
@@ -187,7 +208,12 @@ class _CardioPageState extends State<CardioPage> {
               final row = rows.elementAt(index);
               final value = double.parse(row.value.toStringAsFixed(1));
               if (useTimeBasedXAxis) {
-                spots.add(FlSpot(row.created.millisecondsSinceEpoch.toDouble(), value));
+                spots.add(
+                  FlSpot(
+                    row.created.millisecondsSinceEpoch.toDouble(),
+                    value,
+                  ),
+                );
               } else {
                 spots.add(FlSpot(index.toDouble(), value));
               }
@@ -376,30 +402,6 @@ class _CardioPageState extends State<CardioPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ctrl = DefaultTabController.of(context);
-      ctrl?.addListener(tabListener);
-    });
-  }
-
-  void tabListener() {
-    final settings = context.read<SettingsState>().value;
-    final index = settings.tabs.split(',').indexOf('GraphsPage');
-    if (ctrl!.indexIsChanging == true) return;
-    if (ctrl!.index != index) return;
-    setData();
-  }
-
-  @override
-  void dispose() {
-    ctrl?.removeListener(tabListener);
-    super.dispose();
   }
 
   void setData() async {
