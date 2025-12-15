@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import '../integration_test/screenshot_test.dart';
+import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
 
 void main() async {
@@ -45,6 +46,7 @@ void main() async {
           home: DefaultTabController(
             length: 1,
             child: CardioPage(
+              tabCtrl: MockTabController(),
               name: 'Run',
               unit: 'km',
               data: await getCardioData(
@@ -100,6 +102,7 @@ void main() async {
           home: DefaultTabController(
             length: 1,
             child: CardioPage(
+              tabCtrl: MockTabController(),
               name: 'Run',
               unit: 'km',
               data: await getCardioData(
@@ -151,6 +154,7 @@ void main() async {
           home: DefaultTabController(
             length: 1,
             child: CardioPage(
+              tabCtrl: MockTabController(),
               name: 'Run',
               unit: 'km',
               data: await getCardioData(
