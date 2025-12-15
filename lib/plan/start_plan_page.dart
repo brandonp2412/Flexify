@@ -53,7 +53,6 @@ class _StartPlanPageState extends State<StartPlanPage>
   @override
   Widget build(BuildContext context) {
     if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
-    title = title[0].toUpperCase() + title.substring(1).toLowerCase();
     planState = context.watch<PlanState>();
 
     return material.StreamBuilder(
