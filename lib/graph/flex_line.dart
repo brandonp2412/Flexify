@@ -11,8 +11,8 @@ class FlexLine extends StatelessWidget {
   final List<dynamic> data;
   final bool? hideBottom;
   final bool? hideLeft;
-  final bool? showTrendLine; // New parameter to control trend line visibility
-  final bool timeBasedXAxis; // New flag to indicate time-based X axis
+  final bool? showTrendLine;
+  final bool timeBasedXAxis;
   final LineTouchTooltipData Function() tooltipData;
   final void Function(
     FlTouchEvent event,
@@ -27,7 +27,7 @@ class FlexLine extends StatelessWidget {
     this.touchLine,
     this.hideBottom,
     this.hideLeft,
-    this.showTrendLine = true, // Default to showing trend line
+    this.showTrendLine = true,
     this.timeBasedXAxis = false,
   });
 
@@ -45,11 +45,9 @@ class FlexLine extends StatelessWidget {
       sumXX += spot.x * spot.x;
     }
 
-    // Calculate slope (m) and y-intercept (b) for y = mx + b
     double slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     double intercept = (sumY - slope * sumX) / n;
 
-    // Generate trend line points from first to last x value
     double startX = spots.first.x;
     double endX = spots.last.x;
 
@@ -75,11 +73,9 @@ class FlexLine extends StatelessWidget {
     int count = max(2, (screen / label).floor());
 
     if (timeBasedXAxis) {
-      // For time-based X axis the 'value' parameter is the timestamp in ms
       if (spots.isEmpty) {
         text = const Text('', style: style);
       } else {
-        // Find nearest spot to this value
         int nearestIndex = -1;
         double minDiff = 2;
         for (int i = 0; i < spots.length; i++) {
@@ -90,7 +86,6 @@ class FlexLine extends StatelessWidget {
           }
         }
 
-        // Define a tolerance so we only show labels at sampled positions
         final range = spots.last.x - spots.first.x;
         final spacing = range / (count - 1);
         if (minDiff <= spacing / 2 &&
@@ -135,13 +130,27 @@ class FlexLine extends StatelessWidget {
     ];
     final settings = context.watch<SettingsState>().value;
 
-    // Calculate trend line spots
+    // CRITICAL FIX: Calculate Y-axis min/max to prevent decimal interval issues
+    double minY = spots.isEmpty
+        ? 0
+        : spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
+    double maxY = spots.isEmpty
+        ? 1
+        : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
+
+    // If range is very small (decimal-only data), expand it to prevent tiny intervals
+    double range = maxY - minY;
+    if (range < 1.0) {
+      // Ensure at least a range of 1.0 to avoid problematic decimal intervals
+      double center = (maxY + minY) / 2;
+      minY = center - 0.5;
+      maxY = center + 0.5;
+    }
+
     List<FlSpot> trendSpots =
         showTrendLine == true ? _calculateTrendLine(spots) : [];
 
-    // Prepare line bars data
     List<LineChartBarData> lineBarsData = [
-      // Original data line
       LineChartBarData(
         spots: spots,
         isCurved: settings.curveLines,
@@ -163,20 +172,19 @@ class FlexLine extends StatelessWidget {
       ),
     ];
 
-    // Add trend line if enabled and we have enough data points
     if (showTrendLine == true && trendSpots.isNotEmpty) {
       lineBarsData.add(
         LineChartBarData(
           spots: trendSpots,
-          isCurved: false, // Trend line should always be straight
+          isCurved: false,
           color: Theme.of(context).colorScheme.secondary,
           barWidth: 2,
           isStrokeCapRound: true,
           dotData: const FlDotData(
             show: false,
           ),
-          dashArray: [5, 5], // Makes the trend line dashed
-          belowBarData: BarAreaData(show: false), // No fill for trend line
+          dashArray: [5, 5],
+          belowBarData: BarAreaData(show: false),
         ),
       );
     }
@@ -194,6 +202,9 @@ class FlexLine extends StatelessWidget {
 
     return LineChart(
       LineChartData(
+        // FIX: Set explicit min/max for Y-axis to prevent decimal interval issues
+        minY: minY,
+        maxY: maxY,
         titlesData: FlTitlesData(
           topTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false),
