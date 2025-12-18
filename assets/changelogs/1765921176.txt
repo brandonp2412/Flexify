@@ -1,0 +1,6 @@
+• Add new date formats (e.g. for German)
+• Add time based x-axis option for graph
+• Fix out of memory issues
+• Fix plan trailing ratio & count
+• Let users decide the capitalization of plan titles
+• Move history button to the nav bar

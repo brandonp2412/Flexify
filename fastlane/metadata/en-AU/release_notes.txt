@@ -1,6 +1,10 @@
 • Add new date formats (e.g. for German)
-• Add time based x-axis option for graph
+• add time based x-axis option for graph
+• Ad report a bug button to about page
+• Allow deploying to windows store failures
+• Fix alarm sound picker
+• fix missing toogle on strength_page.dart
 • Fix out of memory issues
 • Fix plan trailing ratio & count
+• Fix unit tests
 • Let users decide the capitalization of plan titles
-• Move history button to the nav bar
