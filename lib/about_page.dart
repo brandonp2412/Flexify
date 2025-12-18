@@ -99,6 +99,17 @@ class AboutPage extends StatelessWidget {
               if (await canLaunchUrlString(url)) await launchUrlString(url);
             },
           ),
+          ListTile(
+            title: const Text("Report a bug"),
+            leading: const Icon(Icons.bug_report),
+            subtitle: const Text("Open a ticket on GitHub"),
+            onTap: () async {
+              final version = (await info).version;
+              final url =
+                  'https://github.com/brandonp2412/Flexify/issues/new?labels=Bug&body=App version: $version';
+              if (await canLaunchUrlString(url)) await launchUrlString(url);
+            },
+          ),
         ],
       ),
     );
