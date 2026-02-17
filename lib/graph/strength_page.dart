@@ -343,7 +343,7 @@ class _StrengthPageState extends State<StrengthPage> {
                           ),
                         ),
                 ),
-                const SizedBox(height: 75),
+                const SizedBox(height: 116),
               ],
             );
           },
