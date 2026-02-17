@@ -77,6 +77,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessenger,
           home: StartPlanPage(
             plan: plan,
           ),
@@ -160,6 +161,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessenger,
           home: StartPlanPage(
             plan: plan,
           ),
@@ -225,6 +227,7 @@ void main() async {
           ChangeNotifierProvider.value(value: planState),
         ],
         child: MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessenger,
           home: StartPlanPage(
             plan: plan,
           ),
