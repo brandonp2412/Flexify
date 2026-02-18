@@ -450,7 +450,15 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   void _updateGymSetTextFields(GymSet gymSet) {
-    unit = gymSet.unit;
+    final settings = context.read<SettingsState>().value;
+    if (settings.strengthUnit == 'last-entry' && !gymSet.cardio ||
+        settings.cardioUnit == 'last-entry' && gymSet.cardio)
+      unit = gymSet.unit;
+    else if (gymSet.cardio)
+      unit = settings.cardioUnit;
+    else
+      unit = settings.strengthUnit;
+
     reps.text = toString(gymSet.reps);
     weight.text = toString(gymSet.weight);
     distance.text = toString(gymSet.distance);

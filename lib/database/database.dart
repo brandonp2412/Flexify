@@ -427,10 +427,22 @@ class AppDatabase extends _$AppDatabase {
             )
           ''');
         },
+        from46To47: (Migrator m, Schema47 schema) async {
+          await schema.database.customStatement('''
+            UPDATE settings 
+            SET cardio_unit = 'last-entry'
+            WHERE cardio_unit = 'km'
+          ''');
+          await schema.database.customStatement('''
+            UPDATE settings 
+            SET strength_unit = 'last-entry'
+            WHERE strength_unit = 'kg'
+          ''');
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 46;
+  int get schemaVersion => 47;
 }
