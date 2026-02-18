@@ -47,7 +47,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   late Stream<List<PlanExercise>> stream;
   late PlanState planState = context.read<PlanState>();
-  late String unit = context.read<SettingsState>().value.strengthUnit;
+  late String unit = 'kg';
   late String title = widget.plan.days.replaceAll(",", ", ");
 
   @override
@@ -410,7 +410,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     WidgetsBinding.instance.addObserver(this);
 
     planState = context.read<PlanState>();
-    unit = context.read<SettingsState>().value.strengthUnit;
     title = widget.plan.title?.isNotEmpty == true
         ? widget.plan.title!
         : widget.plan.days.replaceAll(",", ", ");
