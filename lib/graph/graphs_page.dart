@@ -169,21 +169,21 @@ class GraphsPageState extends State<GraphsPage>
           switch (sort) {
             case GraphSort.dateDesc:
               gymSets.sort(
-                    (a, b) => b.created.value.compareTo(a.created.value),
+                (a, b) => b.created.value.compareTo(a.created.value),
               );
               break;
 
             case GraphSort.dateAsc:
               gymSets.sort(
-                    (a, b) => a.created.value.compareTo(b.created.value),
+                (a, b) => a.created.value.compareTo(b.created.value),
               );
               break;
 
             case GraphSort.name:
               gymSets.sort(
-                    (a, b) => a.name.value.toLowerCase().compareTo(
-                  b.name.value.toLowerCase(),
-                ),
+                (a, b) => a.name.value.toLowerCase().compareTo(
+                      b.name.value.toLowerCase(),
+                    ),
               );
               break;
           }
@@ -408,15 +408,17 @@ class GraphsPageState extends State<GraphsPage>
         final set = gymSets.elementAtOrNull(currentIdx);
         if (set == null) return const SizedBox();
 
-        final previousItem = currentIdx > 0 ? gymSets[currentIdx - 1] : set;
+        final prev = currentIdx > 0 ? gymSets[currentIdx - 1] : null;
 
-        final bool showDivider =
-            sort != GraphSort.name
-                && (currentIdx == 0 || !isSameDay(set.created.value.toLocal(), previousItem.created.value.toLocal()));
+        final created = prev?.created.value.toLocal();
+
+        final divider = sort != GraphSort.name &&
+            created != null &&
+            !isSameDay(created, set.created.value);
 
         return material.Column(
           children: [
-            if (showDivider)
+            if (divider)
               material.Row(
                 children: [
                   const material.Expanded(child: Divider()),
@@ -425,7 +427,7 @@ class GraphsPageState extends State<GraphsPage>
                   Selector<SettingsState, String>(
                     selector: (p0, p1) => p1.value.shortDateFormat,
                     builder: (context, format, child) =>
-                        Text(DateFormat(format).format(set.created.value.toLocal())),
+                        Text(DateFormat(format).format(created)),
                   ),
                   const SizedBox(width: 4),
                   const material.Expanded(child: Divider()),
