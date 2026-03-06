@@ -122,6 +122,7 @@ class _SettingsPageState extends State<SettingsPage>
             ),
             Expanded(
               child: ListView(
+                padding: const EdgeInsets.only(bottom: 116),
                 children: searchCtrl.text.isNotEmpty
                     ? filtered
                     : [
