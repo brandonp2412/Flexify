@@ -34,7 +34,7 @@ class _GraphsFiltersState extends State<GraphsFilters> {
       isLabelVisible: count > 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: StreamBuilder(
-        stream: categoriesStream,
+        stream: getCategoriesStream(),
         builder: (context, snapshot) {
           return PopupMenuButton(
             tooltip: "Filter",

@@ -258,7 +258,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 selector: (context, settings) => settings.value.showUnits,
               ),
               StreamBuilder(
-                stream: categoriesStream,
+                stream: getCategoriesStream(),
                 builder: (context, snapshot) {
                   return DropdownButtonFormField(
                     decoration: InputDecoration(
