@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -14,7 +14,6 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,10 +51,9 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.plan.title?.isNotEmpty == true) title = widget.plan.title!;
     planState = context.watch<PlanState>();
 
-    return material.StreamBuilder(
+    return StreamBuilder(
       stream: stream,
       builder: (context, snapshot) {
         if (snapshot.data == null) return SizedBox();
@@ -92,7 +90,7 @@ class _StartPlanPageState extends State<StartPlanPage>
             padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 104),
             child: Form(
               key: key,
-              child: material.Column(
+              child: Column(
                 children: [
                   if (!cardio) ...strengthFields(snapshot),
                   if (cardio) ...cardioFields(snapshot),
@@ -138,31 +136,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           return null;
         },
       ),
-      TextFormField(
-        controller: weight,
-        decoration: InputDecoration(
-          labelText: 'Weight ($unit)',
-          suffixIcon: Selector<SettingsState, bool>(
-            selector: (context, settings) => settings.value.showBodyWeight,
-            builder: (context, showBodyWeight, child) => Visibility(
-              visible: showBodyWeight,
-              child: IconButton(
-                tooltip: "Use body weight",
-                icon: const Icon(Icons.scale),
-                onPressed: useBodyWeight,
-              ),
-            ),
-          ),
-        ),
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        onTap: () => selectAll(weight),
-        onFieldSubmitted: (value) async => await save(snapshot),
-        validator: (value) {
-          if (value == null || value.isEmpty) return 'Required';
-          if (double.tryParse(value) == null) return 'Invalid number';
-          return null;
-        },
-      ),
+      _weightField(snapshot),
     ];
   }
 
@@ -208,35 +182,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       Row(
         children: [
           if (unit == 'kg' || unit == 'lb' || unit == 'stone')
-            material.Expanded(
-              child: TextFormField(
-                controller: weight,
-                decoration: InputDecoration(
-                  labelText: 'Weight ($unit)',
-                  suffixIcon: Selector<SettingsState, bool>(
-                    selector: (context, settings) =>
-                        settings.value.showBodyWeight,
-                    builder: (context, showBodyWeight, child) => Visibility(
-                      visible: showBodyWeight,
-                      child: IconButton(
-                        tooltip: "Use body weight",
-                        icon: const Icon(Icons.scale),
-                        onPressed: useBodyWeight,
-                      ),
-                    ),
-                  ),
-                ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                onTap: () => selectAll(weight),
-                onFieldSubmitted: (value) async => await save(snapshot),
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Required';
-                  if (double.tryParse(value) == null) return 'Invalid number';
-                  return null;
-                },
-              ),
-            )
+            Expanded(child: _weightField(snapshot))
           else
             Expanded(
               child: TextFormField(
@@ -275,6 +221,34 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
+  TextFormField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
+    return TextFormField(
+      controller: weight,
+      decoration: InputDecoration(
+        labelText: 'Weight ($unit)',
+        suffixIcon: Selector<SettingsState, bool>(
+          selector: (context, settings) => settings.value.showBodyWeight,
+          builder: (context, showBodyWeight, child) => Visibility(
+            visible: showBodyWeight,
+            child: IconButton(
+              tooltip: "Use body weight",
+              icon: const Icon(Icons.scale),
+              onPressed: useBodyWeight,
+            ),
+          ),
+        ),
+      ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onTap: () => selectAll(weight),
+      onFieldSubmitted: (value) async => await save(snapshot),
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Required';
+        if (double.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
+  }
+
   Widget unitSelector() {
     return Selector<SettingsState, bool>(
       selector: (context, settings) => settings.value.showUnits,
@@ -283,7 +257,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Unit'),
           initialValue: unit,
-          items: _getUnitItems(),
+          items: _unitItems,
           onChanged: (String? newValue) {
             setState(() {
               unit = newValue!;
@@ -308,38 +282,15 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
-  List<DropdownMenuItem<String>> _getUnitItems() {
-    return const [
-      DropdownMenuItem(
-        value: 'kg',
-        child: Text("Kilograms (kg)"),
-      ),
-      DropdownMenuItem(
-        value: 'lb',
-        child: Text("Pounds (lb)"),
-      ),
-      DropdownMenuItem(
-        value: 'stone',
-        child: Text("Stone"),
-      ),
-      DropdownMenuItem(
-        value: 'km',
-        child: Text("Kilometers (km)"),
-      ),
-      DropdownMenuItem(
-        value: 'mi',
-        child: Text("Miles (mi)"),
-      ),
-      DropdownMenuItem(
-        value: 'm',
-        child: Text("Meters (m)"),
-      ),
-      DropdownMenuItem(
-        value: 'kcal',
-        child: Text("Kilocalories (kcal)"),
-      ),
-    ];
-  }
+  static const _unitItems = [
+    DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
+    DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
+    DropdownMenuItem(value: 'stone', child: Text("Stone")),
+    DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
+    DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
+    DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
+    DropdownMenuItem(value: 'kcal', child: Text("Kilocalories (kcal)")),
+  ];
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -476,10 +427,11 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index == -1) return Navigator.pop(context);
 
     final plan = planState.plans[index];
-
     if (!mounted) return;
     setState(() {
-      title = plan.days.replaceAll(',', ', ');
+      title = plan.title?.isNotEmpty == true
+          ? plan.title!
+          : plan.days.replaceAll(',', ', ');
     });
   }
 
