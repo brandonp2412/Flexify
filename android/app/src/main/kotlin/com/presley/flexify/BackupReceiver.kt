@@ -31,10 +31,18 @@ class BackupReceiver : BroadcastReceiver() {
         val dir = DocumentFile.fromTreeUri(context, backupUri)
         if (dir == null) return
 
-        val fileName = "flexify.sqlite"
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+        val dateStr = sdf.format(java.util.Date())
+        val fileName = "flexify-$dateStr.sqlite"
 
-        // Delete existing backup if it exists
+        // Delete existing backup for today if it exists
         dir.findFile(fileName)?.delete()
+
+        // Keep only the 2 most recent backups total (1 existing + today's new one)
+        val backupFiles = dir.listFiles()
+            .filter { it.name?.matches(Regex("flexify-\\d{4}-\\d{2}-\\d{2}\\.sqlite")) == true }
+            .sortedByDescending { it.name }
+        backupFiles.drop(1).forEach { it.delete() }
 
         val channelId = "backup_channel"
         var notificationBuilder = NotificationCompat.Builder(context, channelId)
@@ -100,7 +108,7 @@ class BackupReceiver : BroadcastReceiver() {
             }
 
             val dbFolder = File(parentDir, "app_flutter").absolutePath
-            val dbFile = File(dbFolder, fileName)
+            val dbFile = File(dbFolder, "flexify.sqlite")
 
             if (!dbFile.exists()) {
                 Log.e("BackupReceiver", "Database file does not exist: ${dbFile.absolutePath}")
