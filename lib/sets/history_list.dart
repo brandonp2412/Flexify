@@ -31,7 +31,6 @@ class HistoryList extends StatefulWidget {
 
 class _HistoryListState extends State<HistoryList> {
   bool goingNext = false;
-  final GlobalKey<AnimatedListState> _key = GlobalKey<AnimatedListState>();
   List<GymSet> _current = [];
 
   @override
@@ -44,71 +43,9 @@ class _HistoryListState extends State<HistoryList> {
   @override
   void didUpdateWidget(HistoryList oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    final toRemove = _current
-        .where(
-          (oldSet) => !widget.sets.contains(oldSet),
-        )
-        .toList();
-
-    for (var setToRemove in toRemove) {
-      final index = _current.indexOf(setToRemove);
-      if (index != -1) {
-        final removedSet = _current.removeAt(index);
-        _key.currentState?.removeItem(
-          index,
-          (context, animation) => _buildItem(
-            removedSet,
-            animation,
-            index,
-            context.read<SettingsState>().value.showImages,
-          ),
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-    }
-
-    final toAdd = widget.sets
-        .where(
-          (newSet) => !_current.contains(newSet),
-        )
-        .toList();
-
-    for (var setToAdd in toAdd) {
-      final insertIndex = widget.sets.indexOf(setToAdd);
-      if (insertIndex >= 0 && insertIndex <= _current.length) {
-        _current.insert(insertIndex, setToAdd);
-        _key.currentState?.insertItem(insertIndex, duration: Duration.zero);
-      }
-    }
-  }
-
-  Widget _buildItem(
-    GymSet gymSet,
-    Animation<double> animation,
-    int index,
-    bool showImages,
-  ) {
-    final offsetAnimation = Tween<Offset>(
-      begin: const Offset(0.0, -1.0),
-      end: const Offset(0.0, 0.0),
-    ).chain(CurveTween(curve: Curves.easeInOut)).animate(animation);
-
-    final sizeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).chain(CurveTween(curve: Curves.easeInOut)).animate(animation);
-
-    return SizeTransition(
-      sizeFactor: sizeAnimation,
-      child: FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-          position: offsetAnimation,
-          child: _buildListItem(gymSet, index, showImages),
-        ),
-      ),
-    );
+    setState(() {
+      _current = List.from(widget.sets);
+    });
   }
 
   Widget _buildListItem(GymSet gymSet, int index, bool showImages) {
@@ -259,13 +196,12 @@ class _HistoryListState extends State<HistoryList> {
     final showImages = context
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
-    return AnimatedList(
-      key: _key,
-      initialItemCount: _current.length,
+    return ListView.builder(
       padding: const EdgeInsets.only(bottom: 96, top: 8),
       controller: widget.scroll,
-      itemBuilder: (context, index, animation) {
-        return _buildItem(_current[index], animation, index, showImages);
+      itemCount: _current.length,
+      itemBuilder: (context, index) {
+        return _buildListItem(_current[index], index, showImages);
       },
     );
   }
