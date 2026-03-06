@@ -59,7 +59,8 @@ class _CardioPageState extends State<CardioPage> {
 
   void _onTabChanged() {
     final settings = context.read<SettingsState>().value;
-    if (widget.tabCtrl.index == settings.tabs.indexOf('GraphsPage')) {
+    if (widget.tabCtrl.index ==
+        settings.tabs.split(',').indexOf('GraphsPage')) {
       setData();
     }
   }

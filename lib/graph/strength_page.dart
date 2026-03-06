@@ -62,7 +62,8 @@ class _StrengthPageState extends State<StrengthPage> {
 
   void _onTabChanged() {
     final settings = context.read<SettingsState>().value;
-    if (widget.tabCtrl.index == settings.tabs.indexOf('GraphsPage')) {
+    if (widget.tabCtrl.index ==
+        settings.tabs.split(',').indexOf('GraphsPage')) {
       setData();
     }
   }
