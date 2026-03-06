@@ -1,0 +1,10 @@
+• Add env for web screenshots
+• Delete duplicated changelogs
+• Fix buildConfig issues
+• Fix chromedriver port
+• Fix chromedriver setup
+• Fix emulator name in android screenshots
+• Git add entire fastlane dir for workflow
+• Install & start chromedriver in workflows
+• Make sure screenshots are in the commit
+• Prevent duplicates in changelog copying

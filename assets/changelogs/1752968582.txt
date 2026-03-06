@@ -1,0 +1,4 @@
+• Change github workflow
+• Fix github workflow
+• Remove redundant git pulls
+• Replicate fdroid build system for android build releases

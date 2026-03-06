@@ -1,0 +1,11 @@
+- Upgrade flutter
+- Double tapping an exercise opens it
+- Clarify deleting from graphs page
+- Long tap on tabs to hide them
+- Automatically capitalize search for plan exercises
+- Fix bugs on strength graphs
+- Use nested page on graphs -> add
+- Use nested route on timer -> settings
+- Add graph peeking
+- Fix bug on strength page
+- Wait for gym set to save before updating images

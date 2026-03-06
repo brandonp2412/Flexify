@@ -1,0 +1,3 @@
+• Add screenshots to github workflow [skip ci]
+• Fix flutter cache permissions
+• Save sets from history after submitting weight

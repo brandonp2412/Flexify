@@ -1,0 +1,2 @@
+• Balance padding around global progress
+• Fix deploy.sh [skip ci]

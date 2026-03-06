@@ -1,0 +1,7 @@
+- Update flutter
+- Fix X axis consistency in global graphs
+- Only request background permissions once
+- Fix timer progress logic
+- Show most recent graphs instead of best weight
+- Show error before blank loading box in graphs page
+- Add dynamic search

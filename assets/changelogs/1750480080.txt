@@ -1,0 +1,1 @@
+- Fix cardio entries from history page

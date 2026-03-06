@@ -1,0 +1,6 @@
+- Fix tests
+- Add share menus
+- Fix keyboard flickering on submit
+- Preview previous created dates on multi-edit
+- Use new unit selector for cardio graphs
+- Copy layout of strength graphs to cardio

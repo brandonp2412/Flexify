@@ -1,0 +1,4 @@
+- Redesign day selector
+- Fix lag opening graph history
+- Re-calculate ORM when editing reps/weight
+- Add padding to end of edit plan page

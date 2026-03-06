@@ -1,0 +1,4 @@
+- Toggle timers per plan item
+- Add muscle group filter to graphs page
+- Fix unit padding on settings page
+- Fix exercise images not being removed

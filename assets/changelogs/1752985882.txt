@@ -1,0 +1,2 @@
+• Fix final move stage of pipeline
+• Fix upload android artifacts
