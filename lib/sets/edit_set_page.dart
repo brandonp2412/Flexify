@@ -358,7 +358,7 @@ class _EditSetPageState extends State<EditSetPage> {
         }
 
         return StreamBuilder(
-          stream: categoriesStream,
+          stream: getCategoriesStream(),
           builder: (context, snapshot) {
             return Autocomplete<String>(
               initialValue: TextEditingValue(

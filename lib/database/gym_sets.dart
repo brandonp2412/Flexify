@@ -454,11 +454,14 @@ class GymSets extends Table {
   RealColumn get weight => real()();
 }
 
-final categoriesStream = (db.gymSets.selectOnly(distinct: true)
-      ..addColumns([db.gymSets.category])
-      ..where(db.gymSets.category.isNotNull()))
-    .watch()
-    .map(
-      (results) =>
-          results.map((result) => result.read(db.gymSets.category) ?? ""),
-    );
+Stream<List<String>> getCategoriesStream() {
+  return (db.gymSets.selectOnly(distinct: true)
+        ..addColumns([db.gymSets.category])
+        ..where(db.gymSets.category.isNotNull()))
+      .watch()
+      .map(
+        (results) => results
+            .map((result) => result.read(db.gymSets.category) ?? "")
+            .toList(),
+      );
+}

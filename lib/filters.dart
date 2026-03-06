@@ -66,7 +66,7 @@ class _FiltersState extends State<Filters> {
       isLabelVisible: filtersCount > 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: StreamBuilder(
-        stream: categoriesStream,
+        stream: getCategoriesStream(),
         builder: (context, snapshot) {
           return PopupMenuButton(
             itemBuilder: (context) => [

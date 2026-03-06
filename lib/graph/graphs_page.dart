@@ -44,6 +44,7 @@ class GraphsPageState extends State<GraphsPage>
   final scroll = ScrollController();
   bool extendFab = true;
   int total = 0;
+  GraphSort sort = GraphSort.dateDesc;
 
   @override
   bool get wantKeepAlive => true;
@@ -165,7 +166,27 @@ class GraphsPageState extends State<GraphsPage>
           }
 
           final gymSets = stream.toList();
+          switch (sort) {
+            case GraphSort.dateDesc:
+              gymSets.sort(
+                (a, b) => b.created.value.compareTo(a.created.value),
+              );
+              break;
 
+            case GraphSort.dateAsc:
+              gymSets.sort(
+                (a, b) => a.created.value.compareTo(b.created.value),
+              );
+              break;
+
+            case GraphSort.name:
+              gymSets.sort(
+                (a, b) => a.name.value.toLowerCase().compareTo(
+                      b.name.value.toLowerCase(),
+                    ),
+              );
+              break;
+          }
           return material.Column(
             children: [
               AppSearch(
@@ -174,6 +195,12 @@ class GraphsPageState extends State<GraphsPage>
                   setCategory: (value) {
                     setState(() {
                       category = value;
+                    });
+                  },
+                  sort: sort,
+                  setSort: (value) {
+                    setState(() {
+                      sort = value;
                     });
                   },
                 ),
@@ -385,8 +412,9 @@ class GraphsPageState extends State<GraphsPage>
 
         final created = prev?.created.value.toLocal();
 
-        final divider =
-            created != null && !isSameDay(created, set.created.value);
+        final divider = sort != GraphSort.name &&
+            created != null &&
+            !isSameDay(created, set.created.value);
 
         return material.Column(
           children: [

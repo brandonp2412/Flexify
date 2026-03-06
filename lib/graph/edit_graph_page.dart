@@ -99,7 +99,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 builder: (context, showCategories, child) {
                   if (!showCategories) return const SizedBox();
                   return StreamBuilder(
-                    stream: categoriesStream,
+                    stream: getCategoriesStream(),
                     builder: (context, snapshot) {
                       return DropdownButtonFormField(
                         decoration:

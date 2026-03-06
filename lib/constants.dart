@@ -31,6 +31,12 @@ enum StrengthMetric {
   bestReps,
 }
 
+enum GraphSort {
+  dateDesc,
+  dateAsc,
+  name,
+}
+
 final defaultSettings = SettingsCompanion.insert(
   themeMode: ThemeMode.system.toString(),
   planTrailing: PlanTrailing.reorder.toString(),
