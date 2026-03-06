@@ -17,6 +17,7 @@ class AboutPage extends StatelessWidget {
         title: const Text("About"),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 116),
         children: [
           const Padding(
             padding: EdgeInsets.all(8.0),
