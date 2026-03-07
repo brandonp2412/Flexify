@@ -104,18 +104,13 @@ class GraphTile extends StatelessWidget {
     );
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      margin: const EdgeInsets.symmetric(),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(0),
         color: selected.contains(gymSet.name.value)
-            ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
             : Colors.transparent,
-        border: Border.all(
-          color: selected.contains(gymSet.name.value)
-              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
-              : Colors.transparent,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.transparent, width: 0),
       ),
       child: ListTile(
         leading: leading,

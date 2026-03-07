@@ -162,14 +162,22 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
               child: leading,
             );
 
-            return ListTile(
+            return Container(
+              margin: const EdgeInsets.symmetric(),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(0),
+                color: widget.selected.contains(gymSet.id)
+                    ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+                    : Colors.transparent,
+                border: Border.all(color: Colors.transparent, width: 0),
+              ),
+              child: ListTile(
               leading: leading,
               title: Text(
                 gymSet.cardio
                     ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
                     : "$reps x $weight ${gymSet.unit}",
               ),
-              selected: widget.selected.contains(gymSet.id),
               subtitle: Selector<SettingsState, String>(
                 selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, dateFormat, child) => Text(
@@ -192,6 +200,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                     ),
                   );
               },
+            ),
             );
           },
         ).toList(),
