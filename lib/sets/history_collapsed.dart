@@ -167,40 +167,44 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(0),
                 color: widget.selected.contains(gymSet.id)
-                    ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+                    ? Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: .18)
                     : Colors.transparent,
                 border: Border.all(color: Colors.transparent, width: 0),
               ),
               child: ListTile(
-              leading: leading,
-              title: Text(
-                gymSet.cardio
-                    ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
-                    : "$reps x $weight ${gymSet.unit}",
-              ),
-              subtitle: Selector<SettingsState, String>(
-                selector: (context, settings) => settings.value.longDateFormat,
-                builder: (context, dateFormat, child) => Text(
-                  dateFormat == 'timeago'
-                      ? timeago.format(gymSet.created)
-                      : DateFormat(dateFormat).format(gymSet.created),
+                leading: leading,
+                title: Text(
+                  gymSet.cardio
+                      ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
+                      : "$reps x $weight ${gymSet.unit}",
                 ),
-              ),
-              onLongPress: () {
-                widget.onSelect(gymSet.id);
-              },
-              onTap: () {
-                if (widget.selected.isNotEmpty)
+                subtitle: Selector<SettingsState, String>(
+                  selector: (context, settings) =>
+                      settings.value.longDateFormat,
+                  builder: (context, dateFormat, child) => Text(
+                    dateFormat == 'timeago'
+                        ? timeago.format(gymSet.created)
+                        : DateFormat(dateFormat).format(gymSet.created),
+                  ),
+                ),
+                onLongPress: () {
                   widget.onSelect(gymSet.id);
-                else
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditSetPage(gymSet: gymSet),
-                    ),
-                  );
-              },
-            ),
+                },
+                onTap: () {
+                  if (widget.selected.isNotEmpty)
+                    widget.onSelect(gymSet.id);
+                  else
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditSetPage(gymSet: gymSet),
+                      ),
+                    );
+                },
+              ),
             );
           },
         ).toList(),
