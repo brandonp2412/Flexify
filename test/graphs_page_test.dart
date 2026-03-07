@@ -247,4 +247,66 @@ void main() async {
 
     await db.close();
   });
+
+  testWidgets('GraphsPage delete also removes plan exercises',
+      (WidgetTester tester) async {
+    await mockTests();
+    db = AppDatabase(NativeDatabase.memory());
+
+    await db.gymSets.insertOne(
+      GymSetsCompanion.insert(
+        name: 'Zz unique test exercise',
+        reps: 12,
+        weight: 30,
+        unit: 'kg',
+        created: DateTime.now().toLocal().add(const Duration(seconds: 5)),
+        hidden: const Value(false),
+        category: const Value('Chest'),
+      ),
+    );
+
+    final planId = await db.plans.insertOne(
+      PlansCompanion.insert(days: 'Monday'),
+    );
+    await db.planExercises.insertOne(
+      PlanExercisesCompanion.insert(
+        planId: planId,
+        exercise: 'Zz unique test exercise',
+        enabled: true,
+      ),
+    );
+
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: MaterialApp(
+          home: GraphsPage(tabController: MockTabController()),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.longPress(find.text('Zz unique test exercise'));
+    await tester.pumpAndSettle();
+
+    final delete = find.byTooltip('Delete selected');
+    await tester.tap(delete);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+
+    final planExercises = await (db.planExercises.select()
+          ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
+        .get();
+    expect(planExercises, isEmpty);
+
+    await db.close();
+  });
 }

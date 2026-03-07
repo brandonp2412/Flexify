@@ -78,13 +78,9 @@ class GraphsPageState extends State<GraphsPage>
     });
 
     await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(copy))).go();
-
-    final plans = await db.plans.select().get();
-    for (final plan in plans) {
-      db
-          .delete(db.planExercises)
-          .where((x) => x.planId.equals(plan.id) & x.exercise.isIn(copy));
-    }
+    await (db.delete(db.planExercises)
+          ..where((x) => x.exercise.isIn(copy)))
+        .go();
     state.updatePlans(null);
   }
 
