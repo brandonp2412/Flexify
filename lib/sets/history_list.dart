@@ -128,34 +128,33 @@ class _HistoryListState extends State<HistoryList> {
     return Column(
       children: [
         if (showDivider)
-          Row(
-            children: [
-              const Expanded(child: Divider()),
-              const Icon(Icons.today),
-              const SizedBox(width: 4),
-              Selector<SettingsState, String>(
-                selector: (context, settings) => settings.value.shortDateFormat,
-                builder: (context, value, child) => Text(
-                  DateFormat(value).format(previousGymSet.created),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Expanded(child: Divider()),
+                const Icon(Icons.today),
+                const SizedBox(width: 4),
+                Selector<SettingsState, String>(
+                  selector: (context, settings) =>
+                      settings.value.shortDateFormat,
+                  builder: (context, value, child) => Text(
+                    DateFormat(value).format(previousGymSet.created),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              const Expanded(child: Divider()),
-            ],
+                const SizedBox(width: 4),
+                const Expanded(child: Divider()),
+              ],
+            ),
           ),
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          margin: const EdgeInsets.symmetric(),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(0),
             color: widget.selected.contains(gymSet.id)
-                ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
-            border: Border.all(
-              color: widget.selected.contains(gymSet.id)
-                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
-                  : Colors.transparent,
-              width: 1,
-            ),
+            border: Border.all(color: Colors.transparent, width: 0),
           ),
           child: ListTile(
             leading: leading,
