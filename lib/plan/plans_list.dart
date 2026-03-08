@@ -75,7 +75,7 @@ class _PlansListState extends State<PlansList> {
       return ReorderableListView.builder(
         scrollController: widget.scroll,
         itemCount: filteredPlans.length,
-        padding: const EdgeInsets.only(bottom: 96, top: 16),
+        padding: const EdgeInsets.only(bottom: 96, top: 8),
         itemBuilder: (context, index) {
           final plan = filteredPlans[index];
 
