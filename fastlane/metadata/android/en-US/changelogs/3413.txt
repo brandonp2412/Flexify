@@ -2,5 +2,3 @@
 • Always start timer on activated plans
 • Fix new cardio types not working
 • Long press x axis / limit slider to hide
-• Respect exercise timer disabling
-• Respect warmup sets in activated plans
