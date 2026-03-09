@@ -66,10 +66,19 @@ class _EditSetPageState extends State<EditSetPage> {
           )
           ..limit(1))
         .getSingleOrNull();
-    if (last == null)
+    if (last == null) {
+      final template = await (db.gymSets.select()
+            ..where((tbl) => tbl.name.equals(option))
+            ..limit(1))
+          .getSingleOrNull();
       return setState(() {
         name = option;
+        if (template != null) {
+          cardio = template.cardio;
+          unit = template.unit;
+        }
       });
+    }
 
     if (showBodyWeight)
       updateFields(last);
