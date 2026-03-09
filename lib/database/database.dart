@@ -429,20 +429,24 @@ class AppDatabase extends _$AppDatabase {
         },
         from46To47: (Migrator m, Schema47 schema) async {
           await schema.database.customStatement('''
-            UPDATE settings 
+            UPDATE settings
             SET cardio_unit = 'last-entry'
             WHERE cardio_unit = 'km'
           ''');
           await schema.database.customStatement('''
-            UPDATE settings 
+            UPDATE settings
             SET strength_unit = 'last-entry'
             WHERE strength_unit = 'kg'
           ''');
+        },
+        from47To48: (Migrator m, Schema48 schema) async {
+          await m.addColumn(schema.settings, schema.settings.showGraphXAxis);
+          await m.addColumn(schema.settings, schema.settings.showGraphLimit);
         },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 47;
+  int get schemaVersion => 48;
 }

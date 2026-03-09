@@ -12,6 +12,7 @@ import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,7 @@ class CardioPage extends StatefulWidget {
 class _CardioPageState extends State<CardioPage> {
   late List<CardioData> data = widget.data;
   late String target = widget.unit;
+  int limit = 20;
   CardioMetric metric = CardioMetric.pace;
   Period period = Period.day;
   DateTime? start;
@@ -367,13 +369,41 @@ class _CardioPageState extends State<CardioPage> {
                   ],
                 ),
                 SizedBox(height: 8),
-                SwitchListTile(
-                  title: const Text('Use time-based X axis'),
-                  value: useTimeBasedXAxis,
-                  onChanged: (val) => setState(() {
-                    useTimeBasedXAxis = val;
-                  }),
-                ),
+                if (settings.showGraphXAxis)
+                  SwitchListTile(
+                    title: const Text('Use time-based X axis'),
+                    value: useTimeBasedXAxis,
+                    onChanged: (val) => setState(() {
+                      useTimeBasedXAxis = val;
+                    }),
+                  ),
+                if (settings.showGraphLimit)
+                  material.Column(
+                    children: [
+                      material.Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          "Limit ($limit)",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                      Slider(
+                        value: limit.toDouble(),
+                        inactiveColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.24),
+                        min: 10,
+                        max: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            limit = value.toInt();
+                          });
+                          setData();
+                        },
+                      ),
+                    ],
+                  ),
                 if (rows.isEmpty)
                   ListTile(
                     title: Text("No data yet for ${widget.name}"),
@@ -413,6 +443,7 @@ class _CardioPageState extends State<CardioPage> {
       name: widget.name,
       start: start,
       target: target,
+      limit: limit,
     );
 
     if (!mounted) return;

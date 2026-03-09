@@ -43,4 +43,8 @@ class Settings extends Table {
   IntColumn get warmupSets => integer().nullable()();
   BoolColumn get scrollableTabs =>
       boolean().withDefault(const Constant(true))();
+  BoolColumn get showGraphXAxis =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get showGraphLimit =>
+      boolean().withDefault(const Constant(true))();
 }

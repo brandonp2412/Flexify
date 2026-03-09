@@ -105,6 +105,14 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     InputDecoration(labelText: "Name", hintText: oldNames),
                 textCapitalization: TextCapitalization.sentences,
               ),
+              SwitchListTile(
+                title: const Text('Cardio'),
+                value: cardio ?? false,
+                onChanged: (value) => setState(() {
+                  cardio = value;
+                }),
+                contentPadding: EdgeInsets.zero,
+              ),
               if (cardio == true) ...[
                 TextFormField(
                   controller: distance,

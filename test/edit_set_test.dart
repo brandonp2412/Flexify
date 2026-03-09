@@ -129,6 +129,60 @@ void main() async {
     await db.close();
   });
 
+  testWidgets('cardio toggle switches fields', (WidgetTester tester) async {
+    await mockTests();
+    db = AppDatabase(NativeDatabase.memory());
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: MaterialApp(
+          home: EditSetPage(
+            gymSet: GymSet(
+              id: 0,
+              name: "Bench press",
+              reps: 2,
+              weight: 3,
+              unit: 'kg',
+              created: DateTime.now(),
+              hidden: false,
+              bodyWeight: 0,
+              duration: 0,
+              distance: 0,
+              cardio: false,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Initially strength fields are shown
+    expect(find.bySemanticsLabel('Reps'), findsOne);
+    expect(find.bySemanticsLabel('Minutes'), findsNothing);
+
+    // Toggle cardio on
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    // Cardio fields now shown, strength fields hidden
+    expect(find.bySemanticsLabel('Reps'), findsNothing);
+    expect(find.bySemanticsLabel('Minutes'), findsOne);
+
+    // Toggle cardio off
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    expect(find.bySemanticsLabel('Reps'), findsOne);
+
+    await db.close();
+  });
+
   testWidgets('EditGymSet updates', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());

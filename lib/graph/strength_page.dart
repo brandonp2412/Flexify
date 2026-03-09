@@ -294,39 +294,41 @@ class _StrengthPageState extends State<StrengthPage> {
                     ],
                   ),
                 ),
-                SwitchListTile(
-                  title: const Text('Use time-based X axis'),
-                  value: useTimeBasedXAxis,
-                  onChanged: (val) => setState(() {
-                    useTimeBasedXAxis = val;
-                  }),
-                ),
-                material.Column(
-                  children: [
-                    material.Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text(
-                        "Limit ($limit)",
-                        style: Theme.of(context).textTheme.bodyLarge,
+                if (settings.showGraphXAxis)
+                  SwitchListTile(
+                    title: const Text('Use time-based X axis'),
+                    value: useTimeBasedXAxis,
+                    onChanged: (val) => setState(() {
+                      useTimeBasedXAxis = val;
+                    }),
+                  ),
+                if (settings.showGraphLimit)
+                  material.Column(
+                    children: [
+                      material.Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          "Limit ($limit)",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
-                    ),
-                    Slider(
-                      value: limit.toDouble(),
-                      inactiveColor: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withValues(alpha: 0.24),
-                      min: 10,
-                      max: 100,
-                      onChanged: (value) {
-                        setState(() {
-                          limit = value.toInt();
-                        });
-                        setData();
-                      },
-                    ),
-                  ],
-                ),
+                      Slider(
+                        value: limit.toDouble(),
+                        inactiveColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.24),
+                        min: 10,
+                        max: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            limit = value.toInt();
+                          });
+                          setData();
+                        },
+                      ),
+                    ],
+                  ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.35,
                   child: data.isEmpty

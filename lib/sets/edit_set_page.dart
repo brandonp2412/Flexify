@@ -179,6 +179,14 @@ class _EditSetPageState extends State<EditSetPage> {
               children: [
                 autocomplete(showBodyWeight),
                 const SizedBox(height: 8.0),
+                SwitchListTile(
+                  title: const Text('Cardio'),
+                  value: cardio,
+                  onChanged: (value) => setState(() {
+                    cardio = value;
+                  }),
+                  contentPadding: EdgeInsets.zero,
+                ),
                 ...exerciseFields(),
                 const SizedBox(height: 8.0),
                 if (showBodyWeight && name != 'Weight') ...[

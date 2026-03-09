@@ -168,6 +168,44 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
+    if ('show graph x axis'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Show time-based X axis toggle on graphs',
+        child: ListTile(
+          title: const Text('Show graph X axis toggle'),
+          leading: const Icon(Icons.show_chart),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  showGraphXAxis: Value(!settings.showGraphXAxis),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.showGraphXAxis,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(showGraphXAxis: Value(value))),
+          ),
+        ),
+      ),
+    if ('show graph limit'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Show the limit slider on graphs',
+        child: ListTile(
+          title: const Text('Show graph limit'),
+          leading: const Icon(Icons.tune),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  showGraphLimit: Value(!settings.showGraphLimit),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.showGraphLimit,
+            onChanged: (value) => db.settings
+                .update()
+                .write(SettingsCompanion(showGraphLimit: Value(value))),
+          ),
+        ),
+      ),
   ];
 }
 

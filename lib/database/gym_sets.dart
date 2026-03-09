@@ -39,6 +39,7 @@ Future<List<CardioData>> getCardioData({
   String target = "km",
   DateTime? start,
   DateTime? end,
+  int limit = 11,
 }) async {
   Expression<String> col = getCreated(period);
 
@@ -68,7 +69,7 @@ Future<List<CardioData>> getCardioData({
             mode: OrderingMode.desc,
           ),
         ])
-        ..limit(11)
+        ..limit(limit)
         ..groupBy([col]))
       .get();
 

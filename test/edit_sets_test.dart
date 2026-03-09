@@ -13,6 +13,67 @@ import 'package:provider/provider.dart';
 import 'mock_tests.dart';
 
 void main() async {
+  testWidgets('EditSetsPage cardio toggle switches fields',
+      (WidgetTester tester) async {
+    await mockTests();
+    db = AppDatabase(NativeDatabase.memory());
+
+    await (db.gymSets.insertAll([
+      GymSetsCompanion.insert(
+        name: 'Bench press',
+        reps: 2,
+        weight: 90,
+        unit: 'kg',
+        created: DateTime.now(),
+      ),
+      GymSetsCompanion.insert(
+        name: 'Deadlift',
+        reps: 5,
+        weight: 100,
+        unit: 'kg',
+        created: DateTime.now(),
+      ),
+    ]));
+
+    final ids = (await (db.gymSets.select()..limit(2)).get())
+        .map((gymSet) => gymSet.id)
+        .toList();
+
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: MaterialApp(home: EditSetsPage(ids: ids)),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Initially shows strength fields
+    expect(find.bySemanticsLabel('Reps'), findsOne);
+    expect(find.bySemanticsLabel('Distance'), findsNothing);
+
+    // Toggle cardio on
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    // Now shows cardio fields
+    expect(find.bySemanticsLabel('Reps'), findsNothing);
+    expect(find.bySemanticsLabel('Distance'), findsOne);
+
+    // Toggle cardio off
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    expect(find.bySemanticsLabel('Reps'), findsOne);
+
+    await db.close();
+  });
+
   testWidgets('EditGymSets', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
