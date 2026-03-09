@@ -503,20 +503,15 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (index != -1) count = counts[index].count;
     count++;
 
-    final finishedPlan = count == (max ?? settings.maxSets) &&
-        selected == snapshot.data!.length - 1;
-    final isWarmup = count <= (warmupSets ?? settings.warmupSets ?? 0);
     restMs ??= settings.timerDuration.toDouble();
 
-    if (!finishedPlan && !isWarmup && settings.restTimers && peTimers) {
-      final timerState = context.read<TimerState>();
-      timerState.startTimer(
-        "$exercise ($count)",
-        Duration(milliseconds: restMs.toInt()),
-        settings.alarmSound,
-        settings.vibrate,
-      );
-    }
+    final timerState = context.read<TimerState>();
+    timerState.startTimer(
+      "$exercise ($count)",
+      Duration(milliseconds: restMs.toInt()),
+      settings.alarmSound,
+      settings.vibrate,
+    );
 
     final finishedExercise = count == (max ?? settings.maxSets) &&
         selected < snapshot.data!.length - 1;
