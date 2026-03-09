@@ -505,13 +505,15 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     restMs ??= settings.timerDuration.toDouble();
 
-    final timerState = context.read<TimerState>();
-    timerState.startTimer(
-      "$exercise ($count)",
-      Duration(milliseconds: restMs.toInt()),
-      settings.alarmSound,
-      settings.vibrate,
-    );
+    if (warmupSets != null && count > warmupSets || warmupSets == null) {
+      final timerState = context.read<TimerState>();
+      timerState.startTimer(
+        "$exercise ($count)",
+        Duration(milliseconds: restMs.toInt()),
+        settings.alarmSound,
+        settings.vibrate,
+      );
+    }
 
     final finishedExercise = count == (max ?? settings.maxSets) &&
         selected < snapshot.data!.length - 1;
