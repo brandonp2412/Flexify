@@ -12,6 +12,7 @@ import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -295,40 +296,80 @@ class _StrengthPageState extends State<StrengthPage> {
                   ),
                 ),
                 if (settings.showGraphXAxis)
-                  SwitchListTile(
-                    title: const Text('Use time-based X axis'),
-                    value: useTimeBasedXAxis,
-                    onChanged: (val) => setState(() {
-                      useTimeBasedXAxis = val;
-                    }),
+                  GestureDetector(
+                    onLongPress: () {
+                      db.settings.update().write(
+                            const SettingsCompanion(
+                              showGraphXAxis: Value(false),
+                            ),
+                          );
+                      toast(
+                        'Hid X axis toggle',
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () => db.settings.update().write(
+                                const SettingsCompanion(
+                                  showGraphXAxis: Value(true),
+                                ),
+                              ),
+                        ),
+                      );
+                    },
+                    child: SwitchListTile(
+                      title: const Text('Use time-based X axis'),
+                      value: useTimeBasedXAxis,
+                      onChanged: (val) => setState(() {
+                        useTimeBasedXAxis = val;
+                      }),
+                    ),
                   ),
                 if (settings.showGraphLimit)
                   material.Column(
                     children: [
-                      material.Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Text(
-                          "Limit ($limit)",
-                          style: Theme.of(context).textTheme.bodyLarge,
+                      GestureDetector(
+                        onLongPress: () {
+                          db.settings.update().write(
+                                const SettingsCompanion(
+                                  showGraphLimit: Value(false),
+                                ),
+                              );
+                          toast(
+                            'Hid graph limit',
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              onPressed: () => db.settings.update().write(
+                                    const SettingsCompanion(
+                                      showGraphLimit: Value(true),
+                                    ),
+                                  ),
+                            ),
+                          );
+                        },
+                        child: material.Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(
+                            "Limit ($limit)",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
                       ),
                       Slider(
-                        value: limit.toDouble(),
-                        inactiveColor: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.24),
-                        min: 10,
-                        max: 100,
-                        onChanged: (value) {
-                          setState(() {
-                            limit = value.toInt();
-                          });
-                          setData();
-                        },
-                      ),
-                    ],
-                  ),
+                          value: limit.toDouble(),
+                          inactiveColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.24),
+                          min: 10,
+                          max: 100,
+                          onChanged: (value) {
+                            setState(() {
+                              limit = value.toInt();
+                            });
+                            setData();
+                          },
+                        ),
+                      ],
+                    ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.35,
                   child: data.isEmpty

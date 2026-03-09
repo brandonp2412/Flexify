@@ -12,6 +12,7 @@ import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -370,21 +371,61 @@ class _CardioPageState extends State<CardioPage> {
                 ),
                 SizedBox(height: 8),
                 if (settings.showGraphXAxis)
-                  SwitchListTile(
-                    title: const Text('Use time-based X axis'),
-                    value: useTimeBasedXAxis,
-                    onChanged: (val) => setState(() {
-                      useTimeBasedXAxis = val;
-                    }),
+                  GestureDetector(
+                    onLongPress: () {
+                      db.settings.update().write(
+                            const SettingsCompanion(
+                              showGraphXAxis: Value(false),
+                            ),
+                          );
+                      toast(
+                        'Hid X axis toggle',
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () => db.settings.update().write(
+                                const SettingsCompanion(
+                                  showGraphXAxis: Value(true),
+                                ),
+                              ),
+                        ),
+                      );
+                    },
+                    child: SwitchListTile(
+                      title: const Text('Use time-based X axis'),
+                      value: useTimeBasedXAxis,
+                      onChanged: (val) => setState(() {
+                        useTimeBasedXAxis = val;
+                      }),
+                    ),
                   ),
                 if (settings.showGraphLimit)
                   material.Column(
                     children: [
-                      material.Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Text(
-                          "Limit ($limit)",
-                          style: Theme.of(context).textTheme.bodyLarge,
+                      GestureDetector(
+                        onLongPress: () {
+                          db.settings.update().write(
+                                const SettingsCompanion(
+                                  showGraphLimit: Value(false),
+                                ),
+                              );
+                          toast(
+                            'Hid graph limit',
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              onPressed: () => db.settings.update().write(
+                                    const SettingsCompanion(
+                                      showGraphLimit: Value(true),
+                                    ),
+                                  ),
+                            ),
+                          );
+                        },
+                        child: material.Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(
+                            "Limit ($limit)",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
                       ),
                       Slider(
