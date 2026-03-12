@@ -354,22 +354,22 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                       ),
                       Slider(
-                          value: limit.toDouble(),
-                          inactiveColor: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withValues(alpha: 0.24),
-                          min: 10,
-                          max: 100,
-                          onChanged: (value) {
-                            setState(() {
-                              limit = value.toInt();
-                            });
-                            setData();
-                          },
-                        ),
-                      ],
-                    ),
+                        value: limit.toDouble(),
+                        inactiveColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.24),
+                        min: 10,
+                        max: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            limit = value.toInt();
+                          });
+                          setData();
+                        },
+                      ),
+                    ],
+                  ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.35,
                   child: data.isEmpty
