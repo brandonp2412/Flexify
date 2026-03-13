@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -48,6 +47,14 @@ class _TabSettingsState extends State<TabSettings> {
     setState(() {
       tabs[index] = (name: name, enabled: enabled);
     });
+
+    (db.settings.update().write(
+          SettingsCompanion(
+            tabs: Value(
+              tabs.where((tab) => tab.enabled).map((tab) => tab.name).join(','),
+            ),
+          ),
+        ));
   }
 
   @override
@@ -96,6 +103,17 @@ class _TabSettingsState extends State<TabSettings> {
                     tabs.removeAt(oldIndex);
                     tabs.insert(newIndex, temp);
                   });
+
+                  (db.settings.update().write(
+                        SettingsCompanion(
+                          tabs: Value(
+                            tabs
+                                .where((tab) => tab.enabled)
+                                .map((tab) => tab.name)
+                                .join(','),
+                          ),
+                        ),
+                      ));
                 },
                 itemBuilder: (context, index) {
                   final tab = tabs[index];
@@ -207,23 +225,6 @@ class _TabSettingsState extends State<TabSettings> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: AnimatedFab(
-        onPressed: () async {
-          await (db.settings.update().write(
-                SettingsCompanion(
-                  tabs: Value(
-                    tabs
-                        .where((tab) => tab.enabled)
-                        .map((tab) => tab.name)
-                        .join(','),
-                  ),
-                ),
-              ));
-          if (context.mounted) Navigator.of(context).pop();
-        },
-        icon: const Icon(Icons.save),
-        label: const Text("Save"),
       ),
     );
   }
