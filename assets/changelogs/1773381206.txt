@@ -2,7 +2,6 @@
 • Add settings for progress bar position
 • Allow clearing of category
 • Change plans icon in bottom nav
-• Fix all linting issues
 • Fix appearance system ui obscuring graph
 • Fix automatic backups sometimes corrupting database
 • Fix unit tests

@@ -5,6 +5,5 @@
 • Fix all linting issues
 • Fix appearance system ui obscuring graph
 • Fix automatic backups sometimes corrupting database
-• Fix unit tests
 • Instantly update tab settings & remove save button
 • Prevent null hint text on categories or incline when multi-editing sets
