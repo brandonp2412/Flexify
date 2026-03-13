@@ -275,30 +275,36 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 ),
                 selector: (context, settings) => settings.value.showUnits,
               ),
-              StreamBuilder(
-                stream: getCategoriesStream(),
-                builder: (context, snapshot) {
-                  return DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                      hintText: oldCat,
-                    ),
-                    initialValue: category,
-                    items: snapshot.data
-                        ?.map(
-                          (category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(category),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        category = value!;
-                      });
+              Selector<SettingsState, bool>(
+                selector: (context, settings) => settings.value.showCategories,
+                builder: (context, showCategories, child) => Visibility(
+                  visible: showCategories,
+                  child: StreamBuilder(
+                    stream: getCategoriesStream(),
+                    builder: (context, snapshot) {
+                      return DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Category',
+                          hintText: oldCat,
+                        ),
+                        initialValue: category,
+                        items: snapshot.data
+                            ?.map(
+                              (category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(category),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            category = value!;
+                          });
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                ),
               ),
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) {
@@ -417,8 +423,16 @@ class _EditSetsPageState extends State<EditSetsPage> {
         oldSec = gymSets
             .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
             .join(', ');
-        oldInc = gymSets.map((gymSet) => gymSet.incline).join(', ');
-        oldCat = gymSets.map((gymSet) => gymSet.category).join(', ');
+        final incs = gymSets
+            .map((gymSet) => gymSet.incline)
+            .whereType<int>()
+            .join(', ');
+        oldInc = incs.isEmpty ? null : incs;
+        final cats = gymSets
+            .map((gymSet) => gymSet.category)
+            .whereType<String>()
+            .join(', ');
+        oldCat = cats.isEmpty ? null : cats;
       });
     });
   }
