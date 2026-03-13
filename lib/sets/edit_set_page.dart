@@ -419,7 +419,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     labelText: 'Category',
                   ),
                   onChanged: (value) => setState(() {
-                    category = value;
+                    category = value.isNotEmpty ? value : null;
                   }),
                 );
               },
