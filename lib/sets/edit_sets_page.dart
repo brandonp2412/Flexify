@@ -105,13 +105,23 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     InputDecoration(labelText: "Name", hintText: oldNames),
                 textCapitalization: TextCapitalization.sentences,
               ),
-              SwitchListTile(
-                title: const Text('Cardio'),
-                value: cardio ?? false,
-                onChanged: (value) => setState(() {
-                  cardio = value;
-                }),
+              ListTile(
+                title: cardio == true
+                    ? const Text('Cardio')
+                    : const Text('Strength'),
+                leading: cardio == true
+                    ? const Icon(Icons.sports_gymnastics)
+                    : const Icon(Icons.fitness_center),
                 contentPadding: EdgeInsets.zero,
+                onTap: () => setState(() {
+                  cardio = !(cardio ?? false);
+                }),
+                trailing: Switch(
+                  value: cardio ?? false,
+                  onChanged: (value) => setState(() {
+                    cardio = value;
+                  }),
+                ),
               ),
               if (cardio == true) ...[
                 TextFormField(

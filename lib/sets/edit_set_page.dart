@@ -179,13 +179,21 @@ class _EditSetPageState extends State<EditSetPage> {
               children: [
                 autocomplete(showBodyWeight),
                 const SizedBox(height: 8.0),
-                SwitchListTile(
-                  title: const Text('Cardio'),
-                  value: cardio,
-                  onChanged: (value) => setState(() {
-                    cardio = value;
-                  }),
+                ListTile(
+                  title: cardio ? const Text('Cardio') : const Text('Strength'),
+                  leading: cardio
+                      ? const Icon(Icons.sports_gymnastics)
+                      : const Icon(Icons.fitness_center),
                   contentPadding: EdgeInsets.zero,
+                  onTap: () => setState(() {
+                    cardio = !cardio;
+                  }),
+                  trailing: Switch(
+                    value: cardio,
+                    onChanged: (value) => setState(() {
+                      cardio = value;
+                    }),
+                  ),
                 ),
                 ...exerciseFields(),
                 const SizedBox(height: 8.0),
