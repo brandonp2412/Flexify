@@ -373,12 +373,14 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Radio(
-                            value: 1,
+                          RadioGroup<int>(
                             groupValue: 1,
                             onChanged: (value) {},
-                            fillColor: WidgetStateProperty.resolveWith(
-                              (states) => entry.value,
+                            child: Radio<int>(
+                              value: 1,
+                              fillColor: WidgetStateProperty.resolveWith(
+                                (states) => entry.value,
+                              ),
                             ),
                           ),
                           Flexible(

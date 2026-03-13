@@ -73,7 +73,7 @@ class _FiltersState extends State<Filters> {
               PopupMenuItem(
                 child: DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Category'),
-                  value: widget.category,
+                  initialValue: widget.category,
                   items: snapshot.data
                       ?.map(
                         (category) => DropdownMenuItem(

@@ -44,7 +44,7 @@ class _GraphsFiltersState extends State<GraphsFilters> {
                 enabled: false,
                 child: DropdownButtonFormField<GraphSort>(
                   decoration: const InputDecoration(labelText: 'Sort by'),
-                  value: widget.sort,
+                  initialValue: widget.sort,
                   items: const [
                     DropdownMenuItem(
                       value: GraphSort.dateDesc,
@@ -70,7 +70,7 @@ class _GraphsFiltersState extends State<GraphsFilters> {
                 enabled: false,
                 child: DropdownButtonFormField<String>(
                   decoration: const InputDecoration(labelText: 'Category'),
-                  value: widget.category,
+                  initialValue: widget.category,
                   items: snapshot.data
                       ?.map(
                         (category) => DropdownMenuItem(
