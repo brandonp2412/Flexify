@@ -94,6 +94,7 @@ class BackupReceiver : BroadcastReceiver() {
         notificationBuilder =
             notificationBuilder.addAction(R.drawable.ic_baseline_stop_24, "Share", pendingShare)
 
+        val tempFile = File(context.cacheDir, "flexify_backup_temp.sqlite")
         try {
             val outputStream = context.contentResolver.openOutputStream(file.uri)
             if (outputStream == null) {
@@ -101,21 +102,16 @@ class BackupReceiver : BroadcastReceiver() {
                 return
             }
 
-            val parentDir = context.filesDir.parentFile
-            if (parentDir == null) {
-                Log.e("BackupReceiver", "Failed to get parent directory")
+            // VACUUM INTO creates a clean, fully-checkpointed snapshot that includes
+            // all WAL data, avoiding the stale-copy bug from raw file reads.
+            val db = openDb(context)
+            if (db == null) {
+                Log.e("BackupReceiver", "Failed to open database for backup")
                 return
             }
+            db.use { it.execSQL("VACUUM INTO '${tempFile.absolutePath}'") }
 
-            val dbFolder = File(parentDir, "app_flutter").absolutePath
-            val dbFile = File(dbFolder, "flexify.sqlite")
-
-            if (!dbFile.exists()) {
-                Log.e("BackupReceiver", "Database file does not exist: ${dbFile.absolutePath}")
-                return
-            }
-
-            dbFile.inputStream().use { input ->
+            tempFile.inputStream().use { input ->
                 outputStream.use { output ->
                     input.copyTo(output)
                     notificationBuilder = notificationBuilder.setContentTitle("Backed up database")
@@ -124,6 +120,8 @@ class BackupReceiver : BroadcastReceiver() {
             }
         } catch (e: Exception) {
             Log.e("BackupReceiver", "Error during backup: ${e.message}", e)
+        } finally {
+            tempFile.delete()
         }
     }
 }
