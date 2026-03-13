@@ -423,10 +423,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
         oldSec = gymSets
             .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
             .join(', ');
-        final incs = gymSets
-            .map((gymSet) => gymSet.incline)
-            .whereType<int>()
-            .join(', ');
+        final incs =
+            gymSets.map((gymSet) => gymSet.incline).whereType<int>().join(', ');
         oldInc = incs.isEmpty ? null : incs;
         final cats = gymSets
             .map((gymSet) => gymSet.category)

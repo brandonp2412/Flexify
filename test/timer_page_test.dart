@@ -115,6 +115,7 @@ void main() {
         scrollableTabs: false,
         showGraphXAxis: false,
         showGraphLimit: true,
+        progressPosition: 'bottom',
       ),
     );
 
@@ -216,6 +217,7 @@ void main() {
         scrollableTabs: false,
         showGraphXAxis: false,
         showGraphLimit: true,
+        progressPosition: 'bottom',
       ),
     );
 
