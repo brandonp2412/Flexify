@@ -443,10 +443,13 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(schema.settings, schema.settings.showGraphXAxis);
           await m.addColumn(schema.settings, schema.settings.showGraphLimit);
         },
+        from48To49: (Migrator m, Schema49 schema) async {
+          await m.addColumn(schema.settings, schema.settings.progressPosition);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 48;
+  int get schemaVersion => 49;
 }

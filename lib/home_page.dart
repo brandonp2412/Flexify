@@ -99,9 +99,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final setting = context
+    final tabSettings = context
         .select<SettingsState, String>((settings) => settings.value.tabs);
-    final tabs = setting.split(',');
+    final tabs = tabSettings.split(',');
     final scrollableTabs = context.select<SettingsState, bool>(
       (settings) => settings.value.scrollableTabs,
     );
@@ -116,12 +116,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       extendBody: true,
-      bottomSheet: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 48.0),
-          child: const TimerProgressIndicator(),
-        ),
-      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -163,6 +157,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     onLongPress: hideTab,
                   );
                 },
+              ),
+            ),
+            Consumer<SettingsState>(
+              builder: (context, settings, child) => Positioned(
+                top: settings.value.progressPosition == 'top' ? 0 : null,
+                bottom: settings.value.progressPosition == 'bottom' ? 0 : null,
+                left: 48,
+                right: 48,
+                child: settings.value.progressPosition != 'none'
+                    ? const TimerProgressIndicator()
+                    : SizedBox(),
               ),
             ),
           ],

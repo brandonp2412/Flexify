@@ -1325,6 +1325,14 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("show_graph_limit" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _progressPositionMeta =
+      const VerificationMeta('progressPosition');
+  @override
+  late final GeneratedColumn<String> progressPosition = GeneratedColumn<String>(
+      'progress_position', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant("bottom"));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1361,7 +1369,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         warmupSets,
         scrollableTabs,
         showGraphXAxis,
-        showGraphLimit
+        showGraphLimit,
+        progressPosition
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1598,6 +1607,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           showGraphLimit.isAcceptableOrUnknown(
               data['show_graph_limit']!, _showGraphLimitMeta));
     }
+    if (data.containsKey('progress_position')) {
+      context.handle(
+          _progressPositionMeta,
+          progressPosition.isAcceptableOrUnknown(
+              data['progress_position']!, _progressPositionMeta));
+    }
     return context;
   }
 
@@ -1677,6 +1692,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           DriftSqlType.bool, data['${effectivePrefix}show_graph_x_axis'])!,
       showGraphLimit: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}show_graph_limit'])!,
+      progressPosition: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}progress_position'])!,
     );
   }
 
@@ -1722,6 +1739,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool scrollableTabs;
   final bool showGraphXAxis;
   final bool showGraphLimit;
+  final String progressPosition;
   const Setting(
       {required this.alarmSound,
       required this.automaticBackups,
@@ -1757,7 +1775,8 @@ class Setting extends DataClass implements Insertable<Setting> {
       this.warmupSets,
       required this.scrollableTabs,
       required this.showGraphXAxis,
-      required this.showGraphLimit});
+      required this.showGraphLimit,
+      required this.progressPosition});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1802,6 +1821,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['scrollable_tabs'] = Variable<bool>(scrollableTabs);
     map['show_graph_x_axis'] = Variable<bool>(showGraphXAxis);
     map['show_graph_limit'] = Variable<bool>(showGraphLimit);
+    map['progress_position'] = Variable<String>(progressPosition);
     return map;
   }
 
@@ -1848,6 +1868,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       scrollableTabs: Value(scrollableTabs),
       showGraphXAxis: Value(showGraphXAxis),
       showGraphLimit: Value(showGraphLimit),
+      progressPosition: Value(progressPosition),
     );
   }
 
@@ -1891,6 +1912,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       scrollableTabs: serializer.fromJson<bool>(json['scrollableTabs']),
       showGraphXAxis: serializer.fromJson<bool>(json['showGraphXAxis']),
       showGraphLimit: serializer.fromJson<bool>(json['showGraphLimit']),
+      progressPosition: serializer.fromJson<String>(json['progressPosition']),
     );
   }
   @override
@@ -1932,6 +1954,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'scrollableTabs': serializer.toJson<bool>(scrollableTabs),
       'showGraphXAxis': serializer.toJson<bool>(showGraphXAxis),
       'showGraphLimit': serializer.toJson<bool>(showGraphLimit),
+      'progressPosition': serializer.toJson<String>(progressPosition),
     };
   }
 
@@ -1970,7 +1993,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           Value<int?> warmupSets = const Value.absent(),
           bool? scrollableTabs,
           bool? showGraphXAxis,
-          bool? showGraphLimit}) =>
+          bool? showGraphLimit,
+          String? progressPosition}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2009,6 +2033,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         scrollableTabs: scrollableTabs ?? this.scrollableTabs,
         showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
         showGraphLimit: showGraphLimit ?? this.showGraphLimit,
+        progressPosition: progressPosition ?? this.progressPosition,
       );
   Setting copyWithCompanion(SettingsCompanion data) {
     return Setting(
@@ -2093,6 +2118,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       showGraphLimit: data.showGraphLimit.present
           ? data.showGraphLimit.value
           : this.showGraphLimit,
+      progressPosition: data.progressPosition.present
+          ? data.progressPosition.value
+          : this.progressPosition,
     );
   }
 
@@ -2133,7 +2161,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('warmupSets: $warmupSets, ')
           ..write('scrollableTabs: $scrollableTabs, ')
           ..write('showGraphXAxis: $showGraphXAxis, ')
-          ..write('showGraphLimit: $showGraphLimit')
+          ..write('showGraphLimit: $showGraphLimit, ')
+          ..write('progressPosition: $progressPosition')
           ..write(')'))
         .toString();
   }
@@ -2174,7 +2203,8 @@ class Setting extends DataClass implements Insertable<Setting> {
         warmupSets,
         scrollableTabs,
         showGraphXAxis,
-        showGraphLimit
+        showGraphLimit,
+        progressPosition
       ]);
   @override
   bool operator ==(Object other) =>
@@ -2214,7 +2244,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.warmupSets == this.warmupSets &&
           other.scrollableTabs == this.scrollableTabs &&
           other.showGraphXAxis == this.showGraphXAxis &&
-          other.showGraphLimit == this.showGraphLimit);
+          other.showGraphLimit == this.showGraphLimit &&
+          other.progressPosition == this.progressPosition);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -2253,6 +2284,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> scrollableTabs;
   final Value<bool> showGraphXAxis;
   final Value<bool> showGraphLimit;
+  final Value<String> progressPosition;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.automaticBackups = const Value.absent(),
@@ -2289,6 +2321,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.scrollableTabs = const Value.absent(),
     this.showGraphXAxis = const Value.absent(),
     this.showGraphLimit = const Value.absent(),
+    this.progressPosition = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
@@ -2326,6 +2359,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.scrollableTabs = const Value.absent(),
     this.showGraphXAxis = const Value.absent(),
     this.showGraphLimit = const Value.absent(),
+    this.progressPosition = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -2378,6 +2412,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? scrollableTabs,
     Expression<bool>? showGraphXAxis,
     Expression<bool>? showGraphLimit,
+    Expression<String>? progressPosition,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -2417,6 +2452,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (scrollableTabs != null) 'scrollable_tabs': scrollableTabs,
       if (showGraphXAxis != null) 'show_graph_x_axis': showGraphXAxis,
       if (showGraphLimit != null) 'show_graph_limit': showGraphLimit,
+      if (progressPosition != null) 'progress_position': progressPosition,
     });
   }
 
@@ -2455,7 +2491,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<int?>? warmupSets,
       Value<bool>? scrollableTabs,
       Value<bool>? showGraphXAxis,
-      Value<bool>? showGraphLimit}) {
+      Value<bool>? showGraphLimit,
+      Value<String>? progressPosition}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2492,6 +2529,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       scrollableTabs: scrollableTabs ?? this.scrollableTabs,
       showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
       showGraphLimit: showGraphLimit ?? this.showGraphLimit,
+      progressPosition: progressPosition ?? this.progressPosition,
     );
   }
 
@@ -2603,6 +2641,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (showGraphLimit.present) {
       map['show_graph_limit'] = Variable<bool>(showGraphLimit.value);
     }
+    if (progressPosition.present) {
+      map['progress_position'] = Variable<String>(progressPosition.value);
+    }
     return map;
   }
 
@@ -2643,7 +2684,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('warmupSets: $warmupSets, ')
           ..write('scrollableTabs: $scrollableTabs, ')
           ..write('showGraphXAxis: $showGraphXAxis, ')
-          ..write('showGraphLimit: $showGraphLimit')
+          ..write('showGraphLimit: $showGraphLimit, ')
+          ..write('progressPosition: $progressPosition')
           ..write(')'))
         .toString();
   }
@@ -3941,6 +3983,7 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   Value<bool> scrollableTabs,
   Value<bool> showGraphXAxis,
   Value<bool> showGraphLimit,
+  Value<String> progressPosition,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
@@ -3978,6 +4021,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> scrollableTabs,
   Value<bool> showGraphXAxis,
   Value<bool> showGraphLimit,
+  Value<String> progressPosition,
 });
 
 class $$SettingsTableFilterComposer
@@ -4104,6 +4148,10 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get showGraphLimit => $composableBuilder(
       column: $table.showGraphLimit,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get progressPosition => $composableBuilder(
+      column: $table.progressPosition,
       builder: (column) => ColumnFilters(column));
 }
 
@@ -4239,6 +4287,10 @@ class $$SettingsTableOrderingComposer
   ColumnOrderings<bool> get showGraphLimit => $composableBuilder(
       column: $table.showGraphLimit,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get progressPosition => $composableBuilder(
+      column: $table.progressPosition,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$SettingsTableAnnotationComposer
@@ -4354,6 +4406,9 @@ class $$SettingsTableAnnotationComposer
 
   GeneratedColumn<bool> get showGraphLimit => $composableBuilder(
       column: $table.showGraphLimit, builder: (column) => column);
+
+  GeneratedColumn<String> get progressPosition => $composableBuilder(
+      column: $table.progressPosition, builder: (column) => column);
 }
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -4414,6 +4469,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> scrollableTabs = const Value.absent(),
             Value<bool> showGraphXAxis = const Value.absent(),
             Value<bool> showGraphLimit = const Value.absent(),
+            Value<String> progressPosition = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
@@ -4451,6 +4507,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             scrollableTabs: scrollableTabs,
             showGraphXAxis: showGraphXAxis,
             showGraphLimit: showGraphLimit,
+            progressPosition: progressPosition,
           ),
           createCompanionCallback: ({
             required String alarmSound,
@@ -4488,6 +4545,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> scrollableTabs = const Value.absent(),
             Value<bool> showGraphXAxis = const Value.absent(),
             Value<bool> showGraphLimit = const Value.absent(),
+            Value<String> progressPosition = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
@@ -4525,6 +4583,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             scrollableTabs: scrollableTabs,
             showGraphXAxis: showGraphXAxis,
             showGraphLimit: showGraphLimit,
+            progressPosition: progressPosition,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

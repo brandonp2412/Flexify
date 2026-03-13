@@ -191,6 +191,39 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
+    if ('progress position'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Where should the rest timers progress bar be placed?',
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: DropdownButtonFormField<String>(
+            initialValue: settings.progressPosition,
+            decoration: const InputDecoration(
+              labelStyle: TextStyle(),
+              labelText: 'Progress bar position',
+            ),
+            items: const [
+              DropdownMenuItem(
+                value: 'top',
+                child: Text("Top"),
+              ),
+              DropdownMenuItem(
+                value: 'bottom',
+                child: Text("Bottom"),
+              ),
+              DropdownMenuItem(
+                value: 'none',
+                child: Text("None"),
+              ),
+            ],
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    progressPosition: Value(value!),
+                  ),
+                ),
+          ),
+        ),
+      ),
     if ('alarm sound'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Music to play at the end of a rest timer',

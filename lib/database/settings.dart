@@ -47,4 +47,6 @@ class Settings extends Table {
       boolean().withDefault(const Constant(false))();
   BoolColumn get showGraphLimit =>
       boolean().withDefault(const Constant(true))();
+  TextColumn get progressPosition =>
+      text().withDefault(const Constant("bottom"))();
 }
