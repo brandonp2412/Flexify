@@ -245,7 +245,10 @@ class AppearanceSettings extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          children: getAppearanceSettings(context, '', settings),
+          children: [
+            ...getAppearanceSettings(context, '', settings),
+            const SizedBox(height: 116),
+          ],
         ),
       ),
     );
