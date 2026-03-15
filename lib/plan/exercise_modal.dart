@@ -1,5 +1,4 @@
-import 'package:drift/drift.dart' as drift;
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -8,7 +7,6 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +72,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                 return AlertDialog.adaptive(
                   title: Text(widget.exercise),
                   content: SingleChildScrollView(
-                    child: material.Column(
+                    child: Column(
                       children: [
                         Selector<SettingsState, int?>(
                           selector: (context, settings) =>
@@ -152,9 +150,9 @@ class _ExerciseModalState extends State<ExerciseModal> {
               final gymSet = await (db.select(db.gymSets)
                     ..where((r) => db.gymSets.name.equals(widget.exercise))
                     ..orderBy([
-                      (u) => drift.OrderingTerm(
+                      (u) => OrderingTerm(
                             expression: u.created,
-                            mode: drift.OrderingMode.desc,
+                            mode: OrderingMode.desc,
                           ),
                     ])
                     ..limit(1))
@@ -178,9 +176,9 @@ class _ExerciseModalState extends State<ExerciseModal> {
               final gymSet = await (db.select(db.gymSets)
                     ..where((r) => db.gymSets.name.equals(widget.exercise))
                     ..orderBy([
-                      (u) => drift.OrderingTerm(
+                      (u) => OrderingTerm(
                             expression: u.created,
-                            mode: drift.OrderingMode.desc,
+                            mode: OrderingMode.desc,
                           ),
                     ])
                     ..limit(1))

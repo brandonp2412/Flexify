@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
@@ -10,7 +10,6 @@ import 'package:flexify/sets/history_collapsed.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -95,7 +94,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {
-          return material.Column(
+          return Column(
             children: [
               AppSearch(
                 filter: Filters(

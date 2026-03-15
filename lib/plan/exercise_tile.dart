@@ -1,8 +1,7 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +43,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
               return AlertDialog.adaptive(
                 title: Text(widget.planExercise.exercise.value),
                 content: SingleChildScrollView(
-                  child: material.Column(
+                  child: Column(
                     children: [
                       Selector<SettingsState, int?>(
                         selector: (context, settings) =>

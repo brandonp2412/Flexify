@@ -1,5 +1,4 @@
-import 'package:drift/drift.dart' as drift;
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
@@ -16,7 +15,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -117,9 +115,9 @@ class GraphsPageState extends State<GraphsPage>
       spots.add(FlSpot(index.toDouble(), data[index].value));
     }
 
-    return material.SizedBox(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.15,
-      child: material.Padding(
+      child: Padding(
         padding: const EdgeInsets.only(right: 48.0, top: 16.0, left: 48.0),
         child: FlexLine(
           data: data,
@@ -182,7 +180,7 @@ class GraphsPageState extends State<GraphsPage>
               );
               break;
           }
-          return material.Column(
+          return Column(
             children: [
               AppSearch(
                 filter: GraphsFilters(
@@ -319,7 +317,7 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  material.ListView graphList(
+  ListView graphList(
     List<GymSetsCompanion> gymSets,
     bool showGlobalProgress,
   ) {
@@ -342,7 +340,7 @@ class GraphsPageState extends State<GraphsPage>
 
         if (showGlobal) {
           if (index == 0) {
-            return material.Padding(
+            return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
               child: ListTile(
                 leading: const Icon(Icons.language),
@@ -411,12 +409,12 @@ class GraphsPageState extends State<GraphsPage>
             created != null &&
             !isSameDay(created, set.created.value);
 
-        return material.Column(
+        return Column(
           children: [
             if (divider)
-              material.Row(
+              Row(
                 children: [
-                  const material.Expanded(child: Divider()),
+                  const Expanded(child: Divider()),
                   const Icon(Icons.today),
                   const SizedBox(width: 4),
                   Selector<SettingsState, String>(
@@ -425,7 +423,7 @@ class GraphsPageState extends State<GraphsPage>
                         Text(DateFormat(format).format(created)),
                   ),
                   const SizedBox(width: 4),
-                  const material.Expanded(child: Divider()),
+                  const Expanded(child: Divider()),
                 ],
               ),
             GraphTile(

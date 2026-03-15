@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
@@ -12,7 +12,6 @@ import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -475,7 +474,7 @@ class _EditSetPageState extends State<EditSetPage> {
       builder: (context, showImages, child) {
         return Visibility(
           visible: showImages,
-          child: material.Column(
+          child: Column(
             children: [
               if (image == null)
                 TextButton.icon(
@@ -512,7 +511,7 @@ class _EditSetPageState extends State<EditSetPage> {
     );
   }
 
-  material.Row duration() {
+  Row duration() {
     return Row(
       children: [
         Expanded(
@@ -554,7 +553,7 @@ class _EditSetPageState extends State<EditSetPage> {
     );
   }
 
-  material.Autocomplete<String> autocomplete(bool showBodyWeight) {
+  Autocomplete<String> autocomplete(bool showBodyWeight) {
     return Autocomplete<String>(
       optionsBuilder: (textEditingValue) {
         final searchTerms = textEditingValue.text

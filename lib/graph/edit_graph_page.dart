@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
@@ -9,7 +9,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +60,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       textInputAction: TextInputAction.next,
                       decoration:
                           const InputDecoration(labelText: "Rest minutes"),
-                      keyboardType: material.TextInputType.number,
+                      keyboardType: TextInputType.number,
                       onTap: () => selectAll(minutes),
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
@@ -80,7 +79,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       textInputAction: TextInputAction.next,
                       decoration:
                           const InputDecoration(labelText: "Rest seconds"),
-                      keyboardType: material.TextInputType.number,
+                      keyboardType: TextInputType.number,
                       onTap: () {
                         selectAll(seconds);
                       },
@@ -182,9 +181,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 builder: (context, showImages, child) {
                   return Visibility(
                     visible: showImages,
-                    child: material.Column(
+                    child: Column(
                       children: [
-                        material.Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextButton.icon(

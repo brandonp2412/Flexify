@@ -1,6 +1,5 @@
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +99,7 @@ class _FiltersState extends State<Filters> {
                       builder: (context) => AlertDialog(
                         title: const Text("Reps filter"),
                         content: SingleChildScrollView(
-                          child: material.Column(
+                          child: Column(
                             children: [
                               TextField(
                                 onChanged: (value) => widget.setStream(),
@@ -161,7 +160,7 @@ class _FiltersState extends State<Filters> {
                       builder: (context) => AlertDialog(
                         title: const Text("Weight filter"),
                         content: SingleChildScrollView(
-                          child: material.Column(
+                          child: Column(
                             children: [
                               TextField(
                                 onChanged: (value) => widget.setStream(),

@@ -1,11 +1,10 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -161,9 +160,9 @@ List<Widget> getAppearanceSettings(
         ),
       ),
     if ('curve smoothness'.contains(term.toLowerCase()))
-      material.Column(
+      Column(
         children: [
-          material.Padding(
+          Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               "Curve smoothness",

@@ -1,12 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -122,9 +121,9 @@ List<Widget> getTimerSettings(
         padding: const EdgeInsets.all(16),
         child: Tooltip(
           message: 'How long before rest alarms go off?',
-          child: material.Column(
+          child: Column(
             children: [
-              material.Row(
+              Row(
                 children: [
                   const Icon(Icons.public),
                   const SizedBox(width: 8),
@@ -227,7 +226,7 @@ List<Widget> getTimerSettings(
     if ('alarm sound'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Music to play at the end of a rest timer',
-        child: material.Wrap(
+        child: Wrap(
           alignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
@@ -395,11 +394,11 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: material.Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 24),
-          material.Row(
+          Row(
             children: [
               const Icon(Icons.fitness_center),
               const SizedBox(width: 8),
@@ -433,10 +432,10 @@ class _TimerSettingsState extends State<TimerSettings> {
               margin: const EdgeInsets.only(bottom: 12),
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: material.Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    material.Row(
+                    Row(
                       children: [
                         Expanded(
                           child: Text(

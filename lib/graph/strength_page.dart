@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -13,7 +13,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -324,7 +323,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     ),
                   ),
                 if (settings.showGraphLimit)
-                  material.Column(
+                  Column(
                     children: [
                       GestureDetector(
                         onLongPress: () {
@@ -345,7 +344,7 @@ class _StrengthPageState extends State<StrengthPage> {
                             ),
                           );
                         },
-                        child: material.Padding(
+                        child: Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: Text(
                             "Limit ($limit)",

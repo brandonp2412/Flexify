@@ -1,9 +1,8 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -65,10 +64,10 @@ class _TabSettingsState extends State<TabSettings> {
       appBar: AppBar(title: const Text("Tabs")),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: material.Column(
+        child: Column(
           children: [
             ListTile(
-              title: material.Row(
+              title: Row(
                 children: [
                   const Icon(Icons.swipe),
                   SizedBox(width: 8),
@@ -125,7 +124,7 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: material.Row(
+                      title: Row(
                         children: [
                           const Icon(Icons.history),
                           SizedBox(width: 8),
@@ -145,7 +144,7 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: material.Row(
+                      title: Row(
                         children: [
                           const Icon(Icons.calendar_today_outlined),
                           SizedBox(width: 8),
@@ -165,7 +164,7 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: material.Row(
+                      title: Row(
                         children: [
                           const Icon(Icons.insights_rounded),
                           SizedBox(width: 8),
@@ -185,7 +184,7 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: material.Row(
+                      title: Row(
                         children: [
                           const Icon(Icons.timer),
                           SizedBox(width: 8),
@@ -205,7 +204,7 @@ class _TabSettingsState extends State<TabSettings> {
                         value: tab.enabled,
                         onChanged: (value) => setTab(tab.name, value),
                       ),
-                      title: material.Row(
+                      title: Row(
                         children: [
                           const Icon(Icons.settings),
                           SizedBox(width: 8),

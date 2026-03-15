@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -10,7 +10,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +51,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
           subtitle: Text("Tap to create $search"),
           onTap: () async {
             GymSetsCompanion? gymSet = await Navigator.of(context).push(
-              material.MaterialPageRoute(
+              MaterialPageRoute(
                 builder: (context) => AddExercisePage(
                   name: search,
                 ),
@@ -108,7 +107,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         child: ListView(
           children: [
             TextField(
-              decoration: const material.InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Title (optional)',
               ),
               controller: titleCtrl,
@@ -119,10 +118,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
             ),
             DaySelector(daySwitches: days),
             const SizedBox(height: 8),
-            material.Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchBar(
-                leading: const material.Padding(
+                leading: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Icon(Icons.search),
                 ),

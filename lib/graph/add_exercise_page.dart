@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -114,9 +113,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
               ),
               Visibility(
                 visible: settings.value.showImages,
-                child: material.Column(
+                child: Column(
                   children: [
-                    material.Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton.icon(
