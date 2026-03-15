@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -338,41 +339,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   List<DropdownMenuItem<String>> _getUnitItems() {
     if (cardio == true) {
-      // Cardio units: distance and energy
-      return const [
-        DropdownMenuItem(
-          value: 'km',
-          child: Text("Kilometers (km)"),
-        ),
-        DropdownMenuItem(
-          value: 'mi',
-          child: Text("Miles (mi)"),
-        ),
-        DropdownMenuItem(
-          value: 'm',
-          child: Text("Meters (m)"),
-        ),
-        DropdownMenuItem(
-          value: 'kcal',
-          child: Text("Kilocalories (kcal)"),
-        ),
-      ];
+      return cardioUnitMenuItems;
     } else {
-      // Strength units: weight
-      return const [
-        DropdownMenuItem(
-          value: 'kg',
-          child: Text("Kilograms (kg)"),
-        ),
-        DropdownMenuItem(
-          value: 'lb',
-          child: Text("Pounds (lb)"),
-        ),
-        DropdownMenuItem(
-          value: 'stone',
-          child: Text("Stone"),
-        ),
-      ];
+      return strengthUnitMenuItems;
     }
   }
 

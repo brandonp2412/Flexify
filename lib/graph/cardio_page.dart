@@ -298,20 +298,7 @@ class _CardioPageState extends State<CardioPage> {
                         child: DropdownButtonFormField<String>(
                           decoration: const InputDecoration(labelText: 'Unit'),
                           initialValue: target,
-                          items: const [
-                            DropdownMenuItem(
-                              value: 'km',
-                              child: Text("Kilometers (km)"),
-                            ),
-                            DropdownMenuItem(
-                              value: 'mi',
-                              child: Text("Miles (mi)"),
-                            ),
-                            DropdownMenuItem(
-                              value: 'm',
-                              child: Text("Meters (m)"),
-                            ),
-                          ],
+                          items: cardioDistanceUnitMenuItems,
                           onChanged: (value) {
                             setState(() {
                               target = value!;

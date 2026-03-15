@@ -58,6 +58,25 @@ final defaultSettings = SettingsCompanion.insert(
   showCategories: const Value(true),
 );
 
+const strengthUnitMenuItems = <DropdownMenuItem<String>>[
+  DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
+  DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
+  DropdownMenuItem(value: 'stone', child: Text("Stone")),
+];
+
+const cardioDistanceUnitMenuItems = <DropdownMenuItem<String>>[
+  DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
+  DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
+  DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
+];
+
+const cardioUnitMenuItems = <DropdownMenuItem<String>>[
+  DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
+  DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
+  DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
+  DropdownMenuItem(value: 'kcal', child: Text("Kilocalories (kcal)")),
+];
+
 const positiveReinforcement = [
   'Great work! You are incredible.',
   'Nice king! Your progress is inspiring.',

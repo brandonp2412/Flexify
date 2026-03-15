@@ -46,7 +46,7 @@ class _StrengthPageState extends State<StrengthPage> {
   Period period = Period.day;
   DateTime? start;
   DateTime? end;
-  DateTime lastTap = DateTime.fromMicrosecondsSinceEpoch(0);
+  DateTime lastTap = DateTime(0);
 
   @override
   void initState() {
@@ -222,20 +222,7 @@ class _StrengthPageState extends State<StrengthPage> {
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
                     initialValue: target,
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'kg',
-                        child: Text("Kilograms (kg)"),
-                      ),
-                      DropdownMenuItem(
-                        value: 'lb',
-                        child: Text("Pounds (lb)"),
-                      ),
-                      DropdownMenuItem(
-                        value: 'stone',
-                        child: Text("Stone"),
-                      ),
-                    ],
+                    items: strengthUnitMenuItems,
                     onChanged: (String? newValue) {
                       setState(() {
                         target = newValue!;
@@ -406,6 +393,7 @@ class _StrengthPageState extends State<StrengthPage> {
       end: end,
       limit: limit,
     );
+    if (!mounted) return;
     setState(() {
       data = strengthData;
     });
