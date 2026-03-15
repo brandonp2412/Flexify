@@ -40,6 +40,7 @@ class _StrengthPageState extends State<StrengthPage> {
   late String target = widget.unit;
   late String name = widget.name;
   bool useTimeBasedXAxis = false;
+  Timer? _refreshTimer;
 
   int limit = 20;
   StrengthMetric metric = StrengthMetric.bestWeight;
@@ -56,6 +57,7 @@ class _StrengthPageState extends State<StrengthPage> {
 
   @override
   void dispose() {
+    _refreshTimer?.cancel();
     widget.tabCtrl.removeListener(_onTabChanged);
     super.dispose();
   }
@@ -108,7 +110,8 @@ class _StrengthPageState extends State<StrengthPage> {
                   ),
                 ),
               );
-              Timer(kThemeAnimationDuration, setData);
+              _refreshTimer?.cancel();
+              _refreshTimer = Timer(kThemeAnimationDuration, setData);
             },
             icon: const Icon(Icons.history),
             tooltip: "History",

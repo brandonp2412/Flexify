@@ -89,27 +89,32 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     if (state == null) return;
 
     final allPlans = state!.plans;
-    List<Plan> tempFiltered = [];
 
-    for (final plan in allPlans) {
-      bool matches = plan.days.toLowerCase().contains(search.toLowerCase());
-      if (!matches && search.isNotEmpty) {
-        final planExercises = await (db.planExercises.select()
-              ..where(
-                (tbl) =>
-                    tbl.planId.equals(plan.id) & tbl.exercise.like('%$search%'),
-              ))
-            .get();
-        matches = planExercises.isNotEmpty;
-      }
-      if (matches) {
-        tempFiltered.add(plan);
-      }
+    if (search.isEmpty) {
+      if (mounted) setState(() => filtered = allPlans.toList());
+      return;
     }
 
-    setState(() {
-      filtered = tempFiltered;
-    });
+    final lowerSearch = search.toLowerCase();
+
+    // Single query to find all plan IDs with a matching exercise
+    final matchingIds = await (db.planExercises.selectOnly()
+          ..addColumns([db.planExercises.planId])
+          ..where(db.planExercises.exercise.like('%$search%')))
+        .map((row) => row.read(db.planExercises.planId))
+        .get();
+
+    final matchingIdSet = matchingIds.whereType<int>().toSet();
+
+    final tempFiltered = allPlans
+        .where(
+          (plan) =>
+              plan.days.toLowerCase().contains(lowerSearch) ||
+              matchingIdSet.contains(plan.id),
+        )
+        .toList();
+
+    if (mounted) setState(() => filtered = tempFiltered);
   }
 
   @override

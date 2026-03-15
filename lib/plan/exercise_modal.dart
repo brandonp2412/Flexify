@@ -47,6 +47,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
           ))
         .getSingle()
         .then((planExercise) {
+      if (!mounted) return;
       max.text = planExercise.maxSets?.toString() ?? '';
       warmup.text = planExercise.warmupSets?.toString() ?? '';
 
@@ -156,7 +157,8 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           ),
                     ])
                     ..limit(1))
-                  .getSingle();
+                  .getSingleOrNull();
+              if (gymSet == null) return;
               if (!context.mounted) return;
               await Navigator.of(context).push(
                 MaterialPageRoute(
@@ -181,7 +183,8 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           ),
                     ])
                     ..limit(1))
-                  .getSingle();
+                  .getSingleOrNull();
+              if (gymSet == null) return;
               await db.gymSets.deleteOne(gymSet);
               if (!context.mounted) return;
               final planState = context.read<PlanState>();

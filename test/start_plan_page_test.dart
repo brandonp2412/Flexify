@@ -13,6 +13,70 @@ import 'package:provider/provider.dart';
 import 'mock_tests.dart';
 
 void main() async {
+  testWidgets(
+    'StartPlanPage rep estimation does not crash when no RPM data for exercise',
+    (WidgetTester tester) async {
+      await mockTests();
+      db = AppDatabase(NativeDatabase.memory());
+
+      final id = await db.plans.insertOne(
+        PlansCompanion.insert(days: 'Monday'),
+      );
+      await db.planExercises.insertOne(
+        PlanExercisesCompanion.insert(
+          planId: id,
+          exercise: 'Bench press',
+          enabled: true,
+        ),
+      );
+
+      // Enable rep estimation and skip permissions page
+      await db.settings.update().write(
+            const SettingsCompanion(
+              repEstimation: Value(true),
+              explainedPermissions: Value(true),
+            ),
+          );
+      final settings = await (db.settings.select()..limit(1)).getSingle();
+      final plan =
+          await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+      final planState = PlanState();
+      await planState.updateGymCounts(plan.id);
+
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (context) => SettingsState(settings),
+            ),
+            ChangeNotifierProvider(create: (context) => TimerState()),
+            ChangeNotifierProvider.value(value: planState),
+          ],
+          child: MaterialApp(
+            scaffoldMessengerKey: rootScaffoldMessenger,
+            home: StartPlanPage(plan: plan),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle(); // rpms loads as [] (no qualifying gym sets)
+
+      // Save a set to set lastSaved
+      await tester.enterText(find.bySemanticsLabel('Reps'), '5');
+      await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      // Simulate app resume — triggers didChangeAppLifecycleState
+      // Before fix: throws StateError from reduce() on empty iterable
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+
+      await db.close();
+    },
+  );
+
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());

@@ -306,14 +306,17 @@ class _StartPlanPageState extends State<StartPlanPage>
     } else if (!cardio && settings.repEstimation) {
       final parsedWeight = double.parse(weight.text);
       stream.first.then((planExercises) {
-        final closestRpm = rpms!
-            .where((rpm) => rpm.name == planExercises[selected].exercise)
-            .reduce(
-              (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
-                      (rpm2.weight - parsedWeight).abs()
-                  ? rpm1
-                  : rpm2,
-            );
+        if (!mounted) return;
+        final matches = rpms!
+            .where((rpm) => rpm.name == planExercises[selected].exercise);
+        if (matches.isEmpty) return;
+
+        final closestRpm = matches.reduce(
+          (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
+                  (rpm2.weight - parsedWeight).abs()
+              ? rpm1
+              : rpm2,
+        );
 
         final estimatedReps =
             (difference.inMinutes * closestRpm.rpm).clamp(1, 50);

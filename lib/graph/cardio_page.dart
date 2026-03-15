@@ -46,6 +46,7 @@ class _CardioPageState extends State<CardioPage> {
   TabController? ctrl;
   DateTime lastTap = DateTime(0);
   bool useTimeBasedXAxis = false;
+  Timer? _refreshTimer;
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _CardioPageState extends State<CardioPage> {
 
   @override
   void dispose() {
+    _refreshTimer?.cancel();
     widget.tabCtrl.removeListener(_onTabChanged);
     super.dispose();
   }
@@ -137,7 +139,8 @@ class _CardioPageState extends State<CardioPage> {
         ),
       ),
     );
-    Timer(kThemeAnimationDuration, setData);
+    _refreshTimer?.cancel();
+    _refreshTimer = Timer(kThemeAnimationDuration, setData);
   }
 
   @override
@@ -178,7 +181,8 @@ class _CardioPageState extends State<CardioPage> {
                   ),
                 ),
               );
-              Timer(kThemeAnimationDuration, setData);
+              _refreshTimer?.cancel();
+    _refreshTimer = Timer(kThemeAnimationDuration, setData);
             },
             icon: const Icon(Icons.history),
             tooltip: "History",
