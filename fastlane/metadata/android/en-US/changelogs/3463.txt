@@ -1,0 +1,2 @@
+• Fix many potential bugs
+• Include the date divider when selecting

@@ -1,10 +1,7 @@
-• Add cardio/strength icon indicators to the toggles in edit set/sets
-• Add settings for progress bar position
-• Allow clearing of category
-• Change plans icon in bottom nav
-• Fix all linting issues
-• Fix appearance system ui obscuring graph
-• Fix automatic backups sometimes corrupting database
-• Fix unit tests
-• Instantly update tab settings & remove save button
-• Prevent null hint text on categories or incline when multi-editing sets
+• Factor out cardio units
+• Fix many potential bugs
+• Improve consistency of navigation code
+• Improve material import consistency
+• Include the date divider when selecting
+• Refactor app search
+• Rename CLIENT_SECRET -> AZURE_CLIENT_SECRET
