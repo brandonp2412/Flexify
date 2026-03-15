@@ -115,8 +115,7 @@ class _StrengthPageState extends State<StrengthPage> {
           ),
           IconButton(
             onPressed: () async {
-              String? newName = await Navigator.push(
-                context,
+              String? newName = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => EditGraphPage(
                     name: name,
@@ -512,8 +511,7 @@ class _StrengthPageState extends State<StrengthPage> {
     }
 
     if (!mounted) return;
-    await Navigator.push(
-      context,
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditSetPage(
           gymSet: gymSet!,

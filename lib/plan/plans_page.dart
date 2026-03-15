@@ -179,8 +179,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   .toCompanion(false);
               await state!.setExercises(plan);
               if (context.mounted)
-                return Navigator.push(
-                  context,
+                return Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditPlanPage(
                       plan: plan,
@@ -217,8 +216,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           );
           await state!.setExercises(plan);
           if (context.mounted)
-            await Navigator.push(
-              context,
+            await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const EditPlanPage(
                   plan: plan,

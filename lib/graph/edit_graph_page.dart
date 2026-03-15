@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
@@ -125,27 +126,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
               DropdownButtonFormField(
                 decoration: const InputDecoration(labelText: 'Unit'),
                 initialValue: unit,
-                items: const [
-                  DropdownMenuItem(
+                items: [
+                  const DropdownMenuItem(
                     value: null,
                     child: Text(""),
                   ),
-                  DropdownMenuItem(
-                    value: 'kg',
-                    child: Text("kg"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'lb',
-                    child: Text("lb"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'km',
-                    child: Text("km"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'mi',
-                    child: Text("mi"),
-                  ),
+                  ...strengthUnitMenuItems,
+                  ...cardioUnitMenuItems,
                 ],
                 onChanged: (value) {
                   setState(() {

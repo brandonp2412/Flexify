@@ -158,8 +158,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     ..limit(1))
                   .getSingle();
               if (!context.mounted) return;
-              await Navigator.push(
-                context,
+              await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => EditSetPage(gymSet: gymSet),
                 ),
@@ -198,8 +197,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
             title: const Text('Swap'),
             onTap: () async {
               Navigator.pop(context);
-              final result = await Navigator.push(
-                context,
+              final result = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => SwapWorkout(
                     exercise: widget.exercise,

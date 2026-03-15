@@ -143,8 +143,7 @@ class GraphTile extends StatelessWidget {
               end: null,
             );
             if (!context.mounted) return;
-            Navigator.push(
-              context,
+            Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => CardioPage(
                   tabCtrl: tabCtrl,
@@ -168,8 +167,7 @@ class GraphTile extends StatelessWidget {
           );
           if (!context.mounted) return;
 
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => StrengthPage(
                 name: gymSet.name.value,

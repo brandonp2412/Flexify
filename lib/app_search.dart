@@ -199,8 +199,7 @@ class _AppSearchState extends State<AppSearch> {
                             title: const Text('Weight'),
                             onTap: () async {
                               Navigator.pop(context);
-                              await Navigator.push(
-                                context,
+                              await Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => const WeightPage(),
                                 ),
@@ -215,8 +214,7 @@ class _AppSearchState extends State<AppSearch> {
                             title: const Text('Settings'),
                             onTap: () async {
                               Navigator.pop(context);
-                              await Navigator.push(
-                                context,
+                              await Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => const SettingsPage(),
                                 ),

@@ -46,8 +46,7 @@ class _PlansListState extends State<PlansList> {
         );
         await state.setExercises(plan);
         if (context.mounted)
-          await Navigator.push(
-            context,
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditPlanPage(
                 plan: plan,

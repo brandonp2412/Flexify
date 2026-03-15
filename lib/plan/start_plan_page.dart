@@ -74,8 +74,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                       .getSingle();
                   await planState.setExercises(plan.toCompanion(false));
                   if (!context.mounted) return;
-                  await Navigator.push(
-                    context,
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
                           EditPlanPage(plan: plan.toCompanion(false)),
@@ -455,8 +454,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         settings.restTimers &&
         !kIsWeb &&
         mounted) {
-      await Navigator.push(
-        context,
+      await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const PermissionsPage(),
         ),

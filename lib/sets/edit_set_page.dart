@@ -741,36 +741,7 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   List<DropdownMenuItem<String>> getUnitItems() {
-    return const [
-      DropdownMenuItem(
-        value: 'kg',
-        child: Text("Kilograms (kg)"),
-      ),
-      DropdownMenuItem(
-        value: 'lb',
-        child: Text("Pounds (lb)"),
-      ),
-      DropdownMenuItem(
-        value: 'stone',
-        child: Text("Stone"),
-      ),
-      DropdownMenuItem(
-        value: 'km',
-        child: Text("Kilometers (km)"),
-      ),
-      DropdownMenuItem(
-        value: 'mi',
-        child: Text("Miles (mi)"),
-      ),
-      DropdownMenuItem(
-        value: 'm',
-        child: Text("Meters (m)"),
-      ),
-      DropdownMenuItem(
-        value: 'kcal',
-        child: Text("Kilocalories (kcal)"),
-      ),
-    ];
+    return [...strengthUnitMenuItems, ...cardioUnitMenuItems];
   }
 
   void updateFields(GymSet gymSet) {

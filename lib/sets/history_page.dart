@@ -173,8 +173,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   selected.addAll(snapshot.data!.map((gymSet) => gymSet.id));
                 }),
                 selected: selected,
-                onEdit: () => Navigator.push(
-                  context,
+                onEdit: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditSetsPage(
                       ids: selected.toList(),
@@ -298,8 +297,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       );
 
     if (!mounted) return;
-    Navigator.push(
-      context,
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditSetPage(
           gymSet: gymSet,

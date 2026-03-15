@@ -130,8 +130,7 @@ class _CardioPageState extends State<CardioPage> {
         .getSingle();
 
     if (!mounted) return;
-    await Navigator.push(
-      context,
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditSetPage(
           gymSet: gymSet,
@@ -186,8 +185,7 @@ class _CardioPageState extends State<CardioPage> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => EditGraphPage(
                     name: widget.name,

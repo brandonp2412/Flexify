@@ -213,8 +213,7 @@ class GraphsPageState extends State<GraphsPage>
                   );
                 }),
                 selected: selected,
-                onEdit: () => Navigator.push(
-                  context,
+                onEdit: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditGraphPage(
                       name: selected.first,

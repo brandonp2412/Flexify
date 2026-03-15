@@ -197,8 +197,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
                   if (widget.selected.isNotEmpty)
                     widget.onSelect(gymSet.id);
                   else
-                    Navigator.push(
-                      context,
+                    Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => EditSetPage(gymSet: gymSet),
                       ),
