@@ -250,7 +250,7 @@ jobs:
 
       - name: Configure Microsoft Store CLI
         run: |
-          msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
+          msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.AZURE_CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
 
       - name: Publish to Microsoft Store
         run: |
