@@ -6,6 +6,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_list.dart';
+import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   String search = '';
   List<Plan>? filtered;
 
-  final Set<int> selected = {};
+  final _selection = SelectionController<int>();
   final scroll = ScrollController();
 
   @override
@@ -126,10 +127,11 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       body: Column(
         children: [
           AppSearch(
+            controller: _selection,
             onShare: () async {
               final plans = (state?.plans)!
                   .where(
-                    (plan) => selected.contains(plan.id),
+                    (plan) => _selection.contains(plan.id),
                   )
                   .toList();
 
@@ -149,7 +151,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               await SharePlus.instance
                   .share(ShareParams(text: summaries.join('\n\n')));
               setState(() {
-                selected.clear();
+                _selection.clear();
               });
             },
             onChange: (value) {
@@ -158,33 +160,29 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 _filterPlans(); // Re-filter when search changes
               });
             },
-            onClear: () => setState(() {
-              selected.clear();
-            }),
             onDelete: () async {
               final state = context.read<PlanState>();
-              final copy = selected.toList();
+              final copy = _selection.toList();
               setState(() {
-                selected.clear();
+                _selection.clear();
               });
               await db.plans.deleteWhere((tbl) => tbl.id.isIn(copy));
               state.updatePlans(null);
               await db.planExercises
                   .deleteWhere((tbl) => tbl.planId.isIn(copy));
             },
-            onSelect: () => setState(() {
-              selected.addAll(filtered?.map((plan) => plan.id) ?? []);
+            onSelectAll: () => setState(() {
+              _selection.setAll(filtered?.map((plan) => plan.id) ?? []);
             }),
-            selected: selected,
             onEdit: () async {
               final plan = state!.plans
                   .firstWhere(
-                    (element) => element.id == selected.first,
+                    (element) => element.id == _selection.first,
                   )
                   .toCompanion(false);
               await state!.setExercises(plan);
               if (context.mounted)
-                return Navigator.of(context).push(
+                await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditPlanPage(
                       plan: plan,
@@ -198,17 +196,12 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               scroll: scroll,
               plans: filtered,
               navKey: widget.navKey,
-              selected: selected,
+              selected: _selection.selected,
               search: search,
               onSelect: (id) {
-                if (selected.contains(id))
-                  setState(() {
-                    selected.remove(id);
-                  });
-                else
-                  setState(() {
-                    selected.add(id);
-                  });
+                setState(() {
+                  _selection.toggle(id);
+                });
               },
             ),
           ),

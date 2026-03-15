@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
+import 'package:flexify/selection_controller.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -35,7 +36,7 @@ class GraphsPageState extends State<GraphsPage>
     with AutomaticKeepAliveClientMixin {
   late final Stream<List<GymSetsCompanion>> stream = watchGraphs();
 
-  final Set<String> selected = {};
+  final _selection = SelectionController<String>();
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   String search = '';
   String? category;
@@ -70,9 +71,9 @@ class GraphsPageState extends State<GraphsPage>
 
   void onDelete() async {
     final state = context.read<PlanState>();
-    final copy = selected.toList();
+    final copy = _selection.toList();
     setState(() {
-      selected.clear();
+      _selection.clear();
     });
 
     await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(copy))).go();
@@ -183,6 +184,7 @@ class GraphsPageState extends State<GraphsPage>
           return Column(
             children: [
               AppSearch(
+                controller: _selection,
                 filter: GraphsFilters(
                   category: category,
                   setCategory: (value) {
@@ -203,20 +205,16 @@ class GraphsPageState extends State<GraphsPage>
                     search = value;
                   });
                 },
-                onClear: () => setState(() {
-                  selected.clear();
-                }),
-                onDelete: onDelete,
-                onSelect: () => setState(() {
-                  selected.addAll(
+                onDelete: () async => onDelete(),
+                onSelectAll: () => setState(() {
+                  _selection.setAll(
                     gymSets.map((gymSet) => gymSet.name.value),
                   );
                 }),
-                selected: selected,
                 onEdit: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditGraphPage(
-                      name: selected.first,
+                      name: _selection.first,
                     ),
                   ),
                 ),
@@ -264,9 +262,9 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Future<void> onShare() async {
-    final copy = selected.toList();
+    final copy = _selection.toList();
     setState(() {
-      selected.clear();
+      _selection.clear();
     });
     final sets = (await stream.first)
         .where(
@@ -426,20 +424,15 @@ class GraphsPageState extends State<GraphsPage>
                 ],
               ),
             GraphTile(
-              selected: selected,
+              selected: _selection.selected,
               gymSet: set,
               onSelect: (name) async {
-                if (selected.contains(name))
-                  setState(() {
-                    selected.remove(name);
-                  });
-                else
-                  setState(() {
-                    selected.add(name);
-                  });
+                setState(() {
+                  _selection.toggle(name);
+                });
                 final result = await (db.gymSets.selectOnly()
                       ..addColumns([db.gymSets.name.count()])
-                      ..where(db.gymSets.name.isIn(selected)))
+                      ..where(db.gymSets.name.isIn(_selection.selected)))
                     .getSingle();
                 setState(() {
                   total = result.read(db.gymSets.name.count()) ?? 0;

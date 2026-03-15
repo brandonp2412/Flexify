@@ -1,3 +1,4 @@
+import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/weight_page.dart';
@@ -5,26 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppSearch extends StatefulWidget {
-  final Set<dynamic> selected;
-
-  final Function(String) onChange;
-  final Function onClear;
-  final Function onEdit;
-  final Function onDelete;
-  final Function onSelect;
-  final Function onShare;
-  final Function? onRefresh;
+  final SelectionController controller;
+  final ValueChanged<String> onChange;
+  final VoidCallback onSelectAll;
+  final Future<void> Function() onDelete;
+  final Future<void> Function() onEdit;
+  final Future<void> Function() onShare;
+  final VoidCallback? onRefresh;
   final Widget? filter;
   final String? confirmText;
 
   const AppSearch({
     super.key,
-    required this.selected,
+    required this.controller,
     required this.onChange,
-    required this.onClear,
-    required this.onEdit,
+    required this.onSelectAll,
     required this.onDelete,
-    required this.onSelect,
+    required this.onEdit,
     required this.onShare,
     this.onRefresh,
     this.filter,
@@ -40,9 +38,10 @@ class _AppSearchState extends State<AppSearch> {
 
   @override
   Widget build(BuildContext context) {
+    final sel = widget.controller;
     Widget trailingMain;
 
-    if (widget.selected.isNotEmpty) {
+    if (sel.isNotEmpty) {
       trailingMain = IconButton(
         key: const ValueKey('deleteButton'),
         icon: const Icon(Icons.delete),
@@ -55,7 +54,7 @@ class _AppSearchState extends State<AppSearch> {
                 title: const Text('Confirm Delete'),
                 content: Text(
                   widget.confirmText ??
-                      'Are you sure you want to delete ${widget.selected.length} records? This action is not reversible.',
+                      'Are you sure you want to delete ${sel.length} records? This action is not reversible.',
                 ),
                 actions: <Widget>[
                   TextButton.icon(
@@ -102,14 +101,14 @@ class _AppSearchState extends State<AppSearch> {
           duration: const Duration(milliseconds: 150),
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
-          child: widget.selected.isEmpty && ctrl.text.isEmpty == true
+          child: sel.isEmpty && ctrl.text.isEmpty
               ? const Padding(
                   padding: EdgeInsets.only(left: 16.0, right: 8.0),
                   child: Icon(Icons.search),
                 )
               : IconButton(
                   onPressed: () {
-                    widget.onClear();
+                    widget.controller.clear();
                     ctrl.text = '';
                     widget.onChange('');
                   },
@@ -128,8 +127,8 @@ class _AppSearchState extends State<AppSearch> {
                 ScaleTransition(scale: animation, child: child),
           ),
           Badge.count(
-            count: widget.selected.length,
-            isLabelVisible: widget.selected.isNotEmpty,
+            count: sel.length,
+            isLabelVisible: sel.isNotEmpty,
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: Selector<SettingsState, bool>(
               selector: (p0, settings) => settings.value.showBodyWeight,
@@ -164,11 +163,11 @@ class _AppSearchState extends State<AppSearch> {
                           title: const Text('Select all'),
                           onTap: () {
                             Navigator.pop(context);
-                            widget.onSelect();
+                            widget.onSelectAll();
                           },
                         ),
                       ),
-                      if (widget.selected.isNotEmpty) ...[
+                      if (sel.isNotEmpty) ...[
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.edit),
@@ -192,7 +191,7 @@ class _AppSearchState extends State<AppSearch> {
                           ),
                         ),
                       ],
-                      if (widget.selected.isEmpty && showBodyWeight)
+                      if (sel.isEmpty && showBodyWeight)
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.scale),
@@ -207,7 +206,7 @@ class _AppSearchState extends State<AppSearch> {
                             },
                           ),
                         ),
-                      if (widget.selected.isEmpty)
+                      if (sel.isEmpty)
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.settings),
@@ -219,7 +218,8 @@ class _AppSearchState extends State<AppSearch> {
                                   builder: (context) => const SettingsPage(),
                                 ),
                               );
-                              if (widget.onRefresh != null) widget.onRefresh!();
+                              if (widget.onRefresh != null)
+                                widget.onRefresh!();
                             },
                           ),
                         ),

@@ -4,6 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/filters.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/history_collapsed.dart';
@@ -79,8 +80,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   final weightGt = TextEditingController();
   final weightLt = TextEditingController();
   final scroll = ScrollController();
+  final _selection = SelectionController<int>();
 
-  Set<int> selected = {};
   String search = '';
   int limit = 100;
   DateTime? startDate;
@@ -97,6 +98,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           return Column(
             children: [
               AppSearch(
+                controller: _selection,
                 filter: Filters(
                   repsGtCtrl: repsGt,
                   repsLtCtrl: repsLt,
@@ -136,7 +138,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 onShare: () async {
                   final gymSets = snapshot.data!
                       .where(
-                        (gymSet) => selected.contains(gymSet.id),
+                        (gymSet) => _selection.contains(gymSet.id),
                       )
                       .toList();
                   final summaries = gymSets
@@ -148,7 +150,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   await SharePlus.instance
                       .share(ShareParams(text: "I just did $summaries"));
                   setState(() {
-                    selected.clear();
+                    _selection.clear();
                   });
                 },
                 onChange: (value) {
@@ -158,25 +160,22 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   });
                   setStream();
                 },
-                onClear: () => setState(() {
-                  selected.clear();
-                }),
-                onDelete: () {
-                  (db.delete(db.gymSets)..where((tbl) => tbl.id.isIn(selected)))
+                onDelete: () async {
+                  (db.delete(db.gymSets)
+                        ..where((tbl) => tbl.id.isIn(_selection.selected)))
                       .go();
                   setState(() {
-                    selected.clear();
+                    _selection.clear();
                   });
                 },
-                onSelect: () => setState(() {
+                onSelectAll: () => setState(() {
                   if (snapshot.data == null) return;
-                  selected.addAll(snapshot.data!.map((gymSet) => gymSet.id));
+                  _selection.setAll(snapshot.data!.map((gymSet) => gymSet.id));
                 }),
-                selected: selected,
                 onEdit: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditSetsPage(
-                      ids: selected.toList(),
+                      ids: _selection.toList(),
                     ),
                   ),
                 ),
@@ -204,16 +203,11 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                           scroll: scroll,
                           days: historyDays,
                           onSelect: (id) {
-                            if (selected.contains(id))
-                              setState(() {
-                                selected.remove(id);
-                              });
-                            else
-                              setState(() {
-                                selected.add(id);
-                              });
+                            setState(() {
+                              _selection.toggle(id);
+                            });
                           },
-                          selected: selected,
+                          selected: _selection.selected,
                           onNext: () {
                             setState(() {
                               limit += 100;
@@ -226,16 +220,11 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                           scroll: scroll,
                           sets: snapshot.data!,
                           onSelect: (id) {
-                            if (selected.contains(id))
-                              setState(() {
-                                selected.remove(id);
-                              });
-                            else
-                              setState(() {
-                                selected.add(id);
-                              });
+                            setState(() {
+                              _selection.toggle(id);
+                            });
                           },
-                          selected: selected,
+                          selected: _selection.selected,
                           onNext: () {
                             setState(() {
                               limit += 100;
