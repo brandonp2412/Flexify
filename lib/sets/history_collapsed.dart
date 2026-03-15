@@ -54,6 +54,7 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
             history,
             context,
             showImages,
+            widget.selected,
           ),
         );
       },
@@ -72,23 +73,38 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
     HistoryDay history,
     BuildContext context,
     bool showImages,
+    Set<int> selected,
   ) {
+    final dividerHighlighted = showDivider &&
+        prev != null &&
+        prev.gymSets.any((gs) => selected.contains(gs.id)) &&
+        history.gymSets.any((gs) => selected.contains(gs.id));
+
     return [
       if (showDivider)
-        Row(
-          children: [
-            const Expanded(child: Divider()),
-            const Icon(Icons.today),
-            const SizedBox(width: 4),
-            Selector<SettingsState, String>(
-              selector: (context, settings) => settings.value.shortDateFormat,
-              builder: (context, value, child) => Text(
-                DateFormat(value).format(prev!.day),
-              ),
+        Container(
+          color: dividerHighlighted
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+              : Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Expanded(child: Divider()),
+                const Icon(Icons.today),
+                const SizedBox(width: 4),
+                Selector<SettingsState, String>(
+                  selector: (context, settings) =>
+                      settings.value.shortDateFormat,
+                  builder: (context, value, child) => Text(
+                    DateFormat(value).format(prev!.day),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Expanded(child: Divider()),
+              ],
             ),
-            const SizedBox(width: 4),
-            const Expanded(child: Divider()),
-          ],
+          ),
         ),
       ExpansionTile(
         title: Text("${history.name} (${history.gymSets.length})"),

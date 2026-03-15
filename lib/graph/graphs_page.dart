@@ -406,22 +406,37 @@ class GraphsPageState extends State<GraphsPage>
             created != null &&
             !isSameDay(created, set.created.value);
 
+        final dividerHighlighted = divider &&
+            _selection.selected.contains(set.name.value) &&
+            _selection.selected.contains(prev!.name.value);
+
         return Column(
           children: [
             if (divider)
-              Row(
-                children: [
-                  const Expanded(child: Divider()),
-                  const Icon(Icons.today),
-                  const SizedBox(width: 4),
-                  Selector<SettingsState, String>(
-                    selector: (p0, p1) => p1.value.shortDateFormat,
-                    builder: (context, format, child) =>
-                        Text(DateFormat(format).format(created)),
+              Container(
+                color: dividerHighlighted
+                    ? Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: .18)
+                    : Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      const Icon(Icons.today),
+                      const SizedBox(width: 4),
+                      Selector<SettingsState, String>(
+                        selector: (p0, p1) => p1.value.shortDateFormat,
+                        builder: (context, format, child) =>
+                            Text(DateFormat(format).format(created)),
+                      ),
+                      const SizedBox(width: 4),
+                      const Expanded(child: Divider()),
+                    ],
                   ),
-                  const SizedBox(width: 4),
-                  const Expanded(child: Divider()),
-                ],
+                ),
               ),
             GraphTile(
               selected: _selection.selected,

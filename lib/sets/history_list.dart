@@ -128,23 +128,32 @@ class _HistoryListState extends State<HistoryList> {
     return Column(
       children: [
         if (showDivider)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                const Expanded(child: Divider()),
-                const Icon(Icons.today),
-                const SizedBox(width: 4),
-                Selector<SettingsState, String>(
-                  selector: (context, settings) =>
-                      settings.value.shortDateFormat,
-                  builder: (context, value, child) => Text(
-                    DateFormat(value).format(previousGymSet.created),
+          Container(
+            color: (widget.selected.contains(gymSet.id) &&
+                    widget.selected.contains(previousGymSet!.id))
+                ? Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: .18)
+                : Colors.transparent,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Expanded(child: Divider()),
+                  const Icon(Icons.today),
+                  const SizedBox(width: 4),
+                  Selector<SettingsState, String>(
+                    selector: (context, settings) =>
+                        settings.value.shortDateFormat,
+                    builder: (context, value, child) => Text(
+                      DateFormat(value).format(previousGymSet.created),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                const Expanded(child: Divider()),
-              ],
+                  const SizedBox(width: 4),
+                  const Expanded(child: Divider()),
+                ],
+              ),
             ),
           ),
         Container(
