@@ -182,7 +182,7 @@ class _CardioPageState extends State<CardioPage> {
                 ),
               );
               _refreshTimer?.cancel();
-    _refreshTimer = Timer(kThemeAnimationDuration, setData);
+              _refreshTimer = Timer(kThemeAnimationDuration, setData);
             },
             icon: const Icon(Icons.history),
             tooltip: "History",

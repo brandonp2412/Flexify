@@ -131,10 +131,7 @@ class _HistoryListState extends State<HistoryList> {
           Container(
             color: (widget.selected.contains(gymSet.id) &&
                     widget.selected.contains(previousGymSet!.id))
-                ? Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withValues(alpha: .18)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: Padding(
               padding: const EdgeInsets.all(8.0),

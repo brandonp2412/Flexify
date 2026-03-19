@@ -49,9 +49,15 @@ class App extends StatelessWidget {
     final colors = context.select<SettingsState, bool>(
       (settings) => settings.value.systemColors,
     );
+    final amoledDark = context.select<SettingsState, bool>(
+      (settings) => settings.value.themeMode == 'ThemeMode.amoled',
+    );
     final mode = context.select<SettingsState, ThemeMode>(
-      (settings) => ThemeMode.values
-          .byName(settings.value.themeMode.replaceFirst('ThemeMode.', '')),
+      (settings) => settings.value.themeMode == 'ThemeMode.amoled'
+          ? ThemeMode.dark
+          : ThemeMode.values.byName(
+              settings.value.themeMode.replaceFirst('ThemeMode.', ''),
+            ),
     );
 
     final light = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
@@ -65,6 +71,7 @@ class App extends StatelessWidget {
         final settings = context.watch<SettingsState>();
         final currentBrightness =
             settings.value.themeMode == 'ThemeMode.dark' ||
+                    settings.value.themeMode == 'ThemeMode.amoled' ||
                     (settings.value.themeMode == 'ThemeMode.system' &&
                         MediaQuery.of(context).platformBrightness ==
                             Brightness.dark)
@@ -97,7 +104,8 @@ class App extends StatelessWidget {
             ),
           ),
           darkTheme: ThemeData(
-            colorScheme: colors ? darkDynamic : dark,
+            colorScheme: (colors ? darkDynamic : dark)
+                ?.copyWith(surface: amoledDark ? Colors.black : null),
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: const InputDecorationTheme(

@@ -17,30 +17,33 @@ List<Widget> getAppearanceSettings(
     if ('theme'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: DropdownButtonFormField<ThemeMode>(
-          initialValue: ThemeMode.values
-              .byName(settings.value.themeMode.replaceFirst('ThemeMode.', '')),
+        child: DropdownButtonFormField<String>(
+          initialValue: settings.value.themeMode,
           decoration: const InputDecoration(
             labelStyle: TextStyle(),
             labelText: 'Theme',
           ),
           items: const [
             DropdownMenuItem(
-              value: ThemeMode.system,
+              value: 'ThemeMode.system',
               child: Text("System"),
             ),
             DropdownMenuItem(
-              value: ThemeMode.dark,
+              value: 'ThemeMode.dark',
               child: Text("Dark"),
             ),
             DropdownMenuItem(
-              value: ThemeMode.light,
+              value: 'ThemeMode.light',
               child: Text("Light"),
+            ),
+            DropdownMenuItem(
+              value: 'ThemeMode.amoled',
+              child: Text("Pure black"),
             ),
           ],
           onChanged: (value) => db.settings.update().write(
                 SettingsCompanion(
-                  themeMode: Value(value.toString()),
+                  themeMode: Value(value!),
                 ),
               ),
         ),

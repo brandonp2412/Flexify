@@ -218,8 +218,7 @@ class _AppSearchState extends State<AppSearch> {
                                   builder: (context) => const SettingsPage(),
                                 ),
                               );
-                              if (widget.onRefresh != null)
-                                widget.onRefresh!();
+                              if (widget.onRefresh != null) widget.onRefresh!();
                             },
                           ),
                         ),
