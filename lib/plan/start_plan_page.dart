@@ -307,8 +307,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       final parsedWeight = double.parse(weight.text);
       stream.first.then((planExercises) {
         if (!mounted) return;
-        final matches = rpms!
-            .where((rpm) => rpm.name == planExercises[selected].exercise);
+        final matches =
+            rpms!.where((rpm) => rpm.name == planExercises[selected].exercise);
         if (matches.isEmpty) return;
 
         final closestRpm = matches.reduce(
