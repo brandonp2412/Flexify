@@ -107,9 +107,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 textCapitalization: TextCapitalization.sentences,
               ),
               ListTile(
-                title: cardio == true
-                    ? const Text('Cardio')
-                    : const Text('Strength'),
+                title: const Text('Cardio'),
                 leading: cardio == true
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),

@@ -179,7 +179,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 autocomplete(showBodyWeight),
                 const SizedBox(height: 8.0),
                 ListTile(
-                  title: cardio ? const Text('Cardio') : const Text('Strength'),
+                  title: const Text('Cardio'),
                   leading: cardio
                       ? const Icon(Icons.sports_gymnastics)
                       : const Icon(Icons.fitness_center),
