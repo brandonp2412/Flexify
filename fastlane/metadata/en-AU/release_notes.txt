@@ -1,1 +1,3 @@
 • Add pure black theme
+• Fix cardio toggle label
+• Remove Apple App Store link from README
