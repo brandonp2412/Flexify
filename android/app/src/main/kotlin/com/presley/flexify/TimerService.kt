@@ -173,6 +173,10 @@ class TimerService : Service() {
             override fun run() {
                 val startTime = SystemClock.elapsedRealtime()
                 if (flexifyTimer.isExpired()) return
+                if (flexifyTimer.getRemainingMillis() <= 0) {
+                    onTimerExpired()
+                    return
+                }
                 if (flexifyTimer.hasSecondsUpdated()) updateNotification(flexifyTimer.getRemainingSeconds())
                 timerHandler.postDelayed(this, getDelay(startTime))
             }
@@ -193,9 +197,10 @@ class TimerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null && intent.action == TIMER_EXPIRED) onTimerExpired()
+        if (intent == null) return START_NOT_STICKY
+        if (intent.action == TIMER_EXPIRED) onTimerExpired()
         else onTimerStart(intent)
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
