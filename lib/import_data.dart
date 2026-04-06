@@ -342,7 +342,7 @@ $version
             id: Value(int.parse(row[0].toString())),
             days: row[1].toString(),
             title: Value(row[2].toString()),
-            sequence: Value(int.parse(row[3].toString())),
+            sequence: Value(int.tryParse(row[3].toString())),
           ),
         );
 
