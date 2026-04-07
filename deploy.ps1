@@ -240,7 +240,6 @@ function Generate-Screenshots($avdName) {
     $env:FLEXIFY_DEVICE_TYPE = $avdName
 
     & flutter drive --profile --driver=test_driver/integration_test.dart `
-        "--dart-define=FLEXIFY_DEVICE_TYPE=$avdName" `
         --target=integration_test/screenshot_test.dart -d $emulatorId
 
     if ($LASTEXITCODE -eq 0) {
