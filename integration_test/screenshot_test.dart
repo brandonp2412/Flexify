@@ -9,7 +9,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
-import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -347,19 +346,8 @@ void main() {
         tester: tester,
         screenshotName: '4_en-US',
         navigateToPage: (context) async {
-          final plan = await (db.plans.select()..limit(1)).getSingle();
-
-          if (!context.mounted) return;
-          final planState = context.read<PlanState>();
-          await planState.updateGymCounts(plan.id);
-
-          if (!context.mounted) return;
-          navigateTo(
-            context: context,
-            page: StartPlanPage(
-              plan: plan,
-            ),
-          );
+          await tester.tap(find.text('Monday'));
+          await tester.pumpAndSettle();
         },
         tabBarState: 'PlansPage',
       ),
