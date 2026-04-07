@@ -1,1 +1,2 @@
-• Fix timer bugs on some devices
+• Fix start plan page screenshot
+• Remove redundant --dart-define flag
