@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
@@ -31,6 +32,9 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
+      beforeOpen: (details) async {
+        if (kDebugMode) await validateDatabaseSchema();
+      },
       onCreate: (Migrator m) async {
         await m.createAll();
         await m.createIndex(
