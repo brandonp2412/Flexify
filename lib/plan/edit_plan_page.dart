@@ -153,8 +153,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: save,
-        label: const Text("Save"),
-        icon: const Icon(Icons.save),
+        label: Text(widget.plan.id.present ? "Save" : "Add"),
+        icon: Icon(widget.plan.id.present ? Icons.save : Icons.add),
       ),
     );
   }

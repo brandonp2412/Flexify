@@ -140,6 +140,7 @@ void main() {
       const Duration(seconds: 10),
       '',
       false,
+      true,
     );
     await tester.pump();
 
@@ -157,6 +158,7 @@ void main() {
       const Duration(seconds: 10),
       '',
       false,
+      true,
     );
     await tester.pump();
 
@@ -240,6 +242,7 @@ void main() {
       const Duration(seconds: 10),
       '',
       false,
+      true,
     );
     await tester.pumpAndSettle();
 

@@ -45,7 +45,9 @@ class TimerState extends ChangeNotifier {
   Future<void> addOneMinute(
     String alarmSound,
     bool vibrate,
+    bool enableSound,
   ) async {
+    starting = false;
     final updated = timer.increaseDuration(
       const Duration(minutes: 1),
     );
@@ -54,12 +56,16 @@ class TimerState extends ChangeNotifier {
       'timestamp': updated.getTimeStamp(),
       'alarmSound': alarmSound,
       'vibrate': vibrate,
+      'enableSound': enableSound,
     };
     if (!kIsWeb && Platform.isAndroid) {
       androidChannel.invokeMethod('add', args);
     } else {
       next?.cancel();
-      next = Timer(const Duration(minutes: 1), () => notify(null, alarmSound));
+      next = Timer(
+        const Duration(minutes: 1),
+        () => notify(null, alarmSound, enableSound),
+      );
     }
   }
 
@@ -74,6 +80,7 @@ class TimerState extends ChangeNotifier {
     Duration rest,
     String alarmSound,
     bool vibrate,
+    bool enableSound,
   ) async {
     final timer = NativeTimerWrapper(
       rest,
@@ -88,17 +95,22 @@ class TimerState extends ChangeNotifier {
       'restMs': rest.inMilliseconds,
       'alarmSound': alarmSound,
       'vibrate': vibrate,
+      'enableSound': enableSound,
     };
     if (!kIsWeb && Platform.isAndroid) {
       await androidChannel.invokeMethod('timer', args);
     } else {
       next?.cancel();
-      next = Timer(rest, () => notify(title, alarmSound));
+      next = Timer(rest, () => notify(title, alarmSound, enableSound));
     }
   }
 
-  Future<void> notify(String? title, String? alarmSound) async {
-    if (player != null) {
+  Future<void> notify(
+    String? title,
+    String? alarmSound,
+    bool enableSound,
+  ) async {
+    if (player != null && enableSound) {
       player!.play(
         alarmSound?.isNotEmpty == true
             ? DeviceFileSource(alarmSound!)

@@ -697,6 +697,7 @@ class _EditSetPageState extends State<EditSetPage> {
         Duration(milliseconds: restMs!),
         settings.alarmSound,
         settings.vibrate,
+        settings.enableSound,
       );
     else
       timer.startTimer(
@@ -704,6 +705,7 @@ class _EditSetPageState extends State<EditSetPage> {
         Duration(milliseconds: settings.timerDuration),
         settings.alarmSound,
         settings.vibrate,
+        settings.enableSound,
       );
     if (!mounted) return;
     return Navigator.of(context).pop();

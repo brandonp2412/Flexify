@@ -303,6 +303,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                 await timerState.addOneMinute(
                   settings.alarmSound,
                   settings.vibrate,
+                  settings.enableSound,
                 );
               },
               child: const Text('+1 minute'),

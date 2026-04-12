@@ -513,6 +513,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         Duration(milliseconds: restMs.toInt()),
         settings.alarmSound,
         settings.vibrate,
+        settings.enableSound,
       );
 
     final finishedExercise = count == (max ?? settings.maxSets) &&
