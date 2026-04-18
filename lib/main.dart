@@ -42,6 +42,13 @@ Widget appProviders(SettingsState state) => MultiProvider(
     );
 
 class App extends StatelessWidget {
+  static final _lightScheme =
+      ColorScheme.fromSeed(seedColor: Colors.deepPurple);
+  static final _darkScheme = ColorScheme.fromSeed(
+    seedColor: Colors.deepPurple,
+    brightness: Brightness.dark,
+  );
+
   const App({super.key});
 
   @override
@@ -58,12 +65,6 @@ class App extends StatelessWidget {
           : ThemeMode.values.byName(
               settings.value.themeMode.replaceFirst('ThemeMode.', ''),
             ),
-    );
-
-    final light = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
-    final dark = ColorScheme.fromSeed(
-      seedColor: Colors.deepPurple,
-      brightness: Brightness.dark,
     );
 
     return DynamicColorBuilder(
@@ -96,7 +97,7 @@ class App extends StatelessWidget {
           scaffoldMessengerKey: rootScaffoldMessenger,
           title: 'Flexify',
           theme: ThemeData(
-            colorScheme: colors ? lightDynamic : light,
+            colorScheme: colors ? lightDynamic : _lightScheme,
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: const InputDecorationTheme(
@@ -104,7 +105,7 @@ class App extends StatelessWidget {
             ),
           ),
           darkTheme: ThemeData(
-            colorScheme: (colors ? darkDynamic : dark)
+            colorScheme: (colors ? darkDynamic : _darkScheme)
                 ?.copyWith(surface: amoledDark ? Colors.black : null),
             fontFamily: 'Manrope',
             useMaterial3: true,

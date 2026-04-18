@@ -130,6 +130,36 @@ class PlanState extends ChangeNotifier {
     });
   }
 
+  /// Batches all post-save state updates into a single [notifyListeners] call.
+  Future<void> updateAfterSave({
+    required int planId,
+    required bool updateCounts,
+  }) async {
+    gymCounts = await getGymCounts(planId);
+
+    final latest = db.gymSets.created.max();
+    final sub = Subquery(
+      db.select(db.gymSets).join([])
+        ..groupBy([db.gymSets.name])
+        ..addColumns([db.gymSets.name, latest]),
+      'ls',
+    );
+    final query = db.select(db.gymSets).join([
+      innerJoin(
+        sub,
+        sub.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
+            sub.ref(latest).equalsExp(db.gymSets.created),
+        useColumns: false,
+      ),
+    ]);
+    final rows = await query.get();
+    lastSets = rows.map((r) => r.readTable(db.gymSets)).toList();
+
+    if (updateCounts) planCounts = await getPlanCounts();
+
+    notifyListeners();
+  }
+
   Future<List<PlanCount>> getPlanCounts() async {
     return (db.customSelect(
       """

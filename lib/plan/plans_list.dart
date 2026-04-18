@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' as drift;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
@@ -32,10 +33,37 @@ class PlansList extends StatefulWidget {
 }
 
 class _PlansListState extends State<PlansList> {
+  List<Plan> _filteredPlans = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _updateFilteredPlans();
+  }
+
+  @override
+  void didUpdateWidget(PlansList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(oldWidget.plans, widget.plans) ||
+        oldWidget.search != widget.search) {
+      _updateFilteredPlans();
+    }
+  }
+
+  void _updateFilteredPlans() {
+    if (widget.plans == null) {
+      _filteredPlans = [];
+      return;
+    }
+    final term = widget.search.toLowerCase();
+    _filteredPlans = widget.plans!.where((plan) {
+      return plan.title?.toLowerCase().contains(term) == true ||
+          plan.days.toLowerCase().contains(term);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<PlanState>();
-
     final noneFound = ListTile(
       title: const Text("No plans found"),
       subtitle: Text("Tap to create ${widget.search}"),
@@ -44,7 +72,7 @@ class _PlansListState extends State<PlansList> {
           days: const drift.Value(''),
           title: drift.Value(widget.search),
         );
-        await state.setExercises(plan);
+        await context.read<PlanState>().setExercises(plan);
         if (context.mounted)
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -60,11 +88,7 @@ class _PlansListState extends State<PlansList> {
 
     final weekday = weekdays[DateTime.now().weekday - 1];
 
-    final filteredPlans = widget.plans!.where((plan) {
-      final term = widget.search.toLowerCase();
-      return plan.title?.toLowerCase().contains(term) == true ||
-          plan.days.toLowerCase().contains(term);
-    }).toList();
+    final filteredPlans = _filteredPlans;
 
     if (widget.plans!.isEmpty || filteredPlans.isEmpty) return noneFound;
 

@@ -520,12 +520,12 @@ class _StartPlanPageState extends State<StartPlanPage>
         selected < snapshot.data!.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
-    await planState.updateGymCounts(widget.plan.id);
-    await planState.updateDefaults();
-    if (settings.planTrailing == 'PlanTrailing.count' ||
-        settings.planTrailing == 'PlanTrailing.ratio' ||
-        settings.planTrailing == 'PlanTrailing.percent')
-      planState.updatePlanCounts();
+    await planState.updateAfterSave(
+      planId: widget.plan.id,
+      updateCounts: settings.planTrailing == 'PlanTrailing.count' ||
+          settings.planTrailing == 'PlanTrailing.ratio' ||
+          settings.planTrailing == 'PlanTrailing.percent',
+    );
     if (!mounted) return;
     setState(() {
       _updateGymSetTextFields(gymSet);

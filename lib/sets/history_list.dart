@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flexify/database/database.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -43,9 +44,11 @@ class _HistoryListState extends State<HistoryList> {
   @override
   void didUpdateWidget(HistoryList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setState(() {
-      _current = List.from(widget.sets);
-    });
+    if (!listEquals(oldWidget.sets, widget.sets)) {
+      setState(() {
+        _current = List.from(widget.sets);
+      });
+    }
   }
 
   Widget _buildListItem(GymSet gymSet, int index, bool showImages) {
@@ -214,16 +217,11 @@ class _HistoryListState extends State<HistoryList> {
     if (widget.scroll.position.pixels <
             widget.scroll.position.maxScrollExtent - 200 ||
         goingNext) return;
+    goingNext = true;
+    widget.onNext();
     setState(() {
-      goingNext = true;
+      goingNext = false;
     });
-    try {
-      widget.onNext();
-    } finally {
-      setState(() {
-        goingNext = false;
-      });
-    }
   }
 
   @override

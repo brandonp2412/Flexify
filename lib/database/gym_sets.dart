@@ -389,28 +389,27 @@ Future<List<StrengthData>> getGlobalData({
 
 Future<bool> isBest(GymSet gymSet) async {
   if (gymSet.cardio) {
-    final best = await (db.gymSets.select()
-          ..addColumns([db.gymSets.distance.sum() / db.gymSets.duration.sum()])
+    if (gymSet.duration == 0) return false;
+    final paceExpr = db.gymSets.distance.sum() / db.gymSets.duration.sum();
+    final best = await (db.selectOnly(db.gymSets)
+          ..addColumns([paceExpr])
+          ..where(db.gymSets.name.equals(gymSet.name))
+          ..where(db.gymSets.id.isNotValue(gymSet.id))
+          ..where(db.gymSets.hidden.equals(false))
           ..orderBy([
-            (u) => OrderingTerm(
-                  expression: u.weight,
-                  mode: OrderingMode.desc,
-                ),
-            (u) => OrderingTerm(
-                  expression: u.reps,
-                  mode: OrderingMode.desc,
-                ),
+            OrderingTerm(expression: paceExpr, mode: OrderingMode.desc),
           ])
           ..limit(1))
         .getSingleOrNull();
     if (best == null) return false;
-    return gymSet.distance / gymSet.duration > best.distance / best.duration;
+    final bestPace = best.read(paceExpr) ?? 0;
+    return gymSet.distance / gymSet.duration > bestPace;
   } else {
-    final result = await (db.gymSets.selectOnly()
-          ..addColumns(
-            [db.gymSets.weight, db.gymSets.reps],
-          )
+    final result = await (db.selectOnly(db.gymSets)
+          ..addColumns([db.gymSets.weight, db.gymSets.reps])
+          ..where(db.gymSets.name.equals(gymSet.name))
           ..where(db.gymSets.id.isNotValue(gymSet.id))
+          ..where(db.gymSets.hidden.equals(false))
           ..orderBy([
             OrderingTerm(
               expression: db.gymSets.weight,
@@ -426,7 +425,6 @@ Future<bool> isBest(GymSet gymSet) async {
     if (result == null) return false;
     final weight = result.read(db.gymSets.weight)!;
     final reps = result.read(db.gymSets.reps)!;
-
     if (gymSet.weight > weight) return true;
     if (gymSet.weight == weight && gymSet.reps > reps) return true;
     return false;

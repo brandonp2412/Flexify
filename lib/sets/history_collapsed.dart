@@ -237,15 +237,10 @@ class _HistoryCollapsedState extends State<HistoryCollapsed> {
     if (widget.scroll.position.pixels <
             widget.scroll.position.maxScrollExtent - 200 ||
         goingNext) return;
+    goingNext = true;
+    widget.onNext();
     setState(() {
-      goingNext = true;
+      goingNext = false;
     });
-    try {
-      widget.onNext();
-    } finally {
-      setState(() {
-        goingNext = false;
-      });
-    }
   }
 }

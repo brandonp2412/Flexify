@@ -296,19 +296,21 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   List<HistoryDay> getHistoryDays(List<GymSet> gymSets) {
-    List<HistoryDay> historyDays = [];
+    final map = <String, HistoryDay>{};
+    final list = <HistoryDay>[];
     for (final gymSet in gymSets) {
       final day = DateUtils.dateOnly(gymSet.created);
-      final index = historyDays
-          .indexWhere((hd) => isSameDay(hd.day, day) && hd.name == gymSet.name);
-      if (index == -1)
-        historyDays.add(
-          HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day),
-        );
-      else
-        historyDays[index].gymSets.add(gymSet);
+      final key = '${gymSet.name}|${day.millisecondsSinceEpoch}';
+      final existing = map[key];
+      if (existing == null) {
+        final hd = HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day);
+        map[key] = hd;
+        list.add(hd);
+      } else {
+        existing.gymSets.add(gymSet);
+      }
     }
-    return historyDays;
+    return list;
   }
 
   @override
