@@ -185,7 +185,8 @@ void main() {
       await tester.longPress(find.text('5 x 100 kg'));
       final frames = await countFramesToSettle(tester);
 
-      print('[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)');
+      print(
+          '[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)');
       expect(
         frames,
         lessThan(50),
@@ -209,7 +210,8 @@ void main() {
       await tester.tap(find.text('5 x 100 kg'));
       final frames = await countFramesToSettle(tester);
 
-      print('[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)');
+      print(
+          '[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)');
       expect(frames, lessThan(50),
           reason: 'Exiting selection mode took $frames frames');
       await closeDb(tester);
