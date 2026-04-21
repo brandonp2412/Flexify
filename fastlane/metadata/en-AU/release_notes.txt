@@ -1,1 +1,1 @@
-• fix: enable web build by conditionally importing drift migrations
+• Prevent failure of deployments on lint warnings
