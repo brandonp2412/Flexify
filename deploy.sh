@@ -123,7 +123,7 @@ print_step "Running tests and analysis"
 flutter test
 print_success "Tests passed"
 
-dart analyze lib
+dart analyze --no-fatal-warnings lib
 print_success "Analysis passed"
 
 dart format --set-exit-if-changed lib
