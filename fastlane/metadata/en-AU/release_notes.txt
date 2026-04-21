@@ -1,2 +1,9 @@
-• Fix start plan page screenshot
-• Remove redundant --dart-define flag
+• Add CLAUDE.md
+• Fix building for linux in WSL2
+• Fix type in schema.dart
+• Format perf test
+• Make sequence column optional
+• Undo change to edit plan page save button
+• Validate database schema in dev mode
+• fix: timer animation, enableSound, and edit plan button
+• perf: reduce redundant rebuilds and fix isBest() query scope
