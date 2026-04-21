@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:drift_dev/api/migrations_native.dart';
+import 'migrations_web.dart' if (dart.library.io) 'migrations_native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
