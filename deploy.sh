@@ -106,19 +106,6 @@ else
     nvim "$changelog_file"
 fi
 
-# Setup Flutter
-print_step "Setting up Flutter from submodule"
-if [ ! -d "flutter" ]; then
-    print_warning "Flutter submodule not found, initializing..."
-    git submodule update --init --recursive flutter
-else
-    git submodule update --recursive flutter
-fi
-
-export PATH="$PWD/flutter/bin:$PATH"
-chmod +x flutter/bin/* # Ensure executables are runnable
-
-# Run tests and analysis
 print_step "Running tests and analysis"
 flutter test
 print_success "Tests passed"
