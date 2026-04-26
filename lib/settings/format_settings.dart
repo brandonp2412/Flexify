@@ -121,6 +121,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
 
               return DropdownButtonFormField<String>(
                 initialValue: settings.longDateFormat,
+                menuMaxHeight: 300,
                 items: long.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
