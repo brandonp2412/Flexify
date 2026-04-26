@@ -11,25 +11,27 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
   Plans(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> days = GeneratedColumn<String>(
       'days', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<String> exercises = GeneratedColumn<String>(
-      'exercises', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
   late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
       'sequence', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   @override
-  List<GeneratedColumn> get $columns => [days, exercises, id, sequence, title];
+  List<GeneratedColumn> get $columns => [days, id, sequence, title];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -43,8 +45,6 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
     return PlansData(
       days: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}days'])!,
-      exercises: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}exercises'])!,
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       sequence: attachedDatabase.typeMapping
@@ -58,25 +58,22 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
   Plans createAlias(String alias) {
     return Plans(attachedDatabase, alias);
   }
+
+  @override
+  bool get dontWriteConstraints => true;
 }
 
 class PlansData extends DataClass implements Insertable<PlansData> {
   final String days;
-  final String exercises;
   final int id;
   final int? sequence;
   final String? title;
   const PlansData(
-      {required this.days,
-      required this.exercises,
-      required this.id,
-      this.sequence,
-      this.title});
+      {required this.days, required this.id, this.sequence, this.title});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['days'] = Variable<String>(days);
-    map['exercises'] = Variable<String>(exercises);
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || sequence != null) {
       map['sequence'] = Variable<int>(sequence);
@@ -90,7 +87,6 @@ class PlansData extends DataClass implements Insertable<PlansData> {
   PlansCompanion toCompanion(bool nullToAbsent) {
     return PlansCompanion(
       days: Value(days),
-      exercises: Value(exercises),
       id: Value(id),
       sequence: sequence == null && nullToAbsent
           ? const Value.absent()
@@ -105,7 +101,6 @@ class PlansData extends DataClass implements Insertable<PlansData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlansData(
       days: serializer.fromJson<String>(json['days']),
-      exercises: serializer.fromJson<String>(json['exercises']),
       id: serializer.fromJson<int>(json['id']),
       sequence: serializer.fromJson<int?>(json['sequence']),
       title: serializer.fromJson<String?>(json['title']),
@@ -116,7 +111,6 @@ class PlansData extends DataClass implements Insertable<PlansData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'days': serializer.toJson<String>(days),
-      'exercises': serializer.toJson<String>(exercises),
       'id': serializer.toJson<int>(id),
       'sequence': serializer.toJson<int?>(sequence),
       'title': serializer.toJson<String?>(title),
@@ -125,13 +119,11 @@ class PlansData extends DataClass implements Insertable<PlansData> {
 
   PlansData copyWith(
           {String? days,
-          String? exercises,
           int? id,
           Value<int?> sequence = const Value.absent(),
           Value<String?> title = const Value.absent()}) =>
       PlansData(
         days: days ?? this.days,
-        exercises: exercises ?? this.exercises,
         id: id ?? this.id,
         sequence: sequence.present ? sequence.value : this.sequence,
         title: title.present ? title.value : this.title,
@@ -139,7 +131,6 @@ class PlansData extends DataClass implements Insertable<PlansData> {
   PlansData copyWithCompanion(PlansCompanion data) {
     return PlansData(
       days: data.days.present ? data.days.value : this.days,
-      exercises: data.exercises.present ? data.exercises.value : this.exercises,
       id: data.id.present ? data.id.value : this.id,
       sequence: data.sequence.present ? data.sequence.value : this.sequence,
       title: data.title.present ? data.title.value : this.title,
@@ -150,7 +141,6 @@ class PlansData extends DataClass implements Insertable<PlansData> {
   String toString() {
     return (StringBuffer('PlansData(')
           ..write('days: $days, ')
-          ..write('exercises: $exercises, ')
           ..write('id: $id, ')
           ..write('sequence: $sequence, ')
           ..write('title: $title')
@@ -159,13 +149,12 @@ class PlansData extends DataClass implements Insertable<PlansData> {
   }
 
   @override
-  int get hashCode => Object.hash(days, exercises, id, sequence, title);
+  int get hashCode => Object.hash(days, id, sequence, title);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is PlansData &&
           other.days == this.days &&
-          other.exercises == this.exercises &&
           other.id == this.id &&
           other.sequence == this.sequence &&
           other.title == this.title);
@@ -173,35 +162,29 @@ class PlansData extends DataClass implements Insertable<PlansData> {
 
 class PlansCompanion extends UpdateCompanion<PlansData> {
   final Value<String> days;
-  final Value<String> exercises;
   final Value<int> id;
   final Value<int?> sequence;
   final Value<String?> title;
   const PlansCompanion({
     this.days = const Value.absent(),
-    this.exercises = const Value.absent(),
     this.id = const Value.absent(),
     this.sequence = const Value.absent(),
     this.title = const Value.absent(),
   });
   PlansCompanion.insert({
     required String days,
-    required String exercises,
     this.id = const Value.absent(),
     this.sequence = const Value.absent(),
     this.title = const Value.absent(),
-  })  : days = Value(days),
-        exercises = Value(exercises);
+  }) : days = Value(days);
   static Insertable<PlansData> custom({
     Expression<String>? days,
-    Expression<String>? exercises,
     Expression<int>? id,
     Expression<int>? sequence,
     Expression<String>? title,
   }) {
     return RawValuesInsertable({
       if (days != null) 'days': days,
-      if (exercises != null) 'exercises': exercises,
       if (id != null) 'id': id,
       if (sequence != null) 'sequence': sequence,
       if (title != null) 'title': title,
@@ -210,13 +193,11 @@ class PlansCompanion extends UpdateCompanion<PlansData> {
 
   PlansCompanion copyWith(
       {Value<String>? days,
-      Value<String>? exercises,
       Value<int>? id,
       Value<int?>? sequence,
       Value<String?>? title}) {
     return PlansCompanion(
       days: days ?? this.days,
-      exercises: exercises ?? this.exercises,
       id: id ?? this.id,
       sequence: sequence ?? this.sequence,
       title: title ?? this.title,
@@ -228,9 +209,6 @@ class PlansCompanion extends UpdateCompanion<PlansData> {
     final map = <String, Expression>{};
     if (days.present) {
       map['days'] = Variable<String>(days.value);
-    }
-    if (exercises.present) {
-      map['exercises'] = Variable<String>(exercises.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -248,7 +226,6 @@ class PlansCompanion extends UpdateCompanion<PlansData> {
   String toString() {
     return (StringBuffer('PlansCompanion(')
           ..write('days: $days, ')
-          ..write('exercises: $exercises, ')
           ..write('id: $id, ')
           ..write('sequence: $sequence, ')
           ..write('title: $title')
@@ -266,68 +243,93 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
       'body_weight', aliasedName, false,
       type: DriftSqlType.double,
       requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  late final GeneratedColumn<bool> cardio = GeneratedColumn<bool>(
+      $customConstraints: 'NOT NULL DEFAULT 0.0',
+      defaultValue: const CustomExpression('0.0'));
+  late final GeneratedColumn<int> cardio = GeneratedColumn<int>(
       'cardio', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("cardio" IN (0, 1))'),
-      defaultValue: const Constant(false));
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (cardio IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
   late final GeneratedColumn<String> category = GeneratedColumn<String>(
       'category', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  late final GeneratedColumn<DateTime> created = GeneratedColumn<DateTime>(
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> created = GeneratedColumn<int>(
       'created', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<double> distance = GeneratedColumn<double>(
       'distance', aliasedName, false,
       type: DriftSqlType.double,
       requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+      $customConstraints: 'NOT NULL DEFAULT 0.0',
+      defaultValue: const CustomExpression('0.0'));
   late final GeneratedColumn<double> duration = GeneratedColumn<double>(
       'duration', aliasedName, false,
       type: DriftSqlType.double,
       requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
+      $customConstraints: 'NOT NULL DEFAULT 0.0',
+      defaultValue: const CustomExpression('0.0'));
+  late final GeneratedColumn<int> hidden = GeneratedColumn<int>(
       'hidden', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("hidden" IN (0, 1))'),
-      defaultValue: const Constant(false));
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (hidden IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
   late final GeneratedColumn<String> image = GeneratedColumn<String>(
       'image', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> incline = GeneratedColumn<int>(
       'incline', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
       'plan_id', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<double> reps = GeneratedColumn<double>(
       'reps', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      type: DriftSqlType.double,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
       'rest_ms', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
       'unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
       'weight', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      type: DriftSqlType.double,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   @override
   List<GeneratedColumn> get $columns => [
         bodyWeight,
@@ -341,6 +343,7 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
         image,
         incline,
         name,
+        notes,
         planId,
         reps,
         restMs,
@@ -361,17 +364,17 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
       bodyWeight: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}body_weight'])!,
       cardio: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}cardio'])!,
       category: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}category']),
       created: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}created'])!,
       distance: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}distance'])!,
       duration: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
       hidden: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}hidden'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}hidden'])!,
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       image: attachedDatabase.typeMapping
@@ -380,6 +383,8 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
           .read(DriftSqlType.int, data['${effectivePrefix}incline']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       planId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}plan_id']),
       reps: attachedDatabase.typeMapping
@@ -397,20 +402,24 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
   GymSets createAlias(String alias) {
     return GymSets(attachedDatabase, alias);
   }
+
+  @override
+  bool get dontWriteConstraints => true;
 }
 
 class GymSetsData extends DataClass implements Insertable<GymSetsData> {
   final double bodyWeight;
-  final bool cardio;
+  final int cardio;
   final String? category;
-  final DateTime created;
+  final int created;
   final double distance;
   final double duration;
-  final bool hidden;
+  final int hidden;
   final int id;
   final String? image;
   final int? incline;
   final String name;
+  final String? notes;
   final int? planId;
   final double reps;
   final int? restMs;
@@ -428,6 +437,7 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
       this.image,
       this.incline,
       required this.name,
+      this.notes,
       this.planId,
       required this.reps,
       this.restMs,
@@ -437,14 +447,14 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['body_weight'] = Variable<double>(bodyWeight);
-    map['cardio'] = Variable<bool>(cardio);
+    map['cardio'] = Variable<int>(cardio);
     if (!nullToAbsent || category != null) {
       map['category'] = Variable<String>(category);
     }
-    map['created'] = Variable<DateTime>(created);
+    map['created'] = Variable<int>(created);
     map['distance'] = Variable<double>(distance);
     map['duration'] = Variable<double>(duration);
-    map['hidden'] = Variable<bool>(hidden);
+    map['hidden'] = Variable<int>(hidden);
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || image != null) {
       map['image'] = Variable<String>(image);
@@ -453,6 +463,9 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
       map['incline'] = Variable<int>(incline);
     }
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
     if (!nullToAbsent || planId != null) {
       map['plan_id'] = Variable<int>(planId);
     }
@@ -483,6 +496,8 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
           ? const Value.absent()
           : Value(incline),
       name: Value(name),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       planId:
           planId == null && nullToAbsent ? const Value.absent() : Value(planId),
       reps: Value(reps),
@@ -498,16 +513,17 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GymSetsData(
       bodyWeight: serializer.fromJson<double>(json['bodyWeight']),
-      cardio: serializer.fromJson<bool>(json['cardio']),
+      cardio: serializer.fromJson<int>(json['cardio']),
       category: serializer.fromJson<String?>(json['category']),
-      created: serializer.fromJson<DateTime>(json['created']),
+      created: serializer.fromJson<int>(json['created']),
       distance: serializer.fromJson<double>(json['distance']),
       duration: serializer.fromJson<double>(json['duration']),
-      hidden: serializer.fromJson<bool>(json['hidden']),
+      hidden: serializer.fromJson<int>(json['hidden']),
       id: serializer.fromJson<int>(json['id']),
       image: serializer.fromJson<String?>(json['image']),
       incline: serializer.fromJson<int?>(json['incline']),
       name: serializer.fromJson<String>(json['name']),
+      notes: serializer.fromJson<String?>(json['notes']),
       planId: serializer.fromJson<int?>(json['planId']),
       reps: serializer.fromJson<double>(json['reps']),
       restMs: serializer.fromJson<int?>(json['restMs']),
@@ -520,16 +536,17 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'bodyWeight': serializer.toJson<double>(bodyWeight),
-      'cardio': serializer.toJson<bool>(cardio),
+      'cardio': serializer.toJson<int>(cardio),
       'category': serializer.toJson<String?>(category),
-      'created': serializer.toJson<DateTime>(created),
+      'created': serializer.toJson<int>(created),
       'distance': serializer.toJson<double>(distance),
       'duration': serializer.toJson<double>(duration),
-      'hidden': serializer.toJson<bool>(hidden),
+      'hidden': serializer.toJson<int>(hidden),
       'id': serializer.toJson<int>(id),
       'image': serializer.toJson<String?>(image),
       'incline': serializer.toJson<int?>(incline),
       'name': serializer.toJson<String>(name),
+      'notes': serializer.toJson<String?>(notes),
       'planId': serializer.toJson<int?>(planId),
       'reps': serializer.toJson<double>(reps),
       'restMs': serializer.toJson<int?>(restMs),
@@ -540,16 +557,17 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
 
   GymSetsData copyWith(
           {double? bodyWeight,
-          bool? cardio,
+          int? cardio,
           Value<String?> category = const Value.absent(),
-          DateTime? created,
+          int? created,
           double? distance,
           double? duration,
-          bool? hidden,
+          int? hidden,
           int? id,
           Value<String?> image = const Value.absent(),
           Value<int?> incline = const Value.absent(),
           String? name,
+          Value<String?> notes = const Value.absent(),
           Value<int?> planId = const Value.absent(),
           double? reps,
           Value<int?> restMs = const Value.absent(),
@@ -567,6 +585,7 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
         image: image.present ? image.value : this.image,
         incline: incline.present ? incline.value : this.incline,
         name: name ?? this.name,
+        notes: notes.present ? notes.value : this.notes,
         planId: planId.present ? planId.value : this.planId,
         reps: reps ?? this.reps,
         restMs: restMs.present ? restMs.value : this.restMs,
@@ -587,6 +606,7 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
       image: data.image.present ? data.image.value : this.image,
       incline: data.incline.present ? data.incline.value : this.incline,
       name: data.name.present ? data.name.value : this.name,
+      notes: data.notes.present ? data.notes.value : this.notes,
       planId: data.planId.present ? data.planId.value : this.planId,
       reps: data.reps.present ? data.reps.value : this.reps,
       restMs: data.restMs.present ? data.restMs.value : this.restMs,
@@ -609,6 +629,7 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
           ..write('image: $image, ')
           ..write('incline: $incline, ')
           ..write('name: $name, ')
+          ..write('notes: $notes, ')
           ..write('planId: $planId, ')
           ..write('reps: $reps, ')
           ..write('restMs: $restMs, ')
@@ -631,6 +652,7 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
       image,
       incline,
       name,
+      notes,
       planId,
       reps,
       restMs,
@@ -651,6 +673,7 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
           other.image == this.image &&
           other.incline == this.incline &&
           other.name == this.name &&
+          other.notes == this.notes &&
           other.planId == this.planId &&
           other.reps == this.reps &&
           other.restMs == this.restMs &&
@@ -660,16 +683,17 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
 
 class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
   final Value<double> bodyWeight;
-  final Value<bool> cardio;
+  final Value<int> cardio;
   final Value<String?> category;
-  final Value<DateTime> created;
+  final Value<int> created;
   final Value<double> distance;
   final Value<double> duration;
-  final Value<bool> hidden;
+  final Value<int> hidden;
   final Value<int> id;
   final Value<String?> image;
   final Value<int?> incline;
   final Value<String> name;
+  final Value<String?> notes;
   final Value<int?> planId;
   final Value<double> reps;
   final Value<int?> restMs;
@@ -687,6 +711,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     this.image = const Value.absent(),
     this.incline = const Value.absent(),
     this.name = const Value.absent(),
+    this.notes = const Value.absent(),
     this.planId = const Value.absent(),
     this.reps = const Value.absent(),
     this.restMs = const Value.absent(),
@@ -697,7 +722,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     this.bodyWeight = const Value.absent(),
     this.cardio = const Value.absent(),
     this.category = const Value.absent(),
-    required DateTime created,
+    required int created,
     this.distance = const Value.absent(),
     this.duration = const Value.absent(),
     this.hidden = const Value.absent(),
@@ -705,6 +730,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     this.image = const Value.absent(),
     this.incline = const Value.absent(),
     required String name,
+    this.notes = const Value.absent(),
     this.planId = const Value.absent(),
     required double reps,
     this.restMs = const Value.absent(),
@@ -717,16 +743,17 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
         weight = Value(weight);
   static Insertable<GymSetsData> custom({
     Expression<double>? bodyWeight,
-    Expression<bool>? cardio,
+    Expression<int>? cardio,
     Expression<String>? category,
-    Expression<DateTime>? created,
+    Expression<int>? created,
     Expression<double>? distance,
     Expression<double>? duration,
-    Expression<bool>? hidden,
+    Expression<int>? hidden,
     Expression<int>? id,
     Expression<String>? image,
     Expression<int>? incline,
     Expression<String>? name,
+    Expression<String>? notes,
     Expression<int>? planId,
     Expression<double>? reps,
     Expression<int>? restMs,
@@ -745,6 +772,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
       if (image != null) 'image': image,
       if (incline != null) 'incline': incline,
       if (name != null) 'name': name,
+      if (notes != null) 'notes': notes,
       if (planId != null) 'plan_id': planId,
       if (reps != null) 'reps': reps,
       if (restMs != null) 'rest_ms': restMs,
@@ -755,16 +783,17 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
 
   GymSetsCompanion copyWith(
       {Value<double>? bodyWeight,
-      Value<bool>? cardio,
+      Value<int>? cardio,
       Value<String?>? category,
-      Value<DateTime>? created,
+      Value<int>? created,
       Value<double>? distance,
       Value<double>? duration,
-      Value<bool>? hidden,
+      Value<int>? hidden,
       Value<int>? id,
       Value<String?>? image,
       Value<int?>? incline,
       Value<String>? name,
+      Value<String?>? notes,
       Value<int?>? planId,
       Value<double>? reps,
       Value<int?>? restMs,
@@ -782,6 +811,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
       image: image ?? this.image,
       incline: incline ?? this.incline,
       name: name ?? this.name,
+      notes: notes ?? this.notes,
       planId: planId ?? this.planId,
       reps: reps ?? this.reps,
       restMs: restMs ?? this.restMs,
@@ -797,13 +827,13 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
       map['body_weight'] = Variable<double>(bodyWeight.value);
     }
     if (cardio.present) {
-      map['cardio'] = Variable<bool>(cardio.value);
+      map['cardio'] = Variable<int>(cardio.value);
     }
     if (category.present) {
       map['category'] = Variable<String>(category.value);
     }
     if (created.present) {
-      map['created'] = Variable<DateTime>(created.value);
+      map['created'] = Variable<int>(created.value);
     }
     if (distance.present) {
       map['distance'] = Variable<double>(distance.value);
@@ -812,7 +842,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
       map['duration'] = Variable<double>(duration.value);
     }
     if (hidden.present) {
-      map['hidden'] = Variable<bool>(hidden.value);
+      map['hidden'] = Variable<int>(hidden.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -825,6 +855,9 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
     }
     if (planId.present) {
       map['plan_id'] = Variable<int>(planId.value);
@@ -858,6 +891,7 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
           ..write('image: $image, ')
           ..write('incline: $incline, ')
           ..write('name: $name, ')
+          ..write('notes: $notes, ')
           ..write('planId: $planId, ')
           ..write('reps: $reps, ')
           ..write('restMs: $restMs, ')
@@ -875,158 +909,236 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
   Settings(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
       'alarm_sound', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> automaticBackups = GeneratedColumn<bool>(
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> automaticBackups = GeneratedColumn<int>(
       'automatic_backups', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("automatic_backups" IN (0, 1))'),
-      defaultValue: const Constant(false));
+      $customConstraints:
+          'NOT NULL DEFAULT 0 CHECK (automatic_backups IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
   late final GeneratedColumn<String> backupPath = GeneratedColumn<String>(
       'backup_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
       'cardio_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> curveLines = GeneratedColumn<bool>(
-      'curve_lines', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("curve_lines" IN (0, 1))'));
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> curveLines = GeneratedColumn<int>(
+      'curve_lines', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL CHECK (curve_lines IN (0, 1))');
   late final GeneratedColumn<double> curveSmoothness = GeneratedColumn<double>(
       'curve_smoothness', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  late final GeneratedColumn<bool> durationEstimation = GeneratedColumn<bool>(
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> durationEstimation = GeneratedColumn<int>(
       'duration_estimation', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("duration_estimation" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> enableSound = GeneratedColumn<bool>(
+      $customConstraints:
+          'NOT NULL DEFAULT 1 CHECK (duration_estimation IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> enableSound = GeneratedColumn<int>(
       'enable_sound', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("enable_sound" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> explainedPermissions = GeneratedColumn<bool>(
+      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (enable_sound IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> explainedPermissions = GeneratedColumn<int>(
       'explained_permissions', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("explained_permissions" IN (0, 1))'));
-  late final GeneratedColumn<bool> groupHistory = GeneratedColumn<bool>(
+      $customConstraints: 'NOT NULL CHECK (explained_permissions IN (0, 1))');
+  late final GeneratedColumn<int> groupHistory = GeneratedColumn<int>(
       'group_history', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("group_history" IN (0, 1))'));
+      $customConstraints: 'NOT NULL CHECK (group_history IN (0, 1))');
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
   late final GeneratedColumn<String> longDateFormat = GeneratedColumn<String>(
       'long_date_format', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
       'max_sets', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> notifications = GeneratedColumn<bool>(
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> notifications = GeneratedColumn<int>(
       'notifications', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("notifications" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> peekGraph = GeneratedColumn<bool>(
+      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (notifications IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> peekGraph = GeneratedColumn<int>(
       'peek_graph', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("peek_graph" IN (0, 1))'),
-      defaultValue: const Constant(false));
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (peek_graph IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
   late final GeneratedColumn<String> planTrailing = GeneratedColumn<String>(
       'plan_trailing', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> repEstimation = GeneratedColumn<bool>(
-      'rep_estimation', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("rep_estimation" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> restTimers = GeneratedColumn<bool>(
-      'rest_timers', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("rest_timers" IN (0, 1))'));
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> repEstimation = GeneratedColumn<int>(
+      'rep_estimation', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (rep_estimation IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
+  late final GeneratedColumn<int> restTimers = GeneratedColumn<int>(
+      'rest_timers', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL CHECK (rest_timers IN (0, 1))');
   late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
       'short_date_format', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> showBodyWeight = GeneratedColumn<bool>(
-      'show_body_weight', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_body_weight" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> showCategories = GeneratedColumn<bool>(
-      'show_categories', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_categories" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> showImages = GeneratedColumn<bool>(
-      'show_images', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  late final GeneratedColumn<bool> showUnits = GeneratedColumn<bool>(
-      'show_units', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("show_units" IN (0, 1))'));
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> showBodyWeight = GeneratedColumn<int>(
+      'show_body_weight', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 1 CHECK (show_body_weight IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> showCategories = GeneratedColumn<int>(
+      'show_categories', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 1 CHECK (show_categories IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> showImages = GeneratedColumn<int>(
+      'show_images', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_images IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> showNotes = GeneratedColumn<int>(
+      'show_notes', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_notes IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> showGlobalProgress = GeneratedColumn<int>(
+      'show_global_progress', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 1 CHECK (show_global_progress IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> showUnits = GeneratedColumn<int>(
+      'show_units', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL CHECK (show_units IN (0, 1))');
   late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
       'strength_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> systemColors = GeneratedColumn<bool>(
-      'system_colors', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("system_colors" IN (0, 1))'));
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> systemColors = GeneratedColumn<int>(
+      'system_colors', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL CHECK (system_colors IN (0, 1))');
   late final GeneratedColumn<String> tabs = GeneratedColumn<String>(
       'tabs', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultValue:
-          const Constant("HistoryPage,PlansPage,GraphsPage,TimerPage"));
+      $customConstraints:
+          'NOT NULL DEFAULT \'HistoryPage,PlansPage,GraphsPage,TimerPage\'',
+      defaultValue: const CustomExpression(
+          '\'HistoryPage,PlansPage,GraphsPage,TimerPage\''));
   late final GeneratedColumn<String> themeMode = GeneratedColumn<String>(
       'theme_mode', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   late final GeneratedColumn<int> timerDuration = GeneratedColumn<int>(
       'timer_duration', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  late final GeneratedColumn<bool> vibrate = GeneratedColumn<bool>(
-      'vibrate', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("vibrate" IN (0, 1))'));
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> vibrate = GeneratedColumn<int>(
+      'vibrate', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL CHECK (vibrate IN (0, 1))');
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
       'warmup_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> scrollableTabs = GeneratedColumn<int>(
+      'scrollable_tabs', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 1 CHECK (scrollable_tabs IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<int> showGraphXAxis = GeneratedColumn<int>(
+      'show_graph_x_axis', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 0 CHECK (show_graph_x_axis IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
+  late final GeneratedColumn<int> showGraphLimit = GeneratedColumn<int>(
+      'show_graph_limit', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 1 CHECK (show_graph_limit IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
+  late final GeneratedColumn<String> progressPosition = GeneratedColumn<String>(
+      'progress_position', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT \'bottom\'',
+      defaultValue: const CustomExpression('\'bottom\''));
+  late final GeneratedColumn<String> defaultGraphMetric =
+      GeneratedColumn<String>('default_graph_metric', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints: 'NOT NULL DEFAULT \'bestWeight\'',
+          defaultValue: const CustomExpression('\'bestWeight\''));
+  late final GeneratedColumn<String> defaultGraphPeriod =
+      GeneratedColumn<String>('default_graph_period', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          $customConstraints: 'NOT NULL DEFAULT \'day\'',
+          defaultValue: const CustomExpression('\'day\''));
+  late final GeneratedColumn<int> defaultGraphLimit = GeneratedColumn<int>(
+      'default_graph_limit', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 20',
+      defaultValue: const CustomExpression('20'));
+  late final GeneratedColumn<int> defaultGraphTimeBasedXAxis = GeneratedColumn<
+          int>('default_graph_time_based_x_axis', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints:
+          'NOT NULL DEFAULT 0 CHECK (default_graph_time_based_x_axis IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1051,6 +1163,8 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
         showBodyWeight,
         showCategories,
         showImages,
+        showNotes,
+        showGlobalProgress,
         showUnits,
         strengthUnit,
         systemColors,
@@ -1058,7 +1172,15 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
         themeMode,
         timerDuration,
         vibrate,
-        warmupSets
+        warmupSets,
+        scrollableTabs,
+        showGraphXAxis,
+        showGraphLimit,
+        progressPosition,
+        defaultGraphMetric,
+        defaultGraphPeriod,
+        defaultGraphLimit,
+        defaultGraphTimeBasedXAxis
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1073,24 +1195,24 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
     return SettingsData(
       alarmSound: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
-      automaticBackups: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}automatic_backups'])!,
+      automaticBackups: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}automatic_backups'])!,
       backupPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}backup_path']),
       cardioUnit: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
       curveLines: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}curve_lines'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}curve_lines'])!,
       curveSmoothness: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}curve_smoothness']),
       durationEstimation: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}duration_estimation'])!,
+          DriftSqlType.int, data['${effectivePrefix}duration_estimation'])!,
       enableSound: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}enable_sound'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}enable_sound'])!,
       explainedPermissions: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}explained_permissions'])!,
+          DriftSqlType.int, data['${effectivePrefix}explained_permissions'])!,
       groupHistory: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}group_history'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}group_history'])!,
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       longDateFormat: attachedDatabase.typeMapping.read(
@@ -1098,29 +1220,33 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
       maxSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
       notifications: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}notifications'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}notifications'])!,
       peekGraph: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}peek_graph'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}peek_graph'])!,
       planTrailing: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}plan_trailing'])!,
       repEstimation: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}rep_estimation'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}rep_estimation'])!,
       restTimers: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}rest_timers'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}rest_timers'])!,
       shortDateFormat: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
       showBodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_body_weight'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}show_body_weight'])!,
       showCategories: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_categories'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}show_categories'])!,
       showImages: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}show_images'])!,
+      showNotes: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}show_notes'])!,
+      showGlobalProgress: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}show_global_progress'])!,
       showUnits: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}show_units'])!,
       strengthUnit: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
       systemColors: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}system_colors'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}system_colors'])!,
       tabs: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}tabs'])!,
       themeMode: attachedDatabase.typeMapping
@@ -1128,9 +1254,26 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
       timerDuration: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}timer_duration'])!,
       vibrate: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}vibrate'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}vibrate'])!,
       warmupSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
+      scrollableTabs: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}scrollable_tabs'])!,
+      showGraphXAxis: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}show_graph_x_axis'])!,
+      showGraphLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}show_graph_limit'])!,
+      progressPosition: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}progress_position'])!,
+      defaultGraphMetric: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}default_graph_metric'])!,
+      defaultGraphPeriod: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}default_graph_period'])!,
+      defaultGraphLimit: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}default_graph_limit'])!,
+      defaultGraphTimeBasedXAxis: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}default_graph_time_based_x_axis'])!,
     );
   }
 
@@ -1138,39 +1281,52 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
   Settings createAlias(String alias) {
     return Settings(attachedDatabase, alias);
   }
+
+  @override
+  bool get dontWriteConstraints => true;
 }
 
 class SettingsData extends DataClass implements Insertable<SettingsData> {
   final String alarmSound;
-  final bool automaticBackups;
+  final int automaticBackups;
   final String? backupPath;
   final String cardioUnit;
-  final bool curveLines;
+  final int curveLines;
   final double? curveSmoothness;
-  final bool durationEstimation;
-  final bool enableSound;
-  final bool explainedPermissions;
-  final bool groupHistory;
+  final int durationEstimation;
+  final int enableSound;
+  final int explainedPermissions;
+  final int groupHistory;
   final int id;
   final String longDateFormat;
   final int maxSets;
-  final bool notifications;
-  final bool peekGraph;
+  final int notifications;
+  final int peekGraph;
   final String planTrailing;
-  final bool repEstimation;
-  final bool restTimers;
+  final int repEstimation;
+  final int restTimers;
   final String shortDateFormat;
-  final bool showBodyWeight;
-  final bool showCategories;
-  final bool showImages;
-  final bool showUnits;
+  final int showBodyWeight;
+  final int showCategories;
+  final int showImages;
+  final int showNotes;
+  final int showGlobalProgress;
+  final int showUnits;
   final String strengthUnit;
-  final bool systemColors;
+  final int systemColors;
   final String tabs;
   final String themeMode;
   final int timerDuration;
-  final bool vibrate;
+  final int vibrate;
   final int? warmupSets;
+  final int scrollableTabs;
+  final int showGraphXAxis;
+  final int showGraphLimit;
+  final String progressPosition;
+  final String defaultGraphMetric;
+  final String defaultGraphPeriod;
+  final int defaultGraphLimit;
+  final int defaultGraphTimeBasedXAxis;
   const SettingsData(
       {required this.alarmSound,
       required this.automaticBackups,
@@ -1194,6 +1350,8 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       required this.showBodyWeight,
       required this.showCategories,
       required this.showImages,
+      required this.showNotes,
+      required this.showGlobalProgress,
       required this.showUnits,
       required this.strengthUnit,
       required this.systemColors,
@@ -1201,46 +1359,65 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       required this.themeMode,
       required this.timerDuration,
       required this.vibrate,
-      this.warmupSets});
+      this.warmupSets,
+      required this.scrollableTabs,
+      required this.showGraphXAxis,
+      required this.showGraphLimit,
+      required this.progressPosition,
+      required this.defaultGraphMetric,
+      required this.defaultGraphPeriod,
+      required this.defaultGraphLimit,
+      required this.defaultGraphTimeBasedXAxis});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['alarm_sound'] = Variable<String>(alarmSound);
-    map['automatic_backups'] = Variable<bool>(automaticBackups);
+    map['automatic_backups'] = Variable<int>(automaticBackups);
     if (!nullToAbsent || backupPath != null) {
       map['backup_path'] = Variable<String>(backupPath);
     }
     map['cardio_unit'] = Variable<String>(cardioUnit);
-    map['curve_lines'] = Variable<bool>(curveLines);
+    map['curve_lines'] = Variable<int>(curveLines);
     if (!nullToAbsent || curveSmoothness != null) {
       map['curve_smoothness'] = Variable<double>(curveSmoothness);
     }
-    map['duration_estimation'] = Variable<bool>(durationEstimation);
-    map['enable_sound'] = Variable<bool>(enableSound);
-    map['explained_permissions'] = Variable<bool>(explainedPermissions);
-    map['group_history'] = Variable<bool>(groupHistory);
+    map['duration_estimation'] = Variable<int>(durationEstimation);
+    map['enable_sound'] = Variable<int>(enableSound);
+    map['explained_permissions'] = Variable<int>(explainedPermissions);
+    map['group_history'] = Variable<int>(groupHistory);
     map['id'] = Variable<int>(id);
     map['long_date_format'] = Variable<String>(longDateFormat);
     map['max_sets'] = Variable<int>(maxSets);
-    map['notifications'] = Variable<bool>(notifications);
-    map['peek_graph'] = Variable<bool>(peekGraph);
+    map['notifications'] = Variable<int>(notifications);
+    map['peek_graph'] = Variable<int>(peekGraph);
     map['plan_trailing'] = Variable<String>(planTrailing);
-    map['rep_estimation'] = Variable<bool>(repEstimation);
-    map['rest_timers'] = Variable<bool>(restTimers);
+    map['rep_estimation'] = Variable<int>(repEstimation);
+    map['rest_timers'] = Variable<int>(restTimers);
     map['short_date_format'] = Variable<String>(shortDateFormat);
-    map['show_body_weight'] = Variable<bool>(showBodyWeight);
-    map['show_categories'] = Variable<bool>(showCategories);
-    map['show_images'] = Variable<bool>(showImages);
-    map['show_units'] = Variable<bool>(showUnits);
+    map['show_body_weight'] = Variable<int>(showBodyWeight);
+    map['show_categories'] = Variable<int>(showCategories);
+    map['show_images'] = Variable<int>(showImages);
+    map['show_notes'] = Variable<int>(showNotes);
+    map['show_global_progress'] = Variable<int>(showGlobalProgress);
+    map['show_units'] = Variable<int>(showUnits);
     map['strength_unit'] = Variable<String>(strengthUnit);
-    map['system_colors'] = Variable<bool>(systemColors);
+    map['system_colors'] = Variable<int>(systemColors);
     map['tabs'] = Variable<String>(tabs);
     map['theme_mode'] = Variable<String>(themeMode);
     map['timer_duration'] = Variable<int>(timerDuration);
-    map['vibrate'] = Variable<bool>(vibrate);
+    map['vibrate'] = Variable<int>(vibrate);
     if (!nullToAbsent || warmupSets != null) {
       map['warmup_sets'] = Variable<int>(warmupSets);
     }
+    map['scrollable_tabs'] = Variable<int>(scrollableTabs);
+    map['show_graph_x_axis'] = Variable<int>(showGraphXAxis);
+    map['show_graph_limit'] = Variable<int>(showGraphLimit);
+    map['progress_position'] = Variable<String>(progressPosition);
+    map['default_graph_metric'] = Variable<String>(defaultGraphMetric);
+    map['default_graph_period'] = Variable<String>(defaultGraphPeriod);
+    map['default_graph_limit'] = Variable<int>(defaultGraphLimit);
+    map['default_graph_time_based_x_axis'] =
+        Variable<int>(defaultGraphTimeBasedXAxis);
     return map;
   }
 
@@ -1272,6 +1449,8 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       showBodyWeight: Value(showBodyWeight),
       showCategories: Value(showCategories),
       showImages: Value(showImages),
+      showNotes: Value(showNotes),
+      showGlobalProgress: Value(showGlobalProgress),
       showUnits: Value(showUnits),
       strengthUnit: Value(strengthUnit),
       systemColors: Value(systemColors),
@@ -1282,6 +1461,14 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       warmupSets: warmupSets == null && nullToAbsent
           ? const Value.absent()
           : Value(warmupSets),
+      scrollableTabs: Value(scrollableTabs),
+      showGraphXAxis: Value(showGraphXAxis),
+      showGraphLimit: Value(showGraphLimit),
+      progressPosition: Value(progressPosition),
+      defaultGraphMetric: Value(defaultGraphMetric),
+      defaultGraphPeriod: Value(defaultGraphPeriod),
+      defaultGraphLimit: Value(defaultGraphLimit),
+      defaultGraphTimeBasedXAxis: Value(defaultGraphTimeBasedXAxis),
     );
   }
 
@@ -1290,36 +1477,49 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SettingsData(
       alarmSound: serializer.fromJson<String>(json['alarmSound']),
-      automaticBackups: serializer.fromJson<bool>(json['automaticBackups']),
+      automaticBackups: serializer.fromJson<int>(json['automaticBackups']),
       backupPath: serializer.fromJson<String?>(json['backupPath']),
       cardioUnit: serializer.fromJson<String>(json['cardioUnit']),
-      curveLines: serializer.fromJson<bool>(json['curveLines']),
+      curveLines: serializer.fromJson<int>(json['curveLines']),
       curveSmoothness: serializer.fromJson<double?>(json['curveSmoothness']),
-      durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
-      enableSound: serializer.fromJson<bool>(json['enableSound']),
+      durationEstimation: serializer.fromJson<int>(json['durationEstimation']),
+      enableSound: serializer.fromJson<int>(json['enableSound']),
       explainedPermissions:
-          serializer.fromJson<bool>(json['explainedPermissions']),
-      groupHistory: serializer.fromJson<bool>(json['groupHistory']),
+          serializer.fromJson<int>(json['explainedPermissions']),
+      groupHistory: serializer.fromJson<int>(json['groupHistory']),
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
-      notifications: serializer.fromJson<bool>(json['notifications']),
-      peekGraph: serializer.fromJson<bool>(json['peekGraph']),
+      notifications: serializer.fromJson<int>(json['notifications']),
+      peekGraph: serializer.fromJson<int>(json['peekGraph']),
       planTrailing: serializer.fromJson<String>(json['planTrailing']),
-      repEstimation: serializer.fromJson<bool>(json['repEstimation']),
-      restTimers: serializer.fromJson<bool>(json['restTimers']),
+      repEstimation: serializer.fromJson<int>(json['repEstimation']),
+      restTimers: serializer.fromJson<int>(json['restTimers']),
       shortDateFormat: serializer.fromJson<String>(json['shortDateFormat']),
-      showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
-      showCategories: serializer.fromJson<bool>(json['showCategories']),
-      showImages: serializer.fromJson<bool>(json['showImages']),
-      showUnits: serializer.fromJson<bool>(json['showUnits']),
+      showBodyWeight: serializer.fromJson<int>(json['showBodyWeight']),
+      showCategories: serializer.fromJson<int>(json['showCategories']),
+      showImages: serializer.fromJson<int>(json['showImages']),
+      showNotes: serializer.fromJson<int>(json['showNotes']),
+      showGlobalProgress: serializer.fromJson<int>(json['showGlobalProgress']),
+      showUnits: serializer.fromJson<int>(json['showUnits']),
       strengthUnit: serializer.fromJson<String>(json['strengthUnit']),
-      systemColors: serializer.fromJson<bool>(json['systemColors']),
+      systemColors: serializer.fromJson<int>(json['systemColors']),
       tabs: serializer.fromJson<String>(json['tabs']),
       themeMode: serializer.fromJson<String>(json['themeMode']),
       timerDuration: serializer.fromJson<int>(json['timerDuration']),
-      vibrate: serializer.fromJson<bool>(json['vibrate']),
+      vibrate: serializer.fromJson<int>(json['vibrate']),
       warmupSets: serializer.fromJson<int?>(json['warmupSets']),
+      scrollableTabs: serializer.fromJson<int>(json['scrollableTabs']),
+      showGraphXAxis: serializer.fromJson<int>(json['showGraphXAxis']),
+      showGraphLimit: serializer.fromJson<int>(json['showGraphLimit']),
+      progressPosition: serializer.fromJson<String>(json['progressPosition']),
+      defaultGraphMetric:
+          serializer.fromJson<String>(json['defaultGraphMetric']),
+      defaultGraphPeriod:
+          serializer.fromJson<String>(json['defaultGraphPeriod']),
+      defaultGraphLimit: serializer.fromJson<int>(json['defaultGraphLimit']),
+      defaultGraphTimeBasedXAxis:
+          serializer.fromJson<int>(json['defaultGraphTimeBasedXAxis']),
     );
   }
   @override
@@ -1327,69 +1527,90 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'alarmSound': serializer.toJson<String>(alarmSound),
-      'automaticBackups': serializer.toJson<bool>(automaticBackups),
+      'automaticBackups': serializer.toJson<int>(automaticBackups),
       'backupPath': serializer.toJson<String?>(backupPath),
       'cardioUnit': serializer.toJson<String>(cardioUnit),
-      'curveLines': serializer.toJson<bool>(curveLines),
+      'curveLines': serializer.toJson<int>(curveLines),
       'curveSmoothness': serializer.toJson<double?>(curveSmoothness),
-      'durationEstimation': serializer.toJson<bool>(durationEstimation),
-      'enableSound': serializer.toJson<bool>(enableSound),
-      'explainedPermissions': serializer.toJson<bool>(explainedPermissions),
-      'groupHistory': serializer.toJson<bool>(groupHistory),
+      'durationEstimation': serializer.toJson<int>(durationEstimation),
+      'enableSound': serializer.toJson<int>(enableSound),
+      'explainedPermissions': serializer.toJson<int>(explainedPermissions),
+      'groupHistory': serializer.toJson<int>(groupHistory),
       'id': serializer.toJson<int>(id),
       'longDateFormat': serializer.toJson<String>(longDateFormat),
       'maxSets': serializer.toJson<int>(maxSets),
-      'notifications': serializer.toJson<bool>(notifications),
-      'peekGraph': serializer.toJson<bool>(peekGraph),
+      'notifications': serializer.toJson<int>(notifications),
+      'peekGraph': serializer.toJson<int>(peekGraph),
       'planTrailing': serializer.toJson<String>(planTrailing),
-      'repEstimation': serializer.toJson<bool>(repEstimation),
-      'restTimers': serializer.toJson<bool>(restTimers),
+      'repEstimation': serializer.toJson<int>(repEstimation),
+      'restTimers': serializer.toJson<int>(restTimers),
       'shortDateFormat': serializer.toJson<String>(shortDateFormat),
-      'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
-      'showCategories': serializer.toJson<bool>(showCategories),
-      'showImages': serializer.toJson<bool>(showImages),
-      'showUnits': serializer.toJson<bool>(showUnits),
+      'showBodyWeight': serializer.toJson<int>(showBodyWeight),
+      'showCategories': serializer.toJson<int>(showCategories),
+      'showImages': serializer.toJson<int>(showImages),
+      'showNotes': serializer.toJson<int>(showNotes),
+      'showGlobalProgress': serializer.toJson<int>(showGlobalProgress),
+      'showUnits': serializer.toJson<int>(showUnits),
       'strengthUnit': serializer.toJson<String>(strengthUnit),
-      'systemColors': serializer.toJson<bool>(systemColors),
+      'systemColors': serializer.toJson<int>(systemColors),
       'tabs': serializer.toJson<String>(tabs),
       'themeMode': serializer.toJson<String>(themeMode),
       'timerDuration': serializer.toJson<int>(timerDuration),
-      'vibrate': serializer.toJson<bool>(vibrate),
+      'vibrate': serializer.toJson<int>(vibrate),
       'warmupSets': serializer.toJson<int?>(warmupSets),
+      'scrollableTabs': serializer.toJson<int>(scrollableTabs),
+      'showGraphXAxis': serializer.toJson<int>(showGraphXAxis),
+      'showGraphLimit': serializer.toJson<int>(showGraphLimit),
+      'progressPosition': serializer.toJson<String>(progressPosition),
+      'defaultGraphMetric': serializer.toJson<String>(defaultGraphMetric),
+      'defaultGraphPeriod': serializer.toJson<String>(defaultGraphPeriod),
+      'defaultGraphLimit': serializer.toJson<int>(defaultGraphLimit),
+      'defaultGraphTimeBasedXAxis':
+          serializer.toJson<int>(defaultGraphTimeBasedXAxis),
     };
   }
 
   SettingsData copyWith(
           {String? alarmSound,
-          bool? automaticBackups,
+          int? automaticBackups,
           Value<String?> backupPath = const Value.absent(),
           String? cardioUnit,
-          bool? curveLines,
+          int? curveLines,
           Value<double?> curveSmoothness = const Value.absent(),
-          bool? durationEstimation,
-          bool? enableSound,
-          bool? explainedPermissions,
-          bool? groupHistory,
+          int? durationEstimation,
+          int? enableSound,
+          int? explainedPermissions,
+          int? groupHistory,
           int? id,
           String? longDateFormat,
           int? maxSets,
-          bool? notifications,
-          bool? peekGraph,
+          int? notifications,
+          int? peekGraph,
           String? planTrailing,
-          bool? repEstimation,
-          bool? restTimers,
+          int? repEstimation,
+          int? restTimers,
           String? shortDateFormat,
-          bool? showBodyWeight,
-          bool? showCategories,
-          bool? showImages,
-          bool? showUnits,
+          int? showBodyWeight,
+          int? showCategories,
+          int? showImages,
+          int? showNotes,
+          int? showGlobalProgress,
+          int? showUnits,
           String? strengthUnit,
-          bool? systemColors,
+          int? systemColors,
           String? tabs,
           String? themeMode,
           int? timerDuration,
-          bool? vibrate,
-          Value<int?> warmupSets = const Value.absent()}) =>
+          int? vibrate,
+          Value<int?> warmupSets = const Value.absent(),
+          int? scrollableTabs,
+          int? showGraphXAxis,
+          int? showGraphLimit,
+          String? progressPosition,
+          String? defaultGraphMetric,
+          String? defaultGraphPeriod,
+          int? defaultGraphLimit,
+          int? defaultGraphTimeBasedXAxis}) =>
       SettingsData(
         alarmSound: alarmSound ?? this.alarmSound,
         automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -1415,6 +1636,8 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
         showBodyWeight: showBodyWeight ?? this.showBodyWeight,
         showCategories: showCategories ?? this.showCategories,
         showImages: showImages ?? this.showImages,
+        showNotes: showNotes ?? this.showNotes,
+        showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
         showUnits: showUnits ?? this.showUnits,
         strengthUnit: strengthUnit ?? this.strengthUnit,
         systemColors: systemColors ?? this.systemColors,
@@ -1423,6 +1646,15 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
         timerDuration: timerDuration ?? this.timerDuration,
         vibrate: vibrate ?? this.vibrate,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+        scrollableTabs: scrollableTabs ?? this.scrollableTabs,
+        showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
+        showGraphLimit: showGraphLimit ?? this.showGraphLimit,
+        progressPosition: progressPosition ?? this.progressPosition,
+        defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
+        defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
+        defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
+        defaultGraphTimeBasedXAxis:
+            defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
       );
   SettingsData copyWithCompanion(SettingsCompanion data) {
     return SettingsData(
@@ -1479,6 +1711,10 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
           : this.showCategories,
       showImages:
           data.showImages.present ? data.showImages.value : this.showImages,
+      showNotes: data.showNotes.present ? data.showNotes.value : this.showNotes,
+      showGlobalProgress: data.showGlobalProgress.present
+          ? data.showGlobalProgress.value
+          : this.showGlobalProgress,
       showUnits: data.showUnits.present ? data.showUnits.value : this.showUnits,
       strengthUnit: data.strengthUnit.present
           ? data.strengthUnit.value
@@ -1494,6 +1730,30 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       vibrate: data.vibrate.present ? data.vibrate.value : this.vibrate,
       warmupSets:
           data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+      scrollableTabs: data.scrollableTabs.present
+          ? data.scrollableTabs.value
+          : this.scrollableTabs,
+      showGraphXAxis: data.showGraphXAxis.present
+          ? data.showGraphXAxis.value
+          : this.showGraphXAxis,
+      showGraphLimit: data.showGraphLimit.present
+          ? data.showGraphLimit.value
+          : this.showGraphLimit,
+      progressPosition: data.progressPosition.present
+          ? data.progressPosition.value
+          : this.progressPosition,
+      defaultGraphMetric: data.defaultGraphMetric.present
+          ? data.defaultGraphMetric.value
+          : this.defaultGraphMetric,
+      defaultGraphPeriod: data.defaultGraphPeriod.present
+          ? data.defaultGraphPeriod.value
+          : this.defaultGraphPeriod,
+      defaultGraphLimit: data.defaultGraphLimit.present
+          ? data.defaultGraphLimit.value
+          : this.defaultGraphLimit,
+      defaultGraphTimeBasedXAxis: data.defaultGraphTimeBasedXAxis.present
+          ? data.defaultGraphTimeBasedXAxis.value
+          : this.defaultGraphTimeBasedXAxis,
     );
   }
 
@@ -1522,6 +1782,8 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
           ..write('showBodyWeight: $showBodyWeight, ')
           ..write('showCategories: $showCategories, ')
           ..write('showImages: $showImages, ')
+          ..write('showNotes: $showNotes, ')
+          ..write('showGlobalProgress: $showGlobalProgress, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
@@ -1529,7 +1791,15 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
-          ..write('warmupSets: $warmupSets')
+          ..write('warmupSets: $warmupSets, ')
+          ..write('scrollableTabs: $scrollableTabs, ')
+          ..write('showGraphXAxis: $showGraphXAxis, ')
+          ..write('showGraphLimit: $showGraphLimit, ')
+          ..write('progressPosition: $progressPosition, ')
+          ..write('defaultGraphMetric: $defaultGraphMetric, ')
+          ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
+          ..write('defaultGraphLimit: $defaultGraphLimit, ')
+          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis')
           ..write(')'))
         .toString();
   }
@@ -1558,6 +1828,8 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
         showBodyWeight,
         showCategories,
         showImages,
+        showNotes,
+        showGlobalProgress,
         showUnits,
         strengthUnit,
         systemColors,
@@ -1565,7 +1837,15 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
         themeMode,
         timerDuration,
         vibrate,
-        warmupSets
+        warmupSets,
+        scrollableTabs,
+        showGraphXAxis,
+        showGraphLimit,
+        progressPosition,
+        defaultGraphMetric,
+        defaultGraphPeriod,
+        defaultGraphLimit,
+        defaultGraphTimeBasedXAxis
       ]);
   @override
   bool operator ==(Object other) =>
@@ -1593,6 +1873,8 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
           other.showBodyWeight == this.showBodyWeight &&
           other.showCategories == this.showCategories &&
           other.showImages == this.showImages &&
+          other.showNotes == this.showNotes &&
+          other.showGlobalProgress == this.showGlobalProgress &&
           other.showUnits == this.showUnits &&
           other.strengthUnit == this.strengthUnit &&
           other.systemColors == this.systemColors &&
@@ -1600,40 +1882,58 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
           other.themeMode == this.themeMode &&
           other.timerDuration == this.timerDuration &&
           other.vibrate == this.vibrate &&
-          other.warmupSets == this.warmupSets);
+          other.warmupSets == this.warmupSets &&
+          other.scrollableTabs == this.scrollableTabs &&
+          other.showGraphXAxis == this.showGraphXAxis &&
+          other.showGraphLimit == this.showGraphLimit &&
+          other.progressPosition == this.progressPosition &&
+          other.defaultGraphMetric == this.defaultGraphMetric &&
+          other.defaultGraphPeriod == this.defaultGraphPeriod &&
+          other.defaultGraphLimit == this.defaultGraphLimit &&
+          other.defaultGraphTimeBasedXAxis == this.defaultGraphTimeBasedXAxis);
 }
 
 class SettingsCompanion extends UpdateCompanion<SettingsData> {
   final Value<String> alarmSound;
-  final Value<bool> automaticBackups;
+  final Value<int> automaticBackups;
   final Value<String?> backupPath;
   final Value<String> cardioUnit;
-  final Value<bool> curveLines;
+  final Value<int> curveLines;
   final Value<double?> curveSmoothness;
-  final Value<bool> durationEstimation;
-  final Value<bool> enableSound;
-  final Value<bool> explainedPermissions;
-  final Value<bool> groupHistory;
+  final Value<int> durationEstimation;
+  final Value<int> enableSound;
+  final Value<int> explainedPermissions;
+  final Value<int> groupHistory;
   final Value<int> id;
   final Value<String> longDateFormat;
   final Value<int> maxSets;
-  final Value<bool> notifications;
-  final Value<bool> peekGraph;
+  final Value<int> notifications;
+  final Value<int> peekGraph;
   final Value<String> planTrailing;
-  final Value<bool> repEstimation;
-  final Value<bool> restTimers;
+  final Value<int> repEstimation;
+  final Value<int> restTimers;
   final Value<String> shortDateFormat;
-  final Value<bool> showBodyWeight;
-  final Value<bool> showCategories;
-  final Value<bool> showImages;
-  final Value<bool> showUnits;
+  final Value<int> showBodyWeight;
+  final Value<int> showCategories;
+  final Value<int> showImages;
+  final Value<int> showNotes;
+  final Value<int> showGlobalProgress;
+  final Value<int> showUnits;
   final Value<String> strengthUnit;
-  final Value<bool> systemColors;
+  final Value<int> systemColors;
   final Value<String> tabs;
   final Value<String> themeMode;
   final Value<int> timerDuration;
-  final Value<bool> vibrate;
+  final Value<int> vibrate;
   final Value<int?> warmupSets;
+  final Value<int> scrollableTabs;
+  final Value<int> showGraphXAxis;
+  final Value<int> showGraphLimit;
+  final Value<String> progressPosition;
+  final Value<String> defaultGraphMetric;
+  final Value<String> defaultGraphPeriod;
+  final Value<int> defaultGraphLimit;
+  final Value<int> defaultGraphTimeBasedXAxis;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.automaticBackups = const Value.absent(),
@@ -1657,6 +1957,8 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
     this.showBodyWeight = const Value.absent(),
     this.showCategories = const Value.absent(),
     this.showImages = const Value.absent(),
+    this.showNotes = const Value.absent(),
+    this.showGlobalProgress = const Value.absent(),
     this.showUnits = const Value.absent(),
     this.strengthUnit = const Value.absent(),
     this.systemColors = const Value.absent(),
@@ -1665,18 +1967,26 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
     this.timerDuration = const Value.absent(),
     this.vibrate = const Value.absent(),
     this.warmupSets = const Value.absent(),
+    this.scrollableTabs = const Value.absent(),
+    this.showGraphXAxis = const Value.absent(),
+    this.showGraphLimit = const Value.absent(),
+    this.progressPosition = const Value.absent(),
+    this.defaultGraphMetric = const Value.absent(),
+    this.defaultGraphPeriod = const Value.absent(),
+    this.defaultGraphLimit = const Value.absent(),
+    this.defaultGraphTimeBasedXAxis = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
     this.automaticBackups = const Value.absent(),
     this.backupPath = const Value.absent(),
     required String cardioUnit,
-    required bool curveLines,
+    required int curveLines,
     this.curveSmoothness = const Value.absent(),
     this.durationEstimation = const Value.absent(),
     this.enableSound = const Value.absent(),
-    required bool explainedPermissions,
-    required bool groupHistory,
+    required int explainedPermissions,
+    required int groupHistory,
     this.id = const Value.absent(),
     required String longDateFormat,
     required int maxSets,
@@ -1684,19 +1994,29 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
     this.peekGraph = const Value.absent(),
     required String planTrailing,
     this.repEstimation = const Value.absent(),
-    required bool restTimers,
+    required int restTimers,
     required String shortDateFormat,
     this.showBodyWeight = const Value.absent(),
     this.showCategories = const Value.absent(),
     this.showImages = const Value.absent(),
-    required bool showUnits,
+    this.showNotes = const Value.absent(),
+    this.showGlobalProgress = const Value.absent(),
+    required int showUnits,
     required String strengthUnit,
-    required bool systemColors,
+    required int systemColors,
     this.tabs = const Value.absent(),
     required String themeMode,
     required int timerDuration,
-    required bool vibrate,
+    required int vibrate,
     this.warmupSets = const Value.absent(),
+    this.scrollableTabs = const Value.absent(),
+    this.showGraphXAxis = const Value.absent(),
+    this.showGraphLimit = const Value.absent(),
+    this.progressPosition = const Value.absent(),
+    this.defaultGraphMetric = const Value.absent(),
+    this.defaultGraphPeriod = const Value.absent(),
+    this.defaultGraphLimit = const Value.absent(),
+    this.defaultGraphTimeBasedXAxis = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -1715,35 +2035,45 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
         vibrate = Value(vibrate);
   static Insertable<SettingsData> custom({
     Expression<String>? alarmSound,
-    Expression<bool>? automaticBackups,
+    Expression<int>? automaticBackups,
     Expression<String>? backupPath,
     Expression<String>? cardioUnit,
-    Expression<bool>? curveLines,
+    Expression<int>? curveLines,
     Expression<double>? curveSmoothness,
-    Expression<bool>? durationEstimation,
-    Expression<bool>? enableSound,
-    Expression<bool>? explainedPermissions,
-    Expression<bool>? groupHistory,
+    Expression<int>? durationEstimation,
+    Expression<int>? enableSound,
+    Expression<int>? explainedPermissions,
+    Expression<int>? groupHistory,
     Expression<int>? id,
     Expression<String>? longDateFormat,
     Expression<int>? maxSets,
-    Expression<bool>? notifications,
-    Expression<bool>? peekGraph,
+    Expression<int>? notifications,
+    Expression<int>? peekGraph,
     Expression<String>? planTrailing,
-    Expression<bool>? repEstimation,
-    Expression<bool>? restTimers,
+    Expression<int>? repEstimation,
+    Expression<int>? restTimers,
     Expression<String>? shortDateFormat,
-    Expression<bool>? showBodyWeight,
-    Expression<bool>? showCategories,
-    Expression<bool>? showImages,
-    Expression<bool>? showUnits,
+    Expression<int>? showBodyWeight,
+    Expression<int>? showCategories,
+    Expression<int>? showImages,
+    Expression<int>? showNotes,
+    Expression<int>? showGlobalProgress,
+    Expression<int>? showUnits,
     Expression<String>? strengthUnit,
-    Expression<bool>? systemColors,
+    Expression<int>? systemColors,
     Expression<String>? tabs,
     Expression<String>? themeMode,
     Expression<int>? timerDuration,
-    Expression<bool>? vibrate,
+    Expression<int>? vibrate,
     Expression<int>? warmupSets,
+    Expression<int>? scrollableTabs,
+    Expression<int>? showGraphXAxis,
+    Expression<int>? showGraphLimit,
+    Expression<String>? progressPosition,
+    Expression<String>? defaultGraphMetric,
+    Expression<String>? defaultGraphPeriod,
+    Expression<int>? defaultGraphLimit,
+    Expression<int>? defaultGraphTimeBasedXAxis,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -1769,6 +2099,9 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
       if (showCategories != null) 'show_categories': showCategories,
       if (showImages != null) 'show_images': showImages,
+      if (showNotes != null) 'show_notes': showNotes,
+      if (showGlobalProgress != null)
+        'show_global_progress': showGlobalProgress,
       if (showUnits != null) 'show_units': showUnits,
       if (strengthUnit != null) 'strength_unit': strengthUnit,
       if (systemColors != null) 'system_colors': systemColors,
@@ -1777,40 +2110,61 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       if (timerDuration != null) 'timer_duration': timerDuration,
       if (vibrate != null) 'vibrate': vibrate,
       if (warmupSets != null) 'warmup_sets': warmupSets,
+      if (scrollableTabs != null) 'scrollable_tabs': scrollableTabs,
+      if (showGraphXAxis != null) 'show_graph_x_axis': showGraphXAxis,
+      if (showGraphLimit != null) 'show_graph_limit': showGraphLimit,
+      if (progressPosition != null) 'progress_position': progressPosition,
+      if (defaultGraphMetric != null)
+        'default_graph_metric': defaultGraphMetric,
+      if (defaultGraphPeriod != null)
+        'default_graph_period': defaultGraphPeriod,
+      if (defaultGraphLimit != null) 'default_graph_limit': defaultGraphLimit,
+      if (defaultGraphTimeBasedXAxis != null)
+        'default_graph_time_based_x_axis': defaultGraphTimeBasedXAxis,
     });
   }
 
   SettingsCompanion copyWith(
       {Value<String>? alarmSound,
-      Value<bool>? automaticBackups,
+      Value<int>? automaticBackups,
       Value<String?>? backupPath,
       Value<String>? cardioUnit,
-      Value<bool>? curveLines,
+      Value<int>? curveLines,
       Value<double?>? curveSmoothness,
-      Value<bool>? durationEstimation,
-      Value<bool>? enableSound,
-      Value<bool>? explainedPermissions,
-      Value<bool>? groupHistory,
+      Value<int>? durationEstimation,
+      Value<int>? enableSound,
+      Value<int>? explainedPermissions,
+      Value<int>? groupHistory,
       Value<int>? id,
       Value<String>? longDateFormat,
       Value<int>? maxSets,
-      Value<bool>? notifications,
-      Value<bool>? peekGraph,
+      Value<int>? notifications,
+      Value<int>? peekGraph,
       Value<String>? planTrailing,
-      Value<bool>? repEstimation,
-      Value<bool>? restTimers,
+      Value<int>? repEstimation,
+      Value<int>? restTimers,
       Value<String>? shortDateFormat,
-      Value<bool>? showBodyWeight,
-      Value<bool>? showCategories,
-      Value<bool>? showImages,
-      Value<bool>? showUnits,
+      Value<int>? showBodyWeight,
+      Value<int>? showCategories,
+      Value<int>? showImages,
+      Value<int>? showNotes,
+      Value<int>? showGlobalProgress,
+      Value<int>? showUnits,
       Value<String>? strengthUnit,
-      Value<bool>? systemColors,
+      Value<int>? systemColors,
       Value<String>? tabs,
       Value<String>? themeMode,
       Value<int>? timerDuration,
-      Value<bool>? vibrate,
-      Value<int?>? warmupSets}) {
+      Value<int>? vibrate,
+      Value<int?>? warmupSets,
+      Value<int>? scrollableTabs,
+      Value<int>? showGraphXAxis,
+      Value<int>? showGraphLimit,
+      Value<String>? progressPosition,
+      Value<String>? defaultGraphMetric,
+      Value<String>? defaultGraphPeriod,
+      Value<int>? defaultGraphLimit,
+      Value<int>? defaultGraphTimeBasedXAxis}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -1834,6 +2188,8 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       showBodyWeight: showBodyWeight ?? this.showBodyWeight,
       showCategories: showCategories ?? this.showCategories,
       showImages: showImages ?? this.showImages,
+      showNotes: showNotes ?? this.showNotes,
+      showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
       showUnits: showUnits ?? this.showUnits,
       strengthUnit: strengthUnit ?? this.strengthUnit,
       systemColors: systemColors ?? this.systemColors,
@@ -1842,6 +2198,15 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       timerDuration: timerDuration ?? this.timerDuration,
       vibrate: vibrate ?? this.vibrate,
       warmupSets: warmupSets ?? this.warmupSets,
+      scrollableTabs: scrollableTabs ?? this.scrollableTabs,
+      showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
+      showGraphLimit: showGraphLimit ?? this.showGraphLimit,
+      progressPosition: progressPosition ?? this.progressPosition,
+      defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
+      defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
+      defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
+      defaultGraphTimeBasedXAxis:
+          defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
     );
   }
 
@@ -1852,7 +2217,7 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       map['alarm_sound'] = Variable<String>(alarmSound.value);
     }
     if (automaticBackups.present) {
-      map['automatic_backups'] = Variable<bool>(automaticBackups.value);
+      map['automatic_backups'] = Variable<int>(automaticBackups.value);
     }
     if (backupPath.present) {
       map['backup_path'] = Variable<String>(backupPath.value);
@@ -1861,22 +2226,22 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       map['cardio_unit'] = Variable<String>(cardioUnit.value);
     }
     if (curveLines.present) {
-      map['curve_lines'] = Variable<bool>(curveLines.value);
+      map['curve_lines'] = Variable<int>(curveLines.value);
     }
     if (curveSmoothness.present) {
       map['curve_smoothness'] = Variable<double>(curveSmoothness.value);
     }
     if (durationEstimation.present) {
-      map['duration_estimation'] = Variable<bool>(durationEstimation.value);
+      map['duration_estimation'] = Variable<int>(durationEstimation.value);
     }
     if (enableSound.present) {
-      map['enable_sound'] = Variable<bool>(enableSound.value);
+      map['enable_sound'] = Variable<int>(enableSound.value);
     }
     if (explainedPermissions.present) {
-      map['explained_permissions'] = Variable<bool>(explainedPermissions.value);
+      map['explained_permissions'] = Variable<int>(explainedPermissions.value);
     }
     if (groupHistory.present) {
-      map['group_history'] = Variable<bool>(groupHistory.value);
+      map['group_history'] = Variable<int>(groupHistory.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -1888,40 +2253,46 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       map['max_sets'] = Variable<int>(maxSets.value);
     }
     if (notifications.present) {
-      map['notifications'] = Variable<bool>(notifications.value);
+      map['notifications'] = Variable<int>(notifications.value);
     }
     if (peekGraph.present) {
-      map['peek_graph'] = Variable<bool>(peekGraph.value);
+      map['peek_graph'] = Variable<int>(peekGraph.value);
     }
     if (planTrailing.present) {
       map['plan_trailing'] = Variable<String>(planTrailing.value);
     }
     if (repEstimation.present) {
-      map['rep_estimation'] = Variable<bool>(repEstimation.value);
+      map['rep_estimation'] = Variable<int>(repEstimation.value);
     }
     if (restTimers.present) {
-      map['rest_timers'] = Variable<bool>(restTimers.value);
+      map['rest_timers'] = Variable<int>(restTimers.value);
     }
     if (shortDateFormat.present) {
       map['short_date_format'] = Variable<String>(shortDateFormat.value);
     }
     if (showBodyWeight.present) {
-      map['show_body_weight'] = Variable<bool>(showBodyWeight.value);
+      map['show_body_weight'] = Variable<int>(showBodyWeight.value);
     }
     if (showCategories.present) {
-      map['show_categories'] = Variable<bool>(showCategories.value);
+      map['show_categories'] = Variable<int>(showCategories.value);
     }
     if (showImages.present) {
-      map['show_images'] = Variable<bool>(showImages.value);
+      map['show_images'] = Variable<int>(showImages.value);
+    }
+    if (showNotes.present) {
+      map['show_notes'] = Variable<int>(showNotes.value);
+    }
+    if (showGlobalProgress.present) {
+      map['show_global_progress'] = Variable<int>(showGlobalProgress.value);
     }
     if (showUnits.present) {
-      map['show_units'] = Variable<bool>(showUnits.value);
+      map['show_units'] = Variable<int>(showUnits.value);
     }
     if (strengthUnit.present) {
       map['strength_unit'] = Variable<String>(strengthUnit.value);
     }
     if (systemColors.present) {
-      map['system_colors'] = Variable<bool>(systemColors.value);
+      map['system_colors'] = Variable<int>(systemColors.value);
     }
     if (tabs.present) {
       map['tabs'] = Variable<String>(tabs.value);
@@ -1933,10 +2304,35 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       map['timer_duration'] = Variable<int>(timerDuration.value);
     }
     if (vibrate.present) {
-      map['vibrate'] = Variable<bool>(vibrate.value);
+      map['vibrate'] = Variable<int>(vibrate.value);
     }
     if (warmupSets.present) {
       map['warmup_sets'] = Variable<int>(warmupSets.value);
+    }
+    if (scrollableTabs.present) {
+      map['scrollable_tabs'] = Variable<int>(scrollableTabs.value);
+    }
+    if (showGraphXAxis.present) {
+      map['show_graph_x_axis'] = Variable<int>(showGraphXAxis.value);
+    }
+    if (showGraphLimit.present) {
+      map['show_graph_limit'] = Variable<int>(showGraphLimit.value);
+    }
+    if (progressPosition.present) {
+      map['progress_position'] = Variable<String>(progressPosition.value);
+    }
+    if (defaultGraphMetric.present) {
+      map['default_graph_metric'] = Variable<String>(defaultGraphMetric.value);
+    }
+    if (defaultGraphPeriod.present) {
+      map['default_graph_period'] = Variable<String>(defaultGraphPeriod.value);
+    }
+    if (defaultGraphLimit.present) {
+      map['default_graph_limit'] = Variable<int>(defaultGraphLimit.value);
+    }
+    if (defaultGraphTimeBasedXAxis.present) {
+      map['default_graph_time_based_x_axis'] =
+          Variable<int>(defaultGraphTimeBasedXAxis.value);
     }
     return map;
   }
@@ -1966,6 +2362,8 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
           ..write('showBodyWeight: $showBodyWeight, ')
           ..write('showCategories: $showCategories, ')
           ..write('showImages: $showImages, ')
+          ..write('showNotes: $showNotes, ')
+          ..write('showGlobalProgress: $showGlobalProgress, ')
           ..write('showUnits: $showUnits, ')
           ..write('strengthUnit: $strengthUnit, ')
           ..write('systemColors: $systemColors, ')
@@ -1973,7 +2371,15 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
           ..write('themeMode: $themeMode, ')
           ..write('timerDuration: $timerDuration, ')
           ..write('vibrate: $vibrate, ')
-          ..write('warmupSets: $warmupSets')
+          ..write('warmupSets: $warmupSets, ')
+          ..write('scrollableTabs: $scrollableTabs, ')
+          ..write('showGraphXAxis: $showGraphXAxis, ')
+          ..write('showGraphLimit: $showGraphLimit, ')
+          ..write('progressPosition: $progressPosition, ')
+          ..write('defaultGraphMetric: $defaultGraphMetric, ')
+          ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
+          ..write('defaultGraphLimit: $defaultGraphLimit, ')
+          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis')
           ..write(')'))
         .toString();
   }
@@ -1985,47 +2391,52 @@ class PlanExercises extends Table
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   PlanExercises(this.attachedDatabase, [this._alias]);
-  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+  late final GeneratedColumn<int> enabled = GeneratedColumn<int>(
       'enabled', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("enabled" IN (0, 1))'));
-  late final GeneratedColumn<bool> timers = GeneratedColumn<bool>(
+      $customConstraints: 'NOT NULL CHECK (enabled IN (0, 1))');
+  late final GeneratedColumn<int> timers = GeneratedColumn<int>(
       'timers', aliasedName, false,
-      type: DriftSqlType.bool,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("timers" IN (0, 1))'),
-      defaultValue: const Constant(true));
+      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (timers IN (0, 1))',
+      defaultValue: const CustomExpression('1'));
   late final GeneratedColumn<String> exercise = GeneratedColumn<String>(
       'exercise', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES gym_sets (name)'));
+      $customConstraints: 'NOT NULL REFERENCES gym_sets(name)');
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
       'max_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
       'plan_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES plans (id)'));
+      $customConstraints: 'NOT NULL REFERENCES plans(id)');
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
       'warmup_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
+      'sequence', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NOT NULL DEFAULT 0',
+      defaultValue: const CustomExpression('0'));
   @override
   List<GeneratedColumn> get $columns =>
-      [enabled, timers, exercise, id, maxSets, planId, warmupSets];
+      [enabled, timers, exercise, id, maxSets, planId, warmupSets, sequence];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2038,9 +2449,9 @@ class PlanExercises extends Table
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlanExercisesData(
       enabled: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}enabled'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}enabled'])!,
       timers: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}timers'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}timers'])!,
       exercise: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}exercise'])!,
       id: attachedDatabase.typeMapping
@@ -2051,6 +2462,8 @@ class PlanExercises extends Table
           .read(DriftSqlType.int, data['${effectivePrefix}plan_id'])!,
       warmupSets: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
+      sequence: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sequence'])!,
     );
   }
 
@@ -2058,17 +2471,21 @@ class PlanExercises extends Table
   PlanExercises createAlias(String alias) {
     return PlanExercises(attachedDatabase, alias);
   }
+
+  @override
+  bool get dontWriteConstraints => true;
 }
 
 class PlanExercisesData extends DataClass
     implements Insertable<PlanExercisesData> {
-  final bool enabled;
-  final bool timers;
+  final int enabled;
+  final int timers;
   final String exercise;
   final int id;
   final int? maxSets;
   final int planId;
   final int? warmupSets;
+  final int sequence;
   const PlanExercisesData(
       {required this.enabled,
       required this.timers,
@@ -2076,12 +2493,13 @@ class PlanExercisesData extends DataClass
       required this.id,
       this.maxSets,
       required this.planId,
-      this.warmupSets});
+      this.warmupSets,
+      required this.sequence});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['enabled'] = Variable<bool>(enabled);
-    map['timers'] = Variable<bool>(timers);
+    map['enabled'] = Variable<int>(enabled);
+    map['timers'] = Variable<int>(timers);
     map['exercise'] = Variable<String>(exercise);
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || maxSets != null) {
@@ -2091,6 +2509,7 @@ class PlanExercisesData extends DataClass
     if (!nullToAbsent || warmupSets != null) {
       map['warmup_sets'] = Variable<int>(warmupSets);
     }
+    map['sequence'] = Variable<int>(sequence);
     return map;
   }
 
@@ -2107,6 +2526,7 @@ class PlanExercisesData extends DataClass
       warmupSets: warmupSets == null && nullToAbsent
           ? const Value.absent()
           : Value(warmupSets),
+      sequence: Value(sequence),
     );
   }
 
@@ -2114,37 +2534,40 @@ class PlanExercisesData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlanExercisesData(
-      enabled: serializer.fromJson<bool>(json['enabled']),
-      timers: serializer.fromJson<bool>(json['timers']),
+      enabled: serializer.fromJson<int>(json['enabled']),
+      timers: serializer.fromJson<int>(json['timers']),
       exercise: serializer.fromJson<String>(json['exercise']),
       id: serializer.fromJson<int>(json['id']),
       maxSets: serializer.fromJson<int?>(json['maxSets']),
       planId: serializer.fromJson<int>(json['planId']),
       warmupSets: serializer.fromJson<int?>(json['warmupSets']),
+      sequence: serializer.fromJson<int>(json['sequence']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'enabled': serializer.toJson<bool>(enabled),
-      'timers': serializer.toJson<bool>(timers),
+      'enabled': serializer.toJson<int>(enabled),
+      'timers': serializer.toJson<int>(timers),
       'exercise': serializer.toJson<String>(exercise),
       'id': serializer.toJson<int>(id),
       'maxSets': serializer.toJson<int?>(maxSets),
       'planId': serializer.toJson<int>(planId),
       'warmupSets': serializer.toJson<int?>(warmupSets),
+      'sequence': serializer.toJson<int>(sequence),
     };
   }
 
   PlanExercisesData copyWith(
-          {bool? enabled,
-          bool? timers,
+          {int? enabled,
+          int? timers,
           String? exercise,
           int? id,
           Value<int?> maxSets = const Value.absent(),
           int? planId,
-          Value<int?> warmupSets = const Value.absent()}) =>
+          Value<int?> warmupSets = const Value.absent(),
+          int? sequence}) =>
       PlanExercisesData(
         enabled: enabled ?? this.enabled,
         timers: timers ?? this.timers,
@@ -2153,6 +2576,7 @@ class PlanExercisesData extends DataClass
         maxSets: maxSets.present ? maxSets.value : this.maxSets,
         planId: planId ?? this.planId,
         warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+        sequence: sequence ?? this.sequence,
       );
   PlanExercisesData copyWithCompanion(PlanExercisesCompanion data) {
     return PlanExercisesData(
@@ -2164,6 +2588,7 @@ class PlanExercisesData extends DataClass
       planId: data.planId.present ? data.planId.value : this.planId,
       warmupSets:
           data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+      sequence: data.sequence.present ? data.sequence.value : this.sequence,
     );
   }
 
@@ -2176,14 +2601,15 @@ class PlanExercisesData extends DataClass
           ..write('id: $id, ')
           ..write('maxSets: $maxSets, ')
           ..write('planId: $planId, ')
-          ..write('warmupSets: $warmupSets')
+          ..write('warmupSets: $warmupSets, ')
+          ..write('sequence: $sequence')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(enabled, timers, exercise, id, maxSets, planId, warmupSets);
+  int get hashCode => Object.hash(
+      enabled, timers, exercise, id, maxSets, planId, warmupSets, sequence);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2194,17 +2620,19 @@ class PlanExercisesData extends DataClass
           other.id == this.id &&
           other.maxSets == this.maxSets &&
           other.planId == this.planId &&
-          other.warmupSets == this.warmupSets);
+          other.warmupSets == this.warmupSets &&
+          other.sequence == this.sequence);
 }
 
 class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
-  final Value<bool> enabled;
-  final Value<bool> timers;
+  final Value<int> enabled;
+  final Value<int> timers;
   final Value<String> exercise;
   final Value<int> id;
   final Value<int?> maxSets;
   final Value<int> planId;
   final Value<int?> warmupSets;
+  final Value<int> sequence;
   const PlanExercisesCompanion({
     this.enabled = const Value.absent(),
     this.timers = const Value.absent(),
@@ -2213,26 +2641,29 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
     this.maxSets = const Value.absent(),
     this.planId = const Value.absent(),
     this.warmupSets = const Value.absent(),
+    this.sequence = const Value.absent(),
   });
   PlanExercisesCompanion.insert({
-    required bool enabled,
+    required int enabled,
     this.timers = const Value.absent(),
     required String exercise,
     this.id = const Value.absent(),
     this.maxSets = const Value.absent(),
     required int planId,
     this.warmupSets = const Value.absent(),
+    this.sequence = const Value.absent(),
   })  : enabled = Value(enabled),
         exercise = Value(exercise),
         planId = Value(planId);
   static Insertable<PlanExercisesData> custom({
-    Expression<bool>? enabled,
-    Expression<bool>? timers,
+    Expression<int>? enabled,
+    Expression<int>? timers,
     Expression<String>? exercise,
     Expression<int>? id,
     Expression<int>? maxSets,
     Expression<int>? planId,
     Expression<int>? warmupSets,
+    Expression<int>? sequence,
   }) {
     return RawValuesInsertable({
       if (enabled != null) 'enabled': enabled,
@@ -2242,17 +2673,19 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
       if (maxSets != null) 'max_sets': maxSets,
       if (planId != null) 'plan_id': planId,
       if (warmupSets != null) 'warmup_sets': warmupSets,
+      if (sequence != null) 'sequence': sequence,
     });
   }
 
   PlanExercisesCompanion copyWith(
-      {Value<bool>? enabled,
-      Value<bool>? timers,
+      {Value<int>? enabled,
+      Value<int>? timers,
       Value<String>? exercise,
       Value<int>? id,
       Value<int?>? maxSets,
       Value<int>? planId,
-      Value<int?>? warmupSets}) {
+      Value<int?>? warmupSets,
+      Value<int>? sequence}) {
     return PlanExercisesCompanion(
       enabled: enabled ?? this.enabled,
       timers: timers ?? this.timers,
@@ -2261,6 +2694,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
       maxSets: maxSets ?? this.maxSets,
       planId: planId ?? this.planId,
       warmupSets: warmupSets ?? this.warmupSets,
+      sequence: sequence ?? this.sequence,
     );
   }
 
@@ -2268,10 +2702,10 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (enabled.present) {
-      map['enabled'] = Variable<bool>(enabled.value);
+      map['enabled'] = Variable<int>(enabled.value);
     }
     if (timers.present) {
-      map['timers'] = Variable<bool>(timers.value);
+      map['timers'] = Variable<int>(timers.value);
     }
     if (exercise.present) {
       map['exercise'] = Variable<String>(exercise.value);
@@ -2288,6 +2722,9 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
     if (warmupSets.present) {
       map['warmup_sets'] = Variable<int>(warmupSets.value);
     }
+    if (sequence.present) {
+      map['sequence'] = Variable<int>(sequence.value);
+    }
     return map;
   }
 
@@ -2300,24 +2737,170 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
           ..write('id: $id, ')
           ..write('maxSets: $maxSets, ')
           ..write('planId: $planId, ')
-          ..write('warmupSets: $warmupSets')
+          ..write('warmupSets: $warmupSets, ')
+          ..write('sequence: $sequence')
           ..write(')'))
         .toString();
   }
 }
 
-class DatabaseAtV36 extends GeneratedDatabase {
-  DatabaseAtV36(QueryExecutor e) : super(e);
+class Metadata extends Table with TableInfo<Metadata, MetadataData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Metadata(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<int> buildNumber = GeneratedColumn<int>(
+      'build_number', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [buildNumber];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'metadata';
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  MetadataData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MetadataData(
+      buildNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}build_number'])!,
+    );
+  }
+
+  @override
+  Metadata createAlias(String alias) {
+    return Metadata(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class MetadataData extends DataClass implements Insertable<MetadataData> {
+  final int buildNumber;
+  const MetadataData({required this.buildNumber});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['build_number'] = Variable<int>(buildNumber);
+    return map;
+  }
+
+  MetadataCompanion toCompanion(bool nullToAbsent) {
+    return MetadataCompanion(
+      buildNumber: Value(buildNumber),
+    );
+  }
+
+  factory MetadataData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MetadataData(
+      buildNumber: serializer.fromJson<int>(json['buildNumber']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'buildNumber': serializer.toJson<int>(buildNumber),
+    };
+  }
+
+  MetadataData copyWith({int? buildNumber}) => MetadataData(
+        buildNumber: buildNumber ?? this.buildNumber,
+      );
+  MetadataData copyWithCompanion(MetadataCompanion data) {
+    return MetadataData(
+      buildNumber:
+          data.buildNumber.present ? data.buildNumber.value : this.buildNumber,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MetadataData(')
+          ..write('buildNumber: $buildNumber')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => buildNumber.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MetadataData && other.buildNumber == this.buildNumber);
+}
+
+class MetadataCompanion extends UpdateCompanion<MetadataData> {
+  final Value<int> buildNumber;
+  final Value<int> rowid;
+  const MetadataCompanion({
+    this.buildNumber = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MetadataCompanion.insert({
+    required int buildNumber,
+    this.rowid = const Value.absent(),
+  }) : buildNumber = Value(buildNumber);
+  static Insertable<MetadataData> custom({
+    Expression<int>? buildNumber,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (buildNumber != null) 'build_number': buildNumber,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MetadataCompanion copyWith({Value<int>? buildNumber, Value<int>? rowid}) {
+    return MetadataCompanion(
+      buildNumber: buildNumber ?? this.buildNumber,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (buildNumber.present) {
+      map['build_number'] = Variable<int>(buildNumber.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MetadataCompanion(')
+          ..write('buildNumber: $buildNumber, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class DatabaseAtV50 extends GeneratedDatabase {
+  DatabaseAtV50(QueryExecutor e) : super(e);
   late final Plans plans = Plans(this);
   late final GymSets gymSets = GymSets(this);
   late final Settings settings = Settings(this);
   late final PlanExercises planExercises = PlanExercises(this);
+  late final Metadata metadata = Metadata(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [plans, gymSets, settings, planExercises];
+      [plans, gymSets, settings, planExercises, metadata];
   @override
-  int get schemaVersion => 36;
+  int get schemaVersion => 50;
 }

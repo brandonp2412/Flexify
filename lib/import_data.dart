@@ -337,21 +337,28 @@ $version
       final planExercisesToInsert = <PlanExercisesCompanion>[];
 
       for (final row in csvList.skip(1)) {
+        final idStr = row[0].toString().trim();
+        final id = int.tryParse(idStr);
+        if (id == null) {
+          throw FormatException(
+            'Expected an integer plan id, got "$idStr"',
+          );
+        }
         plansToInsert.add(
           PlansCompanion.insert(
-            id: Value(int.parse(row[0].toString())),
-            days: row[1].toString(),
-            title: Value(row[2].toString()),
-            sequence: Value(int.tryParse(row[3].toString())),
+            id: Value(id),
+            days: row[1].toString().trim(),
+            title: Value(row[2].toString().trim()),
+            sequence: Value(int.tryParse(row[3].toString().trim())),
           ),
         );
 
-        final exerciseNames = row[4].toString().split(';');
+        final exerciseNames = row[4].toString().trim().split(';');
         planExercisesToInsert.addAll(
           exerciseNames.map((exerciseName) {
             return PlanExercisesCompanion.insert(
-              planId: int.parse(row[0].toString()),
-              exercise: exerciseName,
+              planId: id,
+              exercise: exerciseName.trim(),
               enabled: true,
               timers: const Value(true),
             );

@@ -356,6 +356,36 @@ class _StartPlanPageState extends State<StartPlanPage>
         .getSingleOrNull();
   }
 
+  /// Returns the first set from the most recent training session for [exercise].
+  ///
+  /// "Most recent session" = the calendar day of the latest recorded set.
+  /// Showing the first set (rather than the last) gives a better baseline for
+  /// progressive overload when weights decrease across sets.
+  Future<GymSet?> getFirstOfLastSession(String exercise) async {
+    final mostRecent = await getLast(exercise);
+    if (mostRecent == null) return null;
+
+    final date = mostRecent.created.toLocal();
+    final startOfDay = DateTime(date.year, date.month, date.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    return (db.gymSets.select()
+          ..where(
+            (tbl) =>
+                tbl.name.equals(exercise) &
+                tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
+                tbl.created.isSmallerThanValue(endOfDay.toUtc()),
+          )
+          ..orderBy([
+            (u) => OrderingTerm(
+                  expression: u.created,
+                  mode: OrderingMode.asc,
+                ),
+          ])
+          ..limit(1))
+        .getSingleOrNull();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -546,7 +576,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<void> select(int index) async {
     setState(() => selected = index);
     final first = await stream.first;
-    final last = await getLast(first[index].exercise);
+    final last = await getFirstOfLastSession(first[index].exercise);
     if (last == null || !mounted) return;
 
     setState(() => _updateGymSetTextFields(last));

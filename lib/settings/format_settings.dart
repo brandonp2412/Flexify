@@ -181,7 +181,10 @@ class FormatSettings extends StatelessWidget {
         title: const Text("Formats"),
       ),
       body: ListView(
-        children: getFormatSettings('', settings.value),
+        children: [
+          ...getFormatSettings('', settings.value),
+          const SizedBox(height: 116),
+        ],
       ),
     );
   }

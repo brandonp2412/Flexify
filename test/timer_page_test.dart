@@ -116,6 +116,10 @@ void main() {
         showGraphXAxis: false,
         showGraphLimit: true,
         progressPosition: 'bottom',
+        defaultGraphMetric: 'bestWeight',
+        defaultGraphPeriod: 'day',
+        defaultGraphLimit: 20,
+        defaultGraphTimeBasedXAxis: false,
       ),
     );
 
@@ -220,6 +224,10 @@ void main() {
         showGraphXAxis: false,
         showGraphLimit: true,
         progressPosition: 'bottom',
+        defaultGraphMetric: 'bestWeight',
+        defaultGraphPeriod: 'day',
+        defaultGraphLimit: 20,
+        defaultGraphTimeBasedXAxis: false,
       ),
     );
 

@@ -355,7 +355,7 @@ class GraphsPageState extends State<GraphsPage>
           currentIdx--;
         }
 
-        if (showPeekGraph && currentIdx == 1) {
+        if (showPeekGraph && currentIdx == 0) {
           return Consumer<SettingsState>(
             builder: (
               BuildContext context,
@@ -391,7 +391,7 @@ class GraphsPageState extends State<GraphsPage>
 
         if (index == itemCount - 1) return const SizedBox(height: 96);
 
-        if (showPeekGraph && currentIdx > 1) {
+        if (showPeekGraph && currentIdx > 0) {
           currentIdx--;
         }
 

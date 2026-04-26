@@ -206,6 +206,85 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
+    if ('default graph metric'.contains(term.toLowerCase()))
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Default graph metric'),
+          value: settings.defaultGraphMetric,
+          items: const [
+            DropdownMenuItem(value: 'bestWeight', child: Text("Best weight")),
+            DropdownMenuItem(value: 'bestReps', child: Text("Best reps")),
+            DropdownMenuItem(value: 'oneRepMax', child: Text("One rep max")),
+            DropdownMenuItem(value: 'volume', child: Text("Volume")),
+            DropdownMenuItem(value: 'pace', child: Text("Pace (cardio)")),
+            DropdownMenuItem(
+              value: 'distance',
+              child: Text("Distance (cardio)"),
+            ),
+          ],
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(defaultGraphMetric: Value(value!))),
+        ),
+      ),
+    if ('default graph period'.contains(term.toLowerCase()))
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: DropdownButtonFormField<String>(
+          decoration: const InputDecoration(labelText: 'Default graph period'),
+          value: settings.defaultGraphPeriod,
+          items: const [
+            DropdownMenuItem(value: 'day', child: Text("Daily")),
+            DropdownMenuItem(value: 'week', child: Text("Weekly")),
+            DropdownMenuItem(value: 'month', child: Text("Monthly")),
+            DropdownMenuItem(value: 'year', child: Text("Yearly")),
+          ],
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(defaultGraphPeriod: Value(value!))),
+        ),
+      ),
+    if ('default graph limit'.contains(term.toLowerCase()))
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: DropdownButtonFormField<int>(
+          decoration: const InputDecoration(labelText: 'Default graph limit'),
+          value: settings.defaultGraphLimit,
+          items: const [
+            DropdownMenuItem(value: 10, child: Text("10")),
+            DropdownMenuItem(value: 20, child: Text("20")),
+            DropdownMenuItem(value: 50, child: Text("50")),
+            DropdownMenuItem(value: 100, child: Text("100")),
+            DropdownMenuItem(value: 200, child: Text("200")),
+          ],
+          onChanged: (value) => db.settings
+              .update()
+              .write(SettingsCompanion(defaultGraphLimit: Value(value!))),
+        ),
+      ),
+    if ('default time based x axis'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Use time-based X axis by default on graphs',
+        child: ListTile(
+          title: const Text('Default time-based X axis'),
+          leading: const Icon(Icons.timeline),
+          onTap: () => db.settings.update().write(
+                SettingsCompanion(
+                  defaultGraphTimeBasedXAxis:
+                      Value(!settings.defaultGraphTimeBasedXAxis),
+                ),
+              ),
+          trailing: Switch(
+            value: settings.defaultGraphTimeBasedXAxis,
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    defaultGraphTimeBasedXAxis: Value(value),
+                  ),
+                ),
+          ),
+        ),
+      ),
   ];
 }
 

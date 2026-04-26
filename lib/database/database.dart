@@ -444,16 +444,58 @@ class AppDatabase extends _$AppDatabase {
           ''');
         },
         from47To48: (Migrator m, Schema48 schema) async {
-          await m.addColumn(schema.settings, schema.settings.showGraphXAxis);
-          await m.addColumn(schema.settings, schema.settings.showGraphLimit);
+          final cols = await schema.database
+              .customSelect(
+                "PRAGMA table_info(settings)",
+              )
+              .get();
+          final existing = cols.map((r) => r.read<String>('name')).toSet();
+          if (!existing.contains('show_graph_x_axis'))
+            await m.addColumn(
+              schema.settings,
+              schema.settings.showGraphXAxis,
+            );
+          if (!existing.contains('show_graph_limit'))
+            await m.addColumn(
+              schema.settings,
+              schema.settings.showGraphLimit,
+            );
         },
         from48To49: (Migrator m, Schema49 schema) async {
-          await m.addColumn(schema.settings, schema.settings.progressPosition);
+          final cols = await schema.database
+              .customSelect(
+                "PRAGMA table_info(settings)",
+              )
+              .get();
+          final existing = cols.map((r) => r.read<String>('name')).toSet();
+          if (!existing.contains('progress_position'))
+            await m.addColumn(
+              schema.settings,
+              schema.settings.progressPosition,
+            );
+        },
+        from49To50: (Migrator m, Schema50 schema) async {
+          await m.addColumn(
+            schema.settings,
+            schema.settings.defaultGraphMetric,
+          );
+          await m.addColumn(
+            schema.settings,
+            schema.settings.defaultGraphPeriod,
+          );
+          await m.addColumn(
+            schema.settings,
+            schema.settings.defaultGraphLimit,
+          );
+          await m.addColumn(
+            schema.settings,
+            schema.settings.defaultGraphTimeBasedXAxis,
+          );
         },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 49;
+  int get schemaVersion => 50;
 }

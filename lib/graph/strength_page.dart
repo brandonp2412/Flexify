@@ -39,12 +39,12 @@ class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> data = widget.data;
   late String target = widget.unit;
   late String name = widget.name;
-  bool useTimeBasedXAxis = false;
+  late bool useTimeBasedXAxis;
   Timer? _refreshTimer;
 
-  int limit = 20;
-  StrengthMetric metric = StrengthMetric.bestWeight;
-  Period period = Period.day;
+  late int limit;
+  late StrengthMetric metric;
+  late Period period;
   DateTime? start;
   DateTime? end;
   DateTime lastTap = DateTime(0);
@@ -52,6 +52,17 @@ class _StrengthPageState extends State<StrengthPage> {
   @override
   void initState() {
     super.initState();
+    final settings = context.read<SettingsState>().value;
+    useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
+    limit = settings.defaultGraphLimit;
+    metric = StrengthMetric.values.firstWhere(
+      (m) => m.name == settings.defaultGraphMetric,
+      orElse: () => StrengthMetric.bestWeight,
+    );
+    period = Period.values.firstWhere(
+      (p) => p.name == settings.defaultGraphPeriod,
+      orElse: () => Period.day,
+    );
     widget.tabCtrl.addListener(_onTabChanged);
   }
 

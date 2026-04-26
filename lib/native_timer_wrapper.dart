@@ -22,7 +22,10 @@ class NativeTimerWrapper {
       ? DateTime.now().difference(stamp) + elapsed
       : Duration.zero;
 
-  Duration getRemaining() => getDuration() - getElapsed();
+  Duration getRemaining() {
+    final remaining = getDuration() - getElapsed();
+    return remaining.isNegative ? Duration.zero : remaining;
+  }
 
   int getTimeStamp() => stamp.millisecondsSinceEpoch;
 

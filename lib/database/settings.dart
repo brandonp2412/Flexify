@@ -49,4 +49,12 @@ class Settings extends Table {
       boolean().withDefault(const Constant(true))();
   TextColumn get progressPosition =>
       text().withDefault(const Constant("bottom"))();
+  TextColumn get defaultGraphMetric =>
+      text().withDefault(const Constant("bestWeight"))();
+  TextColumn get defaultGraphPeriod =>
+      text().withDefault(const Constant("day"))();
+  IntColumn get defaultGraphLimit =>
+      integer().withDefault(const Constant(20))();
+  BoolColumn get defaultGraphTimeBasedXAxis =>
+      boolean().withDefault(const Constant(false))();
 }

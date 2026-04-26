@@ -191,7 +191,7 @@ class _AppSearchState extends State<AppSearch> {
                           ),
                         ),
                       ],
-                      if (sel.isEmpty && showBodyWeight)
+                      if (sel.isEmpty)
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.scale),

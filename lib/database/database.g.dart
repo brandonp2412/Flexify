@@ -1333,6 +1333,41 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant("bottom"));
+  static const VerificationMeta _defaultGraphMetricMeta =
+      const VerificationMeta('defaultGraphMetric');
+  @override
+  late final GeneratedColumn<String> defaultGraphMetric =
+      GeneratedColumn<String>('default_graph_metric', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant("bestWeight"));
+  static const VerificationMeta _defaultGraphPeriodMeta =
+      const VerificationMeta('defaultGraphPeriod');
+  @override
+  late final GeneratedColumn<String> defaultGraphPeriod =
+      GeneratedColumn<String>('default_graph_period', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant("day"));
+  static const VerificationMeta _defaultGraphLimitMeta =
+      const VerificationMeta('defaultGraphLimit');
+  @override
+  late final GeneratedColumn<int> defaultGraphLimit = GeneratedColumn<int>(
+      'default_graph_limit', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(20));
+  static const VerificationMeta _defaultGraphTimeBasedXAxisMeta =
+      const VerificationMeta('defaultGraphTimeBasedXAxis');
+  @override
+  late final GeneratedColumn<bool> defaultGraphTimeBasedXAxis =
+      GeneratedColumn<bool>(
+          'default_graph_time_based_x_axis', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("default_graph_time_based_x_axis" IN (0, 1))'),
+          defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1370,7 +1405,11 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         scrollableTabs,
         showGraphXAxis,
         showGraphLimit,
-        progressPosition
+        progressPosition,
+        defaultGraphMetric,
+        defaultGraphPeriod,
+        defaultGraphLimit,
+        defaultGraphTimeBasedXAxis
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1613,6 +1652,31 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           progressPosition.isAcceptableOrUnknown(
               data['progress_position']!, _progressPositionMeta));
     }
+    if (data.containsKey('default_graph_metric')) {
+      context.handle(
+          _defaultGraphMetricMeta,
+          defaultGraphMetric.isAcceptableOrUnknown(
+              data['default_graph_metric']!, _defaultGraphMetricMeta));
+    }
+    if (data.containsKey('default_graph_period')) {
+      context.handle(
+          _defaultGraphPeriodMeta,
+          defaultGraphPeriod.isAcceptableOrUnknown(
+              data['default_graph_period']!, _defaultGraphPeriodMeta));
+    }
+    if (data.containsKey('default_graph_limit')) {
+      context.handle(
+          _defaultGraphLimitMeta,
+          defaultGraphLimit.isAcceptableOrUnknown(
+              data['default_graph_limit']!, _defaultGraphLimitMeta));
+    }
+    if (data.containsKey('default_graph_time_based_x_axis')) {
+      context.handle(
+          _defaultGraphTimeBasedXAxisMeta,
+          defaultGraphTimeBasedXAxis.isAcceptableOrUnknown(
+              data['default_graph_time_based_x_axis']!,
+              _defaultGraphTimeBasedXAxisMeta));
+    }
     return context;
   }
 
@@ -1694,6 +1758,15 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           .read(DriftSqlType.bool, data['${effectivePrefix}show_graph_limit'])!,
       progressPosition: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}progress_position'])!,
+      defaultGraphMetric: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}default_graph_metric'])!,
+      defaultGraphPeriod: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}default_graph_period'])!,
+      defaultGraphLimit: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}default_graph_limit'])!,
+      defaultGraphTimeBasedXAxis: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}default_graph_time_based_x_axis'])!,
     );
   }
 
@@ -1740,6 +1813,10 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool showGraphXAxis;
   final bool showGraphLimit;
   final String progressPosition;
+  final String defaultGraphMetric;
+  final String defaultGraphPeriod;
+  final int defaultGraphLimit;
+  final bool defaultGraphTimeBasedXAxis;
   const Setting(
       {required this.alarmSound,
       required this.automaticBackups,
@@ -1776,7 +1853,11 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.scrollableTabs,
       required this.showGraphXAxis,
       required this.showGraphLimit,
-      required this.progressPosition});
+      required this.progressPosition,
+      required this.defaultGraphMetric,
+      required this.defaultGraphPeriod,
+      required this.defaultGraphLimit,
+      required this.defaultGraphTimeBasedXAxis});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1822,6 +1903,11 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['show_graph_x_axis'] = Variable<bool>(showGraphXAxis);
     map['show_graph_limit'] = Variable<bool>(showGraphLimit);
     map['progress_position'] = Variable<String>(progressPosition);
+    map['default_graph_metric'] = Variable<String>(defaultGraphMetric);
+    map['default_graph_period'] = Variable<String>(defaultGraphPeriod);
+    map['default_graph_limit'] = Variable<int>(defaultGraphLimit);
+    map['default_graph_time_based_x_axis'] =
+        Variable<bool>(defaultGraphTimeBasedXAxis);
     return map;
   }
 
@@ -1869,6 +1955,10 @@ class Setting extends DataClass implements Insertable<Setting> {
       showGraphXAxis: Value(showGraphXAxis),
       showGraphLimit: Value(showGraphLimit),
       progressPosition: Value(progressPosition),
+      defaultGraphMetric: Value(defaultGraphMetric),
+      defaultGraphPeriod: Value(defaultGraphPeriod),
+      defaultGraphLimit: Value(defaultGraphLimit),
+      defaultGraphTimeBasedXAxis: Value(defaultGraphTimeBasedXAxis),
     );
   }
 
@@ -1913,6 +2003,13 @@ class Setting extends DataClass implements Insertable<Setting> {
       showGraphXAxis: serializer.fromJson<bool>(json['showGraphXAxis']),
       showGraphLimit: serializer.fromJson<bool>(json['showGraphLimit']),
       progressPosition: serializer.fromJson<String>(json['progressPosition']),
+      defaultGraphMetric:
+          serializer.fromJson<String>(json['defaultGraphMetric']),
+      defaultGraphPeriod:
+          serializer.fromJson<String>(json['defaultGraphPeriod']),
+      defaultGraphLimit: serializer.fromJson<int>(json['defaultGraphLimit']),
+      defaultGraphTimeBasedXAxis:
+          serializer.fromJson<bool>(json['defaultGraphTimeBasedXAxis']),
     );
   }
   @override
@@ -1955,6 +2052,11 @@ class Setting extends DataClass implements Insertable<Setting> {
       'showGraphXAxis': serializer.toJson<bool>(showGraphXAxis),
       'showGraphLimit': serializer.toJson<bool>(showGraphLimit),
       'progressPosition': serializer.toJson<String>(progressPosition),
+      'defaultGraphMetric': serializer.toJson<String>(defaultGraphMetric),
+      'defaultGraphPeriod': serializer.toJson<String>(defaultGraphPeriod),
+      'defaultGraphLimit': serializer.toJson<int>(defaultGraphLimit),
+      'defaultGraphTimeBasedXAxis':
+          serializer.toJson<bool>(defaultGraphTimeBasedXAxis),
     };
   }
 
@@ -1994,7 +2096,11 @@ class Setting extends DataClass implements Insertable<Setting> {
           bool? scrollableTabs,
           bool? showGraphXAxis,
           bool? showGraphLimit,
-          String? progressPosition}) =>
+          String? progressPosition,
+          String? defaultGraphMetric,
+          String? defaultGraphPeriod,
+          int? defaultGraphLimit,
+          bool? defaultGraphTimeBasedXAxis}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2034,6 +2140,11 @@ class Setting extends DataClass implements Insertable<Setting> {
         showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
         showGraphLimit: showGraphLimit ?? this.showGraphLimit,
         progressPosition: progressPosition ?? this.progressPosition,
+        defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
+        defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
+        defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
+        defaultGraphTimeBasedXAxis:
+            defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
       );
   Setting copyWithCompanion(SettingsCompanion data) {
     return Setting(
@@ -2121,6 +2232,18 @@ class Setting extends DataClass implements Insertable<Setting> {
       progressPosition: data.progressPosition.present
           ? data.progressPosition.value
           : this.progressPosition,
+      defaultGraphMetric: data.defaultGraphMetric.present
+          ? data.defaultGraphMetric.value
+          : this.defaultGraphMetric,
+      defaultGraphPeriod: data.defaultGraphPeriod.present
+          ? data.defaultGraphPeriod.value
+          : this.defaultGraphPeriod,
+      defaultGraphLimit: data.defaultGraphLimit.present
+          ? data.defaultGraphLimit.value
+          : this.defaultGraphLimit,
+      defaultGraphTimeBasedXAxis: data.defaultGraphTimeBasedXAxis.present
+          ? data.defaultGraphTimeBasedXAxis.value
+          : this.defaultGraphTimeBasedXAxis,
     );
   }
 
@@ -2162,7 +2285,11 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('scrollableTabs: $scrollableTabs, ')
           ..write('showGraphXAxis: $showGraphXAxis, ')
           ..write('showGraphLimit: $showGraphLimit, ')
-          ..write('progressPosition: $progressPosition')
+          ..write('progressPosition: $progressPosition, ')
+          ..write('defaultGraphMetric: $defaultGraphMetric, ')
+          ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
+          ..write('defaultGraphLimit: $defaultGraphLimit, ')
+          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis')
           ..write(')'))
         .toString();
   }
@@ -2204,7 +2331,11 @@ class Setting extends DataClass implements Insertable<Setting> {
         scrollableTabs,
         showGraphXAxis,
         showGraphLimit,
-        progressPosition
+        progressPosition,
+        defaultGraphMetric,
+        defaultGraphPeriod,
+        defaultGraphLimit,
+        defaultGraphTimeBasedXAxis
       ]);
   @override
   bool operator ==(Object other) =>
@@ -2245,7 +2376,11 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.scrollableTabs == this.scrollableTabs &&
           other.showGraphXAxis == this.showGraphXAxis &&
           other.showGraphLimit == this.showGraphLimit &&
-          other.progressPosition == this.progressPosition);
+          other.progressPosition == this.progressPosition &&
+          other.defaultGraphMetric == this.defaultGraphMetric &&
+          other.defaultGraphPeriod == this.defaultGraphPeriod &&
+          other.defaultGraphLimit == this.defaultGraphLimit &&
+          other.defaultGraphTimeBasedXAxis == this.defaultGraphTimeBasedXAxis);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -2285,6 +2420,10 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> showGraphXAxis;
   final Value<bool> showGraphLimit;
   final Value<String> progressPosition;
+  final Value<String> defaultGraphMetric;
+  final Value<String> defaultGraphPeriod;
+  final Value<int> defaultGraphLimit;
+  final Value<bool> defaultGraphTimeBasedXAxis;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.automaticBackups = const Value.absent(),
@@ -2322,6 +2461,10 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.showGraphXAxis = const Value.absent(),
     this.showGraphLimit = const Value.absent(),
     this.progressPosition = const Value.absent(),
+    this.defaultGraphMetric = const Value.absent(),
+    this.defaultGraphPeriod = const Value.absent(),
+    this.defaultGraphLimit = const Value.absent(),
+    this.defaultGraphTimeBasedXAxis = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
@@ -2360,6 +2503,10 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.showGraphXAxis = const Value.absent(),
     this.showGraphLimit = const Value.absent(),
     this.progressPosition = const Value.absent(),
+    this.defaultGraphMetric = const Value.absent(),
+    this.defaultGraphPeriod = const Value.absent(),
+    this.defaultGraphLimit = const Value.absent(),
+    this.defaultGraphTimeBasedXAxis = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -2413,6 +2560,10 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? showGraphXAxis,
     Expression<bool>? showGraphLimit,
     Expression<String>? progressPosition,
+    Expression<String>? defaultGraphMetric,
+    Expression<String>? defaultGraphPeriod,
+    Expression<int>? defaultGraphLimit,
+    Expression<bool>? defaultGraphTimeBasedXAxis,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -2453,6 +2604,13 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (showGraphXAxis != null) 'show_graph_x_axis': showGraphXAxis,
       if (showGraphLimit != null) 'show_graph_limit': showGraphLimit,
       if (progressPosition != null) 'progress_position': progressPosition,
+      if (defaultGraphMetric != null)
+        'default_graph_metric': defaultGraphMetric,
+      if (defaultGraphPeriod != null)
+        'default_graph_period': defaultGraphPeriod,
+      if (defaultGraphLimit != null) 'default_graph_limit': defaultGraphLimit,
+      if (defaultGraphTimeBasedXAxis != null)
+        'default_graph_time_based_x_axis': defaultGraphTimeBasedXAxis,
     });
   }
 
@@ -2492,7 +2650,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<bool>? scrollableTabs,
       Value<bool>? showGraphXAxis,
       Value<bool>? showGraphLimit,
-      Value<String>? progressPosition}) {
+      Value<String>? progressPosition,
+      Value<String>? defaultGraphMetric,
+      Value<String>? defaultGraphPeriod,
+      Value<int>? defaultGraphLimit,
+      Value<bool>? defaultGraphTimeBasedXAxis}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2530,6 +2692,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
       showGraphLimit: showGraphLimit ?? this.showGraphLimit,
       progressPosition: progressPosition ?? this.progressPosition,
+      defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
+      defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
+      defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
+      defaultGraphTimeBasedXAxis:
+          defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
     );
   }
 
@@ -2644,6 +2811,19 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     if (progressPosition.present) {
       map['progress_position'] = Variable<String>(progressPosition.value);
     }
+    if (defaultGraphMetric.present) {
+      map['default_graph_metric'] = Variable<String>(defaultGraphMetric.value);
+    }
+    if (defaultGraphPeriod.present) {
+      map['default_graph_period'] = Variable<String>(defaultGraphPeriod.value);
+    }
+    if (defaultGraphLimit.present) {
+      map['default_graph_limit'] = Variable<int>(defaultGraphLimit.value);
+    }
+    if (defaultGraphTimeBasedXAxis.present) {
+      map['default_graph_time_based_x_axis'] =
+          Variable<bool>(defaultGraphTimeBasedXAxis.value);
+    }
     return map;
   }
 
@@ -2685,7 +2865,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('scrollableTabs: $scrollableTabs, ')
           ..write('showGraphXAxis: $showGraphXAxis, ')
           ..write('showGraphLimit: $showGraphLimit, ')
-          ..write('progressPosition: $progressPosition')
+          ..write('progressPosition: $progressPosition, ')
+          ..write('defaultGraphMetric: $defaultGraphMetric, ')
+          ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
+          ..write('defaultGraphLimit: $defaultGraphLimit, ')
+          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis')
           ..write(')'))
         .toString();
   }
@@ -3984,6 +4168,10 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   Value<bool> showGraphXAxis,
   Value<bool> showGraphLimit,
   Value<String> progressPosition,
+  Value<String> defaultGraphMetric,
+  Value<String> defaultGraphPeriod,
+  Value<int> defaultGraphLimit,
+  Value<bool> defaultGraphTimeBasedXAxis,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
@@ -4022,6 +4210,10 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<bool> showGraphXAxis,
   Value<bool> showGraphLimit,
   Value<String> progressPosition,
+  Value<String> defaultGraphMetric,
+  Value<String> defaultGraphPeriod,
+  Value<int> defaultGraphLimit,
+  Value<bool> defaultGraphTimeBasedXAxis,
 });
 
 class $$SettingsTableFilterComposer
@@ -4152,6 +4344,22 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<String> get progressPosition => $composableBuilder(
       column: $table.progressPosition,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get defaultGraphMetric => $composableBuilder(
+      column: $table.defaultGraphMetric,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get defaultGraphPeriod => $composableBuilder(
+      column: $table.defaultGraphPeriod,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get defaultGraphLimit => $composableBuilder(
+      column: $table.defaultGraphLimit,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
+      column: $table.defaultGraphTimeBasedXAxis,
       builder: (column) => ColumnFilters(column));
 }
 
@@ -4291,6 +4499,22 @@ class $$SettingsTableOrderingComposer
   ColumnOrderings<String> get progressPosition => $composableBuilder(
       column: $table.progressPosition,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get defaultGraphMetric => $composableBuilder(
+      column: $table.defaultGraphMetric,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get defaultGraphPeriod => $composableBuilder(
+      column: $table.defaultGraphPeriod,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get defaultGraphLimit => $composableBuilder(
+      column: $table.defaultGraphLimit,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
+      column: $table.defaultGraphTimeBasedXAxis,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$SettingsTableAnnotationComposer
@@ -4409,6 +4633,18 @@ class $$SettingsTableAnnotationComposer
 
   GeneratedColumn<String> get progressPosition => $composableBuilder(
       column: $table.progressPosition, builder: (column) => column);
+
+  GeneratedColumn<String> get defaultGraphMetric => $composableBuilder(
+      column: $table.defaultGraphMetric, builder: (column) => column);
+
+  GeneratedColumn<String> get defaultGraphPeriod => $composableBuilder(
+      column: $table.defaultGraphPeriod, builder: (column) => column);
+
+  GeneratedColumn<int> get defaultGraphLimit => $composableBuilder(
+      column: $table.defaultGraphLimit, builder: (column) => column);
+
+  GeneratedColumn<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
+      column: $table.defaultGraphTimeBasedXAxis, builder: (column) => column);
 }
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -4470,6 +4706,10 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> showGraphXAxis = const Value.absent(),
             Value<bool> showGraphLimit = const Value.absent(),
             Value<String> progressPosition = const Value.absent(),
+            Value<String> defaultGraphMetric = const Value.absent(),
+            Value<String> defaultGraphPeriod = const Value.absent(),
+            Value<int> defaultGraphLimit = const Value.absent(),
+            Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
@@ -4508,6 +4748,10 @@ class $$SettingsTableTableManager extends RootTableManager<
             showGraphXAxis: showGraphXAxis,
             showGraphLimit: showGraphLimit,
             progressPosition: progressPosition,
+            defaultGraphMetric: defaultGraphMetric,
+            defaultGraphPeriod: defaultGraphPeriod,
+            defaultGraphLimit: defaultGraphLimit,
+            defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
           ),
           createCompanionCallback: ({
             required String alarmSound,
@@ -4546,6 +4790,10 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<bool> showGraphXAxis = const Value.absent(),
             Value<bool> showGraphLimit = const Value.absent(),
             Value<String> progressPosition = const Value.absent(),
+            Value<String> defaultGraphMetric = const Value.absent(),
+            Value<String> defaultGraphPeriod = const Value.absent(),
+            Value<int> defaultGraphLimit = const Value.absent(),
+            Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
@@ -4584,6 +4832,10 @@ class $$SettingsTableTableManager extends RootTableManager<
             showGraphXAxis: showGraphXAxis,
             showGraphLimit: showGraphLimit,
             progressPosition: progressPosition,
+            defaultGraphMetric: defaultGraphMetric,
+            defaultGraphPeriod: defaultGraphPeriod,
+            defaultGraphLimit: defaultGraphLimit,
+            defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

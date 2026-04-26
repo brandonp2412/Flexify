@@ -38,19 +38,30 @@ class CardioPage extends StatefulWidget {
 class _CardioPageState extends State<CardioPage> {
   late List<CardioData> data = widget.data;
   late String target = widget.unit;
-  int limit = 20;
-  CardioMetric metric = CardioMetric.pace;
-  Period period = Period.day;
+  late int limit;
+  late CardioMetric metric;
+  late Period period;
   DateTime? start;
   DateTime? end;
   TabController? ctrl;
   DateTime lastTap = DateTime(0);
-  bool useTimeBasedXAxis = false;
+  late bool useTimeBasedXAxis;
   Timer? _refreshTimer;
 
   @override
   void initState() {
     super.initState();
+    final settings = context.read<SettingsState>().value;
+    useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
+    limit = settings.defaultGraphLimit;
+    metric = CardioMetric.values.firstWhere(
+      (m) => m.name == settings.defaultGraphMetric,
+      orElse: () => CardioMetric.pace,
+    );
+    period = Period.values.firstWhere(
+      (p) => p.name == settings.defaultGraphPeriod,
+      orElse: () => Period.day,
+    );
     widget.tabCtrl.addListener(_onTabChanged);
   }
 
