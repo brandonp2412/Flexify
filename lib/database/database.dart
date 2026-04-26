@@ -3,6 +3,7 @@ import 'migrations_web.dart' if (dart.library.io) 'migrations_native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
+import 'package:flexify/database/graph_preferences.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/database/metadata.dart';
 import 'package:flexify/database/plan_exercises.dart';
@@ -25,7 +26,9 @@ LazyDatabase openConnection() {
   });
 }
 
-@DriftDatabase(tables: [Plans, GymSets, Settings, PlanExercises, Metadata])
+@DriftDatabase(
+  tables: [Plans, GymSets, Settings, PlanExercises, Metadata, GraphPreferences],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? openConnection());
 
@@ -492,10 +495,13 @@ class AppDatabase extends _$AppDatabase {
             schema.settings.defaultGraphTimeBasedXAxis,
           );
         },
+        from50To51: (Migrator m, Schema51 schema) async {
+          await m.createTable(schema.graphPreferences);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 50;
+  int get schemaVersion => 51;
 }

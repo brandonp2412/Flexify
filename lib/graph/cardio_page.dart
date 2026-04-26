@@ -47,6 +47,8 @@ class _CardioPageState extends State<CardioPage> {
   DateTime lastTap = DateTime(0);
   late bool useTimeBasedXAxis;
   Timer? _refreshTimer;
+  Timer? _notesDebounce;
+  final _notesCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -63,11 +65,49 @@ class _CardioPageState extends State<CardioPage> {
       orElse: () => Period.day,
     );
     widget.tabCtrl.addListener(_onTabChanged);
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final pref = await (db.graphPreferences.select()
+          ..where((t) => t.name.equals(widget.name)))
+        .getSingleOrNull();
+    if (pref == null || !mounted) return;
+    setState(() {
+      metric = CardioMetric.values.firstWhere(
+        (m) => m.name == pref.metric,
+        orElse: () => metric,
+      );
+      period = Period.values.firstWhere(
+        (p) => p.name == pref.period,
+        orElse: () => period,
+      );
+      limit = pref.limit;
+      useTimeBasedXAxis = pref.timeBasedXAxis;
+      _notesCtrl.text = pref.notes ?? '';
+    });
+    setData();
+  }
+
+  Future<void> _savePreferences() async {
+    await db.graphPreferences.insertOne(
+      GraphPreferencesCompanion.insert(
+        name: widget.name,
+        metric: Value(metric.name),
+        period: Value(period.name),
+        limit: Value(limit),
+        timeBasedXAxis: Value(useTimeBasedXAxis),
+        notes: Value(_notesCtrl.text.isEmpty ? null : _notesCtrl.text),
+      ),
+      mode: InsertMode.insertOrReplace,
+    );
   }
 
   @override
   void dispose() {
     _refreshTimer?.cancel();
+    _notesDebounce?.cancel();
+    _notesCtrl.dispose();
     widget.tabCtrl.removeListener(_onTabChanged);
     super.dispose();
   }
@@ -269,6 +309,7 @@ class _CardioPageState extends State<CardioPage> {
                       metric = value!;
                     });
                     setData();
+                    _savePreferences();
                   },
                 ),
                 SizedBox(height: 8),
@@ -298,6 +339,7 @@ class _CardioPageState extends State<CardioPage> {
                       period = value!;
                     });
                     setData();
+                    _savePreferences();
                   },
                 ),
                 SizedBox(height: 8),
@@ -392,9 +434,12 @@ class _CardioPageState extends State<CardioPage> {
                     child: SwitchListTile(
                       title: const Text('Use time-based X axis'),
                       value: useTimeBasedXAxis,
-                      onChanged: (val) => setState(() {
-                        useTimeBasedXAxis = val;
-                      }),
+                      onChanged: (val) {
+                        setState(() {
+                          useTimeBasedXAxis = val;
+                        });
+                        _savePreferences();
+                      },
                     ),
                   ),
                 if (settings.showGraphLimit)
@@ -440,6 +485,7 @@ class _CardioPageState extends State<CardioPage> {
                             limit = value.toInt();
                           });
                           setData();
+                          _savePreferences();
                         },
                       ),
                     ],
@@ -466,6 +512,25 @@ class _CardioPageState extends State<CardioPage> {
                       ),
                     ),
                   ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: _notesCtrl,
+                    decoration: const InputDecoration(
+                      labelText: 'Exercise notes',
+                      hintText: 'Notes for this exercise',
+                    ),
+                    minLines: 2,
+                    maxLines: 5,
+                    onChanged: (_) {
+                      _notesDebounce?.cancel();
+                      _notesDebounce = Timer(
+                        const Duration(milliseconds: 600),
+                        _savePreferences,
+                      );
+                    },
+                  ),
+                ),
                 const SizedBox(height: 200),
               ],
             );

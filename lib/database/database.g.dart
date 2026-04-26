@@ -3457,6 +3457,352 @@ class MetadataCompanion extends UpdateCompanion<MetadataData> {
   }
 }
 
+class $GraphPreferencesTable extends GraphPreferences
+    with TableInfo<$GraphPreferencesTable, GraphPreference> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GraphPreferencesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _metricMeta = const VerificationMeta('metric');
+  @override
+  late final GeneratedColumn<String> metric = GeneratedColumn<String>(
+      'metric', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('bestWeight'));
+  static const VerificationMeta _periodMeta = const VerificationMeta('period');
+  @override
+  late final GeneratedColumn<String> period = GeneratedColumn<String>(
+      'period', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('day'));
+  static const VerificationMeta _limitMeta = const VerificationMeta('limit');
+  @override
+  late final GeneratedColumn<int> limit = GeneratedColumn<int>(
+      'limit', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(20));
+  static const VerificationMeta _timeBasedXAxisMeta =
+      const VerificationMeta('timeBasedXAxis');
+  @override
+  late final GeneratedColumn<bool> timeBasedXAxis = GeneratedColumn<bool>(
+      'time_based_x_axis', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("time_based_x_axis" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [name, metric, period, limit, timeBasedXAxis, notes];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'graph_preferences';
+  @override
+  VerificationContext validateIntegrity(Insertable<GraphPreference> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('metric')) {
+      context.handle(_metricMeta,
+          metric.isAcceptableOrUnknown(data['metric']!, _metricMeta));
+    }
+    if (data.containsKey('period')) {
+      context.handle(_periodMeta,
+          period.isAcceptableOrUnknown(data['period']!, _periodMeta));
+    }
+    if (data.containsKey('limit')) {
+      context.handle(
+          _limitMeta, limit.isAcceptableOrUnknown(data['limit']!, _limitMeta));
+    }
+    if (data.containsKey('time_based_x_axis')) {
+      context.handle(
+          _timeBasedXAxisMeta,
+          timeBasedXAxis.isAcceptableOrUnknown(
+              data['time_based_x_axis']!, _timeBasedXAxisMeta));
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {name};
+  @override
+  GraphPreference map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GraphPreference(
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      metric: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}metric'])!,
+      period: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}period'])!,
+      limit: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}limit'])!,
+      timeBasedXAxis: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}time_based_x_axis'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+    );
+  }
+
+  @override
+  $GraphPreferencesTable createAlias(String alias) {
+    return $GraphPreferencesTable(attachedDatabase, alias);
+  }
+}
+
+class GraphPreference extends DataClass implements Insertable<GraphPreference> {
+  final String name;
+  final String metric;
+  final String period;
+  final int limit;
+  final bool timeBasedXAxis;
+  final String? notes;
+  const GraphPreference(
+      {required this.name,
+      required this.metric,
+      required this.period,
+      required this.limit,
+      required this.timeBasedXAxis,
+      this.notes});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['name'] = Variable<String>(name);
+    map['metric'] = Variable<String>(metric);
+    map['period'] = Variable<String>(period);
+    map['limit'] = Variable<int>(limit);
+    map['time_based_x_axis'] = Variable<bool>(timeBasedXAxis);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  GraphPreferencesCompanion toCompanion(bool nullToAbsent) {
+    return GraphPreferencesCompanion(
+      name: Value(name),
+      metric: Value(metric),
+      period: Value(period),
+      limit: Value(limit),
+      timeBasedXAxis: Value(timeBasedXAxis),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+    );
+  }
+
+  factory GraphPreference.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GraphPreference(
+      name: serializer.fromJson<String>(json['name']),
+      metric: serializer.fromJson<String>(json['metric']),
+      period: serializer.fromJson<String>(json['period']),
+      limit: serializer.fromJson<int>(json['limit']),
+      timeBasedXAxis: serializer.fromJson<bool>(json['timeBasedXAxis']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'name': serializer.toJson<String>(name),
+      'metric': serializer.toJson<String>(metric),
+      'period': serializer.toJson<String>(period),
+      'limit': serializer.toJson<int>(limit),
+      'timeBasedXAxis': serializer.toJson<bool>(timeBasedXAxis),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  GraphPreference copyWith(
+          {String? name,
+          String? metric,
+          String? period,
+          int? limit,
+          bool? timeBasedXAxis,
+          Value<String?> notes = const Value.absent()}) =>
+      GraphPreference(
+        name: name ?? this.name,
+        metric: metric ?? this.metric,
+        period: period ?? this.period,
+        limit: limit ?? this.limit,
+        timeBasedXAxis: timeBasedXAxis ?? this.timeBasedXAxis,
+        notes: notes.present ? notes.value : this.notes,
+      );
+  GraphPreference copyWithCompanion(GraphPreferencesCompanion data) {
+    return GraphPreference(
+      name: data.name.present ? data.name.value : this.name,
+      metric: data.metric.present ? data.metric.value : this.metric,
+      period: data.period.present ? data.period.value : this.period,
+      limit: data.limit.present ? data.limit.value : this.limit,
+      timeBasedXAxis: data.timeBasedXAxis.present
+          ? data.timeBasedXAxis.value
+          : this.timeBasedXAxis,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GraphPreference(')
+          ..write('name: $name, ')
+          ..write('metric: $metric, ')
+          ..write('period: $period, ')
+          ..write('limit: $limit, ')
+          ..write('timeBasedXAxis: $timeBasedXAxis, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(name, metric, period, limit, timeBasedXAxis, notes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GraphPreference &&
+          other.name == this.name &&
+          other.metric == this.metric &&
+          other.period == this.period &&
+          other.limit == this.limit &&
+          other.timeBasedXAxis == this.timeBasedXAxis &&
+          other.notes == this.notes);
+}
+
+class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
+  final Value<String> name;
+  final Value<String> metric;
+  final Value<String> period;
+  final Value<int> limit;
+  final Value<bool> timeBasedXAxis;
+  final Value<String?> notes;
+  final Value<int> rowid;
+  const GraphPreferencesCompanion({
+    this.name = const Value.absent(),
+    this.metric = const Value.absent(),
+    this.period = const Value.absent(),
+    this.limit = const Value.absent(),
+    this.timeBasedXAxis = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GraphPreferencesCompanion.insert({
+    required String name,
+    this.metric = const Value.absent(),
+    this.period = const Value.absent(),
+    this.limit = const Value.absent(),
+    this.timeBasedXAxis = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<GraphPreference> custom({
+    Expression<String>? name,
+    Expression<String>? metric,
+    Expression<String>? period,
+    Expression<int>? limit,
+    Expression<bool>? timeBasedXAxis,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (name != null) 'name': name,
+      if (metric != null) 'metric': metric,
+      if (period != null) 'period': period,
+      if (limit != null) 'limit': limit,
+      if (timeBasedXAxis != null) 'time_based_x_axis': timeBasedXAxis,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GraphPreferencesCompanion copyWith(
+      {Value<String>? name,
+      Value<String>? metric,
+      Value<String>? period,
+      Value<int>? limit,
+      Value<bool>? timeBasedXAxis,
+      Value<String?>? notes,
+      Value<int>? rowid}) {
+    return GraphPreferencesCompanion(
+      name: name ?? this.name,
+      metric: metric ?? this.metric,
+      period: period ?? this.period,
+      limit: limit ?? this.limit,
+      timeBasedXAxis: timeBasedXAxis ?? this.timeBasedXAxis,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (metric.present) {
+      map['metric'] = Variable<String>(metric.value);
+    }
+    if (period.present) {
+      map['period'] = Variable<String>(period.value);
+    }
+    if (limit.present) {
+      map['limit'] = Variable<int>(limit.value);
+    }
+    if (timeBasedXAxis.present) {
+      map['time_based_x_axis'] = Variable<bool>(timeBasedXAxis.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GraphPreferencesCompanion(')
+          ..write('name: $name, ')
+          ..write('metric: $metric, ')
+          ..write('period: $period, ')
+          ..write('limit: $limit, ')
+          ..write('timeBasedXAxis: $timeBasedXAxis, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3465,12 +3811,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SettingsTable settings = $SettingsTable(this);
   late final $PlanExercisesTable planExercises = $PlanExercisesTable(this);
   late final $MetadataTable metadata = $MetadataTable(this);
+  late final $GraphPreferencesTable graphPreferences =
+      $GraphPreferencesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [plans, gymSets, settings, planExercises, metadata];
+      [plans, gymSets, settings, planExercises, metadata, graphPreferences];
 }
 
 typedef $$PlansTableCreateCompanionBuilder = PlansCompanion Function({
@@ -5351,6 +5699,197 @@ typedef $$MetadataTableProcessedTableManager = ProcessedTableManager<
     (MetadataData, BaseReferences<_$AppDatabase, $MetadataTable, MetadataData>),
     MetadataData,
     PrefetchHooks Function()>;
+typedef $$GraphPreferencesTableCreateCompanionBuilder
+    = GraphPreferencesCompanion Function({
+  required String name,
+  Value<String> metric,
+  Value<String> period,
+  Value<int> limit,
+  Value<bool> timeBasedXAxis,
+  Value<String?> notes,
+  Value<int> rowid,
+});
+typedef $$GraphPreferencesTableUpdateCompanionBuilder
+    = GraphPreferencesCompanion Function({
+  Value<String> name,
+  Value<String> metric,
+  Value<String> period,
+  Value<int> limit,
+  Value<bool> timeBasedXAxis,
+  Value<String?> notes,
+  Value<int> rowid,
+});
+
+class $$GraphPreferencesTableFilterComposer
+    extends Composer<_$AppDatabase, $GraphPreferencesTable> {
+  $$GraphPreferencesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get metric => $composableBuilder(
+      column: $table.metric, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get period => $composableBuilder(
+      column: $table.period, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get limit => $composableBuilder(
+      column: $table.limit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get timeBasedXAxis => $composableBuilder(
+      column: $table.timeBasedXAxis,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
+}
+
+class $$GraphPreferencesTableOrderingComposer
+    extends Composer<_$AppDatabase, $GraphPreferencesTable> {
+  $$GraphPreferencesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get metric => $composableBuilder(
+      column: $table.metric, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get period => $composableBuilder(
+      column: $table.period, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get limit => $composableBuilder(
+      column: $table.limit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get timeBasedXAxis => $composableBuilder(
+      column: $table.timeBasedXAxis,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
+}
+
+class $$GraphPreferencesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GraphPreferencesTable> {
+  $$GraphPreferencesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get metric =>
+      $composableBuilder(column: $table.metric, builder: (column) => column);
+
+  GeneratedColumn<String> get period =>
+      $composableBuilder(column: $table.period, builder: (column) => column);
+
+  GeneratedColumn<int> get limit =>
+      $composableBuilder(column: $table.limit, builder: (column) => column);
+
+  GeneratedColumn<bool> get timeBasedXAxis => $composableBuilder(
+      column: $table.timeBasedXAxis, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+}
+
+class $$GraphPreferencesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $GraphPreferencesTable,
+    GraphPreference,
+    $$GraphPreferencesTableFilterComposer,
+    $$GraphPreferencesTableOrderingComposer,
+    $$GraphPreferencesTableAnnotationComposer,
+    $$GraphPreferencesTableCreateCompanionBuilder,
+    $$GraphPreferencesTableUpdateCompanionBuilder,
+    (
+      GraphPreference,
+      BaseReferences<_$AppDatabase, $GraphPreferencesTable, GraphPreference>
+    ),
+    GraphPreference,
+    PrefetchHooks Function()> {
+  $$GraphPreferencesTableTableManager(
+      _$AppDatabase db, $GraphPreferencesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GraphPreferencesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GraphPreferencesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GraphPreferencesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> name = const Value.absent(),
+            Value<String> metric = const Value.absent(),
+            Value<String> period = const Value.absent(),
+            Value<int> limit = const Value.absent(),
+            Value<bool> timeBasedXAxis = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GraphPreferencesCompanion(
+            name: name,
+            metric: metric,
+            period: period,
+            limit: limit,
+            timeBasedXAxis: timeBasedXAxis,
+            notes: notes,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String name,
+            Value<String> metric = const Value.absent(),
+            Value<String> period = const Value.absent(),
+            Value<int> limit = const Value.absent(),
+            Value<bool> timeBasedXAxis = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GraphPreferencesCompanion.insert(
+            name: name,
+            metric: metric,
+            period: period,
+            limit: limit,
+            timeBasedXAxis: timeBasedXAxis,
+            notes: notes,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$GraphPreferencesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $GraphPreferencesTable,
+    GraphPreference,
+    $$GraphPreferencesTableFilterComposer,
+    $$GraphPreferencesTableOrderingComposer,
+    $$GraphPreferencesTableAnnotationComposer,
+    $$GraphPreferencesTableCreateCompanionBuilder,
+    $$GraphPreferencesTableUpdateCompanionBuilder,
+    (
+      GraphPreference,
+      BaseReferences<_$AppDatabase, $GraphPreferencesTable, GraphPreference>
+    ),
+    GraphPreference,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5365,4 +5904,6 @@ class $AppDatabaseManager {
       $$PlanExercisesTableTableManager(_db, _db.planExercises);
   $$MetadataTableTableManager get metadata =>
       $$MetadataTableTableManager(_db, _db.metadata);
+  $$GraphPreferencesTableTableManager get graphPreferences =>
+      $$GraphPreferencesTableTableManager(_db, _db.graphPreferences);
 }
