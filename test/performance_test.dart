@@ -10,6 +10,8 @@
 ///   - A regression here means a change introduced unnecessary rebuilds
 ///   - Virtualization can be verified: a 100-item list should need the same
 ///     frames as a 10-item list because ListView.builder only builds visible items
+library;
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
@@ -122,10 +124,13 @@ void main() {
       final frames = await countFramesToSettle(tester);
 
       print('[perf] 100-item list initial render: $frames frames');
-      expect(frames, lessThan(20),
-          reason: '100-item list took $frames frames -- '
-              'if much higher than the 10-item test, '
-              'ListView.builder is building off-screen items');
+      expect(
+        frames,
+        lessThan(20),
+        reason: '100-item list took $frames frames -- '
+            'if much higher than the 10-item test, '
+            'ListView.builder is building off-screen items',
+      );
       await closeDb(tester);
     },
   );
@@ -186,7 +191,8 @@ void main() {
       final frames = await countFramesToSettle(tester);
 
       print(
-          '[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)');
+        '[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)',
+      );
       expect(
         frames,
         lessThan(50),
@@ -211,9 +217,13 @@ void main() {
       final frames = await countFramesToSettle(tester);
 
       print(
-          '[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)');
-      expect(frames, lessThan(50),
-          reason: 'Exiting selection mode took $frames frames');
+        '[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)',
+      );
+      expect(
+        frames,
+        lessThan(50),
+        reason: 'Exiting selection mode took $frames frames',
+      );
       await closeDb(tester);
     },
   );

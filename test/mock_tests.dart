@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-mockTests() async {
+Future<void> mockTests() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   androidChannel = const MethodChannel("com.presley.flexify/timer");
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;

@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flexify/database/database.dart';
-import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +133,7 @@ class _HistoryListState extends State<HistoryList> {
         if (showDivider)
           Container(
             color: (widget.selected.contains(gymSet.id) &&
-                    widget.selected.contains(previousGymSet!.id))
+                    widget.selected.contains(previousGymSet.id))
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: Padding(
