@@ -88,6 +88,7 @@ class GraphsPageState extends State<GraphsPage>
     String format,
   ) {
     return LineTouchTooltipData(
+      fitInsideVertically: true,
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
         final row = data.elementAt(touchedSpots.last.spotIndex);

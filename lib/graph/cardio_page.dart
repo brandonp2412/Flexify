@@ -197,7 +197,6 @@ class _CardioPageState extends State<CardioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.name),
         leading: IconButton(
