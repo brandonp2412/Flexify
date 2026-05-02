@@ -1,28 +1,133 @@
-name: Build and Deploy
+name: Build and Release
 
 on:
   push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+    branches: [main]
+    paths-ignore:
+      - "pubspec.yaml"
   workflow_dispatch:
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
 
 env:
   PUB_SUMMARY_ONLY: true
   KOTLIN_VERSION: "2.1.0"
 
 jobs:
-  build-android:
+  quality-checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }} # Checkout the tag
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter --version
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed lib test
+
+      - name: Analyze code
+        run: dart analyze --no-fatal-warnings lib
+
+      - name: Run tests
+        run: flutter test
+
+  version-bump:
+    needs: quality-checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      build_number: ${{ steps.bump.outputs.build_number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Bump versions and generate changelog
+        id: bump
+        run: |
+          CURRENT_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
+          CURRENT_BUILD=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+          CURRENT_MSIX=$(grep 'msix_version:' pubspec.yaml | sed 's/.*msix_version: *//')
+
+          IFS='.' read -ra V <<< "$CURRENT_VERSION"
+          NEW_PATCH=$((${V[2]} + 1))
+          NEW_VERSION="${V[0]}.${V[1]}.$NEW_PATCH"
+          NEW_BUILD=$((CURRENT_BUILD + 1))
+          CHANGELOG_NUMBER=$((NEW_BUILD * 10 + 3))
+
+          IFS='.' read -ra M <<< "$CURRENT_MSIX"
+          NEW_MSIX="${M[0]}.${M[1]}.$((${M[2]} + 1)).${M[3]}"
+
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "build_number=$NEW_BUILD" >> $GITHUB_OUTPUT
+
+          sed -i "s/^version: .*/version: $NEW_VERSION+$NEW_BUILD/" pubspec.yaml
+          sed -i "s/msix_version: .*/msix_version: $NEW_MSIX/" pubspec.yaml
+
+          CHANGELOG_FILE="fastlane/metadata/android/en-US/changelogs/$CHANGELOG_NUMBER.txt"
+          mkdir -p "$(dirname "$CHANGELOG_FILE")"
+
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            git --no-pager log --pretty=format:'%s' "$LAST_TAG"..HEAD
+          else
+            git --no-pager log --pretty=format:'%s'
+          fi | sort -u \
+            | grep -v "^Merge " \
+            | grep -v "^Release " \
+            | grep -v "^Bump " \
+            | grep -v "\[skip ci\]" \
+            | head -10 \
+            | sed 's/^/• /' > "$CHANGELOG_FILE"
+
+          [ -s "$CHANGELOG_FILE" ] || echo "• Bug fixes and improvements" > "$CHANGELOG_FILE"
+
+          mkdir -p fastlane/metadata/en-AU
+          cp "$CHANGELOG_FILE" fastlane/metadata/en-AU/release_notes.txt
+
+          mkdir -p assets/changelogs
+          cp "$CHANGELOG_FILE" "assets/changelogs/$(date +%s).txt"
+
+      - name: Commit and push version bump
+        run: |
+          git add pubspec.yaml fastlane/metadata assets/changelogs
+          git commit -m "Release ${{ steps.bump.outputs.version }} [skip ci]"
+          git push origin main
+
+      - name: Create and push tag
+        run: |
+          git tag "${{ steps.bump.outputs.version }}"
+          git push origin "${{ steps.bump.outputs.version }}"
+
+  build-android:
+    needs: version-bump
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Java
@@ -51,10 +156,13 @@ jobs:
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get
 
+      - name: Run build_runner
+        working-directory: /home/brandon/flexify
+        run: dart run build_runner build -d
+
       - name: Decode Android keystore
         working-directory: /home/brandon/flexify
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
 
       - name: Build android
         working-directory: /home/brandon/flexify
@@ -80,12 +188,12 @@ jobs:
             build/app/outputs/bundle/release/app-release.aab
 
   build-linux:
+    needs: version-bump
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }} # Checkout the tag
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
@@ -103,6 +211,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
       - name: Build Linux
         run: flutter build linux
 
@@ -118,12 +229,12 @@ jobs:
           path: build/linux/x64/release/bundle/flexify-linux.zip
 
   build-windows:
+    needs: version-bump
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }} # Checkout the tag
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
@@ -136,30 +247,35 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
 
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
       - name: Build Windows
         run: flutter build windows
 
       - name: Create Windows zip
-        run: |
-          Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
+        run: Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-builds
-          path: |
-            flexify-windows.zip
+          path: flexify-windows.zip
 
   build-and-deploy-web:
+    needs: version-bump
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }} # Checkout the tag
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
@@ -175,9 +291,11 @@ jobs:
       - name: Enable web support
         run: flutter config --enable-web
 
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
       - name: Build Flutter web
-        run: |
-          flutter build web --release --base-href /${{ github.event.repository.name }}/
+        run: flutter build web --release --base-href /${{ github.event.repository.name }}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -192,13 +310,16 @@ jobs:
         uses: actions/deploy-pages@v4
 
   create-github-release:
-    needs: [build-android, build-linux, build-windows]
+    needs: [version-bump, build-android, build-linux, build-windows]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }} # Checkout the tag
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -206,8 +327,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: ${{ needs.version-bump.outputs.version }}
+          name: ${{ needs.version-bump.outputs.version }}
           body_path: fastlane/metadata/en-AU/release_notes.txt
           files: |
             android-builds/flutter-apk/app-*-release.apk
@@ -219,13 +340,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-windows-store:
-    needs: [build-windows]
+    needs: [version-bump, build-windows]
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }} # Checkout the tag
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
         run: |
@@ -236,6 +357,9 @@ jobs:
 
       - name: Get Flutter dependencies
         run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
 
       - name: Build MSIX
         run: flutter pub run msix:create
@@ -249,9 +373,7 @@ jobs:
         uses: microsoft/setup-msstore-cli@v1
 
       - name: Configure Microsoft Store CLI
-        run: |
-          msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.AZURE_CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
+        run: msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.AZURE_CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
 
       - name: Publish to Microsoft Store
-        run: |
-          msstore publish --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }} --packageRolloutPercentage 100 || true
+        run: msstore publish --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }} --packageRolloutPercentage 100 || true
