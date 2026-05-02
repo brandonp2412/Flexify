@@ -124,6 +124,7 @@ class TimerService : Service() {
     }
 
     private fun onTimerExpired() {
+        if (flexifyTimer.isExpired()) return
         Log.d("TimerService", "onTimerExpired duration=${flexifyTimer.getDurationSeconds()}")
         flexifyTimer.expire()
         vibrate()
@@ -198,8 +199,9 @@ class TimerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) return START_NOT_STICKY
-        if (intent.action == TIMER_EXPIRED) onTimerExpired()
-        else onTimerStart(intent)
+        if (intent.action == TIMER_EXPIRED) {
+            if (flexifyTimer.isRunning()) onTimerExpired()
+        } else onTimerStart(intent)
         return START_NOT_STICKY
     }
 
