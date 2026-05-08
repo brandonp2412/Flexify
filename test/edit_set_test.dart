@@ -226,4 +226,87 @@ void main() async {
 
     await db.close();
   });
+
+  testWidgets('switching exercises clears note when new exercise has no note',
+      (WidgetTester tester) async {
+    await mockTests();
+    db = AppDatabase(NativeDatabase.memory());
+
+    // Bench press entry with a note
+    await db.into(db.gymSets).insert(
+          GymSetsCompanion.insert(
+            name: 'Bench press',
+            reps: 10,
+            weight: 100,
+            unit: 'kg',
+            created: DateTime.now(),
+            hidden: const Value(false),
+            notes: const Value('bad shoulder'),
+          ),
+        );
+
+    // Squat entry with no note
+    await db.into(db.gymSets).insert(
+          GymSetsCompanion.insert(
+            name: 'Squat',
+            reps: 5,
+            weight: 80,
+            unit: 'kg',
+            created: DateTime.now(),
+            hidden: const Value(false),
+          ),
+        );
+
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: MaterialApp(
+          home: EditSetPage(
+            gymSet: GymSet(
+              id: 0,
+              name: '',
+              reps: 0,
+              weight: 0,
+              unit: 'kg',
+              created: DateTime.now(),
+              hidden: false,
+              bodyWeight: 0,
+              duration: 0,
+              distance: 0,
+              cardio: false,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Select Bench press — its note should appear
+    await tester.enterText(find.bySemanticsLabel('Name'), 'Bench press');
+    await tester.pump();
+    await tester.tap(find.text('Bench press').last);
+    await tester.pumpAndSettle();
+
+    expect(find.bySemanticsLabel('Notes'), findsOne);
+    expect(find.widgetWithText(TextField, 'bad shoulder'), findsOne);
+
+    // Switch to Squat — note must be cleared since Squat has no note
+    await tester.enterText(find.bySemanticsLabel('Name'), 'Squat');
+    await tester.pump();
+    await tester.tap(find.text('Squat').last);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.widgetWithText(TextField, 'bad shoulder'),
+      findsNothing,
+      reason: 'Note from Bench press must not persist when Squat has no note',
+    );
+
+    await db.close();
+  });
 }

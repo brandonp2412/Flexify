@@ -770,8 +770,7 @@ class _EditSetPageState extends State<EditSetPage> {
       incline.text = gymSet.incline.toString();
     if (gymSet.category != null && gymSet.category!.isNotEmpty)
       categoryCtrl.text = gymSet.category!;
-    if (gymSet.notes != null && gymSet.notes!.isNotEmpty)
-      notes.text = gymSet.notes!;
+    notes.text = gymSet.notes ?? '';
   }
 
   Future<void> selectDate() async {
