@@ -26,7 +26,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> days;
   late var exercises = context.read<PlanState>().exercises;
 
-  bool showOff = true;
   String search = '';
 
   final node = FocusNode();
@@ -35,13 +34,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Iterable<Widget> get tiles {
     final match = exercises.where(
-      (pe) {
-        if (showOff)
-          return pe.exercise.value.toLowerCase().contains(search.toLowerCase());
-        if (pe.enabled.value)
-          return pe.exercise.value.toLowerCase().contains(search.toLowerCase());
-        return false;
-      },
+      (pe) => pe.exercise.value.toLowerCase().contains(search.toLowerCase()),
     );
 
     if (match.isEmpty)
@@ -127,19 +120,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
                 textCapitalization: TextCapitalization.sentences,
                 hintText: 'Search exercises...',
-                trailing: [
-                  IconButton(
-                    icon: showOff
-                        ? const Icon(Icons.visibility)
-                        : const Icon(Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        showOff = !showOff;
-                      });
-                    },
-                    tooltip: 'Toggle visibility',
-                  ),
-                ],
                 onChanged: (value) => setState(() {
                   search = value;
                 }),

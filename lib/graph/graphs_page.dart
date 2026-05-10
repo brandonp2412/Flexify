@@ -256,7 +256,6 @@ class GraphsPageState extends State<GraphsPage>
           ),
         ),
         label: Text('Add'),
-        scroll: scroll,
         icon: Icon(Icons.add),
       ),
     );

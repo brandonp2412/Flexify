@@ -390,12 +390,14 @@ Future<List<StrengthData>> getGlobalData({
 Future<bool> isBest(GymSet gymSet) async {
   if (gymSet.cardio) {
     if (gymSet.duration == 0) return false;
-    final paceExpr = db.gymSets.distance.sum() / db.gymSets.duration.sum();
+    // Compare per-set pace (distance/duration) to find the actual best, not an average.
+    final paceExpr = db.gymSets.distance / db.gymSets.duration;
     final best = await (db.selectOnly(db.gymSets)
           ..addColumns([paceExpr])
           ..where(db.gymSets.name.equals(gymSet.name))
           ..where(db.gymSets.id.isNotValue(gymSet.id))
           ..where(db.gymSets.hidden.equals(false))
+          ..where(db.gymSets.duration.isBiggerThanValue(0))
           ..orderBy([
             OrderingTerm(expression: paceExpr, mode: OrderingMode.desc),
           ])
