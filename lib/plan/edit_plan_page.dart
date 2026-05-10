@@ -32,6 +32,23 @@ class _EditPlanPageState extends State<EditPlanPage> {
   final searchCtrl = TextEditingController();
   final titleCtrl = TextEditingController();
 
+  Future<void> addExercise() async {
+    GymSetsCompanion? gymSet = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddExercisePage(name: search),
+      ),
+    );
+    if (gymSet == null || !mounted) return;
+
+    final state = context.read<PlanState>();
+    state.addExercise(gymSet);
+    setState(() {
+      exercises = state.exercises;
+      search = '';
+    });
+    searchCtrl.text = '';
+  }
+
   Iterable<Widget> get tiles {
     final match = exercises.where(
       (pe) => pe.exercise.value.toLowerCase().contains(search.toLowerCase()),
@@ -39,28 +56,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     if (match.isEmpty)
       return [
-        ListTile(
-          title: const Text("Nothing found"),
-          subtitle: Text("Tap to create $search"),
-          onTap: () async {
-            GymSetsCompanion? gymSet = await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AddExercisePage(
-                  name: search,
-                ),
-              ),
-            );
-            if (gymSet == null || !mounted) return;
-
-            final state = context.read<PlanState>();
-            state.addExercise(gymSet);
-            setState(() {
-              exercises = state.exercises;
-              search = '';
-            });
-            searchCtrl.text = '';
-          },
-        ),
+        const ListTile(title: Text("No exercises found")),
       ];
 
     return match.toList().map(
@@ -126,6 +122,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
               ),
             ),
             const SizedBox(height: 8),
+            ListTile(
+              leading: const Icon(Icons.add_circle_outline),
+              title: Text(
+                search.isEmpty ? 'Add exercise' : 'Add "$search"',
+              ),
+              onTap: addExercise,
+            ),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
             const SizedBox(height: 176),
           ],
