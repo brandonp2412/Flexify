@@ -123,7 +123,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
             ),
             const SizedBox(height: 8),
             ListTile(
-              leading: const Icon(Icons.add_circle_outline),
+              leading: IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: addExercise,
+              ),
               title: Text(
                 search.isEmpty ? 'Add exercise' : 'Add "$search"',
               ),
