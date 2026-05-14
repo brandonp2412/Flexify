@@ -518,6 +518,7 @@ class _TimerSettingsState extends State<TimerSettings> {
         title: const Text("Timers"),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 116),
         children: player != null
             ? [
                 ...getTimerSettings(

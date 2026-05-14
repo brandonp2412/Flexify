@@ -80,6 +80,7 @@ class DataSettings extends StatelessWidget {
         title: const Text("Data management"),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 116),
         children: getDataSettings('', settings, context),
       ),
     );

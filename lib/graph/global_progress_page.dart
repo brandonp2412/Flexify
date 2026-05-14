@@ -395,7 +395,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   )
                   .toList(),
             ),
-            SizedBox(height: 100),
+            const SizedBox(height: 116),
           ],
         ),
       ),

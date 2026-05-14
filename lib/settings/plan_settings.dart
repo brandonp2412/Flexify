@@ -156,6 +156,7 @@ class _PlanSettingsState extends State<PlanSettings> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
+          padding: const EdgeInsets.only(bottom: 116),
           children: getPlanSettings('', settings, max, warmup),
         ),
       ),

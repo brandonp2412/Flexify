@@ -49,6 +49,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         child: Form(
           key: key,
           child: ListView(
+            padding: const EdgeInsets.only(bottom: 116),
             children: [
               TextFormField(
                 controller: nameCtrl,

@@ -84,6 +84,7 @@ class _WhatsNewState extends State<WhatsNew> {
         title: const Text("What's new?"),
       ),
       body: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 116),
         itemBuilder: (context, index) => ListTile(
           title: Text(changelogs[index].created),
           subtitle: Text(changelogs[index].content),

@@ -43,6 +43,7 @@ class _WeightPageState extends State<WeightPage> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: ListView(
+            padding: const EdgeInsets.only(bottom: 116),
             children: [
               TextFormField(
                 controller: ctrl,

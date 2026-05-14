@@ -46,6 +46,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         child: Form(
           key: key,
           child: ListView(
+            padding: const EdgeInsets.only(bottom: 116),
             children: [
               TextField(
                 controller: name,
