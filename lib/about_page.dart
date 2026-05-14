@@ -101,6 +101,16 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
+            title: const Text("Leave a review"),
+            leading: const Icon(Icons.reviews_outlined),
+            subtitle: const Text("Rate Flexify on the Play Store"),
+            onTap: () async {
+              const url =
+                  'https://play.google.com/store/apps/details?id=com.presley.flexify';
+              if (await canLaunchUrlString(url)) await launchUrlString(url);
+            },
+          ),
+          ListTile(
             title: const Text("Report a bug"),
             leading: const Icon(Icons.bug_report),
             subtitle: const Text("Open a ticket on GitHub"),
