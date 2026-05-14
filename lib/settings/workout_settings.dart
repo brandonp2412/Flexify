@@ -312,6 +312,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
         title: const Text("Workouts"),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 116),
         children: getWorkoutSettings(context, '', settings),
       ),
     );

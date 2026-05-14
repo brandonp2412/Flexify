@@ -225,7 +225,7 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
       case 'TimerPage':
         return 'Timer';
       case 'StopwatchPage':
-        return 'Stopwatch';
+        return 'Watch';
       case 'SettingsPage':
         return 'Settings';
       default:
