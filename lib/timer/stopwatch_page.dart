@@ -10,7 +10,7 @@ class StopwatchPage extends StatefulWidget {
 }
 
 class _StopwatchPageState extends State<StopwatchPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final _stopwatch = Stopwatch();
   Timer? _ticker;
 
@@ -18,7 +18,26 @@ class _StopwatchPageState extends State<StopwatchPage>
   bool get wantKeepAlive => true;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _stopwatch.isRunning) {
+      _ticker?.cancel();
+      _ticker = Timer.periodic(const Duration(milliseconds: 30), (_) {
+        setState(() {});
+      });
+    } else if (state == AppLifecycleState.paused) {
+      _ticker?.cancel();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _ticker?.cancel();
     super.dispose();
   }
