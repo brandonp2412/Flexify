@@ -25,6 +25,7 @@ dependencies:
   package_info_plus: ^8.0.0
   url_launcher: ^6.2.6
   badges: ^3.1.2
+  wakelock_plus: ^1.2.14
   flutter_local_notifications: ^19.3.0
   msvcredist:
     git:

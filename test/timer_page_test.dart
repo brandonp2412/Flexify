@@ -120,6 +120,7 @@ void main() {
         defaultGraphPeriod: 'day',
         defaultGraphLimit: 20,
         defaultGraphTimeBasedXAxis: false,
+        keepScreenOn: true,
       ),
     );
 
@@ -228,6 +229,7 @@ void main() {
         defaultGraphPeriod: 'day',
         defaultGraphLimit: 20,
         defaultGraphTimeBasedXAxis: false,
+        keepScreenOn: true,
       ),
     );
 

@@ -498,10 +498,18 @@ class AppDatabase extends _$AppDatabase {
         from50To51: (Migrator m, Schema51 schema) async {
           await m.createTable(schema.graphPreferences);
         },
+        from51To52: (Migrator m, Schema52 schema) async {
+          await m.addColumn(schema.settings, schema.settings.keepScreenOn);
+          await schema.settings.update().write(
+                const RawValuesInsertable({
+                  'keep_screen_on': Variable(true),
+                }),
+              );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 51;
+  int get schemaVersion => 52;
 }

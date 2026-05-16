@@ -1368,6 +1368,16 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
           defaultConstraints: GeneratedColumn.constraintIsAlways(
               'CHECK ("default_graph_time_based_x_axis" IN (0, 1))'),
           defaultValue: const Constant(false));
+  static const VerificationMeta _keepScreenOnMeta =
+      const VerificationMeta('keepScreenOn');
+  @override
+  late final GeneratedColumn<bool> keepScreenOn = GeneratedColumn<bool>(
+      'keep_screen_on', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("keep_screen_on" IN (0, 1))'),
+      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
@@ -1409,7 +1419,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         defaultGraphMetric,
         defaultGraphPeriod,
         defaultGraphLimit,
-        defaultGraphTimeBasedXAxis
+        defaultGraphTimeBasedXAxis,
+        keepScreenOn
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1677,6 +1688,12 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
               data['default_graph_time_based_x_axis']!,
               _defaultGraphTimeBasedXAxisMeta));
     }
+    if (data.containsKey('keep_screen_on')) {
+      context.handle(
+          _keepScreenOnMeta,
+          keepScreenOn.isAcceptableOrUnknown(
+              data['keep_screen_on']!, _keepScreenOnMeta));
+    }
     return context;
   }
 
@@ -1767,6 +1784,8 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       defaultGraphTimeBasedXAxis: attachedDatabase.typeMapping.read(
           DriftSqlType.bool,
           data['${effectivePrefix}default_graph_time_based_x_axis'])!,
+      keepScreenOn: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}keep_screen_on'])!,
     );
   }
 
@@ -1817,6 +1836,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final String defaultGraphPeriod;
   final int defaultGraphLimit;
   final bool defaultGraphTimeBasedXAxis;
+  final bool keepScreenOn;
   const Setting(
       {required this.alarmSound,
       required this.automaticBackups,
@@ -1857,7 +1877,8 @@ class Setting extends DataClass implements Insertable<Setting> {
       required this.defaultGraphMetric,
       required this.defaultGraphPeriod,
       required this.defaultGraphLimit,
-      required this.defaultGraphTimeBasedXAxis});
+      required this.defaultGraphTimeBasedXAxis,
+      required this.keepScreenOn});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1908,6 +1929,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['default_graph_limit'] = Variable<int>(defaultGraphLimit);
     map['default_graph_time_based_x_axis'] =
         Variable<bool>(defaultGraphTimeBasedXAxis);
+    map['keep_screen_on'] = Variable<bool>(keepScreenOn);
     return map;
   }
 
@@ -1959,6 +1981,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       defaultGraphPeriod: Value(defaultGraphPeriod),
       defaultGraphLimit: Value(defaultGraphLimit),
       defaultGraphTimeBasedXAxis: Value(defaultGraphTimeBasedXAxis),
+      keepScreenOn: Value(keepScreenOn),
     );
   }
 
@@ -2010,6 +2033,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       defaultGraphLimit: serializer.fromJson<int>(json['defaultGraphLimit']),
       defaultGraphTimeBasedXAxis:
           serializer.fromJson<bool>(json['defaultGraphTimeBasedXAxis']),
+      keepScreenOn: serializer.fromJson<bool>(json['keepScreenOn']),
     );
   }
   @override
@@ -2057,6 +2081,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'defaultGraphLimit': serializer.toJson<int>(defaultGraphLimit),
       'defaultGraphTimeBasedXAxis':
           serializer.toJson<bool>(defaultGraphTimeBasedXAxis),
+      'keepScreenOn': serializer.toJson<bool>(keepScreenOn),
     };
   }
 
@@ -2100,7 +2125,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           String? defaultGraphMetric,
           String? defaultGraphPeriod,
           int? defaultGraphLimit,
-          bool? defaultGraphTimeBasedXAxis}) =>
+          bool? defaultGraphTimeBasedXAxis,
+          bool? keepScreenOn}) =>
       Setting(
         alarmSound: alarmSound ?? this.alarmSound,
         automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2145,6 +2171,7 @@ class Setting extends DataClass implements Insertable<Setting> {
         defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
         defaultGraphTimeBasedXAxis:
             defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
+        keepScreenOn: keepScreenOn ?? this.keepScreenOn,
       );
   Setting copyWithCompanion(SettingsCompanion data) {
     return Setting(
@@ -2244,6 +2271,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       defaultGraphTimeBasedXAxis: data.defaultGraphTimeBasedXAxis.present
           ? data.defaultGraphTimeBasedXAxis.value
           : this.defaultGraphTimeBasedXAxis,
+      keepScreenOn: data.keepScreenOn.present
+          ? data.keepScreenOn.value
+          : this.keepScreenOn,
     );
   }
 
@@ -2289,7 +2319,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('defaultGraphMetric: $defaultGraphMetric, ')
           ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
           ..write('defaultGraphLimit: $defaultGraphLimit, ')
-          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis')
+          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis, ')
+          ..write('keepScreenOn: $keepScreenOn')
           ..write(')'))
         .toString();
   }
@@ -2335,7 +2366,8 @@ class Setting extends DataClass implements Insertable<Setting> {
         defaultGraphMetric,
         defaultGraphPeriod,
         defaultGraphLimit,
-        defaultGraphTimeBasedXAxis
+        defaultGraphTimeBasedXAxis,
+        keepScreenOn
       ]);
   @override
   bool operator ==(Object other) =>
@@ -2380,7 +2412,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.defaultGraphMetric == this.defaultGraphMetric &&
           other.defaultGraphPeriod == this.defaultGraphPeriod &&
           other.defaultGraphLimit == this.defaultGraphLimit &&
-          other.defaultGraphTimeBasedXAxis == this.defaultGraphTimeBasedXAxis);
+          other.defaultGraphTimeBasedXAxis == this.defaultGraphTimeBasedXAxis &&
+          other.keepScreenOn == this.keepScreenOn);
 }
 
 class SettingsCompanion extends UpdateCompanion<Setting> {
@@ -2424,6 +2457,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> defaultGraphPeriod;
   final Value<int> defaultGraphLimit;
   final Value<bool> defaultGraphTimeBasedXAxis;
+  final Value<bool> keepScreenOn;
   const SettingsCompanion({
     this.alarmSound = const Value.absent(),
     this.automaticBackups = const Value.absent(),
@@ -2465,6 +2499,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.defaultGraphPeriod = const Value.absent(),
     this.defaultGraphLimit = const Value.absent(),
     this.defaultGraphTimeBasedXAxis = const Value.absent(),
+    this.keepScreenOn = const Value.absent(),
   });
   SettingsCompanion.insert({
     required String alarmSound,
@@ -2507,6 +2542,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.defaultGraphPeriod = const Value.absent(),
     this.defaultGraphLimit = const Value.absent(),
     this.defaultGraphTimeBasedXAxis = const Value.absent(),
+    this.keepScreenOn = const Value.absent(),
   })  : alarmSound = Value(alarmSound),
         cardioUnit = Value(cardioUnit),
         curveLines = Value(curveLines),
@@ -2564,6 +2600,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<String>? defaultGraphPeriod,
     Expression<int>? defaultGraphLimit,
     Expression<bool>? defaultGraphTimeBasedXAxis,
+    Expression<bool>? keepScreenOn,
   }) {
     return RawValuesInsertable({
       if (alarmSound != null) 'alarm_sound': alarmSound,
@@ -2611,6 +2648,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (defaultGraphLimit != null) 'default_graph_limit': defaultGraphLimit,
       if (defaultGraphTimeBasedXAxis != null)
         'default_graph_time_based_x_axis': defaultGraphTimeBasedXAxis,
+      if (keepScreenOn != null) 'keep_screen_on': keepScreenOn,
     });
   }
 
@@ -2654,7 +2692,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       Value<String>? defaultGraphMetric,
       Value<String>? defaultGraphPeriod,
       Value<int>? defaultGraphLimit,
-      Value<bool>? defaultGraphTimeBasedXAxis}) {
+      Value<bool>? defaultGraphTimeBasedXAxis,
+      Value<bool>? keepScreenOn}) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2697,6 +2736,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
       defaultGraphTimeBasedXAxis:
           defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
+      keepScreenOn: keepScreenOn ?? this.keepScreenOn,
     );
   }
 
@@ -2824,6 +2864,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       map['default_graph_time_based_x_axis'] =
           Variable<bool>(defaultGraphTimeBasedXAxis.value);
     }
+    if (keepScreenOn.present) {
+      map['keep_screen_on'] = Variable<bool>(keepScreenOn.value);
+    }
     return map;
   }
 
@@ -2869,7 +2912,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('defaultGraphMetric: $defaultGraphMetric, ')
           ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
           ..write('defaultGraphLimit: $defaultGraphLimit, ')
-          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis')
+          ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis, ')
+          ..write('keepScreenOn: $keepScreenOn')
           ..write(')'))
         .toString();
   }
@@ -4520,6 +4564,7 @@ typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   Value<String> defaultGraphPeriod,
   Value<int> defaultGraphLimit,
   Value<bool> defaultGraphTimeBasedXAxis,
+  Value<bool> keepScreenOn,
 });
 typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> alarmSound,
@@ -4562,6 +4607,7 @@ typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
   Value<String> defaultGraphPeriod,
   Value<int> defaultGraphLimit,
   Value<bool> defaultGraphTimeBasedXAxis,
+  Value<bool> keepScreenOn,
 });
 
 class $$SettingsTableFilterComposer
@@ -4709,6 +4755,9 @@ class $$SettingsTableFilterComposer
   ColumnFilters<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
       column: $table.defaultGraphTimeBasedXAxis,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get keepScreenOn => $composableBuilder(
+      column: $table.keepScreenOn, builder: (column) => ColumnFilters(column));
 }
 
 class $$SettingsTableOrderingComposer
@@ -4863,6 +4912,10 @@ class $$SettingsTableOrderingComposer
   ColumnOrderings<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
       column: $table.defaultGraphTimeBasedXAxis,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get keepScreenOn => $composableBuilder(
+      column: $table.keepScreenOn,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$SettingsTableAnnotationComposer
@@ -4993,6 +5046,9 @@ class $$SettingsTableAnnotationComposer
 
   GeneratedColumn<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
       column: $table.defaultGraphTimeBasedXAxis, builder: (column) => column);
+
+  GeneratedColumn<bool> get keepScreenOn => $composableBuilder(
+      column: $table.keepScreenOn, builder: (column) => column);
 }
 
 class $$SettingsTableTableManager extends RootTableManager<
@@ -5058,6 +5114,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<String> defaultGraphPeriod = const Value.absent(),
             Value<int> defaultGraphLimit = const Value.absent(),
             Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
+            Value<bool> keepScreenOn = const Value.absent(),
           }) =>
               SettingsCompanion(
             alarmSound: alarmSound,
@@ -5100,6 +5157,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             defaultGraphPeriod: defaultGraphPeriod,
             defaultGraphLimit: defaultGraphLimit,
             defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
+            keepScreenOn: keepScreenOn,
           ),
           createCompanionCallback: ({
             required String alarmSound,
@@ -5142,6 +5200,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             Value<String> defaultGraphPeriod = const Value.absent(),
             Value<int> defaultGraphLimit = const Value.absent(),
             Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
+            Value<bool> keepScreenOn = const Value.absent(),
           }) =>
               SettingsCompanion.insert(
             alarmSound: alarmSound,
@@ -5184,6 +5243,7 @@ class $$SettingsTableTableManager extends RootTableManager<
             defaultGraphPeriod: defaultGraphPeriod,
             defaultGraphLimit: defaultGraphLimit,
             defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
+            keepScreenOn: keepScreenOn,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

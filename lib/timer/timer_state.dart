@@ -6,14 +6,31 @@ import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class TimerState extends ChangeNotifier {
   NativeTimerWrapper timer = NativeTimerWrapper.emptyTimer();
   Timer? next;
   AudioPlayer? player;
   bool starting = false;
+  bool _keepScreenOn = true;
 
-  TimerState() {
+  bool get keepScreenOn => _keepScreenOn;
+
+  void setKeepScreenOn(bool value) {
+    _keepScreenOn = value;
+    if (value) {
+      WakelockPlus.enable().catchError((_) {});
+    } else {
+      WakelockPlus.disable().catchError((_) {});
+    }
+  }
+
+  TimerState({bool keepScreenOn = true}) {
+    _keepScreenOn = keepScreenOn;
+    if (keepScreenOn) {
+      WakelockPlus.enable().catchError((_) {});
+    }
     if (!kIsWeb) {
       try {
         player = AudioPlayer();
@@ -82,6 +99,9 @@ class TimerState extends ChangeNotifier {
     bool vibrate,
     bool enableSound,
   ) async {
+    if (_keepScreenOn) {
+      WakelockPlus.enable().catchError((_) {});
+    }
     final timer = NativeTimerWrapper(
       rest,
       Duration.zero,
@@ -140,6 +160,7 @@ class TimerState extends ChangeNotifier {
 
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
+    WakelockPlus.disable().catchError((_) {});
     if (kIsWeb || !Platform.isAndroid) {
       player?.stop();
       next?.cancel();

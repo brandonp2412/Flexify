@@ -56,6 +56,7 @@ final defaultSettings = SettingsCompanion.insert(
   strengthUnit: 'last-entry',
   systemColors: false,
   showCategories: const Value(true),
+  keepScreenOn: const Value(true),
 );
 
 const strengthUnitMenuItems = <DropdownMenuItem<String>>[

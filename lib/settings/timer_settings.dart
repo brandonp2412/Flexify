@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -260,6 +261,36 @@ List<Widget> getTimerSettings(
                 icon: const Icon(Icons.delete),
               ),
           ],
+        ),
+      ),
+    if ('keep screen'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Keep the screen on during rest timers',
+        child: ListTile(
+          title: const Text('Keep screen on'),
+          leading: settings.keepScreenOn
+              ? const Icon(Icons.brightness_5)
+              : const Icon(Icons.brightness_4_outlined),
+          onTap: () {
+            final newValue = !settings.keepScreenOn;
+            db.settings.update().write(
+                  SettingsCompanion(
+                    keepScreenOn: Value(newValue),
+                  ),
+                );
+            context.read<TimerState>().setKeepScreenOn(newValue);
+          },
+          trailing: Switch(
+            value: settings.keepScreenOn,
+            onChanged: (value) {
+              db.settings.update().write(
+                    SettingsCompanion(
+                      keepScreenOn: Value(value),
+                    ),
+                  );
+              context.read<TimerState>().setKeepScreenOn(value);
+            },
+          ),
         ),
       ),
   ];
