@@ -178,7 +178,10 @@ class _HistoryListState extends State<HistoryList> {
             ),
             trailing: Text(
               trailing,
-              style: const TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             onLongPress: () => widget.onSelect(gymSet.id),
             onTap: () {
