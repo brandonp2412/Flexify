@@ -95,17 +95,27 @@ class _StartPlanPageState extends State<StartPlanPage>
                   if (cardio) ...cardioFields(snapshot),
                   unitSelector(),
                   notesField(),
-                  Expanded(
-                    child: StartList(
-                      exercises: snapshot.data!,
-                      selected: selected,
-                      onSelect: select,
-                      plan: widget.plan,
-                      onMax: () {
-                        planState.updateGymCounts(widget.plan.id);
-                      },
+                  if (snapshot.data!.isEmpty)
+                    const Expanded(
+                      child: Center(
+                        child: Text(
+                          "No exercises yet. Edit this plan to add some.",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: StartList(
+                        exercises: snapshot.data!,
+                        selected: selected,
+                        onSelect: select,
+                        plan: widget.plan,
+                        onMax: () {
+                          planState.updateGymCounts(widget.plan.id);
+                        },
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
