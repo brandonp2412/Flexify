@@ -19,18 +19,13 @@ class TimerState extends ChangeNotifier {
 
   void setKeepScreenOn(bool value) {
     _keepScreenOn = value;
-    if (value) {
-      WakelockPlus.enable().catchError((_) {});
-    } else {
+    if (!value) {
       WakelockPlus.disable().catchError((_) {});
     }
   }
 
   TimerState({bool keepScreenOn = true}) {
     _keepScreenOn = keepScreenOn;
-    if (keepScreenOn) {
-      WakelockPlus.enable().catchError((_) {});
-    }
     if (!kIsWeb) {
       try {
         player = AudioPlayer();
@@ -181,6 +176,10 @@ class TimerState extends ChangeNotifier {
 
   void updateTimer(NativeTimerWrapper updated) {
     timer = updated;
+    if (updated.state == NativeTimerState.expired ||
+        updated.state == NativeTimerState.paused) {
+      WakelockPlus.disable().catchError((_) {});
+    }
     notifyListeners();
   }
 }
