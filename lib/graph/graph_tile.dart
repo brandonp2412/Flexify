@@ -125,7 +125,7 @@ class GraphTile extends StatelessWidget {
         ),
         trailing: Text(
           trailing,
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 14),
         ),
         onTap: () async {
           if (selected.isNotEmpty) {
