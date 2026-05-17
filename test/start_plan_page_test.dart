@@ -77,6 +77,44 @@ void main() async {
     },
   );
 
+  testWidgets('StartPlanPage with no exercises does not crash on save',
+      (WidgetTester tester) async {
+    await mockTests();
+    db = AppDatabase(NativeDatabase.memory());
+
+    final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
+    final plan =
+        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+
+    await db.settings.update().write(
+          const SettingsCompanion(explainedPermissions: Value(true)),
+        );
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    final planState = PlanState();
+    await planState.updateGymCounts(plan.id);
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider.value(value: planState),
+        ],
+        child: MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessenger,
+          home: StartPlanPage(plan: plan),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // FAB must be hidden when the exercise list is empty
+    expect(find.text('Save'), findsNothing);
+
+    await db.close();
+  });
+
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());

@@ -110,11 +110,13 @@ class _StartPlanPageState extends State<StartPlanPage>
               ),
             ),
           ),
-          floatingActionButton: AnimatedFab(
-            onPressed: () async => await save(snapshot),
-            label: const Text("Save"),
-            icon: const Icon(Icons.save),
-          ),
+          floatingActionButton: snapshot.data!.isEmpty
+              ? null
+              : AnimatedFab(
+                  onPressed: () async => await save(snapshot),
+                  label: const Text("Save"),
+                  icon: const Icon(Icons.save),
+                ),
         );
       },
     );
@@ -469,6 +471,8 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> save(AsyncSnapshot<List<PlanExercise>> snapshot) async {
     if (!key.currentState!.validate()) return;
+    if (snapshot.data == null || snapshot.data!.isEmpty) return;
+    if (selected >= snapshot.data!.length) return;
 
     if (!mounted) return;
 
@@ -576,6 +580,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<void> select(int index) async {
     setState(() => selected = index);
     final first = await stream.first;
+    if (first.isEmpty || index >= first.length) return;
     final last = await getFirstOfLastSession(first[index].exercise);
     if (last == null || !mounted) return;
 
