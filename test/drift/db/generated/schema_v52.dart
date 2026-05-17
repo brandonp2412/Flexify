@@ -1143,8 +1143,8 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
       'keep_screen_on', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (keep_screen_on IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (keep_screen_on IN (0, 1))',
+      defaultValue: const CustomExpression('0'));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,

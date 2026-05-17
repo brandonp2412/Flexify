@@ -35,10 +35,10 @@ MethodChannel androidChannel =
 Widget appProviders(SettingsState state) => MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => state),
-        ProxyProvider<SettingsState, TimerState>(
-          update: (context, settings, previous) => TimerState(
-            keepScreenOn: settings.value.keepScreenOn,
-          ),
+        ChangeNotifierProxyProvider<SettingsState, TimerState>(
+          create: (context) => TimerState(),
+          update: (context, settings, previous) =>
+              previous!..setKeepScreenOn(settings.value.keepScreenOn),
         ),
         ChangeNotifierProvider(create: (context) => PlanState()),
       ],

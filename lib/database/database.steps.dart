@@ -7438,8 +7438,8 @@ i1.GeneratedColumn<int> _column_155(String aliasedName) =>
     i1.GeneratedColumn<int>('keep_screen_on', aliasedName, false,
         type: i1.DriftSqlType.int,
         $customConstraints:
-            'NOT NULL DEFAULT 1 CHECK (keep_screen_on IN (0, 1))',
-        defaultValue: const i1.CustomExpression('1'));
+            'NOT NULL DEFAULT 0 CHECK (keep_screen_on IN (0, 1))',
+        defaultValue: const i1.CustomExpression('0'));
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,

@@ -1377,7 +1377,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("keep_screen_on" IN (0, 1))'),
-      defaultValue: const Constant(true));
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         alarmSound,
