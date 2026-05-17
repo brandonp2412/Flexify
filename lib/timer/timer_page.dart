@@ -51,7 +51,7 @@ class TimerPageState extends State<TimerPage>
   }
 }
 
-class _TimerPageWidget extends StatelessWidget {
+class _TimerPageWidget extends StatefulWidget {
   final TimerState timerState;
   final int? total;
   final int? progress;
@@ -63,9 +63,37 @@ class _TimerPageWidget extends StatelessWidget {
   });
 
   @override
+  State<_TimerPageWidget> createState() => _TimerPageWidgetState();
+}
+
+class _TimerPageWidgetState extends State<_TimerPageWidget> {
+  @override
+  void initState() {
+    super.initState();
+    widget.timerState.addListener(_onTimerStateChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.timerState.removeListener(_onTimerStateChanged);
+    super.dispose();
+  }
+
+  void _onTimerStateChanged() {
+    if (!widget.timerState.justExpired) return;
+    widget.timerState.justExpired = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Timer finished!')),
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (total != null && progress != null) {
-      timerState.setTimer(total!, progress!);
+    if (widget.total != null && widget.progress != null) {
+      widget.timerState.setTimer(widget.total!, widget.progress!);
     }
 
     return Scaffold(
@@ -92,9 +120,9 @@ class _TimerPageWidget extends StatelessWidget {
         transitionBuilder: (child, animation) {
           return ScaleTransition(scale: animation, child: child);
         },
-        child: timerState.timer.isRunning()
+        child: widget.timerState.timer.isRunning()
             ? AnimatedFab(
-                onPressed: () async => await timerState.stopTimer(),
+                onPressed: () async => await widget.timerState.stopTimer(),
                 icon: const Icon(Icons.stop),
                 label: const Text("Stop"),
               )

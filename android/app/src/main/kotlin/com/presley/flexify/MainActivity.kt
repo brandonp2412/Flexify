@@ -145,6 +145,9 @@ class MainActivity : FlutterActivity() {
                     "tick",
                     timerService?.flexifyTimer?.generateMethodChannelPayload()
                 )
+                if (intent.getBooleanExtra("justExpired", false)) {
+                    channel?.invokeMethod("timerExpired", null)
+                }
             }
         }
 

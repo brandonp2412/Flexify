@@ -13,6 +13,7 @@ class TimerState extends ChangeNotifier {
   Timer? next;
   AudioPlayer? player;
   bool starting = false;
+  bool justExpired = false;
   bool _keepScreenOn = true;
 
   bool get keepScreenOn => _keepScreenOn;
@@ -43,8 +44,10 @@ class TimerState extends ChangeNotifier {
           DateTime.fromMillisecondsSinceEpoch(call.arguments[2], isUtc: true),
           NativeTimerState.values[call.arguments[3] as int],
         );
-
         updateTimer(timer);
+      } else if (call.method == 'timerExpired') {
+        justExpired = true;
+        notifyListeners();
       }
     });
   }

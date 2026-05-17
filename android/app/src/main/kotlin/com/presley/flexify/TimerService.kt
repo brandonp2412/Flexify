@@ -117,9 +117,10 @@ class TimerService : Service() {
         )
     }
 
-    private fun updateAppUI() {
+    private fun updateAppUI(justExpired: Boolean = false) {
         val intent = Intent(MainActivity.TICK_BROADCAST)
         intent.setPackage(applicationContext.packageName)
+        intent.putExtra("justExpired", justExpired)
         sendBroadcast(intent)
     }
 
@@ -130,7 +131,7 @@ class TimerService : Service() {
         vibrate()
         playSound()
         notifyFinished()
-        updateAppUI()
+        updateAppUI(justExpired = true)
     }
 
     fun updateTimerNotificationRefreshRate() {
@@ -444,6 +445,6 @@ class TimerService : Service() {
         const val ADD_BROADCAST_INTERNAL = "add-timer-event-internal"
         const val TIMER_EXPIRED = "timer-expired-event"
         const val ONGOING_ID = 1
-        const val FINISHED_ID = 1
+        const val FINISHED_ID = 2
     }
 }
