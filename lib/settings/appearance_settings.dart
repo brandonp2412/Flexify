@@ -16,36 +16,60 @@ List<Widget> getAppearanceSettings(
   return [
     if ('theme'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: DropdownButtonFormField<String>(
-          initialValue: settings.value.themeMode,
-          decoration: const InputDecoration(
-            labelStyle: TextStyle(),
-            labelText: 'Theme',
-          ),
-          items: const [
-            DropdownMenuItem(
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+        child: SegmentedButton<String>(
+          segments: const [
+            ButtonSegment(
               value: 'ThemeMode.system',
-              child: Text("System"),
+              label: Text('System'),
+              icon: Icon(Icons.brightness_auto),
             ),
-            DropdownMenuItem(
+            ButtonSegment(
               value: 'ThemeMode.dark',
-              child: Text("Dark"),
+              label: Text('Dark'),
+              icon: Icon(Icons.dark_mode),
             ),
-            DropdownMenuItem(
+            ButtonSegment(
               value: 'ThemeMode.light',
-              child: Text("Light"),
-            ),
-            DropdownMenuItem(
-              value: 'ThemeMode.amoled',
-              child: Text("Pure black"),
+              label: Text('Light'),
+              icon: Icon(Icons.light_mode),
             ),
           ],
-          onChanged: (value) => db.settings.update().write(
+          selected: {
+            settings.value.themeMode == 'ThemeMode.amoled'
+                ? 'ThemeMode.dark'
+                : settings.value.themeMode,
+          },
+          onSelectionChanged: (selection) => db.settings.update().write(
+                SettingsCompanion(themeMode: Value(selection.first)),
+              ),
+        ),
+      ),
+    if ('pure black amoled'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Use pure black colors for AMOLED displays',
+        child: ListTile(
+          leading: const Icon(Icons.contrast),
+          title: const Text('Pure black (AMOLED)'),
+          onTap: () => db.settings.update().write(
                 SettingsCompanion(
-                  themeMode: Value(value!),
+                  themeMode: Value(
+                    settings.value.themeMode == 'ThemeMode.amoled'
+                        ? 'ThemeMode.dark'
+                        : 'ThemeMode.amoled',
+                  ),
                 ),
               ),
+          trailing: Switch(
+            value: settings.value.themeMode == 'ThemeMode.amoled',
+            onChanged: (value) => db.settings.update().write(
+                  SettingsCompanion(
+                    themeMode: Value(
+                      value ? 'ThemeMode.amoled' : 'ThemeMode.dark',
+                    ),
+                  ),
+                ),
+          ),
         ),
       ),
     if ('system color scheme'.contains(term.toLowerCase()))
