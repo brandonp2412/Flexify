@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'migrations_web.dart' if (dart.library.io) 'migrations_native.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/foundation.dart';
 
 import 'database_connection_web.dart'
     if (dart.library.io) 'database_connection_native.dart';
+import 'migrations_web.dart' if (dart.library.io) 'migrations_native.dart';
 
 part 'database.g.dart';
 
