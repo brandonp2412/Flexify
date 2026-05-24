@@ -178,8 +178,11 @@ List<PlansCompanion> plans = [
 
 const screenshotExercise = "Dumbbell shoulder press";
 
-Future<void> appWrapper() async {
-  WidgetsFlutterBinding.ensureInitialized();
+/// Pumps the app widget tree via [tester] so the test binding owns the
+/// lifecycle. Using [runApp] directly leaves orphaned render objects with
+/// dirty semantics parent data, triggering the
+/// `!semantics.parentDataDirty` assertion in [PipelineOwner.flushSemantics].
+Future<void> appWrapper(WidgetTester tester) async {
   await app.db.settings.update().write(
         SettingsCompanion(
           themeMode: Value(ThemeMode.dark.toString()),
@@ -192,7 +195,7 @@ Future<void> appWrapper() async {
   final settings = await (db.settings.select()..limit(1)).getSingle();
   final settingsState = SettingsState(settings);
 
-  runApp(app.appProviders(settingsState));
+  await tester.pumpWidget(app.appProviders(settingsState));
 }
 
 BuildContext getBuildContext(WidgetTester tester, String tabBarState) {
@@ -231,7 +234,7 @@ Future<void> generateScreenshot({
   Future<void> Function(BuildContext context)? navigateToPage,
   bool skipSettle = false,
 }) async {
-  await appWrapper();
+  await appWrapper(tester);
   await tester.pumpAndSettle();
 
   await tester.tap(find.byKey(Key(tabBarState)));
