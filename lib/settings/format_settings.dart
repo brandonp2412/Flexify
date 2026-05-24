@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -38,7 +39,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
   return [
     if ('strength unit'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Strength unit'),
           initialValue: settings.strengthUnit,
@@ -71,7 +72,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
       ),
     if ('cardio unit'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Cardio unit'),
           initialValue: settings.cardioUnit,
@@ -108,7 +109,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
       ),
     if ('long date format'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: Tooltip(
           message: 'Used where space is abundant',
           child: Builder(
@@ -143,7 +144,7 @@ List<Widget> getFormatSettings(String term, Setting settings) {
       ),
     if ('short date format'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: Tooltip(
           message: 'For where space is cramped (Graph lines)',
           child: DropdownButtonFormField<String>(

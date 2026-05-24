@@ -17,7 +17,7 @@ List<Widget> getPlanSettings(
   return [
     if ('warmup sets'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: kSettingsInputPadding,
         child: Tooltip(
           message: 'Warmup sets have no rest timers',
           child: TextField(
@@ -38,7 +38,7 @@ List<Widget> getPlanSettings(
       ),
     if ('sets per exercise'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: kSettingsInputPadding,
         child: Tooltip(
           message: 'Default # of exercises in a plan',
           child: TextField(

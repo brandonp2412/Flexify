@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -208,7 +209,7 @@ List<Widget> getWorkoutSettings(
       ),
     if ('default graph metric'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Default graph metric'),
           initialValue: settings.defaultGraphMetric,
@@ -230,7 +231,7 @@ List<Widget> getWorkoutSettings(
       ),
     if ('default graph period'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Default graph period'),
           initialValue: settings.defaultGraphPeriod,
@@ -247,7 +248,7 @@ List<Widget> getWorkoutSettings(
       ),
     if ('default graph limit'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: kSettingsInputPadding,
         child: DropdownButtonFormField<int>(
           decoration: const InputDecoration(labelText: 'Default graph limit'),
           initialValue: settings.defaultGraphLimit,

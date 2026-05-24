@@ -2,6 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flutter/material.dart';
 
+/// Consistent padding for input fields (dropdowns, text fields) in settings screens.
+const kSettingsInputPadding =
+    EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
+
 const weekdays = [
   'Monday',
   'Tuesday',
