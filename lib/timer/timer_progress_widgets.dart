@@ -197,10 +197,12 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     const double circleSize = 300;
     const double strokeWidth = 14;
-    const double buttonSize = 22;
+    const double buttonSize = 14;
 
     final angle = (-math.pi / 2) - (2 * math.pi * (1 - value));
-    const radius = (circleSize / 2);
+    // strokeAlignInside means the stroke is drawn inward from the circle edge;
+    // the dot should sit at the centre of the stroke track.
+    const radius = (circleSize / 2) - (strokeWidth / 2);
     final buttonX = radius * math.cos(angle);
     final buttonY = radius * math.sin(angle);
 

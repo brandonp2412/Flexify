@@ -3,6 +3,7 @@ import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -84,8 +85,12 @@ class _TimerPageWidgetState extends State<_TimerPageWidget> {
     widget.timerState.justExpired = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Timer finished!')),
+      toast(
+        'Timer finished!',
+        action: SnackBarAction(
+          label: 'Stop',
+          onPressed: widget.timerState.stopTimer,
+        ),
       );
     });
   }

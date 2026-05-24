@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 List<Widget> getPlanSettings(
+  BuildContext context,
   String term,
   Setting settings,
   TextEditingController max,
@@ -16,7 +17,7 @@ List<Widget> getPlanSettings(
   return [
     if ('warmup sets'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: Tooltip(
           message: 'Warmup sets have no rest timers',
           child: TextField(
@@ -37,7 +38,7 @@ List<Widget> getPlanSettings(
       ),
     if ('sets per exercise'.contains(term.toLowerCase()))
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: Tooltip(
           message: 'Default # of exercises in a plan',
           child: TextField(
@@ -64,44 +65,88 @@ List<Widget> getPlanSettings(
         message: 'Right side of list displays in Plans + Plan view',
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-          child: SegmentedButton<PlanTrailing>(
-            segments: const [
-              ButtonSegment(
-                value: PlanTrailing.reorder,
-                label: Text('Order'),
-                icon: Icon(Icons.menu),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 4),
+                child: Text(
+                  'Plan trailing display',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
-              ButtonSegment(
-                value: PlanTrailing.count,
-                label: Text('Count'),
-                icon: Icon(Icons.tag),
-              ),
-              ButtonSegment(
-                value: PlanTrailing.percent,
-                label: Text('%'),
-                icon: Icon(Icons.percent),
-              ),
-              ButtonSegment(
-                value: PlanTrailing.ratio,
-                label: Text('Ratio'),
-                icon: Icon(Icons.format_list_numbered),
-              ),
-              ButtonSegment(
-                value: PlanTrailing.none,
-                label: Text('None'),
-                icon: Icon(Icons.block),
+              Builder(
+                builder: (context) {
+                  final current = PlanTrailing.values.byName(
+                    settings.planTrailing.replaceFirst('PlanTrailing.', ''),
+                  );
+                  void save(PlanTrailing v) => db.settings.update().write(
+                        SettingsCompanion(
+                          planTrailing: Value(v.toString()),
+                        ),
+                      );
+                  const progressOptions = {
+                    PlanTrailing.count,
+                    PlanTrailing.percent,
+                    PlanTrailing.ratio,
+                  };
+                  const otherOptions = {
+                    PlanTrailing.reorder,
+                    PlanTrailing.none,
+                  };
+                  return Column(
+                    children: [
+                      SegmentedButton<PlanTrailing>(
+                        emptySelectionAllowed: true,
+                        selected:
+                            progressOptions.contains(current) ? {current} : {},
+                        segments: const [
+                          ButtonSegment(
+                            value: PlanTrailing.count,
+                            label: Text('Count'),
+                            icon: Icon(Icons.tag),
+                          ),
+                          ButtonSegment(
+                            value: PlanTrailing.percent,
+                            label: Text('%'),
+                            icon: Icon(Icons.percent),
+                          ),
+                          ButtonSegment(
+                            value: PlanTrailing.ratio,
+                            label: Text('Ratio'),
+                            icon: Icon(Icons.format_list_numbered),
+                          ),
+                        ],
+                        onSelectionChanged: (s) {
+                          if (s.isNotEmpty) save(s.first);
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      SegmentedButton<PlanTrailing>(
+                        emptySelectionAllowed: true,
+                        selected:
+                            otherOptions.contains(current) ? {current} : {},
+                        segments: const [
+                          ButtonSegment(
+                            value: PlanTrailing.reorder,
+                            label: Text('Reorder'),
+                            icon: Icon(Icons.menu),
+                          ),
+                          ButtonSegment(
+                            value: PlanTrailing.none,
+                            label: Text('None'),
+                            icon: Icon(Icons.block),
+                          ),
+                        ],
+                        onSelectionChanged: (s) {
+                          if (s.isNotEmpty) save(s.first);
+                        },
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
-            selected: {
-              PlanTrailing.values.byName(
-                settings.planTrailing.replaceFirst('PlanTrailing.', ''),
-              ),
-            },
-            onSelectionChanged: (selection) => db.settings.update().write(
-                  SettingsCompanion(
-                    planTrailing: Value(selection.first.toString()),
-                  ),
-                ),
           ),
         ),
       ),
@@ -136,7 +181,7 @@ class _PlanSettingsState extends State<PlanSettings> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           padding: const EdgeInsets.only(bottom: 116),
-          children: getPlanSettings('', settings, max, warmup),
+          children: getPlanSettings(context, '', settings, max, warmup),
         ),
       ),
     );

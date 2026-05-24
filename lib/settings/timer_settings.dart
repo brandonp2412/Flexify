@@ -226,30 +226,42 @@ List<Widget> getTimerSettings(
         message: 'Where should the rest timers progress bar be placed?',
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-          child: SegmentedButton<String>(
-            segments: const [
-              ButtonSegment(
-                value: 'top',
-                label: Text('Top'),
-                icon: Icon(Icons.vertical_align_top),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 4),
+                child: Text(
+                  'Progress bar position',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
-              ButtonSegment(
-                value: 'bottom',
-                label: Text('Bottom'),
-                icon: Icon(Icons.vertical_align_bottom),
-              ),
-              ButtonSegment(
-                value: 'none',
-                label: Text('None'),
-                icon: Icon(Icons.block),
+              SegmentedButton<String>(
+                segments: const [
+                  ButtonSegment(
+                    value: 'top',
+                    label: Text('Top'),
+                    icon: Icon(Icons.vertical_align_top),
+                  ),
+                  ButtonSegment(
+                    value: 'bottom',
+                    label: Text('Bottom'),
+                    icon: Icon(Icons.vertical_align_bottom),
+                  ),
+                  ButtonSegment(
+                    value: 'none',
+                    label: Text('None'),
+                    icon: Icon(Icons.block),
+                  ),
+                ],
+                selected: {settings.progressPosition},
+                onSelectionChanged: (selection) => db.settings.update().write(
+                      SettingsCompanion(
+                        progressPosition: Value(selection.first),
+                      ),
+                    ),
               ),
             ],
-            selected: {settings.progressPosition},
-            onSelectionChanged: (selection) => db.settings.update().write(
-                  SettingsCompanion(
-                    progressPosition: Value(selection.first),
-                  ),
-                ),
           ),
         ),
       ),

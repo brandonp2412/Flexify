@@ -68,6 +68,7 @@ class _SettingsPageState extends State<SettingsPage>
       filtered.addAll(getDataSettings(searchCtrl.text, settings, context));
       filtered.addAll(
         getPlanSettings(
+          context,
           searchCtrl.text,
           settings.value,
           maxSets,

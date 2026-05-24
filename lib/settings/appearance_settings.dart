@@ -212,30 +212,42 @@ List<Widget> getAppearanceSettings(
         message: 'Visual style of text input fields',
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-          child: SegmentedButton<String>(
-            segments: const [
-              ButtonSegment(
-                value: 'underline',
-                label: Text('Underline'),
-                icon: Icon(Icons.format_underlined),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 4),
+                child: Text(
+                  'Input style',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
-              ButtonSegment(
-                value: 'outlined',
-                label: Text('Outlined'),
-                icon: Icon(Icons.border_all),
-              ),
-              ButtonSegment(
-                value: 'filled',
-                label: Text('Filled'),
-                icon: Icon(Icons.format_color_fill),
+              SegmentedButton<String>(
+                segments: const [
+                  ButtonSegment(
+                    value: 'underline',
+                    label: Text('Line'),
+                    icon: Icon(Icons.format_underlined),
+                  ),
+                  ButtonSegment(
+                    value: 'outlined',
+                    label: Text('Outlined'),
+                    icon: Icon(Icons.border_all),
+                  ),
+                  ButtonSegment(
+                    value: 'filled',
+                    label: Text('Filled'),
+                    icon: Icon(Icons.format_color_fill),
+                  ),
+                ],
+                selected: {settings.value.inputStyle},
+                onSelectionChanged: (selection) => db.settings.update().write(
+                      SettingsCompanion(
+                        inputStyle: Value(selection.first),
+                      ),
+                    ),
               ),
             ],
-            selected: {settings.value.inputStyle},
-            onSelectionChanged: (selection) => db.settings.update().write(
-                  SettingsCompanion(
-                    inputStyle: Value(selection.first),
-                  ),
-                ),
           ),
         ),
       ),
