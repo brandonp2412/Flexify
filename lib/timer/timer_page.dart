@@ -112,8 +112,11 @@ class _TimerPageWidgetState extends State<_TimerPageWidget> {
           ),
         ],
       ),
-      body: const Center(
-        child: TimerCircularProgressIndicator(),
+      body: const Padding(
+        padding: EdgeInsets.only(bottom: 80),
+        child: Center(
+          child: TimerCircularProgressIndicator(),
+        ),
       ),
       floatingActionButton: AnimatedSwitcher(
         duration: const Duration(milliseconds: 150),

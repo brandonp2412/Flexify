@@ -212,103 +212,99 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
       return hslLight.toColor();
     }
 
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: circleSize + 20,
-              height: circleSize + 20,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: lighten(Theme.of(context).colorScheme.surface, .3),
-                  width: 2,
-                ),
-              ),
-            ),
-            Container(
-              width: circleSize - 20,
-              height: circleSize - 20,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: lighten(Theme.of(context).colorScheme.surface, .3),
-                  width: 2,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: circleSize,
-              width: circleSize,
-              child: CircularProgressIndicator(
-                strokeCap: StrokeCap.round,
-                value: value,
-                strokeWidth: strokeWidth,
-                backgroundColor: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.25),
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-          ],
-        ),
-        // Circle button at the end of the progress
-        if (value > 0)
-          Transform.translate(
-            offset: Offset(buttonX, buttonY),
-            child: Container(
-              width: buttonSize,
-              height: buttonSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: lighten(Theme.of(context).colorScheme.primary),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 4,
-                    offset: const Offset(0, 3),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: circleSize,
+          height: circleSize,
+          child: Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              Container(
+                width: circleSize + 20,
+                height: circleSize + 20,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: lighten(Theme.of(context).colorScheme.surface, .3),
+                    width: 2,
                   ),
-                ],
+                ),
               ),
-              child: Icon(
-                Icons.circle,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: 12,
+              Container(
+                width: circleSize - 20,
+                height: circleSize - 20,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: lighten(Theme.of(context).colorScheme.surface, .3),
+                    width: 2,
+                  ),
+                ),
               ),
-            ),
+              SizedBox.expand(
+                child: CircularProgressIndicator(
+                  strokeCap: StrokeCap.round,
+                  value: value,
+                  strokeWidth: strokeWidth,
+                  backgroundColor: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.25),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              if (value > 0)
+                Transform.translate(
+                  offset: Offset(buttonX, buttonY),
+                  child: Container(
+                    width: buttonSize,
+                    height: buttonSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: lighten(Theme.of(context).colorScheme.primary),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 4,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.circle,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 12,
+                    ),
+                  ),
+                ),
+              Text(
+                generateTitleText(timerState.timer.getRemaining()),
+                style: TextStyle(
+                  fontSize: 50.0,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 20.0),
-            Text(
-              generateTitleText(timerState.timer.getRemaining()),
-              style: TextStyle(
-                fontSize: 50.0,
-                color: Theme.of(context).textTheme.bodyLarge!.color,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                final settings = context.read<SettingsState>().value;
-                if (defaultTargetPlatform != TargetPlatform.linux)
-                  await requestNotificationPermission();
-                await timerState.addOneMinute(
-                  settings.alarmSound,
-                  settings.vibrate,
-                  settings.enableSound,
-                );
-              },
-              child: const Text('+1 minute'),
-            ),
-          ],
+        ),
+        TextButton(
+          onPressed: () async {
+            final settings = context.read<SettingsState>().value;
+            if (defaultTargetPlatform != TargetPlatform.linux)
+              await requestNotificationPermission();
+            await timerState.addOneMinute(
+              settings.alarmSound,
+              settings.vibrate,
+              settings.enableSound,
+            );
+          },
+          child: const Text('+1 minute'),
         ),
       ],
     );
