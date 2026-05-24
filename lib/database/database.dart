@@ -506,10 +506,13 @@ class AppDatabase extends _$AppDatabase {
                 }),
               );
         },
+        from52To53: (Migrator m, Schema53 schema) async {
+          await m.addColumn(schema.settings, schema.settings.inputStyle);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 52;
+  int get schemaVersion => 53;
 }

@@ -189,12 +189,9 @@ List<Widget> getAppearanceSettings(
     if ('curve smoothness'.contains(term.toLowerCase()))
       Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              "Curve smoothness",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+          Text(
+            "Curve smoothness",
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           Slider(
             value: settings.value.curveSmoothness ?? 0.35,
@@ -210,11 +207,43 @@ List<Widget> getAppearanceSettings(
           ),
         ],
       ),
+    if ('input style'.contains(term.toLowerCase()))
+      Tooltip(
+        message: 'Visual style of text input fields',
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+          child: SegmentedButton<String>(
+            segments: const [
+              ButtonSegment(
+                value: 'underline',
+                label: Text('Underline'),
+                icon: Icon(Icons.format_underlined),
+              ),
+              ButtonSegment(
+                value: 'outlined',
+                label: Text('Outlined'),
+                icon: Icon(Icons.border_all),
+              ),
+              ButtonSegment(
+                value: 'filled',
+                label: Text('Filled'),
+                icon: Icon(Icons.format_color_fill),
+              ),
+            ],
+            selected: {settings.value.inputStyle},
+            onSelectionChanged: (selection) => db.settings.update().write(
+                  SettingsCompanion(
+                    inputStyle: Value(selection.first),
+                  ),
+                ),
+          ),
+        ),
+      ),
     if ('graph'.contains(term.toLowerCase()))
       SizedBox(
         height: MediaQuery.of(context).size.height * 0.3,
         child: Padding(
-          padding: const EdgeInsets.all(64),
+          padding: const EdgeInsets.only(right: 32, top: 16),
           child: FlexLine(
             hideBottom: true,
             hideLeft: true,

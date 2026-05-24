@@ -121,6 +121,7 @@ void main() {
         defaultGraphLimit: 20,
         defaultGraphTimeBasedXAxis: false,
         keepScreenOn: true,
+        inputStyle: 'underline',
       ),
     );
 
@@ -230,6 +231,7 @@ void main() {
         defaultGraphLimit: 20,
         defaultGraphTimeBasedXAxis: false,
         keepScreenOn: true,
+        inputStyle: 'underline',
       ),
     );
 

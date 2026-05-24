@@ -196,8 +196,8 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double circleSize = 300;
-    const double strokeWidth = 20;
-    const double buttonSize = 24;
+    const double strokeWidth = 14;
+    const double buttonSize = 22;
 
     final angle = (-math.pi / 2) - (2 * math.pi * (1 - value));
     const radius = (circleSize / 2);

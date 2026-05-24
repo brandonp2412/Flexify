@@ -225,30 +225,29 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: 'Where should the rest timers progress bar be placed?',
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: DropdownButtonFormField<String>(
-            initialValue: settings.progressPosition,
-            decoration: const InputDecoration(
-              labelStyle: TextStyle(),
-              labelText: 'Progress bar position',
-            ),
-            items: const [
-              DropdownMenuItem(
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+          child: SegmentedButton<String>(
+            segments: const [
+              ButtonSegment(
                 value: 'top',
-                child: Text("Top"),
+                label: Text('Top'),
+                icon: Icon(Icons.vertical_align_top),
               ),
-              DropdownMenuItem(
+              ButtonSegment(
                 value: 'bottom',
-                child: Text("Bottom"),
+                label: Text('Bottom'),
+                icon: Icon(Icons.vertical_align_bottom),
               ),
-              DropdownMenuItem(
+              ButtonSegment(
                 value: 'none',
-                child: Text("None"),
+                label: Text('None'),
+                icon: Icon(Icons.block),
               ),
             ],
-            onChanged: (value) => db.settings.update().write(
+            selected: {settings.progressPosition},
+            onSelectionChanged: (selection) => db.settings.update().write(
                   SettingsCompanion(
-                    progressPosition: Value(value!),
+                    progressPosition: Value(selection.first),
                   ),
                 ),
           ),

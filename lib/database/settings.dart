@@ -58,4 +58,6 @@ class Settings extends Table {
   BoolColumn get defaultGraphTimeBasedXAxis =>
       boolean().withDefault(const Constant(false))();
   BoolColumn get keepScreenOn => boolean().withDefault(const Constant(false))();
+  TextColumn get inputStyle =>
+      text().withDefault(const Constant("underline"))();
 }

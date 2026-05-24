@@ -60,67 +60,46 @@ List<Widget> getPlanSettings(
         ),
       ),
     if ('plan trailing display'.contains(term.toLowerCase()))
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Tooltip(
-          message: 'Right side of list displays in Plans + Plan view',
-          child: DropdownButtonFormField<PlanTrailing>(
-            initialValue: PlanTrailing.values.byName(
-              settings.planTrailing.replaceFirst('PlanTrailing.', ''),
-            ),
-            decoration: const InputDecoration(
-              labelStyle: TextStyle(),
-              labelText: 'Plan trailing display',
-            ),
-            items: const [
-              DropdownMenuItem(
+      Tooltip(
+        message: 'Right side of list displays in Plans + Plan view',
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+          child: SegmentedButton<PlanTrailing>(
+            segments: const [
+              ButtonSegment(
                 value: PlanTrailing.reorder,
-                child: Row(
-                  children: [
-                    Text("Re-order"),
-                    SizedBox(width: 8),
-                    Icon(Icons.menu, size: 18),
-                  ],
-                ),
+                label: Text('Order'),
+                icon: Icon(Icons.menu),
               ),
-              DropdownMenuItem(
+              ButtonSegment(
                 value: PlanTrailing.count,
-                child: Row(
-                  children: [
-                    Text("Count"),
-                    SizedBox(width: 8),
-                    Text("(5)"),
-                  ],
-                ),
+                label: Text('Count'),
+                icon: Icon(Icons.tag),
               ),
-              DropdownMenuItem(
+              ButtonSegment(
                 value: PlanTrailing.percent,
-                child: Row(
-                  children: [
-                    Text("Percent"),
-                    SizedBox(width: 8),
-                    Text("(50%)"),
-                  ],
-                ),
+                label: Text('%'),
+                icon: Icon(Icons.percent),
               ),
-              DropdownMenuItem(
+              ButtonSegment(
                 value: PlanTrailing.ratio,
-                child: Row(
-                  children: [
-                    Text("Ratio"),
-                    SizedBox(width: 8),
-                    Text("(5 / 10)"),
-                  ],
-                ),
+                label: Text('Ratio'),
+                icon: Icon(Icons.format_list_numbered),
               ),
-              DropdownMenuItem(
+              ButtonSegment(
                 value: PlanTrailing.none,
-                child: Text("None"),
+                label: Text('None'),
+                icon: Icon(Icons.block),
               ),
             ],
-            onChanged: (value) => db.settings.update().write(
+            selected: {
+              PlanTrailing.values.byName(
+                settings.planTrailing.replaceFirst('PlanTrailing.', ''),
+              ),
+            },
+            onSelectionChanged: (selection) => db.settings.update().write(
                   SettingsCompanion(
-                    planTrailing: Value(value.toString()),
+                    planTrailing: Value(selection.first.toString()),
                   ),
                 ),
           ),

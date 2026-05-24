@@ -53,6 +53,19 @@ class App extends StatelessWidget {
     brightness: Brightness.dark,
   );
 
+  static InputDecorationTheme _inputDecorationTheme(String inputStyle) {
+    final border = switch (inputStyle) {
+      'outlined' => const OutlineInputBorder(),
+      'filled' => const OutlineInputBorder(),
+      _ => const UnderlineInputBorder(),
+    };
+    return InputDecorationTheme(
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      border: border,
+      filled: inputStyle == 'filled',
+    );
+  }
+
   const App({super.key});
 
   @override
@@ -69,6 +82,9 @@ class App extends StatelessWidget {
           : ThemeMode.values.byName(
               settings.value.themeMode.replaceFirst('ThemeMode.', ''),
             ),
+    );
+    final inputStyle = context.select<SettingsState, String>(
+      (settings) => settings.value.inputStyle,
     );
 
     return DynamicColorBuilder(
@@ -104,18 +120,14 @@ class App extends StatelessWidget {
             colorScheme: colors ? lightDynamic : _lightScheme,
             fontFamily: 'Manrope',
             useMaterial3: true,
-            inputDecorationTheme: const InputDecorationTheme(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
+            inputDecorationTheme: _inputDecorationTheme(inputStyle),
           ),
           darkTheme: ThemeData(
             colorScheme: (colors ? darkDynamic : _darkScheme)
                 ?.copyWith(surface: amoledDark ? Colors.black : null),
             fontFamily: 'Manrope',
             useMaterial3: true,
-            inputDecorationTheme: const InputDecorationTheme(
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
+            inputDecorationTheme: _inputDecorationTheme(inputStyle),
           ),
           themeMode: mode,
           home: HomePage(),
