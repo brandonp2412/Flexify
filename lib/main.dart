@@ -115,6 +115,7 @@ class App extends StatelessWidget {
         );
 
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           scaffoldMessengerKey: rootScaffoldMessenger,
           title: 'Flexify',
           theme: ThemeData(
