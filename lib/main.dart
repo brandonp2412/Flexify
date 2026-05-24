@@ -54,16 +54,17 @@ class App extends StatelessWidget {
   );
 
   static InputDecorationTheme _inputDecorationTheme(String inputStyle) {
-    final border = switch (inputStyle) {
-      'outlined' => const OutlineInputBorder(),
-      'filled' => const OutlineInputBorder(),
-      _ => const UnderlineInputBorder(),
+    return switch (inputStyle) {
+      'outlined' => const InputDecorationTheme(
+          border: OutlineInputBorder(),
+        ),
+      'filled' => const InputDecorationTheme(
+          filled: true,
+        ),
+      _ => const InputDecorationTheme(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+        ),
     };
-    return InputDecorationTheme(
-      floatingLabelBehavior: FloatingLabelBehavior.always,
-      border: border,
-      filled: inputStyle == 'filled',
-    );
   }
 
   const App({super.key});
