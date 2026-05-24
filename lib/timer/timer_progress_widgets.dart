@@ -195,24 +195,18 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double circleSize = 300;
-    const double strokeWidth = 14;
-    const double buttonSize = 14;
+    const double circleSize = 280;
+    const double strokeWidth = 10;
+    const double dotSize = 16;
+    // Dot sits at the centreline of the stroke track.
+    const double dotRadius = circleSize / 2;
 
     final angle = (-math.pi / 2) - (2 * math.pi * (1 - value));
-    // strokeAlignInside means the stroke is drawn inward from the circle edge;
-    // the dot should sit at the centre of the stroke track.
-    const radius = (circleSize / 2) - (strokeWidth / 2);
-    final buttonX = radius * math.cos(angle);
-    final buttonY = radius * math.sin(angle);
+    final dotX = dotRadius * math.cos(angle);
+    final dotY = dotRadius * math.sin(angle);
 
-    Color lighten(Color color, [double amount = .1]) {
-      assert(amount >= 0 && amount <= 1);
-      final hsl = HSLColor.fromColor(color);
-      final hslLight =
-          hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
-      return hslLight.toColor();
-    }
+    final primary = Theme.of(context).colorScheme.primary;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -224,78 +218,48 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             alignment: Alignment.center,
             clipBehavior: Clip.none,
             children: <Widget>[
-              Container(
-                width: circleSize + 20,
-                height: circleSize + 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: lighten(Theme.of(context).colorScheme.surface, .3),
-                    width: 2,
-                  ),
-                ),
-              ),
-              Container(
-                width: circleSize - 20,
-                height: circleSize - 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: lighten(Theme.of(context).colorScheme.surface, .3),
-                    width: 2,
-                  ),
-                ),
-              ),
               SizedBox.expand(
                 child: CircularProgressIndicator(
                   strokeCap: StrokeCap.round,
                   value: value,
                   strokeWidth: strokeWidth,
-                  backgroundColor: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.25),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).colorScheme.primary,
-                  ),
+                  backgroundColor: onSurface.withValues(alpha: 0.08),
+                  valueColor: AlwaysStoppedAnimation<Color>(primary),
                 ),
               ),
               if (value > 0)
                 Transform.translate(
-                  offset: Offset(buttonX, buttonY),
+                  offset: Offset(dotX, dotY),
                   child: Container(
-                    width: buttonSize,
-                    height: buttonSize,
+                    width: dotSize,
+                    height: dotSize,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: lighten(Theme.of(context).colorScheme.primary),
+                      color: primary,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 4,
-                          offset: const Offset(0, 3),
+                          color: primary.withValues(alpha: 0.55),
+                          blurRadius: 10,
+                          spreadRadius: 2,
                         ),
                       ],
-                    ),
-                    child: Icon(
-                      Icons.circle,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      size: 12,
                     ),
                   ),
                 ),
               Text(
                 generateTitleText(timerState.timer.getRemaining()),
                 style: TextStyle(
-                  fontSize: 50.0,
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 60,
+                  color: onSurface,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: 2,
                 ),
               ),
             ],
           ),
         ),
-        TextButton(
+        const SizedBox(height: 24),
+        FilledButton.tonal(
           onPressed: () async {
             final settings = context.read<SettingsState>().value;
             if (defaultTargetPlatform != TargetPlatform.linux)
