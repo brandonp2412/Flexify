@@ -413,7 +413,7 @@ jobs:
           IFS=',' read -ra ENTRIES <<< "$ANALYSIS"
           for entry in "${ENTRIES[@]}"; do
             filename=$(basename "${entry%%=*}")
-            url="${entry##*=}"
+            url="${entry#*=}"
             VT_SECTION+="- [${filename}](${url})"$'\n'
           done
           CURRENT_BODY=$(gh release view "$VERSION" --json body -q .body)
