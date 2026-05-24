@@ -259,7 +259,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        FilledButton.tonal(
+        TextButton(
           onPressed: () async {
             final settings = context.read<SettingsState>().value;
             if (defaultTargetPlatform != TargetPlatform.linux)
