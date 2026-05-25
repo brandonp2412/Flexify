@@ -142,6 +142,8 @@ List<Widget> getPlanSettings(
                           if (s.isNotEmpty) save(s.first);
                         },
                       ),
+                      const SizedBox(height: 8),
+                      _PlanTrailingPreview(trailing: current),
                     ],
                   );
                 },
@@ -183,6 +185,52 @@ class _PlanSettingsState extends State<PlanSettings> {
           padding: const EdgeInsets.only(bottom: 116),
           children: getPlanSettings(context, '', settings, max, warmup),
         ),
+      ),
+    );
+  }
+}
+
+/// A mock plan list tile previewing how [trailing] looks.
+class _PlanTrailingPreview extends StatelessWidget {
+  final PlanTrailing trailing;
+
+  const _PlanTrailingPreview({required this.trailing});
+
+  Widget _buildTrailing(BuildContext context) {
+    return switch (trailing) {
+      PlanTrailing.count => const Text('5', style: TextStyle(fontSize: 16)),
+      PlanTrailing.percent =>
+        const Text('83.33%', style: TextStyle(fontSize: 16)),
+      PlanTrailing.ratio => const Text('5 / 6', style: TextStyle(fontSize: 16)),
+      PlanTrailing.reorder => const Icon(Icons.drag_handle),
+      PlanTrailing.none => const SizedBox(),
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).primaryColor,
+          child: const Text(
+            'M',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'monospace',
+            ),
+          ),
+        ),
+        title: const Text('Monday'),
+        subtitle: const Text('Bench Press, Squat, Deadlift'),
+        trailing: _buildTrailing(context),
       ),
     );
   }

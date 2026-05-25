@@ -222,49 +222,7 @@ List<Widget> getTimerSettings(
         ),
       ),
     if ('progress position'.contains(term.toLowerCase()))
-      Tooltip(
-        message: 'Where should the rest timers progress bar be placed?',
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 4, bottom: 4),
-                child: Text(
-                  'Progress bar position',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-              SegmentedButton<String>(
-                segments: const [
-                  ButtonSegment(
-                    value: 'top',
-                    label: Text('Top'),
-                    icon: Icon(Icons.vertical_align_top),
-                  ),
-                  ButtonSegment(
-                    value: 'bottom',
-                    label: Text('Bottom'),
-                    icon: Icon(Icons.vertical_align_bottom),
-                  ),
-                  ButtonSegment(
-                    value: 'none',
-                    label: Text('None'),
-                    icon: Icon(Icons.block),
-                  ),
-                ],
-                selected: {settings.progressPosition},
-                onSelectionChanged: (selection) => db.settings.update().write(
-                      SettingsCompanion(
-                        progressPosition: Value(selection.first),
-                      ),
-                    ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      _ProgressPositionSetting(settings: settings),
     if ('alarm sound'.contains(term.toLowerCase()))
       Tooltip(
         message: 'Music to play at the end of a rest timer',
@@ -305,6 +263,107 @@ List<Widget> getTimerSettings(
         ),
       ),
   ];
+}
+
+/// Displays the progress-bar-position picker with a temporary live preview
+/// when the user changes the setting.
+class _ProgressPositionSetting extends StatefulWidget {
+  final Setting settings;
+
+  const _ProgressPositionSetting({required this.settings});
+
+  @override
+  State<_ProgressPositionSetting> createState() =>
+      _ProgressPositionSettingState();
+}
+
+class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
+  bool _showPreview = false;
+
+  void _triggerPreview() {
+    setState(() => _showPreview = true);
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _showPreview = false);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final position = widget.settings.progressPosition;
+    final bar = LinearProgressIndicator(value: 0.6);
+
+    return Tooltip(
+      message: 'Where should the rest timers progress bar be placed?',
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 4),
+              child: Text(
+                'Progress bar position',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            SegmentedButton<String>(
+              segments: const [
+                ButtonSegment(
+                  value: 'top',
+                  label: Text('Top'),
+                  icon: Icon(Icons.vertical_align_top),
+                ),
+                ButtonSegment(
+                  value: 'bottom',
+                  label: Text('Bottom'),
+                  icon: Icon(Icons.vertical_align_bottom),
+                ),
+                ButtonSegment(
+                  value: 'none',
+                  label: Text('None'),
+                  icon: Icon(Icons.block),
+                ),
+              ],
+              selected: {position},
+              onSelectionChanged: (selection) {
+                db.settings.update().write(
+                      SettingsCompanion(
+                        progressPosition: Value(selection.first),
+                      ),
+                    );
+                _triggerPreview();
+              },
+            ),
+            if (_showPreview && position != 'none') ...[
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Column(
+                    children: [
+                      if (position == 'top') bar,
+                      const ListTile(
+                        leading: Icon(Icons.fitness_center),
+                        title: Text('Bench Press'),
+                        subtitle: Text('Rest timer running…'),
+                      ),
+                      if (position == 'bottom') bar,
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class TimerSettings extends StatefulWidget {

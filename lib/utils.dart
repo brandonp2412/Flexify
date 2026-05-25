@@ -68,7 +68,7 @@ void selectAll(TextEditingController controller) => controller.selection =
 
 String toString(double value) {
   final str = value.toStringAsFixed(2);
-  if (str.endsWith('.0')) return str.substring(0, str.length - 2);
   if (str.endsWith('.00')) return str.substring(0, str.length - 3);
+  if (str.endsWith('0')) return str.substring(0, str.length - 1);
   return str;
 }

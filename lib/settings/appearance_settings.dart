@@ -247,6 +247,11 @@ List<Widget> getAppearanceSettings(
                       ),
                     ),
               ),
+              const SizedBox(height: 12),
+              const TextField(
+                decoration: InputDecoration(labelText: 'Preview'),
+                readOnly: true,
+              ),
             ],
           ),
         ),
