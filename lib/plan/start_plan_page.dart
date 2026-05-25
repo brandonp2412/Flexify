@@ -147,6 +147,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           return null;
         },
       ),
+      const SizedBox(height: 8.0),
       _weightField(snapshot),
     ];
   }
@@ -190,6 +191,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ],
       ),
+      const SizedBox(height: 8.0),
       Row(
         children: [
           if (unit == 'kg' || unit == 'lb' || unit == 'stone')
@@ -265,15 +267,21 @@ class _StartPlanPageState extends State<StartPlanPage>
       selector: (context, settings) => settings.value.showUnits,
       builder: (context, showUnits, child) => Visibility(
         visible: showUnits,
-        child: DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Unit'),
-          initialValue: unit,
-          items: _unitItems,
-          onChanged: (String? newValue) {
-            setState(() {
-              unit = newValue!;
-            });
-          },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8.0),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(labelText: 'Unit'),
+              initialValue: unit,
+              items: _unitItems,
+              onChanged: (String? newValue) {
+                setState(() {
+                  unit = newValue!;
+                });
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -284,10 +292,16 @@ class _StartPlanPageState extends State<StartPlanPage>
       selector: (context, settings) => settings.value.showNotes,
       builder: (context, showNotes, child) => Visibility(
         visible: showNotes,
-        child: TextFormField(
-          controller: notes,
-          maxLines: 3,
-          decoration: const InputDecoration(labelText: 'Notes'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8.0),
+            TextFormField(
+              controller: notes,
+              maxLines: 3,
+              decoration: const InputDecoration(labelText: 'Notes'),
+            ),
+          ],
         ),
       ),
     );

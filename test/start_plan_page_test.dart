@@ -116,6 +116,8 @@ void main() async {
   });
 
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1200));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
