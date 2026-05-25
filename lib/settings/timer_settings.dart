@@ -3,6 +3,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -265,33 +266,32 @@ List<Widget> getTimerSettings(
   ];
 }
 
-/// Displays the progress-bar-position picker with a temporary live preview
-/// when the user changes the setting.
-class _ProgressPositionSetting extends StatefulWidget {
+/// Displays the progress-bar-position picker and triggers the real
+/// [TimerProgressIndicator] in the home page for 3 seconds as a preview
+/// whenever the user changes the setting.
+class _ProgressPositionSetting extends StatelessWidget {
   final Setting settings;
 
   const _ProgressPositionSetting({required this.settings});
 
-  @override
-  State<_ProgressPositionSetting> createState() =>
-      _ProgressPositionSettingState();
-}
-
-class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
-  bool _showPreview = false;
-
-  void _triggerPreview() {
-    setState(() => _showPreview = true);
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) setState(() => _showPreview = false);
+  void _triggerPreview(BuildContext context) {
+    final timerState = context.read<TimerState>();
+    const previewDuration = Duration(seconds: 3);
+    timerState.updateTimer(
+      NativeTimerWrapper(
+        previewDuration,
+        Duration.zero,
+        DateTime.now(),
+        NativeTimerState.running,
+      ),
+    );
+    Future.delayed(previewDuration, () {
+      timerState.updateTimer(NativeTimerWrapper.emptyTimer());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final position = widget.settings.progressPosition;
-    final bar = LinearProgressIndicator(value: 0.6);
-
     return Tooltip(
       message: 'Where should the rest timers progress bar be placed?',
       child: Padding(
@@ -324,41 +324,16 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
                   icon: Icon(Icons.block),
                 ),
               ],
-              selected: {position},
+              selected: {settings.progressPosition},
               onSelectionChanged: (selection) {
                 db.settings.update().write(
                       SettingsCompanion(
                         progressPosition: Value(selection.first),
                       ),
                     );
-                _triggerPreview();
+                if (selection.first != 'none') _triggerPreview(context);
               },
             ),
-            if (_showPreview && position != 'none') ...[
-              const SizedBox(height: 12),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Column(
-                    children: [
-                      if (position == 'top') bar,
-                      const ListTile(
-                        leading: Icon(Icons.fitness_center),
-                        title: Text('Bench Press'),
-                        subtitle: Text('Rest timer running…'),
-                      ),
-                      if (position == 'bottom') bar,
-                    ],
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       ),
