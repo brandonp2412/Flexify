@@ -409,12 +409,13 @@ jobs:
           VERSION: ${{ needs.version-bump.outputs.version }}
           ANALYSIS: ${{ steps.vt.outputs.analysis }}
         run: |
-          VT_SECTION=$'\n\n---\n**VirusTotal Analysis**\n'
+          VT_SECTION=$'\n\n<details>\n<summary>VirusTotal Analysis</summary>\n\n'
           IFS=',' read -ra ENTRIES <<< "$ANALYSIS"
           for entry in "${ENTRIES[@]}"; do
             filename=$(basename "${entry%%=*}")
             url="${entry#*=}"
             VT_SECTION+="- [${filename}](${url})"$'\n'
           done
+          VT_SECTION+=$'\n</details>'
           CURRENT_BODY=$(gh release view "$VERSION" --json body -q .body)
           gh release edit "$VERSION" --notes "${CURRENT_BODY}${VT_SECTION}"
