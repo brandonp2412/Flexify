@@ -37,10 +37,8 @@ class MockTabController extends ChangeNotifier implements TabController {
     super.notifyListeners();
   }
 
-  @override
   void reset() {}
 
-  @override
   set indexIsChanging(bool value) {}
 
   @override

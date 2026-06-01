@@ -21,7 +21,9 @@ class TimerState extends ChangeNotifier {
   void setKeepScreenOn(bool value) {
     _keepScreenOn = value;
     if (!value) {
-      WakelockPlus.disable().catchError((_) {});
+      WakelockPlus.disable().catchError((e) {
+        debugPrint('Failed to disable wakelock: $e');
+      });
     }
   }
 
@@ -31,7 +33,7 @@ class TimerState extends ChangeNotifier {
       try {
         player = AudioPlayer();
       } catch (e) {
-        print('Failed to create AudioPlayer: $e');
+        debugPrint('Failed to create AudioPlayer: $e');
         player = null;
       }
     }
@@ -98,7 +100,9 @@ class TimerState extends ChangeNotifier {
     bool enableSound,
   ) async {
     if (_keepScreenOn) {
-      WakelockPlus.enable().catchError((_) {});
+      WakelockPlus.enable().catchError((e) {
+        debugPrint('Failed to enable wakelock: $e');
+      });
     }
     final timer = NativeTimerWrapper(
       rest,
@@ -158,7 +162,9 @@ class TimerState extends ChangeNotifier {
 
   Future<void> stopTimer() async {
     updateTimer(NativeTimerWrapper.emptyTimer());
-    WakelockPlus.disable().catchError((_) {});
+    WakelockPlus.disable().catchError((e) {
+      debugPrint('Failed to disable wakelock: $e');
+    });
     if (kIsWeb || !Platform.isAndroid) {
       player?.stop();
       next?.cancel();
@@ -181,7 +187,9 @@ class TimerState extends ChangeNotifier {
     timer = updated;
     if (updated.state == NativeTimerState.expired ||
         updated.state == NativeTimerState.paused) {
-      WakelockPlus.disable().catchError((_) {});
+      WakelockPlus.disable().catchError((e) {
+        debugPrint('Failed to disable wakelock: $e');
+      });
     }
     notifyListeners();
   }

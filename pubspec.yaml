@@ -43,6 +43,7 @@ dev_dependencies:
   mockito: ^5.4.4
   build_runner: ^2.6.0
   flutter_launcher_icons: ^0.14.4
+  flutter_local_notifications_platform_interface: ^9.1.0
   msix:
     git:
       url: https://github.com/insertjokehere/msix.git

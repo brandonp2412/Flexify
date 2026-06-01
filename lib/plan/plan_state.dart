@@ -93,7 +93,8 @@ class PlanState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateDefaults() async {
+  /// Returns the most recent [GymSet] per unique exercise name.
+  Future<List<GymSet>> _getLatestSets() async {
     final latest = db.gymSets.created.max();
     final sub = Subquery(
       db.select(db.gymSets).join([])
@@ -101,18 +102,20 @@ class PlanState extends ChangeNotifier {
         ..addColumns([db.gymSets.name, latest]),
       'ls',
     );
-    final query = db.select(db.gymSets).join(
-      [
-        innerJoin(
-          sub,
-          sub.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
-              sub.ref(latest).equalsExp(db.gymSets.created),
-          useColumns: false,
-        ),
-      ],
-    );
+    final query = db.select(db.gymSets).join([
+      innerJoin(
+        sub,
+        sub.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
+            sub.ref(latest).equalsExp(db.gymSets.created),
+        useColumns: false,
+      ),
+    ]);
     final rows = await query.get();
-    lastSets = rows.map((rows) => rows.readTable(db.gymSets)).toList();
+    return rows.map((r) => r.readTable(db.gymSets)).toList();
+  }
+
+  Future<void> updateDefaults() async {
+    lastSets = await _getLatestSets();
     notifyListeners();
   }
 
@@ -136,25 +139,7 @@ class PlanState extends ChangeNotifier {
     required bool updateCounts,
   }) async {
     gymCounts = await getGymCounts(planId);
-
-    final latest = db.gymSets.created.max();
-    final sub = Subquery(
-      db.select(db.gymSets).join([])
-        ..groupBy([db.gymSets.name])
-        ..addColumns([db.gymSets.name, latest]),
-      'ls',
-    );
-    final query = db.select(db.gymSets).join([
-      innerJoin(
-        sub,
-        sub.ref(db.gymSets.name).equalsExp(db.gymSets.name) &
-            sub.ref(latest).equalsExp(db.gymSets.created),
-        useColumns: false,
-      ),
-    ]);
-    final rows = await query.get();
-    lastSets = rows.map((r) => r.readTable(db.gymSets)).toList();
-
+    lastSets = await _getLatestSets();
     if (updateCounts) planCounts = await getPlanCounts();
 
     notifyListeners();

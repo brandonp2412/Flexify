@@ -74,7 +74,7 @@ List<Widget> getTimerSettings(
               try {
                 await androidChannel.invokeMethod('previewVibration');
               } catch (e) {
-                print('Failed to trigger preview vibration: $e');
+                debugPrint('Failed to trigger preview vibration: $e');
               }
             }
           },
@@ -90,7 +90,7 @@ List<Widget> getTimerSettings(
                 try {
                   await androidChannel.invokeMethod('previewVibration');
                 } catch (e) {
-                  print('Failed to trigger preview vibration: $e');
+                  debugPrint('Failed to trigger preview vibration: $e');
                 }
               }
             },
@@ -180,7 +180,7 @@ List<Widget> getTimerSettings(
                             SettingsCompanion(
                               timerDuration: Value(
                                 Duration(
-                                  minutes: int.parse(value),
+                                  minutes: int.tryParse(value) ?? 0,
                                   seconds: Duration(
                                         milliseconds: settings.timerDuration,
                                       ).inSeconds %
@@ -206,7 +206,7 @@ List<Widget> getTimerSettings(
                             SettingsCompanion(
                               timerDuration: Value(
                                 Duration(
-                                  seconds: int.parse(value),
+                                  seconds: int.tryParse(value) ?? 0,
                                   minutes: Duration(
                                     milliseconds: settings.timerDuration,
                                   ).inMinutes.floor(),
@@ -374,7 +374,7 @@ class _TimerSettingsState extends State<TimerSettings> {
       try {
         player = AudioPlayer();
       } catch (e) {
-        print('Failed to create AudioPlayer: $e');
+        debugPrint('Failed to create AudioPlayer: $e');
         player = null;
       }
     }
@@ -492,7 +492,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                       .textTheme
                       .bodyMedium
                       ?.color
-                      ?.withAlpha((255 * 0.7).round()),
+                      ?.withValues(alpha: 0.7),
                 ),
           ),
           const SizedBox(height: 16),

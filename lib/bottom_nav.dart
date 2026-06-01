@@ -106,57 +106,64 @@ class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
                 String tab = entry.value;
                 bool isSelected = index == widget.currentIndex;
 
+                final label = _getLabelForTab(tab);
                 return Expanded(
-                  child: GestureDetector(
-                    key: Key(tab),
-                    onTap: () => widget.onTap(index),
-                    onLongPress: widget.onLongPress != null
-                        ? () => widget.onLongPress!(context, tab)
-                        : null,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? color.primary
-                            : color.surfaceContainerLow,
-                        borderRadius:
-                            BorderRadius.circular(isSelected ? 25 : 18),
-                      ),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnimatedScale(
-                            scale: isSelected ? 1.1 : 1.0,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                            child: Icon(
-                              _getIconForTab(tab),
-                              color: isSelected
-                                  ? color.onPrimary
-                                  : color.onSurface,
-                              size: 24,
+                  child: Semantics(
+                    label: label,
+                    button: true,
+                    selected: isSelected,
+                    child: GestureDetector(
+                      key: Key(tab),
+                      onTap: () => widget.onTap(index),
+                      onLongPress: widget.onLongPress != null
+                          ? () => widget.onLongPress!(context, tab)
+                          : null,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? color.primary
+                              : color.surfaceContainerLow,
+                          borderRadius:
+                              BorderRadius.circular(isSelected ? 25 : 18),
+                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AnimatedScale(
+                              scale: isSelected ? 1.1 : 1.0,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              child: Icon(
+                                _getIconForTab(tab),
+                                color: isSelected
+                                    ? color.onPrimary
+                                    : color.onSurface,
+                                size: 24,
+                                semanticLabel: label,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Text(
-                              _getLabelForTab(tab),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(
-                                    color: isSelected
-                                        ? color.onPrimary
-                                        : color.onSurface,
-                                  ),
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(
+                                label,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(
+                                      color: isSelected
+                                          ? color.onPrimary
+                                          : color.onSurface,
+                                    ),
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
