@@ -94,11 +94,7 @@ class _TabSettingsState extends State<TabSettings> {
             Expanded(
               child: ReorderableListView.builder(
                 padding: const EdgeInsets.only(bottom: 116),
-                onReorder: (oldIndex, newIndex) {
-                  if (oldIndex < newIndex) {
-                    newIndex--;
-                  }
-
+                onReorderItem: (oldIndex, newIndex) {
                   final temp = tabs[oldIndex];
                   setState(() {
                     tabs.removeAt(oldIndex);

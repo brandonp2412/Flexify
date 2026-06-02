@@ -112,11 +112,7 @@ class _PlansListState extends State<PlansList> {
             onSelect: (id) => widget.onSelect(id),
           );
         },
-        onReorder: (int old, int idx) async {
-          if (old < idx) {
-            idx--;
-          }
-
+        onReorderItem: (int old, int idx) async {
           final temp = filteredPlans[old];
           filteredPlans.removeAt(old);
           filteredPlans.insert(idx, temp);

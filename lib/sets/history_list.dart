@@ -156,15 +156,10 @@ class _HistoryListState extends State<HistoryList> {
               ),
             ),
           ),
-        Container(
-          margin: const EdgeInsets.symmetric(),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
-            color: widget.selected.contains(gymSet.id)
-                ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
-                : Colors.transparent,
-            border: Border.all(color: Colors.transparent, width: 0),
-          ),
+        Material(
+          color: widget.selected.contains(gymSet.id)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+              : Colors.transparent,
           child: ListTile(
             leading: leading,
             title: Text(gymSet.name),

@@ -112,15 +112,10 @@ class _PlanTileState extends State<PlanTile> {
       child: leading,
     );
 
-    return Container(
-      margin: const EdgeInsets.symmetric(),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(0),
-        color: widget.selected.contains(widget.plan.id)
-            ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
-            : Colors.transparent,
-        border: Border.all(color: Colors.transparent, width: 0),
-      ),
+    return Material(
+      color: widget.selected.contains(widget.plan.id)
+          ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+          : Colors.transparent,
       child: ListTile(
         title: title,
         subtitle: StreamBuilder(

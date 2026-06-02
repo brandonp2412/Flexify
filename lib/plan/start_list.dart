@@ -86,11 +86,7 @@ class _StartListState extends State<StartList> {
         padding: const EdgeInsets.only(bottom: 76),
         itemBuilder: (context, index) =>
             itemBuilder(context, index, max, trailing, counts),
-        onReorder: (oldIndex, newIndex) async {
-          if (oldIndex < newIndex) {
-            newIndex--;
-          }
-
+        onReorderItem: (oldIndex, newIndex) async {
           final item = widget.exercises.removeAt(oldIndex);
           widget.exercises.insert(newIndex, item);
 
