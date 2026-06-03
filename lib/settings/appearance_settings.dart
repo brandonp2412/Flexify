@@ -215,13 +215,6 @@ List<Widget> getAppearanceSettings(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 4, bottom: 4),
-                child: Text(
-                  'Input style',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
               SegmentedButton<String>(
                 segments: const [
                   ButtonSegment(
@@ -249,7 +242,7 @@ List<Widget> getAppearanceSettings(
               ),
               const SizedBox(height: 12),
               const TextField(
-                decoration: InputDecoration(labelText: 'Preview'),
+                decoration: InputDecoration(labelText: 'Input style'),
                 readOnly: true,
               ),
             ],
