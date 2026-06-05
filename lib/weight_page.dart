@@ -141,26 +141,28 @@ class _WeightPageState extends State<WeightPage> {
           if (!key.currentState!.validate()) return;
 
           final settings = context.read<SettingsState>().value;
-          Navigator.pop(context);
-
           if (settings.strengthUnit != 'last-entry')
             unit = settings.strengthUnit;
 
-          db.gymSets.insertOne(
+          final value = double.parse(ctrl.text);
+          await db.gymSets.insertOne(
             GymSetsCompanion.insert(
               created: DateTime.now().toLocal(),
               name: "Weight",
               reps: 1,
               unit: unit ?? 'kg',
-              weight: double.parse(ctrl.text),
+              weight: value,
               image: drift.Value(image),
             ),
           );
-          (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
+          await (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
+              .write(
             GymSetsCompanion(
-              bodyWeight: drift.Value(double.parse(ctrl.text)),
+              bodyWeight: drift.Value(value),
             ),
           );
+
+          if (context.mounted) Navigator.pop(context);
         },
         label: const Text("Save"),
         icon: const Icon(Icons.save),
@@ -179,11 +181,12 @@ class _WeightPageState extends State<WeightPage> {
     super.initState();
     final settings = context.read<SettingsState>().value;
 
-    getBodyWeight().then(
-      (value) => setState(() {
+    getBodyWeight().then((value) {
+      if (!mounted) return;
+      setState(() {
         prev = "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
         unit = value?.unit;
-      }),
-    );
+      });
+    });
   }
 }

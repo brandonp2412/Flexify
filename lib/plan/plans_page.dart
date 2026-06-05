@@ -138,11 +138,16 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               final summaries = await Future.wait(
                 plans.map((plan) async {
                   final days = plan.days.split(',').join(', ');
-                  await state?.setExercises(plan.toCompanion(false));
-                  final exercises = state?.exercises
-                      .where((pe) => pe.enabled.value)
-                      .map((pe) => "- ${pe.exercise.value}")
-                      .join('\n');
+                  final planExercises = await (db.planExercises.select()
+                        ..where(
+                          (tbl) => tbl.planId.equals(plan.id) & tbl.enabled,
+                        )
+                        ..orderBy([
+                          (u) => drift.OrderingTerm(expression: u.sequence),
+                        ]))
+                      .get();
+                  final exercises =
+                      planExercises.map((pe) => "- ${pe.exercise}").join('\n');
 
                   return "$days:\n$exercises";
                 }),
@@ -150,9 +155,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
               await SharePlus.instance
                   .share(ShareParams(text: summaries.join('\n\n')));
-              setState(() {
-                _selection.clear();
-              });
+              if (mounted)
+                setState(() {
+                  _selection.clear();
+                });
             },
             onChange: (value) {
               setState(() {

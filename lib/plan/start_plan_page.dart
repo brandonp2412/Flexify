@@ -449,7 +449,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!mounted) return;
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation) {
-      getRpms().then((value) => setState(() => rpms = value));
+      getRpms().then((value) {
+        if (!mounted) return;
+        setState(() => rpms = value);
+      });
     }
 
     if (settings.strengthUnit != 'last-entry' && !cardio) {

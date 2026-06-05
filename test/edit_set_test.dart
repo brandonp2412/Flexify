@@ -232,6 +232,11 @@ void main() async {
     await mockTests();
     db = AppDatabase(NativeDatabase.memory());
 
+    // Tall surface so the lazily-built ListView renders the Notes field
+    // without needing to scroll.
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
     // Bench press entry with a note
     await db.into(db.gymSets).insert(
           GymSetsCompanion.insert(
