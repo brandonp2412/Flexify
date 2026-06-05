@@ -10,6 +10,7 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -244,12 +245,11 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget buildRepsField() {
-    return TextFormField(
+    return StepperField(
       controller: reps,
       focusNode: repsNode,
-      decoration: const InputDecoration(labelText: 'Reps'),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onTap: () => selectAll(reps),
+      labelText: 'Reps',
+      step: 1,
       onChanged: (value) => setORM(),
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => selectAll(weight),
@@ -262,13 +262,10 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget buildWeightField() {
-    return TextFormField(
+    return StepperField(
       controller: weight,
-      decoration: InputDecoration(
-        labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
-      ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onTap: () => selectAll(weight),
+      labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
+      step: 2.5,
       onFieldSubmitted: (value) => save(),
       onChanged: (value) => setORM(),
       validator: (value) {

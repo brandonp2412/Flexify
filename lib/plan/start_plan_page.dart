@@ -11,6 +11,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -139,13 +140,12 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   List<Widget> strengthFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
     return [
-      TextFormField(
+      StepperField(
         controller: reps,
-        decoration: const InputDecoration(labelText: 'Reps'),
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        labelText: 'Reps',
+        step: 1,
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (value) => selectAll(weight),
-        onTap: () => selectAll(reps),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
           if (double.tryParse(value) == null) return 'Invalid number';
@@ -239,25 +239,22 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  TextFormField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
-    return TextFormField(
+  StepperField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
+    return StepperField(
       controller: weight,
-      decoration: InputDecoration(
-        labelText: 'Weight ($unit)',
-        suffixIcon: Selector<SettingsState, bool>(
-          selector: (context, settings) => settings.value.showBodyWeight,
-          builder: (context, showBodyWeight, child) => Visibility(
-            visible: showBodyWeight,
-            child: IconButton(
-              tooltip: "Use body weight",
-              icon: const Icon(Icons.scale),
-              onPressed: useBodyWeight,
-            ),
+      labelText: 'Weight ($unit)',
+      step: 2.5,
+      suffixIcon: Selector<SettingsState, bool>(
+        selector: (context, settings) => settings.value.showBodyWeight,
+        builder: (context, showBodyWeight, child) => Visibility(
+          visible: showBodyWeight,
+          child: IconButton(
+            tooltip: "Use body weight",
+            icon: const Icon(Icons.scale),
+            onPressed: useBodyWeight,
           ),
         ),
       ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onTap: () => selectAll(weight),
       onFieldSubmitted: (value) async => await save(snapshot),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Required';
