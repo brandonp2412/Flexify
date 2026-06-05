@@ -49,18 +49,29 @@ class StepperField extends StatelessWidget {
 
     return Row(
       children: [
-        IconButton(
-          icon: const Icon(Icons.remove),
-          onPressed: () => _bump(-step),
-          onLongPress: () => _bump(-big),
-        ),
         Expanded(
           child: TextFormField(
             controller: controller,
             focusNode: focusNode,
             decoration: InputDecoration(
               labelText: labelText,
-              suffixIcon: suffixIcon,
+              suffixIcon: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  suffixIcon ?? SizedBox(),
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () => _bump(-step),
+                    onLongPress: () => _bump(-big),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () => _bump(step),
+                    onLongPress: () => _bump(big),
+                  ),
+                ],
+              ),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             textInputAction: textInputAction,
@@ -69,11 +80,6 @@ class StepperField extends StatelessWidget {
             onFieldSubmitted: onFieldSubmitted,
             validator: validator,
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () => _bump(step),
-          onLongPress: () => _bump(big),
         ),
       ],
     );
