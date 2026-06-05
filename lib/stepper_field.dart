@@ -47,41 +47,35 @@ class StepperField extends StatelessWidget {
   Widget build(BuildContext context) {
     final big = longPressStep ?? step * 4;
 
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: controller,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-              labelText: labelText,
-              suffixIcon: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  suffixIcon ?? SizedBox(),
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: () => _bump(-step),
-                    onLongPress: () => _bump(-big),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => _bump(step),
-                    onLongPress: () => _bump(big),
-                  ),
-                ],
-              ),
+    return TextFormField(
+      controller: controller,
+      focusNode: focusNode,
+      decoration: InputDecoration(
+        labelText: labelText,
+        suffixIcon: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            suffixIcon ?? SizedBox(),
+            IconButton(
+              icon: const Icon(Icons.remove),
+              onPressed: () => _bump(-step),
+              onLongPress: () => _bump(-big),
             ),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            textInputAction: textInputAction,
-            onTap: () => selectAll(controller),
-            onChanged: onChanged,
-            onFieldSubmitted: onFieldSubmitted,
-            validator: validator,
-          ),
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () => _bump(step),
+              onLongPress: () => _bump(big),
+            ),
+          ],
         ),
-      ],
+      ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      textInputAction: textInputAction,
+      onTap: () => selectAll(controller),
+      onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
+      validator: validator,
     );
   }
 }
