@@ -9,6 +9,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -101,6 +102,12 @@ class _StartPlanPageState extends State<StartPlanPage>
                   if (cardio) ...cardioFields(snapshot),
                   unitSelector(),
                   notesField(),
+                  if (snapshot.data!.isNotEmpty &&
+                      selected < snapshot.data!.length)
+                    SessionSets(
+                      exercise: snapshot.data![selected].exercise,
+                      planId: widget.plan.id,
+                    ),
                   if (snapshot.data!.isEmpty)
                     const Expanded(
                       child: Center(

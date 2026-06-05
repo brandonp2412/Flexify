@@ -358,4 +358,61 @@ void main() async {
 
     await db.close();
   });
+
+  testWidgets('StartPlanPage shows this-session sets after saving',
+      (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1200));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await mockTests();
+    db = AppDatabase(NativeDatabase.memory());
+
+    final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
+    final plan =
+        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+    await db.planExercises.insertOne(
+      PlanExercisesCompanion.insert(
+        planId: plan.id,
+        exercise: 'Bench press',
+        enabled: true,
+      ),
+    );
+
+    await db.settings.update().write(
+          const SettingsCompanion(explainedPermissions: Value(true)),
+        );
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    final planState = PlanState();
+    await planState.updateGymCounts(plan.id);
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider.value(value: planState),
+        ],
+        child: MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessenger,
+          home: StartPlanPage(plan: plan),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Nothing logged yet — no session strip.
+    expect(find.text('Set 1'), findsNothing);
+
+    await tester.enterText(find.bySemanticsLabel('Reps'), '5');
+    await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    // The saved set now appears in the this-session strip.
+    expect(find.text('Set 1'), findsOne);
+    expect(find.text('50 kg × 5'), findsOne);
+
+    await db.close();
+  });
 }
