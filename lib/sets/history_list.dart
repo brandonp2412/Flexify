@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -202,7 +203,7 @@ class _HistoryListState extends State<HistoryList> {
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 96, top: 8),
+      padding: const EdgeInsets.only(bottom: 96, top: appSearchHeight + 8),
       controller: widget.scroll,
       itemCount: _current.length,
       itemBuilder: (context, index) {

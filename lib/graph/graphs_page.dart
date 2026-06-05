@@ -187,67 +187,81 @@ class GraphsPageState extends State<GraphsPage>
               );
               break;
           }
-          return Column(
+          return Stack(
             children: [
-              AppSearch(
-                controller: _selection,
-                filter: GraphsFilters(
-                  category: category,
-                  setCategory: (value) {
-                    setState(() {
-                      category = value;
-                    });
-                  },
-                  sort: sort,
-                  setSort: (value) {
-                    setState(() {
-                      sort = value;
-                    });
-                  },
-                ),
-                onShare: onShare,
-                onChange: (value) {
-                  setState(() {
-                    search = value;
-                  });
-                },
-                onDelete: () async => onDelete(),
-                onSelectAll: () => setState(() {
-                  _selection.setAll(
-                    gymSets.map((gymSet) => gymSet.name.value),
-                  );
-                }),
-                onEdit: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditGraphPage(
-                      name: _selection.first,
-                    ),
-                  ),
-                ),
-                confirmText: "This will delete $total records. Are you sure?",
-              ),
-              if (gymSets.isEmpty &&
-                  !'global progress'.contains(search.toLowerCase()))
-                ListTile(
-                  title: const Text("No graphs found"),
-                  subtitle: Text(
-                    "Tap to create an exercise called $search",
-                  ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddExercisePage(
-                          name: search,
+              Positioned.fill(
+                child: Column(
+                  children: [
+                    if (gymSets.isEmpty &&
+                        !'global progress'.contains(search.toLowerCase()))
+                      Padding(
+                        padding: const EdgeInsets.only(top: appSearchHeight),
+                        child: ListTile(
+                          title: const Text("No graphs found"),
+                          subtitle: Text(
+                            "Tap to create an exercise called $search",
+                          ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => AddExercisePage(
+                                  name: search,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    );
-                  },
+                    Selector<SettingsState, bool>(
+                      selector: (p0, settingsState) =>
+                          settingsState.value.showGlobalProgress,
+                      builder: (context, showGlobal, child) => Expanded(
+                        child: graphList(gymSets, showGlobal),
+                      ),
+                    ),
+                  ],
                 ),
-              Selector<SettingsState, bool>(
-                selector: (p0, settingsState) =>
-                    settingsState.value.showGlobalProgress,
-                builder: (context, showGlobal, child) => Expanded(
-                  child: graphList(gymSets, showGlobal),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: AppSearch(
+                  controller: _selection,
+                  filter: GraphsFilters(
+                    category: category,
+                    setCategory: (value) {
+                      setState(() {
+                        category = value;
+                      });
+                    },
+                    sort: sort,
+                    setSort: (value) {
+                      setState(() {
+                        sort = value;
+                      });
+                    },
+                  ),
+                  onShare: onShare,
+                  onChange: (value) {
+                    setState(() {
+                      search = value;
+                    });
+                  },
+                  onDelete: () async => onDelete(),
+                  onSelectAll: () => setState(() {
+                    _selection.setAll(
+                      gymSets.map((gymSet) => gymSet.name.value),
+                    );
+                  }),
+                  onEdit: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditGraphPage(
+                        name: _selection.first,
+                      ),
+                    ),
+                  ),
+                  confirmText: "This will delete $total records. Are you sure?",
                 ),
               ),
             ],
@@ -337,7 +351,7 @@ class GraphsPageState extends State<GraphsPage>
     return ListView.builder(
       itemCount: itemCount,
       controller: scroll,
-      padding: const EdgeInsets.only(bottom: 50, top: 8),
+      padding: const EdgeInsets.only(bottom: 50, top: appSearchHeight + 8),
       itemBuilder: (context, index) {
         int currentIdx = index;
 

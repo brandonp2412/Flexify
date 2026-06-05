@@ -95,146 +95,163 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {
-          return Column(
+          return Stack(
             children: [
-              AppSearch(
-                controller: _selection,
-                filter: Filters(
-                  repsGtCtrl: repsGt,
-                  repsLtCtrl: repsLt,
-                  weightGtCtrl: weightGt,
-                  weightLtCtrl: weightLt,
-                  setStream: () {
-                    setState(() {
-                      limit = 100;
-                    });
-                    setStream();
-                  },
-                  endDate: endDate,
-                  startDate: startDate,
-                  setEnd: (value) {
-                    setState(() {
-                      endDate = value;
-                      limit = 100;
-                    });
-                    setStream();
-                  },
-                  setStart: (value) {
-                    setState(() {
-                      startDate = value;
-                      limit = 100;
-                    });
-                    setStream();
-                  },
-                  category: category,
-                  setCategory: (value) {
-                    setState(() {
-                      category = value;
-                      limit = 100;
-                    });
-                    setStream();
-                  },
+              Positioned.fill(
+                child: Column(
+                  children: [
+                    if (snapshot.data?.isEmpty == true)
+                      const Padding(
+                        padding: EdgeInsets.only(top: appSearchHeight),
+                        child: ListTile(
+                          title: Text("No entries yet"),
+                          subtitle: Text(
+                            "Complete some sets to see them here",
+                          ),
+                        ),
+                      ),
+                    if (snapshot.hasError)
+                      Expanded(child: ErrorWidget(snapshot.error.toString())),
+                    if (snapshot.hasData)
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            final groupHistory =
+                                context.select<SettingsState, bool>(
+                              (settings) => settings.value.groupHistory,
+                            );
+
+                            if (groupHistory) {
+                              final historyDays =
+                                  getHistoryDays(snapshot.data!);
+                              return HistoryCollapsed(
+                                scroll: scroll,
+                                days: historyDays,
+                                onSelect: (id) {
+                                  setState(() {
+                                    _selection.toggle(id);
+                                  });
+                                },
+                                selected: _selection.selected,
+                                onNext: () {
+                                  setState(() {
+                                    limit += 100;
+                                  });
+                                  setStream();
+                                },
+                              );
+                            } else
+                              return HistoryList(
+                                scroll: scroll,
+                                sets: snapshot.data!,
+                                onSelect: (id) {
+                                  setState(() {
+                                    _selection.toggle(id);
+                                  });
+                                },
+                                selected: _selection.selected,
+                                onNext: () {
+                                  setState(() {
+                                    limit += 100;
+                                  });
+                                  setStream();
+                                },
+                              );
+                          },
+                        ),
+                      ),
+                  ],
                 ),
-                onShare: () async {
-                  final gymSets = snapshot.data!
-                      .where(
-                        (gymSet) => _selection.contains(gymSet.id),
-                      )
-                      .toList();
-                  final summaries = gymSets
-                      .map(
-                        (gymSet) =>
-                            "${toString(gymSet.reps)}x${toString(gymSet.weight)}${gymSet.unit} ${gymSet.name}",
-                      )
-                      .join(', ');
-                  await SharePlus.instance
-                      .share(ShareParams(text: "I just did $summaries"));
-                  setState(() {
-                    _selection.clear();
-                  });
-                },
-                onChange: (value) {
-                  setState(() {
-                    search = value;
-                    limit = 100;
-                  });
-                  setStream();
-                },
-                onDelete: () async {
-                  (db.delete(db.gymSets)
-                        ..where((tbl) => tbl.id.isIn(_selection.selected)))
-                      .go();
-                  setState(() {
-                    _selection.clear();
-                  });
-                },
-                onSelectAll: () => setState(() {
-                  if (snapshot.data == null) return;
-                  _selection.setAll(snapshot.data!.map((gymSet) => gymSet.id));
-                }),
-                onEdit: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditSetsPage(
-                      ids: _selection.toList(),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: AppSearch(
+                  controller: _selection,
+                  filter: Filters(
+                    repsGtCtrl: repsGt,
+                    repsLtCtrl: repsLt,
+                    weightGtCtrl: weightGt,
+                    weightLtCtrl: weightLt,
+                    setStream: () {
+                      setState(() {
+                        limit = 100;
+                      });
+                      setStream();
+                    },
+                    endDate: endDate,
+                    startDate: startDate,
+                    setEnd: (value) {
+                      setState(() {
+                        endDate = value;
+                        limit = 100;
+                      });
+                      setStream();
+                    },
+                    setStart: (value) {
+                      setState(() {
+                        startDate = value;
+                        limit = 100;
+                      });
+                      setStream();
+                    },
+                    category: category,
+                    setCategory: (value) {
+                      setState(() {
+                        category = value;
+                        limit = 100;
+                      });
+                      setStream();
+                    },
+                  ),
+                  onShare: () async {
+                    final gymSets = snapshot.data!
+                        .where(
+                          (gymSet) => _selection.contains(gymSet.id),
+                        )
+                        .toList();
+                    final summaries = gymSets
+                        .map(
+                          (gymSet) =>
+                              "${toString(gymSet.reps)}x${toString(gymSet.weight)}${gymSet.unit} ${gymSet.name}",
+                        )
+                        .join(', ');
+                    await SharePlus.instance
+                        .share(ShareParams(text: "I just did $summaries"));
+                    setState(() {
+                      _selection.clear();
+                    });
+                  },
+                  onChange: (value) {
+                    setState(() {
+                      search = value;
+                      limit = 100;
+                    });
+                    setStream();
+                  },
+                  onDelete: () async {
+                    (db.delete(db.gymSets)
+                          ..where((tbl) => tbl.id.isIn(_selection.selected)))
+                        .go();
+                    setState(() {
+                      _selection.clear();
+                    });
+                  },
+                  onSelectAll: () => setState(() {
+                    if (snapshot.data == null) return;
+                    _selection
+                        .setAll(snapshot.data!.map((gymSet) => gymSet.id));
+                  }),
+                  onEdit: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditSetsPage(
+                        ids: _selection.toList(),
+                      ),
                     ),
                   ),
                 ),
               ),
-              if (snapshot.data?.isEmpty == true)
-                const ListTile(
-                  title: Text("No entries yet"),
-                  subtitle: Text(
-                    "Complete some sets to see them here",
-                  ),
-                ),
-              if (snapshot.hasError)
-                Expanded(child: ErrorWidget(snapshot.error.toString())),
-              if (snapshot.hasData)
-                Expanded(
-                  child: Builder(
-                    builder: (context) {
-                      final groupHistory = context.select<SettingsState, bool>(
-                        (settings) => settings.value.groupHistory,
-                      );
-
-                      if (groupHistory) {
-                        final historyDays = getHistoryDays(snapshot.data!);
-                        return HistoryCollapsed(
-                          scroll: scroll,
-                          days: historyDays,
-                          onSelect: (id) {
-                            setState(() {
-                              _selection.toggle(id);
-                            });
-                          },
-                          selected: _selection.selected,
-                          onNext: () {
-                            setState(() {
-                              limit += 100;
-                            });
-                            setStream();
-                          },
-                        );
-                      } else
-                        return HistoryList(
-                          scroll: scroll,
-                          sets: snapshot.data!,
-                          onSelect: (id) {
-                            setState(() {
-                              _selection.toggle(id);
-                            });
-                          },
-                          selected: _selection.selected,
-                          onNext: () {
-                            setState(() {
-                              limit += 100;
-                            });
-                            setStream();
-                          },
-                        );
-                    },
-                  ),
-                ),
             ],
           );
         },

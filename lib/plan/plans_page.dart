@@ -124,80 +124,9 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
+      body: Stack(
         children: [
-          AppSearch(
-            controller: _selection,
-            onShare: () async {
-              final plans = (state?.plans)!
-                  .where(
-                    (plan) => _selection.contains(plan.id),
-                  )
-                  .toList();
-
-              final summaries = await Future.wait(
-                plans.map((plan) async {
-                  final days = plan.days.split(',').join(', ');
-                  final planExercises = await (db.planExercises.select()
-                        ..where(
-                          (tbl) => tbl.planId.equals(plan.id) & tbl.enabled,
-                        )
-                        ..orderBy([
-                          (u) => drift.OrderingTerm(expression: u.sequence),
-                        ]))
-                      .get();
-                  final exercises =
-                      planExercises.map((pe) => "- ${pe.exercise}").join('\n');
-
-                  return "$days:\n$exercises";
-                }),
-              );
-
-              await SharePlus.instance
-                  .share(ShareParams(text: summaries.join('\n\n')));
-              if (mounted)
-                setState(() {
-                  _selection.clear();
-                });
-            },
-            onChange: (value) {
-              setState(() {
-                search = value;
-                _filterPlans(); // Re-filter when search changes
-              });
-            },
-            onDelete: () async {
-              final state = context.read<PlanState>();
-              final copy = _selection.toList();
-              setState(() {
-                _selection.clear();
-              });
-              await db.plans.deleteWhere((tbl) => tbl.id.isIn(copy));
-              state.updatePlans(null);
-              await db.planExercises
-                  .deleteWhere((tbl) => tbl.planId.isIn(copy));
-            },
-            onSelectAll: () => setState(() {
-              _selection.setAll(filtered?.map((plan) => plan.id) ?? []);
-            }),
-            onEdit: () async {
-              final plan = state!.plans
-                  .firstWhere(
-                    (element) => element.id == _selection.first,
-                  )
-                  .toCompanion(false);
-              await state!.setExercises(plan);
-              if (context.mounted)
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditPlanPage(
-                      plan: plan,
-                    ),
-                  ),
-                );
-            },
-          ),
-          Expanded(
+          Positioned.fill(
             child: PlansList(
               scroll: scroll,
               plans: filtered,
@@ -208,6 +137,83 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 setState(() {
                   _selection.toggle(id);
                 });
+              },
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AppSearch(
+              controller: _selection,
+              onShare: () async {
+                final plans = (state?.plans)!
+                    .where(
+                      (plan) => _selection.contains(plan.id),
+                    )
+                    .toList();
+
+                final summaries = await Future.wait(
+                  plans.map((plan) async {
+                    final days = plan.days.split(',').join(', ');
+                    final planExercises = await (db.planExercises.select()
+                          ..where(
+                            (tbl) => tbl.planId.equals(plan.id) & tbl.enabled,
+                          )
+                          ..orderBy([
+                            (u) => drift.OrderingTerm(expression: u.sequence),
+                          ]))
+                        .get();
+                    final exercises = planExercises
+                        .map((pe) => "- ${pe.exercise}")
+                        .join('\n');
+
+                    return "$days:\n$exercises";
+                  }),
+                );
+
+                await SharePlus.instance
+                    .share(ShareParams(text: summaries.join('\n\n')));
+                if (mounted)
+                  setState(() {
+                    _selection.clear();
+                  });
+              },
+              onChange: (value) {
+                setState(() {
+                  search = value;
+                  _filterPlans(); // Re-filter when search changes
+                });
+              },
+              onDelete: () async {
+                final state = context.read<PlanState>();
+                final copy = _selection.toList();
+                setState(() {
+                  _selection.clear();
+                });
+                await db.plans.deleteWhere((tbl) => tbl.id.isIn(copy));
+                state.updatePlans(null);
+                await db.planExercises
+                    .deleteWhere((tbl) => tbl.planId.isIn(copy));
+              },
+              onSelectAll: () => setState(() {
+                _selection.setAll(filtered?.map((plan) => plan.id) ?? []);
+              }),
+              onEdit: () async {
+                final plan = state!.plans
+                    .firstWhere(
+                      (element) => element.id == _selection.first,
+                    )
+                    .toCompanion(false);
+                await state!.setExercises(plan);
+                if (context.mounted)
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditPlanPage(
+                        plan: plan,
+                      ),
+                    ),
+                  );
               },
             ),
           ),

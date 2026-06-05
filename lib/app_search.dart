@@ -5,6 +5,11 @@ import 'package:flexify/weight_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Vertical space occupied by [AppSearch] when floated on top of a list: the
+/// 56px search pill plus its 16px top padding. List views offset their content
+/// by this amount so the first item clears the floating bar.
+const double appSearchHeight = 72;
+
 class AppSearch extends StatefulWidget {
   final SelectionController controller;
   final ValueChanged<String> onChange;

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/foundation.dart' show listEquals;
+import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
@@ -64,24 +65,27 @@ class _PlansListState extends State<PlansList> {
 
   @override
   Widget build(BuildContext context) {
-    final noneFound = ListTile(
-      title: const Text("No plans found"),
-      subtitle: Text("Tap to create ${widget.search}"),
-      onTap: () async {
-        final plan = PlansCompanion(
-          days: const drift.Value(''),
-          title: drift.Value(widget.search),
-        );
-        await context.read<PlanState>().setExercises(plan);
-        if (context.mounted)
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => EditPlanPage(
-                plan: plan,
-              ),
-            ),
+    final noneFound = Padding(
+      padding: const EdgeInsets.only(top: appSearchHeight),
+      child: ListTile(
+        title: const Text("No plans found"),
+        subtitle: Text("Tap to create ${widget.search}"),
+        onTap: () async {
+          final plan = PlansCompanion(
+            days: const drift.Value(''),
+            title: drift.Value(widget.search),
           );
-      },
+          await context.read<PlanState>().setExercises(plan);
+          if (context.mounted)
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => EditPlanPage(
+                  plan: plan,
+                ),
+              ),
+            );
+        },
+      ),
     );
 
     if (widget.plans == null) return noneFound;
@@ -98,7 +102,7 @@ class _PlansListState extends State<PlansList> {
       return ReorderableListView.builder(
         scrollController: widget.scroll,
         itemCount: filteredPlans.length,
-        padding: const EdgeInsets.only(bottom: 96, top: 8),
+        padding: const EdgeInsets.only(bottom: 96, top: appSearchHeight + 8),
         itemBuilder: (context, index) {
           final plan = filteredPlans[index];
 
@@ -133,7 +137,7 @@ class _PlansListState extends State<PlansList> {
     return ListView.builder(
       controller: widget.scroll,
       itemCount: filteredPlans.length,
-      padding: const EdgeInsets.only(bottom: 96, top: 8),
+      padding: const EdgeInsets.only(bottom: 96, top: appSearchHeight + 8),
       itemBuilder: (context, index) {
         final plan = filteredPlans[index];
 
