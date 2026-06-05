@@ -236,11 +236,16 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildStrengthFields() {
     return [
-      if (name != 'Weight') buildRepsField(),
-      SizedBox(height: 8.0),
+      const SizedBox(height: 8.0),
+      if (name != 'Weight') ...[
+        buildRepsField(),
+        const SizedBox(height: 8.0),
+      ],
       buildWeightField(),
-      SizedBox(height: 8.0),
-      if (name != 'Weight') buildORMField(),
+      if (name != 'Weight') ...[
+        const SizedBox(height: 8.0),
+        buildORMField(),
+      ],
     ];
   }
 
