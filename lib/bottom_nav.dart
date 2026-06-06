@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// Total height of the floating [BottomNav] bar: its 80px body plus the 16px
+/// vertical padding on each side. Pages drawn behind the nav should reserve
+/// this much space at the bottom so trailing content is not obscured.
+const double bottomNavHeight = 112;
+
 class BottomNav extends StatefulWidget {
   final List<String> tabs;
   final int currentIndex;
