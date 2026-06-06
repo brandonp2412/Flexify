@@ -8,11 +8,11 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -196,14 +196,39 @@ class _CardioPageState extends State<CardioPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>().value;
+    final theme = Theme.of(context);
+
+    const metricOptions = <(CardioMetric, String)>[
+      (CardioMetric.pace, 'Pace (distance / time)'),
+      (CardioMetric.inclineAdjustedPace, 'Adjusted pace'),
+      (CardioMetric.duration, 'Duration'),
+      (CardioMetric.distance, 'Distance'),
+      (CardioMetric.incline, 'Incline'),
+    ];
+
+    final spots = <FlSpot>[];
+    for (var index = 0; index < data.length; index++) {
+      final row = data[index];
+      final value = double.parse(row.value.toStringAsFixed(1));
+      if (useTimeBasedXAxis) {
+        spots.add(
+          FlSpot(
+            row.created.millisecondsSinceEpoch.toDouble(),
+            value,
+          ),
+        );
+      } else {
+        spots.add(FlSpot(index.toDouble(), value));
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
@@ -252,231 +277,256 @@ class _CardioPageState extends State<CardioPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Builder(
-          builder: (context) {
-            List<FlSpot> spots = [];
-            final rows = data;
-
-            for (var index = 0; index < rows.length; index++) {
-              final row = rows.elementAt(index);
-              final value = double.parse(row.value.toStringAsFixed(1));
-              if (useTimeBasedXAxis) {
-                spots.add(
-                  FlSpot(
-                    row.created.millisecondsSinceEpoch.toDouble(),
-                    value,
-                  ),
-                );
-              } else {
-                spots.add(FlSpot(index.toDouble(), value));
-              }
-            }
-
-            final settings = context.watch<SettingsState>().value;
-
-            return ListView(
-              children: [
-                DropdownButtonFormField(
-                  decoration: const InputDecoration(labelText: 'Metric'),
-                  initialValue: metric,
-                  items: const [
-                    DropdownMenuItem(
-                      value: CardioMetric.pace,
-                      child: Text("Pace (distance / time)"),
-                    ),
-                    DropdownMenuItem(
-                      value: CardioMetric.inclineAdjustedPace,
-                      child: Text("Adjusted pace"),
-                    ),
-                    DropdownMenuItem(
-                      value: CardioMetric.duration,
-                      child: Text("Duration"),
-                    ),
-                    DropdownMenuItem(
-                      value: CardioMetric.distance,
-                      child: Text("Distance"),
-                    ),
-                    DropdownMenuItem(
-                      value: CardioMetric.incline,
-                      child: Text("Incline"),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      metric = value!;
-                    });
-                    setData();
-                    _savePreferences();
-                  },
-                ),
-                SizedBox(height: 8),
-                DropdownButtonFormField(
-                  decoration: const InputDecoration(labelText: 'Period'),
-                  initialValue: period,
-                  items: const [
-                    DropdownMenuItem(
-                      value: Period.day,
-                      child: Text("Daily"),
-                    ),
-                    DropdownMenuItem(
-                      value: Period.week,
-                      child: Text("Weekly"),
-                    ),
-                    DropdownMenuItem(
-                      value: Period.month,
-                      child: Text("Monthly"),
-                    ),
-                    DropdownMenuItem(
-                      value: Period.year,
-                      child: Text("Yearly"),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      period = value!;
-                    });
-                    setData();
-                    _savePreferences();
-                  },
-                ),
-                SizedBox(height: 8),
-                if (metric == CardioMetric.distance)
-                  Selector<SettingsState, bool>(
-                    selector: (p0, p1) => p1.value.showUnits,
-                    builder: (context, value, child) => Visibility(
-                      visible: value,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: DropdownButtonFormField<String>(
-                          decoration: const InputDecoration(labelText: 'Unit'),
-                          initialValue: target,
-                          items: cardioDistanceUnitMenuItems,
-                          onChanged: (value) {
-                            setState(() {
-                              target = value!;
-                            });
-                            setData();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title: const Text('Start date'),
-                        subtitle: Selector<SettingsState, String>(
-                          selector: (p0, settings) =>
-                              settings.value.shortDateFormat,
-                          builder: (context, value, child) {
-                            if (start == null) return Text(value);
-
-                            return Text(
-                              DateFormat(value).format(start!),
-                            );
-                          },
-                        ),
-                        onLongPress: () => setState(() {
-                          start = null;
-                        }),
-                        trailing: const Icon(Icons.calendar_today),
-                        onTap: () => _selectStart(),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        title: const Text('Stop date'),
-                        subtitle: Selector<SettingsState, String>(
-                          selector: (context, settings) =>
-                              settings.value.shortDateFormat,
-                          builder: (context, value, child) {
-                            if (end == null) return Text(value);
-
-                            return Text(
-                              DateFormat(value).format(end!),
-                            );
-                          },
-                        ),
-                        onLongPress: () => setState(() {
-                          end = null;
-                        }),
-                        trailing: const Icon(Icons.calendar_today),
-                        onTap: () => _selectEnd(),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                if (settings.showGraphXAxis)
-                  GestureDetector(
-                    onLongPress: () {
-                      db.settings.update().write(
-                            const SettingsCompanion(
-                              showGraphXAxis: Value(false),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButton<CardioMetric>(
+                      value: metric,
+                      isExpanded: true,
+                      underline: const SizedBox.shrink(),
+                      borderRadius: BorderRadius.circular(12),
+                      items: metricOptions
+                          .map(
+                            (option) => DropdownMenuItem(
+                              value: option.$1,
+                              child: Text(option.$2),
                             ),
-                          );
-                      toast(
-                        'Hid X axis toggle',
-                        action: SnackBarAction(
-                          label: 'Undo',
-                          onPressed: () => db.settings.update().write(
-                                const SettingsCompanion(
-                                  showGraphXAxis: Value(true),
+                          )
+                          .toList(),
+                      selectedItemBuilder: (context) => metricOptions
+                          .map(
+                            (option) => Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                option.$2,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                        ),
-                      );
-                    },
-                    child: SwitchListTile(
-                      title: const Text('Use time-based X axis'),
-                      value: useTimeBasedXAxis,
-                      onChanged: (val) {
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
                         setState(() {
-                          useTimeBasedXAxis = val;
+                          metric = value!;
                         });
+                        setData();
                         _savePreferences();
                       },
                     ),
                   ),
-                if (settings.showGraphLimit)
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onLongPress: () {
-                          db.settings.update().write(
-                                const SettingsCompanion(
-                                  showGraphLimit: Value(false),
-                                ),
-                              );
-                          toast(
-                            'Hid graph limit',
-                            action: SnackBarAction(
-                              label: 'Undo',
-                              onPressed: () => db.settings.update().write(
-                                    const SettingsCompanion(
-                                      showGraphLimit: Value(true),
-                                    ),
-                                  ),
-                            ),
-                          );
-                        },
+                  const SizedBox(width: 8),
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.tune),
+                    tooltip: 'Options',
+                    onPressed: _showOptions,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SegmentedButton<Period>(
+                showSelectedIcon: false,
+                segments: const [
+                  ButtonSegment(value: Period.day, label: Text('Day')),
+                  ButtonSegment(value: Period.week, label: Text('Week')),
+                  ButtonSegment(value: Period.month, label: Text('Month')),
+                  ButtonSegment(value: Period.year, label: Text('Year')),
+                ],
+                selected: {period},
+                onSelectionChanged: (value) {
+                  setState(() {
+                    period = value.first;
+                  });
+                  setData();
+                  _savePreferences();
+                },
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: data.isEmpty
+                    ? Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 16),
+                          padding: const EdgeInsets.all(16),
                           child: Text(
-                            "Limit ($limit)",
-                            style: Theme.of(context).textTheme.bodyLarge,
+                            "No data yet for ${widget.name}",
+                            textAlign: TextAlign.center,
                           ),
                         ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 32.0, top: 16.0),
+                        child: FlexLine(
+                          spots: spots,
+                          tooltipData: () =>
+                              tooltipData(settings.shortDateFormat),
+                          touchLine: touchLine,
+                          data: data,
+                          timeBasedXAxis: useTimeBasedXAxis,
+                        ),
+                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextField(
+                  controller: _notesCtrl,
+                  decoration: const InputDecoration(
+                    labelText: 'Exercise notes',
+                    hintText: 'Notes for this exercise',
+                  ),
+                  minLines: 2,
+                  maxLines: 5,
+                  onChanged: (_) {
+                    _notesDebounce?.cancel();
+                    _notesDebounce = Timer(
+                      const Duration(milliseconds: 600),
+                      _savePreferences,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showOptions() {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (sheetContext, setSheet) {
+            final theme = Theme.of(sheetContext);
+            final colorScheme = theme.colorScheme;
+            final settings = context.read<SettingsState>().value;
+
+            Widget sectionLabel(String text) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    text,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                );
+
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  0,
+                  16,
+                  16 + MediaQuery.of(sheetContext).viewInsets.bottom,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (metric == CardioMetric.distance &&
+                        settings.showUnits) ...[
+                      sectionLabel('Unit'),
+                      DropdownButtonFormField<String>(
+                        initialValue: target,
+                        items: cardioDistanceUnitMenuItems,
+                        onChanged: (value) {
+                          setState(() {
+                            target = value!;
+                          });
+                          setData();
+                          setSheet(() {});
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                    sectionLabel('Date range'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GraphDateField(
+                            label: 'Start date',
+                            value: start,
+                            hint: settings.shortDateFormat,
+                            onTap: () async {
+                              await _selectStart();
+                              setSheet(() {});
+                            },
+                            onClear: () {
+                              setState(() {
+                                start = null;
+                              });
+                              setData();
+                              setSheet(() {});
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: GraphDateField(
+                            label: 'Stop date',
+                            value: end,
+                            hint: settings.shortDateFormat,
+                            onTap: () async {
+                              await _selectEnd();
+                              setSheet(() {});
+                            },
+                            onClear: () {
+                              setState(() {
+                                end = null;
+                              });
+                              setData();
+                              setSheet(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (settings.showGraphLimit) ...[
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Data points',
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  colorScheme.primary.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '$limit',
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Slider(
                         value: limit.toDouble(),
-                        inactiveColor: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.24),
+                        inactiveColor:
+                            colorScheme.primary.withValues(alpha: 0.24),
                         min: 10,
                         max: 100,
                         onChanged: (value) {
@@ -485,57 +535,30 @@ class _CardioPageState extends State<CardioPage> {
                           });
                           setData();
                           _savePreferences();
+                          setSheet(() {});
                         },
                       ),
                     ],
-                  ),
-                if (rows.isEmpty)
-                  ListTile(
-                    title: Text("No data yet for ${widget.name}"),
-                    subtitle:
-                        const Text("Complete some plans to view graphs here"),
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                if (rows.isNotEmpty)
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.40,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                      child: FlexLine(
-                        spots: spots,
-                        tooltipData: () =>
-                            tooltipData(settings.shortDateFormat),
-                        touchLine: touchLine,
-                        data: data,
-                        timeBasedXAxis: useTimeBasedXAxis,
+                    if (settings.showGraphXAxis)
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text('Use time-based X axis'),
+                        value: useTimeBasedXAxis,
+                        onChanged: (value) {
+                          setState(() {
+                            useTimeBasedXAxis = value;
+                          });
+                          _savePreferences();
+                          setSheet(() {});
+                        },
                       ),
-                    ),
-                  ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextField(
-                    controller: _notesCtrl,
-                    decoration: const InputDecoration(
-                      labelText: 'Exercise notes',
-                      hintText: 'Notes for this exercise',
-                    ),
-                    minLines: 2,
-                    maxLines: 5,
-                    onChanged: (_) {
-                      _notesDebounce?.cancel();
-                      _notesDebounce = Timer(
-                        const Duration(milliseconds: 600),
-                        _savePreferences,
-                      );
-                    },
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 200),
-              ],
+              ),
             );
           },
-        ),
-      ),
+        );
+      },
     );
   }
 

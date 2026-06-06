@@ -77,7 +77,7 @@ void main() async {
 
     await tester.pumpAndSettle();
     expect(find.text('Dumbbell shoulder press'), findsOne);
-    expect(find.text('Metric'), findsOne);
+    expect(find.text('Best weight'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
     expect(find.byType(LineChart), findsOne);
 

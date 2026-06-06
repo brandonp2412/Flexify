@@ -66,10 +66,13 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Run'), findsOne);
     expect(find.text('Pace (distance / time)'), findsOne);
-    expect(find.text('Start date'), findsOne);
-    expect(find.text('Stop date'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
     expect(find.byType(LineChart), findsOne);
+
+    await tester.tap(find.byTooltip('Options'));
+    await tester.pumpAndSettle();
+    expect(find.text('Start date'), findsOne);
+    expect(find.text('Stop date'), findsOne);
 
     await db.close();
   });

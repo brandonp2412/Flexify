@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -148,6 +149,18 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       ),
     );
 
+    final theme = Theme.of(context);
+    final metricOptions = <(StrengthMetric, String)>[
+      (StrengthMetric.bestWeight, 'Best weight'),
+      (StrengthMetric.bestReps, 'Best reps'),
+      (StrengthMetric.oneRepMax, 'One rep max'),
+      (StrengthMetric.volume, 'Volume'),
+      if (settings.showBodyWeight)
+        (StrengthMetric.relativeStrength, 'Relative strength'),
+    ];
+    final metricValue =
+        metricOptions.any((option) => option.$1 == metric) ? metric : null;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -159,246 +172,309 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: [
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Metric'),
-              initialValue: metric,
-              items: [
-                const DropdownMenuItem(
-                  value: StrengthMetric.bestWeight,
-                  child: Text("Best weight"),
-                ),
-                const DropdownMenuItem(
-                  value: StrengthMetric.bestReps,
-                  child: Text("Best reps"),
-                ),
-                const DropdownMenuItem(
-                  value: StrengthMetric.oneRepMax,
-                  child: Text("One rep max"),
-                ),
-                const DropdownMenuItem(
-                  value: StrengthMetric.volume,
-                  child: Text("Volume"),
-                ),
-                if (settings.showBodyWeight)
-                  const DropdownMenuItem(
-                    value: StrengthMetric.relativeStrength,
-                    child: Text("Relative strength"),
-                  ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  metric = value!;
-                });
-                setData();
-              },
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: 'Period'),
-              initialValue: period,
-              items: const [
-                DropdownMenuItem(
-                  value: Period.day,
-                  child: Text("Daily"),
-                ),
-                DropdownMenuItem(
-                  value: Period.week,
-                  child: Text("Weekly"),
-                ),
-                DropdownMenuItem(
-                  value: Period.month,
-                  child: Text("Monthly"),
-                ),
-                DropdownMenuItem(
-                  value: Period.year,
-                  child: Text("Yearly"),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  period = value!;
-                });
-                setData();
-              },
-            ),
-            Visibility(
-              visible: settings.showUnits,
-              child: Column(
-                children: [
-                  const SizedBox(height: 8),
-                  DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Unit'),
-                    initialValue: targetUnit,
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'kg',
-                        child: Text("Kilograms (kg)"),
-                      ),
-                      DropdownMenuItem(
-                        value: 'lb',
-                        child: Text("Pounds (lb)"),
-                      ),
-                      DropdownMenuItem(
-                        value: 'stone',
-                        child: Text("Stone"),
-                      ),
-                    ],
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        targetUnit = newValue!;
-                      });
-                      setData();
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
                 children: [
                   Expanded(
-                    child: ListTile(
-                      title: const Text('Start date'),
-                      subtitle: startDate == null
-                          ? Text(settings.shortDateFormat)
-                          : Text(
-                              DateFormat(settings.shortDateFormat)
-                                  .format(startDate!),
+                    child: DropdownButton<StrengthMetric>(
+                      value: metricValue,
+                      isExpanded: true,
+                      underline: const SizedBox.shrink(),
+                      borderRadius: BorderRadius.circular(12),
+                      items: metricOptions
+                          .map(
+                            (option) => DropdownMenuItem(
+                              value: option.$1,
+                              child: Text(option.$2),
                             ),
-                      onLongPress: () {
-                        setState(() {
-                          startDate = null;
-                        });
-                        setData();
-                      },
-                      trailing: const Icon(Icons.calendar_today),
-                      onTap: selectStart,
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: const Text('Stop date'),
-                      subtitle: endDate != null
-                          ? Text(
-                              DateFormat(settings.shortDateFormat)
-                                  .format(endDate!),
-                            )
-                          : Text(settings.shortDateFormat),
-                      onLongPress: () {
-                        setState(() {
-                          endDate = null;
-                        });
-                        setData();
-                      },
-                      trailing: const Icon(Icons.calendar_today),
-                      onTap: selectEnd,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text(
-                    "Limit ($limit)",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-                Slider(
-                  value: limit.toDouble(),
-                  inactiveColor: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.24),
-                  min: 10,
-                  max: 200,
-                  onChanged: (value) {
-                    setState(() {
-                      limit = value.toInt();
-                    });
-                    setData();
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.40,
-              child: data.isEmpty
-                  ? const SizedBox()
-                  : Padding(
-                      padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                      child: lineChart,
-                    ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (data.isNotEmpty)
-                  Text(
-                    DateFormat(settings.shortDateFormat)
-                        .format(data.first.created),
-                  ),
-                if (data.length > 2)
-                  Text(
-                    DateFormat(settings.shortDateFormat)
-                        .format(data[data.length ~/ 2].created),
-                  ),
-                if (data.length > 1)
-                  Text(
-                    DateFormat(settings.shortDateFormat)
-                        .format(data.last.created),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 16.0,
-              runSpacing: 8.0,
-              alignment: WrapAlignment.center,
-              children: chartColors
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => SizedBox(
-                      width: 120,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          RadioGroup<int>(
-                            groupValue: 1,
-                            onChanged: (value) {},
-                            child: Radio<int>(
-                              value: 1,
-                              fillColor: WidgetStateProperty.resolveWith(
-                                (states) => entry.value,
+                          )
+                          .toList(),
+                      selectedItemBuilder: (context) => metricOptions
+                          .map(
+                            (option) => Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                option.$2,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              categories[entry.key] ?? "None",
-                              overflow: TextOverflow.ellipsis,
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          metric = value!;
+                        });
+                        setData();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.tune),
+                    tooltip: 'Options',
+                    onPressed: _showOptions,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SegmentedButton<Period>(
+                showSelectedIcon: false,
+                segments: const [
+                  ButtonSegment(value: Period.day, label: Text('Day')),
+                  ButtonSegment(value: Period.week, label: Text('Week')),
+                  ButtonSegment(value: Period.month, label: Text('Month')),
+                  ButtonSegment(value: Period.year, label: Text('Year')),
+                ],
+                selected: {period},
+                onSelectionChanged: (value) {
+                  setState(() {
+                    period = value.first;
+                  });
+                  setData();
+                },
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                flex: 3,
+                child: data.isEmpty
+                    ? const Center(child: Text("No data yet."))
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 32.0, top: 16.0),
+                        child: lineChart,
+                      ),
+              ),
+              if (data.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      DateFormat(settings.shortDateFormat)
+                          .format(data.first.created),
+                    ),
+                    if (data.length > 2)
+                      Text(
+                        DateFormat(settings.shortDateFormat)
+                            .format(data[data.length ~/ 2].created),
+                      ),
+                    if (data.length > 1)
+                      Text(
+                        DateFormat(settings.shortDateFormat)
+                            .format(data.last.created),
+                      ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: 8),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: 16.0,
+                    runSpacing: 8.0,
+                    alignment: WrapAlignment.center,
+                    children: chartColors
+                        .asMap()
+                        .entries
+                        .map(
+                          (entry) => SizedBox(
+                            width: 120,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                RadioGroup<int>(
+                                  groupValue: 1,
+                                  onChanged: (value) {},
+                                  child: Radio<int>(
+                                    value: 1,
+                                    fillColor: WidgetStateProperty.resolveWith(
+                                      (states) => entry.value,
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    categories[entry.key] ?? "None",
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            const SizedBox(height: 116),
-          ],
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  void _showOptions() {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (sheetContext, setSheet) {
+            final theme = Theme.of(sheetContext);
+            final colorScheme = theme.colorScheme;
+            final settings = context.read<SettingsState>().value;
+
+            Widget sectionLabel(String text) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    text,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                );
+
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  0,
+                  16,
+                  16 + MediaQuery.of(sheetContext).viewInsets.bottom,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (settings.showUnits) ...[
+                      sectionLabel('Unit'),
+                      DropdownButtonFormField<String>(
+                        initialValue: targetUnit,
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'kg',
+                            child: Text("Kilograms (kg)"),
+                          ),
+                          DropdownMenuItem(
+                            value: 'lb',
+                            child: Text("Pounds (lb)"),
+                          ),
+                          DropdownMenuItem(
+                            value: 'stone',
+                            child: Text("Stone"),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            targetUnit = value!;
+                          });
+                          setData();
+                          setSheet(() {});
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                    sectionLabel('Date range'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GraphDateField(
+                            label: 'Start date',
+                            value: startDate,
+                            hint: settings.shortDateFormat,
+                            onTap: () async {
+                              await selectStart();
+                              setSheet(() {});
+                            },
+                            onClear: () {
+                              setState(() {
+                                startDate = null;
+                              });
+                              setData();
+                              setSheet(() {});
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: GraphDateField(
+                            label: 'Stop date',
+                            value: endDate,
+                            hint: settings.shortDateFormat,
+                            onTap: () async {
+                              await selectEnd();
+                              setSheet(() {});
+                            },
+                            onClear: () {
+                              setState(() {
+                                endDate = null;
+                              });
+                              setData();
+                              setSheet(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Data points',
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$limit',
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              color: colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: limit.toDouble(),
+                      inactiveColor:
+                          colorScheme.primary.withValues(alpha: 0.24),
+                      min: 10,
+                      max: 200,
+                      onChanged: (value) {
+                        setState(() {
+                          limit = value.toInt();
+                        });
+                        setData();
+                        setSheet(() {});
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
