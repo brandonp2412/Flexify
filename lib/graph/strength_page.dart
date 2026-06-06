@@ -153,6 +153,7 @@ class _StrengthPageState extends State<StrengthPage> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(name),
         leading: IconButton(
@@ -335,6 +336,7 @@ class _StrengthPageState extends State<StrengthPage> {
   void _showOptions() {
     showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       showDragHandle: true,
       isScrollControlled: true,
       builder: (sheetContext) {

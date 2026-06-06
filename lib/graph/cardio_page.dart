@@ -225,6 +225,7 @@ class _CardioPageState extends State<CardioPage> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.name),
         leading: IconButton(
@@ -408,6 +409,7 @@ class _CardioPageState extends State<CardioPage> {
   void _showOptions() {
     showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       showDragHandle: true,
       isScrollControlled: true,
       builder: (sheetContext) {

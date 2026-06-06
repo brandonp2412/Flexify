@@ -330,6 +330,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
   void _showOptions() {
     showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       showDragHandle: true,
       isScrollControlled: true,
       builder: (sheetContext) {
