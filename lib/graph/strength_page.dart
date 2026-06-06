@@ -10,6 +10,7 @@ import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/graph_history_page.dart';
+import 'package:flexify/graph/graph_notes_page.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
@@ -103,6 +104,28 @@ class _StrengthPageState extends State<StrengthPage> {
       ),
       mode: InsertMode.insertOrReplace,
     );
+  }
+
+  void _onNotesChanged() {
+    _notesDebounce?.cancel();
+    _notesDebounce = Timer(
+      const Duration(milliseconds: 600),
+      _savePreferences,
+    );
+  }
+
+  Future<void> _editNotes() async {
+    await Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => GraphNotesPage(
+          controller: _notesCtrl,
+          onChanged: _onNotesChanged,
+        ),
+      ),
+    );
+    _notesDebounce?.cancel();
+    await _savePreferences();
+    if (mounted) setState(() {});
   }
 
   @override
@@ -310,19 +333,14 @@ class _StrengthPageState extends State<StrengthPage> {
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
                   controller: _notesCtrl,
+                  readOnly: true,
+                  onTap: _editNotes,
                   decoration: const InputDecoration(
                     labelText: 'Exercise notes',
                     hintText: 'Notes for this exercise',
                   ),
                   minLines: 2,
                   maxLines: 5,
-                  onChanged: (_) {
-                    _notesDebounce?.cancel();
-                    _notesDebounce = Timer(
-                      const Duration(milliseconds: 600),
-                      _savePreferences,
-                    );
-                  },
                 ),
               ),
               const SizedBox(height: 8),
@@ -425,66 +443,62 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                       ],
                     ),
-                    if (settings.showGraphLimit) ...[
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Data points',
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Data points',
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$limit',
                             style: theme.textTheme.labelLarge?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
+                              color: colorScheme.primary,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color:
-                                  colorScheme.primary.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              '$limit',
-                              style: theme.textTheme.labelLarge?.copyWith(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Slider(
-                        value: limit.toDouble(),
-                        inactiveColor:
-                            colorScheme.primary.withValues(alpha: 0.24),
-                        min: 10,
-                        max: 100,
-                        onChanged: (value) {
-                          setState(() {
-                            limit = value.toInt();
-                          });
-                          setData();
-                          _savePreferences();
-                          setSheet(() {});
-                        },
-                      ),
-                    ],
-                    if (settings.showGraphXAxis)
-                      SwitchListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: const Text('Use time-based X axis'),
-                        value: useTimeBasedXAxis,
-                        onChanged: (value) {
-                          setState(() {
-                            useTimeBasedXAxis = value;
-                          });
-                          _savePreferences();
-                          setSheet(() {});
-                        },
-                      ),
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: limit.toDouble(),
+                      inactiveColor:
+                          colorScheme.primary.withValues(alpha: 0.24),
+                      min: 10,
+                      max: 100,
+                      onChanged: (value) {
+                        setState(() {
+                          limit = value.toInt();
+                        });
+                        setData();
+                        _savePreferences();
+                        setSheet(() {});
+                      },
+                    ),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Use time-based X axis'),
+                      value: useTimeBasedXAxis,
+                      onChanged: (value) {
+                        setState(() {
+                          useTimeBasedXAxis = value;
+                        });
+                        _savePreferences();
+                        setSheet(() {});
+                      },
+                    ),
                   ],
                 ),
               ),
