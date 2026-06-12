@@ -247,10 +247,14 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   StepperField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
+    final exerciseName =
+        snapshot.data!.isNotEmpty && selected < snapshot.data!.length
+            ? snapshot.data![selected].exercise
+            : '';
     return StepperField(
       controller: weight,
       labelText: 'Weight ($unit)',
-      step: 2.5,
+      step: weightStep(exerciseName, unit),
       suffixIcon: Selector<SettingsState, bool>(
         selector: (context, settings) => settings.value.showBodyWeight,
         builder: (context, showBodyWeight, child) => Visibility(

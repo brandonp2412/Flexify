@@ -66,6 +66,40 @@ Future<bool> requestNotificationPermission() async {
 void selectAll(TextEditingController controller) => controller.selection =
     TextSelection(baseOffset: 0, extentOffset: controller.text.length);
 
+/// Returns the weight increment step based on exercise name and unit.
+/// - Dumbbell exercises: 2 kg / 5 lb
+/// - Cable/machine exercises (weight stacks): 5 kg / 10 lb
+/// - Barbell/default: 2.5 kg / 5 lb
+double weightStep(String name, String unit) {
+  final lower = name.toLowerCase();
+  final isLb = unit == 'lb' || unit == 'stone';
+
+  if (lower.contains('dumbbell') ||
+      lower.startsWith('db ') ||
+      lower.contains(' db ') ||
+      lower.endsWith(' db')) {
+    return isLb ? 5.0 : 2.0;
+  }
+
+  if (lower.contains('cable') ||
+      lower.contains('machine') ||
+      lower.contains('pulldown') ||
+      lower.contains('pull-down') ||
+      lower.contains('pull down') ||
+      lower.contains('leg press') ||
+      lower.contains('leg extension') ||
+      lower.contains('leg curl') ||
+      lower.contains('chest fly') ||
+      lower.contains('pec deck') ||
+      lower.contains('seated row') ||
+      lower.contains('hack squat') ||
+      lower.contains('smith')) {
+    return isLb ? 10.0 : 5.0;
+  }
+
+  return isLb ? 5.0 : 2.5;
+}
+
 String toString(double value) {
   final str = value.toStringAsFixed(2);
   if (str.endsWith('.00')) return str.substring(0, str.length - 3);

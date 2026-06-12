@@ -270,7 +270,7 @@ class _EditSetPageState extends State<EditSetPage> {
     return StepperField(
       controller: weight,
       labelText: name == 'Weight' ? 'Value ' : 'Weight ($unit)',
-      step: 2.5,
+      step: weightStep(name, unit),
       onFieldSubmitted: (value) => save(),
       onChanged: (value) => setORM(),
       validator: (value) {
