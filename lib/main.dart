@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flexify/crash_logger.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/failed_migrations_page.dart';
 import 'package:flexify/home_page.dart';
@@ -13,18 +16,25 @@ import 'package:provider/provider.dart';
 final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await CrashLogger.install();
 
-  Setting setting;
+      Setting setting;
 
-  try {
-    setting = await (db.settings.select()..limit(1)).getSingle();
-  } catch (error) {
-    return runApp(FailedMigrationsPage(error: error));
-  }
+      try {
+        setting = await (db.settings.select()..limit(1)).getSingle();
+      } catch (error) {
+        return runApp(FailedMigrationsPage(error: error));
+      }
 
-  final state = SettingsState(setting);
-  runApp(appProviders(state));
+      final state = SettingsState(setting);
+      runApp(appProviders(state));
+    },
+    (error, stack) =>
+        CrashLogger.instance?.record(error, stack, context: 'zone'),
+  );
 }
 
 AppDatabase db = AppDatabase();

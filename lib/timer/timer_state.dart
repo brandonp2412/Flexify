@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flexify/crash_logger.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,8 @@ class TimerState extends ChangeNotifier {
   bool starting = false;
   bool justExpired = false;
   bool _keepScreenOn = true;
+
+  FlutterLocalNotificationsPlugin? _notifications;
 
   bool get keepScreenOn => _keepScreenOn;
 
@@ -127,18 +130,13 @@ class TimerState extends ChangeNotifier {
     }
   }
 
-  Future<void> notify(
-    String? title,
-    String? alarmSound,
-    bool enableSound,
-  ) async {
-    if (player != null && enableSound) {
-      player!.play(
-        alarmSound?.isNotEmpty == true
-            ? DeviceFileSource(alarmSound!)
-            : AssetSource('argon.mp3'),
-      );
-    }
+  /// Lazily builds and initializes the notification plugin a single time.
+  ///
+  /// Re-initializing on every timer expiry repeatedly re-registers the native
+  /// (WinRT) notification stack on Windows, which was a likely source of
+  /// intermittent crashes; initializing once avoids that churn.
+  Future<FlutterLocalNotificationsPlugin?> _getNotifications() async {
+    if (_notifications != null) return _notifications;
 
     const linux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
@@ -155,9 +153,36 @@ class TimerState extends ChangeNotifier {
         iconPath: 'assets/ic_launcher.png',
       ),
     );
+
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin.initialize(init);
-    await plugin.show(1, title ?? "Timer up", null, null);
+    _notifications = plugin;
+    return _notifications;
+  }
+
+  Future<void> notify(
+    String? title,
+    String? alarmSound,
+    bool enableSound,
+  ) async {
+    if (player != null && enableSound) {
+      try {
+        await player!.play(
+          alarmSound?.isNotEmpty == true
+              ? DeviceFileSource(alarmSound!)
+              : AssetSource('argon.mp3'),
+        );
+      } catch (error, stack) {
+        CrashLogger.instance?.record(error, stack, context: 'notify.play');
+      }
+    }
+
+    try {
+      final plugin = await _getNotifications();
+      await plugin?.show(1, title ?? "Timer up", null, null);
+    } catch (error, stack) {
+      CrashLogger.instance?.record(error, stack, context: 'notify.show');
+    }
   }
 
   Future<void> stopTimer() async {
