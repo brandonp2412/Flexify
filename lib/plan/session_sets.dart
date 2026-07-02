@@ -64,34 +64,44 @@ class _SessionSetsState extends State<SessionSets> {
       stream: stream,
       builder: (context, snapshot) {
         final sets = snapshot.data;
-        if (sets == null || sets.isEmpty) return const SizedBox.shrink();
 
-        final best = _bestId(sets);
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8.0),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  for (var i = 0; i < sets.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: _SetChip(
-                        gymSet: sets[i],
-                        number: i + 1,
-                        best: sets[i].id == best,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          alignment: Alignment.topCenter,
+          child: sets == null || sets.isEmpty
+              ? const SizedBox.shrink()
+              : _buildChips(sets),
         );
       },
+    );
+  }
+
+  Widget _buildChips(List<GymSet> sets) {
+    final best = _bestId(sets);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 8.0),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (var i = 0; i < sets.length; i++)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: _SetChip(
+                    gymSet: sets[i],
+                    number: i + 1,
+                    best: sets[i].id == best,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
