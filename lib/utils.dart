@@ -86,7 +86,6 @@ double weightStep(String name, String unit) {
       lower.contains('pulldown') ||
       lower.contains('pull-down') ||
       lower.contains('pull down') ||
-      lower.contains('leg press') ||
       lower.contains('leg extension') ||
       lower.contains('leg curl') ||
       lower.contains('chest fly') ||
@@ -95,6 +94,10 @@ double weightStep(String name, String unit) {
       lower.contains('hack squat') ||
       lower.contains('smith')) {
     return isLb ? 10.0 : 5.0;
+  }
+
+  if (lower.contains('leg press') || lower.contains('calf raise')) {
+    return isLb ? 20.0 : 10.0;
   }
 
   return isLb ? 5.0 : 2.5;
