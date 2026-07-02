@@ -130,6 +130,8 @@ class TimerService : Service() {
         flexifyTimer.expire()
         vibrate()
         playSound()
+        NotificationManagerCompat.from(this).cancel(ONGOING_ID)
+        stopForeground(STOP_FOREGROUND_REMOVE)
         notifyFinished()
         updateAppUI(justExpired = true)
     }
