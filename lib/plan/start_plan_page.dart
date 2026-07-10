@@ -581,7 +581,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     restMs ??= settings.timerDuration.toDouble();
 
     final timerState = context.read<TimerState>();
-    if (count > warmupSets && peTimers)
+    if (settings.restTimers && count > warmupSets && peTimers)
       timerState.startTimer(
         "$exercise ($count)",
         Duration(milliseconds: restMs.toInt()),
