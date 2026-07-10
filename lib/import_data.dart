@@ -122,7 +122,7 @@ $version
   }
 
   Future<void> _importDatabaseNative(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.pickFiles();
     if (result == null) return;
 
     File sourceFile = File(result.files.single.path!);
@@ -150,7 +150,7 @@ $version
   }
 
   Future<void> _importDatabaseWeb(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.pickFiles();
     if (result == null) return;
 
     Uint8List? fileBytes = result.files.single.bytes;
@@ -167,7 +167,7 @@ $version
     Navigator.pop(context);
 
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.pickFiles();
       if (result == null) return;
 
       String csvContent;
@@ -190,7 +190,7 @@ $version
         }
       }
 
-      final rows = const CsvToListConverter(eol: "\n").convert(csvContent);
+      final rows = CsvDecoder().convert(csvContent);
 
       if (rows.isEmpty) throw Exception('CSV file is empty');
       if (rows.length <= 1)
@@ -304,7 +304,7 @@ $version
     Navigator.pop(context);
 
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.pickFiles();
       if (result == null) return;
 
       String csvContent;
@@ -327,7 +327,7 @@ $version
         }
       }
 
-      final csvList = const CsvToListConverter(eol: "\n").convert(csvContent);
+      final csvList = CsvDecoder().convert(csvContent);
 
       if (csvList.isEmpty) throw Exception('CSV file is empty');
       if (csvList.length <= 1)

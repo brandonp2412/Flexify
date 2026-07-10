@@ -13,7 +13,7 @@ import 'mock_tests.dart';
 class TestFlutterLocalNotificationsPlatform
     extends FlutterLocalNotificationsPlatform {
   @override
-  Future<void> show(int id, String? title, String? body, {String? payload}) {
+  Future<void> show({int? id, String? title, String? body, String? payload}) {
     return Future.value();
   }
 
@@ -23,7 +23,7 @@ class TestFlutterLocalNotificationsPlatform
   }
 
   @override
-  Future<void> cancel(int id) {
+  Future<void> cancel({int? id}) {
     return Future.value();
   }
 
@@ -43,22 +43,22 @@ class TestFlutterLocalNotificationsPlatform
   }
 
   @override
-  Future<void> periodicallyShow(
-    int id,
+  Future<void> periodicallyShow({
+    int? id,
     String? title,
     String? body,
-    RepeatInterval repeatInterval,
-  ) {
+    RepeatInterval? repeatInterval,
+  }) {
     return Future.value();
   }
 
   @override
-  Future<void> periodicallyShowWithDuration(
-    int id,
+  Future<void> periodicallyShowWithDuration({
+    int? id,
     String? title,
     String? body,
-    Duration repeatDurationInterval,
-  ) {
+    Duration? repeatDurationInterval,
+  }) {
     return Future.value();
   }
 

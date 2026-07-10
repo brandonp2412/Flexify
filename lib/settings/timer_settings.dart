@@ -234,7 +234,7 @@ List<Widget> getTimerSettings(
             TextButton.icon(
               onPressed: () async {
                 final result =
-                    await FilePicker.platform.pickFiles(type: FileType.audio);
+                    await FilePicker.pickFiles(type: FileType.audio);
                 if (result == null || result.files.single.path == null) return;
                 db.settings.update().write(
                       SettingsCompanion(

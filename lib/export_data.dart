@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/main.dart';
@@ -65,9 +66,9 @@ class ExportData extends StatelessWidget {
                         ]);
                       }
                       final csv =
-                          const ListToCsvConverter(eol: "\n").convert(data);
+                          CsvEncoder(lineDelimiter: "\n").convert(data);
                       final bytes = Uint8List.fromList(csv.codeUnits);
-                      await FilePicker.platform.saveFile(
+                      await FilePicker.saveFile(
                         fileName: 'graphs.csv',
                         bytes: bytes,
                       );
@@ -100,9 +101,9 @@ class ExportData extends StatelessWidget {
                       if (!await requestNotificationPermission()) return;
 
                       final csv =
-                          const ListToCsvConverter(eol: "\n").convert(data);
+                          CsvEncoder(lineDelimiter: "\n").convert(data);
                       final bytes = Uint8List.fromList(csv.codeUnits);
-                      await FilePicker.platform.saveFile(
+                      await FilePicker.saveFile(
                         fileName: 'plans.csv',
                         bytes: bytes,
                         type: FileType.custom,
@@ -119,7 +120,7 @@ class ExportData extends StatelessWidget {
                       final file =
                           File(p.join(dbFolder.path, 'flexify.sqlite'));
                       final bytes = await file.readAsBytes();
-                      final result = await FilePicker.platform.saveFile(
+                      final result = await FilePicker.saveFile(
                         fileName: 'flexify.sqlite',
                         bytes: bytes,
                         type: FileType.custom,

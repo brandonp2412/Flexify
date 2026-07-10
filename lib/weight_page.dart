@@ -25,7 +25,7 @@ class _WeightPageState extends State<WeightPage> {
   final key = GlobalKey<FormState>();
 
   void pick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.pickFiles();
     if (result?.files.single == null) return;
 
     setState(() {

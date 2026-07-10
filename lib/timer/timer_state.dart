@@ -155,7 +155,7 @@ class TimerState extends ChangeNotifier {
     );
 
     final plugin = FlutterLocalNotificationsPlugin();
-    await plugin.initialize(init);
+    await plugin.initialize(settings: init);
     _notifications = plugin;
     return _notifications;
   }
@@ -179,7 +179,7 @@ class TimerState extends ChangeNotifier {
 
     try {
       final plugin = await _getNotifications();
-      await plugin?.show(1, title ?? "Timer up", null, null);
+      await plugin?.show(id: 1, title: title ?? "Timer up");
     } catch (error, stack) {
       CrashLogger.instance?.record(error, stack, context: 'notify.show');
     }

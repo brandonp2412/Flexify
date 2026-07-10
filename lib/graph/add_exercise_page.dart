@@ -170,7 +170,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   }
 
   void pick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.pickFiles();
     if (result?.files.single == null) return;
 
     setState(() {

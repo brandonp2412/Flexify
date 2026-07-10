@@ -3926,8 +3926,7 @@ final class $$PlansTableReferences
   static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
       _planExercisesRefsTable(_$AppDatabase db) =>
           MultiTypedResultKey.fromTable(db.planExercises,
-              aliasName:
-                  $_aliasNameGenerator(db.plans.id, db.planExercises.planId));
+              aliasName: 'plans__id__plan_exercises__plan_id');
 
   $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
     final manager = $$PlanExercisesTableTableManager($_db, $_db.planExercises)
@@ -4182,8 +4181,7 @@ final class $$GymSetsTableReferences
   static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
       _planExercisesRefsTable(_$AppDatabase db) =>
           MultiTypedResultKey.fromTable(db.planExercises,
-              aliasName: $_aliasNameGenerator(
-                  db.gymSets.name, db.planExercises.exercise));
+              aliasName: 'gym_sets__name__plan_exercises__exercise');
 
   $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
     final manager = $$PlanExercisesTableTableManager($_db, $_db.planExercises)
@@ -5349,8 +5347,7 @@ final class $$PlanExercisesTableReferences
       super.$_db, super.$_table, super.$_typedResult);
 
   static $GymSetsTable _exerciseTable(_$AppDatabase db) =>
-      db.gymSets.createAlias(
-          $_aliasNameGenerator(db.planExercises.exercise, db.gymSets.name));
+      db.gymSets.createAlias('plan_exercises__exercise__gym_sets__name');
 
   $$GymSetsTableProcessedTableManager get exercise {
     final $_column = $_itemColumn<String>('exercise')!;
@@ -5363,8 +5360,8 @@ final class $$PlanExercisesTableReferences
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static $PlansTable _planIdTable(_$AppDatabase db) => db.plans
-      .createAlias($_aliasNameGenerator(db.planExercises.planId, db.plans.id));
+  static $PlansTable _planIdTable(_$AppDatabase db) =>
+      db.plans.createAlias('plan_exercises__plan_id__plans__id');
 
   $$PlansTableProcessedTableManager get planId {
     final $_column = $_itemColumn<int>('plan_id')!;
