@@ -7,6 +7,10 @@ device_type="${2:-phoneScreenshots}"
 
 echo "Running screenshot tests on Android device $device..."
 
+# Clean stale Kotlin compilation state that can cause
+# "cannot find symbol" errors for plugin classes in GeneratedPluginRegistrant.java
+(cd android && ./gradlew clean)
+
 export FLEXIFY_DEVICE_TYPE="$device_type"
 
 # --profile is required: Flutter 3.41.x has a framework-level
