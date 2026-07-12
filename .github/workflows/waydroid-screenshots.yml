@@ -1,0 +1,111 @@
+name: Waydroid Screenshots (experimental)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_screenshots:
+        description: "Run the full Waydroid screenshot flow (otherwise just probe binder support)"
+        type: boolean
+        default: true
+
+jobs:
+  waydroid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Probe kernel binder/ashmem support
+        run: |
+          set -x
+          uname -a
+          echo "--- modules dir ---"
+          find /lib/modules/$(uname -r) \( -name 'binder*' -o -name 'ashmem*' \) 2>/dev/null || true
+          echo "--- modinfo ---"
+          modinfo binder_linux 2>&1 || echo "binder_linux NOT found as module"
+          echo "--- try load ---"
+          sudo modprobe binder_linux 2>&1 && echo "binder_linux loaded OK" || echo "modprobe binder_linux failed"
+          echo "--- /proc/filesystems ---"
+          grep -i binder /proc/filesystems || echo "no binder in /proc/filesystems"
+          echo "--- try mount binderfs ---"
+          sudo mkdir -p /dev/binderfs
+          sudo mount -t binder binder /dev/binderfs 2>&1 && echo "binderfs mounted OK" || echo "binderfs mount failed"
+          ls -la /dev/binderfs 2>/dev/null || true
+
+      - name: Install anbox binder module (fallback if kernel lacks it)
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          set -x
+          if grep -qi binder /proc/filesystems; then
+            echo "Kernel already provides binder; skipping DKMS build."
+            exit 0
+          fi
+          sudo apt-get update
+          sudo apt-get install -y curl ca-certificates
+          curl -s https://repo.waydro.id | sudo bash || true
+          sudo apt-get install -y linux-headers-$(uname -r) dkms build-essential || true
+          git clone https://github.com/choff/anbox-modules.git /tmp/anbox-modules || true
+          cd /tmp/anbox-modules
+          sudo cp anbox.conf /etc/modules-load.d/ || true
+          sudo cp 99-anbox.rules /lib/udev/rules.d/ || true
+          sudo cp -rT ashmem /usr/src/anbox-ashmem-1 || true
+          sudo cp -rT binder /usr/src/anbox-binder-1 || true
+          sudo dkms install anbox-ashmem/1 || true
+          sudo dkms install anbox-binder/1 || true
+          sudo modprobe ashmem_linux || true
+          sudo modprobe binder_linux || true
+          grep -i binder /proc/filesystems || echo "STILL no binder after DKMS"
+
+      - name: Install Waydroid
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          set -x
+          sudo apt-get update
+          sudo apt-get install -y curl ca-certificates lxc iptables dnsmasq-base
+          curl -s https://repo.waydro.id | sudo bash
+          sudo apt-get install -y waydroid
+          sudo waydroid init -s GAPPS || sudo waydroid init
+
+      - name: Start Waydroid container
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          set -x
+          sudo systemctl start waydroid-container || sudo waydroid container start &
+          sleep 20
+          waydroid status || true
+
+      - name: Setup Flutter from submodule
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter --version
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get dependencies
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          flutter pub get
+          dart run build_runner build -d
+
+      - name: Setup Android SDK / adb
+        if: ${{ inputs.run_screenshots }}
+        uses: android-actions/setup-android@v3
+
+      - name: Run Waydroid screenshots
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          chmod +x scripts/*.sh
+          ./scripts/screenshots-waydroid.sh
+
+      - name: Upload screenshots
+        if: ${{ always() && inputs.run_screenshots }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: waydroid-screenshots
+          path: |
+            fastlane/metadata/android/en-US/images/**/*.png
+            fastlane/screenshots/**/*.png
+          if-no-files-found: warn
