@@ -103,8 +103,29 @@ jobs:
             sudo apt-get install -y android-tools-adb
           fi
 
+      - name: Start headless Wayland compositor
+        if: ${{ inputs.run_screenshots }}
+        run: |
+          set -x
+          sudo apt-get install -y weston
+          export XDG_RUNTIME_DIR=/tmp/xdg
+          mkdir -p "$XDG_RUNTIME_DIR"
+          chmod 0700 "$XDG_RUNTIME_DIR"
+          weston --backend=headless-backend.so --socket=wayland-1 \
+            --width=1080 --height=2424 >/tmp/weston.log 2>&1 &
+          for i in $(seq 1 20); do
+            [ -S "$XDG_RUNTIME_DIR/wayland-1" ] && break
+            sleep 1
+          done
+          echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> $GITHUB_ENV
+          echo "WAYLAND_DISPLAY=wayland-1" >> $GITHUB_ENV
+          ls -la "$XDG_RUNTIME_DIR" || true
+          cat /tmp/weston.log || true
+
       - name: Run Waydroid screenshots
         if: ${{ inputs.run_screenshots }}
+        env:
+          BOOT_TIMEOUT: "180"
         run: |
           chmod +x scripts/*.sh
           ./scripts/screenshots-waydroid.sh
