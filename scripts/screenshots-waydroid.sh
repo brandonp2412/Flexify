@@ -70,8 +70,12 @@ bring_up_waydroid() {
     local w="$1" h="$2" _
 
     log "Setting Waydroid resolution to ${w}x${h}"
-    sudo sed -i '/^persist\.waydroid\.width=/d;/^persist\.waydroid\.height=/d' "$BASE_PROP"
-    printf 'persist.waydroid.width=%s\npersist.waydroid.height=%s\n' "$w" "$h" | sudo tee -a "$BASE_PROP" >/dev/null
+    # qemu.hw.mainkeys=1 tells Android the device has hardware navigation keys, so
+    # SystemUI never draws the on-screen navigation bar. Without it the opaque nav
+    # bar is captured as a black strip at the bottom of every screenshot, since
+    # integration_test PixelCopies the FlutterView rect straight from the window.
+    sudo sed -i '/^persist\.waydroid\.width=/d;/^persist\.waydroid\.height=/d;/^qemu\.hw\.mainkeys=/d' "$BASE_PROP"
+    printf 'persist.waydroid.width=%s\npersist.waydroid.height=%s\nqemu.hw.mainkeys=1\n' "$w" "$h" | sudo tee -a "$BASE_PROP" >/dev/null
 
     log "Stopping Waydroid session/container for a clean boot..."
     cleanup_hung_adb
