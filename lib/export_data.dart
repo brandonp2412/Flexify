@@ -65,8 +65,7 @@ class ExportData extends StatelessWidget {
                           gymSet.incline,
                         ]);
                       }
-                      final csv =
-                          CsvEncoder(lineDelimiter: "\n").convert(data);
+                      final csv = CsvEncoder(lineDelimiter: "\n").convert(data);
                       final bytes = Uint8List.fromList(csv.codeUnits);
                       await FilePicker.saveFile(
                         fileName: 'graphs.csv',
@@ -100,8 +99,7 @@ class ExportData extends StatelessWidget {
 
                       if (!await requestNotificationPermission()) return;
 
-                      final csv =
-                          CsvEncoder(lineDelimiter: "\n").convert(data);
+                      final csv = CsvEncoder(lineDelimiter: "\n").convert(data);
                       final bytes = Uint8List.fromList(csv.codeUnits);
                       await FilePicker.saveFile(
                         fileName: 'plans.csv',
