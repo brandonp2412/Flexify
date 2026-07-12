@@ -107,10 +107,12 @@ jobs:
         if: ${{ inputs.run_screenshots }}
         run: |
           set -x
-          sudo apt-get install -y weston
+          sudo apt-get install -y weston dbus-x11
           export XDG_RUNTIME_DIR=/tmp/xdg
           mkdir -p "$XDG_RUNTIME_DIR"
           chmod 0700 "$XDG_RUNTIME_DIR"
+          eval "$(dbus-launch --sh-syntax)"
+          echo "DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS" >> $GITHUB_ENV
           weston --backend=headless-backend.so --socket=wayland-1 \
             --width=1080 --height=2424 >/tmp/weston.log 2>&1 &
           for i in $(seq 1 20); do
