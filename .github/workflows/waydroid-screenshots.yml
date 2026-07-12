@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           submodules: recursive
 
       - name: Probe kernel binder/ashmem support
@@ -79,6 +80,7 @@ jobs:
       - name: Setup Flutter from submodule
         if: ${{ inputs.run_screenshots }}
         run: |
+          git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
           echo "$PWD/flutter/bin" >> $GITHUB_PATH
           flutter/bin/flutter --version
