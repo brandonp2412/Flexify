@@ -147,6 +147,12 @@ jobs:
           cat /tmp/session.log || true
           echo "--- waydroid-container journal ---"
           sudo journalctl -u waydroid-container --no-pager -n 80 || true
+          echo "--- waydroid.log ---"
+          sudo cat /var/lib/waydroid/waydroid.log 2>/dev/null | tail -80 || true
+          echo "--- lxc console/log ---"
+          sudo find /var/lib/waydroid/lxc -name '*.log' -exec echo '== {} ==' \; -exec cat {} \; 2>/dev/null | tail -120 || true
+          echo "--- dmesg binder/lxc ---"
+          sudo dmesg 2>/dev/null | grep -iE 'binder|lxc|apparmor|audit|android|init' | tail -60 || true
           echo "--- logcat (if up) ---"
           timeout 15 waydroid logcat -d 2>/dev/null | tail -60 || true
 
