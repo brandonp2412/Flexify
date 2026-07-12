@@ -394,10 +394,6 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '6_en-US',
-        navigateToPage: (context) async => navigateTo(
-          context: context,
-          page: HistoryPage(tabController: MockTabController()),
-        ),
         tabBarState: 'HistoryPage',
       ),
     );
