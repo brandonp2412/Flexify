@@ -92,9 +92,16 @@ jobs:
           flutter pub get
           dart run build_runner build -d
 
-      - name: Setup Android SDK / adb
+      - name: Ensure adb is available
         if: ${{ inputs.run_screenshots }}
-        uses: android-actions/setup-android@v3
+        run: |
+          if command -v adb >/dev/null 2>&1; then
+            adb version
+          elif [ -x "$ANDROID_HOME/platform-tools/adb" ]; then
+            echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+          else
+            sudo apt-get install -y android-tools-adb
+          fi
 
       - name: Run Waydroid screenshots
         if: ${{ inputs.run_screenshots }}
