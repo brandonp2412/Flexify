@@ -421,6 +421,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   focusNode: focusNode,
                   decoration: const InputDecoration(
                     labelText: 'Category',
+                    helperText: 'Muscle group, e.g. Chest or Legs',
                   ),
                   onChanged: (value) => setState(() {
                     category = value.isNotEmpty ? value : null;
