@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-/// Total height of the floating [BottomNav] bar: its 80px body plus the 16px
-/// vertical padding on each side. Pages drawn behind the nav should reserve
-/// this much space at the bottom so trailing content is not obscured.
-const double bottomNavHeight = 112;
+/// Total height this floating dock occupies, including outer padding.
+const double bottomNavHeight = 96;
 
-class BottomNav extends StatefulWidget {
+/// Variant 1: "Pill dock" — a compact centered pill where the selected tab
+/// expands horizontally to reveal its label while unselected tabs collapse
+/// to icon-only circles.
+class BottomNav extends StatelessWidget {
   final List<String> tabs;
   final int currentIndex;
   final Function(int) onTap;
@@ -20,188 +21,88 @@ class BottomNav extends StatefulWidget {
   });
 
   @override
-  State<BottomNav> createState() => _BottomNavState();
-}
-
-class _BottomNavState extends State<BottomNav> with TickerProviderStateMixin {
-  late AnimationController _slideController;
-  late Animation<double> _slideAnimation;
-  int _previousIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _slideController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _slideAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _slideController,
-        curve: Curves.easeInOutCubic,
-      ),
-    );
-    _previousIndex = widget.currentIndex;
-  }
-
-  @override
-  void didUpdateWidget(BottomNav oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentIndex != widget.currentIndex) {
-      _previousIndex = oldWidget.currentIndex;
-      _slideController.reset();
-      _slideController.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    _slideController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
 
-    return Container(
-      color: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-        child: Stack(
-          children: [
-            // Background sliding indicator
-            AnimatedBuilder(
-              animation: _slideAnimation,
-              builder: (context, child) {
-                double tabWidth = (MediaQuery.of(context).size.width - 40) /
-                    widget.tabs.length;
-                double startX = _previousIndex * tabWidth;
-                double endX = widget.currentIndex * tabWidth;
-                double currentX =
-                    startX + (endX - startX) * _slideAnimation.value;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+      child: Center(
+        child: Container(
+          height: 60,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: color.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: tabs.asMap().entries.map((entry) {
+              final index = entry.key;
+              final tab = entry.value;
+              final isSelected = index == currentIndex;
+              final label = _getLabelForTab(tab);
 
-                return Positioned(
-                  left: currentX + 4,
+              return Semantics(
+                label: label,
+                button: true,
+                selected: isSelected,
+                child: GestureDetector(
+                  key: Key(tab),
+                  onTap: () => onTap(index),
+                  onLongPress: onLongPress != null
+                      ? () => onLongPress!(context, tab)
+                      : null,
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    width: tabWidth - 8,
-                    height: 80,
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeOutCubic,
+                    height: 48,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isSelected ? 16 : 12,
+                    ),
                     decoration: BoxDecoration(
-                      color: color.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: color.primary.withValues(alpha: 0.3),
-                        width: 2,
-                      ),
+                      color: isSelected ? color.primary : Colors.transparent,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _getIconForTab(tab),
+                          color: isSelected ? color.onPrimary : color.onSurface,
+                          size: 24,
+                          semanticLabel: label,
+                        ),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 350),
+                          curve: Curves.easeOutCubic,
+                          child: isSelected
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Text(
+                                    label,
+                                    maxLines: 1,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(color: color.onPrimary),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
-            // Tab items
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: widget.tabs.asMap().entries.map((entry) {
-                int index = entry.key;
-                String tab = entry.value;
-                bool isSelected = index == widget.currentIndex;
-
-                final label = _getLabelForTab(tab);
-                return Expanded(
-                  child: Semantics(
-                    label: label,
-                    button: true,
-                    selected: isSelected,
-                    child: GestureDetector(
-                      key: Key(tab),
-                      onTap: () => widget.onTap(index),
-                      onLongPress: widget.onLongPress != null
-                          ? () => widget.onLongPress!(context, tab)
-                          : null,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? color.primary
-                              : color.surfaceContainerLow,
-                          borderRadius:
-                              BorderRadius.circular(isSelected ? 25 : 18),
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedScale(
-                              scale: isSelected ? 1.1 : 1.0,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                              child: Icon(
-                                _getIconForTab(tab),
-                                color: isSelected
-                                    ? color.onPrimary
-                                    : color.onSurface,
-                                size: 24,
-                                semanticLabel: label,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Text(
-                                label,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(
-                                      color: isSelected
-                                          ? color.onPrimary
-                                          : color.onSurface,
-                                    ),
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            // Sliding direction indicator (optional visual enhancement)
-            AnimatedBuilder(
-              animation: _slideAnimation,
-              builder: (context, child) {
-                if (_slideAnimation.isAnimating) {
-                  bool isMovingRight = widget.currentIndex > _previousIndex;
-                  return Positioned(
-                    top: 35,
-                    left: isMovingRight ? null : 20,
-                    right: isMovingRight ? 20 : null,
-                    child: AnimatedOpacity(
-                      opacity: _slideAnimation.value,
-                      duration: const Duration(milliseconds: 150),
-                      child: Icon(
-                        isMovingRight
-                            ? Icons.keyboard_arrow_right
-                            : Icons.keyboard_arrow_left,
-                        color: color.primary.withValues(alpha: 0.6),
-                        size: 20,
-                      ),
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
+                ),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
