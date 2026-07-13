@@ -76,6 +76,9 @@ class _EditSetPageState extends State<EditSetPage> {
         if (template != null) {
           cardio = template.cardio;
           unit = template.unit;
+          category = template.category;
+          if (template.category != null && template.category!.isNotEmpty)
+            categoryCtrl.text = template.category!;
         }
       });
     }
