@@ -161,6 +161,14 @@ jobs:
         working-directory: /home/brandon/flexify
         run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
 
+      - name: Tune Gradle for CI runner memory
+        working-directory: /home/brandon/flexify
+        run: |
+          sed -i \
+            -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
+            -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
+            android/gradle.properties
+
       - name: Build android
         working-directory: /home/brandon/flexify
         run: |
