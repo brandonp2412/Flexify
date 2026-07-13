@@ -52,6 +52,7 @@ jobs:
     outputs:
       version: ${{ steps.bump.outputs.version }}
       build_number: ${{ steps.bump.outputs.build_number }}
+      commit_sha: ${{ steps.bump.outputs.commit_sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -115,6 +116,7 @@ jobs:
           git add pubspec.yaml fastlane/metadata assets/changelogs
           git commit -m "Release ${{ steps.bump.outputs.version }} [skip ci]"
           git push origin main
+          echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
   build-android:
     needs: version-bump
@@ -122,7 +124,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Java
@@ -188,7 +190,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
@@ -229,7 +231,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
@@ -270,7 +272,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
@@ -312,7 +314,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.version-bump.outputs.commit_sha }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -347,7 +349,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Flutter from submodule
