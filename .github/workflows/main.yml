@@ -116,11 +116,6 @@ jobs:
           git commit -m "Release ${{ steps.bump.outputs.version }} [skip ci]"
           git push origin main
 
-      - name: Create and push tag
-        run: |
-          git tag "${{ steps.bump.outputs.version }}"
-          git push origin "${{ steps.bump.outputs.version }}"
-
   build-android:
     needs: version-bump
     runs-on: ubuntu-latest
@@ -323,6 +318,13 @@ jobs:
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
+
+      - name: Create and push tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag "${{ needs.version-bump.outputs.version }}"
+          git push origin "${{ needs.version-bump.outputs.version }}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
