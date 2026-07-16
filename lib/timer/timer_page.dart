@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,6 +86,10 @@ class _TimerPageWidgetState extends State<_TimerPageWidget> {
   void _onTimerStateChanged() {
     if (!widget.timerState.justExpired) return;
     widget.timerState.justExpired = false;
+    // Android's TimerService already shows a system notification with its
+    // own Stop/Add 1 min actions when the timer expires, so an in-app toast
+    // here would just duplicate it.
+    if (!kIsWeb && Platform.isAndroid) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       toast(

@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
@@ -71,31 +71,71 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void hideTab(BuildContext context, String tab) {
+  void hideTab(BuildContext context, String tab) async {
     final state = context.read<SettingsState>();
-    final old = state.value.tabs;
-    var tabs = state.value.tabs.split(',');
+    final tabs = state.value.tabs.split(',');
 
     if (tabs.length == 1) return toast("Can't hide everything!");
+
+    final label = BottomNav.labelForTab(tab);
+    final confirmed = await showModalBottomSheet<bool>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(BottomNav.iconForTab(tab)),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Remove $label tab?',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'You can add it back later from settings.',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancel'),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('Remove'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (confirmed != true) return;
+
     tabs.remove(tab);
-    db.settings.update().write(
+    await db.settings.update().write(
           SettingsCompanion(
             tabs: Value(tabs.join(',')),
           ),
         );
-    toast(
-      'Hid $tab',
-      action: SnackBarAction(
-        label: 'Undo',
-        onPressed: () {
-          db.settings.update().write(
-                SettingsCompanion(
-                  tabs: Value(old),
-                ),
-              );
-        },
-      ),
-    );
+    if (context.mounted) toast('Removed $label');
   }
 
   @override

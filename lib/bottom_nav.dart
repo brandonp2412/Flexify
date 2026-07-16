@@ -47,7 +47,7 @@ class BottomNav extends StatelessWidget {
               final index = entry.key;
               final tab = entry.value;
               final isSelected = index == currentIndex;
-              final label = _getLabelForTab(tab);
+              final label = labelForTab(tab);
 
               return Semantics(
                 label: label,
@@ -74,7 +74,7 @@ class BottomNav extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          _getIconForTab(tab),
+                          iconForTab(tab),
                           color: isSelected ? color.onPrimary : color.onSurface,
                           size: 24,
                           semanticLabel: label,
@@ -108,7 +108,7 @@ class BottomNav extends StatelessWidget {
     );
   }
 
-  IconData _getIconForTab(String tab) {
+  static IconData iconForTab(String tab) {
     switch (tab) {
       case 'HistoryPage':
         return Icons.history_rounded;
@@ -127,7 +127,7 @@ class BottomNav extends StatelessWidget {
     }
   }
 
-  String _getLabelForTab(String tab) {
+  static String labelForTab(String tab) {
     switch (tab) {
       case 'HistoryPage':
         return 'History';

@@ -29,12 +29,21 @@ class NativeTimerWrapper {
 
   int getTimeStamp() => stamp.millisecondsSinceEpoch;
 
-  NativeTimerWrapper increaseDuration(Duration increase) => NativeTimerWrapper(
-        total + increase,
-        isRunning() ? elapsed : Duration.zero,
-        isRunning() ? stamp : DateTime.now(),
-        NativeTimerState.running,
-      );
+  NativeTimerWrapper increaseDuration(Duration increase) => isRunning()
+      ? NativeTimerWrapper(
+          total + increase,
+          elapsed,
+          stamp,
+          NativeTimerState.running,
+        )
+      // Mirrors TimerService.addReceiver on Android: a non-running timer is
+      // restarted fresh with just the added duration, not total + increase.
+      : NativeTimerWrapper(
+          increase,
+          Duration.zero,
+          DateTime.now(),
+          NativeTimerState.running,
+        );
   bool isRunning() => state == NativeTimerState.running;
   bool update() {
     if (state == NativeTimerState.running &&
