@@ -83,7 +83,7 @@ class _StartListState extends State<StartList> {
     if (trailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
         itemCount: widget.exercises.length,
-        padding: const EdgeInsets.only(bottom: 76),
+        padding: EdgeInsets.zero,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, max, trailing, counts),
         onReorderItem: (oldIndex, newIndex) async {
@@ -108,7 +108,7 @@ class _StartListState extends State<StartList> {
       );
     else
       return ListView.builder(
-        padding: const EdgeInsets.only(bottom: 76),
+        padding: EdgeInsets.zero,
         itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, max, trailing, counts),

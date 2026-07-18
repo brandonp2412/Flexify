@@ -108,6 +108,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                       exercise: snapshot.data![selected].exercise,
                       planId: widget.plan.id,
                     ),
+                  SizedBox(height: 8.0),
                   if (snapshot.data!.isEmpty)
                     const Expanded(
                       child: Center(

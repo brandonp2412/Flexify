@@ -156,7 +156,12 @@ class _EditSetPageState extends State<EditSetPage> {
               onPressed: () async {
                 Navigator.pop(dialogContext);
                 await db.delete(db.gymSets).delete(widget.gymSet);
-                if (mounted) Navigator.pop(context);
+                if (mounted) {
+                  final planState = context.read<PlanState>();
+                  if (widget.gymSet.planId != null)
+                    planState.updateGymCounts(widget.gymSet.planId!);
+                  Navigator.pop(context);
+                }
               },
             ),
           ],
@@ -462,6 +467,7 @@ class _EditSetPageState extends State<EditSetPage> {
         ),
         trailing: const Icon(Icons.calendar_today),
         onTap: () => selectDate(),
+        onLongPress: () => Navigator.of(context).pop(),
       ),
       selector: (context, settings) => settings.value.longDateFormat,
     );
@@ -677,11 +683,15 @@ class _EditSetPageState extends State<EditSetPage> {
             .write(GymSetsCompanion(image: Value(image)));
       if (!mounted) return;
       planState.updateDefaults();
+      if (widget.gymSet.planId != null)
+        planState.updateGymCounts(widget.gymSet.planId!);
       return Navigator.of(context).pop();
     } else {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
       await db.into(db.gymSets).insert(insert);
       planState.updateDefaults();
+      if (widget.gymSet.planId != null)
+        planState.updateGymCounts(widget.gymSet.planId!);
     }
 
     if (settings.notifications) {

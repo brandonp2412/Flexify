@@ -68,6 +68,7 @@ class TimerState extends ChangeNotifier {
     bool enableSound,
   ) async {
     starting = false;
+    _notifications?.cancel(id: 1);
     final updated = timer.increaseDuration(
       const Duration(minutes: 1),
     );
