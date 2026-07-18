@@ -318,7 +318,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 child: data.isEmpty
                     ? const Center(child: Text("No data yet."))
                     : Padding(
-                        padding: const EdgeInsets.only(top: 16.0, right: 35.0),
+                        padding: const EdgeInsets.only(top: 16.0, right: 45.0),
                         child: FlexLine(
                           data: data,
                           spots: spots,
@@ -329,21 +329,23 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                       ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: TextField(
-                  controller: _notesCtrl,
-                  readOnly: true,
-                  onTap: _editNotes,
-                  decoration: const InputDecoration(
-                    labelText: 'Exercise notes',
-                    hintText: 'Notes for this exercise',
+              if (settings.showNotes) ...[
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextField(
+                    controller: _notesCtrl,
+                    readOnly: true,
+                    onTap: _editNotes,
+                    decoration: const InputDecoration(
+                      labelText: 'Exercise notes',
+                      hintText: 'Notes for this exercise',
+                    ),
+                    minLines: 2,
+                    maxLines: 5,
                   ),
-                  minLines: 2,
-                  maxLines: 5,
                 ),
-              ),
-              const SizedBox(height: 8),
+              ],
             ],
           ),
         ),

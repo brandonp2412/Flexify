@@ -402,6 +402,7 @@ class _CardioPageState extends State<CardioPage> {
                         ),
                       ),
               ),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
