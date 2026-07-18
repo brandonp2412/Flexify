@@ -143,6 +143,13 @@ jobs:
           cd ..
           mv ${{ github.event.repository.name }} /home/brandon/flexify
 
+      - name: Normalize Android SDK path
+        run: |
+          sudo mkdir -p /opt/android-sdk
+          sudo cp -a "$ANDROID_HOME/." /opt/android-sdk/
+          echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
+
       - name: Setup Flutter from submodule and get dependencies
         working-directory: /home/brandon/flexify
         run: |
@@ -150,8 +157,15 @@ jobs:
           chmod +x flutter/bin/*
           echo "/home/brandon/flexify/flutter/bin" >> $GITHUB_PATH
           export PUB_CACHE=$(pwd)/.pub-cache
+          echo "PUB_CACHE=$(pwd)/.pub-cache" >> $GITHUB_ENV
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get
+
+      - name: Strip non-deterministic build IDs from jni native library
+        working-directory: /home/brandon/flexify
+        run: |
+          sed -i -e 's/-Wl,/-Wl,--build-id=none,/' \
+            .pub-cache/hosted/pub.dev/jni-*/src/CMakeLists.txt
 
       - name: Run build_runner
         working-directory: /home/brandon/flexify
