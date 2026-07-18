@@ -161,12 +161,6 @@ jobs:
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get
 
-      - name: Strip non-deterministic build IDs from jni native library
-        working-directory: /home/brandon/flexify
-        run: |
-          sed -i -e 's/-Wl,/-Wl,--build-id=none,/' \
-            .pub-cache/hosted/pub.dev/jni-*/src/CMakeLists.txt
-
       - name: Run build_runner
         working-directory: /home/brandon/flexify
         run: dart run build_runner build -d
@@ -187,15 +181,17 @@ jobs:
         working-directory: /home/brandon/flexify
         run: rm -f android/local.properties
 
-      - name: Build android
+      - name: Build android (one ABI at a time)
         working-directory: /home/brandon/flexify
         run: |
           echo "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
-          flutter build apk --split-per-abi
-          flutter build apk
+          flutter build apk --release --split-per-abi --target-platform android-x64
+          flutter build apk --release --split-per-abi --target-platform android-arm64
+          flutter build apk --release --split-per-abi --target-platform android-arm
+          flutter build apk --release
           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
           flutter build appbundle
           mkdir -p "${GITHUB_WORKSPACE}/build"
