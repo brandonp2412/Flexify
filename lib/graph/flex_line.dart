@@ -74,7 +74,7 @@ class FlexLine extends StatelessWidget {
 
     if (timeBasedXAxis) {
       if (spots.isEmpty) {
-        text = const Text('', style: style);
+        text = const Text('');
       } else {
         int nearestIndex = -1;
         double minDiff = 2;
@@ -94,10 +94,9 @@ class FlexLine extends StatelessWidget {
           DateTime created = data[nearestIndex].created;
           text = Text(
             DateFormat(format).format(created),
-            style: style,
           );
         } else {
-          text = const Text('', style: style);
+          text = const Text('');
         }
       }
     } else {
@@ -109,10 +108,9 @@ class FlexLine extends StatelessWidget {
         DateTime created = data[value.toInt()].created;
         text = Text(
           DateFormat(format).format(created),
-          style: style,
         );
       } else {
-        text = const Text('', style: style);
+        text = const Text('');
       }
     }
 

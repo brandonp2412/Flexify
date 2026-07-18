@@ -318,7 +318,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 child: data.isEmpty
                     ? const Center(child: Text("No data yet."))
                     : Padding(
-                        padding: const EdgeInsets.only(right: 32.0, top: 16.0),
+                        padding: const EdgeInsets.only(top: 16.0, right: 35.0),
                         child: FlexLine(
                           data: data,
                           spots: spots,
