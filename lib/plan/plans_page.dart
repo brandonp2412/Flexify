@@ -145,6 +145,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             left: 0,
             right: 0,
             child: AppSearch(
+              hintText: 'Search plans...',
               controller: _selection,
               onShare: () async {
                 final plans = (state?.plans)!

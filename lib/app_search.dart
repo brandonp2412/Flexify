@@ -20,6 +20,7 @@ class AppSearch extends StatefulWidget {
   final VoidCallback? onRefresh;
   final Widget? filter;
   final String? confirmText;
+  final String? hintText;
 
   const AppSearch({
     super.key,
@@ -32,6 +33,7 @@ class AppSearch extends StatefulWidget {
     this.onRefresh,
     this.filter,
     this.confirmText,
+    this.hintText,
   });
 
   @override
@@ -95,7 +97,7 @@ class _AppSearchState extends State<AppSearch> {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: SearchBar(
-        hintText: "Search...",
+        hintText: widget.hintText ?? "Search...",
         controller: ctrl,
         padding: WidgetStateProperty.all(
           const EdgeInsets.only(right: 8.0),

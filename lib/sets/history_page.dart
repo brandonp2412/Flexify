@@ -168,6 +168,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 left: 0,
                 right: 0,
                 child: AppSearch(
+                  hintText: 'Search history...',
                   controller: _selection,
                   filter: Filters(
                     repsGtCtrl: repsGt,

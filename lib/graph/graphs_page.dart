@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -14,6 +13,7 @@ import 'package:flexify/graph/global_progress_page.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -227,6 +227,7 @@ class GraphsPageState extends State<GraphsPage>
                 left: 0,
                 right: 0,
                 child: AppSearch(
+                  hintText: 'Search graphs...',
                   controller: _selection,
                   filter: GraphsFilters(
                     category: category,
