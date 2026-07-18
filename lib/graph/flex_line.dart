@@ -202,6 +202,7 @@ class FlexLine extends StatelessWidget {
 
     return LineChart(
       LineChartData(
+        borderData: FlBorderData(show: false),
         // FIX: Set explicit min/max for Y-axis to prevent decimal interval issues
         minY: minY,
         maxY: maxY,

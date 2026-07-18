@@ -122,6 +122,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
     var lineChart = LineChart(
       LineChartData(
+        borderData: FlBorderData(show: false),
         titlesData: const FlTitlesData(
           topTitles: AxisTitles(
             sideTitles: SideTitles(showTitles: false),
