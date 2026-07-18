@@ -84,7 +84,7 @@ class _SessionSetsState extends State<SessionSets> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 8.0),
+        const SizedBox(height: 16.0),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
