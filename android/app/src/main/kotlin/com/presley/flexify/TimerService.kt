@@ -74,6 +74,16 @@ class TimerService : Service() {
             }
         }
 
+    private val finishedStopReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                mediaPlayer?.stop()
+                vibrator?.cancel()
+                val notificationManager = NotificationManagerCompat.from(this@TimerService)
+                notificationManager.cancel(FINISHED_ID)
+            }
+        }
+
     private val addReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -112,6 +122,14 @@ class TimerService : Service() {
             addReceiver, IntentFilter().apply {
                 addAction(ADD_BROADCAST)
                 addAction(ADD_BROADCAST_INTERNAL)
+            },
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
+        ContextCompat.registerReceiver(
+            applicationContext,
+            finishedStopReceiver, IntentFilter().apply {
+                addAction(STOP_FINISHED_INTERNAL)
             },
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
@@ -213,6 +231,7 @@ class TimerService : Service() {
         if (timerRunnable != null) timerHandler.removeCallbacks(timerRunnable!!)
         applicationContext.unregisterReceiver(stopReceiver)
         applicationContext.unregisterReceiver(addReceiver)
+        applicationContext.unregisterReceiver(finishedStopReceiver)
         mediaPlayer?.stop()
         mediaPlayer?.release()
         vibrator?.cancel()
@@ -378,7 +397,7 @@ class TimerService : Service() {
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val stopBroadcast = Intent(STOP_BROADCAST_INTERNAL)
+        val stopBroadcast = Intent(STOP_FINISHED_INTERNAL)
         stopBroadcast.setPackage(applicationContext.packageName)
         val pendingStop =
             PendingIntent.getBroadcast(
@@ -446,6 +465,7 @@ class TimerService : Service() {
         const val ADD_BROADCAST = "add-timer-event"
         const val ADD_BROADCAST_INTERNAL = "add-timer-event-internal"
         const val TIMER_EXPIRED = "timer-expired-event"
+        const val STOP_FINISHED_INTERNAL = "stop-finished-internal"
         const val ONGOING_ID = 1
         const val FINISHED_ID = 2
     }

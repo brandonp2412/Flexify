@@ -183,6 +183,10 @@ jobs:
             -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
             android/gradle.properties
 
+      - name: Remove stale local.properties to ensure version from pubspec.yaml
+        working-directory: /home/brandon/flexify
+        run: rm -f android/local.properties
+
       - name: Build android
         working-directory: /home/brandon/flexify
         run: |
