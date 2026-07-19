@@ -7,7 +7,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
-import 'package:flexify/sets/history_collapsed.dart';
+import 'package:flexify/sets/group_history.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -124,7 +124,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                             if (groupHistory) {
                               final historyDays =
                                   getHistoryDays(snapshot.data!);
-                              return HistoryCollapsed(
+                              return GroupHistory(
                                 scroll: scroll,
                                 days: historyDays,
                                 onSelect: (id) {

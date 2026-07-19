@@ -10,13 +10,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class HistoryCollapsed extends StatefulWidget {
+class GroupHistory extends StatefulWidget {
   final List<HistoryDay> days;
   final ScrollController scroll;
   final Function(int) onSelect;
   final Set<int> selected;
   final Function onNext;
-  const HistoryCollapsed({
+  const GroupHistory({
     super.key,
     required this.days,
     required this.onSelect,
@@ -26,10 +26,10 @@ class HistoryCollapsed extends StatefulWidget {
   });
 
   @override
-  State<HistoryCollapsed> createState() => _HistoryCollapsedState();
+  State<GroupHistory> createState() => _GroupHistoryState();
 }
 
-class _HistoryCollapsedState extends State<HistoryCollapsed> {
+class _GroupHistoryState extends State<GroupHistory> {
   bool goingNext = false;
 
   @override

@@ -14,7 +14,7 @@ Flutter app, ~78 Dart files under `lib/`. Flat top-level files plus feature subf
   `start_list`, `session_sets`, `swap_workout`, `exercise_tile`, `exercise_modal`, plan/plans tiles.
 - `graph/` — `graphs_page`, `strength_page`/`strength_data`, `cardio_page`/`cardio_data`,
   `global_progress_page`, `edit_graph_page`, `graph_history_page`, `graph_notes_page`, `flex_line`.
-- `sets/` — `history_page`, `history_list`, `history_collapsed`, `edit_sets_page`, `edit_set_page`.
+- `sets/` — `history_page`, `history_list`, `group_history`, `edit_sets_page`, `edit_set_page`.
 - `timer/` — `timer_page`, `timer_state` (ChangeNotifier), `stopwatch_page`, `timer_progress_widgets`.
 - `settings/` — `settings_page`, `settings_state` (ChangeNotifier), plus per-section pages:
   `appearance_settings`, `format_settings`, `timer_settings`, `data_settings`, `tab_settings`,
