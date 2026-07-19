@@ -32,7 +32,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    expect(find.text('Search...'), findsOne);
+    expect(find.text('Search plans...'), findsOne);
     expect(find.byType(ListTile), findsWidgets);
 
     await db.close();
@@ -174,7 +174,7 @@ void main() async {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Search...'), findsOne);
+    expect(find.text('Search plans...'), findsOne);
 
     await db.close();
   });

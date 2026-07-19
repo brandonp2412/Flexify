@@ -32,7 +32,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    expect(find.text('Search...'), findsOne);
+    expect(find.text('Search graphs...'), findsOne);
     expect(find.byType(ListTile), findsWidgets);
 
     await db.close();

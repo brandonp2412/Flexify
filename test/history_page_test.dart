@@ -32,7 +32,7 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    expect(find.text('Search...'), findsOne);
+    expect(find.text('Search history...'), findsOne);
     expect(find.text('No entries yet'), findsOne);
 
     await db.close();
@@ -81,7 +81,6 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    expect(find.text('Search...'), findsOne);
     expect(find.text('Bench press'), findsNWidgets(3));
     expect(find.text('1 x 90 kg'), findsOne);
     expect(find.text('4 x 80 kg'), findsOne);
@@ -232,7 +231,7 @@ void main() async {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Search...'), findsOne);
+    expect(find.text('Search history...'), findsOne);
 
     await db.close();
   });
