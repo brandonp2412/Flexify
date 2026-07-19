@@ -24,7 +24,6 @@ class _TabSettingsState extends State<TabSettings> {
     (name: 'PlansPage', enabled: false),
     (name: 'GraphsPage', enabled: false),
     (name: 'TimerPage', enabled: false),
-    (name: 'StopwatchPage', enabled: false),
     (name: 'SettingsPage', enabled: false),
   ];
 
@@ -187,26 +186,6 @@ class _TabSettingsState extends State<TabSettings> {
                           const Icon(Icons.timer),
                           SizedBox(width: 8),
                           const Text("Timer"),
-                        ],
-                      ),
-                      trailing: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  } else if (tab.name == 'StopwatchPage') {
-                    return ListTile(
-                      key: Key(tab.name),
-                      onTap: () => setTab(tab.name, !tab.enabled),
-                      leading: Switch(
-                        value: tab.enabled,
-                        onChanged: (value) => setTab(tab.name, value),
-                      ),
-                      title: Row(
-                        children: [
-                          const Icon(Icons.timer_outlined),
-                          SizedBox(width: 8),
-                          const Text("Stopwatch"),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(

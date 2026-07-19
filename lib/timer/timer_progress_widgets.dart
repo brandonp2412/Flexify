@@ -140,6 +140,93 @@ class _TimerCircularProgressIndicatorState
   }
 }
 
+class StopwatchProgressIndicator extends StatelessWidget {
+  final Duration elapsed;
+  final TimerState timerState;
+  final VoidCallback onRestart;
+
+  const StopwatchProgressIndicator({
+    super.key,
+    required this.elapsed,
+    required this.timerState,
+    required this.onRestart,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const double circleSize = 280;
+    const double strokeWidth = 10;
+
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final started = elapsed > Duration.zero;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: circleSize,
+          height: circleSize,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              SizedBox.expand(
+                child: CircularProgressIndicator(
+                  strokeCap: StrokeCap.round,
+                  value: 1,
+                  strokeWidth: strokeWidth,
+                  backgroundColor: onSurface.withValues(alpha: 0.08),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    onSurface.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+              Text(
+                _formatElapsed(elapsed),
+                style: TextStyle(
+                  fontSize: 46,
+                  color: onSurface,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: 2,
+                  fontFeatures: [const FontFeature.tabularFigures()],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        TextButton(
+          onPressed: started ? onRestart : () => _addOneMinute(context),
+          child: Text(started ? 'Restart' : '+1 minute'),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _addOneMinute(BuildContext context) async {
+    final settings = context.read<SettingsState>().value;
+    if (defaultTargetPlatform != TargetPlatform.linux)
+      await requestNotificationPermission();
+    await timerState.addOneMinute(
+      settings.alarmSound,
+      settings.vibrate,
+      settings.enableSound,
+    );
+  }
+
+  String _formatElapsed(Duration elapsed) {
+    final hours = elapsed.inHours;
+    final minutes = elapsed.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = elapsed.inSeconds.remainder(60).toString().padLeft(2, '0');
+    final centiseconds =
+        (elapsed.inMilliseconds.remainder(1000) ~/ 10).toString().padLeft(
+              2,
+              '0',
+            );
+    if (hours > 0) return '$hours:$minutes:$seconds.$centiseconds';
+    return '$minutes:$seconds.$centiseconds';
+  }
+}
+
 class TimerProgressIndicator extends StatefulWidget {
   const TimerProgressIndicator({super.key});
 

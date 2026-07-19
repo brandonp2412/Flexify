@@ -118,8 +118,6 @@ class BottomNav extends StatelessWidget {
         return Icons.insights_rounded;
       case 'TimerPage':
         return Icons.timer_rounded;
-      case 'StopwatchPage':
-        return Icons.timer_outlined;
       case 'SettingsPage':
         return Icons.settings_rounded;
       default:
@@ -137,8 +135,6 @@ class BottomNav extends StatelessWidget {
         return 'Graphs';
       case 'TimerPage':
         return 'Timer';
-      case 'StopwatchPage':
-        return 'Watch';
       case 'SettingsPage':
         return 'Settings';
       default:

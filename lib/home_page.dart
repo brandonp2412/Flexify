@@ -8,7 +8,6 @@ import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/whats_new.dart';
-import 'package:flexify/timer/stopwatch_page.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/utils.dart';
@@ -176,8 +175,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   return GraphsPage(tabController: controller);
                 else if (tab == 'TimerPage')
                   return const TimerPage();
-                else if (tab == 'StopwatchPage')
-                  return const StopwatchPage();
                 else if (tab == 'SettingsPage')
                   return const SettingsPage();
                 else

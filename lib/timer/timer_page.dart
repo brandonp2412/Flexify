@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flexify/animated_fab.dart';
@@ -70,20 +71,89 @@ class _TimerPageWidget extends StatefulWidget {
   State<_TimerPageWidget> createState() => _TimerPageWidgetState();
 }
 
-class _TimerPageWidgetState extends State<_TimerPageWidget> {
+class _TimerPageWidgetState extends State<_TimerPageWidget>
+    with WidgetsBindingObserver {
+  // Wall-clock start time; null when the stopwatch is paused/reset.
+  DateTime? _stopwatchStartedAt;
+  // Accumulated duration from previous running intervals.
+  Duration _stopwatchAccumulated = Duration.zero;
+  bool _stopwatchRunning = false;
+  Timer? _stopwatchTicker;
+
+  Duration get _stopwatchElapsed {
+    if (!_stopwatchRunning || _stopwatchStartedAt == null) {
+      return _stopwatchAccumulated;
+    }
+    return _stopwatchAccumulated +
+        DateTime.now().difference(_stopwatchStartedAt!);
+  }
+
   @override
   void initState() {
     super.initState();
     widget.timerState.addListener(_onTimerStateChanged);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     widget.timerState.removeListener(_onTimerStateChanged);
+    WidgetsBinding.instance.removeObserver(this);
+    _stopwatchTicker?.cancel();
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _stopwatchRunning) {
+      _startStopwatchTicker();
+    } else if (state == AppLifecycleState.paused) {
+      _stopwatchTicker?.cancel();
+    }
+  }
+
+  void _startStopwatchTicker() {
+    _stopwatchTicker?.cancel();
+    _stopwatchTicker = Timer.periodic(const Duration(milliseconds: 30), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  void _startStopwatch() {
+    setState(() {
+      _stopwatchStartedAt = DateTime.now();
+      _stopwatchRunning = true;
+    });
+    _startStopwatchTicker();
+  }
+
+  void _pauseStopwatch() {
+    setState(() {
+      _stopwatchAccumulated = _stopwatchElapsed;
+      _stopwatchStartedAt = null;
+      _stopwatchRunning = false;
+    });
+    _stopwatchTicker?.cancel();
+  }
+
+  void _restartStopwatch() {
+    setState(() {
+      _stopwatchAccumulated = Duration.zero;
+      _stopwatchStartedAt = _stopwatchRunning ? DateTime.now() : null;
+    });
+  }
+
   void _onTimerStateChanged() {
+    if (widget.timerState.timer.getDuration() > Duration.zero &&
+        _stopwatchTicker != null) {
+      _stopwatchTicker?.cancel();
+      _stopwatchTicker = null;
+      setState(() {
+        _stopwatchRunning = false;
+        _stopwatchStartedAt = null;
+        _stopwatchAccumulated = Duration.zero;
+      });
+    }
     if (!widget.timerState.justExpired) return;
     widget.timerState.justExpired = false;
     // Android's TimerService already shows a system notification with its
@@ -108,6 +178,9 @@ class _TimerPageWidgetState extends State<_TimerPageWidget> {
       widget.timerState.setTimer(widget.total!, widget.progress!);
     }
 
+    final timer = widget.timerState.timer;
+    final countdownActive = timer.getDuration() > Duration.zero;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -124,10 +197,16 @@ class _TimerPageWidgetState extends State<_TimerPageWidget> {
           ),
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.only(bottom: 80),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 80),
         child: Center(
-          child: TimerCircularProgressIndicator(),
+          child: countdownActive
+              ? const TimerCircularProgressIndicator()
+              : StopwatchProgressIndicator(
+                  elapsed: _stopwatchElapsed,
+                  timerState: widget.timerState,
+                  onRestart: _restartStopwatch,
+                ),
         ),
       ),
       floatingActionButton: AnimatedSwitcher(
@@ -135,13 +214,22 @@ class _TimerPageWidgetState extends State<_TimerPageWidget> {
         transitionBuilder: (child, animation) {
           return ScaleTransition(scale: animation, child: child);
         },
-        child: widget.timerState.timer.isRunning()
+        child: timer.isRunning()
             ? AnimatedFab(
                 onPressed: () async => await widget.timerState.stopTimer(),
                 icon: const Icon(Icons.stop),
                 label: const Text("Stop"),
               )
-            : const SizedBox(),
+            : countdownActive
+                ? const SizedBox()
+                : AnimatedFab(
+                    onPressed:
+                        _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
+                    icon: Icon(
+                      _stopwatchRunning ? Icons.pause : Icons.play_arrow,
+                    ),
+                    label: Text(_stopwatchRunning ? "Pause" : "Start"),
+                  ),
       ),
     );
   }
