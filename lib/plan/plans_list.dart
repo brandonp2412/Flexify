@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flexify/app_search.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
@@ -8,6 +8,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -102,7 +103,10 @@ class _PlansListState extends State<PlansList> {
       return ReorderableListView.builder(
         scrollController: widget.scroll,
         itemCount: filteredPlans.length,
-        padding: const EdgeInsets.only(bottom: 96, top: appSearchHeight + 8),
+        padding: const EdgeInsets.only(
+          bottom: bottomNavHeight,
+          top: appSearchHeight + 8,
+        ),
         itemBuilder: (context, index) {
           final plan = filteredPlans[index];
 
@@ -137,7 +141,10 @@ class _PlansListState extends State<PlansList> {
     return ListView.builder(
       controller: widget.scroll,
       itemCount: filteredPlans.length,
-      padding: const EdgeInsets.only(bottom: 96, top: appSearchHeight + 8),
+      padding: const EdgeInsets.only(
+        bottom: bottomNavHeight,
+        top: appSearchHeight + 8,
+      ),
       itemBuilder: (context, index) {
         final plan = filteredPlans[index];
 
