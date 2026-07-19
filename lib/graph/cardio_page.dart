@@ -325,7 +325,10 @@ class _CardioPageState extends State<CardioPage> {
                           .map(
                             (option) => DropdownMenuItem(
                               value: option.$1,
-                              child: Text(option.$2),
+                              child: Text(
+                                option.$2,
+                                style: theme.textTheme.titleLarge,
+                              ),
                             ),
                           )
                           .toList(),
@@ -336,9 +339,7 @@ class _CardioPageState extends State<CardioPage> {
                               child: Text(
                                 option.$2,
                                 overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: theme.textTheme.titleLarge,
                               ),
                             ),
                           )
@@ -360,7 +361,7 @@ class _CardioPageState extends State<CardioPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               SegmentedButton<Period>(
                 showSelectedIcon: false,
                 segments: const [
@@ -402,7 +403,7 @@ class _CardioPageState extends State<CardioPage> {
                         ),
                       ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
