@@ -1,15 +1,21 @@
-/// Render performance tests using simulated frame counts.
+/// Rebuild-cycle regression tests using simulated frame counts.
 ///
 /// In Flutter's test environment, each [pump()] call advances a simulated
 /// clock by 16ms and processes exactly one frame -- no real GPU involved.
 /// Frame counts are therefore hardware-independent: they measure how many
-/// rebuild passes the framework needs to settle, not how fast the CPU runs.
+/// rebuild passes the framework needs to settle, not how fast the CPU runs
+/// or how expensive any single frame is to paint.
 ///
 /// What frame counts tell you:
 ///   - More frames = more setState/rebuild cycles = less efficient UI
 ///   - A regression here means a change introduced unnecessary rebuilds
 ///   - Virtualization can be verified: a 100-item list should need the same
 ///     frames as a 10-item list because ListView.builder only builds visible items
+///
+/// Thresholds below are pinned close to measured values (small buffer for
+/// natural variance), not the loose bounds a first pass tends to pick --
+/// a tight bound is what actually catches a regression instead of just a
+/// runaway rebuild loop.
 library;
 
 import 'package:drift/drift.dart';
@@ -33,15 +39,22 @@ import 'mock_tests.dart';
 
 /// Pumps frames one at a time until nothing is scheduled, returning the count.
 /// Each pump() is one simulated 16ms tick -- completely hardware-independent.
+///
+/// Uses do-while rather than while: a DB write (e.g. insertOne/deleteWhere)
+/// returns before Drift's stream has dispatched its update, so
+/// hasScheduledFrame can still read false immediately afterwards. A plain
+/// while loop would exit having pumped zero frames and never observe the
+/// rebuild it was meant to measure -- the first pump must always happen
+/// unconditionally to let that pending stream event land.
 Future<int> countFramesToSettle(WidgetTester tester) async {
   int frames = 0;
-  while (tester.binding.hasScheduledFrame) {
+  do {
     await tester.pump(const Duration(milliseconds: 16));
     frames++;
     if (frames > 500) {
       throw Exception('Widget did not settle after 500 frames (~8s simulated)');
     }
-  }
+  } while (tester.binding.hasScheduledFrame);
   return frames;
 }
 
@@ -100,7 +113,7 @@ void main() {
   // building off-screen items instead of virtualizing.
 
   testWidgets(
-    'HistoryPage with 10 items settles within 20 frames',
+    'HistoryPage with 10 items settles within 6 frames',
     (tester) async {
       await db.gymSets.insertAll(
         List.generate(10, (i) => makeSet('Bench press', minutesAgo: i)),
@@ -108,14 +121,15 @@ void main() {
       await tester.pumpWidget(historyApp(await settings()));
       final frames = await countFramesToSettle(tester);
 
+      // Measured baseline: 2 frames.
       print('[perf] 10-item list initial render: $frames frames');
-      expect(frames, lessThan(20), reason: '10-item list took $frames frames');
+      expect(frames, lessThan(6), reason: '10-item list took $frames frames');
       await closeDb(tester);
     },
   );
 
   testWidgets(
-    'HistoryPage with 100 items settles within 20 frames (same as 10 -- virtualized)',
+    'HistoryPage with 100 items settles within 6 frames (same as 10 -- virtualized)',
     (tester) async {
       await db.gymSets.insertAll(
         List.generate(100, (i) => makeSet('Bench press', minutesAgo: i)),
@@ -123,10 +137,11 @@ void main() {
       await tester.pumpWidget(historyApp(await settings()));
       final frames = await countFramesToSettle(tester);
 
+      // Measured baseline: 2 frames, same as the 10-item case.
       print('[perf] 100-item list initial render: $frames frames');
       expect(
         frames,
-        lessThan(20),
+        lessThan(6),
         reason: '100-item list took $frames frames -- '
             'if much higher than the 10-item test, '
             'ListView.builder is building off-screen items',
@@ -147,11 +162,12 @@ void main() {
       await db.gymSets.insertOne(makeSet('Squat'));
       final frames = await countFramesToSettle(tester);
 
-      // Expect ~2: one for StreamBuilder, one for HistoryList's setState in didUpdateWidget
+      // Measured baseline: 2 frames (one for StreamBuilder, one for
+      // HistoryList's setState in didUpdateWidget).
       print('[perf] Insert record → UI settle: $frames frames');
       expect(
         frames,
-        lessThan(6),
+        lessThan(4),
         reason: 'Stream update took $frames frames -- '
             'expected ~2 (StreamBuilder + HistoryList setState)',
       );
@@ -169,8 +185,9 @@ void main() {
       await (db.gymSets.deleteWhere((t) => t.id.equals(id)));
       final frames = await countFramesToSettle(tester);
 
+      // Measured baseline: 2 frames, same as insert.
       print('[perf] Delete record → UI settle: $frames frames');
-      expect(frames, lessThan(6), reason: 'Delete settled in $frames frames');
+      expect(frames, lessThan(4), reason: 'Delete settled in $frames frames');
       await closeDb(tester);
     },
   );
@@ -178,7 +195,7 @@ void main() {
   // --- Selection animation --------------------------------------------
 
   testWidgets(
-    'entering selection mode settles within 50 frames',
+    'entering selection mode settles within 45 frames',
     (tester) async {
       await db.gymSets.insertOne(makeSet('Deadlift'));
       await tester.pumpWidget(historyApp(await settings()));
@@ -186,7 +203,7 @@ void main() {
 
       // longPress recognition takes kLongPressTimeout (500ms = ~31 frames at 16ms),
       // then AnimatedSwitcher animates the leading icon (150ms = ~10 frames).
-      // Total expected: ~41 frames. Threshold is 50 to allow a small buffer.
+      // Measured baseline: 39 frames.
       await tester.longPress(find.text('5 x 100 kg'));
       final frames = await countFramesToSettle(tester);
 
@@ -195,7 +212,7 @@ void main() {
       );
       expect(
         frames,
-        lessThan(50),
+        lessThan(45),
         reason: 'Entering selection mode took $frames frames',
       );
       await closeDb(tester);
@@ -203,7 +220,7 @@ void main() {
   );
 
   testWidgets(
-    'exiting selection mode settles within 50 frames',
+    'exiting selection mode settles within 45 frames',
     (tester) async {
       await db.gymSets.insertOne(makeSet('OHP'));
       await tester.pumpWidget(historyApp(await settings()));
@@ -213,6 +230,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap to deselect -- AnimatedSwitcher plays in reverse (150ms = ~10 frames)
+      // Measured baseline: 40 frames.
       await tester.tap(find.text('5 x 100 kg'));
       final frames = await countFramesToSettle(tester);
 
@@ -221,7 +239,7 @@ void main() {
       );
       expect(
         frames,
-        lessThan(50),
+        lessThan(45),
         reason: 'Exiting selection mode took $frames frames',
       );
       await closeDb(tester);
