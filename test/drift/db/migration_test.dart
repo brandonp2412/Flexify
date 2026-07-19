@@ -13,6 +13,7 @@ import 'generated/schema_v2.dart' as v2;
 import 'generated/schema_v3.dart' as v3;
 import 'generated/schema_v4.dart' as v4;
 import 'generated/schema_v5.dart' as v5;
+import 'generated/schema_v53.dart' as v53;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -574,4 +575,52 @@ void main() {
       },
     );
   });
+
+  test(
+    'migration from v53 to v54 removes StopwatchPage from tabs',
+    () async {
+      final oldSettingsData = <v53.SettingsCompanion>[
+        v53.SettingsCompanion.insert(
+          alarmSound: '',
+          cardioUnit: 'last-entry',
+          curveLines: 1,
+          explainedPermissions: 0,
+          groupHistory: 0,
+          longDateFormat: 'timeago',
+          maxSets: 3,
+          planTrailing: 'PlanTrailing.reorder',
+          restTimers: 0,
+          shortDateFormat: 'd/M/yy',
+          showUnits: 1,
+          strengthUnit: 'last-entry',
+          systemColors: 0,
+          tabs: const Value(
+            'HistoryPage,PlansPage,GraphsPage,TimerPage,StopwatchPage',
+          ),
+          themeMode: 'ThemeMode.system',
+          timerDuration: 210000,
+          vibrate: 1,
+        ),
+      ];
+
+      await verifier.testWithDataIntegrity(
+        oldVersion: 53,
+        newVersion: 54,
+        createOld: v53.DatabaseAtV53.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.settings, oldSettingsData);
+        },
+        validateItems: (newDb) async {
+          final settings = await newDb.select(newDb.settings).get();
+          expect(settings.length, 1);
+          expect(
+            settings.first.tabs,
+            'HistoryPage,PlansPage,GraphsPage,TimerPage',
+          );
+        },
+      );
+    },
+  );
 }

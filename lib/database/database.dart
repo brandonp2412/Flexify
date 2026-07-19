@@ -510,10 +510,30 @@ class AppDatabase extends _$AppDatabase {
         from52To53: (Migrator m, Schema53 schema) async {
           await m.addColumn(schema.settings, schema.settings.inputStyle);
         },
+        from53To54: (Migrator m, Schema54 schema) async {
+          final rows = await schema.database
+              .customSelect('SELECT id, tabs FROM settings')
+              .get();
+          for (final row in rows) {
+            final tabs = row.read<String>('tabs');
+            final cleaned = tabs
+                .split(',')
+                .where((tab) => tab != 'StopwatchPage')
+                .join(',');
+            if (cleaned == tabs) continue;
+            await schema.database.customStatement(
+              'UPDATE settings SET tabs = ? WHERE id = ?',
+              [
+                cleaned.isEmpty ? 'HistoryPage' : cleaned,
+                row.read<int>('id'),
+              ],
+            );
+          }
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 53;
+  int get schemaVersion => 54;
 }
