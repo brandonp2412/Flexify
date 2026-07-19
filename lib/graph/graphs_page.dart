@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -410,73 +411,32 @@ class GraphsPageState extends State<GraphsPage>
           );
         }
 
-        if (index == itemCount - 1) return const SizedBox(height: 96);
+        if (index == itemCount - 1)
+          return const SizedBox(height: bottomNavHeight);
 
         if (showPeekGraph && currentIdx > 0) {
           currentIdx--;
         }
 
-        final set = gymSets.elementAtOrNull(currentIdx);
-        if (set == null) return const SizedBox();
+        final gymSet = gymSets.elementAtOrNull(currentIdx);
+        if (gymSet == null) return const SizedBox();
 
-        final prev = currentIdx > 0 ? gymSets[currentIdx - 1] : null;
-
-        final created = prev?.created.value.toLocal();
-
-        final divider = sort != GraphSort.name &&
-            created != null &&
-            !isSameDay(created, set.created.value);
-
-        final dividerHighlighted = divider &&
-            _selection.selected.contains(set.name.value) &&
-            _selection.selected.contains(prev!.name.value);
-
-        return Column(
-          children: [
-            if (divider)
-              Container(
-                color: dividerHighlighted
-                    ? Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: .18)
-                    : Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Expanded(child: Divider()),
-                      const Icon(Icons.today),
-                      const SizedBox(width: 4),
-                      Selector<SettingsState, String>(
-                        selector: (p0, p1) => p1.value.shortDateFormat,
-                        builder: (context, format, child) =>
-                            Text(DateFormat(format).format(created)),
-                      ),
-                      const SizedBox(width: 4),
-                      const Expanded(child: Divider()),
-                    ],
-                  ),
-                ),
-              ),
-            GraphTile(
-              selected: _selection.selected,
-              gymSet: set,
-              onSelect: (name) async {
-                setState(() {
-                  _selection.toggle(name);
-                });
-                final result = await (db.gymSets.selectOnly()
-                      ..addColumns([db.gymSets.name.count()])
-                      ..where(db.gymSets.name.isIn(_selection.selected)))
-                    .getSingle();
-                setState(() {
-                  total = result.read(db.gymSets.name.count()) ?? 0;
-                });
-              },
-              tabCtrl: widget.tabController,
-            ),
-          ],
+        return GraphTile(
+          selected: _selection.selected,
+          gymSet: gymSet,
+          onSelect: (name) async {
+            setState(() {
+              _selection.toggle(name);
+            });
+            final result = await (db.gymSets.selectOnly()
+                  ..addColumns([db.gymSets.name.count()])
+                  ..where(db.gymSets.name.isIn(_selection.selected)))
+                .getSingle();
+            setState(() {
+              total = result.read(db.gymSets.name.count()) ?? 0;
+            });
+          },
+          tabCtrl: widget.tabController,
         );
       },
     );
