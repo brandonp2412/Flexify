@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Total height this floating dock occupies, including outer padding.
-const double bottomNavHeight = 96;
+const double bottomNavHeight = 80;
 
 /// Variant 1: "Pill dock" — a compact centered pill where the selected tab
 /// expands horizontally to reveal its label while unselected tabs collapse

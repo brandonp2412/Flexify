@@ -1,3 +1,4 @@
+import 'package:flexify/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedFab extends StatefulWidget {
@@ -47,7 +48,7 @@ class _AnimatedFabState extends State<AnimatedFab> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 96),
+      padding: const EdgeInsets.only(bottom: bottomNavHeight),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
