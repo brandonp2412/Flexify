@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:drift/drift.dart' hide Column;
@@ -47,6 +48,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? image;
 
   late Stream<List<PlanExercise>> stream;
+  StreamSubscription<void>? _gymSetsSub;
   late PlanState planState = context.read<PlanState>();
   late String unit = 'kg';
   late String title = widget.plan.days.replaceAll(",", ", ");
@@ -373,6 +375,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     WidgetsBinding.instance.removeObserver(this);
     planState.removeListener(planChanged);
+    _gymSetsSub?.cancel();
 
     super.dispose();
   }
@@ -432,6 +435,13 @@ class _StartPlanPageState extends State<StartPlanPage>
         : widget.plan.days.replaceAll(",", ", ");
 
     _loadExercises();
+    planState.updateGymCounts(widget.plan.id);
+    _gymSetsSub = db.tableUpdates(TableUpdateQuery.onTable(db.gymSets)).listen(
+      (_) {
+        if (!mounted) return;
+        planState.updateGymCounts(widget.plan.id);
+      },
+    );
   }
 
   Future<void> _loadExercises() async {

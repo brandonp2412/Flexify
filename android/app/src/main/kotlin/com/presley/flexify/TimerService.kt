@@ -170,6 +170,7 @@ class TimerService : Service() {
 
     private fun startTimer(msDuration: Long, timeStamp: Long) {
         timerRunnable?.let { timerHandler.removeCallbacks(it) }
+        NotificationManagerCompat.from(this).cancel(FINISHED_ID)
 
         flexifyTimer.stop(applicationContext)
         flexifyTimer = FlexifyTimer(msDuration)
