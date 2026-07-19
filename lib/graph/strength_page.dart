@@ -258,7 +258,10 @@ class _StrengthPageState extends State<StrengthPage> {
                             .map(
                               (option) => DropdownMenuItem(
                                 value: option.$1,
-                                child: Text(option.$2),
+                                child: Text(
+                                  option.$2,
+                                  style: theme.textTheme.titleLarge,
+                                ),
                               ),
                             )
                             .toList(),
@@ -269,9 +272,7 @@ class _StrengthPageState extends State<StrengthPage> {
                                 child: Text(
                                   option.$2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: theme.textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: theme.textTheme.titleLarge,
                                 ),
                               ),
                             )
@@ -295,7 +296,7 @@ class _StrengthPageState extends State<StrengthPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               SegmentedButton<Period>(
                 showSelectedIcon: false,
                 segments: const [
@@ -329,8 +330,8 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                       ),
               ),
+              const SizedBox(height: 16),
               if (settings.showNotes) ...[
-                const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
