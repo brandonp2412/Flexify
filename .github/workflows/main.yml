@@ -144,6 +144,7 @@ jobs:
           mv ${{ github.event.repository.name }} /home/brandon/flexify
 
       - name: Normalize Android SDK path
+        working-directory: /home/brandon/flexify
         run: |
           sudo mkdir -p /opt/android-sdk
           sudo cp -a "$ANDROID_HOME/." /opt/android-sdk/

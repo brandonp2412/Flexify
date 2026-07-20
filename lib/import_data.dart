@@ -145,6 +145,12 @@ $version
     await settingsState.init();
 
     if (!ctx.mounted) return;
+    final planState = ctx.read<PlanState>();
+    await planState.updatePlans(null);
+    planState.updatePlanCounts();
+    await planState.updateDefaults();
+
+    if (!ctx.mounted) return;
     Navigator.of(ctx, rootNavigator: true)
         .pushNamedAndRemoveUntil('/', (_) => false);
   }
