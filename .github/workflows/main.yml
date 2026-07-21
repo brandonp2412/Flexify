@@ -147,7 +147,7 @@ jobs:
         working-directory: /home/brandon/flexify
         run: |
           sudo mkdir -p /opt/android-sdk
-          sudo cp -a "$ANDROID_HOME/." /opt/android-sdk/
+          sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
           echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
 
