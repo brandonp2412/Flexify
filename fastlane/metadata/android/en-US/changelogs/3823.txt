@@ -1,0 +1,10 @@
+• Add test to dart analyze
+• Allow exercise list to scroll past the nav bar when completing a plan
+• Change style of strength page
+• Consistently use bottomNavHeight
+• Fix bottom height
+• Fix graphs spacing & hide notes if setting is off
+• Fix unit tests for Search bar
+• Improve graphs style
+• Make plan chips spacing consistent
+• Match style in cardio page
