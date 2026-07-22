@@ -50,21 +50,17 @@ jobs:
             -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
             android/gradle.properties
 
-      # Fork PRs cannot access the real keystore secrets, so sign with a
-      # throwaway key generated per run. The APK uses the .pr application id
-      # so it installs alongside the real app instead of conflicting with it.
-      - name: Create throwaway signing key
+      # Fork PRs cannot access the real keystore secrets, so sign with the
+      # committed, deliberately public pr-testing-public.jks. Every PR build
+      # shares its signature, so testers can update Flexify PR in place, and
+      # the .pr application id keeps it from conflicting with the real app.
+      - name: Configure PR testing signing key
         run: |
-          keytool -genkeypair \
-            -keystore android/app/keystore.jks \
-            -storepass flexify-pr -keypass flexify-pr \
-            -alias pr -keyalg RSA -keysize 2048 -validity 30 \
-            -dname "CN=Flexify PR Build"
           cat > android/key.properties <<EOF
-          storePassword=flexify-pr
-          keyPassword=flexify-pr
+          storePassword=pr-testing-public
+          keyPassword=pr-testing-public
           keyAlias=pr
-          storeFile=keystore.jks
+          storeFile=pr-testing-public.jks
           EOF
 
       - name: Build APK
@@ -91,7 +87,7 @@ jobs:
             echo ""
             echo "[Download the APK](${{ steps.upload.outputs.artifact-url }}) (zipped, expires in 14 days)."
             echo ""
-            echo "Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. Each build is signed with a fresh throwaway key, so uninstall any previous *Flexify PR* build first."
+            echo "Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. All PR builds share a signing key, so installing one replaces any previous *Flexify PR* build in place."
           } >> "$GITHUB_STEP_SUMMARY"
 
       # The GITHUB_TOKEN on fork PRs is read-only, so commenting only works for
@@ -108,7 +104,7 @@ jobs:
               '',
               `[Download the APK](${{ toJSON(steps.upload.outputs.artifact-url) }}) (zipped, expires in 14 days) to test this change.`,
               '',
-              `Built from ${context.payload.pull_request.head.sha}. Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. Each build is signed with a fresh throwaway key, so uninstall any previous *Flexify PR* build first.`,
+              `Built from ${context.payload.pull_request.head.sha}. Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. All PR builds share a signing key, so installing one replaces any previous *Flexify PR* build in place.`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
