@@ -136,6 +136,7 @@ $version
 
     await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
     db = AppDatabase();
+    dbVersion.value++;
 
     await (db.settings.update())
         .write(const SettingsCompanion(alarmSound: Value('')));

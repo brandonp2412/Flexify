@@ -38,6 +38,17 @@ class _PlanTileState extends State<PlanTile> {
   void initState() {
     super.initState();
     _exercisesStream = _getExercises();
+    dbVersion.addListener(_onDbChanged);
+  }
+
+  @override
+  void dispose() {
+    dbVersion.removeListener(_onDbChanged);
+    super.dispose();
+  }
+
+  void _onDbChanged() {
+    setState(() => _exercisesStream = _getExercises());
   }
 
   Stream<List<PlanExercise>> _getExercises() {
