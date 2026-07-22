@@ -19,9 +19,11 @@ jobs:
   build-apk:
     runs-on: ubuntu-latest
     steps:
+      # Submodules are deliberately not fetched here: actions/checkout clones
+      # them with --depth=1, leaving the Flutter submodule without tags and
+      # reporting version 0.0.0-unknown. The manual submodule update below
+      # clones it in full instead.
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Setup Java
         uses: actions/setup-java@v4
