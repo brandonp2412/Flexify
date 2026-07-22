@@ -27,6 +27,14 @@ if (keystorePropertiesFile.exists()) {
    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// Optional env vars used by CI to build a side-by-side testing app
+// (e.g. PR builds with applicationId com.presley.flexify.pr). Deliberately
+// not product flavors: declaring productFlavors would force --flavor onto
+// every existing build command, including the F-Droid recipe maintained
+// outside this repo. Unset, the build output is unchanged.
+def appIdSuffix = System.getenv('FLEXIFY_APP_ID_SUFFIX') ?: ''
+def appLabel = System.getenv('FLEXIFY_APP_LABEL') ?: 'Flexify'
+
 android {
     namespace "com.presley.flexify"
     compileSdkVersion flutter.compileSdkVersion
@@ -48,10 +56,17 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        if (appIdSuffix) {
+            main.res.srcDirs += 'src/pr/res'
+        }
     }
 
     defaultConfig {
-        applicationId "com.presley.flexify"
+        applicationId "com.presley.flexify" + appIdSuffix
+        manifestPlaceholders += [
+            appLabel: appLabel,
+            appIcon: appIdSuffix ? "@mipmap/ic_launcher_pr" : "@mipmap/ic_launcher",
+        ]
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
