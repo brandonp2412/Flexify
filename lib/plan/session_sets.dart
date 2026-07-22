@@ -132,6 +132,15 @@ class _SetChip extends StatelessWidget {
   });
 
   String get _value {
+    if (gymSet.cardio &&
+        (gymSet.unit == 'kg' ||
+            gymSet.unit == 'lb' ||
+            gymSet.unit == 'stone')) {
+      final minutes = gymSet.duration.floor();
+      final seconds =
+          ((gymSet.duration * 60) % 60).floor().toString().padLeft(2, '0');
+      return "${toString(gymSet.weight)} ${gymSet.unit} / $minutes:$seconds";
+    }
     if (gymSet.cardio) return "${toString(gymSet.distance)} ${gymSet.unit}";
     return "${toString(gymSet.weight)} ${gymSet.unit} × ${toString(gymSet.reps)}";
   }

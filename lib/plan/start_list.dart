@@ -36,6 +36,10 @@ typedef Tapped = ({
 });
 
 class _StartListState extends State<StartList> {
+  // 76 clears the FAB; the extra 80 clears the SessionSets chip row that
+  // renders above this list on the currently selected exercise.
+  static const _bottomPadding = 76.0 + 80.0;
+
   Tapped lastTap = (index: 0, dateTime: DateTime(0));
 
   void tap(int index, List<GymCount> counts) async {
@@ -83,7 +87,7 @@ class _StartListState extends State<StartList> {
     if (trailing == PlanTrailing.reorder)
       return ReorderableListView.builder(
         itemCount: widget.exercises.length,
-        padding: const EdgeInsets.only(bottom: 76),
+        padding: const EdgeInsets.only(bottom: _bottomPadding),
         itemBuilder: (context, index) =>
             itemBuilder(context, index, max, trailing, counts),
         onReorderItem: (oldIndex, newIndex) async {
@@ -108,7 +112,7 @@ class _StartListState extends State<StartList> {
       );
     else
       return ListView.builder(
-        padding: const EdgeInsets.only(bottom: 76),
+        padding: const EdgeInsets.only(bottom: _bottomPadding),
         itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
             itemBuilder(context, index, max, trailing, counts),

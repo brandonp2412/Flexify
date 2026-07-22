@@ -170,6 +170,8 @@ class TimerService : Service() {
 
     private fun startTimer(msDuration: Long, timeStamp: Long) {
         timerRunnable?.let { timerHandler.removeCallbacks(it) }
+        mediaPlayer?.stop()
+        vibrator?.cancel()
         NotificationManagerCompat.from(this).cancel(FINISHED_ID)
 
         flexifyTimer.stop(applicationContext)
