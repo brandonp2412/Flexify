@@ -114,6 +114,8 @@ jobs:
       - name: Comment download link on PR
         if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
         with:
           script: |
             const marker = '<!-- pr-apk-comment -->';
@@ -127,7 +129,7 @@ jobs:
               marker,
               '### 📱 PR APK built',
               '',
-              `[Download the APK](${{ toJSON(steps.upload.outputs.artifact-url) }}) (zipped, expires in 14 days) to test this change.`,
+              `[Download the APK](${process.env.ARTIFACT_URL}) (zipped, expires in 14 days) to test this change.`,
               '',
               `Built from ${pr.head.sha}. Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. All PR builds share a signing key, so installing one replaces any previous *Flexify PR* build in place.`,
             ].join('\n');
