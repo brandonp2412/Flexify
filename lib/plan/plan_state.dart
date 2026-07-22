@@ -184,11 +184,15 @@ class PlanState extends ChangeNotifier {
   }
 
   Future<List<GymCount>> getGymCounts(int planId) async {
+    // Matches the calendar-day predicate in [getPlanCounts] so set counts
+    // reset at local midnight. A rolling window was used here previously,
+    // making counts leak across days:
+    // https://github.com/brandonp2412/Flexify/issues/313
     final count = CustomExpression<int>(
       """
       COUNT(
         CASE
-          WHEN created >= strftime('%s', 'now', 'localtime', '-24 hours')
+          WHEN DATE(created, 'unixepoch', 'localtime') = DATE('now', 'localtime')
                AND hidden = 0
                AND gym_sets.plan_id = $planId
           THEN 1
