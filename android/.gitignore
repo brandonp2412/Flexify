@@ -11,3 +11,8 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Deliberately public keystore used ONLY to sign PR test builds
+# (com.presley.flexify.pr) so testers can update them in place.
+# It must never sign a release. Passwords: pr-testing-public / alias: pr
+!app/pr-testing-public.jks
