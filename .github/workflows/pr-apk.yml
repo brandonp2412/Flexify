@@ -1,0 +1,132 @@
+name: PR APK
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: pr-apk-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  PUB_SUMMARY_ONLY: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter --version
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Tune Gradle for CI runner memory
+        run: |
+          sed -i \
+            -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
+            -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
+            android/gradle.properties
+
+      # Fork PRs cannot access the real keystore secrets, so sign with a
+      # throwaway key generated per run. The APK installs fine for testing but
+      # cannot upgrade an existing store-signed install.
+      - name: Create throwaway signing key
+        run: |
+          keytool -genkeypair \
+            -keystore android/app/keystore.jks \
+            -storepass flexify-pr -keypass flexify-pr \
+            -alias pr -keyalg RSA -keysize 2048 -validity 30 \
+            -dname "CN=Flexify PR Build"
+          cat > android/key.properties <<EOF
+          storePassword=flexify-pr
+          keyPassword=flexify-pr
+          keyAlias=pr
+          storeFile=keystore.jks
+          EOF
+
+      - name: Build APK
+        run: |
+          flutter build apk --release
+          mv build/app/outputs/flutter-apk/app-release.apk \
+            flexify-pr-${{ github.event.pull_request.number }}.apk
+
+      - name: Upload APK artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: flexify-pr-${{ github.event.pull_request.number }}
+          path: flexify-pr-*.apk
+          retention-days: 14
+
+      - name: Add job summary
+        run: |
+          {
+            echo "### 📱 PR APK built"
+            echo ""
+            echo "[Download the APK](${{ steps.upload.outputs.artifact-url }}) (zipped, expires in 14 days)."
+            echo ""
+            echo "Signed with a throwaway key — uninstall any existing Flexify install before testing."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # The GITHUB_TOKEN on fork PRs is read-only, so commenting only works for
+      # branches in this repo; fork contributors get the job summary instead.
+      - name: Comment download link on PR
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- pr-apk-comment -->';
+            const body = [
+              marker,
+              '### 📱 PR APK built',
+              '',
+              `[Download the APK](${{ toJSON(steps.upload.outputs.artifact-url) }}) (zipped, expires in 14 days) to test this change.`,
+              '',
+              `Built from ${context.payload.pull_request.head.sha}. Signed with a throwaway key — uninstall any existing Flexify install before testing.`,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
