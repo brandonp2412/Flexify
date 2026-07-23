@@ -39,6 +39,11 @@ Future<void> main() async {
 
 AppDatabase db = AppDatabase();
 
+/// Bumped whenever [db] is replaced with a new instance (e.g. after
+/// importing a database), so widgets holding a `.watch()` stream tied to
+/// the old instance know to rebuild it against the current one.
+final ValueNotifier<int> dbVersion = ValueNotifier(0);
+
 MethodChannel androidChannel =
     const MethodChannel("com.presley.flexify/android");
 

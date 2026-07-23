@@ -375,6 +375,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     WidgetsBinding.instance.removeObserver(this);
     planState.removeListener(planChanged);
+    dbVersion.removeListener(_loadExercises);
     _gymSetsSub?.cancel();
 
     super.dispose();
@@ -428,6 +429,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.initState();
     planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
+    dbVersion.addListener(_loadExercises);
 
     planState = context.read<PlanState>();
     title = widget.plan.title?.isNotEmpty == true
