@@ -207,6 +207,123 @@ jobs:
             build/app/outputs/flutter-apk/flexify.apk
             build/app/outputs/bundle/release/app-release.aab
 
+  # Builds the release APK twice, from two independent checkouts with no
+  # shared Gradle/pub caches, and diffs the results (ignoring the signature
+  # block, whose timestamp is expected to differ). Catches the kind of
+  # non-determinism (absolute paths, embedded timestamps, dependency drift)
+  # behind F-Droid build failures #16, #138, #178, #201, #310, #314 — it
+  # does not fully replicate F-Droid's Debian/LXC buildserver (different
+  # pinned SDK/NDK build-tools versions there could still diverge), so this
+  # is a proxy for the recurring cause, not full build-environment parity.
+  # Runs on workflow_dispatch only for now; fold into the push trigger once
+  # it's been confirmed to pass on current main.
+  verify-reproducible:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Build release APK twice from independent checkouts
+        run: |
+          build_once() {
+            local outdir="$1"
+
+            sudo rm -rf /home/brandon
+            sudo mkdir -p /home/brandon
+            sudo chown "$USER" -R /home/brandon
+            git init /home/brandon/flexify
+            cd /home/brandon/flexify
+            git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+            git fetch --depth 1 origin "${GITHUB_SHA}"
+            git checkout --detach FETCH_HEAD
+
+            git submodule update --init --recursive flutter
+            chmod +x flutter/bin/*
+            export PATH="/home/brandon/flexify/flutter/bin:$PATH"
+            flutter config --no-analytics
+
+            sudo mkdir -p /opt/android-sdk
+            sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
+            export ANDROID_HOME=/opt/android-sdk
+            export ANDROID_SDK_ROOT=/opt/android-sdk
+
+            export PUB_CACHE="$(pwd)/.pub-cache"
+            flutter pub get
+            dart run build_runner build -d
+
+            sed -i \
+              -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
+              -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
+              android/gradle.properties
+            rm -f android/local.properties
+
+            echo "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" > android/key.properties
+            echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+            echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+            echo "storeFile=keystore.jks" >> android/key.properties
+            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+
+            flutter build apk --release
+
+            mkdir -p "$outdir"
+            cp build/app/outputs/flutter-apk/app-release.apk "$outdir/app-release.apk"
+
+            cd /
+            sudo umount /opt/android-sdk
+            sudo rm -rf /home/brandon
+          }
+
+          build_once "${GITHUB_WORKSPACE}/build1"
+          build_once "${GITHUB_WORKSPACE}/build2"
+
+      - name: Compare APKs (ignoring signature block)
+        run: |
+          mkdir -p apk1 apk2
+          unzip -q build1/app-release.apk -d apk1
+          unzip -q build2/app-release.apk -d apk2
+
+          find apk1/META-INF -maxdepth 1 -type f \
+            \( -iname '*.RSA' -o -iname '*.SF' -o -iname '*.MF' \) -delete
+          find apk2/META-INF -maxdepth 1 -type f \
+            \( -iname '*.RSA' -o -iname '*.SF' -o -iname '*.MF' \) -delete
+
+          (cd apk1 && find . -type f | sort) > /tmp/list1.txt
+          (cd apk2 && find . -type f | sort) > /tmp/list2.txt
+
+          if ! diff -u /tmp/list1.txt /tmp/list2.txt; then
+            echo "::error::APK entry lists differ between the two builds"
+            exit 1
+          fi
+
+          status=0
+          while IFS= read -r f; do
+            if ! cmp -s "apk1/$f" "apk2/$f"; then
+              echo "::error::First differing file: $f"
+              status=1
+              break
+            fi
+          done < /tmp/list1.txt
+
+          if [ "$status" -eq 0 ]; then
+            echo "Reproducible: all non-signature APK entries are byte-identical." \
+              >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Not reproducible: see the first differing file above." \
+              >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Known limitation: this proxies F-Droid's buildserver via the same" \
+            "path layout (/home/brandon/flexify) build-android uses, but does not" \
+            "pin the exact SDK/NDK build-tools versions F-Droid's Debian/LXC" \
+            "environment uses, so it won't catch every possible divergence there." \
+            >> "$GITHUB_STEP_SUMMARY"
+
+          exit "$status"
+
   build-linux:
     needs: version-bump
     runs-on: ubuntu-latest
