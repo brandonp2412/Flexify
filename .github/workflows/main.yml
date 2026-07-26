@@ -52,7 +52,7 @@ jobs:
     outputs:
       version: ${{ steps.bump.outputs.version }}
       build_number: ${{ steps.bump.outputs.build_number }}
-      commit_sha: ${{ steps.bump.outputs.commit_sha }}
+      commit_sha: ${{ steps.commit-push.outputs.commit_sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -112,6 +112,7 @@ jobs:
           cp "$CHANGELOG_FILE" "assets/changelogs/$(date +%s).txt"
 
       - name: Commit and push version bump
+        id: commit-push
         run: |
           git add pubspec.yaml fastlane/metadata assets/changelogs
           git commit -m "Release ${{ steps.bump.outputs.version }} [skip ci]"
