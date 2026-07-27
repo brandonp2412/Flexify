@@ -70,10 +70,23 @@ class _SessionSetsState extends State<SessionSets> {
           curve: Curves.easeOut,
           alignment: Alignment.topCenter,
           child: sets == null || sets.isEmpty
-              ? const SizedBox.shrink()
+              ? _buildPlaceholder()
               : _buildChips(sets),
         );
       },
+    );
+  }
+
+  /// Same height as a populated chip row so the layout below doesn't jump
+  /// when the first set of the session is logged.
+  Widget _buildPlaceholder() {
+    return const Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 16.0),
+        _PlaceholderChip(),
+      ],
     );
   }
 
@@ -117,6 +130,44 @@ class _SessionSetsState extends State<SessionSets> {
     final metric = cardio ? best.distance : best.weight;
     if (metric <= 0) return null;
     return best.id;
+  }
+}
+
+/// Ghost stand-in for a [_SetChip], matching its size so the chip row
+/// reserves its height before any sets have been logged this session.
+class _PlaceholderChip extends StatelessWidget {
+  const _PlaceholderChip();
+
+  @override
+  Widget build(BuildContext context) {
+    final barColor = Theme.of(
+      context,
+    ).colorScheme.onSurfaceVariant.withValues(alpha: 0.12);
+
+    Widget bar(double width, double height) => Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: barColor,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        );
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            bar(40.0, 11.0),
+            const SizedBox(height: 4.0),
+            bar(72.0, 15.0),
+          ],
+        ),
+      ),
+    );
   }
 }
 
