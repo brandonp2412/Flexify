@@ -133,38 +133,37 @@ class _SessionSetsState extends State<SessionSets> {
   }
 }
 
-/// Ghost stand-in for a [_SetChip], matching its size so the chip row
-/// reserves its height before any sets have been logged this session.
+/// Invisible stand-in for a [_SetChip]. Reuses the same `Card`/padding/text
+/// styles as the real chip so the reserved height is measured from the
+/// same font metrics rather than guessed, and the layout below doesn't
+/// jump once the first set of the session is logged. The placeholder text
+/// deliberately can't match a real chip's content, so it stays invisible
+/// to widget-text finders in tests.
 class _PlaceholderChip extends StatelessWidget {
   const _PlaceholderChip();
 
   @override
   Widget build(BuildContext context) {
-    final barColor = Theme.of(
-      context,
-    ).colorScheme.onSurfaceVariant.withValues(alpha: 0.12);
-
-    Widget bar(double width, double height) => Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: barColor,
-            borderRadius: BorderRadius.circular(4.0),
+    final theme = Theme.of(context);
+    return Opacity(
+      opacity: 0,
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Set",
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              Text("—", style: theme.textTheme.titleSmall),
+            ],
           ),
-        );
-
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            bar(40.0, 11.0),
-            const SizedBox(height: 4.0),
-            bar(72.0, 15.0),
-          ],
         ),
       ),
     );
