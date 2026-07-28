@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -16,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('HistoryPage loads', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -40,7 +39,7 @@ void main() async {
 
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
@@ -91,7 +90,7 @@ void main() async {
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -129,7 +128,7 @@ void main() async {
 
   testWidgets('HistoryPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -158,7 +157,7 @@ void main() async {
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -194,7 +193,7 @@ void main() async {
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',

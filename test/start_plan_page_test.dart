@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -17,7 +16,7 @@ void main() async {
     'StartPlanPage rep estimation does not crash when no RPM data for exercise',
     (WidgetTester tester) async {
       await mockTests();
-      db = AppDatabase(NativeDatabase.memory());
+      db = testDb();
 
       final id = await db.plans.insertOne(
         PlansCompanion.insert(days: 'Monday'),
@@ -61,6 +60,10 @@ void main() async {
 
       await tester.pumpAndSettle(); // rpms loads as [] (no qualifying gym sets)
 
+      // Open the log sheet for the exercise
+      await tester.tap(find.text('Bench press'));
+      await tester.pumpAndSettle();
+
       // Save a set to set lastSaved
       await tester.enterText(find.bySemanticsLabel('Reps'), '5');
       await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
@@ -80,7 +83,7 @@ void main() async {
   testWidgets('StartPlanPage with no exercises does not crash on save',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
     final plan =
@@ -119,7 +122,7 @@ void main() async {
     await tester.binding.setSurfaceSize(const Size(800, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await (db.gymSets.insertAll([
       GymSetsCompanion.insert(
@@ -201,7 +204,7 @@ void main() async {
 
   testWidgets('StartPlanPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await (db.gymSets.insertAll([
       GymSetsCompanion.insert(
@@ -283,7 +286,7 @@ void main() async {
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -341,6 +344,9 @@ void main() async {
 
     await tester.pumpAndSettle();
 
+    await tester.tap(find.text('Barbell bench press'));
+    await tester.pumpAndSettle();
+
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
     await tester.pumpAndSettle();
@@ -364,7 +370,7 @@ void main() async {
     await tester.binding.setSurfaceSize(const Size(800, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
     final plan =
@@ -402,6 +408,9 @@ void main() async {
 
     // Nothing logged yet — no session strip.
     expect(find.text('Set 1'), findsNothing);
+
+    await tester.tap(find.text('Bench press'));
+    await tester.pumpAndSettle();
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');

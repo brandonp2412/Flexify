@@ -1,11 +1,12 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'mock_tests.dart';
+
 void main() async {
-  db = AppDatabase(NativeDatabase.memory());
+  db = testDb();
 
   test('gym sets can be created', () async {
     final id = await db.gymSets.insertOne(

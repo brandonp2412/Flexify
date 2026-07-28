@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/main.dart';
@@ -16,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -40,7 +39,7 @@ void main() async {
 
   testWidgets('GraphsPage add button', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -65,7 +64,7 @@ void main() async {
   testWidgets('GraphsPage taps barbell bench press',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -106,7 +105,7 @@ void main() async {
 
   testWidgets('GraphsPage taps global progress', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -134,7 +133,7 @@ void main() async {
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -164,7 +163,7 @@ void main() async {
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -202,7 +201,7 @@ void main() async {
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -251,7 +250,7 @@ void main() async {
   testWidgets('GraphsPage delete also removes plan exercises',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(

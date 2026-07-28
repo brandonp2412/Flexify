@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -15,7 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   render(WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -63,7 +62,7 @@ void main() async {
   testWidgets('SettingsPage shows images', (WidgetTester tester) async {
     TestWidgetsFlutterBinding.ensureInitialized();
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await (db.settings.update())
         .write(const SettingsCompanion(showImages: Value(false)));
     final oldSettings = await (db.settings.select()..limit(1)).getSingle();

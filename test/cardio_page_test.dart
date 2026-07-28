@@ -133,7 +133,7 @@ void main() async {
 
   testWidgets('CardioPage selects metrics', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(

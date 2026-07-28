@@ -1,6 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
@@ -16,7 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('PlansPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -40,7 +38,7 @@ void main() async {
 
   testWidgets('PlansPage add button', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -64,7 +62,7 @@ void main() async {
 
   testWidgets('PlansPage tap tile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -83,6 +81,10 @@ void main() async {
     final tile = find.byType(ListTile).first;
     await tester.tap(tile);
     await tester.pumpAndSettle();
+
+    final exercise = find.byType(ListTile).first;
+    await tester.tap(exercise);
+    await tester.pumpAndSettle();
     expect(find.text('Save'), findsOne);
 
     await db.close();
@@ -90,7 +92,7 @@ void main() async {
 
   testWidgets('PlansPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -119,7 +121,7 @@ void main() async {
 
   testWidgets('PlansPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -145,7 +147,7 @@ void main() async {
 
   testWidgets('PlansPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(

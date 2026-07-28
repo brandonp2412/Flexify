@@ -19,7 +19,6 @@
 library;
 
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -87,7 +86,7 @@ GymSetsCompanion makeSet(String name, {int minutesAgo = 0}) =>
 void main() {
   setUp(() async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
   });
 
   // db is closed inside each test so Drift's stream cleanup timer fires while

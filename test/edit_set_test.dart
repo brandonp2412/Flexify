@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -15,7 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('EditGymSet inserts', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -67,7 +66,7 @@ void main() async {
   testWidgets('selecting new cardio exercise shows cardio fields',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     // Insert a hidden set representing a cardio exercise definition
     // (as edit_graph_page does when creating/editing an exercise as cardio)
@@ -131,7 +130,7 @@ void main() async {
 
   testWidgets('cardio toggle switches fields', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -185,7 +184,7 @@ void main() async {
 
   testWidgets('EditGymSet updates', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -230,7 +229,7 @@ void main() async {
   testWidgets('switching exercises clears note when new exercise has no note',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     // Tall surface so the lazily-built ListView renders the Notes field
     // without needing to scroll.

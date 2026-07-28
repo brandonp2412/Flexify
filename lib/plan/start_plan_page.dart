@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -52,6 +51,11 @@ class _StartPlanPageState extends State<StartPlanPage>
   late PlanState planState = context.read<PlanState>();
   late String unit = 'kg';
   late String title = widget.plan.days.replaceAll(",", ", ");
+  AsyncSnapshot<List<PlanExercise>> _snapshot = const AsyncSnapshot.nothing();
+
+  bool _sheetOpen = false;
+  void Function(void Function())? _setSheetState;
+  Future<void> _selectQueue = Future.value();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +65,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       stream: stream,
       builder: (context, snapshot) {
         if (snapshot.data == null) return SizedBox();
+        _snapshot = snapshot;
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -91,54 +96,100 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
           body: Padding(
             padding: const EdgeInsets.all(8),
+            child: snapshot.data!.isEmpty
+                ? const Center(
+                    child: Text(
+                      "No exercises yet. Edit this plan to add some.",
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : StartList(
+                    exercises: snapshot.data!,
+                    selected: selected,
+                    onSelect: openLog,
+                    plan: widget.plan,
+                    onMax: () {
+                      planState.updateGymCounts(widget.plan.id);
+                    },
+                  ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildLogSheet(BuildContext sheetContext) {
+    final snapshot = _snapshot;
+    final exercise =
+        snapshot.data!.isNotEmpty && selected < snapshot.data!.length
+            ? snapshot.data![selected].exercise
+            : '';
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(sheetContext).height * 0.85,
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Form(
               key: key,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (!cardio) ...strengthFields(snapshot),
-                  if (cardio) ...cardioFields(snapshot),
-                  unitSelector(),
-                  notesField(),
-                  if (snapshot.data!.isNotEmpty &&
-                      selected < snapshot.data!.length)
-                    SessionSets(
-                      exercise: snapshot.data![selected].exercise,
-                      planId: widget.plan.id,
+                  const SizedBox(height: 8.0),
+                  Container(
+                    width: 32,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Theme.of(sheetContext).dividerColor,
+                      borderRadius: BorderRadius.circular(2),
                     ),
-                  if (snapshot.data!.isEmpty)
-                    const Expanded(
-                      child: Center(
-                        child: Text(
-                          "No exercises yet. Edit this plan to add some.",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  else
-                    Expanded(
-                      child: StartList(
-                        exercises: snapshot.data!,
-                        selected: selected,
-                        onSelect: select,
-                        plan: widget.plan,
-                        onMax: () {
-                          planState.updateGymCounts(widget.plan.id);
-                        },
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    exercise,
+                    style: Theme.of(sheetContext).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (!cardio) ...strengthFields(snapshot),
+                          if (cardio) ...cardioFields(snapshot),
+                          unitSelector(),
+                          notesField(),
+                          if (snapshot.data!.isNotEmpty &&
+                              selected < snapshot.data!.length)
+                            SessionSets(
+                              exercise: exercise,
+                              planId: widget.plan.id,
+                            ),
+                        ],
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      onPressed: () async => await save(snapshot),
+                      icon: const Icon(Icons.save),
+                      label: const Text("Save"),
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
                 ],
               ),
             ),
           ),
-          floatingActionButton: snapshot.data!.isEmpty
-              ? null
-              : AnimatedFab(
-                  onPressed: () async => await save(snapshot),
-                  label: const Text("Save"),
-                  icon: const Icon(Icons.save),
-                ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -381,7 +432,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.dispose();
   }
 
-  Future<GymSet?> getLast(String exercise) async {
+  Future<GymSet?> getLast(String exercise) {
     return (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
@@ -446,21 +497,23 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
+  SimpleSelectStatement<$PlanExercisesTable, PlanExercise> _exercisesQuery() =>
+      db.planExercises.select()
+        ..where(
+          (pe) => pe.planId.equals(widget.plan.id) & pe.enabled,
+        )
+        ..orderBy(
+          [
+            (u) => OrderingTerm(
+                  expression: u.sequence,
+                  mode: OrderingMode.asc,
+                ),
+          ],
+        );
+
   Future<void> _loadExercises() async {
     setState(() {
-      stream = (db.planExercises.select()
-            ..where(
-              (pe) => pe.planId.equals(widget.plan.id) & pe.enabled,
-            )
-            ..orderBy(
-              [
-                (u) => OrderingTerm(
-                      expression: u.sequence,
-                      mode: OrderingMode.asc,
-                    ),
-              ],
-            ))
-          .watch();
+      stream = _exercisesQuery().watch();
     });
 
     select(0);
@@ -612,6 +665,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       _updateGymSetTextFields(gymSet);
       lastSaved = DateTime.now();
     });
+    _setSheetState?.call(() {});
     if (finishedExercise) await select(selected + 1);
 
     if (!settings.notifications) return;
@@ -624,14 +678,41 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (mounted && random.nextDouble() < 0.3) toast(randomMessage);
   }
 
-  Future<void> select(int index) async {
+  Future<void> select(int index) {
+    final queued = _selectQueue.then((_) => _selectImpl(index));
+    _selectQueue = queued.catchError((_) {});
+    return queued;
+  }
+
+  Future<void> _selectImpl(int index) async {
     setState(() => selected = index);
-    final first = await stream.first;
-    if (first.isEmpty || index >= first.length) return;
-    final last = await getFirstOfLastSession(first[index].exercise);
+    _setSheetState?.call(() {});
+    final exercises =
+        _snapshot.hasData ? _snapshot.data! : await _exercisesQuery().get();
+    if (exercises.isEmpty || index >= exercises.length) return;
+    final last = await getFirstOfLastSession(exercises[index].exercise);
     if (last == null || !mounted) return;
 
     setState(() => _updateGymSetTextFields(last));
+    _setSheetState?.call(() {});
+  }
+
+  Future<void> openLog(int index) async {
+    await select(index);
+    if (!mounted || _sheetOpen) return;
+    _sheetOpen = true;
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (sheetContext, setSheetState) {
+          _setSheetState = setSheetState;
+          return buildLogSheet(sheetContext);
+        },
+      ),
+    );
+    _sheetOpen = false;
+    _setSheetState = null;
   }
 
   void useBodyWeight() async {

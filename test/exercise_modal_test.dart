@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
@@ -17,7 +16,7 @@ void main() {
     'ExerciseModal edit does not crash when exercise has no recorded sets',
     (WidgetTester tester) async {
       await mockTests();
-      db = AppDatabase(NativeDatabase.memory());
+      db = testDb();
 
       final id = await db.plans.insertOne(
         PlansCompanion.insert(days: 'Monday'),
@@ -70,7 +69,7 @@ void main() {
     'ExerciseModal undo does not crash when exercise has no recorded sets',
     (WidgetTester tester) async {
       await mockTests();
-      db = AppDatabase(NativeDatabase.memory());
+      db = testDb();
 
       final id = await db.plans.insertOne(
         PlansCompanion.insert(days: 'Monday'),

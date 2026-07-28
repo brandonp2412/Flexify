@@ -1,6 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -14,7 +12,7 @@ import 'mock_tests.dart';
 
 void main() async {
   testWidgets('AddExercise', (WidgetTester tester) async {
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await mockTests();
     await tester.pumpWidget(

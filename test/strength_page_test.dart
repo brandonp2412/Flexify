@@ -1,8 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart';
@@ -20,7 +18,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('StrengthPage displays', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.planExercises.deleteAll();
     await db.plans.deleteAll();
 
@@ -86,7 +84,7 @@ void main() async {
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.planExercises.deleteAll();
     await db.plans.deleteAll();
 
@@ -152,7 +150,7 @@ void main() async {
 
   testWidgets('StrengthPage selects metrics', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.planExercises.deleteAll();
     await db.plans.deleteAll();
 
