@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "mcp__ide__getDiagnostics",
-      "Skill(playwright-scraping)"
+      "Skill(playwright-scraping)",
+      "mcp__Claude_Code_Remote__list_repos",
+      "mcp__Claude_Code_Remote__add_repo"
     ]
   }
 }
