@@ -207,6 +207,7 @@ jobs:
             build/app/outputs/flutter-apk/app-*-release.apk
             build/app/outputs/flutter-apk/flexify.apk
             build/app/outputs/bundle/release/app-release.aab
+          retention-days: 1
 
   build-linux:
     needs: version-bump
@@ -248,6 +249,7 @@ jobs:
         with:
           name: linux-builds
           path: build/linux/x64/release/bundle/flexify-linux.zip
+          retention-days: 1
 
   build-windows:
     needs: version-bump
@@ -282,6 +284,7 @@ jobs:
         with:
           name: windows-builds
           path: flexify-windows.zip
+          retention-days: 1
 
   build-and-deploy-web:
     needs: version-bump
