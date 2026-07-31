@@ -168,6 +168,7 @@ jobs:
         if: ${{ always() && inputs.run_screenshots }}
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: waydroid-screenshots
           path: |
             fastlane/metadata/android/en-US/images/**/*.png
