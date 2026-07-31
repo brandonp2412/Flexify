@@ -202,6 +202,7 @@ jobs:
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: android-builds
           path: |
             build/app/outputs/flutter-apk/app-*-release.apk
@@ -246,6 +247,7 @@ jobs:
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: linux-builds
           path: build/linux/x64/release/bundle/flexify-linux.zip
 
@@ -280,6 +282,7 @@ jobs:
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: windows-builds
           path: flexify-windows.zip
 
