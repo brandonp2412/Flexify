@@ -133,39 +133,56 @@ class _SessionSetsState extends State<SessionSets> {
   }
 }
 
-/// Invisible stand-in for a [_SetChip]. Reuses the same `Card`/padding/text
+/// Skeleton stand-in for a [_SetChip]. Reuses the same `Card`/padding/text
 /// styles as the real chip so the reserved height is measured from the
 /// same font metrics rather than guessed, and the layout below doesn't
-/// jump once the first set of the session is logged. The placeholder text
-/// deliberately can't match a real chip's content, so it stays invisible
-/// to widget-text finders in tests.
+/// jump once the first set of the session is logged. The text itself is
+/// transparent; a decoration box behind each line draws a skeleton bar
+/// sized to that line's exact bounding box, so it reads as an empty slot
+/// rather than mimicking real chip content, and stays invisible to
+/// widget-text finders in tests.
 class _PlaceholderChip extends StatelessWidget {
   const _PlaceholderChip();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Opacity(
-      opacity: 0,
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Set",
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              Text("—", style: theme.textTheme.titleSmall),
-            ],
-          ),
+    final barColor = theme.colorScheme.onSurfaceVariant.withValues(
+      alpha: 0.3,
+    );
+    return Card(
+      margin: EdgeInsets.zero,
+      color: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _skeletonLine("Set 9", theme.textTheme.labelSmall, barColor),
+            _skeletonLine(
+              "999 kg × 99",
+              theme.textTheme.titleSmall,
+              barColor,
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _skeletonLine(String text, TextStyle? style, Color barColor) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: barColor,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(text, style: style?.copyWith(color: Colors.transparent)),
     );
   }
 }
