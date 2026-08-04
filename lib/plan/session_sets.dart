@@ -166,7 +166,7 @@ class _PlaceholderChip extends StatelessWidget {
           children: [
             _skeletonLine("Set 9", theme.textTheme.labelSmall, barColor),
             _skeletonLine(
-              "999 kg × 99",
+              "8 kg × 50",
               theme.textTheme.titleSmall,
               barColor,
             ),
