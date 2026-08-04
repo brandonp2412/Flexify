@@ -2,42 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSContactsUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSMotionUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSSiriUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -58,7 +24,66 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSCameraUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSContactsUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSLocationUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSMotionUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSSiriUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>A third party API (permissions_handler) requests this</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>UIWindowScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>flutter</string>
+					<key>UISceneDelegateClassName</key>
+					<string>FlutterSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -77,11 +102,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>A third party API (permissions_handler) requests this</string>
 </dict>
 </plist>
