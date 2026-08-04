@@ -198,6 +198,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     }),
                   ),
                 ),
+                const SizedBox(height: 8.0),
                 ...exerciseFields(),
                 const SizedBox(height: 8.0),
                 if (showBodyWeight && name != 'Weight') ...[
