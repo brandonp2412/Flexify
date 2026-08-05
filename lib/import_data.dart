@@ -160,8 +160,9 @@ $version
     FilePickerResult? result = await FilePicker.pickFiles();
     if (result == null) return;
 
-    Uint8List? fileBytes = result.files.single.bytes;
-    if (fileBytes == null) {
+    try {
+      await result.files.single.readAsBytes();
+    } catch (_) {
       throw Exception('Could not read file data');
     }
 
@@ -178,18 +179,10 @@ $version
       if (result == null) return;
 
       String csvContent;
+      final fileBytes = await result.files.single.readAsBytes();
       if (kIsWeb) {
-        final fileBytes = result.files.single.bytes;
-        if (fileBytes == null) throw Exception('Could not read file data');
         csvContent = String.fromCharCodes(fileBytes);
       } else {
-        Uint8List fileBytes;
-        if (result.files.single.bytes != null) {
-          fileBytes = result.files.single.bytes!;
-        } else {
-          final file = File(result.files.single.path!);
-          fileBytes = await file.readAsBytes();
-        }
         try {
           csvContent = utf8.decode(fileBytes, allowMalformed: false);
         } catch (e) {
@@ -315,18 +308,10 @@ $version
       if (result == null) return;
 
       String csvContent;
+      final fileBytes = await result.files.single.readAsBytes();
       if (kIsWeb) {
-        final fileBytes = result.files.single.bytes;
-        if (fileBytes == null) throw Exception('Could not read file data');
         csvContent = String.fromCharCodes(fileBytes);
       } else {
-        Uint8List fileBytes;
-        if (result.files.single.bytes != null) {
-          fileBytes = result.files.single.bytes!;
-        } else {
-          final file = File(result.files.single.path!);
-          fileBytes = await file.readAsBytes();
-        }
         try {
           csvContent = utf8.decode(fileBytes, allowMalformed: false);
         } catch (e) {
