@@ -287,6 +287,7 @@ void main() {
 
     await app.db.delete(app.db.gymSets).go();
     await app.db.delete(app.db.plans).go();
+    await app.db.delete(app.db.planExercises).go();
 
     exercisesToPopulateTestDB.forEach(
       (key, value) async => await app.db.into(app.db.gymSets).insert(
