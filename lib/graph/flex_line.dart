@@ -63,10 +63,6 @@ class FlexLine extends StatelessWidget {
     String format,
     BuildContext context,
   ) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
     Widget text;
     double screen = MediaQuery.of(context).size.width;
     double label = 120;
@@ -200,6 +196,7 @@ class FlexLine extends StatelessWidget {
 
     return LineChart(
       LineChartData(
+        clipData: FlClipData.all(),
         borderData: FlBorderData(show: false),
         // FIX: Set explicit min/max for Y-axis to prevent decimal interval issues
         minY: minY,
