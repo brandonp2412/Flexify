@@ -13,6 +13,11 @@ remote_name="$1"
 repo_root=$(git rev-parse --show-toplevel)
 cd "$repo_root"
 
+# Git provides the refs being pushed on stdin. Preserve them before invoking
+# any checks: a child process may otherwise consume stdin, leaving nothing for
+# the auto-fix push below.
+mapfile -t push_updates
+
 if [ "${XDG_SESSION_TYPE:-}" = "wayland" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
   echo "== pre-push: on Wayland, regenerating screenshots =="
   if ! ./scripts/screenshots-waydroid.sh; then
@@ -35,7 +40,8 @@ if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
   git commit -m "chore: auto-fix formatting/lint/generated client/screenshots [pre-push]"
 
   echo "== pre-push: pushing auto-fix commit =="
-  while read -r local_ref _ remote_ref _; do
+  for update in "${push_updates[@]}"; do
+    read -r local_ref _ remote_ref _ <<< "$update"
     [ -z "$local_ref" ] && continue
     git push --no-verify "$remote_name" "HEAD:$remote_ref"
   done
