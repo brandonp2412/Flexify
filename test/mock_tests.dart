@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,6 +61,18 @@ Future<void> mockTests() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   androidChannel = const MethodChannel("com.presley.flexify/timer");
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
+}
+
+/// An in-memory [AppDatabase] whose query streams close synchronously when
+/// their last listener detaches, so tests don't need to call `db.close()`
+/// to avoid Drift's pending-cleanup-timer failing after the test ends.
+AppDatabase testDb() {
+  return AppDatabase(
+    DatabaseConnection(
+      NativeDatabase.memory(),
+      closeStreamsSynchronously: true,
+    ),
+  );
 }
 
 void mockFilePicker(String filePath) {

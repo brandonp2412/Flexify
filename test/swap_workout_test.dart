@@ -1,6 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/swap_workout.dart';
@@ -15,7 +13,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('SwapWorkout', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final plan = await (db.plans.select()..limit(1)).getSingle();
     final planExercises = await (db.planExercises.select()
@@ -48,7 +46,5 @@ void main() async {
     await tester.tap(find.text('Arnold press'));
     await tester.pumpAndSettle();
     expect(find.text('Swap workout'), findsNothing);
-
-    await db.close();
   });
 }

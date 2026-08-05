@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
@@ -15,7 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('EditPlanPage updates', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final planState = PlanState();
 
@@ -79,13 +78,11 @@ void main() async {
     await tester.tap(find.text("Save"));
     await tester.pumpAndSettle();
     expect(find.textContaining('Title'), findsNothing);
-
-    await db.close();
   });
 
   testWidgets('EditPlanPage searches', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
 
     const plan = PlansCompanion(
@@ -140,7 +137,5 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Back extension'), findsNWidgets(2));
     expect(find.text('Arnold press'), findsNothing);
-
-    await db.close();
   });
 }

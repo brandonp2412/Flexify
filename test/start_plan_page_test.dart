@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -17,7 +16,7 @@ void main() async {
     'StartPlanPage rep estimation does not crash when no RPM data for exercise',
     (WidgetTester tester) async {
       await mockTests();
-      db = AppDatabase(NativeDatabase.memory());
+      db = testDb();
 
       final id = await db.plans.insertOne(
         PlansCompanion.insert(days: 'Monday'),
@@ -72,15 +71,13 @@ void main() async {
       // Before fix: throws StateError from reduce() on empty iterable
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pumpAndSettle();
-
-      await db.close();
     },
   );
 
   testWidgets('StartPlanPage with no exercises does not crash on save',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
     final plan =
@@ -111,15 +108,13 @@ void main() async {
 
     // FAB must be hidden when the exercise list is empty
     expect(find.text('Save'), findsNothing);
-
-    await db.close();
   });
 
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
     await tester.binding.setSurfaceSize(const Size(800, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await (db.gymSets.insertAll([
       GymSetsCompanion.insert(
@@ -195,13 +190,11 @@ void main() async {
     expect(find.textContaining("Bench press"), findsOne);
     expect(find.textContaining("Barbell row"), findsOne);
     expect(find.textContaining("Squat"), findsOne);
-
-    await db.close();
   });
 
   testWidgets('StartPlanPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await (db.gymSets.insertAll([
       GymSetsCompanion.insert(
@@ -277,13 +270,11 @@ void main() async {
 
     await tester.tap(find.text('Barbell row'));
     await tester.pumpAndSettle();
-
-    await db.close();
   });
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     final planCompanion = PlansCompanion.insert(
       days: 'Monday,Tuesday,Wednesday',
@@ -355,8 +346,6 @@ void main() async {
         .get();
 
     expect(gymSets.length, equals(2));
-
-    await db.close();
   });
 
   testWidgets('StartPlanPage shows this-session sets after saving',
@@ -364,7 +353,7 @@ void main() async {
     await tester.binding.setSurfaceSize(const Size(800, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
     final plan =
@@ -412,7 +401,5 @@ void main() async {
     // The saved set now appears in the this-session strip.
     expect(find.text('Set 1'), findsOne);
     expect(find.text('50 kg × 5'), findsOne);
-
-    await db.close();
   });
 }

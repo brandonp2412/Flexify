@@ -1,13 +1,14 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'mock_tests.dart';
+
 void main() {
   setUp(() {
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
   });
 
   test('getGymCounts only counts sets from the current calendar day', () async {

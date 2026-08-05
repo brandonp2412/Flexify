@@ -1,8 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/main.dart';
@@ -20,9 +18,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('CardioPage displays', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(
-      NativeDatabase.memory(),
-    );
+    db = testDb();
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(
@@ -73,15 +69,11 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('CardioPage edits', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(
-      NativeDatabase.memory(),
-    );
+    db = testDb();
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(
@@ -127,13 +119,11 @@ void main() async {
     await tester.tap(edit);
     await tester.pumpAndSettle();
     expect(find.text('Update all run'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('CardioPage selects metrics', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     for (final element in graphData) {
       await db.into(db.gymSets).insert(
             generateGymSetCompanion(
@@ -187,7 +177,5 @@ void main() async {
     await tester.tap(find.text('Distance'));
     await tester.pumpAndSettle();
     expect(find.byType(LineChart), findsOne);
-
-    await db.close();
   });
 }

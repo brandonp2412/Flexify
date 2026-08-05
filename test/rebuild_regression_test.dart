@@ -19,7 +19,6 @@
 library;
 
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -87,25 +86,10 @@ GymSetsCompanion makeSet(String name, {int minutesAgo = 0}) =>
 void main() {
   setUp(() async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
-  });
-
-  // db is closed inside each test so Drift's stream cleanup timer fires while
-  // the widget tree is still alive and can be pumped. tearDown is a safety net.
-  tearDown(() async {
-    try {
-      await db.close();
-    } catch (_) {}
+    db = testDb();
   });
 
   Future<Setting> settings() => (db.settings.select()..limit(1)).getSingle();
-
-  // Call at the end of each test: closes DB then pumps one frame so Drift's
-  // zero-duration cleanup timer fires before the framework checks for pending timers.
-  Future<void> closeDb(WidgetTester tester) async {
-    await db.close();
-    await tester.pump();
-  }
 
   // --- Virtualization -------------------------------------------------
   // Both tests share the same frame threshold. If the 100-item test ever needs
@@ -124,7 +108,6 @@ void main() {
       // Measured baseline: 2 frames.
       print('[perf] 10-item list initial render: $frames frames');
       expect(frames, lessThan(6), reason: '10-item list took $frames frames');
-      await closeDb(tester);
     },
   );
 
@@ -146,7 +129,6 @@ void main() {
             'if much higher than the 10-item test, '
             'ListView.builder is building off-screen items',
       );
-      await closeDb(tester);
     },
   );
 
@@ -171,7 +153,6 @@ void main() {
         reason: 'Stream update took $frames frames -- '
             'expected ~2 (StreamBuilder + HistoryList setState)',
       );
-      await closeDb(tester);
     },
   );
 
@@ -188,7 +169,6 @@ void main() {
       // Measured baseline: 2 frames, same as insert.
       print('[perf] Delete record → UI settle: $frames frames');
       expect(frames, lessThan(4), reason: 'Delete settled in $frames frames');
-      await closeDb(tester);
     },
   );
 
@@ -215,7 +195,6 @@ void main() {
         lessThan(45),
         reason: 'Entering selection mode took $frames frames',
       );
-      await closeDb(tester);
     },
   );
 
@@ -242,7 +221,6 @@ void main() {
         lessThan(45),
         reason: 'Exiting selection mode took $frames frames',
       );
-      await closeDb(tester);
     },
   );
 }

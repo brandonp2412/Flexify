@@ -1,6 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
@@ -16,7 +14,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('PlansPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -34,13 +32,11 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Search plans...'), findsOne);
     expect(find.byType(ListTile), findsWidgets);
-
-    await db.close();
   });
 
   testWidgets('PlansPage add button', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -58,13 +54,11 @@ void main() async {
     final add = find.text('Add');
     await tester.tap(add);
     await tester.pumpAndSettle();
-
-    await db.close();
   });
 
   testWidgets('PlansPage tap tile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -84,13 +78,11 @@ void main() async {
     await tester.tap(tile);
     await tester.pumpAndSettle();
     expect(find.text('Save'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('PlansPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -113,13 +105,11 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('PlansPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -139,13 +129,11 @@ void main() async {
     await tester.longPress(tile);
     await tester.pumpAndSettle();
     expect(find.text('1'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('PlansPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -175,7 +163,5 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Search plans...'), findsOne);
-
-    await db.close();
   });
 }

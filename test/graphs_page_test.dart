@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/main.dart';
@@ -16,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -34,13 +33,11 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Search graphs...'), findsOne);
     expect(find.byType(ListTile), findsWidgets);
-
-    await db.close();
   });
 
   testWidgets('GraphsPage add button', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -58,14 +55,12 @@ void main() async {
     final add = find.text('Add');
     await tester.tap(add);
     await tester.pumpAndSettle();
-
-    await db.close();
   });
 
   testWidgets('GraphsPage taps barbell bench press',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -100,13 +95,11 @@ void main() async {
     await tester.tap(find.text('Barbell bench press'));
     await tester.pumpAndSettle();
     expect(find.text('Best weight'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('GraphsPage taps global progress', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -128,13 +121,11 @@ void main() async {
     await tester.tap(find.text('Global progress'));
     await tester.pumpAndSettle();
     expect(find.text('Best weight'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -158,13 +149,11 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -196,13 +185,11 @@ void main() async {
     await tester.longPress(find.text('Barbell bent-over row'));
     await tester.pumpAndSettle();
     expect(find.text('1'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -244,14 +231,12 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Back extension'), findsNothing);
-
-    await db.close();
   });
 
   testWidgets('GraphsPage delete also removes plan exercises',
       (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertOne(
       GymSetsCompanion.insert(
@@ -306,7 +291,5 @@ void main() async {
           ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
         .get();
     expect(planExercises, isEmpty);
-
-    await db.close();
   });
 }

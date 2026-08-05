@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -19,7 +18,7 @@ void main() async {
     'PlanTile refreshes its exercise list after db is swapped and '
     'dbVersion bumps, without the widget being remounted (#315)',
     (WidgetTester tester) async {
-      final oldDb = AppDatabase(NativeDatabase.memory());
+      final oldDb = testDb();
       await oldDb.planExercises.deleteAll();
       await oldDb.plans.deleteAll();
       await oldDb.plans.insertOne(
@@ -64,7 +63,7 @@ void main() async {
       expect(find.text('Bench press'), findsOne);
       expect(find.text('Squat'), findsNothing);
 
-      final newDb = AppDatabase(NativeDatabase.memory());
+      final newDb = testDb();
       await newDb.planExercises.deleteAll();
       await newDb.plans.deleteAll();
       await newDb.plans.insertOne(

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -16,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('HistoryPage loads', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -34,13 +33,11 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('Search history...'), findsOne);
     expect(find.text('No entries yet'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
 
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
@@ -85,13 +82,11 @@ void main() async {
     expect(find.text('1 x 90 kg'), findsOne);
     expect(find.text('4 x 80 kg'), findsOne);
     expect(find.text('8 x 70 kg'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -123,13 +118,11 @@ void main() async {
     expect(find.textContaining('Weight (kg)'), findsOne);
     expect(find.textContaining('Reps'), findsOne);
     expect(find.textContaining('Name'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('HistoryPage settings', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -152,13 +145,11 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -188,13 +179,11 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.byTooltip('Delete selected'), findsOne);
-
-    await db.close();
   });
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     await db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Bench press',
@@ -232,7 +221,5 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text('Search history...'), findsOne);
-
-    await db.close();
   });
 }

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graph_tile.dart';
 import 'package:flexify/main.dart';
@@ -16,7 +15,7 @@ import 'mock_tests.dart';
 void main() async {
   testWidgets('GraphTile', (WidgetTester tester) async {
     await mockTests();
-    db = AppDatabase(NativeDatabase.memory());
+    db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -48,7 +47,5 @@ void main() async {
 
     expect(find.text('Bench press'), findsOne);
     expect(find.text('5 x 20 kg'), findsOne);
-
-    await db.close();
   });
 }
