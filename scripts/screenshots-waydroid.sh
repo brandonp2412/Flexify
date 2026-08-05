@@ -13,10 +13,12 @@ BASE_PROP="/var/lib/waydroid/waydroid_base.prop"
 device=""
 ip=""
 show=0
+watch=0
 headless_pid=""
 watchdog_pid=""
+watch_args=()
 
-# Usage: screenshots-waydroid.sh [device-type] [screenshot] [--show|--headed]
+# Usage: screenshots-waydroid.sh [device-type] [screenshot] [--show|--headed] [--watch]
 # device-type: phoneScreenshots | sevenInchScreenshots | tenInchScreenshots | desktop
 # screenshot:  screenshot number (e.g. 1) or test name (e.g. Overview)
 device_type_filter=""
@@ -24,8 +26,13 @@ only=""
 
 for arg in "$@"; do
     case "$arg" in
-    --show | --headed) show=1 ;;
+    --show | --headed)
+        show=1
+        watch_args+=("$arg")
+        ;;
+    --watch) watch=1 ;;
     *)
+        watch_args+=("$arg")
         if [ -z "$device_type_filter" ]; then
             device_type_filter="$arg"
         elif [ -z "$only" ]; then
@@ -42,6 +49,17 @@ log() {
 add_timestamps() {
     stdbuf -oL tr '\r' '\n' | while IFS= read -r line; do
         printf '[%s] %s\n' "$(date '+%H:%M:%S')" "$line"
+    done
+}
+
+watch_files() {
+    local path
+    for path in lib assets integration_test test_driver; do
+        [ -d "$PROJECT_DIR/$path" ] && find "$PROJECT_DIR/$path" -type f
+    done
+    [ -f "$PROJECT_DIR/pubspec.yaml" ] && printf '%s\n' "$PROJECT_DIR/pubspec.yaml"
+    for path in "$SCRIPT_DIR"/screenshots-*.sh "$SCRIPT_DIR/screenshot-names.sh"; do
+        [ -f "$path" ] && printf '%s\n' "$path"
     done
 }
 
@@ -290,6 +308,16 @@ run_device_type() {
 
 main() {
     local device_type width height
+
+    if [ "$watch" -eq 1 ]; then
+        if ! command -v entr >/dev/null 2>&1; then
+            log "ERROR: --watch requires entr"
+            exit 1
+        fi
+        log "Watching app and screenshot sources for changes..."
+        watch_files | entr -n "$0" "${watch_args[@]}"
+        exit $?
+    fi
 
     trap 'stop_unfreeze_watchdog; stop_headless_compositor' EXIT
 
