@@ -8,6 +8,9 @@ set -euo pipefail
 repo_root=$(git rev-parse --show-toplevel)
 cd "$repo_root"
 
+# A clean CI checkout has no package configuration. Running build_runner via
+# `dart` cannot resolve Flutter SDK dependencies on its own.
+flutter pub get
 dart run build_runner build
 
 echo "== formatting =="
