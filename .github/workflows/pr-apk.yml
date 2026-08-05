@@ -36,13 +36,13 @@ jobs:
       # clones it in full instead. Credentials are not persisted because
       # manual runs build unreviewed fork code, which must not find a token
       # in the git config.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/pull/{0}/head', inputs.pr) || '' }}
           persist-credentials: false
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "zulu"
           java-version: "17"

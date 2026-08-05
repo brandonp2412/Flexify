@@ -15,7 +15,7 @@ jobs:
   quality-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
       build_number: ${{ steps.bump.outputs.build_number }}
       commit_sha: ${{ steps.commit-push.outputs.commit_sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           submodules: false
@@ -111,13 +111,13 @@ jobs:
     needs: version-bump
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "zulu"
           java-version: "17"
@@ -212,7 +212,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "zulu"
           java-version: "17"
@@ -318,7 +318,7 @@ jobs:
     needs: version-bump
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -360,7 +360,7 @@ jobs:
     needs: version-bump
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -402,7 +402,7 @@ jobs:
       pages: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -444,14 +444,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
 
       - name: Create and push tag
         run: |
@@ -479,7 +479,7 @@ jobs:
     needs: [version-bump, build-windows]
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -520,10 +520,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download Android artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: android-builds
           path: android-builds
