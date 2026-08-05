@@ -70,16 +70,7 @@ class _HistoryListState extends State<HistoryList> {
       incline = '@ ${gymSet.incline}%';
     }
 
-    Widget? leading = SizedBox(
-      height: 24,
-      width: 24,
-      child: Checkbox(
-        value: widget.selected.contains(gymSet.id),
-        onChanged: (value) {
-          widget.onSelect(gymSet.id);
-        },
-      ),
-    );
+    Widget? leading;
 
     if (widget.selected.isEmpty && showImages && gymSet.image != null) {
       leading = GestureDetector(
@@ -113,14 +104,6 @@ class _HistoryListState extends State<HistoryList> {
         ),
       );
     }
-
-    leading = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 150),
-      transitionBuilder: (child, animation) {
-        return ScaleTransition(scale: animation, child: child);
-      },
-      child: leading,
-    );
 
     String trailing = "$reps x $weight ${gymSet.unit}";
     if (gymSet.cardio &&
@@ -167,17 +150,18 @@ class _HistoryListState extends State<HistoryList> {
             title: Text(gymSet.name),
             subtitle: Selector<SettingsState, String>(
               selector: (context, settings) => settings.value.longDateFormat,
-              builder: (context, dateFormat, child) => Text(
-                dateFormat == 'timeago'
-                    ? timeago.format(gymSet.created)
-                    : DateFormat(dateFormat).format(gymSet.created),
-              ),
-            ),
-            trailing: Text(
-              trailing,
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              builder: (context, dateFormat, child) => IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Text(
+                      dateFormat == 'timeago'
+                          ? timeago.format(gymSet.created)
+                          : DateFormat(dateFormat).format(gymSet.created),
+                    ),
+                    VerticalDivider(),
+                    Text(trailing),
+                  ],
+                ),
               ),
             ),
             onLongPress: () => widget.onSelect(gymSet.id),

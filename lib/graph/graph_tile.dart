@@ -47,16 +47,7 @@ class GraphTile extends StatelessWidget {
           "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}";
     }
 
-    Widget? leading = SizedBox(
-      height: 24,
-      width: 24,
-      child: Checkbox(
-        value: selected.contains(gymSet.name.value),
-        onChanged: (value) {
-          onSelect(gymSet.name.value);
-        },
-      ),
-    );
+    Widget? leading;
 
     if (selected.isEmpty &&
         showImages &&
@@ -95,14 +86,6 @@ class GraphTile extends StatelessWidget {
       );
     }
 
-    leading = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 150),
-      transitionBuilder: (child, animation) {
-        return ScaleTransition(scale: animation, child: child);
-      },
-      child: leading,
-    );
-
     return Material(
       color: selected.contains(gymSet.name.value)
           ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
@@ -112,17 +95,18 @@ class GraphTile extends StatelessWidget {
         title: Text(gymSet.name.value),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.longDateFormat,
-          builder: (context, dateFormat, child) => Text(
-            dateFormat == 'timeago'
-                ? timeago.format(gymSet.created.value)
-                : DateFormat(dateFormat).format(gymSet.created.value),
-          ),
-        ),
-        trailing: Text(
-          trailing,
-          style: TextStyle(
-            fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          builder: (context, dateFormat, child) => IntrinsicHeight(
+            child: Row(
+              children: [
+                Text(
+                  dateFormat == 'timeago'
+                      ? timeago.format(gymSet.created.value)
+                      : DateFormat(dateFormat).format(gymSet.created.value),
+                ),
+                VerticalDivider(),
+                Text(trailing),
+              ],
+            ),
           ),
         ),
         onTap: () async {

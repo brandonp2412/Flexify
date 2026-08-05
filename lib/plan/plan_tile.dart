@@ -81,16 +81,7 @@ class _PlanTileState extends State<PlanTile> {
     final showImages = context
         .select<SettingsState, bool>((settings) => settings.value.showImages);
 
-    Widget? leading = SizedBox(
-      height: 24,
-      width: 24,
-      child: Checkbox(
-        value: widget.selected.contains(widget.plan.id),
-        onChanged: (value) {
-          widget.onSelect(widget.plan.id);
-        },
-      ),
-    );
+    Widget? leading;
 
     if (widget.selected.isEmpty && showImages)
       leading = GestureDetector(
@@ -117,14 +108,6 @@ class _PlanTileState extends State<PlanTile> {
           ),
         ),
       );
-
-    leading = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 150),
-      transitionBuilder: (child, animation) {
-        return ScaleTransition(scale: animation, child: child);
-      },
-      child: leading,
-    );
 
     return Material(
       color: widget.selected.contains(widget.plan.id)
