@@ -116,7 +116,7 @@ class _GroupHistoryState extends State<GroupHistory> {
                       const Icon(Icons.error),
                 ),
               );
-            } else if (widget.selected.isEmpty) {
+            } else if (widget.selected.isEmpty && showImages) {
               leading = GestureDetector(
                 onTap: () => widget.onSelect(gymSet.id),
                 child: Container(

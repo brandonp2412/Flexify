@@ -78,6 +78,9 @@ class _PlanTileState extends State<PlanTile> {
     } else if (widget.plan.days.split(',').length < 7)
       title = RichText(text: TextSpan(children: _getChildren(context)));
 
+    final showImages = context
+        .select<SettingsState, bool>((settings) => settings.value.showImages);
+
     Widget? leading = SizedBox(
       height: 24,
       width: 24,
@@ -89,7 +92,7 @@ class _PlanTileState extends State<PlanTile> {
       ),
     );
 
-    if (widget.selected.isEmpty)
+    if (widget.selected.isEmpty && showImages)
       leading = GestureDetector(
         onTap: () => widget.onSelect(widget.plan.id),
         child: Container(

@@ -89,7 +89,7 @@ class _HistoryListState extends State<HistoryList> {
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
-    } else if (widget.selected.isEmpty) {
+    } else if (widget.selected.isEmpty && showImages) {
       leading = GestureDetector(
         onTap: () => widget.onSelect(gymSet.id),
         child: Container(
