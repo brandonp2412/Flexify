@@ -2,8 +2,12 @@
 
 set -e
 
-device="${1:?Usage: screenshots-android.sh <device-id> [device-type]}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/screenshot-names.sh"
+
+device="${1:?Usage: screenshots-android.sh <device-id> [device-type] [screenshot]}"
 device_type="${2:-phoneScreenshots}"
+only="${3:-}"
 
 echo "Running screenshot tests on Android device $device..."
 
@@ -13,12 +17,20 @@ echo "Running screenshot tests on Android device $device..."
 
 export FLEXIFY_DEVICE_TYPE="$device_type"
 
-# --profile is required: Flutter 3.41.x has a framework-level
-# assertion bug in PipelineOwner.flushSemantics that fires spuriously
-# during integration tests. Profile mode skips Dart asserts, bypassing it.
+dart_define=()
+if [ -n "$only" ]; then
+    only="$(screenshot_name "$only")"
+    dart_define=(--dart-define=SCREENSHOT_ONLY="$only")
+    echo "Capturing only: $only"
+fi
+
+# --profile is required: Flutter's framework-level assertion bug in
+# PipelineOwner.flushSemantics can fire spuriously during integration tests.
+# Profile mode skips Dart asserts, bypassing it.
 flutter drive --profile \
     --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
+    "${dart_define[@]}" \
     -d "$device"
 
 echo "Screenshot tests completed successfully!"

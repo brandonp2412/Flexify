@@ -266,6 +266,12 @@ GymSetsCompanion generateGymSetCompanion(
       category: const Value("Arms"),
     );
 
+// Set with --dart-define=SCREENSHOT_ONLY=<TestName> to run a single
+// screenshot, e.g. SCREENSHOT_ONLY=SettingsPage for phoneScreenshots #3.
+const _only = String.fromEnvironment('SCREENSHOT_ONLY');
+
+bool _skip(String name) => _only.isNotEmpty && _only != name;
+
 void main() {
   IntegrationTestWidgetsFlutterBinding binding =
       IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -312,6 +318,7 @@ void main() {
         screenshotName: '1_en-US',
         tabBarState: 'PlansPage',
       ),
+      skip: _skip("PlanPage"),
     );
 
     testWidgets(
@@ -326,6 +333,7 @@ void main() {
         ),
         tabBarState: 'GraphsPage',
       ),
+      skip: _skip("GraphPage"),
     );
 
     testWidgets(
@@ -340,6 +348,7 @@ void main() {
         ),
         tabBarState: 'PlansPage',
       ),
+      skip: _skip("SettingsPage"),
     );
 
     testWidgets(
@@ -354,6 +363,7 @@ void main() {
         },
         tabBarState: 'PlansPage',
       ),
+      skip: _skip("StartPlanPage"),
     );
   });
 
@@ -386,6 +396,7 @@ void main() {
         },
         tabBarState: 'GraphsPage',
       ),
+      skip: _skip("ViewGraphPage"),
     );
 
     testWidgets(
@@ -396,6 +407,7 @@ void main() {
         screenshotName: '6_en-US',
         tabBarState: 'HistoryPage',
       ),
+      skip: _skip("GraphHistory"),
     );
 
     testWidgets(
@@ -416,6 +428,7 @@ void main() {
         },
         tabBarState: 'GraphsPage',
       ),
+      skip: _skip("EditPlanPage"),
     );
 
     testWidgets(
@@ -433,6 +446,7 @@ void main() {
         },
         tabBarState: 'TimerPage',
       ),
+      skip: _skip("TimerPage"),
     );
   });
 }

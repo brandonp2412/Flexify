@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Runs scripts/check.sh (the single source of truth for "is this app OK")
+# before anything leaves your machine. Auto-fixable changes it produces
+# (formatting, lint fixes, stale swagger/generated client, and on Wayland,
+# stale screenshots) are committed and pushed automatically; a real
+# analyze/test failure blocks the push.
+#
+# Activate with: git config core.hooksPath .githooks
+
+set -euo pipefail
+
+remote_name="$1"
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+if [ "${XDG_SESSION_TYPE:-}" = "wayland" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
+  echo "== pre-push: on Wayland, regenerating screenshots =="
+  if ! ./scripts/screenshots-waydroid.sh; then
+    echo "pre-push: WARNING: screenshot regeneration failed; continuing without updating them." >&2
+  fi
+else
+  echo "== pre-push: not on Wayland, skipping screenshot regeneration =="
+fi
+
+echo "== pre-push: running checks =="
+if ! ./scripts/check.sh; then
+  echo
+  echo "pre-push: checks failed. Push aborted." >&2
+  exit 1
+fi
+
+if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+  echo "== pre-push: auto-fixed changes detected, committing =="
+  git add -A
+  git commit -m "chore: auto-fix formatting/lint/generated client/screenshots [pre-push]"
+
+  echo "== pre-push: pushing auto-fix commit =="
+  while read -r local_ref _ remote_ref _; do
+    [ -z "$local_ref" ] && continue
+    git push --no-verify "$remote_name" "HEAD:$remote_ref"
+  done
+
+  echo
+  echo "pre-push: committed and pushed auto-fixes for you. The original push was replaced by that commit." >&2
+  exit 1
+fi
+
+exit 0
