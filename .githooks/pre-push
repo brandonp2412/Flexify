@@ -7,7 +7,7 @@
 #
 # Activate with: git config core.hooksPath .githooks
 
-set -euo pipefail
+set -euox pipefail
 
 remote_name="$1"
 repo_root=$(git rev-parse --show-toplevel)

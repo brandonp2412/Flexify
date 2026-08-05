@@ -8,13 +8,13 @@ set -euo pipefail
 repo_root=$(git rev-parse --show-toplevel)
 cd "$repo_root"
 
-dart run build_runner build -d
+dart run build_runner build
 
 echo "== formatting =="
 dart format lib test
 
 echo "== applying auto-fixes =="
-dart fix --apply lib test
+dart fix --apply
 
 echo "== analyzing =="
 flutter analyze lib test
