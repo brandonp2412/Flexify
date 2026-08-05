@@ -29,20 +29,8 @@ jobs:
           flutter/bin/flutter --version
           flutter/bin/flutter config --no-analytics
 
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Run build_runner
-        run: dart run build_runner build -d
-
-      - name: Verify formatting
-        run: dart format --set-exit-if-changed lib test
-
-      - name: Analyze code
-        run: dart analyze --no-fatal-warnings lib test
-
-      - name: Run tests
-        run: flutter test
+      - name: Check
+        run: ./scripts/check.sh
 
   version-bump:
     needs: quality-checks
