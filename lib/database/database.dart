@@ -43,8 +43,26 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
         await m.createIndex(
           Index(
-            'GymSets',
-            "CREATE INDEX IF NOT EXISTS gym_sets_name_created ON gym_sets(name, created);",
+            'gym_sets',
+            "CREATE INDEX IF NOT EXISTS gym_sets_name_hidden_created ON gym_sets(name, hidden, created);",
+          ),
+        );
+        await m.createIndex(
+          Index(
+            'gym_sets',
+            "CREATE INDEX IF NOT EXISTS gym_sets_created ON gym_sets(created);",
+          ),
+        );
+        await m.createIndex(
+          Index(
+            'gym_sets',
+            "CREATE INDEX IF NOT EXISTS gym_sets_plan_id ON gym_sets(plan_id);",
+          ),
+        );
+        await m.createIndex(
+          Index(
+            'plan_exercises',
+            "CREATE INDEX IF NOT EXISTS plan_exercises_plan_id ON plan_exercises(plan_id);",
           ),
         );
 
@@ -530,10 +548,22 @@ class AppDatabase extends _$AppDatabase {
             );
           }
         },
+        from54To55: (Migrator m, Schema55 schema) async {
+          await m.database
+              .customStatement('DROP INDEX IF EXISTS gym_sets_name');
+          await m.database
+              .customStatement('DROP INDEX IF EXISTS gym_sets_hidden');
+          await m.createIndex(
+            Index(
+              'gym_sets',
+              'CREATE INDEX IF NOT EXISTS gym_sets_name_hidden_created ON gym_sets(name, hidden, created)',
+            ),
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 54;
+  int get schemaVersion => 55;
 }

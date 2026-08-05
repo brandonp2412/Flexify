@@ -4,7 +4,7 @@ Persistence uses **Drift** (`drift`, `drift_dev`, `sqlite3`) over SQLite. Web us
 
 ## Key files (lib/database/)
 - `database.dart` — `AppDatabase extends _$AppDatabase`, `@DriftDatabase(tables: [...])`,
-  `MigrationStrategy`, and **`schemaVersion`** (currently 53 — verify before relying on it).
+  `MigrationStrategy`, and **`schemaVersion`** (currently 55 — verify before relying on it).
   Generates `database.g.dart` (`part`) and uses `database.steps.dart` (step-by-step schema).
 - Tables (one file each): `plans.dart` (Plans), `gym_sets.dart` (GymSets — the core logged-set
   table), `settings.dart` (Settings — single-row app config), `plan_exercises.dart` (PlanExercises),
@@ -25,4 +25,6 @@ Migration tests live in `test/generated_migrations/schema_vN.dart`. Schemas expo
 
 ALWAYS read the Drift docs (https://drift.simonbinder.eu/docs/) before modifying schemas/queries.
 
-`gym_sets` has an index `gym_sets_name_created` on `(name, created)`.
+`gym_sets` has a composite index `gym_sets_name_hidden_created` on `(name, hidden, created)`
+(added in schema 55, replacing the old standalone `gym_sets_name` and `gym_sets_hidden`
+indices), plus standalone indices on `created` and `plan_id`.
