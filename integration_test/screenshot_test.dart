@@ -191,6 +191,7 @@ Future<void> appWrapper(WidgetTester tester) async {
           systemColors: const Value(false),
           curveLines: const Value(true),
           showImages: const Value(false),
+          showGlobalProgress: const Value(false),
         ),
       );
   final settings = await (db.settings.select()..limit(1)).getSingle();
