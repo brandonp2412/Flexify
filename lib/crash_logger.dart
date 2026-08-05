@@ -14,15 +14,19 @@ import 'package:path_provider/path_provider.dart';
 class CrashLogger {
   CrashLogger._(this._file);
 
-  final File _file;
+  final File? _file;
   static CrashLogger? _instance;
 
   /// Wires up [FlutterError.onError] and [PlatformDispatcher.onError] to append
   /// to the crash log, then returns the logger so callers can record their own
-  /// non-fatal failures via [record].
+  /// non-fatal failures via [record]. On web, `path_provider` has no backing
+  /// implementation, so errors are only sent to the console there.
   static Future<CrashLogger> install() async {
-    final dir = await getApplicationSupportDirectory();
-    final file = File(p.join(dir.path, 'crash.log'));
+    File? file;
+    if (!kIsWeb) {
+      final dir = await getApplicationSupportDirectory();
+      file = File(p.join(dir.path, 'crash.log'));
+    }
     final logger = CrashLogger._(file);
     _instance = logger;
 
@@ -37,7 +41,7 @@ class CrashLogger {
       return true;
     };
 
-    debugPrint('Crash log: ${file.path}');
+    if (file != null) debugPrint('Crash log: ${file.path}');
     return logger;
   }
 
@@ -53,8 +57,10 @@ class CrashLogger {
     entry.writeln();
 
     debugPrint(entry.toString());
+    final file = _file;
+    if (file == null) return;
     try {
-      _file.writeAsStringSync(entry.toString(), mode: FileMode.append);
+      file.writeAsStringSync(entry.toString(), mode: FileMode.append);
     } catch (_) {
       // Logging must never throw; if the file is unwritable, the debugPrint
       // above is the best we can do.
