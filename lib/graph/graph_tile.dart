@@ -57,6 +57,7 @@ class GraphTile extends StatelessWidget {
         onTap: () => onSelect(gymSet.name.value),
         child: Image.file(
           File(gymSet.image.value!),
+          cacheWidth: 64,
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
