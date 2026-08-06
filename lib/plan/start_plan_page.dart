@@ -38,6 +38,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   final minutes = TextEditingController(text: "0.0");
   final seconds = TextEditingController(text: "0.0");
   final incline = TextEditingController(text: "0");
+  final repDuration = TextEditingController(text: "0.0");
   final key = GlobalKey<FormState>();
 
   int selected = 0;
@@ -46,6 +47,9 @@ class _StartPlanPageState extends State<StartPlanPage>
   List<Rpm>? rpms;
   String? category;
   String? image;
+  GymSet? baseGymSet;
+  bool isGoalApplied = false;
+  String goalSummaryText = "";
 
   late Stream<List<PlanExercise>> stream;
   StreamSubscription<void>? _gymSetsSub;
@@ -96,6 +100,57 @@ class _StartPlanPageState extends State<StartPlanPage>
               key: key,
               child: Column(
                 children: [
+                  if (isGoalApplied)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "🎯 $goalSummaryText",
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimaryContainer,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton.icon(
+                                    onPressed: resetToBaseSet,
+                                    icon: const Icon(Icons.refresh, size: 18),
+                                    label: const Text("Reset"),
+                                    style: TextButton.styleFrom(
+                                      visualDensity: VisualDensity.compact,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   if (!cardio) ...strengthFields(snapshot),
                   if (cardio) ...cardioFields(snapshot),
                   unitSelector(),
@@ -153,6 +208,19 @@ class _StartPlanPageState extends State<StartPlanPage>
         onFieldSubmitted: (value) => selectAll(weight),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
+          if (double.tryParse(value) == null) return 'Invalid number';
+          return null;
+        },
+      ),
+      const SizedBox(height: 8.0),
+      StepperField(
+        controller: repDuration,
+        labelText: 'Time per rep (seconds)',
+        step: 5,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => selectAll(weight),
+        validator: (value) {
+          if (value == null || value.isEmpty) return null;
           if (double.tryParse(value) == null) return 'Invalid number';
           return null;
         },
@@ -381,6 +449,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     incline.dispose();
     notes.dispose();
     seconds.dispose();
+    repDuration.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
     planState.removeListener(planChanged);
@@ -480,7 +549,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
   }
 
-  void _updateGymSetTextFields(GymSet gymSet) {
+  void _updateGymSetTextFields(GymSet gymSet, [PlanExercise? planExercise]) {
+    baseGymSet = gymSet;
     final settings = context.read<SettingsState>().value;
     if (settings.strengthUnit == 'last-entry' && !gymSet.cardio ||
         settings.cardioUnit == 'last-entry' && gymSet.cardio)
@@ -490,16 +560,61 @@ class _StartPlanPageState extends State<StartPlanPage>
     else
       unit = settings.strengthUnit;
 
-    reps.text = toString(gymSet.reps);
-    weight.text = toString(gymSet.weight);
+    double targetReps = gymSet.reps;
+    double targetWeight = gymSet.weight;
+    double targetRepDuration = gymSet.repDuration;
+    double totalSecs = gymSet.duration * 60;
+
+    final hasIncWeight = (planExercise?.incrementWeight ?? 0) > 0;
+    final hasIncReps = (planExercise?.incrementReps ?? 0) > 0;
+    final hasIncDur = (planExercise?.incrementDuration ?? 0) > 0;
+
+    isGoalApplied = false;
+    goalSummaryText = "";
+
+    if (planExercise != null && (hasIncWeight || hasIncReps || hasIncDur)) {
+      isGoalApplied = true;
+      List<String> parts = [];
+      if (hasIncWeight) {
+        targetWeight += planExercise!.incrementWeight!;
+        parts.add("+${toString(planExercise!.incrementWeight!)}$unit");
+      }
+      if (hasIncReps) {
+        targetReps += planExercise!.incrementReps!;
+        parts.add("+${toString(planExercise!.incrementReps!)} reps");
+      }
+      if (hasIncDur) {
+        final incDur = planExercise!.incrementDuration!;
+        parts.add("+${toString(incDur)}s");
+        if (gymSet.cardio || (gymSet.repDuration == 0 && gymSet.duration > 0)) {
+          totalSecs += incDur;
+        } else {
+          targetRepDuration += incDur;
+        }
+      }
+      goalSummaryText = "Goal: ${parts.join(', ')}";
+    }
+
+    reps.text = toString(targetReps);
+    weight.text = toString(targetWeight);
+    repDuration.text = toString(targetRepDuration);
     distance.text = toString(gymSet.distance);
-    minutes.text = gymSet.duration.floor().toString();
-    seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
+    minutes.text = (totalSecs / 60).floor().toString();
+    seconds.text = (totalSecs % 60).floor().toString();
     incline.text = gymSet.incline?.toString() ?? "";
     cardio = gymSet.cardio;
     category = gymSet.category;
     image = gymSet.image;
     notes.text = gymSet.notes ?? "";
+  }
+
+  void resetToBaseSet() {
+    if (baseGymSet != null) {
+      setState(() {
+        _updateGymSetTextFields(baseGymSet!);
+      });
+      toast('Reset to base set values');
+    }
   }
 
   void planChanged() {
@@ -574,6 +689,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       category: Value(category),
       image: Value(image),
       reps: double.tryParse(reps.text) ?? 0,
+      repDuration: Value(double.tryParse(repDuration.text) ?? 0),
       weight: double.tryParse(weight.text) ?? 0,
       incline: Value(int.tryParse(incline.text)),
       distance: Value(double.tryParse(distance.text) ?? 0),
@@ -632,7 +748,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final last = await getFirstOfLastSession(first[index].exercise);
     if (last == null || !mounted) return;
 
-    setState(() => _updateGymSetTextFields(last));
+    setState(() => _updateGymSetTextFields(last, first[index]));
   }
 
   void useBodyWeight() async {
