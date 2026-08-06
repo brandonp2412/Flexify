@@ -9,11 +9,19 @@ class Plans extends Table with TableInfo {
   final String? _alias;
   Plans(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> workouts = GeneratedColumn<String>(
-      'workouts', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'workouts',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<String> days = GeneratedColumn<String>(
-      'days', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'days',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [workouts, days];
   @override
@@ -40,20 +48,40 @@ class GymSets extends Table with TableInfo {
   final String? _alias;
   GymSets(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<int> reps = GeneratedColumn<int>(
-      'reps', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'reps',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<int> weight = GeneratedColumn<int>(
-      'weight', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
-      'unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<DateTime> created = GeneratedColumn<DateTime>(
-      'created', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'created',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [name, reps, weight, unit, created];
   @override

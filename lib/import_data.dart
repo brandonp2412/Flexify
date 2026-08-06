@@ -20,10 +20,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ImportData extends StatelessWidget {
   final BuildContext ctx;
 
-  const ImportData({
-    super.key,
-    required this.ctx,
-  });
+  const ImportData({super.key, required this.ctx});
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +135,9 @@ $version
     db = AppDatabase();
     dbVersion.value++;
 
-    await (db.settings.update())
-        .write(const SettingsCompanion(alarmSound: Value('')));
+    await (db.settings.update()).write(
+      const SettingsCompanion(alarmSound: Value('')),
+    );
 
     if (!ctx.mounted) return;
     final settingsState = ctx.read<SettingsState>();
@@ -152,8 +150,10 @@ $version
     await planState.updateDefaults();
 
     if (!ctx.mounted) return;
-    Navigator.of(ctx, rootNavigator: true)
-        .pushNamedAndRemoveUntil('/', (_) => false);
+    Navigator.of(
+      ctx,
+      rootNavigator: true,
+    ).pushNamedAndRemoveUntil('/', (_) => false);
   }
 
   Future<void> _importDatabaseWeb(BuildContext context) async {
@@ -228,8 +228,9 @@ $version
         if (columns.elementAtOrNull(7) == 'bodyWeight') {
           final bodyWeightValue = row.elementAtOrNull(7);
           if (bodyWeightValue != null) {
-            bodyWeight =
-                Value(double.tryParse(bodyWeightValue.toString()) ?? 0);
+            bodyWeight = Value(
+              double.tryParse(bodyWeightValue.toString()) ?? 0,
+            );
           }
         }
 
@@ -268,8 +269,9 @@ $version
 
       final weightSet = await getBodyWeight();
       if (weightSet != null) {
-        (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
-            .write(GymSetsCompanion(bodyWeight: Value(weightSet.weight)));
+        (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
+          GymSetsCompanion(bodyWeight: Value(weightSet.weight)),
+        );
       }
 
       if (!ctx.mounted) return;
@@ -332,9 +334,7 @@ $version
         final idStr = row[0].toString().trim();
         final id = int.tryParse(idStr);
         if (id == null) {
-          throw FormatException(
-            'Expected an integer plan id, got "$idStr"',
-          );
+          throw FormatException('Expected an integer plan id, got "$idStr"');
         }
         plansToInsert.add(
           PlansCompanion.insert(

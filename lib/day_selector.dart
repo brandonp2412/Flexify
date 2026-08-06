@@ -58,8 +58,9 @@ class _DaySelectorState extends State<DaySelector> {
                       style: TextStyle(
                         color: colorScheme.onSurface,
                         fontSize: 14,
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.w500,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                       child: Text(dayLabel),
                     ),

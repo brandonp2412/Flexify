@@ -39,22 +39,21 @@ class _ExerciseModalState extends State<ExerciseModal> {
   void initState() {
     super.initState();
 
-    (db.planExercises.select()
-          ..where(
-            (u) =>
-                u.planId.equals(widget.planId) &
-                u.exercise.equals(widget.exercise),
-          ))
+    (db.planExercises.select()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
         .getSingle()
         .then((planExercise) {
-      if (!mounted) return;
-      max.text = planExercise.maxSets?.toString() ?? '';
-      warmup.text = planExercise.warmupSets?.toString() ?? '';
+          if (!mounted) return;
+          max.text = planExercise.maxSets?.toString() ?? '';
+          warmup.text = planExercise.warmupSets?.toString() ?? '';
 
-      setState(() {
-        timers = planExercise.timers;
-      });
-    });
+          setState(() {
+            timers = planExercise.timers;
+          });
+        });
   }
 
   @override
@@ -148,16 +147,17 @@ class _ExerciseModalState extends State<ExerciseModal> {
             title: const Text('Edit'),
             onTap: () async {
               Navigator.pop(context);
-              final gymSet = await (db.select(db.gymSets)
-                    ..where((r) => db.gymSets.name.equals(widget.exercise))
-                    ..orderBy([
-                      (u) => OrderingTerm(
+              final gymSet =
+                  await (db.select(db.gymSets)
+                        ..where((r) => db.gymSets.name.equals(widget.exercise))
+                        ..orderBy([
+                          (u) => OrderingTerm(
                             expression: u.created,
                             mode: OrderingMode.desc,
                           ),
-                    ])
-                    ..limit(1))
-                  .getSingleOrNull();
+                        ])
+                        ..limit(1))
+                      .getSingleOrNull();
               if (gymSet == null) return;
               if (!context.mounted) return;
               await Navigator.of(context).push(
@@ -174,16 +174,17 @@ class _ExerciseModalState extends State<ExerciseModal> {
             title: const Text('Undo'),
             onTap: () async {
               Navigator.pop(context);
-              final gymSet = await (db.select(db.gymSets)
-                    ..where((r) => db.gymSets.name.equals(widget.exercise))
-                    ..orderBy([
-                      (u) => OrderingTerm(
+              final gymSet =
+                  await (db.select(db.gymSets)
+                        ..where((r) => db.gymSets.name.equals(widget.exercise))
+                        ..orderBy([
+                          (u) => OrderingTerm(
                             expression: u.created,
                             mode: OrderingMode.desc,
                           ),
-                    ])
-                    ..limit(1))
-                  .getSingleOrNull();
+                        ])
+                        ..limit(1))
+                      .getSingleOrNull();
               if (gymSet == null) return;
               await db.gymSets.deleteOne(gymSet);
               if (!context.mounted) return;
@@ -218,45 +219,32 @@ class _ExerciseModalState extends State<ExerciseModal> {
   }
 
   void changeTimers(bool value) {
-    (db.planExercises.update()
-          ..where(
-            (u) =>
-                u.planId.equals(widget.planId) &
-                u.exercise.equals(widget.exercise),
-          ))
-        .write(
-      PlanExercisesCompanion(
-        timers: Value(value),
-      ),
-    );
+    (db.planExercises.update()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
+        .write(PlanExercisesCompanion(timers: Value(value)));
   }
 
   void changeMax(String value) {
-    (db.planExercises.update()
-          ..where(
-            (u) =>
-                u.planId.equals(widget.planId) &
-                u.exercise.equals(widget.exercise),
-          ))
-        .write(
-      PlanExercisesCompanion(
-        maxSets: Value(int.tryParse(max.text)),
-      ),
-    );
+    (db.planExercises.update()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
+        .write(PlanExercisesCompanion(maxSets: Value(int.tryParse(max.text))));
     widget.onMax();
   }
 
   void changeWarmup(String value) {
-    (db.planExercises.update()
-          ..where(
-            (u) =>
-                u.planId.equals(widget.planId) &
-                u.exercise.equals(widget.exercise),
-          ))
+    (db.planExercises.update()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
         .write(
-      PlanExercisesCompanion(
-        warmupSets: Value(int.tryParse(warmup.text)),
-      ),
-    );
+          PlanExercisesCompanion(warmupSets: Value(int.tryParse(warmup.text))),
+        );
   }
 }

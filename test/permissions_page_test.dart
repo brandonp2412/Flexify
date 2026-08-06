@@ -23,11 +23,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: Scaffold(
-            body: PermissionsPage(),
-          ),
-        ),
+        child: const MaterialApp(home: Scaffold(body: PermissionsPage())),
       ),
     );
 

@@ -23,9 +23,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: SettingsPage(),
-        ),
+        child: const MaterialApp(home: SettingsPage()),
       ),
     );
     await tester.pumpAndSettle();
@@ -59,8 +57,9 @@ void main() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     db = testDb();
-    await (db.settings.update())
-        .write(const SettingsCompanion(showImages: Value(false)));
+    await (db.settings.update()).write(
+      const SettingsCompanion(showImages: Value(false)),
+    );
     final oldSettings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
       MultiProvider(
@@ -71,9 +70,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: const MaterialApp(
-          home: SettingsPage(),
-        ),
+        child: const MaterialApp(home: SettingsPage()),
       ),
     );
     await tester.pumpAndSettle();

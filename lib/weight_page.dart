@@ -63,28 +63,25 @@ class _WeightPageState extends State<WeightPage> {
                 selector: (context, settings) => settings.value.strengthUnit,
                 builder: (context, value, child) =>
                     DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Unit'),
-                  initialValue: unit ?? value,
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'kg',
-                      child: Text("Kilograms (kg)"),
+                      decoration: const InputDecoration(labelText: 'Unit'),
+                      initialValue: unit ?? value,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'kg',
+                          child: Text("Kilograms (kg)"),
+                        ),
+                        DropdownMenuItem(
+                          value: 'lb',
+                          child: Text("Pounds (lb)"),
+                        ),
+                        DropdownMenuItem(value: 'stone', child: Text("Stone")),
+                      ],
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          unit = newValue!;
+                        });
+                      },
                     ),
-                    DropdownMenuItem(
-                      value: 'lb',
-                      child: Text("Pounds (lb)"),
-                    ),
-                    DropdownMenuItem(
-                      value: 'stone',
-                      child: Text("Stone"),
-                    ),
-                  ],
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      unit = newValue!;
-                    });
-                  },
-                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -118,10 +115,10 @@ class _WeightPageState extends State<WeightPage> {
                                 File(image!),
                                 errorBuilder: (context, error, stackTrace) =>
                                     TextButton.icon(
-                                  label: const Text('Image error'),
-                                  icon: const Icon(Icons.error),
-                                  onPressed: () => pick(),
-                                ),
+                                      label: const Text('Image error'),
+                                      icon: const Icon(Icons.error),
+                                      onPressed: () => pick(),
+                                    ),
                               ),
                             ),
                           ),
@@ -156,11 +153,7 @@ class _WeightPageState extends State<WeightPage> {
             ),
           );
           await (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
-              .write(
-            GymSetsCompanion(
-              bodyWeight: drift.Value(value),
-            ),
-          );
+              .write(GymSetsCompanion(bodyWeight: drift.Value(value)));
 
           if (context.mounted) Navigator.pop(context);
         },

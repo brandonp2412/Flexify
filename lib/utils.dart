@@ -20,13 +20,15 @@ void toast(String message, {SnackBarAction? action, Duration? duration}) {
 }
 
 Future<GymSet?> getBodyWeight() async {
-  final gymSet = await (db.gymSets.select()
-        ..where((tbl) => tbl.name.equals('Weight'))
-        ..orderBy(
-          [(u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc)],
-        )
-        ..limit(1))
-      .getSingleOrNull();
+  final gymSet =
+      await (db.gymSets.select()
+            ..where((tbl) => tbl.name.equals('Weight'))
+            ..orderBy([
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
   return gymSet;
 }
 

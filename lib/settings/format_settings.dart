@@ -44,29 +44,15 @@ List<Widget> getFormatSettings(String term, Setting settings) {
           decoration: const InputDecoration(labelText: 'Strength unit'),
           initialValue: settings.strengthUnit,
           items: const [
-            DropdownMenuItem(
-              value: "last-entry",
-              child: Text("Last entry"),
-            ),
-            DropdownMenuItem(
-              value: 'kg',
-              child: Text("Kilograms (kg)"),
-            ),
-            DropdownMenuItem(
-              value: 'lb',
-              child: Text("Pounds (lb)"),
-            ),
-            DropdownMenuItem(
-              value: 'stone',
-              child: Text("Stone"),
-            ),
+            DropdownMenuItem(value: "last-entry", child: Text("Last entry")),
+            DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
+            DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
+            DropdownMenuItem(value: 'stone', child: Text("Stone")),
           ],
           onChanged: (value) {
             db.settings.update().write(
-                  SettingsCompanion(
-                    strengthUnit: Value(value!),
-                  ),
-                );
+              SettingsCompanion(strengthUnit: Value(value!)),
+            );
           },
         ),
       ),
@@ -77,33 +63,16 @@ List<Widget> getFormatSettings(String term, Setting settings) {
           decoration: const InputDecoration(labelText: 'Cardio unit'),
           initialValue: settings.cardioUnit,
           items: const [
-            DropdownMenuItem(
-              value: "last-entry",
-              child: Text("Last entry"),
-            ),
-            DropdownMenuItem(
-              value: 'km',
-              child: Text("Kilometers (km)"),
-            ),
-            DropdownMenuItem(
-              value: 'mi',
-              child: Text("Miles (mi)"),
-            ),
-            DropdownMenuItem(
-              value: 'm',
-              child: Text("Meters (m)"),
-            ),
-            DropdownMenuItem(
-              value: 'kcal',
-              child: Text("Kilocalories (kcal)"),
-            ),
+            DropdownMenuItem(value: "last-entry", child: Text("Last entry")),
+            DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
+            DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
+            DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
+            DropdownMenuItem(value: 'kcal', child: Text("Kilocalories (kcal)")),
           ],
           onChanged: (value) {
             db.settings.update().write(
-                  SettingsCompanion(
-                    cardioUnit: Value(value!),
-                  ),
-                );
+              SettingsCompanion(cardioUnit: Value(value!)),
+            );
           },
         ),
       ),
@@ -117,8 +86,9 @@ List<Widget> getFormatSettings(String term, Setting settings) {
               var format = timeago.format(DateTime.now());
 
               if (settings.longDateFormat != 'timeago')
-                format =
-                    DateFormat(settings.longDateFormat).format(DateTime.now());
+                format = DateFormat(
+                  settings.longDateFormat,
+                ).format(DateTime.now());
 
               return DropdownButtonFormField<String>(
                 initialValue: settings.longDateFormat,
@@ -130,10 +100,8 @@ List<Widget> getFormatSettings(String term, Setting settings) {
                   );
                 }).toList(),
                 onChanged: (value) => db.settings.update().write(
-                      SettingsCompanion(
-                        longDateFormat: Value(value!),
-                      ),
-                    ),
+                  SettingsCompanion(longDateFormat: Value(value!)),
+                ),
                 decoration: InputDecoration(
                   labelText: 'Long date format ($format)',
                 ),
@@ -150,16 +118,11 @@ List<Widget> getFormatSettings(String term, Setting settings) {
           child: DropdownButtonFormField<String>(
             initialValue: settings.shortDateFormat,
             items: short.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
+              return DropdownMenuItem<String>(value: value, child: Text(value));
             }).toList(),
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    shortDateFormat: Value(value!),
-                  ),
-                ),
+              SettingsCompanion(shortDateFormat: Value(value!)),
+            ),
             decoration: InputDecoration(
               labelText:
                   'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
@@ -179,9 +142,7 @@ class FormatSettings extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Formats"),
-      ),
+      appBar: AppBar(title: const Text("Formats")),
       body: ListView(
         children: [
           ...getFormatSettings('', settings.value),

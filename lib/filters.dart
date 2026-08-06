@@ -123,8 +123,8 @@ class _FiltersState extends State<Filters> {
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
+                                          decimal: true,
+                                        ),
                                   ),
                                   TextField(
                                     onChanged: (value) => widget.setStream(),
@@ -134,8 +134,8 @@ class _FiltersState extends State<Filters> {
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
+                                          decimal: true,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -182,8 +182,8 @@ class _FiltersState extends State<Filters> {
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
+                                          decimal: true,
+                                        ),
                                   ),
                                   TextField(
                                     onChanged: (value) => widget.setStream(),
@@ -193,8 +193,8 @@ class _FiltersState extends State<Filters> {
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
+                                          decimal: true,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -232,11 +232,12 @@ class _FiltersState extends State<Filters> {
                             settings.value.shortDateFormat,
                         builder: (context, shortDateFormat, child) =>
                             widget.startDate != null
-                                ? Text(
-                                    DateFormat(shortDateFormat)
-                                        .format(widget.startDate!),
-                                  )
-                                : Text(shortDateFormat),
+                            ? Text(
+                                DateFormat(
+                                  shortDateFormat,
+                                ).format(widget.startDate!),
+                              )
+                            : Text(shortDateFormat),
                       ),
                       onTap: () async {
                         Navigator.pop(context);
@@ -258,11 +259,12 @@ class _FiltersState extends State<Filters> {
                             settings.value.shortDateFormat,
                         builder: (context, shortDateFormat, child) =>
                             widget.endDate != null
-                                ? Text(
-                                    DateFormat(shortDateFormat)
-                                        .format(widget.endDate!),
-                                  )
-                                : Text(shortDateFormat),
+                            ? Text(
+                                DateFormat(
+                                  shortDateFormat,
+                                ).format(widget.endDate!),
+                              )
+                            : Text(shortDateFormat),
                       ),
                       onTap: () async {
                         Navigator.pop(context);

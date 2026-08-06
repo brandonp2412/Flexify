@@ -16,9 +16,10 @@ void main() async {
     db = testDb();
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final plan = await (db.plans.select()..limit(1)).getSingle();
-    final planExercises = await (db.planExercises.select()
-          ..where((u) => u.planId.equals(plan.id)))
-        .get();
+    final planExercises =
+        await (db.planExercises.select()
+              ..where((u) => u.planId.equals(plan.id)))
+            .get();
 
     await tester.pumpWidget(
       MultiProvider(

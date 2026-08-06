@@ -31,14 +31,14 @@ void main() async {
 
       // Enable rep estimation and skip permissions page
       await db.settings.update().write(
-            const SettingsCompanion(
-              repEstimation: Value(true),
-              explainedPermissions: Value(true),
-            ),
-          );
+        const SettingsCompanion(
+          repEstimation: Value(true),
+          explainedPermissions: Value(true),
+        ),
+      );
       final settings = await (db.settings.select()..limit(1)).getSingle();
-      final plan =
-          await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+      final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+          .getSingle();
       final planState = PlanState();
       await planState.updateGymCounts(plan.id);
 
@@ -74,18 +74,19 @@ void main() async {
     },
   );
 
-  testWidgets('StartPlanPage with no exercises does not crash on save',
-      (WidgetTester tester) async {
+  testWidgets('StartPlanPage with no exercises does not crash on save', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
     db = testDb();
 
     final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
-    final plan =
-        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+        .getSingle();
 
     await db.settings.update().write(
-          const SettingsCompanion(explainedPermissions: Value(true)),
-        );
+      const SettingsCompanion(explainedPermissions: Value(true)),
+    );
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final planState = PlanState();
     await planState.updateGymCounts(plan.id);
@@ -164,8 +165,8 @@ void main() async {
         enabled: true,
       ),
     ]);
-    final plan =
-        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+        .getSingle();
 
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
@@ -177,9 +178,7 @@ void main() async {
         ],
         child: MaterialApp(
           scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(
-            plan: plan,
-          ),
+          home: StartPlanPage(plan: plan),
         ),
       ),
     );
@@ -246,8 +245,8 @@ void main() async {
       ),
     ]);
 
-    final plan =
-        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+        .getSingle();
 
     final settings = await (db.settings.select()..limit(1)).getSingle();
     await tester.pumpWidget(
@@ -259,9 +258,7 @@ void main() async {
         ],
         child: MaterialApp(
           scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(
-            plan: plan,
-          ),
+          home: StartPlanPage(plan: plan),
         ),
       ),
     );
@@ -280,8 +277,8 @@ void main() async {
       days: 'Monday,Tuesday,Wednesday',
     );
     final id = await (db.plans.insertOne(planCompanion));
-    final plan =
-        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+        .getSingle();
 
     await db.planExercises.insertAll([
       PlanExercisesCompanion.insert(
@@ -305,8 +302,8 @@ void main() async {
     ]);
 
     await db.settings.update().write(
-          SettingsCompanion(explainedPermissions: Value(true)),
-        );
+      SettingsCompanion(explainedPermissions: Value(true)),
+    );
     final settings = await (db.settings.select()..limit(1)).getSingle();
 
     final planState = PlanState();
@@ -315,17 +312,13 @@ void main() async {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (context) => SettingsState(settings),
-          ),
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider.value(value: planState),
         ],
         child: MaterialApp(
           scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(
-            plan: plan,
-          ),
+          home: StartPlanPage(plan: plan),
         ),
       ),
     );
@@ -341,23 +334,25 @@ void main() async {
     await tester.tap(save);
     await tester.pumpAndSettle();
 
-    final gymSets = await (db.gymSets.select()
-          ..where((u) => u.name.equals('Barbell bench press')))
-        .get();
+    final gymSets =
+        await (db.gymSets.select()
+              ..where((u) => u.name.equals('Barbell bench press')))
+            .get();
 
     expect(gymSets.length, equals(2));
   });
 
-  testWidgets('StartPlanPage shows this-session sets after saving',
-      (WidgetTester tester) async {
+  testWidgets('StartPlanPage shows this-session sets after saving', (
+    WidgetTester tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(800, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await mockTests();
     db = testDb();
 
     final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
-    final plan =
-        await (db.plans.select()..where((u) => u.id.equals(id))).getSingle();
+    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+        .getSingle();
     await db.planExercises.insertOne(
       PlanExercisesCompanion.insert(
         planId: plan.id,
@@ -367,8 +362,8 @@ void main() async {
     );
 
     await db.settings.update().write(
-          const SettingsCompanion(explainedPermissions: Value(true)),
-        );
+      const SettingsCompanion(explainedPermissions: Value(true)),
+    );
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final planState = PlanState();
     await planState.updateGymCounts(plan.id);

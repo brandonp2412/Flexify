@@ -23,11 +23,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
         child: MaterialApp(
-          home: Builder(
-            builder: (context) => ImportData(
-              ctx: context,
-            ),
-          ),
+          home: Builder(builder: (context) => ImportData(ctx: context)),
         ),
       ),
     );

@@ -99,9 +99,7 @@ class _AppSearchState extends State<AppSearch> {
       child: SearchBar(
         hintText: widget.hintText ?? "Search...",
         controller: ctrl,
-        padding: WidgetStateProperty.all(
-          const EdgeInsets.only(right: 8.0),
-        ),
+        padding: WidgetStateProperty.all(const EdgeInsets.only(right: 8.0)),
         textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
         leading: AnimatedSwitcher(
@@ -120,10 +118,7 @@ class _AppSearchState extends State<AppSearch> {
                     widget.onChange('');
                   },
                   icon: const Icon(Icons.arrow_back),
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 8.0,
-                  ),
+                  padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                 ),
         ),
         trailing: [
@@ -145,10 +140,9 @@ class _AppSearchState extends State<AppSearch> {
                 onPressed: () async {
                   final RenderBox button =
                       context.findRenderObject() as RenderBox;
-                  final RenderBox overlay = Navigator.of(context)
-                      .overlay!
-                      .context
-                      .findRenderObject() as RenderBox;
+                  final RenderBox overlay =
+                      Navigator.of(context).overlay!.context.findRenderObject()
+                          as RenderBox;
                   final RelativeRect position = RelativeRect.fromRect(
                     Rect.fromPoints(
                       button.localToGlobal(Offset.zero, ancestor: overlay),

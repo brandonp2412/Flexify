@@ -54,14 +54,18 @@ class _HistoryListState extends State<HistoryList> {
   }
 
   Widget _buildListItem(GymSet gymSet, int index, bool showImages) {
-    final previousGymSet =
-        index > 0 ? _current.elementAtOrNull(index - 1) : null;
-    final bool showDivider = previousGymSet != null &&
+    final previousGymSet = index > 0
+        ? _current.elementAtOrNull(index - 1)
+        : null;
+    final bool showDivider =
+        previousGymSet != null &&
         !isSameDay(gymSet.created, previousGymSet.created);
 
     final minutes = gymSet.duration.floor();
-    final seconds =
-        ((gymSet.duration * 60) % 60).floor().toString().padLeft(2, '0');
+    final seconds = ((gymSet.duration * 60) % 60).floor().toString().padLeft(
+      2,
+      '0',
+    );
     final distance = toString(gymSet.distance);
     final reps = toString(gymSet.reps);
     final weight = toString(gymSet.weight);
@@ -117,7 +121,8 @@ class _HistoryListState extends State<HistoryList> {
       children: [
         if (showDivider)
           Container(
-            color: (widget.selected.contains(gymSet.id) &&
+            color:
+                (widget.selected.contains(gymSet.id) &&
                     widget.selected.contains(previousGymSet.id))
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
@@ -131,9 +136,8 @@ class _HistoryListState extends State<HistoryList> {
                   Selector<SettingsState, String>(
                     selector: (context, settings) =>
                         settings.value.shortDateFormat,
-                    builder: (context, value, child) => Text(
-                      DateFormat(value).format(previousGymSet.created),
-                    ),
+                    builder: (context, value, child) =>
+                        Text(DateFormat(value).format(previousGymSet.created)),
                   ),
                   const SizedBox(width: 4),
                   const Expanded(child: Divider()),
@@ -184,8 +188,9 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages = context
-        .select<SettingsState, bool>((settings) => settings.value.showImages);
+    final showImages = context.select<SettingsState, bool>(
+      (settings) => settings.value.showImages,
+    );
 
     return ListView.builder(
       padding: const EdgeInsets.only(
@@ -203,7 +208,8 @@ class _HistoryListState extends State<HistoryList> {
   void scrollListener() {
     if (widget.scroll.position.pixels <
             widget.scroll.position.maxScrollExtent - 200 ||
-        goingNext) return;
+        goingNext)
+      return;
     goingNext = true;
     widget.onNext();
     setState(() {

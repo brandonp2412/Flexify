@@ -61,14 +61,17 @@ void main() async {
     expect(find.text('Bench press'), findsNothing);
   });
 
-  testWidgets('selecting new cardio exercise shows cardio fields',
-      (WidgetTester tester) async {
+  testWidgets('selecting new cardio exercise shows cardio fields', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
     db = testDb();
 
     // Insert a hidden set representing a cardio exercise definition
     // (as edit_graph_page does when creating/editing an exercise as cardio)
-    await db.into(db.gymSets).insert(
+    await db
+        .into(db.gymSets)
+        .insert(
           GymSetsCompanion.insert(
             name: 'Running',
             reps: 0,
@@ -218,8 +221,9 @@ void main() async {
     expect(find.text('Bench press'), findsNothing);
   });
 
-  testWidgets('switching exercises clears note when new exercise has no note',
-      (WidgetTester tester) async {
+  testWidgets('switching exercises clears note when new exercise has no note', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
     db = testDb();
 
@@ -229,7 +233,9 @@ void main() async {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     // Bench press entry with a note
-    await db.into(db.gymSets).insert(
+    await db
+        .into(db.gymSets)
+        .insert(
           GymSetsCompanion.insert(
             name: 'Bench press',
             reps: 10,
@@ -242,7 +248,9 @@ void main() async {
         );
 
     // Squat entry with no note
-    await db.into(db.gymSets).insert(
+    await db
+        .into(db.gymSets)
+        .insert(
           GymSetsCompanion.insert(
             name: 'Squat',
             reps: 5,

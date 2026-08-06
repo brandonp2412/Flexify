@@ -35,8 +35,9 @@ class _GroupHistoryState extends State<GroupHistory> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages = context
-        .select<SettingsState, bool>((settings) => settings.value.showImages);
+    final showImages = context.select<SettingsState, bool>(
+      (settings) => settings.value.showImages,
+    );
 
     return ListView.builder(
       itemCount: widget.days.length,
@@ -77,117 +78,111 @@ class _GroupHistoryState extends State<GroupHistory> {
         title: Text("${history.name} (${history.gymSets.length})"),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.shortDateFormat,
-          builder: (context, value, child) => Text(
-            DateFormat(value).format(history.gymSets.first.created),
-          ),
+          builder: (context, value, child) =>
+              Text(DateFormat(value).format(history.gymSets.first.created)),
         ),
         shape: const Border.symmetric(),
-        children: history.gymSets.map(
-          (gymSet) {
-            final minutes = gymSet.duration.floor();
-            final seconds = ((gymSet.duration * 60) % 60)
-                .floor()
-                .toString()
-                .padLeft(2, '0');
-            final distance = toString(gymSet.distance);
-            final reps = toString(gymSet.reps);
-            final weight = toString(gymSet.weight);
-            String incline = '';
-            if (gymSet.incline != null && gymSet.incline! > 0)
-              incline = '@ ${gymSet.incline}%';
+        children: history.gymSets.map((gymSet) {
+          final minutes = gymSet.duration.floor();
+          final seconds = ((gymSet.duration * 60) % 60)
+              .floor()
+              .toString()
+              .padLeft(2, '0');
+          final distance = toString(gymSet.distance);
+          final reps = toString(gymSet.reps);
+          final weight = toString(gymSet.weight);
+          String incline = '';
+          if (gymSet.incline != null && gymSet.incline! > 0)
+            incline = '@ ${gymSet.incline}%';
 
-            Widget? leading = SizedBox(
-              height: 24,
-              width: 24,
-              child: Checkbox(
-                value: widget.selected.contains(gymSet.id),
-                onChanged: (value) {
-                  widget.onSelect(gymSet.id);
-                },
+          Widget? leading = SizedBox(
+            height: 24,
+            width: 24,
+            child: Checkbox(
+              value: widget.selected.contains(gymSet.id),
+              onChanged: (value) {
+                widget.onSelect(gymSet.id);
+              },
+            ),
+          );
+
+          if (widget.selected.isEmpty && showImages && gymSet.image != null) {
+            leading = GestureDetector(
+              onTap: () => widget.onSelect(gymSet.id),
+              child: Image.file(
+                File(gymSet.image!),
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.error),
               ),
             );
-
-            if (widget.selected.isEmpty && showImages && gymSet.image != null) {
-              leading = GestureDetector(
-                onTap: () => widget.onSelect(gymSet.id),
-                child: Image.file(
-                  File(gymSet.image!),
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.error),
+          } else if (widget.selected.isEmpty && showImages) {
+            leading = GestureDetector(
+              onTap: () => widget.onSelect(gymSet.id),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              );
-            } else if (widget.selected.isEmpty && showImages) {
-              leading = GestureDetector(
-                onTap: () => widget.onSelect(gymSet.id),
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      gymSet.name.isNotEmpty
-                          ? gymSet.name[0].toUpperCase()
-                          : '?',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'monospace',
-                      ),
+                child: Center(
+                  child: Text(
+                    gymSet.name.isNotEmpty ? gymSet.name[0].toUpperCase() : '?',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'monospace',
                     ),
                   ),
                 ),
-              );
-            }
-
-            leading = AnimatedSwitcher(
-              duration: const Duration(milliseconds: 150),
-              transitionBuilder: (child, animation) {
-                return ScaleTransition(scale: animation, child: child);
-              },
-              child: leading,
-            );
-
-            return Material(
-              color: widget.selected.contains(gymSet.id)
-                  ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
-                  : Colors.transparent,
-              child: ListTile(
-                leading: leading,
-                title: Text(
-                  gymSet.cardio
-                      ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
-                      : "$reps x $weight ${gymSet.unit}",
-                ),
-                subtitle: Selector<SettingsState, String>(
-                  selector: (context, settings) =>
-                      settings.value.longDateFormat,
-                  builder: (context, dateFormat, child) => Text(
-                    dateFormat == 'timeago'
-                        ? timeago.format(gymSet.created)
-                        : DateFormat(dateFormat).format(gymSet.created),
-                  ),
-                ),
-                onLongPress: () {
-                  widget.onSelect(gymSet.id);
-                },
-                onTap: () {
-                  if (widget.selected.isNotEmpty)
-                    widget.onSelect(gymSet.id);
-                  else
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => EditSetPage(gymSet: gymSet),
-                      ),
-                    );
-                },
               ),
             );
-          },
-        ).toList(),
+          }
+
+          leading = AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            transitionBuilder: (child, animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: leading,
+          );
+
+          return Material(
+            color: widget.selected.contains(gymSet.id)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+                : Colors.transparent,
+            child: ListTile(
+              leading: leading,
+              title: Text(
+                gymSet.cardio
+                    ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
+                    : "$reps x $weight ${gymSet.unit}",
+              ),
+              subtitle: Selector<SettingsState, String>(
+                selector: (context, settings) => settings.value.longDateFormat,
+                builder: (context, dateFormat, child) => Text(
+                  dateFormat == 'timeago'
+                      ? timeago.format(gymSet.created)
+                      : DateFormat(dateFormat).format(gymSet.created),
+                ),
+              ),
+              onLongPress: () {
+                widget.onSelect(gymSet.id);
+              },
+              onTap: () {
+                if (widget.selected.isNotEmpty)
+                  widget.onSelect(gymSet.id);
+                else
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditSetPage(gymSet: gymSet),
+                    ),
+                  );
+              },
+            ),
+          );
+        }).toList(),
       ),
     ];
   }
@@ -201,7 +196,8 @@ class _GroupHistoryState extends State<GroupHistory> {
   void scrollListener() {
     if (widget.scroll.position.pixels <
             widget.scroll.position.maxScrollExtent - 200 ||
-        goingNext) return;
+        goingNext)
+      return;
     goingNext = true;
     widget.onNext();
     setState(() {

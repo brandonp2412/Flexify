@@ -73,9 +73,10 @@ class _StartPlanPageState extends State<StartPlanPage>
             actions: [
               IconButton(
                 onPressed: () async {
-                  final plan = await (db.plans.select()
-                        ..whereSamePrimaryKey(widget.plan))
-                      .getSingle();
+                  final plan =
+                      await (db.plans.select()
+                            ..whereSamePrimaryKey(widget.plan))
+                          .getSingle();
                   await planState.setExercises(plan.toCompanion(false));
                   if (!context.mounted) return;
                   await Navigator.of(context).push(
@@ -169,8 +170,9 @@ class _StartPlanPageState extends State<StartPlanPage>
             child: TextFormField(
               controller: minutes,
               decoration: const InputDecoration(labelText: 'Minutes'),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: false),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: false,
+              ),
               onTap: () => selectAll(minutes),
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (value) => selectAll(seconds),
@@ -186,8 +188,9 @@ class _StartPlanPageState extends State<StartPlanPage>
             child: TextFormField(
               controller: seconds,
               decoration: const InputDecoration(labelText: 'Seconds'),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: false),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: false,
+              ),
               onTap: () => selectAll(seconds),
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (value) => selectAll(distance),
@@ -211,8 +214,9 @@ class _StartPlanPageState extends State<StartPlanPage>
                 textInputAction: TextInputAction.next,
                 controller: distance,
                 decoration: const InputDecoration(labelText: 'Distance'),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 onFieldSubmitted: (value) => selectAll(incline),
                 onTap: () => selectAll(distance),
                 validator: (value) {
@@ -227,8 +231,9 @@ class _StartPlanPageState extends State<StartPlanPage>
             child: TextFormField(
               controller: incline,
               decoration: const InputDecoration(labelText: 'Incline %'),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               onTap: () => selectAll(incline),
               onFieldSubmitted: (value) => save(snapshot),
               validator: (value) {
@@ -246,8 +251,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   StepperField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
     final exerciseName =
         snapshot.data!.isNotEmpty && selected < snapshot.data!.length
-            ? snapshot.data![selected].exercise
-            : '';
+        ? snapshot.data![selected].exercise
+        : '';
     return StepperField(
       controller: weight,
       labelText: 'Weight ($unit)',
@@ -343,19 +348,23 @@ class _StartPlanPageState extends State<StartPlanPage>
       final parsedWeight = double.parse(weight.text);
       stream.first.then((planExercises) {
         if (!mounted) return;
-        final matches =
-            rpms!.where((rpm) => rpm.name == planExercises[selected].exercise);
+        final matches = rpms!.where(
+          (rpm) => rpm.name == planExercises[selected].exercise,
+        );
         if (matches.isEmpty) return;
 
         final closestRpm = matches.reduce(
-          (rpm1, rpm2) => (rpm1.weight - parsedWeight).abs() <
+          (rpm1, rpm2) =>
+              (rpm1.weight - parsedWeight).abs() <
                   (rpm2.weight - parsedWeight).abs()
               ? rpm1
               : rpm2,
         );
 
-        final estimatedReps =
-            (difference.inMinutes * closestRpm.rpm).clamp(1, 50);
+        final estimatedReps = (difference.inMinutes * closestRpm.rpm).clamp(
+          1,
+          50,
+        );
         if (estimatedReps <= 0) return;
 
         reps.text = estimatedReps.toInt().toString();
@@ -385,10 +394,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     return (db.gymSets.select()
           ..where((tbl) => db.gymSets.name.equals(exercise))
           ..orderBy([
-            (u) => OrderingTerm(
-                  expression: u.created,
-                  mode: OrderingMode.desc,
-                ),
+            (u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc),
           ])
           ..limit(1))
         .getSingleOrNull();
@@ -415,10 +421,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 tbl.created.isSmallerThanValue(endOfDay.toUtc()),
           )
           ..orderBy([
-            (u) => OrderingTerm(
-                  expression: u.created,
-                  mode: OrderingMode.asc,
-                ),
+            (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
           ])
           ..limit(1))
         .getSingleOrNull();
@@ -438,29 +441,26 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     _loadExercises();
     planState.updateGymCounts(widget.plan.id);
-    _gymSetsSub = db.tableUpdates(TableUpdateQuery.onTable(db.gymSets)).listen(
-      (_) {
-        if (!mounted) return;
-        planState.updateGymCounts(widget.plan.id);
-      },
-    );
+    _gymSetsSub = db.tableUpdates(TableUpdateQuery.onTable(db.gymSets)).listen((
+      _,
+    ) {
+      if (!mounted) return;
+      planState.updateGymCounts(widget.plan.id);
+    });
   }
 
   Future<void> _loadExercises() async {
     setState(() {
-      stream = (db.planExercises.select()
-            ..where(
-              (pe) => pe.planId.equals(widget.plan.id) & pe.enabled,
-            )
-            ..orderBy(
-              [
-                (u) => OrderingTerm(
-                      expression: u.sequence,
-                      mode: OrderingMode.asc,
-                    ),
-              ],
-            ))
-          .watch();
+      stream =
+          (db.planExercises.select()
+                ..where((pe) => pe.planId.equals(widget.plan.id) & pe.enabled)
+                ..orderBy([
+                  (u) => OrderingTerm(
+                    expression: u.sequence,
+                    mode: OrderingMode.asc,
+                  ),
+                ]))
+              .watch();
     });
 
     select(0);
@@ -503,8 +503,9 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   void planChanged() {
-    final index =
-        planState.plans.indexWhere((plan) => plan.id == widget.plan.id);
+    final index = planState.plans.indexWhere(
+      (plan) => plan.id == widget.plan.id,
+    );
     if (index == -1) return Navigator.pop(context);
 
     final plan = planState.plans[index];
@@ -538,11 +539,9 @@ class _StartPlanPageState extends State<StartPlanPage>
         settings.restTimers &&
         !kIsWeb &&
         mounted) {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const PermissionsPage(),
-        ),
-      );
+      await Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (context) => const PermissionsPage()));
     }
 
     if (!mounted) return;
@@ -597,13 +596,15 @@ class _StartPlanPageState extends State<StartPlanPage>
         settings.enableSound,
       );
 
-    final finishedExercise = count == (max ?? settings.maxSets) &&
+    final finishedExercise =
+        count == (max ?? settings.maxSets) &&
         selected < snapshot.data!.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     await planState.updateAfterSave(
       planId: widget.plan.id,
-      updateCounts: settings.planTrailing == 'PlanTrailing.count' ||
+      updateCounts:
+          settings.planTrailing == 'PlanTrailing.count' ||
           settings.planTrailing == 'PlanTrailing.ratio' ||
           settings.planTrailing == 'PlanTrailing.percent',
     );

@@ -36,10 +36,8 @@ List<Widget> getTimerSettings(
             }
 
             db.settings.update().write(
-                  SettingsCompanion(
-                    restTimers: Value(newValue),
-                  ),
-                );
+              SettingsCompanion(restTimers: Value(newValue)),
+            );
           },
           trailing: Switch(
             value: settings.restTimers,
@@ -49,10 +47,8 @@ List<Widget> getTimerSettings(
               }
 
               db.settings.update().write(
-                    SettingsCompanion(
-                      restTimers: Value(value),
-                    ),
-                  );
+                SettingsCompanion(restTimers: Value(value)),
+              );
             },
           ),
         ),
@@ -66,10 +62,8 @@ List<Widget> getTimerSettings(
           onTap: () async {
             final newValue = !settings.vibrate;
             await db.settings.update().write(
-                  SettingsCompanion(
-                    vibrate: Value(newValue),
-                  ),
-                );
+              SettingsCompanion(vibrate: Value(newValue)),
+            );
             if (newValue) {
               try {
                 await androidChannel.invokeMethod('previewVibration');
@@ -82,10 +76,8 @@ List<Widget> getTimerSettings(
             value: settings.vibrate,
             onChanged: (value) async {
               await db.settings.update().write(
-                    SettingsCompanion(
-                      vibrate: Value(value),
-                    ),
-                  );
+                SettingsCompanion(vibrate: Value(value)),
+              );
               if (value) {
                 try {
                   await androidChannel.invokeMethod('previewVibration');
@@ -104,17 +96,13 @@ List<Widget> getTimerSettings(
           title: const Text('Enable sound'),
           leading: const Icon(Icons.music_note_outlined),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  enableSound: Value(!settings.enableSound),
-                ),
-              ),
+            SettingsCompanion(enableSound: Value(!settings.enableSound)),
+          ),
           trailing: Switch(
             value: settings.enableSound,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    enableSound: Value(value),
-                  ),
-                ),
+              SettingsCompanion(enableSound: Value(value)),
+            ),
           ),
         ),
       ),
@@ -129,20 +117,16 @@ List<Widget> getTimerSettings(
           onTap: () {
             final newValue = !settings.keepScreenOn;
             db.settings.update().write(
-                  SettingsCompanion(
-                    keepScreenOn: Value(newValue),
-                  ),
-                );
+              SettingsCompanion(keepScreenOn: Value(newValue)),
+            );
             context.read<TimerState>().setKeepScreenOn(newValue);
           },
           trailing: Switch(
             value: settings.keepScreenOn,
             onChanged: (value) {
               db.settings.update().write(
-                    SettingsCompanion(
-                      keepScreenOn: Value(value),
-                    ),
-                  );
+                SettingsCompanion(keepScreenOn: Value(value)),
+              );
               context.read<TimerState>().setKeepScreenOn(value);
             },
           ),
@@ -177,43 +161,40 @@ List<Widget> getTimerSettings(
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(minCtrl),
                       onChanged: (value) => db.settings.update().write(
-                            SettingsCompanion(
-                              timerDuration: Value(
-                                Duration(
-                                  minutes: int.tryParse(value) ?? 0,
-                                  seconds: Duration(
-                                        milliseconds: settings.timerDuration,
-                                      ).inSeconds %
-                                      60,
-                                ).inMilliseconds,
-                              ),
-                            ),
+                        SettingsCompanion(
+                          timerDuration: Value(
+                            Duration(
+                              minutes: int.tryParse(value) ?? 0,
+                              seconds:
+                                  Duration(
+                                    milliseconds: settings.timerDuration,
+                                  ).inSeconds %
+                                  60,
+                            ).inMilliseconds,
                           ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
+                  const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'seconds',
-                      ),
+                      decoration: const InputDecoration(labelText: 'seconds'),
                       controller: secCtrl,
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(secCtrl),
                       onChanged: (value) => db.settings.update().write(
-                            SettingsCompanion(
-                              timerDuration: Value(
-                                Duration(
-                                  seconds: int.tryParse(value) ?? 0,
-                                  minutes: Duration(
-                                    milliseconds: settings.timerDuration,
-                                  ).inMinutes.floor(),
-                                ).inMilliseconds,
-                              ),
-                            ),
+                        SettingsCompanion(
+                          timerDuration: Value(
+                            Duration(
+                              seconds: int.tryParse(value) ?? 0,
+                              minutes: Duration(
+                                milliseconds: settings.timerDuration,
+                              ).inMinutes.floor(),
+                            ).inMilliseconds,
                           ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -236,10 +217,10 @@ List<Widget> getTimerSettings(
                 final result = await FilePicker.pickFiles(type: FileType.audio);
                 if (result == null || result.files.single.path == null) return;
                 db.settings.update().write(
-                      SettingsCompanion(
-                        alarmSound: Value(result.files.single.path!),
-                      ),
-                    );
+                  SettingsCompanion(
+                    alarmSound: Value(result.files.single.path!),
+                  ),
+                );
                 player.play(DeviceFileSource(result.files.single.path!));
               },
               icon: const Icon(Icons.music_note),
@@ -251,10 +232,8 @@ List<Widget> getTimerSettings(
               TextButton.icon(
                 onPressed: () {
                   db.settings.update().write(
-                        const SettingsCompanion(
-                          alarmSound: Value(''),
-                        ),
-                      );
+                    const SettingsCompanion(alarmSound: Value('')),
+                  );
                 },
                 label: const Text("Delete"),
                 icon: const Icon(Icons.delete),
@@ -326,10 +305,8 @@ class _ProgressPositionSetting extends StatelessWidget {
               selected: {settings.progressPosition},
               onSelectionChanged: (selection) {
                 db.settings.update().write(
-                      SettingsCompanion(
-                        progressPosition: Value(selection.first),
-                      ),
-                    );
+                  SettingsCompanion(progressPosition: Value(selection.first)),
+                );
                 if (selection.first != 'none') _triggerPreview(context);
               },
             ),
@@ -350,9 +327,9 @@ class TimerSettings extends StatefulWidget {
 class _TimerSettingsState extends State<TimerSettings> {
   late SettingsState settings = context.read<SettingsState>();
   late final minCtrl = TextEditingController(
-    text: (Duration(milliseconds: settings.value.timerDuration))
-        .inMinutes
-        .toString(),
+    text: (Duration(
+      milliseconds: settings.value.timerDuration,
+    )).inMinutes.toString(),
   );
   late final secCtrl = TextEditingController(
     text:
@@ -382,11 +359,12 @@ class _TimerSettingsState extends State<TimerSettings> {
   }
 
   Future<void> _loadExercisesWithCustomTimers() async {
-    final exercises = await (db.selectOnly(db.gymSets)
-          ..addColumns([db.gymSets.name, db.gymSets.restMs])
-          ..where(db.gymSets.restMs.isNotNull())
-          ..groupBy([db.gymSets.name]))
-        .get();
+    final exercises =
+        await (db.selectOnly(db.gymSets)
+              ..addColumns([db.gymSets.name, db.gymSets.restMs])
+              ..where(db.gymSets.restMs.isNotNull())
+              ..groupBy([db.gymSets.name]))
+            .get();
 
     setState(() {
       exercisesWithCustomTimers = exercises
@@ -429,17 +407,14 @@ class _TimerSettingsState extends State<TimerSettings> {
     }
 
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
-        .write(
-      GymSetsCompanion(
-        restMs: Value(duration?.inMilliseconds),
-      ),
-    );
+        .write(GymSetsCompanion(restMs: Value(duration?.inMilliseconds)));
 
     // If duration is null (both minutes and seconds are 0), remove from list
     if (duration == null) {
       setState(() {
-        exercisesWithCustomTimers
-            .removeWhere((e) => e.name.value == exerciseName);
+        exercisesWithCustomTimers.removeWhere(
+          (e) => e.name.value == exerciseName,
+        );
         minuteControllers.remove(exerciseName);
         secondControllers.remove(exerciseName);
       });
@@ -448,15 +423,12 @@ class _TimerSettingsState extends State<TimerSettings> {
 
   Future<void> _removeCustomTimer(String exerciseName) async {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
-        .write(
-      const GymSetsCompanion(
-        restMs: Value(null),
-      ),
-    );
+        .write(const GymSetsCompanion(restMs: Value(null)));
 
     setState(() {
-      exercisesWithCustomTimers
-          .removeWhere((e) => e.name.value == exerciseName);
+      exercisesWithCustomTimers.removeWhere(
+        (e) => e.name.value == exerciseName,
+      );
       minuteControllers.remove(exerciseName);
       secondControllers.remove(exerciseName);
     });
@@ -487,12 +459,10 @@ class _TimerSettingsState extends State<TimerSettings> {
           Text(
             "These exercises have custom rest durations",
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.color
-                      ?.withValues(alpha: 0.7),
-                ),
+              color: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+            ),
           ),
           const SizedBox(height: 16),
           ...exercisesWithCustomTimers.map((exercise) {
@@ -589,9 +559,7 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Timers"),
-      ),
+      appBar: AppBar(title: const Text("Timers")),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: player != null

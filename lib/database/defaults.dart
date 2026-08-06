@@ -63,27 +63,14 @@ const defaultExercises = [
 ];
 
 const defaultPlans = [
-  PlansCompanion(
-    id: Value(1),
-    days: Value('Monday'),
-  ),
-  PlansCompanion(
-    id: Value(2),
-    days: Value('Wednesday'),
-  ),
-  PlansCompanion(
-    id: Value(3),
-    days: Value('Friday'),
-  ),
+  PlansCompanion(id: Value(1), days: Value('Monday')),
+  PlansCompanion(id: Value(2), days: Value('Wednesday')),
+  PlansCompanion(id: Value(3), days: Value('Friday')),
 ];
 
 final defaultPlanExercises = [
   ...['Barbell bench press', 'Squat', 'Lat pull-down', 'Leg press'].map(
-    (e) => PlanExercisesCompanion.insert(
-      planId: 1,
-      exercise: e,
-      enabled: true,
-    ),
+    (e) => PlanExercisesCompanion.insert(planId: 1, exercise: e, enabled: true),
   ),
   ...[
     'Deadlift',
@@ -91,18 +78,10 @@ final defaultPlanExercises = [
     'Dumbbell biceps curl',
     'Barbell bent-over row',
   ].map(
-    (e) => PlanExercisesCompanion.insert(
-      planId: 2,
-      exercise: e,
-      enabled: true,
-    ),
+    (e) => PlanExercisesCompanion.insert(planId: 2, exercise: e, enabled: true),
   ),
   ...['Leg press', 'Pull-up', 'Push-up', 'Crunch'].map(
-    (e) => PlanExercisesCompanion.insert(
-      planId: 3,
-      exercise: e,
-      enabled: true,
-    ),
+    (e) => PlanExercisesCompanion.insert(planId: 3, exercise: e, enabled: true),
   ),
 ];
 

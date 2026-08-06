@@ -20,7 +20,9 @@ void main() async {
     await mockTests();
     db = testDb();
     for (final element in graphData) {
-      await db.into(db.gymSets).insert(
+      await db
+          .into(db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Run",
               element.weight,
@@ -75,7 +77,9 @@ void main() async {
     await mockTests();
     db = testDb();
     for (final element in graphData) {
-      await db.into(db.gymSets).insert(
+      await db
+          .into(db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Run",
               element.weight,
@@ -125,7 +129,9 @@ void main() async {
     await mockTests();
     db = testDb();
     for (final element in graphData) {
-      await db.into(db.gymSets).insert(
+      await db
+          .into(db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Run",
               element.weight,

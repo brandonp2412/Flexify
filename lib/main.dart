@@ -44,25 +44,27 @@ AppDatabase db = AppDatabase();
 /// the old instance know to rebuild it against the current one.
 final ValueNotifier<int> dbVersion = ValueNotifier(0);
 
-MethodChannel androidChannel =
-    const MethodChannel("com.presley.flexify/android");
+MethodChannel androidChannel = const MethodChannel(
+  "com.presley.flexify/android",
+);
 
 Widget appProviders(SettingsState state) => MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => state),
-        ChangeNotifierProxyProvider<SettingsState, TimerState>(
-          create: (context) => TimerState(),
-          update: (context, settings, previous) =>
-              previous!..setKeepScreenOn(settings.value.keepScreenOn),
-        ),
-        ChangeNotifierProvider(create: (context) => PlanState()),
-      ],
-      child: App(),
-    );
+  providers: [
+    ChangeNotifierProvider(create: (context) => state),
+    ChangeNotifierProxyProvider<SettingsState, TimerState>(
+      create: (context) => TimerState(),
+      update: (context, settings, previous) =>
+          previous!..setKeepScreenOn(settings.value.keepScreenOn),
+    ),
+    ChangeNotifierProvider(create: (context) => PlanState()),
+  ],
+  child: App(),
+);
 
 class App extends StatelessWidget {
-  static final _lightScheme =
-      ColorScheme.fromSeed(seedColor: Colors.deepPurple);
+  static final _lightScheme = ColorScheme.fromSeed(
+    seedColor: Colors.deepPurple,
+  );
   static final _darkScheme = ColorScheme.fromSeed(
     seedColor: Colors.deepPurple,
     brightness: Brightness.dark,
@@ -70,15 +72,11 @@ class App extends StatelessWidget {
 
   static InputDecorationTheme _inputDecorationTheme(String inputStyle) {
     return switch (inputStyle) {
-      'outlined' => const InputDecorationTheme(
-          border: OutlineInputBorder(),
-        ),
-      'filled' => const InputDecorationTheme(
-          filled: true,
-        ),
+      'outlined' => const InputDecorationTheme(border: OutlineInputBorder()),
+      'filled' => const InputDecorationTheme(filled: true),
       _ => const InputDecorationTheme(
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-        ),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
     };
   }
 
@@ -108,12 +106,12 @@ class App extends StatelessWidget {
         final settings = context.watch<SettingsState>();
         final currentBrightness =
             settings.value.themeMode == 'ThemeMode.dark' ||
-                    settings.value.themeMode == 'ThemeMode.amoled' ||
-                    (settings.value.themeMode == 'ThemeMode.system' &&
-                        MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark)
-                ? Brightness.dark
-                : Brightness.light;
+                settings.value.themeMode == 'ThemeMode.amoled' ||
+                (settings.value.themeMode == 'ThemeMode.system' &&
+                    MediaQuery.of(context).platformBrightness ==
+                        Brightness.dark)
+            ? Brightness.dark
+            : Brightness.light;
 
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(
@@ -122,8 +120,8 @@ class App extends StatelessWidget {
                 : Brightness.dark,
             systemNavigationBarIconBrightness:
                 currentBrightness == Brightness.dark
-                    ? Brightness.light
-                    : Brightness.dark,
+                ? Brightness.light
+                : Brightness.dark,
             statusBarColor: Colors.transparent,
             systemNavigationBarColor: Colors.transparent,
           ),
@@ -140,8 +138,9 @@ class App extends StatelessWidget {
             inputDecorationTheme: _inputDecorationTheme(inputStyle),
           ),
           darkTheme: ThemeData(
-            colorScheme: (colors ? darkDynamic : _darkScheme)
-                ?.copyWith(surface: amoledDark ? Colors.black : null),
+            colorScheme: (colors ? darkDynamic : _darkScheme)?.copyWith(
+              surface: amoledDark ? Colors.black : null,
+            ),
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: _inputDecorationTheme(inputStyle),

@@ -41,9 +41,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('Add exercise'),
-      ),
+      appBar: AppBar(title: const Text('Add exercise')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -63,26 +61,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 decoration: const InputDecoration(labelText: 'Unit'),
                 initialValue: unit,
                 items: const [
-                  DropdownMenuItem(
-                    value: 'kg',
-                    child: Text("Kilograms (kg)"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'lb',
-                    child: Text("Pounds (lb)"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'stone',
-                    child: Text("Stone"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'km',
-                    child: Text("Kilometers (km)"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'mi',
-                    child: Text("Miles (mi)"),
-                  ),
+                  DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
+                  DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
+                  DropdownMenuItem(value: 'stone', child: Text("Stone")),
+                  DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
+                  DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
@@ -142,10 +125,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
                         File(image!),
                         errorBuilder: (context, error, stackTrace) =>
                             TextButton.icon(
-                          label: const Text('Image error'),
-                          icon: const Icon(Icons.error),
-                          onPressed: () => pick(),
-                        ),
+                              label: const Text('Image error'),
+                              icon: const Icon(Icons.error),
+                              onPressed: () => pick(),
+                            ),
                       ),
                     ],
                   ],

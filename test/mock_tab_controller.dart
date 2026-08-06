@@ -11,11 +11,7 @@ class MockTabController extends ChangeNotifier implements TabController {
   int get previousIndex => 0;
 
   @override
-  void animateTo(
-    int value, {
-    Duration? duration,
-    Curve curve = Curves.ease,
-  }) {}
+  void animateTo(int value, {Duration? duration, Curve curve = Curves.ease}) {}
 
   @override
   Animation<double> get animation => AlwaysStoppedAnimation(0.0);

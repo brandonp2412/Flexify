@@ -77,12 +77,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     );
 
     return hueValues.map((hue) {
-      return HSLColor.fromAHSL(
-        1.0,
-        hue,
-        0.65,
-        isDark ? 0.7 : 0.5,
-      ).toColor();
+      return HSLColor.fromAHSL(1.0, hue, 0.65, isDark ? 0.7 : 0.5).toColor();
     }).toList();
   }
 
@@ -112,9 +107,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
           barWidth: 3,
           isStrokeCapRound: true,
           curveSmoothness: settings.curveSmoothness ?? 0.35,
-          dotData: const FlDotData(
-            show: false,
-          ),
+          dotData: const FlDotData(show: false),
         ),
       );
       index++;
@@ -124,23 +117,12 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       LineChartData(
         borderData: FlBorderData(show: false),
         titlesData: const FlTitlesData(
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 45,
-            ),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 45),
           ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-            ),
-          ),
+          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         lineTouchData: LineTouchData(
           enabled: true,
@@ -160,18 +142,16 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       if (settings.showBodyWeight)
         (StrengthMetric.relativeStrength, 'Relative strength'),
     ];
-    final metricValue =
-        metricOptions.any((option) => option.$1 == metric) ? metric : null;
+    final metricValue = metricOptions.any((option) => option.$1 == metric)
+        ? metric
+        : null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Global progress"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.language),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.language), onPressed: () {}),
         ],
       ),
       body: SafeArea(
@@ -264,18 +244,21 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      DateFormat(settings.shortDateFormat)
-                          .format(data.first.created),
+                      DateFormat(
+                        settings.shortDateFormat,
+                      ).format(data.first.created),
                     ),
                     if (data.length > 2)
                       Text(
-                        DateFormat(settings.shortDateFormat)
-                            .format(data[data.length ~/ 2].created),
+                        DateFormat(
+                          settings.shortDateFormat,
+                        ).format(data[data.length ~/ 2].created),
                       ),
                     if (data.length > 1)
                       Text(
-                        DateFormat(settings.shortDateFormat)
-                            .format(data.last.created),
+                        DateFormat(
+                          settings.shortDateFormat,
+                        ).format(data.last.created),
                       ),
                   ],
                 ),
@@ -342,14 +325,14 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             final settings = context.read<SettingsState>().value;
 
             Widget sectionLabel(String text) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    text,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                );
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                text,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            );
 
             return SafeArea(
               child: Padding(
@@ -464,8 +447,9 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                     ),
                     Slider(
                       value: limit.toDouble(),
-                      inactiveColor:
-                          colorScheme.primary.withValues(alpha: 0.24),
+                      inactiveColor: colorScheme.primary.withValues(
+                        alpha: 0.24,
+                      ),
                       min: 10,
                       max: 200,
                       onChanged: (value) {

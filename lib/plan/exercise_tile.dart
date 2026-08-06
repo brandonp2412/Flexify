@@ -133,11 +133,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
       trailing: Switch(
         value: widget.planExercise.enabled.value,
         onChanged: (value) {
-          widget.onChange(
-            widget.planExercise.copyWith(
-              enabled: Value(value),
-            ),
-          );
+          widget.onChange(widget.planExercise.copyWith(enabled: Value(value)));
         },
       ),
       onTap: () {

@@ -12,10 +12,7 @@ import 'package:provider/provider.dart';
 class DeleteRecordsButton extends StatelessWidget {
   final BuildContext ctx;
 
-  const DeleteRecordsButton({
-    super.key,
-    required this.ctx,
-  });
+  const DeleteRecordsButton({super.key, required this.ctx});
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +51,9 @@ class DeleteRecordsButton extends StatelessWidget {
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
                                   Navigator.pop(context);
-                                  await (db.delete(db.gymSets)
-                                        ..where((u) => u.hidden.equals(false)))
-                                      .go();
+                                  await (db.delete(
+                                    db.gymSets,
+                                  )..where((u) => u.hidden.equals(false))).go();
                                   if (!ctx.mounted) return;
                                   Navigator.pop(ctx);
                                 },

@@ -41,8 +41,8 @@ List<Widget> getAppearanceSettings(
                 : settings.value.themeMode,
           },
           onSelectionChanged: (selection) => db.settings.update().write(
-                SettingsCompanion(themeMode: Value(selection.first)),
-              ),
+            SettingsCompanion(themeMode: Value(selection.first)),
+          ),
         ),
       ),
     if ('pure black amoled'.contains(term.toLowerCase()))
@@ -52,23 +52,21 @@ List<Widget> getAppearanceSettings(
           leading: const Icon(Icons.contrast),
           title: const Text('Pure black (AMOLED)'),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  themeMode: Value(
-                    settings.value.themeMode == 'ThemeMode.amoled'
-                        ? 'ThemeMode.dark'
-                        : 'ThemeMode.amoled',
-                  ),
-                ),
+            SettingsCompanion(
+              themeMode: Value(
+                settings.value.themeMode == 'ThemeMode.amoled'
+                    ? 'ThemeMode.dark'
+                    : 'ThemeMode.amoled',
               ),
+            ),
+          ),
           trailing: Switch(
             value: settings.value.themeMode == 'ThemeMode.amoled',
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    themeMode: Value(
-                      value ? 'ThemeMode.amoled' : 'ThemeMode.dark',
-                    ),
-                  ),
-                ),
+              SettingsCompanion(
+                themeMode: Value(value ? 'ThemeMode.amoled' : 'ThemeMode.dark'),
+              ),
+            ),
           ),
         ),
       ),
@@ -83,17 +81,15 @@ List<Widget> getAppearanceSettings(
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
             onTap: () => db.settings.update().write(
-                  SettingsCompanion(
-                    systemColors: Value(!settings.value.systemColors),
-                  ),
-                ),
+              SettingsCompanion(
+                systemColors: Value(!settings.value.systemColors),
+              ),
+            ),
             trailing: Switch(
               value: settings.value.systemColors,
               onChanged: (value) => db.settings.update().write(
-                    SettingsCompanion(
-                      systemColors: Value(value),
-                    ),
-                  ),
+                SettingsCompanion(systemColors: Value(value)),
+              ),
             ),
           ),
         ),
@@ -107,17 +103,13 @@ List<Widget> getAppearanceSettings(
               ? const Icon(Icons.image)
               : const Icon(Icons.image_outlined),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showImages: Value(!settings.value.showImages),
-                ),
-              ),
+            SettingsCompanion(showImages: Value(!settings.value.showImages)),
+          ),
           trailing: Switch(
             value: settings.value.showImages,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    showImages: Value(value),
-                  ),
-                ),
+              SettingsCompanion(showImages: Value(value)),
+            ),
           ),
         ),
       ),
@@ -130,17 +122,15 @@ List<Widget> getAppearanceSettings(
               ? const Icon(Icons.public)
               : const Icon(Icons.public_off),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showGlobalProgress: Value(!settings.value.showGlobalProgress),
-                ),
-              ),
+            SettingsCompanion(
+              showGlobalProgress: Value(!settings.value.showGlobalProgress),
+            ),
+          ),
           trailing: Switch(
             value: settings.value.showGlobalProgress,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    showGlobalProgress: Value(value),
-                  ),
-                ),
+              SettingsCompanion(showGlobalProgress: Value(value)),
+            ),
           ),
         ),
       ),
@@ -151,17 +141,13 @@ List<Widget> getAppearanceSettings(
           title: const Text('Peek graph'),
           leading: const Icon(Icons.visibility_outlined),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  peekGraph: Value(!settings.value.peekGraph),
-                ),
-              ),
+            SettingsCompanion(peekGraph: Value(!settings.value.peekGraph)),
+          ),
           trailing: Switch(
             value: settings.value.peekGraph,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    peekGraph: Value(value),
-                  ),
-                ),
+              SettingsCompanion(peekGraph: Value(value)),
+            ),
           ),
         ),
       ),
@@ -172,17 +158,13 @@ List<Widget> getAppearanceSettings(
           title: const Text('Curve line graphs'),
           leading: const Icon(Icons.insights),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  curveLines: Value(!settings.value.curveLines),
-                ),
-              ),
+            SettingsCompanion(curveLines: Value(!settings.value.curveLines)),
+          ),
           trailing: Switch(
             value: settings.value.curveLines,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    curveLines: Value(value),
-                  ),
-                ),
+              SettingsCompanion(curveLines: Value(value)),
+            ),
           ),
         ),
       ),
@@ -195,14 +177,13 @@ List<Widget> getAppearanceSettings(
           ),
           Slider(
             value: settings.value.curveSmoothness ?? 0.35,
-            inactiveColor:
-                Theme.of(context).colorScheme.primary.withValues(alpha: 0.24),
+            inactiveColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.24),
             onChanged: (value) {
               db.settings.update().write(
-                    SettingsCompanion(
-                      curveSmoothness: Value(value),
-                    ),
-                  );
+                SettingsCompanion(curveSmoothness: Value(value)),
+              );
             },
           ),
         ],
@@ -235,10 +216,8 @@ List<Widget> getAppearanceSettings(
                 ],
                 selected: {settings.value.inputStyle},
                 onSelectionChanged: (selection) => db.settings.update().write(
-                      SettingsCompanion(
-                        inputStyle: Value(selection.first),
-                      ),
-                    ),
+                  SettingsCompanion(inputStyle: Value(selection.first)),
+                ),
               ),
               const SizedBox(height: 12),
               const TextField(
@@ -304,9 +283,7 @@ class AppearanceSettings extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Appearance"),
-      ),
+      appBar: AppBar(title: const Text("Appearance")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(

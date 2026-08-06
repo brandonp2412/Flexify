@@ -65,8 +65,9 @@ class GraphDateField extends StatelessWidget {
                       color: hasValue
                           ? colorScheme.onSurface
                           : colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-                      fontWeight:
-                          hasValue ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: hasValue
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                   ),
                 ],

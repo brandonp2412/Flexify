@@ -31,8 +31,9 @@ class GraphTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String trailing;
-    final showImages = context
-        .select<SettingsState, bool>((settings) => settings.value.showImages);
+    final showImages = context.select<SettingsState, bool>(
+      (settings) => settings.value.showImages,
+    );
 
     if (gymSet.cardio.value) {
       final minutes = gymSet.duration.value.floor();

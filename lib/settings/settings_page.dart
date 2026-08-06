@@ -48,11 +48,7 @@ class _SettingsPageState extends State<SettingsPage>
       );
       filtered.addAll(getFormatSettings(searchCtrl.text, settings.value));
       filtered.addAll(
-        getWorkoutSettings(
-          context,
-          searchCtrl.text,
-          settings.value,
-        ),
+        getWorkoutSettings(context, searchCtrl.text, settings.value),
       );
       if (player != null)
         filtered.addAll(
@@ -78,11 +74,7 @@ class _SettingsPageState extends State<SettingsPage>
     }
 
     if (filtered.isEmpty)
-      filtered = [
-        const ListTile(
-          title: Text("No settings found"),
-        ),
-      ];
+      filtered = [const ListTile(title: Text("No settings found"))];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -93,9 +85,7 @@ class _SettingsPageState extends State<SettingsPage>
             IconButton(
               onPressed: () async {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AboutPage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const AboutPage()),
                 );
               },
               icon: const Icon(Icons.info_outline_rounded),
@@ -117,9 +107,7 @@ class _SettingsPageState extends State<SettingsPage>
               },
               leading: const Icon(Icons.search),
             ),
-            const SizedBox(
-              height: 8.0,
-            ),
+            const SizedBox(height: 8.0),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.only(bottom: 116),

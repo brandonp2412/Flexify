@@ -42,10 +42,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         );
       else
         db.metadata.update().write(
-              MetadataCompanion(
-                buildNumber: Value(int.parse(pkg.buildNumber)),
-              ),
-            );
+          MetadataCompanion(buildNumber: Value(int.parse(pkg.buildNumber))),
+        );
 
       if (int.parse(pkg.buildNumber) == meta.buildNumber) return null;
 
@@ -54,11 +52,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           "New version ${pkg.version}",
           action: SnackBarAction(
             label: 'Changes',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const WhatsNew(),
-              ),
-            ),
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const WhatsNew())),
           ),
         );
     });
@@ -130,17 +126,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     tabs.remove(tab);
     await db.settings.update().write(
-          SettingsCompanion(
-            tabs: Value(tabs.join(',')),
-          ),
-        );
+      SettingsCompanion(tabs: Value(tabs.join(','))),
+    );
     if (context.mounted) toast('Removed $label');
   }
 
   @override
   Widget build(BuildContext context) {
-    final tabSettings = context
-        .select<SettingsState, String>((settings) => settings.value.tabs);
+    final tabSettings = context.select<SettingsState, String>(
+      (settings) => settings.value.tabs,
+    );
     final tabs = tabSettings.split(',');
     final scrollableTabs = context.select<SettingsState, bool>(
       (settings) => settings.value.scrollableTabs,
@@ -168,9 +163,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 if (tab == 'HistoryPage')
                   return HistoryPage(tabController: controller);
                 else if (tab == 'PlansPage')
-                  return PlansPage(
-                    tabController: controller,
-                  );
+                  return PlansPage(tabController: controller);
                 else if (tab == 'GraphsPage')
                   return GraphsPage(tabController: controller);
                 else if (tab == 'TimerPage')

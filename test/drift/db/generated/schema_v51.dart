@@ -10,26 +10,38 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
   final String? _alias;
   Plans(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> days = GeneratedColumn<String>(
-      'days', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'days',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT',
+  );
   late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
-      'sequence', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'sequence',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'title',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   @override
   List<GeneratedColumn> get $columns => [days, id, sequence, title];
   @override
@@ -43,14 +55,22 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
   PlansData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlansData(
-      days: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}days'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      sequence: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sequence']),
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title']),
+      days: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}days'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      ),
     );
   }
 
@@ -68,8 +88,12 @@ class PlansData extends DataClass implements Insertable<PlansData> {
   final int id;
   final int? sequence;
   final String? title;
-  const PlansData(
-      {required this.days, required this.id, this.sequence, this.title});
+  const PlansData({
+    required this.days,
+    required this.id,
+    this.sequence,
+    this.title,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -91,13 +115,16 @@ class PlansData extends DataClass implements Insertable<PlansData> {
       sequence: sequence == null && nullToAbsent
           ? const Value.absent()
           : Value(sequence),
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
+      title: title == null && nullToAbsent
+          ? const Value.absent()
+          : Value(title),
     );
   }
 
-  factory PlansData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlansData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlansData(
       days: serializer.fromJson<String>(json['days']),
@@ -117,17 +144,17 @@ class PlansData extends DataClass implements Insertable<PlansData> {
     };
   }
 
-  PlansData copyWith(
-          {String? days,
-          int? id,
-          Value<int?> sequence = const Value.absent(),
-          Value<String?> title = const Value.absent()}) =>
-      PlansData(
-        days: days ?? this.days,
-        id: id ?? this.id,
-        sequence: sequence.present ? sequence.value : this.sequence,
-        title: title.present ? title.value : this.title,
-      );
+  PlansData copyWith({
+    String? days,
+    int? id,
+    Value<int?> sequence = const Value.absent(),
+    Value<String?> title = const Value.absent(),
+  }) => PlansData(
+    days: days ?? this.days,
+    id: id ?? this.id,
+    sequence: sequence.present ? sequence.value : this.sequence,
+    title: title.present ? title.value : this.title,
+  );
   PlansData copyWithCompanion(PlansCompanion data) {
     return PlansData(
       days: data.days.present ? data.days.value : this.days,
@@ -191,11 +218,12 @@ class PlansCompanion extends UpdateCompanion<PlansData> {
     });
   }
 
-  PlansCompanion copyWith(
-      {Value<String>? days,
-      Value<int>? id,
-      Value<int?>? sequence,
-      Value<String?>? title}) {
+  PlansCompanion copyWith({
+    Value<String>? days,
+    Value<int>? id,
+    Value<int?>? sequence,
+    Value<String?>? title,
+  }) {
     return PlansCompanion(
       days: days ?? this.days,
       id: id ?? this.id,
@@ -240,116 +268,167 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
   final String? _alias;
   GymSets(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<double> bodyWeight = GeneratedColumn<double>(
-      'body_weight', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0.0',
-      defaultValue: const CustomExpression('0.0'));
+    'body_weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0.0',
+    defaultValue: const CustomExpression('0.0'),
+  );
   late final GeneratedColumn<int> cardio = GeneratedColumn<int>(
-      'cardio', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (cardio IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'cardio',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0 CHECK (cardio IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<String> category = GeneratedColumn<String>(
-      'category', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'category',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> created = GeneratedColumn<int>(
-      'created', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'created',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<double> distance = GeneratedColumn<double>(
-      'distance', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0.0',
-      defaultValue: const CustomExpression('0.0'));
+    'distance',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0.0',
+    defaultValue: const CustomExpression('0.0'),
+  );
   late final GeneratedColumn<double> duration = GeneratedColumn<double>(
-      'duration', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0.0',
-      defaultValue: const CustomExpression('0.0'));
+    'duration',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0.0',
+    defaultValue: const CustomExpression('0.0'),
+  );
   late final GeneratedColumn<int> hidden = GeneratedColumn<int>(
-      'hidden', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (hidden IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0 CHECK (hidden IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT',
+  );
   late final GeneratedColumn<String> image = GeneratedColumn<String>(
-      'image', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'image',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> incline = GeneratedColumn<int>(
-      'incline', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'incline',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
-      'plan_id', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'plan_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<double> reps = GeneratedColumn<double>(
-      'reps', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'reps',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
-      'rest_ms', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'rest_ms',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
-      'unit', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
-      'weight', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        bodyWeight,
-        cardio,
-        category,
-        created,
-        distance,
-        duration,
-        hidden,
-        id,
-        image,
-        incline,
-        name,
-        notes,
-        planId,
-        reps,
-        restMs,
-        unit,
-        weight
-      ];
+    bodyWeight,
+    cardio,
+    category,
+    created,
+    distance,
+    duration,
+    hidden,
+    id,
+    image,
+    incline,
+    name,
+    notes,
+    planId,
+    reps,
+    restMs,
+    unit,
+    weight,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -361,40 +440,74 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
   GymSetsData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GymSetsData(
-      bodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}body_weight'])!,
-      cardio: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}cardio'])!,
-      category: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}category']),
-      created: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}created'])!,
-      distance: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}distance'])!,
-      duration: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
-      hidden: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}hidden'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      image: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}image']),
-      incline: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}incline']),
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-      planId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}plan_id']),
-      reps: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}reps'])!,
-      restMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rest_ms']),
-      unit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
-      weight: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
+      bodyWeight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}body_weight'],
+      )!,
+      cardio: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}cardio'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      ),
+      created: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created'],
+      )!,
+      distance: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}distance'],
+      )!,
+      duration: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration'],
+      )!,
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}hidden'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      image: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image'],
+      ),
+      incline: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}incline'],
+      ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      planId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}plan_id'],
+      ),
+      reps: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}reps'],
+      )!,
+      restMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rest_ms'],
+      ),
+      unit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit'],
+      )!,
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight'],
+      )!,
     );
   }
 
@@ -425,24 +538,25 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
   final int? restMs;
   final String unit;
   final double weight;
-  const GymSetsData(
-      {required this.bodyWeight,
-      required this.cardio,
-      this.category,
-      required this.created,
-      required this.distance,
-      required this.duration,
-      required this.hidden,
-      required this.id,
-      this.image,
-      this.incline,
-      required this.name,
-      this.notes,
-      this.planId,
-      required this.reps,
-      this.restMs,
-      required this.unit,
-      required this.weight});
+  const GymSetsData({
+    required this.bodyWeight,
+    required this.cardio,
+    this.category,
+    required this.created,
+    required this.distance,
+    required this.duration,
+    required this.hidden,
+    required this.id,
+    this.image,
+    this.incline,
+    required this.name,
+    this.notes,
+    this.planId,
+    required this.reps,
+    this.restMs,
+    required this.unit,
+    required this.weight,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -490,26 +604,32 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
       duration: Value(duration),
       hidden: Value(hidden),
       id: Value(id),
-      image:
-          image == null && nullToAbsent ? const Value.absent() : Value(image),
+      image: image == null && nullToAbsent
+          ? const Value.absent()
+          : Value(image),
       incline: incline == null && nullToAbsent
           ? const Value.absent()
           : Value(incline),
       name: Value(name),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
-      planId:
-          planId == null && nullToAbsent ? const Value.absent() : Value(planId),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      planId: planId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(planId),
       reps: Value(reps),
-      restMs:
-          restMs == null && nullToAbsent ? const Value.absent() : Value(restMs),
+      restMs: restMs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(restMs),
       unit: Value(unit),
       weight: Value(weight),
     );
   }
 
-  factory GymSetsData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GymSetsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GymSetsData(
       bodyWeight: serializer.fromJson<double>(json['bodyWeight']),
@@ -555,47 +675,48 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
     };
   }
 
-  GymSetsData copyWith(
-          {double? bodyWeight,
-          int? cardio,
-          Value<String?> category = const Value.absent(),
-          int? created,
-          double? distance,
-          double? duration,
-          int? hidden,
-          int? id,
-          Value<String?> image = const Value.absent(),
-          Value<int?> incline = const Value.absent(),
-          String? name,
-          Value<String?> notes = const Value.absent(),
-          Value<int?> planId = const Value.absent(),
-          double? reps,
-          Value<int?> restMs = const Value.absent(),
-          String? unit,
-          double? weight}) =>
-      GymSetsData(
-        bodyWeight: bodyWeight ?? this.bodyWeight,
-        cardio: cardio ?? this.cardio,
-        category: category.present ? category.value : this.category,
-        created: created ?? this.created,
-        distance: distance ?? this.distance,
-        duration: duration ?? this.duration,
-        hidden: hidden ?? this.hidden,
-        id: id ?? this.id,
-        image: image.present ? image.value : this.image,
-        incline: incline.present ? incline.value : this.incline,
-        name: name ?? this.name,
-        notes: notes.present ? notes.value : this.notes,
-        planId: planId.present ? planId.value : this.planId,
-        reps: reps ?? this.reps,
-        restMs: restMs.present ? restMs.value : this.restMs,
-        unit: unit ?? this.unit,
-        weight: weight ?? this.weight,
-      );
+  GymSetsData copyWith({
+    double? bodyWeight,
+    int? cardio,
+    Value<String?> category = const Value.absent(),
+    int? created,
+    double? distance,
+    double? duration,
+    int? hidden,
+    int? id,
+    Value<String?> image = const Value.absent(),
+    Value<int?> incline = const Value.absent(),
+    String? name,
+    Value<String?> notes = const Value.absent(),
+    Value<int?> planId = const Value.absent(),
+    double? reps,
+    Value<int?> restMs = const Value.absent(),
+    String? unit,
+    double? weight,
+  }) => GymSetsData(
+    bodyWeight: bodyWeight ?? this.bodyWeight,
+    cardio: cardio ?? this.cardio,
+    category: category.present ? category.value : this.category,
+    created: created ?? this.created,
+    distance: distance ?? this.distance,
+    duration: duration ?? this.duration,
+    hidden: hidden ?? this.hidden,
+    id: id ?? this.id,
+    image: image.present ? image.value : this.image,
+    incline: incline.present ? incline.value : this.incline,
+    name: name ?? this.name,
+    notes: notes.present ? notes.value : this.notes,
+    planId: planId.present ? planId.value : this.planId,
+    reps: reps ?? this.reps,
+    restMs: restMs.present ? restMs.value : this.restMs,
+    unit: unit ?? this.unit,
+    weight: weight ?? this.weight,
+  );
   GymSetsData copyWithCompanion(GymSetsCompanion data) {
     return GymSetsData(
-      bodyWeight:
-          data.bodyWeight.present ? data.bodyWeight.value : this.bodyWeight,
+      bodyWeight: data.bodyWeight.present
+          ? data.bodyWeight.value
+          : this.bodyWeight,
       cardio: data.cardio.present ? data.cardio.value : this.cardio,
       category: data.category.present ? data.category.value : this.category,
       created: data.created.present ? data.created.value : this.created,
@@ -641,23 +762,24 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
 
   @override
   int get hashCode => Object.hash(
-      bodyWeight,
-      cardio,
-      category,
-      created,
-      distance,
-      duration,
-      hidden,
-      id,
-      image,
-      incline,
-      name,
-      notes,
-      planId,
-      reps,
-      restMs,
-      unit,
-      weight);
+    bodyWeight,
+    cardio,
+    category,
+    created,
+    distance,
+    duration,
+    hidden,
+    id,
+    image,
+    incline,
+    name,
+    notes,
+    planId,
+    reps,
+    restMs,
+    unit,
+    weight,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -736,11 +858,11 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     this.restMs = const Value.absent(),
     required String unit,
     required double weight,
-  })  : created = Value(created),
-        name = Value(name),
-        reps = Value(reps),
-        unit = Value(unit),
-        weight = Value(weight);
+  }) : created = Value(created),
+       name = Value(name),
+       reps = Value(reps),
+       unit = Value(unit),
+       weight = Value(weight);
   static Insertable<GymSetsData> custom({
     Expression<double>? bodyWeight,
     Expression<int>? cardio,
@@ -781,24 +903,25 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     });
   }
 
-  GymSetsCompanion copyWith(
-      {Value<double>? bodyWeight,
-      Value<int>? cardio,
-      Value<String?>? category,
-      Value<int>? created,
-      Value<double>? distance,
-      Value<double>? duration,
-      Value<int>? hidden,
-      Value<int>? id,
-      Value<String?>? image,
-      Value<int?>? incline,
-      Value<String>? name,
-      Value<String?>? notes,
-      Value<int?>? planId,
-      Value<double>? reps,
-      Value<int?>? restMs,
-      Value<String>? unit,
-      Value<double>? weight}) {
+  GymSetsCompanion copyWith({
+    Value<double>? bodyWeight,
+    Value<int>? cardio,
+    Value<String?>? category,
+    Value<int>? created,
+    Value<double>? distance,
+    Value<double>? duration,
+    Value<int>? hidden,
+    Value<int>? id,
+    Value<String?>? image,
+    Value<int?>? incline,
+    Value<String>? name,
+    Value<String?>? notes,
+    Value<int?>? planId,
+    Value<double>? reps,
+    Value<int?>? restMs,
+    Value<String>? unit,
+    Value<double>? weight,
+  }) {
     return GymSetsCompanion(
       bodyWeight: bodyWeight ?? this.bodyWeight,
       cardio: cardio ?? this.cardio,
@@ -908,280 +1031,400 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
   final String? _alias;
   Settings(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
-      'alarm_sound', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'alarm_sound',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> automaticBackups = GeneratedColumn<int>(
-      'automatic_backups', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 0 CHECK (automatic_backups IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'automatic_backups',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 0 CHECK (automatic_backups IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<String> backupPath = GeneratedColumn<String>(
-      'backup_path', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'backup_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
-      'cardio_unit', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'cardio_unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> curveLines = GeneratedColumn<int>(
-      'curve_lines', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (curve_lines IN (0, 1))');
+    'curve_lines',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (curve_lines IN (0, 1))',
+  );
   late final GeneratedColumn<double> curveSmoothness = GeneratedColumn<double>(
-      'curve_smoothness', aliasedName, true,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'curve_smoothness',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> durationEstimation = GeneratedColumn<int>(
-      'duration_estimation', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 1 CHECK (duration_estimation IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'duration_estimation',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 1 CHECK (duration_estimation IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> enableSound = GeneratedColumn<int>(
-      'enable_sound', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (enable_sound IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'enable_sound',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (enable_sound IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> explainedPermissions = GeneratedColumn<int>(
-      'explained_permissions', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (explained_permissions IN (0, 1))');
+    'explained_permissions',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (explained_permissions IN (0, 1))',
+  );
   late final GeneratedColumn<int> groupHistory = GeneratedColumn<int>(
-      'group_history', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (group_history IN (0, 1))');
+    'group_history',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (group_history IN (0, 1))',
+  );
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT',
+  );
   late final GeneratedColumn<String> longDateFormat = GeneratedColumn<String>(
-      'long_date_format', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'long_date_format',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'max_sets',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> notifications = GeneratedColumn<int>(
-      'notifications', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (notifications IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'notifications',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (notifications IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> peekGraph = GeneratedColumn<int>(
-      'peek_graph', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (peek_graph IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'peek_graph',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0 CHECK (peek_graph IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<String> planTrailing = GeneratedColumn<String>(
-      'plan_trailing', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'plan_trailing',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> repEstimation = GeneratedColumn<int>(
-      'rep_estimation', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0 CHECK (rep_estimation IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'rep_estimation',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0 CHECK (rep_estimation IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<int> restTimers = GeneratedColumn<int>(
-      'rest_timers', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (rest_timers IN (0, 1))');
+    'rest_timers',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (rest_timers IN (0, 1))',
+  );
   late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
-      'short_date_format', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'short_date_format',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> showBodyWeight = GeneratedColumn<int>(
-      'show_body_weight', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 1 CHECK (show_body_weight IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'show_body_weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_body_weight IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> showCategories = GeneratedColumn<int>(
-      'show_categories', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 1 CHECK (show_categories IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'show_categories',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_categories IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> showImages = GeneratedColumn<int>(
-      'show_images', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_images IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'show_images',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_images IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> showNotes = GeneratedColumn<int>(
-      'show_notes', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_notes IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'show_notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_notes IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> showGlobalProgress = GeneratedColumn<int>(
-      'show_global_progress', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 1 CHECK (show_global_progress IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'show_global_progress',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 1 CHECK (show_global_progress IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> showUnits = GeneratedColumn<int>(
-      'show_units', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (show_units IN (0, 1))');
+    'show_units',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (show_units IN (0, 1))',
+  );
   late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
-      'strength_unit', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'strength_unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> systemColors = GeneratedColumn<int>(
-      'system_colors', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (system_colors IN (0, 1))');
+    'system_colors',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (system_colors IN (0, 1))',
+  );
   late final GeneratedColumn<String> tabs = GeneratedColumn<String>(
-      'tabs', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT \'HistoryPage,PlansPage,GraphsPage,TimerPage\'',
-      defaultValue: const CustomExpression(
-          '\'HistoryPage,PlansPage,GraphsPage,TimerPage\''));
+    'tabs',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT \'HistoryPage,PlansPage,GraphsPage,TimerPage\'',
+    defaultValue: const CustomExpression(
+      '\'HistoryPage,PlansPage,GraphsPage,TimerPage\'',
+    ),
+  );
   late final GeneratedColumn<String> themeMode = GeneratedColumn<String>(
-      'theme_mode', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'theme_mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> timerDuration = GeneratedColumn<int>(
-      'timer_duration', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'timer_duration',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<int> vibrate = GeneratedColumn<int>(
-      'vibrate', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (vibrate IN (0, 1))');
+    'vibrate',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (vibrate IN (0, 1))',
+  );
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
-      'warmup_sets', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'warmup_sets',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> scrollableTabs = GeneratedColumn<int>(
-      'scrollable_tabs', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 1 CHECK (scrollable_tabs IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'scrollable_tabs',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (scrollable_tabs IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<int> showGraphXAxis = GeneratedColumn<int>(
-      'show_graph_x_axis', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 0 CHECK (show_graph_x_axis IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'show_graph_x_axis',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 0 CHECK (show_graph_x_axis IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<int> showGraphLimit = GeneratedColumn<int>(
-      'show_graph_limit', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 1 CHECK (show_graph_limit IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'show_graph_limit',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (show_graph_limit IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<String> progressPosition = GeneratedColumn<String>(
-      'progress_position', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT \'bottom\'',
-      defaultValue: const CustomExpression('\'bottom\''));
+    'progress_position',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT \'bottom\'',
+    defaultValue: const CustomExpression('\'bottom\''),
+  );
   late final GeneratedColumn<String> defaultGraphMetric =
-      GeneratedColumn<String>('default_graph_metric', aliasedName, false,
-          type: DriftSqlType.string,
-          requiredDuringInsert: false,
-          $customConstraints: 'NOT NULL DEFAULT \'bestWeight\'',
-          defaultValue: const CustomExpression('\'bestWeight\''));
+      GeneratedColumn<String>(
+        'default_graph_metric',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        $customConstraints: 'NOT NULL DEFAULT \'bestWeight\'',
+        defaultValue: const CustomExpression('\'bestWeight\''),
+      );
   late final GeneratedColumn<String> defaultGraphPeriod =
-      GeneratedColumn<String>('default_graph_period', aliasedName, false,
-          type: DriftSqlType.string,
-          requiredDuringInsert: false,
-          $customConstraints: 'NOT NULL DEFAULT \'day\'',
-          defaultValue: const CustomExpression('\'day\''));
+      GeneratedColumn<String>(
+        'default_graph_period',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        $customConstraints: 'NOT NULL DEFAULT \'day\'',
+        defaultValue: const CustomExpression('\'day\''),
+      );
   late final GeneratedColumn<int> defaultGraphLimit = GeneratedColumn<int>(
-      'default_graph_limit', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 20',
-      defaultValue: const CustomExpression('20'));
-  late final GeneratedColumn<int> defaultGraphTimeBasedXAxis = GeneratedColumn<
-          int>('default_graph_time_based_x_axis', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 0 CHECK (default_graph_time_based_x_axis IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'default_graph_limit',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 20',
+    defaultValue: const CustomExpression('20'),
+  );
+  late final GeneratedColumn<int>
+  defaultGraphTimeBasedXAxis = GeneratedColumn<int>(
+    'default_graph_time_based_x_axis',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 0 CHECK (default_graph_time_based_x_axis IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        alarmSound,
-        automaticBackups,
-        backupPath,
-        cardioUnit,
-        curveLines,
-        curveSmoothness,
-        durationEstimation,
-        enableSound,
-        explainedPermissions,
-        groupHistory,
-        id,
-        longDateFormat,
-        maxSets,
-        notifications,
-        peekGraph,
-        planTrailing,
-        repEstimation,
-        restTimers,
-        shortDateFormat,
-        showBodyWeight,
-        showCategories,
-        showImages,
-        showNotes,
-        showGlobalProgress,
-        showUnits,
-        strengthUnit,
-        systemColors,
-        tabs,
-        themeMode,
-        timerDuration,
-        vibrate,
-        warmupSets,
-        scrollableTabs,
-        showGraphXAxis,
-        showGraphLimit,
-        progressPosition,
-        defaultGraphMetric,
-        defaultGraphPeriod,
-        defaultGraphLimit,
-        defaultGraphTimeBasedXAxis
-      ];
+    alarmSound,
+    automaticBackups,
+    backupPath,
+    cardioUnit,
+    curveLines,
+    curveSmoothness,
+    durationEstimation,
+    enableSound,
+    explainedPermissions,
+    groupHistory,
+    id,
+    longDateFormat,
+    maxSets,
+    notifications,
+    peekGraph,
+    planTrailing,
+    repEstimation,
+    restTimers,
+    shortDateFormat,
+    showBodyWeight,
+    showCategories,
+    showImages,
+    showNotes,
+    showGlobalProgress,
+    showUnits,
+    strengthUnit,
+    systemColors,
+    tabs,
+    themeMode,
+    timerDuration,
+    vibrate,
+    warmupSets,
+    scrollableTabs,
+    showGraphXAxis,
+    showGraphLimit,
+    progressPosition,
+    defaultGraphMetric,
+    defaultGraphPeriod,
+    defaultGraphLimit,
+    defaultGraphTimeBasedXAxis,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1193,87 +1436,166 @@ class Settings extends Table with TableInfo<Settings, SettingsData> {
   SettingsData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return SettingsData(
-      alarmSound: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
-      automaticBackups: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}automatic_backups'])!,
-      backupPath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}backup_path']),
-      cardioUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
-      curveLines: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}curve_lines'])!,
+      alarmSound: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}alarm_sound'],
+      )!,
+      automaticBackups: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}automatic_backups'],
+      )!,
+      backupPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}backup_path'],
+      ),
+      cardioUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cardio_unit'],
+      )!,
+      curveLines: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}curve_lines'],
+      )!,
       curveSmoothness: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}curve_smoothness']),
+        DriftSqlType.double,
+        data['${effectivePrefix}curve_smoothness'],
+      ),
       durationEstimation: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}duration_estimation'])!,
-      enableSound: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}enable_sound'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_estimation'],
+      )!,
+      enableSound: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}enable_sound'],
+      )!,
       explainedPermissions: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}explained_permissions'])!,
-      groupHistory: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}group_history'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}explained_permissions'],
+      )!,
+      groupHistory: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}group_history'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
       longDateFormat: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}long_date_format'])!,
-      maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
-      notifications: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}notifications'])!,
-      peekGraph: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}peek_graph'])!,
-      planTrailing: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}plan_trailing'])!,
-      repEstimation: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rep_estimation'])!,
-      restTimers: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rest_timers'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}long_date_format'],
+      )!,
+      maxSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_sets'],
+      )!,
+      notifications: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}notifications'],
+      )!,
+      peekGraph: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}peek_graph'],
+      )!,
+      planTrailing: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}plan_trailing'],
+      )!,
+      repEstimation: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rep_estimation'],
+      )!,
+      restTimers: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rest_timers'],
+      )!,
       shortDateFormat: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
-      showBodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_body_weight'])!,
-      showCategories: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_categories'])!,
-      showImages: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_images'])!,
-      showNotes: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_notes'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}short_date_format'],
+      )!,
+      showBodyWeight: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_body_weight'],
+      )!,
+      showCategories: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_categories'],
+      )!,
+      showImages: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_images'],
+      )!,
+      showNotes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_notes'],
+      )!,
       showGlobalProgress: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}show_global_progress'])!,
-      showUnits: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_units'])!,
-      strengthUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
-      systemColors: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}system_colors'])!,
-      tabs: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}tabs'])!,
-      themeMode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}theme_mode'])!,
-      timerDuration: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}timer_duration'])!,
-      vibrate: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}vibrate'])!,
-      warmupSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
-      scrollableTabs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}scrollable_tabs'])!,
-      showGraphXAxis: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_graph_x_axis'])!,
-      showGraphLimit: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}show_graph_limit'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}show_global_progress'],
+      )!,
+      showUnits: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_units'],
+      )!,
+      strengthUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}strength_unit'],
+      )!,
+      systemColors: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}system_colors'],
+      )!,
+      tabs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tabs'],
+      )!,
+      themeMode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}theme_mode'],
+      )!,
+      timerDuration: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timer_duration'],
+      )!,
+      vibrate: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}vibrate'],
+      )!,
+      warmupSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}warmup_sets'],
+      ),
+      scrollableTabs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}scrollable_tabs'],
+      )!,
+      showGraphXAxis: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_graph_x_axis'],
+      )!,
+      showGraphLimit: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}show_graph_limit'],
+      )!,
       progressPosition: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}progress_position'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}progress_position'],
+      )!,
       defaultGraphMetric: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}default_graph_metric'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}default_graph_metric'],
+      )!,
       defaultGraphPeriod: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}default_graph_period'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}default_graph_period'],
+      )!,
       defaultGraphLimit: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}default_graph_limit'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}default_graph_limit'],
+      )!,
       defaultGraphTimeBasedXAxis: attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}default_graph_time_based_x_axis'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}default_graph_time_based_x_axis'],
+      )!,
     );
   }
 
@@ -1327,47 +1649,48 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
   final String defaultGraphPeriod;
   final int defaultGraphLimit;
   final int defaultGraphTimeBasedXAxis;
-  const SettingsData(
-      {required this.alarmSound,
-      required this.automaticBackups,
-      this.backupPath,
-      required this.cardioUnit,
-      required this.curveLines,
-      this.curveSmoothness,
-      required this.durationEstimation,
-      required this.enableSound,
-      required this.explainedPermissions,
-      required this.groupHistory,
-      required this.id,
-      required this.longDateFormat,
-      required this.maxSets,
-      required this.notifications,
-      required this.peekGraph,
-      required this.planTrailing,
-      required this.repEstimation,
-      required this.restTimers,
-      required this.shortDateFormat,
-      required this.showBodyWeight,
-      required this.showCategories,
-      required this.showImages,
-      required this.showNotes,
-      required this.showGlobalProgress,
-      required this.showUnits,
-      required this.strengthUnit,
-      required this.systemColors,
-      required this.tabs,
-      required this.themeMode,
-      required this.timerDuration,
-      required this.vibrate,
-      this.warmupSets,
-      required this.scrollableTabs,
-      required this.showGraphXAxis,
-      required this.showGraphLimit,
-      required this.progressPosition,
-      required this.defaultGraphMetric,
-      required this.defaultGraphPeriod,
-      required this.defaultGraphLimit,
-      required this.defaultGraphTimeBasedXAxis});
+  const SettingsData({
+    required this.alarmSound,
+    required this.automaticBackups,
+    this.backupPath,
+    required this.cardioUnit,
+    required this.curveLines,
+    this.curveSmoothness,
+    required this.durationEstimation,
+    required this.enableSound,
+    required this.explainedPermissions,
+    required this.groupHistory,
+    required this.id,
+    required this.longDateFormat,
+    required this.maxSets,
+    required this.notifications,
+    required this.peekGraph,
+    required this.planTrailing,
+    required this.repEstimation,
+    required this.restTimers,
+    required this.shortDateFormat,
+    required this.showBodyWeight,
+    required this.showCategories,
+    required this.showImages,
+    required this.showNotes,
+    required this.showGlobalProgress,
+    required this.showUnits,
+    required this.strengthUnit,
+    required this.systemColors,
+    required this.tabs,
+    required this.themeMode,
+    required this.timerDuration,
+    required this.vibrate,
+    this.warmupSets,
+    required this.scrollableTabs,
+    required this.showGraphXAxis,
+    required this.showGraphLimit,
+    required this.progressPosition,
+    required this.defaultGraphMetric,
+    required this.defaultGraphPeriod,
+    required this.defaultGraphLimit,
+    required this.defaultGraphTimeBasedXAxis,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1416,8 +1739,9 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
     map['default_graph_metric'] = Variable<String>(defaultGraphMetric);
     map['default_graph_period'] = Variable<String>(defaultGraphPeriod);
     map['default_graph_limit'] = Variable<int>(defaultGraphLimit);
-    map['default_graph_time_based_x_axis'] =
-        Variable<int>(defaultGraphTimeBasedXAxis);
+    map['default_graph_time_based_x_axis'] = Variable<int>(
+      defaultGraphTimeBasedXAxis,
+    );
     return map;
   }
 
@@ -1472,8 +1796,10 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
     );
   }
 
-  factory SettingsData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory SettingsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SettingsData(
       alarmSound: serializer.fromJson<String>(json['alarmSound']),
@@ -1484,8 +1810,9 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       curveSmoothness: serializer.fromJson<double?>(json['curveSmoothness']),
       durationEstimation: serializer.fromJson<int>(json['durationEstimation']),
       enableSound: serializer.fromJson<int>(json['enableSound']),
-      explainedPermissions:
-          serializer.fromJson<int>(json['explainedPermissions']),
+      explainedPermissions: serializer.fromJson<int>(
+        json['explainedPermissions'],
+      ),
       groupHistory: serializer.fromJson<int>(json['groupHistory']),
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
@@ -1513,13 +1840,16 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       showGraphXAxis: serializer.fromJson<int>(json['showGraphXAxis']),
       showGraphLimit: serializer.fromJson<int>(json['showGraphLimit']),
       progressPosition: serializer.fromJson<String>(json['progressPosition']),
-      defaultGraphMetric:
-          serializer.fromJson<String>(json['defaultGraphMetric']),
-      defaultGraphPeriod:
-          serializer.fromJson<String>(json['defaultGraphPeriod']),
+      defaultGraphMetric: serializer.fromJson<String>(
+        json['defaultGraphMetric'],
+      ),
+      defaultGraphPeriod: serializer.fromJson<String>(
+        json['defaultGraphPeriod'],
+      ),
       defaultGraphLimit: serializer.fromJson<int>(json['defaultGraphLimit']),
-      defaultGraphTimeBasedXAxis:
-          serializer.fromJson<int>(json['defaultGraphTimeBasedXAxis']),
+      defaultGraphTimeBasedXAxis: serializer.fromJson<int>(
+        json['defaultGraphTimeBasedXAxis'],
+      ),
     );
   }
   @override
@@ -1565,118 +1895,124 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       'defaultGraphMetric': serializer.toJson<String>(defaultGraphMetric),
       'defaultGraphPeriod': serializer.toJson<String>(defaultGraphPeriod),
       'defaultGraphLimit': serializer.toJson<int>(defaultGraphLimit),
-      'defaultGraphTimeBasedXAxis':
-          serializer.toJson<int>(defaultGraphTimeBasedXAxis),
+      'defaultGraphTimeBasedXAxis': serializer.toJson<int>(
+        defaultGraphTimeBasedXAxis,
+      ),
     };
   }
 
-  SettingsData copyWith(
-          {String? alarmSound,
-          int? automaticBackups,
-          Value<String?> backupPath = const Value.absent(),
-          String? cardioUnit,
-          int? curveLines,
-          Value<double?> curveSmoothness = const Value.absent(),
-          int? durationEstimation,
-          int? enableSound,
-          int? explainedPermissions,
-          int? groupHistory,
-          int? id,
-          String? longDateFormat,
-          int? maxSets,
-          int? notifications,
-          int? peekGraph,
-          String? planTrailing,
-          int? repEstimation,
-          int? restTimers,
-          String? shortDateFormat,
-          int? showBodyWeight,
-          int? showCategories,
-          int? showImages,
-          int? showNotes,
-          int? showGlobalProgress,
-          int? showUnits,
-          String? strengthUnit,
-          int? systemColors,
-          String? tabs,
-          String? themeMode,
-          int? timerDuration,
-          int? vibrate,
-          Value<int?> warmupSets = const Value.absent(),
-          int? scrollableTabs,
-          int? showGraphXAxis,
-          int? showGraphLimit,
-          String? progressPosition,
-          String? defaultGraphMetric,
-          String? defaultGraphPeriod,
-          int? defaultGraphLimit,
-          int? defaultGraphTimeBasedXAxis}) =>
-      SettingsData(
-        alarmSound: alarmSound ?? this.alarmSound,
-        automaticBackups: automaticBackups ?? this.automaticBackups,
-        backupPath: backupPath.present ? backupPath.value : this.backupPath,
-        cardioUnit: cardioUnit ?? this.cardioUnit,
-        curveLines: curveLines ?? this.curveLines,
-        curveSmoothness: curveSmoothness.present
-            ? curveSmoothness.value
-            : this.curveSmoothness,
-        durationEstimation: durationEstimation ?? this.durationEstimation,
-        enableSound: enableSound ?? this.enableSound,
-        explainedPermissions: explainedPermissions ?? this.explainedPermissions,
-        groupHistory: groupHistory ?? this.groupHistory,
-        id: id ?? this.id,
-        longDateFormat: longDateFormat ?? this.longDateFormat,
-        maxSets: maxSets ?? this.maxSets,
-        notifications: notifications ?? this.notifications,
-        peekGraph: peekGraph ?? this.peekGraph,
-        planTrailing: planTrailing ?? this.planTrailing,
-        repEstimation: repEstimation ?? this.repEstimation,
-        restTimers: restTimers ?? this.restTimers,
-        shortDateFormat: shortDateFormat ?? this.shortDateFormat,
-        showBodyWeight: showBodyWeight ?? this.showBodyWeight,
-        showCategories: showCategories ?? this.showCategories,
-        showImages: showImages ?? this.showImages,
-        showNotes: showNotes ?? this.showNotes,
-        showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
-        showUnits: showUnits ?? this.showUnits,
-        strengthUnit: strengthUnit ?? this.strengthUnit,
-        systemColors: systemColors ?? this.systemColors,
-        tabs: tabs ?? this.tabs,
-        themeMode: themeMode ?? this.themeMode,
-        timerDuration: timerDuration ?? this.timerDuration,
-        vibrate: vibrate ?? this.vibrate,
-        warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
-        scrollableTabs: scrollableTabs ?? this.scrollableTabs,
-        showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
-        showGraphLimit: showGraphLimit ?? this.showGraphLimit,
-        progressPosition: progressPosition ?? this.progressPosition,
-        defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
-        defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
-        defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
-        defaultGraphTimeBasedXAxis:
-            defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
-      );
+  SettingsData copyWith({
+    String? alarmSound,
+    int? automaticBackups,
+    Value<String?> backupPath = const Value.absent(),
+    String? cardioUnit,
+    int? curveLines,
+    Value<double?> curveSmoothness = const Value.absent(),
+    int? durationEstimation,
+    int? enableSound,
+    int? explainedPermissions,
+    int? groupHistory,
+    int? id,
+    String? longDateFormat,
+    int? maxSets,
+    int? notifications,
+    int? peekGraph,
+    String? planTrailing,
+    int? repEstimation,
+    int? restTimers,
+    String? shortDateFormat,
+    int? showBodyWeight,
+    int? showCategories,
+    int? showImages,
+    int? showNotes,
+    int? showGlobalProgress,
+    int? showUnits,
+    String? strengthUnit,
+    int? systemColors,
+    String? tabs,
+    String? themeMode,
+    int? timerDuration,
+    int? vibrate,
+    Value<int?> warmupSets = const Value.absent(),
+    int? scrollableTabs,
+    int? showGraphXAxis,
+    int? showGraphLimit,
+    String? progressPosition,
+    String? defaultGraphMetric,
+    String? defaultGraphPeriod,
+    int? defaultGraphLimit,
+    int? defaultGraphTimeBasedXAxis,
+  }) => SettingsData(
+    alarmSound: alarmSound ?? this.alarmSound,
+    automaticBackups: automaticBackups ?? this.automaticBackups,
+    backupPath: backupPath.present ? backupPath.value : this.backupPath,
+    cardioUnit: cardioUnit ?? this.cardioUnit,
+    curveLines: curveLines ?? this.curveLines,
+    curveSmoothness: curveSmoothness.present
+        ? curveSmoothness.value
+        : this.curveSmoothness,
+    durationEstimation: durationEstimation ?? this.durationEstimation,
+    enableSound: enableSound ?? this.enableSound,
+    explainedPermissions: explainedPermissions ?? this.explainedPermissions,
+    groupHistory: groupHistory ?? this.groupHistory,
+    id: id ?? this.id,
+    longDateFormat: longDateFormat ?? this.longDateFormat,
+    maxSets: maxSets ?? this.maxSets,
+    notifications: notifications ?? this.notifications,
+    peekGraph: peekGraph ?? this.peekGraph,
+    planTrailing: planTrailing ?? this.planTrailing,
+    repEstimation: repEstimation ?? this.repEstimation,
+    restTimers: restTimers ?? this.restTimers,
+    shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+    showBodyWeight: showBodyWeight ?? this.showBodyWeight,
+    showCategories: showCategories ?? this.showCategories,
+    showImages: showImages ?? this.showImages,
+    showNotes: showNotes ?? this.showNotes,
+    showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
+    showUnits: showUnits ?? this.showUnits,
+    strengthUnit: strengthUnit ?? this.strengthUnit,
+    systemColors: systemColors ?? this.systemColors,
+    tabs: tabs ?? this.tabs,
+    themeMode: themeMode ?? this.themeMode,
+    timerDuration: timerDuration ?? this.timerDuration,
+    vibrate: vibrate ?? this.vibrate,
+    warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+    scrollableTabs: scrollableTabs ?? this.scrollableTabs,
+    showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
+    showGraphLimit: showGraphLimit ?? this.showGraphLimit,
+    progressPosition: progressPosition ?? this.progressPosition,
+    defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
+    defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
+    defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
+    defaultGraphTimeBasedXAxis:
+        defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
+  );
   SettingsData copyWithCompanion(SettingsCompanion data) {
     return SettingsData(
-      alarmSound:
-          data.alarmSound.present ? data.alarmSound.value : this.alarmSound,
+      alarmSound: data.alarmSound.present
+          ? data.alarmSound.value
+          : this.alarmSound,
       automaticBackups: data.automaticBackups.present
           ? data.automaticBackups.value
           : this.automaticBackups,
-      backupPath:
-          data.backupPath.present ? data.backupPath.value : this.backupPath,
-      cardioUnit:
-          data.cardioUnit.present ? data.cardioUnit.value : this.cardioUnit,
-      curveLines:
-          data.curveLines.present ? data.curveLines.value : this.curveLines,
+      backupPath: data.backupPath.present
+          ? data.backupPath.value
+          : this.backupPath,
+      cardioUnit: data.cardioUnit.present
+          ? data.cardioUnit.value
+          : this.cardioUnit,
+      curveLines: data.curveLines.present
+          ? data.curveLines.value
+          : this.curveLines,
       curveSmoothness: data.curveSmoothness.present
           ? data.curveSmoothness.value
           : this.curveSmoothness,
       durationEstimation: data.durationEstimation.present
           ? data.durationEstimation.value
           : this.durationEstimation,
-      enableSound:
-          data.enableSound.present ? data.enableSound.value : this.enableSound,
+      enableSound: data.enableSound.present
+          ? data.enableSound.value
+          : this.enableSound,
       explainedPermissions: data.explainedPermissions.present
           ? data.explainedPermissions.value
           : this.explainedPermissions,
@@ -1698,8 +2034,9 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       repEstimation: data.repEstimation.present
           ? data.repEstimation.value
           : this.repEstimation,
-      restTimers:
-          data.restTimers.present ? data.restTimers.value : this.restTimers,
+      restTimers: data.restTimers.present
+          ? data.restTimers.value
+          : this.restTimers,
       shortDateFormat: data.shortDateFormat.present
           ? data.shortDateFormat.value
           : this.shortDateFormat,
@@ -1709,8 +2046,9 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
       showCategories: data.showCategories.present
           ? data.showCategories.value
           : this.showCategories,
-      showImages:
-          data.showImages.present ? data.showImages.value : this.showImages,
+      showImages: data.showImages.present
+          ? data.showImages.value
+          : this.showImages,
       showNotes: data.showNotes.present ? data.showNotes.value : this.showNotes,
       showGlobalProgress: data.showGlobalProgress.present
           ? data.showGlobalProgress.value
@@ -1728,8 +2066,9 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
           ? data.timerDuration.value
           : this.timerDuration,
       vibrate: data.vibrate.present ? data.vibrate.value : this.vibrate,
-      warmupSets:
-          data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+      warmupSets: data.warmupSets.present
+          ? data.warmupSets.value
+          : this.warmupSets,
       scrollableTabs: data.scrollableTabs.present
           ? data.scrollableTabs.value
           : this.scrollableTabs,
@@ -1806,47 +2145,47 @@ class SettingsData extends DataClass implements Insertable<SettingsData> {
 
   @override
   int get hashCode => Object.hashAll([
-        alarmSound,
-        automaticBackups,
-        backupPath,
-        cardioUnit,
-        curveLines,
-        curveSmoothness,
-        durationEstimation,
-        enableSound,
-        explainedPermissions,
-        groupHistory,
-        id,
-        longDateFormat,
-        maxSets,
-        notifications,
-        peekGraph,
-        planTrailing,
-        repEstimation,
-        restTimers,
-        shortDateFormat,
-        showBodyWeight,
-        showCategories,
-        showImages,
-        showNotes,
-        showGlobalProgress,
-        showUnits,
-        strengthUnit,
-        systemColors,
-        tabs,
-        themeMode,
-        timerDuration,
-        vibrate,
-        warmupSets,
-        scrollableTabs,
-        showGraphXAxis,
-        showGraphLimit,
-        progressPosition,
-        defaultGraphMetric,
-        defaultGraphPeriod,
-        defaultGraphLimit,
-        defaultGraphTimeBasedXAxis
-      ]);
+    alarmSound,
+    automaticBackups,
+    backupPath,
+    cardioUnit,
+    curveLines,
+    curveSmoothness,
+    durationEstimation,
+    enableSound,
+    explainedPermissions,
+    groupHistory,
+    id,
+    longDateFormat,
+    maxSets,
+    notifications,
+    peekGraph,
+    planTrailing,
+    repEstimation,
+    restTimers,
+    shortDateFormat,
+    showBodyWeight,
+    showCategories,
+    showImages,
+    showNotes,
+    showGlobalProgress,
+    showUnits,
+    strengthUnit,
+    systemColors,
+    tabs,
+    themeMode,
+    timerDuration,
+    vibrate,
+    warmupSets,
+    scrollableTabs,
+    showGraphXAxis,
+    showGraphLimit,
+    progressPosition,
+    defaultGraphMetric,
+    defaultGraphPeriod,
+    defaultGraphLimit,
+    defaultGraphTimeBasedXAxis,
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2017,22 +2356,22 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
     this.defaultGraphPeriod = const Value.absent(),
     this.defaultGraphLimit = const Value.absent(),
     this.defaultGraphTimeBasedXAxis = const Value.absent(),
-  })  : alarmSound = Value(alarmSound),
-        cardioUnit = Value(cardioUnit),
-        curveLines = Value(curveLines),
-        explainedPermissions = Value(explainedPermissions),
-        groupHistory = Value(groupHistory),
-        longDateFormat = Value(longDateFormat),
-        maxSets = Value(maxSets),
-        planTrailing = Value(planTrailing),
-        restTimers = Value(restTimers),
-        shortDateFormat = Value(shortDateFormat),
-        showUnits = Value(showUnits),
-        strengthUnit = Value(strengthUnit),
-        systemColors = Value(systemColors),
-        themeMode = Value(themeMode),
-        timerDuration = Value(timerDuration),
-        vibrate = Value(vibrate);
+  }) : alarmSound = Value(alarmSound),
+       cardioUnit = Value(cardioUnit),
+       curveLines = Value(curveLines),
+       explainedPermissions = Value(explainedPermissions),
+       groupHistory = Value(groupHistory),
+       longDateFormat = Value(longDateFormat),
+       maxSets = Value(maxSets),
+       planTrailing = Value(planTrailing),
+       restTimers = Value(restTimers),
+       shortDateFormat = Value(shortDateFormat),
+       showUnits = Value(showUnits),
+       strengthUnit = Value(strengthUnit),
+       systemColors = Value(systemColors),
+       themeMode = Value(themeMode),
+       timerDuration = Value(timerDuration),
+       vibrate = Value(vibrate);
   static Insertable<SettingsData> custom({
     Expression<String>? alarmSound,
     Expression<int>? automaticBackups,
@@ -2124,47 +2463,48 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
     });
   }
 
-  SettingsCompanion copyWith(
-      {Value<String>? alarmSound,
-      Value<int>? automaticBackups,
-      Value<String?>? backupPath,
-      Value<String>? cardioUnit,
-      Value<int>? curveLines,
-      Value<double?>? curveSmoothness,
-      Value<int>? durationEstimation,
-      Value<int>? enableSound,
-      Value<int>? explainedPermissions,
-      Value<int>? groupHistory,
-      Value<int>? id,
-      Value<String>? longDateFormat,
-      Value<int>? maxSets,
-      Value<int>? notifications,
-      Value<int>? peekGraph,
-      Value<String>? planTrailing,
-      Value<int>? repEstimation,
-      Value<int>? restTimers,
-      Value<String>? shortDateFormat,
-      Value<int>? showBodyWeight,
-      Value<int>? showCategories,
-      Value<int>? showImages,
-      Value<int>? showNotes,
-      Value<int>? showGlobalProgress,
-      Value<int>? showUnits,
-      Value<String>? strengthUnit,
-      Value<int>? systemColors,
-      Value<String>? tabs,
-      Value<String>? themeMode,
-      Value<int>? timerDuration,
-      Value<int>? vibrate,
-      Value<int?>? warmupSets,
-      Value<int>? scrollableTabs,
-      Value<int>? showGraphXAxis,
-      Value<int>? showGraphLimit,
-      Value<String>? progressPosition,
-      Value<String>? defaultGraphMetric,
-      Value<String>? defaultGraphPeriod,
-      Value<int>? defaultGraphLimit,
-      Value<int>? defaultGraphTimeBasedXAxis}) {
+  SettingsCompanion copyWith({
+    Value<String>? alarmSound,
+    Value<int>? automaticBackups,
+    Value<String?>? backupPath,
+    Value<String>? cardioUnit,
+    Value<int>? curveLines,
+    Value<double?>? curveSmoothness,
+    Value<int>? durationEstimation,
+    Value<int>? enableSound,
+    Value<int>? explainedPermissions,
+    Value<int>? groupHistory,
+    Value<int>? id,
+    Value<String>? longDateFormat,
+    Value<int>? maxSets,
+    Value<int>? notifications,
+    Value<int>? peekGraph,
+    Value<String>? planTrailing,
+    Value<int>? repEstimation,
+    Value<int>? restTimers,
+    Value<String>? shortDateFormat,
+    Value<int>? showBodyWeight,
+    Value<int>? showCategories,
+    Value<int>? showImages,
+    Value<int>? showNotes,
+    Value<int>? showGlobalProgress,
+    Value<int>? showUnits,
+    Value<String>? strengthUnit,
+    Value<int>? systemColors,
+    Value<String>? tabs,
+    Value<String>? themeMode,
+    Value<int>? timerDuration,
+    Value<int>? vibrate,
+    Value<int?>? warmupSets,
+    Value<int>? scrollableTabs,
+    Value<int>? showGraphXAxis,
+    Value<int>? showGraphLimit,
+    Value<String>? progressPosition,
+    Value<String>? defaultGraphMetric,
+    Value<String>? defaultGraphPeriod,
+    Value<int>? defaultGraphLimit,
+    Value<int>? defaultGraphTimeBasedXAxis,
+  }) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2331,8 +2671,9 @@ class SettingsCompanion extends UpdateCompanion<SettingsData> {
       map['default_graph_limit'] = Variable<int>(defaultGraphLimit.value);
     }
     if (defaultGraphTimeBasedXAxis.present) {
-      map['default_graph_time_based_x_axis'] =
-          Variable<int>(defaultGraphTimeBasedXAxis.value);
+      map['default_graph_time_based_x_axis'] = Variable<int>(
+        defaultGraphTimeBasedXAxis.value,
+      );
     }
     return map;
   }
@@ -2392,51 +2733,83 @@ class PlanExercises extends Table
   final String? _alias;
   PlanExercises(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<int> enabled = GeneratedColumn<int>(
-      'enabled', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL CHECK (enabled IN (0, 1))');
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (enabled IN (0, 1))',
+  );
   late final GeneratedColumn<int> timers = GeneratedColumn<int>(
-      'timers', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 1 CHECK (timers IN (0, 1))',
-      defaultValue: const CustomExpression('1'));
+    'timers',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 1 CHECK (timers IN (0, 1))',
+    defaultValue: const CustomExpression('1'),
+  );
   late final GeneratedColumn<String> exercise = GeneratedColumn<String>(
-      'exercise', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL REFERENCES gym_sets(name)');
+    'exercise',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES gym_sets(name)',
+  );
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT',
+  );
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'max_sets',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
-      'plan_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL REFERENCES plans(id)');
+    'plan_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES plans(id)',
+  );
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
-      'warmup_sets', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'warmup_sets',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
-      'sequence', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0',
-      defaultValue: const CustomExpression('0'));
+    'sequence',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [enabled, timers, exercise, id, maxSets, planId, warmupSets, sequence];
+  List<GeneratedColumn> get $columns => [
+    enabled,
+    timers,
+    exercise,
+    id,
+    maxSets,
+    planId,
+    warmupSets,
+    sequence,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2448,22 +2821,38 @@ class PlanExercises extends Table
   PlanExercisesData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlanExercisesData(
-      enabled: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}enabled'])!,
-      timers: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}timers'])!,
-      exercise: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}exercise'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets']),
-      planId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}plan_id'])!,
-      warmupSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
-      sequence: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sequence'])!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}enabled'],
+      )!,
+      timers: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timers'],
+      )!,
+      exercise: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}exercise'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      maxSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_sets'],
+      ),
+      planId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}plan_id'],
+      )!,
+      warmupSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}warmup_sets'],
+      ),
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      )!,
     );
   }
 
@@ -2486,15 +2875,16 @@ class PlanExercisesData extends DataClass
   final int planId;
   final int? warmupSets;
   final int sequence;
-  const PlanExercisesData(
-      {required this.enabled,
-      required this.timers,
-      required this.exercise,
-      required this.id,
-      this.maxSets,
-      required this.planId,
-      this.warmupSets,
-      required this.sequence});
+  const PlanExercisesData({
+    required this.enabled,
+    required this.timers,
+    required this.exercise,
+    required this.id,
+    this.maxSets,
+    required this.planId,
+    this.warmupSets,
+    required this.sequence,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2530,8 +2920,10 @@ class PlanExercisesData extends DataClass
     );
   }
 
-  factory PlanExercisesData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlanExercisesData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlanExercisesData(
       enabled: serializer.fromJson<int>(json['enabled']),
@@ -2559,25 +2951,25 @@ class PlanExercisesData extends DataClass
     };
   }
 
-  PlanExercisesData copyWith(
-          {int? enabled,
-          int? timers,
-          String? exercise,
-          int? id,
-          Value<int?> maxSets = const Value.absent(),
-          int? planId,
-          Value<int?> warmupSets = const Value.absent(),
-          int? sequence}) =>
-      PlanExercisesData(
-        enabled: enabled ?? this.enabled,
-        timers: timers ?? this.timers,
-        exercise: exercise ?? this.exercise,
-        id: id ?? this.id,
-        maxSets: maxSets.present ? maxSets.value : this.maxSets,
-        planId: planId ?? this.planId,
-        warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
-        sequence: sequence ?? this.sequence,
-      );
+  PlanExercisesData copyWith({
+    int? enabled,
+    int? timers,
+    String? exercise,
+    int? id,
+    Value<int?> maxSets = const Value.absent(),
+    int? planId,
+    Value<int?> warmupSets = const Value.absent(),
+    int? sequence,
+  }) => PlanExercisesData(
+    enabled: enabled ?? this.enabled,
+    timers: timers ?? this.timers,
+    exercise: exercise ?? this.exercise,
+    id: id ?? this.id,
+    maxSets: maxSets.present ? maxSets.value : this.maxSets,
+    planId: planId ?? this.planId,
+    warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+    sequence: sequence ?? this.sequence,
+  );
   PlanExercisesData copyWithCompanion(PlanExercisesCompanion data) {
     return PlanExercisesData(
       enabled: data.enabled.present ? data.enabled.value : this.enabled,
@@ -2586,8 +2978,9 @@ class PlanExercisesData extends DataClass
       id: data.id.present ? data.id.value : this.id,
       maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
       planId: data.planId.present ? data.planId.value : this.planId,
-      warmupSets:
-          data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+      warmupSets: data.warmupSets.present
+          ? data.warmupSets.value
+          : this.warmupSets,
       sequence: data.sequence.present ? data.sequence.value : this.sequence,
     );
   }
@@ -2609,7 +3002,15 @@ class PlanExercisesData extends DataClass
 
   @override
   int get hashCode => Object.hash(
-      enabled, timers, exercise, id, maxSets, planId, warmupSets, sequence);
+    enabled,
+    timers,
+    exercise,
+    id,
+    maxSets,
+    planId,
+    warmupSets,
+    sequence,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2652,9 +3053,9 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
     required int planId,
     this.warmupSets = const Value.absent(),
     this.sequence = const Value.absent(),
-  })  : enabled = Value(enabled),
-        exercise = Value(exercise),
-        planId = Value(planId);
+  }) : enabled = Value(enabled),
+       exercise = Value(exercise),
+       planId = Value(planId);
   static Insertable<PlanExercisesData> custom({
     Expression<int>? enabled,
     Expression<int>? timers,
@@ -2677,15 +3078,16 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
     });
   }
 
-  PlanExercisesCompanion copyWith(
-      {Value<int>? enabled,
-      Value<int>? timers,
-      Value<String>? exercise,
-      Value<int>? id,
-      Value<int?>? maxSets,
-      Value<int>? planId,
-      Value<int?>? warmupSets,
-      Value<int>? sequence}) {
+  PlanExercisesCompanion copyWith({
+    Value<int>? enabled,
+    Value<int>? timers,
+    Value<String>? exercise,
+    Value<int>? id,
+    Value<int?>? maxSets,
+    Value<int>? planId,
+    Value<int?>? warmupSets,
+    Value<int>? sequence,
+  }) {
     return PlanExercisesCompanion(
       enabled: enabled ?? this.enabled,
       timers: timers ?? this.timers,
@@ -2750,10 +3152,13 @@ class Metadata extends Table with TableInfo<Metadata, MetadataData> {
   final String? _alias;
   Metadata(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<int> buildNumber = GeneratedColumn<int>(
-      'build_number', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'build_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   @override
   List<GeneratedColumn> get $columns => [buildNumber];
   @override
@@ -2767,8 +3172,10 @@ class Metadata extends Table with TableInfo<Metadata, MetadataData> {
   MetadataData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return MetadataData(
-      buildNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}build_number'])!,
+      buildNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}build_number'],
+      )!,
     );
   }
 
@@ -2792,13 +3199,13 @@ class MetadataData extends DataClass implements Insertable<MetadataData> {
   }
 
   MetadataCompanion toCompanion(bool nullToAbsent) {
-    return MetadataCompanion(
-      buildNumber: Value(buildNumber),
-    );
+    return MetadataCompanion(buildNumber: Value(buildNumber));
   }
 
-  factory MetadataData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory MetadataData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MetadataData(
       buildNumber: serializer.fromJson<int>(json['buildNumber']),
@@ -2812,13 +3219,13 @@ class MetadataData extends DataClass implements Insertable<MetadataData> {
     };
   }
 
-  MetadataData copyWith({int? buildNumber}) => MetadataData(
-        buildNumber: buildNumber ?? this.buildNumber,
-      );
+  MetadataData copyWith({int? buildNumber}) =>
+      MetadataData(buildNumber: buildNumber ?? this.buildNumber);
   MetadataData copyWithCompanion(MetadataCompanion data) {
     return MetadataData(
-      buildNumber:
-          data.buildNumber.present ? data.buildNumber.value : this.buildNumber,
+      buildNumber: data.buildNumber.present
+          ? data.buildNumber.value
+          : this.buildNumber,
     );
   }
 
@@ -2895,43 +3302,67 @@ class GraphPreferences extends Table
   final String? _alias;
   GraphPreferences(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   late final GeneratedColumn<String> metric = GeneratedColumn<String>(
-      'metric', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT \'bestWeight\'',
-      defaultValue: const CustomExpression('\'bestWeight\''));
+    'metric',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT \'bestWeight\'',
+    defaultValue: const CustomExpression('\'bestWeight\''),
+  );
   late final GeneratedColumn<String> period = GeneratedColumn<String>(
-      'period', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT \'day\'',
-      defaultValue: const CustomExpression('\'day\''));
+    'period',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT \'day\'',
+    defaultValue: const CustomExpression('\'day\''),
+  );
   late final GeneratedColumn<int> limit = GeneratedColumn<int>(
-      'limit', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 20',
-      defaultValue: const CustomExpression('20'));
+    'limit',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 20',
+    defaultValue: const CustomExpression('20'),
+  );
   late final GeneratedColumn<int> timeBasedXAxis = GeneratedColumn<int>(
-      'time_based_x_axis', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      $customConstraints:
-          'NOT NULL DEFAULT 0 CHECK (time_based_x_axis IN (0, 1))',
-      defaultValue: const CustomExpression('0'));
+    'time_based_x_axis',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 0 CHECK (time_based_x_axis IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'NULL');
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [name, metric, period, limit, timeBasedXAxis, notes];
+  List<GeneratedColumn> get $columns => [
+    name,
+    metric,
+    period,
+    limit,
+    timeBasedXAxis,
+    notes,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2943,18 +3374,30 @@ class GraphPreferences extends Table
   GraphPreferencesData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GraphPreferencesData(
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      metric: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}metric'])!,
-      period: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}period'])!,
-      limit: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}limit'])!,
-      timeBasedXAxis: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}time_based_x_axis'])!,
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      metric: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metric'],
+      )!,
+      period: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}period'],
+      )!,
+      limit: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}limit'],
+      )!,
+      timeBasedXAxis: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}time_based_x_axis'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
     );
   }
 
@@ -2977,13 +3420,14 @@ class GraphPreferencesData extends DataClass
   final int limit;
   final int timeBasedXAxis;
   final String? notes;
-  const GraphPreferencesData(
-      {required this.name,
-      required this.metric,
-      required this.period,
-      required this.limit,
-      required this.timeBasedXAxis,
-      this.notes});
+  const GraphPreferencesData({
+    required this.name,
+    required this.metric,
+    required this.period,
+    required this.limit,
+    required this.timeBasedXAxis,
+    this.notes,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3005,13 +3449,16 @@ class GraphPreferencesData extends DataClass
       period: Value(period),
       limit: Value(limit),
       timeBasedXAxis: Value(timeBasedXAxis),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
     );
   }
 
-  factory GraphPreferencesData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GraphPreferencesData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GraphPreferencesData(
       name: serializer.fromJson<String>(json['name']),
@@ -3035,21 +3482,21 @@ class GraphPreferencesData extends DataClass
     };
   }
 
-  GraphPreferencesData copyWith(
-          {String? name,
-          String? metric,
-          String? period,
-          int? limit,
-          int? timeBasedXAxis,
-          Value<String?> notes = const Value.absent()}) =>
-      GraphPreferencesData(
-        name: name ?? this.name,
-        metric: metric ?? this.metric,
-        period: period ?? this.period,
-        limit: limit ?? this.limit,
-        timeBasedXAxis: timeBasedXAxis ?? this.timeBasedXAxis,
-        notes: notes.present ? notes.value : this.notes,
-      );
+  GraphPreferencesData copyWith({
+    String? name,
+    String? metric,
+    String? period,
+    int? limit,
+    int? timeBasedXAxis,
+    Value<String?> notes = const Value.absent(),
+  }) => GraphPreferencesData(
+    name: name ?? this.name,
+    metric: metric ?? this.metric,
+    period: period ?? this.period,
+    limit: limit ?? this.limit,
+    timeBasedXAxis: timeBasedXAxis ?? this.timeBasedXAxis,
+    notes: notes.present ? notes.value : this.notes,
+  );
   GraphPreferencesData copyWithCompanion(GraphPreferencesCompanion data) {
     return GraphPreferencesData(
       name: data.name.present ? data.name.value : this.name,
@@ -3137,14 +3584,15 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreferencesData> {
     });
   }
 
-  GraphPreferencesCompanion copyWith(
-      {Value<String>? name,
-      Value<String>? metric,
-      Value<String>? period,
-      Value<int>? limit,
-      Value<int>? timeBasedXAxis,
-      Value<String?>? notes,
-      Value<int>? rowid}) {
+  GraphPreferencesCompanion copyWith({
+    Value<String>? name,
+    Value<String>? metric,
+    Value<String>? period,
+    Value<int>? limit,
+    Value<int>? timeBasedXAxis,
+    Value<String?>? notes,
+    Value<int>? rowid,
+  }) {
     return GraphPreferencesCompanion(
       name: name ?? this.name,
       metric: metric ?? this.metric,
@@ -3210,8 +3658,14 @@ class DatabaseAtV51 extends GeneratedDatabase {
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [plans, gymSets, settings, planExercises, metadata, graphPreferences];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    plans,
+    gymSets,
+    settings,
+    planExercises,
+    metadata,
+    graphPreferences,
+  ];
   @override
   int get schemaVersion => 51;
 }

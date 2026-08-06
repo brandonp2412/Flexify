@@ -31,10 +31,11 @@ void main() async {
         created: DateTime.now(),
       ),
     );
-    final gymSet = await (db.gymSets.select()
-          ..where((u) => u.id.equals(id))
-          ..limit(1))
-        .getSingle();
+    final gymSet =
+        await (db.gymSets.select()
+              ..where((u) => u.id.equals(id))
+              ..limit(1))
+            .getSingle();
     expect(gymSet.name, 'Bench press');
   });
 
@@ -48,19 +49,19 @@ void main() async {
         created: DateTime.now(),
       ),
     );
-    final gymSet = await (db.gymSets.select()
-          ..where((u) => u.id.equals(id))
-          ..limit(1))
-        .getSingle();
+    final gymSet =
+        await (db.gymSets.select()
+              ..where((u) => u.id.equals(id))
+              ..limit(1))
+            .getSingle();
     await (db.gymSets.update()..where((u) => u.id.equals(id))).write(
-      gymSet.copyWith(
-        name: 'New name',
-      ),
+      gymSet.copyWith(name: 'New name'),
     );
-    final updatedSet = await (db.gymSets.select()
-          ..where((u) => u.id.equals(id))
-          ..limit(1))
-        .getSingle();
+    final updatedSet =
+        await (db.gymSets.select()
+              ..where((u) => u.id.equals(id))
+              ..limit(1))
+            .getSingle();
     expect(updatedSet.name, 'New name');
   });
 
@@ -75,10 +76,11 @@ void main() async {
       ),
     );
     await (db.gymSets.deleteWhere((tbl) => tbl.id.equals(id)));
-    final gymSet = await (db.gymSets.select()
-          ..where((u) => u.id.equals(id))
-          ..limit(1))
-        .getSingleOrNull();
+    final gymSet =
+        await (db.gymSets.select()
+              ..where((u) => u.id.equals(id))
+              ..limit(1))
+            .getSingleOrNull();
     expect(gymSet, null);
   });
 }

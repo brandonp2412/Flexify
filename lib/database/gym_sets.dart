@@ -43,35 +43,31 @@ Future<List<CardioData>> getCardioData({
 }) async {
   Expression<String> col = getCreated(period);
 
-  final results = await (db.selectOnly(db.gymSets)
-        ..addColumns([
-          db.gymSets.duration.sum(),
-          db.gymSets.distance.sum(),
-          db.gymSets.distance.sum() / db.gymSets.duration.sum(),
-          db.gymSets.incline.avg(),
-          inclineAdjustedPace,
-          db.gymSets.created,
-          db.gymSets.unit,
-        ])
-        ..where(db.gymSets.name.equals(name))
-        ..where(db.gymSets.hidden.equals(false))
-        ..where(
-          db.gymSets.created.isBiggerOrEqualValue(start ?? DateTime(0)),
-        )
-        ..where(
-          db.gymSets.created.isSmallerThanValue(
-            end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
-          ),
-        )
-        ..orderBy([
-          OrderingTerm(
-            expression: col,
-            mode: OrderingMode.desc,
-          ),
-        ])
-        ..limit(limit)
-        ..groupBy([col]))
-      .get();
+  final results =
+      await (db.selectOnly(db.gymSets)
+            ..addColumns([
+              db.gymSets.duration.sum(),
+              db.gymSets.distance.sum(),
+              db.gymSets.distance.sum() / db.gymSets.duration.sum(),
+              db.gymSets.incline.avg(),
+              inclineAdjustedPace,
+              db.gymSets.created,
+              db.gymSets.unit,
+            ])
+            ..where(db.gymSets.name.equals(name))
+            ..where(db.gymSets.hidden.equals(false))
+            ..where(
+              db.gymSets.created.isBiggerOrEqualValue(start ?? DateTime(0)),
+            )
+            ..where(
+              db.gymSets.created.isSmallerThanValue(
+                end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
+              ),
+            )
+            ..orderBy([OrderingTerm(expression: col, mode: OrderingMode.desc)])
+            ..limit(limit)
+            ..groupBy([col]))
+          .get();
 
   List<CardioData> list = [];
 
@@ -161,7 +157,7 @@ Future<List<Rpm>> getRpms() async {
         (result) => (
           name: result.read<String>('name'),
           rpm: result.read<double>('rpm'),
-          weight: result.read<double>('weight')
+          weight: result.read<double>('weight'),
         ),
       )
       .toList();
@@ -252,25 +248,14 @@ Future<List<StrengthData>> getStrengthData({
     ])
     ..where(db.gymSets.name.equals(name))
     ..where(db.gymSets.hidden.equals(false))
-    ..orderBy([
-      OrderingTerm(
-        expression: col,
-        mode: OrderingMode.desc,
-      ),
-    ])
+    ..orderBy([OrderingTerm(expression: col, mode: OrderingMode.desc)])
     ..limit(limit)
     ..groupBy([col]));
 
   if (start != null)
-    query = query
-      ..where(
-        db.gymSets.created.isBiggerOrEqualValue(start),
-      );
+    query = query..where(db.gymSets.created.isBiggerOrEqualValue(start));
   if (end != null)
-    query = query
-      ..where(
-        db.gymSets.created.isSmallerThanValue(end),
-      );
+    query = query..where(db.gymSets.created.isSmallerThanValue(end));
 
   final results = await query.get();
 
@@ -335,25 +320,14 @@ Future<List<StrengthData>> getGlobalData({
       db.gymSets.category,
     ])
     ..where(db.gymSets.hidden.equals(false) & db.gymSets.category.isNotNull())
-    ..orderBy([
-      OrderingTerm(
-        expression: col,
-        mode: OrderingMode.desc,
-      ),
-    ])
+    ..orderBy([OrderingTerm(expression: col, mode: OrderingMode.desc)])
     ..limit(limit)
     ..groupBy([db.gymSets.category, col]));
 
   if (start != null)
-    query = query
-      ..where(
-        db.gymSets.created.isBiggerOrEqualValue(start),
-      );
+    query = query..where(db.gymSets.created.isBiggerOrEqualValue(start));
   if (end != null)
-    query = query
-      ..where(
-        db.gymSets.created.isSmallerThanValue(end),
-      );
+    query = query..where(db.gymSets.created.isSmallerThanValue(end));
 
   final results = await query.get();
 
@@ -392,38 +366,40 @@ Future<bool> isBest(GymSet gymSet) async {
     if (gymSet.duration == 0) return false;
     // Compare per-set pace (distance/duration) to find the actual best, not an average.
     final paceExpr = db.gymSets.distance / db.gymSets.duration;
-    final best = await (db.selectOnly(db.gymSets)
-          ..addColumns([paceExpr])
-          ..where(db.gymSets.name.equals(gymSet.name))
-          ..where(db.gymSets.id.isNotValue(gymSet.id))
-          ..where(db.gymSets.hidden.equals(false))
-          ..where(db.gymSets.duration.isBiggerThanValue(0))
-          ..orderBy([
-            OrderingTerm(expression: paceExpr, mode: OrderingMode.desc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
+    final best =
+        await (db.selectOnly(db.gymSets)
+              ..addColumns([paceExpr])
+              ..where(db.gymSets.name.equals(gymSet.name))
+              ..where(db.gymSets.id.isNotValue(gymSet.id))
+              ..where(db.gymSets.hidden.equals(false))
+              ..where(db.gymSets.duration.isBiggerThanValue(0))
+              ..orderBy([
+                OrderingTerm(expression: paceExpr, mode: OrderingMode.desc),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
     if (best == null) return false;
     final bestPace = best.read(paceExpr) ?? 0;
     return gymSet.distance / gymSet.duration > bestPace;
   } else {
-    final result = await (db.selectOnly(db.gymSets)
-          ..addColumns([db.gymSets.weight, db.gymSets.reps])
-          ..where(db.gymSets.name.equals(gymSet.name))
-          ..where(db.gymSets.id.isNotValue(gymSet.id))
-          ..where(db.gymSets.hidden.equals(false))
-          ..orderBy([
-            OrderingTerm(
-              expression: db.gymSets.weight,
-              mode: OrderingMode.desc,
-            ),
-            OrderingTerm(
-              expression: db.gymSets.reps,
-              mode: OrderingMode.desc,
-            ),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
+    final result =
+        await (db.selectOnly(db.gymSets)
+              ..addColumns([db.gymSets.weight, db.gymSets.reps])
+              ..where(db.gymSets.name.equals(gymSet.name))
+              ..where(db.gymSets.id.isNotValue(gymSet.id))
+              ..where(db.gymSets.hidden.equals(false))
+              ..orderBy([
+                OrderingTerm(
+                  expression: db.gymSets.weight,
+                  mode: OrderingMode.desc,
+                ),
+                OrderingTerm(
+                  expression: db.gymSets.reps,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
     if (result == null) return false;
     final weight = result.read(db.gymSets.weight)!;
     final reps = result.read(db.gymSets.reps)!;

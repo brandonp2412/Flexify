@@ -68,9 +68,7 @@ class TimerState extends ChangeNotifier {
     bool enableSound,
   ) async {
     starting = false;
-    final updated = timer.increaseDuration(
-      const Duration(minutes: 1),
-    );
+    final updated = timer.increaseDuration(const Duration(minutes: 1));
     updateTimer(updated);
     final args = {
       'timestamp': updated.getTimeStamp(),
@@ -138,8 +136,9 @@ class TimerState extends ChangeNotifier {
   Future<FlutterLocalNotificationsPlugin?> _getNotifications() async {
     if (_notifications != null) return _notifications;
 
-    const linux =
-        LinuxInitializationSettings(defaultActionName: 'Open notification');
+    const linux = LinuxInitializationSettings(
+      defaultActionName: 'Open notification',
+    );
     const darwin = DarwinInitializationSettings();
     const init = InitializationSettings(
       linux: linux,

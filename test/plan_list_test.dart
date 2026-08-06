@@ -19,10 +19,7 @@ void main() async {
     await db.planExercises.deleteAll();
     await db.plans.deleteAll();
     final planId = await db.plans.insertOne(
-      PlansCompanion.insert(
-        id: Value(1),
-        days: 'Monday',
-      ),
+      PlansCompanion.insert(id: Value(1), days: 'Monday'),
     );
 
     await db.planExercises.insertOne(
@@ -45,13 +42,7 @@ void main() async {
           home: Scaffold(
             body: PlansList(
               scroll: scroll,
-              plans: [
-                Plan(
-                  days: "Monday",
-                  id: planId,
-                  sequence: 2,
-                ),
-              ],
+              plans: [Plan(days: "Monday", id: planId, sequence: 2)],
               onSelect: (value) {},
               selected: const {},
               navKey: GlobalKey(),

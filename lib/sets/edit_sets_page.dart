@@ -53,9 +53,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(
-          'Edit ${widget.ids.length} sets',
-        ),
+        title: Text('Edit ${widget.ids.length} sets'),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
@@ -81,8 +79,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
                           Navigator.pop(dialogContext);
-                          await db.gymSets
-                              .deleteWhere((u) => u.id.isIn(widget.ids));
+                          await db.gymSets.deleteWhere(
+                            (u) => u.id.isIn(widget.ids),
+                          );
                           if (context.mounted) Navigator.pop(context);
                         },
                       ),
@@ -102,8 +101,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
             children: [
               TextField(
                 controller: name,
-                decoration:
-                    InputDecoration(labelText: "Name", hintText: oldNames),
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  hintText: oldNames,
+                ),
                 textCapitalization: TextCapitalization.sentences,
               ),
               ListTile(
@@ -204,8 +205,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
               if (cardio == false || cardio == null) ...[
                 TextFormField(
                   controller: reps,
-                  decoration:
-                      InputDecoration(labelText: 'Reps', hintText: oldReps),
+                  decoration: InputDecoration(
+                    labelText: 'Reps',
+                    hintText: oldReps,
+                  ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
@@ -366,40 +369,43 @@ class _EditSetsPageState extends State<EditSetsPage> {
           ..limit(3))
         .get()
         .then((gymSets) {
-      setState(() {
-        cardio = gymSets.first.cardio;
-        oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
-        oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
-        oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-        oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-        if (settings.longDateFormat == 'timeago')
-          oldCreated = gymSets
-              .map(
-                (gymSet) => timeago.format(gymSet.created),
-              )
-              .join(', ');
-        else
-          oldCreated = gymSets
-              .map(
-                (gymSet) =>
-                    DateFormat(settings.longDateFormat).format(gymSet.created),
-              )
-              .join(', ');
-        oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
-        oldMin = gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
-        oldSec = gymSets
-            .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
-            .join(', ');
-        final incs =
-            gymSets.map((gymSet) => gymSet.incline).whereType<int>().join(', ');
-        oldInc = incs.isEmpty ? null : incs;
-        final cats = gymSets
-            .map((gymSet) => gymSet.category)
-            .whereType<String>()
-            .join(', ');
-        oldCat = cats.isEmpty ? null : cats;
-      });
-    });
+          setState(() {
+            cardio = gymSets.first.cardio;
+            oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
+            oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
+            oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
+            oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+            if (settings.longDateFormat == 'timeago')
+              oldCreated = gymSets
+                  .map((gymSet) => timeago.format(gymSet.created))
+                  .join(', ');
+            else
+              oldCreated = gymSets
+                  .map(
+                    (gymSet) => DateFormat(
+                      settings.longDateFormat,
+                    ).format(gymSet.created),
+                  )
+                  .join(', ');
+            oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
+            oldMin = gymSets
+                .map((gymSet) => gymSet.duration.floor())
+                .join(', ');
+            oldSec = gymSets
+                .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
+                .join(', ');
+            final incs = gymSets
+                .map((gymSet) => gymSet.incline)
+                .whereType<int>()
+                .join(', ');
+            oldInc = incs.isEmpty ? null : incs;
+            final cats = gymSets
+                .map((gymSet) => gymSet.category)
+                .whereType<String>()
+                .join(', ');
+            oldCat = cats.isEmpty ? null : cats;
+          });
+        });
   }
 
   Future<void> selectTime(DateTime pickedDate) async {
@@ -438,7 +444,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
       weight: Value.absentIfNull(double.tryParse(weight.text)),
       bodyWeight: Value.absentIfNull(double.tryParse(body.text)),
       distance: Value.absentIfNull(double.tryParse(distance.text)),
-      duration: int.tryParse(seconds.text) == null &&
+      duration:
+          int.tryParse(seconds.text) == null &&
               int.tryParse(minutes.text) == null
           ? const Value.absent()
           : Value(
@@ -448,8 +455,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
       category: Value.absentIfNull(category),
     );
 
-    await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids)))
-        .write(gymSet);
+    await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(
+      gymSet,
+    );
     planState.updateDefaults();
   }
 

@@ -61,11 +61,7 @@ class _TimerPageWidget extends StatefulWidget {
   final int? total;
   final int? progress;
 
-  const _TimerPageWidget({
-    required this.timerState,
-    this.total,
-    this.progress,
-  });
+  const _TimerPageWidget({required this.timerState, this.total, this.progress});
 
   @override
   State<_TimerPageWidget> createState() => _TimerPageWidgetState();
@@ -188,9 +184,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
           IconButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const SettingsPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
               );
             },
             icon: const Icon(Icons.settings),
@@ -221,15 +215,14 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
                 label: const Text("Stop"),
               )
             : countdownActive
-                ? const SizedBox()
-                : AnimatedFab(
-                    onPressed:
-                        _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
-                    icon: Icon(
-                      _stopwatchRunning ? Icons.pause : Icons.play_arrow,
-                    ),
-                    label: Text(_stopwatchRunning ? "Pause" : "Start"),
-                  ),
+            ? const SizedBox()
+            : AnimatedFab(
+                onPressed: _stopwatchRunning
+                    ? _pauseStopwatch
+                    : _startStopwatch,
+                icon: Icon(_stopwatchRunning ? Icons.pause : Icons.play_arrow),
+                label: Text(_stopwatchRunning ? "Pause" : "Start"),
+              ),
       ),
     );
   }

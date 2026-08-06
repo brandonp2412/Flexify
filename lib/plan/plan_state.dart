@@ -188,8 +188,7 @@ class PlanState extends ChangeNotifier {
     // reset at local midnight. A rolling window was used here previously,
     // making counts leak across days:
     // https://github.com/brandonp2412/Flexify/issues/313
-    final count = CustomExpression<int>(
-      """
+    final count = CustomExpression<int>("""
       COUNT(
         CASE
           WHEN DATE(created, 'unixepoch', 'localtime') = DATE('now', 'localtime')
@@ -198,29 +197,30 @@ class PlanState extends ChangeNotifier {
           THEN 1
         END
       )
-   """,
-    );
+   """);
 
-    final results = await (db.selectOnly(db.planExercises)
-          ..addColumns([
-            db.gymSets.name,
-            count,
-            db.planExercises.maxSets,
-            db.gymSets.restMs,
-            db.planExercises.warmupSets,
-            db.planExercises.timers,
-          ])
-          ..join([
-            innerJoin(
-              db.gymSets,
-              db.gymSets.name.equalsExp(db.planExercises.exercise),
-            ),
-          ])
-          ..where(
-            db.planExercises.planId.equals(planId) & db.planExercises.enabled,
-          )
-          ..groupBy([db.gymSets.name]))
-        .get();
+    final results =
+        await (db.selectOnly(db.planExercises)
+              ..addColumns([
+                db.gymSets.name,
+                count,
+                db.planExercises.maxSets,
+                db.gymSets.restMs,
+                db.planExercises.warmupSets,
+                db.planExercises.timers,
+              ])
+              ..join([
+                innerJoin(
+                  db.gymSets,
+                  db.gymSets.name.equalsExp(db.planExercises.exercise),
+                ),
+              ])
+              ..where(
+                db.planExercises.planId.equals(planId) &
+                    db.planExercises.enabled,
+              )
+              ..groupBy([db.gymSets.name]))
+            .get();
     return results
         .map(
           (row) => (
@@ -235,11 +235,9 @@ class PlanState extends ChangeNotifier {
         .toList();
   }
 
-  Future<List<Plan>> getPlans() async => await (db.select(db.plans)
-        ..orderBy([
-          (u) => OrderingTerm(expression: u.sequence),
-        ]))
-      .get();
+  Future<List<Plan>> getPlans() async => await (db.select(
+    db.plans,
+  )..orderBy([(u) => OrderingTerm(expression: u.sequence)])).get();
 
   Future<void> updatePlans(List<Plan>? newPlans) async {
     if (newPlans != null)

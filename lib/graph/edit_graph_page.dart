@@ -23,8 +23,9 @@ class EditGraphPage extends StatefulWidget {
 }
 
 class _EditGraphPageState extends State<EditGraphPage> {
-  late final TextEditingController name =
-      TextEditingController(text: widget.name);
+  late final TextEditingController name = TextEditingController(
+    text: widget.name,
+  );
   final TextEditingController minutes = TextEditingController();
   final TextEditingController seconds = TextEditingController();
   final key = GlobalKey<FormState>();
@@ -38,9 +39,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text("Update all ${widget.name.toLowerCase()}"),
-      ),
+      appBar: AppBar(title: Text("Update all ${widget.name.toLowerCase()}")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
@@ -61,8 +60,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     child: TextFormField(
                       controller: minutes,
                       textInputAction: TextInputAction.next,
-                      decoration:
-                          const InputDecoration(labelText: "Rest minutes"),
+                      decoration: const InputDecoration(
+                        labelText: "Rest minutes",
+                      ),
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(minutes),
                       validator: (value) {
@@ -73,15 +73,14 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       },
                     ),
                   ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
+                  const SizedBox(width: 8.0),
                   Expanded(
                     child: TextFormField(
                       controller: seconds,
                       textInputAction: TextInputAction.next,
-                      decoration:
-                          const InputDecoration(labelText: "Rest seconds"),
+                      decoration: const InputDecoration(
+                        labelText: "Rest seconds",
+                      ),
                       keyboardType: TextInputType.number,
                       onTap: () {
                         selectAll(seconds);
@@ -107,8 +106,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       return Column(
                         children: [
                           DropdownButtonFormField(
-                            decoration:
-                                const InputDecoration(labelText: 'Category'),
+                            decoration: const InputDecoration(
+                              labelText: 'Category',
+                            ),
                             initialValue: category,
                             items: snapshot.data
                                 ?.map(
@@ -135,10 +135,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 decoration: const InputDecoration(labelText: 'Unit'),
                 initialValue: unit,
                 items: [
-                  const DropdownMenuItem(
-                    value: null,
-                    child: Text(""),
-                  ),
+                  const DropdownMenuItem(value: null, child: Text("")),
                   ...strengthUnitMenuItems,
                   ...cardioUnitMenuItems,
                 ],
@@ -154,8 +151,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   leading: cardio!
                       ? const Icon(Icons.sports_gymnastics)
                       : const Icon(Icons.fitness_center),
-                  title:
-                      cardio! ? const Text('Cardio') : const Text('Strength'),
+                  title: cardio!
+                      ? const Text('Cardio')
+                      : const Text('Strength'),
                   onTap: () {
                     setState(() {
                       cardio = !cardio!;
@@ -208,10 +206,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
                             File(image!),
                             errorBuilder: (context, error, stackTrace) =>
                                 TextButton.icon(
-                              label: const Text('Image error'),
-                              icon: const Icon(Icons.error),
-                              onPressed: () => pick(),
-                            ),
+                                  label: const Text('Image error'),
+                                  icon: const Icon(Icons.error),
+                                  onPressed: () => pick(),
+                                ),
                           ),
                         ],
                       ],
@@ -251,33 +249,36 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
         .write(
-      GymSetsCompanion(
-        name: name.text.isEmpty ? const Value.absent() : Value(name.text),
-        cardio: Value.absentIfNull(cardio),
-        unit: Value.absentIfNull(unit),
-        restMs: Value(duration?.inMilliseconds),
-        image: Value(image),
-        category: Value.absentIfNull(category),
-      ),
-    );
+          GymSetsCompanion(
+            name: name.text.isEmpty ? const Value.absent() : Value(name.text),
+            cardio: Value.absentIfNull(cardio),
+            unit: Value.absentIfNull(unit),
+            restMs: Value(duration?.inMilliseconds),
+            image: Value(image),
+            category: Value.absentIfNull(category),
+          ),
+        );
 
     await (db.planExercises.update()
           ..where((tbl) => tbl.exercise.equals(widget.name)))
         .write(
-      PlanExercisesCompanion(
-        exercise: name.text.isEmpty ? const Value.absent() : Value(name.text),
-      ),
-    );
+          PlanExercisesCompanion(
+            exercise: name.text.isEmpty
+                ? const Value.absent()
+                : Value(name.text),
+          ),
+        );
 
     if (!mounted) return;
     context.read<PlanState>().updatePlans(null);
   }
 
   Future<int> getCount() async {
-    final result = await (db.gymSets.selectOnly()
-          ..addColumns([db.gymSets.name.count()])
-          ..where(db.gymSets.name.equals(name.text)))
-        .getSingle();
+    final result =
+        await (db.gymSets.selectOnly()
+              ..addColumns([db.gymSets.name.count()])
+              ..where(db.gymSets.name.equals(name.text)))
+            .getSingle();
     return result.read(db.gymSets.name.count()) ?? 0;
   }
 
@@ -305,10 +306,11 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   Future<bool> mixedUnits() async {
-    final result = await (db.gymSets.selectOnly(distinct: true)
-          ..addColumns([db.gymSets.unit])
-          ..where(db.gymSets.name.equals(name.text)))
-        .get();
+    final result =
+        await (db.gymSets.selectOnly(distinct: true)
+              ..addColumns([db.gymSets.unit])
+              ..where(db.gymSets.name.equals(name.text)))
+            .get();
     return result.length > 1;
   }
 

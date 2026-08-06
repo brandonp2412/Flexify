@@ -16,11 +16,7 @@ class SessionSets extends StatefulWidget {
   final String exercise;
   final int planId;
 
-  const SessionSets({
-    super.key,
-    required this.exercise,
-    required this.planId,
-  });
+  const SessionSets({super.key, required this.exercise, required this.planId});
 
   @override
   State<SessionSets> createState() => _SessionSetsState();
@@ -39,23 +35,26 @@ class _SessionSetsState extends State<SessionSets> {
   void didUpdateWidget(SessionSets oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.exercise != widget.exercise ||
-        oldWidget.planId != widget.planId) _watch();
+        oldWidget.planId != widget.planId)
+      _watch();
   }
 
   void _watch() {
     final cutoff = DateTime.now().subtract(const Duration(hours: 24));
-    stream = (db.gymSets.select()
-          ..where(
-            (tbl) =>
-                tbl.name.equals(widget.exercise) &
-                tbl.planId.equals(widget.planId) &
-                tbl.hidden.equals(false) &
-                tbl.created.isBiggerOrEqualValue(cutoff),
-          )
-          ..orderBy([
-            (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
-          ]))
-        .watch();
+    stream =
+        (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.name.equals(widget.exercise) &
+                    tbl.planId.equals(widget.planId) &
+                    tbl.hidden.equals(false) &
+                    tbl.created.isBiggerOrEqualValue(cutoff),
+              )
+              ..orderBy([
+                (u) =>
+                    OrderingTerm(expression: u.created, mode: OrderingMode.asc),
+              ]))
+            .watch();
   }
 
   @override
@@ -83,10 +82,7 @@ class _SessionSetsState extends State<SessionSets> {
     return const Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 16.0),
-        _PlaceholderChip(),
-      ],
+      children: [SizedBox(height: 16.0), _PlaceholderChip()],
     );
   }
 
@@ -147,9 +143,7 @@ class _PlaceholderChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final barColor = theme.colorScheme.onSurfaceVariant.withValues(
-      alpha: 0.3,
-    );
+    final barColor = theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3);
     return Card(
       margin: EdgeInsets.zero,
       color: Colors.transparent,
@@ -165,11 +159,7 @@ class _PlaceholderChip extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _skeletonLine("Set 9", theme.textTheme.labelSmall, barColor),
-            _skeletonLine(
-              "8 kg × 50",
-              theme.textTheme.titleSmall,
-              barColor,
-            ),
+            _skeletonLine("8 kg × 50", theme.textTheme.titleSmall, barColor),
           ],
         ),
       ),
@@ -204,8 +194,10 @@ class _SetChip extends StatelessWidget {
             gymSet.unit == 'lb' ||
             gymSet.unit == 'stone')) {
       final minutes = gymSet.duration.floor();
-      final seconds =
-          ((gymSet.duration * 60) % 60).floor().toString().padLeft(2, '0');
+      final seconds = ((gymSet.duration * 60) % 60).floor().toString().padLeft(
+        2,
+        '0',
+      );
       return "${toString(gymSet.weight)} ${gymSet.unit} / $minutes:$seconds";
     }
     if (gymSet.cardio) return "${toString(gymSet.distance)} ${gymSet.unit}";

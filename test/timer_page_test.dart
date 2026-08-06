@@ -73,8 +73,9 @@ void main() {
     FlutterLocalNotificationsPlatform.instance =
         TestFlutterLocalNotificationsPlatform();
   });
-  testWidgets('TimerProgressIndicator maintains state after manual stop',
-      (WidgetTester tester) async {
+  testWidgets('TimerProgressIndicator maintains state after manual stop', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
 
     final timerState = TimerState();
@@ -132,9 +133,7 @@ void main() {
           ChangeNotifierProvider.value(value: settings),
         ],
         child: const MaterialApp(
-          home: Scaffold(
-            body: TimerProgressIndicator(),
-          ),
+          home: Scaffold(body: TimerProgressIndicator()),
         ),
       ),
     );
@@ -183,8 +182,9 @@ void main() {
     timerState.dispose();
   });
 
-  testWidgets('TimerPage displays stop button when timer is running',
-      (WidgetTester tester) async {
+  testWidgets('TimerPage displays stop button when timer is running', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
 
     final timerState = TimerState();
@@ -241,9 +241,7 @@ void main() {
           ChangeNotifierProvider.value(value: timerState),
           ChangeNotifierProvider.value(value: settings),
         ],
-        child: const MaterialApp(
-          home: TimerPage(),
-        ),
+        child: const MaterialApp(home: TimerPage()),
       ),
     );
 

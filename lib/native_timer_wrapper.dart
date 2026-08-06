@@ -9,12 +9,7 @@ class NativeTimerWrapper {
 
   final DateTime stamp;
 
-  NativeTimerWrapper(
-    this.total,
-    this.elapsed,
-    this.stamp,
-    this.state,
-  );
+  NativeTimerWrapper(this.total, this.elapsed, this.stamp, this.state);
 
   Duration getDuration() => total;
 
@@ -54,9 +49,9 @@ class NativeTimerWrapper {
   }
 
   static NativeTimerWrapper emptyTimer() => NativeTimerWrapper(
-        Duration.zero,
-        Duration.zero,
-        DateTime.now(),
-        NativeTimerState.expired,
-      );
+    Duration.zero,
+    Duration.zero,
+    DateTime.now(),
+    NativeTimerState.expired,
+  );
 }

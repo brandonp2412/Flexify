@@ -14,10 +14,8 @@ class FlexLine extends StatelessWidget {
   final bool? showTrendLine;
   final bool timeBasedXAxis;
   final LineTouchTooltipData Function() tooltipData;
-  final void Function(
-    FlTouchEvent event,
-    LineTouchResponse? touchResponse,
-  )? touchLine;
+  final void Function(FlTouchEvent event, LineTouchResponse? touchResponse)?
+  touchLine;
 
   const FlexLine({
     super.key,
@@ -88,9 +86,7 @@ class FlexLine extends StatelessWidget {
             nearestIndex >= 0 &&
             nearestIndex < data.length) {
           DateTime created = data[nearestIndex].created;
-          text = Text(
-            DateFormat(format).format(created),
-          );
+          text = Text(DateFormat(format).format(created));
         } else {
           text = const Text('');
         }
@@ -102,18 +98,13 @@ class FlexLine extends StatelessWidget {
 
       if (indices.contains(value.toInt())) {
         DateTime created = data[value.toInt()].created;
-        text = Text(
-          DateFormat(format).format(created),
-        );
+        text = Text(DateFormat(format).format(created));
       } else {
         text = const Text('');
       }
     }
 
-    return SideTitleWidget(
-      meta: meta,
-      child: text,
-    );
+    return SideTitleWidget(meta: meta, child: text);
   }
 
   @override
@@ -141,8 +132,9 @@ class FlexLine extends StatelessWidget {
       maxY = center + 0.5;
     }
 
-    List<FlSpot> trendSpots =
-        showTrendLine == true ? _calculateTrendLine(spots) : [];
+    List<FlSpot> trendSpots = showTrendLine == true
+        ? _calculateTrendLine(spots)
+        : [];
 
     List<LineChartBarData> lineBarsData = [
       LineChartBarData(
@@ -152,15 +144,14 @@ class FlexLine extends StatelessWidget {
         barWidth: 3,
         isStrokeCapRound: true,
         curveSmoothness: settings.curveSmoothness ?? 0.35,
-        dotData: const FlDotData(
-          show: false,
-        ),
+        dotData: const FlDotData(show: false),
         preventCurveOverShooting: true,
         belowBarData: BarAreaData(
           show: true,
           gradient: LinearGradient(
-            colors:
-                colors.map((color) => color.withValues(alpha: 0.3)).toList(),
+            colors: colors
+                .map((color) => color.withValues(alpha: 0.3))
+                .toList(),
           ),
         ),
       ),
@@ -174,9 +165,7 @@ class FlexLine extends StatelessWidget {
           color: Theme.of(context).colorScheme.secondary,
           barWidth: 2,
           isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
+          dotData: const FlDotData(show: false),
           dashArray: [5, 5],
           belowBarData: BarAreaData(show: false),
         ),

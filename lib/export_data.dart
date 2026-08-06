@@ -11,9 +11,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class ExportData extends StatelessWidget {
-  const ExportData({
-    super.key,
-  });
+  const ExportData({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,7 @@ class ExportData extends StatelessWidget {
                           'cardio',
                           'hidden',
                           'incline',
-                        ]
+                        ],
                       ];
                       for (var gymSet in gymSets) {
                         data.add([
@@ -83,11 +81,11 @@ class ExportData extends StatelessWidget {
                         ['id', 'days', 'title', 'sequence', 'exercises'],
                       ];
                       for (var plan in plans) {
-                        final planExercises = await (db.planExercises.select()
-                              ..where(
-                                (u) => u.planId.equals(plan.id) & u.enabled,
-                              ))
-                            .get();
+                        final planExercises =
+                            await (db.planExercises.select()..where(
+                                  (u) => u.planId.equals(plan.id) & u.enabled,
+                                ))
+                                .get();
                         data.add([
                           plan.id,
                           plan.days,
@@ -115,8 +113,9 @@ class ExportData extends StatelessWidget {
                     onTap: () async {
                       Navigator.pop(context);
                       final dbFolder = await getApplicationDocumentsDirectory();
-                      final file =
-                          File(p.join(dbFolder.path, 'flexify.sqlite'));
+                      final file = File(
+                        p.join(dbFolder.path, 'flexify.sqlite'),
+                      );
                       final bytes = await file.readAsBytes();
                       final result = await FilePicker.saveFile(
                         fileName: 'flexify.sqlite',
@@ -126,7 +125,8 @@ class ExportData extends StatelessWidget {
                       );
                       if (Platform.isMacOS ||
                           Platform.isWindows ||
-                          Platform.isLinux) await file.copy(result!);
+                          Platform.isLinux)
+                        await file.copy(result!);
                     },
                   ),
                 ],

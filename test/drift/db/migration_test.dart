@@ -210,8 +210,9 @@ void main() {
       },
       validateItems: (newDb) async {
         final gymSets = await newDb.select(newDb.gymSets).get();
-        final userSet = gymSets
-            .firstWhere((set) => set.name == 'Deadlift' && set.reps == 5.0);
+        final userSet = gymSets.firstWhere(
+          (set) => set.name == 'Deadlift' && set.reps == 5.0,
+        );
         expect(userSet.hidden, false);
         expect(userSet.weight, 100.0);
         expect(userSet.created, testDate);
@@ -220,76 +221,78 @@ void main() {
   });
 
   test(
-      'migration from v5 to v15 preserves data through multiple schema changes',
-      () async {
-    final testDate = DateTime(2024, 1, 1);
+    'migration from v5 to v15 preserves data through multiple schema changes',
+    () async {
+      final testDate = DateTime(2024, 1, 1);
 
-    final oldPlansData = <v5.PlansData>[
-      v5.PlansData(
-        id: 1,
-        sequence: 1,
-        exercises: 'Overhead Press,Rows',
-        days: 'Monday,Thursday',
-        title: 'Upper Body Strength',
-      ),
-    ];
+      final oldPlansData = <v5.PlansData>[
+        v5.PlansData(
+          id: 1,
+          sequence: 1,
+          exercises: 'Overhead Press,Rows',
+          days: 'Monday,Thursday',
+          title: 'Upper Body Strength',
+        ),
+      ];
 
-    final oldGymSetsData = <v5.GymSetsData>[
-      v5.GymSetsData(
-        id: 1,
-        name: 'Overhead Press',
-        reps: 6.0,
-        weight: 50.0,
-        unit: 'kg',
-        created: testDate,
-        hidden: false,
-      ),
-      v5.GymSetsData(
-        id: 2,
-        name: 'Rows',
-        reps: 8.0,
-        weight: 60.0,
-        unit: 'kg',
-        created: testDate,
-        hidden: true,
-      ),
-    ];
+      final oldGymSetsData = <v5.GymSetsData>[
+        v5.GymSetsData(
+          id: 1,
+          name: 'Overhead Press',
+          reps: 6.0,
+          weight: 50.0,
+          unit: 'kg',
+          created: testDate,
+          hidden: false,
+        ),
+        v5.GymSetsData(
+          id: 2,
+          name: 'Rows',
+          reps: 8.0,
+          weight: 60.0,
+          unit: 'kg',
+          created: testDate,
+          hidden: true,
+        ),
+      ];
 
-    await verifier.testWithDataIntegrity(
-      oldVersion: 5,
-      newVersion: 15,
-      createOld: v5.DatabaseAtV5.new,
-      createNew: v15.DatabaseAtV15.new,
-      openTestedDatabase: AppDatabase.new,
-      createItems: (batch, oldDb) {
-        batch.insertAll(oldDb.plans, oldPlansData);
-        batch.insertAll(oldDb.gymSets, oldGymSetsData);
-      },
-      validateItems: (newDb) async {
-        final plans = await newDb.select(newDb.plans).get();
-        expect(plans.length, 1);
-        expect(plans.first.title, 'Upper Body Strength');
-        expect(plans.first.exercises, 'Overhead Press,Rows');
-        expect(plans.first.sequence, 1);
+      await verifier.testWithDataIntegrity(
+        oldVersion: 5,
+        newVersion: 15,
+        createOld: v5.DatabaseAtV5.new,
+        createNew: v15.DatabaseAtV15.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.plans, oldPlansData);
+          batch.insertAll(oldDb.gymSets, oldGymSetsData);
+        },
+        validateItems: (newDb) async {
+          final plans = await newDb.select(newDb.plans).get();
+          expect(plans.length, 1);
+          expect(plans.first.title, 'Upper Body Strength');
+          expect(plans.first.exercises, 'Overhead Press,Rows');
+          expect(plans.first.sequence, 1);
 
-        final gymSets = await newDb.select(newDb.gymSets).get();
-        expect(gymSets.length, 2);
+          final gymSets = await newDb.select(newDb.gymSets).get();
+          expect(gymSets.length, 2);
 
-        final overheadPress =
-            gymSets.firstWhere((set) => set.name == 'Overhead Press');
-        expect(overheadPress.weight, 50.0);
-        expect(overheadPress.hidden, false);
-        expect(overheadPress.bodyWeight, 0.0); // Added in v6
-        expect(overheadPress.cardio, false); // Added in v8
+          final overheadPress = gymSets.firstWhere(
+            (set) => set.name == 'Overhead Press',
+          );
+          expect(overheadPress.weight, 50.0);
+          expect(overheadPress.hidden, false);
+          expect(overheadPress.bodyWeight, 0.0); // Added in v6
+          expect(overheadPress.cardio, false); // Added in v8
 
-        final rows = gymSets.firstWhere((set) => set.name == 'Rows');
-        expect(rows.weight, 60.0);
-        expect(rows.hidden, true);
-        expect(rows.bodyWeight, 0.0);
-        expect(rows.cardio, false);
-      },
-    );
-  });
+          final rows = gymSets.firstWhere((set) => set.name == 'Rows');
+          expect(rows.weight, 60.0);
+          expect(rows.hidden, true);
+          expect(rows.bodyWeight, 0.0);
+          expect(rows.cardio, false);
+        },
+      );
+    },
+  );
 
   test('migration from v15 to v16 adds settings table', () async {
     final oldPlansData = <v15.PlansData>[
@@ -547,8 +550,9 @@ void main() {
         expect(deadlift.planId, 1);
         expect(deadlift.cardio, false);
 
-        final romanianDeadlift =
-            gymSets.firstWhere((set) => set.name == 'Romanian Deadlift');
+        final romanianDeadlift = gymSets.firstWhere(
+          (set) => set.name == 'Romanian Deadlift',
+        );
         expect(romanianDeadlift.weight, 80.0);
         expect(romanianDeadlift.reps, 8.0);
         expect(romanianDeadlift.restMs, 120000);
@@ -556,8 +560,9 @@ void main() {
         final planExercises = await newDb.select(newDb.planExercises).get();
         expect(planExercises.length, 2);
         expect(
-          planExercises
-              .any((pe) => pe.exercise == 'Deadlift' && pe.maxSets == 3),
+          planExercises.any(
+            (pe) => pe.exercise == 'Deadlift' && pe.maxSets == 3,
+          ),
           true,
         );
         expect(
@@ -569,103 +574,94 @@ void main() {
 
         // Verify settings table exists (added in v16)
         final settings = await newDb.select(newDb.settings).get();
+        expect(settings.length, 0);
+      },
+    );
+  });
+
+  test('migration from v53 to v54 removes StopwatchPage from tabs', () async {
+    final oldSettingsData = <v53.SettingsCompanion>[
+      v53.SettingsCompanion.insert(
+        alarmSound: '',
+        cardioUnit: 'last-entry',
+        curveLines: 1,
+        explainedPermissions: 0,
+        groupHistory: 0,
+        longDateFormat: 'timeago',
+        maxSets: 3,
+        planTrailing: 'PlanTrailing.reorder',
+        restTimers: 0,
+        shortDateFormat: 'd/M/yy',
+        showUnits: 1,
+        strengthUnit: 'last-entry',
+        systemColors: 0,
+        tabs: const Value(
+          'HistoryPage,PlansPage,GraphsPage,TimerPage,StopwatchPage',
+        ),
+        themeMode: 'ThemeMode.system',
+        timerDuration: 210000,
+        vibrate: 1,
+      ),
+    ];
+
+    await verifier.testWithDataIntegrity(
+      oldVersion: 53,
+      newVersion: 54,
+      createOld: v53.DatabaseAtV53.new,
+      createNew: AppDatabase.new,
+      openTestedDatabase: AppDatabase.new,
+      createItems: (batch, oldDb) {
+        batch.insertAll(oldDb.settings, oldSettingsData);
+      },
+      validateItems: (newDb) async {
+        final settings = await newDb.select(newDb.settings).get();
+        expect(settings.length, 1);
         expect(
-          settings.length,
-          0,
+          settings.first.tabs,
+          'HistoryPage,PlansPage,GraphsPage,TimerPage',
         );
       },
     );
   });
 
-  test(
-    'migration from v53 to v54 removes StopwatchPage from tabs',
-    () async {
-      final oldSettingsData = <v53.SettingsCompanion>[
-        v53.SettingsCompanion.insert(
-          alarmSound: '',
-          cardioUnit: 'last-entry',
-          curveLines: 1,
-          explainedPermissions: 0,
-          groupHistory: 0,
-          longDateFormat: 'timeago',
-          maxSets: 3,
-          planTrailing: 'PlanTrailing.reorder',
-          restTimers: 0,
-          shortDateFormat: 'd/M/yy',
-          showUnits: 1,
-          strengthUnit: 'last-entry',
-          systemColors: 0,
-          tabs: const Value(
-            'HistoryPage,PlansPage,GraphsPage,TimerPage,StopwatchPage',
-          ),
-          themeMode: 'ThemeMode.system',
-          timerDuration: 210000,
-          vibrate: 1,
-        ),
-      ];
+  test('migration from v47 to v48 adds showGraphXAxis and showGraphLimit '
+      'without duplicate column errors', () async {
+    final oldSettingsData = <v47.SettingsCompanion>[
+      v47.SettingsCompanion.insert(
+        alarmSound: '',
+        cardioUnit: 'last-entry',
+        curveLines: 1,
+        explainedPermissions: 0,
+        groupHistory: 0,
+        longDateFormat: 'timeago',
+        maxSets: 3,
+        planTrailing: 'PlanTrailing.reorder',
+        restTimers: 0,
+        shortDateFormat: 'd/M/yy',
+        showUnits: 1,
+        strengthUnit: 'last-entry',
+        systemColors: 0,
+        themeMode: 'ThemeMode.system',
+        timerDuration: 210000,
+        vibrate: 1,
+      ),
+    ];
 
-      await verifier.testWithDataIntegrity(
-        oldVersion: 53,
-        newVersion: 54,
-        createOld: v53.DatabaseAtV53.new,
-        createNew: AppDatabase.new,
-        openTestedDatabase: AppDatabase.new,
-        createItems: (batch, oldDb) {
-          batch.insertAll(oldDb.settings, oldSettingsData);
-        },
-        validateItems: (newDb) async {
-          final settings = await newDb.select(newDb.settings).get();
-          expect(settings.length, 1);
-          expect(
-            settings.first.tabs,
-            'HistoryPage,PlansPage,GraphsPage,TimerPage',
-          );
-        },
-      );
-    },
-  );
-
-  test(
-    'migration from v47 to v48 adds showGraphXAxis and showGraphLimit '
-    'without duplicate column errors',
-    () async {
-      final oldSettingsData = <v47.SettingsCompanion>[
-        v47.SettingsCompanion.insert(
-          alarmSound: '',
-          cardioUnit: 'last-entry',
-          curveLines: 1,
-          explainedPermissions: 0,
-          groupHistory: 0,
-          longDateFormat: 'timeago',
-          maxSets: 3,
-          planTrailing: 'PlanTrailing.reorder',
-          restTimers: 0,
-          shortDateFormat: 'd/M/yy',
-          showUnits: 1,
-          strengthUnit: 'last-entry',
-          systemColors: 0,
-          themeMode: 'ThemeMode.system',
-          timerDuration: 210000,
-          vibrate: 1,
-        ),
-      ];
-
-      await verifier.testWithDataIntegrity(
-        oldVersion: 47,
-        newVersion: 48,
-        createOld: v47.DatabaseAtV47.new,
-        createNew: AppDatabase.new,
-        openTestedDatabase: AppDatabase.new,
-        createItems: (batch, oldDb) {
-          batch.insertAll(oldDb.settings, oldSettingsData);
-        },
-        validateItems: (newDb) async {
-          final settings = await newDb.select(newDb.settings).get();
-          expect(settings.length, 1);
-          expect(settings.first.showGraphXAxis, false);
-          expect(settings.first.showGraphLimit, true);
-        },
-      );
-    },
-  );
+    await verifier.testWithDataIntegrity(
+      oldVersion: 47,
+      newVersion: 48,
+      createOld: v47.DatabaseAtV47.new,
+      createNew: AppDatabase.new,
+      openTestedDatabase: AppDatabase.new,
+      createItems: (batch, oldDb) {
+        batch.insertAll(oldDb.settings, oldSettingsData);
+      },
+      validateItems: (newDb) async {
+        final settings = await newDb.select(newDb.settings).get();
+        expect(settings.length, 1);
+        expect(settings.first.showGraphXAxis, false);
+        expect(settings.first.showGraphLimit, true);
+      },
+    );
+  });
 }

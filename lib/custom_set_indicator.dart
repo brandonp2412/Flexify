@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomSetIndicator extends StatelessWidget {
-  const CustomSetIndicator({
-    super.key,
-    required this.count,
-    required this.max,
-  });
+  const CustomSetIndicator({super.key, required this.count, required this.max});
   final int count;
   final int max;
 

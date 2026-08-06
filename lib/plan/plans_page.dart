@@ -41,9 +41,7 @@ class PlansPageState extends State<PlansPage>
       child: Navigator(
         key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => _PlansPageWidget(
-            navKey: navKey,
-          ),
+          builder: (context) => _PlansPageWidget(navKey: navKey),
           settings: settings,
         ),
       ),
@@ -99,11 +97,12 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     final lowerSearch = search.toLowerCase();
 
     // Single query to find all plan IDs with a matching exercise
-    final matchingIds = await (db.planExercises.selectOnly()
-          ..addColumns([db.planExercises.planId])
-          ..where(db.planExercises.exercise.like('%$search%')))
-        .map((row) => row.read(db.planExercises.planId))
-        .get();
+    final matchingIds =
+        await (db.planExercises.selectOnly()
+              ..addColumns([db.planExercises.planId])
+              ..where(db.planExercises.exercise.like('%$search%')))
+            .map((row) => row.read(db.planExercises.planId))
+            .get();
 
     final matchingIdSet = matchingIds.whereType<int>().toSet();
 
@@ -149,22 +148,23 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               controller: _selection,
               onShare: () async {
                 final plans = (state?.plans)!
-                    .where(
-                      (plan) => _selection.contains(plan.id),
-                    )
+                    .where((plan) => _selection.contains(plan.id))
                     .toList();
 
                 final summaries = await Future.wait(
                   plans.map((plan) async {
                     final days = plan.days.split(',').join(', ');
-                    final planExercises = await (db.planExercises.select()
-                          ..where(
-                            (tbl) => tbl.planId.equals(plan.id) & tbl.enabled,
-                          )
-                          ..orderBy([
-                            (u) => drift.OrderingTerm(expression: u.sequence),
-                          ]))
-                        .get();
+                    final planExercises =
+                        await (db.planExercises.select()
+                              ..where(
+                                (tbl) =>
+                                    tbl.planId.equals(plan.id) & tbl.enabled,
+                              )
+                              ..orderBy([
+                                (u) =>
+                                    drift.OrderingTerm(expression: u.sequence),
+                              ]))
+                            .get();
                     final exercises = planExercises
                         .map((pe) => "- ${pe.exercise}")
                         .join('\n');
@@ -173,8 +173,9 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   }),
                 );
 
-                await SharePlus.instance
-                    .share(ShareParams(text: summaries.join('\n\n')));
+                await SharePlus.instance.share(
+                  ShareParams(text: summaries.join('\n\n')),
+                );
                 if (mounted)
                   setState(() {
                     _selection.clear();
@@ -194,25 +195,22 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 });
                 await db.plans.deleteWhere((tbl) => tbl.id.isIn(copy));
                 state.updatePlans(null);
-                await db.planExercises
-                    .deleteWhere((tbl) => tbl.planId.isIn(copy));
+                await db.planExercises.deleteWhere(
+                  (tbl) => tbl.planId.isIn(copy),
+                );
               },
               onSelectAll: () => setState(() {
                 _selection.setAll(filtered?.map((plan) => plan.id) ?? []);
               }),
               onEdit: () async {
                 final plan = state!.plans
-                    .firstWhere(
-                      (element) => element.id == _selection.first,
-                    )
+                    .firstWhere((element) => element.id == _selection.first)
                     .toCompanion(false);
                 await state!.setExercises(plan);
                 if (context.mounted)
                   await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => EditPlanPage(
-                        plan: plan,
-                      ),
+                      builder: (context) => EditPlanPage(plan: plan),
                     ),
                   );
               },
@@ -222,16 +220,12 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: () async {
-          const plan = PlansCompanion(
-            days: drift.Value(''),
-          );
+          const plan = PlansCompanion(days: drift.Value(''));
           await state!.setExercises(plan);
           if (context.mounted)
             await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const EditPlanPage(
-                  plan: plan,
-                ),
+                builder: (context) => const EditPlanPage(plan: plan),
               ),
             );
         },

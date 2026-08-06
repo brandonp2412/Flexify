@@ -53,9 +53,7 @@ class HistoryPageState extends State<HistoryPage>
       child: Navigator(
         key: navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => _HistoryPageWidget(
-            navigatorKey: navKey,
-          ),
+          builder: (context) => _HistoryPageWidget(navigatorKey: navKey),
           settings: settings,
         ),
       ),
@@ -105,9 +103,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         padding: EdgeInsets.only(top: appSearchHeight),
                         child: ListTile(
                           title: Text("No entries yet"),
-                          subtitle: Text(
-                            "Complete some sets to see them here",
-                          ),
+                          subtitle: Text("Complete some sets to see them here"),
                         ),
                       ),
                     if (snapshot.hasError)
@@ -116,14 +112,15 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       Expanded(
                         child: Builder(
                           builder: (context) {
-                            final groupHistory =
-                                context.select<SettingsState, bool>(
-                              (settings) => settings.value.groupHistory,
-                            );
+                            final groupHistory = context
+                                .select<SettingsState, bool>(
+                                  (settings) => settings.value.groupHistory,
+                                );
 
                             if (groupHistory) {
-                              final historyDays =
-                                  getHistoryDays(snapshot.data!);
+                              final historyDays = getHistoryDays(
+                                snapshot.data!,
+                              );
                               return GroupHistory(
                                 scroll: scroll,
                                 days: historyDays,
@@ -208,9 +205,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                   ),
                   onShare: () async {
                     final gymSets = snapshot.data!
-                        .where(
-                          (gymSet) => _selection.contains(gymSet.id),
-                        )
+                        .where((gymSet) => _selection.contains(gymSet.id))
                         .toList();
                     final summaries = gymSets
                         .map(
@@ -218,8 +213,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                               "${toString(gymSet.reps)}x${toString(gymSet.weight)}${gymSet.unit} ${gymSet.name}",
                         )
                         .join(', ');
-                    await SharePlus.instance
-                        .share(ShareParams(text: "I just did $summaries"));
+                    await SharePlus.instance.share(
+                      ShareParams(text: "I just did $summaries"),
+                    );
                     setState(() {
                       _selection.clear();
                     });
@@ -232,23 +228,23 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     setStream();
                   },
                   onDelete: () async {
-                    (db.delete(db.gymSets)
-                          ..where((tbl) => tbl.id.isIn(_selection.selected)))
-                        .go();
+                    (db.delete(
+                      db.gymSets,
+                    )..where((tbl) => tbl.id.isIn(_selection.selected))).go();
                     setState(() {
                       _selection.clear();
                     });
                   },
                   onSelectAll: () => setState(() {
                     if (snapshot.data == null) return;
-                    _selection
-                        .setAll(snapshot.data!.map((gymSet) => gymSet.id));
+                    _selection.setAll(
+                      snapshot.data!.map((gymSet) => gymSet.id),
+                    );
                   }),
                   onEdit: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => EditSetsPage(
-                        ids: _selection.toList(),
-                      ),
+                      builder: (context) =>
+                          EditSetsPage(ids: _selection.toList()),
                     ),
                   ),
                 ),
@@ -273,7 +269,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     if (settings.showBodyWeight)
       bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
 
-    GymSet gymSet = gymSets.firstOrNull ??
+    GymSet gymSet =
+        gymSets.firstOrNull ??
         GymSet(
           id: 0,
           bodyWeight: bodyWeight,
@@ -295,21 +292,13 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     );
 
     if (settings.strengthUnit != 'last-entry' && !gymSet.cardio)
-      gymSet = gymSet.copyWith(
-        unit: settings.strengthUnit,
-      );
+      gymSet = gymSet.copyWith(unit: settings.strengthUnit);
     else if (settings.cardioUnit != 'last-entry' && gymSet.cardio)
-      gymSet = gymSet.copyWith(
-        unit: settings.cardioUnit,
-      );
+      gymSet = gymSet.copyWith(unit: settings.cardioUnit);
 
     if (!mounted) return;
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditSetPage(
-          gymSet: gymSet,
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
     );
   }
 
@@ -338,18 +327,15 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void setStream() {
-    final terms =
-        search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
+    final terms = search
+        .toLowerCase()
+        .split(" ")
+        .where((term) => term.isNotEmpty);
 
     var query = (db.gymSets.select()
-      ..orderBy(
-        [
-          (u) => OrderingTerm(
-                expression: u.created,
-                mode: OrderingMode.desc,
-              ),
-        ],
-      )
+      ..orderBy([
+        (u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+      ])
       ..where((tbl) => tbl.hidden.equals(false))
       ..limit(limit));
 
@@ -369,18 +355,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       query = query
         ..where(
           (tbl) =>
-              tbl.reps.isBiggerThanValue(
-                double.tryParse(repsGt.text) ?? 0,
-              ) &
+              tbl.reps.isBiggerThanValue(double.tryParse(repsGt.text) ?? 0) &
               tbl.cardio.equals(false),
         );
     if (repsLt.text.isNotEmpty)
       query = query
         ..where(
           (tbl) =>
-              tbl.reps.isSmallerThanValue(
-                double.tryParse(repsLt.text) ?? 0,
-              ) &
+              tbl.reps.isSmallerThanValue(double.tryParse(repsLt.text) ?? 0) &
               tbl.cardio.equals(false),
         );
     if (weightGt.text.isNotEmpty)

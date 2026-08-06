@@ -10,24 +10,44 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
   final String? _alias;
   Plans(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
-      'sequence', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'sequence',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   late final GeneratedColumn<String> exercises = GeneratedColumn<String>(
-      'exercises', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'exercises',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<String> days = GeneratedColumn<String>(
-      'days', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'days',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'title',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [id, sequence, exercises, days, title];
   @override
@@ -41,16 +61,26 @@ class Plans extends Table with TableInfo<Plans, PlansData> {
   PlansData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlansData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      sequence: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sequence']),
-      exercises: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}exercises'])!,
-      days: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}days'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title']),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      ),
+      exercises: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}exercises'],
+      )!,
+      days: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}days'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      ),
     );
   }
 
@@ -66,12 +96,13 @@ class PlansData extends DataClass implements Insertable<PlansData> {
   final String exercises;
   final String days;
   final String? title;
-  const PlansData(
-      {required this.id,
-      this.sequence,
-      required this.exercises,
-      required this.days,
-      this.title});
+  const PlansData({
+    required this.id,
+    this.sequence,
+    required this.exercises,
+    required this.days,
+    this.title,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -95,13 +126,16 @@ class PlansData extends DataClass implements Insertable<PlansData> {
           : Value(sequence),
       exercises: Value(exercises),
       days: Value(days),
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
+      title: title == null && nullToAbsent
+          ? const Value.absent()
+          : Value(title),
     );
   }
 
-  factory PlansData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlansData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlansData(
       id: serializer.fromJson<int>(json['id']),
@@ -123,19 +157,19 @@ class PlansData extends DataClass implements Insertable<PlansData> {
     };
   }
 
-  PlansData copyWith(
-          {int? id,
-          Value<int?> sequence = const Value.absent(),
-          String? exercises,
-          String? days,
-          Value<String?> title = const Value.absent()}) =>
-      PlansData(
-        id: id ?? this.id,
-        sequence: sequence.present ? sequence.value : this.sequence,
-        exercises: exercises ?? this.exercises,
-        days: days ?? this.days,
-        title: title.present ? title.value : this.title,
-      );
+  PlansData copyWith({
+    int? id,
+    Value<int?> sequence = const Value.absent(),
+    String? exercises,
+    String? days,
+    Value<String?> title = const Value.absent(),
+  }) => PlansData(
+    id: id ?? this.id,
+    sequence: sequence.present ? sequence.value : this.sequence,
+    exercises: exercises ?? this.exercises,
+    days: days ?? this.days,
+    title: title.present ? title.value : this.title,
+  );
   PlansData copyWithCompanion(PlansCompanion data) {
     return PlansData(
       id: data.id.present ? data.id.value : this.id,
@@ -190,8 +224,8 @@ class PlansCompanion extends UpdateCompanion<PlansData> {
     required String exercises,
     required String days,
     this.title = const Value.absent(),
-  })  : exercises = Value(exercises),
-        days = Value(days);
+  }) : exercises = Value(exercises),
+       days = Value(days);
   static Insertable<PlansData> custom({
     Expression<int>? id,
     Expression<int>? sequence,
@@ -208,12 +242,13 @@ class PlansCompanion extends UpdateCompanion<PlansData> {
     });
   }
 
-  PlansCompanion copyWith(
-      {Value<int>? id,
-      Value<int?>? sequence,
-      Value<String>? exercises,
-      Value<String>? days,
-      Value<String?>? title}) {
+  PlansCompanion copyWith({
+    Value<int>? id,
+    Value<int?>? sequence,
+    Value<String>? exercises,
+    Value<String>? days,
+    Value<String?>? title,
+  }) {
     return PlansCompanion(
       id: id ?? this.id,
       sequence: sequence ?? this.sequence,
@@ -263,83 +298,131 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
   final String? _alias;
   GymSets(this.attachedDatabase, [this._alias]);
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<double> reps = GeneratedColumn<double>(
-      'reps', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+    'reps',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
-      'weight', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+    'weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
-      'unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<DateTime> created = GeneratedColumn<DateTime>(
-      'created', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+    'created',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
   late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
-      'hidden', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("hidden" IN (0, 1))'),
-      defaultValue: const Constant(false));
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   late final GeneratedColumn<double> bodyWeight = GeneratedColumn<double>(
-      'body_weight', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'body_weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   late final GeneratedColumn<double> duration = GeneratedColumn<double>(
-      'duration', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'duration',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   late final GeneratedColumn<double> distance = GeneratedColumn<double>(
-      'distance', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'distance',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   late final GeneratedColumn<bool> cardio = GeneratedColumn<bool>(
-      'cardio', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("cardio" IN (0, 1))'),
-      defaultValue: const Constant(false));
+    'cardio',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("cardio" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
-      'rest_ms', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue:
-          Constant(const Duration(minutes: 3, seconds: 30).inMilliseconds));
+    'rest_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: Constant(
+      const Duration(minutes: 3, seconds: 30).inMilliseconds,
+    ),
+  );
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(3));
+    'max_sets',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(3),
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        id,
-        name,
-        reps,
-        weight,
-        unit,
-        created,
-        hidden,
-        bodyWeight,
-        duration,
-        distance,
-        cardio,
-        restMs,
-        maxSets
-      ];
+    id,
+    name,
+    reps,
+    weight,
+    unit,
+    created,
+    hidden,
+    bodyWeight,
+    duration,
+    distance,
+    cardio,
+    restMs,
+    maxSets,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -351,32 +434,58 @@ class GymSets extends Table with TableInfo<GymSets, GymSetsData> {
   GymSetsData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GymSetsData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      reps: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}reps'])!,
-      weight: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
-      unit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
-      created: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created'])!,
-      hidden: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}hidden'])!,
-      bodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}body_weight'])!,
-      duration: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
-      distance: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}distance'])!,
-      cardio: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
-      restMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rest_ms'])!,
-      maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      reps: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}reps'],
+      )!,
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight'],
+      )!,
+      unit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit'],
+      )!,
+      created: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created'],
+      )!,
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
+      bodyWeight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}body_weight'],
+      )!,
+      duration: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration'],
+      )!,
+      distance: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}distance'],
+      )!,
+      cardio: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}cardio'],
+      )!,
+      restMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rest_ms'],
+      )!,
+      maxSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_sets'],
+      )!,
     );
   }
 
@@ -400,20 +509,21 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
   final bool cardio;
   final int restMs;
   final int maxSets;
-  const GymSetsData(
-      {required this.id,
-      required this.name,
-      required this.reps,
-      required this.weight,
-      required this.unit,
-      required this.created,
-      required this.hidden,
-      required this.bodyWeight,
-      required this.duration,
-      required this.distance,
-      required this.cardio,
-      required this.restMs,
-      required this.maxSets});
+  const GymSetsData({
+    required this.id,
+    required this.name,
+    required this.reps,
+    required this.weight,
+    required this.unit,
+    required this.created,
+    required this.hidden,
+    required this.bodyWeight,
+    required this.duration,
+    required this.distance,
+    required this.cardio,
+    required this.restMs,
+    required this.maxSets,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -451,8 +561,10 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
     );
   }
 
-  factory GymSetsData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GymSetsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GymSetsData(
       id: serializer.fromJson<int>(json['id']),
@@ -490,35 +602,35 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
     };
   }
 
-  GymSetsData copyWith(
-          {int? id,
-          String? name,
-          double? reps,
-          double? weight,
-          String? unit,
-          DateTime? created,
-          bool? hidden,
-          double? bodyWeight,
-          double? duration,
-          double? distance,
-          bool? cardio,
-          int? restMs,
-          int? maxSets}) =>
-      GymSetsData(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        reps: reps ?? this.reps,
-        weight: weight ?? this.weight,
-        unit: unit ?? this.unit,
-        created: created ?? this.created,
-        hidden: hidden ?? this.hidden,
-        bodyWeight: bodyWeight ?? this.bodyWeight,
-        duration: duration ?? this.duration,
-        distance: distance ?? this.distance,
-        cardio: cardio ?? this.cardio,
-        restMs: restMs ?? this.restMs,
-        maxSets: maxSets ?? this.maxSets,
-      );
+  GymSetsData copyWith({
+    int? id,
+    String? name,
+    double? reps,
+    double? weight,
+    String? unit,
+    DateTime? created,
+    bool? hidden,
+    double? bodyWeight,
+    double? duration,
+    double? distance,
+    bool? cardio,
+    int? restMs,
+    int? maxSets,
+  }) => GymSetsData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    reps: reps ?? this.reps,
+    weight: weight ?? this.weight,
+    unit: unit ?? this.unit,
+    created: created ?? this.created,
+    hidden: hidden ?? this.hidden,
+    bodyWeight: bodyWeight ?? this.bodyWeight,
+    duration: duration ?? this.duration,
+    distance: distance ?? this.distance,
+    cardio: cardio ?? this.cardio,
+    restMs: restMs ?? this.restMs,
+    maxSets: maxSets ?? this.maxSets,
+  );
   GymSetsData copyWithCompanion(GymSetsCompanion data) {
     return GymSetsData(
       id: data.id.present ? data.id.value : this.id,
@@ -528,8 +640,9 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
       unit: data.unit.present ? data.unit.value : this.unit,
       created: data.created.present ? data.created.value : this.created,
       hidden: data.hidden.present ? data.hidden.value : this.hidden,
-      bodyWeight:
-          data.bodyWeight.present ? data.bodyWeight.value : this.bodyWeight,
+      bodyWeight: data.bodyWeight.present
+          ? data.bodyWeight.value
+          : this.bodyWeight,
       duration: data.duration.present ? data.duration.value : this.duration,
       distance: data.distance.present ? data.distance.value : this.distance,
       cardio: data.cardio.present ? data.cardio.value : this.cardio,
@@ -559,8 +672,21 @@ class GymSetsData extends DataClass implements Insertable<GymSetsData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, reps, weight, unit, created, hidden,
-      bodyWeight, duration, distance, cardio, restMs, maxSets);
+  int get hashCode => Object.hash(
+    id,
+    name,
+    reps,
+    weight,
+    unit,
+    created,
+    hidden,
+    bodyWeight,
+    duration,
+    distance,
+    cardio,
+    restMs,
+    maxSets,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -623,11 +749,11 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     this.cardio = const Value.absent(),
     this.restMs = const Value.absent(),
     this.maxSets = const Value.absent(),
-  })  : name = Value(name),
-        reps = Value(reps),
-        weight = Value(weight),
-        unit = Value(unit),
-        created = Value(created);
+  }) : name = Value(name),
+       reps = Value(reps),
+       weight = Value(weight),
+       unit = Value(unit),
+       created = Value(created);
   static Insertable<GymSetsData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -660,20 +786,21 @@ class GymSetsCompanion extends UpdateCompanion<GymSetsData> {
     });
   }
 
-  GymSetsCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? name,
-      Value<double>? reps,
-      Value<double>? weight,
-      Value<String>? unit,
-      Value<DateTime>? created,
-      Value<bool>? hidden,
-      Value<double>? bodyWeight,
-      Value<double>? duration,
-      Value<double>? distance,
-      Value<bool>? cardio,
-      Value<int>? restMs,
-      Value<int>? maxSets}) {
+  GymSetsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<double>? reps,
+    Value<double>? weight,
+    Value<String>? unit,
+    Value<DateTime>? created,
+    Value<bool>? hidden,
+    Value<double>? bodyWeight,
+    Value<double>? duration,
+    Value<double>? distance,
+    Value<bool>? cardio,
+    Value<int>? restMs,
+    Value<int>? maxSets,
+  }) {
     return GymSetsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,

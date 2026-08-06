@@ -29,14 +29,13 @@ class _SwapWorkoutState extends State<SwapWorkout> {
       });
     });
 
-    _distinctExercises = (db.gymSets.selectOnly(distinct: true)
-          ..addColumns([db.gymSets.name])
-          ..orderBy([
-            drift.OrderingTerm(expression: db.gymSets.name),
-          ]))
-        .map((row) => row.read(db.gymSets.name)!)
-        .watch()
-        .map((event) => event.where((name) => name.isNotEmpty).toList());
+    _distinctExercises =
+        (db.gymSets.selectOnly(distinct: true)
+              ..addColumns([db.gymSets.name])
+              ..orderBy([drift.OrderingTerm(expression: db.gymSets.name)]))
+            .map((row) => row.read(db.gymSets.name)!)
+            .watch()
+            .map((event) => event.where((name) => name.isNotEmpty).toList());
   }
 
   @override
@@ -51,9 +50,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('Swap workout'),
-      ),
+      appBar: AppBar(title: const Text('Swap workout')),
       body: Column(
         children: [
           Padding(
@@ -80,9 +77,9 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
                 final exercises = snapshot.data!
                     .where(
-                      (name) => name
-                          .toLowerCase()
-                          .contains(_searchQuery.toLowerCase()),
+                      (name) => name.toLowerCase().contains(
+                        _searchQuery.toLowerCase(),
+                      ),
                     )
                     .toList();
 
@@ -93,14 +90,15 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                     return ListTile(
                       title: Text(exercise),
                       onTap: () async {
-                        final old = await (db.planExercises.select()
-                              ..where(
-                                (tbl) =>
-                                    tbl.planId.equals(widget.planId) &
-                                    tbl.exercise.equals(widget.exercise),
-                              )
-                              ..limit(1))
-                            .getSingle();
+                        final old =
+                            await (db.planExercises.select()
+                                  ..where(
+                                    (tbl) =>
+                                        tbl.planId.equals(widget.planId) &
+                                        tbl.exercise.equals(widget.exercise),
+                                  )
+                                  ..limit(1))
+                                .getSingle();
                         await db.planExercises.deleteOne(old);
                         await db.planExercises.insertOne(
                           PlanExercisesCompanion.insert(

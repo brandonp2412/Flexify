@@ -31,10 +31,7 @@ class StartList extends StatefulWidget {
   State<StartList> createState() => _StartListState();
 }
 
-typedef Tapped = ({
-  int index,
-  DateTime dateTime,
-});
+typedef Tapped = ({int index, DateTime dateTime});
 
 class _StartListState extends State<StartList> {
   // bottomNavHeight clears the FAB; the extra 80 clears the SessionSets
@@ -57,16 +54,19 @@ class _StartListState extends State<StartList> {
         lastTap = (index: index, dateTime: DateTime.now());
       });
 
-    final gymSet = await (db.gymSets.select()
-          ..where((tbl) => tbl.name.equals(widget.exercises[index].exercise))
-          ..orderBy(
-            [
-              (u) =>
-                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-            ],
-          )
-          ..limit(1))
-        .getSingle();
+    final gymSet =
+        await (db.gymSets.select()
+              ..where(
+                (tbl) => tbl.name.equals(widget.exercises[index].exercise),
+              )
+              ..orderBy([
+                (u) => OrderingTerm(
+                  expression: u.created,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..limit(1))
+            .getSingle();
     if (!mounted) return;
 
     Navigator.of(context).push(
@@ -76,8 +76,9 @@ class _StartListState extends State<StartList> {
 
   @override
   Widget build(BuildContext context) {
-    final max = context
-        .select<SettingsState, int>((settings) => settings.value.maxSets);
+    final max = context.select<SettingsState, int>(
+      (settings) => settings.value.maxSets,
+    );
     final trailing = context.select<SettingsState, PlanTrailing>(
       (settings) => PlanTrailing.values.byName(
         settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
@@ -129,8 +130,9 @@ class _StartListState extends State<StartList> {
     List<GymCount> counts,
   ) {
     final exercise = widget.exercises[index];
-    final idx =
-        counts.indexWhere((element) => element.name == exercise.exercise);
+    final idx = counts.indexWhere(
+      (element) => element.name == exercise.exercise,
+    );
     var count = 0;
     int max = maxSets;
 
@@ -144,25 +146,16 @@ class _StartListState extends State<StartList> {
       case PlanTrailing.reorder:
         trail = ReorderableDragStartListener(
           index: index,
-          child: const Icon(
-            Icons.drag_handle,
-            size: 32,
-          ),
+          child: const Icon(Icons.drag_handle, size: 32),
         );
         break;
 
       case PlanTrailing.ratio:
-        trail = Text(
-          "$count / $max",
-          style: const TextStyle(fontSize: 16),
-        );
+        trail = Text("$count / $max", style: const TextStyle(fontSize: 16));
         break;
 
       case PlanTrailing.count:
-        trail = Text(
-          count.toString(),
-          style: const TextStyle(fontSize: 16),
-        );
+        trail = Text(count.toString(), style: const TextStyle(fontSize: 16));
         break;
 
       case PlanTrailing.percent:
@@ -210,9 +203,7 @@ class _StartListState extends State<StartList> {
                   onChanged: (value) {
                     widget.onSelect(index);
                   },
-                  child: Radio<bool>(
-                    value: index == widget.selected,
-                  ),
+                  child: Radio<bool>(value: index == widget.selected),
                 ),
                 Flexible(child: Text(exercise.exercise)),
               ],

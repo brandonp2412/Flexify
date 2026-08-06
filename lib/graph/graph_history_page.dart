@@ -30,9 +30,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(widget.name),
-      ),
+      appBar: AppBar(title: Text(widget.name)),
       body: Builder(
         builder: (context) {
           if (sets.isEmpty)
@@ -75,19 +73,18 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   void setSets() async {
-    final result = await (db.gymSets.select()
-          ..orderBy(
-            [
-              (u) => OrderingTerm(
-                    expression: u.created,
-                    mode: OrderingMode.desc,
-                  ),
-            ],
-          )
-          ..where((tbl) => tbl.name.equals(widget.name))
-          ..where((tbl) => tbl.hidden.equals(false))
-          ..limit(limit))
-        .get();
+    final result =
+        await (db.gymSets.select()
+              ..orderBy([
+                (u) => OrderingTerm(
+                  expression: u.created,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..where((tbl) => tbl.name.equals(widget.name))
+              ..where((tbl) => tbl.hidden.equals(false))
+              ..limit(limit))
+            .get();
     setState(() {
       sets = result;
     });

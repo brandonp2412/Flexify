@@ -3,9 +3,5 @@ class CardioData {
   final double value;
   final String unit;
 
-  CardioData({
-    required this.created,
-    required this.value,
-    required this.unit,
-  });
+  CardioData({required this.created, required this.value, required this.unit});
 }

@@ -54,12 +54,9 @@ class _PlanTileState extends State<PlanTile> {
   Stream<List<PlanExercise>> _getExercises() {
     return (db.planExercises.select()
           ..where((tbl) => tbl.planId.equals(widget.plan.id) & tbl.enabled)
-          ..orderBy(
-            [
-              (u) =>
-                  OrderingTerm(expression: u.sequence, mode: OrderingMode.asc),
-            ],
-          ))
+          ..orderBy([
+            (u) => OrderingTerm(expression: u.sequence, mode: OrderingMode.asc),
+          ]))
         .watch();
   }
 
@@ -71,15 +68,16 @@ class _PlanTileState extends State<PlanTile> {
       title = Text(
         widget.plan.title!,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: today ? FontWeight.bold : null,
-              decoration: today ? TextDecoration.underline : null,
-            ),
+          fontWeight: today ? FontWeight.bold : null,
+          decoration: today ? TextDecoration.underline : null,
+        ),
       );
     } else if (widget.plan.days.split(',').length < 7)
       title = RichText(text: TextSpan(children: _getChildren(context)));
 
-    final showImages = context
-        .select<SettingsState, bool>((settings) => settings.value.showImages);
+    final showImages = context.select<SettingsState, bool>(
+      (settings) => settings.value.showImages,
+    );
 
     Widget? leading;
 
@@ -146,8 +144,9 @@ class _PlanTileState extends State<PlanTile> {
               );
 
             final state = context.watch<PlanState>();
-            final idx = state.planCounts
-                .indexWhere((element) => element.planId == widget.plan.id);
+            final idx = state.planCounts.indexWhere(
+              (element) => element.planId == widget.plan.id,
+            );
             PlanCount count;
             if (idx != -1)
               count = state.planCounts[idx];
@@ -180,9 +179,7 @@ class _PlanTileState extends State<PlanTile> {
 
           widget.navigatorKey.currentState!.push(
             MaterialPageRoute(
-              builder: (context) => StartPlanPage(
-                plan: widget.plan,
-              ),
+              builder: (context) => StartPlanPage(plan: widget.plan),
             ),
           );
         },
@@ -203,20 +200,16 @@ class _PlanTileState extends State<PlanTile> {
         TextSpan(
           text: day.trim(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight:
-                    widget.weekday == day.trim() ? FontWeight.bold : null,
-                decoration: widget.weekday == day.trim()
-                    ? TextDecoration.underline
-                    : null,
-              ),
+            fontWeight: widget.weekday == day.trim() ? FontWeight.bold : null,
+            decoration: widget.weekday == day.trim()
+                ? TextDecoration.underline
+                : null,
+          ),
         ),
       );
       if (index < split.length - 1)
         result.add(
-          TextSpan(
-            text: ", ",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          TextSpan(text: ", ", style: Theme.of(context).textTheme.bodyLarge),
         );
     }
     return result;

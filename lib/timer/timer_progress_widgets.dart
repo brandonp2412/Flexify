@@ -217,11 +217,9 @@ class StopwatchProgressIndicator extends StatelessWidget {
     final hours = elapsed.inHours;
     final minutes = elapsed.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = elapsed.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final centiseconds =
-        (elapsed.inMilliseconds.remainder(1000) ~/ 10).toString().padLeft(
-              2,
-              '0',
-            );
+    final centiseconds = (elapsed.inMilliseconds.remainder(1000) ~/ 10)
+        .toString()
+        .padLeft(2, '0');
     if (hours > 0) return '$hours:$minutes:$seconds.$centiseconds';
     return '$minutes:$seconds.$centiseconds';
   }
@@ -279,7 +277,8 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
         final currentProgress =
             elapsed.inMilliseconds / duration.inMilliseconds;
 
-        final isNewTimer = lastDuration != duration ||
+        final isNewTimer =
+            lastDuration != duration ||
             (lastTimestamp != null &&
                 timerState.timer.stamp
                         .difference(lastTimestamp!)
@@ -297,15 +296,10 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
           visible: true,
           child: TweenAnimationBuilder<double>(
             key: animationKey,
-            tween: Tween<double>(
-              begin: 1.0 - currentProgress,
-              end: 0.0,
-            ),
+            tween: Tween<double>(begin: 1.0 - currentProgress, end: 0.0),
             duration: remaining,
             builder: (context, value, child) {
-              return LinearProgressIndicator(
-                value: value,
-              );
+              return LinearProgressIndicator(value: value);
             },
           ),
         );

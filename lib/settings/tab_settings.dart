@@ -13,10 +13,7 @@ class TabSettings extends StatefulWidget {
   createState() => _TabSettingsState();
 }
 
-typedef TabSetting = ({
-  String name,
-  bool enabled,
-});
+typedef TabSetting = ({String name, bool enabled});
 
 class _TabSettingsState extends State<TabSettings> {
   List<TabSetting> tabs = [
@@ -48,12 +45,12 @@ class _TabSettingsState extends State<TabSettings> {
     });
 
     (db.settings.update().write(
-          SettingsCompanion(
-            tabs: Value(
-              tabs.where((tab) => tab.enabled).map((tab) => tab.name).join(','),
-            ),
-          ),
-        ));
+      SettingsCompanion(
+        tabs: Value(
+          tabs.where((tab) => tab.enabled).map((tab) => tab.name).join(','),
+        ),
+      ),
+    ));
   }
 
   @override
@@ -75,18 +72,16 @@ class _TabSettingsState extends State<TabSettings> {
                 ],
               ),
               onTap: () => db.settings.update().write(
-                    SettingsCompanion(
-                      scrollableTabs: Value(!settings.value.scrollableTabs),
-                    ),
-                  ),
+                SettingsCompanion(
+                  scrollableTabs: Value(!settings.value.scrollableTabs),
+                ),
+              ),
               leading: Switch(
                 value: settings.value.scrollableTabs,
                 onChanged: (value) {
                   db.settings.update().write(
-                        SettingsCompanion(
-                          scrollableTabs: Value(value),
-                        ),
-                      );
+                    SettingsCompanion(scrollableTabs: Value(value)),
+                  );
                 },
               ),
             ),
@@ -101,15 +96,15 @@ class _TabSettingsState extends State<TabSettings> {
                   });
 
                   (db.settings.update().write(
-                        SettingsCompanion(
-                          tabs: Value(
-                            tabs
-                                .where((tab) => tab.enabled)
-                                .map((tab) => tab.name)
-                                .join(','),
-                          ),
-                        ),
-                      ));
+                    SettingsCompanion(
+                      tabs: Value(
+                        tabs
+                            .where((tab) => tab.enabled)
+                            .map((tab) => tab.name)
+                            .join(','),
+                      ),
+                    ),
+                  ));
                 },
                 itemBuilder: (context, index) {
                   final tab = tabs[index];

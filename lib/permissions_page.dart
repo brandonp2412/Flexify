@@ -25,9 +25,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Missing permissions"),
-      ),
+      appBar: AppBar(title: const Text("Missing permissions")),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -43,18 +41,16 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 title: const Text('Rest timers'),
                 onTap: () {
                   db.settings.update().write(
-                        SettingsCompanion(
-                          restTimers: Value(!settings.value.restTimers),
-                        ),
-                      );
+                    SettingsCompanion(
+                      restTimers: Value(!settings.value.restTimers),
+                    ),
+                  );
                 },
                 trailing: Switch(
                   value: settings.value.restTimers,
                   onChanged: (value) => db.settings.update().write(
-                        SettingsCompanion(
-                          restTimers: Value(value),
-                        ),
-                      ),
+                    SettingsCompanion(restTimers: Value(value)),
+                  ),
                 ),
               ),
               ListTile(
@@ -126,10 +122,10 @@ class _PermissionsPageState extends State<PermissionsPage> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                         db.settings.update().write(
-                              const SettingsCompanion(
-                                explainedPermissions: Value(true),
-                              ),
-                            );
+                          const SettingsCompanion(
+                            explainedPermissions: Value(true),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -139,10 +135,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
           else {
             Navigator.pop(context);
             db.settings.update().write(
-                  const SettingsCompanion(
-                    explainedPermissions: Value(true),
-                  ),
-                );
+              const SettingsCompanion(explainedPermissions: Value(true)),
+            );
           }
         },
         label: const Text("Confirm"),

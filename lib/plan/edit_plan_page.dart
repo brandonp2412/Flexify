@@ -34,9 +34,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Future<void> addExercise() async {
     GymSetsCompanion? gymSet = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddExercisePage(name: search),
-      ),
+      MaterialPageRoute(builder: (context) => AddExercisePage(name: search)),
     );
     if (gymSet == null || !mounted) return;
 
@@ -55,23 +53,22 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     if (match.isEmpty)
-      return [
-        const ListTile(title: Text("No exercises found")),
-      ];
+      return [const ListTile(title: Text("No exercises found"))];
 
     return match.toList().map(
-          (pe) => ExerciseTile(
-            planExercise: pe,
-            onChange: (value) {
-              final id = exercises
-                  .indexWhere((exercise) => exercise.exercise == pe.exercise);
-              if (id == -1) return;
-              setState(() {
-                exercises[id] = value;
-              });
-            },
-          ),
-        );
+      (pe) => ExerciseTile(
+        planExercise: pe,
+        onChange: (value) {
+          final id = exercises.indexWhere(
+            (exercise) => exercise.exercise == pe.exercise,
+          );
+          if (id == -1) return;
+          setState(() {
+            exercises[id] = value;
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -88,23 +85,17 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(title),
-      ),
+      appBar: AppBar(title: Text(title)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'Title (optional)',
-              ),
+              decoration: const InputDecoration(labelText: 'Title (optional)'),
               controller: titleCtrl,
               textCapitalization: TextCapitalization.sentences,
             ),
-            const SizedBox(
-              height: 16.0,
-            ),
+            const SizedBox(height: 16.0),
             DaySelector(daySwitches: days),
             const SizedBox(height: 8),
             Padding(
@@ -127,9 +118,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 icon: const Icon(Icons.add),
                 onPressed: addExercise,
               ),
-              title: Text(
-                search.isEmpty ? 'Add exercise' : 'Add "$search"',
-              ),
+              title: Text(search.isEmpty ? 'Add exercise' : 'Add "$search"'),
               onTap: addExercise,
             ),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
@@ -179,8 +168,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     if (widget.plan.id.present) {
       await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
-      await db.planExercises
-          .deleteWhere((tbl) => tbl.planId.equals(widget.plan.id.value));
+      await db.planExercises.deleteWhere(
+        (tbl) => tbl.planId.equals(widget.plan.id.value),
+      );
       await db.planExercises.insertAll(
         exercises.map((pe) => pe.copyWith(planId: widget.plan.id)),
       );

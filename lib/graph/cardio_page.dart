@@ -71,9 +71,10 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   Future<void> _loadPreferences() async {
-    final pref = await (db.graphPreferences.select()
-          ..where((t) => t.name.equals(widget.name)))
-        .getSingleOrNull();
+    final pref =
+        await (db.graphPreferences.select()
+              ..where((t) => t.name.equals(widget.name)))
+            .getSingleOrNull();
     if (pref == null || !mounted) return;
     setState(() {
       metric = CardioMetric.values.firstWhere(
@@ -107,19 +108,14 @@ class _CardioPageState extends State<CardioPage> {
 
   void _onNotesChanged() {
     _notesDebounce?.cancel();
-    _notesDebounce = Timer(
-      const Duration(milliseconds: 600),
-      _savePreferences,
-    );
+    _notesDebounce = Timer(const Duration(milliseconds: 600), _savePreferences);
   }
 
   Future<void> _editNotes() async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (context) => GraphNotesPage(
-          controller: _notesCtrl,
-          onChanged: _onNotesChanged,
-        ),
+        builder: (context) =>
+            GraphNotesPage(controller: _notesCtrl, onChanged: _onNotesChanged),
       ),
     );
     _notesDebounce?.cancel();
@@ -145,44 +141,44 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
-        getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-        getTooltipItems: (touchedSpots) {
-          return touchedSpots.map((spot) {
-            // Only show tooltip for the first line (index 0 = actual data)
-            // Return null for trend line (index 1)
-            if (spot.barIndex != 0) return null;
+    getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
+    getTooltipItems: (touchedSpots) {
+      return touchedSpots.map((spot) {
+        // Only show tooltip for the first line (index 0 = actual data)
+        // Return null for trend line (index 1)
+        if (spot.barIndex != 0) return null;
 
-            final row = data.elementAt(spot.spotIndex);
-            String text = row.value.toStringAsFixed(2);
-            final created = DateFormat(format).format(row.created);
-            switch (metric) {
-              case CardioMetric.pace:
-                text = "${row.value} ${row.unit} / min";
-                break;
-              case CardioMetric.duration:
-                final minutes = row.value.floor();
-                final seconds =
-                    ((row.value * 60) % 60).floor().toString().padLeft(2, '0');
-                text = "$minutes:$seconds";
-                break;
-              case CardioMetric.distance:
-                text += " ${row.unit}";
-                break;
-              case CardioMetric.incline:
-                text += "%";
-                break;
-              case CardioMetric.inclineAdjustedPace:
-                break;
-            }
-            return LineTooltipItem(
-              "$text\n$created",
-              TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
-              ),
+        final row = data.elementAt(spot.spotIndex);
+        String text = row.value.toStringAsFixed(2);
+        final created = DateFormat(format).format(row.created);
+        switch (metric) {
+          case CardioMetric.pace:
+            text = "${row.value} ${row.unit} / min";
+            break;
+          case CardioMetric.duration:
+            final minutes = row.value.floor();
+            final seconds = ((row.value * 60) % 60).floor().toString().padLeft(
+              2,
+              '0',
             );
-          }).toList();
-        },
-      );
+            text = "$minutes:$seconds";
+            break;
+          case CardioMetric.distance:
+            text += " ${row.unit}";
+            break;
+          case CardioMetric.incline:
+            text += "%";
+            break;
+          case CardioMetric.inclineAdjustedPace:
+            break;
+        }
+        return LineTooltipItem(
+          "$text\n$created",
+          TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
+        );
+      }).toList();
+    },
+  );
 
   Future<void> touchLine(
     FlTouchEvent event,
@@ -198,21 +194,19 @@ class _CardioPageState extends State<CardioPage> {
     final index = response?.lineBarSpots?[0].spotIndex;
     if (index == null) return;
     final row = data[index];
-    GymSet? gymSet = await (db.gymSets.select()
-          ..where(
-            (tbl) =>
-                tbl.created.equals(row.created) & tbl.name.equals(widget.name),
-          )
-          ..limit(1))
-        .getSingle();
+    GymSet? gymSet =
+        await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.created.equals(row.created) &
+                    tbl.name.equals(widget.name),
+              )
+              ..limit(1))
+            .getSingle();
 
     if (!mounted) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditSetPage(
-          gymSet: gymSet,
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
     );
     _refreshTimer?.cancel();
     _refreshTimer = Timer(kThemeAnimationDuration, setData);
@@ -236,12 +230,7 @@ class _CardioPageState extends State<CardioPage> {
       final row = data[index];
       final value = double.parse(row.value.toStringAsFixed(1));
       if (useTimeBasedXAxis) {
-        spots.add(
-          FlSpot(
-            row.created.millisecondsSinceEpoch.toDouble(),
-            value,
-          ),
-        );
+        spots.add(FlSpot(row.created.millisecondsSinceEpoch.toDouble(), value));
       } else {
         spots.add(FlSpot(index.toDouble(), value));
       }
@@ -258,27 +247,24 @@ class _CardioPageState extends State<CardioPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final gymSets = await (db.gymSets.select()
-                    ..orderBy(
-                      [
-                        (u) => OrderingTerm(
-                              expression: u.created,
-                              mode: OrderingMode.desc,
-                            ),
-                      ],
-                    )
-                    ..where((tbl) => tbl.name.equals(widget.name))
-                    ..where((tbl) => tbl.hidden.equals(false))
-                    ..limit(20))
-                  .get();
+              final gymSets =
+                  await (db.gymSets.select()
+                        ..orderBy([
+                          (u) => OrderingTerm(
+                            expression: u.created,
+                            mode: OrderingMode.desc,
+                          ),
+                        ])
+                        ..where((tbl) => tbl.name.equals(widget.name))
+                        ..where((tbl) => tbl.hidden.equals(false))
+                        ..limit(20))
+                      .get();
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => GraphHistoryPage(
-                    name: widget.name,
-                    gymSets: gymSets,
-                  ),
+                  builder: (context) =>
+                      GraphHistoryPage(name: widget.name, gymSets: gymSets),
                 ),
               );
               _refreshTimer?.cancel();
@@ -291,9 +277,7 @@ class _CardioPageState extends State<CardioPage> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => EditGraphPage(
-                    name: widget.name,
-                  ),
+                  builder: (context) => EditGraphPage(name: widget.name),
                 ),
               );
             },
@@ -440,14 +424,14 @@ class _CardioPageState extends State<CardioPage> {
             final settings = context.read<SettingsState>().value;
 
             Widget sectionLabel(String text) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    text,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                );
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                text,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            );
 
             return SafeArea(
               child: Padding(
@@ -550,8 +534,9 @@ class _CardioPageState extends State<CardioPage> {
                     ),
                     Slider(
                       value: limit.toDouble(),
-                      inactiveColor:
-                          colorScheme.primary.withValues(alpha: 0.24),
+                      inactiveColor: colorScheme.primary.withValues(
+                        alpha: 0.24,
+                      ),
                       min: 10,
                       max: 100,
                       onChanged: (value) {

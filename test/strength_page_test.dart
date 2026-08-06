@@ -23,13 +23,14 @@ void main() async {
     await db.plans.deleteAll();
 
     exercisesToPopulateTestDB.forEach(
-      (key, value) async => await db.into(db.gymSets).insert(
-            generateGymSetCompanion(key, value),
-          ),
+      (key, value) async =>
+          await db.into(db.gymSets).insert(generateGymSetCompanion(key, value)),
     );
 
     for (final element in graphData) {
-      await db.into(db.gymSets).insert(
+      await db
+          .into(db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Dumbbell shoulder press",
               element.weight,
@@ -87,13 +88,14 @@ void main() async {
     await db.plans.deleteAll();
 
     exercisesToPopulateTestDB.forEach(
-      (key, value) async => await db.into(db.gymSets).insert(
-            generateGymSetCompanion(key, value),
-          ),
+      (key, value) async =>
+          await db.into(db.gymSets).insert(generateGymSetCompanion(key, value)),
     );
 
     for (final element in graphData) {
-      await db.into(db.gymSets).insert(
+      await db
+          .into(db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Dumbbell shoulder press",
               element.weight,
@@ -151,13 +153,14 @@ void main() async {
     await db.plans.deleteAll();
 
     exercisesToPopulateTestDB.forEach(
-      (key, value) async => await db.into(db.gymSets).insert(
-            generateGymSetCompanion(key, value),
-          ),
+      (key, value) async =>
+          await db.into(db.gymSets).insert(generateGymSetCompanion(key, value)),
     );
 
     for (final element in graphData) {
-      await db.into(db.gymSets).insert(
+      await db
+          .into(db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Dumbbell shoulder press",
               element.weight,

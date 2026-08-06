@@ -20,17 +20,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Group history'),
           leading: const Icon(Icons.expand_more),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  groupHistory: Value(!settings.groupHistory),
-                ),
-              ),
+            SettingsCompanion(groupHistory: Value(!settings.groupHistory)),
+          ),
           trailing: Switch(
             value: settings.groupHistory,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    groupHistory: Value(value),
-                  ),
-                ),
+              SettingsCompanion(groupHistory: Value(value)),
+            ),
           ),
         ),
       ),
@@ -40,14 +36,14 @@ List<Widget> getWorkoutSettings(
         child: ListTile(
           title: const Text('Show units'),
           leading: const Icon(Icons.scale_sharp),
-          onTap: () => db.settings
-              .update()
-              .write(SettingsCompanion(showUnits: Value(!settings.showUnits))),
+          onTap: () => db.settings.update().write(
+            SettingsCompanion(showUnits: Value(!settings.showUnits)),
+          ),
           trailing: Switch(
             value: settings.showUnits,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(showUnits: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(showUnits: Value(value)),
+            ),
           ),
         ),
       ),
@@ -58,15 +54,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Show body weight'),
           leading: const Icon(Icons.scale_outlined),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showBodyWeight: Value(!settings.showBodyWeight),
-                ),
-              ),
+            SettingsCompanion(showBodyWeight: Value(!settings.showBodyWeight)),
+          ),
           trailing: Switch(
             value: settings.showBodyWeight,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(showBodyWeight: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(showBodyWeight: Value(value)),
+            ),
           ),
         ),
       ),
@@ -77,15 +71,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Show categories'),
           leading: const Icon(Icons.category),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showCategories: Value(!settings.showCategories),
-                ),
-              ),
+            SettingsCompanion(showCategories: Value(!settings.showCategories)),
+          ),
           trailing: Switch(
             value: settings.showCategories,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(showCategories: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(showCategories: Value(value)),
+            ),
           ),
         ),
       ),
@@ -96,15 +88,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Show notes'),
           leading: const Icon(Icons.note_alt_outlined),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showNotes: Value(!settings.showNotes),
-                ),
-              ),
+            SettingsCompanion(showNotes: Value(!settings.showNotes)),
+          ),
           trailing: Switch(
             value: settings.showNotes,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(showNotes: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(showNotes: Value(value)),
+            ),
           ),
         ),
       ),
@@ -116,18 +106,16 @@ List<Widget> getWorkoutSettings(
           leading: const Icon(Icons.notifications),
           onTap: () {
             db.settings.update().write(
-                  SettingsCompanion(
-                    notifications: Value(!settings.notifications),
-                  ),
-                );
+              SettingsCompanion(notifications: Value(!settings.notifications)),
+            );
             if (!settings.notifications)
               toast('Positive messages appear now like this!');
           },
           trailing: Switch(
             value: settings.notifications,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(notifications: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(notifications: Value(value)),
+            ),
           ),
         ),
       ),
@@ -138,15 +126,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Rep estimation'),
           leading: const Icon(Icons.repeat_outlined),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  repEstimation: Value(!settings.repEstimation),
-                ),
-              ),
+            SettingsCompanion(repEstimation: Value(!settings.repEstimation)),
+          ),
           trailing: Switch(
             value: settings.repEstimation,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(repEstimation: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(repEstimation: Value(value)),
+            ),
           ),
         ),
       ),
@@ -157,15 +143,15 @@ List<Widget> getWorkoutSettings(
           title: const Text('Duration estimation'),
           leading: const Icon(Icons.access_time),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  durationEstimation: Value(!settings.durationEstimation),
-                ),
-              ),
+            SettingsCompanion(
+              durationEstimation: Value(!settings.durationEstimation),
+            ),
+          ),
           trailing: Switch(
             value: settings.durationEstimation,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(durationEstimation: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(durationEstimation: Value(value)),
+            ),
           ),
         ),
       ),
@@ -176,15 +162,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Show graph X axis toggle'),
           leading: const Icon(Icons.show_chart),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showGraphXAxis: Value(!settings.showGraphXAxis),
-                ),
-              ),
+            SettingsCompanion(showGraphXAxis: Value(!settings.showGraphXAxis)),
+          ),
           trailing: Switch(
             value: settings.showGraphXAxis,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(showGraphXAxis: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(showGraphXAxis: Value(value)),
+            ),
           ),
         ),
       ),
@@ -195,15 +179,13 @@ List<Widget> getWorkoutSettings(
           title: const Text('Show graph limit'),
           leading: const Icon(Icons.tune),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  showGraphLimit: Value(!settings.showGraphLimit),
-                ),
-              ),
+            SettingsCompanion(showGraphLimit: Value(!settings.showGraphLimit)),
+          ),
           trailing: Switch(
             value: settings.showGraphLimit,
-            onChanged: (value) => db.settings
-                .update()
-                .write(SettingsCompanion(showGraphLimit: Value(value))),
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(showGraphLimit: Value(value)),
+            ),
           ),
         ),
       ),
@@ -224,9 +206,9 @@ List<Widget> getWorkoutSettings(
               child: Text("Distance (cardio)"),
             ),
           ],
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(defaultGraphMetric: Value(value!))),
+          onChanged: (value) => db.settings.update().write(
+            SettingsCompanion(defaultGraphMetric: Value(value!)),
+          ),
         ),
       ),
     if ('default graph period'.contains(term.toLowerCase()))
@@ -241,9 +223,9 @@ List<Widget> getWorkoutSettings(
             DropdownMenuItem(value: 'month', child: Text("Monthly")),
             DropdownMenuItem(value: 'year', child: Text("Yearly")),
           ],
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(defaultGraphPeriod: Value(value!))),
+          onChanged: (value) => db.settings.update().write(
+            SettingsCompanion(defaultGraphPeriod: Value(value!)),
+          ),
         ),
       ),
     if ('default graph limit'.contains(term.toLowerCase()))
@@ -259,9 +241,9 @@ List<Widget> getWorkoutSettings(
             DropdownMenuItem(value: 100, child: Text("100")),
             DropdownMenuItem(value: 200, child: Text("200")),
           ],
-          onChanged: (value) => db.settings
-              .update()
-              .write(SettingsCompanion(defaultGraphLimit: Value(value!))),
+          onChanged: (value) => db.settings.update().write(
+            SettingsCompanion(defaultGraphLimit: Value(value!)),
+          ),
         ),
       ),
     if ('default time based x axis'.contains(term.toLowerCase()))
@@ -271,18 +253,17 @@ List<Widget> getWorkoutSettings(
           title: const Text('Default time-based X axis'),
           leading: const Icon(Icons.timeline),
           onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  defaultGraphTimeBasedXAxis:
-                      Value(!settings.defaultGraphTimeBasedXAxis),
-                ),
+            SettingsCompanion(
+              defaultGraphTimeBasedXAxis: Value(
+                !settings.defaultGraphTimeBasedXAxis,
               ),
+            ),
+          ),
           trailing: Switch(
             value: settings.defaultGraphTimeBasedXAxis,
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    defaultGraphTimeBasedXAxis: Value(value),
-                  ),
-                ),
+              SettingsCompanion(defaultGraphTimeBasedXAxis: Value(value)),
+            ),
           ),
         ),
       ),
@@ -300,8 +281,9 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
   late var settings = context.read<SettingsState>().value;
 
   late final max = TextEditingController(text: settings.maxSets.toString());
-  late final warmup =
-      TextEditingController(text: settings.warmupSets?.toString());
+  late final warmup = TextEditingController(
+    text: settings.warmupSets?.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -309,9 +291,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Workouts"),
-      ),
+      appBar: AppBar(title: const Text("Workouts")),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: getWorkoutSettings(context, '', settings),

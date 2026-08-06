@@ -4,18 +4,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({
-    super.key,
-  });
+  const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final info = PackageInfo.fromPlatform();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("About"),
-      ),
+      appBar: AppBar(title: const Text("About")),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: [
@@ -43,11 +39,9 @@ class AboutPage extends StatelessWidget {
             title: const Text("Whats new?"),
             subtitle: const Text("See our release notes"),
             leading: const Icon(Icons.change_circle_outlined),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const WhatsNew(),
-              ),
-            ),
+            onTap: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const WhatsNew())),
           ),
           ListTile(
             leading: const Icon(Icons.info_outline),

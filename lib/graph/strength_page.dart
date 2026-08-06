@@ -72,9 +72,9 @@ class _StrengthPageState extends State<StrengthPage> {
   }
 
   Future<void> _loadPreferences() async {
-    final pref = await (db.graphPreferences.select()
-          ..where((t) => t.name.equals(name)))
-        .getSingleOrNull();
+    final pref =
+        await (db.graphPreferences.select()..where((t) => t.name.equals(name)))
+            .getSingleOrNull();
     if (pref == null || !mounted) return;
     setState(() {
       metric = StrengthMetric.values.firstWhere(
@@ -108,19 +108,14 @@ class _StrengthPageState extends State<StrengthPage> {
 
   void _onNotesChanged() {
     _notesDebounce?.cancel();
-    _notesDebounce = Timer(
-      const Duration(milliseconds: 600),
-      _savePreferences,
-    );
+    _notesDebounce = Timer(const Duration(milliseconds: 600), _savePreferences);
   }
 
   Future<void> _editNotes() async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (context) => GraphNotesPage(
-          controller: _notesCtrl,
-          onChanged: _onNotesChanged,
-        ),
+        builder: (context) =>
+            GraphNotesPage(controller: _notesCtrl, onChanged: _onNotesChanged),
       ),
     );
     _notesDebounce?.cancel();
@@ -158,8 +153,9 @@ class _StrengthPageState extends State<StrengthPage> {
       if (settings.showBodyWeight)
         (StrengthMetric.relativeStrength, 'Relative strength'),
     ];
-    final metricValue =
-        metricOptions.any((option) => option.$1 == metric) ? metric : null;
+    final metricValue = metricOptions.any((option) => option.$1 == metric)
+        ? metric
+        : null;
 
     final spots = <FlSpot>[];
     for (var index = 0; index < data.length; index++) {
@@ -186,27 +182,24 @@ class _StrengthPageState extends State<StrengthPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final gymSets = await (db.gymSets.select()
-                    ..orderBy(
-                      [
-                        (u) => OrderingTerm(
-                              expression: u.created,
-                              mode: OrderingMode.desc,
-                            ),
-                      ],
-                    )
-                    ..where((tbl) => tbl.name.equals(name))
-                    ..where((tbl) => tbl.hidden.equals(false))
-                    ..limit(20))
-                  .get();
+              final gymSets =
+                  await (db.gymSets.select()
+                        ..orderBy([
+                          (u) => OrderingTerm(
+                            expression: u.created,
+                            mode: OrderingMode.desc,
+                          ),
+                        ])
+                        ..where((tbl) => tbl.name.equals(name))
+                        ..where((tbl) => tbl.hidden.equals(false))
+                        ..limit(20))
+                      .get();
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => GraphHistoryPage(
-                    name: name,
-                    gymSets: gymSets,
-                  ),
+                  builder: (context) =>
+                      GraphHistoryPage(name: name, gymSets: gymSets),
                 ),
               );
               _refreshTimer?.cancel();
@@ -219,9 +212,7 @@ class _StrengthPageState extends State<StrengthPage> {
             onPressed: () async {
               String? newName = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => EditGraphPage(
-                    name: name,
-                  ),
+                  builder: (context) => EditGraphPage(name: name),
                 ),
               );
               if (mounted && newName != null)
@@ -402,14 +393,14 @@ class _StrengthPageState extends State<StrengthPage> {
             final settings = context.read<SettingsState>().value;
 
             Widget sectionLabel(String text) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    text,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                );
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                text,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            );
 
             return SafeArea(
               child: Padding(
@@ -511,8 +502,9 @@ class _StrengthPageState extends State<StrengthPage> {
                     ),
                     Slider(
                       value: limit.toDouble(),
-                      inactiveColor:
-                          colorScheme.primary.withValues(alpha: 0.24),
+                      inactiveColor: colorScheme.primary.withValues(
+                        alpha: 0.24,
+                      ),
                       min: 10,
                       max: 100,
                       onChanged: (value) {
@@ -563,9 +555,7 @@ class _StrengthPageState extends State<StrengthPage> {
     });
   }
 
-  LineTouchTooltipData tooltipData(
-    String format,
-  ) {
+  LineTouchTooltipData tooltipData(String format) {
     return LineTouchTooltipData(
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
@@ -617,71 +607,73 @@ class _StrengthPageState extends State<StrengthPage> {
 
     switch (metric) {
       case StrengthMetric.oneRepMax:
-        final ormExpression = db.gymSets.weight /
+        final ormExpression =
+            db.gymSets.weight /
             (const CustomExpression<double>('1.0278 - 0.0278 * reps'));
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    ormExpression.equals(row.value) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
+        gymSet =
+            await (db.gymSets.select()
+                  ..where(
+                    (tbl) =>
+                        tbl.created.equals(row.created) &
+                        ormExpression.equals(row.value) &
+                        tbl.name.equals(widget.name),
+                  )
+                  ..limit(1))
+                .getSingle();
         break;
       case StrengthMetric.volume:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
+        gymSet =
+            await (db.gymSets.select()
+                  ..where(
+                    (tbl) =>
+                        tbl.created.equals(row.created) &
+                        tbl.name.equals(widget.name),
+                  )
+                  ..limit(1))
+                .getSingle();
         break;
       case StrengthMetric.bestWeight:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.weight.equals(row.value) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
+        gymSet =
+            await (db.gymSets.select()
+                  ..where(
+                    (tbl) =>
+                        tbl.created.equals(row.created) &
+                        tbl.weight.equals(row.value) &
+                        tbl.name.equals(widget.name),
+                  )
+                  ..limit(1))
+                .getSingle();
         break;
       case StrengthMetric.relativeStrength:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    ((tbl.weight / tbl.bodyWeight).equals(row.value) |
-                        (tbl.weight / tbl.bodyWeight).isNull()) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
+        gymSet =
+            await (db.gymSets.select()
+                  ..where(
+                    (tbl) =>
+                        tbl.created.equals(row.created) &
+                        ((tbl.weight / tbl.bodyWeight).equals(row.value) |
+                            (tbl.weight / tbl.bodyWeight).isNull()) &
+                        tbl.name.equals(widget.name),
+                  )
+                  ..limit(1))
+                .getSingle();
         break;
       case StrengthMetric.bestReps:
-        gymSet = await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.reps.equals(row.value) &
-                    tbl.name.equals(widget.name),
-              )
-              ..limit(1))
-            .getSingle();
+        gymSet =
+            await (db.gymSets.select()
+                  ..where(
+                    (tbl) =>
+                        tbl.created.equals(row.created) &
+                        tbl.reps.equals(row.value) &
+                        tbl.name.equals(widget.name),
+                  )
+                  ..limit(1))
+                .getSingle();
         break;
     }
 
     if (!mounted) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditSetPage(
-          gymSet: gymSet!,
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet!)),
     );
     Timer(kThemeAnimationDuration, setData);
   }

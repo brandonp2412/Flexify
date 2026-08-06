@@ -57,8 +57,9 @@ void main() async {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('GraphsPage taps barbell bench press',
-      (WidgetTester tester) async {
+  testWidgets('GraphsPage taps barbell bench press', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
     db = testDb();
 
@@ -233,8 +234,9 @@ void main() async {
     expect(find.text('Back extension'), findsNothing);
   });
 
-  testWidgets('GraphsPage delete also removes plan exercises',
-      (WidgetTester tester) async {
+  testWidgets('GraphsPage delete also removes plan exercises', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
     db = testDb();
 
@@ -287,9 +289,10 @@ void main() async {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
-    final planExercises = await (db.planExercises.select()
-          ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
-        .get();
+    final planExercises =
+        await (db.planExercises.select()
+              ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
+            .get();
     expect(planExercises, isEmpty);
   });
 }

@@ -203,12 +203,11 @@ class AppDatabase extends _$AppDatabase {
         from17To18: (Migrator m, Schema18 schema) async {
           final plans = await (schema.plans.select()).get();
           const maxSets = CustomExpression<int>('max_sets');
-          final gymSets = await (schema.gymSets.selectOnly()
-                ..addColumns(
-                  [maxSets, schema.gymSets.name],
-                )
-                ..groupBy([schema.gymSets.name]))
-              .get();
+          final gymSets =
+              await (schema.gymSets.selectOnly()
+                    ..addColumns([maxSets, schema.gymSets.name])
+                    ..groupBy([schema.gymSets.name]))
+                  .get();
 
           List<Insertable<QueryRow>> pe = [];
           for (final plan in plans) {
@@ -264,9 +263,10 @@ class AppDatabase extends _$AppDatabase {
           const hideTimerTab = CustomExpression<bool>('hide_timer_tab');
           const hideHistoryTab = CustomExpression<bool>('hide_history_tab');
 
-          final result = await (schema.settings.selectOnly()
-                ..addColumns([hideWeight, hideTimerTab, hideHistoryTab]))
-              .getSingleOrNull();
+          final result =
+              await (schema.settings.selectOnly()
+                    ..addColumns([hideWeight, hideTimerTab, hideHistoryTab]))
+                  .getSingleOrNull();
 
           await m.addColumn(schema.settings, schema.settings.showBodyWeight);
           await m.addColumn(schema.settings, schema.settings.showTimerTab);
@@ -274,15 +274,12 @@ class AppDatabase extends _$AppDatabase {
 
           if (result != null)
             await schema.settings.update().write(
-                  RawValuesInsertable(
-                    {
-                      'show_body_weight': Variable(!result.read(hideWeight)!),
-                      'show_timer_tab': Variable(!result.read(hideTimerTab)!),
-                      'show_history_tab':
-                          Variable(!result.read(hideHistoryTab)!),
-                    },
-                  ),
-                );
+              RawValuesInsertable({
+                'show_body_weight': Variable(!result.read(hideWeight)!),
+                'show_timer_tab': Variable(!result.read(hideTimerTab)!),
+                'show_history_tab': Variable(!result.read(hideHistoryTab)!),
+              }),
+            );
 
           await m.alterTable(TableMigration(schema.settings));
         },
@@ -294,8 +291,8 @@ class AppDatabase extends _$AppDatabase {
         },
         from26To27: (Migrator m, Schema27 schema) async {
           var tabs = ['HistoryPage', 'PlansPage', 'GraphsPage', 'TimerPage'];
-          final settings =
-              await (schema.settings.select()..limit(1)).getSingleOrNull();
+          final settings = await (schema.settings.select()..limit(1))
+              .getSingleOrNull();
 
           if (settings != null) {
             bool showTimer = settings.read('show_timer_tab');
@@ -306,10 +303,8 @@ class AppDatabase extends _$AppDatabase {
 
           await m.addColumn(schema.settings, schema.settings.tabs);
           await schema.settings.update().write(
-                RawValuesInsertable({
-                  'tabs': Variable(tabs.join(',')),
-                }),
-              );
+            RawValuesInsertable({'tabs': Variable(tabs.join(','))}),
+          );
 
           await m.alterTable(TableMigration(schema.settings));
         },
@@ -317,8 +312,9 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(schema.settings, schema.settings.enableSound);
         },
         from28To29: (Migrator m, Schema29 schema) async {
-          await m.database
-              .customStatement('DROP INDEX IF EXISTS gym_sets_name_created');
+          await m.database.customStatement(
+            'DROP INDEX IF EXISTS gym_sets_name_created',
+          );
           await m.createIndex(
             Index(
               'gym_sets',
@@ -357,15 +353,11 @@ class AppDatabase extends _$AppDatabase {
         },
         from31To32: (Migrator m, Schema32 schema) async {
           await schema.settings.update().write(
-                const RawValuesInsertable({
-                  'rep_estimation': Variable(false),
-                }),
-              );
+            const RawValuesInsertable({'rep_estimation': Variable(false)}),
+          );
           await schema.settings.update().write(
-                const RawValuesInsertable({
-                  'duration_estimation': Variable(false),
-                }),
-              );
+            const RawValuesInsertable({'duration_estimation': Variable(false)}),
+          );
         },
         from32To33: (Migrator m, Schema33 schema) async {
           await m.addColumn(schema.settings, schema.settings.peekGraph);
@@ -399,41 +391,38 @@ class AppDatabase extends _$AppDatabase {
         },
         from40To41: (Migrator m, Schema41 schema) async {
           await schema.settings.update().write(
-                const RawValuesInsertable({
-                  'strength_unit': Variable("last-entry"),
-                  'cardio_unit': Variable("last-entry"),
-                }),
-              );
+            const RawValuesInsertable({
+              'strength_unit': Variable("last-entry"),
+              'cardio_unit': Variable("last-entry"),
+            }),
+          );
         },
         from41To42: (Migrator m, Schema42 schema) async {
           await m.alterTable(TableMigration(schema.settings));
           await schema.settings.update().write(
-                const RawValuesInsertable({
-                  'rep_estimation': Variable(false),
-                }),
-              );
+            const RawValuesInsertable({'rep_estimation': Variable(false)}),
+          );
         },
         from42To43: (Migrator m, Schema43 schema) async {
           await m.addColumn(schema.settings, schema.settings.scrollableTabs);
         },
         from43To44: (Migrator m, Schema44 schema) async {
           final plans = await (schema.plans.select()).get();
-          await batch(
-            (b) {
-              for (final plan in plans) {
-                final planId = plan.read<int>('id');
+          await batch((b) {
+            for (final plan in plans) {
+              final planId = plan.read<int>('id');
 
-                String sql;
-                sql = '''
+              String sql;
+              sql =
+                  '''
                 DELETE FROM plan_exercises
                 WHERE plan_id = $planId
                 AND enabled = false;
                 ''';
 
-                b.customStatement(sql);
-              }
-            },
-          );
+              b.customStatement(sql);
+            }
+          });
         },
         from44To45: (Migrator m, Schema45 schema) async {
           await m.alterTable(TableMigration(schema.plans));
@@ -467,27 +456,17 @@ class AppDatabase extends _$AppDatabase {
         },
         from47To48: (Migrator m, Schema48 schema) async {
           final cols = await schema.database
-              .customSelect(
-                "PRAGMA table_info(settings)",
-              )
+              .customSelect("PRAGMA table_info(settings)")
               .get();
           final existing = cols.map((r) => r.read<String>('name')).toSet();
           if (!existing.contains('show_graph_x_axis'))
-            await m.addColumn(
-              schema.settings,
-              schema.settings.showGraphXAxis,
-            );
+            await m.addColumn(schema.settings, schema.settings.showGraphXAxis);
           if (!existing.contains('show_graph_limit'))
-            await m.addColumn(
-              schema.settings,
-              schema.settings.showGraphLimit,
-            );
+            await m.addColumn(schema.settings, schema.settings.showGraphLimit);
         },
         from48To49: (Migrator m, Schema49 schema) async {
           final cols = await schema.database
-              .customSelect(
-                "PRAGMA table_info(settings)",
-              )
+              .customSelect("PRAGMA table_info(settings)")
               .get();
           final existing = cols.map((r) => r.read<String>('name')).toSet();
           if (!existing.contains('progress_position'))
@@ -505,10 +484,7 @@ class AppDatabase extends _$AppDatabase {
             schema.settings,
             schema.settings.defaultGraphPeriod,
           );
-          await m.addColumn(
-            schema.settings,
-            schema.settings.defaultGraphLimit,
-          );
+          await m.addColumn(schema.settings, schema.settings.defaultGraphLimit);
           await m.addColumn(
             schema.settings,
             schema.settings.defaultGraphTimeBasedXAxis,
@@ -520,10 +496,8 @@ class AppDatabase extends _$AppDatabase {
         from51To52: (Migrator m, Schema52 schema) async {
           await m.addColumn(schema.settings, schema.settings.keepScreenOn);
           await schema.settings.update().write(
-                const RawValuesInsertable({
-                  'keep_screen_on': Variable(true),
-                }),
-              );
+            const RawValuesInsertable({'keep_screen_on': Variable(true)}),
+          );
         },
         from52To53: (Migrator m, Schema53 schema) async {
           await m.addColumn(schema.settings, schema.settings.inputStyle);
@@ -541,18 +515,17 @@ class AppDatabase extends _$AppDatabase {
             if (cleaned == tabs) continue;
             await schema.database.customStatement(
               'UPDATE settings SET tabs = ? WHERE id = ?',
-              [
-                cleaned.isEmpty ? 'HistoryPage' : cleaned,
-                row.read<int>('id'),
-              ],
+              [cleaned.isEmpty ? 'HistoryPage' : cleaned, row.read<int>('id')],
             );
           }
         },
         from54To55: (Migrator m, Schema55 schema) async {
-          await m.database
-              .customStatement('DROP INDEX IF EXISTS gym_sets_name');
-          await m.database
-              .customStatement('DROP INDEX IF EXISTS gym_sets_hidden');
+          await m.database.customStatement(
+            'DROP INDEX IF EXISTS gym_sets_name',
+          );
+          await m.database.customStatement(
+            'DROP INDEX IF EXISTS gym_sets_hidden',
+          );
           await m.createIndex(
             Index(
               'gym_sets',

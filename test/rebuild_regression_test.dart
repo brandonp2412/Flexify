@@ -64,9 +64,7 @@ Widget historyApp(Setting settings) {
       ChangeNotifierProvider(create: (_) => TimerState()),
       ChangeNotifierProvider(create: (_) => PlanState()),
     ],
-    child: MaterialApp(
-      home: HistoryPage(tabController: MockTabController()),
-    ),
+    child: MaterialApp(home: HistoryPage(tabController: MockTabController())),
   );
 }
 
@@ -96,20 +94,19 @@ void main() {
   // significantly more frames than the 10-item test, ListView.builder is
   // building off-screen items instead of virtualizing.
 
-  testWidgets(
-    'HistoryPage with 10 items settles within 6 frames',
-    (tester) async {
-      await db.gymSets.insertAll(
-        List.generate(10, (i) => makeSet('Bench press', minutesAgo: i)),
-      );
-      await tester.pumpWidget(historyApp(await settings()));
-      final frames = await countFramesToSettle(tester);
+  testWidgets('HistoryPage with 10 items settles within 6 frames', (
+    tester,
+  ) async {
+    await db.gymSets.insertAll(
+      List.generate(10, (i) => makeSet('Bench press', minutesAgo: i)),
+    );
+    await tester.pumpWidget(historyApp(await settings()));
+    final frames = await countFramesToSettle(tester);
 
-      // Measured baseline: 2 frames.
-      print('[perf] 10-item list initial render: $frames frames');
-      expect(frames, lessThan(6), reason: '10-item list took $frames frames');
-    },
-  );
+    // Measured baseline: 2 frames.
+    print('[perf] 10-item list initial render: $frames frames');
+    expect(frames, lessThan(6), reason: '10-item list took $frames frames');
+  });
 
   testWidgets(
     'HistoryPage with 100 items settles within 6 frames (same as 10 -- virtualized)',
@@ -125,7 +122,8 @@ void main() {
       expect(
         frames,
         lessThan(6),
-        reason: '100-item list took $frames frames -- '
+        reason:
+            '100-item list took $frames frames -- '
             'if much higher than the 10-item test, '
             'ListView.builder is building off-screen items',
       );
@@ -150,77 +148,73 @@ void main() {
       expect(
         frames,
         lessThan(4),
-        reason: 'Stream update took $frames frames -- '
+        reason:
+            'Stream update took $frames frames -- '
             'expected ~2 (StreamBuilder + HistoryList setState)',
       );
     },
   );
 
-  testWidgets(
-    'deleting a set settles in few frames',
-    (tester) async {
-      final id = await db.gymSets.insertOne(makeSet('Romanian DL'));
-      await tester.pumpWidget(historyApp(await settings()));
-      await tester.pumpAndSettle();
+  testWidgets('deleting a set settles in few frames', (tester) async {
+    final id = await db.gymSets.insertOne(makeSet('Romanian DL'));
+    await tester.pumpWidget(historyApp(await settings()));
+    await tester.pumpAndSettle();
 
-      await (db.gymSets.deleteWhere((t) => t.id.equals(id)));
-      final frames = await countFramesToSettle(tester);
+    await (db.gymSets.deleteWhere((t) => t.id.equals(id)));
+    final frames = await countFramesToSettle(tester);
 
-      // Measured baseline: 2 frames, same as insert.
-      print('[perf] Delete record → UI settle: $frames frames');
-      expect(frames, lessThan(4), reason: 'Delete settled in $frames frames');
-    },
-  );
+    // Measured baseline: 2 frames, same as insert.
+    print('[perf] Delete record → UI settle: $frames frames');
+    expect(frames, lessThan(4), reason: 'Delete settled in $frames frames');
+  });
 
   // --- Selection animation --------------------------------------------
 
-  testWidgets(
-    'entering selection mode settles within 45 frames',
-    (tester) async {
-      await db.gymSets.insertOne(makeSet('Deadlift'));
-      await tester.pumpWidget(historyApp(await settings()));
-      await tester.pumpAndSettle();
+  testWidgets('entering selection mode settles within 45 frames', (
+    tester,
+  ) async {
+    await db.gymSets.insertOne(makeSet('Deadlift'));
+    await tester.pumpWidget(historyApp(await settings()));
+    await tester.pumpAndSettle();
 
-      // longPress recognition takes kLongPressTimeout (500ms = ~31 frames at 16ms),
-      // then AnimatedSwitcher animates the leading icon (150ms = ~10 frames).
-      // Measured baseline: 39 frames.
-      await tester.longPress(find.text('5 x 100 kg'));
-      final frames = await countFramesToSettle(tester);
+    // longPress recognition takes kLongPressTimeout (500ms = ~31 frames at 16ms),
+    // then AnimatedSwitcher animates the leading icon (150ms = ~10 frames).
+    // Measured baseline: 39 frames.
+    await tester.longPress(find.text('5 x 100 kg'));
+    final frames = await countFramesToSettle(tester);
 
-      print(
-        '[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)',
-      );
-      expect(
-        frames,
-        lessThan(45),
-        reason: 'Entering selection mode took $frames frames',
-      );
-    },
-  );
+    print(
+      '[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)',
+    );
+    expect(
+      frames,
+      lessThan(45),
+      reason: 'Entering selection mode took $frames frames',
+    );
+  });
 
-  testWidgets(
-    'exiting selection mode settles within 45 frames',
-    (tester) async {
-      await db.gymSets.insertOne(makeSet('OHP'));
-      await tester.pumpWidget(historyApp(await settings()));
-      await tester.pumpAndSettle();
+  testWidgets('exiting selection mode settles within 45 frames', (
+    tester,
+  ) async {
+    await db.gymSets.insertOne(makeSet('OHP'));
+    await tester.pumpWidget(historyApp(await settings()));
+    await tester.pumpAndSettle();
 
-      await tester.longPress(find.text('5 x 100 kg'));
-      await tester.pumpAndSettle();
+    await tester.longPress(find.text('5 x 100 kg'));
+    await tester.pumpAndSettle();
 
-      // Tap to deselect -- AnimatedSwitcher plays in reverse (150ms = ~10 frames)
-      // Measured baseline: 40 frames.
-      await tester.tap(find.text('5 x 100 kg'));
-      final frames = await countFramesToSettle(tester);
+    // Tap to deselect -- AnimatedSwitcher plays in reverse (150ms = ~10 frames)
+    // Measured baseline: 40 frames.
+    await tester.tap(find.text('5 x 100 kg'));
+    final frames = await countFramesToSettle(tester);
 
-      print(
-        '[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)',
-      );
-      expect(
-        frames,
-        lessThan(45),
-        reason: 'Exiting selection mode took $frames frames',
-      );
-    },
-  );
+    print(
+      '[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)',
+    );
+    expect(
+      frames,
+      lessThan(45),
+      reason: 'Exiting selection mode took $frames frames',
+    );
+  });
 }

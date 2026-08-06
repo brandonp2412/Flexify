@@ -12,8 +12,9 @@ import 'package:provider/provider.dart';
 import 'mock_tests.dart';
 
 void main() async {
-  testWidgets('EditSetsPage cardio toggle switches fields',
-      (WidgetTester tester) async {
+  testWidgets('EditSetsPage cardio toggle switches fields', (
+    WidgetTester tester,
+  ) async {
     await mockTests();
     db = testDb();
 
@@ -114,11 +115,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: EditSetsPage(
-            ids: ids,
-          ),
-        ),
+        child: MaterialApp(home: EditSetsPage(ids: ids)),
       ),
     );
 
@@ -140,11 +137,12 @@ void main() async {
     await tester.pumpAndSettle();
 
     expect(find.text("Edit 3 sets"), findsNothing);
-    final gymSets = await (db.gymSets.select()
-          ..where((u) => u.reps.equals(9))
-          ..where((u) => u.weight.equals(200))
-          ..where((u) => u.name.equals('New name')))
-        .get();
+    final gymSets =
+        await (db.gymSets.select()
+              ..where((u) => u.reps.equals(9))
+              ..where((u) => u.weight.equals(200))
+              ..where((u) => u.name.equals('New name')))
+            .get();
     expect(gymSets.length, equals(3));
   });
 }

@@ -55,11 +55,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => planState),
         ],
-        child: const MaterialApp(
-          home: EditPlanPage(
-            plan: plan,
-          ),
-        ),
+        child: const MaterialApp(home: EditPlanPage(plan: plan)),
       ),
     );
 
@@ -124,11 +120,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => planState),
         ],
-        child: const MaterialApp(
-          home: EditPlanPage(
-            plan: plan,
-          ),
-        ),
+        child: const MaterialApp(home: EditPlanPage(plan: plan)),
       ),
     );
 

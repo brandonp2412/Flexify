@@ -78,8 +78,9 @@ class GraphsPageState extends State<GraphsPage>
     });
 
     await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(copy))).go();
-    await (db.delete(db.planExercises)..where((x) => x.exercise.isIn(copy)))
-        .go();
+    await (db.delete(
+      db.planExercises,
+    )..where((x) => x.exercise.isIn(copy))).go();
     state.updatePlans(null);
   }
 
@@ -130,11 +131,7 @@ class GraphsPageState extends State<GraphsPage>
         child: FlexLine(
           data: data,
           spots: spots,
-          tooltipData: () => tooltipData(
-            data,
-            gymSet.unit.value,
-            format,
-          ),
+          tooltipData: () => tooltipData(data, gymSet.unit.value, format),
           hideBottom: true,
           hideLeft: true,
         ),
@@ -151,8 +148,10 @@ class GraphsPageState extends State<GraphsPage>
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
           if (!snapshot.hasData) return const SizedBox();
 
-          final terms =
-              search.toLowerCase().split(" ").where((term) => term.isNotEmpty);
+          final terms = search
+              .toLowerCase()
+              .split(" ")
+              .where((term) => term.isNotEmpty);
           var stream = snapshot.data!.where((gymSet) {
             if (category != null) {
               return gymSet.category.value == category;
@@ -183,8 +182,8 @@ class GraphsPageState extends State<GraphsPage>
             case GraphSort.name:
               gymSets.sort(
                 (a, b) => a.name.value.toLowerCase().compareTo(
-                      b.name.value.toLowerCase(),
-                    ),
+                  b.name.value.toLowerCase(),
+                ),
               );
               break;
           }
@@ -205,9 +204,8 @@ class GraphsPageState extends State<GraphsPage>
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => AddExercisePage(
-                                  name: search,
-                                ),
+                                builder: (context) =>
+                                    AddExercisePage(name: search),
                               ),
                             );
                           },
@@ -216,9 +214,8 @@ class GraphsPageState extends State<GraphsPage>
                     Selector<SettingsState, bool>(
                       selector: (p0, settingsState) =>
                           settingsState.value.showGlobalProgress,
-                      builder: (context, showGlobal, child) => Expanded(
-                        child: graphList(gymSets, showGlobal),
-                      ),
+                      builder: (context, showGlobal, child) =>
+                          Expanded(child: graphList(gymSets, showGlobal)),
                     ),
                   ],
                 ),
@@ -258,9 +255,8 @@ class GraphsPageState extends State<GraphsPage>
                   }),
                   onEdit: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => EditGraphPage(
-                        name: _selection.first,
-                      ),
+                      builder: (context) =>
+                          EditGraphPage(name: _selection.first),
                     ),
                   ),
                   confirmText: "This will delete $total records. Are you sure?",
@@ -272,9 +268,7 @@ class GraphsPageState extends State<GraphsPage>
       ),
       floatingActionButton: AnimatedFab(
         onPressed: () => navKey.currentState!.push(
-          MaterialPageRoute(
-            builder: (context) => const AddExercisePage(),
-          ),
+          MaterialPageRoute(builder: (context) => const AddExercisePage()),
         ),
         label: Text('Add'),
         scroll: scroll,
@@ -289,9 +283,7 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
     final sets = (await stream.first)
-        .where(
-          (gymSet) => copy.contains(gymSet.name.value),
-        )
+        .where((gymSet) => copy.contains(gymSet.name.value))
         .toList();
     final text = sets
         .map(
@@ -315,10 +307,8 @@ class GraphsPageState extends State<GraphsPage>
                 title: const Text('Hide global progress'),
                 onTap: () {
                   db.settings.update().write(
-                        const SettingsCompanion(
-                          showGlobalProgress: Value(false),
-                        ),
-                      );
+                    const SettingsCompanion(showGlobalProgress: Value(false)),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -336,12 +326,10 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  ListView graphList(
-    List<GymSetsCompanion> gymSets,
-    bool showGlobalProgress,
-  ) {
+  ListView graphList(List<GymSetsCompanion> gymSets, bool showGlobalProgress) {
     var itemCount = gymSets.length + 1;
-    final showGlobal = 'global graphs'.contains(search.toLowerCase()) &&
+    final showGlobal =
+        'global graphs'.contains(search.toLowerCase()) &&
         category == null &&
         showGlobalProgress;
     if (showGlobal) itemCount++;
@@ -379,35 +367,32 @@ class GraphsPageState extends State<GraphsPage>
 
         if (showPeekGraph && currentIdx == 0) {
           return Consumer<SettingsState>(
-            builder: (
-              BuildContext context,
-              SettingsState settings,
-              Widget? child,
-            ) {
-              if (!settings.value.peekGraph) return const SizedBox();
-              if (gymSets.firstOrNull == null) return const SizedBox();
+            builder:
+                (BuildContext context, SettingsState settings, Widget? child) {
+                  if (!settings.value.peekGraph) return const SizedBox();
+                  if (gymSets.firstOrNull == null) return const SizedBox();
 
-              return FutureBuilder(
-                builder: (context, snapshot) => snapshot.data != null
-                    ? getPeek(
-                        gymSets.first,
-                        snapshot.data!,
-                        settings.value.shortDateFormat,
-                      )
-                    : const SizedBox(),
-                future: gymSets.first.cardio.value
-                    ? getCardioData(name: gymSets.first.name.value)
-                    : getStrengthData(
-                        target: gymSets.first.unit.value,
-                        name: gymSets.first.name.value,
-                        metric: StrengthMetric.bestWeight,
-                        period: Period.day,
-                        start: null,
-                        end: null,
-                        limit: 20,
-                      ),
-              );
-            },
+                  return FutureBuilder(
+                    builder: (context, snapshot) => snapshot.data != null
+                        ? getPeek(
+                            gymSets.first,
+                            snapshot.data!,
+                            settings.value.shortDateFormat,
+                          )
+                        : const SizedBox(),
+                    future: gymSets.first.cardio.value
+                        ? getCardioData(name: gymSets.first.name.value)
+                        : getStrengthData(
+                            target: gymSets.first.unit.value,
+                            name: gymSets.first.name.value,
+                            metric: StrengthMetric.bestWeight,
+                            period: Period.day,
+                            start: null,
+                            end: null,
+                            limit: 20,
+                          ),
+                  );
+                },
           );
         }
 
@@ -428,10 +413,11 @@ class GraphsPageState extends State<GraphsPage>
             setState(() {
               _selection.toggle(name);
             });
-            final result = await (db.gymSets.selectOnly()
-                  ..addColumns([db.gymSets.name.count()])
-                  ..where(db.gymSets.name.isIn(_selection.selected)))
-                .getSingle();
+            final result =
+                await (db.gymSets.selectOnly()
+                      ..addColumns([db.gymSets.name.count()])
+                      ..where(db.gymSets.name.isIn(_selection.selected)))
+                    .getSingle();
             setState(() {
               total = result.read(db.gymSets.name.count()) ?? 0;
             });

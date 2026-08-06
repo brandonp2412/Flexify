@@ -17,10 +17,8 @@ import 'package:share_plus/share_plus.dart';
 
 void tapBackup(bool value) async {
   await db.settings.update().write(
-        SettingsCompanion(
-          automaticBackups: Value(value),
-        ),
-      );
+    SettingsCompanion(automaticBackups: Value(value)),
+  );
 
   if (value) {
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -76,9 +74,7 @@ class DataSettings extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Data management"),
-      ),
+      appBar: AppBar(title: const Text("Data management")),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: getDataSettings('', settings, context),

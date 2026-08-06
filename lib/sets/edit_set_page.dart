@@ -54,23 +54,25 @@ class _EditSetPageState extends State<EditSetPage> {
   late String name;
 
   void onSelected(String option, bool showBodyWeight) async {
-    final last = await (db.gymSets.select()
-          ..where((tbl) => tbl.name.equals(option) & tbl.hidden.equals(false))
-          ..orderBy(
-            [
-              (u) => OrderingTerm(
-                    expression: u.created,
-                    mode: OrderingMode.desc,
-                  ),
-            ],
-          )
-          ..limit(1))
-        .getSingleOrNull();
+    final last =
+        await (db.gymSets.select()
+              ..where(
+                (tbl) => tbl.name.equals(option) & tbl.hidden.equals(false),
+              )
+              ..orderBy([
+                (u) => OrderingTerm(
+                  expression: u.created,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
     if (last == null) {
-      final template = await (db.gymSets.select()
-            ..where((tbl) => tbl.name.equals(option))
-            ..limit(1))
-          .getSingleOrNull();
+      final template =
+          await (db.gymSets.select()
+                ..where((tbl) => tbl.name.equals(option))
+                ..limit(1))
+              .getSingleOrNull();
       return setState(() {
         name = option;
         if (template != null) {
@@ -87,11 +89,7 @@ class _EditSetPageState extends State<EditSetPage> {
       updateFields(last);
     else {
       final bodyWeight = await getBodyWeight();
-      updateFields(
-        last.copyWith(
-          bodyWeight: bodyWeight?.weight,
-        ),
-      );
+      updateFields(last.copyWith(bodyWeight: bodyWeight?.weight));
     }
 
     if (cardio) {
@@ -119,12 +117,8 @@ class _EditSetPageState extends State<EditSetPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text(
-        widget.gymSet.id > 0 ? widget.gymSet.name : 'Add set',
-      ),
-      actions: [
-        if (widget.gymSet.id > 0) buildDeleteButton(),
-      ],
+      title: Text(widget.gymSet.id > 0 ? widget.gymSet.name : 'Add set'),
+      actions: [if (widget.gymSet.id > 0) buildDeleteButton()],
     );
   }
 
@@ -205,23 +199,14 @@ class _EditSetPageState extends State<EditSetPage> {
                   bodyFields(showBodyWeight),
                   const SizedBox(height: 8.0),
                 ],
-                if (showUnits) ...[
-                  unitSelector(),
-                  const SizedBox(height: 8.0),
-                ],
+                if (showUnits) ...[unitSelector(), const SizedBox(height: 8.0)],
                 if (showCategories && name != 'Weight') ...[
                   categorySelector(),
                   const SizedBox(height: 8.0),
                 ],
-                if (showNotes) ...[
-                  notesField(),
-                  const SizedBox(height: 8.0),
-                ],
+                if (showNotes) ...[notesField(), const SizedBox(height: 8.0)],
                 dateSelector(),
-                if (showImages) ...[
-                  const SizedBox(height: 8.0),
-                  imageField(),
-                ],
+                if (showImages) ...[const SizedBox(height: 8.0), imageField()],
               ],
             );
           },
@@ -241,15 +226,9 @@ class _EditSetPageState extends State<EditSetPage> {
   List<Widget> buildStrengthFields() {
     return [
       const SizedBox(height: 8.0),
-      if (name != 'Weight') ...[
-        buildRepsField(),
-        const SizedBox(height: 8.0),
-      ],
+      if (name != 'Weight') ...[buildRepsField(), const SizedBox(height: 8.0)],
       buildWeightField(),
-      if (name != 'Weight') ...[
-        const SizedBox(height: 8.0),
-        buildORMField(),
-      ],
+      if (name != 'Weight') ...[const SizedBox(height: 8.0), buildORMField()],
     ];
   }
 
@@ -288,9 +267,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget buildORMField() {
     return TextField(
       controller: orm,
-      decoration: const InputDecoration(
-        labelText: 'One rep max (estimate)',
-      ),
+      decoration: const InputDecoration(labelText: 'One rep max (estimate)'),
       enabled: false,
     );
   }
@@ -345,9 +322,7 @@ class _EditSetPageState extends State<EditSetPage> {
       visible: showBodyWeight && name != 'Weight',
       child: TextFormField(
         controller: body,
-        decoration: InputDecoration(
-          labelText: 'Body weight ($unit)',
-        ),
+        decoration: InputDecoration(labelText: 'Body weight ($unit)'),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(body),
         validator: (value) {
@@ -401,8 +376,8 @@ class _EditSetPageState extends State<EditSetPage> {
                 }
                 return snapshot.data!.where((String option) {
                   return option.toLowerCase().contains(
-                        textEditingValue.text.toLowerCase(),
-                      );
+                    textEditingValue.text.toLowerCase(),
+                  );
                 });
               },
               onSelected: (String selection) {
@@ -410,25 +385,26 @@ class _EditSetPageState extends State<EditSetPage> {
                   category = selection;
                 });
               },
-              fieldViewBuilder: (
-                BuildContext context,
-                TextEditingController textEditingController,
-                FocusNode focusNode,
-                VoidCallback onFieldSubmitted,
-              ) {
-                categoryCtrl = textEditingController;
-                return TextFormField(
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  decoration: const InputDecoration(
-                    labelText: 'Category',
-                    helperText: 'Muscle group, e.g. Chest or Legs',
-                  ),
-                  onChanged: (value) => setState(() {
-                    category = value.isNotEmpty ? value : null;
-                  }),
-                );
-              },
+              fieldViewBuilder:
+                  (
+                    BuildContext context,
+                    TextEditingController textEditingController,
+                    FocusNode focusNode,
+                    VoidCallback onFieldSubmitted,
+                  ) {
+                    categoryCtrl = textEditingController;
+                    return TextFormField(
+                      controller: textEditingController,
+                      focusNode: focusNode,
+                      decoration: const InputDecoration(
+                        labelText: 'Category',
+                        helperText: 'Muscle group, e.g. Chest or Legs',
+                      ),
+                      onChanged: (value) => setState(() {
+                        category = value.isNotEmpty ? value : null;
+                      }),
+                    );
+                  },
             );
           },
         );
@@ -442,9 +418,7 @@ class _EditSetPageState extends State<EditSetPage> {
         visible: showNotes,
         child: TextField(
           maxLines: 3,
-          decoration: const InputDecoration(
-            labelText: 'Notes',
-          ),
+          decoration: const InputDecoration(labelText: 'Notes'),
           controller: notes,
         ),
       ),
@@ -502,10 +476,10 @@ class _EditSetPageState extends State<EditSetPage> {
                       File(image!),
                       errorBuilder: (context, error, stackTrace) =>
                           TextButton.icon(
-                        label: const Text('Image error'),
-                        icon: const Icon(Icons.error),
-                        onPressed: () => pick(),
-                      ),
+                            label: const Text('Image error'),
+                            icon: const Icon(Icons.error),
+                            onPressed: () => pick(),
+                          ),
                     ),
                   ),
                 ),
@@ -525,9 +499,7 @@ class _EditSetPageState extends State<EditSetPage> {
           child: TextFormField(
             controller: minutes,
             decoration: const InputDecoration(labelText: 'Minutes'),
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: false,
-            ),
+            keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(minutes),
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (value) => selectAll(seconds),
@@ -543,9 +515,7 @@ class _EditSetPageState extends State<EditSetPage> {
           child: TextFormField(
             controller: seconds,
             decoration: const InputDecoration(labelText: 'Seconds'),
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: false,
-            ),
+            keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(seconds),
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (value) => selectAll(incline),
@@ -576,33 +546,34 @@ class _EditSetPageState extends State<EditSetPage> {
       },
       onSelected: (option) => onSelected(option, showBodyWeight),
       initialValue: TextEditingValue(text: name),
-      fieldViewBuilder: (
-        BuildContext context,
-        TextEditingController textEditingController,
-        FocusNode focusNode,
-        VoidCallback onFieldSubmitted,
-      ) {
-        nameCtrl = textEditingController;
-        return TextFormField(
-          decoration: const InputDecoration(labelText: 'Name'),
-          controller: textEditingController,
-          textInputAction: TextInputAction.next,
-          onTap: () {
-            selectAll(textEditingController);
+      fieldViewBuilder:
+          (
+            BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted,
+          ) {
+            nameCtrl = textEditingController;
+            return TextFormField(
+              decoration: const InputDecoration(labelText: 'Name'),
+              controller: textEditingController,
+              textInputAction: TextInputAction.next,
+              onTap: () {
+                selectAll(textEditingController);
+              },
+              focusNode: focusNode,
+              onFieldSubmitted: (String value) {
+                onFieldSubmitted();
+              },
+              onChanged: (value) => setState(() {
+                name = value;
+              }),
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'Required';
+                return null;
+              },
+            );
           },
-          focusNode: focusNode,
-          onFieldSubmitted: (String value) {
-            onFieldSubmitted();
-          },
-          onChanged: (value) => setState(() {
-            name = value;
-          }),
-          validator: (value) {
-            if (value == null || value.isEmpty) return 'Required';
-            return null;
-          },
-        );
-      },
     );
   }
 
@@ -628,9 +599,9 @@ class _EditSetPageState extends State<EditSetPage> {
       created = widget.gymSet.created;
     });
 
-    (db.gymSets.selectOnly(distinct: true)..addColumns([db.gymSets.name]))
-        .get()
-        .then((results) {
+    (db.gymSets.selectOnly(
+      distinct: true,
+    )..addColumns([db.gymSets.name])).get().then((results) {
       final names = results.map((result) => result.read(db.gymSets.name)!);
       setState(() {
         options = names.toList();
@@ -658,7 +629,8 @@ class _EditSetPageState extends State<EditSetPage> {
       weight: double.tryParse(weight.text),
       bodyWeight: double.tryParse(body.text),
       distance: double.tryParse(distance.text),
-      duration: (int.tryParse(seconds.text) ?? 0) / 60 +
+      duration:
+          (int.tryParse(seconds.text) ?? 0) / 60 +
           (int.tryParse(minutes.text) ?? 0),
       cardio: cardio,
       restMs: Value(restMs),
@@ -674,8 +646,9 @@ class _EditSetPageState extends State<EditSetPage> {
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
       if (image != null)
-        (db.update(db.gymSets)..where((u) => u.name.equals(name)))
-            .write(GymSetsCompanion(image: Value(image)));
+        (db.update(db.gymSets)..where((u) => u.name.equals(name))).write(
+          GymSetsCompanion(image: Value(image)),
+        );
       if (!mounted) return;
       planState.updateDefaults();
       return Navigator.of(context).pop();

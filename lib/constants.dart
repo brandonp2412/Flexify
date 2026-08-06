@@ -3,8 +3,10 @@ import 'package:flexify/database/database.dart';
 import 'package:flutter/material.dart';
 
 /// Consistent padding for input fields (dropdowns, text fields) in settings screens.
-const kSettingsInputPadding =
-    EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
+const kSettingsInputPadding = EdgeInsets.symmetric(
+  horizontal: 16.0,
+  vertical: 8.0,
+);
 
 const weekdays = [
   'Monday',
@@ -18,12 +20,7 @@ const weekdays = [
 
 enum CardioMetric { pace, distance, duration, incline, inclineAdjustedPace }
 
-enum Period {
-  day,
-  week,
-  month,
-  year,
-}
+enum Period { day, week, month, year }
 
 enum PlanTrailing { reorder, ratio, count, percent, none }
 
@@ -35,11 +32,7 @@ enum StrengthMetric {
   bestReps,
 }
 
-enum GraphSort {
-  dateDesc,
-  dateAsc,
-  name,
-}
+enum GraphSort { dateDesc, dateAsc, name }
 
 final defaultSettings = SettingsCompanion.insert(
   themeMode: ThemeMode.system.toString(),

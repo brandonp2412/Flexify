@@ -79,11 +79,7 @@ class _PlansListState extends State<PlansList> {
           await context.read<PlanState>().setExercises(plan);
           if (context.mounted)
             await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EditPlanPage(
-                  plan: plan,
-                ),
-              ),
+              MaterialPageRoute(builder: (context) => EditPlanPage(plan: plan)),
             );
         },
       ),
@@ -130,8 +126,9 @@ class _PlansListState extends State<PlansList> {
           await db.transaction(() async {
             for (int i = 0; i < filteredPlans.length; i++) {
               final plan = filteredPlans[i];
-              final updated =
-                  plan.toCompanion(false).copyWith(sequence: drift.Value(i));
+              final updated = plan
+                  .toCompanion(false)
+                  .copyWith(sequence: drift.Value(i));
               await db.update(db.plans).replace(updated);
             }
           });

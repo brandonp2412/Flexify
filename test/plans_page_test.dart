@@ -23,9 +23,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: PlansPage(tabController: MockTabController()),
-        ),
+        child: MaterialApp(home: PlansPage(tabController: MockTabController())),
       ),
     );
 
@@ -45,9 +43,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: PlansPage(tabController: MockTabController()),
-        ),
+        child: MaterialApp(home: PlansPage(tabController: MockTabController())),
       ),
     );
 
@@ -67,9 +63,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: PlansPage(tabController: MockTabController()),
-        ),
+        child: MaterialApp(home: PlansPage(tabController: MockTabController())),
       ),
     );
 
@@ -91,9 +85,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: PlansPage(tabController: MockTabController()),
-        ),
+        child: MaterialApp(home: PlansPage(tabController: MockTabController())),
       ),
     );
 
@@ -118,9 +110,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: PlansPage(tabController: MockTabController()),
-        ),
+        child: MaterialApp(home: PlansPage(tabController: MockTabController())),
       ),
     );
 
@@ -142,9 +132,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TimerState()),
           ChangeNotifierProvider(create: (context) => PlanState()),
         ],
-        child: MaterialApp(
-          home: PlansPage(tabController: MockTabController()),
-        ),
+        child: MaterialApp(home: PlansPage(tabController: MockTabController())),
       ),
     );
 

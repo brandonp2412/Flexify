@@ -29,10 +29,8 @@ List<Widget> getPlanSettings(
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(warmup),
             onChanged: (value) => db.settings.update().write(
-                  SettingsCompanion(
-                    warmupSets: Value(int.parse(value)),
-                  ),
-                ),
+              SettingsCompanion(warmupSets: Value(int.parse(value))),
+            ),
           ),
         ),
       ),
@@ -51,10 +49,8 @@ List<Widget> getPlanSettings(
             onChanged: (value) {
               if (int.parse(value) > 0 && int.parse(value) <= 20) {
                 db.settings.update().write(
-                      SettingsCompanion(
-                        maxSets: Value(int.parse(value)),
-                      ),
-                    );
+                  SettingsCompanion(maxSets: Value(int.parse(value))),
+                );
               }
             },
           ),
@@ -81,10 +77,8 @@ List<Widget> getPlanSettings(
                     settings.planTrailing.replaceFirst('PlanTrailing.', ''),
                   );
                   void save(PlanTrailing v) => db.settings.update().write(
-                        SettingsCompanion(
-                          planTrailing: Value(v.toString()),
-                        ),
-                      );
+                    SettingsCompanion(planTrailing: Value(v.toString())),
+                  );
                   const progressOptions = {
                     PlanTrailing.count,
                     PlanTrailing.percent,
@@ -98,8 +92,9 @@ List<Widget> getPlanSettings(
                     children: [
                       SegmentedButton<PlanTrailing>(
                         emptySelectionAllowed: true,
-                        selected:
-                            progressOptions.contains(current) ? {current} : {},
+                        selected: progressOptions.contains(current)
+                            ? {current}
+                            : {},
                         segments: const [
                           ButtonSegment(
                             value: PlanTrailing.count,
@@ -124,8 +119,9 @@ List<Widget> getPlanSettings(
                       const SizedBox(height: 8),
                       SegmentedButton<PlanTrailing>(
                         emptySelectionAllowed: true,
-                        selected:
-                            otherOptions.contains(current) ? {current} : {},
+                        selected: otherOptions.contains(current)
+                            ? {current}
+                            : {},
                         segments: const [
                           ButtonSegment(
                             value: PlanTrailing.reorder,
@@ -167,8 +163,9 @@ class _PlanSettingsState extends State<PlanSettings> {
 
   late final max = TextEditingController(text: settings.maxSets.toString());
 
-  late final warmup =
-      TextEditingController(text: settings.warmupSets?.toString());
+  late final warmup = TextEditingController(
+    text: settings.warmupSets?.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +173,7 @@ class _PlanSettingsState extends State<PlanSettings> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Plans"),
-      ),
+      appBar: AppBar(title: const Text("Plans")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -199,8 +194,10 @@ class _PlanTrailingPreview extends StatelessWidget {
   Widget _buildTrailing(BuildContext context) {
     return switch (trailing) {
       PlanTrailing.count => const Text('5', style: TextStyle(fontSize: 16)),
-      PlanTrailing.percent =>
-        const Text('83.33%', style: TextStyle(fontSize: 16)),
+      PlanTrailing.percent => const Text(
+        '83.33%',
+        style: TextStyle(fontSize: 16),
+      ),
       PlanTrailing.ratio => const Text('5 / 6', style: TextStyle(fontSize: 16)),
       PlanTrailing.reorder => const Icon(Icons.drag_handle),
       PlanTrailing.none => const SizedBox(),
@@ -211,9 +208,7 @@ class _PlanTrailingPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
