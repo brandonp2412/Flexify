@@ -214,7 +214,9 @@ class _CardioPageState extends State<CardioPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>().value;
+    final shortDateFormat = context.select<SettingsState, String>(
+      (settings) => settings.value.shortDateFormat,
+    );
     final theme = Theme.of(context);
 
     const metricOptions = <(CardioMetric, String)>[
@@ -380,7 +382,7 @@ class _CardioPageState extends State<CardioPage> {
                         child: FlexLine(
                           spots: spots,
                           tooltipData: () =>
-                              tooltipData(settings.shortDateFormat),
+                              tooltipData(shortDateFormat),
                           touchLine: touchLine,
                           data: data,
                           timeBasedXAxis: useTimeBasedXAxis,
