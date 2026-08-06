@@ -103,11 +103,13 @@ class App extends StatelessWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        final settings = context.watch<SettingsState>();
+        final themeMode = context.select<SettingsState, String>(
+          (settings) => settings.value.themeMode,
+        );
         final currentBrightness =
-            settings.value.themeMode == 'ThemeMode.dark' ||
-                settings.value.themeMode == 'ThemeMode.amoled' ||
-                (settings.value.themeMode == 'ThemeMode.system' &&
+            themeMode == 'ThemeMode.dark' ||
+                themeMode == 'ThemeMode.amoled' ||
+                (themeMode == 'ThemeMode.system' &&
                     MediaQuery.of(context).platformBrightness ==
                         Brightness.dark)
             ? Brightness.dark

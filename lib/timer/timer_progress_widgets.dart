@@ -5,6 +5,7 @@ import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class TimerCircularProgressIndicator extends StatefulWidget {
@@ -140,17 +141,75 @@ class _TimerCircularProgressIndicatorState
   }
 }
 
-class StopwatchProgressIndicator extends StatelessWidget {
-  final Duration elapsed;
+class StopwatchProgressIndicator extends StatefulWidget {
+  final DateTime? startedAt;
+  final Duration accumulated;
+  final bool isRunning;
   final TimerState timerState;
   final VoidCallback onRestart;
 
   const StopwatchProgressIndicator({
     super.key,
-    required this.elapsed,
+    required this.startedAt,
+    required this.accumulated,
+    required this.isRunning,
     required this.timerState,
     required this.onRestart,
   });
+
+  @override
+  State<StopwatchProgressIndicator> createState() => _StopwatchProgressIndicatorState();
+}
+
+class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
+    with SingleTickerProviderStateMixin {
+  late Ticker _ticker;
+  Duration _elapsed = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateElapsed();
+    _ticker = createTicker((_) {
+      if (widget.isRunning && mounted) {
+        setState(() {
+          _updateElapsed();
+        });
+      }
+    });
+    if (widget.isRunning) {
+      _ticker.start();
+    }
+  }
+
+  @override
+  void didUpdateWidget(StopwatchProgressIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isRunning != oldWidget.isRunning ||
+        widget.startedAt != oldWidget.startedAt ||
+        widget.accumulated != oldWidget.accumulated) {
+      _updateElapsed();
+      if (widget.isRunning && !_ticker.isActive) {
+        _ticker.start();
+      } else if (!widget.isRunning && _ticker.isActive) {
+        _ticker.stop();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  void _updateElapsed() {
+    if (!widget.isRunning || widget.startedAt == null) {
+      _elapsed = widget.accumulated;
+    } else {
+      _elapsed = widget.accumulated + DateTime.now().difference(widget.startedAt!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +217,7 @@ class StopwatchProgressIndicator extends StatelessWidget {
     const double strokeWidth = 10;
 
     final onSurface = Theme.of(context).colorScheme.onSurface;
-    final started = elapsed > Duration.zero;
+    final started = _elapsed > Duration.zero;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -181,7 +240,7 @@ class StopwatchProgressIndicator extends StatelessWidget {
                 ),
               ),
               Text(
-                _formatElapsed(elapsed),
+                _formatElapsed(_elapsed),
                 style: TextStyle(
                   fontSize: 46,
                   color: onSurface,
@@ -195,7 +254,7 @@ class StopwatchProgressIndicator extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         TextButton(
-          onPressed: started ? onRestart : () => _addOneMinute(context),
+          onPressed: started ? widget.onRestart : () => _addOneMinute(context),
           child: Text(started ? 'Restart' : '+1 minute'),
         ),
       ],
@@ -206,7 +265,7 @@ class StopwatchProgressIndicator extends StatelessWidget {
     final settings = context.read<SettingsState>().value;
     if (defaultTargetPlatform != TargetPlatform.linux)
       await requestNotificationPermission();
-    await timerState.addOneMinute(
+    await widget.timerState.addOneMinute(
       settings.alarmSound,
       settings.vibrate,
       settings.enableSound,

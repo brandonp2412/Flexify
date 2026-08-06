@@ -204,6 +204,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                           const SizedBox(height: 8),
                           Image.file(
                             File(image!),
+                            cacheWidth: 400,
                             errorBuilder: (context, error, stackTrace) =>
                                 TextButton.icon(
                                   label: const Text('Image error'),

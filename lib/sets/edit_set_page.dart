@@ -474,6 +474,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     }),
                     child: Image.file(
                       File(image!),
+                      cacheWidth: 400,
                       errorBuilder: (context, error, stackTrace) =>
                           TextButton.icon(
                             label: const Text('Image error'),
