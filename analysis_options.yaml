@@ -6,3 +6,6 @@ linter:
     require_trailing_commas: true
     avoid_print: false
 
+analyzer: 
+  exclude: 
+  - "flutter/**"

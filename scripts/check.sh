@@ -20,7 +20,7 @@ echo "== applying auto-fixes =="
 dart fix --apply
 
 echo "== analyzing =="
-flutter analyze lib test
+flutter analyze
 
 echo "== testing =="
 flutter test
