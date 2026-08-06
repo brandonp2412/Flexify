@@ -11,4 +11,7 @@ class PlanExercises extends Table {
   IntColumn get planId => integer().references(Plans, #id)();
   IntColumn get warmupSets => integer().nullable()();
   IntColumn get sequence => integer().withDefault(const Constant(0))();
+  RealColumn get incrementWeight => real().nullable()();
+  RealColumn get incrementReps => real().nullable()();
+  RealColumn get incrementDuration => real().nullable()();
 }

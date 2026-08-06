@@ -33,7 +33,20 @@ class ExerciseModal extends StatefulWidget {
 class _ExerciseModalState extends State<ExerciseModal> {
   final max = TextEditingController();
   final warmup = TextEditingController();
+  final incrementWeight = TextEditingController();
+  final incrementReps = TextEditingController();
+  final incrementDuration = TextEditingController();
   bool timers = true;
+
+  @override
+  void dispose() {
+    max.dispose();
+    warmup.dispose();
+    incrementWeight.dispose();
+    incrementReps.dispose();
+    incrementDuration.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -49,6 +62,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
           if (!mounted) return;
           max.text = planExercise.maxSets?.toString() ?? '';
           warmup.text = planExercise.warmupSets?.toString() ?? '';
+          incrementWeight.text =
+              planExercise.incrementWeight?.toString() ?? '';
+          incrementReps.text = planExercise.incrementReps?.toString() ?? '';
+          incrementDuration.text =
+              planExercise.incrementDuration?.toString() ?? '';
 
           setState(() {
             timers = planExercise.timers;
@@ -122,6 +140,54 @@ class _ExerciseModalState extends State<ExerciseModal> {
                                 changeTimers(value);
                               },
                             ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Divider(),
+                        const Text(
+                          "Progressive Session Goals",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: incrementWeight,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          onTap: () => selectAll(incrementWeight),
+                          onChanged: changeIncrementWeight,
+                          decoration: const InputDecoration(
+                            labelText: "Weight Increment (+)",
+                            border: OutlineInputBorder(),
+                            hintText: "0.0",
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: incrementReps,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          onTap: () => selectAll(incrementReps),
+                          onChanged: changeIncrementReps,
+                          decoration: const InputDecoration(
+                            labelText: "Reps Increment (+)",
+                            border: OutlineInputBorder(),
+                            hintText: "0.0",
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: incrementDuration,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          onTap: () => selectAll(incrementDuration),
+                          onChanged: changeIncrementDuration,
+                          decoration: const InputDecoration(
+                            labelText: "Time Increment (sec +)",
+                            border: OutlineInputBorder(),
+                            hintText: "0.0",
                           ),
                         ),
                       ],
@@ -245,6 +311,45 @@ class _ExerciseModalState extends State<ExerciseModal> {
         ))
         .write(
           PlanExercisesCompanion(warmupSets: Value(int.tryParse(warmup.text))),
+        );
+  }
+
+  void changeIncrementWeight(String value) {
+    (db.planExercises.update()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
+        .write(
+          PlanExercisesCompanion(
+            incrementWeight: Value(double.tryParse(incrementWeight.text)),
+          ),
+        );
+  }
+
+  void changeIncrementReps(String value) {
+    (db.planExercises.update()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
+        .write(
+          PlanExercisesCompanion(
+            incrementReps: Value(double.tryParse(incrementReps.text)),
+          ),
+        );
+  }
+
+  void changeIncrementDuration(String value) {
+    (db.planExercises.update()..where(
+          (u) =>
+              u.planId.equals(widget.planId) &
+              u.exercise.equals(widget.exercise),
+        ))
+        .write(
+          PlanExercisesCompanion(
+            incrementDuration: Value(double.tryParse(incrementDuration.text)),
+          ),
         );
   }
 }
