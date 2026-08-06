@@ -110,7 +110,9 @@ class _HistoryListState extends State<HistoryList> {
     }
 
     String trailing = "$reps x $weight ${gymSet.unit}";
-    if (gymSet.cardio &&
+    if (gymSet.repDuration > 0)
+      trailing = "$reps × ${toString(gymSet.repDuration)}s @ $weight ${gymSet.unit}";
+    else if (gymSet.cardio &&
         (gymSet.unit == 'kg' || gymSet.unit == 'lb' || gymSet.unit == 'stone'))
       trailing = "$weight ${gymSet.unit} / $minutes:$seconds $incline";
     else if (gymSet.cardio &&
