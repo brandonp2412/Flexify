@@ -11,28 +11,45 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
   static const VerificationMeta _daysMeta = const VerificationMeta('days');
   @override
   late final GeneratedColumn<String> days = GeneratedColumn<String>(
-      'days', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'days',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _sequenceMeta =
-      const VerificationMeta('sequence');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _sequenceMeta = const VerificationMeta(
+    'sequence',
+  );
   @override
   late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
-      'sequence', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'sequence',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'title',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [days, id, sequence, title];
   @override
@@ -41,13 +58,17 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
   String get actualTableName => $name;
   static const String $name = 'plans';
   @override
-  VerificationContext validateIntegrity(Insertable<Plan> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Plan> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('days')) {
       context.handle(
-          _daysMeta, days.isAcceptableOrUnknown(data['days']!, _daysMeta));
+        _daysMeta,
+        days.isAcceptableOrUnknown(data['days']!, _daysMeta),
+      );
     } else if (isInserting) {
       context.missing(_daysMeta);
     }
@@ -55,12 +76,16 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('sequence')) {
-      context.handle(_sequenceMeta,
-          sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta));
+      context.handle(
+        _sequenceMeta,
+        sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta),
+      );
     }
     if (data.containsKey('title')) {
       context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
     }
     return context;
   }
@@ -71,14 +96,22 @@ class $PlansTable extends Plans with TableInfo<$PlansTable, Plan> {
   Plan map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Plan(
-      days: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}days'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      sequence: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sequence']),
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title']),
+      days: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}days'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      ),
     );
   }
 
@@ -115,13 +148,16 @@ class Plan extends DataClass implements Insertable<Plan> {
       sequence: sequence == null && nullToAbsent
           ? const Value.absent()
           : Value(sequence),
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
+      title: title == null && nullToAbsent
+          ? const Value.absent()
+          : Value(title),
     );
   }
 
-  factory Plan.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Plan.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Plan(
       days: serializer.fromJson<String>(json['days']),
@@ -141,17 +177,17 @@ class Plan extends DataClass implements Insertable<Plan> {
     };
   }
 
-  Plan copyWith(
-          {String? days,
-          int? id,
-          Value<int?> sequence = const Value.absent(),
-          Value<String?> title = const Value.absent()}) =>
-      Plan(
-        days: days ?? this.days,
-        id: id ?? this.id,
-        sequence: sequence.present ? sequence.value : this.sequence,
-        title: title.present ? title.value : this.title,
-      );
+  Plan copyWith({
+    String? days,
+    int? id,
+    Value<int?> sequence = const Value.absent(),
+    Value<String?> title = const Value.absent(),
+  }) => Plan(
+    days: days ?? this.days,
+    id: id ?? this.id,
+    sequence: sequence.present ? sequence.value : this.sequence,
+    title: title.present ? title.value : this.title,
+  );
   Plan copyWithCompanion(PlansCompanion data) {
     return Plan(
       days: data.days.present ? data.days.value : this.days,
@@ -215,11 +251,12 @@ class PlansCompanion extends UpdateCompanion<Plan> {
     });
   }
 
-  PlansCompanion copyWith(
-      {Value<String>? days,
-      Value<int>? id,
-      Value<int?>? sequence,
-      Value<String?>? title}) {
+  PlansCompanion copyWith({
+    Value<String>? days,
+    Value<int>? id,
+    Value<int?>? sequence,
+    Value<String?>? title,
+  }) {
     return PlansCompanion(
       days: days ?? this.days,
       id: id ?? this.id,
@@ -263,221 +300,324 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $GymSetsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _bodyWeightMeta =
-      const VerificationMeta('bodyWeight');
+  static const VerificationMeta _bodyWeightMeta = const VerificationMeta(
+    'bodyWeight',
+  );
   @override
   late final GeneratedColumn<double> bodyWeight = GeneratedColumn<double>(
-      'body_weight', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'body_weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   static const VerificationMeta _cardioMeta = const VerificationMeta('cardio');
   @override
   late final GeneratedColumn<bool> cardio = GeneratedColumn<bool>(
-      'cardio', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("cardio" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _categoryMeta =
-      const VerificationMeta('category');
+    'cardio',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("cardio" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
   @override
   late final GeneratedColumn<String> category = GeneratedColumn<String>(
-      'category', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdMeta =
-      const VerificationMeta('created');
+    'category',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdMeta = const VerificationMeta(
+    'created',
+  );
   @override
   late final GeneratedColumn<DateTime> created = GeneratedColumn<DateTime>(
-      'created', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _distanceMeta =
-      const VerificationMeta('distance');
+    'created',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _distanceMeta = const VerificationMeta(
+    'distance',
+  );
   @override
   late final GeneratedColumn<double> distance = GeneratedColumn<double>(
-      'distance', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  static const VerificationMeta _durationMeta =
-      const VerificationMeta('duration');
+    'distance',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _durationMeta = const VerificationMeta(
+    'duration',
+  );
   @override
   late final GeneratedColumn<double> duration = GeneratedColumn<double>(
-      'duration', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+    'duration',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
   static const VerificationMeta _hiddenMeta = const VerificationMeta('hidden');
   @override
   late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
-      'hidden', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("hidden" IN (0, 1))'),
-      defaultValue: const Constant(false));
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _imageMeta = const VerificationMeta('image');
   @override
   late final GeneratedColumn<String> image = GeneratedColumn<String>(
-      'image', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _inclineMeta =
-      const VerificationMeta('incline');
+    'image',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _inclineMeta = const VerificationMeta(
+    'incline',
+  );
   @override
   late final GeneratedColumn<int> incline = GeneratedColumn<int>(
-      'incline', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'incline',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
   @override
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
-      'plan_id', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'plan_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _repsMeta = const VerificationMeta('reps');
   @override
   late final GeneratedColumn<double> reps = GeneratedColumn<double>(
-      'reps', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+    'reps',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _restMsMeta = const VerificationMeta('restMs');
   @override
   late final GeneratedColumn<int> restMs = GeneratedColumn<int>(
-      'rest_ms', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'rest_ms',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _unitMeta = const VerificationMeta('unit');
   @override
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
-      'unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _weightMeta = const VerificationMeta('weight');
   @override
   late final GeneratedColumn<double> weight = GeneratedColumn<double>(
-      'weight', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+    'weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        bodyWeight,
-        cardio,
-        category,
-        created,
-        distance,
-        duration,
-        hidden,
-        id,
-        image,
-        incline,
-        name,
-        notes,
-        planId,
-        reps,
-        restMs,
-        unit,
-        weight
-      ];
+    bodyWeight,
+    cardio,
+    category,
+    created,
+    distance,
+    duration,
+    hidden,
+    id,
+    image,
+    incline,
+    name,
+    notes,
+    planId,
+    reps,
+    restMs,
+    unit,
+    weight,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'gym_sets';
   @override
-  VerificationContext validateIntegrity(Insertable<GymSet> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<GymSet> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('body_weight')) {
       context.handle(
-          _bodyWeightMeta,
-          bodyWeight.isAcceptableOrUnknown(
-              data['body_weight']!, _bodyWeightMeta));
+        _bodyWeightMeta,
+        bodyWeight.isAcceptableOrUnknown(data['body_weight']!, _bodyWeightMeta),
+      );
     }
     if (data.containsKey('cardio')) {
-      context.handle(_cardioMeta,
-          cardio.isAcceptableOrUnknown(data['cardio']!, _cardioMeta));
+      context.handle(
+        _cardioMeta,
+        cardio.isAcceptableOrUnknown(data['cardio']!, _cardioMeta),
+      );
     }
     if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
     }
     if (data.containsKey('created')) {
-      context.handle(_createdMeta,
-          created.isAcceptableOrUnknown(data['created']!, _createdMeta));
+      context.handle(
+        _createdMeta,
+        created.isAcceptableOrUnknown(data['created']!, _createdMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdMeta);
     }
     if (data.containsKey('distance')) {
-      context.handle(_distanceMeta,
-          distance.isAcceptableOrUnknown(data['distance']!, _distanceMeta));
+      context.handle(
+        _distanceMeta,
+        distance.isAcceptableOrUnknown(data['distance']!, _distanceMeta),
+      );
     }
     if (data.containsKey('duration')) {
-      context.handle(_durationMeta,
-          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
+      context.handle(
+        _durationMeta,
+        duration.isAcceptableOrUnknown(data['duration']!, _durationMeta),
+      );
     }
     if (data.containsKey('hidden')) {
-      context.handle(_hiddenMeta,
-          hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta));
+      context.handle(
+        _hiddenMeta,
+        hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta),
+      );
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('image')) {
       context.handle(
-          _imageMeta, image.isAcceptableOrUnknown(data['image']!, _imageMeta));
+        _imageMeta,
+        image.isAcceptableOrUnknown(data['image']!, _imageMeta),
+      );
     }
     if (data.containsKey('incline')) {
-      context.handle(_inclineMeta,
-          incline.isAcceptableOrUnknown(data['incline']!, _inclineMeta));
+      context.handle(
+        _inclineMeta,
+        incline.isAcceptableOrUnknown(data['incline']!, _inclineMeta),
+      );
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('notes')) {
       context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
     }
     if (data.containsKey('plan_id')) {
-      context.handle(_planIdMeta,
-          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
+      context.handle(
+        _planIdMeta,
+        planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta),
+      );
     }
     if (data.containsKey('reps')) {
       context.handle(
-          _repsMeta, reps.isAcceptableOrUnknown(data['reps']!, _repsMeta));
+        _repsMeta,
+        reps.isAcceptableOrUnknown(data['reps']!, _repsMeta),
+      );
     } else if (isInserting) {
       context.missing(_repsMeta);
     }
     if (data.containsKey('rest_ms')) {
-      context.handle(_restMsMeta,
-          restMs.isAcceptableOrUnknown(data['rest_ms']!, _restMsMeta));
+      context.handle(
+        _restMsMeta,
+        restMs.isAcceptableOrUnknown(data['rest_ms']!, _restMsMeta),
+      );
     }
     if (data.containsKey('unit')) {
       context.handle(
-          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+        _unitMeta,
+        unit.isAcceptableOrUnknown(data['unit']!, _unitMeta),
+      );
     } else if (isInserting) {
       context.missing(_unitMeta);
     }
     if (data.containsKey('weight')) {
-      context.handle(_weightMeta,
-          weight.isAcceptableOrUnknown(data['weight']!, _weightMeta));
+      context.handle(
+        _weightMeta,
+        weight.isAcceptableOrUnknown(data['weight']!, _weightMeta),
+      );
     } else if (isInserting) {
       context.missing(_weightMeta);
     }
@@ -490,40 +630,74 @@ class $GymSetsTable extends GymSets with TableInfo<$GymSetsTable, GymSet> {
   GymSet map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GymSet(
-      bodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}body_weight'])!,
-      cardio: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}cardio'])!,
-      category: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}category']),
-      created: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created'])!,
-      distance: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}distance'])!,
-      duration: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}duration'])!,
-      hidden: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}hidden'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      image: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}image']),
-      incline: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}incline']),
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-      planId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}plan_id']),
-      reps: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}reps'])!,
-      restMs: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rest_ms']),
-      unit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
-      weight: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}weight'])!,
+      bodyWeight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}body_weight'],
+      )!,
+      cardio: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}cardio'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      ),
+      created: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created'],
+      )!,
+      distance: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}distance'],
+      )!,
+      duration: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration'],
+      )!,
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      image: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image'],
+      ),
+      incline: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}incline'],
+      ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      planId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}plan_id'],
+      ),
+      reps: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}reps'],
+      )!,
+      restMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rest_ms'],
+      ),
+      unit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit'],
+      )!,
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight'],
+      )!,
     );
   }
 
@@ -551,24 +725,25 @@ class GymSet extends DataClass implements Insertable<GymSet> {
   final int? restMs;
   final String unit;
   final double weight;
-  const GymSet(
-      {required this.bodyWeight,
-      required this.cardio,
-      this.category,
-      required this.created,
-      required this.distance,
-      required this.duration,
-      required this.hidden,
-      required this.id,
-      this.image,
-      this.incline,
-      required this.name,
-      this.notes,
-      this.planId,
-      required this.reps,
-      this.restMs,
-      required this.unit,
-      required this.weight});
+  const GymSet({
+    required this.bodyWeight,
+    required this.cardio,
+    this.category,
+    required this.created,
+    required this.distance,
+    required this.duration,
+    required this.hidden,
+    required this.id,
+    this.image,
+    this.incline,
+    required this.name,
+    this.notes,
+    this.planId,
+    required this.reps,
+    this.restMs,
+    required this.unit,
+    required this.weight,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -616,26 +791,32 @@ class GymSet extends DataClass implements Insertable<GymSet> {
       duration: Value(duration),
       hidden: Value(hidden),
       id: Value(id),
-      image:
-          image == null && nullToAbsent ? const Value.absent() : Value(image),
+      image: image == null && nullToAbsent
+          ? const Value.absent()
+          : Value(image),
       incline: incline == null && nullToAbsent
           ? const Value.absent()
           : Value(incline),
       name: Value(name),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
-      planId:
-          planId == null && nullToAbsent ? const Value.absent() : Value(planId),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      planId: planId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(planId),
       reps: Value(reps),
-      restMs:
-          restMs == null && nullToAbsent ? const Value.absent() : Value(restMs),
+      restMs: restMs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(restMs),
       unit: Value(unit),
       weight: Value(weight),
     );
   }
 
-  factory GymSet.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GymSet.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GymSet(
       bodyWeight: serializer.fromJson<double>(json['bodyWeight']),
@@ -681,47 +862,48 @@ class GymSet extends DataClass implements Insertable<GymSet> {
     };
   }
 
-  GymSet copyWith(
-          {double? bodyWeight,
-          bool? cardio,
-          Value<String?> category = const Value.absent(),
-          DateTime? created,
-          double? distance,
-          double? duration,
-          bool? hidden,
-          int? id,
-          Value<String?> image = const Value.absent(),
-          Value<int?> incline = const Value.absent(),
-          String? name,
-          Value<String?> notes = const Value.absent(),
-          Value<int?> planId = const Value.absent(),
-          double? reps,
-          Value<int?> restMs = const Value.absent(),
-          String? unit,
-          double? weight}) =>
-      GymSet(
-        bodyWeight: bodyWeight ?? this.bodyWeight,
-        cardio: cardio ?? this.cardio,
-        category: category.present ? category.value : this.category,
-        created: created ?? this.created,
-        distance: distance ?? this.distance,
-        duration: duration ?? this.duration,
-        hidden: hidden ?? this.hidden,
-        id: id ?? this.id,
-        image: image.present ? image.value : this.image,
-        incline: incline.present ? incline.value : this.incline,
-        name: name ?? this.name,
-        notes: notes.present ? notes.value : this.notes,
-        planId: planId.present ? planId.value : this.planId,
-        reps: reps ?? this.reps,
-        restMs: restMs.present ? restMs.value : this.restMs,
-        unit: unit ?? this.unit,
-        weight: weight ?? this.weight,
-      );
+  GymSet copyWith({
+    double? bodyWeight,
+    bool? cardio,
+    Value<String?> category = const Value.absent(),
+    DateTime? created,
+    double? distance,
+    double? duration,
+    bool? hidden,
+    int? id,
+    Value<String?> image = const Value.absent(),
+    Value<int?> incline = const Value.absent(),
+    String? name,
+    Value<String?> notes = const Value.absent(),
+    Value<int?> planId = const Value.absent(),
+    double? reps,
+    Value<int?> restMs = const Value.absent(),
+    String? unit,
+    double? weight,
+  }) => GymSet(
+    bodyWeight: bodyWeight ?? this.bodyWeight,
+    cardio: cardio ?? this.cardio,
+    category: category.present ? category.value : this.category,
+    created: created ?? this.created,
+    distance: distance ?? this.distance,
+    duration: duration ?? this.duration,
+    hidden: hidden ?? this.hidden,
+    id: id ?? this.id,
+    image: image.present ? image.value : this.image,
+    incline: incline.present ? incline.value : this.incline,
+    name: name ?? this.name,
+    notes: notes.present ? notes.value : this.notes,
+    planId: planId.present ? planId.value : this.planId,
+    reps: reps ?? this.reps,
+    restMs: restMs.present ? restMs.value : this.restMs,
+    unit: unit ?? this.unit,
+    weight: weight ?? this.weight,
+  );
   GymSet copyWithCompanion(GymSetsCompanion data) {
     return GymSet(
-      bodyWeight:
-          data.bodyWeight.present ? data.bodyWeight.value : this.bodyWeight,
+      bodyWeight: data.bodyWeight.present
+          ? data.bodyWeight.value
+          : this.bodyWeight,
       cardio: data.cardio.present ? data.cardio.value : this.cardio,
       category: data.category.present ? data.category.value : this.category,
       created: data.created.present ? data.created.value : this.created,
@@ -767,23 +949,24 @@ class GymSet extends DataClass implements Insertable<GymSet> {
 
   @override
   int get hashCode => Object.hash(
-      bodyWeight,
-      cardio,
-      category,
-      created,
-      distance,
-      duration,
-      hidden,
-      id,
-      image,
-      incline,
-      name,
-      notes,
-      planId,
-      reps,
-      restMs,
-      unit,
-      weight);
+    bodyWeight,
+    cardio,
+    category,
+    created,
+    distance,
+    duration,
+    hidden,
+    id,
+    image,
+    incline,
+    name,
+    notes,
+    planId,
+    reps,
+    restMs,
+    unit,
+    weight,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -862,11 +1045,11 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     this.restMs = const Value.absent(),
     required String unit,
     required double weight,
-  })  : created = Value(created),
-        name = Value(name),
-        reps = Value(reps),
-        unit = Value(unit),
-        weight = Value(weight);
+  }) : created = Value(created),
+       name = Value(name),
+       reps = Value(reps),
+       unit = Value(unit),
+       weight = Value(weight);
   static Insertable<GymSet> custom({
     Expression<double>? bodyWeight,
     Expression<bool>? cardio,
@@ -907,24 +1090,25 @@ class GymSetsCompanion extends UpdateCompanion<GymSet> {
     });
   }
 
-  GymSetsCompanion copyWith(
-      {Value<double>? bodyWeight,
-      Value<bool>? cardio,
-      Value<String?>? category,
-      Value<DateTime>? created,
-      Value<double>? distance,
-      Value<double>? duration,
-      Value<bool>? hidden,
-      Value<int>? id,
-      Value<String?>? image,
-      Value<int?>? incline,
-      Value<String>? name,
-      Value<String?>? notes,
-      Value<int?>? planId,
-      Value<double>? reps,
-      Value<int?>? restMs,
-      Value<String>? unit,
-      Value<double>? weight}) {
+  GymSetsCompanion copyWith({
+    Value<double>? bodyWeight,
+    Value<bool>? cardio,
+    Value<String?>? category,
+    Value<DateTime>? created,
+    Value<double>? distance,
+    Value<double>? duration,
+    Value<bool>? hidden,
+    Value<int>? id,
+    Value<String?>? image,
+    Value<int?>? incline,
+    Value<String>? name,
+    Value<String?>? notes,
+    Value<int?>? planId,
+    Value<double>? reps,
+    Value<int?>? restMs,
+    Value<String>? unit,
+    Value<double>? weight,
+  }) {
     return GymSetsCompanion(
       bodyWeight: bodyWeight ?? this.bodyWeight,
       cardio: cardio ?? this.cardio,
@@ -1033,481 +1217,698 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $SettingsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _alarmSoundMeta =
-      const VerificationMeta('alarmSound');
+  static const VerificationMeta _alarmSoundMeta = const VerificationMeta(
+    'alarmSound',
+  );
   @override
   late final GeneratedColumn<String> alarmSound = GeneratedColumn<String>(
-      'alarm_sound', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _automaticBackupsMeta =
-      const VerificationMeta('automaticBackups');
+    'alarm_sound',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _automaticBackupsMeta = const VerificationMeta(
+    'automaticBackups',
+  );
   @override
   late final GeneratedColumn<bool> automaticBackups = GeneratedColumn<bool>(
-      'automatic_backups', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("automatic_backups" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _backupPathMeta =
-      const VerificationMeta('backupPath');
+    'automatic_backups',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("automatic_backups" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _backupPathMeta = const VerificationMeta(
+    'backupPath',
+  );
   @override
   late final GeneratedColumn<String> backupPath = GeneratedColumn<String>(
-      'backup_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _cardioUnitMeta =
-      const VerificationMeta('cardioUnit');
+    'backup_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cardioUnitMeta = const VerificationMeta(
+    'cardioUnit',
+  );
   @override
   late final GeneratedColumn<String> cardioUnit = GeneratedColumn<String>(
-      'cardio_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _curveLinesMeta =
-      const VerificationMeta('curveLines');
+    'cardio_unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _curveLinesMeta = const VerificationMeta(
+    'curveLines',
+  );
   @override
   late final GeneratedColumn<bool> curveLines = GeneratedColumn<bool>(
-      'curve_lines', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("curve_lines" IN (0, 1))'));
-  static const VerificationMeta _curveSmoothnessMeta =
-      const VerificationMeta('curveSmoothness');
+    'curve_lines',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("curve_lines" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _curveSmoothnessMeta = const VerificationMeta(
+    'curveSmoothness',
+  );
   @override
   late final GeneratedColumn<double> curveSmoothness = GeneratedColumn<double>(
-      'curve_smoothness', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+    'curve_smoothness',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _durationEstimationMeta =
       const VerificationMeta('durationEstimation');
   @override
   late final GeneratedColumn<bool> durationEstimation = GeneratedColumn<bool>(
-      'duration_estimation', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("duration_estimation" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _enableSoundMeta =
-      const VerificationMeta('enableSound');
+    'duration_estimation',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("duration_estimation" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _enableSoundMeta = const VerificationMeta(
+    'enableSound',
+  );
   @override
   late final GeneratedColumn<bool> enableSound = GeneratedColumn<bool>(
-      'enable_sound', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("enable_sound" IN (0, 1))'),
-      defaultValue: const Constant(true));
+    'enable_sound',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("enable_sound" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _explainedPermissionsMeta =
       const VerificationMeta('explainedPermissions');
   @override
   late final GeneratedColumn<bool> explainedPermissions = GeneratedColumn<bool>(
-      'explained_permissions', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("explained_permissions" IN (0, 1))'));
-  static const VerificationMeta _groupHistoryMeta =
-      const VerificationMeta('groupHistory');
+    'explained_permissions',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("explained_permissions" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _groupHistoryMeta = const VerificationMeta(
+    'groupHistory',
+  );
   @override
   late final GeneratedColumn<bool> groupHistory = GeneratedColumn<bool>(
-      'group_history', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("group_history" IN (0, 1))'));
+    'group_history',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("group_history" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _longDateFormatMeta =
-      const VerificationMeta('longDateFormat');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _longDateFormatMeta = const VerificationMeta(
+    'longDateFormat',
+  );
   @override
   late final GeneratedColumn<String> longDateFormat = GeneratedColumn<String>(
-      'long_date_format', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _maxSetsMeta =
-      const VerificationMeta('maxSets');
+    'long_date_format',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxSetsMeta = const VerificationMeta(
+    'maxSets',
+  );
   @override
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _notificationsMeta =
-      const VerificationMeta('notifications');
+    'max_sets',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _notificationsMeta = const VerificationMeta(
+    'notifications',
+  );
   @override
   late final GeneratedColumn<bool> notifications = GeneratedColumn<bool>(
-      'notifications', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("notifications" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _peekGraphMeta =
-      const VerificationMeta('peekGraph');
+    'notifications',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("notifications" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _peekGraphMeta = const VerificationMeta(
+    'peekGraph',
+  );
   @override
   late final GeneratedColumn<bool> peekGraph = GeneratedColumn<bool>(
-      'peek_graph', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("peek_graph" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _planTrailingMeta =
-      const VerificationMeta('planTrailing');
+    'peek_graph',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("peek_graph" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _planTrailingMeta = const VerificationMeta(
+    'planTrailing',
+  );
   @override
   late final GeneratedColumn<String> planTrailing = GeneratedColumn<String>(
-      'plan_trailing', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _repEstimationMeta =
-      const VerificationMeta('repEstimation');
+    'plan_trailing',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _repEstimationMeta = const VerificationMeta(
+    'repEstimation',
+  );
   @override
   late final GeneratedColumn<bool> repEstimation = GeneratedColumn<bool>(
-      'rep_estimation', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("rep_estimation" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _restTimersMeta =
-      const VerificationMeta('restTimers');
+    'rep_estimation',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("rep_estimation" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _restTimersMeta = const VerificationMeta(
+    'restTimers',
+  );
   @override
   late final GeneratedColumn<bool> restTimers = GeneratedColumn<bool>(
-      'rest_timers', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("rest_timers" IN (0, 1))'));
-  static const VerificationMeta _shortDateFormatMeta =
-      const VerificationMeta('shortDateFormat');
+    'rest_timers',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("rest_timers" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _shortDateFormatMeta = const VerificationMeta(
+    'shortDateFormat',
+  );
   @override
   late final GeneratedColumn<String> shortDateFormat = GeneratedColumn<String>(
-      'short_date_format', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _showBodyWeightMeta =
-      const VerificationMeta('showBodyWeight');
+    'short_date_format',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _showBodyWeightMeta = const VerificationMeta(
+    'showBodyWeight',
+  );
   @override
   late final GeneratedColumn<bool> showBodyWeight = GeneratedColumn<bool>(
-      'show_body_weight', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_body_weight" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showCategoriesMeta =
-      const VerificationMeta('showCategories');
+    'show_body_weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_body_weight" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _showCategoriesMeta = const VerificationMeta(
+    'showCategories',
+  );
   @override
   late final GeneratedColumn<bool> showCategories = GeneratedColumn<bool>(
-      'show_categories', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_categories" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showImagesMeta =
-      const VerificationMeta('showImages');
+    'show_categories',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_categories" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _showImagesMeta = const VerificationMeta(
+    'showImages',
+  );
   @override
   late final GeneratedColumn<bool> showImages = GeneratedColumn<bool>(
-      'show_images', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("show_images" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showNotesMeta =
-      const VerificationMeta('showNotes');
+    'show_images',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_images" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _showNotesMeta = const VerificationMeta(
+    'showNotes',
+  );
   @override
   late final GeneratedColumn<bool> showNotes = GeneratedColumn<bool>(
-      'show_notes', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("show_notes" IN (0, 1))'),
-      defaultValue: const Constant(true));
+    'show_notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_notes" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _showGlobalProgressMeta =
       const VerificationMeta('showGlobalProgress');
   @override
   late final GeneratedColumn<bool> showGlobalProgress = GeneratedColumn<bool>(
-      'show_global_progress', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_global_progress" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showUnitsMeta =
-      const VerificationMeta('showUnits');
+    'show_global_progress',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_global_progress" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _showUnitsMeta = const VerificationMeta(
+    'showUnits',
+  );
   @override
   late final GeneratedColumn<bool> showUnits = GeneratedColumn<bool>(
-      'show_units', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("show_units" IN (0, 1))'));
-  static const VerificationMeta _strengthUnitMeta =
-      const VerificationMeta('strengthUnit');
+    'show_units',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_units" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _strengthUnitMeta = const VerificationMeta(
+    'strengthUnit',
+  );
   @override
   late final GeneratedColumn<String> strengthUnit = GeneratedColumn<String>(
-      'strength_unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _systemColorsMeta =
-      const VerificationMeta('systemColors');
+    'strength_unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _systemColorsMeta = const VerificationMeta(
+    'systemColors',
+  );
   @override
   late final GeneratedColumn<bool> systemColors = GeneratedColumn<bool>(
-      'system_colors', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("system_colors" IN (0, 1))'));
+    'system_colors',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("system_colors" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _tabsMeta = const VerificationMeta('tabs');
   @override
   late final GeneratedColumn<String> tabs = GeneratedColumn<String>(
-      'tabs', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue:
-          const Constant("HistoryPage,PlansPage,GraphsPage,TimerPage"));
-  static const VerificationMeta _themeModeMeta =
-      const VerificationMeta('themeMode');
+    'tabs',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("HistoryPage,PlansPage,GraphsPage,TimerPage"),
+  );
+  static const VerificationMeta _themeModeMeta = const VerificationMeta(
+    'themeMode',
+  );
   @override
   late final GeneratedColumn<String> themeMode = GeneratedColumn<String>(
-      'theme_mode', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _timerDurationMeta =
-      const VerificationMeta('timerDuration');
+    'theme_mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timerDurationMeta = const VerificationMeta(
+    'timerDuration',
+  );
   @override
   late final GeneratedColumn<int> timerDuration = GeneratedColumn<int>(
-      'timer_duration', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _vibrateMeta =
-      const VerificationMeta('vibrate');
+    'timer_duration',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _vibrateMeta = const VerificationMeta(
+    'vibrate',
+  );
   @override
   late final GeneratedColumn<bool> vibrate = GeneratedColumn<bool>(
-      'vibrate', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("vibrate" IN (0, 1))'));
-  static const VerificationMeta _warmupSetsMeta =
-      const VerificationMeta('warmupSets');
+    'vibrate',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("vibrate" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _warmupSetsMeta = const VerificationMeta(
+    'warmupSets',
+  );
   @override
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
-      'warmup_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _scrollableTabsMeta =
-      const VerificationMeta('scrollableTabs');
+    'warmup_sets',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _scrollableTabsMeta = const VerificationMeta(
+    'scrollableTabs',
+  );
   @override
   late final GeneratedColumn<bool> scrollableTabs = GeneratedColumn<bool>(
-      'scrollable_tabs', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("scrollable_tabs" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _showGraphXAxisMeta =
-      const VerificationMeta('showGraphXAxis');
+    'scrollable_tabs',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("scrollable_tabs" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _showGraphXAxisMeta = const VerificationMeta(
+    'showGraphXAxis',
+  );
   @override
   late final GeneratedColumn<bool> showGraphXAxis = GeneratedColumn<bool>(
-      'show_graph_x_axis', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_graph_x_axis" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _showGraphLimitMeta =
-      const VerificationMeta('showGraphLimit');
+    'show_graph_x_axis',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_graph_x_axis" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _showGraphLimitMeta = const VerificationMeta(
+    'showGraphLimit',
+  );
   @override
   late final GeneratedColumn<bool> showGraphLimit = GeneratedColumn<bool>(
-      'show_graph_limit', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("show_graph_limit" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _progressPositionMeta =
-      const VerificationMeta('progressPosition');
+    'show_graph_limit',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("show_graph_limit" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _progressPositionMeta = const VerificationMeta(
+    'progressPosition',
+  );
   @override
   late final GeneratedColumn<String> progressPosition = GeneratedColumn<String>(
-      'progress_position', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant("bottom"));
+    'progress_position',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("bottom"),
+  );
   static const VerificationMeta _defaultGraphMetricMeta =
       const VerificationMeta('defaultGraphMetric');
   @override
   late final GeneratedColumn<String> defaultGraphMetric =
-      GeneratedColumn<String>('default_graph_metric', aliasedName, false,
-          type: DriftSqlType.string,
-          requiredDuringInsert: false,
-          defaultValue: const Constant("bestWeight"));
+      GeneratedColumn<String>(
+        'default_graph_metric',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant("bestWeight"),
+      );
   static const VerificationMeta _defaultGraphPeriodMeta =
       const VerificationMeta('defaultGraphPeriod');
   @override
   late final GeneratedColumn<String> defaultGraphPeriod =
-      GeneratedColumn<String>('default_graph_period', aliasedName, false,
-          type: DriftSqlType.string,
-          requiredDuringInsert: false,
-          defaultValue: const Constant("day"));
-  static const VerificationMeta _defaultGraphLimitMeta =
-      const VerificationMeta('defaultGraphLimit');
+      GeneratedColumn<String>(
+        'default_graph_period',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant("day"),
+      );
+  static const VerificationMeta _defaultGraphLimitMeta = const VerificationMeta(
+    'defaultGraphLimit',
+  );
   @override
   late final GeneratedColumn<int> defaultGraphLimit = GeneratedColumn<int>(
-      'default_graph_limit', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(20));
+    'default_graph_limit',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(20),
+  );
   static const VerificationMeta _defaultGraphTimeBasedXAxisMeta =
       const VerificationMeta('defaultGraphTimeBasedXAxis');
   @override
   late final GeneratedColumn<bool> defaultGraphTimeBasedXAxis =
       GeneratedColumn<bool>(
-          'default_graph_time_based_x_axis', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintIsAlways(
-              'CHECK ("default_graph_time_based_x_axis" IN (0, 1))'),
-          defaultValue: const Constant(false));
-  static const VerificationMeta _keepScreenOnMeta =
-      const VerificationMeta('keepScreenOn');
+        'default_graph_time_based_x_axis',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("default_graph_time_based_x_axis" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  static const VerificationMeta _keepScreenOnMeta = const VerificationMeta(
+    'keepScreenOn',
+  );
   @override
   late final GeneratedColumn<bool> keepScreenOn = GeneratedColumn<bool>(
-      'keep_screen_on', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("keep_screen_on" IN (0, 1))'),
-      defaultValue: const Constant(false));
-  static const VerificationMeta _inputStyleMeta =
-      const VerificationMeta('inputStyle');
+    'keep_screen_on',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("keep_screen_on" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _inputStyleMeta = const VerificationMeta(
+    'inputStyle',
+  );
   @override
   late final GeneratedColumn<String> inputStyle = GeneratedColumn<String>(
-      'input_style', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant("underline"));
+    'input_style',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("underline"),
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        alarmSound,
-        automaticBackups,
-        backupPath,
-        cardioUnit,
-        curveLines,
-        curveSmoothness,
-        durationEstimation,
-        enableSound,
-        explainedPermissions,
-        groupHistory,
-        id,
-        longDateFormat,
-        maxSets,
-        notifications,
-        peekGraph,
-        planTrailing,
-        repEstimation,
-        restTimers,
-        shortDateFormat,
-        showBodyWeight,
-        showCategories,
-        showImages,
-        showNotes,
-        showGlobalProgress,
-        showUnits,
-        strengthUnit,
-        systemColors,
-        tabs,
-        themeMode,
-        timerDuration,
-        vibrate,
-        warmupSets,
-        scrollableTabs,
-        showGraphXAxis,
-        showGraphLimit,
-        progressPosition,
-        defaultGraphMetric,
-        defaultGraphPeriod,
-        defaultGraphLimit,
-        defaultGraphTimeBasedXAxis,
-        keepScreenOn,
-        inputStyle
-      ];
+    alarmSound,
+    automaticBackups,
+    backupPath,
+    cardioUnit,
+    curveLines,
+    curveSmoothness,
+    durationEstimation,
+    enableSound,
+    explainedPermissions,
+    groupHistory,
+    id,
+    longDateFormat,
+    maxSets,
+    notifications,
+    peekGraph,
+    planTrailing,
+    repEstimation,
+    restTimers,
+    shortDateFormat,
+    showBodyWeight,
+    showCategories,
+    showImages,
+    showNotes,
+    showGlobalProgress,
+    showUnits,
+    strengthUnit,
+    systemColors,
+    tabs,
+    themeMode,
+    timerDuration,
+    vibrate,
+    warmupSets,
+    scrollableTabs,
+    showGraphXAxis,
+    showGraphLimit,
+    progressPosition,
+    defaultGraphMetric,
+    defaultGraphPeriod,
+    defaultGraphLimit,
+    defaultGraphTimeBasedXAxis,
+    keepScreenOn,
+    inputStyle,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'settings';
   @override
-  VerificationContext validateIntegrity(Insertable<Setting> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Setting> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('alarm_sound')) {
       context.handle(
-          _alarmSoundMeta,
-          alarmSound.isAcceptableOrUnknown(
-              data['alarm_sound']!, _alarmSoundMeta));
+        _alarmSoundMeta,
+        alarmSound.isAcceptableOrUnknown(data['alarm_sound']!, _alarmSoundMeta),
+      );
     } else if (isInserting) {
       context.missing(_alarmSoundMeta);
     }
     if (data.containsKey('automatic_backups')) {
       context.handle(
+        _automaticBackupsMeta,
+        automaticBackups.isAcceptableOrUnknown(
+          data['automatic_backups']!,
           _automaticBackupsMeta,
-          automaticBackups.isAcceptableOrUnknown(
-              data['automatic_backups']!, _automaticBackupsMeta));
+        ),
+      );
     }
     if (data.containsKey('backup_path')) {
       context.handle(
-          _backupPathMeta,
-          backupPath.isAcceptableOrUnknown(
-              data['backup_path']!, _backupPathMeta));
+        _backupPathMeta,
+        backupPath.isAcceptableOrUnknown(data['backup_path']!, _backupPathMeta),
+      );
     }
     if (data.containsKey('cardio_unit')) {
       context.handle(
-          _cardioUnitMeta,
-          cardioUnit.isAcceptableOrUnknown(
-              data['cardio_unit']!, _cardioUnitMeta));
+        _cardioUnitMeta,
+        cardioUnit.isAcceptableOrUnknown(data['cardio_unit']!, _cardioUnitMeta),
+      );
     } else if (isInserting) {
       context.missing(_cardioUnitMeta);
     }
     if (data.containsKey('curve_lines')) {
       context.handle(
-          _curveLinesMeta,
-          curveLines.isAcceptableOrUnknown(
-              data['curve_lines']!, _curveLinesMeta));
+        _curveLinesMeta,
+        curveLines.isAcceptableOrUnknown(data['curve_lines']!, _curveLinesMeta),
+      );
     } else if (isInserting) {
       context.missing(_curveLinesMeta);
     }
     if (data.containsKey('curve_smoothness')) {
       context.handle(
+        _curveSmoothnessMeta,
+        curveSmoothness.isAcceptableOrUnknown(
+          data['curve_smoothness']!,
           _curveSmoothnessMeta,
-          curveSmoothness.isAcceptableOrUnknown(
-              data['curve_smoothness']!, _curveSmoothnessMeta));
+        ),
+      );
     }
     if (data.containsKey('duration_estimation')) {
       context.handle(
+        _durationEstimationMeta,
+        durationEstimation.isAcceptableOrUnknown(
+          data['duration_estimation']!,
           _durationEstimationMeta,
-          durationEstimation.isAcceptableOrUnknown(
-              data['duration_estimation']!, _durationEstimationMeta));
+        ),
+      );
     }
     if (data.containsKey('enable_sound')) {
       context.handle(
+        _enableSoundMeta,
+        enableSound.isAcceptableOrUnknown(
+          data['enable_sound']!,
           _enableSoundMeta,
-          enableSound.isAcceptableOrUnknown(
-              data['enable_sound']!, _enableSoundMeta));
+        ),
+      );
     }
     if (data.containsKey('explained_permissions')) {
       context.handle(
+        _explainedPermissionsMeta,
+        explainedPermissions.isAcceptableOrUnknown(
+          data['explained_permissions']!,
           _explainedPermissionsMeta,
-          explainedPermissions.isAcceptableOrUnknown(
-              data['explained_permissions']!, _explainedPermissionsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_explainedPermissionsMeta);
     }
     if (data.containsKey('group_history')) {
       context.handle(
+        _groupHistoryMeta,
+        groupHistory.isAcceptableOrUnknown(
+          data['group_history']!,
           _groupHistoryMeta,
-          groupHistory.isAcceptableOrUnknown(
-              data['group_history']!, _groupHistoryMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_groupHistoryMeta);
     }
@@ -1516,198 +1917,271 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     }
     if (data.containsKey('long_date_format')) {
       context.handle(
+        _longDateFormatMeta,
+        longDateFormat.isAcceptableOrUnknown(
+          data['long_date_format']!,
           _longDateFormatMeta,
-          longDateFormat.isAcceptableOrUnknown(
-              data['long_date_format']!, _longDateFormatMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_longDateFormatMeta);
     }
     if (data.containsKey('max_sets')) {
-      context.handle(_maxSetsMeta,
-          maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
+      context.handle(
+        _maxSetsMeta,
+        maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta),
+      );
     } else if (isInserting) {
       context.missing(_maxSetsMeta);
     }
     if (data.containsKey('notifications')) {
       context.handle(
+        _notificationsMeta,
+        notifications.isAcceptableOrUnknown(
+          data['notifications']!,
           _notificationsMeta,
-          notifications.isAcceptableOrUnknown(
-              data['notifications']!, _notificationsMeta));
+        ),
+      );
     }
     if (data.containsKey('peek_graph')) {
-      context.handle(_peekGraphMeta,
-          peekGraph.isAcceptableOrUnknown(data['peek_graph']!, _peekGraphMeta));
+      context.handle(
+        _peekGraphMeta,
+        peekGraph.isAcceptableOrUnknown(data['peek_graph']!, _peekGraphMeta),
+      );
     }
     if (data.containsKey('plan_trailing')) {
       context.handle(
+        _planTrailingMeta,
+        planTrailing.isAcceptableOrUnknown(
+          data['plan_trailing']!,
           _planTrailingMeta,
-          planTrailing.isAcceptableOrUnknown(
-              data['plan_trailing']!, _planTrailingMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_planTrailingMeta);
     }
     if (data.containsKey('rep_estimation')) {
       context.handle(
+        _repEstimationMeta,
+        repEstimation.isAcceptableOrUnknown(
+          data['rep_estimation']!,
           _repEstimationMeta,
-          repEstimation.isAcceptableOrUnknown(
-              data['rep_estimation']!, _repEstimationMeta));
+        ),
+      );
     }
     if (data.containsKey('rest_timers')) {
       context.handle(
-          _restTimersMeta,
-          restTimers.isAcceptableOrUnknown(
-              data['rest_timers']!, _restTimersMeta));
+        _restTimersMeta,
+        restTimers.isAcceptableOrUnknown(data['rest_timers']!, _restTimersMeta),
+      );
     } else if (isInserting) {
       context.missing(_restTimersMeta);
     }
     if (data.containsKey('short_date_format')) {
       context.handle(
+        _shortDateFormatMeta,
+        shortDateFormat.isAcceptableOrUnknown(
+          data['short_date_format']!,
           _shortDateFormatMeta,
-          shortDateFormat.isAcceptableOrUnknown(
-              data['short_date_format']!, _shortDateFormatMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_shortDateFormatMeta);
     }
     if (data.containsKey('show_body_weight')) {
       context.handle(
+        _showBodyWeightMeta,
+        showBodyWeight.isAcceptableOrUnknown(
+          data['show_body_weight']!,
           _showBodyWeightMeta,
-          showBodyWeight.isAcceptableOrUnknown(
-              data['show_body_weight']!, _showBodyWeightMeta));
+        ),
+      );
     }
     if (data.containsKey('show_categories')) {
       context.handle(
+        _showCategoriesMeta,
+        showCategories.isAcceptableOrUnknown(
+          data['show_categories']!,
           _showCategoriesMeta,
-          showCategories.isAcceptableOrUnknown(
-              data['show_categories']!, _showCategoriesMeta));
+        ),
+      );
     }
     if (data.containsKey('show_images')) {
       context.handle(
-          _showImagesMeta,
-          showImages.isAcceptableOrUnknown(
-              data['show_images']!, _showImagesMeta));
+        _showImagesMeta,
+        showImages.isAcceptableOrUnknown(data['show_images']!, _showImagesMeta),
+      );
     }
     if (data.containsKey('show_notes')) {
-      context.handle(_showNotesMeta,
-          showNotes.isAcceptableOrUnknown(data['show_notes']!, _showNotesMeta));
+      context.handle(
+        _showNotesMeta,
+        showNotes.isAcceptableOrUnknown(data['show_notes']!, _showNotesMeta),
+      );
     }
     if (data.containsKey('show_global_progress')) {
       context.handle(
+        _showGlobalProgressMeta,
+        showGlobalProgress.isAcceptableOrUnknown(
+          data['show_global_progress']!,
           _showGlobalProgressMeta,
-          showGlobalProgress.isAcceptableOrUnknown(
-              data['show_global_progress']!, _showGlobalProgressMeta));
+        ),
+      );
     }
     if (data.containsKey('show_units')) {
-      context.handle(_showUnitsMeta,
-          showUnits.isAcceptableOrUnknown(data['show_units']!, _showUnitsMeta));
+      context.handle(
+        _showUnitsMeta,
+        showUnits.isAcceptableOrUnknown(data['show_units']!, _showUnitsMeta),
+      );
     } else if (isInserting) {
       context.missing(_showUnitsMeta);
     }
     if (data.containsKey('strength_unit')) {
       context.handle(
+        _strengthUnitMeta,
+        strengthUnit.isAcceptableOrUnknown(
+          data['strength_unit']!,
           _strengthUnitMeta,
-          strengthUnit.isAcceptableOrUnknown(
-              data['strength_unit']!, _strengthUnitMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_strengthUnitMeta);
     }
     if (data.containsKey('system_colors')) {
       context.handle(
+        _systemColorsMeta,
+        systemColors.isAcceptableOrUnknown(
+          data['system_colors']!,
           _systemColorsMeta,
-          systemColors.isAcceptableOrUnknown(
-              data['system_colors']!, _systemColorsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_systemColorsMeta);
     }
     if (data.containsKey('tabs')) {
       context.handle(
-          _tabsMeta, tabs.isAcceptableOrUnknown(data['tabs']!, _tabsMeta));
+        _tabsMeta,
+        tabs.isAcceptableOrUnknown(data['tabs']!, _tabsMeta),
+      );
     }
     if (data.containsKey('theme_mode')) {
-      context.handle(_themeModeMeta,
-          themeMode.isAcceptableOrUnknown(data['theme_mode']!, _themeModeMeta));
+      context.handle(
+        _themeModeMeta,
+        themeMode.isAcceptableOrUnknown(data['theme_mode']!, _themeModeMeta),
+      );
     } else if (isInserting) {
       context.missing(_themeModeMeta);
     }
     if (data.containsKey('timer_duration')) {
       context.handle(
+        _timerDurationMeta,
+        timerDuration.isAcceptableOrUnknown(
+          data['timer_duration']!,
           _timerDurationMeta,
-          timerDuration.isAcceptableOrUnknown(
-              data['timer_duration']!, _timerDurationMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_timerDurationMeta);
     }
     if (data.containsKey('vibrate')) {
-      context.handle(_vibrateMeta,
-          vibrate.isAcceptableOrUnknown(data['vibrate']!, _vibrateMeta));
+      context.handle(
+        _vibrateMeta,
+        vibrate.isAcceptableOrUnknown(data['vibrate']!, _vibrateMeta),
+      );
     } else if (isInserting) {
       context.missing(_vibrateMeta);
     }
     if (data.containsKey('warmup_sets')) {
       context.handle(
-          _warmupSetsMeta,
-          warmupSets.isAcceptableOrUnknown(
-              data['warmup_sets']!, _warmupSetsMeta));
+        _warmupSetsMeta,
+        warmupSets.isAcceptableOrUnknown(data['warmup_sets']!, _warmupSetsMeta),
+      );
     }
     if (data.containsKey('scrollable_tabs')) {
       context.handle(
+        _scrollableTabsMeta,
+        scrollableTabs.isAcceptableOrUnknown(
+          data['scrollable_tabs']!,
           _scrollableTabsMeta,
-          scrollableTabs.isAcceptableOrUnknown(
-              data['scrollable_tabs']!, _scrollableTabsMeta));
+        ),
+      );
     }
     if (data.containsKey('show_graph_x_axis')) {
       context.handle(
+        _showGraphXAxisMeta,
+        showGraphXAxis.isAcceptableOrUnknown(
+          data['show_graph_x_axis']!,
           _showGraphXAxisMeta,
-          showGraphXAxis.isAcceptableOrUnknown(
-              data['show_graph_x_axis']!, _showGraphXAxisMeta));
+        ),
+      );
     }
     if (data.containsKey('show_graph_limit')) {
       context.handle(
+        _showGraphLimitMeta,
+        showGraphLimit.isAcceptableOrUnknown(
+          data['show_graph_limit']!,
           _showGraphLimitMeta,
-          showGraphLimit.isAcceptableOrUnknown(
-              data['show_graph_limit']!, _showGraphLimitMeta));
+        ),
+      );
     }
     if (data.containsKey('progress_position')) {
       context.handle(
+        _progressPositionMeta,
+        progressPosition.isAcceptableOrUnknown(
+          data['progress_position']!,
           _progressPositionMeta,
-          progressPosition.isAcceptableOrUnknown(
-              data['progress_position']!, _progressPositionMeta));
+        ),
+      );
     }
     if (data.containsKey('default_graph_metric')) {
       context.handle(
+        _defaultGraphMetricMeta,
+        defaultGraphMetric.isAcceptableOrUnknown(
+          data['default_graph_metric']!,
           _defaultGraphMetricMeta,
-          defaultGraphMetric.isAcceptableOrUnknown(
-              data['default_graph_metric']!, _defaultGraphMetricMeta));
+        ),
+      );
     }
     if (data.containsKey('default_graph_period')) {
       context.handle(
+        _defaultGraphPeriodMeta,
+        defaultGraphPeriod.isAcceptableOrUnknown(
+          data['default_graph_period']!,
           _defaultGraphPeriodMeta,
-          defaultGraphPeriod.isAcceptableOrUnknown(
-              data['default_graph_period']!, _defaultGraphPeriodMeta));
+        ),
+      );
     }
     if (data.containsKey('default_graph_limit')) {
       context.handle(
+        _defaultGraphLimitMeta,
+        defaultGraphLimit.isAcceptableOrUnknown(
+          data['default_graph_limit']!,
           _defaultGraphLimitMeta,
-          defaultGraphLimit.isAcceptableOrUnknown(
-              data['default_graph_limit']!, _defaultGraphLimitMeta));
+        ),
+      );
     }
     if (data.containsKey('default_graph_time_based_x_axis')) {
       context.handle(
+        _defaultGraphTimeBasedXAxisMeta,
+        defaultGraphTimeBasedXAxis.isAcceptableOrUnknown(
+          data['default_graph_time_based_x_axis']!,
           _defaultGraphTimeBasedXAxisMeta,
-          defaultGraphTimeBasedXAxis.isAcceptableOrUnknown(
-              data['default_graph_time_based_x_axis']!,
-              _defaultGraphTimeBasedXAxisMeta));
+        ),
+      );
     }
     if (data.containsKey('keep_screen_on')) {
       context.handle(
+        _keepScreenOnMeta,
+        keepScreenOn.isAcceptableOrUnknown(
+          data['keep_screen_on']!,
           _keepScreenOnMeta,
-          keepScreenOn.isAcceptableOrUnknown(
-              data['keep_screen_on']!, _keepScreenOnMeta));
+        ),
+      );
     }
     if (data.containsKey('input_style')) {
       context.handle(
-          _inputStyleMeta,
-          inputStyle.isAcceptableOrUnknown(
-              data['input_style']!, _inputStyleMeta));
+        _inputStyleMeta,
+        inputStyle.isAcceptableOrUnknown(data['input_style']!, _inputStyleMeta),
+      );
     }
     return context;
   }
@@ -1718,91 +2192,174 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   Setting map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Setting(
-      alarmSound: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}alarm_sound'])!,
+      alarmSound: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}alarm_sound'],
+      )!,
       automaticBackups: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}automatic_backups'])!,
-      backupPath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}backup_path']),
-      cardioUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cardio_unit'])!,
-      curveLines: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}curve_lines'])!,
+        DriftSqlType.bool,
+        data['${effectivePrefix}automatic_backups'],
+      )!,
+      backupPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}backup_path'],
+      ),
+      cardioUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cardio_unit'],
+      )!,
+      curveLines: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}curve_lines'],
+      )!,
       curveSmoothness: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}curve_smoothness']),
+        DriftSqlType.double,
+        data['${effectivePrefix}curve_smoothness'],
+      ),
       durationEstimation: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}duration_estimation'])!,
-      enableSound: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}enable_sound'])!,
+        DriftSqlType.bool,
+        data['${effectivePrefix}duration_estimation'],
+      )!,
+      enableSound: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enable_sound'],
+      )!,
       explainedPermissions: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}explained_permissions'])!,
-      groupHistory: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}group_history'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+        DriftSqlType.bool,
+        data['${effectivePrefix}explained_permissions'],
+      )!,
+      groupHistory: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}group_history'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
       longDateFormat: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}long_date_format'])!,
-      maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets'])!,
-      notifications: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}notifications'])!,
-      peekGraph: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}peek_graph'])!,
-      planTrailing: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}plan_trailing'])!,
-      repEstimation: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}rep_estimation'])!,
-      restTimers: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}rest_timers'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}long_date_format'],
+      )!,
+      maxSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_sets'],
+      )!,
+      notifications: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}notifications'],
+      )!,
+      peekGraph: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}peek_graph'],
+      )!,
+      planTrailing: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}plan_trailing'],
+      )!,
+      repEstimation: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}rep_estimation'],
+      )!,
+      restTimers: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}rest_timers'],
+      )!,
       shortDateFormat: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}short_date_format'])!,
-      showBodyWeight: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_body_weight'])!,
-      showCategories: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_categories'])!,
-      showImages: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_images'])!,
-      showNotes: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_notes'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}short_date_format'],
+      )!,
+      showBodyWeight: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_body_weight'],
+      )!,
+      showCategories: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_categories'],
+      )!,
+      showImages: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_images'],
+      )!,
+      showNotes: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_notes'],
+      )!,
       showGlobalProgress: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}show_global_progress'])!,
-      showUnits: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_units'])!,
-      strengthUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}strength_unit'])!,
-      systemColors: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}system_colors'])!,
-      tabs: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}tabs'])!,
-      themeMode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}theme_mode'])!,
-      timerDuration: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}timer_duration'])!,
-      vibrate: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}vibrate'])!,
-      warmupSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
-      scrollableTabs: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}scrollable_tabs'])!,
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_global_progress'],
+      )!,
+      showUnits: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_units'],
+      )!,
+      strengthUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}strength_unit'],
+      )!,
+      systemColors: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}system_colors'],
+      )!,
+      tabs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tabs'],
+      )!,
+      themeMode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}theme_mode'],
+      )!,
+      timerDuration: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timer_duration'],
+      )!,
+      vibrate: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}vibrate'],
+      )!,
+      warmupSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}warmup_sets'],
+      ),
+      scrollableTabs: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}scrollable_tabs'],
+      )!,
       showGraphXAxis: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}show_graph_x_axis'])!,
-      showGraphLimit: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}show_graph_limit'])!,
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_graph_x_axis'],
+      )!,
+      showGraphLimit: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_graph_limit'],
+      )!,
       progressPosition: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}progress_position'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}progress_position'],
+      )!,
       defaultGraphMetric: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}default_graph_metric'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}default_graph_metric'],
+      )!,
       defaultGraphPeriod: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}default_graph_period'])!,
+        DriftSqlType.string,
+        data['${effectivePrefix}default_graph_period'],
+      )!,
       defaultGraphLimit: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}default_graph_limit'])!,
+        DriftSqlType.int,
+        data['${effectivePrefix}default_graph_limit'],
+      )!,
       defaultGraphTimeBasedXAxis: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool,
-          data['${effectivePrefix}default_graph_time_based_x_axis'])!,
-      keepScreenOn: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}keep_screen_on'])!,
-      inputStyle: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}input_style'])!,
+        DriftSqlType.bool,
+        data['${effectivePrefix}default_graph_time_based_x_axis'],
+      )!,
+      keepScreenOn: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}keep_screen_on'],
+      )!,
+      inputStyle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}input_style'],
+      )!,
     );
   }
 
@@ -1855,49 +2412,50 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool defaultGraphTimeBasedXAxis;
   final bool keepScreenOn;
   final String inputStyle;
-  const Setting(
-      {required this.alarmSound,
-      required this.automaticBackups,
-      this.backupPath,
-      required this.cardioUnit,
-      required this.curveLines,
-      this.curveSmoothness,
-      required this.durationEstimation,
-      required this.enableSound,
-      required this.explainedPermissions,
-      required this.groupHistory,
-      required this.id,
-      required this.longDateFormat,
-      required this.maxSets,
-      required this.notifications,
-      required this.peekGraph,
-      required this.planTrailing,
-      required this.repEstimation,
-      required this.restTimers,
-      required this.shortDateFormat,
-      required this.showBodyWeight,
-      required this.showCategories,
-      required this.showImages,
-      required this.showNotes,
-      required this.showGlobalProgress,
-      required this.showUnits,
-      required this.strengthUnit,
-      required this.systemColors,
-      required this.tabs,
-      required this.themeMode,
-      required this.timerDuration,
-      required this.vibrate,
-      this.warmupSets,
-      required this.scrollableTabs,
-      required this.showGraphXAxis,
-      required this.showGraphLimit,
-      required this.progressPosition,
-      required this.defaultGraphMetric,
-      required this.defaultGraphPeriod,
-      required this.defaultGraphLimit,
-      required this.defaultGraphTimeBasedXAxis,
-      required this.keepScreenOn,
-      required this.inputStyle});
+  const Setting({
+    required this.alarmSound,
+    required this.automaticBackups,
+    this.backupPath,
+    required this.cardioUnit,
+    required this.curveLines,
+    this.curveSmoothness,
+    required this.durationEstimation,
+    required this.enableSound,
+    required this.explainedPermissions,
+    required this.groupHistory,
+    required this.id,
+    required this.longDateFormat,
+    required this.maxSets,
+    required this.notifications,
+    required this.peekGraph,
+    required this.planTrailing,
+    required this.repEstimation,
+    required this.restTimers,
+    required this.shortDateFormat,
+    required this.showBodyWeight,
+    required this.showCategories,
+    required this.showImages,
+    required this.showNotes,
+    required this.showGlobalProgress,
+    required this.showUnits,
+    required this.strengthUnit,
+    required this.systemColors,
+    required this.tabs,
+    required this.themeMode,
+    required this.timerDuration,
+    required this.vibrate,
+    this.warmupSets,
+    required this.scrollableTabs,
+    required this.showGraphXAxis,
+    required this.showGraphLimit,
+    required this.progressPosition,
+    required this.defaultGraphMetric,
+    required this.defaultGraphPeriod,
+    required this.defaultGraphLimit,
+    required this.defaultGraphTimeBasedXAxis,
+    required this.keepScreenOn,
+    required this.inputStyle,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1946,8 +2504,9 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['default_graph_metric'] = Variable<String>(defaultGraphMetric);
     map['default_graph_period'] = Variable<String>(defaultGraphPeriod);
     map['default_graph_limit'] = Variable<int>(defaultGraphLimit);
-    map['default_graph_time_based_x_axis'] =
-        Variable<bool>(defaultGraphTimeBasedXAxis);
+    map['default_graph_time_based_x_axis'] = Variable<bool>(
+      defaultGraphTimeBasedXAxis,
+    );
     map['keep_screen_on'] = Variable<bool>(keepScreenOn);
     map['input_style'] = Variable<String>(inputStyle);
     return map;
@@ -2006,8 +2565,10 @@ class Setting extends DataClass implements Insertable<Setting> {
     );
   }
 
-  factory Setting.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Setting.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Setting(
       alarmSound: serializer.fromJson<String>(json['alarmSound']),
@@ -2018,8 +2579,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       curveSmoothness: serializer.fromJson<double?>(json['curveSmoothness']),
       durationEstimation: serializer.fromJson<bool>(json['durationEstimation']),
       enableSound: serializer.fromJson<bool>(json['enableSound']),
-      explainedPermissions:
-          serializer.fromJson<bool>(json['explainedPermissions']),
+      explainedPermissions: serializer.fromJson<bool>(
+        json['explainedPermissions'],
+      ),
       groupHistory: serializer.fromJson<bool>(json['groupHistory']),
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
@@ -2047,13 +2609,16 @@ class Setting extends DataClass implements Insertable<Setting> {
       showGraphXAxis: serializer.fromJson<bool>(json['showGraphXAxis']),
       showGraphLimit: serializer.fromJson<bool>(json['showGraphLimit']),
       progressPosition: serializer.fromJson<String>(json['progressPosition']),
-      defaultGraphMetric:
-          serializer.fromJson<String>(json['defaultGraphMetric']),
-      defaultGraphPeriod:
-          serializer.fromJson<String>(json['defaultGraphPeriod']),
+      defaultGraphMetric: serializer.fromJson<String>(
+        json['defaultGraphMetric'],
+      ),
+      defaultGraphPeriod: serializer.fromJson<String>(
+        json['defaultGraphPeriod'],
+      ),
       defaultGraphLimit: serializer.fromJson<int>(json['defaultGraphLimit']),
-      defaultGraphTimeBasedXAxis:
-          serializer.fromJson<bool>(json['defaultGraphTimeBasedXAxis']),
+      defaultGraphTimeBasedXAxis: serializer.fromJson<bool>(
+        json['defaultGraphTimeBasedXAxis'],
+      ),
       keepScreenOn: serializer.fromJson<bool>(json['keepScreenOn']),
       inputStyle: serializer.fromJson<String>(json['inputStyle']),
     );
@@ -2101,124 +2666,130 @@ class Setting extends DataClass implements Insertable<Setting> {
       'defaultGraphMetric': serializer.toJson<String>(defaultGraphMetric),
       'defaultGraphPeriod': serializer.toJson<String>(defaultGraphPeriod),
       'defaultGraphLimit': serializer.toJson<int>(defaultGraphLimit),
-      'defaultGraphTimeBasedXAxis':
-          serializer.toJson<bool>(defaultGraphTimeBasedXAxis),
+      'defaultGraphTimeBasedXAxis': serializer.toJson<bool>(
+        defaultGraphTimeBasedXAxis,
+      ),
       'keepScreenOn': serializer.toJson<bool>(keepScreenOn),
       'inputStyle': serializer.toJson<String>(inputStyle),
     };
   }
 
-  Setting copyWith(
-          {String? alarmSound,
-          bool? automaticBackups,
-          Value<String?> backupPath = const Value.absent(),
-          String? cardioUnit,
-          bool? curveLines,
-          Value<double?> curveSmoothness = const Value.absent(),
-          bool? durationEstimation,
-          bool? enableSound,
-          bool? explainedPermissions,
-          bool? groupHistory,
-          int? id,
-          String? longDateFormat,
-          int? maxSets,
-          bool? notifications,
-          bool? peekGraph,
-          String? planTrailing,
-          bool? repEstimation,
-          bool? restTimers,
-          String? shortDateFormat,
-          bool? showBodyWeight,
-          bool? showCategories,
-          bool? showImages,
-          bool? showNotes,
-          bool? showGlobalProgress,
-          bool? showUnits,
-          String? strengthUnit,
-          bool? systemColors,
-          String? tabs,
-          String? themeMode,
-          int? timerDuration,
-          bool? vibrate,
-          Value<int?> warmupSets = const Value.absent(),
-          bool? scrollableTabs,
-          bool? showGraphXAxis,
-          bool? showGraphLimit,
-          String? progressPosition,
-          String? defaultGraphMetric,
-          String? defaultGraphPeriod,
-          int? defaultGraphLimit,
-          bool? defaultGraphTimeBasedXAxis,
-          bool? keepScreenOn,
-          String? inputStyle}) =>
-      Setting(
-        alarmSound: alarmSound ?? this.alarmSound,
-        automaticBackups: automaticBackups ?? this.automaticBackups,
-        backupPath: backupPath.present ? backupPath.value : this.backupPath,
-        cardioUnit: cardioUnit ?? this.cardioUnit,
-        curveLines: curveLines ?? this.curveLines,
-        curveSmoothness: curveSmoothness.present
-            ? curveSmoothness.value
-            : this.curveSmoothness,
-        durationEstimation: durationEstimation ?? this.durationEstimation,
-        enableSound: enableSound ?? this.enableSound,
-        explainedPermissions: explainedPermissions ?? this.explainedPermissions,
-        groupHistory: groupHistory ?? this.groupHistory,
-        id: id ?? this.id,
-        longDateFormat: longDateFormat ?? this.longDateFormat,
-        maxSets: maxSets ?? this.maxSets,
-        notifications: notifications ?? this.notifications,
-        peekGraph: peekGraph ?? this.peekGraph,
-        planTrailing: planTrailing ?? this.planTrailing,
-        repEstimation: repEstimation ?? this.repEstimation,
-        restTimers: restTimers ?? this.restTimers,
-        shortDateFormat: shortDateFormat ?? this.shortDateFormat,
-        showBodyWeight: showBodyWeight ?? this.showBodyWeight,
-        showCategories: showCategories ?? this.showCategories,
-        showImages: showImages ?? this.showImages,
-        showNotes: showNotes ?? this.showNotes,
-        showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
-        showUnits: showUnits ?? this.showUnits,
-        strengthUnit: strengthUnit ?? this.strengthUnit,
-        systemColors: systemColors ?? this.systemColors,
-        tabs: tabs ?? this.tabs,
-        themeMode: themeMode ?? this.themeMode,
-        timerDuration: timerDuration ?? this.timerDuration,
-        vibrate: vibrate ?? this.vibrate,
-        warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
-        scrollableTabs: scrollableTabs ?? this.scrollableTabs,
-        showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
-        showGraphLimit: showGraphLimit ?? this.showGraphLimit,
-        progressPosition: progressPosition ?? this.progressPosition,
-        defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
-        defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
-        defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
-        defaultGraphTimeBasedXAxis:
-            defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
-        keepScreenOn: keepScreenOn ?? this.keepScreenOn,
-        inputStyle: inputStyle ?? this.inputStyle,
-      );
+  Setting copyWith({
+    String? alarmSound,
+    bool? automaticBackups,
+    Value<String?> backupPath = const Value.absent(),
+    String? cardioUnit,
+    bool? curveLines,
+    Value<double?> curveSmoothness = const Value.absent(),
+    bool? durationEstimation,
+    bool? enableSound,
+    bool? explainedPermissions,
+    bool? groupHistory,
+    int? id,
+    String? longDateFormat,
+    int? maxSets,
+    bool? notifications,
+    bool? peekGraph,
+    String? planTrailing,
+    bool? repEstimation,
+    bool? restTimers,
+    String? shortDateFormat,
+    bool? showBodyWeight,
+    bool? showCategories,
+    bool? showImages,
+    bool? showNotes,
+    bool? showGlobalProgress,
+    bool? showUnits,
+    String? strengthUnit,
+    bool? systemColors,
+    String? tabs,
+    String? themeMode,
+    int? timerDuration,
+    bool? vibrate,
+    Value<int?> warmupSets = const Value.absent(),
+    bool? scrollableTabs,
+    bool? showGraphXAxis,
+    bool? showGraphLimit,
+    String? progressPosition,
+    String? defaultGraphMetric,
+    String? defaultGraphPeriod,
+    int? defaultGraphLimit,
+    bool? defaultGraphTimeBasedXAxis,
+    bool? keepScreenOn,
+    String? inputStyle,
+  }) => Setting(
+    alarmSound: alarmSound ?? this.alarmSound,
+    automaticBackups: automaticBackups ?? this.automaticBackups,
+    backupPath: backupPath.present ? backupPath.value : this.backupPath,
+    cardioUnit: cardioUnit ?? this.cardioUnit,
+    curveLines: curveLines ?? this.curveLines,
+    curveSmoothness: curveSmoothness.present
+        ? curveSmoothness.value
+        : this.curveSmoothness,
+    durationEstimation: durationEstimation ?? this.durationEstimation,
+    enableSound: enableSound ?? this.enableSound,
+    explainedPermissions: explainedPermissions ?? this.explainedPermissions,
+    groupHistory: groupHistory ?? this.groupHistory,
+    id: id ?? this.id,
+    longDateFormat: longDateFormat ?? this.longDateFormat,
+    maxSets: maxSets ?? this.maxSets,
+    notifications: notifications ?? this.notifications,
+    peekGraph: peekGraph ?? this.peekGraph,
+    planTrailing: planTrailing ?? this.planTrailing,
+    repEstimation: repEstimation ?? this.repEstimation,
+    restTimers: restTimers ?? this.restTimers,
+    shortDateFormat: shortDateFormat ?? this.shortDateFormat,
+    showBodyWeight: showBodyWeight ?? this.showBodyWeight,
+    showCategories: showCategories ?? this.showCategories,
+    showImages: showImages ?? this.showImages,
+    showNotes: showNotes ?? this.showNotes,
+    showGlobalProgress: showGlobalProgress ?? this.showGlobalProgress,
+    showUnits: showUnits ?? this.showUnits,
+    strengthUnit: strengthUnit ?? this.strengthUnit,
+    systemColors: systemColors ?? this.systemColors,
+    tabs: tabs ?? this.tabs,
+    themeMode: themeMode ?? this.themeMode,
+    timerDuration: timerDuration ?? this.timerDuration,
+    vibrate: vibrate ?? this.vibrate,
+    warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+    scrollableTabs: scrollableTabs ?? this.scrollableTabs,
+    showGraphXAxis: showGraphXAxis ?? this.showGraphXAxis,
+    showGraphLimit: showGraphLimit ?? this.showGraphLimit,
+    progressPosition: progressPosition ?? this.progressPosition,
+    defaultGraphMetric: defaultGraphMetric ?? this.defaultGraphMetric,
+    defaultGraphPeriod: defaultGraphPeriod ?? this.defaultGraphPeriod,
+    defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
+    defaultGraphTimeBasedXAxis:
+        defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
+    keepScreenOn: keepScreenOn ?? this.keepScreenOn,
+    inputStyle: inputStyle ?? this.inputStyle,
+  );
   Setting copyWithCompanion(SettingsCompanion data) {
     return Setting(
-      alarmSound:
-          data.alarmSound.present ? data.alarmSound.value : this.alarmSound,
+      alarmSound: data.alarmSound.present
+          ? data.alarmSound.value
+          : this.alarmSound,
       automaticBackups: data.automaticBackups.present
           ? data.automaticBackups.value
           : this.automaticBackups,
-      backupPath:
-          data.backupPath.present ? data.backupPath.value : this.backupPath,
-      cardioUnit:
-          data.cardioUnit.present ? data.cardioUnit.value : this.cardioUnit,
-      curveLines:
-          data.curveLines.present ? data.curveLines.value : this.curveLines,
+      backupPath: data.backupPath.present
+          ? data.backupPath.value
+          : this.backupPath,
+      cardioUnit: data.cardioUnit.present
+          ? data.cardioUnit.value
+          : this.cardioUnit,
+      curveLines: data.curveLines.present
+          ? data.curveLines.value
+          : this.curveLines,
       curveSmoothness: data.curveSmoothness.present
           ? data.curveSmoothness.value
           : this.curveSmoothness,
       durationEstimation: data.durationEstimation.present
           ? data.durationEstimation.value
           : this.durationEstimation,
-      enableSound:
-          data.enableSound.present ? data.enableSound.value : this.enableSound,
+      enableSound: data.enableSound.present
+          ? data.enableSound.value
+          : this.enableSound,
       explainedPermissions: data.explainedPermissions.present
           ? data.explainedPermissions.value
           : this.explainedPermissions,
@@ -2240,8 +2811,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       repEstimation: data.repEstimation.present
           ? data.repEstimation.value
           : this.repEstimation,
-      restTimers:
-          data.restTimers.present ? data.restTimers.value : this.restTimers,
+      restTimers: data.restTimers.present
+          ? data.restTimers.value
+          : this.restTimers,
       shortDateFormat: data.shortDateFormat.present
           ? data.shortDateFormat.value
           : this.shortDateFormat,
@@ -2251,8 +2823,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       showCategories: data.showCategories.present
           ? data.showCategories.value
           : this.showCategories,
-      showImages:
-          data.showImages.present ? data.showImages.value : this.showImages,
+      showImages: data.showImages.present
+          ? data.showImages.value
+          : this.showImages,
       showNotes: data.showNotes.present ? data.showNotes.value : this.showNotes,
       showGlobalProgress: data.showGlobalProgress.present
           ? data.showGlobalProgress.value
@@ -2270,8 +2843,9 @@ class Setting extends DataClass implements Insertable<Setting> {
           ? data.timerDuration.value
           : this.timerDuration,
       vibrate: data.vibrate.present ? data.vibrate.value : this.vibrate,
-      warmupSets:
-          data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+      warmupSets: data.warmupSets.present
+          ? data.warmupSets.value
+          : this.warmupSets,
       scrollableTabs: data.scrollableTabs.present
           ? data.scrollableTabs.value
           : this.scrollableTabs,
@@ -2299,8 +2873,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       keepScreenOn: data.keepScreenOn.present
           ? data.keepScreenOn.value
           : this.keepScreenOn,
-      inputStyle:
-          data.inputStyle.present ? data.inputStyle.value : this.inputStyle,
+      inputStyle: data.inputStyle.present
+          ? data.inputStyle.value
+          : this.inputStyle,
     );
   }
 
@@ -2355,49 +2930,49 @@ class Setting extends DataClass implements Insertable<Setting> {
 
   @override
   int get hashCode => Object.hashAll([
-        alarmSound,
-        automaticBackups,
-        backupPath,
-        cardioUnit,
-        curveLines,
-        curveSmoothness,
-        durationEstimation,
-        enableSound,
-        explainedPermissions,
-        groupHistory,
-        id,
-        longDateFormat,
-        maxSets,
-        notifications,
-        peekGraph,
-        planTrailing,
-        repEstimation,
-        restTimers,
-        shortDateFormat,
-        showBodyWeight,
-        showCategories,
-        showImages,
-        showNotes,
-        showGlobalProgress,
-        showUnits,
-        strengthUnit,
-        systemColors,
-        tabs,
-        themeMode,
-        timerDuration,
-        vibrate,
-        warmupSets,
-        scrollableTabs,
-        showGraphXAxis,
-        showGraphLimit,
-        progressPosition,
-        defaultGraphMetric,
-        defaultGraphPeriod,
-        defaultGraphLimit,
-        defaultGraphTimeBasedXAxis,
-        keepScreenOn,
-        inputStyle
-      ]);
+    alarmSound,
+    automaticBackups,
+    backupPath,
+    cardioUnit,
+    curveLines,
+    curveSmoothness,
+    durationEstimation,
+    enableSound,
+    explainedPermissions,
+    groupHistory,
+    id,
+    longDateFormat,
+    maxSets,
+    notifications,
+    peekGraph,
+    planTrailing,
+    repEstimation,
+    restTimers,
+    shortDateFormat,
+    showBodyWeight,
+    showCategories,
+    showImages,
+    showNotes,
+    showGlobalProgress,
+    showUnits,
+    strengthUnit,
+    systemColors,
+    tabs,
+    themeMode,
+    timerDuration,
+    vibrate,
+    warmupSets,
+    scrollableTabs,
+    showGraphXAxis,
+    showGraphLimit,
+    progressPosition,
+    defaultGraphMetric,
+    defaultGraphPeriod,
+    defaultGraphLimit,
+    defaultGraphTimeBasedXAxis,
+    keepScreenOn,
+    inputStyle,
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2576,22 +3151,22 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.defaultGraphTimeBasedXAxis = const Value.absent(),
     this.keepScreenOn = const Value.absent(),
     this.inputStyle = const Value.absent(),
-  })  : alarmSound = Value(alarmSound),
-        cardioUnit = Value(cardioUnit),
-        curveLines = Value(curveLines),
-        explainedPermissions = Value(explainedPermissions),
-        groupHistory = Value(groupHistory),
-        longDateFormat = Value(longDateFormat),
-        maxSets = Value(maxSets),
-        planTrailing = Value(planTrailing),
-        restTimers = Value(restTimers),
-        shortDateFormat = Value(shortDateFormat),
-        showUnits = Value(showUnits),
-        strengthUnit = Value(strengthUnit),
-        systemColors = Value(systemColors),
-        themeMode = Value(themeMode),
-        timerDuration = Value(timerDuration),
-        vibrate = Value(vibrate);
+  }) : alarmSound = Value(alarmSound),
+       cardioUnit = Value(cardioUnit),
+       curveLines = Value(curveLines),
+       explainedPermissions = Value(explainedPermissions),
+       groupHistory = Value(groupHistory),
+       longDateFormat = Value(longDateFormat),
+       maxSets = Value(maxSets),
+       planTrailing = Value(planTrailing),
+       restTimers = Value(restTimers),
+       shortDateFormat = Value(shortDateFormat),
+       showUnits = Value(showUnits),
+       strengthUnit = Value(strengthUnit),
+       systemColors = Value(systemColors),
+       themeMode = Value(themeMode),
+       timerDuration = Value(timerDuration),
+       vibrate = Value(vibrate);
   static Insertable<Setting> custom({
     Expression<String>? alarmSound,
     Expression<bool>? automaticBackups,
@@ -2687,49 +3262,50 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     });
   }
 
-  SettingsCompanion copyWith(
-      {Value<String>? alarmSound,
-      Value<bool>? automaticBackups,
-      Value<String?>? backupPath,
-      Value<String>? cardioUnit,
-      Value<bool>? curveLines,
-      Value<double?>? curveSmoothness,
-      Value<bool>? durationEstimation,
-      Value<bool>? enableSound,
-      Value<bool>? explainedPermissions,
-      Value<bool>? groupHistory,
-      Value<int>? id,
-      Value<String>? longDateFormat,
-      Value<int>? maxSets,
-      Value<bool>? notifications,
-      Value<bool>? peekGraph,
-      Value<String>? planTrailing,
-      Value<bool>? repEstimation,
-      Value<bool>? restTimers,
-      Value<String>? shortDateFormat,
-      Value<bool>? showBodyWeight,
-      Value<bool>? showCategories,
-      Value<bool>? showImages,
-      Value<bool>? showNotes,
-      Value<bool>? showGlobalProgress,
-      Value<bool>? showUnits,
-      Value<String>? strengthUnit,
-      Value<bool>? systemColors,
-      Value<String>? tabs,
-      Value<String>? themeMode,
-      Value<int>? timerDuration,
-      Value<bool>? vibrate,
-      Value<int?>? warmupSets,
-      Value<bool>? scrollableTabs,
-      Value<bool>? showGraphXAxis,
-      Value<bool>? showGraphLimit,
-      Value<String>? progressPosition,
-      Value<String>? defaultGraphMetric,
-      Value<String>? defaultGraphPeriod,
-      Value<int>? defaultGraphLimit,
-      Value<bool>? defaultGraphTimeBasedXAxis,
-      Value<bool>? keepScreenOn,
-      Value<String>? inputStyle}) {
+  SettingsCompanion copyWith({
+    Value<String>? alarmSound,
+    Value<bool>? automaticBackups,
+    Value<String?>? backupPath,
+    Value<String>? cardioUnit,
+    Value<bool>? curveLines,
+    Value<double?>? curveSmoothness,
+    Value<bool>? durationEstimation,
+    Value<bool>? enableSound,
+    Value<bool>? explainedPermissions,
+    Value<bool>? groupHistory,
+    Value<int>? id,
+    Value<String>? longDateFormat,
+    Value<int>? maxSets,
+    Value<bool>? notifications,
+    Value<bool>? peekGraph,
+    Value<String>? planTrailing,
+    Value<bool>? repEstimation,
+    Value<bool>? restTimers,
+    Value<String>? shortDateFormat,
+    Value<bool>? showBodyWeight,
+    Value<bool>? showCategories,
+    Value<bool>? showImages,
+    Value<bool>? showNotes,
+    Value<bool>? showGlobalProgress,
+    Value<bool>? showUnits,
+    Value<String>? strengthUnit,
+    Value<bool>? systemColors,
+    Value<String>? tabs,
+    Value<String>? themeMode,
+    Value<int>? timerDuration,
+    Value<bool>? vibrate,
+    Value<int?>? warmupSets,
+    Value<bool>? scrollableTabs,
+    Value<bool>? showGraphXAxis,
+    Value<bool>? showGraphLimit,
+    Value<String>? progressPosition,
+    Value<String>? defaultGraphMetric,
+    Value<String>? defaultGraphPeriod,
+    Value<int>? defaultGraphLimit,
+    Value<bool>? defaultGraphTimeBasedXAxis,
+    Value<bool>? keepScreenOn,
+    Value<String>? inputStyle,
+  }) {
     return SettingsCompanion(
       alarmSound: alarmSound ?? this.alarmSound,
       automaticBackups: automaticBackups ?? this.automaticBackups,
@@ -2898,8 +3474,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       map['default_graph_limit'] = Variable<int>(defaultGraphLimit.value);
     }
     if (defaultGraphTimeBasedXAxis.present) {
-      map['default_graph_time_based_x_axis'] =
-          Variable<bool>(defaultGraphTimeBasedXAxis.value);
+      map['default_graph_time_based_x_axis'] = Variable<bool>(
+        defaultGraphTimeBasedXAxis.value,
+      );
     }
     if (keepScreenOn.present) {
       map['keep_screen_on'] = Variable<bool>(keepScreenOn.value);
@@ -2966,96 +3543,148 @@ class $PlanExercisesTable extends PlanExercises
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $PlanExercisesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _enabledMeta =
-      const VerificationMeta('enabled');
+  static const VerificationMeta _enabledMeta = const VerificationMeta(
+    'enabled',
+  );
   @override
   late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
-      'enabled', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("enabled" IN (0, 1))'));
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("enabled" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _timersMeta = const VerificationMeta('timers');
   @override
   late final GeneratedColumn<bool> timers = GeneratedColumn<bool>(
-      'timers', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("timers" IN (0, 1))'),
-      defaultValue: const Constant(true));
-  static const VerificationMeta _exerciseMeta =
-      const VerificationMeta('exercise');
+    'timers',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("timers" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _exerciseMeta = const VerificationMeta(
+    'exercise',
+  );
   @override
   late final GeneratedColumn<String> exercise = GeneratedColumn<String>(
-      'exercise', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES gym_sets (name)'));
+    'exercise',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES gym_sets (name)',
+    ),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _maxSetsMeta =
-      const VerificationMeta('maxSets');
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _maxSetsMeta = const VerificationMeta(
+    'maxSets',
+  );
   @override
   late final GeneratedColumn<int> maxSets = GeneratedColumn<int>(
-      'max_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'max_sets',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _planIdMeta = const VerificationMeta('planId');
   @override
   late final GeneratedColumn<int> planId = GeneratedColumn<int>(
-      'plan_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES plans (id)'));
-  static const VerificationMeta _warmupSetsMeta =
-      const VerificationMeta('warmupSets');
+    'plan_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES plans (id)',
+    ),
+  );
+  static const VerificationMeta _warmupSetsMeta = const VerificationMeta(
+    'warmupSets',
+  );
   @override
   late final GeneratedColumn<int> warmupSets = GeneratedColumn<int>(
-      'warmup_sets', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _sequenceMeta =
-      const VerificationMeta('sequence');
+    'warmup_sets',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sequenceMeta = const VerificationMeta(
+    'sequence',
+  );
   @override
   late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
-      'sequence', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0));
+    'sequence',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [enabled, timers, exercise, id, maxSets, planId, warmupSets, sequence];
+  List<GeneratedColumn> get $columns => [
+    enabled,
+    timers,
+    exercise,
+    id,
+    maxSets,
+    planId,
+    warmupSets,
+    sequence,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'plan_exercises';
   @override
-  VerificationContext validateIntegrity(Insertable<PlanExercise> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<PlanExercise> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('enabled')) {
-      context.handle(_enabledMeta,
-          enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta));
+      context.handle(
+        _enabledMeta,
+        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
+      );
     } else if (isInserting) {
       context.missing(_enabledMeta);
     }
     if (data.containsKey('timers')) {
-      context.handle(_timersMeta,
-          timers.isAcceptableOrUnknown(data['timers']!, _timersMeta));
+      context.handle(
+        _timersMeta,
+        timers.isAcceptableOrUnknown(data['timers']!, _timersMeta),
+      );
     }
     if (data.containsKey('exercise')) {
-      context.handle(_exerciseMeta,
-          exercise.isAcceptableOrUnknown(data['exercise']!, _exerciseMeta));
+      context.handle(
+        _exerciseMeta,
+        exercise.isAcceptableOrUnknown(data['exercise']!, _exerciseMeta),
+      );
     } else if (isInserting) {
       context.missing(_exerciseMeta);
     }
@@ -3063,24 +3692,30 @@ class $PlanExercisesTable extends PlanExercises
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('max_sets')) {
-      context.handle(_maxSetsMeta,
-          maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta));
+      context.handle(
+        _maxSetsMeta,
+        maxSets.isAcceptableOrUnknown(data['max_sets']!, _maxSetsMeta),
+      );
     }
     if (data.containsKey('plan_id')) {
-      context.handle(_planIdMeta,
-          planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta));
+      context.handle(
+        _planIdMeta,
+        planId.isAcceptableOrUnknown(data['plan_id']!, _planIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_planIdMeta);
     }
     if (data.containsKey('warmup_sets')) {
       context.handle(
-          _warmupSetsMeta,
-          warmupSets.isAcceptableOrUnknown(
-              data['warmup_sets']!, _warmupSetsMeta));
+        _warmupSetsMeta,
+        warmupSets.isAcceptableOrUnknown(data['warmup_sets']!, _warmupSetsMeta),
+      );
     }
     if (data.containsKey('sequence')) {
-      context.handle(_sequenceMeta,
-          sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta));
+      context.handle(
+        _sequenceMeta,
+        sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta),
+      );
     }
     return context;
   }
@@ -3091,22 +3726,38 @@ class $PlanExercisesTable extends PlanExercises
   PlanExercise map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlanExercise(
-      enabled: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}enabled'])!,
-      timers: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}timers'])!,
-      exercise: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}exercise'])!,
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      maxSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}max_sets']),
-      planId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}plan_id'])!,
-      warmupSets: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}warmup_sets']),
-      sequence: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sequence'])!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enabled'],
+      )!,
+      timers: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}timers'],
+      )!,
+      exercise: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}exercise'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      maxSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_sets'],
+      ),
+      planId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}plan_id'],
+      )!,
+      warmupSets: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}warmup_sets'],
+      ),
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      )!,
     );
   }
 
@@ -3125,15 +3776,16 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   final int planId;
   final int? warmupSets;
   final int sequence;
-  const PlanExercise(
-      {required this.enabled,
-      required this.timers,
-      required this.exercise,
-      required this.id,
-      this.maxSets,
-      required this.planId,
-      this.warmupSets,
-      required this.sequence});
+  const PlanExercise({
+    required this.enabled,
+    required this.timers,
+    required this.exercise,
+    required this.id,
+    this.maxSets,
+    required this.planId,
+    this.warmupSets,
+    required this.sequence,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3169,8 +3821,10 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     );
   }
 
-  factory PlanExercise.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PlanExercise.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlanExercise(
       enabled: serializer.fromJson<bool>(json['enabled']),
@@ -3198,25 +3852,25 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     };
   }
 
-  PlanExercise copyWith(
-          {bool? enabled,
-          bool? timers,
-          String? exercise,
-          int? id,
-          Value<int?> maxSets = const Value.absent(),
-          int? planId,
-          Value<int?> warmupSets = const Value.absent(),
-          int? sequence}) =>
-      PlanExercise(
-        enabled: enabled ?? this.enabled,
-        timers: timers ?? this.timers,
-        exercise: exercise ?? this.exercise,
-        id: id ?? this.id,
-        maxSets: maxSets.present ? maxSets.value : this.maxSets,
-        planId: planId ?? this.planId,
-        warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
-        sequence: sequence ?? this.sequence,
-      );
+  PlanExercise copyWith({
+    bool? enabled,
+    bool? timers,
+    String? exercise,
+    int? id,
+    Value<int?> maxSets = const Value.absent(),
+    int? planId,
+    Value<int?> warmupSets = const Value.absent(),
+    int? sequence,
+  }) => PlanExercise(
+    enabled: enabled ?? this.enabled,
+    timers: timers ?? this.timers,
+    exercise: exercise ?? this.exercise,
+    id: id ?? this.id,
+    maxSets: maxSets.present ? maxSets.value : this.maxSets,
+    planId: planId ?? this.planId,
+    warmupSets: warmupSets.present ? warmupSets.value : this.warmupSets,
+    sequence: sequence ?? this.sequence,
+  );
   PlanExercise copyWithCompanion(PlanExercisesCompanion data) {
     return PlanExercise(
       enabled: data.enabled.present ? data.enabled.value : this.enabled,
@@ -3225,8 +3879,9 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
       id: data.id.present ? data.id.value : this.id,
       maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
       planId: data.planId.present ? data.planId.value : this.planId,
-      warmupSets:
-          data.warmupSets.present ? data.warmupSets.value : this.warmupSets,
+      warmupSets: data.warmupSets.present
+          ? data.warmupSets.value
+          : this.warmupSets,
       sequence: data.sequence.present ? data.sequence.value : this.sequence,
     );
   }
@@ -3248,7 +3903,15 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
 
   @override
   int get hashCode => Object.hash(
-      enabled, timers, exercise, id, maxSets, planId, warmupSets, sequence);
+    enabled,
+    timers,
+    exercise,
+    id,
+    maxSets,
+    planId,
+    warmupSets,
+    sequence,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3291,9 +3954,9 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     required int planId,
     this.warmupSets = const Value.absent(),
     this.sequence = const Value.absent(),
-  })  : enabled = Value(enabled),
-        exercise = Value(exercise),
-        planId = Value(planId);
+  }) : enabled = Value(enabled),
+       exercise = Value(exercise),
+       planId = Value(planId);
   static Insertable<PlanExercise> custom({
     Expression<bool>? enabled,
     Expression<bool>? timers,
@@ -3316,15 +3979,16 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     });
   }
 
-  PlanExercisesCompanion copyWith(
-      {Value<bool>? enabled,
-      Value<bool>? timers,
-      Value<String>? exercise,
-      Value<int>? id,
-      Value<int?>? maxSets,
-      Value<int>? planId,
-      Value<int?>? warmupSets,
-      Value<int>? sequence}) {
+  PlanExercisesCompanion copyWith({
+    Value<bool>? enabled,
+    Value<bool>? timers,
+    Value<String>? exercise,
+    Value<int>? id,
+    Value<int?>? maxSets,
+    Value<int>? planId,
+    Value<int?>? warmupSets,
+    Value<int>? sequence,
+  }) {
     return PlanExercisesCompanion(
       enabled: enabled ?? this.enabled,
       timers: timers ?? this.timers,
@@ -3389,12 +4053,17 @@ class $MetadataTable extends Metadata
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $MetadataTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _buildNumberMeta =
-      const VerificationMeta('buildNumber');
+  static const VerificationMeta _buildNumberMeta = const VerificationMeta(
+    'buildNumber',
+  );
   @override
   late final GeneratedColumn<int> buildNumber = GeneratedColumn<int>(
-      'build_number', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'build_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [buildNumber];
   @override
@@ -3403,15 +4072,20 @@ class $MetadataTable extends Metadata
   String get actualTableName => $name;
   static const String $name = 'metadata';
   @override
-  VerificationContext validateIntegrity(Insertable<MetadataData> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<MetadataData> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('build_number')) {
       context.handle(
+        _buildNumberMeta,
+        buildNumber.isAcceptableOrUnknown(
+          data['build_number']!,
           _buildNumberMeta,
-          buildNumber.isAcceptableOrUnknown(
-              data['build_number']!, _buildNumberMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_buildNumberMeta);
     }
@@ -3424,8 +4098,10 @@ class $MetadataTable extends Metadata
   MetadataData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return MetadataData(
-      buildNumber: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}build_number'])!,
+      buildNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}build_number'],
+      )!,
     );
   }
 
@@ -3446,13 +4122,13 @@ class MetadataData extends DataClass implements Insertable<MetadataData> {
   }
 
   MetadataCompanion toCompanion(bool nullToAbsent) {
-    return MetadataCompanion(
-      buildNumber: Value(buildNumber),
-    );
+    return MetadataCompanion(buildNumber: Value(buildNumber));
   }
 
-  factory MetadataData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory MetadataData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MetadataData(
       buildNumber: serializer.fromJson<int>(json['buildNumber']),
@@ -3466,13 +4142,13 @@ class MetadataData extends DataClass implements Insertable<MetadataData> {
     };
   }
 
-  MetadataData copyWith({int? buildNumber}) => MetadataData(
-        buildNumber: buildNumber ?? this.buildNumber,
-      );
+  MetadataData copyWith({int? buildNumber}) =>
+      MetadataData(buildNumber: buildNumber ?? this.buildNumber);
   MetadataData copyWithCompanion(MetadataCompanion data) {
     return MetadataData(
-      buildNumber:
-          data.buildNumber.present ? data.buildNumber.value : this.buildNumber,
+      buildNumber: data.buildNumber.present
+          ? data.buildNumber.value
+          : this.buildNumber,
     );
   }
 
@@ -3551,84 +4227,127 @@ class $GraphPreferencesTable extends GraphPreferences
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _metricMeta = const VerificationMeta('metric');
   @override
   late final GeneratedColumn<String> metric = GeneratedColumn<String>(
-      'metric', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('bestWeight'));
+    'metric',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('bestWeight'),
+  );
   static const VerificationMeta _periodMeta = const VerificationMeta('period');
   @override
   late final GeneratedColumn<String> period = GeneratedColumn<String>(
-      'period', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultValue: const Constant('day'));
+    'period',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('day'),
+  );
   static const VerificationMeta _limitMeta = const VerificationMeta('limit');
   @override
   late final GeneratedColumn<int> limit = GeneratedColumn<int>(
-      'limit', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: const Constant(20));
-  static const VerificationMeta _timeBasedXAxisMeta =
-      const VerificationMeta('timeBasedXAxis');
+    'limit',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(20),
+  );
+  static const VerificationMeta _timeBasedXAxisMeta = const VerificationMeta(
+    'timeBasedXAxis',
+  );
   @override
   late final GeneratedColumn<bool> timeBasedXAxis = GeneratedColumn<bool>(
-      'time_based_x_axis', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("time_based_x_axis" IN (0, 1))'),
-      defaultValue: const Constant(false));
+    'time_based_x_axis',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("time_based_x_axis" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [name, metric, period, limit, timeBasedXAxis, notes];
+  List<GeneratedColumn> get $columns => [
+    name,
+    metric,
+    period,
+    limit,
+    timeBasedXAxis,
+    notes,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'graph_preferences';
   @override
-  VerificationContext validateIntegrity(Insertable<GraphPreference> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<GraphPreference> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('metric')) {
-      context.handle(_metricMeta,
-          metric.isAcceptableOrUnknown(data['metric']!, _metricMeta));
+      context.handle(
+        _metricMeta,
+        metric.isAcceptableOrUnknown(data['metric']!, _metricMeta),
+      );
     }
     if (data.containsKey('period')) {
-      context.handle(_periodMeta,
-          period.isAcceptableOrUnknown(data['period']!, _periodMeta));
+      context.handle(
+        _periodMeta,
+        period.isAcceptableOrUnknown(data['period']!, _periodMeta),
+      );
     }
     if (data.containsKey('limit')) {
       context.handle(
-          _limitMeta, limit.isAcceptableOrUnknown(data['limit']!, _limitMeta));
+        _limitMeta,
+        limit.isAcceptableOrUnknown(data['limit']!, _limitMeta),
+      );
     }
     if (data.containsKey('time_based_x_axis')) {
       context.handle(
+        _timeBasedXAxisMeta,
+        timeBasedXAxis.isAcceptableOrUnknown(
+          data['time_based_x_axis']!,
           _timeBasedXAxisMeta,
-          timeBasedXAxis.isAcceptableOrUnknown(
-              data['time_based_x_axis']!, _timeBasedXAxisMeta));
+        ),
+      );
     }
     if (data.containsKey('notes')) {
       context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
     }
     return context;
   }
@@ -3639,18 +4358,30 @@ class $GraphPreferencesTable extends GraphPreferences
   GraphPreference map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GraphPreference(
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      metric: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}metric'])!,
-      period: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}period'])!,
-      limit: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}limit'])!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      metric: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metric'],
+      )!,
+      period: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}period'],
+      )!,
+      limit: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}limit'],
+      )!,
       timeBasedXAxis: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool, data['${effectivePrefix}time_based_x_axis'])!,
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+        DriftSqlType.bool,
+        data['${effectivePrefix}time_based_x_axis'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
     );
   }
 
@@ -3667,13 +4398,14 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   final int limit;
   final bool timeBasedXAxis;
   final String? notes;
-  const GraphPreference(
-      {required this.name,
-      required this.metric,
-      required this.period,
-      required this.limit,
-      required this.timeBasedXAxis,
-      this.notes});
+  const GraphPreference({
+    required this.name,
+    required this.metric,
+    required this.period,
+    required this.limit,
+    required this.timeBasedXAxis,
+    this.notes,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3695,13 +4427,16 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
       period: Value(period),
       limit: Value(limit),
       timeBasedXAxis: Value(timeBasedXAxis),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
     );
   }
 
-  factory GraphPreference.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GraphPreference.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GraphPreference(
       name: serializer.fromJson<String>(json['name']),
@@ -3725,21 +4460,21 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
     };
   }
 
-  GraphPreference copyWith(
-          {String? name,
-          String? metric,
-          String? period,
-          int? limit,
-          bool? timeBasedXAxis,
-          Value<String?> notes = const Value.absent()}) =>
-      GraphPreference(
-        name: name ?? this.name,
-        metric: metric ?? this.metric,
-        period: period ?? this.period,
-        limit: limit ?? this.limit,
-        timeBasedXAxis: timeBasedXAxis ?? this.timeBasedXAxis,
-        notes: notes.present ? notes.value : this.notes,
-      );
+  GraphPreference copyWith({
+    String? name,
+    String? metric,
+    String? period,
+    int? limit,
+    bool? timeBasedXAxis,
+    Value<String?> notes = const Value.absent(),
+  }) => GraphPreference(
+    name: name ?? this.name,
+    metric: metric ?? this.metric,
+    period: period ?? this.period,
+    limit: limit ?? this.limit,
+    timeBasedXAxis: timeBasedXAxis ?? this.timeBasedXAxis,
+    notes: notes.present ? notes.value : this.notes,
+  );
   GraphPreference copyWithCompanion(GraphPreferencesCompanion data) {
     return GraphPreference(
       name: data.name.present ? data.name.value : this.name,
@@ -3827,14 +4562,15 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
     });
   }
 
-  GraphPreferencesCompanion copyWith(
-      {Value<String>? name,
-      Value<String>? metric,
-      Value<String>? period,
-      Value<int>? limit,
-      Value<bool>? timeBasedXAxis,
-      Value<String?>? notes,
-      Value<int>? rowid}) {
+  GraphPreferencesCompanion copyWith({
+    Value<String>? name,
+    Value<String>? metric,
+    Value<String>? period,
+    Value<int>? limit,
+    Value<bool>? timeBasedXAxis,
+    Value<String?>? notes,
+    Value<int>? rowid,
+  }) {
     return GraphPreferencesCompanion(
       name: name ?? this.name,
       metric: metric ?? this.metric,
@@ -3896,45 +4632,58 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SettingsTable settings = $SettingsTable(this);
   late final $PlanExercisesTable planExercises = $PlanExercisesTable(this);
   late final $MetadataTable metadata = $MetadataTable(this);
-  late final $GraphPreferencesTable graphPreferences =
-      $GraphPreferencesTable(this);
+  late final $GraphPreferencesTable graphPreferences = $GraphPreferencesTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [plans, gymSets, settings, planExercises, metadata, graphPreferences];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    plans,
+    gymSets,
+    settings,
+    planExercises,
+    metadata,
+    graphPreferences,
+  ];
 }
 
-typedef $$PlansTableCreateCompanionBuilder = PlansCompanion Function({
-  required String days,
-  Value<int> id,
-  Value<int?> sequence,
-  Value<String?> title,
-});
-typedef $$PlansTableUpdateCompanionBuilder = PlansCompanion Function({
-  Value<String> days,
-  Value<int> id,
-  Value<int?> sequence,
-  Value<String?> title,
-});
+typedef $$PlansTableCreateCompanionBuilder =
+    PlansCompanion Function({
+      required String days,
+      Value<int> id,
+      Value<int?> sequence,
+      Value<String?> title,
+    });
+typedef $$PlansTableUpdateCompanionBuilder =
+    PlansCompanion Function({
+      Value<String> days,
+      Value<int> id,
+      Value<int?> sequence,
+      Value<String?> title,
+    });
 
 final class $$PlansTableReferences
     extends BaseReferences<_$AppDatabase, $PlansTable, Plan> {
   $$PlansTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
-      _planExercisesRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.planExercises,
-              aliasName: 'plans__id__plan_exercises__plan_id');
+  _planExercisesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.planExercises,
+    aliasName: 'plans__id__plan_exercises__plan_id',
+  );
 
   $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
-    final manager = $$PlanExercisesTableTableManager($_db, $_db.planExercises)
-        .filter((f) => f.planId.id.sqlEquals($_itemColumn<int>('id')!));
+    final manager = $$PlanExercisesTableTableManager(
+      $_db,
+      $_db.planExercises,
+    ).filter((f) => f.planId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_planExercisesRefsTable($_db));
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
+      manager.$state.copyWith(prefetchedData: cache),
+    );
   }
 }
 
@@ -3947,35 +4696,47 @@ class $$PlansTableFilterComposer extends Composer<_$AppDatabase, $PlansTable> {
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get days => $composableBuilder(
-      column: $table.days, builder: (column) => ColumnFilters(column));
+    column: $table.days,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get sequence => $composableBuilder(
-      column: $table.sequence, builder: (column) => ColumnFilters(column));
+    column: $table.sequence,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnFilters(column));
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
 
   Expression<bool> planExercisesRefs(
-      Expression<bool> Function($$PlanExercisesTableFilterComposer f) f) {
+    Expression<bool> Function($$PlanExercisesTableFilterComposer f) f,
+  ) {
     final $$PlanExercisesTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.planExercises,
-        getReferencedColumn: (t) => t.planId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlanExercisesTableFilterComposer(
-              $db: $db,
-              $table: $db.planExercises,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.planExercises,
+      getReferencedColumn: (t) => t.planId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlanExercisesTableFilterComposer(
+            $db: $db,
+            $table: $db.planExercises,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
@@ -3990,16 +4751,24 @@ class $$PlansTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get days => $composableBuilder(
-      column: $table.days, builder: (column) => ColumnOrderings(column));
+    column: $table.days,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get sequence => $composableBuilder(
-      column: $table.sequence, builder: (column) => ColumnOrderings(column));
+    column: $table.sequence,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnOrderings(column));
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PlansTableAnnotationComposer
@@ -4024,41 +4793,49 @@ class $$PlansTableAnnotationComposer
       $composableBuilder(column: $table.title, builder: (column) => column);
 
   Expression<T> planExercisesRefs<T extends Object>(
-      Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f) {
+    Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f,
+  ) {
     final $$PlanExercisesTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.planExercises,
-        getReferencedColumn: (t) => t.planId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlanExercisesTableAnnotationComposer(
-              $db: $db,
-              $table: $db.planExercises,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.planExercises,
+      getReferencedColumn: (t) => t.planId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlanExercisesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.planExercises,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
 
-class $$PlansTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $PlansTable,
-    Plan,
-    $$PlansTableFilterComposer,
-    $$PlansTableOrderingComposer,
-    $$PlansTableAnnotationComposer,
-    $$PlansTableCreateCompanionBuilder,
-    $$PlansTableUpdateCompanionBuilder,
-    (Plan, $$PlansTableReferences),
-    Plan,
-    PrefetchHooks Function({bool planExercisesRefs})> {
+class $$PlansTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlansTable,
+          Plan,
+          $$PlansTableFilterComposer,
+          $$PlansTableOrderingComposer,
+          $$PlansTableAnnotationComposer,
+          $$PlansTableCreateCompanionBuilder,
+          $$PlansTableUpdateCompanionBuilder,
+          (Plan, $$PlansTableReferences),
+          Plan,
+          PrefetchHooks Function({bool planExercisesRefs})
+        > {
   $$PlansTableTableManager(_$AppDatabase db, $PlansTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4067,130 +4844,142 @@ class $$PlansTableTableManager extends RootTableManager<
               $$PlansTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$PlansTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> days = const Value.absent(),
-            Value<int> id = const Value.absent(),
-            Value<int?> sequence = const Value.absent(),
-            Value<String?> title = const Value.absent(),
-          }) =>
-              PlansCompanion(
-            days: days,
-            id: id,
-            sequence: sequence,
-            title: title,
-          ),
-          createCompanionCallback: ({
-            required String days,
-            Value<int> id = const Value.absent(),
-            Value<int?> sequence = const Value.absent(),
-            Value<String?> title = const Value.absent(),
-          }) =>
-              PlansCompanion.insert(
-            days: days,
-            id: id,
-            sequence: sequence,
-            title: title,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> days = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<int?> sequence = const Value.absent(),
+                Value<String?> title = const Value.absent(),
+              }) => PlansCompanion(
+                days: days,
+                id: id,
+                sequence: sequence,
+                title: title,
+              ),
+          createCompanionCallback:
+              ({
+                required String days,
+                Value<int> id = const Value.absent(),
+                Value<int?> sequence = const Value.absent(),
+                Value<String?> title = const Value.absent(),
+              }) => PlansCompanion.insert(
+                days: days,
+                id: id,
+                sequence: sequence,
+                title: title,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) =>
-                  (e.readTable(table), $$PlansTableReferences(db, table, e)))
+              .map(
+                (e) =>
+                    (e.readTable(table), $$PlansTableReferences(db, table, e)),
+              )
               .toList(),
           prefetchHooksCallback: ({planExercisesRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (planExercisesRefs) db.planExercises
+                if (planExercisesRefs) db.planExercises,
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (planExercisesRefs)
                     await $_getPrefetchedData<Plan, $PlansTable, PlanExercise>(
-                        currentTable: table,
-                        referencedTable:
-                            $$PlansTableReferences._planExercisesRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$PlansTableReferences(db, table, p0)
-                                .planExercisesRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.planId == item.id),
-                        typedResults: items)
+                      currentTable: table,
+                      referencedTable: $$PlansTableReferences
+                          ._planExercisesRefsTable(db),
+                      managerFromTypedResult: (p0) => $$PlansTableReferences(
+                        db,
+                        table,
+                        p0,
+                      ).planExercisesRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.planId == item.id),
+                      typedResults: items,
+                    ),
                 ];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$PlansTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $PlansTable,
-    Plan,
-    $$PlansTableFilterComposer,
-    $$PlansTableOrderingComposer,
-    $$PlansTableAnnotationComposer,
-    $$PlansTableCreateCompanionBuilder,
-    $$PlansTableUpdateCompanionBuilder,
-    (Plan, $$PlansTableReferences),
-    Plan,
-    PrefetchHooks Function({bool planExercisesRefs})>;
-typedef $$GymSetsTableCreateCompanionBuilder = GymSetsCompanion Function({
-  Value<double> bodyWeight,
-  Value<bool> cardio,
-  Value<String?> category,
-  required DateTime created,
-  Value<double> distance,
-  Value<double> duration,
-  Value<bool> hidden,
-  Value<int> id,
-  Value<String?> image,
-  Value<int?> incline,
-  required String name,
-  Value<String?> notes,
-  Value<int?> planId,
-  required double reps,
-  Value<int?> restMs,
-  required String unit,
-  required double weight,
-});
-typedef $$GymSetsTableUpdateCompanionBuilder = GymSetsCompanion Function({
-  Value<double> bodyWeight,
-  Value<bool> cardio,
-  Value<String?> category,
-  Value<DateTime> created,
-  Value<double> distance,
-  Value<double> duration,
-  Value<bool> hidden,
-  Value<int> id,
-  Value<String?> image,
-  Value<int?> incline,
-  Value<String> name,
-  Value<String?> notes,
-  Value<int?> planId,
-  Value<double> reps,
-  Value<int?> restMs,
-  Value<String> unit,
-  Value<double> weight,
-});
+typedef $$PlansTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlansTable,
+      Plan,
+      $$PlansTableFilterComposer,
+      $$PlansTableOrderingComposer,
+      $$PlansTableAnnotationComposer,
+      $$PlansTableCreateCompanionBuilder,
+      $$PlansTableUpdateCompanionBuilder,
+      (Plan, $$PlansTableReferences),
+      Plan,
+      PrefetchHooks Function({bool planExercisesRefs})
+    >;
+typedef $$GymSetsTableCreateCompanionBuilder =
+    GymSetsCompanion Function({
+      Value<double> bodyWeight,
+      Value<bool> cardio,
+      Value<String?> category,
+      required DateTime created,
+      Value<double> distance,
+      Value<double> duration,
+      Value<bool> hidden,
+      Value<int> id,
+      Value<String?> image,
+      Value<int?> incline,
+      required String name,
+      Value<String?> notes,
+      Value<int?> planId,
+      required double reps,
+      Value<int?> restMs,
+      required String unit,
+      required double weight,
+    });
+typedef $$GymSetsTableUpdateCompanionBuilder =
+    GymSetsCompanion Function({
+      Value<double> bodyWeight,
+      Value<bool> cardio,
+      Value<String?> category,
+      Value<DateTime> created,
+      Value<double> distance,
+      Value<double> duration,
+      Value<bool> hidden,
+      Value<int> id,
+      Value<String?> image,
+      Value<int?> incline,
+      Value<String> name,
+      Value<String?> notes,
+      Value<int?> planId,
+      Value<double> reps,
+      Value<int?> restMs,
+      Value<String> unit,
+      Value<double> weight,
+    });
 
 final class $$GymSetsTableReferences
     extends BaseReferences<_$AppDatabase, $GymSetsTable, GymSet> {
   $$GymSetsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
-      _planExercisesRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.planExercises,
-              aliasName: 'gym_sets__name__plan_exercises__exercise');
+  _planExercisesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.planExercises,
+    aliasName: 'gym_sets__name__plan_exercises__exercise',
+  );
 
   $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
-    final manager = $$PlanExercisesTableTableManager($_db, $_db.planExercises)
-        .filter(
-            (f) => f.exercise.name.sqlEquals($_itemColumn<String>('name')!));
+    final manager = $$PlanExercisesTableTableManager(
+      $_db,
+      $_db.planExercises,
+    ).filter((f) => f.exercise.name.sqlEquals($_itemColumn<String>('name')!));
 
     final cache = $_typedResult.readTableOrNull(_planExercisesRefsTable($_db));
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
+      manager.$state.copyWith(prefetchedData: cache),
+    );
   }
 }
 
@@ -4204,74 +4993,112 @@ class $$GymSetsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<double> get bodyWeight => $composableBuilder(
-      column: $table.bodyWeight, builder: (column) => ColumnFilters(column));
+    column: $table.bodyWeight,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get cardio => $composableBuilder(
-      column: $table.cardio, builder: (column) => ColumnFilters(column));
+    column: $table.cardio,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get category => $composableBuilder(
-      column: $table.category, builder: (column) => ColumnFilters(column));
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<DateTime> get created => $composableBuilder(
-      column: $table.created, builder: (column) => ColumnFilters(column));
+    column: $table.created,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get distance => $composableBuilder(
-      column: $table.distance, builder: (column) => ColumnFilters(column));
+    column: $table.distance,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get duration => $composableBuilder(
-      column: $table.duration, builder: (column) => ColumnFilters(column));
+    column: $table.duration,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get hidden => $composableBuilder(
-      column: $table.hidden, builder: (column) => ColumnFilters(column));
+    column: $table.hidden,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get image => $composableBuilder(
-      column: $table.image, builder: (column) => ColumnFilters(column));
+    column: $table.image,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get incline => $composableBuilder(
-      column: $table.incline, builder: (column) => ColumnFilters(column));
+    column: $table.incline,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get planId => $composableBuilder(
-      column: $table.planId, builder: (column) => ColumnFilters(column));
+    column: $table.planId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get reps => $composableBuilder(
-      column: $table.reps, builder: (column) => ColumnFilters(column));
+    column: $table.reps,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get restMs => $composableBuilder(
-      column: $table.restMs, builder: (column) => ColumnFilters(column));
+    column: $table.restMs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get unit => $composableBuilder(
-      column: $table.unit, builder: (column) => ColumnFilters(column));
+    column: $table.unit,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get weight => $composableBuilder(
-      column: $table.weight, builder: (column) => ColumnFilters(column));
+    column: $table.weight,
+    builder: (column) => ColumnFilters(column),
+  );
 
   Expression<bool> planExercisesRefs(
-      Expression<bool> Function($$PlanExercisesTableFilterComposer f) f) {
+    Expression<bool> Function($$PlanExercisesTableFilterComposer f) f,
+  ) {
     final $$PlanExercisesTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.name,
-        referencedTable: $db.planExercises,
-        getReferencedColumn: (t) => t.exercise,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlanExercisesTableFilterComposer(
-              $db: $db,
-              $table: $db.planExercises,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.name,
+      referencedTable: $db.planExercises,
+      getReferencedColumn: (t) => t.exercise,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlanExercisesTableFilterComposer(
+            $db: $db,
+            $table: $db.planExercises,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
@@ -4286,55 +5113,89 @@ class $$GymSetsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<double> get bodyWeight => $composableBuilder(
-      column: $table.bodyWeight, builder: (column) => ColumnOrderings(column));
+    column: $table.bodyWeight,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get cardio => $composableBuilder(
-      column: $table.cardio, builder: (column) => ColumnOrderings(column));
+    column: $table.cardio,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get category => $composableBuilder(
-      column: $table.category, builder: (column) => ColumnOrderings(column));
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<DateTime> get created => $composableBuilder(
-      column: $table.created, builder: (column) => ColumnOrderings(column));
+    column: $table.created,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get distance => $composableBuilder(
-      column: $table.distance, builder: (column) => ColumnOrderings(column));
+    column: $table.distance,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get duration => $composableBuilder(
-      column: $table.duration, builder: (column) => ColumnOrderings(column));
+    column: $table.duration,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get hidden => $composableBuilder(
-      column: $table.hidden, builder: (column) => ColumnOrderings(column));
+    column: $table.hidden,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get image => $composableBuilder(
-      column: $table.image, builder: (column) => ColumnOrderings(column));
+    column: $table.image,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get incline => $composableBuilder(
-      column: $table.incline, builder: (column) => ColumnOrderings(column));
+    column: $table.incline,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get planId => $composableBuilder(
-      column: $table.planId, builder: (column) => ColumnOrderings(column));
+    column: $table.planId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get reps => $composableBuilder(
-      column: $table.reps, builder: (column) => ColumnOrderings(column));
+    column: $table.reps,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get restMs => $composableBuilder(
-      column: $table.restMs, builder: (column) => ColumnOrderings(column));
+    column: $table.restMs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get unit => $composableBuilder(
-      column: $table.unit, builder: (column) => ColumnOrderings(column));
+    column: $table.unit,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get weight => $composableBuilder(
-      column: $table.weight, builder: (column) => ColumnOrderings(column));
+    column: $table.weight,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$GymSetsTableAnnotationComposer
@@ -4347,7 +5208,9 @@ class $$GymSetsTableAnnotationComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   GeneratedColumn<double> get bodyWeight => $composableBuilder(
-      column: $table.bodyWeight, builder: (column) => column);
+    column: $table.bodyWeight,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get cardio =>
       $composableBuilder(column: $table.cardio, builder: (column) => column);
@@ -4398,41 +5261,49 @@ class $$GymSetsTableAnnotationComposer
       $composableBuilder(column: $table.weight, builder: (column) => column);
 
   Expression<T> planExercisesRefs<T extends Object>(
-      Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f) {
+    Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f,
+  ) {
     final $$PlanExercisesTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.name,
-        referencedTable: $db.planExercises,
-        getReferencedColumn: (t) => t.exercise,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlanExercisesTableAnnotationComposer(
-              $db: $db,
-              $table: $db.planExercises,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.name,
+      referencedTable: $db.planExercises,
+      getReferencedColumn: (t) => t.exercise,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlanExercisesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.planExercises,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return f(composer);
   }
 }
 
-class $$GymSetsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $GymSetsTable,
-    GymSet,
-    $$GymSetsTableFilterComposer,
-    $$GymSetsTableOrderingComposer,
-    $$GymSetsTableAnnotationComposer,
-    $$GymSetsTableCreateCompanionBuilder,
-    $$GymSetsTableUpdateCompanionBuilder,
-    (GymSet, $$GymSetsTableReferences),
-    GymSet,
-    PrefetchHooks Function({bool planExercisesRefs})> {
+class $$GymSetsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $GymSetsTable,
+          GymSet,
+          $$GymSetsTableFilterComposer,
+          $$GymSetsTableOrderingComposer,
+          $$GymSetsTableAnnotationComposer,
+          $$GymSetsTableCreateCompanionBuilder,
+          $$GymSetsTableUpdateCompanionBuilder,
+          (GymSet, $$GymSetsTableReferences),
+          GymSet,
+          PrefetchHooks Function({bool planExercisesRefs})
+        > {
   $$GymSetsTableTableManager(_$AppDatabase db, $GymSetsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -4441,215 +5312,229 @@ class $$GymSetsTableTableManager extends RootTableManager<
               $$GymSetsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$GymSetsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<double> bodyWeight = const Value.absent(),
-            Value<bool> cardio = const Value.absent(),
-            Value<String?> category = const Value.absent(),
-            Value<DateTime> created = const Value.absent(),
-            Value<double> distance = const Value.absent(),
-            Value<double> duration = const Value.absent(),
-            Value<bool> hidden = const Value.absent(),
-            Value<int> id = const Value.absent(),
-            Value<String?> image = const Value.absent(),
-            Value<int?> incline = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<int?> planId = const Value.absent(),
-            Value<double> reps = const Value.absent(),
-            Value<int?> restMs = const Value.absent(),
-            Value<String> unit = const Value.absent(),
-            Value<double> weight = const Value.absent(),
-          }) =>
-              GymSetsCompanion(
-            bodyWeight: bodyWeight,
-            cardio: cardio,
-            category: category,
-            created: created,
-            distance: distance,
-            duration: duration,
-            hidden: hidden,
-            id: id,
-            image: image,
-            incline: incline,
-            name: name,
-            notes: notes,
-            planId: planId,
-            reps: reps,
-            restMs: restMs,
-            unit: unit,
-            weight: weight,
-          ),
-          createCompanionCallback: ({
-            Value<double> bodyWeight = const Value.absent(),
-            Value<bool> cardio = const Value.absent(),
-            Value<String?> category = const Value.absent(),
-            required DateTime created,
-            Value<double> distance = const Value.absent(),
-            Value<double> duration = const Value.absent(),
-            Value<bool> hidden = const Value.absent(),
-            Value<int> id = const Value.absent(),
-            Value<String?> image = const Value.absent(),
-            Value<int?> incline = const Value.absent(),
-            required String name,
-            Value<String?> notes = const Value.absent(),
-            Value<int?> planId = const Value.absent(),
-            required double reps,
-            Value<int?> restMs = const Value.absent(),
-            required String unit,
-            required double weight,
-          }) =>
-              GymSetsCompanion.insert(
-            bodyWeight: bodyWeight,
-            cardio: cardio,
-            category: category,
-            created: created,
-            distance: distance,
-            duration: duration,
-            hidden: hidden,
-            id: id,
-            image: image,
-            incline: incline,
-            name: name,
-            notes: notes,
-            planId: planId,
-            reps: reps,
-            restMs: restMs,
-            unit: unit,
-            weight: weight,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<double> bodyWeight = const Value.absent(),
+                Value<bool> cardio = const Value.absent(),
+                Value<String?> category = const Value.absent(),
+                Value<DateTime> created = const Value.absent(),
+                Value<double> distance = const Value.absent(),
+                Value<double> duration = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<String?> image = const Value.absent(),
+                Value<int?> incline = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int?> planId = const Value.absent(),
+                Value<double> reps = const Value.absent(),
+                Value<int?> restMs = const Value.absent(),
+                Value<String> unit = const Value.absent(),
+                Value<double> weight = const Value.absent(),
+              }) => GymSetsCompanion(
+                bodyWeight: bodyWeight,
+                cardio: cardio,
+                category: category,
+                created: created,
+                distance: distance,
+                duration: duration,
+                hidden: hidden,
+                id: id,
+                image: image,
+                incline: incline,
+                name: name,
+                notes: notes,
+                planId: planId,
+                reps: reps,
+                restMs: restMs,
+                unit: unit,
+                weight: weight,
+              ),
+          createCompanionCallback:
+              ({
+                Value<double> bodyWeight = const Value.absent(),
+                Value<bool> cardio = const Value.absent(),
+                Value<String?> category = const Value.absent(),
+                required DateTime created,
+                Value<double> distance = const Value.absent(),
+                Value<double> duration = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<String?> image = const Value.absent(),
+                Value<int?> incline = const Value.absent(),
+                required String name,
+                Value<String?> notes = const Value.absent(),
+                Value<int?> planId = const Value.absent(),
+                required double reps,
+                Value<int?> restMs = const Value.absent(),
+                required String unit,
+                required double weight,
+              }) => GymSetsCompanion.insert(
+                bodyWeight: bodyWeight,
+                cardio: cardio,
+                category: category,
+                created: created,
+                distance: distance,
+                duration: duration,
+                hidden: hidden,
+                id: id,
+                image: image,
+                incline: incline,
+                name: name,
+                notes: notes,
+                planId: planId,
+                reps: reps,
+                restMs: restMs,
+                unit: unit,
+                weight: weight,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) =>
-                  (e.readTable(table), $$GymSetsTableReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$GymSetsTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({planExercisesRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (planExercisesRefs) db.planExercises
+                if (planExercisesRefs) db.planExercises,
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (planExercisesRefs)
-                    await $_getPrefetchedData<GymSet, $GymSetsTable,
-                            PlanExercise>(
-                        currentTable: table,
-                        referencedTable: $$GymSetsTableReferences
-                            ._planExercisesRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$GymSetsTableReferences(db, table, p0)
-                                .planExercisesRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.exercise == item.name),
-                        typedResults: items)
+                    await $_getPrefetchedData<
+                      GymSet,
+                      $GymSetsTable,
+                      PlanExercise
+                    >(
+                      currentTable: table,
+                      referencedTable: $$GymSetsTableReferences
+                          ._planExercisesRefsTable(db),
+                      managerFromTypedResult: (p0) => $$GymSetsTableReferences(
+                        db,
+                        table,
+                        p0,
+                      ).planExercisesRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.exercise == item.name),
+                      typedResults: items,
+                    ),
                 ];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$GymSetsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $GymSetsTable,
-    GymSet,
-    $$GymSetsTableFilterComposer,
-    $$GymSetsTableOrderingComposer,
-    $$GymSetsTableAnnotationComposer,
-    $$GymSetsTableCreateCompanionBuilder,
-    $$GymSetsTableUpdateCompanionBuilder,
-    (GymSet, $$GymSetsTableReferences),
-    GymSet,
-    PrefetchHooks Function({bool planExercisesRefs})>;
-typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
-  required String alarmSound,
-  Value<bool> automaticBackups,
-  Value<String?> backupPath,
-  required String cardioUnit,
-  required bool curveLines,
-  Value<double?> curveSmoothness,
-  Value<bool> durationEstimation,
-  Value<bool> enableSound,
-  required bool explainedPermissions,
-  required bool groupHistory,
-  Value<int> id,
-  required String longDateFormat,
-  required int maxSets,
-  Value<bool> notifications,
-  Value<bool> peekGraph,
-  required String planTrailing,
-  Value<bool> repEstimation,
-  required bool restTimers,
-  required String shortDateFormat,
-  Value<bool> showBodyWeight,
-  Value<bool> showCategories,
-  Value<bool> showImages,
-  Value<bool> showNotes,
-  Value<bool> showGlobalProgress,
-  required bool showUnits,
-  required String strengthUnit,
-  required bool systemColors,
-  Value<String> tabs,
-  required String themeMode,
-  required int timerDuration,
-  required bool vibrate,
-  Value<int?> warmupSets,
-  Value<bool> scrollableTabs,
-  Value<bool> showGraphXAxis,
-  Value<bool> showGraphLimit,
-  Value<String> progressPosition,
-  Value<String> defaultGraphMetric,
-  Value<String> defaultGraphPeriod,
-  Value<int> defaultGraphLimit,
-  Value<bool> defaultGraphTimeBasedXAxis,
-  Value<bool> keepScreenOn,
-  Value<String> inputStyle,
-});
-typedef $$SettingsTableUpdateCompanionBuilder = SettingsCompanion Function({
-  Value<String> alarmSound,
-  Value<bool> automaticBackups,
-  Value<String?> backupPath,
-  Value<String> cardioUnit,
-  Value<bool> curveLines,
-  Value<double?> curveSmoothness,
-  Value<bool> durationEstimation,
-  Value<bool> enableSound,
-  Value<bool> explainedPermissions,
-  Value<bool> groupHistory,
-  Value<int> id,
-  Value<String> longDateFormat,
-  Value<int> maxSets,
-  Value<bool> notifications,
-  Value<bool> peekGraph,
-  Value<String> planTrailing,
-  Value<bool> repEstimation,
-  Value<bool> restTimers,
-  Value<String> shortDateFormat,
-  Value<bool> showBodyWeight,
-  Value<bool> showCategories,
-  Value<bool> showImages,
-  Value<bool> showNotes,
-  Value<bool> showGlobalProgress,
-  Value<bool> showUnits,
-  Value<String> strengthUnit,
-  Value<bool> systemColors,
-  Value<String> tabs,
-  Value<String> themeMode,
-  Value<int> timerDuration,
-  Value<bool> vibrate,
-  Value<int?> warmupSets,
-  Value<bool> scrollableTabs,
-  Value<bool> showGraphXAxis,
-  Value<bool> showGraphLimit,
-  Value<String> progressPosition,
-  Value<String> defaultGraphMetric,
-  Value<String> defaultGraphPeriod,
-  Value<int> defaultGraphLimit,
-  Value<bool> defaultGraphTimeBasedXAxis,
-  Value<bool> keepScreenOn,
-  Value<String> inputStyle,
-});
+typedef $$GymSetsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $GymSetsTable,
+      GymSet,
+      $$GymSetsTableFilterComposer,
+      $$GymSetsTableOrderingComposer,
+      $$GymSetsTableAnnotationComposer,
+      $$GymSetsTableCreateCompanionBuilder,
+      $$GymSetsTableUpdateCompanionBuilder,
+      (GymSet, $$GymSetsTableReferences),
+      GymSet,
+      PrefetchHooks Function({bool planExercisesRefs})
+    >;
+typedef $$SettingsTableCreateCompanionBuilder =
+    SettingsCompanion Function({
+      required String alarmSound,
+      Value<bool> automaticBackups,
+      Value<String?> backupPath,
+      required String cardioUnit,
+      required bool curveLines,
+      Value<double?> curveSmoothness,
+      Value<bool> durationEstimation,
+      Value<bool> enableSound,
+      required bool explainedPermissions,
+      required bool groupHistory,
+      Value<int> id,
+      required String longDateFormat,
+      required int maxSets,
+      Value<bool> notifications,
+      Value<bool> peekGraph,
+      required String planTrailing,
+      Value<bool> repEstimation,
+      required bool restTimers,
+      required String shortDateFormat,
+      Value<bool> showBodyWeight,
+      Value<bool> showCategories,
+      Value<bool> showImages,
+      Value<bool> showNotes,
+      Value<bool> showGlobalProgress,
+      required bool showUnits,
+      required String strengthUnit,
+      required bool systemColors,
+      Value<String> tabs,
+      required String themeMode,
+      required int timerDuration,
+      required bool vibrate,
+      Value<int?> warmupSets,
+      Value<bool> scrollableTabs,
+      Value<bool> showGraphXAxis,
+      Value<bool> showGraphLimit,
+      Value<String> progressPosition,
+      Value<String> defaultGraphMetric,
+      Value<String> defaultGraphPeriod,
+      Value<int> defaultGraphLimit,
+      Value<bool> defaultGraphTimeBasedXAxis,
+      Value<bool> keepScreenOn,
+      Value<String> inputStyle,
+    });
+typedef $$SettingsTableUpdateCompanionBuilder =
+    SettingsCompanion Function({
+      Value<String> alarmSound,
+      Value<bool> automaticBackups,
+      Value<String?> backupPath,
+      Value<String> cardioUnit,
+      Value<bool> curveLines,
+      Value<double?> curveSmoothness,
+      Value<bool> durationEstimation,
+      Value<bool> enableSound,
+      Value<bool> explainedPermissions,
+      Value<bool> groupHistory,
+      Value<int> id,
+      Value<String> longDateFormat,
+      Value<int> maxSets,
+      Value<bool> notifications,
+      Value<bool> peekGraph,
+      Value<String> planTrailing,
+      Value<bool> repEstimation,
+      Value<bool> restTimers,
+      Value<String> shortDateFormat,
+      Value<bool> showBodyWeight,
+      Value<bool> showCategories,
+      Value<bool> showImages,
+      Value<bool> showNotes,
+      Value<bool> showGlobalProgress,
+      Value<bool> showUnits,
+      Value<String> strengthUnit,
+      Value<bool> systemColors,
+      Value<String> tabs,
+      Value<String> themeMode,
+      Value<int> timerDuration,
+      Value<bool> vibrate,
+      Value<int?> warmupSets,
+      Value<bool> scrollableTabs,
+      Value<bool> showGraphXAxis,
+      Value<bool> showGraphLimit,
+      Value<String> progressPosition,
+      Value<String> defaultGraphMetric,
+      Value<String> defaultGraphPeriod,
+      Value<int> defaultGraphLimit,
+      Value<bool> defaultGraphTimeBasedXAxis,
+      Value<bool> keepScreenOn,
+      Value<String> inputStyle,
+    });
 
 class $$SettingsTableFilterComposer
     extends Composer<_$AppDatabase, $SettingsTable> {
@@ -4661,147 +5546,214 @@ class $$SettingsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get alarmSound => $composableBuilder(
-      column: $table.alarmSound, builder: (column) => ColumnFilters(column));
+    column: $table.alarmSound,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get automaticBackups => $composableBuilder(
-      column: $table.automaticBackups,
-      builder: (column) => ColumnFilters(column));
+    column: $table.automaticBackups,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get backupPath => $composableBuilder(
-      column: $table.backupPath, builder: (column) => ColumnFilters(column));
+    column: $table.backupPath,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get cardioUnit => $composableBuilder(
-      column: $table.cardioUnit, builder: (column) => ColumnFilters(column));
+    column: $table.cardioUnit,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get curveLines => $composableBuilder(
-      column: $table.curveLines, builder: (column) => ColumnFilters(column));
+    column: $table.curveLines,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<double> get curveSmoothness => $composableBuilder(
-      column: $table.curveSmoothness,
-      builder: (column) => ColumnFilters(column));
+    column: $table.curveSmoothness,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get durationEstimation => $composableBuilder(
-      column: $table.durationEstimation,
-      builder: (column) => ColumnFilters(column));
+    column: $table.durationEstimation,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get enableSound => $composableBuilder(
-      column: $table.enableSound, builder: (column) => ColumnFilters(column));
+    column: $table.enableSound,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get explainedPermissions => $composableBuilder(
-      column: $table.explainedPermissions,
-      builder: (column) => ColumnFilters(column));
+    column: $table.explainedPermissions,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get groupHistory => $composableBuilder(
-      column: $table.groupHistory, builder: (column) => ColumnFilters(column));
+    column: $table.groupHistory,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get longDateFormat => $composableBuilder(
-      column: $table.longDateFormat,
-      builder: (column) => ColumnFilters(column));
+    column: $table.longDateFormat,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get maxSets => $composableBuilder(
-      column: $table.maxSets, builder: (column) => ColumnFilters(column));
+    column: $table.maxSets,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get notifications => $composableBuilder(
-      column: $table.notifications, builder: (column) => ColumnFilters(column));
+    column: $table.notifications,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get peekGraph => $composableBuilder(
-      column: $table.peekGraph, builder: (column) => ColumnFilters(column));
+    column: $table.peekGraph,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get planTrailing => $composableBuilder(
-      column: $table.planTrailing, builder: (column) => ColumnFilters(column));
+    column: $table.planTrailing,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get repEstimation => $composableBuilder(
-      column: $table.repEstimation, builder: (column) => ColumnFilters(column));
+    column: $table.repEstimation,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get restTimers => $composableBuilder(
-      column: $table.restTimers, builder: (column) => ColumnFilters(column));
+    column: $table.restTimers,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get shortDateFormat => $composableBuilder(
-      column: $table.shortDateFormat,
-      builder: (column) => ColumnFilters(column));
+    column: $table.shortDateFormat,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showBodyWeight => $composableBuilder(
-      column: $table.showBodyWeight,
-      builder: (column) => ColumnFilters(column));
+    column: $table.showBodyWeight,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showCategories => $composableBuilder(
-      column: $table.showCategories,
-      builder: (column) => ColumnFilters(column));
+    column: $table.showCategories,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showImages => $composableBuilder(
-      column: $table.showImages, builder: (column) => ColumnFilters(column));
+    column: $table.showImages,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showNotes => $composableBuilder(
-      column: $table.showNotes, builder: (column) => ColumnFilters(column));
+    column: $table.showNotes,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showGlobalProgress => $composableBuilder(
-      column: $table.showGlobalProgress,
-      builder: (column) => ColumnFilters(column));
+    column: $table.showGlobalProgress,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showUnits => $composableBuilder(
-      column: $table.showUnits, builder: (column) => ColumnFilters(column));
+    column: $table.showUnits,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get strengthUnit => $composableBuilder(
-      column: $table.strengthUnit, builder: (column) => ColumnFilters(column));
+    column: $table.strengthUnit,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get systemColors => $composableBuilder(
-      column: $table.systemColors, builder: (column) => ColumnFilters(column));
+    column: $table.systemColors,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get tabs => $composableBuilder(
-      column: $table.tabs, builder: (column) => ColumnFilters(column));
+    column: $table.tabs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get themeMode => $composableBuilder(
-      column: $table.themeMode, builder: (column) => ColumnFilters(column));
+    column: $table.themeMode,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get timerDuration => $composableBuilder(
-      column: $table.timerDuration, builder: (column) => ColumnFilters(column));
+    column: $table.timerDuration,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get vibrate => $composableBuilder(
-      column: $table.vibrate, builder: (column) => ColumnFilters(column));
+    column: $table.vibrate,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get warmupSets => $composableBuilder(
-      column: $table.warmupSets, builder: (column) => ColumnFilters(column));
+    column: $table.warmupSets,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get scrollableTabs => $composableBuilder(
-      column: $table.scrollableTabs,
-      builder: (column) => ColumnFilters(column));
+    column: $table.scrollableTabs,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showGraphXAxis => $composableBuilder(
-      column: $table.showGraphXAxis,
-      builder: (column) => ColumnFilters(column));
+    column: $table.showGraphXAxis,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get showGraphLimit => $composableBuilder(
-      column: $table.showGraphLimit,
-      builder: (column) => ColumnFilters(column));
+    column: $table.showGraphLimit,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get progressPosition => $composableBuilder(
-      column: $table.progressPosition,
-      builder: (column) => ColumnFilters(column));
+    column: $table.progressPosition,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get defaultGraphMetric => $composableBuilder(
-      column: $table.defaultGraphMetric,
-      builder: (column) => ColumnFilters(column));
+    column: $table.defaultGraphMetric,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get defaultGraphPeriod => $composableBuilder(
-      column: $table.defaultGraphPeriod,
-      builder: (column) => ColumnFilters(column));
+    column: $table.defaultGraphPeriod,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get defaultGraphLimit => $composableBuilder(
-      column: $table.defaultGraphLimit,
-      builder: (column) => ColumnFilters(column));
+    column: $table.defaultGraphLimit,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
-      column: $table.defaultGraphTimeBasedXAxis,
-      builder: (column) => ColumnFilters(column));
+    column: $table.defaultGraphTimeBasedXAxis,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get keepScreenOn => $composableBuilder(
-      column: $table.keepScreenOn, builder: (column) => ColumnFilters(column));
+    column: $table.keepScreenOn,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get inputStyle => $composableBuilder(
-      column: $table.inputStyle, builder: (column) => ColumnFilters(column));
+    column: $table.inputStyle,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$SettingsTableOrderingComposer
@@ -4814,155 +5766,214 @@ class $$SettingsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get alarmSound => $composableBuilder(
-      column: $table.alarmSound, builder: (column) => ColumnOrderings(column));
+    column: $table.alarmSound,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get automaticBackups => $composableBuilder(
-      column: $table.automaticBackups,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.automaticBackups,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get backupPath => $composableBuilder(
-      column: $table.backupPath, builder: (column) => ColumnOrderings(column));
+    column: $table.backupPath,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get cardioUnit => $composableBuilder(
-      column: $table.cardioUnit, builder: (column) => ColumnOrderings(column));
+    column: $table.cardioUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get curveLines => $composableBuilder(
-      column: $table.curveLines, builder: (column) => ColumnOrderings(column));
+    column: $table.curveLines,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<double> get curveSmoothness => $composableBuilder(
-      column: $table.curveSmoothness,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.curveSmoothness,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get durationEstimation => $composableBuilder(
-      column: $table.durationEstimation,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.durationEstimation,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get enableSound => $composableBuilder(
-      column: $table.enableSound, builder: (column) => ColumnOrderings(column));
+    column: $table.enableSound,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get explainedPermissions => $composableBuilder(
-      column: $table.explainedPermissions,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.explainedPermissions,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get groupHistory => $composableBuilder(
-      column: $table.groupHistory,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.groupHistory,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get longDateFormat => $composableBuilder(
-      column: $table.longDateFormat,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.longDateFormat,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get maxSets => $composableBuilder(
-      column: $table.maxSets, builder: (column) => ColumnOrderings(column));
+    column: $table.maxSets,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get notifications => $composableBuilder(
-      column: $table.notifications,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.notifications,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get peekGraph => $composableBuilder(
-      column: $table.peekGraph, builder: (column) => ColumnOrderings(column));
+    column: $table.peekGraph,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get planTrailing => $composableBuilder(
-      column: $table.planTrailing,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.planTrailing,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get repEstimation => $composableBuilder(
-      column: $table.repEstimation,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.repEstimation,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get restTimers => $composableBuilder(
-      column: $table.restTimers, builder: (column) => ColumnOrderings(column));
+    column: $table.restTimers,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get shortDateFormat => $composableBuilder(
-      column: $table.shortDateFormat,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.shortDateFormat,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showBodyWeight => $composableBuilder(
-      column: $table.showBodyWeight,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.showBodyWeight,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showCategories => $composableBuilder(
-      column: $table.showCategories,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.showCategories,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showImages => $composableBuilder(
-      column: $table.showImages, builder: (column) => ColumnOrderings(column));
+    column: $table.showImages,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showNotes => $composableBuilder(
-      column: $table.showNotes, builder: (column) => ColumnOrderings(column));
+    column: $table.showNotes,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showGlobalProgress => $composableBuilder(
-      column: $table.showGlobalProgress,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.showGlobalProgress,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showUnits => $composableBuilder(
-      column: $table.showUnits, builder: (column) => ColumnOrderings(column));
+    column: $table.showUnits,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get strengthUnit => $composableBuilder(
-      column: $table.strengthUnit,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.strengthUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get systemColors => $composableBuilder(
-      column: $table.systemColors,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.systemColors,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get tabs => $composableBuilder(
-      column: $table.tabs, builder: (column) => ColumnOrderings(column));
+    column: $table.tabs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get themeMode => $composableBuilder(
-      column: $table.themeMode, builder: (column) => ColumnOrderings(column));
+    column: $table.themeMode,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get timerDuration => $composableBuilder(
-      column: $table.timerDuration,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.timerDuration,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get vibrate => $composableBuilder(
-      column: $table.vibrate, builder: (column) => ColumnOrderings(column));
+    column: $table.vibrate,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get warmupSets => $composableBuilder(
-      column: $table.warmupSets, builder: (column) => ColumnOrderings(column));
+    column: $table.warmupSets,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get scrollableTabs => $composableBuilder(
-      column: $table.scrollableTabs,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.scrollableTabs,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showGraphXAxis => $composableBuilder(
-      column: $table.showGraphXAxis,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.showGraphXAxis,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get showGraphLimit => $composableBuilder(
-      column: $table.showGraphLimit,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.showGraphLimit,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get progressPosition => $composableBuilder(
-      column: $table.progressPosition,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.progressPosition,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get defaultGraphMetric => $composableBuilder(
-      column: $table.defaultGraphMetric,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.defaultGraphMetric,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get defaultGraphPeriod => $composableBuilder(
-      column: $table.defaultGraphPeriod,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.defaultGraphPeriod,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get defaultGraphLimit => $composableBuilder(
-      column: $table.defaultGraphLimit,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.defaultGraphLimit,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
-      column: $table.defaultGraphTimeBasedXAxis,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.defaultGraphTimeBasedXAxis,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get keepScreenOn => $composableBuilder(
-      column: $table.keepScreenOn,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.keepScreenOn,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get inputStyle => $composableBuilder(
-      column: $table.inputStyle, builder: (column) => ColumnOrderings(column));
+    column: $table.inputStyle,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SettingsTableAnnotationComposer
@@ -4975,85 +5986,129 @@ class $$SettingsTableAnnotationComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   GeneratedColumn<String> get alarmSound => $composableBuilder(
-      column: $table.alarmSound, builder: (column) => column);
+    column: $table.alarmSound,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get automaticBackups => $composableBuilder(
-      column: $table.automaticBackups, builder: (column) => column);
+    column: $table.automaticBackups,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get backupPath => $composableBuilder(
-      column: $table.backupPath, builder: (column) => column);
+    column: $table.backupPath,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get cardioUnit => $composableBuilder(
-      column: $table.cardioUnit, builder: (column) => column);
+    column: $table.cardioUnit,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get curveLines => $composableBuilder(
-      column: $table.curveLines, builder: (column) => column);
+    column: $table.curveLines,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<double> get curveSmoothness => $composableBuilder(
-      column: $table.curveSmoothness, builder: (column) => column);
+    column: $table.curveSmoothness,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get durationEstimation => $composableBuilder(
-      column: $table.durationEstimation, builder: (column) => column);
+    column: $table.durationEstimation,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get enableSound => $composableBuilder(
-      column: $table.enableSound, builder: (column) => column);
+    column: $table.enableSound,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get explainedPermissions => $composableBuilder(
-      column: $table.explainedPermissions, builder: (column) => column);
+    column: $table.explainedPermissions,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get groupHistory => $composableBuilder(
-      column: $table.groupHistory, builder: (column) => column);
+    column: $table.groupHistory,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get longDateFormat => $composableBuilder(
-      column: $table.longDateFormat, builder: (column) => column);
+    column: $table.longDateFormat,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get maxSets =>
       $composableBuilder(column: $table.maxSets, builder: (column) => column);
 
   GeneratedColumn<bool> get notifications => $composableBuilder(
-      column: $table.notifications, builder: (column) => column);
+    column: $table.notifications,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get peekGraph =>
       $composableBuilder(column: $table.peekGraph, builder: (column) => column);
 
   GeneratedColumn<String> get planTrailing => $composableBuilder(
-      column: $table.planTrailing, builder: (column) => column);
+    column: $table.planTrailing,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get repEstimation => $composableBuilder(
-      column: $table.repEstimation, builder: (column) => column);
+    column: $table.repEstimation,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get restTimers => $composableBuilder(
-      column: $table.restTimers, builder: (column) => column);
+    column: $table.restTimers,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get shortDateFormat => $composableBuilder(
-      column: $table.shortDateFormat, builder: (column) => column);
+    column: $table.shortDateFormat,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showBodyWeight => $composableBuilder(
-      column: $table.showBodyWeight, builder: (column) => column);
+    column: $table.showBodyWeight,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showCategories => $composableBuilder(
-      column: $table.showCategories, builder: (column) => column);
+    column: $table.showCategories,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showImages => $composableBuilder(
-      column: $table.showImages, builder: (column) => column);
+    column: $table.showImages,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showNotes =>
       $composableBuilder(column: $table.showNotes, builder: (column) => column);
 
   GeneratedColumn<bool> get showGlobalProgress => $composableBuilder(
-      column: $table.showGlobalProgress, builder: (column) => column);
+    column: $table.showGlobalProgress,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showUnits =>
       $composableBuilder(column: $table.showUnits, builder: (column) => column);
 
   GeneratedColumn<String> get strengthUnit => $composableBuilder(
-      column: $table.strengthUnit, builder: (column) => column);
+    column: $table.strengthUnit,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get systemColors => $composableBuilder(
-      column: $table.systemColors, builder: (column) => column);
+    column: $table.systemColors,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get tabs =>
       $composableBuilder(column: $table.tabs, builder: (column) => column);
@@ -5062,59 +6117,87 @@ class $$SettingsTableAnnotationComposer
       $composableBuilder(column: $table.themeMode, builder: (column) => column);
 
   GeneratedColumn<int> get timerDuration => $composableBuilder(
-      column: $table.timerDuration, builder: (column) => column);
+    column: $table.timerDuration,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get vibrate =>
       $composableBuilder(column: $table.vibrate, builder: (column) => column);
 
   GeneratedColumn<int> get warmupSets => $composableBuilder(
-      column: $table.warmupSets, builder: (column) => column);
+    column: $table.warmupSets,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get scrollableTabs => $composableBuilder(
-      column: $table.scrollableTabs, builder: (column) => column);
+    column: $table.scrollableTabs,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showGraphXAxis => $composableBuilder(
-      column: $table.showGraphXAxis, builder: (column) => column);
+    column: $table.showGraphXAxis,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get showGraphLimit => $composableBuilder(
-      column: $table.showGraphLimit, builder: (column) => column);
+    column: $table.showGraphLimit,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get progressPosition => $composableBuilder(
-      column: $table.progressPosition, builder: (column) => column);
+    column: $table.progressPosition,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get defaultGraphMetric => $composableBuilder(
-      column: $table.defaultGraphMetric, builder: (column) => column);
+    column: $table.defaultGraphMetric,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get defaultGraphPeriod => $composableBuilder(
-      column: $table.defaultGraphPeriod, builder: (column) => column);
+    column: $table.defaultGraphPeriod,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get defaultGraphLimit => $composableBuilder(
-      column: $table.defaultGraphLimit, builder: (column) => column);
+    column: $table.defaultGraphLimit,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
-      column: $table.defaultGraphTimeBasedXAxis, builder: (column) => column);
+    column: $table.defaultGraphTimeBasedXAxis,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<bool> get keepScreenOn => $composableBuilder(
-      column: $table.keepScreenOn, builder: (column) => column);
+    column: $table.keepScreenOn,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get inputStyle => $composableBuilder(
-      column: $table.inputStyle, builder: (column) => column);
+    column: $table.inputStyle,
+    builder: (column) => column,
+  );
 }
 
-class $$SettingsTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $SettingsTable,
-    Setting,
-    $$SettingsTableFilterComposer,
-    $$SettingsTableOrderingComposer,
-    $$SettingsTableAnnotationComposer,
-    $$SettingsTableCreateCompanionBuilder,
-    $$SettingsTableUpdateCompanionBuilder,
-    (Setting, BaseReferences<_$AppDatabase, $SettingsTable, Setting>),
-    Setting,
-    PrefetchHooks Function()> {
+class $$SettingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SettingsTable,
+          Setting,
+          $$SettingsTableFilterComposer,
+          $$SettingsTableOrderingComposer,
+          $$SettingsTableAnnotationComposer,
+          $$SettingsTableCreateCompanionBuilder,
+          $$SettingsTableUpdateCompanionBuilder,
+          (Setting, BaseReferences<_$AppDatabase, $SettingsTable, Setting>),
+          Setting,
+          PrefetchHooks Function()
+        > {
   $$SettingsTableTableManager(_$AppDatabase db, $SettingsTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5123,228 +6206,234 @@ class $$SettingsTableTableManager extends RootTableManager<
               $$SettingsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$SettingsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> alarmSound = const Value.absent(),
-            Value<bool> automaticBackups = const Value.absent(),
-            Value<String?> backupPath = const Value.absent(),
-            Value<String> cardioUnit = const Value.absent(),
-            Value<bool> curveLines = const Value.absent(),
-            Value<double?> curveSmoothness = const Value.absent(),
-            Value<bool> durationEstimation = const Value.absent(),
-            Value<bool> enableSound = const Value.absent(),
-            Value<bool> explainedPermissions = const Value.absent(),
-            Value<bool> groupHistory = const Value.absent(),
-            Value<int> id = const Value.absent(),
-            Value<String> longDateFormat = const Value.absent(),
-            Value<int> maxSets = const Value.absent(),
-            Value<bool> notifications = const Value.absent(),
-            Value<bool> peekGraph = const Value.absent(),
-            Value<String> planTrailing = const Value.absent(),
-            Value<bool> repEstimation = const Value.absent(),
-            Value<bool> restTimers = const Value.absent(),
-            Value<String> shortDateFormat = const Value.absent(),
-            Value<bool> showBodyWeight = const Value.absent(),
-            Value<bool> showCategories = const Value.absent(),
-            Value<bool> showImages = const Value.absent(),
-            Value<bool> showNotes = const Value.absent(),
-            Value<bool> showGlobalProgress = const Value.absent(),
-            Value<bool> showUnits = const Value.absent(),
-            Value<String> strengthUnit = const Value.absent(),
-            Value<bool> systemColors = const Value.absent(),
-            Value<String> tabs = const Value.absent(),
-            Value<String> themeMode = const Value.absent(),
-            Value<int> timerDuration = const Value.absent(),
-            Value<bool> vibrate = const Value.absent(),
-            Value<int?> warmupSets = const Value.absent(),
-            Value<bool> scrollableTabs = const Value.absent(),
-            Value<bool> showGraphXAxis = const Value.absent(),
-            Value<bool> showGraphLimit = const Value.absent(),
-            Value<String> progressPosition = const Value.absent(),
-            Value<String> defaultGraphMetric = const Value.absent(),
-            Value<String> defaultGraphPeriod = const Value.absent(),
-            Value<int> defaultGraphLimit = const Value.absent(),
-            Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
-            Value<bool> keepScreenOn = const Value.absent(),
-            Value<String> inputStyle = const Value.absent(),
-          }) =>
-              SettingsCompanion(
-            alarmSound: alarmSound,
-            automaticBackups: automaticBackups,
-            backupPath: backupPath,
-            cardioUnit: cardioUnit,
-            curveLines: curveLines,
-            curveSmoothness: curveSmoothness,
-            durationEstimation: durationEstimation,
-            enableSound: enableSound,
-            explainedPermissions: explainedPermissions,
-            groupHistory: groupHistory,
-            id: id,
-            longDateFormat: longDateFormat,
-            maxSets: maxSets,
-            notifications: notifications,
-            peekGraph: peekGraph,
-            planTrailing: planTrailing,
-            repEstimation: repEstimation,
-            restTimers: restTimers,
-            shortDateFormat: shortDateFormat,
-            showBodyWeight: showBodyWeight,
-            showCategories: showCategories,
-            showImages: showImages,
-            showNotes: showNotes,
-            showGlobalProgress: showGlobalProgress,
-            showUnits: showUnits,
-            strengthUnit: strengthUnit,
-            systemColors: systemColors,
-            tabs: tabs,
-            themeMode: themeMode,
-            timerDuration: timerDuration,
-            vibrate: vibrate,
-            warmupSets: warmupSets,
-            scrollableTabs: scrollableTabs,
-            showGraphXAxis: showGraphXAxis,
-            showGraphLimit: showGraphLimit,
-            progressPosition: progressPosition,
-            defaultGraphMetric: defaultGraphMetric,
-            defaultGraphPeriod: defaultGraphPeriod,
-            defaultGraphLimit: defaultGraphLimit,
-            defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
-            keepScreenOn: keepScreenOn,
-            inputStyle: inputStyle,
-          ),
-          createCompanionCallback: ({
-            required String alarmSound,
-            Value<bool> automaticBackups = const Value.absent(),
-            Value<String?> backupPath = const Value.absent(),
-            required String cardioUnit,
-            required bool curveLines,
-            Value<double?> curveSmoothness = const Value.absent(),
-            Value<bool> durationEstimation = const Value.absent(),
-            Value<bool> enableSound = const Value.absent(),
-            required bool explainedPermissions,
-            required bool groupHistory,
-            Value<int> id = const Value.absent(),
-            required String longDateFormat,
-            required int maxSets,
-            Value<bool> notifications = const Value.absent(),
-            Value<bool> peekGraph = const Value.absent(),
-            required String planTrailing,
-            Value<bool> repEstimation = const Value.absent(),
-            required bool restTimers,
-            required String shortDateFormat,
-            Value<bool> showBodyWeight = const Value.absent(),
-            Value<bool> showCategories = const Value.absent(),
-            Value<bool> showImages = const Value.absent(),
-            Value<bool> showNotes = const Value.absent(),
-            Value<bool> showGlobalProgress = const Value.absent(),
-            required bool showUnits,
-            required String strengthUnit,
-            required bool systemColors,
-            Value<String> tabs = const Value.absent(),
-            required String themeMode,
-            required int timerDuration,
-            required bool vibrate,
-            Value<int?> warmupSets = const Value.absent(),
-            Value<bool> scrollableTabs = const Value.absent(),
-            Value<bool> showGraphXAxis = const Value.absent(),
-            Value<bool> showGraphLimit = const Value.absent(),
-            Value<String> progressPosition = const Value.absent(),
-            Value<String> defaultGraphMetric = const Value.absent(),
-            Value<String> defaultGraphPeriod = const Value.absent(),
-            Value<int> defaultGraphLimit = const Value.absent(),
-            Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
-            Value<bool> keepScreenOn = const Value.absent(),
-            Value<String> inputStyle = const Value.absent(),
-          }) =>
-              SettingsCompanion.insert(
-            alarmSound: alarmSound,
-            automaticBackups: automaticBackups,
-            backupPath: backupPath,
-            cardioUnit: cardioUnit,
-            curveLines: curveLines,
-            curveSmoothness: curveSmoothness,
-            durationEstimation: durationEstimation,
-            enableSound: enableSound,
-            explainedPermissions: explainedPermissions,
-            groupHistory: groupHistory,
-            id: id,
-            longDateFormat: longDateFormat,
-            maxSets: maxSets,
-            notifications: notifications,
-            peekGraph: peekGraph,
-            planTrailing: planTrailing,
-            repEstimation: repEstimation,
-            restTimers: restTimers,
-            shortDateFormat: shortDateFormat,
-            showBodyWeight: showBodyWeight,
-            showCategories: showCategories,
-            showImages: showImages,
-            showNotes: showNotes,
-            showGlobalProgress: showGlobalProgress,
-            showUnits: showUnits,
-            strengthUnit: strengthUnit,
-            systemColors: systemColors,
-            tabs: tabs,
-            themeMode: themeMode,
-            timerDuration: timerDuration,
-            vibrate: vibrate,
-            warmupSets: warmupSets,
-            scrollableTabs: scrollableTabs,
-            showGraphXAxis: showGraphXAxis,
-            showGraphLimit: showGraphLimit,
-            progressPosition: progressPosition,
-            defaultGraphMetric: defaultGraphMetric,
-            defaultGraphPeriod: defaultGraphPeriod,
-            defaultGraphLimit: defaultGraphLimit,
-            defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
-            keepScreenOn: keepScreenOn,
-            inputStyle: inputStyle,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> alarmSound = const Value.absent(),
+                Value<bool> automaticBackups = const Value.absent(),
+                Value<String?> backupPath = const Value.absent(),
+                Value<String> cardioUnit = const Value.absent(),
+                Value<bool> curveLines = const Value.absent(),
+                Value<double?> curveSmoothness = const Value.absent(),
+                Value<bool> durationEstimation = const Value.absent(),
+                Value<bool> enableSound = const Value.absent(),
+                Value<bool> explainedPermissions = const Value.absent(),
+                Value<bool> groupHistory = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<String> longDateFormat = const Value.absent(),
+                Value<int> maxSets = const Value.absent(),
+                Value<bool> notifications = const Value.absent(),
+                Value<bool> peekGraph = const Value.absent(),
+                Value<String> planTrailing = const Value.absent(),
+                Value<bool> repEstimation = const Value.absent(),
+                Value<bool> restTimers = const Value.absent(),
+                Value<String> shortDateFormat = const Value.absent(),
+                Value<bool> showBodyWeight = const Value.absent(),
+                Value<bool> showCategories = const Value.absent(),
+                Value<bool> showImages = const Value.absent(),
+                Value<bool> showNotes = const Value.absent(),
+                Value<bool> showGlobalProgress = const Value.absent(),
+                Value<bool> showUnits = const Value.absent(),
+                Value<String> strengthUnit = const Value.absent(),
+                Value<bool> systemColors = const Value.absent(),
+                Value<String> tabs = const Value.absent(),
+                Value<String> themeMode = const Value.absent(),
+                Value<int> timerDuration = const Value.absent(),
+                Value<bool> vibrate = const Value.absent(),
+                Value<int?> warmupSets = const Value.absent(),
+                Value<bool> scrollableTabs = const Value.absent(),
+                Value<bool> showGraphXAxis = const Value.absent(),
+                Value<bool> showGraphLimit = const Value.absent(),
+                Value<String> progressPosition = const Value.absent(),
+                Value<String> defaultGraphMetric = const Value.absent(),
+                Value<String> defaultGraphPeriod = const Value.absent(),
+                Value<int> defaultGraphLimit = const Value.absent(),
+                Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
+                Value<bool> keepScreenOn = const Value.absent(),
+                Value<String> inputStyle = const Value.absent(),
+              }) => SettingsCompanion(
+                alarmSound: alarmSound,
+                automaticBackups: automaticBackups,
+                backupPath: backupPath,
+                cardioUnit: cardioUnit,
+                curveLines: curveLines,
+                curveSmoothness: curveSmoothness,
+                durationEstimation: durationEstimation,
+                enableSound: enableSound,
+                explainedPermissions: explainedPermissions,
+                groupHistory: groupHistory,
+                id: id,
+                longDateFormat: longDateFormat,
+                maxSets: maxSets,
+                notifications: notifications,
+                peekGraph: peekGraph,
+                planTrailing: planTrailing,
+                repEstimation: repEstimation,
+                restTimers: restTimers,
+                shortDateFormat: shortDateFormat,
+                showBodyWeight: showBodyWeight,
+                showCategories: showCategories,
+                showImages: showImages,
+                showNotes: showNotes,
+                showGlobalProgress: showGlobalProgress,
+                showUnits: showUnits,
+                strengthUnit: strengthUnit,
+                systemColors: systemColors,
+                tabs: tabs,
+                themeMode: themeMode,
+                timerDuration: timerDuration,
+                vibrate: vibrate,
+                warmupSets: warmupSets,
+                scrollableTabs: scrollableTabs,
+                showGraphXAxis: showGraphXAxis,
+                showGraphLimit: showGraphLimit,
+                progressPosition: progressPosition,
+                defaultGraphMetric: defaultGraphMetric,
+                defaultGraphPeriod: defaultGraphPeriod,
+                defaultGraphLimit: defaultGraphLimit,
+                defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
+                keepScreenOn: keepScreenOn,
+                inputStyle: inputStyle,
+              ),
+          createCompanionCallback:
+              ({
+                required String alarmSound,
+                Value<bool> automaticBackups = const Value.absent(),
+                Value<String?> backupPath = const Value.absent(),
+                required String cardioUnit,
+                required bool curveLines,
+                Value<double?> curveSmoothness = const Value.absent(),
+                Value<bool> durationEstimation = const Value.absent(),
+                Value<bool> enableSound = const Value.absent(),
+                required bool explainedPermissions,
+                required bool groupHistory,
+                Value<int> id = const Value.absent(),
+                required String longDateFormat,
+                required int maxSets,
+                Value<bool> notifications = const Value.absent(),
+                Value<bool> peekGraph = const Value.absent(),
+                required String planTrailing,
+                Value<bool> repEstimation = const Value.absent(),
+                required bool restTimers,
+                required String shortDateFormat,
+                Value<bool> showBodyWeight = const Value.absent(),
+                Value<bool> showCategories = const Value.absent(),
+                Value<bool> showImages = const Value.absent(),
+                Value<bool> showNotes = const Value.absent(),
+                Value<bool> showGlobalProgress = const Value.absent(),
+                required bool showUnits,
+                required String strengthUnit,
+                required bool systemColors,
+                Value<String> tabs = const Value.absent(),
+                required String themeMode,
+                required int timerDuration,
+                required bool vibrate,
+                Value<int?> warmupSets = const Value.absent(),
+                Value<bool> scrollableTabs = const Value.absent(),
+                Value<bool> showGraphXAxis = const Value.absent(),
+                Value<bool> showGraphLimit = const Value.absent(),
+                Value<String> progressPosition = const Value.absent(),
+                Value<String> defaultGraphMetric = const Value.absent(),
+                Value<String> defaultGraphPeriod = const Value.absent(),
+                Value<int> defaultGraphLimit = const Value.absent(),
+                Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
+                Value<bool> keepScreenOn = const Value.absent(),
+                Value<String> inputStyle = const Value.absent(),
+              }) => SettingsCompanion.insert(
+                alarmSound: alarmSound,
+                automaticBackups: automaticBackups,
+                backupPath: backupPath,
+                cardioUnit: cardioUnit,
+                curveLines: curveLines,
+                curveSmoothness: curveSmoothness,
+                durationEstimation: durationEstimation,
+                enableSound: enableSound,
+                explainedPermissions: explainedPermissions,
+                groupHistory: groupHistory,
+                id: id,
+                longDateFormat: longDateFormat,
+                maxSets: maxSets,
+                notifications: notifications,
+                peekGraph: peekGraph,
+                planTrailing: planTrailing,
+                repEstimation: repEstimation,
+                restTimers: restTimers,
+                shortDateFormat: shortDateFormat,
+                showBodyWeight: showBodyWeight,
+                showCategories: showCategories,
+                showImages: showImages,
+                showNotes: showNotes,
+                showGlobalProgress: showGlobalProgress,
+                showUnits: showUnits,
+                strengthUnit: strengthUnit,
+                systemColors: systemColors,
+                tabs: tabs,
+                themeMode: themeMode,
+                timerDuration: timerDuration,
+                vibrate: vibrate,
+                warmupSets: warmupSets,
+                scrollableTabs: scrollableTabs,
+                showGraphXAxis: showGraphXAxis,
+                showGraphLimit: showGraphLimit,
+                progressPosition: progressPosition,
+                defaultGraphMetric: defaultGraphMetric,
+                defaultGraphPeriod: defaultGraphPeriod,
+                defaultGraphLimit: defaultGraphLimit,
+                defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
+                keepScreenOn: keepScreenOn,
+                inputStyle: inputStyle,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$SettingsTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $SettingsTable,
-    Setting,
-    $$SettingsTableFilterComposer,
-    $$SettingsTableOrderingComposer,
-    $$SettingsTableAnnotationComposer,
-    $$SettingsTableCreateCompanionBuilder,
-    $$SettingsTableUpdateCompanionBuilder,
-    (Setting, BaseReferences<_$AppDatabase, $SettingsTable, Setting>),
-    Setting,
-    PrefetchHooks Function()>;
-typedef $$PlanExercisesTableCreateCompanionBuilder = PlanExercisesCompanion
-    Function({
-  required bool enabled,
-  Value<bool> timers,
-  required String exercise,
-  Value<int> id,
-  Value<int?> maxSets,
-  required int planId,
-  Value<int?> warmupSets,
-  Value<int> sequence,
-});
-typedef $$PlanExercisesTableUpdateCompanionBuilder = PlanExercisesCompanion
-    Function({
-  Value<bool> enabled,
-  Value<bool> timers,
-  Value<String> exercise,
-  Value<int> id,
-  Value<int?> maxSets,
-  Value<int> planId,
-  Value<int?> warmupSets,
-  Value<int> sequence,
-});
+typedef $$SettingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SettingsTable,
+      Setting,
+      $$SettingsTableFilterComposer,
+      $$SettingsTableOrderingComposer,
+      $$SettingsTableAnnotationComposer,
+      $$SettingsTableCreateCompanionBuilder,
+      $$SettingsTableUpdateCompanionBuilder,
+      (Setting, BaseReferences<_$AppDatabase, $SettingsTable, Setting>),
+      Setting,
+      PrefetchHooks Function()
+    >;
+typedef $$PlanExercisesTableCreateCompanionBuilder =
+    PlanExercisesCompanion Function({
+      required bool enabled,
+      Value<bool> timers,
+      required String exercise,
+      Value<int> id,
+      Value<int?> maxSets,
+      required int planId,
+      Value<int?> warmupSets,
+      Value<int> sequence,
+    });
+typedef $$PlanExercisesTableUpdateCompanionBuilder =
+    PlanExercisesCompanion Function({
+      Value<bool> enabled,
+      Value<bool> timers,
+      Value<String> exercise,
+      Value<int> id,
+      Value<int?> maxSets,
+      Value<int> planId,
+      Value<int?> warmupSets,
+      Value<int> sequence,
+    });
 
 final class $$PlanExercisesTableReferences
     extends BaseReferences<_$AppDatabase, $PlanExercisesTable, PlanExercise> {
   $$PlanExercisesTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
 
   static $GymSetsTable _exerciseTable(_$AppDatabase db) =>
       db.gymSets.createAlias('plan_exercises__exercise__gym_sets__name');
@@ -5352,12 +6441,15 @@ final class $$PlanExercisesTableReferences
   $$GymSetsTableProcessedTableManager get exercise {
     final $_column = $_itemColumn<String>('exercise')!;
 
-    final manager = $$GymSetsTableTableManager($_db, $_db.gymSets)
-        .filter((f) => f.name.sqlEquals($_column));
+    final manager = $$GymSetsTableTableManager(
+      $_db,
+      $_db.gymSets,
+    ).filter((f) => f.name.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_exerciseTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
   }
 
   static $PlansTable _planIdTable(_$AppDatabase db) =>
@@ -5366,12 +6458,15 @@ final class $$PlanExercisesTableReferences
   $$PlansTableProcessedTableManager get planId {
     final $_column = $_itemColumn<int>('plan_id')!;
 
-    final manager = $$PlansTableTableManager($_db, $_db.plans)
-        .filter((f) => f.id.sqlEquals($_column));
+    final manager = $$PlansTableTableManager(
+      $_db,
+      $_db.plans,
+    ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_planIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
   }
 }
 
@@ -5385,60 +6480,78 @@ class $$PlanExercisesTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<bool> get enabled => $composableBuilder(
-      column: $table.enabled, builder: (column) => ColumnFilters(column));
+    column: $table.enabled,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get timers => $composableBuilder(
-      column: $table.timers, builder: (column) => ColumnFilters(column));
+    column: $table.timers,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get maxSets => $composableBuilder(
-      column: $table.maxSets, builder: (column) => ColumnFilters(column));
+    column: $table.maxSets,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get warmupSets => $composableBuilder(
-      column: $table.warmupSets, builder: (column) => ColumnFilters(column));
+    column: $table.warmupSets,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get sequence => $composableBuilder(
-      column: $table.sequence, builder: (column) => ColumnFilters(column));
+    column: $table.sequence,
+    builder: (column) => ColumnFilters(column),
+  );
 
   $$GymSetsTableFilterComposer get exercise {
     final $$GymSetsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.exercise,
-        referencedTable: $db.gymSets,
-        getReferencedColumn: (t) => t.name,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$GymSetsTableFilterComposer(
-              $db: $db,
-              $table: $db.gymSets,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.exercise,
+      referencedTable: $db.gymSets,
+      getReferencedColumn: (t) => t.name,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GymSetsTableFilterComposer(
+            $db: $db,
+            $table: $db.gymSets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 
   $$PlansTableFilterComposer get planId {
     final $$PlansTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.planId,
-        referencedTable: $db.plans,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlansTableFilterComposer(
-              $db: $db,
-              $table: $db.plans,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.planId,
+      referencedTable: $db.plans,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlansTableFilterComposer(
+            $db: $db,
+            $table: $db.plans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -5453,60 +6566,78 @@ class $$PlanExercisesTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<bool> get enabled => $composableBuilder(
-      column: $table.enabled, builder: (column) => ColumnOrderings(column));
+    column: $table.enabled,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get timers => $composableBuilder(
-      column: $table.timers, builder: (column) => ColumnOrderings(column));
+    column: $table.timers,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get maxSets => $composableBuilder(
-      column: $table.maxSets, builder: (column) => ColumnOrderings(column));
+    column: $table.maxSets,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get warmupSets => $composableBuilder(
-      column: $table.warmupSets, builder: (column) => ColumnOrderings(column));
+    column: $table.warmupSets,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get sequence => $composableBuilder(
-      column: $table.sequence, builder: (column) => ColumnOrderings(column));
+    column: $table.sequence,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   $$GymSetsTableOrderingComposer get exercise {
     final $$GymSetsTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.exercise,
-        referencedTable: $db.gymSets,
-        getReferencedColumn: (t) => t.name,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$GymSetsTableOrderingComposer(
-              $db: $db,
-              $table: $db.gymSets,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.exercise,
+      referencedTable: $db.gymSets,
+      getReferencedColumn: (t) => t.name,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GymSetsTableOrderingComposer(
+            $db: $db,
+            $table: $db.gymSets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 
   $$PlansTableOrderingComposer get planId {
     final $$PlansTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.planId,
-        referencedTable: $db.plans,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlansTableOrderingComposer(
-              $db: $db,
-              $table: $db.plans,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.planId,
+      referencedTable: $db.plans,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlansTableOrderingComposer(
+            $db: $db,
+            $table: $db.plans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
@@ -5533,66 +6664,78 @@ class $$PlanExercisesTableAnnotationComposer
       $composableBuilder(column: $table.maxSets, builder: (column) => column);
 
   GeneratedColumn<int> get warmupSets => $composableBuilder(
-      column: $table.warmupSets, builder: (column) => column);
+    column: $table.warmupSets,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get sequence =>
       $composableBuilder(column: $table.sequence, builder: (column) => column);
 
   $$GymSetsTableAnnotationComposer get exercise {
     final $$GymSetsTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.exercise,
-        referencedTable: $db.gymSets,
-        getReferencedColumn: (t) => t.name,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$GymSetsTableAnnotationComposer(
-              $db: $db,
-              $table: $db.gymSets,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.exercise,
+      referencedTable: $db.gymSets,
+      getReferencedColumn: (t) => t.name,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GymSetsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.gymSets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 
   $$PlansTableAnnotationComposer get planId {
     final $$PlansTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.planId,
-        referencedTable: $db.plans,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlansTableAnnotationComposer(
-              $db: $db,
-              $table: $db.plans,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+      composer: this,
+      getCurrentColumn: (t) => t.planId,
+      referencedTable: $db.plans,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PlansTableAnnotationComposer(
+            $db: $db,
+            $table: $db.plans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
     return composer;
   }
 }
 
-class $$PlanExercisesTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $PlanExercisesTable,
-    PlanExercise,
-    $$PlanExercisesTableFilterComposer,
-    $$PlanExercisesTableOrderingComposer,
-    $$PlanExercisesTableAnnotationComposer,
-    $$PlanExercisesTableCreateCompanionBuilder,
-    $$PlanExercisesTableUpdateCompanionBuilder,
-    (PlanExercise, $$PlanExercisesTableReferences),
-    PlanExercise,
-    PrefetchHooks Function({bool exercise, bool planId})> {
+class $$PlanExercisesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlanExercisesTable,
+          PlanExercise,
+          $$PlanExercisesTableFilterComposer,
+          $$PlanExercisesTableOrderingComposer,
+          $$PlanExercisesTableAnnotationComposer,
+          $$PlanExercisesTableCreateCompanionBuilder,
+          $$PlanExercisesTableUpdateCompanionBuilder,
+          (PlanExercise, $$PlanExercisesTableReferences),
+          PlanExercise,
+          PrefetchHooks Function({bool exercise, bool planId})
+        > {
   $$PlanExercisesTableTableManager(_$AppDatabase db, $PlanExercisesTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5601,58 +6744,61 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
               $$PlanExercisesTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$PlanExercisesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<bool> enabled = const Value.absent(),
-            Value<bool> timers = const Value.absent(),
-            Value<String> exercise = const Value.absent(),
-            Value<int> id = const Value.absent(),
-            Value<int?> maxSets = const Value.absent(),
-            Value<int> planId = const Value.absent(),
-            Value<int?> warmupSets = const Value.absent(),
-            Value<int> sequence = const Value.absent(),
-          }) =>
-              PlanExercisesCompanion(
-            enabled: enabled,
-            timers: timers,
-            exercise: exercise,
-            id: id,
-            maxSets: maxSets,
-            planId: planId,
-            warmupSets: warmupSets,
-            sequence: sequence,
-          ),
-          createCompanionCallback: ({
-            required bool enabled,
-            Value<bool> timers = const Value.absent(),
-            required String exercise,
-            Value<int> id = const Value.absent(),
-            Value<int?> maxSets = const Value.absent(),
-            required int planId,
-            Value<int?> warmupSets = const Value.absent(),
-            Value<int> sequence = const Value.absent(),
-          }) =>
-              PlanExercisesCompanion.insert(
-            enabled: enabled,
-            timers: timers,
-            exercise: exercise,
-            id: id,
-            maxSets: maxSets,
-            planId: planId,
-            warmupSets: warmupSets,
-            sequence: sequence,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<bool> enabled = const Value.absent(),
+                Value<bool> timers = const Value.absent(),
+                Value<String> exercise = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<int?> maxSets = const Value.absent(),
+                Value<int> planId = const Value.absent(),
+                Value<int?> warmupSets = const Value.absent(),
+                Value<int> sequence = const Value.absent(),
+              }) => PlanExercisesCompanion(
+                enabled: enabled,
+                timers: timers,
+                exercise: exercise,
+                id: id,
+                maxSets: maxSets,
+                planId: planId,
+                warmupSets: warmupSets,
+                sequence: sequence,
+              ),
+          createCompanionCallback:
+              ({
+                required bool enabled,
+                Value<bool> timers = const Value.absent(),
+                required String exercise,
+                Value<int> id = const Value.absent(),
+                Value<int?> maxSets = const Value.absent(),
+                required int planId,
+                Value<int?> warmupSets = const Value.absent(),
+                Value<int> sequence = const Value.absent(),
+              }) => PlanExercisesCompanion.insert(
+                enabled: enabled,
+                timers: timers,
+                exercise: exercise,
+                id: id,
+                maxSets: maxSets,
+                planId: planId,
+                warmupSets: warmupSets,
+                sequence: sequence,
+              ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$PlanExercisesTableReferences(db, table, e)
-                  ))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$PlanExercisesTableReferences(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: ({exercise = false, planId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
+              addJoins:
+                  <
+                    T extends TableManagerState<
                       dynamic,
                       dynamic,
                       dynamic,
@@ -5663,58 +6809,65 @@ class $$PlanExercisesTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
-                      dynamic>>(state) {
-                if (exercise) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.exercise,
-                    referencedTable:
-                        $$PlanExercisesTableReferences._exerciseTable(db),
-                    referencedColumn:
-                        $$PlanExercisesTableReferences._exerciseTable(db).name,
-                  ) as T;
-                }
-                if (planId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.planId,
-                    referencedTable:
-                        $$PlanExercisesTableReferences._planIdTable(db),
-                    referencedColumn:
-                        $$PlanExercisesTableReferences._planIdTable(db).id,
-                  ) as T;
-                }
+                      dynamic
+                    >
+                  >(state) {
+                    if (exercise) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.exercise,
+                                referencedTable: $$PlanExercisesTableReferences
+                                    ._exerciseTable(db),
+                                referencedColumn: $$PlanExercisesTableReferences
+                                    ._exerciseTable(db)
+                                    .name,
+                              )
+                              as T;
+                    }
+                    if (planId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.planId,
+                                referencedTable: $$PlanExercisesTableReferences
+                                    ._planIdTable(db),
+                                referencedColumn: $$PlanExercisesTableReferences
+                                    ._planIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
             );
           },
-        ));
+        ),
+      );
 }
 
-typedef $$PlanExercisesTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $PlanExercisesTable,
-    PlanExercise,
-    $$PlanExercisesTableFilterComposer,
-    $$PlanExercisesTableOrderingComposer,
-    $$PlanExercisesTableAnnotationComposer,
-    $$PlanExercisesTableCreateCompanionBuilder,
-    $$PlanExercisesTableUpdateCompanionBuilder,
-    (PlanExercise, $$PlanExercisesTableReferences),
-    PlanExercise,
-    PrefetchHooks Function({bool exercise, bool planId})>;
-typedef $$MetadataTableCreateCompanionBuilder = MetadataCompanion Function({
-  required int buildNumber,
-  Value<int> rowid,
-});
-typedef $$MetadataTableUpdateCompanionBuilder = MetadataCompanion Function({
-  Value<int> buildNumber,
-  Value<int> rowid,
-});
+typedef $$PlanExercisesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlanExercisesTable,
+      PlanExercise,
+      $$PlanExercisesTableFilterComposer,
+      $$PlanExercisesTableOrderingComposer,
+      $$PlanExercisesTableAnnotationComposer,
+      $$PlanExercisesTableCreateCompanionBuilder,
+      $$PlanExercisesTableUpdateCompanionBuilder,
+      (PlanExercise, $$PlanExercisesTableReferences),
+      PlanExercise,
+      PrefetchHooks Function({bool exercise, bool planId})
+    >;
+typedef $$MetadataTableCreateCompanionBuilder =
+    MetadataCompanion Function({required int buildNumber, Value<int> rowid});
+typedef $$MetadataTableUpdateCompanionBuilder =
+    MetadataCompanion Function({Value<int> buildNumber, Value<int> rowid});
 
 class $$MetadataTableFilterComposer
     extends Composer<_$AppDatabase, $MetadataTable> {
@@ -5726,7 +6879,9 @@ class $$MetadataTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get buildNumber => $composableBuilder(
-      column: $table.buildNumber, builder: (column) => ColumnFilters(column));
+    column: $table.buildNumber,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$MetadataTableOrderingComposer
@@ -5739,7 +6894,9 @@ class $$MetadataTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get buildNumber => $composableBuilder(
-      column: $table.buildNumber, builder: (column) => ColumnOrderings(column));
+    column: $table.buildNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$MetadataTableAnnotationComposer
@@ -5752,23 +6909,32 @@ class $$MetadataTableAnnotationComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   GeneratedColumn<int> get buildNumber => $composableBuilder(
-      column: $table.buildNumber, builder: (column) => column);
+    column: $table.buildNumber,
+    builder: (column) => column,
+  );
 }
 
-class $$MetadataTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $MetadataTable,
-    MetadataData,
-    $$MetadataTableFilterComposer,
-    $$MetadataTableOrderingComposer,
-    $$MetadataTableAnnotationComposer,
-    $$MetadataTableCreateCompanionBuilder,
-    $$MetadataTableUpdateCompanionBuilder,
-    (MetadataData, BaseReferences<_$AppDatabase, $MetadataTable, MetadataData>),
-    MetadataData,
-    PrefetchHooks Function()> {
+class $$MetadataTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MetadataTable,
+          MetadataData,
+          $$MetadataTableFilterComposer,
+          $$MetadataTableOrderingComposer,
+          $$MetadataTableAnnotationComposer,
+          $$MetadataTableCreateCompanionBuilder,
+          $$MetadataTableUpdateCompanionBuilder,
+          (
+            MetadataData,
+            BaseReferences<_$AppDatabase, $MetadataTable, MetadataData>,
+          ),
+          MetadataData,
+          PrefetchHooks Function()
+        > {
   $$MetadataTableTableManager(_$AppDatabase db, $MetadataTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5777,61 +6943,64 @@ class $$MetadataTableTableManager extends RootTableManager<
               $$MetadataTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$MetadataTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> buildNumber = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              MetadataCompanion(
-            buildNumber: buildNumber,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required int buildNumber,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              MetadataCompanion.insert(
-            buildNumber: buildNumber,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<int> buildNumber = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MetadataCompanion(buildNumber: buildNumber, rowid: rowid),
+          createCompanionCallback:
+              ({
+                required int buildNumber,
+                Value<int> rowid = const Value.absent(),
+              }) => MetadataCompanion.insert(
+                buildNumber: buildNumber,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$MetadataTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $MetadataTable,
-    MetadataData,
-    $$MetadataTableFilterComposer,
-    $$MetadataTableOrderingComposer,
-    $$MetadataTableAnnotationComposer,
-    $$MetadataTableCreateCompanionBuilder,
-    $$MetadataTableUpdateCompanionBuilder,
-    (MetadataData, BaseReferences<_$AppDatabase, $MetadataTable, MetadataData>),
-    MetadataData,
-    PrefetchHooks Function()>;
-typedef $$GraphPreferencesTableCreateCompanionBuilder
-    = GraphPreferencesCompanion Function({
-  required String name,
-  Value<String> metric,
-  Value<String> period,
-  Value<int> limit,
-  Value<bool> timeBasedXAxis,
-  Value<String?> notes,
-  Value<int> rowid,
-});
-typedef $$GraphPreferencesTableUpdateCompanionBuilder
-    = GraphPreferencesCompanion Function({
-  Value<String> name,
-  Value<String> metric,
-  Value<String> period,
-  Value<int> limit,
-  Value<bool> timeBasedXAxis,
-  Value<String?> notes,
-  Value<int> rowid,
-});
+typedef $$MetadataTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MetadataTable,
+      MetadataData,
+      $$MetadataTableFilterComposer,
+      $$MetadataTableOrderingComposer,
+      $$MetadataTableAnnotationComposer,
+      $$MetadataTableCreateCompanionBuilder,
+      $$MetadataTableUpdateCompanionBuilder,
+      (
+        MetadataData,
+        BaseReferences<_$AppDatabase, $MetadataTable, MetadataData>,
+      ),
+      MetadataData,
+      PrefetchHooks Function()
+    >;
+typedef $$GraphPreferencesTableCreateCompanionBuilder =
+    GraphPreferencesCompanion Function({
+      required String name,
+      Value<String> metric,
+      Value<String> period,
+      Value<int> limit,
+      Value<bool> timeBasedXAxis,
+      Value<String?> notes,
+      Value<int> rowid,
+    });
+typedef $$GraphPreferencesTableUpdateCompanionBuilder =
+    GraphPreferencesCompanion Function({
+      Value<String> name,
+      Value<String> metric,
+      Value<String> period,
+      Value<int> limit,
+      Value<bool> timeBasedXAxis,
+      Value<String?> notes,
+      Value<int> rowid,
+    });
 
 class $$GraphPreferencesTableFilterComposer
     extends Composer<_$AppDatabase, $GraphPreferencesTable> {
@@ -5843,23 +7012,34 @@ class $$GraphPreferencesTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get metric => $composableBuilder(
-      column: $table.metric, builder: (column) => ColumnFilters(column));
+    column: $table.metric,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get period => $composableBuilder(
-      column: $table.period, builder: (column) => ColumnFilters(column));
+    column: $table.period,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get limit => $composableBuilder(
-      column: $table.limit, builder: (column) => ColumnFilters(column));
+    column: $table.limit,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<bool> get timeBasedXAxis => $composableBuilder(
-      column: $table.timeBasedXAxis,
-      builder: (column) => ColumnFilters(column));
+    column: $table.timeBasedXAxis,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$GraphPreferencesTableOrderingComposer
@@ -5872,23 +7052,34 @@ class $$GraphPreferencesTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get metric => $composableBuilder(
-      column: $table.metric, builder: (column) => ColumnOrderings(column));
+    column: $table.metric,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get period => $composableBuilder(
-      column: $table.period, builder: (column) => ColumnOrderings(column));
+    column: $table.period,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get limit => $composableBuilder(
-      column: $table.limit, builder: (column) => ColumnOrderings(column));
+    column: $table.limit,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<bool> get timeBasedXAxis => $composableBuilder(
-      column: $table.timeBasedXAxis,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.timeBasedXAxis,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$GraphPreferencesTableAnnotationComposer
@@ -5913,30 +7104,41 @@ class $$GraphPreferencesTableAnnotationComposer
       $composableBuilder(column: $table.limit, builder: (column) => column);
 
   GeneratedColumn<bool> get timeBasedXAxis => $composableBuilder(
-      column: $table.timeBasedXAxis, builder: (column) => column);
+    column: $table.timeBasedXAxis,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
 }
 
-class $$GraphPreferencesTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $GraphPreferencesTable,
-    GraphPreference,
-    $$GraphPreferencesTableFilterComposer,
-    $$GraphPreferencesTableOrderingComposer,
-    $$GraphPreferencesTableAnnotationComposer,
-    $$GraphPreferencesTableCreateCompanionBuilder,
-    $$GraphPreferencesTableUpdateCompanionBuilder,
-    (
-      GraphPreference,
-      BaseReferences<_$AppDatabase, $GraphPreferencesTable, GraphPreference>
-    ),
-    GraphPreference,
-    PrefetchHooks Function()> {
+class $$GraphPreferencesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $GraphPreferencesTable,
+          GraphPreference,
+          $$GraphPreferencesTableFilterComposer,
+          $$GraphPreferencesTableOrderingComposer,
+          $$GraphPreferencesTableAnnotationComposer,
+          $$GraphPreferencesTableCreateCompanionBuilder,
+          $$GraphPreferencesTableUpdateCompanionBuilder,
+          (
+            GraphPreference,
+            BaseReferences<
+              _$AppDatabase,
+              $GraphPreferencesTable,
+              GraphPreference
+            >,
+          ),
+          GraphPreference,
+          PrefetchHooks Function()
+        > {
   $$GraphPreferencesTableTableManager(
-      _$AppDatabase db, $GraphPreferencesTable table)
-      : super(TableManagerState(
+    _$AppDatabase db,
+    $GraphPreferencesTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -5945,64 +7147,67 @@ class $$GraphPreferencesTableTableManager extends RootTableManager<
               $$GraphPreferencesTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$GraphPreferencesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> name = const Value.absent(),
-            Value<String> metric = const Value.absent(),
-            Value<String> period = const Value.absent(),
-            Value<int> limit = const Value.absent(),
-            Value<bool> timeBasedXAxis = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GraphPreferencesCompanion(
-            name: name,
-            metric: metric,
-            period: period,
-            limit: limit,
-            timeBasedXAxis: timeBasedXAxis,
-            notes: notes,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String name,
-            Value<String> metric = const Value.absent(),
-            Value<String> period = const Value.absent(),
-            Value<int> limit = const Value.absent(),
-            Value<bool> timeBasedXAxis = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GraphPreferencesCompanion.insert(
-            name: name,
-            metric: metric,
-            period: period,
-            limit: limit,
-            timeBasedXAxis: timeBasedXAxis,
-            notes: notes,
-            rowid: rowid,
-          ),
+          updateCompanionCallback:
+              ({
+                Value<String> name = const Value.absent(),
+                Value<String> metric = const Value.absent(),
+                Value<String> period = const Value.absent(),
+                Value<int> limit = const Value.absent(),
+                Value<bool> timeBasedXAxis = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GraphPreferencesCompanion(
+                name: name,
+                metric: metric,
+                period: period,
+                limit: limit,
+                timeBasedXAxis: timeBasedXAxis,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String name,
+                Value<String> metric = const Value.absent(),
+                Value<String> period = const Value.absent(),
+                Value<int> limit = const Value.absent(),
+                Value<bool> timeBasedXAxis = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GraphPreferencesCompanion.insert(
+                name: name,
+                metric: metric,
+                period: period,
+                limit: limit,
+                timeBasedXAxis: timeBasedXAxis,
+                notes: notes,
+                rowid: rowid,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$GraphPreferencesTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $GraphPreferencesTable,
-    GraphPreference,
-    $$GraphPreferencesTableFilterComposer,
-    $$GraphPreferencesTableOrderingComposer,
-    $$GraphPreferencesTableAnnotationComposer,
-    $$GraphPreferencesTableCreateCompanionBuilder,
-    $$GraphPreferencesTableUpdateCompanionBuilder,
-    (
+typedef $$GraphPreferencesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $GraphPreferencesTable,
       GraphPreference,
-      BaseReferences<_$AppDatabase, $GraphPreferencesTable, GraphPreference>
-    ),
-    GraphPreference,
-    PrefetchHooks Function()>;
+      $$GraphPreferencesTableFilterComposer,
+      $$GraphPreferencesTableOrderingComposer,
+      $$GraphPreferencesTableAnnotationComposer,
+      $$GraphPreferencesTableCreateCompanionBuilder,
+      $$GraphPreferencesTableUpdateCompanionBuilder,
+      (
+        GraphPreference,
+        BaseReferences<_$AppDatabase, $GraphPreferencesTable, GraphPreference>,
+      ),
+      GraphPreference,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
