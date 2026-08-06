@@ -29,6 +29,7 @@ class EditSetPage extends StatefulWidget {
 
 class _EditSetPageState extends State<EditSetPage> {
   final reps = TextEditingController();
+  final repDuration = TextEditingController();
   final weight = TextEditingController();
   final orm = TextEditingController();
   final body = TextEditingController();
@@ -226,10 +227,30 @@ class _EditSetPageState extends State<EditSetPage> {
   List<Widget> buildStrengthFields() {
     return [
       const SizedBox(height: 8.0),
-      if (name != 'Weight') ...[buildRepsField(), const SizedBox(height: 8.0)],
+      if (name != 'Weight') ...[
+        buildRepsField(),
+        const SizedBox(height: 8.0),
+        buildRepDurationField(),
+        const SizedBox(height: 8.0),
+      ],
       buildWeightField(),
       if (name != 'Weight') ...[const SizedBox(height: 8.0), buildORMField()],
     ];
+  }
+
+  Widget buildRepDurationField() {
+    return StepperField(
+      controller: repDuration,
+      labelText: 'Time per rep (seconds)',
+      step: 5,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => selectAll(weight),
+      validator: (value) {
+        if (value == null || value.isEmpty) return null;
+        if (double.tryParse(value) == null) return 'Invalid number';
+        return null;
+      },
+    );
   }
 
   Widget buildRepsField() {
@@ -580,6 +601,7 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void dispose() {
     reps.dispose();
+    repDuration.dispose();
     repsNode.dispose();
     weight.dispose();
     body.dispose();
@@ -621,17 +643,23 @@ class _EditSetPageState extends State<EditSetPage> {
   Future<void> save() async {
     if (!key.currentState!.validate()) return;
 
+    final parsedRepDuration = double.tryParse(repDuration.text) ?? 0.0;
+    final parsedReps = double.tryParse(reps.text) ?? 0.0;
+    final computedDuration = (parsedRepDuration > 0 && parsedReps > 0)
+        ? (parsedReps * parsedRepDuration) / 60.0
+        : (int.tryParse(seconds.text) ?? 0) / 60 +
+            (int.tryParse(minutes.text) ?? 0);
+
     final gymSet = widget.gymSet.copyWith(
       name: name,
       unit: unit,
       created: created,
       reps: double.tryParse(reps.text),
+      repDuration: parsedRepDuration,
       weight: double.tryParse(weight.text),
       bodyWeight: double.tryParse(body.text),
       distance: double.tryParse(distance.text),
-      duration:
-          (int.tryParse(seconds.text) ?? 0) / 60 +
-          (int.tryParse(minutes.text) ?? 0),
+      duration: computedDuration,
       cardio: cardio,
       restMs: Value(restMs),
       incline: Value(int.tryParse(incline.text)),
@@ -738,6 +766,7 @@ class _EditSetPageState extends State<EditSetPage> {
     });
 
     if (gymSet.reps != 0) reps.text = toString(gymSet.reps);
+    if (gymSet.repDuration != 0) repDuration.text = toString(gymSet.repDuration);
     weight.text = toString(gymSet.weight);
     setORM();
     if (gymSet.bodyWeight != 0) body.text = toString(gymSet.bodyWeight);

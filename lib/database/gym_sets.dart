@@ -426,6 +426,7 @@ class GymSets extends Table {
   TextColumn get notes => text().nullable()();
   IntColumn get planId => integer().nullable()();
   RealColumn get reps => real()();
+  RealColumn get repDuration => real().withDefault(const Constant(0.0))();
   IntColumn get restMs => integer().nullable()();
   TextColumn get unit => text()();
   RealColumn get weight => real()();
