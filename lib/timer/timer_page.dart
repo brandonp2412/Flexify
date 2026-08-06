@@ -74,7 +74,6 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
   // Accumulated duration from previous running intervals.
   Duration _stopwatchAccumulated = Duration.zero;
   bool _stopwatchRunning = false;
-  Timer? _stopwatchTicker;
 
   Duration get _stopwatchElapsed {
     if (!_stopwatchRunning || _stopwatchStartedAt == null) {
@@ -95,24 +94,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
   void dispose() {
     widget.timerState.removeListener(_onTimerStateChanged);
     WidgetsBinding.instance.removeObserver(this);
-    _stopwatchTicker?.cancel();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && _stopwatchRunning) {
-      _startStopwatchTicker();
-    } else if (state == AppLifecycleState.paused) {
-      _stopwatchTicker?.cancel();
-    }
-  }
-
-  void _startStopwatchTicker() {
-    _stopwatchTicker?.cancel();
-    _stopwatchTicker = Timer.periodic(const Duration(milliseconds: 30), (_) {
-      if (mounted) setState(() {});
-    });
   }
 
   void _startStopwatch() {
@@ -120,7 +102,6 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
       _stopwatchStartedAt = DateTime.now();
       _stopwatchRunning = true;
     });
-    _startStopwatchTicker();
   }
 
   void _pauseStopwatch() {
@@ -129,7 +110,6 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
       _stopwatchStartedAt = null;
       _stopwatchRunning = false;
     });
-    _stopwatchTicker?.cancel();
   }
 
   void _restartStopwatch() {
@@ -141,9 +121,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
 
   void _onTimerStateChanged() {
     if (widget.timerState.timer.getDuration() > Duration.zero &&
-        _stopwatchTicker != null) {
-      _stopwatchTicker?.cancel();
-      _stopwatchTicker = null;
+        _stopwatchRunning) {
       setState(() {
         _stopwatchRunning = false;
         _stopwatchStartedAt = null;
@@ -197,7 +175,9 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
           child: countdownActive
               ? const TimerCircularProgressIndicator()
               : StopwatchProgressIndicator(
-                  elapsed: _stopwatchElapsed,
+                  startedAt: _stopwatchStartedAt,
+                  accumulated: _stopwatchAccumulated,
+                  isRunning: _stopwatchRunning,
                   timerState: widget.timerState,
                   onRestart: _restartStopwatch,
                 ),
