@@ -216,12 +216,8 @@ class FlexLine extends StatelessWidget {
               showTitles: hideBottom != true,
               reservedSize: 27,
               interval: bottomInterval,
-              getTitlesWidget: (value, meta) => bottomTitleWidgets(
-                value,
-                meta,
-                shortDateFormat,
-                context,
-              ),
+              getTitlesWidget: (value, meta) =>
+                  bottomTitleWidgets(value, meta, shortDateFormat, context),
             ),
           ),
         ),
