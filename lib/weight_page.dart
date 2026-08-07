@@ -59,29 +59,19 @@ class _WeightPageState extends State<WeightPage> {
                 autofocus: true,
               ),
               const SizedBox(height: 8),
-              Selector<SettingsState, String>(
-                selector: (context, settings) => settings.value.strengthUnit,
-                builder: (context, value, child) =>
-                    DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: 'Unit'),
-                      initialValue: unit ?? value,
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'kg',
-                          child: Text("Kilograms (kg)"),
-                        ),
-                        DropdownMenuItem(
-                          value: 'lb',
-                          child: Text("Pounds (lb)"),
-                        ),
-                        DropdownMenuItem(value: 'stone', child: Text("Stone")),
-                      ],
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          unit = newValue!;
-                        });
-                      },
-                    ),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: 'Unit'),
+                initialValue: unit,
+                items: const [
+                  DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
+                  DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
+                  DropdownMenuItem(value: 'stone', child: Text("Stone")),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    unit = newValue!;
+                  });
+                },
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -177,9 +167,14 @@ class _WeightPageState extends State<WeightPage> {
 
     getBodyWeight().then((value) {
       if (!mounted) return;
+
       setState(() {
         prev = "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
-        unit = value?.unit;
+
+        if (settings.strengthUnit == 'last-entry')
+          unit = value?.unit;
+        else
+          unit = settings.strengthUnit;
       });
     });
   }
