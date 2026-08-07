@@ -100,12 +100,12 @@ class App extends StatelessWidget {
     final inputStyle = context.select<SettingsState, String>(
       (settings) => settings.value.inputStyle,
     );
+    final themeMode = context.select<SettingsState, String>(
+      (settings) => settings.value.themeMode,
+    );
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        final themeMode = context.select<SettingsState, String>(
-          (settings) => settings.value.themeMode,
-        );
         final currentBrightness =
             themeMode == 'ThemeMode.dark' ||
                 themeMode == 'ThemeMode.amoled' ||
