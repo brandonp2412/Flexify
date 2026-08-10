@@ -34,6 +34,7 @@ void main() async {
         const SettingsCompanion(
           repEstimation: Value(true),
           explainedPermissions: Value(true),
+          notificationPermissionRequested: Value(true),
         ),
       );
       final settings = await (db.settings.select()..limit(1)).getSingle();
@@ -302,7 +303,10 @@ void main() async {
     ]);
 
     await db.settings.update().write(
-      SettingsCompanion(explainedPermissions: Value(true)),
+      SettingsCompanion(
+        explainedPermissions: Value(true),
+        notificationPermissionRequested: Value(true),
+      ),
     );
     final settings = await (db.settings.select()..limit(1)).getSingle();
 
@@ -362,7 +366,10 @@ void main() async {
     );
 
     await db.settings.update().write(
-      const SettingsCompanion(explainedPermissions: Value(true)),
+      const SettingsCompanion(
+        explainedPermissions: Value(true),
+        notificationPermissionRequested: Value(true),
+      ),
     );
     final settings = await (db.settings.select()..limit(1)).getSingle();
     final planState = PlanState();

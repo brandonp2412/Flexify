@@ -17,6 +17,8 @@ class Settings extends Table {
   TextColumn get longDateFormat => text()();
   IntColumn get maxSets => integer()();
   BoolColumn get notifications => boolean().withDefault(const Constant(true))();
+  BoolColumn get notificationPermissionRequested =>
+      boolean().withDefault(const Constant(false))();
   BoolColumn get peekGraph => boolean().withDefault(const Constant(false))();
   TextColumn get planTrailing => text()();
   BoolColumn get repEstimation =>

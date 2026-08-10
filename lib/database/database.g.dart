@@ -1396,6 +1396,21 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     ),
     defaultValue: const Constant(true),
   );
+  static const VerificationMeta _notificationPermissionRequestedMeta =
+      const VerificationMeta('notificationPermissionRequested');
+  @override
+  late final GeneratedColumn<bool> notificationPermissionRequested =
+      GeneratedColumn<bool>(
+        'notification_permission_requested',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("notification_permission_requested" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
   static const VerificationMeta _peekGraphMeta = const VerificationMeta(
     'peekGraph',
   );
@@ -1783,6 +1798,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     longDateFormat,
     maxSets,
     notifications,
+    notificationPermissionRequested,
     peekGraph,
     planTrailing,
     repEstimation,
@@ -1940,6 +1956,15 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         notifications.isAcceptableOrUnknown(
           data['notifications']!,
           _notificationsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('notification_permission_requested')) {
+      context.handle(
+        _notificationPermissionRequestedMeta,
+        notificationPermissionRequested.isAcceptableOrUnknown(
+          data['notification_permission_requested']!,
+          _notificationPermissionRequestedMeta,
         ),
       );
     }
@@ -2248,6 +2273,10 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         DriftSqlType.bool,
         data['${effectivePrefix}notifications'],
       )!,
+      notificationPermissionRequested: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}notification_permission_requested'],
+      )!,
       peekGraph: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}peek_graph'],
@@ -2384,6 +2413,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final String longDateFormat;
   final int maxSets;
   final bool notifications;
+  final bool notificationPermissionRequested;
   final bool peekGraph;
   final String planTrailing;
   final bool repEstimation;
@@ -2427,6 +2457,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     required this.longDateFormat,
     required this.maxSets,
     required this.notifications,
+    required this.notificationPermissionRequested,
     required this.peekGraph,
     required this.planTrailing,
     required this.repEstimation,
@@ -2477,6 +2508,9 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['long_date_format'] = Variable<String>(longDateFormat);
     map['max_sets'] = Variable<int>(maxSets);
     map['notifications'] = Variable<bool>(notifications);
+    map['notification_permission_requested'] = Variable<bool>(
+      notificationPermissionRequested,
+    );
     map['peek_graph'] = Variable<bool>(peekGraph);
     map['plan_trailing'] = Variable<String>(planTrailing);
     map['rep_estimation'] = Variable<bool>(repEstimation);
@@ -2532,6 +2566,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       longDateFormat: Value(longDateFormat),
       maxSets: Value(maxSets),
       notifications: Value(notifications),
+      notificationPermissionRequested: Value(notificationPermissionRequested),
       peekGraph: Value(peekGraph),
       planTrailing: Value(planTrailing),
       repEstimation: Value(repEstimation),
@@ -2587,6 +2622,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
       notifications: serializer.fromJson<bool>(json['notifications']),
+      notificationPermissionRequested: serializer.fromJson<bool>(
+        json['notificationPermissionRequested'],
+      ),
       peekGraph: serializer.fromJson<bool>(json['peekGraph']),
       planTrailing: serializer.fromJson<String>(json['planTrailing']),
       repEstimation: serializer.fromJson<bool>(json['repEstimation']),
@@ -2641,6 +2679,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       'longDateFormat': serializer.toJson<String>(longDateFormat),
       'maxSets': serializer.toJson<int>(maxSets),
       'notifications': serializer.toJson<bool>(notifications),
+      'notificationPermissionRequested': serializer.toJson<bool>(
+        notificationPermissionRequested,
+      ),
       'peekGraph': serializer.toJson<bool>(peekGraph),
       'planTrailing': serializer.toJson<String>(planTrailing),
       'repEstimation': serializer.toJson<bool>(repEstimation),
@@ -2689,6 +2730,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     String? longDateFormat,
     int? maxSets,
     bool? notifications,
+    bool? notificationPermissionRequested,
     bool? peekGraph,
     String? planTrailing,
     bool? repEstimation,
@@ -2734,6 +2776,8 @@ class Setting extends DataClass implements Insertable<Setting> {
     longDateFormat: longDateFormat ?? this.longDateFormat,
     maxSets: maxSets ?? this.maxSets,
     notifications: notifications ?? this.notifications,
+    notificationPermissionRequested:
+        notificationPermissionRequested ?? this.notificationPermissionRequested,
     peekGraph: peekGraph ?? this.peekGraph,
     planTrailing: planTrailing ?? this.planTrailing,
     repEstimation: repEstimation ?? this.repEstimation,
@@ -2804,6 +2848,10 @@ class Setting extends DataClass implements Insertable<Setting> {
       notifications: data.notifications.present
           ? data.notifications.value
           : this.notifications,
+      notificationPermissionRequested:
+          data.notificationPermissionRequested.present
+          ? data.notificationPermissionRequested.value
+          : this.notificationPermissionRequested,
       peekGraph: data.peekGraph.present ? data.peekGraph.value : this.peekGraph,
       planTrailing: data.planTrailing.present
           ? data.planTrailing.value
@@ -2896,6 +2944,9 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
           ..write('notifications: $notifications, ')
+          ..write(
+            'notificationPermissionRequested: $notificationPermissionRequested, ',
+          )
           ..write('peekGraph: $peekGraph, ')
           ..write('planTrailing: $planTrailing, ')
           ..write('repEstimation: $repEstimation, ')
@@ -2944,6 +2995,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     longDateFormat,
     maxSets,
     notifications,
+    notificationPermissionRequested,
     peekGraph,
     planTrailing,
     repEstimation,
@@ -2991,6 +3043,8 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.longDateFormat == this.longDateFormat &&
           other.maxSets == this.maxSets &&
           other.notifications == this.notifications &&
+          other.notificationPermissionRequested ==
+              this.notificationPermissionRequested &&
           other.peekGraph == this.peekGraph &&
           other.planTrailing == this.planTrailing &&
           other.repEstimation == this.repEstimation &&
@@ -3036,6 +3090,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> longDateFormat;
   final Value<int> maxSets;
   final Value<bool> notifications;
+  final Value<bool> notificationPermissionRequested;
   final Value<bool> peekGraph;
   final Value<String> planTrailing;
   final Value<bool> repEstimation;
@@ -3079,6 +3134,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.longDateFormat = const Value.absent(),
     this.maxSets = const Value.absent(),
     this.notifications = const Value.absent(),
+    this.notificationPermissionRequested = const Value.absent(),
     this.peekGraph = const Value.absent(),
     this.planTrailing = const Value.absent(),
     this.repEstimation = const Value.absent(),
@@ -3123,6 +3179,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required String longDateFormat,
     required int maxSets,
     this.notifications = const Value.absent(),
+    this.notificationPermissionRequested = const Value.absent(),
     this.peekGraph = const Value.absent(),
     required String planTrailing,
     this.repEstimation = const Value.absent(),
@@ -3182,6 +3239,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<String>? longDateFormat,
     Expression<int>? maxSets,
     Expression<bool>? notifications,
+    Expression<bool>? notificationPermissionRequested,
     Expression<bool>? peekGraph,
     Expression<String>? planTrailing,
     Expression<bool>? repEstimation,
@@ -3227,6 +3285,8 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (longDateFormat != null) 'long_date_format': longDateFormat,
       if (maxSets != null) 'max_sets': maxSets,
       if (notifications != null) 'notifications': notifications,
+      if (notificationPermissionRequested != null)
+        'notification_permission_requested': notificationPermissionRequested,
       if (peekGraph != null) 'peek_graph': peekGraph,
       if (planTrailing != null) 'plan_trailing': planTrailing,
       if (repEstimation != null) 'rep_estimation': repEstimation,
@@ -3277,6 +3337,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Value<String>? longDateFormat,
     Value<int>? maxSets,
     Value<bool>? notifications,
+    Value<bool>? notificationPermissionRequested,
     Value<bool>? peekGraph,
     Value<String>? planTrailing,
     Value<bool>? repEstimation,
@@ -3321,6 +3382,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       longDateFormat: longDateFormat ?? this.longDateFormat,
       maxSets: maxSets ?? this.maxSets,
       notifications: notifications ?? this.notifications,
+      notificationPermissionRequested:
+          notificationPermissionRequested ??
+          this.notificationPermissionRequested,
       peekGraph: peekGraph ?? this.peekGraph,
       planTrailing: planTrailing ?? this.planTrailing,
       repEstimation: repEstimation ?? this.repEstimation,
@@ -3397,6 +3461,11 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (notifications.present) {
       map['notifications'] = Variable<bool>(notifications.value);
+    }
+    if (notificationPermissionRequested.present) {
+      map['notification_permission_requested'] = Variable<bool>(
+        notificationPermissionRequested.value,
+      );
     }
     if (peekGraph.present) {
       map['peek_graph'] = Variable<bool>(peekGraph.value);
@@ -3504,6 +3573,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('longDateFormat: $longDateFormat, ')
           ..write('maxSets: $maxSets, ')
           ..write('notifications: $notifications, ')
+          ..write(
+            'notificationPermissionRequested: $notificationPermissionRequested, ',
+          )
           ..write('peekGraph: $peekGraph, ')
           ..write('planTrailing: $planTrailing, ')
           ..write('repEstimation: $repEstimation, ')
@@ -5461,6 +5533,7 @@ typedef $$SettingsTableCreateCompanionBuilder =
       required String longDateFormat,
       required int maxSets,
       Value<bool> notifications,
+      Value<bool> notificationPermissionRequested,
       Value<bool> peekGraph,
       required String planTrailing,
       Value<bool> repEstimation,
@@ -5506,6 +5579,7 @@ typedef $$SettingsTableUpdateCompanionBuilder =
       Value<String> longDateFormat,
       Value<int> maxSets,
       Value<bool> notifications,
+      Value<bool> notificationPermissionRequested,
       Value<bool> peekGraph,
       Value<String> planTrailing,
       Value<bool> repEstimation,
@@ -5612,6 +5686,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get notifications => $composableBuilder(
     column: $table.notifications,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get notificationPermissionRequested => $composableBuilder(
+    column: $table.notificationPermissionRequested,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5835,6 +5914,12 @@ class $$SettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get notificationPermissionRequested =>
+      $composableBuilder(
+        column: $table.notificationPermissionRequested,
+        builder: (column) => ColumnOrderings(column),
+      );
+
   ColumnOrderings<bool> get peekGraph => $composableBuilder(
     column: $table.peekGraph,
     builder: (column) => ColumnOrderings(column),
@@ -6051,6 +6136,12 @@ class $$SettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<bool> get notificationPermissionRequested =>
+      $composableBuilder(
+        column: $table.notificationPermissionRequested,
+        builder: (column) => column,
+      );
+
   GeneratedColumn<bool> get peekGraph =>
       $composableBuilder(column: $table.peekGraph, builder: (column) => column);
 
@@ -6222,6 +6313,8 @@ class $$SettingsTableTableManager
                 Value<String> longDateFormat = const Value.absent(),
                 Value<int> maxSets = const Value.absent(),
                 Value<bool> notifications = const Value.absent(),
+                Value<bool> notificationPermissionRequested =
+                    const Value.absent(),
                 Value<bool> peekGraph = const Value.absent(),
                 Value<String> planTrailing = const Value.absent(),
                 Value<bool> repEstimation = const Value.absent(),
@@ -6265,6 +6358,8 @@ class $$SettingsTableTableManager
                 longDateFormat: longDateFormat,
                 maxSets: maxSets,
                 notifications: notifications,
+                notificationPermissionRequested:
+                    notificationPermissionRequested,
                 peekGraph: peekGraph,
                 planTrailing: planTrailing,
                 repEstimation: repEstimation,
@@ -6310,6 +6405,8 @@ class $$SettingsTableTableManager
                 required String longDateFormat,
                 required int maxSets,
                 Value<bool> notifications = const Value.absent(),
+                Value<bool> notificationPermissionRequested =
+                    const Value.absent(),
                 Value<bool> peekGraph = const Value.absent(),
                 required String planTrailing,
                 Value<bool> repEstimation = const Value.absent(),
@@ -6353,6 +6450,8 @@ class $$SettingsTableTableManager
                 longDateFormat: longDateFormat,
                 maxSets: maxSets,
                 notifications: notifications,
+                notificationPermissionRequested:
+                    notificationPermissionRequested,
                 peekGraph: peekGraph,
                 planTrailing: planTrailing,
                 repEstimation: repEstimation,

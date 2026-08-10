@@ -58,11 +58,19 @@ DateTime parseDate(String dateString) {
 Future<bool> requestNotificationPermission() async {
   if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
     return true;
-  if (!kIsWeb) {
-    final permission = await Permission.notification.request();
-    return permission.isGranted;
-  }
-  return true;
+  if (kIsWeb) return true;
+
+  final settings = await (db.settings.select()..limit(1)).getSingle();
+  if (!settings.notifications || settings.notificationPermissionRequested)
+    return Permission.notification.isGranted;
+
+  // Record the attempt before showing the system dialog so repeated saves,
+  // including concurrent ones, cannot repeatedly ask after a denial.
+  await db.settings.update().write(
+    const SettingsCompanion(notificationPermissionRequested: Value(true)),
+  );
+  final permission = await Permission.notification.request();
+  return permission.isGranted;
 }
 
 void selectAll(TextEditingController controller) => controller.selection =

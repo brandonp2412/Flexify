@@ -535,6 +535,10 @@ class _StartPlanPageState extends State<StartPlanPage>
       bodyWeight = lastSet?.bodyWeight;
     }
 
+    if (settings.notifications && !settings.notificationPermissionRequested) {
+      await requestNotificationPermission();
+    }
+
     if (!settings.explainedPermissions &&
         settings.restTimers &&
         !kIsWeb &&
