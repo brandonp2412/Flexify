@@ -48,6 +48,7 @@ void main() async {
     await db.planExercises.insertAll(planExercises);
 
     planState.setExercises(plan);
+    await tester.binding.setSurfaceSize(const Size(1200, 2400));
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -67,13 +68,13 @@ void main() async {
 
     await tester.tap(find.text('Mon'));
     await tester.tap(find.text('Thu'));
-    await scroll(tester, find.text('Arnold press'));
     await tester.tap(find.text('Arnold press'));
     await tester.tap(find.text('Barbell biceps curl'));
 
     await tester.tap(find.text("Save"));
     await tester.pumpAndSettle();
     expect(find.textContaining('Title'), findsNothing);
+    await tester.binding.setSurfaceSize(null);
   });
 
   testWidgets('EditPlanPage searches', (WidgetTester tester) async {
@@ -113,6 +114,7 @@ void main() async {
     final planState = PlanState();
     await planState.setExercises(plan);
 
+    await tester.binding.setSurfaceSize(const Size(1200, 2400));
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -124,10 +126,10 @@ void main() async {
       ),
     );
 
-    await scroll(tester, find.text('Arnold press'));
     await tester.enterText(find.byType(SearchBar), 'Back extension');
     await tester.pumpAndSettle();
     expect(find.text('Back extension'), findsNWidgets(2));
     expect(find.text('Arnold press'), findsNothing);
+    await tester.binding.setSurfaceSize(null);
   });
 }
