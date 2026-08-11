@@ -381,8 +381,7 @@ class _CardioPageState extends State<CardioPage> {
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                         child: FlexLine(
                           spots: spots,
-                          tooltipData: () =>
-                              tooltipData(shortDateFormat),
+                          tooltipData: () => tooltipData(shortDateFormat),
                           touchLine: touchLine,
                           data: data,
                           timeBasedXAxis: useTimeBasedXAxis,

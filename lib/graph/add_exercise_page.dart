@@ -57,6 +57,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 validator: (value) =>
                     value?.isNotEmpty == true ? null : 'Required',
               ),
+              const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unit'),
                 initialValue: unit,

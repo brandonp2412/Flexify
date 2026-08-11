@@ -39,11 +39,13 @@ class _ExerciseModalState extends State<ExerciseModal> {
   void initState() {
     super.initState();
 
-    (db.planExercises.select()..where(
-          (u) =>
-              u.planId.equals(widget.planId) &
-              u.exercise.equals(widget.exercise),
-        ))
+    (db.planExercises.select()
+          ..where(
+            (u) =>
+                u.planId.equals(widget.planId) &
+                u.exercise.equals(widget.exercise),
+          )
+          ..limit(1))
         .getSingle()
         .then((planExercise) {
           if (!mounted) return;

@@ -356,8 +356,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         child: FlexLine(
                           data: data,
                           spots: spots,
-                          tooltipData: () =>
-                              tooltipData(shortDateFormat),
+                          tooltipData: () => tooltipData(shortDateFormat),
                           touchLine: touchLine,
                           timeBasedXAxis: useTimeBasedXAxis,
                         ),

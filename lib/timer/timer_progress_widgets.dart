@@ -158,7 +158,8 @@ class StopwatchProgressIndicator extends StatefulWidget {
   });
 
   @override
-  State<StopwatchProgressIndicator> createState() => _StopwatchProgressIndicatorState();
+  State<StopwatchProgressIndicator> createState() =>
+      _StopwatchProgressIndicatorState();
 }
 
 class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
@@ -207,7 +208,8 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
     if (!widget.isRunning || widget.startedAt == null) {
       _elapsed = widget.accumulated;
     } else {
-      _elapsed = widget.accumulated + DateTime.now().difference(widget.startedAt!);
+      _elapsed =
+          widget.accumulated + DateTime.now().difference(widget.startedAt!);
     }
   }
 
@@ -421,7 +423,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                       color: primary,
                       boxShadow: [
                         BoxShadow(
-                          color: primary.withValues(alpha: 0.55),
+                          color: primary.withValues(alpha: 0.4),
                           blurRadius: 10,
                           spreadRadius: 2,
                         ),
