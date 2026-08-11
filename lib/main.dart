@@ -106,7 +106,6 @@ class App extends StatelessWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-
         final currentBrightness =
             themeMode == 'ThemeMode.dark' ||
                 themeMode == 'ThemeMode.amoled' ||
