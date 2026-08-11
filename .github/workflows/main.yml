@@ -104,7 +104,7 @@ jobs:
         run: |
           git add pubspec.yaml fastlane/metadata assets/changelogs
           git commit -m "Release ${{ steps.bump.outputs.version }} [skip ci]"
-          git push origin main
+          git push origin HEAD:${{ github.ref_name }}
           echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
   build-android:
