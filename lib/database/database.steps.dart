@@ -8528,6 +8528,7 @@ final class Schema56 extends i0.VersionedSchema {
   @override
   late final List<i1.DatabaseSchemaEntity> entities = [
     plans,
+    gymSets,
     settings,
     planExercises,
     metadata,
@@ -8540,6 +8541,36 @@ final class Schema56 extends i0.VersionedSchema {
       isStrict: false,
       tableConstraints: [],
       columns: [_column_85, _column_86, _column_87, _column_88],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape45 gymSets = Shape45(
+    source: i0.VersionedTable(
+      entityName: 'gym_sets',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_89,
+        _column_90,
+        _column_91,
+        _column_92,
+        _column_93,
+        _column_94,
+        _column_95,
+        _column_86,
+        _column_96,
+        _column_97,
+        _column_98,
+        _column_99,
+        _column_100,
+        _column_101,
+        _column_157,
+        _column_102,
+        _column_103,
+        _column_104,
+      ],
       attachedDatabase: database,
     ),
     alias: null,
@@ -8649,12 +8680,64 @@ final class Schema56 extends i0.VersionedSchema {
   );
 }
 
+class Shape45 extends i0.VersionedTable {
+  Shape45({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<double> get bodyWeight =>
+      columnsByName['body_weight']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<int> get cardio =>
+      columnsByName['cardio']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get category =>
+      columnsByName['category']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get created =>
+      columnsByName['created']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<double> get distance =>
+      columnsByName['distance']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<double> get duration =>
+      columnsByName['duration']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<int> get hidden =>
+      columnsByName['hidden']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get image =>
+      columnsByName['image']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get incline =>
+      columnsByName['incline']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get notes =>
+      columnsByName['notes']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get planId =>
+      columnsByName['plan_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<double> get reps =>
+      columnsByName['reps']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<double> get repDuration =>
+      columnsByName['rep_duration']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<int> get restMs =>
+      columnsByName['rest_ms']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get unit =>
+      columnsByName['unit']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get weight =>
+      columnsByName['weight']! as i1.GeneratedColumn<double>;
+}
+
+i1.GeneratedColumn<double> _column_157(String aliasedName) =>
+    i1.GeneratedColumn<double>(
+      'rep_duration',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.double,
+      $customConstraints: 'NOT NULL DEFAULT 0.0',
+      defaultValue: const i1.CustomExpression('0.0'),
+    );
+
 final class Schema57 extends i0.VersionedSchema {
   Schema57({required super.database}) : super(version: 57);
   @override
   late final List<i1.DatabaseSchemaEntity> entities = [
     plans,
+    gymSets,
     settings,
+    planExercises,
     metadata,
     graphPreferences,
   ];
@@ -8665,6 +8748,36 @@ final class Schema57 extends i0.VersionedSchema {
       isStrict: false,
       tableConstraints: [],
       columns: [_column_85, _column_86, _column_87, _column_88],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape45 gymSets = Shape45(
+    source: i0.VersionedTable(
+      entityName: 'gym_sets',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_89,
+        _column_90,
+        _column_91,
+        _column_92,
+        _column_93,
+        _column_94,
+        _column_95,
+        _column_86,
+        _column_96,
+        _column_97,
+        _column_98,
+        _column_99,
+        _column_100,
+        _column_101,
+        _column_157,
+        _column_102,
+        _column_103,
+        _column_104,
+      ],
       attachedDatabase: database,
     ),
     alias: null,
@@ -8723,6 +8836,29 @@ final class Schema57 extends i0.VersionedSchema {
     ),
     alias: null,
   );
+  late final Shape46 planExercises = Shape46(
+    source: i0.VersionedTable(
+      entityName: 'plan_exercises',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_137,
+        _column_138,
+        _column_139,
+        _column_86,
+        _column_140,
+        _column_141,
+        _column_135,
+        _column_142,
+        _column_158,
+        _column_159,
+        _column_160,
+      ],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
   late final Shape32 metadata = Shape32(
     source: i0.VersionedTable(
       entityName: 'metadata',
@@ -8754,6 +8890,56 @@ final class Schema57 extends i0.VersionedSchema {
   );
 }
 
+class Shape46 extends i0.VersionedTable {
+  Shape46({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<int> get enabled =>
+      columnsByName['enabled']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get timers =>
+      columnsByName['timers']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get exercise =>
+      columnsByName['exercise']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get id =>
+      columnsByName['id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get maxSets =>
+      columnsByName['max_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get planId =>
+      columnsByName['plan_id']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get warmupSets =>
+      columnsByName['warmup_sets']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get sequence =>
+      columnsByName['sequence']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<double> get incrementWeight =>
+      columnsByName['increment_weight']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<double> get incrementReps =>
+      columnsByName['increment_reps']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<double> get incrementDuration =>
+      columnsByName['increment_duration']! as i1.GeneratedColumn<double>;
+}
+
+i1.GeneratedColumn<double> _column_158(String aliasedName) =>
+    i1.GeneratedColumn<double>(
+      'increment_weight',
+      aliasedName,
+      true,
+      type: i1.DriftSqlType.double,
+      $customConstraints: 'NULL',
+    );
+i1.GeneratedColumn<double> _column_159(String aliasedName) =>
+    i1.GeneratedColumn<double>(
+      'increment_reps',
+      aliasedName,
+      true,
+      type: i1.DriftSqlType.double,
+      $customConstraints: 'NULL',
+    );
+i1.GeneratedColumn<double> _column_160(String aliasedName) =>
+    i1.GeneratedColumn<double>(
+      'increment_duration',
+      aliasedName,
+      true,
+      type: i1.DriftSqlType.double,
+      $customConstraints: 'NULL',
+    );
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,

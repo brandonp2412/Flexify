@@ -230,6 +230,16 @@
             "dsl_features": []
           },
           {
+            "name": "rep_duration",
+            "getter_name": "repDuration",
+            "moor_type": "double",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0.0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
             "name": "rest_ms",
             "getter_name": "restMs",
             "moor_type": "int",
@@ -256,16 +266,6 @@
             "nullable": false,
             "customConstraints": null,
             "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "rep_duration",
-            "getter_name": "repDuration",
-            "moor_type": "real",
-            "nullable": false,
-            "customConstraints": null,
-            "default_dart": "const CustomExpression('0.0')",
             "default_client_dart": null,
             "dsl_features": []
           }
@@ -1071,7 +1071,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"gym_sets\" (\"body_weight\" REAL NOT NULL DEFAULT 0.0, \"cardio\" INTEGER NOT NULL DEFAULT 0 CHECK (\"cardio\" IN (0, 1, \"rep_duration\" REAL NOT NULL DEFAULT 0.0), \"rep_duration\" REAL NOT NULL DEFAULT 0.0), \"category\" TEXT NULL, \"created\" INTEGER NOT NULL, \"distance\" REAL NOT NULL DEFAULT 0.0, \"duration\" REAL NOT NULL DEFAULT 0.0, \"hidden\" INTEGER NOT NULL DEFAULT 0 CHECK (\"hidden\" IN (0, 1, \"rep_duration\" REAL NOT NULL DEFAULT 0.0), \"rep_duration\" REAL NOT NULL DEFAULT 0.0), \"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"image\" TEXT NULL, \"incline\" INTEGER NULL, \"name\" TEXT NOT NULL, \"notes\" TEXT NULL, \"plan_id\" INTEGER NULL, \"reps\" REAL NOT NULL, \"rest_ms\" INTEGER NULL, \"unit\" TEXT NOT NULL, \"weight\" REAL NOT NULL, \"rep_duration\" REAL NOT NULL DEFAULT 0.0);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"gym_sets\" (\"body_weight\" REAL NOT NULL DEFAULT 0.0, \"cardio\" INTEGER NOT NULL DEFAULT 0 CHECK (\"cardio\" IN (0, 1)), \"category\" TEXT NULL, \"created\" INTEGER NOT NULL, \"distance\" REAL NOT NULL DEFAULT 0.0, \"duration\" REAL NOT NULL DEFAULT 0.0, \"hidden\" INTEGER NOT NULL DEFAULT 0 CHECK (\"hidden\" IN (0, 1)), \"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"image\" TEXT NULL, \"incline\" INTEGER NULL, \"name\" TEXT NOT NULL, \"notes\" TEXT NULL, \"plan_id\" INTEGER NULL, \"reps\" REAL NOT NULL, \"rep_duration\" REAL NOT NULL DEFAULT 0.0, \"rest_ms\" INTEGER NULL, \"unit\" TEXT NOT NULL, \"weight\" REAL NOT NULL);"
         }
       ]
     },
