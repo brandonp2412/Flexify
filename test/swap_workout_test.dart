@@ -39,6 +39,9 @@ void main() async {
       ),
     );
 
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
     expect(find.text('Swap workout'), findsOne);
 
     await tester.pumpAndSettle();

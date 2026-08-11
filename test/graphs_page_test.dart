@@ -93,7 +93,11 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Barbell bench press'));
+    await tester.binding.setSurfaceSize(const Size(1200, 2400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpAndSettle();
+    final benchPress = find.text('Barbell bench press');
+    await tester.tap(benchPress);
     await tester.pumpAndSettle();
     expect(find.text('Best weight'), findsOne);
   });
@@ -183,7 +187,11 @@ void main() async {
     );
 
     await tester.pumpAndSettle();
-    await tester.longPress(find.text('Barbell bent-over row'));
+    await tester.binding.setSurfaceSize(const Size(1200, 2400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpAndSettle();
+    final row = find.text('Barbell bent-over row');
+    await tester.longPress(row);
     await tester.pumpAndSettle();
     expect(find.text('1'), findsOne);
   });
@@ -218,9 +226,12 @@ void main() async {
       ),
     );
 
+    await tester.binding.setSurfaceSize(const Size(1200, 2400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpAndSettle();
 
-    await tester.longPress(find.text('Back extension'));
+    final backExt = find.text('Back extension');
+    await tester.longPress(backExt);
     await tester.pumpAndSettle();
 
     final delete = find.byTooltip('Delete selected');

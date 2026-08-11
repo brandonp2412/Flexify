@@ -68,6 +68,7 @@ class _EditSetPageState extends State<EditSetPage> {
               ])
               ..limit(1))
             .getSingleOrNull();
+
     if (last == null) {
       final template =
           await (db.gymSets.select()
@@ -76,6 +77,7 @@ class _EditSetPageState extends State<EditSetPage> {
               .getSingleOrNull();
       return setState(() {
         name = option;
+        notes.clear();
         if (template != null) {
           cardio = template.cardio;
           unit = template.unit;
@@ -780,7 +782,11 @@ class _EditSetPageState extends State<EditSetPage> {
       incline.text = gymSet.incline.toString();
     if (gymSet.category != null && gymSet.category!.isNotEmpty)
       categoryCtrl.text = gymSet.category!;
-    notes.text = gymSet.notes ?? '';
+    if (gymSet.notes != null) {
+      notes.text = gymSet.notes!;
+    } else {
+      notes.clear();
+    }
   }
 
   Future<void> selectDate() async {

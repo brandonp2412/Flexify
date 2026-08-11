@@ -247,12 +247,12 @@ void main() async {
           ),
         );
 
-    // Squat entry with no note
+    // Deadlift entry with no note
     await db
         .into(db.gymSets)
         .insert(
           GymSetsCompanion.insert(
-            name: 'Squat',
+            name: 'Deadlift',
             reps: 5,
             weight: 80,
             unit: 'kg',
@@ -292,23 +292,23 @@ void main() async {
 
     // Select Bench press — its note should appear
     await tester.enterText(find.bySemanticsLabel('Name'), 'Bench press');
-    await tester.pump();
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Bench press').last);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Notes'), findsOne);
     expect(find.widgetWithText(TextField, 'bad shoulder'), findsOne);
 
-    // Switch to Squat — note must be cleared since Squat has no note
-    await tester.enterText(find.bySemanticsLabel('Name'), 'Squat');
-    await tester.pump();
-    await tester.tap(find.text('Squat').last);
+    // Switch to Deadlift — note must be cleared since Deadlift has no note
+    await tester.enterText(find.bySemanticsLabel('Name'), 'Deadlift');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Deadlift').last);
     await tester.pumpAndSettle();
 
     expect(
       find.widgetWithText(TextField, 'bad shoulder'),
       findsNothing,
-      reason: 'Note from Bench press must not persist when Squat has no note',
+      reason: 'Note from Bench press must not persist when Deadlift has no note',
     );
   });
 }
