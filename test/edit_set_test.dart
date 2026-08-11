@@ -262,6 +262,9 @@ void main() async {
         );
 
     final settings = await (db.settings.select()..limit(1)).getSingle();
+    await (db.settings.update()).write(
+      SettingsCompanion(showNotes: Value(true)),
+    );
     await tester.pumpWidget(
       MultiProvider(
         providers: [
