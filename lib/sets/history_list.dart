@@ -81,6 +81,7 @@ class _HistoryListState extends State<HistoryList> {
         onTap: () => widget.onSelect(gymSet.id),
         child: Image.file(
           File(gymSet.image!),
+          cacheWidth: 64,
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );

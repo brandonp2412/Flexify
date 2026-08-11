@@ -142,7 +142,15 @@ class _StrengthPageState extends State<StrengthPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>().value;
+    final showBodyWeight = context.select<SettingsState, bool>(
+      (settings) => settings.value.showBodyWeight,
+    );
+    final shortDateFormat = context.select<SettingsState, String>(
+      (settings) => settings.value.shortDateFormat,
+    );
+    final showNotes = context.select<SettingsState, bool>(
+      (settings) => settings.value.showNotes,
+    );
     final theme = Theme.of(context);
 
     final metricOptions = <(StrengthMetric, String)>[
@@ -150,7 +158,7 @@ class _StrengthPageState extends State<StrengthPage> {
       (StrengthMetric.bestReps, 'Best reps'),
       (StrengthMetric.oneRepMax, 'One rep max'),
       (StrengthMetric.volume, 'Volume'),
-      if (settings.showBodyWeight)
+      if (showBodyWeight)
         (StrengthMetric.relativeStrength, 'Relative strength'),
     ];
     final metricValue = metricOptions.any((option) => option.$1 == metric)
@@ -348,15 +356,14 @@ class _StrengthPageState extends State<StrengthPage> {
                         child: FlexLine(
                           data: data,
                           spots: spots,
-                          tooltipData: () =>
-                              tooltipData(settings.shortDateFormat),
+                          tooltipData: () => tooltipData(shortDateFormat),
                           touchLine: touchLine,
                           timeBasedXAxis: useTimeBasedXAxis,
                         ),
                       ),
               ),
               const SizedBox(height: 16),
-              if (settings.showNotes) ...[
+              if (showNotes) ...[
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(

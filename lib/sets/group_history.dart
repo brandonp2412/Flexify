@@ -95,22 +95,14 @@ class _GroupHistoryState extends State<GroupHistory> {
           if (gymSet.incline != null && gymSet.incline! > 0)
             incline = '@ ${gymSet.incline}%';
 
-          Widget? leading = SizedBox(
-            height: 24,
-            width: 24,
-            child: Checkbox(
-              value: widget.selected.contains(gymSet.id),
-              onChanged: (value) {
-                widget.onSelect(gymSet.id);
-              },
-            ),
-          );
+          Widget? leading;
 
           if (widget.selected.isEmpty && showImages && gymSet.image != null) {
             leading = GestureDetector(
               onTap: () => widget.onSelect(gymSet.id),
               child: Image.file(
                 File(gymSet.image!),
+                cacheWidth: 64,
                 errorBuilder: (context, error, stackTrace) =>
                     const Icon(Icons.error),
               ),
@@ -139,14 +131,6 @@ class _GroupHistoryState extends State<GroupHistory> {
               ),
             );
           }
-
-          leading = AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            transitionBuilder: (child, animation) {
-              return ScaleTransition(scale: animation, child: child);
-            },
-            child: leading,
-          );
 
           return Material(
             color: widget.selected.contains(gymSet.id)

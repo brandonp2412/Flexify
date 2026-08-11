@@ -57,6 +57,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 validator: (value) =>
                     value?.isNotEmpty == true ? null : 'Required',
               ),
+              const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unit'),
                 initialValue: unit,
@@ -123,6 +124,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       const SizedBox(height: 8),
                       Image.file(
                         File(image!),
+                        cacheWidth: 400,
                         errorBuilder: (context, error, stackTrace) =>
                             TextButton.icon(
                               label: const Text('Image error'),

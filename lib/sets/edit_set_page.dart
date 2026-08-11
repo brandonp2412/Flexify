@@ -193,7 +193,6 @@ class _EditSetPageState extends State<EditSetPage> {
                     }),
                   ),
                 ),
-                const SizedBox(height: 8.0),
                 ...exerciseFields(),
                 const SizedBox(height: 8.0),
                 if (showBodyWeight && name != 'Weight') ...[
@@ -295,6 +294,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildCardioFields() {
     return [
+      SizedBox(height: 8.0),
       buildDistanceField(),
       SizedBox(height: 8.0),
       duration(),
@@ -495,6 +495,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     }),
                     child: Image.file(
                       File(image!),
+                      cacheWidth: 400,
                       errorBuilder: (context, error, stackTrace) =>
                           TextButton.icon(
                             label: const Text('Image error'),

@@ -113,7 +113,15 @@ class FlexLine extends StatelessWidget {
       Theme.of(context).colorScheme.primary,
       Theme.of(context).colorScheme.surface,
     ];
-    final settings = context.watch<SettingsState>().value;
+    final curveLines = context.select<SettingsState, bool>(
+      (settings) => settings.value.curveLines,
+    );
+    final curveSmoothness = context.select<SettingsState, double?>(
+      (settings) => settings.value.curveSmoothness,
+    );
+    final shortDateFormat = context.select<SettingsState, String>(
+      (settings) => settings.value.shortDateFormat,
+    );
 
     // CRITICAL FIX: Calculate Y-axis min/max to prevent decimal interval issues
     double minY = spots.isEmpty
@@ -139,11 +147,11 @@ class FlexLine extends StatelessWidget {
     List<LineChartBarData> lineBarsData = [
       LineChartBarData(
         spots: spots,
-        isCurved: settings.curveLines,
+        isCurved: curveLines,
         color: Theme.of(context).colorScheme.primary,
         barWidth: 3,
         isStrokeCapRound: true,
-        curveSmoothness: settings.curveSmoothness ?? 0.35,
+        curveSmoothness: curveSmoothness ?? 0.35,
         dotData: const FlDotData(show: false),
         preventCurveOverShooting: true,
         belowBarData: BarAreaData(
@@ -208,12 +216,8 @@ class FlexLine extends StatelessWidget {
               showTitles: hideBottom != true,
               reservedSize: 27,
               interval: bottomInterval,
-              getTitlesWidget: (value, meta) => bottomTitleWidgets(
-                value,
-                meta,
-                settings.shortDateFormat,
-                context,
-              ),
+              getTitlesWidget: (value, meta) =>
+                  bottomTitleWidgets(value, meta, shortDateFormat, context),
             ),
           ),
         ),
