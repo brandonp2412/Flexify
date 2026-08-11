@@ -1,0 +1,10 @@
+• Add flutter submodule to analysis ignore list
+• Add missing spacing to add_exercise_page.dart
+• Fix cardio fields spacing
+• Fix dropdown error in weight_page.dart
+• Fix failing widget tests by adjusting test parameters and viewports
+• Fix flaky edit_plan_page_test by setting surface size
+• Fix getSingle error in exercise_modal.dart
+• Fix hardcoded main branch in version-bump push step
+• Fix weird context error in main.dart
+• Format
