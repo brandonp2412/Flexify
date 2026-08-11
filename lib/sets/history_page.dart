@@ -272,6 +272,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     GymSet gymSet =
         gymSets.firstOrNull ??
         GymSet(
+          repDuration: 0,
           id: 0,
           bodyWeight: bodyWeight,
           restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,

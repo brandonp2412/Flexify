@@ -29,7 +29,7 @@ void main() async {
             body: HistoryList(
               scroll: ScrollController(),
               sets: [
-                GymSet(
+                GymSet(repDuration: 0,
                   id: 1,
                   name: 'Bench press',
                   reps: 2,

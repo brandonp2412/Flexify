@@ -25,7 +25,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: EditSetPage(
-            gymSet: GymSet(
+            gymSet: GymSet(repDuration: 0,
               id: 0,
               name: "Bench press",
               reps: 2,
@@ -93,7 +93,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: EditSetPage(
-            gymSet: GymSet(
+            gymSet: GymSet(repDuration: 0,
               id: 0,
               name: "Bench press",
               reps: 2,
@@ -140,7 +140,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: EditSetPage(
-            gymSet: GymSet(
+            gymSet: GymSet(repDuration: 0,
               id: 0,
               name: "Bench press",
               reps: 2,
@@ -192,7 +192,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: EditSetPage(
-            gymSet: GymSet(
+            gymSet: GymSet(repDuration: 0,
               id: 1,
               name: "Bench press",
               reps: 2,
@@ -271,7 +271,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: EditSetPage(
-            gymSet: GymSet(
+            gymSet: GymSet(repDuration: 0,
               id: 0,
               name: '',
               reps: 0,
