@@ -23,7 +23,7 @@ class SessionSets extends StatefulWidget {
 }
 
 class _SessionSetsState extends State<SessionSets> {
-  late Stream<List<GymSet>> stream;
+  late Stream<List<GymSet>> _stream;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _SessionSetsState extends State<SessionSets> {
 
   void _watch() {
     final cutoff = DateTime.now().subtract(const Duration(hours: 24));
-    stream =
+    _stream =
         (db.gymSets.select()
               ..where(
                 (tbl) =>
@@ -60,7 +60,7 @@ class _SessionSetsState extends State<SessionSets> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: stream,
+      stream: _stream,
       builder: (context, snapshot) {
         final sets = snapshot.data;
 
@@ -178,30 +178,30 @@ class _PlaceholderChip extends StatelessWidget {
 }
 
 class _SetChip extends StatelessWidget {
-  final GymSet gymSet;
-  final int number;
-  final bool best;
+  final GymSet _gymSet;
+  final int _number;
+  final bool _best;
 
   const _SetChip({
-    required this.gymSet,
-    required this.number,
-    required this.best,
+    required this._gymSet,
+    required this._number,
+    required this._best,
   });
 
   String get _value {
-    if (gymSet.cardio &&
-        (gymSet.unit == 'kg' ||
-            gymSet.unit == 'lb' ||
-            gymSet.unit == 'stone')) {
-      final minutes = gymSet.duration.floor();
-      final seconds = ((gymSet.duration * 60) % 60).floor().toString().padLeft(
+    if (_gymSet.cardio &&
+        (_gymSet.unit == 'kg' ||
+            _gymSet.unit == 'lb' ||
+            _gymSet.unit == 'stone')) {
+      final minutes = _gymSet.duration.floor();
+      final seconds = ((_gymSet.duration * 60) % 60).floor().toString().padLeft(
         2,
         '0',
       );
-      return "${toString(gymSet.weight)} ${gymSet.unit} / $minutes:$seconds";
+      return "${toString(_gymSet.weight)} ${_gymSet.unit} / $minutes:$seconds";
     }
-    if (gymSet.cardio) return "${toString(gymSet.distance)} ${gymSet.unit}";
-    return "${toString(gymSet.weight)} ${gymSet.unit} × ${toString(gymSet.reps)}";
+    if (_gymSet.cardio) return "${toString(_gymSet.distance)} ${_gymSet.unit}";
+    return "${toString(_gymSet.weight)} ${_gymSet.unit} × ${toString(_gymSet.reps)}";
   }
 
   @override
@@ -212,7 +212,7 @@ class _SetChip extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: _gymSet)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -224,12 +224,12 @@ class _SetChip extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Set $number",
+                    "Set $_number",
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  if (best) ...[
+                  if (_best) ...[
                     const SizedBox(width: 4.0),
                     Icon(
                       Icons.star,

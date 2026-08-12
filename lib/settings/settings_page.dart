@@ -24,15 +24,15 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage>
     with AutomaticKeepAliveClientMixin {
-  final searchCtrl = TextEditingController();
+  final _searchCtrl = TextEditingController();
 
-  late final Setting settings;
-  late final TextEditingController maxSets;
-  late final TextEditingController warmupSets;
-  late final TextEditingController minutes;
-  late final TextEditingController seconds;
+  late final Setting _settings;
+  late final TextEditingController _maxSets;
+  late final TextEditingController _warmupSets;
+  late final TextEditingController _minutes;
+  late final TextEditingController _seconds;
 
-  AudioPlayer? player;
+  AudioPlayer? _player;
 
   @override
   bool get wantKeepAlive => true;
@@ -42,39 +42,39 @@ class _SettingsPageState extends State<SettingsPage>
     super.build(context);
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
-    if (searchCtrl.text.isNotEmpty) {
+    if (_searchCtrl.text.isNotEmpty) {
       filtered.addAll(
-        getAppearanceSettings(context, searchCtrl.text, settings),
+        getAppearanceSettings(context, _searchCtrl.text, settings),
       );
-      filtered.addAll(getFormatSettings(searchCtrl.text, settings.value));
+      filtered.addAll(getFormatSettings(_searchCtrl.text, settings.value));
       filtered.addAll(
-        getWorkoutSettings(context, searchCtrl.text, settings.value),
+        getWorkoutSettings(context, _searchCtrl.text, settings.value),
       );
-      if (player != null)
+      if (_player != null)
         filtered.addAll(
           getTimerSettings(
-            searchCtrl.text,
+            _searchCtrl.text,
             settings.value,
-            minutes,
-            seconds,
-            player!,
+            _minutes,
+            _seconds,
+            _player!,
             context,
           ),
         );
-      filtered.addAll(getDataSettings(searchCtrl.text, settings, context));
+      filtered.addAll(getDataSettings(_searchCtrl.text, settings, context));
       filtered.addAll(
         getPlanSettings(
           context,
-          searchCtrl.text,
+          _searchCtrl.text,
           settings.value,
-          maxSets,
-          warmupSets,
+          _maxSets,
+          _warmupSets,
         ),
       );
     }
 
     if (filtered.isEmpty)
-      filtered = [const ListTile(title: Text("No settings found"))];
+      filtered = [const ListTile(title: Text("No _settings found"))];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage>
           children: <Widget>[
             SearchBar(
               hintText: "Search...",
-              controller: searchCtrl,
+              controller: _searchCtrl,
               padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
               ),
@@ -111,7 +111,7 @@ class _SettingsPageState extends State<SettingsPage>
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.only(bottom: 116),
-                children: searchCtrl.text.isNotEmpty
+                children: _searchCtrl.text.isNotEmpty
                     ? filtered
                     : [
                         ListTile(
@@ -188,12 +188,12 @@ class _SettingsPageState extends State<SettingsPage>
 
   @override
   void dispose() {
-    searchCtrl.dispose();
-    maxSets.dispose();
-    warmupSets.dispose();
-    minutes.dispose();
-    seconds.dispose();
-    player?.dispose();
+    _searchCtrl.dispose();
+    _maxSets.dispose();
+    _warmupSets.dispose();
+    _minutes.dispose();
+    _seconds.dispose();
+    _player?.dispose();
 
     super.dispose();
   }
@@ -202,23 +202,25 @@ class _SettingsPageState extends State<SettingsPage>
   void initState() {
     super.initState();
 
-    settings = context.read<SettingsState>().value;
-    maxSets = TextEditingController(text: settings.maxSets.toString());
-    warmupSets = TextEditingController(text: settings.warmupSets?.toString());
-    minutes = TextEditingController(
-      text: Duration(milliseconds: settings.timerDuration).inMinutes.toString(),
+    _settings = context.read<SettingsState>().value;
+    _maxSets = TextEditingController(text: _settings.maxSets.toString());
+    _warmupSets = TextEditingController(text: _settings.warmupSets?.toString());
+    _minutes = TextEditingController(
+      text: Duration(
+        milliseconds: _settings.timerDuration,
+      ).inMinutes.toString(),
     );
-    seconds = TextEditingController(
-      text: (Duration(milliseconds: settings.timerDuration).inSeconds % 60)
+    _seconds = TextEditingController(
+      text: (Duration(milliseconds: _settings.timerDuration).inSeconds % 60)
           .toString(),
     );
 
     if (!kIsWeb) {
       try {
-        player = AudioPlayer();
+        _player = AudioPlayer();
       } catch (e) {
         print('Failed to create AudioPlayer: $e');
-        player = null;
+        _player = null;
       }
     }
   }

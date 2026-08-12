@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  late TabController controller;
+  late TabController _controller;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     final setting = context.read<SettingsState>().value.tabs;
     final tabs = setting.split(',');
-    controller = TabController(length: tabs.length, vsync: this);
+    _controller = TabController(length: tabs.length, vsync: this);
 
     final info = PackageInfo.fromPlatform();
     info.then((pkg) async {
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -141,10 +141,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       (settings) => settings.value.scrollableTabs,
     );
 
-    if (tabs.length != controller.length) {
-      controller.dispose();
-      controller = TabController(length: tabs.length, vsync: this);
-      if (controller.index >= tabs.length) controller.index = tabs.length - 1;
+    if (tabs.length != _controller.length) {
+      _controller.dispose();
+      _controller = TabController(length: tabs.length, vsync: this);
+      if (_controller.index >= tabs.length) _controller.index = tabs.length - 1;
     }
 
     return Scaffold(
@@ -155,17 +155,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Stack(
           children: [
             TabBarView(
-              controller: controller,
+              controller: _controller,
               physics: scrollableTabs
                   ? const AlwaysScrollableScrollPhysics()
                   : const NeverScrollableScrollPhysics(),
               children: tabs.map((tab) {
                 if (tab == 'HistoryPage')
-                  return HistoryPage(tabController: controller);
+                  return HistoryPage(tabController: _controller);
                 else if (tab == 'PlansPage')
-                  return PlansPage(tabController: controller);
+                  return PlansPage(tabController: _controller);
                 else if (tab == 'GraphsPage')
-                  return GraphsPage(tabController: controller);
+                  return GraphsPage(tabController: _controller);
                 else if (tab == 'TimerPage')
                   return const TimerPage();
                 else if (tab == 'SettingsPage')
@@ -179,13 +179,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               left: 0,
               right: 0,
               child: ValueListenableBuilder(
-                valueListenable: controller.animation!,
+                valueListenable: _controller.animation!,
                 builder: (context, value, child) {
                   return BottomNav(
                     tabs: tabs,
                     currentIndex: value.round(),
                     onTap: (index) {
-                      controller.animateTo(index);
+                      _controller.animateTo(index);
                     },
                     onLongPress: hideTab,
                   );

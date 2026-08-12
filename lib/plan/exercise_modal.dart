@@ -31,9 +31,9 @@ class ExerciseModal extends StatefulWidget {
 }
 
 class _ExerciseModalState extends State<ExerciseModal> {
-  final max = TextEditingController();
-  final warmup = TextEditingController();
-  bool timers = true;
+  final _max = TextEditingController();
+  final _warmup = TextEditingController();
+  bool _timers = true;
 
   @override
   void initState() {
@@ -49,11 +49,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
         .getSingle()
         .then((planExercise) {
           if (!mounted) return;
-          max.text = planExercise.maxSets?.toString() ?? '';
-          warmup.text = planExercise.warmupSets?.toString() ?? '';
+          _max.text = planExercise.maxSets?.toString() ?? '';
+          _warmup.text = planExercise.warmupSets?.toString() ?? '';
 
           setState(() {
-            timers = planExercise.timers;
+            _timers = planExercise.timers;
           });
         });
   }
@@ -80,11 +80,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           selector: (context, settings) =>
                               settings.value.warmupSets,
                           builder: (context, value, child) => TextField(
-                            controller: warmup,
+                            controller: _warmup,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(warmup),
+                            onTap: () => selectAll(_warmup),
                             onChanged: changeWarmup,
                             decoration: InputDecoration(
                               labelText: "Warmup sets",
@@ -98,11 +98,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           selector: (context, settings) =>
                               settings.value.maxSets,
                           builder: (context, value, child) => TextField(
-                            controller: max,
+                            controller: _max,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(max),
+                            onTap: () => selectAll(_max),
                             onChanged: changeMax,
                             decoration: InputDecoration(
                               labelText: "Working sets (max: 20)",
@@ -114,12 +114,12 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         const SizedBox(height: 16),
                         StatefulBuilder(
                           builder: (context, setState) => ListTile(
-                            title: const Text('Rest timers'),
+                            title: const Text('Rest _timers'),
                             trailing: Switch(
-                              value: timers,
+                              value: _timers,
                               onChanged: (value) {
                                 setState(() {
-                                  timers = value;
+                                  _timers = value;
                                 });
                                 changeTimers(value);
                               },
@@ -235,7 +235,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               u.planId.equals(widget.planId) &
               u.exercise.equals(widget.exercise),
         ))
-        .write(PlanExercisesCompanion(maxSets: Value(int.tryParse(max.text))));
+        .write(PlanExercisesCompanion(maxSets: Value(int.tryParse(_max.text))));
     widget.onMax();
   }
 
@@ -246,7 +246,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               u.exercise.equals(widget.exercise),
         ))
         .write(
-          PlanExercisesCompanion(warmupSets: Value(int.tryParse(warmup.text))),
+          PlanExercisesCompanion(warmupSets: Value(int.tryParse(_warmup.text))),
         );
   }
 }

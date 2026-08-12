@@ -159,17 +159,17 @@ class PlanSettings extends StatefulWidget {
 }
 
 class _PlanSettingsState extends State<PlanSettings> {
-  late var settings = context.read<SettingsState>().value;
+  late var _settings = context.read<SettingsState>().value;
 
-  late final max = TextEditingController(text: settings.maxSets.toString());
+  late final _max = TextEditingController(text: _settings.maxSets.toString());
 
-  late final warmup = TextEditingController(
-    text: settings.warmupSets?.toString(),
+  late final _warmup = TextEditingController(
+    text: _settings.warmupSets?.toString(),
   );
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>().value;
+    _settings = context.watch<SettingsState>().value;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -178,7 +178,7 @@ class _PlanSettingsState extends State<PlanSettings> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           padding: const EdgeInsets.only(bottom: 116),
-          children: getPlanSettings(context, '', settings, max, warmup),
+          children: getPlanSettings(context, '', _settings, _max, _warmup),
         ),
       ),
     );

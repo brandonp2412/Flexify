@@ -23,48 +23,48 @@ class EditPlanPage extends StatefulWidget {
 }
 
 class _EditPlanPageState extends State<EditPlanPage> {
-  late List<bool> days;
-  late var exercises = context.read<PlanState>().exercises;
+  late List<bool> _days;
+  late var _exercises = context.read<PlanState>().exercises;
 
-  String search = '';
+  String _search = '';
 
-  final node = FocusNode();
-  final searchCtrl = TextEditingController();
-  final titleCtrl = TextEditingController();
+  final _node = FocusNode();
+  final _searchCtrl = TextEditingController();
+  final _titleCtrl = TextEditingController();
 
   Future<void> addExercise() async {
     GymSetsCompanion? gymSet = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => AddExercisePage(name: search)),
+      MaterialPageRoute(builder: (context) => AddExercisePage(name: _search)),
     );
     if (gymSet == null || !mounted) return;
 
     final state = context.read<PlanState>();
     state.addExercise(gymSet);
     setState(() {
-      exercises = state.exercises;
-      search = '';
+      _exercises = state.exercises;
+      _search = '';
     });
-    searchCtrl.text = '';
+    _searchCtrl.text = '';
   }
 
   Iterable<Widget> get tiles {
-    final match = exercises.where(
-      (pe) => pe.exercise.value.toLowerCase().contains(search.toLowerCase()),
+    final match = _exercises.where(
+      (pe) => pe.exercise.value.toLowerCase().contains(_search.toLowerCase()),
     );
 
     if (match.isEmpty)
-      return [const ListTile(title: Text("No exercises found"))];
+      return [const ListTile(title: Text("No _exercises found"))];
 
     return match.toList().map(
       (pe) => ExerciseTile(
         planExercise: pe,
         onChange: (value) {
-          final id = exercises.indexWhere(
+          final id = _exercises.indexWhere(
             (exercise) => exercise.exercise == pe.exercise,
           );
           if (id == -1) return;
           setState(() {
-            exercises[id] = value;
+            _exercises[id] = value;
           });
         },
       ),
@@ -73,7 +73,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    exercises = context.select<PlanState, List<PlanExercisesCompanion>>(
+    _exercises = context.select<PlanState, List<PlanExercisesCompanion>>(
       (value) => value.exercises,
     );
 
@@ -92,11 +92,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
           children: [
             TextField(
               decoration: const InputDecoration(labelText: 'Title (optional)'),
-              controller: titleCtrl,
+              controller: _titleCtrl,
               textCapitalization: TextCapitalization.sentences,
             ),
             const SizedBox(height: 16.0),
-            DaySelector(daySwitches: days),
+            DaySelector(daySwitches: _days),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -106,9 +106,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   child: Icon(Icons.search),
                 ),
                 textCapitalization: TextCapitalization.sentences,
-                hintText: 'Search exercises...',
+                hintText: 'Search _exercises...',
                 onChanged: (value) => setState(() {
-                  search = value;
+                  _search = value;
                 }),
               ),
             ),
@@ -118,7 +118,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 icon: const Icon(Icons.add),
                 onPressed: addExercise,
               ),
-              title: Text(search.isEmpty ? 'Add exercise' : 'Add "$search"'),
+              title: Text(_search.isEmpty ? 'Add exercise' : 'Add "$_search"'),
               onTap: addExercise,
             ),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
@@ -136,9 +136,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   void dispose() {
-    node.dispose();
-    searchCtrl.dispose();
-    titleCtrl.dispose();
+    _node.dispose();
+    _searchCtrl.dispose();
+    _titleCtrl.dispose();
     super.dispose();
   }
 
@@ -146,24 +146,25 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    titleCtrl.text = widget.plan.title.value ?? "";
+    _titleCtrl.text = widget.plan.title.value ?? "";
     final list = widget.plan.days.value.split(',');
-    days = weekdays.map((day) => list.contains(day)).toList();
+    _days = weekdays.map((day) => list.contains(day)).toList();
   }
 
   Future<void> save() async {
     final selected = [];
-    for (int i = 0; i < days.length; i++)
-      if (days[i]) selected.add(weekdays[i]);
+    for (int i = 0; i < _days.length; i++)
+      if (_days[i]) selected.add(weekdays[i]);
 
-    if (selected.isEmpty && titleCtrl.text.isEmpty) return toast('Select days');
+    if (selected.isEmpty && _titleCtrl.text.isEmpty)
+      return toast('Select _days');
 
-    if (exercises.where((exercise) => exercise.enabled.value).isEmpty)
-      return toast('Select exercises');
+    if (_exercises.where((exercise) => exercise.enabled.value).isEmpty)
+      return toast('Select _exercises');
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),
-      title: Value(titleCtrl.text),
+      title: Value(_titleCtrl.text),
     );
 
     if (widget.plan.id.present) {
@@ -172,12 +173,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
         (tbl) => tbl.planId.equals(widget.plan.id.value),
       );
       await db.planExercises.insertAll(
-        exercises.map((pe) => pe.copyWith(planId: widget.plan.id)),
+        _exercises.map((pe) => pe.copyWith(planId: widget.plan.id)),
       );
     } else {
       final id = await db.into(db.plans).insert(newPlan);
       await db.planExercises.insertAll(
-        exercises
+        _exercises
             .where((element) => element.enabled.value)
             .map((pe) => pe.copyWith(planId: Value(id))),
       );

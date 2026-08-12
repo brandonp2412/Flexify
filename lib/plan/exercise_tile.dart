@@ -20,10 +20,10 @@ class ExerciseTile extends StatefulWidget {
 }
 
 class _ExerciseTileState extends State<ExerciseTile> {
-  late final max = TextEditingController(
+  late final _max = TextEditingController(
     text: widget.planExercise.maxSets.value?.toString(),
   );
-  late final warmup = TextEditingController(
+  late final _warmup = TextEditingController(
     text: widget.planExercise.warmupSets.value?.toString(),
   );
 
@@ -49,15 +49,15 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         selector: (context, settings) =>
                             settings.value.warmupSets,
                         builder: (context, value, child) => TextField(
-                          controller: warmup,
+                          controller: _warmup,
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: false,
                           ),
-                          onTap: () => selectAll(warmup),
+                          onTap: () => selectAll(_warmup),
                           onChanged: (value) {
                             final pe = widget.planExercise.copyWith(
                               enabled: const Value(true),
-                              warmupSets: Value(int.tryParse(warmup.text)),
+                              warmupSets: Value(int.tryParse(_warmup.text)),
                             );
                             widget.onChange(pe);
                           },
@@ -72,17 +72,17 @@ class _ExerciseTileState extends State<ExerciseTile> {
                       Selector<SettingsState, int>(
                         selector: (context, settings) => settings.value.maxSets,
                         builder: (context, value, child) => TextField(
-                          controller: max,
+                          controller: _max,
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: false,
                           ),
-                          onTap: () => selectAll(max),
+                          onTap: () => selectAll(_max),
                           onChanged: (value) {
-                            if (int.parse(max.text) > 0 &&
-                                int.parse(max.text) <= 20) {
+                            if (int.parse(_max.text) > 0 &&
+                                int.parse(_max.text) <= 20) {
                               final pe = widget.planExercise.copyWith(
                                 enabled: const Value(true),
-                                maxSets: Value(int.parse(max.text)),
+                                maxSets: Value(int.parse(_max.text)),
                               );
                               widget.onChange(pe);
                             }

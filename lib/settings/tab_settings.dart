@@ -16,7 +16,7 @@ class TabSettings extends StatefulWidget {
 typedef TabSetting = ({String name, bool enabled});
 
 class _TabSettingsState extends State<TabSettings> {
-  List<TabSetting> tabs = [
+  List<TabSetting> _tabs = [
     (name: 'HistoryPage', enabled: false),
     (name: 'PlansPage', enabled: false),
     (name: 'GraphsPage', enabled: false),
@@ -31,23 +31,25 @@ class _TabSettingsState extends State<TabSettings> {
     final tabSplit = settings.value.tabs.split(',');
 
     final enabled = tabSplit.map((tab) => (name: tab, enabled: true)).toList();
-    final disabled = tabs.where((tab) => !tabSplit.contains(tab.name)).toList();
+    final disabled = _tabs
+        .where((tab) => !tabSplit.contains(tab.name))
+        .toList();
 
-    tabs = enabled + disabled;
+    _tabs = enabled + disabled;
   }
 
   void setTab(String name, bool enabled) {
-    if (!enabled && tabs.where((tab) => tab.enabled == true).length == 1)
+    if (!enabled && _tabs.where((tab) => tab.enabled == true).length == 1)
       return toast('You need at least one tab');
-    final index = tabs.indexWhere((tappedTab) => tappedTab.name == name);
+    final index = _tabs.indexWhere((tappedTab) => tappedTab.name == name);
     setState(() {
-      tabs[index] = (name: name, enabled: enabled);
+      _tabs[index] = (name: name, enabled: enabled);
     });
 
     (db.settings.update().write(
       SettingsCompanion(
         tabs: Value(
-          tabs.where((tab) => tab.enabled).map((tab) => tab.name).join(','),
+          _tabs.where((tab) => tab.enabled).map((tab) => tab.name).join(','),
         ),
       ),
     ));
@@ -68,7 +70,7 @@ class _TabSettingsState extends State<TabSettings> {
                 children: [
                   const Icon(Icons.swipe),
                   SizedBox(width: 8),
-                  const Text("Swipe between tabs"),
+                  const Text("Swipe between _tabs"),
                 ],
               ),
               onTap: () => db.settings.update().write(
@@ -89,16 +91,16 @@ class _TabSettingsState extends State<TabSettings> {
               child: ReorderableListView.builder(
                 padding: const EdgeInsets.only(bottom: 116),
                 onReorderItem: (oldIndex, newIndex) {
-                  final temp = tabs[oldIndex];
+                  final temp = _tabs[oldIndex];
                   setState(() {
-                    tabs.removeAt(oldIndex);
-                    tabs.insert(newIndex, temp);
+                    _tabs.removeAt(oldIndex);
+                    _tabs.insert(newIndex, temp);
                   });
 
                   (db.settings.update().write(
                     SettingsCompanion(
                       tabs: Value(
-                        tabs
+                        _tabs
                             .where((tab) => tab.enabled)
                             .map((tab) => tab.name)
                             .join(','),
@@ -107,7 +109,7 @@ class _TabSettingsState extends State<TabSettings> {
                   ));
                 },
                 itemBuilder: (context, index) {
-                  final tab = tabs[index];
+                  final tab = _tabs[index];
                   if (tab.name == 'HistoryPage') {
                     return ListTile(
                       key: Key(tab.name),
@@ -211,7 +213,7 @@ class _TabSettingsState extends State<TabSettings> {
                   } else
                     return ErrorWidget("Invalid tab settings.");
                 },
-                itemCount: tabs.length,
+                itemCount: _tabs.length,
               ),
             ),
           ],

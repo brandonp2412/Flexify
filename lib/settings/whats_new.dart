@@ -19,7 +19,7 @@ class Changelog {
 }
 
 class _WhatsNewState extends State<WhatsNew> {
-  List<Changelog> changelogs = [];
+  List<Changelog> _changelogs = [];
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _WhatsNewState extends State<WhatsNew> {
   void setChangelogs() async {
     final logs = await getChangelogFiles(context);
     setState(() {
-      changelogs = logs;
+      _changelogs = logs;
     });
   }
 
@@ -41,7 +41,7 @@ class _WhatsNewState extends State<WhatsNew> {
 
     final files = manifest
         .listAssets()
-        .where((key) => key.startsWith('assets/changelogs/'))
+        .where((key) => key.startsWith('assets/_changelogs/'))
         .toList();
 
     files.sort((a, b) {
@@ -85,10 +85,10 @@ class _WhatsNewState extends State<WhatsNew> {
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 116),
         itemBuilder: (context, index) => ListTile(
-          title: Text(changelogs[index].created),
-          subtitle: Text(changelogs[index].content),
+          title: Text(_changelogs[index].created),
+          subtitle: Text(_changelogs[index].content),
         ),
-        itemCount: changelogs.length,
+        itemCount: _changelogs.length,
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.favorite_outline),

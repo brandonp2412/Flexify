@@ -31,7 +31,7 @@ class GroupHistory extends StatefulWidget {
 }
 
 class _GroupHistoryState extends State<GroupHistory> {
-  bool goingNext = false;
+  bool _goingNext = false;
 
   @override
   Widget build(BuildContext context) {
@@ -180,12 +180,12 @@ class _GroupHistoryState extends State<GroupHistory> {
   void scrollListener() {
     if (widget.scroll.position.pixels <
             widget.scroll.position.maxScrollExtent - 200 ||
-        goingNext)
+        _goingNext)
       return;
-    goingNext = true;
+    _goingNext = true;
     widget.onNext();
     setState(() {
-      goingNext = false;
+      _goingNext = false;
     });
   }
 }

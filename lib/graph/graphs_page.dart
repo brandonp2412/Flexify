@@ -35,16 +35,16 @@ class GraphsPage extends StatefulWidget {
 
 class GraphsPageState extends State<GraphsPage>
     with AutomaticKeepAliveClientMixin {
-  late final Stream<List<GymSetsCompanion>> stream = watchGraphs();
+  late final Stream<List<GymSetsCompanion>> _stream = watchGraphs();
 
   final _selection = SelectionController<String>();
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-  String search = '';
-  String? category;
-  final scroll = ScrollController();
+  String _search = '';
+  String? _category;
+  final _scroll = ScrollController();
   bool extendFab = true;
-  int total = 0;
-  GraphSort sort = GraphSort.dateDesc;
+  int _total = 0;
+  GraphSort _sort = GraphSort.dateDesc;
 
   @override
   bool get wantKeepAlive => true;
@@ -143,18 +143,18 @@ class GraphsPageState extends State<GraphsPage>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: StreamBuilder(
-        stream: stream,
+        stream: _stream,
         builder: (context, snapshot) {
           if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
           if (!snapshot.hasData) return const SizedBox();
 
-          final terms = search
+          final terms = _search
               .toLowerCase()
               .split(" ")
               .where((term) => term.isNotEmpty);
           var stream = snapshot.data!.where((gymSet) {
-            if (category != null) {
-              return gymSet.category.value == category;
+            if (_category != null) {
+              return gymSet.category.value == _category;
             }
             return true;
           });
@@ -166,7 +166,7 @@ class GraphsPageState extends State<GraphsPage>
           }
 
           final gymSets = stream.toList();
-          switch (sort) {
+          switch (_sort) {
             case GraphSort.dateDesc:
               gymSets.sort(
                 (a, b) => b.created.value.compareTo(a.created.value),
@@ -193,19 +193,19 @@ class GraphsPageState extends State<GraphsPage>
                 child: Column(
                   children: [
                     if (gymSets.isEmpty &&
-                        !'global progress'.contains(search.toLowerCase()))
+                        !'global progress'.contains(_search.toLowerCase()))
                       Padding(
                         padding: const EdgeInsets.only(top: appSearchHeight),
                         child: ListTile(
                           title: const Text("No graphs found"),
                           subtitle: Text(
-                            "Tap to create an exercise called $search",
+                            "Tap to create an exercise called $_search",
                           ),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    AddExercisePage(name: search),
+                                    AddExercisePage(name: _search),
                               ),
                             );
                           },
@@ -228,23 +228,23 @@ class GraphsPageState extends State<GraphsPage>
                   hintText: 'Search graphs...',
                   controller: _selection,
                   filter: GraphsFilters(
-                    category: category,
+                    category: _category,
                     setCategory: (value) {
                       setState(() {
-                        category = value;
+                        _category = value;
                       });
                     },
-                    sort: sort,
+                    sort: _sort,
                     setSort: (value) {
                       setState(() {
-                        sort = value;
+                        _sort = value;
                       });
                     },
                   ),
                   onShare: onShare,
                   onChange: (value) {
                     setState(() {
-                      search = value;
+                      _search = value;
                     });
                   },
                   onDelete: () async => onDelete(),
@@ -259,7 +259,8 @@ class GraphsPageState extends State<GraphsPage>
                           EditGraphPage(name: _selection.first),
                     ),
                   ),
-                  confirmText: "This will delete $total records. Are you sure?",
+                  confirmText:
+                      "This will delete $_total records. Are you sure?",
                 ),
               ),
             ],
@@ -271,7 +272,7 @@ class GraphsPageState extends State<GraphsPage>
           MaterialPageRoute(builder: (context) => const AddExercisePage()),
         ),
         label: Text('Add'),
-        scroll: scroll,
+        scroll: _scroll,
         icon: Icon(Icons.add),
       ),
     );
@@ -282,7 +283,7 @@ class GraphsPageState extends State<GraphsPage>
     setState(() {
       _selection.clear();
     });
-    final sets = (await stream.first)
+    final sets = (await _stream.first)
         .where((gymSet) => copy.contains(gymSet.name.value))
         .toList();
     final text = sets
@@ -329,8 +330,8 @@ class GraphsPageState extends State<GraphsPage>
   ListView graphList(List<GymSetsCompanion> gymSets, bool showGlobalProgress) {
     var itemCount = gymSets.length + 1;
     final showGlobal =
-        'global graphs'.contains(search.toLowerCase()) &&
-        category == null &&
+        'global graphs'.contains(_search.toLowerCase()) &&
+        _category == null &&
         showGlobalProgress;
     if (showGlobal) itemCount++;
 
@@ -340,7 +341,7 @@ class GraphsPageState extends State<GraphsPage>
 
     return ListView.builder(
       itemCount: itemCount,
-      controller: scroll,
+      controller: _scroll,
       padding: const EdgeInsets.only(bottom: 50, top: appSearchHeight + 8),
       itemBuilder: (context, index) {
         int currentIdx = index;
@@ -352,7 +353,7 @@ class GraphsPageState extends State<GraphsPage>
               child: ListTile(
                 leading: const Icon(Icons.language),
                 title: const Text("Global progress"),
-                subtitle: const Text("A chart grouped by category"),
+                subtitle: const Text("A chart grouped by _category"),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const GlobalProgressPage(),
@@ -419,7 +420,7 @@ class GraphsPageState extends State<GraphsPage>
                       ..where(db.gymSets.name.isIn(_selection.selected)))
                     .getSingle();
             setState(() {
-              total = result.read(db.gymSets.name.count()) ?? 0;
+              _total = result.read(db.gymSets.name.count()) ?? 0;
             });
           },
           tabCtrl: widget.tabController,

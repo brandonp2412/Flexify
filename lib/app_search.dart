@@ -41,7 +41,7 @@ class AppSearch extends StatefulWidget {
 }
 
 class _AppSearchState extends State<AppSearch> {
-  final TextEditingController ctrl = TextEditingController();
+  final TextEditingController _ctrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class _AppSearchState extends State<AppSearch> {
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: SearchBar(
         hintText: widget.hintText ?? "Search...",
-        controller: ctrl,
+        controller: _ctrl,
         padding: WidgetStateProperty.all(const EdgeInsets.only(right: 8.0)),
         textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
@@ -106,7 +106,7 @@ class _AppSearchState extends State<AppSearch> {
           duration: const Duration(milliseconds: 150),
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
-          child: sel.isEmpty && ctrl.text.isEmpty
+          child: sel.isEmpty && _ctrl.text.isEmpty
               ? const Padding(
                   padding: EdgeInsets.only(left: 16.0, right: 8.0),
                   child: Icon(Icons.search),
@@ -114,7 +114,7 @@ class _AppSearchState extends State<AppSearch> {
               : IconButton(
                   onPressed: () {
                     widget.controller.clear();
-                    ctrl.text = '';
+                    _ctrl.text = '';
                     widget.onChange('');
                   },
                   icon: const Icon(Icons.arrow_back),
@@ -236,7 +236,7 @@ class _AppSearchState extends State<AppSearch> {
 
   @override
   void dispose() {
-    ctrl.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 }

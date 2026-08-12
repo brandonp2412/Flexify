@@ -34,7 +34,7 @@ class HistoryPage extends StatefulWidget {
 
 class HistoryPageState extends State<HistoryPage>
     with AutomaticKeepAliveClientMixin {
-  final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
   @override
   bool get wantKeepAlive => true;
@@ -44,16 +44,16 @@ class HistoryPageState extends State<HistoryPage>
     super.build(context);
     return NavigatorPopHandler(
       onPopWithResult: (result) {
-        if (navKey.currentState!.canPop() == false) return;
+        if (_navKey.currentState!.canPop() == false) return;
         final settings = context.read<SettingsState>().value;
         final historyIndex = settings.tabs.split(',').indexOf('HistoryPage');
         if (widget.tabController.index == historyIndex)
-          navKey.currentState!.pop();
+          _navKey.currentState!.pop();
       },
       child: Navigator(
-        key: navKey,
+        key: _navKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => _HistoryPageWidget(navigatorKey: navKey),
+          builder: (context) => _HistoryPageWidget(navigatorKey: _navKey),
           settings: settings,
         ),
       ),

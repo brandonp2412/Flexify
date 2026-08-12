@@ -18,18 +18,18 @@ class WeightPage extends StatefulWidget {
 }
 
 class _WeightPageState extends State<WeightPage> {
-  final TextEditingController ctrl = TextEditingController();
-  String prev = "";
-  String? unit;
-  String? image;
-  final key = GlobalKey<FormState>();
+  final TextEditingController _ctrl = TextEditingController();
+  String _prev = "";
+  String? _unit;
+  String? _image;
+  final _key = GlobalKey<FormState>();
 
   void pick() async {
     FilePickerResult? result = await FilePicker.pickFiles();
     if (result?.files.single == null) return;
 
     setState(() {
-      image = result?.files.single.path;
+      _image = result?.files.single.path;
     });
   }
 
@@ -39,14 +39,14 @@ class _WeightPageState extends State<WeightPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('Enter Weight')),
       body: Form(
-        key: key,
+        key: _key,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: ListView(
             padding: const EdgeInsets.only(bottom: 116),
             children: [
               TextFormField(
-                controller: ctrl,
+                controller: _ctrl,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -61,7 +61,7 @@ class _WeightPageState extends State<WeightPage> {
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unit'),
-                initialValue: unit,
+                initialValue: _unit,
                 items: const [
                   DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
                   DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
@@ -69,13 +69,13 @@ class _WeightPageState extends State<WeightPage> {
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
-                    unit = newValue!;
+                    _unit = newValue!;
                   });
                 },
               ),
               const SizedBox(height: 8),
               TextFormField(
-                controller: TextEditingController(text: prev),
+                controller: TextEditingController(text: _prev),
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
@@ -86,23 +86,23 @@ class _WeightPageState extends State<WeightPage> {
                     visible: showImages,
                     child: Column(
                       children: [
-                        if (image == null)
+                        if (_image == null)
                           TextButton.icon(
                             onPressed: pick,
                             label: const Text('Image'),
                             icon: const Icon(Icons.image),
                           ),
-                        if (image != null) ...[
+                        if (_image != null) ...[
                           const SizedBox(height: 8),
                           Tooltip(
                             message: 'Long-press to delete',
                             child: GestureDetector(
                               onTap: () => pick(),
                               onLongPress: () => setState(() {
-                                image = null;
+                                _image = null;
                               }),
                               child: Image.file(
-                                File(image!),
+                                File(_image!),
                                 cacheWidth: 400,
                                 errorBuilder: (context, error, stackTrace) =>
                                     TextButton.icon(
@@ -126,21 +126,21 @@ class _WeightPageState extends State<WeightPage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: () async {
-          if (!key.currentState!.validate()) return;
+          if (!_key.currentState!.validate()) return;
 
           final settings = context.read<SettingsState>().value;
           if (settings.strengthUnit != 'last-entry')
-            unit = settings.strengthUnit;
+            _unit = settings.strengthUnit;
 
-          final value = double.parse(ctrl.text);
+          final value = double.parse(_ctrl.text);
           await db.gymSets.insertOne(
             GymSetsCompanion.insert(
               created: DateTime.now().toLocal(),
               name: "Weight",
               reps: 1,
-              unit: unit ?? 'kg',
+              unit: _unit ?? 'kg',
               weight: value,
-              image: drift.Value(image),
+              image: drift.Value(_image),
             ),
           );
           await (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
@@ -156,7 +156,7 @@ class _WeightPageState extends State<WeightPage> {
 
   @override
   void dispose() {
-    ctrl.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
@@ -169,12 +169,12 @@ class _WeightPageState extends State<WeightPage> {
       if (!mounted) return;
 
       setState(() {
-        prev = "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
+        _prev = "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
 
         if (settings.strengthUnit == 'last-entry')
-          unit = value?.unit;
+          _unit = value?.unit;
         else
-          unit = settings.strengthUnit;
+          _unit = settings.strengthUnit;
       });
     });
   }

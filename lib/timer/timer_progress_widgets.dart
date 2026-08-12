@@ -295,9 +295,9 @@ class TimerProgressIndicator extends StatefulWidget {
 
 class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
     with WidgetsBindingObserver {
-  Duration? lastDuration;
-  DateTime? lastTimestamp;
-  GlobalKey? animationKey;
+  Duration? _lastDuration;
+  DateTime? _lastTimestamp;
+  GlobalKey? _animationKey;
 
   @override
   void initState() {
@@ -315,7 +315,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       setState(() {
-        animationKey = GlobalKey();
+        _animationKey = GlobalKey();
       });
     }
   }
@@ -329,9 +329,9 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
         final remaining = timerState.timer.getRemaining();
 
         if (duration == Duration.zero || remaining == Duration.zero) {
-          lastDuration = null;
-          lastTimestamp = null;
-          animationKey = null;
+          _lastDuration = null;
+          _lastTimestamp = null;
+          _animationKey = null;
           return const SizedBox.shrink();
         }
 
@@ -339,24 +339,24 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
             elapsed.inMilliseconds / duration.inMilliseconds;
 
         final isNewTimer =
-            lastDuration != duration ||
-            (lastTimestamp != null &&
+            _lastDuration != duration ||
+            (_lastTimestamp != null &&
                 timerState.timer.stamp
-                        .difference(lastTimestamp!)
+                        .difference(_lastTimestamp!)
                         .inSeconds
                         .abs() >
                     1);
 
         if (isNewTimer) {
-          lastDuration = duration;
-          lastTimestamp = timerState.timer.stamp;
-          animationKey = GlobalKey();
+          _lastDuration = duration;
+          _lastTimestamp = timerState.timer.stamp;
+          _animationKey = GlobalKey();
         }
 
         return Visibility(
           visible: true,
           child: TweenAnimationBuilder<double>(
-            key: animationKey,
+            key: _animationKey,
             tween: Tween<double>(begin: 1.0 - currentProgress, end: 0.0),
             duration: remaining,
             builder: (context, value, child) {

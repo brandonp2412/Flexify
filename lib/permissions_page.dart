@@ -15,9 +15,9 @@ class PermissionsPage extends StatefulWidget {
 }
 
 class _PermissionsPageState extends State<PermissionsPage> {
-  bool schedule = false;
-  bool ignore = false;
-  bool notify = false;
+  bool _schedule = false;
+  bool _ignore = false;
+  bool _notify = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
                   Permission.ignoreBatteryOptimizations,
                 ),
                 trailing: Switch(
-                  value: ignore,
+                  value: _ignore,
                   onChanged: (_) async => await requestPermission(
                     Permission.ignoreBatteryOptimizations,
                   ),
@@ -76,7 +76,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 onTap: () async =>
                     await requestPermission(Permission.scheduleExactAlarm),
                 trailing: Switch(
-                  value: schedule,
+                  value: _schedule,
                   onChanged: (_) async =>
                       await requestPermission(Permission.scheduleExactAlarm),
                 ),
@@ -89,7 +89,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 onTap: () async =>
                     await requestPermission(Permission.notification),
                 trailing: Switch(
-                  value: notify,
+                  value: _notify,
                   onChanged: (_) async =>
                       await requestPermission(Permission.notification),
                 ),
@@ -100,7 +100,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: () {
-          if ((!ignore || !schedule) && settings.value.restTimers)
+          if ((!_ignore || !_schedule) && settings.value.restTimers)
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -146,9 +146,9 @@ class _PermissionsPageState extends State<PermissionsPage> {
   }
 
   Future initPermissionStatus() async {
-    notify = await Permission.notification.isGranted;
-    ignore = await Permission.ignoreBatteryOptimizations.isGranted;
-    schedule = await Permission.scheduleExactAlarm.isGranted;
+    _notify = await Permission.notification.isGranted;
+    _ignore = await Permission.ignoreBatteryOptimizations.isGranted;
+    _schedule = await Permission.scheduleExactAlarm.isGranted;
     setState(() {});
   }
 
@@ -163,11 +163,11 @@ class _PermissionsPageState extends State<PermissionsPage> {
     setState(() {
       switch (permission) {
         case Permission.notification:
-          notify = value;
+          _notify = value;
         case Permission.ignoreBatteryOptimizations:
-          ignore = value;
+          _ignore = value;
         case Permission.scheduleExactAlarm:
-          schedule = value;
+          _schedule = value;
         default:
           return;
       }

@@ -19,20 +19,20 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  final TextEditingController nameCtrl = TextEditingController();
-  bool cardio = false;
+  final TextEditingController _nameCtrl = TextEditingController();
+  bool _cardio = false;
 
   late var settings = context.watch<SettingsState>();
-  late String unit = settings.value.strengthUnit == 'last-entry'
+  late String _unit = settings.value.strengthUnit == 'last-entry'
       ? 'kg'
       : settings.value.strengthUnit;
-  String? image;
-  final key = GlobalKey<FormState>();
+  String? _image;
+  final _key = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    if (widget.name != null) nameCtrl.text = widget.name!;
+    if (widget.name != null) _nameCtrl.text = widget.name!;
   }
 
   @override
@@ -45,12 +45,12 @@ class _AddExercisePageState extends State<AddExercisePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: key,
+          key: _key,
           child: ListView(
             padding: const EdgeInsets.only(bottom: 116),
             children: [
               TextFormField(
-                controller: nameCtrl,
+                controller: _nameCtrl,
                 decoration: const InputDecoration(labelText: 'Name'),
                 textCapitalization: TextCapitalization.sentences,
                 autofocus: true,
@@ -60,7 +60,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unit'),
-                initialValue: unit,
+                initialValue: _unit,
                 items: const [
                   DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
                   DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
@@ -70,29 +70,29 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
-                    unit = newValue!;
+                    _unit = newValue!;
                   });
                 },
               ),
               const SizedBox(height: 8),
               ListTile(
-                title: cardio ? const Text('Cardio') : const Text('Strength'),
-                leading: cardio
+                title: _cardio ? const Text('Cardio') : const Text('Strength'),
+                leading: _cardio
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),
                 onTap: () {
                   setState(() {
-                    if (cardio)
-                      unit = 'kg';
+                    if (_cardio)
+                      _unit = 'kg';
                     else
-                      unit = 'km';
-                    cardio = !cardio;
+                      _unit = 'km';
+                    _cardio = !_cardio;
                   });
                 },
                 trailing: Switch(
-                  value: cardio,
+                  value: _cardio,
                   onChanged: (value) => setState(() {
-                    cardio = value;
+                    _cardio = value;
                   }),
                 ),
               ),
@@ -108,11 +108,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
                           label: const Text('Image'),
                           icon: const Icon(Icons.image),
                         ),
-                        if (image != null)
+                        if (_image != null)
                           TextButton.icon(
                             onPressed: () {
                               setState(() {
-                                image = null;
+                                _image = null;
                               });
                             },
                             label: const Text("Delete"),
@@ -120,10 +120,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
                           ),
                       ],
                     ),
-                    if (image != null) ...[
+                    if (_image != null) ...[
                       const SizedBox(height: 8),
                       Image.file(
-                        File(image!),
+                        File(_image!),
                         cacheWidth: 400,
                         errorBuilder: (context, error, stackTrace) =>
                             TextButton.icon(
@@ -141,7 +141,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ),
       ),
       floatingActionButton: AnimatedFab(
-        onPressed: () => save(unit),
+        onPressed: () => save(_unit),
         label: const Text('Save'),
         icon: const Icon(Icons.save),
       ),
@@ -150,7 +150,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   void dispose() {
-    nameCtrl.dispose();
+    _nameCtrl.dispose();
     super.dispose();
   }
 
@@ -159,27 +159,27 @@ class _AddExercisePageState extends State<AddExercisePage> {
     if (result?.files.single == null) return;
 
     setState(() {
-      image = result?.files.single.path;
+      _image = result?.files.single.path;
     });
   }
 
   Future<void> save(String unit) async {
-    if (!key.currentState!.validate()) return;
+    if (!_key.currentState!.validate()) return;
 
-    if (settings.value.strengthUnit != 'last-entry' && !cardio)
-      unit = settings.value.strengthUnit;
-    else if (settings.value.cardioUnit != 'last-entry' && cardio)
-      unit = settings.value.cardioUnit;
+    if (settings.value.strengthUnit != 'last-entry' && !_cardio)
+      _unit = settings.value.strengthUnit;
+    else if (settings.value.cardioUnit != 'last-entry' && _cardio)
+      _unit = settings.value.cardioUnit;
 
     final insert = GymSetsCompanion.insert(
       created: DateTime.now().toLocal(),
       reps: 0,
       weight: 0,
-      name: nameCtrl.text,
-      unit: unit,
-      cardio: Value(cardio),
+      name: _nameCtrl.text,
+      unit: _unit,
+      cardio: Value(_cardio),
       hidden: const Value(true),
-      image: Value(image),
+      image: Value(_image),
     );
     await db.gymSets.insertOne(insert);
     if (!mounted) return;

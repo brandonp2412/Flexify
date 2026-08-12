@@ -325,22 +325,22 @@ class TimerSettings extends StatefulWidget {
 }
 
 class _TimerSettingsState extends State<TimerSettings> {
-  late SettingsState settings = context.read<SettingsState>();
-  late final minCtrl = TextEditingController(
+  late final SettingsState _settings = context.read<SettingsState>();
+  late final _minCtrl = TextEditingController(
     text: (Duration(
-      milliseconds: settings.value.timerDuration,
+      milliseconds: _settings.value.timerDuration,
     )).inMinutes.toString(),
   );
-  late final secCtrl = TextEditingController(
+  late final _secCtrl = TextEditingController(
     text:
-        ((Duration(milliseconds: settings.value.timerDuration)).inSeconds % 60)
+        ((Duration(milliseconds: _settings.value.timerDuration)).inSeconds % 60)
             .toString(),
   );
 
-  AudioPlayer? player;
-  List<GymSetsCompanion> exercisesWithCustomTimers = [];
-  Map<String, TextEditingController> minuteControllers = {};
-  Map<String, TextEditingController> secondControllers = {};
+  AudioPlayer? _player;
+  List<GymSetsCompanion> _exercisesWithCustomTimers = [];
+  final Map<String, TextEditingController> _minuteControllers = {};
+  final Map<String, TextEditingController> _secondControllers = {};
 
   @override
   void initState() {
@@ -348,10 +348,10 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     if (!kIsWeb) {
       try {
-        player = AudioPlayer();
+        _player = AudioPlayer();
       } catch (e) {
         debugPrint('Failed to create AudioPlayer: $e');
-        player = null;
+        _player = null;
       }
     }
 
@@ -367,7 +367,7 @@ class _TimerSettingsState extends State<TimerSettings> {
             .get();
 
     setState(() {
-      exercisesWithCustomTimers = exercises
+      _exercisesWithCustomTimers = exercises
           .map(
             (result) => GymSetsCompanion(
               name: Value(result.read(db.gymSets.name)!),
@@ -382,10 +382,10 @@ class _TimerSettingsState extends State<TimerSettings> {
         final restMs = result.read(db.gymSets.restMs);
         if (restMs != null) {
           final duration = Duration(milliseconds: restMs);
-          minuteControllers[exerciseName] = TextEditingController(
+          _minuteControllers[exerciseName] = TextEditingController(
             text: duration.inMinutes.toString(),
           );
-          secondControllers[exerciseName] = TextEditingController(
+          _secondControllers[exerciseName] = TextEditingController(
             text: (duration.inSeconds % 60).toString(),
           );
         }
@@ -412,11 +412,11 @@ class _TimerSettingsState extends State<TimerSettings> {
     // If duration is null (both minutes and seconds are 0), remove from list
     if (duration == null) {
       setState(() {
-        exercisesWithCustomTimers.removeWhere(
+        _exercisesWithCustomTimers.removeWhere(
           (e) => e.name.value == exerciseName,
         );
-        minuteControllers.remove(exerciseName);
-        secondControllers.remove(exerciseName);
+        _minuteControllers.remove(exerciseName);
+        _secondControllers.remove(exerciseName);
       });
     }
   }
@@ -426,16 +426,16 @@ class _TimerSettingsState extends State<TimerSettings> {
         .write(const GymSetsCompanion(restMs: Value(null)));
 
     setState(() {
-      exercisesWithCustomTimers.removeWhere(
+      _exercisesWithCustomTimers.removeWhere(
         (e) => e.name.value == exerciseName,
       );
-      minuteControllers.remove(exerciseName);
-      secondControllers.remove(exerciseName);
+      _minuteControllers.remove(exerciseName);
+      _secondControllers.remove(exerciseName);
     });
   }
 
   Widget _buildPerExerciseSection() {
-    if (exercisesWithCustomTimers.isEmpty) {
+    if (_exercisesWithCustomTimers.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -465,13 +465,13 @@ class _TimerSettingsState extends State<TimerSettings> {
             ),
           ),
           const SizedBox(height: 16),
-          ...exercisesWithCustomTimers.map((exercise) {
+          ..._exercisesWithCustomTimers.map((exercise) {
             final exerciseName = exercise.name.value;
-            if (minuteControllers[exerciseName] == null ||
-                secondControllers[exerciseName] == null)
+            if (_minuteControllers[exerciseName] == null ||
+                _secondControllers[exerciseName] == null)
               return const SizedBox();
-            final minController = minuteControllers[exerciseName]!;
-            final secController = secondControllers[exerciseName]!;
+            final minController = _minuteControllers[exerciseName]!;
+            final secController = _secondControllers[exerciseName]!;
 
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
@@ -562,21 +562,21 @@ class _TimerSettingsState extends State<TimerSettings> {
       appBar: AppBar(title: const Text("Timers")),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
-        children: player != null
+        children: _player != null
             ? [
                 ...getTimerSettings(
                   '',
                   settings.value,
-                  minCtrl,
-                  secCtrl,
-                  player!,
+                  _minCtrl,
+                  _secCtrl,
+                  _player!,
                   context,
                 ),
                 _buildPerExerciseSection(),
               ]
             : [
                 const ListTile(
-                  title: Text("Timer settings"),
+                  title: Text("Timer _settings"),
                   subtitle: Text("Audio features not available on web"),
                 ),
               ],
@@ -588,18 +588,18 @@ class _TimerSettingsState extends State<TimerSettings> {
   void dispose() {
     super.dispose();
 
-    minCtrl.dispose();
-    secCtrl.dispose();
+    _minCtrl.dispose();
+    _secCtrl.dispose();
 
     // Dispose of all exercise controllers
-    for (final controller in minuteControllers.values) {
+    for (final controller in _minuteControllers.values) {
       controller.dispose();
     }
-    for (final controller in secondControllers.values) {
+    for (final controller in _secondControllers.values) {
       controller.dispose();
     }
 
-    player?.stop();
-    player?.dispose();
+    _player?.stop();
+    _player?.dispose();
   }
 }

@@ -278,23 +278,23 @@ class WorkoutSettings extends StatefulWidget {
 }
 
 class _WorkoutSettingsState extends State<WorkoutSettings> {
-  late var settings = context.read<SettingsState>().value;
+  late var _settings = context.read<SettingsState>().value;
 
-  late final max = TextEditingController(text: settings.maxSets.toString());
-  late final warmup = TextEditingController(
-    text: settings.warmupSets?.toString(),
+  late final _max = TextEditingController(text: _settings.maxSets.toString());
+  late final _warmup = TextEditingController(
+    text: _settings.warmupSets?.toString(),
   );
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>().value;
+    _settings = context.watch<SettingsState>().value;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text("Workouts")),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
-        children: getWorkoutSettings(context, '', settings),
+        children: getWorkoutSettings(context, '', _settings),
       ),
     );
   }
@@ -303,7 +303,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
   void dispose() {
     super.dispose();
 
-    max.dispose();
-    warmup.dispose();
+    _max.dispose();
+    _warmup.dispose();
   }
 }

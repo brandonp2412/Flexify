@@ -22,31 +22,31 @@ class EditSetsPage extends StatefulWidget {
 }
 
 class _EditSetsPageState extends State<EditSetsPage> {
-  final reps = TextEditingController();
-  final weight = TextEditingController();
-  final body = TextEditingController();
-  final distance = TextEditingController();
-  final minutes = TextEditingController();
-  final seconds = TextEditingController();
-  final incline = TextEditingController();
-  final name = TextEditingController();
-  final key = GlobalKey<FormState>();
+  final _reps = TextEditingController();
+  final _weight = TextEditingController();
+  final _body = TextEditingController();
+  final _distance = TextEditingController();
+  final _minutes = TextEditingController();
+  final _seconds = TextEditingController();
+  final _incline = TextEditingController();
+  final _name = TextEditingController();
+  final _key = GlobalKey<FormState>();
 
-  String? unit;
-  DateTime? created;
-  bool? cardio;
-  int? restMs;
-  String? category;
-  String? oldNames;
-  String? oldReps;
-  String? oldWeights;
-  String? oldBody;
-  String? oldCreated;
-  String? oldDist;
-  String? oldMin;
-  String? oldSec;
-  String? oldInc;
-  String? oldCat;
+  String? _unit;
+  DateTime? _created;
+  bool? _cardio;
+  int? _restMs;
+  String? _category;
+  String? _oldNames;
+  String? _oldReps;
+  String? _oldWeights;
+  String? _oldBody;
+  String? _oldCreated;
+  String? _oldDist;
+  String? _oldMin;
+  String? _oldSec;
+  String? _oldInc;
+  String? _oldCat;
 
   @override
   Widget build(BuildContext context) {
@@ -96,44 +96,44 @@ class _EditSetsPageState extends State<EditSetsPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: key,
+          key: _key,
           child: ListView(
             children: [
               TextField(
-                controller: name,
+                controller: _name,
                 decoration: InputDecoration(
                   labelText: "Name",
-                  hintText: oldNames,
+                  hintText: _oldNames,
                 ),
                 textCapitalization: TextCapitalization.sentences,
               ),
               ListTile(
                 title: const Text('Cardio'),
-                leading: cardio == true
+                leading: _cardio == true
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),
                 contentPadding: EdgeInsets.zero,
                 onTap: () => setState(() {
-                  cardio = !(cardio ?? false);
+                  _cardio = !(_cardio ?? false);
                 }),
                 trailing: Switch(
-                  value: cardio ?? false,
+                  value: _cardio ?? false,
                   onChanged: (value) => setState(() {
-                    cardio = value;
+                    _cardio = value;
                   }),
                 ),
               ),
-              if (cardio == true) ...[
+              if (_cardio == true) ...[
                 TextFormField(
-                  controller: distance,
+                  controller: _distance,
                   decoration: InputDecoration(
                     labelText: 'Distance',
-                    hintText: oldDist,
+                    hintText: _oldDist,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onTap: () => selectAll(distance),
+                  onTap: () => selectAll(_distance),
                   validator: (value) {
                     if (value == null) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -144,15 +144,15 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: minutes,
+                        controller: _minutes,
                         decoration: InputDecoration(
                           labelText: 'Minutes',
-                          hintText: oldMin,
+                          hintText: _oldMin,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
                         ),
-                        onTap: () => selectAll(minutes),
+                        onTap: () => selectAll(_minutes),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
@@ -165,15 +165,15 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: TextFormField(
-                        controller: seconds,
+                        controller: _seconds,
                         decoration: InputDecoration(
                           labelText: 'Seconds',
-                          hintText: oldSec,
+                          hintText: _oldSec,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: false,
                         ),
-                        onTap: () => selectAll(seconds),
+                        onTap: () => selectAll(_seconds),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
@@ -186,15 +186,15 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   ],
                 ),
                 TextFormField(
-                  controller: incline,
+                  controller: _incline,
                   decoration: InputDecoration(
                     labelText: 'Incline %',
-                    hintText: oldInc,
+                    hintText: _oldInc,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onTap: () => selectAll(incline),
+                  onTap: () => selectAll(_incline),
                   validator: (value) {
                     if (value == null) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -202,17 +202,17 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   },
                 ),
               ],
-              if (cardio == false || cardio == null) ...[
+              if (_cardio == false || _cardio == null) ...[
                 TextFormField(
-                  controller: reps,
+                  controller: _reps,
                   decoration: InputDecoration(
                     labelText: 'Reps',
-                    hintText: oldReps,
+                    hintText: _oldReps,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onTap: () => selectAll(reps),
+                  onTap: () => selectAll(_reps),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -220,15 +220,15 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   },
                 ),
                 TextFormField(
-                  controller: weight,
+                  controller: _weight,
                   decoration: InputDecoration(
-                    labelText: name.text == 'Weight' ? 'Value' : 'Weight',
-                    hintText: oldWeights,
+                    labelText: _name.text == 'Weight' ? 'Value' : 'Weight',
+                    hintText: _oldWeights,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onTap: () => selectAll(weight),
+                  onTap: () => selectAll(_weight),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
                     if (double.tryParse(value) == null) return 'Invalid number';
@@ -236,20 +236,20 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   },
                 ),
               ],
-              if (name.text != 'Weight')
+              if (_name.text != 'Weight')
                 Selector<SettingsState, bool>(
                   builder: (context, showBodyWeight, child) => Visibility(
                     visible: showBodyWeight,
                     child: TextFormField(
-                      controller: body,
+                      controller: _body,
                       decoration: InputDecoration(
-                        labelText: 'Body weight',
-                        hintText: oldBody,
+                        labelText: 'Body _weight',
+                        hintText: _oldBody,
                       ),
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
-                      onTap: () => selectAll(body),
+                      onTap: () => selectAll(_body),
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
                         if (double.tryParse(value) == null)
@@ -266,11 +266,11 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   visible: showUnits,
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
-                    initialValue: unit,
+                    initialValue: _unit,
                     items: _getUnitItems(),
                     onChanged: (String? newValue) {
                       setState(() {
-                        unit = newValue!;
+                        _unit = newValue!;
                       });
                     },
                   ),
@@ -287,9 +287,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       return DropdownButtonFormField(
                         decoration: InputDecoration(
                           labelText: 'Category',
-                          hintText: oldCat,
+                          hintText: _oldCat,
                         ),
-                        initialValue: category,
+                        initialValue: _category,
                         items: snapshot.data
                             ?.map(
                               (category) => DropdownMenuItem(
@@ -300,7 +300,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                             .toList(),
                         onChanged: (value) {
                           setState(() {
-                            category = value!;
+                            _category = value!;
                           });
                         },
                       );
@@ -310,12 +310,12 @@ class _EditSetsPageState extends State<EditSetsPage> {
               ),
               Selector<SettingsState, String>(
                 builder: (context, longDateFormat, child) {
-                  var subtitle = oldCreated ?? "";
+                  var subtitle = _oldCreated ?? "";
 
-                  if (longDateFormat == 'timeago' && created != null)
-                    subtitle = timeago.format(created!);
-                  else if (longDateFormat != 'timeago' && created != null)
-                    subtitle = DateFormat(longDateFormat).format(created!);
+                  if (longDateFormat == 'timeago' && _created != null)
+                    subtitle = timeago.format(_created!);
+                  else if (longDateFormat != 'timeago' && _created != null)
+                    subtitle = DateFormat(longDateFormat).format(_created!);
 
                   return ListTile(
                     title: const Text('Created Date'),
@@ -339,7 +339,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   }
 
   List<DropdownMenuItem<String>> _getUnitItems() {
-    if (cardio == true) {
+    if (_cardio == true) {
       return cardioUnitMenuItems;
     } else {
       return strengthUnitMenuItems;
@@ -348,13 +348,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   @override
   void dispose() {
-    reps.dispose();
-    weight.dispose();
-    body.dispose();
-    distance.dispose();
-    minutes.dispose();
-    seconds.dispose();
-    incline.dispose();
+    _reps.dispose();
+    _weight.dispose();
+    _body.dispose();
+    _distance.dispose();
+    _minutes.dispose();
+    _seconds.dispose();
+    _incline.dispose();
 
     super.dispose();
   }
@@ -370,40 +370,40 @@ class _EditSetsPageState extends State<EditSetsPage> {
         .get()
         .then((gymSets) {
           setState(() {
-            cardio = gymSets.first.cardio;
-            oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
-            oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
-            oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-            oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+            _cardio = gymSets.first.cardio;
+            _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
+            _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
+            _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
+            _oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
             if (settings.longDateFormat == 'timeago')
-              oldCreated = gymSets
+              _oldCreated = gymSets
                   .map((gymSet) => timeago.format(gymSet.created))
                   .join(', ');
             else
-              oldCreated = gymSets
+              _oldCreated = gymSets
                   .map(
                     (gymSet) => DateFormat(
                       settings.longDateFormat,
                     ).format(gymSet.created),
                   )
                   .join(', ');
-            oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
-            oldMin = gymSets
+            _oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
+            _oldMin = gymSets
                 .map((gymSet) => gymSet.duration.floor())
                 .join(', ');
-            oldSec = gymSets
+            _oldSec = gymSets
                 .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
                 .join(', ');
             final incs = gymSets
                 .map((gymSet) => gymSet.incline)
                 .whereType<int>()
                 .join(', ');
-            oldInc = incs.isEmpty ? null : incs;
+            _oldInc = incs.isEmpty ? null : incs;
             final cats = gymSets
                 .map((gymSet) => gymSet.category)
                 .whereType<String>()
                 .join(', ');
-            oldCat = cats.isEmpty ? null : cats;
+            _oldCat = cats.isEmpty ? null : cats;
           });
         });
   }
@@ -411,12 +411,12 @@ class _EditSetsPageState extends State<EditSetsPage> {
   Future<void> selectTime(DateTime pickedDate) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(created ?? DateTime.now()),
+      initialTime: TimeOfDay.fromDateTime(_created ?? DateTime.now()),
     );
 
     if (pickedTime != null) {
       setState(() {
-        created = DateTime(
+        _created = DateTime(
           pickedDate.year,
           pickedDate.month,
           pickedDate.day,
@@ -428,31 +428,31 @@ class _EditSetsPageState extends State<EditSetsPage> {
   }
 
   Future<void> save() async {
-    if (!key.currentState!.validate()) return;
+    if (!_key.currentState!.validate()) return;
 
     final planState = context.read<PlanState>();
     Navigator.pop(context);
 
     final gymSet = GymSetsCompanion(
-      name: name.text.isNotEmpty ? Value(name.text) : const Value.absent(),
-      unit: Value.absentIfNull(unit),
-      created: Value.absentIfNull(created),
-      cardio: Value.absentIfNull(cardio),
-      restMs: Value.absentIfNull(restMs),
-      incline: Value.absentIfNull(int.tryParse(incline.text)),
-      reps: Value.absentIfNull(double.tryParse(reps.text)),
-      weight: Value.absentIfNull(double.tryParse(weight.text)),
-      bodyWeight: Value.absentIfNull(double.tryParse(body.text)),
-      distance: Value.absentIfNull(double.tryParse(distance.text)),
+      name: _name.text.isNotEmpty ? Value(_name.text) : const Value.absent(),
+      unit: Value.absentIfNull(_unit),
+      created: Value.absentIfNull(_created),
+      cardio: Value.absentIfNull(_cardio),
+      restMs: Value.absentIfNull(_restMs),
+      incline: Value.absentIfNull(int.tryParse(_incline.text)),
+      reps: Value.absentIfNull(double.tryParse(_reps.text)),
+      weight: Value.absentIfNull(double.tryParse(_weight.text)),
+      bodyWeight: Value.absentIfNull(double.tryParse(_body.text)),
+      distance: Value.absentIfNull(double.tryParse(_distance.text)),
       duration:
-          int.tryParse(seconds.text) == null &&
-              int.tryParse(minutes.text) == null
+          int.tryParse(_seconds.text) == null &&
+              int.tryParse(_minutes.text) == null
           ? const Value.absent()
           : Value(
-              (int.tryParse(seconds.text) ?? 0) / 60 +
-                  (int.tryParse(minutes.text) ?? 0),
+              (int.tryParse(_seconds.text) ?? 0) / 60 +
+                  (int.tryParse(_minutes.text) ?? 0),
             ),
-      category: Value.absentIfNull(category),
+      category: Value.absentIfNull(_category),
     );
 
     await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(
@@ -464,7 +464,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: created,
+      initialDate: _created,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );

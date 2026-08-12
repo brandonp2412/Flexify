@@ -31,41 +31,41 @@ class StartPlanPage extends StatefulWidget {
 
 class _StartPlanPageState extends State<StartPlanPage>
     with WidgetsBindingObserver {
-  final reps = TextEditingController(text: "0.0");
-  final weight = TextEditingController(text: "0.0");
-  final notes = TextEditingController(text: "");
-  final distance = TextEditingController(text: "0.0");
-  final minutes = TextEditingController(text: "0.0");
-  final seconds = TextEditingController(text: "0.0");
-  final incline = TextEditingController(text: "0");
-  final key = GlobalKey<FormState>();
+  final _reps = TextEditingController(text: "0.0");
+  final _weight = TextEditingController(text: "0.0");
+  final _notes = TextEditingController(text: "");
+  final _distance = TextEditingController(text: "0.0");
+  final _minutes = TextEditingController(text: "0.0");
+  final _seconds = TextEditingController(text: "0.0");
+  final _incline = TextEditingController(text: "0");
+  final _key = GlobalKey<FormState>();
 
-  int selected = 0;
-  bool cardio = false;
-  DateTime? lastSaved;
-  List<Rpm>? rpms;
-  String? category;
-  String? image;
+  int _selected = 0;
+  bool _cardio = false;
+  DateTime? _lastSaved;
+  List<Rpm>? _rpms;
+  String? _category;
+  String? _image;
 
-  late Stream<List<PlanExercise>> stream;
+  late Stream<List<PlanExercise>> _stream;
   StreamSubscription<void>? _gymSetsSub;
-  late PlanState planState = context.read<PlanState>();
-  late String unit = 'kg';
-  late String title = widget.plan.days.replaceAll(",", ", ");
+  late PlanState _planState = context.read<PlanState>();
+  late String _unit = 'kg';
+  late String _title = widget.plan.days.replaceAll(",", ", ");
 
   @override
   Widget build(BuildContext context) {
-    planState = context.watch<PlanState>();
+    _planState = context.watch<PlanState>();
 
     return StreamBuilder(
-      stream: stream,
+      stream: _stream,
       builder: (context, snapshot) {
         if (snapshot.data == null) return SizedBox();
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text(title),
+            title: Text(_title),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.pop(context),
@@ -77,7 +77,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                       await (db.plans.select()
                             ..whereSamePrimaryKey(widget.plan))
                           .getSingle();
-                  await planState.setExercises(plan.toCompanion(false));
+                  await _planState.setExercises(plan.toCompanion(false));
                   if (!context.mounted) return;
                   await Navigator.of(context).push(
                     MaterialPageRoute(
@@ -93,17 +93,17 @@ class _StartPlanPageState extends State<StartPlanPage>
           body: Padding(
             padding: const EdgeInsets.all(8),
             child: Form(
-              key: key,
+              key: _key,
               child: Column(
                 children: [
-                  if (!cardio) ...strengthFields(snapshot),
-                  if (cardio) ...cardioFields(snapshot),
+                  if (!_cardio) ...strengthFields(snapshot),
+                  if (_cardio) ...cardioFields(snapshot),
                   unitSelector(),
                   notesField(),
                   if (snapshot.data!.isNotEmpty &&
-                      selected < snapshot.data!.length)
+                      _selected < snapshot.data!.length)
                     SessionSets(
-                      exercise: snapshot.data![selected].exercise,
+                      exercise: snapshot.data![_selected].exercise,
                       planId: widget.plan.id,
                     ),
                   if (snapshot.data!.isEmpty)
@@ -119,11 +119,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                     Expanded(
                       child: StartList(
                         exercises: snapshot.data!,
-                        selected: selected,
+                        selected: _selected,
                         onSelect: select,
                         plan: widget.plan,
                         onMax: () {
-                          planState.updateGymCounts(widget.plan.id);
+                          _planState.updateGymCounts(widget.plan.id);
                         },
                       ),
                     ),
@@ -146,11 +146,11 @@ class _StartPlanPageState extends State<StartPlanPage>
   List<Widget> strengthFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
     return [
       StepperField(
-        controller: reps,
+        controller: _reps,
         labelText: 'Reps',
         step: 1,
         textInputAction: TextInputAction.next,
-        onFieldSubmitted: (value) => selectAll(weight),
+        onFieldSubmitted: (value) => selectAll(_weight),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
           if (double.tryParse(value) == null) return 'Invalid number';
@@ -168,14 +168,14 @@ class _StartPlanPageState extends State<StartPlanPage>
         children: [
           Expanded(
             child: TextFormField(
-              controller: minutes,
+              controller: _minutes,
               decoration: const InputDecoration(labelText: 'Minutes'),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: false,
               ),
-              onTap: () => selectAll(minutes),
+              onTap: () => selectAll(_minutes),
               textInputAction: TextInputAction.next,
-              onFieldSubmitted: (value) => selectAll(seconds),
+              onFieldSubmitted: (value) => selectAll(_seconds),
               validator: (value) {
                 if (value?.isNotEmpty == true && int.tryParse(value!) == null)
                   return 'Invalid number';
@@ -186,14 +186,14 @@ class _StartPlanPageState extends State<StartPlanPage>
           const SizedBox(width: 8.0),
           Expanded(
             child: TextFormField(
-              controller: seconds,
+              controller: _seconds,
               decoration: const InputDecoration(labelText: 'Seconds'),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: false,
               ),
-              onTap: () => selectAll(seconds),
+              onTap: () => selectAll(_seconds),
               textInputAction: TextInputAction.next,
-              onFieldSubmitted: (value) => selectAll(distance),
+              onFieldSubmitted: (value) => selectAll(_distance),
               validator: (value) {
                 if (value?.isNotEmpty == true && int.tryParse(value!) == null)
                   return 'Invalid number';
@@ -206,19 +206,19 @@ class _StartPlanPageState extends State<StartPlanPage>
       const SizedBox(height: 8.0),
       Row(
         children: [
-          if (unit == 'kg' || unit == 'lb' || unit == 'stone')
+          if (_unit == 'kg' || _unit == 'lb' || _unit == 'stone')
             Expanded(child: _weightField(snapshot))
           else
             Expanded(
               child: TextFormField(
                 textInputAction: TextInputAction.next,
-                controller: distance,
+                controller: _distance,
                 decoration: const InputDecoration(labelText: 'Distance'),
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                onFieldSubmitted: (value) => selectAll(incline),
-                onTap: () => selectAll(distance),
+                onFieldSubmitted: (value) => selectAll(_incline),
+                onTap: () => selectAll(_distance),
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
                   if (double.tryParse(value) == null) return 'Invalid number';
@@ -229,12 +229,12 @@ class _StartPlanPageState extends State<StartPlanPage>
           const SizedBox(width: 8.0),
           Expanded(
             child: TextFormField(
-              controller: incline,
+              controller: _incline,
               decoration: const InputDecoration(labelText: 'Incline %'),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
-              onTap: () => selectAll(incline),
+              onTap: () => selectAll(_incline),
               onFieldSubmitted: (value) => save(snapshot),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
@@ -250,19 +250,19 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   StepperField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
     final exerciseName =
-        snapshot.data!.isNotEmpty && selected < snapshot.data!.length
-        ? snapshot.data![selected].exercise
+        snapshot.data!.isNotEmpty && _selected < snapshot.data!.length
+        ? snapshot.data![_selected].exercise
         : '';
     return StepperField(
-      controller: weight,
-      labelText: 'Weight ($unit)',
-      step: weightStep(exerciseName, unit),
+      controller: _weight,
+      labelText: 'Weight ($_unit)',
+      step: weightStep(exerciseName, _unit),
       suffixIcon: Selector<SettingsState, bool>(
         selector: (context, settings) => settings.value.showBodyWeight,
         builder: (context, showBodyWeight, child) => Visibility(
           visible: showBodyWeight,
           child: IconButton(
-            tooltip: "Use body weight",
+            tooltip: "Use body _weight",
             icon: const Icon(Icons.scale),
             onPressed: useBodyWeight,
           ),
@@ -288,11 +288,11 @@ class _StartPlanPageState extends State<StartPlanPage>
             const SizedBox(height: 8.0),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Unit'),
-              initialValue: unit,
+              initialValue: _unit,
               items: _unitItems,
               onChanged: (String? newValue) {
                 setState(() {
-                  unit = newValue!;
+                  _unit = newValue!;
                 });
               },
             ),
@@ -312,7 +312,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           children: [
             const SizedBox(height: 8.0),
             TextFormField(
-              controller: notes,
+              controller: _notes,
               maxLines: 3,
               decoration: const InputDecoration(labelText: 'Notes'),
             ),
@@ -336,20 +336,20 @@ class _StartPlanPageState extends State<StartPlanPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state != AppLifecycleState.resumed) return;
-    if (rpms == null || !mounted || lastSaved == null) return;
+    if (_rpms == null || !mounted || _lastSaved == null) return;
 
     final settings = context.read<SettingsState>().value;
-    final difference = DateTime.now().difference(lastSaved!);
+    final difference = DateTime.now().difference(_lastSaved!);
 
-    if (cardio && settings.durationEstimation) {
-      minutes.text = difference.inMinutes.toString();
-      seconds.text = (difference.inSeconds % 60).toString();
-    } else if (!cardio && settings.repEstimation) {
-      final parsedWeight = double.parse(weight.text);
-      stream.first.then((planExercises) {
+    if (_cardio && settings.durationEstimation) {
+      _minutes.text = difference.inMinutes.toString();
+      _seconds.text = (difference.inSeconds % 60).toString();
+    } else if (!_cardio && settings.repEstimation) {
+      final parsedWeight = double.parse(_weight.text);
+      _stream.first.then((planExercises) {
         if (!mounted) return;
-        final matches = rpms!.where(
-          (rpm) => rpm.name == planExercises[selected].exercise,
+        final matches = _rpms!.where(
+          (rpm) => rpm.name == planExercises[_selected].exercise,
         );
         if (matches.isEmpty) return;
 
@@ -367,23 +367,23 @@ class _StartPlanPageState extends State<StartPlanPage>
         );
         if (estimatedReps <= 0) return;
 
-        reps.text = estimatedReps.toInt().toString();
+        _reps.text = estimatedReps.toInt().toString();
       });
     }
   }
 
   @override
   void dispose() {
-    reps.dispose();
-    weight.dispose();
-    distance.dispose();
-    minutes.dispose();
-    incline.dispose();
-    notes.dispose();
-    seconds.dispose();
+    _reps.dispose();
+    _weight.dispose();
+    _distance.dispose();
+    _minutes.dispose();
+    _incline.dispose();
+    _notes.dispose();
+    _seconds.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
-    planState.removeListener(planChanged);
+    _planState.removeListener(planChanged);
     dbVersion.removeListener(_loadExercises);
     _gymSetsSub?.cancel();
 
@@ -430,28 +430,28 @@ class _StartPlanPageState extends State<StartPlanPage>
   @override
   void initState() {
     super.initState();
-    planState.addListener(planChanged);
+    _planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
     dbVersion.addListener(_loadExercises);
 
-    planState = context.read<PlanState>();
-    title = widget.plan.title?.isNotEmpty == true
+    _planState = context.read<PlanState>();
+    _title = widget.plan.title?.isNotEmpty == true
         ? widget.plan.title!
         : widget.plan.days.replaceAll(",", ", ");
 
     _loadExercises();
-    planState.updateGymCounts(widget.plan.id);
+    _planState.updateGymCounts(widget.plan.id);
     _gymSetsSub = db.tableUpdates(TableUpdateQuery.onTable(db.gymSets)).listen((
       _,
     ) {
       if (!mounted) return;
-      planState.updateGymCounts(widget.plan.id);
+      _planState.updateGymCounts(widget.plan.id);
     });
   }
 
   Future<void> _loadExercises() async {
     setState(() {
-      stream =
+      _stream =
           (db.planExercises.select()
                 ..where((pe) => pe.planId.equals(widget.plan.id) & pe.enabled)
                 ..orderBy([
@@ -469,14 +469,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (settings.repEstimation) {
       getRpms().then((value) {
         if (!mounted) return;
-        setState(() => rpms = value);
+        setState(() => _rpms = value);
       });
     }
 
-    if (settings.strengthUnit != 'last-entry' && !cardio) {
-      setState(() => unit = settings.strengthUnit);
-    } else if (settings.cardioUnit != 'last-entry' && cardio) {
-      setState(() => unit = settings.cardioUnit);
+    if (settings.strengthUnit != 'last-entry' && !_cardio) {
+      setState(() => _unit = settings.strengthUnit);
+    } else if (settings.cardioUnit != 'last-entry' && _cardio) {
+      setState(() => _unit = settings.cardioUnit);
     }
   }
 
@@ -484,47 +484,47 @@ class _StartPlanPageState extends State<StartPlanPage>
     final settings = context.read<SettingsState>().value;
     if (settings.strengthUnit == 'last-entry' && !gymSet.cardio ||
         settings.cardioUnit == 'last-entry' && gymSet.cardio)
-      unit = gymSet.unit;
+      _unit = gymSet.unit;
     else if (gymSet.cardio)
-      unit = settings.cardioUnit;
+      _unit = settings.cardioUnit;
     else
-      unit = settings.strengthUnit;
+      _unit = settings.strengthUnit;
 
-    reps.text = toString(gymSet.reps);
-    weight.text = toString(gymSet.weight);
-    distance.text = toString(gymSet.distance);
-    minutes.text = gymSet.duration.floor().toString();
-    seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
-    incline.text = gymSet.incline?.toString() ?? "";
-    cardio = gymSet.cardio;
-    category = gymSet.category;
-    image = gymSet.image;
-    notes.text = gymSet.notes ?? "";
+    _reps.text = toString(gymSet.reps);
+    _weight.text = toString(gymSet.weight);
+    _distance.text = toString(gymSet.distance);
+    _minutes.text = gymSet.duration.floor().toString();
+    _seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
+    _incline.text = gymSet.incline?.toString() ?? "";
+    _cardio = gymSet.cardio;
+    _category = gymSet.category;
+    _image = gymSet.image;
+    _notes.text = gymSet.notes ?? "";
   }
 
   void planChanged() {
-    final index = planState.plans.indexWhere(
+    final index = _planState.plans.indexWhere(
       (plan) => plan.id == widget.plan.id,
     );
     if (index == -1) return Navigator.pop(context);
 
-    final plan = planState.plans[index];
+    final plan = _planState.plans[index];
     if (!mounted) return;
     setState(() {
-      title = plan.title?.isNotEmpty == true
+      _title = plan.title?.isNotEmpty == true
           ? plan.title!
           : plan.days.replaceAll(',', ', ');
     });
   }
 
   Future<void> save(AsyncSnapshot<List<PlanExercise>> snapshot) async {
-    if (!key.currentState!.validate()) return;
+    if (!_key.currentState!.validate()) return;
     if (snapshot.data == null || snapshot.data!.isEmpty) return;
-    if (selected >= snapshot.data!.length) return;
+    if (_selected >= snapshot.data!.length) return;
 
     if (!mounted) return;
 
-    final exercise = snapshot.data![selected].exercise;
+    final exercise = snapshot.data![_selected].exercise;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     if (settings.showBodyWeight) {
@@ -549,7 +549,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     if (!mounted) return;
-    final counts = planState.gymCounts;
+    final counts = _planState.gymCounts;
     final index = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
@@ -565,23 +565,23 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     var gymSetInsert = GymSetsCompanion.insert(
       name: exercise,
-      unit: unit,
+      unit: _unit,
       created: DateTime.now().toLocal(),
-      cardio: Value(cardio),
+      cardio: Value(_cardio),
       duration: Value(
-        (int.tryParse(seconds.text) ?? 0) / 60 +
-            (int.tryParse(minutes.text) ?? 0),
+        (int.tryParse(_seconds.text) ?? 0) / 60 +
+            (int.tryParse(_minutes.text) ?? 0),
       ),
       bodyWeight: Value.absentIfNull(bodyWeight),
       restMs: Value(restMs?.toInt()),
       planId: Value(widget.plan.id),
-      category: Value(category),
-      image: Value(image),
-      reps: double.tryParse(reps.text) ?? 0,
-      weight: double.tryParse(weight.text) ?? 0,
-      incline: Value(int.tryParse(incline.text)),
-      distance: Value(double.tryParse(distance.text) ?? 0),
-      notes: Value(notes.text),
+      category: Value(_category),
+      image: Value(_image),
+      reps: double.tryParse(_reps.text) ?? 0,
+      weight: double.tryParse(_weight.text) ?? 0,
+      incline: Value(int.tryParse(_incline.text)),
+      distance: Value(double.tryParse(_distance.text) ?? 0),
+      notes: Value(_notes.text),
     );
 
     var count = 0;
@@ -602,10 +602,10 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     final finishedExercise =
         count == (max ?? settings.maxSets) &&
-        selected < snapshot.data!.length - 1;
+        _selected < snapshot.data!.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
-    await planState.updateAfterSave(
+    await _planState.updateAfterSave(
       planId: widget.plan.id,
       updateCounts:
           settings.planTrailing == 'PlanTrailing.count' ||
@@ -615,9 +615,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!mounted) return;
     setState(() {
       _updateGymSetTextFields(gymSet);
-      lastSaved = DateTime.now();
+      _lastSaved = DateTime.now();
     });
-    if (finishedExercise) await select(selected + 1);
+    if (finishedExercise) await select(_selected + 1);
 
     if (!settings.notifications) return;
 
@@ -630,8 +630,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> select(int index) async {
-    setState(() => selected = index);
-    final first = await stream.first;
+    setState(() => _selected = index);
+    final first = await _stream.first;
     if (first.isEmpty || index >= first.length) return;
     final last = await getFirstOfLastSession(first[index].exercise);
     if (last == null || !mounted) return;
@@ -643,9 +643,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     final weightSet = await getBodyWeight();
     if (!mounted) return;
     if (weightSet == null) {
-      toast('No weight entered yet');
+      toast('No _weight entered yet');
     } else {
-      weight.text = toString(weightSet.weight);
+      _weight.text = toString(weightSet.weight);
     }
   }
 }

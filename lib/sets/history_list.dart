@@ -33,7 +33,7 @@ class HistoryList extends StatefulWidget {
 }
 
 class _HistoryListState extends State<HistoryList> {
-  bool goingNext = false;
+  bool _goingNext = false;
   List<GymSet> _current = [];
 
   @override
@@ -209,12 +209,12 @@ class _HistoryListState extends State<HistoryList> {
   void scrollListener() {
     if (widget.scroll.position.pixels <
             widget.scroll.position.maxScrollExtent - 200 ||
-        goingNext)
+        _goingNext)
       return;
-    goingNext = true;
+    _goingNext = true;
     widget.onNext();
     setState(() {
-      goingNext = false;
+      _goingNext = false;
     });
   }
 
