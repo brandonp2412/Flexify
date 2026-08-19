@@ -39,6 +39,7 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
+  patrol: 4.9.0
   flutter_lints: ^6.0.0
   mockito: ^5.4.4
   build_runner: ^2.15.1
@@ -81,3 +82,9 @@ msix_config:
   trim_logo: false
   publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE
   store: true
+
+patrol:
+  app_name: Flexify
+  test_directory: patrol_test
+  android:
+    package_name: com.presley.flexify

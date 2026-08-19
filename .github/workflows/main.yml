@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths-ignore:
       - "pubspec.yaml"
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -32,8 +34,108 @@ jobs:
       - name: Check
         run: ./scripts/check.sh
 
+  generate-screenshots:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - device_type: phoneScreenshots
+            profile: pixel_6
+          - device_type: sevenInchScreenshots
+            profile: Nexus 7
+          - device_type: tenInchScreenshots
+            profile: Nexus 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "21"
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get Flutter dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Generate ${{ matrix.device_type }}
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          FLEXIFY_DEVICE_TYPE: ${{ matrix.device_type }}
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: ${{ matrix.profile }}
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: ./scripts/ci-screenshots.sh
+
+      - name: Upload ${{ matrix.device_type }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.device_type }}
+          path: fastlane/metadata/android/en-US/images/${{ matrix.device_type }}
+          if-no-files-found: error
+          retention-days: 7
+
+  patrol-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "21"
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get Flutter dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: Install Patrol CLI
+        run: |
+          dart pub global activate patrol_cli 4.9.0
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run Patrol tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: patrol test -t patrol_test/device_features_test.dart
+
   version-bump:
-    needs: quality-checks
+    if: github.event_name == 'push'
+    needs: [quality-checks, generate-screenshots, patrol-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -47,6 +149,24 @@ jobs:
           fetch-depth: 0
           submodules: false
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download phone screenshots
+        uses: actions/download-artifact@v5
+        with:
+          name: screenshots-phoneScreenshots
+          path: fastlane/metadata/android/en-US/images/phoneScreenshots
+
+      - name: Download seven-inch screenshots
+        uses: actions/download-artifact@v5
+        with:
+          name: screenshots-sevenInchScreenshots
+          path: fastlane/metadata/android/en-US/images/sevenInchScreenshots
+
+      - name: Download ten-inch screenshots
+        uses: actions/download-artifact@v5
+        with:
+          name: screenshots-tenInchScreenshots
+          path: fastlane/metadata/android/en-US/images/tenInchScreenshots
 
       - name: Configure Git
         run: |

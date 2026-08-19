@@ -45,9 +45,12 @@ class TimerServiceTest {
         dbFolder.mkdirs()
         val dbFile = File(dbFolder, "flexify.sqlite")
         SQLiteDatabase.openOrCreateDatabase(dbFile, null).use { db ->
-            db.execSQL("CREATE TABLE IF NOT EXISTS settings (enable_sound INTEGER)")
+            db.execSQL("DROP TABLE IF EXISTS settings")
+            db.execSQL(
+                "CREATE TABLE IF NOT EXISTS settings (enable_sound INTEGER, alarm_sound TEXT NOT NULL DEFAULT '')"
+            )
             db.execSQL("DELETE FROM settings")
-            db.execSQL("INSERT INTO settings (enable_sound) VALUES (0)")
+            db.execSQL("INSERT INTO settings (enable_sound, alarm_sound) VALUES (0, '')")
         }
     }
 
