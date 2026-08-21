@@ -132,17 +132,26 @@ class _GroupHistoryState extends State<GroupHistory> {
             );
           }
 
+          String title = "$reps x $weight ${gymSet.unit}";
+          if (gymSet.cardio &&
+              (gymSet.unit == 'kg' ||
+                  gymSet.unit == 'lb' ||
+                  gymSet.unit == 'stone')) {
+            title = "$weight ${gymSet.unit} / $minutes:$seconds $incline";
+          } else if (gymSet.cardio &&
+              (gymSet.unit == 'km' ||
+                  gymSet.unit == 'mi' ||
+                  gymSet.unit == 'kcal')) {
+            title = "$distance ${gymSet.unit} / $minutes:$seconds $incline";
+          }
+
           return Material(
             color: widget.selected.contains(gymSet.id)
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: ListTile(
               leading: leading,
-              title: Text(
-                gymSet.cardio
-                    ? "$distance ${gymSet.unit} / $minutes:$seconds $incline"
-                    : "$reps x $weight ${gymSet.unit}",
-              ),
+              title: Text(title),
               subtitle: Selector<SettingsState, String>(
                 selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, dateFormat, child) => Text(

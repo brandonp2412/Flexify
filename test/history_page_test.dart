@@ -84,6 +84,49 @@ void main() async {
     expect(find.text('8 x 70 kg'), findsOne);
   });
 
+  testWidgets('HistoryPage keeps cardio weight when history is grouped', (
+    WidgetTester tester,
+  ) async {
+    await mockTests();
+    db = testDb();
+    await db
+        .into(db.gymSets)
+        .insert(
+          GymSetsCompanion.insert(
+            name: 'Sled push',
+            reps: 0,
+            weight: 30,
+            unit: 'kg',
+            created: DateTime.now(),
+            cardio: const Value(true),
+            duration: const Value(10),
+          ),
+        );
+    await db.settings.update().write(
+      const SettingsCompanion(groupHistory: Value(true)),
+    );
+
+    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
+          ChangeNotifierProvider(create: (context) => TimerState()),
+          ChangeNotifierProvider(create: (context) => PlanState()),
+        ],
+        child: MaterialApp(
+          home: HistoryPage(tabController: MockTabController()),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sled push (1)'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('30 kg / 10:00 '), findsOne);
+  });
+
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     await mockTests();
     db = testDb();
