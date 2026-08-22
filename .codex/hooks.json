@@ -1,0 +1,30 @@
+{
+  "description": "Enforce Flutter autofix, formatting, and analysis before Codex finishes a turn.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/flutter_test_before_push.py\"",
+            "timeout": 1200,
+            "statusMessage": "Running Flutter tests before push"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/flutter_quality.py\"",
+            "timeout": 600,
+            "statusMessage": "Applying Dart fixes, formatting, and analyzing"
+          }
+        ]
+      }
+    ]
+  }
+}
