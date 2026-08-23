@@ -58,6 +58,27 @@ pinned_bin = root / "flutter" / "bin"
 dart = str(pinned_bin / "dart") if (pinned_bin / "dart").is_file() else "dart"
 flutter = str(pinned_bin / "flutter") if (pinned_bin / "flutter").is_file() else "flutter"
 
+dart_files_result = subprocess.run(
+    [
+        "git",
+        "ls-files",
+        "--cached",
+        "--others",
+        "--exclude-standard",
+        "-z",
+        "--",
+        "*.dart",
+    ],
+    cwd=root,
+    stdout=subprocess.PIPE,
+    check=False,
+)
+dart_files = [
+    path.decode("utf-8", errors="surrogateescape")
+    for path in dart_files_result.stdout.split(b"\0")
+    if path
+]
+
 before = working_tree_fingerprint(root)
 state_result = run(["git", "rev-parse", "--git-path", "codex-flutter-quality"], root)
 state_path = Path(state_result.stdout.strip())
@@ -69,7 +90,7 @@ if state_path.is_file() and state_path.read_text().strip() == before:
 
 checks = [
     ("dart fix --apply", [dart, "fix", "--apply"]),
-    ("dart format .", [dart, "format", "."]),
+    ("dart format", [dart, "format", *dart_files]),
     ("flutter analyze", [flutter, "analyze"]),
 ]
 failures: list[str] = []
