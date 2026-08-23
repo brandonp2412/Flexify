@@ -131,7 +131,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          script: patrol test -t patrol_test/device_features_test.dart
+          script: ./scripts/ci-patrol.sh
 
   version-bump:
     if: github.event_name == 'push'
