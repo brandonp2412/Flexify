@@ -6,8 +6,15 @@ name: Deploy to Google Play
 # pushes back the "review process" by 1 day.
 on:
   schedule:
-    - cron: '0 0 */2 * *' 
+    - cron: '0 0 */2 * *'
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-google-play
+  cancel-in-progress: false
 
 jobs:
   deploy-google-play:
@@ -19,53 +26,21 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Get latest release commit hash
-        id: get_release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          release_tag=$(gh release view --json tagName --jq .tagName)
-          echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
-          echo "commit_hash=$(git rev-list -n 1 "$release_tag")" >> "$GITHUB_OUTPUT"
-
-      - name: Get last deployed commit hash from tag
-        id: get_tag
-        run: |
-          if git rev-parse last-deployed >/dev/null 2>&1; then
-            echo "last_commit=$(git rev-parse last-deployed)" >> $GITHUB_OUTPUT
-          else
-            echo "last_commit=none" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Determine whether deployment is needed
-        id: deployment
-        run: |
-          if [ "${{ steps.get_release.outputs.commit_hash }}" = "${{ steps.get_tag.outputs.last_commit }}" ]; then
-            echo "The latest release is already deployed."
-            echo "should_deploy=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_deploy=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - uses: robinraju/release-downloader@v1
-        if: steps.deployment.outputs.should_deploy == 'true'
         with:
           latest: true
           fileName: app-release.aab
 
       - name: Setup Ruby
-        if: steps.deployment.outputs.should_deploy == 'true'
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
           bundler-cache: true
 
       - name: Create Google Play JSON key file
-        if: steps.deployment.outputs.should_deploy == 'true'
         run: echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
 
       - name: Deploy to Google Play
-        if: steps.deployment.outputs.should_deploy == 'true'
         run: |
           set +e
           bundle exec fastlane supply \
@@ -75,17 +50,7 @@ jobs:
             --track production 2>&1 | tee deploy.log
           status=${PIPESTATUS[0]}
           if [ "$status" -ne 0 ] && grep -qE 'Version code [0-9]+ has already been used' deploy.log; then
-            echo "The latest release bundle is already in Google Play."
+            echo "The latest release is already uploaded or pending review in Google Play."
             exit 0
           fi
           exit "$status"
-
-      - name: Tag latest commit as deployed
-        if: steps.deployment.outputs.should_deploy == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -f last-deployed ${{ steps.get_release.outputs.commit_hash }}
-          git push origin refs/tags/last-deployed --force
