@@ -42,11 +42,9 @@ class SetInfo {
   final double weight;
 
   SetInfo(int days, this.reps, this.weight)
-      : dateTime = DateTime.now()
-            .subtract(
-              Duration(days: days),
-            )
-            .copyWith(hour: 12);
+    : dateTime = DateTime.now()
+          .subtract(Duration(days: days))
+          .copyWith(hour: 12);
 }
 
 List<SetInfo> graphData = [
@@ -76,21 +74,13 @@ List<PlanExercisesCompanion> planExercises = [
     enabled: true,
     exercise: 'Triceps dip',
   ),
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Squat',
-  ),
+  PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Squat'),
   PlanExercisesCompanion.insert(
     planId: 1,
     enabled: true,
     exercise: 'Standing calf raise',
   ),
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Pull-up',
-  ),
+  PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Pull-up'),
   PlanExercisesCompanion.insert(
     planId: 2,
     enabled: true,
@@ -116,16 +106,8 @@ List<PlanExercisesCompanion> planExercises = [
     enabled: true,
     exercise: 'Barbell shoulder press',
   ),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Crunch',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Chin-up',
-  ),
+  PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Crunch'),
+  PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Chin-up'),
   PlanExercisesCompanion.insert(
     planId: 3,
     enabled: true,
@@ -141,11 +123,7 @@ List<PlanExercisesCompanion> planExercises = [
     enabled: true,
     exercise: 'Neck curl',
   ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Chin-up',
-  ),
+  PlanExercisesCompanion.insert(planId: 4, enabled: true, exercise: 'Chin-up'),
   PlanExercisesCompanion.insert(
     planId: 4,
     enabled: true,
@@ -184,16 +162,16 @@ const screenshotExercise = "Dumbbell shoulder press";
 /// `!semantics.parentDataDirty` assertion in [PipelineOwner.flushSemantics].
 Future<void> appWrapper(WidgetTester tester) async {
   await app.db.settings.update().write(
-        SettingsCompanion(
-          themeMode: Value(ThemeMode.dark.toString()),
-          explainedPermissions: const Value(true),
-          restTimers: const Value(true),
-          systemColors: const Value(false),
-          curveLines: const Value(true),
-          showImages: const Value(false),
-          showGlobalProgress: const Value(false),
-        ),
-      );
+    SettingsCompanion(
+      themeMode: Value(ThemeMode.dark.toString()),
+      explainedPermissions: const Value(true),
+      restTimers: const Value(true),
+      systemColors: const Value(false),
+      curveLines: const Value(true),
+      showImages: const Value(false),
+      showGlobalProgress: const Value(false),
+    ),
+  );
   final settings = await (db.settings.select()..limit(1)).getSingle();
   final settingsState = SettingsState(settings);
 
@@ -221,11 +199,7 @@ BuildContext getBuildContext(WidgetTester tester, String tabBarState) {
 }
 
 void navigateTo({required BuildContext context, required Widget page}) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => page,
-    ),
-  );
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
 }
 
 Future<void> generateScreenshot({
@@ -258,15 +232,14 @@ GymSetsCompanion generateGymSetCompanion(
   double weight, {
   double reps = 12,
   DateTime? date,
-}) =>
-    GymSetsCompanion.insert(
-      name: exercise,
-      reps: reps,
-      weight: weight,
-      unit: "kg",
-      created: date ?? DateTime.now(),
-      category: const Value("Arms"),
-    );
+}) => GymSetsCompanion.insert(
+  name: exercise,
+  reps: reps,
+  weight: weight,
+  unit: "kg",
+  created: date ?? DateTime.now(),
+  category: const Value("Arms"),
+);
 
 // Set with --dart-define=SCREENSHOT_ONLY=<TestName> to run a single
 // screenshot, e.g. SCREENSHOT_ONLY=SettingsPage for phoneScreenshots #3.
@@ -292,13 +265,15 @@ void main() {
     await app.db.delete(app.db.planExercises).go();
 
     exercisesToPopulateTestDB.forEach(
-      (key, value) async => await app.db.into(app.db.gymSets).insert(
-            generateGymSetCompanion(key, value),
-          ),
+      (key, value) async => await app.db
+          .into(app.db.gymSets)
+          .insert(generateGymSetCompanion(key, value)),
     );
 
     for (final element in graphData) {
-      await app.db.into(app.db.gymSets).insert(
+      await app.db
+          .into(app.db.gymSets)
+          .insert(
             generateGymSetCompanion(
               "Dumbbell shoulder press",
               element.weight,
@@ -345,10 +320,8 @@ void main() {
         binding: binding,
         tester: tester,
         screenshotName: '3_en-US',
-        navigateToPage: (context) async => navigateTo(
-          context: context,
-          page: const SettingsPage(),
-        ),
+        navigateToPage: (context) async =>
+            navigateTo(context: context, page: const SettingsPage()),
         tabBarState: 'PlansPage',
       ),
       skip: _skip("SettingsPage"),

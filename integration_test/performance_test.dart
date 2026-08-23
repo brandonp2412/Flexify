@@ -11,15 +11,15 @@ import 'package:integration_test/integration_test.dart';
 Future<void> appWrapper() async {
   WidgetsFlutterBinding.ensureInitialized();
   await app.db.settings.update().write(
-        SettingsCompanion(
-          themeMode: Value(ThemeMode.dark.toString()),
-          explainedPermissions: const Value(true),
-          restTimers: const Value(true),
-          systemColors: const Value(false),
-          curveLines: const Value(true),
-          scrollableTabs: const Value(true),
-        ),
-      );
+    SettingsCompanion(
+      themeMode: Value(ThemeMode.dark.toString()),
+      explainedPermissions: const Value(true),
+      restTimers: const Value(true),
+      systemColors: const Value(false),
+      curveLines: const Value(true),
+      scrollableTabs: const Value(true),
+    ),
+  );
   final settings = await (db.settings.select()..limit(1)).getSingle();
   final settingsState = SettingsState(settings);
 
