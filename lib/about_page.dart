@@ -69,6 +69,16 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
+            title: const Text("Privacy policy"),
+            leading: const Icon(Icons.privacy_tip_outlined),
+            subtitle: const Text("How Flexify handles your data"),
+            onTap: () async {
+              const url =
+                  'https://brandonp2412.github.io/Flexify/privacy-policy.html';
+              if (await canLaunchUrlString(url)) await launchUrlString(url);
+            },
+          ),
+          ListTile(
             title: const Text("License"),
             leading: const Icon(Icons.balance),
             subtitle: FutureBuilder(
