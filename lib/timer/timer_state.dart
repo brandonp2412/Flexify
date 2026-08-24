@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/crash_logger.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -24,8 +25,8 @@ class TimerState extends ChangeNotifier {
   void setKeepScreenOn(bool value) {
     _keepScreenOn = value;
     if (!value) {
-      WakelockPlus.disable().catchError((e) {
-        debugPrint('Failed to disable wakelock: $e');
+      WakelockPlus.disable().catchError((error, stackTrace) {
+        talker.handle(error, stackTrace, 'Failed to disable wakelock');
       });
     }
   }
@@ -35,8 +36,8 @@ class TimerState extends ChangeNotifier {
     if (!kIsWeb) {
       try {
         player = AudioPlayer();
-      } catch (e) {
-        debugPrint('Failed to create AudioPlayer: $e');
+      } catch (error, stackTrace) {
+        talker.handle(error, stackTrace, 'Failed to create timer audio player');
         player = null;
       }
     }
@@ -100,9 +101,10 @@ class TimerState extends ChangeNotifier {
     bool vibrate,
     bool enableSound,
   ) async {
+    talker.info('Starting rest timer for ${rest.inSeconds} seconds');
     if (_keepScreenOn) {
-      WakelockPlus.enable().catchError((e) {
-        debugPrint('Failed to enable wakelock: $e');
+      WakelockPlus.enable().catchError((error, stackTrace) {
+        talker.handle(error, stackTrace, 'Failed to enable wakelock');
       });
     }
     final timer = NativeTimerWrapper(
@@ -164,6 +166,7 @@ class TimerState extends ChangeNotifier {
     String? alarmSound,
     bool enableSound,
   ) async {
+    talker.info('Rest timer expired');
     if (player != null && enableSound) {
       try {
         await player!.play(
@@ -185,9 +188,10 @@ class TimerState extends ChangeNotifier {
   }
 
   Future<void> stopTimer() async {
+    talker.info('Stopping rest timer');
     updateTimer(NativeTimerWrapper.emptyTimer());
-    WakelockPlus.disable().catchError((e) {
-      debugPrint('Failed to disable wakelock: $e');
+    WakelockPlus.disable().catchError((error, stackTrace) {
+      talker.handle(error, stackTrace, 'Failed to disable wakelock');
     });
     if (kIsWeb || !Platform.isAndroid) {
       player?.stop();
@@ -211,8 +215,8 @@ class TimerState extends ChangeNotifier {
     timer = updated;
     if (updated.state == NativeTimerState.expired ||
         updated.state == NativeTimerState.paused) {
-      WakelockPlus.disable().catchError((e) {
-        debugPrint('Failed to disable wakelock: $e');
+      WakelockPlus.disable().catchError((error, stackTrace) {
+        talker.handle(error, stackTrace, 'Failed to disable wakelock');
       });
     }
     notifyListeners();

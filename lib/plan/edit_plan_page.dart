@@ -7,6 +7,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/day_selector.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/utils.dart';
@@ -183,6 +184,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
             .map((pe) => pe.copyWith(planId: Value(id))),
       );
     }
+
+    talker.info(
+      widget.plan.id.present ? 'Updated workout plan' : 'Created workout plan',
+    );
 
     if (!mounted) return;
     final state = context.read<PlanState>();

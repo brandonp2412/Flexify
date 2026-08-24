@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -182,6 +183,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       image: Value(_image),
     );
     await db.gymSets.insertOne(insert);
+    talker.info('Created exercise template');
     if (!mounted) return;
 
     Navigator.pop(context, insert);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/data_settings.dart';
 import 'package:flexify/settings/format_settings.dart';
@@ -218,8 +219,12 @@ class _SettingsPageState extends State<SettingsPage>
     if (!kIsWeb) {
       try {
         _player = AudioPlayer();
-      } catch (e) {
-        print('Failed to create AudioPlayer: $e');
+      } catch (error, stackTrace) {
+        talker.handle(
+          error,
+          stackTrace,
+          'Failed to create settings audio player',
+        );
         _player = null;
       }
     }

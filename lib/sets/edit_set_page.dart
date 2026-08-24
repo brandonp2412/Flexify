@@ -8,6 +8,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -652,11 +653,13 @@ class _EditSetPageState extends State<EditSetPage> {
         );
       if (!mounted) return;
       planState.updateDefaults();
+      talker.info('Updated workout set');
       return Navigator.of(context).pop();
     } else {
       var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
       await db.into(db.gymSets).insert(insert);
       planState.updateDefaults();
+      talker.info('Created workout set');
     }
 
     if (settings.notifications) {

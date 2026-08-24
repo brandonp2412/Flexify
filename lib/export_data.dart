@@ -5,6 +5,7 @@ import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
@@ -69,6 +70,9 @@ class ExportData extends StatelessWidget {
                         fileName: 'graphs.csv',
                         bytes: bytes,
                       );
+                      talker.info(
+                        'Exported ${gymSets.length} graph entries to CSV',
+                      );
                     },
                   ),
                   ListTile(
@@ -105,6 +109,7 @@ class ExportData extends StatelessWidget {
                         type: FileType.custom,
                         allowedExtensions: ['csv'],
                       );
+                      talker.info('Exported ${plans.length} plans to CSV');
                     },
                   ),
                   ListTile(
@@ -127,6 +132,7 @@ class ExportData extends StatelessWidget {
                           Platform.isWindows ||
                           Platform.isLinux)
                         await file.copy(result!);
+                      talker.info('Exported Flexify database backup');
                     },
                   ),
                 ],

@@ -6,6 +6,7 @@ import 'package:flexify/crash_logger.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/failed_migrations_page.dart';
 import 'package:flexify/home_page.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      talker.info('Starting Flexify');
       await CrashLogger.install();
 
       Setting setting;
@@ -26,10 +28,16 @@ Future<void> main() async {
       try {
         setting = await (db.settings.select()..limit(1)).getSingle();
       } catch (error) {
+        CrashLogger.instance?.record(
+          error,
+          StackTrace.current,
+          context: 'database migration',
+        );
         return runApp(FailedMigrationsPage(error: error));
       }
 
       final state = SettingsState(setting);
+      talker.info('Loaded application settings');
       runApp(appProviders(state));
     },
     (error, stack) =>

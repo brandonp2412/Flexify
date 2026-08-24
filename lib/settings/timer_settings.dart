@@ -3,6 +3,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -67,8 +68,8 @@ List<Widget> getTimerSettings(
             if (newValue) {
               try {
                 await androidChannel.invokeMethod('previewVibration');
-              } catch (e) {
-                debugPrint('Failed to trigger preview vibration: $e');
+              } catch (error, stackTrace) {
+                talker.handle(error, stackTrace, 'Failed to preview vibration');
               }
             }
           },
@@ -81,8 +82,12 @@ List<Widget> getTimerSettings(
               if (value) {
                 try {
                   await androidChannel.invokeMethod('previewVibration');
-                } catch (e) {
-                  debugPrint('Failed to trigger preview vibration: $e');
+                } catch (error, stackTrace) {
+                  talker.handle(
+                    error,
+                    stackTrace,
+                    'Failed to preview vibration',
+                  );
                 }
               }
             },
@@ -349,8 +354,8 @@ class _TimerSettingsState extends State<TimerSettings> {
     if (!kIsWeb) {
       try {
         _player = AudioPlayer();
-      } catch (e) {
-        debugPrint('Failed to create AudioPlayer: $e');
+      } catch (error, stackTrace) {
+        talker.handle(error, stackTrace, 'Failed to create timer audio player');
         _player = null;
       }
     }

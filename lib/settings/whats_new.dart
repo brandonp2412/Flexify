@@ -1,3 +1,4 @@
+import 'package:flexify/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +60,7 @@ class _WhatsNewState extends State<WhatsNew> {
         final filename = path.split('/').last.replaceAll('.txt', '');
         final timestamp = int.tryParse(filename);
         if (timestamp == null || filename.isEmpty) {
-          print('Skipping invalid changelog file: $path');
+          talker.warning('Skipping invalid changelog asset: $path');
           continue;
         }
         result.add(
@@ -71,8 +72,12 @@ class _WhatsNewState extends State<WhatsNew> {
             content: content,
           ),
         );
-      } catch (e) {
-        print('Error loading changelog file $path: $e');
+      } catch (error, stackTrace) {
+        talker.handle(
+          error,
+          stackTrace,
+          'Unable to load changelog asset: $path',
+        );
       }
     }
     return result;

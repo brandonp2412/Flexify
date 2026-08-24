@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flexify/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -41,7 +42,7 @@ class CrashLogger {
       return true;
     };
 
-    if (file != null) debugPrint('Crash log: ${file.path}');
+    if (file != null) talker.info('Crash log available at: ${file.path}');
     return logger;
   }
 
@@ -51,19 +52,19 @@ class CrashLogger {
   /// Appends a timestamped entry for [error]. Safe to call from anywhere; any
   /// failure to write is swallowed so logging can never itself crash the app.
   void record(Object error, StackTrace? stack, {String context = 'uncaught'}) {
+    talker.handle(error, stack, context);
     final entry = StringBuffer()
       ..writeln('[${DateTime.now().toIso8601String()}] ($context) $error');
     if (stack != null) entry.writeln(stack.toString().trimRight());
     entry.writeln();
 
-    debugPrint(entry.toString());
+    talker.error(entry.toString().trimRight());
     final file = _file;
     if (file == null) return;
     try {
       file.writeAsStringSync(entry.toString(), mode: FileMode.append);
     } catch (_) {
-      // Logging must never throw; if the file is unwritable, the debugPrint
-      // above is the best we can do.
+      // Logging must never throw; Talker has already received the entry.
     }
   }
 }

@@ -9,6 +9,7 @@ import 'package:flexify/database/metadata.dart';
 import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/plans.dart';
 import 'package:flexify/database/settings.dart';
+import 'package:flexify/logging.dart';
 import 'package:flutter/foundation.dart';
 
 import 'database_connection_web.dart'
@@ -37,9 +38,11 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration {
     return MigrationStrategy(
       beforeOpen: (details) async {
+        talker.debug('Opening Flexify database schema v${details.versionNow}');
         if (kDebugMode) await validateDatabaseSchema();
       },
       onCreate: (Migrator m) async {
+        talker.info('Creating Flexify database');
         await m.createAll();
         await m.createIndex(
           Index(
@@ -73,6 +76,9 @@ class AppDatabase extends _$AppDatabase {
         });
 
         await settings.insertOne(defaultSettings);
+        talker.info(
+          'Created Flexify database with starter plans and exercises',
+        );
       },
       onUpgrade: stepByStep(
         from1To2: (m, schema) async {

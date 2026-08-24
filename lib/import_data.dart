@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -61,6 +62,7 @@ class ImportData extends StatelessWidget {
 
   Future<void> importDatabase(BuildContext context) async {
     Navigator.pop(context);
+    talker.info('Starting Flexify database import');
 
     try {
       if (kIsWeb) {
@@ -69,6 +71,7 @@ class ImportData extends StatelessWidget {
         await _importDatabaseNative(context);
       }
     } catch (e, stackTrace) {
+      talker.handle(e, stackTrace, 'Failed to import Flexify database');
       if (!ctx.mounted) return;
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
@@ -134,6 +137,7 @@ $version
     await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
     db = AppDatabase();
     dbVersion.value++;
+    talker.info('Imported Flexify database backup');
 
     await (db.settings.update()).write(
       const SettingsCompanion(alarmSound: Value('')),
@@ -266,6 +270,7 @@ $version
 
       await db.gymSets.deleteAll();
       await db.gymSets.insertAll(gymSets);
+      talker.info('Imported ${gymSets.length} graph entries');
 
       final weightSet = await getBodyWeight();
       if (weightSet != null) {
@@ -278,7 +283,8 @@ $version
       Navigator.pop(ctx);
 
       toast('Graph data imported successfully!');
-    } catch (e) {
+    } catch (e, stackTrace) {
+      talker.handle(e, stackTrace, 'Failed to import graph data');
       if (!ctx.mounted) return;
 
       toast(
@@ -362,6 +368,9 @@ $version
       await db.planExercises.deleteAll();
       await db.plans.insertAll(plansToInsert);
       await db.planExercises.insertAll(planExercisesToInsert);
+      talker.info(
+        'Imported ${plansToInsert.length} plans and ${planExercisesToInsert.length} exercises',
+      );
 
       if (!ctx.mounted) return;
       ctx.read<PlanState>().updatePlans(null);
@@ -369,6 +378,7 @@ $version
 
       toast('Plans imported successfully');
     } catch (e, stackTrace) {
+      talker.handle(e, stackTrace, 'Failed to import plan data');
       if (!ctx.mounted) return;
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
