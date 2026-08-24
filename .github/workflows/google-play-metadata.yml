@@ -1,0 +1,33 @@
+name: Sync Google Play listing
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "fastlane/metadata/android/**"
+      - "fastlane/Fastfile"
+      - "fastlane/Appfile"
+      - ".github/workflows/google-play-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: google-play-metadata
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - name: Configure Google Play credentials
+        run: |
+          mkdir -p ~/.config
+          printf '%s' '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > ~/.config/googlePlay.json
+      - run: bundle exec fastlane android metadata track:production
