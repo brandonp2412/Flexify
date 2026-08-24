@@ -1,1 +1,1 @@
-Track gym progress
+Log workouts, reps, cardio, and rest timers. Track strength offline.

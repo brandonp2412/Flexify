@@ -1,9 +1,17 @@
-Flex on people with Flexify
+Log your gym workouts, follow your strength progress, and keep your training private.
 
-Log your workouts quickly - our app is incredibly fast.
-No internet? No worries. We don't use the web at all.
-Visualize your progress with snappy and beautiful graphs.
-Customize everything. Any feature you don't like can be toggled off in settings.
-You don't need to compromise on speed for beauty, get both with Flexify.
+Flexify is a fast, offline workout tracker for strength training and cardio. Record sets, reps, and weights, use rest timers to stay on pace, and review clear progress graphs after every session.
 
-Notice a bug? Create an issue on https://github.com/brandonp2412/Flexify/issues
+BUILD A BETTER TRAINING LOG
+
+• Log strength workouts, exercises, sets, reps, and weight
+• Record cardio sessions and cardio types
+• Use rest timers and alarms between sets
+• Review workout history and strength progress with graphs
+• Tailor features, settings, and light or dark appearance to your routine
+
+PRIVATE, FAST, AND OFFLINE
+
+Flexify does not require an account or internet connection. Your workout data stays on your device, so you can train and log sessions anywhere. The app is open source and has no advertising or tracking.
+
+Whether you are beginning a gym routine or refining an established programme, Flexify gives you a focused workout journal without clutter.
