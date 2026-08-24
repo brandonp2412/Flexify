@@ -38,16 +38,23 @@ jobs:
           bundler-cache: true
 
       - name: Create Google Play JSON key file
-        run: echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
+        run: |
+          echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
+          mkdir -p ~/.config
+          cp google-play-key.json ~/.config/googlePlay.json
 
       - name: Deploy to Google Play
         run: |
           set +e
+          bundle exec fastlane android metadata track:production
           bundle exec fastlane supply \
             --aab app-release.aab \
             --json_key google-play-key.json \
             --package_name com.presley.flexify \
-            --track production 2>&1 | tee deploy.log
+            --track production \
+            --skip_upload_metadata true \
+            --skip_upload_images true \
+            --skip_upload_screenshots true 2>&1 | tee deploy.log
           status=${PIPESTATUS[0]}
           if [ "$status" -ne 0 ] && grep -qE 'Version code [0-9]+ has already been used' deploy.log; then
             echo "The latest release is already uploaded or pending review in Google Play."
