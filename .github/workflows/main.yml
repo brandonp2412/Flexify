@@ -48,6 +48,7 @@ jobs:
             profile: pixel_6
           - device_type: sevenInchScreenshots
             profile: Nexus 7
+            screen_size: 1920x1080
           - device_type: tenInchScreenshots
             profile: Nexus 10
     steps:
@@ -79,6 +80,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         env:
           FLEXIFY_DEVICE_TYPE: ${{ matrix.device_type }}
+          SCREENSHOT_SCREEN_SIZE: ${{ matrix.screen_size }}
         with:
           api-level: 35
           target: google_apis
