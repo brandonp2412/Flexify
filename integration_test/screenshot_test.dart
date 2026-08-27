@@ -21,145 +21,8 @@ import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
 import '../test/mock_tab_controller.dart';
+import '../test/support/graph_fixtures.dart';
 
-Map<String, double> exercisesToPopulateTestDB = {
-  "Barbell bench press": 90,
-  "Barbell bent-over row": 82.5,
-  "Barbell biceps curl": 45,
-  "Barbell shoulder press": 50,
-  "Chin-up": 20,
-  "Crunch": 25,
-  "Dumbbell bicep curls": 30,
-  "Dumbbell chest press": 55,
-  "Dumbbell lateral raise": 10,
-  "Dumbbell shoulder press": 40,
-  "Triceps dip": 20,
-};
-
-class SetInfo {
-  final DateTime dateTime;
-  final double reps;
-  final double weight;
-
-  SetInfo(int days, this.reps, this.weight)
-    : dateTime = DateTime.now()
-          .subtract(Duration(days: days))
-          .copyWith(hour: 12);
-}
-
-List<SetInfo> graphData = [
-  SetInfo(0, 8, 1),
-  SetInfo(0, 6, 5),
-  SetInfo(0, 6, 6.25),
-  SetInfo(4, 8, 1),
-  SetInfo(4, 6, 2.5),
-  SetInfo(4, 6, 5),
-  SetInfo(4, 6, 5),
-  SetInfo(4, 6, 5),
-  SetInfo(8, 6, 5),
-  SetInfo(8, 6, 4),
-  SetInfo(8, 6, 10),
-  SetInfo(12, 6, 5),
-  SetInfo(16, 6, 1),
-  SetInfo(20, 6, 5),
-  SetInfo(24, 6, 1),
-  SetInfo(28, 6, 1),
-  SetInfo(32, 6, 1),
-  SetInfo(36, 6, 1),
-];
-
-List<PlanExercisesCompanion> planExercises = [
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Triceps dip',
-  ),
-  PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Squat'),
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Standing calf raise',
-  ),
-  PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Pull-up'),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell bench press',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell bent-over row',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Dumbbell lateral raise',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell biceps curl',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Barbell shoulder press',
-  ),
-  PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Crunch'),
-  PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Chin-up'),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Romanian deadlift',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Barbell shoulder press',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Neck curl',
-  ),
-  PlanExercisesCompanion.insert(planId: 4, enabled: true, exercise: 'Chin-up'),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Romanian deadlift',
-  ),
-];
-
-List<PlansCompanion> plans = [
-  PlansCompanion.insert(
-    id: Value(1),
-    days: 'Tuesday,Saturday',
-    title: const Value("Tuesday, Saturday"),
-  ),
-  PlansCompanion(
-    id: Value(2),
-    days: Value('Wednesday,Sunday'),
-    title: const Value("Wednesday, Sunday"),
-  ),
-  PlansCompanion(
-    id: Value(3),
-    days: Value('Monday'),
-    title: const Value("Monday"),
-  ),
-  PlansCompanion(
-    id: Value(4),
-    days: Value('Thursday'),
-    title: const Value("Thursday"),
-  ),
-];
-
-const screenshotExercise = "Dumbbell shoulder press";
-
-/// Pumps the app widget tree via [tester] so the test binding owns the
-/// lifecycle. Using [runApp] directly leaves orphaned render objects with
-/// dirty semantics parent data, triggering the
-/// `!semantics.parentDataDirty` assertion in [PipelineOwner.flushSemantics].
 Future<void> appWrapper(WidgetTester tester) async {
   await app.db.settings.update().write(
     SettingsCompanion(
@@ -227,36 +90,19 @@ Future<void> generateScreenshot({
   await binding.takeScreenshot(screenshotName);
 }
 
-GymSetsCompanion generateGymSetCompanion(
-  String exercise,
-  double weight, {
-  double reps = 12,
-  DateTime? date,
-}) => GymSetsCompanion.insert(
-  name: exercise,
-  reps: reps,
-  weight: weight,
-  unit: "kg",
-  created: date ?? DateTime.now(),
-  category: const Value("Arms"),
-);
-
-// Set with --dart-define=SCREENSHOT_ONLY=<TestName> to run a single
-// screenshot, e.g. SCREENSHOT_ONLY=SettingsPage for phoneScreenshots #3.
 const _only = String.fromEnvironment('SCREENSHOT_ONLY');
 
 bool _skip(String name) => _only.isNotEmpty && _only != name;
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding binding =
-      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  var deviceType = const String.fromEnvironment("FLEXIFY_DEVICE_TYPE");
+  var deviceType = const String.fromEnvironment('FLEXIFY_DEVICE_TYPE');
   if (deviceType.isEmpty) deviceType = 'desktop';
 
   setUpAll(() async {
     app.db = AppDatabase();
-    app.androidChannel = const MethodChannel("com.presley.flexify/timer");
+    app.androidChannel = const MethodChannel('com.presley.flexify/timer');
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.androidChannel, (message) => null);
 
@@ -264,44 +110,26 @@ void main() {
     await app.db.delete(app.db.plans).go();
     await app.db.delete(app.db.planExercises).go();
 
-    exercisesToPopulateTestDB.forEach(
-      (key, value) async => await app.db
-          .into(app.db.gymSets)
-          .insert(generateGymSetCompanion(key, value)),
-    );
-
-    for (final element in graphData) {
-      await app.db
-          .into(app.db.gymSets)
-          .insert(
-            generateGymSetCompanion(
-              "Dumbbell shoulder press",
-              element.weight,
-              reps: element.reps,
-              date: element.dateTime,
-            ),
-          );
-    }
-
-    await db.plans.insertAll(plans);
-    await db.planExercises.insertAll(planExercises);
+    await seedGraphFixtures(app.db);
+    await db.plans.insertAll(screenshotPlans);
+    await db.planExercises.insertAll(screenshotPlanExercises);
   });
 
-  group("Generate default screenshots ", () {
+  group('Generate default screenshots ', () {
     testWidgets(
-      "PlanPage",
-      (tester) async => await generateScreenshot(
+      'PlanPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '1_en-US',
         tabBarState: 'PlansPage',
       ),
-      skip: _skip("PlanPage"),
+      skip: _skip('PlanPage'),
     );
 
     testWidgets(
-      "GraphPage",
-      (tester) async => await generateScreenshot(
+      'GraphPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '2_en-US',
@@ -311,12 +139,12 @@ void main() {
         ),
         tabBarState: 'GraphsPage',
       ),
-      skip: _skip("GraphPage"),
+      skip: _skip('GraphPage'),
     );
 
     testWidgets(
-      "SettingsPage",
-      (tester) async => await generateScreenshot(
+      'SettingsPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '3_en-US',
@@ -324,12 +152,12 @@ void main() {
             navigateTo(context: context, page: const SettingsPage()),
         tabBarState: 'PlansPage',
       ),
-      skip: _skip("SettingsPage"),
+      skip: _skip('SettingsPage'),
     );
 
     testWidgets(
-      "StartPlanPage",
-      (tester) async => await generateScreenshot(
+      'StartPlanPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '4_en-US',
@@ -339,20 +167,19 @@ void main() {
         },
         tabBarState: 'PlansPage',
       ),
-      skip: _skip("StartPlanPage"),
+      skip: _skip('StartPlanPage'),
     );
   });
 
-  group("Generate extra screenshots", () {
+  group('Generate extra screenshots', () {
     testWidgets(
-      "ViewGraphPage",
-      (tester) async => await generateScreenshot(
+      'ViewGraphPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '5_en-US',
         navigateToPage: (context) async {
           navigateTo(
-            // ignore: use_build_context_synchronously
             context: context,
             page: StrengthPage(
               tabCtrl: MockTabController(),
@@ -360,7 +187,7 @@ void main() {
               unit: 'kg',
               data: await getStrengthData(
                 target: 'kg',
-                name: 'Dumbbell shoulder press',
+                name: screenshotExercise,
                 metric: StrengthMetric.bestWeight,
                 period: Period.day,
                 start: null,
@@ -372,23 +199,23 @@ void main() {
         },
         tabBarState: 'GraphsPage',
       ),
-      skip: _skip("ViewGraphPage"),
+      skip: _skip('ViewGraphPage'),
     );
 
     testWidgets(
-      "GraphHistory",
-      (tester) async => await generateScreenshot(
+      'GraphHistory',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '6_en-US',
         tabBarState: 'HistoryPage',
       ),
-      skip: _skip("GraphHistory"),
+      skip: _skip('GraphHistory'),
     );
 
     testWidgets(
-      "EditPlanPage",
-      (tester) async => await generateScreenshot(
+      'EditPlanPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '7_en-US',
@@ -404,12 +231,12 @@ void main() {
         },
         tabBarState: 'GraphsPage',
       ),
-      skip: _skip("EditPlanPage"),
+      skip: _skip('EditPlanPage'),
     );
 
     testWidgets(
-      "TimerPage",
-      (tester) async => await generateScreenshot(
+      'TimerPage',
+      (tester) async => generateScreenshot(
         binding: binding,
         tester: tester,
         screenshotName: '8_en-US',
@@ -420,7 +247,7 @@ void main() {
         },
         tabBarState: 'TimerPage',
       ),
-      skip: _skip("TimerPage"),
+      skip: _skip('TimerPage'),
     );
   });
 }
