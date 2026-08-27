@@ -53,6 +53,10 @@ void main() {
   });
 
   test('setExercises keeps enabled plan order before available exercises', () async {
+    await db.planExercises.deleteAll();
+    await db.plans.deleteAll();
+    await db.gymSets.deleteAll();
+
     final planId = await db.plans.insertOne(
       planFixture(id: 1, title: 'Push day'),
     );
