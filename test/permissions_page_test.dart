@@ -1,32 +1,16 @@
-import 'package:drift/drift.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
-import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
-import 'mock_tests.dart';
+import 'support/test_app.dart';
 
-void main() async {
-  await mockTests();
-
+void main() {
   testWidgets('PermissionsPage', (WidgetTester tester) async {
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: const MaterialApp(home: Scaffold(body: PermissionsPage())),
-      ),
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(
+      tester,
+      const Scaffold(body: PermissionsPage()),
     );
-
     await tester.pumpAndSettle();
 
     expect(find.text('Missing permissions'), findsOne);
