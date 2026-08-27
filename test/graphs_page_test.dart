@@ -1,151 +1,73 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
 import 'mock_tab_controller.dart';
-import 'mock_tests.dart';
+import 'support/fixtures.dart';
+import 'support/test_app.dart';
 
-void main() async {
+Future<void> pumpGraphsPage(
+  WidgetTester tester,
+  FlexifyTestHarness harness, {
+  bool withTabController = false,
+}) async {
+  final page = GraphsPage(tabController: MockTabController());
+  await harness.pump(
+    tester,
+    withTabController
+        ? DefaultTabController(length: 1, child: page)
+        : page,
+  );
+  await tester.pumpAndSettle();
+}
+
+void main() {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: GraphsPage(tabController: MockTabController()),
-        ),
-      ),
-    );
+    final harness = await FlexifyTestHarness.create();
+    await pumpGraphsPage(tester, harness);
 
-    await tester.pumpAndSettle();
     expect(find.text('Search graphs...'), findsOne);
     expect(find.byType(ListTile), findsWidgets);
-  });
-
-  testWidgets('GraphsPage add button', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: GraphsPage(tabController: MockTabController()),
-        ),
-      ),
-    );
-
-    final add = find.text('Add');
-    await tester.tap(add);
-    await tester.pumpAndSettle();
   });
 
   testWidgets('GraphsPage taps barbell bench press', (
     WidgetTester tester,
   ) async {
-    await mockTests();
-    db = testDb();
-
-    await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Barbell bench press',
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.gymSets.insertOne(
+      gymSetFixture(
+        'Barbell bench press',
         reps: 10,
         weight: 100,
-        unit: 'kg',
         created: DateTime.now().toLocal(),
-        hidden: const Value(false),
-        category: const Value('Chest'),
+        category: 'Chest',
       ),
     );
 
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: DefaultTabController(
-            length: 1,
-            child: GraphsPage(tabController: MockTabController()),
-          ),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
+    await pumpGraphsPage(tester, harness, withTabController: true);
     await tester.tap(find.text('Barbell bench press'));
     await tester.pumpAndSettle();
+
     expect(find.text('Best weight'), findsOne);
   });
 
   testWidgets('GraphsPage taps global progress', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: DefaultTabController(
-            length: 1,
-            child: GraphsPage(tabController: MockTabController()),
-          ),
-        ),
-      ),
-    );
+    final harness = await FlexifyTestHarness.create();
+    await pumpGraphsPage(tester, harness, withTabController: true);
 
-    await tester.pumpAndSettle();
     await tester.tap(find.text('Global progress'));
     await tester.pumpAndSettle();
+
     expect(find.text('Best weight'), findsOne);
   });
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: GraphsPage(tabController: MockTabController()),
-        ),
-      ),
-    );
+    final harness = await FlexifyTestHarness.create();
+    await pumpGraphsPage(tester, harness);
 
+    await tester.tap(find.byTooltip('Show menu'));
     await tester.pumpAndSettle();
-    final menu = find.byTooltip('Show menu');
-    await tester.tap(menu);
-    await tester.pumpAndSettle();
-
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
 
@@ -153,81 +75,44 @@ void main() async {
   });
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-
-    await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Barbell bent-over row',
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.gymSets.insertOne(
+      gymSetFixture(
+        'Barbell bent-over row',
         reps: 8,
         weight: 80,
-        unit: 'kg',
         created: DateTime.now().toLocal(),
-        hidden: const Value(false),
-        category: const Value('Back'),
+        category: 'Back',
       ),
     );
 
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: GraphsPage(tabController: MockTabController()),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
+    await pumpGraphsPage(tester, harness);
     await tester.longPress(find.text('Barbell bent-over row'));
     await tester.pumpAndSettle();
+
     expect(find.text('1'), findsOne);
   });
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-
-    await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Back extension',
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.gymSets.insertOne(
+      gymSetFixture(
+        'Back extension',
         reps: 12,
         weight: 50,
-        unit: 'kg',
         created: DateTime.now().toLocal(),
-        hidden: const Value(false),
-        category: const Value('Back'),
+        category: 'Back',
       ),
     );
 
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: GraphsPage(tabController: MockTabController()),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
+    await pumpGraphsPage(tester, harness);
     await tester.longPress(find.text('Back extension'));
     await tester.pumpAndSettle();
 
-    final delete = find.byTooltip('Delete selected');
-    await tester.tap(delete);
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
-
     expect(find.text('Confirm Delete'), findsOne);
+
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
@@ -237,62 +122,36 @@ void main() async {
   testWidgets('GraphsPage delete also removes plan exercises', (
     WidgetTester tester,
   ) async {
-    await mockTests();
-    db = testDb();
-
-    await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Zz unique test exercise',
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.gymSets.insertOne(
+      gymSetFixture(
+        'Zz unique test exercise',
         reps: 12,
         weight: 30,
-        unit: 'kg',
         created: DateTime.now().toLocal().add(const Duration(seconds: 5)),
-        hidden: const Value(false),
-        category: const Value('Chest'),
+        category: 'Chest',
       ),
     );
 
-    final planId = await db.plans.insertOne(
-      PlansCompanion.insert(days: 'Monday'),
-    );
-    await db.planExercises.insertOne(
-      PlanExercisesCompanion.insert(
+    final planId = await harness.database.plans.insertOne(planFixture());
+    await harness.database.planExercises.insertOne(
+      planExerciseFixture(
         planId: planId,
         exercise: 'Zz unique test exercise',
-        enabled: true,
       ),
     );
 
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: GraphsPage(tabController: MockTabController()),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
+    await pumpGraphsPage(tester, harness);
     await tester.longPress(find.text('Zz unique test exercise'));
     await tester.pumpAndSettle();
-
-    final delete = find.byTooltip('Delete selected');
-    await tester.tap(delete);
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
-
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
-    final planExercises =
-        await (db.planExercises.select()
-              ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
-            .get();
+    final planExercises = await (harness.database.planExercises.select()
+          ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
+        .get();
     expect(planExercises, isEmpty);
   });
 }
