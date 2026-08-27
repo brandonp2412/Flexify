@@ -12,6 +12,8 @@ GymSetsCompanion gymSetFixture(
   bool cardio = false,
   double? duration,
   String? category,
+  int? planId,
+  bool hidden = false,
 }) {
   return GymSetsCompanion.insert(
     name: name,
@@ -22,6 +24,8 @@ GymSetsCompanion gymSetFixture(
     cardio: Value(cardio),
     duration: duration == null ? const Value.absent() : Value(duration),
     category: category == null ? const Value.absent() : Value(category),
+    planId: planId == null ? const Value.absent() : Value(planId),
+    hidden: Value(hidden),
   );
 }
 
