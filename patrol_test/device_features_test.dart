@@ -36,10 +36,16 @@ void main() {
 
       if (await $.platform.mobile.isPermissionDialogVisible()) {
         await $.platform.mobile.grantPermissionWhenInUse();
+        await $.pumpAndSettle();
+
+        // The first tap can be consumed by Android's runtime permission flow.
+        // Once permission is granted, trigger the backup action again so the
+        // document-tree picker is guaranteed to be the foreground UI.
+        if ($('Automatic backup').exists) {
+          await $('Automatic backup').tap();
+        }
       }
 
-      // "Use this folder" is the action specific to ACTION_OPEN_DOCUMENT_TREE.
-      // The optional "New folder" menu item can be hidden by DocumentsUI.
       await $.platform.android.waitUntilVisible(
         const AndroidSelector(text: 'Use this folder'),
         timeout: const Duration(seconds: 10),
