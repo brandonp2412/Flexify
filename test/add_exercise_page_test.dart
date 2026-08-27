@@ -1,36 +1,19 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
-import 'mock_tests.dart';
+import 'support/test_app.dart';
 
-void main() async {
+void main() {
   testWidgets('AddExercise', (WidgetTester tester) async {
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await mockTests();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: const MaterialApp(home: AddExercisePage()),
-      ),
-    );
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(tester, const AddExercisePage());
 
-    expect(find.text("Add exercise"), findsOne);
+    expect(find.text('Add exercise'), findsOne);
     await tester.enterText(find.bySemanticsLabel('Name'), 'Bench press 2');
 
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
+
     expect(find.textContaining('Add exercise'), findsNothing);
   });
 }
