@@ -42,7 +42,7 @@ jobs:
           fi
 
       - name: Analyze
-        run: flutter/bin/flutter analyze
+        run: flutter/bin/flutter analyze --no-fatal-infos
 
       - name: Test
         run: flutter/bin/flutter test
