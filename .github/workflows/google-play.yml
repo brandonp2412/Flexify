@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: deploy-google-play
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy-google-play:
