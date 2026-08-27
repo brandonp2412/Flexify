@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -15,17 +16,21 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-void tapBackup(bool value) async {
+Future<void> tapBackup(bool value) async {
   await db.settings.update().write(
     SettingsCompanion(automaticBackups: Value(value)),
   );
 
-  if (value) {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
-    androidChannel.invokeMethod('pick', {'dbPath': dbPath});
-    await Permission.notification.request();
-  }
+  if (!value) return;
+
+  // Keep the notification permission flow in front of the app. Launching the
+  // document picker first lets the permission activity displace DocumentsUI,
+  // which can leave automatic-backup setup without a foreground folder picker.
+  await Permission.notification.request();
+
+  final dbFolder = await getApplicationDocumentsDirectory();
+  final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
+  unawaited(androidChannel.invokeMethod<void>('pick', {'dbPath': dbPath}));
 }
 
 List<Widget> getDataSettings(

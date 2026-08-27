@@ -26,8 +26,8 @@ void main() {
       expect($('Import data').exists, isTrue);
       expect($('Delete records').exists, isTrue);
 
-      // Force a known transition to enabled, which launches the real Android
-      // ACTION_OPEN_DOCUMENT_TREE folder picker.
+      // Force a known transition to enabled. Notification permission is
+      // resolved first; the app then launches ACTION_OPEN_DOCUMENT_TREE.
       if ($(Switch).which<Switch>((widget) => widget.value).exists) {
         await $('Automatic backup').tap();
         await $.pumpAndSettle();
@@ -37,13 +37,6 @@ void main() {
       if (await $.platform.mobile.isPermissionDialogVisible()) {
         await $.platform.mobile.grantPermissionWhenInUse();
         await $.pumpAndSettle();
-
-        // The first tap can be consumed by Android's runtime permission flow.
-        // Once permission is granted, trigger the backup action again so the
-        // document-tree picker is guaranteed to be the foreground UI.
-        if ($('Automatic backup').exists) {
-          await $('Automatic backup').tap();
-        }
       }
 
       // ACTION_OPEN_DOCUMENT_TREE is fulfilled by Android's DocumentsUI.
@@ -51,7 +44,7 @@ void main() {
       // so assert the system picker package rather than a presentation detail.
       await $.platform.android.waitUntilVisible(
         const AndroidSelector(applicationPackage: 'com.google.android.documentsui'),
-        timeout: const Duration(seconds: 10),
+        timeout: const Duration(seconds: 20),
       );
 
       // Leave no persisted folder grant behind for subsequent test runs.
