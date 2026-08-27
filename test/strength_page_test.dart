@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
@@ -67,16 +68,14 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     await pumpStrengthPage(tester, harness);
 
+    var currentMetric = 'Best weight';
     for (final metric in ['Best reps', 'One rep max', 'Volume']) {
-      await tester.tap(find.text(find.text('Best weight').evaluate().isNotEmpty
-          ? 'Best weight'
-          : metric == 'One rep max'
-              ? 'Best reps'
-              : 'One rep max'));
+      await tester.tap(find.text(currentMetric));
       await tester.pumpAndSettle();
       await tester.tap(find.text(metric));
       await tester.pumpAndSettle();
       expect(find.byType(LineChart), findsOne);
+      currentMetric = metric;
     }
   });
 }
