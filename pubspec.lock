@@ -469,6 +469,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  frisbee_flutter_foundation:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_foundation"
+      relative: true
+    source: path
+    version: "0.1.0"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
