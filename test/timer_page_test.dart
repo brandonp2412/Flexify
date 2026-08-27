@@ -1,14 +1,10 @@
-import 'package:flexify/database/database.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications_platform_interface/flutter_local_notifications_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
-import 'mock_tests.dart';
+import 'support/test_app.dart';
 
 class TestFlutterLocalNotificationsPlatform
     extends FlutterLocalNotificationsPlatform {
@@ -73,70 +69,16 @@ void main() {
     FlutterLocalNotificationsPlatform.instance =
         TestFlutterLocalNotificationsPlatform();
   });
+
   testWidgets('TimerProgressIndicator maintains state after manual stop', (
     WidgetTester tester,
   ) async {
-    await mockTests();
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
 
-    final timerState = TimerState();
-    final settings = SettingsState(
-      const Setting(
-        id: 1,
-        alarmSound: '',
-        vibrate: true,
-        restTimers: true,
-        showUnits: true,
-        systemColors: true,
-        explainedPermissions: true,
-        cardioUnit: 'km',
-        tabs: 'HistoryPage,PlansPage,GraphsPage,TimerPage',
-        themeMode: 'ThemeMode.system',
-        groupHistory: true,
-        automaticBackups: true,
-        curveLines: false,
-        warmupSets: null,
-        timerDuration: 180000,
-        maxSets: 3,
-        longDateFormat: 'dd/MM/yy',
-        shortDateFormat: 'd/M/yy',
-        durationEstimation: true,
-        enableSound: true,
-        showBodyWeight: true,
-        showCategories: true,
-        showImages: true,
-        showNotes: true,
-        showGlobalProgress: true,
-        strengthUnit: 'kg',
-        backupPath: null,
-        curveSmoothness: null,
-        notifications: true,
-        notificationPermissionRequested: true,
-        peekGraph: false,
-        planTrailing: 'PlanTrailing.reorder',
-        repEstimation: true,
-        scrollableTabs: false,
-        showGraphXAxis: false,
-        showGraphLimit: true,
-        progressPosition: 'bottom',
-        defaultGraphMetric: 'bestWeight',
-        defaultGraphPeriod: 'day',
-        defaultGraphLimit: 20,
-        defaultGraphTimeBasedXAxis: false,
-        keepScreenOn: true,
-        inputStyle: 'underline',
-      ),
-    );
-
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(value: timerState),
-          ChangeNotifierProvider.value(value: settings),
-        ],
-        child: const MaterialApp(
-          home: Scaffold(body: TimerProgressIndicator()),
-        ),
-      ),
+    await harness.pump(
+      tester,
+      const Scaffold(body: TimerProgressIndicator()),
     );
 
     expect(find.byType(LinearProgressIndicator), findsNothing);
@@ -186,66 +128,10 @@ void main() {
   testWidgets('TimerPage displays stop button when timer is running', (
     WidgetTester tester,
   ) async {
-    await mockTests();
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
 
-    final timerState = TimerState();
-    final settings = SettingsState(
-      const Setting(
-        id: 1,
-        alarmSound: '',
-        vibrate: true,
-        restTimers: true,
-        showUnits: true,
-        systemColors: true,
-        explainedPermissions: true,
-        cardioUnit: 'km',
-        tabs: 'HistoryPage,PlansPage,GraphsPage,TimerPage',
-        themeMode: 'ThemeMode.system',
-        groupHistory: true,
-        automaticBackups: true,
-        curveLines: false,
-        warmupSets: null,
-        timerDuration: 180000,
-        maxSets: 3,
-        longDateFormat: 'dd/MM/yy',
-        shortDateFormat: 'd/M/yy',
-        durationEstimation: true,
-        enableSound: true,
-        showBodyWeight: true,
-        showCategories: true,
-        showImages: true,
-        showNotes: true,
-        showGlobalProgress: true,
-        strengthUnit: 'kg',
-        backupPath: null,
-        curveSmoothness: null,
-        notifications: true,
-        notificationPermissionRequested: true,
-        peekGraph: false,
-        planTrailing: 'PlanTrailing.reorder',
-        repEstimation: true,
-        scrollableTabs: false,
-        showGraphXAxis: false,
-        showGraphLimit: true,
-        progressPosition: 'bottom',
-        defaultGraphMetric: 'bestWeight',
-        defaultGraphPeriod: 'day',
-        defaultGraphLimit: 20,
-        defaultGraphTimeBasedXAxis: false,
-        keepScreenOn: true,
-        inputStyle: 'underline',
-      ),
-    );
-
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(value: timerState),
-          ChangeNotifierProvider.value(value: settings),
-        ],
-        child: const MaterialApp(home: TimerPage()),
-      ),
-    );
+    await harness.pump(tester, const TimerPage());
 
     expect(find.text('Stop'), findsNothing);
 
