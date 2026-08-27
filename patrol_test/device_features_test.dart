@@ -46,8 +46,11 @@ void main() {
         }
       }
 
+      // ACTION_OPEN_DOCUMENT_TREE is fulfilled by Android's DocumentsUI.
+      // Individual labels/actions differ across API levels and initial folders,
+      // so assert the system picker package rather than a presentation detail.
       await $.platform.android.waitUntilVisible(
-        const AndroidSelector(text: 'Use this folder'),
+        const AndroidSelector(applicationPackage: 'com.google.android.documentsui'),
         timeout: const Duration(seconds: 10),
       );
 
