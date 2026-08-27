@@ -37,10 +37,10 @@ void main() {
     },
   );
 
-  testWidgets(
+  test(
     'starting a second rest timer supersedes the first instead of stacking '
     '(#300)',
-    (WidgetTester tester) async {
+    () async {
       await mockTests();
       final timerState = TimerState();
 
