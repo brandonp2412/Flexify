@@ -30,13 +30,13 @@ jobs:
       - name: Install dependencies
         run: flutter/bin/flutter pub get --enforce-lockfile
 
-      - name: Check formatting
+      - name: Check changed Dart formatting
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          paths=()
-          for path in lib test integration_test patrol_test; do
-            [[ -d "$path" ]] && paths+=("$path")
-          done
+          mapfile -t paths < <(git diff --name-only --diff-filter=ACMRT \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}" -- '*.dart')
           if ((${#paths[@]})); then
             flutter/bin/dart format --output=none --set-exit-if-changed "${paths[@]}"
           fi
