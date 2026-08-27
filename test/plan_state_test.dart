@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter_test/flutter_test.dart';
