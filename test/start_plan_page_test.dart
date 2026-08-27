@@ -1,75 +1,42 @@
-import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
-import 'mock_tests.dart';
+import 'support/fixtures.dart';
+import 'support/test_app.dart';
 
-void main() async {
+void main() {
   testWidgets(
     'StartPlanPage rep estimation does not crash when no RPM data for exercise',
     (WidgetTester tester) async {
-      await mockTests();
-      db = testDb();
+      final harness = await FlexifyTestHarness.create();
+      final database = harness.database;
 
-      final id = await db.plans.insertOne(
-        PlansCompanion.insert(days: 'Monday'),
+      final id = await database.plans.insertOne(planFixture());
+      await database.planExercises.insertOne(
+        planExerciseFixture(planId: id, exercise: 'Bench press'),
       );
-      await db.planExercises.insertOne(
-        PlanExercisesCompanion.insert(
-          planId: id,
-          exercise: 'Bench press',
-          enabled: true,
+      await database.settings.update().write(
+        testSettings(
+          repEstimation: true,
+          explainedPermissions: true,
+          notificationPermissionRequested: true,
         ),
       );
 
-      // Enable rep estimation and skip permissions page
-      await db.settings.update().write(
-        const SettingsCompanion(
-          repEstimation: Value(true),
-          explainedPermissions: Value(true),
-          notificationPermissionRequested: Value(true),
-        ),
-      );
-      final settings = await (db.settings.select()..limit(1)).getSingle();
-      final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+      final plan = await (database.plans.select()
+            ..where((plan) => plan.id.equals(id)))
           .getSingle();
-      final planState = PlanState();
-      await planState.updateGymCounts(plan.id);
+      await harness.planState.updateGymCounts(plan.id);
+      await harness.pump(tester, StartPlanPage(plan: plan));
+      await tester.pumpAndSettle();
 
-      await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => SettingsState(settings),
-            ),
-            ChangeNotifierProvider(create: (context) => TimerState()),
-            ChangeNotifierProvider.value(value: planState),
-          ],
-          child: MaterialApp(
-            scaffoldMessengerKey: rootScaffoldMessenger,
-            home: StartPlanPage(plan: plan),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle(); // rpms loads as [] (no qualifying gym sets)
-
-      // Save a set to set lastSaved
       await tester.enterText(find.bySemanticsLabel('Reps'), '5');
       await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
       await tester.pumpAndSettle();
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
-      // Simulate app resume — triggers didChangeAppLifecycleState
-      // Before fix: throws StateError from reduce() on empty iterable
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pumpAndSettle();
     },
@@ -78,255 +45,106 @@ void main() async {
   testWidgets('StartPlanPage with no exercises does not crash on save', (
     WidgetTester tester,
   ) async {
-    await mockTests();
-    db = testDb();
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
 
-    final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
-    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+    final id = await database.plans.insertOne(planFixture());
+    await database.settings.update().write(
+      testSettings(explainedPermissions: true),
+    );
+    final plan = await (database.plans.select()
+          ..where((plan) => plan.id.equals(id)))
         .getSingle();
+    await harness.planState.updateGymCounts(plan.id);
 
-    await db.settings.update().write(
-      const SettingsCompanion(explainedPermissions: Value(true)),
-    );
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    final planState = PlanState();
-    await planState.updateGymCounts(plan.id);
-
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider.value(value: planState),
-        ],
-        child: MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(plan: plan),
-        ),
-      ),
-    );
-
+    await harness.pump(tester, StartPlanPage(plan: plan));
     await tester.pumpAndSettle();
 
-    // FAB must be hidden when the exercise list is empty
     expect(find.text('Save'), findsNothing);
   });
 
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
-    await tester.binding.setSurfaceSize(const Size(800, 1200));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await mockTests();
-    db = testDb();
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
 
-    await (db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Bench press',
+    await database.gymSets.insertAll([
+      gymSetFixture(
+        'Bench press',
         reps: 2,
         weight: 90,
-        unit: 'kg',
-        created: DateTime.now(),
-        category: Value("Chest"),
+        category: 'Chest',
       ),
-      GymSetsCompanion.insert(
-        name: 'Barbell row',
+      gymSetFixture(
+        'Barbell row',
         reps: 5,
         weight: 60,
-        unit: 'kg',
-        created: DateTime.now(),
-        category: Value("Shoulders"),
+        category: 'Shoulders',
       ),
-      GymSetsCompanion.insert(
-        name: 'Squat',
-        reps: 7,
-        weight: 100,
-        unit: 'kg',
-        created: DateTime.now(),
-        category: Value("Legs"),
-      ),
-    ]));
-
-    final planCompanion = PlansCompanion.insert(
-      days: 'Monday,Tuesday,Wednesday',
-    );
-    final id = await (db.plans.insertOne(planCompanion));
-    await db.planExercises.insertAll([
-      PlanExercisesCompanion.insert(
-        planId: id,
-        exercise: 'Bench press',
-        enabled: true,
-      ),
-      PlanExercisesCompanion.insert(
-        planId: id,
-        exercise: 'Barbell row',
-        enabled: true,
-      ),
-      PlanExercisesCompanion.insert(
-        planId: id,
-        exercise: 'Squat',
-        enabled: true,
-      ),
-    ]);
-    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
-        .getSingle();
-
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(plan: plan),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    expect(find.textContaining("Monday, Tuesday, Wednesday"), findsOne);
-    expect(find.textContaining("Bench press"), findsOne);
-    expect(find.textContaining("Barbell row"), findsOne);
-    expect(find.textContaining("Squat"), findsOne);
-  });
-
-  testWidgets('StartPlanPage selects', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-
-    await (db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Bench press',
-        reps: 2,
-        weight: 90,
-        unit: 'kg',
-        created: DateTime.now(),
-        category: Value("Chest"),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Barbell row',
-        reps: 5,
-        weight: 60,
-        unit: 'kg',
-        created: DateTime.now(),
-        category: Value("Shoulders"),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Squat',
-        reps: 7,
-        weight: 100,
-        unit: 'kg',
-        created: DateTime.now(),
-        category: Value("Legs"),
-      ),
-    ]));
-
-    final planCompanion = PlansCompanion.insert(
-      days: 'Monday,Tuesday,Wednesday',
-    );
-    final id = await (db.plans.insertOne(planCompanion));
-
-    await db.planExercises.insertAll([
-      PlanExercisesCompanion.insert(
-        planId: id,
-        exercise: 'Bench press',
-        enabled: true,
-      ),
-      PlanExercisesCompanion.insert(
-        planId: id,
-        exercise: 'Barbell row',
-        enabled: true,
-      ),
-      PlanExercisesCompanion.insert(
-        planId: id,
-        exercise: 'Squat',
-        enabled: true,
-      ),
+      gymSetFixture('Squat', reps: 7, weight: 100, category: 'Legs'),
     ]);
 
-    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+    final id = await database.plans.insertOne(
+      planFixture(days: 'Monday,Tuesday,Wednesday'),
+    );
+    await database.planExercises.insertAll([
+      planExerciseFixture(planId: id, exercise: 'Bench press'),
+      planExerciseFixture(planId: id, exercise: 'Barbell row'),
+      planExerciseFixture(planId: id, exercise: 'Squat'),
+    ]);
+    final plan = await (database.plans.select()
+          ..where((plan) => plan.id.equals(id)))
         .getSingle();
 
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(plan: plan),
-        ),
-      ),
+    await harness.pump(
+      tester,
+      StartPlanPage(plan: plan),
+      surfaceSize: const Size(800, 1200),
     );
-
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Barbell row'));
-    await tester.pumpAndSettle();
+    expect(find.textContaining('Monday, Tuesday, Wednesday'), findsOne);
+    expect(find.textContaining('Bench press'), findsOne);
+    expect(find.textContaining('Barbell row'), findsOne);
+    expect(find.textContaining('Squat'), findsOne);
   });
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
 
-    final planCompanion = PlansCompanion.insert(
-      days: 'Monday,Tuesday,Wednesday',
+    final id = await database.plans.insertOne(
+      planFixture(days: 'Monday,Tuesday,Wednesday'),
     );
-    final id = await (db.plans.insertOne(planCompanion));
-    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+    final plan = await (database.plans.select()
+          ..where((plan) => plan.id.equals(id)))
         .getSingle();
 
-    await db.planExercises.insertAll([
-      PlanExercisesCompanion.insert(
+    await database.planExercises.insertAll([
+      planExerciseFixture(
         planId: plan.id,
         exercise: 'Barbell bench press',
-        enabled: true,
-        sequence: Value(0),
+        sequence: 0,
       ),
-      PlanExercisesCompanion.insert(
+      planExerciseFixture(
         planId: plan.id,
         exercise: 'Barbell bent-over row',
-        enabled: true,
-        sequence: Value(1),
+        sequence: 1,
       ),
-      PlanExercisesCompanion.insert(
+      planExerciseFixture(
         planId: plan.id,
         exercise: 'Crunch',
-        enabled: true,
-        sequence: Value(2),
+        sequence: 2,
       ),
     ]);
-
-    await db.settings.update().write(
-      SettingsCompanion(
-        explainedPermissions: Value(true),
-        notificationPermissionRequested: Value(true),
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
       ),
     );
-    final settings = await (db.settings.select()..limit(1)).getSingle();
+    await harness.planState.updateGymCounts(plan.id);
 
-    final planState = PlanState();
-    await planState.updateGymCounts(plan.id);
-
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider.value(value: planState),
-        ],
-        child: MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(plan: plan),
-        ),
-      ),
-    );
-
+    await harness.pump(tester, StartPlanPage(plan: plan));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
@@ -334,64 +152,43 @@ void main() async {
     await tester.pumpAndSettle();
     expect(find.text('50'), findsOne);
 
-    final save = find.text('Save');
-    await tester.tap(save);
+    await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    final gymSets =
-        await (db.gymSets.select()
-              ..where((u) => u.name.equals('Barbell bench press')))
-            .get();
-
+    final gymSets = await (database.gymSets.select()
+          ..where((set) => set.name.equals('Barbell bench press')))
+        .get();
     expect(gymSets.length, equals(2));
   });
 
   testWidgets('StartPlanPage shows this-session sets after saving', (
     WidgetTester tester,
   ) async {
-    await tester.binding.setSurfaceSize(const Size(800, 1200));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await mockTests();
-    db = testDb();
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
 
-    final id = await db.plans.insertOne(PlansCompanion.insert(days: 'Monday'));
-    final plan = await (db.plans.select()..where((u) => u.id.equals(id)))
+    final id = await database.plans.insertOne(planFixture());
+    final plan = await (database.plans.select()
+          ..where((plan) => plan.id.equals(id)))
         .getSingle();
-    await db.planExercises.insertOne(
-      PlanExercisesCompanion.insert(
-        planId: plan.id,
-        exercise: 'Bench press',
-        enabled: true,
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: plan.id, exercise: 'Bench press'),
+    );
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
       ),
     );
+    await harness.planState.updateGymCounts(plan.id);
 
-    await db.settings.update().write(
-      const SettingsCompanion(
-        explainedPermissions: Value(true),
-        notificationPermissionRequested: Value(true),
-      ),
+    await harness.pump(
+      tester,
+      StartPlanPage(plan: plan),
+      surfaceSize: const Size(800, 1200),
     );
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    final planState = PlanState();
-    await planState.updateGymCounts(plan.id);
-
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider.value(value: planState),
-        ],
-        child: MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessenger,
-          home: StartPlanPage(plan: plan),
-        ),
-      ),
-    );
-
     await tester.pumpAndSettle();
 
-    // Nothing logged yet — no session strip.
     expect(find.text('Set 1'), findsNothing);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
@@ -400,7 +197,6 @@ void main() async {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    // The saved set now appears in the this-session strip.
     expect(find.text('Set 1'), findsOne);
     expect(find.text('50 kg × 5'), findsOne);
   });
