@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
