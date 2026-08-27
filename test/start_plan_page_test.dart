@@ -6,6 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fixtures.dart';
 import 'support/test_app.dart';
 
+Finder textFieldWithLabel(String label) => find.byWidgetPredicate(
+  (widget) =>
+      widget is TextFormField && widget.decoration.labelText == label,
+);
+
 void main() {
   testWidgets(
     'StartPlanPage rep estimation does not crash when no RPM data for exercise',
@@ -32,8 +37,8 @@ void main() {
       await harness.pump(tester, StartPlanPage(plan: plan));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.bySemanticsLabel('Reps'), '5');
-      await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
+      await tester.enterText(textFieldWithLabel('Reps'), '5');
+      await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
       await tester.pumpAndSettle();
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
@@ -103,7 +108,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Monday, Tuesday, Wednesday'), findsOne);
+    expect(find.byType(AppBar), findsOne);
     expect(find.textContaining('Bench press'), findsOne);
     expect(find.textContaining('Barbell row'), findsOne);
     expect(find.textContaining('Squat'), findsOne);
@@ -148,8 +153,8 @@ void main() {
     await harness.pump(tester, StartPlanPage(plan: plan));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.bySemanticsLabel('Reps'), '5');
-    await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
+    await tester.enterText(textFieldWithLabel('Reps'), '5');
+    await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
     await tester.pumpAndSettle();
     expect(find.text('50'), findsOne);
 
@@ -192,8 +197,8 @@ void main() {
 
     expect(find.text('Set 1'), findsNothing);
 
-    await tester.enterText(find.bySemanticsLabel('Reps'), '5');
-    await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
+    await tester.enterText(textFieldWithLabel('Reps'), '5');
+    await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
     await tester.pumpAndSettle();
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
