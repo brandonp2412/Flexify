@@ -8,6 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  frisbee_flutter_foundation:
+    path: packages/flutter_foundation
   cupertino_icons: ^1.0.2
   drift: ^2.34.3
   path_provider: ^2.1.2

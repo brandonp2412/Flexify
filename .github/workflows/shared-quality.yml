@@ -1,0 +1,10 @@
+name: Shared Flutter quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    uses: ./.github/workflows/flutter-quality.yml
