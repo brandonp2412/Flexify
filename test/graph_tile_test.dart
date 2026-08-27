@@ -1,45 +1,30 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graph_tile.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
 import 'mock_tab_controller.dart';
-import 'mock_tests.dart';
+import 'support/test_app.dart';
 
-void main() async {
+void main() {
   testWidgets('GraphTile', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: GraphTile(
-              tabCtrl: MockTabController(),
-              onSelect: (value) => null,
-              selected: const {},
-              gymSet: GymSetsCompanion(
-                name: const Value("Bench press"),
-                created: Value(DateTime.now()),
-                reps: const Value(5),
-                weight: const Value(20),
-                cardio: const Value(false),
-                unit: const Value('kg'),
-              ),
-            ),
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(
+      tester,
+      Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GraphTile(
+          tabCtrl: MockTabController(),
+          onSelect: (value) => null,
+          selected: const {},
+          gymSet: GymSetsCompanion(
+            name: const Value('Bench press'),
+            created: Value(DateTime.now()),
+            reps: const Value(5),
+            weight: const Value(20),
+            cardio: const Value(false),
+            unit: const Value('kg'),
           ),
         ),
       ),
