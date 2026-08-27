@@ -80,7 +80,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: ${{ matrix.profile }}
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu software -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: ./scripts/ci-screenshots.sh
 
       - name: Upload ${{ matrix.device_type }}
@@ -130,7 +130,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_6
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu software -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: ./scripts/ci-patrol.sh
 
   version-bump:

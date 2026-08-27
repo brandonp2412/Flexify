@@ -19,6 +19,7 @@ mkdir -p "$screenshot_dir"
 drive_log=$(mktemp)
 drive_status=0
 flutter drive --profile \
+  --no-enable-impeller \
   --driver=test_driver/integration_test.dart \
   --target=integration_test/screenshot_test.dart \
   -d "emulator-$EMULATOR_PORT" >"$drive_log" 2>&1 || drive_status=$?
