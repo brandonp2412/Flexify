@@ -41,7 +41,7 @@ class _WhatsNewState extends State<WhatsNew> {
 
     final files = manifest
         .listAssets()
-        .where((key) => key.startsWith('assets/_changelogs/'))
+        .where((key) => key.startsWith('assets/changelogs/'))
         .toList();
 
     files.sort((a, b) {
