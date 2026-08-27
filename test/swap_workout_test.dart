@@ -1,40 +1,24 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/swap_workout.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
-import 'mock_tests.dart';
+import 'support/test_app.dart';
 
-void main() async {
+void main() {
   testWidgets('SwapWorkout', (WidgetTester tester) async {
-    await mockTests();
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    final plan = await (db.plans.select()..limit(1)).getSingle();
-    final planExercises =
-        await (db.planExercises.select()
-              ..where((u) => u.planId.equals(plan.id)))
-            .get();
+    final harness = await FlexifyTestHarness.create();
+    final plan = await (harness.database.plans.select()..limit(1)).getSingle();
+    final planExercises = await (harness.database.planExercises.select()
+          ..where((exercise) => exercise.planId.equals(plan.id)))
+        .get();
 
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: SwapWorkout(
-              exercise: planExercises.first.exercise,
-              planId: plan.id,
-            ),
-          ),
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: SwapWorkout(
+          exercise: planExercises.first.exercise,
+          planId: plan.id,
         ),
       ),
     );
