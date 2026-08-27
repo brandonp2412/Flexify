@@ -1,61 +1,29 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
 import 'mock_tests.dart';
+import 'support/fixtures.dart';
+import 'support/test_app.dart';
 
-void main() async {
+void main() {
   testWidgets(
     'saving a set does not start a rest timer when restTimers is off (#308)',
     (WidgetTester tester) async {
-      await mockTests();
-      db = testDb();
-      final timerState = TimerState();
-
-      final settings = await (db.settings.select()..limit(1)).getSingle();
+      final harness = await FlexifyTestHarness.create();
+      final timerState = harness.timerState;
+      final settings = await (harness.database.settings.select()..limit(1))
+          .getSingle();
       expect(settings.restTimers, false);
 
-      await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => SettingsState(settings),
-            ),
-            ChangeNotifierProvider.value(value: timerState),
-            ChangeNotifierProvider(create: (context) => PlanState()),
-          ],
-          child: MaterialApp(
-            home: EditSetPage(
-              gymSet: GymSet(
-                id: 0,
-                name: 'Bench press',
-                reps: 2,
-                weight: 3,
-                unit: 'kg',
-                created: DateTime.now(),
-                hidden: false,
-                bodyWeight: 0,
-                duration: 0,
-                distance: 0,
-                cardio: false,
-              ),
-            ),
-          ),
-        ),
+      await harness.pump(
+        tester,
+        EditSetPage(gymSet: gymSetModelFixture()),
       );
 
-      final reps = find.bySemanticsLabel('Reps');
-      final weight = find.bySemanticsLabel('Weight (kg)');
-      await tester.enterText(reps, '10');
-      await tester.enterText(weight, '50');
-
+      await tester.enterText(find.bySemanticsLabel('Reps'), '10');
+      await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
@@ -113,50 +81,23 @@ void main() async {
     'saving a set starts a rest timer using the exercise default duration '
     'when restTimers is on',
     (WidgetTester tester) async {
-      await mockTests();
-      db = testDb();
-      final timerState = TimerState();
+      final harness = await FlexifyTestHarness.create();
+      final timerState = harness.timerState;
 
-      await db
-          .update(db.settings)
-          .write(const SettingsCompanion(restTimers: Value(true)));
-      final settings = await (db.settings.select()..limit(1)).getSingle();
+      await harness.database.settings.update().write(
+        testSettings(restTimers: true),
+      );
+      final settings = await (harness.database.settings.select()..limit(1))
+          .getSingle();
       expect(settings.restTimers, true);
 
-      await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => SettingsState(settings),
-            ),
-            ChangeNotifierProvider.value(value: timerState),
-            ChangeNotifierProvider(create: (context) => PlanState()),
-          ],
-          child: MaterialApp(
-            home: EditSetPage(
-              gymSet: GymSet(
-                id: 0,
-                name: 'Bench press',
-                reps: 2,
-                weight: 3,
-                unit: 'kg',
-                created: DateTime.now(),
-                hidden: false,
-                bodyWeight: 0,
-                duration: 0,
-                distance: 0,
-                cardio: false,
-              ),
-            ),
-          ),
-        ),
+      await harness.pump(
+        tester,
+        EditSetPage(gymSet: gymSetModelFixture()),
       );
 
-      final reps = find.bySemanticsLabel('Reps');
-      final weight = find.bySemanticsLabel('Weight (kg)');
-      await tester.enterText(reps, '10');
-      await tester.enterText(weight, '50');
-
+      await tester.enterText(find.bySemanticsLabel('Reps'), '10');
+      await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
