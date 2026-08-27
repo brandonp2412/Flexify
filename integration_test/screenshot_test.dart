@@ -97,9 +97,6 @@ bool _skip(String name) => _only.isNotEmpty && _only != name;
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  var deviceType = const String.fromEnvironment('FLEXIFY_DEVICE_TYPE');
-  if (deviceType.isEmpty) deviceType = 'desktop';
-
   setUpAll(() async {
     app.db = AppDatabase();
     app.androidChannel = const MethodChannel('com.presley.flexify/timer');
