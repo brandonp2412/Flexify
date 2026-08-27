@@ -16,14 +16,39 @@ screenshot_dir="fastlane/metadata/android/en-US/images/$FLEXIFY_DEVICE_TYPE"
 rm -rf "$screenshot_dir"
 mkdir -p "$screenshot_dir"
 
-drive_log=$(mktemp)
-drive_status=0
-flutter drive --profile \
-  --no-enable-impeller \
-  --driver=test_driver/integration_test.dart \
-  --target=integration_test/screenshot_test.dart \
-  -d "emulator-$EMULATOR_PORT" >"$drive_log" 2>&1 || drive_status=$?
-cat "$drive_log"
+run_drive() {
+  drive_log=$(mktemp)
+  drive_status=0
+  flutter drive --profile \
+    --no-enable-impeller \
+    --driver=test_driver/integration_test.dart \
+    --target=integration_test/screenshot_test.dart \
+    -d "emulator-$EMULATOR_PORT" >"$drive_log" 2>&1 || drive_status=$?
+  cat "$drive_log"
+}
+
+screenshots_complete() {
+  for number in $(seq 1 8); do
+    if [ ! -s "$screenshot_dir/${number}_en-US.png" ]; then
+      return 1
+    fi
+  done
+  return 0
+}
+
+run_drive
+
+if ! screenshots_complete; then
+  echo "Screenshot set incomplete; attempting one clean retry" >&2
+  rm -rf "$screenshot_dir"
+  mkdir -p "$screenshot_dir"
+
+  adb reconnect offline >/dev/null 2>&1 || true
+  adb -s "emulator-$EMULATOR_PORT" wait-for-device >/dev/null 2>&1 || true
+  sleep 2
+
+  run_drive
+fi
 
 for number in $(seq 1 8); do
   if [ ! -s "$screenshot_dir/${number}_en-US.png" ]; then
