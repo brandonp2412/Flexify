@@ -1,57 +1,35 @@
-import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/history_list.dart';
-import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 
-import 'mock_tests.dart';
+import 'support/fixtures.dart';
+import 'support/test_app.dart';
 
-void main() async {
-  await mockTests();
-
+void main() {
   testWidgets('HistoryList', (WidgetTester tester) async {
-    db = testDb();
-    final settings = await (db.settings.select()..limit(1)).getSingle();
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => SettingsState(settings)),
-          ChangeNotifierProvider(create: (context) => TimerState()),
-          ChangeNotifierProvider(create: (context) => PlanState()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: HistoryList(
-              scroll: ScrollController(),
-              sets: [
-                GymSet(
-                  id: 1,
-                  name: 'Bench press',
-                  reps: 2,
-                  weight: 3,
-                  unit: 'kg',
-                  created: DateTime.now(),
-                  hidden: false,
-                  bodyWeight: 54,
-                  duration: 8,
-                  distance: 9,
-                  cardio: false,
-                ),
-              ],
-              onNext: () {},
-              onSelect: (value) {},
-              selected: const {},
+    final harness = await FlexifyTestHarness.create();
+    final scroll = ScrollController();
+    addTearDown(scroll.dispose);
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: HistoryList(
+          scroll: scroll,
+          sets: [
+            gymSetModelFixture(
+              id: 1,
+              bodyWeight: 54,
+              duration: 8,
+              distance: 9,
             ),
-          ),
+          ],
+          onNext: () {},
+          onSelect: (value) {},
+          selected: const {},
         ),
       ),
     );
-
     await tester.pumpAndSettle();
 
     expect(find.text('Bench press'), findsOne);
