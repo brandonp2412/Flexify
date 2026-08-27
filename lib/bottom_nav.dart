@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Total height this floating dock occupies, including outer padding.
-const double bottomNavHeight = 80;
+/// Total fixed height occupied by the navigation pill and its visual padding.
+/// The device bottom safe-area inset is added separately by [BottomNav].
+const double bottomNavHeight = 60 + 32;
 
 /// Variant 1: "Pill dock" — a compact centered pill where the selected tab
 /// expands horizontally to reveal its label while unselected tabs collapse
@@ -9,8 +10,8 @@ const double bottomNavHeight = 80;
 class BottomNav extends StatelessWidget {
   final List<String> tabs;
   final int currentIndex;
-  final Function(int) onTap;
-  final Function(BuildContext, String)? onLongPress;
+  final ValueChanged<int> onTap;
+  final void Function(BuildContext, String)? onLongPress;
 
   const BottomNav({
     super.key,
@@ -23,10 +24,12 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
+    final systemBottomInset = MediaQuery.paddingOf(context).bottom;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, systemBottomInset + 16),
       child: Center(
+        heightFactor: 1,
         child: Container(
           height: 60,
           padding: const EdgeInsets.all(6),
