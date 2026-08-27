@@ -1,0 +1,54 @@
+name: Promote verified timer screenshots
+
+on:
+  push:
+    branches: [promote-timer-screenshots]
+    paths:
+      - ".github/workflows/promote-timer-screenshots.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download verified screenshot artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          rm -rf /tmp/flexify-screenshots
+          mkdir -p /tmp/flexify-screenshots/{phone,seven,ten}
+          gh run download 33037154163 -R "$GITHUB_REPOSITORY" -n screenshots-phoneScreenshots -D /tmp/flexify-screenshots/phone
+          gh run download 33037154163 -R "$GITHUB_REPOSITORY" -n screenshots-sevenInchScreenshots -D /tmp/flexify-screenshots/seven
+          gh run download 33037154163 -R "$GITHUB_REPOSITORY" -n screenshots-tenInchScreenshots -D /tmp/flexify-screenshots/ten
+
+      - name: Promote timer screenshots to main
+        run: |
+          cp /tmp/flexify-screenshots/phone/8_en-US.png fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png
+          cp /tmp/flexify-screenshots/seven/8_en-US.png fastlane/metadata/android/en-US/images/sevenInchScreenshots/8_en-US.png
+          cp /tmp/flexify-screenshots/ten/8_en-US.png fastlane/metadata/android/en-US/images/tenInchScreenshots/8_en-US.png
+
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add \
+            fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png \
+            fastlane/metadata/android/en-US/images/sevenInchScreenshots/8_en-US.png \
+            fastlane/metadata/android/en-US/images/tenInchScreenshots/8_en-US.png
+
+          if git diff --cached --quiet; then
+            echo "Verified screenshots are already on main"
+            exit 0
+          fi
+
+          git commit -m "fix: update verified timer screenshots [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
