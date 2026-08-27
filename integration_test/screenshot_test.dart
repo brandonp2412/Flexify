@@ -176,21 +176,23 @@ void main() {
         tester: tester,
         screenshotName: '5_en-US',
         navigateToPage: (context) async {
+          final data = await getStrengthData(
+            target: 'kg',
+            name: screenshotExercise,
+            metric: StrengthMetric.bestWeight,
+            period: Period.day,
+            start: null,
+            end: null,
+            limit: 11,
+          );
+          if (!context.mounted) return;
           navigateTo(
             context: context,
             page: StrengthPage(
               tabCtrl: MockTabController(),
               name: screenshotExercise,
               unit: 'kg',
-              data: await getStrengthData(
-                target: 'kg',
-                name: screenshotExercise,
-                metric: StrengthMetric.bestWeight,
-                period: Period.day,
-                start: null,
-                end: null,
-                limit: 11,
-              ),
+              data: data,
             ),
           );
         },
