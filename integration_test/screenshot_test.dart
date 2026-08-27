@@ -417,8 +417,6 @@ void main() {
         navigateToPage: (context) async {
           context.read<TimerState>().setTimer(60, 7);
           await tester.pump();
-          if (!context.mounted) return;
-          await tester.pump(const Duration(seconds: 7));
         },
         tabBarState: 'TimerPage',
       ),
