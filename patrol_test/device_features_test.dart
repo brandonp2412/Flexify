@@ -38,8 +38,10 @@ void main() {
         await $.platform.mobile.grantPermissionWhenInUse();
       }
 
+      // "Use this folder" is the action specific to ACTION_OPEN_DOCUMENT_TREE.
+      // The optional "New folder" menu item can be hidden by DocumentsUI.
       await $.platform.android.waitUntilVisible(
-        const AndroidSelector(contentDescription: 'New folder'),
+        const AndroidSelector(text: 'Use this folder'),
         timeout: const Duration(seconds: 10),
       );
 
