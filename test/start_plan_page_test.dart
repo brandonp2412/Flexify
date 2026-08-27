@@ -1,15 +1,18 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/stepper_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fixtures.dart';
 import 'support/test_app.dart';
 
-Finder textFieldWithLabel(String label) => find.byWidgetPredicate(
-  (widget) =>
-      widget is TextFormField && widget.decoration.labelText == label,
-);
+Finder textFieldWithLabel(String label) => find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) => widget is StepperField && widget.labelText == label,
+      ),
+      matching: find.byType(EditableText),
+    );
 
 void main() {
   testWidgets(
