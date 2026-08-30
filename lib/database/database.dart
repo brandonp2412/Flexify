@@ -32,7 +32,11 @@ LazyDatabase openConnection() {
   tables: [Plans, GymSets, Settings, PlanExercises, Metadata, GraphPreferences],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase([QueryExecutor? executor]) : super(executor ?? openConnection());
+  /// Creates a database backed by the provided [executor].
+  AppDatabase(super.executor);
+
+  /// Opens Flexify's persistent application database.
+  AppDatabase.persistent() : super(openConnection());
 
   @override
   MigrationStrategy get migration {

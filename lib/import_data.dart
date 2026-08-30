@@ -135,7 +135,7 @@ $version
     await db.close();
 
     await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
-    db = AppDatabase();
+    db = AppDatabase.persistent();
     dbVersion.value++;
     talker.info('Imported Flexify database backup');
 

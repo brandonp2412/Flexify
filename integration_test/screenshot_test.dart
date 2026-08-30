@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 
 import '../test/mock_tab_controller.dart';
 import '../test/support/graph_fixtures.dart';
+import 'test_database.dart';
 
 Future<void> appWrapper(WidgetTester tester) async {
   await app.db.settings.update().write(
@@ -96,9 +97,11 @@ bool _skip(String name) => _only.isNotEmpty && _only != name;
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  late AppDatabase database;
 
   setUpAll(() async {
-    app.db = AppDatabase();
+    database = createIntegrationTestDatabase();
+    app.db = database;
     app.androidChannel = const MethodChannel('com.presley.flexify/timer');
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.androidChannel, (message) => null);
@@ -110,6 +113,10 @@ void main() {
     await seedGraphFixtures(app.db);
     await db.plans.insertAll(screenshotPlans);
     await db.planExercises.insertAll(screenshotPlanExercises);
+  });
+
+  tearDownAll(() async {
+    await database.close();
   });
 
   group('Generate default screenshots ', () {

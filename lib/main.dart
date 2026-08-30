@@ -45,7 +45,7 @@ Future<void> main() async {
   );
 }
 
-AppDatabase db = AppDatabase();
+AppDatabase db = AppDatabase.persistent();
 
 /// Bumped whenever [db] is replaced with a new instance (e.g. after
 /// importing a database), so widgets holding a `.watch()` stream tied to
