@@ -1,0 +1,49 @@
+name: Finalize Microsoft Store rollout
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: flexify-msstore-rollout
+  cancel-in-progress: true
+
+jobs:
+  finalize:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Setup Microsoft Store CLI
+        uses: microsoft/setup-msstore-cli@v1
+
+      - name: Configure Microsoft Store CLI
+        shell: pwsh
+        run: msstore reconfigure --tenantId "${{ secrets.AZURE_TENANT_ID }}" --clientId "${{ secrets.AZURE_CLIENT_ID }}" --clientSecret "${{ secrets.AZURE_CLIENT_SECRET }}" --sellerId "${{ secrets.SELLER_ID }}"
+
+      - name: Finalize completed rollout
+        id: finalize
+        shell: pwsh
+        run: ./scripts/finalize-msstore-rollout.ps1 -ProductId "${{ secrets.PRODUCT_ID }}"
+
+      - name: Disable finalization checks until the next Store publish
+        if: steps.finalize.outputs.finalized == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.disableWorkflow({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'finalize-msstore-rollout.yml',
+            });

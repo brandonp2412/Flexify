@@ -490,6 +490,9 @@ jobs:
   deploy-windows-store:
     needs: [version-bump, build-windows]
     runs-on: windows-latest
+    permissions:
+      actions: write
+      contents: read
     steps:
       - uses: actions/checkout@v5
         with:
@@ -524,7 +527,35 @@ jobs:
         run: msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.AZURE_CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
 
       - name: Publish to Microsoft Store
-        run: msstore publish --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }} --packageRolloutPercentage 100 || true
+        id: publish_msstore
+        shell: pwsh
+        run: |
+          msstore publish --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }} --packageRolloutPercentage 100
+          if ($LASTEXITCODE -eq 0) {
+            "published=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            "published=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Warning "Microsoft Store publish failed; preserving the existing non-blocking release behavior."
+          }
+
+      - name: Start Microsoft Store finalization checks
+        if: steps.publish_msstore.outputs.published == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const workflowId = 'finalize-msstore-rollout.yml';
+            await github.rest.actions.enableWorkflow({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: workflowId,
+            });
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: workflowId,
+              ref: 'main',
+            });
 
   virustotal:
     needs: [create-github-release, version-bump]
