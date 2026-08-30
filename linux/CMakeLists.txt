@@ -48,6 +48,11 @@ endfunction()
 
 # Flutter library and tool build rules.
 set(FLUTTER_MANAGED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/flutter")
+file(STRINGS "${FLUTTER_MANAGED_DIR}/ephemeral/generated_config.cmake"
+  FLUTTER_TARGET_CONFIG REGEX "FLUTTER_TARGET=")
+if(FLUTTER_TARGET_CONFIG MATCHES "integration_test/|flutter_test_listener\\.")
+  set(APPLICATION_ID "window0.hidden")
+endif()
 add_subdirectory(${FLUTTER_MANAGED_DIR})
 
 # System-level dependencies.

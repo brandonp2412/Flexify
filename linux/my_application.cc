@@ -97,8 +97,15 @@ static void my_application_class_init(MyApplicationClass* klass) {
 static void my_application_init(MyApplication* self) {}
 
 MyApplication* my_application_new() {
+  const gchar* dwl_app_id = g_getenv("DWL_APP_ID");
+  const gchar* application_id =
+      dwl_app_id != nullptr && dwl_app_id[0] != '\0' ? dwl_app_id : APPLICATION_ID;
+  if (dwl_app_id != nullptr && dwl_app_id[0] != '\0') {
+    g_set_prgname(application_id);
+  }
+
   return MY_APPLICATION(g_object_new(my_application_get_type(),
-                                     "application-id", APPLICATION_ID,
+                                     "application-id", application_id,
                                      "flags", G_APPLICATION_NON_UNIQUE,
                                      nullptr));
 }
