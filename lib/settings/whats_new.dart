@@ -30,6 +30,7 @@ class _WhatsNewState extends State<WhatsNew> {
 
   void setChangelogs() async {
     final logs = await getChangelogFiles(context);
+    if (!mounted) return;
     setState(() {
       _changelogs = logs;
     });

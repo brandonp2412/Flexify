@@ -206,8 +206,11 @@ class _StrengthPageState extends State<StrengthPage> {
 
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      GraphHistoryPage(name: name, gymSets: gymSets),
+                  builder: (context) => GraphHistoryPage(
+                    name: name,
+                    gymSets: gymSets,
+                    tabController: widget.tabCtrl,
+                  ),
                 ),
               );
               _refreshTimer?.cancel();
@@ -446,7 +449,7 @@ class _StrengthPageState extends State<StrengthPage> {
                             hint: settings.shortDateFormat,
                             onTap: () async {
                               await _selectStart();
-                              setSheet(() {});
+                              if (sheetContext.mounted) setSheet(() {});
                             },
                             onClear: () {
                               setState(() {
@@ -465,7 +468,7 @@ class _StrengthPageState extends State<StrengthPage> {
                             hint: settings.shortDateFormat,
                             onTap: () async {
                               await _selectEnd();
-                              setSheet(() {});
+                              if (sheetContext.mounted) setSheet(() {});
                             },
                             onClear: () {
                               setState(() {
@@ -682,7 +685,8 @@ class _StrengthPageState extends State<StrengthPage> {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet!)),
     );
-    Timer(kThemeAnimationDuration, setData);
+    _refreshTimer?.cancel();
+    _refreshTimer = Timer(kThemeAnimationDuration, setData);
   }
 
   Future<void> _selectEnd() async {
@@ -693,7 +697,7 @@ class _StrengthPageState extends State<StrengthPage> {
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate == null) return;
+    if (pickedDate == null || !mounted) return;
 
     setState(() {
       end = pickedDate;
@@ -709,7 +713,7 @@ class _StrengthPageState extends State<StrengthPage> {
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate == null) return;
+    if (pickedDate == null || !mounted) return;
 
     setState(() {
       start = pickedDate;

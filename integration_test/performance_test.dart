@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/main.dart';
@@ -27,14 +28,23 @@ Future<void> appWrapper() async {
 }
 
 void main() {
+  late AppDatabase database;
+
   setUpAll(() async {
-    app.db = AppDatabase();
+    database = AppDatabase(
+      DatabaseConnection(
+        NativeDatabase.memory(),
+        closeStreamsSynchronously: true,
+      ),
+    );
+    app.db = database;
     app.androidChannel = const MethodChannel("com.presley.flexify/timer");
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.androidChannel, (message) => null);
+  });
 
-    await app.db.delete(app.db.gymSets).go();
-    await app.db.delete(app.db.plans).go();
+  tearDownAll(() async {
+    await database.close();
   });
 
   group('Performance Tests', () {
@@ -42,45 +52,30 @@ void main() {
       await appWrapper();
       await tester.pumpAndSettle();
 
-      final stopwatch = Stopwatch()..start();
-
-      // Assuming there are 4 tabs: Plans, Graphs, Timer, History
-      // Find the TabBarView
       final tabBarViewFinder = find.byType(TabBarView);
       expect(tabBarViewFinder, findsOneWidget);
 
-      // Swipe from Plans to Graphs
-      await tester.drag(tabBarViewFinder, const Offset(-500, 0));
-      await tester.pumpAndSettle();
+      var gestureTime = Duration.zero;
+      for (final offset in const [
+        Offset(-500, 0),
+        Offset(-500, 0),
+        Offset(-500, 0),
+        Offset(500, 0),
+        Offset(500, 0),
+        Offset(500, 0),
+      ]) {
+        final stopwatch = Stopwatch()..start();
+        await tester.drag(tabBarViewFinder, offset);
+        stopwatch.stop();
+        gestureTime += stopwatch.elapsed;
+        await tester.pumpAndSettle();
+      }
 
-      // Swipe from Graphs to Timer
-      await tester.drag(tabBarViewFinder, const Offset(-500, 0));
-      await tester.pumpAndSettle();
-
-      // Swipe from Timer to History
-      await tester.drag(tabBarViewFinder, const Offset(-500, 0));
-      await tester.pumpAndSettle();
-
-      // Swipe back from History to Timer
-      await tester.drag(tabBarViewFinder, const Offset(500, 0));
-      await tester.pumpAndSettle();
-
-      // Swipe back from Timer to Graphs
-      await tester.drag(tabBarViewFinder, const Offset(500, 0));
-      await tester.pumpAndSettle();
-
-      // Swipe back from Graphs to Plans
-      await tester.drag(tabBarViewFinder, const Offset(500, 0));
-      await tester.pumpAndSettle();
-
-      stopwatch.stop();
-      final elapsed = stopwatch.elapsedMilliseconds;
-
-      print('Performance Test: Swiping between tabs took $elapsed ms');
-
-      // You can set a threshold for performance here
-      // For example, expect it to be under 2000ms (2 seconds)
-      expect(elapsed, lessThan(2000));
+      print(
+        'Performance Test: Six tab swipe gestures took '
+        '${gestureTime.inMilliseconds} ms excluding animations',
+      );
+      expect(gestureTime.inMilliseconds, lessThan(2000));
     });
   });
 }

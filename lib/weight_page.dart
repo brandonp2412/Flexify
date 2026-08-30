@@ -26,7 +26,7 @@ class _WeightPageState extends State<WeightPage> {
 
   void pick() async {
     FilePickerResult? result = await FilePicker.pickFiles();
-    if (result?.files.single == null) return;
+    if (result?.files.single == null || !mounted) return;
 
     setState(() {
       _image = result?.files.single.path;
@@ -75,7 +75,7 @@ class _WeightPageState extends State<WeightPage> {
               ),
               const SizedBox(height: 8),
               TextFormField(
-                controller: TextEditingController(text: _prev),
+                initialValue: _prev,
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),

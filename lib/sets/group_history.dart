@@ -63,8 +63,8 @@ class _GroupHistoryState extends State<GroupHistory> {
 
   @override
   void dispose() {
-    super.dispose();
     widget.scroll.removeListener(scrollListener);
+    super.dispose();
   }
 
   List<Widget> historyChildren(

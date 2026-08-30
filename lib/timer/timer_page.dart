@@ -13,8 +13,9 @@ import 'package:provider/provider.dart';
 class TimerPage extends StatefulWidget {
   final int? total;
   final int? progress;
+  final TabController? tabController;
 
-  const TimerPage({super.key, this.total, this.progress});
+  const TimerPage({super.key, this.total, this.progress, this.tabController});
 
   @override
   createState() => TimerPageState();
@@ -35,10 +36,12 @@ class TimerPageState extends State<TimerPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (_navKey.currentState!.canPop() == false) return;
-        final ctrl = DefaultTabController.of(context);
         final settings = context.read<SettingsState>().value;
         final index = settings.tabs.split(',').indexOf('TimerPage');
-        if (ctrl.index == index) _navKey.currentState!.pop();
+        final tabController = widget.tabController;
+        if (tabController == null || tabController.index == index) {
+          _navKey.currentState!.pop();
+        }
       },
       child: Navigator(
         key: _navKey,

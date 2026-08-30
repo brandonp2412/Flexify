@@ -157,7 +157,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   void pick() async {
     FilePickerResult? result = await FilePicker.pickFiles();
-    if (result?.files.single == null) return;
+    if (result?.files.single == null || !mounted) return;
 
     setState(() {
       _image = result?.files.single.path;

@@ -53,15 +53,7 @@ class _PlansListState extends State<PlansList> {
   }
 
   void _updateFilteredPlans() {
-    if (widget.plans == null) {
-      _filteredPlans = [];
-      return;
-    }
-    final term = widget.search.toLowerCase();
-    _filteredPlans = widget.plans!.where((plan) {
-      return plan.title?.toLowerCase().contains(term) == true ||
-          plan.days.toLowerCase().contains(term);
-    }).toList();
+    _filteredPlans = widget.plans?.toList() ?? [];
   }
 
   @override

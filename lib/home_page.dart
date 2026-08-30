@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 else if (tab == 'GraphsPage')
                   return GraphsPage(tabController: _controller);
                 else if (tab == 'TimerPage')
-                  return const TimerPage();
+                  return TimerPage(tabController: _controller);
                 else if (tab == 'SettingsPage')
                   return const SettingsPage();
                 else

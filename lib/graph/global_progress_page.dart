@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class GlobalProgressPage extends StatefulWidget {
-  const GlobalProgressPage({super.key});
+  final TabController tabController;
+
+  const GlobalProgressPage({super.key, required this.tabController});
 
   @override
   State<GlobalProgressPage> createState() => _GlobalProgressPageState();
@@ -32,10 +34,8 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     super.initState();
     setData();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      tabController = DefaultTabController.of(context);
-      tabController?.addListener(tabListener);
-    });
+    tabController = widget.tabController;
+    tabController?.addListener(tabListener);
   }
 
   void tabListener() {
@@ -62,6 +62,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       limit: limit,
     );
     final newCategories = await getCategories();
+    if (!mounted) return;
     setState(() {
       data = newData;
       categories = newCategories;
@@ -384,7 +385,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                             hint: settings.shortDateFormat,
                             onTap: () async {
                               await selectStart();
-                              setSheet(() {});
+                              if (sheetContext.mounted) setSheet(() {});
                             },
                             onClear: () {
                               setState(() {
@@ -403,7 +404,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                             hint: settings.shortDateFormat,
                             onTap: () async {
                               await selectEnd();
-                              setSheet(() {});
+                              if (sheetContext.mounted) setSheet(() {});
                             },
                             onClear: () {
                               setState(() {
@@ -478,7 +479,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate == null) return;
+    if (pickedDate == null || !mounted) return;
 
     setState(() {
       endDate = pickedDate;
@@ -494,7 +495,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate == null) return;
+    if (pickedDate == null || !mounted) return;
 
     setState(() {
       startDate = pickedDate;

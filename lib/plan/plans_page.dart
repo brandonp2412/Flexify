@@ -77,6 +77,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   @override
   void dispose() {
     _state?.removeListener(_onPlansStateChanged);
+    _scroll.dispose();
     super.dispose();
   }
 
@@ -95,12 +96,20 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     }
 
     final lowerSearch = _search.toLowerCase();
+    final escapedSearch = _search
+        .replaceAll('~', '~~')
+        .replaceAll('%', '~%')
+        .replaceAll('_', '~_');
 
-    // Single query to find all plan IDs with a matching exercise
     final matchingIds =
         await (db.planExercises.selectOnly()
               ..addColumns([db.planExercises.planId])
-              ..where(db.planExercises.exercise.like('%$_search%')))
+              ..where(
+                db.planExercises.exercise.like(
+                  '%$escapedSearch%',
+                  escapeChar: '~',
+                ),
+              ))
             .map((row) => row.read(db.planExercises.planId))
             .get();
 
@@ -109,6 +118,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     final tempFiltered = allPlans
         .where(
           (plan) =>
+              plan.title?.toLowerCase().contains(lowerSearch) == true ||
               plan.days.toLowerCase().contains(lowerSearch) ||
               matchingIdSet.contains(plan.id),
         )

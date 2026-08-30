@@ -36,6 +36,13 @@ class _ExerciseModalState extends State<ExerciseModal> {
   bool _timers = true;
 
   @override
+  void dispose() {
+    _max.dispose();
+    _warmup.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
 
@@ -114,7 +121,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         const SizedBox(height: 16),
                         StatefulBuilder(
                           builder: (context, setState) => ListTile(
-                            title: const Text('Rest _timers'),
+                            title: const Text('Rest timers'),
                             trailing: Switch(
                               value: _timers,
                               onChanged: (value) {

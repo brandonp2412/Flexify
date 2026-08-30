@@ -29,7 +29,7 @@ List<Widget> getPlanSettings(
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(warmup),
             onChanged: (value) => db.settings.update().write(
-              SettingsCompanion(warmupSets: Value(int.parse(value))),
+              SettingsCompanion(warmupSets: Value(int.tryParse(value))),
             ),
           ),
         ),
@@ -47,9 +47,10 @@ List<Widget> getPlanSettings(
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(max),
             onChanged: (value) {
-              if (int.parse(value) > 0 && int.parse(value) <= 20) {
+              final parsed = int.tryParse(value);
+              if (parsed != null && parsed > 0 && parsed <= 20) {
                 db.settings.update().write(
-                  SettingsCompanion(maxSets: Value(int.parse(value))),
+                  SettingsCompanion(maxSets: Value(parsed)),
                 );
               }
             },
@@ -166,6 +167,13 @@ class _PlanSettingsState extends State<PlanSettings> {
   late final _warmup = TextEditingController(
     text: _settings.warmupSets?.toString(),
   );
+
+  @override
+  void dispose() {
+    _max.dispose();
+    _warmup.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

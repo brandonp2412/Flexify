@@ -32,7 +32,9 @@ List<Widget> getTimerSettings(
           onTap: () async {
             final newValue = !settings.restTimers;
 
-            if (newValue) {
+            if (newValue &&
+                !kIsWeb &&
+                defaultTargetPlatform == TargetPlatform.android) {
               await androidChannel.invokeMethod('requestTimerPermissions');
             }
 
@@ -43,7 +45,9 @@ List<Widget> getTimerSettings(
           trailing: Switch(
             value: settings.restTimers,
             onChanged: (value) async {
-              if (value) {
+              if (value &&
+                  !kIsWeb &&
+                  defaultTargetPlatform == TargetPlatform.android) {
                 await androidChannel.invokeMethod('requestTimerPermissions');
               }
 
@@ -65,7 +69,9 @@ List<Widget> getTimerSettings(
             await db.settings.update().write(
               SettingsCompanion(vibrate: Value(newValue)),
             );
-            if (newValue) {
+            if (newValue &&
+                !kIsWeb &&
+                defaultTargetPlatform == TargetPlatform.android) {
               try {
                 await androidChannel.invokeMethod('previewVibration');
               } catch (error, stackTrace) {
@@ -79,7 +85,9 @@ List<Widget> getTimerSettings(
               await db.settings.update().write(
                 SettingsCompanion(vibrate: Value(value)),
               );
-              if (value) {
+              if (value &&
+                  !kIsWeb &&
+                  defaultTargetPlatform == TargetPlatform.android) {
                 try {
                   await androidChannel.invokeMethod('previewVibration');
                 } catch (error, stackTrace) {
@@ -370,6 +378,7 @@ class _TimerSettingsState extends State<TimerSettings> {
               ..where(db.gymSets.restMs.isNotNull())
               ..groupBy([db.gymSets.name]))
             .get();
+    if (!mounted) return;
 
     setState(() {
       _exercisesWithCustomTimers = exercises
@@ -414,14 +423,15 @@ class _TimerSettingsState extends State<TimerSettings> {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
         .write(GymSetsCompanion(restMs: Value(duration?.inMilliseconds)));
 
+    if (!mounted) return;
     // If duration is null (both minutes and seconds are 0), remove from list
     if (duration == null) {
+      _minuteControllers.remove(exerciseName)?.dispose();
+      _secondControllers.remove(exerciseName)?.dispose();
       setState(() {
         _exercisesWithCustomTimers.removeWhere(
           (e) => e.name.value == exerciseName,
         );
-        _minuteControllers.remove(exerciseName);
-        _secondControllers.remove(exerciseName);
       });
     }
   }
@@ -429,13 +439,14 @@ class _TimerSettingsState extends State<TimerSettings> {
   Future<void> _removeCustomTimer(String exerciseName) async {
     await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
         .write(const GymSetsCompanion(restMs: Value(null)));
+    if (!mounted) return;
 
+    _minuteControllers.remove(exerciseName)?.dispose();
+    _secondControllers.remove(exerciseName)?.dispose();
     setState(() {
       _exercisesWithCustomTimers.removeWhere(
         (e) => e.name.value == exerciseName,
       );
-      _minuteControllers.remove(exerciseName);
-      _secondControllers.remove(exerciseName);
     });
   }
 
@@ -581,8 +592,8 @@ class _TimerSettingsState extends State<TimerSettings> {
               ]
             : [
                 const ListTile(
-                  title: Text("Timer _settings"),
-                  subtitle: Text("Audio features not available on web"),
+                  title: Text("Timer settings"),
+                  subtitle: Text("Audio features are not available"),
                 ),
               ],
       ),
@@ -591,8 +602,6 @@ class _TimerSettingsState extends State<TimerSettings> {
 
   @override
   void dispose() {
-    super.dispose();
-
     _minCtrl.dispose();
     _secCtrl.dispose();
 
@@ -606,5 +615,6 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     _player?.stop();
     _player?.dispose();
+    super.dispose();
   }
 }

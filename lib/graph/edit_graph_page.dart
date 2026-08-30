@@ -317,7 +317,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   void pick() async {
     FilePickerResult? result = await FilePicker.pickFiles();
-    if (result?.files.single == null) return;
+    if (result?.files.single == null || !mounted) return;
 
     setState(() {
       image = result?.files.single.path;

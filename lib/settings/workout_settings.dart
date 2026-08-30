@@ -301,9 +301,8 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
 
   @override
   void dispose() {
-    super.dispose();
-
     _max.dispose();
     _warmup.dispose();
+    super.dispose();
   }
 }

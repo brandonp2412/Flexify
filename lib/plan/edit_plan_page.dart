@@ -54,7 +54,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     if (match.isEmpty)
-      return [const ListTile(title: Text("No _exercises found"))];
+      return [const ListTile(title: Text("No exercises found"))];
 
     return match.toList().map(
       (pe) => ExerciseTile(
@@ -107,7 +107,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   child: Icon(Icons.search),
                 ),
                 textCapitalization: TextCapitalization.sentences,
-                hintText: 'Search _exercises...',
+                hintText: 'Search exercises...',
                 onChanged: (value) => setState(() {
                   _search = value;
                 }),
@@ -158,10 +158,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
       if (_days[i]) selected.add(weekdays[i]);
 
     if (selected.isEmpty && _titleCtrl.text.isEmpty)
-      return toast('Select _days');
+      return toast('Select days');
 
     if (_exercises.where((exercise) => exercise.enabled.value).isEmpty)
-      return toast('Select _exercises');
+      return toast('Select exercises');
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),

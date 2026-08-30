@@ -74,6 +74,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 ..where((tbl) => tbl.name.equals(option))
                 ..limit(1))
               .getSingleOrNull();
+      if (!mounted) return;
       return setState(() {
         _name = option;
         if (template != null) {
@@ -86,10 +87,12 @@ class _EditSetPageState extends State<EditSetPage> {
       });
     }
 
+    if (!mounted) return;
     if (showBodyWeight)
       updateFields(last);
     else {
       final bodyWeight = await getBodyWeight();
+      if (!mounted) return;
       updateFields(last.copyWith(bodyWeight: bodyWeight?.weight));
     }
 
@@ -323,7 +326,7 @@ class _EditSetPageState extends State<EditSetPage> {
       visible: showBodyWeight && _name != 'Weight',
       child: TextFormField(
         controller: _body,
-        decoration: InputDecoration(labelText: 'Body _weight ($_unit)'),
+        decoration: InputDecoration(labelText: 'Body weight ($_unit)'),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(_body),
         validator: (value) {
@@ -584,10 +587,14 @@ class _EditSetPageState extends State<EditSetPage> {
     _reps.dispose();
     _repsNode.dispose();
     _weight.dispose();
+    _orm.dispose();
     _body.dispose();
     _distance.dispose();
+    _distNode.dispose();
     _minutes.dispose();
+    _seconds.dispose();
     _incline.dispose();
+    _notes.dispose();
 
     super.dispose();
   }
@@ -613,7 +620,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void pick() async {
     FilePickerResult? result = await FilePicker.pickFiles();
-    if (result?.files.single == null) return;
+    if (result?.files.single == null || !mounted) return;
 
     setState(() {
       _image = result?.files.single.path;
@@ -701,7 +708,7 @@ class _EditSetPageState extends State<EditSetPage> {
       initialTime: TimeOfDay.fromDateTime(_created),
     );
 
-    if (pickedTime != null) {
+    if (pickedTime != null && mounted) {
       setState(() {
         _created = DateTime(
           pickedDate.year,

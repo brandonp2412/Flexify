@@ -70,7 +70,7 @@ class _TabSettingsState extends State<TabSettings> {
                 children: [
                   const Icon(Icons.swipe),
                   SizedBox(width: 8),
-                  const Text("Swipe between _tabs"),
+                  const Text("Swipe between tabs"),
                 ],
               ),
               onTap: () => db.settings.update().write(

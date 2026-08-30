@@ -9,11 +9,13 @@ import 'package:provider/provider.dart';
 class GraphHistoryPage extends StatefulWidget {
   final String name;
   final List<GymSet> gymSets;
+  final TabController tabController;
 
   const GraphHistoryPage({
     super.key,
     required this.name,
     required this.gymSets,
+    required this.tabController,
   });
 
   @override
@@ -24,7 +26,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   late List<GymSet> sets = widget.gymSets;
   int limit = 20;
   final scroll = ScrollController();
-  TabController? ctrl;
+  late final TabController ctrl = widget.tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -58,18 +60,15 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
 
   @override
   void dispose() {
-    ctrl?.removeListener(tabListener);
+    ctrl.removeListener(tabListener);
+    scroll.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ctrl = DefaultTabController.of(context);
-      ctrl?.addListener(tabListener);
-    });
+    ctrl.addListener(tabListener);
   }
 
   void setSets() async {
@@ -85,6 +84,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
               ..where((tbl) => tbl.hidden.equals(false))
               ..limit(limit))
             .get();
+    if (!mounted) return;
     setState(() {
       sets = result;
     });
@@ -93,8 +93,8 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   void tabListener() {
     final settings = context.read<SettingsState>().value;
     final index = settings.tabs.split(',').indexOf('GraphsPage');
-    if (ctrl!.indexIsChanging == true) return;
-    if (ctrl!.index != index) return;
+    if (ctrl.indexIsChanging == true) return;
+    if (ctrl.index != index) return;
     setSets();
   }
 }

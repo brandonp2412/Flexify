@@ -90,8 +90,9 @@ class TimerState extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
     next?.cancel();
+    player?.dispose();
+    super.dispose();
   }
 
   Future<void> startTimer(

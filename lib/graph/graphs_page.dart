@@ -50,6 +50,12 @@ class GraphsPageState extends State<GraphsPage>
   bool get wantKeepAlive => true;
 
   @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return NavigatorPopHandler(
@@ -353,10 +359,11 @@ class GraphsPageState extends State<GraphsPage>
               child: ListTile(
                 leading: const Icon(Icons.language),
                 title: const Text("Global progress"),
-                subtitle: const Text("A chart grouped by _category"),
+                subtitle: const Text("A chart grouped by category"),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const GlobalProgressPage(),
+                    builder: (context) =>
+                        GlobalProgressPage(tabController: widget.tabController),
                   ),
                 ),
                 onLongPress: longPressGlobal,
@@ -419,6 +426,7 @@ class GraphsPageState extends State<GraphsPage>
                       ..addColumns([db.gymSets.name.count()])
                       ..where(db.gymSets.name.isIn(_selection.selected)))
                     .getSingle();
+            if (!mounted) return;
             setState(() {
               _total = result.read(db.gymSets.name.count()) ?? 0;
             });

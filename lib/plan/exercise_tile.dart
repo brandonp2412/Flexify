@@ -28,6 +28,13 @@ class _ExerciseTileState extends State<ExerciseTile> {
   );
 
   @override
+  void dispose() {
+    _max.dispose();
+    _warmup.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: IconButton(
@@ -78,11 +85,11 @@ class _ExerciseTileState extends State<ExerciseTile> {
                           ),
                           onTap: () => selectAll(_max),
                           onChanged: (value) {
-                            if (int.parse(_max.text) > 0 &&
-                                int.parse(_max.text) <= 20) {
+                            final parsed = int.tryParse(_max.text);
+                            if (parsed != null && parsed > 0 && parsed <= 20) {
                               final pe = widget.planExercise.copyWith(
                                 enabled: const Value(true),
-                                maxSets: Value(int.parse(_max.text)),
+                                maxSets: Value(parsed),
                               );
                               widget.onChange(pe);
                             }

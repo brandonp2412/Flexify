@@ -17,6 +17,8 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 Future<void> tapBackup(bool value) async {
+  if (kIsWeb || !Platform.isAndroid) return;
+
   await db.settings.update().write(
     SettingsCompanion(automaticBackups: Value(value)),
   );
@@ -39,7 +41,9 @@ List<Widget> getDataSettings(
   BuildContext context,
 ) {
   return [
-    if ('automatic backup'.contains(term.toLowerCase()))
+    if ('automatic backup'.contains(term.toLowerCase()) &&
+        !kIsWeb &&
+        Platform.isAndroid)
       ListTile(
         title: const Text('Automatic backup'),
         leading: settings.value.automaticBackups

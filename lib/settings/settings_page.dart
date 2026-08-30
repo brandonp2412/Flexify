@@ -75,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage>
     }
 
     if (filtered.isEmpty)
-      filtered = [const ListTile(title: Text("No _settings found"))];
+      filtered = [const ListTile(title: Text("No settings found"))];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

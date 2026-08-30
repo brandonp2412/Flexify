@@ -262,7 +262,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         builder: (context, showBodyWeight, child) => Visibility(
           visible: showBodyWeight,
           child: IconButton(
-            tooltip: "Use body _weight",
+            tooltip: "Use body weight",
             icon: const Icon(Icons.scale),
             onPressed: useBodyWeight,
           ),
@@ -542,6 +542,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!settings.explainedPermissions &&
         settings.restTimers &&
         !kIsWeb &&
+        defaultTargetPlatform == TargetPlatform.android &&
         mounted) {
       await Navigator.of(
         context,
@@ -643,7 +644,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final weightSet = await getBodyWeight();
     if (!mounted) return;
     if (weightSet == null) {
-      toast('No _weight entered yet');
+      toast('No weight entered yet');
     } else {
       _weight.text = toString(weightSet.weight);
     }

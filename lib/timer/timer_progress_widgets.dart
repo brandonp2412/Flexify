@@ -215,51 +215,70 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
 
   @override
   Widget build(BuildContext context) {
-    const double circleSize = 280;
+    const double maxCircleSize = 280;
     const double strokeWidth = 10;
+    const double controlsHeight = 56;
 
     final onSurface = Theme.of(context).colorScheme.onSurface;
     final started = _elapsed > Duration.zero;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          width: circleSize,
-          height: circleSize,
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              SizedBox.expand(
-                child: CircularProgressIndicator(
-                  strokeCap: StrokeCap.round,
-                  value: 1,
-                  strokeWidth: strokeWidth,
-                  backgroundColor: onSurface.withValues(alpha: 0.08),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    onSurface.withValues(alpha: 0.08),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableHeight = constraints.maxHeight.isFinite
+            ? math.max(0.0, constraints.maxHeight - controlsHeight)
+            : maxCircleSize;
+        final availableWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : maxCircleSize;
+        final circleSize = math.min(
+          maxCircleSize,
+          math.min(availableHeight, availableWidth),
+        );
+        final timeFontSize = math.min(46.0, math.max(20.0, circleSize * 0.16));
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: circleSize,
+              height: circleSize,
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  SizedBox.expand(
+                    child: CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      value: 1,
+                      strokeWidth: strokeWidth,
+                      backgroundColor: onSurface.withValues(alpha: 0.08),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        onSurface.withValues(alpha: 0.08),
+                      ),
+                    ),
                   ),
-                ),
+                  Text(
+                    _formatElapsed(_elapsed),
+                    style: TextStyle(
+                      fontSize: timeFontSize,
+                      color: onSurface,
+                      fontWeight: FontWeight.w300,
+                      letterSpacing: 2,
+                      fontFeatures: [const FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                _formatElapsed(_elapsed),
-                style: TextStyle(
-                  fontSize: 46,
-                  color: onSurface,
-                  fontWeight: FontWeight.w300,
-                  letterSpacing: 2,
-                  fontFeatures: [const FontFeature.tabularFigures()],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 24),
-        TextButton(
-          onPressed: started ? widget.onRestart : () => _addOneMinute(context),
-          child: Text(started ? 'Restart' : '+1 minute'),
-        ),
-      ],
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: started
+                  ? widget.onRestart
+                  : () => _addOneMinute(context),
+              child: Text(started ? 'Restart' : '+1 minute'),
+            ),
+          ],
+        );
+      },
     );
   }
 

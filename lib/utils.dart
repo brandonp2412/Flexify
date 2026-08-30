@@ -58,7 +58,11 @@ DateTime parseDate(String dateString) {
 Future<bool> requestNotificationPermission() async {
   if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
     return true;
-  if (kIsWeb) return true;
+  if (kIsWeb ||
+      defaultTargetPlatform == TargetPlatform.linux ||
+      defaultTargetPlatform == TargetPlatform.macOS) {
+    return true;
+  }
 
   final settings = await (db.settings.select()..limit(1)).getSingle();
   if (!settings.notifications || settings.notificationPermissionRequested)

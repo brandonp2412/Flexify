@@ -216,6 +216,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     await SharePlus.instance.share(
                       ShareParams(text: "I just did $summaries"),
                     );
+                    if (!mounted) return;
                     setState(() {
                       _selection.clear();
                     });
@@ -318,6 +319,16 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       }
     }
     return list;
+  }
+
+  @override
+  void dispose() {
+    repsGt.dispose();
+    repsLt.dispose();
+    weightGt.dispose();
+    weightLt.dispose();
+    scroll.dispose();
+    super.dispose();
   }
 
   @override

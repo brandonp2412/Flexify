@@ -243,7 +243,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     child: TextFormField(
                       controller: _body,
                       decoration: InputDecoration(
-                        labelText: 'Body _weight',
+                        labelText: 'Body weight',
                         hintText: _oldBody,
                       ),
                       keyboardType: const TextInputType.numberWithOptions(
@@ -355,6 +355,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
     _minutes.dispose();
     _seconds.dispose();
     _incline.dispose();
+    _name.dispose();
 
     super.dispose();
   }
@@ -414,7 +415,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
       initialTime: TimeOfDay.fromDateTime(_created ?? DateTime.now()),
     );
 
-    if (pickedTime != null) {
+    if (pickedTime != null && mounted) {
       setState(() {
         _created = DateTime(
           pickedDate.year,

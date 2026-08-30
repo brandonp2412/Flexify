@@ -149,6 +149,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
     _notify = await Permission.notification.isGranted;
     _ignore = await Permission.ignoreBatteryOptimizations.isGranted;
     _schedule = await Permission.scheduleExactAlarm.isGranted;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -160,6 +161,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
 
   Future requestPermission(Permission permission) async {
     final value = await permission.request().isGranted;
+    if (!mounted) return;
     setState(() {
       switch (permission) {
         case Permission.notification:

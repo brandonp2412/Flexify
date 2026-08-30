@@ -265,8 +265,11 @@ class _CardioPageState extends State<CardioPage> {
 
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      GraphHistoryPage(name: widget.name, gymSets: gymSets),
+                  builder: (context) => GraphHistoryPage(
+                    name: widget.name,
+                    gymSets: gymSets,
+                    tabController: widget.tabCtrl,
+                  ),
                 ),
               );
               _refreshTimer?.cancel();
@@ -472,7 +475,7 @@ class _CardioPageState extends State<CardioPage> {
                             hint: settings.shortDateFormat,
                             onTap: () async {
                               await _selectStart();
-                              setSheet(() {});
+                              if (sheetContext.mounted) setSheet(() {});
                             },
                             onClear: () {
                               setState(() {
@@ -491,7 +494,7 @@ class _CardioPageState extends State<CardioPage> {
                             hint: settings.shortDateFormat,
                             onTap: () async {
                               await _selectEnd();
-                              setSheet(() {});
+                              if (sheetContext.mounted) setSheet(() {});
                             },
                             onClear: () {
                               setState(() {
@@ -596,7 +599,7 @@ class _CardioPageState extends State<CardioPage> {
       lastDate: DateTime(2100),
     );
 
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
     setState(() {
       end = picked;
     });
@@ -611,7 +614,7 @@ class _CardioPageState extends State<CardioPage> {
       lastDate: DateTime(2100),
     );
 
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
     setState(() {
       start = picked;
     });
