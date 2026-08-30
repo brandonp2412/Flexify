@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/graph/graph_curve_settings.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -461,6 +462,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                         setSheet(() {});
                       },
                     ),
+                    const GraphCurveSettings(),
                   ],
                 ),
               ),

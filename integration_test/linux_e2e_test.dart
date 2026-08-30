@@ -418,6 +418,63 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('Graph selection, curve options, and history multi-delete work', (
+    tester,
+  ) async {
+    await _pumpIsolatedApp(tester);
+    final now = DateTime(2026, 8, 30, 12);
+    for (var index = 0; index < 2; index++) {
+      await app.db
+          .into(app.db.gymSets)
+          .insert(
+            GymSetsCompanion.insert(
+              name: 'Selection E2E',
+              reps: (5 + index).toDouble(),
+              weight: (50 + index).toDouble(),
+              unit: 'kg',
+              created: now.subtract(Duration(days: index)),
+            ),
+          );
+    }
+    await _tapTab(tester, 'GraphsPage');
+    await tester.enterText(find.byType(SearchBar), 'Selection E2E');
+    await tester.pumpAndSettle();
+
+    await tester.longPress(find.widgetWithText(ListTile, 'Selection E2E'));
+    await tester.pumpAndSettle();
+    expect(find.text('S'), findsOneWidget);
+    await tester.tap(find.text('S'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(ListTile, 'Selection E2E'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.tune));
+    await tester.pumpAndSettle();
+    expect(find.text('Curve line graphs'), findsOneWidget);
+    expect(find.text('Curve smoothness'), findsOneWidget);
+    await tester.tapAt(const Offset(8, 8));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.history));
+    await tester.pumpAndSettle();
+    expect(find.byType(ListTile), findsNWidgets(2));
+    await tester.longPress(find.byType(ListTile).first);
+    await tester.pumpAndSettle();
+    expect(find.text('1 selected'), findsOneWidget);
+    expect(find.text('S'), findsNWidgets(2));
+
+    await tester.tap(find.byType(ListTile).last);
+    await tester.pumpAndSettle();
+    expect(find.text('2 selected'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('deleteGraphHistorySelection')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No data yet for Selection E2E'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Automatic backup is hidden on Linux', (tester) async {
     await _pumpIsolatedApp(tester);
     await _openSettingsSection(tester, 'Data management');

@@ -8,6 +8,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/graph_curve_settings.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
@@ -538,6 +539,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         setSheet(() {});
                       },
                     ),
+                    const GraphCurveSettings(),
                   ],
                 ),
               ),

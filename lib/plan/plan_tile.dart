@@ -81,7 +81,7 @@ class _PlanTileState extends State<PlanTile> {
 
     Widget? leading;
 
-    if (widget.selected.isEmpty && showImages)
+    if (showImages)
       leading = GestureDetector(
         onTap: () => widget.onSelect(widget.plan.id),
         child: Container(

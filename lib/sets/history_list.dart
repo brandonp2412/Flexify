@@ -76,7 +76,7 @@ class _HistoryListState extends State<HistoryList> {
 
     Widget? leading;
 
-    if (widget.selected.isEmpty && showImages && gymSet.image != null) {
+    if (showImages && gymSet.image != null) {
       leading = GestureDetector(
         onTap: () => widget.onSelect(gymSet.id),
         child: Image.file(
@@ -85,7 +85,7 @@ class _HistoryListState extends State<HistoryList> {
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
-    } else if (widget.selected.isEmpty && showImages) {
+    } else if (showImages) {
       leading = GestureDetector(
         onTap: () => widget.onSelect(gymSet.id),
         child: Container(

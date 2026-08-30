@@ -9,6 +9,7 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/graph_curve_settings.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
@@ -564,6 +565,7 @@ class _CardioPageState extends State<CardioPage> {
                         setSheet(() {});
                       },
                     ),
+                    const GraphCurveSettings(),
                   ],
                 ),
               ),

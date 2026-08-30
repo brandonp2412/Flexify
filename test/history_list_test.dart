@@ -17,12 +17,7 @@ void main() {
         body: HistoryList(
           scroll: scroll,
           sets: [
-            gymSetModelFixture(
-              id: 1,
-              bodyWeight: 54,
-              duration: 8,
-              distance: 9,
-            ),
+            gymSetModelFixture(id: 1, bodyWeight: 54, duration: 8, distance: 9),
           ],
           onNext: () {},
           onSelect: (value) {},
@@ -34,5 +29,29 @@ void main() {
 
     expect(find.text('Bench press'), findsOne);
     expect(find.text('2 x 3 kg'), findsOne);
+  });
+
+  testWidgets('keeps leading avatar visible while selected', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final scroll = ScrollController();
+    addTearDown(scroll.dispose);
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: HistoryList(
+          scroll: scroll,
+          sets: [gymSetModelFixture(id: 1)],
+          onNext: () {},
+          onSelect: (value) {},
+          selected: const {1},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('B'), findsOne);
   });
 }

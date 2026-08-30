@@ -50,9 +50,7 @@ class GraphTile extends StatelessWidget {
 
     Widget? leading;
 
-    if (selected.isEmpty &&
-        showImages &&
-        gymSet.image.value?.isNotEmpty == true) {
+    if (showImages && gymSet.image.value?.isNotEmpty == true) {
       leading = GestureDetector(
         onTap: () => onSelect(gymSet.name.value),
         child: Image.file(
@@ -61,7 +59,7 @@ class GraphTile extends StatelessWidget {
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
-    } else if (selected.isEmpty && showImages) {
+    } else if (showImages) {
       leading = GestureDetector(
         onTap: () => onSelect(gymSet.name.value),
         child: Container(
