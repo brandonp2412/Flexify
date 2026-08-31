@@ -9,11 +9,11 @@ import 'support/fixtures.dart';
 import 'support/test_app.dart';
 
 Finder textFieldWithLabel(String label) => find.descendant(
-      of: find.byWidgetPredicate(
-        (widget) => widget is StepperField && widget.labelText == label,
-      ),
-      matching: find.byType(EditableText),
-    );
+  of: find.byWidgetPredicate(
+    (widget) => widget is StepperField && widget.labelText == label,
+  ),
+  matching: find.byType(EditableText),
+);
 
 Future<PlanState> seededPlanState(int planId) async {
   final state = PlanState();
@@ -42,9 +42,9 @@ void main() {
         ),
       );
 
-      final plan = await (database.plans.select()
-            ..where((plan) => plan.id.equals(id)))
-          .getSingle();
+      final plan =
+          await (database.plans.select()..where((plan) => plan.id.equals(id)))
+              .getSingle();
       final planState = await seededPlanState(plan.id);
       await harness.pump(
         tester,
@@ -74,16 +74,12 @@ void main() {
     await database.settings.update().write(
       testSettings(explainedPermissions: true),
     );
-    final plan = await (database.plans.select()
-          ..where((plan) => plan.id.equals(id)))
-        .getSingle();
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
     final planState = await seededPlanState(plan.id);
 
-    await harness.pump(
-      tester,
-      StartPlanPage(plan: plan),
-      planState: planState,
-    );
+    await harness.pump(tester, StartPlanPage(plan: plan), planState: planState);
     await tester.pumpAndSettle();
 
     expect(find.text('Save'), findsNothing);
@@ -94,18 +90,8 @@ void main() {
     final database = harness.database;
 
     await database.gymSets.insertAll([
-      gymSetFixture(
-        'Bench press',
-        reps: 2,
-        weight: 90,
-        category: 'Chest',
-      ),
-      gymSetFixture(
-        'Barbell row',
-        reps: 5,
-        weight: 60,
-        category: 'Shoulders',
-      ),
+      gymSetFixture('Bench press', reps: 2, weight: 90, category: 'Chest'),
+      gymSetFixture('Barbell row', reps: 5, weight: 60, category: 'Shoulders'),
       gymSetFixture('Squat', reps: 7, weight: 100, category: 'Legs'),
     ]);
 
@@ -117,9 +103,9 @@ void main() {
       planExerciseFixture(planId: id, exercise: 'Barbell row'),
       planExerciseFixture(planId: id, exercise: 'Squat'),
     ]);
-    final plan = await (database.plans.select()
-          ..where((plan) => plan.id.equals(id)))
-        .getSingle();
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
     final planState = await seededPlanState(plan.id);
 
     await harness.pump(
@@ -143,9 +129,9 @@ void main() {
     final id = await database.plans.insertOne(
       planFixture(days: 'Monday,Tuesday,Wednesday'),
     );
-    final plan = await (database.plans.select()
-          ..where((plan) => plan.id.equals(id)))
-        .getSingle();
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
 
     await database.planExercises.insertAll([
       planExerciseFixture(
@@ -158,11 +144,7 @@ void main() {
         exercise: 'Barbell bent-over row',
         sequence: 1,
       ),
-      planExerciseFixture(
-        planId: plan.id,
-        exercise: 'Crunch',
-        sequence: 2,
-      ),
+      planExerciseFixture(planId: plan.id, exercise: 'Crunch', sequence: 2),
     ]);
     await database.settings.update().write(
       testSettings(
@@ -172,11 +154,7 @@ void main() {
     );
     final planState = await seededPlanState(plan.id);
 
-    await harness.pump(
-      tester,
-      StartPlanPage(plan: plan),
-      planState: planState,
-    );
+    await harness.pump(tester, StartPlanPage(plan: plan), planState: planState);
     await tester.pumpAndSettle();
 
     await tester.enterText(textFieldWithLabel('Reps'), '5');
@@ -187,9 +165,10 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    final gymSets = await (database.gymSets.select()
-          ..where((set) => set.name.equals('Barbell bench press')))
-        .get();
+    final gymSets =
+        await (database.gymSets.select()
+              ..where((set) => set.name.equals('Barbell bench press')))
+            .get();
     expect(gymSets.length, equals(2));
   });
 
@@ -200,9 +179,9 @@ void main() {
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
-    final plan = await (database.plans.select()
-          ..where((plan) => plan.id.equals(id)))
-        .getSingle();
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
     await database.planExercises.insertOne(
       planExerciseFixture(planId: plan.id, exercise: 'Bench press'),
     );

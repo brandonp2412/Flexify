@@ -9,9 +9,10 @@ void main() {
   testWidgets('SwapWorkout', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     final plan = await (harness.database.plans.select()..limit(1)).getSingle();
-    final planExercises = await (harness.database.planExercises.select()
-          ..where((exercise) => exercise.planId.equals(plan.id)))
-        .get();
+    final planExercises =
+        await (harness.database.planExercises.select()
+              ..where((exercise) => exercise.planId.equals(plan.id)))
+            .get();
 
     await harness.pump(
       tester,

@@ -100,12 +100,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Edit 3 sets'), findsNothing);
-    final gymSets = await (harness.database.gymSets.select()
-          ..where((set) => set.id.isIn(ids))
-          ..where((set) => set.reps.equals(9))
-          ..where((set) => set.weight.equals(200))
-          ..where((set) => set.name.equals('New name')))
-        .get();
+    final gymSets =
+        await (harness.database.gymSets.select()
+              ..where((set) => set.id.isIn(ids))
+              ..where((set) => set.reps.equals(9))
+              ..where((set) => set.weight.equals(200))
+              ..where((set) => set.name.equals('New name')))
+            .get();
     expect(gymSets.length, equals(3));
   });
 }

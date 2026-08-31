@@ -43,7 +43,9 @@ void main() {
       // Individual labels/actions differ across API levels and initial folders,
       // so assert the system picker package rather than a presentation detail.
       await $.platform.android.waitUntilVisible(
-        const AndroidSelector(applicationPackage: 'com.google.android.documentsui'),
+        const AndroidSelector(
+          applicationPackage: 'com.google.android.documentsui',
+        ),
         timeout: const Duration(seconds: 20),
       );
 

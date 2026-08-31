@@ -12,11 +12,7 @@ void main() {
     await harness.pump(
       tester,
       EditSetPage(
-        gymSet: gymSetModelFixture(
-          bodyWeight: 52,
-          duration: 3,
-          distance: 6,
-        ),
+        gymSet: gymSetModelFixture(bodyWeight: 52, duration: 3, distance: 6),
       ),
     );
 
@@ -54,10 +50,7 @@ void main() {
       ),
     );
 
-    await harness.pump(
-      tester,
-      EditSetPage(gymSet: gymSetModelFixture()),
-    );
+    await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
 
@@ -72,10 +65,7 @@ void main() {
 
   testWidgets('cardio toggle switches fields', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.pump(
-      tester,
-      EditSetPage(gymSet: gymSetModelFixture()),
-    );
+    await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
@@ -144,9 +134,7 @@ void main() {
 
     await harness.pump(
       tester,
-      EditSetPage(
-        gymSet: gymSetModelFixture(name: '', reps: 0, weight: 0),
-      ),
+      EditSetPage(gymSet: gymSetModelFixture(name: '', reps: 0, weight: 0)),
       surfaceSize: const Size(800, 1600),
     );
     await tester.pumpAndSettle();

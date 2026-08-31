@@ -76,10 +76,7 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     final timerState = harness.timerState;
 
-    await harness.pump(
-      tester,
-      const Scaffold(body: TimerProgressIndicator()),
-    );
+    await harness.pump(tester, const Scaffold(body: TimerProgressIndicator()));
 
     expect(find.byType(LinearProgressIndicator), findsNothing);
 

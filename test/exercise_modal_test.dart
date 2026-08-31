@@ -6,9 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fixtures.dart';
 import 'support/test_app.dart';
 
-Future<(FlexifyTestHarness, int)> pumpExerciseModal(
-  WidgetTester tester,
-) async {
+Future<(FlexifyTestHarness, int)> pumpExerciseModal(WidgetTester tester) async {
   final harness = await FlexifyTestHarness.create();
   final id = await harness.database.plans.insertOne(planFixture());
   await harness.database.planExercises.insertOne(

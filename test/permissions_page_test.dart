@@ -7,10 +7,7 @@ import 'support/test_app.dart';
 void main() {
   testWidgets('PermissionsPage', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.pump(
-      tester,
-      const Scaffold(body: PermissionsPage()),
-    );
+    await harness.pump(tester, const Scaffold(body: PermissionsPage()));
     await tester.pumpAndSettle();
 
     expect(find.text('Missing permissions'), findsOne);

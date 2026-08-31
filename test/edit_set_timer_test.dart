@@ -17,10 +17,7 @@ void main() {
           .getSingle();
       expect(settings.restTimers, false);
 
-      await harness.pump(
-        tester,
-        EditSetPage(gymSet: gymSetModelFixture()),
-      );
+      await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
 
       await tester.enterText(find.bySemanticsLabel('Reps'), '10');
       await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
@@ -37,45 +34,42 @@ void main() {
     },
   );
 
-  test(
-    'starting a second rest timer supersedes the first instead of stacking '
-    '(#300)',
-    () async {
-      await mockTests();
-      final timerState = TimerState();
+  test('starting a second rest timer supersedes the first instead of stacking '
+      '(#300)', () async {
+    await mockTests();
+    final timerState = TimerState();
 
-      await timerState.startTimer(
-        'Bench press',
-        const Duration(seconds: 30),
-        '',
-        false,
-        false,
-      );
-      expect(timerState.timer.isRunning(), true);
-      expect(timerState.timer.total, const Duration(seconds: 30));
+    await timerState.startTimer(
+      'Bench press',
+      const Duration(seconds: 30),
+      '',
+      false,
+      false,
+    );
+    expect(timerState.timer.isRunning(), true);
+    expect(timerState.timer.total, const Duration(seconds: 30));
 
-      await timerState.startTimer(
-        'Squat',
-        const Duration(seconds: 45),
-        '',
-        false,
-        false,
-      );
+    await timerState.startTimer(
+      'Squat',
+      const Duration(seconds: 45),
+      '',
+      false,
+      false,
+    );
 
-      expect(
-        timerState.timer.isRunning(),
-        true,
-        reason: 'The second startTimer call must leave a single active timer',
-      );
-      expect(
-        timerState.timer.total,
-        const Duration(seconds: 45),
-        reason: 'The second timer must supersede the first, not be ignored',
-      );
+    expect(
+      timerState.timer.isRunning(),
+      true,
+      reason: 'The second startTimer call must leave a single active timer',
+    );
+    expect(
+      timerState.timer.total,
+      const Duration(seconds: 45),
+      reason: 'The second timer must supersede the first, not be ignored',
+    );
 
-      timerState.dispose();
-    },
-  );
+    timerState.dispose();
+  });
 
   testWidgets(
     'saving a set starts a rest timer using the exercise default duration '
@@ -91,10 +85,7 @@ void main() {
           .getSingle();
       expect(settings.restTimers, true);
 
-      await harness.pump(
-        tester,
-        EditSetPage(gymSet: gymSetModelFixture()),
-      );
+      await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
 
       await tester.enterText(find.bySemanticsLabel('Reps'), '10');
       await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');

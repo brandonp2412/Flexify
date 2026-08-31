@@ -108,9 +108,7 @@ SettingsCompanion testSettings({
     groupHistory: groupHistory == null
         ? const Value.absent()
         : Value(groupHistory),
-    restTimers: restTimers == null
-        ? const Value.absent()
-        : Value(restTimers),
+    restTimers: restTimers == null ? const Value.absent() : Value(restTimers),
     showNotes: showNotes == null ? const Value.absent() : Value(showNotes),
   );
 }

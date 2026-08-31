@@ -9,10 +9,7 @@ Future<void> pumpPlansPage(
   WidgetTester tester,
   FlexifyTestHarness harness,
 ) async {
-  await harness.pump(
-    tester,
-    PlansPage(tabController: MockTabController()),
-  );
+  await harness.pump(tester, PlansPage(tabController: MockTabController()));
   await tester.pumpAndSettle();
 }
 

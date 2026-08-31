@@ -15,14 +15,16 @@ Future<void> pumpCardioPage(
   FlexifyTestHarness harness,
 ) async {
   for (final element in graphData) {
-    await harness.database.into(harness.database.gymSets).insert(
-      graphGymSet(
-        'Run',
-        element.weight,
-        reps: element.reps,
-        date: element.dateTime,
-      ).copyWith(cardio: const Value(true)),
-    );
+    await harness.database
+        .into(harness.database.gymSets)
+        .insert(
+          graphGymSet(
+            'Run',
+            element.weight,
+            reps: element.reps,
+            date: element.dateTime,
+          ).copyWith(cardio: const Value(true)),
+        );
   }
 
   await harness.pump(

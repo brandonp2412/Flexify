@@ -153,19 +153,21 @@ GymSetsCompanion graphGymSet(
 
 Future<void> seedGraphFixtures(AppDatabase database) async {
   for (final entry in exercisesToPopulateTestDb.entries) {
-    await database.into(database.gymSets).insert(
-      graphGymSet(entry.key, entry.value),
-    );
+    await database
+        .into(database.gymSets)
+        .insert(graphGymSet(entry.key, entry.value));
   }
 
   for (final element in graphData) {
-    await database.into(database.gymSets).insert(
-      graphGymSet(
-        screenshotExercise,
-        element.weight,
-        reps: element.reps,
-        date: element.dateTime,
-      ),
-    );
+    await database
+        .into(database.gymSets)
+        .insert(
+          graphGymSet(
+            screenshotExercise,
+            element.weight,
+            reps: element.reps,
+            date: element.dateTime,
+          ),
+        );
   }
 }

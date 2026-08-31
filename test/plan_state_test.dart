@@ -52,45 +52,50 @@ void main() {
     expect(counts.single.count, 1);
   });
 
-  test('setExercises keeps enabled plan order before available exercises', () async {
-    await db.planExercises.deleteAll();
-    await db.plans.deleteAll();
-    await db.gymSets.deleteAll();
+  test(
+    'setExercises keeps enabled plan order before available exercises',
+    () async {
+      await db.planExercises.deleteAll();
+      await db.plans.deleteAll();
+      await db.gymSets.deleteAll();
 
-    final planId = await db.plans.insertOne(
-      planFixture(id: 1, title: 'Push day'),
-    );
-    final plan = await (db.plans.select()..where((p) => p.id.equals(planId)))
-        .getSingle();
+      final planId = await db.plans.insertOne(
+        planFixture(id: 1, title: 'Push day'),
+      );
+      final plan = await (db.plans.select()..where((p) => p.id.equals(planId)))
+          .getSingle();
 
-    await db.gymSets.insertAll([
-      gymSetFixture('Arnold press'),
-      gymSetFixture('Back extension'),
-      gymSetFixture('Barbell biceps curl'),
-    ]);
-    await db.planExercises.insertAll([
-      planExerciseFixture(
-        planId: planId,
-        exercise: 'Arnold press',
-        sequence: 1,
-      ),
-      planExerciseFixture(
-        planId: planId,
-        exercise: 'Back extension',
-        sequence: 0,
-      ),
-    ]);
+      await db.gymSets.insertAll([
+        gymSetFixture('Arnold press'),
+        gymSetFixture('Back extension'),
+        gymSetFixture('Barbell biceps curl'),
+      ]);
+      await db.planExercises.insertAll([
+        planExerciseFixture(
+          planId: planId,
+          exercise: 'Arnold press',
+          sequence: 1,
+        ),
+        planExerciseFixture(
+          planId: planId,
+          exercise: 'Back extension',
+          sequence: 0,
+        ),
+      ]);
 
-    final state = PlanState();
-    await state.setExercises(plan.toCompanion(false));
+      final state = PlanState();
+      await state.setExercises(plan.toCompanion(false));
 
-    expect(
-      state.exercises.map((exercise) => exercise.exercise.value),
-      ['Back extension', 'Arnold press', 'Barbell biceps curl'],
-    );
-    expect(
-      state.exercises.map((exercise) => exercise.enabled.value),
-      [true, true, false],
-    );
-  });
+      expect(state.exercises.map((exercise) => exercise.exercise.value), [
+        'Back extension',
+        'Arnold press',
+        'Barbell biceps curl',
+      ]);
+      expect(state.exercises.map((exercise) => exercise.enabled.value), [
+        true,
+        true,
+        false,
+      ]);
+    },
+  );
 }

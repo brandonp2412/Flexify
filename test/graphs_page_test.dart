@@ -15,9 +15,7 @@ Future<void> pumpGraphsPage(
   final page = GraphsPage(tabController: MockTabController());
   await harness.pump(
     tester,
-    withTabController
-        ? DefaultTabController(length: 1, child: page)
-        : page,
+    withTabController ? DefaultTabController(length: 1, child: page) : page,
   );
   await tester.pumpAndSettle();
 }
@@ -135,10 +133,7 @@ void main() {
 
     final planId = await harness.database.plans.insertOne(planFixture());
     await harness.database.planExercises.insertOne(
-      planExerciseFixture(
-        planId: planId,
-        exercise: 'Zz unique test exercise',
-      ),
+      planExerciseFixture(planId: planId, exercise: 'Zz unique test exercise'),
     );
 
     await pumpGraphsPage(tester, harness);
@@ -149,9 +144,10 @@ void main() {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
-    final planExercises = await (harness.database.planExercises.select()
-          ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
-        .get();
+    final planExercises =
+        await (harness.database.planExercises.select()
+              ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
+            .get();
     expect(planExercises, isEmpty);
   });
 }
