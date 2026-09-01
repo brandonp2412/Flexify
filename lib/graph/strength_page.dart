@@ -554,7 +554,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (!mounted) return;
     final strengthData = await getStrengthData(
       target: target,
-      name: widget.name,
+      name: name,
       metric: metric,
       period: period,
       start: start,
@@ -628,7 +628,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     (tbl) =>
                         tbl.created.equals(row.created) &
                         ormExpression.equals(row.value) &
-                        tbl.name.equals(widget.name),
+                        tbl.name.equals(name),
                   )
                   ..limit(1))
                 .getSingle();
@@ -638,8 +638,7 @@ class _StrengthPageState extends State<StrengthPage> {
             await (db.gymSets.select()
                   ..where(
                     (tbl) =>
-                        tbl.created.equals(row.created) &
-                        tbl.name.equals(widget.name),
+                        tbl.created.equals(row.created) & tbl.name.equals(name),
                   )
                   ..limit(1))
                 .getSingle();
@@ -651,7 +650,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     (tbl) =>
                         tbl.created.equals(row.created) &
                         tbl.weight.equals(row.value) &
-                        tbl.name.equals(widget.name),
+                        tbl.name.equals(name),
                   )
                   ..limit(1))
                 .getSingle();
@@ -664,7 +663,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         tbl.created.equals(row.created) &
                         ((tbl.weight / tbl.bodyWeight).equals(row.value) |
                             (tbl.weight / tbl.bodyWeight).isNull()) &
-                        tbl.name.equals(widget.name),
+                        tbl.name.equals(name),
                   )
                   ..limit(1))
                 .getSingle();
@@ -676,7 +675,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     (tbl) =>
                         tbl.created.equals(row.created) &
                         tbl.reps.equals(row.value) &
-                        tbl.name.equals(widget.name),
+                        tbl.name.equals(name),
                   )
                   ..limit(1))
                 .getSingle();

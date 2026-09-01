@@ -73,11 +73,18 @@ class _ExerciseModalState extends State<ExerciseModal> {
           leading: const Icon(Icons.settings),
           title: const Text('Settings'),
           onTap: () async {
+            final rootContext = Navigator.of(
+              context,
+              rootNavigator: true,
+            ).context;
+            final maxController = TextEditingController(text: _max.text);
+            final warmupController = TextEditingController(text: _warmup.text);
+            var timers = _timers;
             Navigator.pop(context);
 
-            showDialog(
-              context: context,
-              builder: (context) {
+            await showDialog(
+              context: rootContext,
+              builder: (dialogContext) {
                 return AlertDialog.adaptive(
                   title: Text(widget.exercise),
                   content: SingleChildScrollView(
@@ -87,11 +94,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           selector: (context, settings) =>
                               settings.value.warmupSets,
                           builder: (context, value, child) => TextField(
-                            controller: _warmup,
+                            controller: warmupController,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(_warmup),
+                            onTap: () => selectAll(warmupController),
                             onChanged: changeWarmup,
                             decoration: InputDecoration(
                               labelText: "Warmup sets",
@@ -105,11 +112,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                           selector: (context, settings) =>
                               settings.value.maxSets,
                           builder: (context, value, child) => TextField(
-                            controller: _max,
+                            controller: maxController,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(_max),
+                            onTap: () => selectAll(maxController),
                             onChanged: changeMax,
                             decoration: InputDecoration(
                               labelText: "Working sets (max: 20)",
@@ -120,13 +127,13 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         ),
                         const SizedBox(height: 16),
                         StatefulBuilder(
-                          builder: (context, setState) => ListTile(
+                          builder: (context, setDialogState) => ListTile(
                             title: const Text('Rest timers'),
                             trailing: Switch(
-                              value: _timers,
+                              value: timers,
                               onChanged: (value) {
-                                setState(() {
-                                  _timers = value;
+                                setDialogState(() {
+                                  timers = value;
                                 });
                                 changeTimers(value);
                               },
@@ -138,9 +145,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                   ),
                   actions: [
                     TextButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(dialogContext),
                       label: const Text("OK"),
                       icon: const Icon(Icons.check),
                     ),
@@ -148,6 +153,8 @@ class _ExerciseModalState extends State<ExerciseModal> {
                 );
               },
             );
+            maxController.dispose();
+            warmupController.dispose();
           },
         ),
         if (widget.hasData)
@@ -242,7 +249,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               u.planId.equals(widget.planId) &
               u.exercise.equals(widget.exercise),
         ))
-        .write(PlanExercisesCompanion(maxSets: Value(int.tryParse(_max.text))));
+        .write(PlanExercisesCompanion(maxSets: Value(int.tryParse(value))));
     widget.onMax();
   }
 
@@ -252,8 +259,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
               u.planId.equals(widget.planId) &
               u.exercise.equals(widget.exercise),
         ))
-        .write(
-          PlanExercisesCompanion(warmupSets: Value(int.tryParse(_warmup.text))),
-        );
+        .write(PlanExercisesCompanion(warmupSets: Value(int.tryParse(value))));
   }
 }

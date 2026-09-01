@@ -29,6 +29,8 @@ double getCardio(TypedResult row, CardioMetric metric) {
       return row.read(db.gymSets.incline.avg())!;
     case CardioMetric.inclineAdjustedPace:
       return row.read(inclineAdjustedPace)!;
+    case CardioMetric.weight:
+      return row.read(db.gymSets.weight.max())!;
   }
 }
 
@@ -51,6 +53,7 @@ Future<List<CardioData>> getCardioData({
               db.gymSets.distance.sum() / db.gymSets.duration.sum(),
               db.gymSets.incline.avg(),
               inclineAdjustedPace,
+              db.gymSets.weight.max(),
               db.gymSets.created,
               db.gymSets.unit,
             ])
@@ -75,7 +78,21 @@ Future<List<CardioData>> getCardioData({
     var value = getCardio(result, metric);
     final unit = result.read(db.gymSets.unit)!;
 
-    if (unit == 'km' && target == 'mi') {
+    if (metric == CardioMetric.weight) {
+      if (unit == 'lb' && target == 'kg') {
+        value *= 0.45359237;
+      } else if (unit == 'kg' && target == 'lb') {
+        value *= 2.20462262;
+      } else if (unit == 'stone' && target == 'kg') {
+        value *= 6.35029318;
+      } else if (unit == 'kg' && target == 'stone') {
+        value /= 6.35029318;
+      } else if (unit == 'stone' && target == 'lb') {
+        value *= 14;
+      } else if (unit == 'lb' && target == 'stone') {
+        value /= 14;
+      }
+    } else if (unit == 'km' && target == 'mi') {
       value /= 1.609;
     } else if (unit == 'mi' && target == 'km') {
       value *= 1.609;
@@ -362,6 +379,32 @@ Future<List<StrengthData>> getGlobalData({
 }
 
 Future<bool> isBest(GymSet gymSet) async {
+  if (gymSet.cardio && _isWeightUnit(gymSet.unit)) {
+    final result =
+        await (db.selectOnly(db.gymSets)
+              ..addColumns([db.gymSets.weight, db.gymSets.duration])
+              ..where(db.gymSets.name.equals(gymSet.name))
+              ..where(db.gymSets.id.isNotValue(gymSet.id))
+              ..where(db.gymSets.hidden.equals(false))
+              ..orderBy([
+                OrderingTerm(
+                  expression: db.gymSets.weight,
+                  mode: OrderingMode.desc,
+                ),
+                OrderingTerm(
+                  expression: db.gymSets.duration,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+    if (result == null) return false;
+    final weight = result.read(db.gymSets.weight)!;
+    final duration = result.read(db.gymSets.duration)!;
+    if (gymSet.weight > weight) return true;
+    return gymSet.weight == weight && gymSet.duration > duration;
+  }
+
   if (gymSet.cardio) {
     if (gymSet.duration == 0) return false;
     // Compare per-set pace (distance/duration) to find the actual best, not an average.
@@ -408,6 +451,9 @@ Future<bool> isBest(GymSet gymSet) async {
     return false;
   }
 }
+
+bool _isWeightUnit(String unit) =>
+    unit == 'kg' || unit == 'lb' || unit == 'stone';
 
 typedef Rpm = ({String name, double rpm, double weight});
 

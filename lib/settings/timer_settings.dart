@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
@@ -260,13 +262,29 @@ List<Widget> getTimerSettings(
 /// Displays the progress-bar-position picker and triggers the real
 /// [TimerProgressIndicator] in the home page for 3 seconds as a preview
 /// whenever the user changes the setting.
-class _ProgressPositionSetting extends StatelessWidget {
+class _ProgressPositionSetting extends StatefulWidget {
   final Setting settings;
 
   const _ProgressPositionSetting({required this.settings});
 
-  void _triggerPreview(BuildContext context) {
+  @override
+  State<_ProgressPositionSetting> createState() =>
+      _ProgressPositionSettingState();
+}
+
+class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
+  Timer? _previewTimer;
+  TimerState? _previewTimerState;
+
+  void _triggerPreview() {
     final timerState = context.read<TimerState>();
+    if (timerState.timer.isRunning() &&
+        timerState.timer.getRemaining() > Duration.zero) {
+      return;
+    }
+
+    _previewTimer?.cancel();
+    _previewTimerState = timerState;
     const previewDuration = Duration(seconds: 3);
     timerState.updateTimer(
       NativeTimerWrapper(
@@ -276,9 +294,22 @@ class _ProgressPositionSetting extends StatelessWidget {
         NativeTimerState.running,
       ),
     );
-    Future.delayed(previewDuration, () {
+    _previewTimer = Timer(previewDuration, () {
+      if (!mounted) return;
       timerState.updateTimer(NativeTimerWrapper.emptyTimer());
+      _previewTimerState = null;
+      _previewTimer = null;
     });
+  }
+
+  @override
+  void dispose() {
+    _previewTimer?.cancel();
+    if (_previewTimerState != null) {
+      _previewTimerState!.updateTimer(NativeTimerWrapper.emptyTimer());
+      _previewTimerState = null;
+    }
+    super.dispose();
   }
 
   @override
@@ -315,12 +346,12 @@ class _ProgressPositionSetting extends StatelessWidget {
                   icon: Icon(Icons.block),
                 ),
               ],
-              selected: {settings.progressPosition},
+              selected: {widget.settings.progressPosition},
               onSelectionChanged: (selection) {
                 db.settings.update().write(
                   SettingsCompanion(progressPosition: Value(selection.first)),
                 );
-                if (selection.first != 'none') _triggerPreview(context);
+                if (selection.first != 'none') _triggerPreview();
               },
             ),
           ],

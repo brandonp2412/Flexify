@@ -83,7 +83,7 @@ class TimerState extends ChangeNotifier {
       next?.cancel();
       next = Timer(
         const Duration(minutes: 1),
-        () => notify(null, alarmSound, enableSound),
+        () => _expireDesktopTimer(null, alarmSound, enableSound),
       );
     }
   }
@@ -127,8 +127,29 @@ class TimerState extends ChangeNotifier {
       await androidChannel.invokeMethod('timer', args);
     } else {
       next?.cancel();
-      next = Timer(rest, () => notify(title, alarmSound, enableSound));
+      next = Timer(
+        rest,
+        () => _expireDesktopTimer(title, alarmSound, enableSound),
+      );
     }
+  }
+
+  Future<void> _expireDesktopTimer(
+    String? title,
+    String alarmSound,
+    bool enableSound,
+  ) async {
+    final duration = timer.getDuration();
+    justExpired = true;
+    updateTimer(
+      NativeTimerWrapper(
+        duration,
+        duration,
+        DateTime.now(),
+        NativeTimerState.expired,
+      ),
+    );
+    await notify(title, alarmSound, enableSound);
   }
 
   /// Lazily builds and initializes the notification plugin a single time.

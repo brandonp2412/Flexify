@@ -114,19 +114,28 @@ class _SessionSetsState extends State<SessionSets> {
     );
   }
 
-  /// Id of the top set this session: heaviest weight (strength) or furthest
-  /// distance (cardio). Returns null when nothing stands out.
+  /// Id of the top set this session, using the measurement shown to the user.
   int? _bestId(List<GymSet> sets) {
     if (sets.length < 2) return null;
     final cardio = sets.first.cardio;
-    final best = sets.reduce(
-      (a, b) =>
-          (cardio ? b.distance > a.distance : b.weight > a.weight) ? b : a,
-    );
-    final metric = cardio ? best.distance : best.weight;
+    final weightedCardio = cardio && _isWeightUnit(sets.first.unit);
+    final best = sets.reduce((a, b) {
+      if (!cardio) return b.weight > a.weight ? b : a;
+      if (!weightedCardio) return b.distance > a.distance ? b : a;
+      if (b.weight != a.weight) return b.weight > a.weight ? b : a;
+      return b.duration > a.duration ? b : a;
+    });
+    final metric = weightedCardio
+        ? best.weight
+        : cardio
+        ? best.distance
+        : best.weight;
     if (metric <= 0) return null;
     return best.id;
   }
+
+  bool _isWeightUnit(String unit) =>
+      unit == 'kg' || unit == 'lb' || unit == 'stone';
 }
 
 /// Skeleton stand-in for a [_SetChip]. Reuses the same `Card`/padding/text

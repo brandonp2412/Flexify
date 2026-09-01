@@ -139,7 +139,7 @@ void main() {
       false,
       true,
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     expect(find.text('Stop'), findsOneWidget);
     expect(find.byIcon(Icons.stop), findsOneWidget);

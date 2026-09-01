@@ -145,6 +145,9 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
+  bool _isWeightUnit(String unit) =>
+      unit == 'kg' || unit == 'lb' || unit == 'stone';
+
   Scaffold graphsPage() {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -389,7 +392,13 @@ class GraphsPageState extends State<GraphsPage>
                           )
                         : const SizedBox(),
                     future: gymSets.first.cardio.value
-                        ? getCardioData(name: gymSets.first.name.value)
+                        ? getCardioData(
+                            name: gymSets.first.name.value,
+                            target: gymSets.first.unit.value,
+                            metric: _isWeightUnit(gymSets.first.unit.value)
+                                ? CardioMetric.weight
+                                : CardioMetric.pace,
+                          )
                         : getStrengthData(
                             target: gymSets.first.unit.value,
                             name: gymSets.first.name.value,

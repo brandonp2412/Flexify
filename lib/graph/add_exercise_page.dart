@@ -81,21 +81,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 leading: _cardio
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),
-                onTap: () {
-                  setState(() {
-                    if (_cardio)
-                      _unit = 'kg';
-                    else
-                      _unit = 'km';
-                    _cardio = !_cardio;
-                  });
-                },
-                trailing: Switch(
-                  value: _cardio,
-                  onChanged: (value) => setState(() {
-                    _cardio = value;
-                  }),
-                ),
+                onTap: () => _setCardio(!_cardio),
+                trailing: Switch(value: _cardio, onChanged: _setCardio),
               ),
               Visibility(
                 visible: settings.value.showImages,
@@ -154,6 +141,16 @@ class _AddExercisePageState extends State<AddExercisePage> {
     _nameCtrl.dispose();
     super.dispose();
   }
+
+  void _setCardio(bool value) {
+    setState(() {
+      _cardio = value;
+      if (!value && !_isWeightUnit(_unit)) _unit = 'kg';
+    });
+  }
+
+  bool _isWeightUnit(String value) =>
+      value == 'kg' || value == 'lb' || value == 'stone';
 
   void pick() async {
     FilePickerResult? result = await FilePicker.pickFiles();

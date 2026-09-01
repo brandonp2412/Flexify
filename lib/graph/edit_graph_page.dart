@@ -154,22 +154,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   title: cardio!
                       ? const Text('Cardio')
                       : const Text('Strength'),
-                  onTap: () {
-                    setState(() {
-                      cardio = !cardio!;
-                      if (unit == null || unit?.isEmpty == true) return;
-                      if (cardio!)
-                        unit = unit == 'kg' ? 'km' : 'mi';
-                      else
-                        unit = unit == 'km' ? 'kg' : 'lb';
-                    });
-                  },
-                  trailing: Switch(
-                    value: cardio!,
-                    onChanged: (value) => setState(() {
-                      cardio = value;
-                    }),
-                  ),
+                  onTap: () => _setCardio(!cardio!),
+                  trailing: Switch(value: cardio!, onChanged: _setCardio),
                 ),
                 const SizedBox(height: 8.0),
               ] else
@@ -270,8 +256,35 @@ class _EditGraphPageState extends State<EditGraphPage> {
           ),
         );
 
+    if (name.text.isNotEmpty && name.text != widget.name) {
+      await _migrateGraphPreferences(name.text);
+    }
+
     if (!mounted) return;
     context.read<PlanState>().updatePlans(null);
+  }
+
+  Future<void> _migrateGraphPreferences(String newName) async {
+    final oldPreference =
+        await (db.graphPreferences.select()
+              ..where((tbl) => tbl.name.equals(widget.name)))
+            .getSingleOrNull();
+    if (oldPreference == null) return;
+
+    final targetPreference =
+        await (db.graphPreferences.select()
+              ..where((tbl) => tbl.name.equals(newName)))
+            .getSingleOrNull();
+    if (targetPreference != null) {
+      await (db.graphPreferences.delete()
+            ..where((tbl) => tbl.name.equals(widget.name)))
+          .go();
+      return;
+    }
+
+    await (db.graphPreferences.update()
+          ..where((tbl) => tbl.name.equals(widget.name)))
+        .write(GraphPreferencesCompanion(name: Value(newName)));
   }
 
   Future<int> getCount() async {
@@ -306,13 +319,20 @@ class _EditGraphPageState extends State<EditGraphPage> {
         );
   }
 
-  Future<bool> mixedUnits() async {
+  Future<List<String>> currentUnits() async {
     final result =
         await (db.gymSets.selectOnly(distinct: true)
               ..addColumns([db.gymSets.unit])
-              ..where(db.gymSets.name.equals(name.text)))
+              ..where(db.gymSets.name.equals(widget.name)))
             .get();
-    return result.length > 1;
+    return result.map((row) => row.read(db.gymSets.unit)!).toList();
+  }
+
+  Future<bool> mixedUnits() async => (await currentUnits()).length > 1;
+
+  Future<bool> needsUnitConversion() async {
+    if (unit == null) return false;
+    return (await currentUnits()).any((current) => current != unit);
   }
 
   void pick() async {
@@ -324,155 +344,135 @@ class _EditGraphPageState extends State<EditGraphPage> {
     });
   }
 
+  Future<bool> confirmUpdate(String title, String content) async {
+    if (!mounted) return false;
+    return await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: <Widget>[
+              TextButton.icon(
+                label: const Text('Cancel'),
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pop(dialogContext, false),
+              ),
+              TextButton.icon(
+                label: const Text('Confirm'),
+                icon: const Icon(Icons.check),
+                onPressed: () => Navigator.pop(dialogContext, true),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   Future<void> save() async {
     if (!key.currentState!.validate()) return;
 
     final count = await getCount();
+    if (count > 0 && widget.name != name.text) {
+      final confirmed = await confirmUpdate(
+        'Update conflict',
+        'Your new name exists already for $count records. Are you sure?',
+      );
+      if (!confirmed) return;
+    }
 
-    if (count > 0 && widget.name != name.text && mounted)
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Update conflict'),
-            content: Text(
-              'Your new name exists already for $count records. Are you sure?',
-            ),
-            actions: <Widget>[
-              TextButton.icon(
-                label: const Text('Cancel'),
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton.icon(
-                label: const Text('Confirm'),
-                icon: const Icon(Icons.check),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await doUpdate();
-                },
-              ),
-            ],
-          );
-        },
+    final shouldConvert = await needsUnitConversion();
+    if (shouldConvert && await mixedUnits()) {
+      final confirmed = await confirmUpdate(
+        'Units conflict',
+        'Not all of your records have the same unit. This will convert all units to $unit. Are you sure?',
       );
-    else if (unit != null && await mixedUnits() && mounted)
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Units conflict'),
-            content: Text(
-              'Not all of your records have the same unit. This will convert all units to $unit. Are you sure?',
-            ),
-            actions: <Widget>[
-              TextButton.icon(
-                label: const Text('Cancel'),
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton.icon(
-                label: const Text('Confirm'),
-                icon: const Icon(Icons.check),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await convertUnits();
-                  await doUpdate();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    else
-      await doUpdate();
+      if (!confirmed) return;
+    }
+
+    if (shouldConvert) await convertUnits();
+    await doUpdate();
 
     if (!mounted) return;
     Navigator.pop(context, name.text);
   }
 
-  Future<void> convertUnits() async {
-    if (unit == 'kg')
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight * 0.45359237, 
-          unit = 'kg'
-        WHERE name = ? AND unit = 'lb';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-    else if (unit == 'lb')
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight * 2.20462262, 
-          unit = 'lb'
-        WHERE name = ? AND unit = 'kg';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-    else if (unit == 'km') {
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight * 1.609, 
-          unit = 'km'
-        WHERE name = ? AND unit = 'mi';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight / 1000, 
-          unit = 'km'
-        WHERE name = ? AND unit = 'm';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-    } else if (unit == 'mi') {
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight / 1.609, 
-          unit = 'mi'
-        WHERE name = ? AND unit = 'km';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight / 1609.34, 
-          unit = 'mi'
-        WHERE name = ? AND unit = 'm';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-    } else if (unit == 'm') {
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight * 1000, 
-          unit = 'm'
-        WHERE name = ? AND unit = 'km';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
-      await db.customUpdate(
-        '''
-        UPDATE gym_sets SET weight = weight * 1609.34, 
-          unit = 'm'
-        WHERE name = ? AND unit = 'mi';
-      ''',
-        updates: {db.gymSets},
-        variables: [Variable(widget.name)],
-      );
+  void _setCardio(bool value) {
+    setState(() {
+      cardio = value;
+      if (!value && unit != null && !_isWeightUnit(unit!)) unit = 'kg';
+    });
+  }
+
+  bool _isWeightUnit(String value) =>
+      value == 'kg' || value == 'lb' || value == 'stone';
+
+  bool _isDistanceUnit(String value) =>
+      value == 'km' || value == 'mi' || value == 'm';
+
+  double convertStrengthValue(double value, String source, String target) {
+    if (source == target) return value;
+    switch ('$source->$target') {
+      case 'kg->lb':
+        return value * 2.20462262185;
+      case 'kg->stone':
+        return value / 6.35029318;
+      case 'lb->kg':
+        return value * 0.45359237;
+      case 'lb->stone':
+        return value / 14;
+      case 'stone->kg':
+        return value * 6.35029318;
+      case 'stone->lb':
+        return value * 14;
     }
+    return value;
+  }
+
+  double convertCardioValue(double value, String source, String target) {
+    if (source == target) return value;
+    switch ('$source->$target') {
+      case 'km->mi':
+        return value / 1.609344;
+      case 'km->m':
+        return value * 1000;
+      case 'mi->km':
+        return value * 1.609344;
+      case 'mi->m':
+        return value * 1609.344;
+      case 'm->km':
+        return value / 1000;
+      case 'm->mi':
+        return value / 1609.344;
+    }
+    return value;
+  }
+
+  Future<void> convertUnits() async {
+    final target = unit;
+    if (target == null) return;
+
+    final rows =
+        await (db.gymSets.select()
+              ..where((tbl) => tbl.name.equals(widget.name)))
+            .get();
+
+    await db.transaction(() async {
+      for (final row in rows) {
+        GymSetsCompanion companion;
+        if (_isWeightUnit(row.unit) && _isWeightUnit(target)) {
+          companion = GymSetsCompanion(
+            weight: Value(convertStrengthValue(row.weight, row.unit, target)),
+          );
+        } else if (_isDistanceUnit(row.unit) && _isDistanceUnit(target)) {
+          companion = GymSetsCompanion(
+            distance: Value(convertCardioValue(row.distance, row.unit, target)),
+          );
+        } else {
+          companion = const GymSetsCompanion();
+        }
+        await (db.gymSets.update()..where((tbl) => tbl.id.equals(row.id)))
+            .write(companion);
+      }
+    });
   }
 }

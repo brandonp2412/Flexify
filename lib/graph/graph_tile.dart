@@ -41,8 +41,10 @@ class GraphTile extends StatelessWidget {
           .floor()
           .toString()
           .padLeft(2, '0');
-      trailing =
-          "${toString(gymSet.distance.value)} ${gymSet.unit.value} / $minutes:$seconds";
+      final value = _isWeightUnit(gymSet.unit.value)
+          ? gymSet.weight.value
+          : gymSet.distance.value;
+      trailing = "${toString(value)} ${gymSet.unit.value} / $minutes:$seconds";
     } else {
       trailing =
           "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}";
@@ -119,7 +121,9 @@ class GraphTile extends StatelessWidget {
             final data = await getCardioData(
               target: gymSet.unit.value,
               name: gymSet.name.value,
-              metric: CardioMetric.pace,
+              metric: _isWeightUnit(gymSet.unit.value)
+                  ? CardioMetric.weight
+                  : CardioMetric.pace,
               period: Period.day,
               start: null,
               end: null,
@@ -166,4 +170,7 @@ class GraphTile extends StatelessWidget {
       ),
     );
   }
+
+  bool _isWeightUnit(String unit) =>
+      unit == 'kg' || unit == 'lb' || unit == 'stone';
 }

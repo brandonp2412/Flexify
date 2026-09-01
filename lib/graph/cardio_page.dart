@@ -41,6 +41,7 @@ class CardioPage extends StatefulWidget {
 class _CardioPageState extends State<CardioPage> {
   late List<CardioData> data = widget.data;
   late String target = widget.unit;
+  late String name = widget.name;
   late int limit;
   late CardioMetric metric;
   late Period period;
@@ -59,10 +60,12 @@ class _CardioPageState extends State<CardioPage> {
     final settings = context.read<SettingsState>().value;
     useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
-    metric = CardioMetric.values.firstWhere(
-      (m) => m.name == settings.defaultGraphMetric,
-      orElse: () => CardioMetric.pace,
-    );
+    metric = _isWeightUnit(target)
+        ? CardioMetric.weight
+        : CardioMetric.values.firstWhere(
+            (m) => m.name == settings.defaultGraphMetric,
+            orElse: () => CardioMetric.pace,
+          );
     period = Period.values.firstWhere(
       (p) => p.name == settings.defaultGraphPeriod,
       orElse: () => Period.day,
@@ -73,15 +76,23 @@ class _CardioPageState extends State<CardioPage> {
 
   Future<void> _loadPreferences() async {
     final pref =
-        await (db.graphPreferences.select()
-              ..where((t) => t.name.equals(widget.name)))
+        await (db.graphPreferences.select()..where((t) => t.name.equals(name)))
             .getSingleOrNull();
     if (pref == null || !mounted) return;
     setState(() {
-      metric = CardioMetric.values.firstWhere(
+      final savedMetric = CardioMetric.values.firstWhere(
         (m) => m.name == pref.metric,
         orElse: () => metric,
       );
+      metric =
+          _isWeightUnit(target) &&
+              !{
+                CardioMetric.weight,
+                CardioMetric.duration,
+                CardioMetric.incline,
+              }.contains(savedMetric)
+          ? CardioMetric.weight
+          : savedMetric;
       period = Period.values.firstWhere(
         (p) => p.name == pref.period,
         orElse: () => period,
@@ -96,7 +107,7 @@ class _CardioPageState extends State<CardioPage> {
   Future<void> _savePreferences() async {
     await db.graphPreferences.insertOne(
       GraphPreferencesCompanion.insert(
-        name: widget.name,
+        name: name,
         metric: Value(metric.name),
         period: Value(period.name),
         limit: Value(limit),
@@ -172,6 +183,9 @@ class _CardioPageState extends State<CardioPage> {
             break;
           case CardioMetric.inclineAdjustedPace:
             break;
+          case CardioMetric.weight:
+            text += " ${row.unit}";
+            break;
         }
         return LineTooltipItem(
           "$text\n$created",
@@ -199,8 +213,7 @@ class _CardioPageState extends State<CardioPage> {
         await (db.gymSets.select()
               ..where(
                 (tbl) =>
-                    tbl.created.equals(row.created) &
-                    tbl.name.equals(widget.name),
+                    tbl.created.equals(row.created) & tbl.name.equals(name),
               )
               ..limit(1))
             .getSingle();
@@ -220,13 +233,19 @@ class _CardioPageState extends State<CardioPage> {
     );
     final theme = Theme.of(context);
 
-    const metricOptions = <(CardioMetric, String)>[
-      (CardioMetric.pace, 'Pace (distance / time)'),
-      (CardioMetric.inclineAdjustedPace, 'Adjusted pace'),
-      (CardioMetric.duration, 'Duration'),
-      (CardioMetric.distance, 'Distance'),
-      (CardioMetric.incline, 'Incline'),
-    ];
+    final metricOptions = _isWeightUnit(target)
+        ? const <(CardioMetric, String)>[
+            (CardioMetric.weight, 'Weight'),
+            (CardioMetric.duration, 'Duration'),
+            (CardioMetric.incline, 'Incline'),
+          ]
+        : const <(CardioMetric, String)>[
+            (CardioMetric.pace, 'Pace (distance / time)'),
+            (CardioMetric.inclineAdjustedPace, 'Adjusted pace'),
+            (CardioMetric.duration, 'Duration'),
+            (CardioMetric.distance, 'Distance'),
+            (CardioMetric.incline, 'Incline'),
+          ];
 
     final spots = <FlSpot>[];
     for (var index = 0; index < data.length; index++) {
@@ -242,7 +261,7 @@ class _CardioPageState extends State<CardioPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.name),
+        title: Text(name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -258,7 +277,7 @@ class _CardioPageState extends State<CardioPage> {
                             mode: OrderingMode.desc,
                           ),
                         ])
-                        ..where((tbl) => tbl.name.equals(widget.name))
+                        ..where((tbl) => tbl.name.equals(name))
                         ..where((tbl) => tbl.hidden.equals(false))
                         ..limit(20))
                       .get();
@@ -267,7 +286,7 @@ class _CardioPageState extends State<CardioPage> {
               await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => GraphHistoryPage(
-                    name: widget.name,
+                    name: name,
                     gymSets: gymSets,
                     tabController: widget.tabCtrl,
                   ),
@@ -280,12 +299,36 @@ class _CardioPageState extends State<CardioPage> {
             tooltip: "History",
           ),
           IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
+            onPressed: () async {
+              final newName = await Navigator.of(context).push<String>(
                 MaterialPageRoute(
-                  builder: (context) => EditGraphPage(name: widget.name),
+                  builder: (context) => EditGraphPage(name: name),
                 ),
               );
+              if (mounted && newName != null) {
+                final updated =
+                    await (db.gymSets.select()
+                          ..where((tbl) => tbl.name.equals(newName))
+                          ..limit(1))
+                        .getSingleOrNull();
+                if (!mounted) return;
+                setState(() {
+                  name = newName;
+                  if (updated != null) target = updated.unit;
+                  if (_isWeightUnit(target) &&
+                      !{
+                        CardioMetric.weight,
+                        CardioMetric.duration,
+                        CardioMetric.incline,
+                      }.contains(metric)) {
+                    metric = CardioMetric.weight;
+                  } else if (!_isWeightUnit(target) &&
+                      metric == CardioMetric.weight) {
+                    metric = CardioMetric.pace;
+                  }
+                });
+                setData();
+              }
             },
             icon: const Icon(Icons.edit),
             tooltip: "Edit",
@@ -376,7 +419,7 @@ class _CardioPageState extends State<CardioPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            "No data yet for ${widget.name}",
+                            "No data yet for $name",
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -450,12 +493,15 @@ class _CardioPageState extends State<CardioPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (metric == CardioMetric.distance &&
+                    if ((metric == CardioMetric.distance ||
+                            metric == CardioMetric.weight) &&
                         settings.showUnits) ...[
                       sectionLabel('Unit'),
                       DropdownButtonFormField<String>(
                         initialValue: target,
-                        items: cardioDistanceUnitMenuItems,
+                        items: metric == CardioMetric.weight
+                            ? strengthUnitMenuItems
+                            : cardioDistanceUnitMenuItems,
                         onChanged: (value) {
                           setState(() {
                             target = value!;
@@ -581,7 +627,7 @@ class _CardioPageState extends State<CardioPage> {
       end: end,
       period: period,
       metric: metric,
-      name: widget.name,
+      name: name,
       start: start,
       target: target,
       limit: limit,
@@ -592,6 +638,9 @@ class _CardioPageState extends State<CardioPage> {
       data = cardio;
     });
   }
+
+  bool _isWeightUnit(String value) =>
+      value == 'kg' || value == 'lb' || value == 'stone';
 
   Future<void> _selectEnd() async {
     final DateTime? picked = await showDatePicker(

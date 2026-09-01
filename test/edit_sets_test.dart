@@ -40,6 +40,19 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsNothing);
+    expect(find.bySemanticsLabel('Weight'), findsOne);
+    expect(find.bySemanticsLabel('Distance'), findsNothing);
+
+    final unitDropdown = find.byWidgetPredicate(
+      (widget) =>
+          widget is DropdownButtonFormField<String> &&
+          widget.decoration.labelText == 'Unit',
+    );
+    await tester.tap(unitDropdown);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Kilometers (km)').last);
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Weight'), findsNothing);
     expect(find.bySemanticsLabel('Distance'), findsOne);
 
     await tester.tap(find.byType(Switch));
@@ -92,7 +105,12 @@ void main() {
     await tester.pump();
     await tester.enterText(find.bySemanticsLabel('Weight'), '200');
     await tester.pump();
-    await tester.tap(find.bySemanticsLabel('Unit'));
+    final unitDropdown = find.byWidgetPredicate(
+      (widget) =>
+          widget is DropdownButtonFormField<String> &&
+          widget.decoration.labelText == 'Unit',
+    );
+    await tester.tap(unitDropdown);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Pounds (lb)'));
     await tester.pumpAndSettle();

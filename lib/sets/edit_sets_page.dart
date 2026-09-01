@@ -114,32 +114,52 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     : const Icon(Icons.fitness_center),
                 contentPadding: EdgeInsets.zero,
                 onTap: () => setState(() {
-                  _cardio = !(_cardio ?? false);
+                  _setCardio(!(_cardio ?? false));
                 }),
                 trailing: Switch(
                   value: _cardio ?? false,
                   onChanged: (value) => setState(() {
-                    _cardio = value;
+                    _setCardio(value);
                   }),
                 ),
               ),
               if (_cardio == true) ...[
-                TextFormField(
-                  controller: _distance,
-                  decoration: InputDecoration(
-                    labelText: 'Distance',
-                    hintText: _oldDist,
+                if (_isWeightUnit(_unit))
+                  TextFormField(
+                    controller: _weight,
+                    decoration: InputDecoration(
+                      labelText: 'Weight',
+                      hintText: _oldWeights,
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onTap: () => selectAll(_weight),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return null;
+                      if (double.tryParse(value) == null)
+                        return 'Invalid number';
+                      return null;
+                    },
+                  )
+                else
+                  TextFormField(
+                    controller: _distance,
+                    decoration: InputDecoration(
+                      labelText: 'Distance',
+                      hintText: _oldDist,
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onTap: () => selectAll(_distance),
+                    validator: (value) {
+                      if (value == null) return null;
+                      if (double.tryParse(value) == null)
+                        return 'Invalid number';
+                      return null;
+                    },
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(_distance),
-                  validator: (value) {
-                    if (value == null) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
-                    return null;
-                  },
-                ),
                 Row(
                   children: [
                     Expanded(
@@ -340,11 +360,19 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   List<DropdownMenuItem<String>> _getUnitItems() {
     if (_cardio == true) {
-      return cardioUnitMenuItems;
+      return [...strengthUnitMenuItems, ...cardioUnitMenuItems];
     } else {
       return strengthUnitMenuItems;
     }
   }
+
+  void _setCardio(bool value) {
+    _cardio = value;
+    if (!value && !_isWeightUnit(_unit)) _unit = 'kg';
+  }
+
+  bool _isWeightUnit(String? value) =>
+      value == 'kg' || value == 'lb' || value == 'stone';
 
   @override
   void dispose() {
@@ -372,6 +400,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
         .then((gymSets) {
           setState(() {
             _cardio = gymSets.first.cardio;
+            final units = gymSets.map((gymSet) => gymSet.unit).toSet();
+            _unit = units.length == 1 ? units.single : null;
             _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
             _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
             _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
