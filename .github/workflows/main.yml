@@ -9,6 +9,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   PUB_SUMMARY_ONLY: true
   KOTLIN_VERSION: "2.1.0"
@@ -21,17 +24,17 @@ jobs:
   quality-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           submodules: recursive
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
           flutter/bin/flutter --version
           flutter/bin/flutter config --no-analytics
 
@@ -52,10 +55,12 @@ jobs:
           - device_type: tenInchScreenshots
             profile: Nexus 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
 
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: "zulu"
           java-version: "21"
@@ -64,7 +69,7 @@ jobs:
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
           flutter/bin/flutter config --no-analytics
 
       - name: Get Flutter dependencies
@@ -77,7 +82,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Generate ${{ matrix.device_type }}
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         env:
           FLEXIFY_DEVICE_TYPE: ${{ matrix.device_type }}
           SCREENSHOT_SCREEN_SIZE: ${{ matrix.screen_size }}
@@ -90,7 +95,7 @@ jobs:
           script: ./scripts/ci-screenshots.sh
 
       - name: Upload ${{ matrix.device_type }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: screenshots-${{ matrix.device_type }}
           path: fastlane/metadata/android/en-US/images/${{ matrix.device_type }}
@@ -100,10 +105,12 @@ jobs:
   patrol-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
 
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: "zulu"
           java-version: "21"
@@ -112,7 +119,7 @@ jobs:
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
           flutter/bin/flutter config --no-analytics
 
       - name: Get Flutter dependencies
@@ -130,7 +137,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Run Patrol tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         with:
           api-level: 35
           target: google_apis
@@ -150,26 +157,26 @@ jobs:
       build_number: ${{ steps.bump.outputs.build_number }}
       commit_sha: ${{ steps.commit-push.outputs.commit_sha }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
           submodules: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Download phone screenshots
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: screenshots-phoneScreenshots
           path: fastlane/metadata/android/en-US/images/phoneScreenshots
 
       - name: Download seven-inch screenshots
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: screenshots-sevenInchScreenshots
           path: fastlane/metadata/android/en-US/images/sevenInchScreenshots
 
       - name: Download ten-inch screenshots
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: screenshots-tenInchScreenshots
           path: fastlane/metadata/android/en-US/images/tenInchScreenshots
@@ -195,8 +202,8 @@ jobs:
           IFS='.' read -ra M <<< "$CURRENT_MSIX"
           NEW_MSIX="${M[0]}.${M[1]}.$((${M[2]} + 1)).${M[3]}"
 
-          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "build_number=$NEW_BUILD" >> $GITHUB_OUTPUT
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "build_number=$NEW_BUILD" >> "$GITHUB_OUTPUT"
 
           sed -i "s/^version: .*/version: $NEW_VERSION+$NEW_BUILD/" pubspec.yaml
           sed -i "s/msix_version: .*/msix_version: $NEW_MSIX/" pubspec.yaml
@@ -227,23 +234,27 @@ jobs:
 
       - name: Commit and push version bump
         id: commit-push
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.bump.outputs.version }}
         run: |
           git add pubspec.yaml fastlane/metadata assets/changelogs
-          git commit -m "Release ${{ steps.bump.outputs.version }} [skip ci]"
+          git commit -m "Release $RELEASE_VERSION [skip ci]"
+          gh auth setup-git
           git push origin main
-          echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   build-android:
     needs: version-bump
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: "zulu"
           java-version: "21"
@@ -254,26 +265,28 @@ jobs:
           sudo chown $USER -R /home/brandon
 
       - name: Move project to F-Droid location
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
           cd ..
-          mv ${{ github.event.repository.name }} /home/brandon/flexify
+          mv "$REPO_NAME" /home/brandon/flexify
 
       - name: Normalize Android SDK path
         working-directory: /home/brandon/flexify
         run: |
           sudo mkdir -p /opt/android-sdk
           sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
-          echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_HOME=/opt/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> "$GITHUB_ENV"
 
       - name: Setup Flutter from submodule and get dependencies
         working-directory: /home/brandon/flexify
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "/home/brandon/flexify/flutter/bin" >> $GITHUB_PATH
+          echo "/home/brandon/flexify/flutter/bin" >> "$GITHUB_PATH"
           export PUB_CACHE=$(pwd)/.pub-cache
-          echo "PUB_CACHE=$(pwd)/.pub-cache" >> $GITHUB_ENV
+          echo "PUB_CACHE=$(pwd)/.pub-cache" >> "$GITHUB_ENV"
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get
 
@@ -283,7 +296,9 @@ jobs:
 
       - name: Decode Android keystore
         working-directory: /home/brandon/flexify
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
 
       - name: Tune Gradle for CI runner memory
         working-directory: /home/brandon/flexify
@@ -299,10 +314,14 @@ jobs:
 
       - name: Build android (one ABI at a time)
         working-directory: /home/brandon/flexify
+        env:
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          echo "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" > android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
           flutter build apk --release --split-per-abi --target-platform android-x64
           flutter build apk --release --split-per-abi --target-platform android-arm64
@@ -314,7 +333,7 @@ jobs:
           mv build/* "${GITHUB_WORKSPACE}/build"
 
       - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           retention-days: 7
           name: android-builds
@@ -327,16 +346,16 @@ jobs:
     needs: version-bump
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> "$GITHUB_PATH"
           flutter/bin/flutter config --no-analytics
 
       - name: Get Flutter dependencies
@@ -359,7 +378,7 @@ jobs:
           zip -r flexify-linux.zip .
 
       - name: Upload Linux artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           retention-days: 7
           name: linux-builds
@@ -369,16 +388,16 @@ jobs:
     needs: version-bump
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "${{ github.workspace }}\flutter\bin" >> $env:GITHUB_PATH
+          echo "$env:GITHUB_WORKSPACE\flutter\bin" >> $env:GITHUB_PATH
           flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
@@ -394,7 +413,7 @@ jobs:
         run: Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
 
       - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           retention-days: 7
           name: windows-builds
@@ -407,20 +426,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     permissions:
-      contents: write
+      contents: read
       pages: write
       id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> "$GITHUB_PATH"
           flutter/bin/flutter config --no-analytics
 
       - name: Get Flutter dependencies
@@ -433,22 +452,24 @@ jobs:
         run: dart run build_runner build -d
 
       - name: Build Flutter web
-        run: flutter build web --release --base-href /${{ github.event.repository.name }}/
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: flutter build web --release --base-href "/${REPO_NAME}/"
 
       - name: Add privacy policy to web deployment
         run: cp docs/privacy-policy.html build/web/privacy-policy.html
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@1f0c5cde4bc74cd7e1254d0cb4de8d49e9068c7d # v4
 
       - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: ./build/web
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
 
   create-github-release:
     needs: [version-bump, build-android, build-linux, build-windows]
@@ -456,24 +477,28 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
 
       - name: Create and push tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ needs.version-bump.outputs.version }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag "${{ needs.version-bump.outputs.version }}"
-          git push origin "${{ needs.version-bump.outputs.version }}"
+          git tag "$RELEASE_VERSION"
+          gh auth setup-git
+          git push origin "$RELEASE_VERSION"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
         with:
           tag_name: ${{ needs.version-bump.outputs.version }}
           name: ${{ needs.version-bump.outputs.version }}
@@ -494,16 +519,16 @@ jobs:
       actions: write
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Setup Flutter from submodule
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "${{ github.workspace }}\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "$env:GITHUB_WORKSPACE\flutter\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
@@ -516,21 +541,28 @@ jobs:
         run: flutter pub run msix:create
 
       - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
         with:
           dotnet-version: "9.0.x"
 
       - name: Setup Microsoft Store CLI
-        uses: microsoft/setup-msstore-cli@v1
+        uses: microsoft/setup-msstore-cli@3b2ec9136230357ce9abc02b9d056626fb248d3f # v1
 
       - name: Configure Microsoft Store CLI
-        run: msstore reconfigure --tenantId ${{ secrets.AZURE_TENANT_ID }} --clientId ${{ secrets.AZURE_CLIENT_ID }} --clientSecret ${{ secrets.AZURE_CLIENT_SECRET }} --sellerId ${{ secrets.SELLER_ID }}
+        env:
+          MSSTORE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          MSSTORE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          MSSTORE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          MSSTORE_SELLER_ID: ${{ secrets.SELLER_ID }}
+        run: msstore reconfigure --tenantId $env:MSSTORE_TENANT_ID --clientId $env:MSSTORE_CLIENT_ID --clientSecret $env:MSSTORE_CLIENT_SECRET --sellerId $env:MSSTORE_SELLER_ID
 
       - name: Publish to Microsoft Store
         id: publish_msstore
         shell: pwsh
+        env:
+          PRODUCT_ID: ${{ secrets.PRODUCT_ID }}
         run: |
-          msstore publish --inputDirectory build/windows/x64/runner/Release --appId ${{ secrets.PRODUCT_ID }} --packageRolloutPercentage 100
+          msstore publish --inputDirectory build/windows/x64/runner/Release --appId $env:PRODUCT_ID --packageRolloutPercentage 100
           if ($LASTEXITCODE -eq 0) {
             "published=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           } else {
@@ -540,7 +572,7 @@ jobs:
 
       - name: Start Microsoft Store finalization checks
         if: steps.publish_msstore.outputs.published == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -563,17 +595,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
 
       - name: Download Android artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: android-builds
           path: android-builds
 
       - name: VirusTotal Scan
         id: vt
-        uses: crazy-max/ghaction-virustotal@v4
+        uses: crazy-max/ghaction-virustotal@d34968c958ae283fe976efed637081b9f9dcf74f # v4
         with:
           vt_api_key: ${{ secrets.VT_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -584,9 +618,10 @@ jobs:
 
       - name: Append VirusTotal links to release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.version-bump.outputs.version }}
           ANALYSIS: ${{ steps.vt.outputs.analysis }}
+          REPOSITORY: ${{ github.repository }}
         run: |
           VT_SECTION=$'\n\n<details>\n<summary>VirusTotal Analysis</summary>\n\n'
           IFS=',' read -ra ENTRIES <<< "$ANALYSIS"
@@ -596,5 +631,5 @@ jobs:
             VT_SECTION+="- [${filename}](${url})"$'\n'
           done
           VT_SECTION+=$'\n</details>'
-          CURRENT_BODY=$(gh release view "$VERSION" --json body -q .body)
-          gh release edit "$VERSION" --notes "${CURRENT_BODY}${VT_SECTION}"
+          CURRENT_BODY=$(gh release view "$VERSION" --repo "$REPOSITORY" --json body -q .body)
+          gh release edit "$VERSION" --repo "$REPOSITORY" --notes "${CURRENT_BODY}${VT_SECTION}"
