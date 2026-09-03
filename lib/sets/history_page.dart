@@ -4,6 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/filters.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
@@ -88,8 +89,24 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final desktop = isDesktopLayout(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: desktop
+          ? AppBar(
+              title: const Text('History'),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: FilledButton.icon(
+                    onPressed: onAdd,
+                    icon: const Icon(Icons.add_rounded),
+                    label: const Text('Add set'),
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {
@@ -254,12 +271,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           );
         },
       ),
-      floatingActionButton: AnimatedFab(
-        onPressed: onAdd,
-        label: Text('Add'),
-        icon: Icon(Icons.add),
-        scroll: scroll,
-      ),
+      floatingActionButton: desktop
+          ? null
+          : AnimatedFab(
+              onPressed: onAdd,
+              label: const Text('Add'),
+              icon: const Icon(Icons.add),
+              scroll: scroll,
+            ),
     );
   }
 

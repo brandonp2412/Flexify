@@ -10,6 +10,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -84,54 +85,112 @@ class _EditPlanPageState extends State<EditPlanPage> {
     else
       title = "Add plan";
 
+    final desktop = isDesktopLayout(context);
+    final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text(title)),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          if (desktop)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: FilledButton.icon(
+                onPressed: save,
+                icon: const Icon(Icons.save_rounded),
+                label: const Text('Save plan'),
+              ),
+            ),
+        ],
+      ),
+      body: ResponsiveContent(
+        maxWidth: 1040,
+        desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+        mobilePadding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
           children: [
-            TextField(
-              decoration: const InputDecoration(labelText: 'Title (optional)'),
-              controller: _titleCtrl,
-              textCapitalization: TextCapitalization.sentences,
+            if (desktop)
+              Text(
+                'Plan details',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+              ),
+            if (desktop) const SizedBox(height: 12),
+            Container(
+              padding: desktop ? const EdgeInsets.all(20) : EdgeInsets.zero,
+              decoration: desktop
+                  ? BoxDecoration(
+                      color: colors.surfaceContainerLow,
+                      borderRadius: BorderRadius.circular(20),
+                    )
+                  : null,
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Title (optional)',
+                    ),
+                    controller: _titleCtrl,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  const SizedBox(height: 16),
+                  DaySelector(daySwitches: _days),
+                ],
+              ),
             ),
-            const SizedBox(height: 16.0),
-            DaySelector(daySwitches: _days),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SearchBar(
-                leading: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(Icons.search),
+            SizedBox(height: desktop ? 24 : 8),
+            if (desktop)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Exercises',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                textCapitalization: TextCapitalization.sentences,
-                hintText: 'Search exercises...',
-                onChanged: (value) => setState(() {
-                  _search = value;
-                }),
+              ),
+            SearchBar(
+              controller: _searchCtrl,
+              leading: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(Icons.search),
+              ),
+              textCapitalization: TextCapitalization.sentences,
+              hintText: 'Search exercises...',
+              onChanged: (value) => setState(() {
+                _search = value;
+              }),
+            ),
+            const SizedBox(height: 10),
+            Material(
+              color: desktop ? colors.surfaceContainerLow : Colors.transparent,
+              borderRadius: desktop ? BorderRadius.circular(14) : null,
+              child: ListTile(
+                leading: const Icon(Icons.add_rounded),
+                title: Text(
+                  _search.isEmpty ? 'Add exercise' : 'Add "$_search"',
+                ),
+                trailing: desktop
+                    ? const Icon(Icons.chevron_right_rounded)
+                    : null,
+                onTap: addExercise,
               ),
             ),
-            const SizedBox(height: 8),
-            ListTile(
-              leading: IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: addExercise,
-              ),
-              title: Text(_search.isEmpty ? 'Add exercise' : 'Add "$_search"'),
-              onTap: addExercise,
-            ),
+            const SizedBox(height: 6),
             ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
-            const SizedBox(height: 176),
+            SizedBox(height: desktop ? 40 : 176),
           ],
         ),
       ),
-      floatingActionButton: AnimatedFab(
-        onPressed: save,
-        label: const Text("Save"),
-        icon: const Icon(Icons.save),
-      ),
+      floatingActionButton: desktop
+          ? null
+          : AnimatedFab(
+              onPressed: save,
+              label: const Text("Save"),
+              icon: const Icon(Icons.save),
+            ),
     );
   }
 

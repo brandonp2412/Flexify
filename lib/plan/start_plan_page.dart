@@ -12,6 +12,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -62,6 +63,24 @@ class _StartPlanPageState extends State<StartPlanPage>
       builder: (context, snapshot) {
         if (snapshot.data == null) return SizedBox();
 
+        final desktop = isDesktopLayout(context);
+        final colors = Theme.of(context).colorScheme;
+
+        Widget exerciseList() => snapshot.data!.isEmpty
+            ? const Center(
+                child: Text(
+                  "No exercises yet. Edit this plan to add some.",
+                  textAlign: TextAlign.center,
+                ),
+              )
+            : StartList(
+                exercises: snapshot.data!,
+                selected: _selected,
+                onSelect: select,
+                plan: widget.plan,
+                onMax: () => _planState.updateGymCounts(widget.plan.id),
+              );
+
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -72,6 +91,7 @@ class _StartPlanPageState extends State<StartPlanPage>
             ),
             actions: [
               IconButton(
+                tooltip: 'Edit plan',
                 onPressed: () async {
                   final plan =
                       await (db.plans.select()
@@ -88,50 +108,99 @@ class _StartPlanPageState extends State<StartPlanPage>
                 },
                 icon: const Icon(Icons.edit),
               ),
+              if (desktop && snapshot.data!.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: FilledButton.icon(
+                    onPressed: () async => await save(snapshot),
+                    icon: const Icon(Icons.save_rounded),
+                    label: const Text('Save set'),
+                  ),
+                ),
             ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(8),
+          body: ResponsiveContent(
+            maxWidth: desktopWideContentMaxWidth,
+            desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+            mobilePadding: const EdgeInsets.all(8),
             child: Form(
               key: _key,
-              child: Column(
-                children: [
-                  if (!_cardio) ...strengthFields(snapshot),
-                  if (_cardio) ...cardioFields(snapshot),
-                  unitSelector(),
-                  notesField(),
-                  if (snapshot.data!.isNotEmpty &&
-                      _selected < snapshot.data!.length)
-                    SessionSets(
-                      exercise: snapshot.data![_selected].exercise,
-                      planId: widget.plan.id,
-                    ),
-                  if (snapshot.data!.isEmpty)
-                    const Expanded(
-                      child: Center(
-                        child: Text(
-                          "No exercises yet. Edit this plan to add some.",
-                          textAlign: TextAlign.center,
+              child: desktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          width: 420,
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: colors.surfaceContainerLow,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    snapshot.data!.isNotEmpty &&
+                                            _selected < snapshot.data!.length
+                                        ? snapshot.data![_selected].exercise
+                                        : 'Set details',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.w700),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  if (!_cardio) ...strengthFields(snapshot),
+                                  if (_cardio) ...cardioFields(snapshot),
+                                  unitSelector(),
+                                  notesField(),
+                                  if (snapshot.data!.isNotEmpty &&
+                                      _selected < snapshot.data!.length) ...[
+                                    const SizedBox(height: 16),
+                                    SessionSets(
+                                      exercise:
+                                          snapshot.data![_selected].exercise,
+                                      planId: widget.plan.id,
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colors.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: exerciseList(),
+                          ),
+                        ),
+                      ],
                     )
-                  else
-                    Expanded(
-                      child: StartList(
-                        exercises: snapshot.data!,
-                        selected: _selected,
-                        onSelect: select,
-                        plan: widget.plan,
-                        onMax: () {
-                          _planState.updateGymCounts(widget.plan.id);
-                        },
-                      ),
+                  : Column(
+                      children: [
+                        if (!_cardio) ...strengthFields(snapshot),
+                        if (_cardio) ...cardioFields(snapshot),
+                        unitSelector(),
+                        notesField(),
+                        if (snapshot.data!.isNotEmpty &&
+                            _selected < snapshot.data!.length)
+                          SessionSets(
+                            exercise: snapshot.data![_selected].exercise,
+                            planId: widget.plan.id,
+                          ),
+                        Expanded(child: exerciseList()),
+                      ],
                     ),
-                ],
-              ),
             ),
           ),
-          floatingActionButton: snapshot.data!.isEmpty
+          floatingActionButton: desktop || snapshot.data!.isEmpty
               ? null
               : AnimatedFab(
                   onPressed: () async => await save(snapshot),

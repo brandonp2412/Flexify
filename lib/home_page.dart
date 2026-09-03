@@ -4,6 +4,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plans_page.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -147,64 +148,132 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (_controller.index >= tabs.length) _controller.index = tabs.length - 1;
     }
 
+    final desktop = isDesktopLayout(context);
+
+    final content = Stack(
+      children: [
+        TabBarView(
+          controller: _controller,
+          physics: scrollableTabs
+              ? const AlwaysScrollableScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
+          children: tabs.map((tab) {
+            if (tab == 'HistoryPage')
+              return HistoryPage(tabController: _controller);
+            else if (tab == 'PlansPage')
+              return PlansPage(tabController: _controller);
+            else if (tab == 'GraphsPage')
+              return GraphsPage(tabController: _controller);
+            else if (tab == 'TimerPage')
+              return TimerPage(tabController: _controller);
+            else if (tab == 'SettingsPage')
+              return const SettingsPage();
+            else
+              return ErrorWidget("Couldn't build tab content.");
+          }).toList(),
+        ),
+        if (!desktop)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: ValueListenableBuilder(
+              valueListenable: _controller.animation!,
+              builder: (context, value, child) {
+                return BottomNav(
+                  tabs: tabs,
+                  currentIndex: value.round(),
+                  onTap: _controller.animateTo,
+                  onLongPress: hideTab,
+                );
+              },
+            ),
+          ),
+        Consumer<SettingsState>(
+          builder: (context, settings, child) => Positioned(
+            top: settings.value.progressPosition == 'top' ? 8 : null,
+            bottom: settings.value.progressPosition == 'bottom'
+                ? (desktop ? 12 : 0)
+                : null,
+            left: desktop ? 24 : 48,
+            right: desktop ? 24 : 48,
+            child: settings.value.progressPosition != 'none'
+                ? const TimerProgressIndicator()
+                : const SizedBox(),
+          ),
+        ),
+      ],
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      extendBody: true,
+      extendBody: !desktop,
       body: SafeArea(
-        child: Stack(
-          children: [
-            TabBarView(
-              controller: _controller,
-              physics: scrollableTabs
-                  ? const AlwaysScrollableScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
-              children: tabs.map((tab) {
-                if (tab == 'HistoryPage')
-                  return HistoryPage(tabController: _controller);
-                else if (tab == 'PlansPage')
-                  return PlansPage(tabController: _controller);
-                else if (tab == 'GraphsPage')
-                  return GraphsPage(tabController: _controller);
-                else if (tab == 'TimerPage')
-                  return TimerPage(tabController: _controller);
-                else if (tab == 'SettingsPage')
-                  return const SettingsPage();
-                else
-                  return ErrorWidget("Couldn't build tab content.");
-              }).toList(),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: ValueListenableBuilder(
-                valueListenable: _controller.animation!,
-                builder: (context, value, child) {
-                  return BottomNav(
-                    tabs: tabs,
-                    currentIndex: value.round(),
-                    onTap: (index) {
-                      _controller.animateTo(index);
-                    },
-                    onLongPress: hideTab,
-                  );
-                },
-              ),
-            ),
-            Consumer<SettingsState>(
-              builder: (context, settings, child) => Positioned(
-                top: settings.value.progressPosition == 'top' ? 0 : null,
-                bottom: settings.value.progressPosition == 'bottom' ? 0 : null,
-                left: 48,
-                right: 48,
-                child: settings.value.progressPosition != 'none'
-                    ? const TimerProgressIndicator()
-                    : SizedBox(),
-              ),
-            ),
-          ],
-        ),
+        child: desktop
+            ? Row(
+                children: [
+                  Container(
+                    width: 224,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surfaceContainerLow,
+                      border: Border(
+                        right: BorderSide(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.outlineVariant.withValues(alpha: .35),
+                        ),
+                      ),
+                    ),
+                    child: ValueListenableBuilder(
+                      valueListenable: _controller.animation!,
+                      builder: (context, value, child) {
+                        return NavigationRail(
+                          extended: true,
+                          minExtendedWidth: 224,
+                          backgroundColor: Colors.transparent,
+                          selectedIndex: value.round().clamp(
+                            0,
+                            tabs.length - 1,
+                          ),
+                          onDestinationSelected: _controller.animateTo,
+                          leading: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.fitness_center_rounded,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'Flexify',
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                          ),
+                          destinations: tabs
+                              .map(
+                                (tab) => NavigationRailDestination(
+                                  icon: Icon(BottomNav.iconForTab(tab)),
+                                  selectedIcon: Icon(BottomNav.iconForTab(tab)),
+                                  label: Text(
+                                    BottomNav.labelForTab(tab),
+                                    key: Key(tab),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(child: content),
+                ],
+              )
+            : content,
       ),
     );
   }

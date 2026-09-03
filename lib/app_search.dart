@@ -1,3 +1,4 @@
+import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -94,8 +95,10 @@ class _AppSearchState extends State<AppSearch> {
       trailingMain = const SizedBox.shrink(key: ValueKey('emptyWidget'));
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+    return ResponsiveContent(
+      maxWidth: 760,
+      desktopPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+      mobilePadding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: SearchBar(
         hintText: widget.hintText ?? "Search...",
         controller: _ctrl,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
@@ -156,10 +157,37 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
 
     final timer = widget.timerState.timer;
     final countdownActive = timer.getDuration() > Duration.zero;
+    final desktop = isDesktopLayout(context);
+
+    final timerVisual = countdownActive
+        ? const TimerCircularProgressIndicator()
+        : StopwatchProgressIndicator(
+            startedAt: _stopwatchStartedAt,
+            accumulated: _stopwatchAccumulated,
+            isRunning: _stopwatchRunning,
+            timerState: widget.timerState,
+            onRestart: _restartStopwatch,
+          );
+
+    Widget? desktopAction;
+    if (timer.isRunning()) {
+      desktopAction = FilledButton.icon(
+        onPressed: () async => await widget.timerState.stopTimer(),
+        icon: const Icon(Icons.stop_rounded),
+        label: const Text('Stop timer'),
+      );
+    } else if (!countdownActive) {
+      desktopAction = FilledButton.icon(
+        onPressed: _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
+        icon: Icon(_stopwatchRunning ? Icons.pause_rounded : Icons.play_arrow),
+        label: Text(_stopwatchRunning ? 'Pause' : 'Start stopwatch'),
+      );
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        title: desktop ? const Text('Timer') : null,
         actions: [
           IconButton(
             onPressed: () {
@@ -172,40 +200,46 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 80),
+        padding: EdgeInsets.only(bottom: desktop ? 24 : 80),
         child: Center(
-          child: countdownActive
-              ? const TimerCircularProgressIndicator()
-              : StopwatchProgressIndicator(
-                  startedAt: _stopwatchStartedAt,
-                  accumulated: _stopwatchAccumulated,
-                  isRunning: _stopwatchRunning,
-                  timerState: widget.timerState,
-                  onRestart: _restartStopwatch,
-                ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              timerVisual,
+              if (desktop && desktopAction != null) ...[
+                const SizedBox(height: 20),
+                desktopAction,
+              ],
+            ],
+          ),
         ),
       ),
-      floatingActionButton: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 150),
-        transitionBuilder: (child, animation) {
-          return ScaleTransition(scale: animation, child: child);
-        },
-        child: timer.isRunning()
-            ? AnimatedFab(
-                onPressed: () async => await widget.timerState.stopTimer(),
-                icon: const Icon(Icons.stop),
-                label: const Text("Stop"),
-              )
-            : countdownActive
-            ? const SizedBox()
-            : AnimatedFab(
-                onPressed: _stopwatchRunning
-                    ? _pauseStopwatch
-                    : _startStopwatch,
-                icon: Icon(_stopwatchRunning ? Icons.pause : Icons.play_arrow),
-                label: Text(_stopwatchRunning ? "Pause" : "Start"),
-              ),
-      ),
+      floatingActionButton: desktop
+          ? null
+          : AnimatedSwitcher(
+              duration: const Duration(milliseconds: 150),
+              transitionBuilder: (child, animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+              child: timer.isRunning()
+                  ? AnimatedFab(
+                      onPressed: () async =>
+                          await widget.timerState.stopTimer(),
+                      icon: const Icon(Icons.stop),
+                      label: const Text("Stop"),
+                    )
+                  : countdownActive
+                  ? const SizedBox()
+                  : AnimatedFab(
+                      onPressed: _stopwatchRunning
+                          ? _pauseStopwatch
+                          : _startStopwatch,
+                      icon: Icon(
+                        _stopwatchRunning ? Icons.pause : Icons.play_arrow,
+                      ),
+                      label: Text(_stopwatchRunning ? "Pause" : "Start"),
+                    ),
+            ),
     );
   }
 }

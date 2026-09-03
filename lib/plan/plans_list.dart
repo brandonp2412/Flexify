@@ -7,6 +7,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plan_tile.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
@@ -90,6 +91,7 @@ class _PlansListState extends State<PlansList> {
     if (settings.value.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
         scrollController: widget.scroll,
+        buildDefaultDragHandles: !isDesktopLayout(context),
         itemCount: filteredPlans.length,
         padding: const EdgeInsets.only(
           bottom: bottomNavHeight,
@@ -98,14 +100,16 @@ class _PlansListState extends State<PlansList> {
         itemBuilder: (context, index) {
           final plan = filteredPlans[index];
 
-          return PlanTile(
+          return ResponsiveContent(
             key: Key(plan.id.toString()),
-            plan: plan,
-            weekday: weekday,
-            index: index,
-            navigatorKey: widget.navKey,
-            selected: widget.selected,
-            onSelect: (id) => widget.onSelect(id),
+            child: PlanTile(
+              plan: plan,
+              weekday: weekday,
+              index: index,
+              navigatorKey: widget.navKey,
+              selected: widget.selected,
+              onSelect: (id) => widget.onSelect(id),
+            ),
           );
         },
         onReorderItem: (int old, int idx) async {
@@ -137,13 +141,15 @@ class _PlansListState extends State<PlansList> {
       itemBuilder: (context, index) {
         final plan = filteredPlans[index];
 
-        return PlanTile(
-          plan: plan,
-          weekday: weekday,
-          index: index,
-          navigatorKey: widget.navKey,
-          selected: widget.selected,
-          onSelect: (id) => widget.onSelect(id),
+        return ResponsiveContent(
+          child: PlanTile(
+            plan: plan,
+            weekday: weekday,
+            index: index,
+            navigatorKey: widget.navKey,
+            selected: widget.selected,
+            onSelect: (id) => widget.onSelect(id),
+          ),
         );
       },
     );

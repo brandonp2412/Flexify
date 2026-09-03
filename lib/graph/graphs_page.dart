@@ -14,6 +14,7 @@ import 'package:flexify/graph/global_progress_page.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -149,8 +150,28 @@ class GraphsPageState extends State<GraphsPage>
       unit == 'kg' || unit == 'lb' || unit == 'stone';
 
   Scaffold graphsPage() {
+    final desktop = isDesktopLayout(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: desktop
+          ? AppBar(
+              title: const Text('Graphs'),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: FilledButton.icon(
+                    onPressed: () => navKey.currentState!.push(
+                      MaterialPageRoute(
+                        builder: (context) => const AddExercisePage(),
+                      ),
+                    ),
+                    icon: const Icon(Icons.add_rounded),
+                    label: const Text('New exercise'),
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: StreamBuilder(
         stream: _stream,
         builder: (context, snapshot) {
@@ -276,14 +297,18 @@ class GraphsPageState extends State<GraphsPage>
           );
         },
       ),
-      floatingActionButton: AnimatedFab(
-        onPressed: () => navKey.currentState!.push(
-          MaterialPageRoute(builder: (context) => const AddExercisePage()),
-        ),
-        label: Text('Add'),
-        scroll: _scroll,
-        icon: Icon(Icons.add),
-      ),
+      floatingActionButton: desktop
+          ? null
+          : AnimatedFab(
+              onPressed: () => navKey.currentState!.push(
+                MaterialPageRoute(
+                  builder: (context) => const AddExercisePage(),
+                ),
+              ),
+              label: const Text('Add'),
+              scroll: _scroll,
+              icon: const Icon(Icons.add),
+            ),
     );
   }
 
@@ -351,25 +376,61 @@ class GraphsPageState extends State<GraphsPage>
     return ListView.builder(
       itemCount: itemCount,
       controller: _scroll,
-      padding: const EdgeInsets.only(bottom: 50, top: appSearchHeight + 8),
+      padding: EdgeInsets.only(
+        bottom: isDesktopLayout(context) ? 32 : 50,
+        top: appSearchHeight + 8,
+      ),
       itemBuilder: (context, index) {
         int currentIdx = index;
 
         if (showGlobal) {
           if (index == 0) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-              child: ListTile(
-                leading: const Icon(Icons.language),
-                title: const Text("Global progress"),
-                subtitle: const Text("A chart grouped by category"),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        GlobalProgressPage(tabController: widget.tabController),
+            return ResponsiveContent(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 5,
+                ),
+                child: Material(
+                  color: isDesktopLayout(context)
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Colors.transparent,
+                  borderRadius: isDesktopLayout(context)
+                      ? BorderRadius.circular(16)
+                      : null,
+                  clipBehavior: isDesktopLayout(context)
+                      ? Clip.antiAlias
+                      : Clip.none,
+                  child: ListTile(
+                    contentPadding: isDesktopLayout(context)
+                        ? const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 9,
+                          )
+                        : null,
+                    leading: const Icon(Icons.language),
+                    title: Text(
+                      "Global progress",
+                      style: isDesktopLayout(context)
+                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            )
+                          : null,
+                    ),
+                    subtitle: const Text("A chart grouped by category"),
+                    trailing: isDesktopLayout(context)
+                        ? const Icon(Icons.chevron_right_rounded)
+                        : null,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => GlobalProgressPage(
+                          tabController: widget.tabController,
+                        ),
+                      ),
+                    ),
+                    onLongPress: longPressGlobal,
                   ),
                 ),
-                onLongPress: longPressGlobal,
               ),
             );
           }
@@ -423,24 +484,26 @@ class GraphsPageState extends State<GraphsPage>
         final gymSet = gymSets.elementAtOrNull(currentIdx);
         if (gymSet == null) return const SizedBox();
 
-        return GraphTile(
-          selected: _selection.selected,
-          gymSet: gymSet,
-          onSelect: (name) async {
-            setState(() {
-              _selection.toggle(name);
-            });
-            final result =
-                await (db.gymSets.selectOnly()
-                      ..addColumns([db.gymSets.name.count()])
-                      ..where(db.gymSets.name.isIn(_selection.selected)))
-                    .getSingle();
-            if (!mounted) return;
-            setState(() {
-              _total = result.read(db.gymSets.name.count()) ?? 0;
-            });
-          },
-          tabCtrl: widget.tabController,
+        return ResponsiveContent(
+          child: GraphTile(
+            selected: _selection.selected,
+            gymSet: gymSet,
+            onSelect: (name) async {
+              setState(() {
+                _selection.toggle(name);
+              });
+              final result =
+                  await (db.gymSets.selectOnly()
+                        ..addColumns([db.gymSets.name.count()])
+                        ..where(db.gymSets.name.isIn(_selection.selected)))
+                      .getSingle();
+              if (!mounted) return;
+              setState(() {
+                _total = result.read(db.gymSets.name.count()) ?? 0;
+              });
+            },
+            tabCtrl: widget.tabController,
+          ),
         );
       },
     );

@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/logging.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/data_settings.dart';
 import 'package:flexify/settings/format_settings.dart';
@@ -93,8 +94,10 @@ class _SettingsPageState extends State<SettingsPage>
             ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: ResponsiveContent(
+        maxWidth: 1120,
+        desktopPadding: const EdgeInsets.fromLTRB(32, 12, 32, 28),
+        mobilePadding: const EdgeInsets.all(8),
         child: Column(
           children: <Widget>[
             SearchBar(
@@ -103,88 +106,159 @@ class _SettingsPageState extends State<SettingsPage>
               padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
               ),
-              onChanged: (_) {
-                setState(() {});
-              },
+              onChanged: (_) => setState(() {}),
               leading: const Icon(Icons.search),
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: isDesktopLayout(context) ? 20 : 8),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 116),
-                children: _searchCtrl.text.isNotEmpty
-                    ? filtered
-                    : [
-                        ListTile(
-                          leading: const Icon(Icons.color_lens),
-                          title: const Text("Appearance"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const AppearanceSettings(),
+              child: _searchCtrl.text.isNotEmpty
+                  ? ListView(
+                      padding: EdgeInsets.only(
+                        bottom: isDesktopLayout(context) ? 24 : 116,
+                      ),
+                      children: filtered,
+                    )
+                  : isDesktopLayout(context)
+                  ? GridView.builder(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 14,
+                            mainAxisSpacing: 14,
+                            childAspectRatio: 4.0,
+                          ),
+                      itemCount: _categories.length,
+                      itemBuilder: (context, index) {
+                        final category = _categories[index];
+                        final colors = Theme.of(context).colorScheme;
+                        return Card(
+                          color: colors.surfaceContainerLow,
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () => _openCategory(category.$4),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 48,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      color: colors.primaryContainer,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Icon(
+                                      category.$1,
+                                      color: colors.onPrimaryContainer,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          category.$2,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          category.$3,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: colors.onSurfaceVariant,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Icon(Icons.chevron_right_rounded),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.storage),
-                          title: const Text("Data management"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const DataSettings(),
+                        );
+                      },
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.only(bottom: 116),
+                      children: _categories
+                          .map(
+                            (category) => ListTile(
+                              leading: Icon(category.$1),
+                              title: Text(category.$2),
+                              onTap: () => _openCategory(category.$4),
                             ),
-                          ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.format_bold),
-                          title: const Text("Formats"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const FormatSettings(),
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.calendar_today),
-                          title: const Text("Plans"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const PlanSettings(),
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.tab_sharp),
-                          title: const Text("Tabs"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const TabSettings(),
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.timer),
-                          title: const Text("Timers"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const TimerSettings(),
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.fitness_center),
-                          title: const Text("Workouts"),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const WorkoutSettings(),
-                            ),
-                          ),
-                        ),
-                      ],
-              ),
+                          )
+                          .toList(),
+                    ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<(IconData, String, String, Widget)> get _categories => const [
+    (
+      Icons.color_lens_rounded,
+      'Appearance',
+      'Theme, colors and interface styling',
+      AppearanceSettings(),
+    ),
+    (
+      Icons.storage_rounded,
+      'Data management',
+      'Import, export and manage your workout data',
+      DataSettings(),
+    ),
+    (
+      Icons.format_bold_rounded,
+      'Formats',
+      'Dates, numbers and measurement formatting',
+      FormatSettings(),
+    ),
+    (
+      Icons.calendar_today_rounded,
+      'Plans',
+      'Defaults and behaviour for workout plans',
+      PlanSettings(),
+    ),
+    (
+      Icons.tab_rounded,
+      'Tabs',
+      'Choose and arrange primary navigation tabs',
+      TabSettings(),
+    ),
+    (
+      Icons.timer_rounded,
+      'Timers',
+      'Rest timer duration, sound and behaviour',
+      TimerSettings(),
+    ),
+    (
+      Icons.fitness_center_rounded,
+      'Workouts',
+      'Exercise tracking and workout preferences',
+      WorkoutSettings(),
+    ),
+  ];
+
+  void _openCategory(Widget page) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_list.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -127,12 +128,37 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     if (mounted) setState(() => _filtered = tempFiltered);
   }
 
+  Future<void> _addPlan() async {
+    const plan = PlansCompanion(days: drift.Value(''));
+    await _state!.setExercises(plan);
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const EditPlanPage(plan: plan)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _state = context.watch<PlanState>(); // Watch for changes to rebuild
+    final desktop = isDesktopLayout(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: desktop
+          ? AppBar(
+              title: const Text('Plans'),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: FilledButton.icon(
+                    onPressed: _addPlan,
+                    icon: const Icon(Icons.add_rounded),
+                    label: const Text('New plan'),
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: Stack(
         children: [
           Positioned.fill(
@@ -227,21 +253,14 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
           ),
         ],
       ),
-      floatingActionButton: AnimatedFab(
-        onPressed: () async {
-          const plan = PlansCompanion(days: drift.Value(''));
-          await _state!.setExercises(plan);
-          if (context.mounted)
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const EditPlanPage(plan: plan),
-              ),
-            );
-        },
-        label: Text('Add'),
-        icon: Icon(Icons.add),
-        scroll: _scroll,
-      ),
+      floatingActionButton: desktop
+          ? null
+          : AnimatedFab(
+              onPressed: _addPlan,
+              label: const Text('Add'),
+              icon: const Icon(Icons.add),
+              scroll: _scroll,
+            ),
     );
   }
 }

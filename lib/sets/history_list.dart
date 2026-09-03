@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -146,42 +147,77 @@ class _HistoryListState extends State<HistoryList> {
               ),
             ),
           ),
-        Material(
-          color: widget.selected.contains(gymSet.id)
-              ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
-              : Colors.transparent,
-          child: ListTile(
-            leading: leading,
-            title: Text(gymSet.name),
-            subtitle: Selector<SettingsState, String>(
-              selector: (context, settings) => settings.value.longDateFormat,
-              builder: (context, dateFormat, child) => IntrinsicHeight(
-                child: Row(
-                  children: [
-                    Text(
+        Builder(
+          builder: (context) {
+            final desktop = isDesktopLayout(context);
+            final colors = Theme.of(context).colorScheme;
+            final tile = Material(
+              color: widget.selected.contains(gymSet.id)
+                  ? colors.primary.withValues(alpha: .18)
+                  : desktop
+                  ? colors.surfaceContainerLow
+                  : Colors.transparent,
+              borderRadius: desktop ? BorderRadius.circular(16) : null,
+              clipBehavior: desktop ? Clip.antiAlias : Clip.none,
+              child: ListTile(
+                contentPadding: desktop
+                    ? const EdgeInsets.symmetric(horizontal: 20, vertical: 9)
+                    : null,
+                leading: leading,
+                title: Text(
+                  gymSet.name,
+                  style: desktop
+                      ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        )
+                      : null,
+                ),
+                subtitle: Selector<SettingsState, String>(
+                  selector: (context, settings) =>
+                      settings.value.longDateFormat,
+                  builder: (context, dateFormat, child) => Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: Text(
                       dateFormat == 'timeago'
                           ? timeago.format(gymSet.created)
                           : DateFormat(dateFormat).format(gymSet.created),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
                     ),
-                    VerticalDivider(),
-                    Text(trailing),
-                  ],
-                ),
-              ),
-            ),
-            onLongPress: () => widget.onSelect(gymSet.id),
-            onTap: () {
-              if (widget.selected.isNotEmpty) {
-                widget.onSelect(gymSet.id);
-              } else {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditSetPage(gymSet: gymSet),
                   ),
-                );
-              }
-            },
-          ),
+                ),
+                trailing: Text(
+                  trailing,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                onLongPress: () => widget.onSelect(gymSet.id),
+                onTap: () {
+                  if (widget.selected.isNotEmpty) {
+                    widget.onSelect(gymSet.id);
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => EditSetPage(gymSet: gymSet),
+                      ),
+                    );
+                  }
+                },
+              ),
+            );
+            if (!desktop) return tile;
+            return ResponsiveContent(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 5,
+                ),
+                child: tile,
+              ),
+            );
+          },
         ),
       ],
     );
@@ -194,8 +230,8 @@ class _HistoryListState extends State<HistoryList> {
     );
 
     return ListView.builder(
-      padding: const EdgeInsets.only(
-        bottom: bottomNavHeight,
+      padding: EdgeInsets.only(
+        bottom: isDesktopLayout(context) ? 32 : bottomNavHeight,
         top: appSearchHeight + 8,
       ),
       controller: widget.scroll,

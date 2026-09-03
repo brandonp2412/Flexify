@@ -4,6 +4,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -107,22 +108,64 @@ class _PlanTileState extends State<PlanTile> {
         ),
       );
 
-    return Material(
+    final desktop = isDesktopLayout(context);
+    final colors = Theme.of(context).colorScheme;
+    final today = widget.plan.days.split(',').contains(widget.weekday);
+
+    final tile = Material(
       color: widget.selected.contains(widget.plan.id)
-          ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+          ? colors.primary.withValues(alpha: .18)
+          : desktop
+          ? colors.surfaceContainerLow
           : Colors.transparent,
+      borderRadius: desktop ? BorderRadius.circular(16) : null,
+      clipBehavior: desktop ? Clip.antiAlias : Clip.none,
       child: ListTile(
-        title: title,
-        subtitle: StreamBuilder(
-          stream: _exercisesStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(snapshot.data!.map((e) => e.exercise).join(', '));
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-            return const Text('Loading exercises...');
-          },
+        contentPadding: desktop
+            ? const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
+            : null,
+        title: Row(
+          children: [
+            Flexible(child: title),
+            if (desktop && today) ...[
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: colors.primaryContainer,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  'Today',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: colors.onPrimaryContainer,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: StreamBuilder(
+            stream: _exercisesStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                  snapshot.data!.map((e) => e.exercise).join('  •  '),
+                  maxLines: desktop ? 2 : null,
+                  overflow: desktop ? TextOverflow.ellipsis : null,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              return const Text('Loading exercises...');
+            },
+          ),
         ),
         leading: leading,
         trailing: Builder(
@@ -133,6 +176,15 @@ class _PlanTileState extends State<PlanTile> {
               ),
             );
             if (trailing == PlanTrailing.none) return const SizedBox();
+            if (trailing == PlanTrailing.reorder && desktop) {
+              return ReorderableDragStartListener(
+                index: widget.index,
+                child: Icon(
+                  Icons.drag_indicator_rounded,
+                  color: colors.onSurfaceVariant,
+                ),
+              );
+            }
             if (trailing == PlanTrailing.reorder &&
                 defaultTargetPlatform == TargetPlatform.linux)
               return const SizedBox();
@@ -183,10 +235,14 @@ class _PlanTileState extends State<PlanTile> {
             ),
           );
         },
-        onLongPress: () {
-          widget.onSelect(widget.plan.id);
-        },
+        onLongPress: () => widget.onSelect(widget.plan.id),
       ),
+    );
+
+    if (!desktop) return tile;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: tile,
     );
   }
 

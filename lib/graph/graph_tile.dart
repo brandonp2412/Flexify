@@ -5,6 +5,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -88,27 +89,48 @@ class GraphTile extends StatelessWidget {
       );
     }
 
-    return Material(
+    final desktop = isDesktopLayout(context);
+    final colors = Theme.of(context).colorScheme;
+    final tile = Material(
       color: selected.contains(gymSet.name.value)
-          ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
+          ? colors.primary.withValues(alpha: .18)
+          : desktop
+          ? colors.surfaceContainerLow
           : Colors.transparent,
+      borderRadius: desktop ? BorderRadius.circular(16) : null,
+      clipBehavior: desktop ? Clip.antiAlias : Clip.none,
       child: ListTile(
+        contentPadding: desktop
+            ? const EdgeInsets.symmetric(horizontal: 20, vertical: 9)
+            : null,
         leading: leading,
-        title: Text(gymSet.name.value),
+        title: Text(
+          gymSet.name.value,
+          style: desktop
+              ? Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)
+              : null,
+        ),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.longDateFormat,
-          builder: (context, dateFormat, child) => IntrinsicHeight(
-            child: Row(
-              children: [
-                Text(
-                  dateFormat == 'timeago'
-                      ? timeago.format(gymSet.created.value)
-                      : DateFormat(dateFormat).format(gymSet.created.value),
-                ),
-                VerticalDivider(),
-                Text(trailing),
-              ],
+          builder: (context, dateFormat, child) => Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Text(
+              dateFormat == 'timeago'
+                  ? timeago.format(gymSet.created.value)
+                  : DateFormat(dateFormat).format(gymSet.created.value),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
+          ),
+        ),
+        trailing: Text(
+          trailing,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colors.onSurface,
           ),
         ),
         onTap: () async {
@@ -168,6 +190,12 @@ class GraphTile extends StatelessWidget {
           onSelect(gymSet.name.value);
         },
       ),
+    );
+
+    if (!desktop) return tile;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: tile,
     );
   }
 
