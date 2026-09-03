@@ -21,25 +21,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: main
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: robinraju/release-downloader@v1
+      - uses: robinraju/release-downloader@28fc21f50d76778e7023361aa1f863e717d3d56f # v1
         with:
           latest: true
           fileName: app-release.aab
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
         with:
           ruby-version: "3.3"
           bundler-cache: true
 
       - name: Create Google Play JSON key file
+        env:
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
         run: |
-          echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > google-play-key.json
+          printf '%s' "$GOOGLE_PLAY_JSON_KEY" > google-play-key.json
           mkdir -p ~/.config
           cp google-play-key.json ~/.config/googlePlay.json
 
