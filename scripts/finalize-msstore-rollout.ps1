@@ -24,10 +24,46 @@ function Invoke-StoreCommand([string[]]$Arguments) {
   }
 }
 
+function ConvertFrom-StoreJson($Output, [string]$Description) {
+  $text = ($Output | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
+  $jsonStart = $text.IndexOf("{")
+  $jsonEnd = $text.LastIndexOf("}")
+
+  if ($jsonStart -lt 0 -or $jsonEnd -le $jsonStart) {
+    throw "Microsoft Store CLI returned no $Description JSON."
+  }
+
+  return $text.Substring($jsonStart, $jsonEnd - $jsonStart + 1) |
+    ConvertFrom-Json
+}
+
 Set-FinalizedOutput $false
 
+$appResult = Invoke-StoreCommand @(
+  "apps", "get", $ProductId, "--verbose"
+)
+
+if ($appResult.ExitCode -ne 0) {
+  Write-Error "Could not retrieve the Microsoft Store application."
+  exit $appResult.ExitCode
+}
+
+try {
+  $application = ConvertFrom-StoreJson $appResult.Output "application"
+} catch {
+  Write-Error $_.Exception.Message
+  exit 1
+}
+
+$submissionId = $application.LastPublishedApplicationSubmission.Id
+if (-not $submissionId) {
+  Write-Error "Microsoft Store returned no last published submission ID."
+  exit 1
+}
+
 $getResult = Invoke-StoreCommand @(
-  "submission", "rollout", "get", $ProductId, "--verbose"
+  "submission", "rollout", "get", $ProductId,
+  "--submissionId", $submissionId, "--verbose"
 )
 
 if ($getResult.ExitCode -ne 0) {
@@ -35,25 +71,17 @@ if ($getResult.ExitCode -ne 0) {
   exit $getResult.ExitCode
 }
 
-$rolloutText = ($getResult.Output | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
-$jsonStart = $rolloutText.IndexOf("{")
-$jsonEnd = $rolloutText.LastIndexOf("}")
-
-if ($jsonStart -lt 0 -or $jsonEnd -le $jsonStart) {
-  Write-Error "Microsoft Store CLI returned no rollout JSON."
-  exit 1
-}
-
-$rolloutJson = $rolloutText.Substring($jsonStart, $jsonEnd - $jsonStart + 1)
-
 try {
-  $rollout = $rolloutJson | ConvertFrom-Json
+  $rollout = ConvertFrom-StoreJson $getResult.Output "rollout"
 } catch {
-  Write-Error "Microsoft Store CLI returned invalid rollout JSON: $($_.Exception.Message)"
+  Write-Error $_.Exception.Message
   exit 1
 }
 
-if (-not $rollout.isPackageRollout) {
+if (
+  -not $rollout.IsPackageRollout -or
+  $rollout.PackageRolloutStatus -eq "PackageRolloutComplete"
+) {
   Set-FinalizedOutput $true
   Write-Host "No active Microsoft Store package rollout remains."
   exit 0
@@ -65,7 +93,8 @@ if ([double]$rollout.packageRolloutPercentage -lt 100) {
 }
 
 $finalizeResult = Invoke-StoreCommand @(
-  "submission", "rollout", "finalize", $ProductId, "--verbose"
+  "submission", "rollout", "finalize", $ProductId,
+  "--submissionId", $submissionId, "--verbose"
 )
 
 if ($finalizeResult.ExitCode -ne 0) {

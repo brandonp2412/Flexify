@@ -3,7 +3,16 @@ set -euo pipefail
 
 printf '%s\n' "$*" >> "$MSSTORE_CALLS"
 
+if [[ "$*" == "apps get "* ]]; then
+  printf '{\n  "PendingApplicationSubmission": { "Id": "PENDING-ID" },\n  "LastPublishedApplicationSubmission": { "Id": "PUBLISHED-ID" }\n}\n'
+  exit 0
+fi
+
 if [[ "$*" == "submission rollout get "* ]]; then
+  [[ "$*" == *"--submissionId PUBLISHED-ID"* ]] || {
+    printf 'rollout lookup did not target the published submission\n' >&2
+    exit 65
+  }
   case "$MSSTORE_SCENARIO" in
     get-failure)
       printf 'status lookup failed\n' >&2
@@ -13,10 +22,13 @@ if [[ "$*" == "submission rollout get "* ]]; then
       printf '{\n  "IsPackageRollout": true,\n  "PackageRolloutPercentage": 50,\n  "PackageRolloutStatus": "PackageRolloutInProgress"\n}\n'
       ;;
     ready|finalize-failure)
-      printf '{\n  "IsPackageRollout": true,\n  "PackageRolloutPercentage": 100,\n  "PackageRolloutStatus": "PackageRolloutComplete"\n}\n'
+      printf '{\n  "IsPackageRollout": true,\n  "PackageRolloutPercentage": 100,\n  "PackageRolloutStatus": "PackageRolloutInProgress"\n}\n'
       ;;
     inactive)
       printf '{\n  "IsPackageRollout": false,\n  "PackageRolloutPercentage": 100,\n  "PackageRolloutStatus": "PackageRolloutNotStarted"\n}\n'
+      ;;
+    complete)
+      printf '{\n  "IsPackageRollout": true,\n  "PackageRolloutPercentage": 100,\n  "PackageRolloutStatus": "PackageRolloutComplete"\n}\n'
       ;;
     *)
       printf 'unknown test scenario\n' >&2
@@ -27,6 +39,10 @@ if [[ "$*" == "submission rollout get "* ]]; then
 fi
 
 if [[ "$*" == "submission rollout finalize "* ]]; then
+  [[ "$*" == *"--submissionId PUBLISHED-ID"* ]] || {
+    printf 'finalize did not target the published submission\n' >&2
+    exit 66
+  }
   if [[ "$MSSTORE_SCENARIO" == "finalize-failure" ]]; then
     printf 'finalization failed\n' >&2
     exit 9

@@ -44,12 +44,18 @@ run_case() {
       "$scenario" "$expected_finalize_calls" "$actual_finalize_calls" >&2
     return 1
   }
+
+  grep -q '^apps get TEST-PRODUCT ' "$calls_file" || {
+    printf '%s: application details were not retrieved\n' "$scenario" >&2
+    return 1
+  }
 }
 
 run_case get-failure 1 false 0
 run_case pending 0 false 0
 run_case ready 0 true 1
 run_case inactive 0 true 0
+run_case complete 0 true 0
 run_case finalize-failure 1 false 1
 
 printf 'All finalizer behavior tests passed.\n'
