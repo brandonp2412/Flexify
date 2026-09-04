@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' "$*" >> "$MSSTORE_CALLS"
+
+if [[ "$*" == "submission rollout get "* ]]; then
+  case "$MSSTORE_SCENARIO" in
+    get-failure)
+      printf 'status lookup failed\n' >&2
+      exit 7
+      ;;
+    pending)
+      printf '{"isPackageRollout":true,"packageRolloutPercentage":50,"packageRolloutStatus":"inProgress"}\n'
+      ;;
+    ready|finalize-failure)
+      printf '{"isPackageRollout":true,"packageRolloutPercentage":100,"packageRolloutStatus":"inProgress"}\n'
+      ;;
+    inactive)
+      printf '{"isPackageRollout":false,"packageRolloutPercentage":100,"packageRolloutStatus":"notStarted"}\n'
+      ;;
+    *)
+      printf 'unknown test scenario\n' >&2
+      exit 64
+      ;;
+  esac
+  exit 0
+fi
+
+if [[ "$*" == "submission rollout finalize "* ]]; then
+  if [[ "$MSSTORE_SCENARIO" == "finalize-failure" ]]; then
+    printf 'finalization failed\n' >&2
+    exit 9
+  fi
+  printf '{"isPackageRollout":false,"packageRolloutPercentage":100,"packageRolloutStatus":"completed"}\n'
+  exit 0
+fi
+
+printf 'unexpected command: %s\n' "$*" >&2
+exit 64
