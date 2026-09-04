@@ -35,15 +35,16 @@ if ($getResult.ExitCode -ne 0) {
   exit $getResult.ExitCode
 }
 
-$rolloutJson = $getResult.Output |
-  ForEach-Object { $_.ToString().Trim() } |
-  Where-Object { $_.StartsWith("{") -and $_.EndsWith("}") } |
-  Select-Object -Last 1
+$rolloutText = ($getResult.Output | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
+$jsonStart = $rolloutText.IndexOf("{")
+$jsonEnd = $rolloutText.LastIndexOf("}")
 
-if (-not $rolloutJson) {
+if ($jsonStart -lt 0 -or $jsonEnd -le $jsonStart) {
   Write-Error "Microsoft Store CLI returned no rollout JSON."
   exit 1
 }
+
+$rolloutJson = $rolloutText.Substring($jsonStart, $jsonEnd - $jsonStart + 1)
 
 try {
   $rollout = $rolloutJson | ConvertFrom-Json
