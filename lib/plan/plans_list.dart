@@ -3,6 +3,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_state.dart';
@@ -59,15 +60,25 @@ class _PlansListState extends State<PlansList> {
 
   @override
   Widget build(BuildContext context) {
+    final searchLabel = widget.search.trim();
     final noneFound = Padding(
       padding: const EdgeInsets.only(top: appSearchHeight),
-      child: ListTile(
-        title: const Text("No plans found"),
-        subtitle: Text("Tap to create ${widget.search}"),
-        onTap: () async {
+      child: AppEmptyState(
+        icon: searchLabel.isEmpty
+            ? Icons.fitness_center_rounded
+            : Icons.search_off_rounded,
+        title: searchLabel.isEmpty ? 'No plans yet' : 'No matching plans',
+        message: searchLabel.isEmpty
+            ? 'Create your first training plan to get started.'
+            : 'Nothing matches “$searchLabel”. You can create it as a new plan.',
+        actionLabel: searchLabel.isEmpty
+            ? 'Create plan'
+            : 'Create “$searchLabel”',
+        actionIcon: Icons.add_rounded,
+        onAction: () async {
           final plan = PlansCompanion(
             days: const drift.Value(''),
-            title: drift.Value(widget.search),
+            title: drift.Value(searchLabel),
           );
           await context.read<PlanState>().setExercises(plan);
           if (context.mounted)

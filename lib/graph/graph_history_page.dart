@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
@@ -45,9 +46,11 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
         body: Builder(
           builder: (context) {
             if (sets.isEmpty) {
-              return ListTile(
-                title: Text("No data yet for ${widget.name}"),
-                subtitle: const Text("Enter some data to view graphs here"),
+              return AppEmptyState(
+                icon: Icons.history_rounded,
+                title: 'No history yet for ${widget.name}',
+                message:
+                    'Complete some sets to see this exercise history here.',
               );
             }
 

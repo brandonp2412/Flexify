@@ -6,6 +6,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
@@ -415,14 +416,11 @@ class _CardioPageState extends State<CardioPage> {
               const SizedBox(height: 8),
               Expanded(
                 child: data.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            "No data yet for $name",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                    ? AppEmptyState(
+                        icon: Icons.monitor_heart_outlined,
+                        title: 'No data yet for $name',
+                        message:
+                            'Complete a set for this exercise to build its chart.',
                       )
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),

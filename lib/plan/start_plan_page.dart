@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
@@ -66,12 +67,27 @@ class _StartPlanPageState extends State<StartPlanPage>
         final desktop = isDesktopLayout(context);
         final colors = Theme.of(context).colorScheme;
 
+        Future<void> editPlan() async {
+          final plan =
+              await (db.plans.select()..whereSamePrimaryKey(widget.plan))
+                  .getSingle();
+          await _planState.setExercises(plan.toCompanion(false));
+          if (!context.mounted) return;
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EditPlanPage(plan: plan.toCompanion(false)),
+            ),
+          );
+        }
+
         Widget exerciseList() => snapshot.data!.isEmpty
-            ? const Center(
-                child: Text(
-                  "No exercises yet. Edit this plan to add some.",
-                  textAlign: TextAlign.center,
-                ),
+            ? AppEmptyState(
+                icon: Icons.fitness_center_rounded,
+                title: 'No exercises yet',
+                message: 'Add exercises to this plan before starting it.',
+                actionLabel: 'Edit plan',
+                actionIcon: Icons.edit_rounded,
+                onAction: editPlan,
               )
             : StartList(
                 exercises: snapshot.data!,
@@ -92,20 +108,7 @@ class _StartPlanPageState extends State<StartPlanPage>
             actions: [
               IconButton(
                 tooltip: 'Edit plan',
-                onPressed: () async {
-                  final plan =
-                      await (db.plans.select()
-                            ..whereSamePrimaryKey(widget.plan))
-                          .getSingle();
-                  await _planState.setExercises(plan.toCompanion(false));
-                  if (!context.mounted) return;
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditPlanPage(plan: plan.toCompanion(false)),
-                    ),
-                  );
-                },
+                onPressed: editPlan,
                 icon: const Icon(Icons.edit),
               ),
               if (desktop && snapshot.data!.isNotEmpty)

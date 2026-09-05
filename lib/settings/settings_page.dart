@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/appearance_settings.dart';
@@ -76,7 +77,22 @@ class _SettingsPageState extends State<SettingsPage>
     }
 
     if (filtered.isEmpty)
-      filtered = [const ListTile(title: Text("No settings found"))];
+      filtered = [
+        SizedBox(
+          height: 360,
+          child: AppEmptyState(
+            icon: Icons.search_off_rounded,
+            title: 'No settings found',
+            message: 'Nothing matches “${_searchCtrl.text.trim()}”.',
+            actionLabel: 'Clear search',
+            actionIcon: Icons.close_rounded,
+            onAction: () {
+              _searchCtrl.clear();
+              setState(() {});
+            },
+          ),
+        ),
+      ];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -5,6 +5,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/day_selector.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
@@ -55,7 +56,21 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     if (match.isEmpty)
-      return [const ListTile(title: Text("No exercises found"))];
+      return [
+        SizedBox(
+          height: 260,
+          child: AppEmptyState(
+            icon: Icons.search_off_rounded,
+            title: 'No exercises found',
+            message: _search.isEmpty
+                ? 'Add an exercise to this plan.'
+                : 'Nothing matches “$_search”. You can add it as a new exercise.',
+            actionLabel: _search.isEmpty ? 'Add exercise' : 'Add “$_search”',
+            actionIcon: Icons.add_rounded,
+            onAction: addExercise,
+          ),
+        ),
+      ];
 
     return match.toList().map(
       (pe) => ExerciseTile(

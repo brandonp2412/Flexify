@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/graph_curve_settings.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/strength_data.dart';
@@ -234,7 +235,12 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
               Expanded(
                 flex: 3,
                 child: data.isEmpty
-                    ? const Center(child: Text("No data yet."))
+                    ? const AppEmptyState(
+                        icon: Icons.show_chart_rounded,
+                        title: 'No data yet',
+                        message:
+                            'Complete some sets to build your progress chart.',
+                      )
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                         child: lineChart,

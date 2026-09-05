@@ -6,6 +6,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/graph_curve_settings.dart';
@@ -354,7 +355,12 @@ class _StrengthPageState extends State<StrengthPage> {
               const SizedBox(height: 8),
               Expanded(
                 child: data.isEmpty
-                    ? const Center(child: Text("No data yet."))
+                    ? const AppEmptyState(
+                        icon: Icons.fitness_center_rounded,
+                        title: 'No data yet',
+                        message:
+                            'Complete a set for this exercise to build its chart.',
+                      )
                     : Padding(
                         padding: const EdgeInsets.only(top: 16.0, right: 45.0),
                         child: FlexLine(

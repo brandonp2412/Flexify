@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/filters.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
@@ -116,16 +117,23 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 child: Column(
                   children: [
                     if (snapshot.data?.isEmpty == true)
-                      const Padding(
-                        padding: EdgeInsets.only(top: appSearchHeight),
-                        child: ListTile(
-                          title: Text("No entries yet"),
-                          subtitle: Text("Complete some sets to see them here"),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: appSearchHeight),
+                          child: AppEmptyState(
+                            icon: Icons.history_rounded,
+                            title: 'No entries yet',
+                            message:
+                                'Complete a set or add one manually to start your history.',
+                            actionLabel: 'Add set',
+                            actionIcon: Icons.add_rounded,
+                            onAction: onAdd,
+                          ),
                         ),
                       ),
                     if (snapshot.hasError)
                       Expanded(child: ErrorWidget(snapshot.error.toString())),
-                    if (snapshot.hasData)
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty)
                       Expanded(
                         child: Builder(
                           builder: (context) {

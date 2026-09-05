@@ -6,6 +6,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
@@ -222,30 +223,40 @@ class GraphsPageState extends State<GraphsPage>
               Positioned.fill(
                 child: Column(
                   children: [
-                    if (gymSets.isEmpty &&
-                        !'global progress'.contains(_search.toLowerCase()))
-                      Padding(
-                        padding: const EdgeInsets.only(top: appSearchHeight),
-                        child: ListTile(
-                          title: const Text("No graphs found"),
-                          subtitle: Text(
-                            "Tap to create an exercise called $_search",
-                          ),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    AddExercisePage(name: _search),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
                     Selector<SettingsState, bool>(
                       selector: (p0, settingsState) =>
                           settingsState.value.showGlobalProgress,
-                      builder: (context, showGlobal, child) =>
-                          Expanded(child: graphList(gymSets, showGlobal)),
+                      builder: (context, showGlobal, child) {
+                        final showEmpty =
+                            gymSets.isEmpty &&
+                            !'global progress'.contains(_search.toLowerCase());
+                        return Expanded(
+                          child: showEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: appSearchHeight,
+                                  ),
+                                  child: AppEmptyState(
+                                    icon: Icons.search_off_rounded,
+                                    title: 'No graphs found',
+                                    message: _search.trim().isEmpty
+                                        ? 'Complete a set to create your first exercise graph.'
+                                        : 'Nothing matches “${_search.trim()}”. You can create it as a new exercise.',
+                                    actionLabel: _search.trim().isEmpty
+                                        ? 'Add exercise'
+                                        : 'Add “${_search.trim()}”',
+                                    actionIcon: Icons.add_rounded,
+                                    onAction: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            AddExercisePage(name: _search),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : graphList(gymSets, showGlobal),
+                        );
+                      },
                     ),
                   ],
                 ),
