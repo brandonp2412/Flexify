@@ -74,7 +74,7 @@ void main() {
                 ..where((row) => row.name.equals('Graph history test')))
               .get();
       expect(remaining, isEmpty);
-      expect(find.text('No data yet for Graph history test'), findsOne);
+      expect(find.text('No history yet for Graph history test'), findsOne);
     },
   );
 }
