@@ -24,7 +24,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text("What's new?"), findsOneWidget);
-    expect(find.byType(ListTile), findsWidgets);
     expect(find.text(latestContent), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

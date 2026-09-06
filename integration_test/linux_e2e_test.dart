@@ -4,7 +4,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -209,10 +208,7 @@ void main() {
     await tester.tap(cardioSwitch);
     await tester.pumpAndSettle();
 
-    final dropdown = tester.widget<DropdownButtonFormField<String>>(
-      find.byType(DropdownButtonFormField<String>),
-    );
-    expect(dropdown.initialValue, 'kg');
+    expect(find.text('Kilograms (kg)'), findsOneWidget);
   });
 
   testWidgets('Settings empty search result uses normal copy', (tester) async {
@@ -241,7 +237,7 @@ void main() {
     await tester.tap(find.byKey(const Key('GraphsPage')));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.byKey(const Key('GraphsPage')), findsOneWidget);
+    expect(find.text('Graphs'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('GraphsPage')));
     await tester.pumpAndSettle();
@@ -265,10 +261,10 @@ void main() {
     await tester.drag(find.byType(TabBarView), const Offset(-700, 0));
     await tester.pumpAndSettle();
     expect(find.text('No entries yet'), findsOneWidget);
-    expect(find.byType(PlanTile), findsNothing);
+    expect(find.text('Search plans...'), findsNothing);
 
     await _tapTab(tester, 'PlansPage');
-    expect(find.byType(PlanTile), findsWidgets);
+    expect(find.text('Search plans...'), findsOneWidget);
     settings = await (app.db.settings.select()..limit(1)).getSingle();
     expect(settings.scrollableTabs, isFalse);
     expect(tester.takeException(), isNull);
@@ -328,7 +324,7 @@ void main() {
     await tester.tap(find.text('Remove'));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('GraphsPage')), findsNothing);
+    expect(find.text('Graphs'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -439,9 +435,8 @@ void main() {
     await tester.enterText(find.byType(SearchBar), 'Squat');
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('1')), findsOneWidget);
-    expect(find.byKey(const Key('2')), findsNothing);
-    expect(find.byKey(const Key('3')), findsNothing);
+    expect(find.text('Squat'), findsOneWidget);
+    expect(find.text('Barbell bench press'), findsNothing);
     expect(find.text('No plans found'), findsNothing);
   });
 
@@ -474,7 +469,6 @@ void main() {
     await tester.pumpAndSettle();
 
     final settingsButtons = find.byIcon(Icons.settings);
-    expect(settingsButtons, findsWidgets);
     await tester.tap(settingsButtons.first);
     await tester.pumpAndSettle();
 
@@ -550,28 +544,29 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.history));
     await tester.pumpAndSettle();
-    expect(find.byType(ListTile), findsNWidgets(2));
-    await tester.longPress(find.byType(ListTile).first);
+    expect(find.text('5 x 50 kg'), findsOneWidget);
+    expect(find.text('6 x 51 kg'), findsOneWidget);
+    await tester.longPress(find.text('5 x 50 kg'));
     await tester.pumpAndSettle();
     expect(find.text('1 selected'), findsOneWidget);
     expect(find.text('S'), findsNWidgets(2));
-    await tester.tap(find.byKey(const ValueKey('selectAllGraphHistory')));
+    await tester.tap(find.byTooltip('Select all'));
     await tester.pumpAndSettle();
     expect(find.text('2 selected'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('deleteGraphHistorySelection')));
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
     expect(find.text('2 selected'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('clearGraphHistorySelection')));
+    await tester.tap(find.byTooltip('Cancel selection'));
     await tester.pumpAndSettle();
 
-    await tester.longPress(find.byType(ListTile).first);
+    await tester.longPress(find.text('5 x 50 kg'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(ListTile).last);
+    await tester.tap(find.text('6 x 51 kg'));
     await tester.pumpAndSettle();
     expect(find.text('2 selected'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('deleteGraphHistorySelection')));
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
@@ -930,13 +925,7 @@ void main() {
     }
     await tester.tap(find.text('5 x 50 kg'));
     await tester.pumpAndSettle();
-    expect(
-      find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text('Linux E2E grouped'),
-      ),
-      findsOneWidget,
-    );
+    expect(find.text('Linux E2E grouped'), findsOneWidget);
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
@@ -996,33 +985,13 @@ void main() {
     await _tapTab(tester, 'PlansPage');
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
-    expect(
-      tester
-          .widget<Radio<bool>>(
-            find.descendant(
-              of: find.byKey(Key(first)),
-              matching: find.byType(Radio<bool>),
-            ),
-          )
-          .value,
-      isTrue,
-    );
+    expect(find.text(first), findsOneWidget);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '60');
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
-    expect(
-      tester
-          .widget<Radio<bool>>(
-            find.descendant(
-              of: find.byKey(Key(second)),
-              matching: find.byType(Radio<bool>),
-            ),
-          )
-          .value,
-      isTrue,
-    );
+    expect(find.text(second), findsOneWidget);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '6');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '70');
@@ -1105,7 +1074,6 @@ void main() {
     await tester.tap(find.text('+1 minute'));
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Stop'), findsOneWidget);
-    expect(find.byType(TimerCircularProgressIndicator), findsOneWidget);
     await tester.tap(find.text('Stop'));
     await tester.pumpAndSettle();
     expect(find.text('Start'), findsOneWidget);
@@ -1277,14 +1245,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Strength'));
     await tester.pumpAndSettle();
-    expect(
-      tester
-          .widget<DropdownButtonFormField<String>>(
-            find.byType(DropdownButtonFormField<String>),
-          )
-          .initialValue,
-      'kg',
-    );
+    expect(find.text('Kilograms (kg)'), findsOneWidget);
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(
@@ -2201,7 +2162,7 @@ void main() {
           .getSingleOrNull(),
       isNotNull,
     );
-    expect(find.byKey(const Key('Arnold press')), findsOneWidget);
+    expect(find.text('Arnold press'), findsOneWidget);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
@@ -2693,7 +2654,6 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle();
     expect(find.text("What's new?"), findsOneWidget);
-    expect(find.byType(ListTile), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 }

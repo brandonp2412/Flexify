@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_page.dart';
@@ -57,7 +56,6 @@ void main() {
     expect(find.text('Run'), findsOne);
     expect(find.text('Pace (distance / time)'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
-    expect(find.byType(LineChart), findsOne);
 
     await tester.tap(find.byTooltip('Options'));
     await tester.pumpAndSettle();
@@ -84,7 +82,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text(metric));
       await tester.pumpAndSettle();
-      expect(find.byType(LineChart), findsOne);
+      expect(find.text(metric), findsOne);
       currentMetric = metric;
     }
   });

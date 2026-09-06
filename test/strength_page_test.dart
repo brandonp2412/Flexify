@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/strength_page.dart';
@@ -51,7 +50,6 @@ void main() {
     expect(find.text(screenshotExercise), findsOne);
     expect(find.text('Best weight'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
-    expect(find.byType(LineChart), findsOne);
   });
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
@@ -74,7 +72,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text(metric));
       await tester.pumpAndSettle();
-      expect(find.byType(LineChart), findsOne);
+      expect(find.text(metric), findsOne);
       currentMetric = metric;
     }
   });

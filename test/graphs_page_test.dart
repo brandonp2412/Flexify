@@ -26,7 +26,7 @@ void main() {
     await pumpGraphsPage(tester, harness);
 
     expect(find.text('Search graphs...'), findsOne);
-    expect(find.byType(ListTile), findsWidgets);
+    expect(find.text('Global progress'), findsOne);
   });
 
   testWidgets('GraphsPage taps barbell bench press', (

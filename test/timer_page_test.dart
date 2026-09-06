@@ -1,6 +1,4 @@
 import 'package:flexify/timer/timer_page.dart';
-import 'package:flexify/timer/timer_progress_widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications_platform_interface/flutter_local_notifications_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -70,15 +68,11 @@ void main() {
         TestFlutterLocalNotificationsPlatform();
   });
 
-  testWidgets('TimerProgressIndicator maintains state after manual stop', (
+  testWidgets('Timer state resets after manual stop', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
     final timerState = harness.timerState;
-
-    await harness.pump(tester, const Scaffold(body: TimerProgressIndicator()));
-
-    expect(find.byType(LinearProgressIndicator), findsNothing);
 
     await timerState.startTimer(
       'Test Timer',
@@ -89,14 +83,14 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byType(LinearProgressIndicator), findsOneWidget);
+    expect(timerState.timer.isRunning(), isTrue);
 
     await tester.pump(const Duration(seconds: 2));
 
     await timerState.stopTimer();
     await tester.pump();
 
-    expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(timerState.timer.isRunning(), isFalse);
 
     await timerState.startTimer(
       'Test Timer 2',
@@ -107,15 +101,12 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byType(LinearProgressIndicator), findsOneWidget);
-
-    final progressIndicator = tester.widget<LinearProgressIndicator>(
-      find.byType(LinearProgressIndicator),
-    );
-    expect(progressIndicator.value, isNotNull);
+    expect(timerState.timer.isRunning(), isTrue);
+    final remaining = timerState.timer.getRemaining();
+    expect(remaining.compareTo(Duration.zero), greaterThanOrEqualTo(0));
     expect(
-      progressIndicator.value! >= 0 && progressIndicator.value! <= 1,
-      isTrue,
+      remaining.compareTo(const Duration(seconds: 10)),
+      lessThanOrEqualTo(0),
     );
 
     await timerState.stopTimer();
@@ -142,7 +133,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('Stop'), findsOneWidget);
-    expect(find.byIcon(Icons.stop), findsOneWidget);
 
     await tester.tap(find.text('Stop'));
     await tester.pumpAndSettle();

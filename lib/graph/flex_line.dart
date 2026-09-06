@@ -29,7 +29,6 @@ class FlexLine extends StatelessWidget {
     this.timeBasedXAxis = false,
   });
 
-  // Calculate linear regression trend line
   List<FlSpot> _calculateTrendLine(List<FlSpot> spots) {
     if (spots.length < 2) return [];
 
@@ -123,7 +122,6 @@ class FlexLine extends StatelessWidget {
       (settings) => settings.value.shortDateFormat,
     );
 
-    // CRITICAL FIX: Calculate Y-axis min/max to prevent decimal interval issues
     double minY = spots.isEmpty
         ? 0
         : spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
@@ -131,10 +129,9 @@ class FlexLine extends StatelessWidget {
         ? 1
         : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
 
-    // If range is very small (decimal-only data), expand it to prevent tiny intervals
     double range = maxY - minY;
     if (range < 1.0) {
-      // Ensure at least a range of 1.0 to avoid problematic decimal intervals
+      // fl_chart's automatic intervals become unstable for a near-zero range.
       double center = (maxY + minY) / 2;
       minY = center - 0.5;
       maxY = center + 0.5;
@@ -180,7 +177,6 @@ class FlexLine extends StatelessWidget {
       );
     }
 
-    // Determine interval for bottom titles
     double? bottomInterval;
     if (timeBasedXAxis && spots.length > 1) {
       double screen = MediaQuery.of(context).size.width;
@@ -195,7 +191,6 @@ class FlexLine extends StatelessWidget {
       LineChartData(
         clipData: FlClipData.all(),
         borderData: FlBorderData(show: false),
-        // FIX: Set explicit min/max for Y-axis to prevent decimal interval issues
         minY: minY,
         maxY: maxY,
         titlesData: FlTitlesData(

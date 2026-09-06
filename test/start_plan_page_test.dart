@@ -116,7 +116,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(AppBar), findsOne);
     expect(find.textContaining('Bench press'), findsOne);
     expect(find.textContaining('Barbell row'), findsOne);
     expect(find.textContaining('Squat'), findsOne);

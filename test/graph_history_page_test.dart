@@ -50,19 +50,18 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byType(ListTile), findsNWidgets(2));
-      await tester.longPress(find.byType(ListTile).first);
+      expect(find.text('2 x 3 kg'), findsOne);
+      expect(find.text('4 x 5 kg'), findsOne);
+      await tester.longPress(find.text('4 x 5 kg'));
       await tester.pumpAndSettle();
       expect(find.text('1 selected'), findsOne);
 
-      await tester.tap(find.byType(ListTile).last);
+      await tester.tap(find.text('2 x 3 kg'));
       await tester.pumpAndSettle();
       expect(find.text('2 selected'), findsOne);
-      expect(find.byKey(const ValueKey('editGraphHistorySelection')), findsOne);
+      expect(find.byTooltip('Edit selected'), findsOne);
 
-      await tester.tap(
-        find.byKey(const ValueKey('deleteGraphHistorySelection')),
-      );
+      await tester.tap(find.byTooltip('Delete selected'));
       await tester.pumpAndSettle();
       expect(find.text('Confirm Delete'), findsOne);
 

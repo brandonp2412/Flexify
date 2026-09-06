@@ -157,8 +157,6 @@ class _CardioPageState extends State<CardioPage> {
     getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
     getTooltipItems: (touchedSpots) {
       return touchedSpots.map((spot) {
-        // Only show tooltip for the first line (index 0 = actual data)
-        // Return null for trend line (index 1)
         if (spot.barIndex != 0) return null;
 
         final row = data.elementAt(spot.spotIndex);

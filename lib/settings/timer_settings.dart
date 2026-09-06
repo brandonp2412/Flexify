@@ -421,7 +421,6 @@ class _TimerSettingsState extends State<TimerSettings> {
           )
           .toList();
 
-      // Initialize controllers for each exercise
       for (final result in exercises) {
         final exerciseName = result.read(db.gymSets.name)!;
         final restMs = result.read(db.gymSets.restMs);
@@ -455,7 +454,6 @@ class _TimerSettingsState extends State<TimerSettings> {
         .write(GymSetsCompanion(restMs: Value(duration?.inMilliseconds)));
 
     if (!mounted) return;
-    // If duration is null (both minutes and seconds are 0), remove from list
     if (duration == null) {
       _minuteControllers.remove(exerciseName)?.dispose();
       _secondControllers.remove(exerciseName)?.dispose();
@@ -636,7 +634,6 @@ class _TimerSettingsState extends State<TimerSettings> {
     _minCtrl.dispose();
     _secCtrl.dispose();
 
-    // Dispose of all exercise controllers
     for (final controller in _minuteControllers.values) {
       controller.dispose();
     }
