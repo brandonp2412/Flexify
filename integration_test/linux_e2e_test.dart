@@ -342,14 +342,20 @@ void main() {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'TimerPage');
 
-    await tester.tap(find.byIcon(Icons.settings));
+    await tester.tap(find.byTooltip('Settings'));
     await tester.pumpAndSettle();
-    expect(find.text('Settings'), findsOneWidget);
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('Settings')),
+      findsOneWidget,
+    );
 
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.text('Start'), findsOneWidget);
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('Timer')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Rest timer setting does not call Android APIs on Linux', (

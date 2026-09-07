@@ -195,6 +195,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
               );
             },
+            tooltip: 'Settings',
             icon: const Icon(Icons.settings),
           ),
         ],
