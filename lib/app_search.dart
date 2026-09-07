@@ -115,6 +115,7 @@ class _AppSearchState extends State<AppSearch> {
                   child: Icon(Icons.search),
                 )
               : IconButton(
+                  tooltip: 'Clear selection',
                   onPressed: () {
                     widget.controller.clear();
                     _ctrl.text = '';

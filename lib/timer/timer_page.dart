@@ -72,9 +72,7 @@ class _TimerPageWidget extends StatefulWidget {
 
 class _TimerPageWidgetState extends State<_TimerPageWidget>
     with WidgetsBindingObserver {
-  // Wall-clock start time; null when the stopwatch is paused/reset.
   DateTime? _stopwatchStartedAt;
-  // Accumulated duration from previous running intervals.
   Duration _stopwatchAccumulated = Duration.zero;
   bool _stopwatchRunning = false;
 
