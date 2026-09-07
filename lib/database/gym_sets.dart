@@ -424,32 +424,32 @@ Future<bool> isBest(GymSet gymSet) async {
     if (best == null) return false;
     final bestPace = best.read(paceExpr) ?? 0;
     return gymSet.distance / gymSet.duration > bestPace;
-  } else {
-    final result =
-        await (db.selectOnly(db.gymSets)
-              ..addColumns([db.gymSets.weight, db.gymSets.reps])
-              ..where(db.gymSets.name.equals(gymSet.name))
-              ..where(db.gymSets.id.isNotValue(gymSet.id))
-              ..where(db.gymSets.hidden.equals(false))
-              ..orderBy([
-                OrderingTerm(
-                  expression: db.gymSets.weight,
-                  mode: OrderingMode.desc,
-                ),
-                OrderingTerm(
-                  expression: db.gymSets.reps,
-                  mode: OrderingMode.desc,
-                ),
-              ])
-              ..limit(1))
-            .getSingleOrNull();
-    if (result == null) return false;
-    final weight = result.read(db.gymSets.weight)!;
-    final reps = result.read(db.gymSets.reps)!;
-    if (gymSet.weight > weight) return true;
-    if (gymSet.weight == weight && gymSet.reps > reps) return true;
-    return false;
   }
+
+  final result =
+      await (db.selectOnly(db.gymSets)
+            ..addColumns([db.gymSets.weight, db.gymSets.reps])
+            ..where(db.gymSets.name.equals(gymSet.name))
+            ..where(db.gymSets.id.isNotValue(gymSet.id))
+            ..where(db.gymSets.hidden.equals(false))
+            ..orderBy([
+              OrderingTerm(
+                expression: db.gymSets.weight,
+                mode: OrderingMode.desc,
+              ),
+              OrderingTerm(
+                expression: db.gymSets.reps,
+                mode: OrderingMode.desc,
+              ),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
+  if (result == null) return false;
+  final weight = result.read(db.gymSets.weight)!;
+  final reps = result.read(db.gymSets.reps)!;
+  if (gymSet.weight > weight) return true;
+  if (gymSet.weight == weight && gymSet.reps > reps) return true;
+  return false;
 }
 
 bool _isWeightUnit(String unit) =>

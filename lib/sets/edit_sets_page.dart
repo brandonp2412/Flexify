@@ -361,9 +361,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
   List<DropdownMenuItem<String>> _getUnitItems() {
     if (_cardio == true) {
       return [...strengthUnitMenuItems, ...cardioUnitMenuItems];
-    } else {
-      return strengthUnitMenuItems;
     }
+    return strengthUnitMenuItems;
   }
 
   void _setCardio(bool value) {

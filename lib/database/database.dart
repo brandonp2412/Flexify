@@ -20,11 +20,8 @@ part 'database.g.dart';
 
 LazyDatabase openConnection() {
   return LazyDatabase(() async {
-    if (kIsWeb) {
-      return createWebConnection();
-    } else {
-      return createNativeConnection();
-    }
+    if (kIsWeb) return createWebConnection();
+    return createNativeConnection();
   });
 }
 

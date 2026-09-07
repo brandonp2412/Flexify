@@ -219,11 +219,8 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   List<Widget> exerciseFields() {
-    if (_cardio) {
-      return buildCardioFields();
-    } else {
-      return buildStrengthFields();
-    }
+    if (_cardio) return buildCardioFields();
+    return buildStrengthFields();
   }
 
   List<Widget> buildStrengthFields() {
@@ -662,12 +659,12 @@ class _EditSetPageState extends State<EditSetPage> {
       planState.updateDefaults();
       talker.info('Updated workout set');
       return Navigator.of(context).pop();
-    } else {
-      var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-      await db.into(db.gymSets).insert(insert);
-      planState.updateDefaults();
-      talker.info('Created workout set');
     }
+
+    var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+    await db.into(db.gymSets).insert(insert);
+    planState.updateDefaults();
+    talker.info('Created workout set');
 
     if (settings.notifications) {
       final best = await isBest(gymSet);
