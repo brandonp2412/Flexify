@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
@@ -57,8 +58,17 @@ Future<SettingsState> _pumpIsolatedApp(
   return settingsState;
 }
 
-Future<void> _tapTab(WidgetTester tester, String key) async {
-  await tester.tap(find.byKey(Key(key)));
+Future<void> _tapTab(WidgetTester tester, String tab) async {
+  final label = BottomNav.labelForTab(tab);
+  final textFinder = find.text(label);
+  if (textFinder.evaluate().isNotEmpty) {
+    await tester.tap(textFinder.last);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    return;
+  }
+
+  await tester.tap(find.byTooltip(label));
   await tester.pumpAndSettle();
   expect(tester.takeException(), isNull);
 }
@@ -342,14 +352,14 @@ void main() {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'TimerPage');
 
-    await tester.tap(find.byIcon(Icons.settings));
+    await tester.tap(find.byTooltip('Settings'));
     await tester.pumpAndSettle();
-    expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('Settings'), findsWidgets);
 
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.text('Start'), findsOneWidget);
+    expect(find.text('Start stopwatch'), findsOneWidget);
   });
 
   testWidgets('Rest timer setting does not call Android APIs on Linux', (
