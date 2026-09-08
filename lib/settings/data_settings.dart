@@ -61,10 +61,12 @@ Future<void> notifyAutomaticBackupEnabled() async {
 Future<void> tapBackup(bool value) async {
   if (kIsWeb || !Platform.isAndroid) return;
 
-  await db.settings.update().write(
-    SettingsCompanion(automaticBackups: Value(value)),
-  );
-  if (!value) return;
+  if (!value) {
+    await db.settings.update().write(
+      const SettingsCompanion(automaticBackups: Value(false)),
+    );
+    return;
+  }
 
   try {
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -72,14 +74,11 @@ Future<void> tapBackup(bool value) async {
     final selectedPath = await androidChannel.invokeMethod<String>('pick', {
       'dbPath': dbPath,
     });
+    if (selectedPath == null) return;
 
-    if (selectedPath == null) {
-      await db.settings.update().write(
-        const SettingsCompanion(automaticBackups: Value(false)),
-      );
-      return;
-    }
-
+    await db.settings.update().write(
+      const SettingsCompanion(automaticBackups: Value(true)),
+    );
     await notifyAutomaticBackupEnabled();
   } catch (_) {
     await db.settings.update().write(
