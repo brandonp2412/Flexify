@@ -1,18 +1,24 @@
-import 'dart:io';
-
 import 'package:csv/csv.dart';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
+import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-class ExportData extends StatelessWidget {
+class ExportData extends StatefulWidget {
   const ExportData({super.key});
+
+  @override
+  State<ExportData> createState() => _ExportDataState();
+}
+
+class _ExportDataState extends State<ExportData> {
+  bool exporting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -114,25 +120,35 @@ class ExportData extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage),
-                    title: const Text('Database'),
+                    title: const Text('Backup'),
                     onTap: () async {
                       Navigator.pop(context);
-                      final dbFolder = await getApplicationDocumentsDirectory();
-                      final file = File(
-                        p.join(dbFolder.path, 'flexify.sqlite'),
+                      setState(() => exporting = true);
+                      final tempDirectory = await getTemporaryDirectory();
+                      final workingDirectory = await tempDirectory.createTemp(
+                        'flexify-export-',
                       );
-                      final bytes = await file.readAsBytes();
-                      final result = await FilePicker.saveFile(
-                        fileName: 'flexify.sqlite',
-                        bytes: bytes,
-                        type: FileType.custom,
-                        allowedExtensions: ['sqlite'],
-                      );
-                      if (Platform.isMacOS ||
-                          Platform.isWindows ||
-                          Platform.isLinux)
-                        await file.copy(result!);
-                      talker.info('Exported Flexify database backup');
+                      try {
+                        final dbFolder =
+                            await getApplicationDocumentsDirectory();
+                        final archive = await createBackupArchive(
+                          databasePath: p.join(
+                            dbFolder.path,
+                            backupDatabaseName,
+                          ),
+                          workingDirectory: workingDirectory,
+                        );
+                        await FilePicker.saveFile(
+                          fileName: 'flexify-backup.zip',
+                          bytes: await archive.readAsBytes(),
+                          type: FileType.custom,
+                          allowedExtensions: ['zip'],
+                        );
+                        talker.info('Exported Flexify data and image backup');
+                      } finally {
+                        await workingDirectory.delete(recursive: true);
+                        if (mounted) setState(() => exporting = false);
+                      }
                     },
                   ),
                 ],
@@ -142,7 +158,13 @@ class ExportData extends StatelessWidget {
         );
       },
       icon: const Icon(Icons.download),
-      label: const Text('Export data'),
+      label: exporting
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(),
+            )
+          : const Text('Export data'),
     );
   }
 }

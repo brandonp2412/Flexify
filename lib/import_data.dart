@@ -8,6 +8,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -46,7 +47,7 @@ class ImportData extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage),
-                    title: const Text('Database'),
+                    title: const Text('Backup'),
                     onTap: () => importDatabase(context),
                   ),
                 ],
@@ -122,22 +123,37 @@ $version
   }
 
   Future<void> _importDatabaseNative(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.pickFiles();
+    final result = await FilePicker.pickFiles();
     if (result == null) return;
 
-    File sourceFile = File(result.files.single.path!);
-
-    if (!await sourceFile.exists()) {
+    final selectedFile = File(result.files.single.path!);
+    if (!await selectedFile.exists()) {
       throw Exception('Selected file does not exist');
     }
 
     final dbFolder = await getApplicationDocumentsDirectory();
-    await db.close();
+    final tempDirectory = await getTemporaryDirectory();
+    final workingDirectory = await tempDirectory.createTemp('flexify-import-');
+    try {
+      final sourceFile = p.extension(selectedFile.path).toLowerCase() == '.zip'
+          ? await extractBackupArchive(
+              archiveFile: selectedFile,
+              workingDirectory: workingDirectory,
+              documentsDirectory: dbFolder,
+            )
+          : selectedFile;
 
-    await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
-    db = AppDatabase.persistent();
-    dbVersion.value++;
-    talker.info('Imported Flexify database backup');
+      await db.close();
+      try {
+        await sourceFile.copy(p.join(dbFolder.path, backupDatabaseName));
+      } finally {
+        db = AppDatabase.persistent();
+      }
+      dbVersion.value++;
+      talker.info('Imported Flexify data and image backup');
+    } finally {
+      await workingDirectory.delete(recursive: true);
+    }
 
     await (db.settings.update()).write(
       const SettingsCompanion(alarmSound: Value('')),

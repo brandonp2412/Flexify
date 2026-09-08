@@ -17,6 +17,6 @@ void main() {
 
     expect(find.text('Graphs'), findsOne);
     expect(find.text('Plans'), findsOne);
-    expect(find.text('Database'), findsOne);
+    expect(find.text('Backup'), findsOne);
   });
 }

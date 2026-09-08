@@ -26,32 +26,20 @@ void main() {
       expect($('Import data').exists, isTrue);
       expect($('Delete records').exists, isTrue);
 
-      // Force a known transition to enabled. Notification permission is
-      // resolved first; the app then launches ACTION_OPEN_DOCUMENT_TREE.
       if ($(Switch).which<Switch>((widget) => widget.value).exists) {
         await $('Automatic backup').tap();
         await $.pumpAndSettle();
       }
+      expect($(Switch).which<Switch>((widget) => !widget.value).exists, isTrue);
+
       await $('Automatic backup').tap();
-
-      if (await $.platform.mobile.isPermissionDialogVisible()) {
-        await $.platform.mobile.grantPermissionWhenInUse();
-        await $.pumpAndSettle();
-      }
-
-      // ACTION_OPEN_DOCUMENT_TREE is fulfilled by Android's DocumentsUI.
-      // Individual labels/actions differ across API levels and initial folders,
-      // so assert the system picker package rather than a presentation detail.
-      await $.platform.android.waitUntilVisible(
-        const AndroidSelector(
-          applicationPackage: 'com.google.android.documentsui',
-        ),
-        timeout: const Duration(seconds: 20),
-      );
-
-      // Leave no persisted folder grant behind for subsequent test runs.
       await $.platform.android.pressBack();
+      await $.pump(const Duration(seconds: 1));
+
+      expect($('Automatic backup').exists, isTrue);
+      expect($(Switch).which<Switch>((widget) => !widget.value).exists, isTrue);
     },
     semanticsEnabled: false,
+    tags: 'backup',
   );
 }

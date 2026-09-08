@@ -30,7 +30,7 @@ class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
     private var timerBound = false
     private var timerService: TimerService? = null
-    private var savedPath: String? = null
+    private var pendingPickResult: MethodChannel.Result? = null
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -54,10 +54,7 @@ class MainActivity : FlutterActivity() {
         window.navigationBarColor = android.graphics.Color.TRANSPARENT
 
         val (automaticBackups, backupPath) = getSettings(context)
-        if (!automaticBackups) return
-        if (backupPath != null) {
-            scheduleBackups(context)
-        }
+        if (automaticBackups && backupPath != null) scheduleBackups(context)
     }
 
     @SuppressLint("WrongConstant")
@@ -81,7 +78,17 @@ class MainActivity : FlutterActivity() {
 
                 "pick" -> {
                     val dbPath = call.argument<String>("dbPath")!!
+                    pendingPickResult = result
                     pick(dbPath)
+                }
+
+                "runBackupNow" -> {
+                    if (!BuildConfig.DEBUG) {
+                        result.notImplemented()
+                        return@setMethodCallHandler
+                    }
+                    sendBroadcast(Intent(this, BackupReceiver::class.java))
+                    result.success(null)
                 }
 
                 "getProgress" -> {
@@ -196,31 +203,28 @@ class MainActivity : FlutterActivity() {
 
     private fun pick(path: String) {
         Log.d("MainActivity.pick", "dbPath=$path")
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        savedPath = path
-        activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
+        activity.startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), WRITE_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != WRITE_REQUEST_CODE) return
 
         data?.data?.also { uri ->
-            if (requestCode != WRITE_REQUEST_CODE) return
-
             val contentResolver = applicationContext.contentResolver
-            val takeFlags: Int =
+            val takeFlags =
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, takeFlags)
-            Log.d("auto backup", "uri=$uri")
-            scheduleBackups(context)
 
-            val db = openDb(context)!!
-            val values = ContentValues().apply {
-                put("backup_path", uri.toString())
+            openDb(context)?.use { db ->
+                val values = ContentValues().apply { put("backup_path", uri.toString()) }
+                db.update("settings", values, null, null)
             }
-            db.update("settings", values, null, null)
-            db.close()
+            scheduleBackups(context)
         }
+
+        pendingPickResult?.success(data?.data?.toString())
+        pendingPickResult = null
     }
 
     override fun onResume() {

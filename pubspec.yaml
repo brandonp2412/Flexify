@@ -20,6 +20,7 @@ dependencies:
   provider: ^6.1.1
   dynamic_color: ^1.7.0
   sqlite3: ^3.5.1
+  archive: ^4.0.2
   file_picker: ^12.0.0-beta.7
   share_plus: ^13.3.0
   audioplayers: ^6.5.0

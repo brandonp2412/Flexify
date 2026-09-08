@@ -1148,7 +1148,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Graphs'), findsOneWidget);
     expect(find.text('Plans'), findsOneWidget);
-    expect(find.text('Database'), findsOneWidget);
+    expect(find.text('Backup'), findsOneWidget);
     await tester.tapAt(const Offset(8, 8));
     await tester.pumpAndSettle();
 
@@ -1156,7 +1156,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Graphs'), findsOneWidget);
     expect(find.text('Plans'), findsOneWidget);
-    expect(find.text('Database'), findsOneWidget);
+    expect(find.text('Backup'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
