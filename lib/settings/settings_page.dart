@@ -307,17 +307,17 @@ class _SettingsPageState extends State<SettingsPage>
           .toString(),
     );
 
-    if (!kIsWeb) {
-      try {
-        _player = AudioPlayer();
-      } catch (error, stackTrace) {
-        talker.handle(
-          error,
-          stackTrace,
-          'Failed to create settings audio player',
-        );
-        _player = null;
-      }
+    if (kIsWeb) return;
+
+    try {
+      _player = AudioPlayer();
+    } catch (error, stackTrace) {
+      talker.handle(
+        error,
+        stackTrace,
+        'Failed to create settings audio player',
+      );
+      _player = null;
     }
   }
 }
