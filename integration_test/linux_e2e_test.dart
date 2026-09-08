@@ -234,12 +234,12 @@ void main() {
     await _pumpIsolatedApp(tester);
     await _openSettingsSection(tester, 'Tabs');
 
-    await tester.tap(find.byKey(const Key('GraphsPage')));
+    await tester.tap(find.widgetWithText(ListTile, 'Graphs'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     expect(find.text('Graphs'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('GraphsPage')));
+    await tester.tap(find.widgetWithText(ListTile, 'Graphs'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
