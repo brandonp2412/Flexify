@@ -677,11 +677,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Linux E2E graph Zebra'), findsOneWidget);
     expect(settingsState.value.showGlobalProgress, isTrue);
-    final clearSearch = find.descendant(
-      of: find.byType(SearchBar),
-      matching: find.byIcon(Icons.arrow_back),
-    );
-    await tester.tap(clearSearch);
+    await tester.tap(find.byTooltip('Clear selection'));
     await tester.pumpAndSettle();
     expect(find.text('Global progress'), findsOneWidget);
 
@@ -1963,7 +1959,7 @@ void main() {
     expect(find.text('Exercise notes'), findsOneWidget);
     await tester.enterText(find.byType(TextField), 'Linux E2E graph notes');
     await tester.pump(const Duration(milliseconds: 700));
-    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
     final pref =
