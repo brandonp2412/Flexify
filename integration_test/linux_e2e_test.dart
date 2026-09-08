@@ -788,7 +788,7 @@ void main() {
 
     await tester.tap(find.widgetWithText(ListTile, 'Linux E2E press'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.delete));
+    await tester.tap(find.byTooltip('Delete set'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
@@ -799,7 +799,7 @@ void main() {
       isNotNull,
     );
 
-    await tester.tap(find.byIcon(Icons.delete));
+    await tester.tap(find.byTooltip('Delete set'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
@@ -2640,7 +2640,7 @@ void main() {
   testWidgets('About and Whats New render on Linux', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _openSettings(tester);
-    await tester.tap(find.byIcon(Icons.info_outline_rounded));
+    await tester.tap(find.byTooltip('About'));
     await tester.pumpAndSettle();
     expect(find.text('About'), findsOneWidget);
     for (final title in [

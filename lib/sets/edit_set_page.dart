@@ -128,6 +128,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   Widget buildDeleteButton() {
     return IconButton(
+      tooltip: 'Delete set',
       icon: const Icon(Icons.delete),
       onPressed: () => showDeleteDialog(),
     );

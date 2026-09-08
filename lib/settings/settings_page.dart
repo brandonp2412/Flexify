@@ -101,6 +101,7 @@ class _SettingsPageState extends State<SettingsPage>
         actions: [
           if (!kIsWeb && !Platform.isIOS && !Platform.isMacOS)
             IconButton(
+              tooltip: 'About',
               onPressed: () async {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const AboutPage()),
