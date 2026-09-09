@@ -717,8 +717,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!mounted) return;
     if (weightSet == null) {
       toast('No weight entered yet');
-    } else {
-      _weight.text = toString(weightSet.weight);
+      return;
     }
+    _weight.text = toString(weightSet.weight);
   }
 }
