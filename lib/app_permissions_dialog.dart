@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -17,7 +17,10 @@ Future<void> showAppPermissionsDialog(
   await showDialog<void>(
     context: context,
     barrierDismissible: !required,
-    builder: (context) => _AppPermissionsDialog(settings: settings),
+    builder: (context) => PopScope(
+      canPop: !required,
+      child: _AppPermissionsDialog(settings: settings),
+    ),
   );
 }
 
