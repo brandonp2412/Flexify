@@ -53,8 +53,29 @@ class MainActivity : FlutterActivity() {
         window.statusBarColor = android.graphics.Color.TRANSPARENT
         window.navigationBarColor = android.graphics.Color.TRANSPARENT
 
+        resetPermissionPromptStateOnFreshInstall()
+
         val (automaticBackups, backupPath) = getSettings(context)
         if (automaticBackups && backupPath != null) scheduleBackups(context)
+    }
+
+    private fun resetPermissionPromptStateOnFreshInstall() {
+        val marker = File(noBackupFilesDir, PERMISSION_INSTALL_MARKER)
+        if (marker.exists()) return
+
+        openDb(context)?.use { database ->
+            val values = ContentValues().apply {
+                put("notification_permission_requested", 0)
+                put("explained_permissions", 0)
+            }
+            database.update("settings", values, null, null)
+        }
+
+        try {
+            marker.createNewFile()
+        } catch (error: Exception) {
+            Log.e("MainActivity", "Failed to create permission install marker", error)
+        }
     }
 
     @SuppressLint("WrongConstant")
@@ -302,5 +323,6 @@ class MainActivity : FlutterActivity() {
         const val WRITE_REQUEST_CODE = 43
         const val TIMER_PERMISSION_REQUEST_CODE = 44
         const val TICK_BROADCAST = "tick-event"
+        const val PERMISSION_INSTALL_MARKER = "permission-prompt-state-v1"
     }
 }
