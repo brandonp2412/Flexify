@@ -152,7 +152,10 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
         FilledButton(
           onPressed: () async {
             await db.settings.update().write(
-              const SettingsCompanion(explainedPermissions: Value(true)),
+              const SettingsCompanion(
+                explainedPermissions: Value(true),
+                notificationPermissionRequested: Value(true),
+              ),
             );
             if (!context.mounted) return;
             Navigator.pop(context);
