@@ -244,12 +244,12 @@ void main() {
     await _pumpIsolatedApp(tester);
     await _openSettingsSection(tester, 'Tabs');
 
-    await tester.tap(find.byKey(const Key('GraphsPage')));
+    await tester.tap(find.widgetWithText(ListTile, 'Graphs'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     expect(find.text('Graphs'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('GraphsPage')));
+    await tester.tap(find.widgetWithText(ListTile, 'Graphs'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
@@ -354,11 +354,19 @@ void main() {
 
     await tester.tap(find.byTooltip('Settings'));
     await tester.pumpAndSettle();
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('Settings')),
+      findsOneWidget,
+    );
     expect(find.text('Settings'), findsWidgets);
 
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('Timer')),
+      findsOneWidget,
+    );
     expect(find.text('Start stopwatch'), findsOneWidget);
   });
 
@@ -475,11 +483,10 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'PlansPage');
-    await tester.tap(find.text('Add'));
+    await tester.tap(find.text('New plan'));
     await tester.pumpAndSettle();
 
-    final settingsButtons = find.byIcon(Icons.settings);
-    await tester.tap(settingsButtons.first);
+    await tester.tap(find.byTooltip('Settings').first);
     await tester.pumpAndSettle();
 
     await tester.enterText(
@@ -510,7 +517,7 @@ void main() {
 
     await tester.tap(find.text('Barbell bench press'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.history));
+    await tester.tap(find.byTooltip('History'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
@@ -545,14 +552,14 @@ void main() {
 
     await tester.tap(find.widgetWithText(ListTile, 'Selection E2E'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.tune));
+    await tester.tap(find.byTooltip('Options'));
     await tester.pumpAndSettle();
     expect(find.text('Curve line graphs'), findsOneWidget);
     expect(find.text('Curve smoothness'), findsOneWidget);
     await tester.tapAt(const Offset(8, 8));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.history));
+    await tester.tap(find.byTooltip('History'));
     await tester.pumpAndSettle();
     expect(find.text('5 x 50 kg'), findsOneWidget);
     expect(find.text('6 x 51 kg'), findsOneWidget);
@@ -581,7 +588,7 @@ void main() {
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
 
-    expect(find.text('No data yet for Selection E2E'), findsOneWidget);
+    expect(find.text('No history yet for Selection E2E'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -682,11 +689,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Linux E2E graph Zebra'), findsOneWidget);
     expect(settingsState.value.showGlobalProgress, isTrue);
-    final clearSearch = find.descendant(
-      of: find.byType(SearchBar),
-      matching: find.byIcon(Icons.arrow_back),
-    );
-    await tester.tap(clearSearch);
+    await tester.tap(find.byTooltip('Clear selection'));
     await tester.pumpAndSettle();
     expect(find.text('Global progress'), findsOneWidget);
 
@@ -793,7 +796,7 @@ void main() {
 
     await tester.tap(find.widgetWithText(ListTile, 'Linux E2E press'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.delete));
+    await tester.tap(find.byTooltip('Delete set'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
@@ -804,7 +807,7 @@ void main() {
       isNotNull,
     );
 
-    await tester.tap(find.byIcon(Icons.delete));
+    await tester.tap(find.byTooltip('Delete set'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
@@ -1153,7 +1156,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Graphs'), findsOneWidget);
     expect(find.text('Plans'), findsOneWidget);
-    expect(find.text('Database'), findsOneWidget);
+    expect(find.text('Backup'), findsOneWidget);
     await tester.tapAt(const Offset(8, 8));
     await tester.pumpAndSettle();
 
@@ -1161,7 +1164,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Graphs'), findsOneWidget);
     expect(find.text('Plans'), findsOneWidget);
-    expect(find.text('Database'), findsOneWidget);
+    expect(find.text('Backup'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -1240,8 +1243,9 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
     await _tapTab(tester, 'PlansPage');
-    await tester.tap(find.text('Add'));
+    await tester.tap(find.text('New plan'));
     await tester.pumpAndSettle();
+
     await tester.enterText(
       _textFieldWithLabel('Title (optional)'),
       'Linux E2E weighted plan',
@@ -1385,7 +1389,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Select all'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('deleteButton')));
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
@@ -1395,7 +1399,7 @@ void main() {
           .get(),
       hasLength(2),
     );
-    await tester.tap(find.byKey(const ValueKey('deleteButton')));
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
@@ -1713,7 +1717,7 @@ void main() {
     expect(rows, hasLength(2));
     expect(rows.every((row) => row.reps == 10), isTrue);
 
-    final clearSelection = find.byIcon(Icons.arrow_back);
+    final clearSelection = find.byTooltip('Clear selection');
     if (clearSelection.evaluate().isNotEmpty) {
       await tester.tap(clearSelection.first);
       await tester.pumpAndSettle();
@@ -1724,7 +1728,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Select all'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('deleteButton')));
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
@@ -1735,7 +1739,7 @@ void main() {
       hasLength(2),
     );
 
-    await tester.tap(find.byKey(const ValueKey('deleteButton')));
+    await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
@@ -1800,7 +1804,7 @@ void main() {
     (tester) async {
       await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
       await _tapTab(tester, 'PlansPage');
-      await tester.tap(find.text('Add'));
+      await tester.tap(find.text('New plan'));
       await tester.pumpAndSettle();
       await tester.enterText(
         _textFieldWithLabel('Title (optional)'),
@@ -1812,7 +1816,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(ListTile, 'Barbell bench press'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Save'));
+      await tester.tap(find.text('Save plan'));
       await tester.pumpAndSettle();
 
       var plan =
@@ -1861,7 +1865,7 @@ void main() {
       );
       await tester.tap(find.text('Tue'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Save'));
+      await tester.tap(find.text('Save plan'));
       await tester.pumpAndSettle();
 
       plan =
@@ -1870,7 +1874,7 @@ void main() {
       expect(plan.title, 'Linux E2E edited plan');
       expect(plan.days.split(',').toSet(), {'Monday', 'Tuesday'});
 
-      final clearSelection = find.byIcon(Icons.arrow_back);
+      final clearSelection = find.byTooltip('Clear selection');
       if (clearSelection.evaluate().isNotEmpty) {
         await tester.tap(clearSelection.first);
         await tester.pumpAndSettle();
@@ -1881,7 +1885,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(ListTile, 'Select all'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const ValueKey('deleteButton')));
+      await tester.tap(find.byTooltip('Delete selected'));
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
       await tester.pumpAndSettle();
@@ -1890,7 +1894,7 @@ void main() {
             .getSingleOrNull(),
         isNotNull,
       );
-      await tester.tap(find.byKey(const ValueKey('deleteButton')));
+      await tester.tap(find.byTooltip('Delete selected'));
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(TextButton, 'Delete'));
       await tester.pumpAndSettle();
@@ -1967,7 +1971,7 @@ void main() {
     expect(find.text('Exercise notes'), findsOneWidget);
     await tester.enterText(find.byType(TextField), 'Linux E2E graph notes');
     await tester.pump(const Duration(milliseconds: 700));
-    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
     final pref =
@@ -2644,7 +2648,7 @@ void main() {
   testWidgets('About and Whats New render on Linux', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _openSettings(tester);
-    await tester.tap(find.byIcon(Icons.info_outline_rounded));
+    await tester.tap(find.byTooltip('About'));
     await tester.pumpAndSettle();
     expect(find.text('About'), findsOneWidget);
     for (final title in [

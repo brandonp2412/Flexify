@@ -30,7 +30,7 @@ class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
     private var timerBound = false
     private var timerService: TimerService? = null
-    private var savedPath: String? = null
+    private var pendingPickResult: MethodChannel.Result? = null
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -53,10 +53,75 @@ class MainActivity : FlutterActivity() {
         window.statusBarColor = android.graphics.Color.TRANSPARENT
         window.navigationBarColor = android.graphics.Color.TRANSPARENT
 
+        resetPermissionPromptStateOnFreshInstall()
+
         val (automaticBackups, backupPath) = getSettings(context)
-        if (!automaticBackups) return
-        if (backupPath != null) {
-            scheduleBackups(context)
+        if (automaticBackups && backupPath != null) scheduleBackups(context)
+    }
+
+    private fun resetPermissionPromptStateOnFreshInstall() {
+        val marker = File(noBackupFilesDir, PERMISSION_INSTALL_MARKER)
+        if (marker.exists()) return
+
+        try {
+            openDb(context)?.use { database ->
+                val columns = mutableSetOf<String>()
+                database.rawQuery("PRAGMA table_info(settings)", null).use { cursor ->
+                    val nameIndex = cursor.getColumnIndex("name")
+                    while (cursor.moveToNext()) {
+                        if (nameIndex >= 0) columns.add(cursor.getString(nameIndex))
+                    }
+                }
+
+                val values = ContentValues().apply {
+                    if (columns.contains("notification_permission_requested")) {
+                        put("notification_permission_requested", 0)
+                    }
+                    if (columns.contains("explained_permissions")) {
+                        put("explained_permissions", 0)
+                    }
+                }
+                if (values.size() > 0) database.update("settings", values, null, null)
+            }
+        } catch (error: Exception) {
+            Log.w("MainActivity", "Could not reset restored permission prompt state", error)
+        }
+
+        try {
+            marker.createNewFile()
+        } catch (error: Exception) {
+            Log.e("MainActivity", "Failed to create permission install marker", error)
+        }
+    }
+
+    private fun claimNotificationPermissionPrompt(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return false
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) return false
+
+        return try {
+            openDb(context)?.use { database ->
+                val cursor = database.rawQuery(
+                    "SELECT notification_permission_requested FROM settings LIMIT 1",
+                    null
+                )
+                val alreadyRequested = cursor.use {
+                    it.moveToFirst() && it.getInt(0) != 0
+                }
+                if (alreadyRequested) return@use false
+
+                val values = ContentValues().apply {
+                    put("notification_permission_requested", 1)
+                }
+                database.update("settings", values, null, null)
+                true
+            } ?: true
+        } catch (error: Exception) {
+            Log.w("MainActivity", "Could not persist notification permission request", error)
+            true
         }
     }
 
@@ -81,7 +146,17 @@ class MainActivity : FlutterActivity() {
 
                 "pick" -> {
                     val dbPath = call.argument<String>("dbPath")!!
+                    pendingPickResult = result
                     pick(dbPath)
+                }
+
+                "runBackupNow" -> {
+                    if (!BuildConfig.DEBUG) {
+                        result.notImplemented()
+                        return@setMethodCallHandler
+                    }
+                    sendBroadcast(Intent(this, BackupReceiver::class.java))
+                    result.success(null)
                 }
 
                 "getProgress" -> {
@@ -196,31 +271,28 @@ class MainActivity : FlutterActivity() {
 
     private fun pick(path: String) {
         Log.d("MainActivity.pick", "dbPath=$path")
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        savedPath = path
-        activity.startActivityForResult(intent, WRITE_REQUEST_CODE)
+        activity.startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), WRITE_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != WRITE_REQUEST_CODE) return
 
         data?.data?.also { uri ->
-            if (requestCode != WRITE_REQUEST_CODE) return
-
             val contentResolver = applicationContext.contentResolver
-            val takeFlags: Int =
+            val takeFlags =
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, takeFlags)
-            Log.d("auto backup", "uri=$uri")
-            scheduleBackups(context)
 
-            val db = openDb(context)!!
-            val values = ContentValues().apply {
-                put("backup_path", uri.toString())
+            openDb(context)?.use { db ->
+                val values = ContentValues().apply { put("backup_path", uri.toString()) }
+                db.update("settings", values, null, null)
             }
-            db.update("settings", values, null, null)
-            db.close()
+            scheduleBackups(context)
         }
+
+        pendingPickResult?.success(data?.data?.toString())
+        pendingPickResult = null
     }
 
     override fun onResume() {
@@ -233,22 +305,10 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun requestTimerPermissions() {
-        val permissions = mutableListOf<String>()
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-        
-        if (permissions.isNotEmpty()) {
+        if (claimNotificationPermissionPrompt()) {
             ActivityCompat.requestPermissions(
                 this,
-                permissions.toTypedArray(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                 TIMER_PERMISSION_REQUEST_CODE
             )
         }
@@ -298,5 +358,6 @@ class MainActivity : FlutterActivity() {
         const val WRITE_REQUEST_CODE = 43
         const val TIMER_PERMISSION_REQUEST_CODE = 44
         const val TICK_BROADCAST = "tick-event"
+        const val PERMISSION_INSTALL_MARKER = "permission-prompt-state-v1"
     }
 }

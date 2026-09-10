@@ -22,6 +22,7 @@ class GraphNotesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Exercise notes'),
         leading: IconButton(
+          tooltip: 'Back',
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),

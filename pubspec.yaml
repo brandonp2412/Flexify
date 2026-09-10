@@ -1,7 +1,7 @@
 name: flexify
 description: Track gym progress, visualize graphs, enjoy offline support & timers
 publish_to: none
-version: 2.1.119+404
+version: 2.1.124+409
 environment:
   sdk: ">=3.12.0 <4.0.0"
   flutter: ">=3.44.8"
@@ -20,6 +20,7 @@ dependencies:
   provider: ^6.1.1
   dynamic_color: ^1.7.0
   sqlite3: ^3.5.1
+  archive: ^4.0.2
   file_picker: ^12.0.0-beta.7
   share_plus: ^13.3.0
   audioplayers: ^6.5.0
@@ -78,7 +79,7 @@ msix_config:
   display_name: Flexify
   publisher_display_name: Brandon Dick
   identity_name: FrisbeeSoftware.Flexify
-  msix_version: 1.0.244.0
+  msix_version: 1.0.249.0
   logo_path: assets/ic_launcher.png
   trim_logo: false
   publisher: CN=BB0811CB-EED5-441C-BE1B-D31F391F76DE

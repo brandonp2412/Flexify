@@ -1,0 +1,4 @@
+• Flatten tab content selection
+• Prefer visible tab selector
+• Simplify early-return control flow
+• refactor: prefer user-visible controls in Linux E2E

@@ -38,6 +38,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: IconButton(
+        tooltip: 'Settings',
         icon: const Icon(Icons.settings),
         onPressed: () {
           showDialog(

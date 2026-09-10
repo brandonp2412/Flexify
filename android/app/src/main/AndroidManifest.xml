@@ -52,7 +52,9 @@
                 android:value="App does not require SCHEDULE_EXACT_ALARM or USE_EXACT_ALARM, but needs foreground service for foreground timer." />
         </service>
 
-        <receiver android:name=".BackupReceiver" />
+        <receiver
+            android:name=".BackupReceiver"
+            android:exported="false" />
 
         <receiver android:name=".BootReceiver"
             android:exported="false">

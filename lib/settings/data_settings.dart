@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
+import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
@@ -10,29 +11,82 @@ import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+Future<void> notifyAutomaticBackupEnabled() async {
+  if (kIsWeb) return;
+
+  if (Platform.isAndroid || Platform.isIOS) {
+    final permission = await Permission.notification.request();
+    if (!permission.isGranted) return;
+  }
+
+  const darwin = DarwinInitializationSettings();
+  const android = AndroidInitializationSettings(
+    '@drawable/baseline_arrow_downward_24',
+  );
+  const linux = LinuxInitializationSettings(
+    defaultActionName: 'Open notification',
+  );
+  const init = InitializationSettings(
+    android: android,
+    iOS: darwin,
+    macOS: darwin,
+    linux: linux,
+  );
+  final plugin = FlutterLocalNotificationsPlugin();
+  await plugin.initialize(settings: init);
+  await plugin.show(
+    id: 4,
+    title: 'Automatic backups enabled',
+    body:
+        'Flexify will automatically back up your data and images to the selected folder each day.',
+    notificationDetails: const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'backup-settings',
+        'Backup settings',
+        channelDescription: 'Notifications explaining automatic backups',
+      ),
+      iOS: DarwinNotificationDetails(),
+      macOS: DarwinNotificationDetails(),
+      linux: LinuxNotificationDetails(),
+    ),
+  );
+}
+
 Future<void> tapBackup(bool value) async {
   if (kIsWeb || !Platform.isAndroid) return;
 
-  await db.settings.update().write(
-    SettingsCompanion(automaticBackups: Value(value)),
-  );
+  if (!value) {
+    await db.settings.update().write(
+      const SettingsCompanion(automaticBackups: Value(false)),
+    );
+    return;
+  }
 
-  if (!value) return;
+  try {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
+    final selectedPath = await androidChannel.invokeMethod<String>('pick', {
+      'dbPath': dbPath,
+    });
+    if (selectedPath == null) return;
 
-  // Keep the notification permission flow in front of the app. Launching the
-  // document picker first lets the permission activity displace DocumentsUI,
-  // which can leave automatic-backup setup without a foreground folder picker.
-  await Permission.notification.request();
-
-  final dbFolder = await getApplicationDocumentsDirectory();
-  final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
-  unawaited(androidChannel.invokeMethod<void>('pick', {'dbPath': dbPath}));
+    await db.settings.update().write(
+      const SettingsCompanion(automaticBackups: Value(true)),
+    );
+    await notifyAutomaticBackupEnabled();
+  } catch (_) {
+    await db.settings.update().write(
+      const SettingsCompanion(automaticBackups: Value(false)),
+    );
+    rethrow;
+  }
 }
 
 List<Widget> getDataSettings(
@@ -45,7 +99,7 @@ List<Widget> getDataSettings(
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
-        title: const Text('Automatic backup'),
+        title: const Text('Automatic backup', textAlign: TextAlign.center),
         leading: settings.value.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
@@ -54,6 +108,18 @@ List<Widget> getDataSettings(
           value: settings.value.automaticBackups,
           onChanged: (value) => tapBackup(value),
         ),
+      ),
+    if ('app permissions access'.contains(term.toLowerCase()) &&
+        !kIsWeb &&
+        Platform.isAndroid)
+      ListTile(
+        title: const Text('App permissions', textAlign: TextAlign.center),
+        subtitle: const Text(
+          'Review access required by your enabled features',
+          textAlign: TextAlign.center,
+        ),
+        leading: const Icon(Icons.admin_panel_settings_outlined),
+        onTap: () => showAppPermissionsDialog(context),
       ),
     if ('share database'.contains(term.toLowerCase()) &&
         !kIsWeb &&

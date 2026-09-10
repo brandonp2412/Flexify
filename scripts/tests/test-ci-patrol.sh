@@ -18,6 +18,11 @@ attempt=$((attempt + 1))
 printf '%s\n' "$attempt" >"$attempt_file"
 
 if [[ $attempt -eq 1 ]]; then
+  if [[ ${PATROL_TEST_MODE:-selector} == timeout ]]; then
+    sleep 2
+    exit 1
+  fi
+
   echo "waitUntilVisible() failed with Invalid response: 404 selector"
   echo "Total: 1"
   echo "Successful: 0"
@@ -38,5 +43,17 @@ PATH="$test_root/bin:$PATH" \
 
 if [[ $(<"$attempt_file") -ne 2 ]]; then
   echo "Expected Patrol to retry once after a transient test failure." >&2
+  exit 1
+fi
+
+rm -f "$attempt_file"
+PATH="$test_root/bin:$PATH" \
+  PATROL_TEST_ATTEMPT_FILE="$attempt_file" \
+  PATROL_TEST_MODE=timeout \
+  PATROL_TIMEOUT=0.1s \
+  "$repo_root/scripts/ci-patrol.sh"
+
+if [[ $(<"$attempt_file") -ne 2 ]]; then
+  echo "Expected Patrol to retry once after a timeout." >&2
   exit 1
 fi

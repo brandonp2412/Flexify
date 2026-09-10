@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -46,7 +48,7 @@ class ImportData extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage),
-                    title: const Text('Database'),
+                    title: const Text('Backup'),
                     onTap: () => importDatabase(context),
                   ),
                 ],
@@ -122,26 +124,50 @@ $version
   }
 
   Future<void> _importDatabaseNative(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.pickFiles();
+    final result = await FilePicker.pickFiles();
     if (result == null) return;
 
-    File sourceFile = File(result.files.single.path!);
-
-    if (!await sourceFile.exists()) {
+    final selectedFile = File(result.files.single.path!);
+    if (!await selectedFile.exists()) {
       throw Exception('Selected file does not exist');
     }
 
     final dbFolder = await getApplicationDocumentsDirectory();
-    await db.close();
+    final tempDirectory = await getTemporaryDirectory();
+    final workingDirectory = await tempDirectory.createTemp('flexify-import-');
+    try {
+      final sourceFile = p.extension(selectedFile.path).toLowerCase() == '.zip'
+          ? await extractBackupArchive(
+              archiveFile: selectedFile,
+              workingDirectory: workingDirectory,
+              documentsDirectory: dbFolder,
+            )
+          : selectedFile;
 
-    await sourceFile.copy(p.join(dbFolder.path, 'flexify.sqlite'));
-    db = AppDatabase.persistent();
-    dbVersion.value++;
-    talker.info('Imported Flexify database backup');
+      await db.close();
+      try {
+        await sourceFile.copy(p.join(dbFolder.path, backupDatabaseName));
+      } finally {
+        db = AppDatabase.persistent();
+      }
+      dbVersion.value++;
+      talker.info('Imported Flexify data and image backup');
+    } finally {
+      await workingDirectory.delete(recursive: true);
+    }
 
+    // Permission state belongs to this Android install, not to the imported
+    // database. Force a fresh, single checklist for the imported settings.
     await (db.settings.update()).write(
-      const SettingsCompanion(alarmSound: Value('')),
+      const SettingsCompanion(
+        alarmSound: Value(''),
+        explainedPermissions: Value(false),
+        notificationPermissionRequested: Value(false),
+      ),
     );
+
+    final importedSettings =
+        await (db.settings.select()..limit(1)).getSingle();
 
     if (!ctx.mounted) return;
     final settingsState = ctx.read<SettingsState>();
@@ -152,6 +178,13 @@ $version
     await planState.updatePlans(null);
     planState.updatePlanCounts();
     await planState.updateDefaults();
+
+    if (!ctx.mounted) return;
+    await showAppPermissionsDialog(
+      ctx,
+      required: true,
+      settings: importedSettings,
+    );
 
     if (!ctx.mounted) return;
     Navigator.of(
