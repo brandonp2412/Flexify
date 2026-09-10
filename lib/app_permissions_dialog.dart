@@ -10,18 +10,21 @@ import 'package:provider/provider.dart';
 Future<void> showAppPermissionsDialog(
   BuildContext context, {
   bool required = false,
+  Setting? settings,
 }) async {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
 
   await showDialog<void>(
     context: context,
     barrierDismissible: !required,
-    builder: (context) => const _AppPermissionsDialog(),
+    builder: (context) => _AppPermissionsDialog(settings: settings),
   );
 }
 
 class _AppPermissionsDialog extends StatefulWidget {
-  const _AppPermissionsDialog();
+  final Setting? settings;
+
+  const _AppPermissionsDialog({this.settings});
 
   @override
   State<_AppPermissionsDialog> createState() => _AppPermissionsDialogState();
@@ -69,7 +72,7 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>().value;
+    final settings = widget.settings ?? context.watch<SettingsState>().value;
     final needsTimerAccess = settings.restTimers;
     final needsNotifications = settings.notifications || needsTimerAccess;
     final hasRequirements = needsNotifications || needsTimerAccess;
