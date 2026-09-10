@@ -17,8 +17,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Combine history entries by day',
         child: ListTile(
-          title: const Text('Group history'),
-          leading: const Icon(Icons.expand_more),
+          title: const Text('Group history', textAlign: TextAlign.center),
+          leading: settings.groupHistory
+              ? const Icon(Icons.view_agenda)
+              : const Icon(Icons.view_agenda_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(groupHistory: Value(!settings.groupHistory)),
           ),
@@ -34,8 +36,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Show km/mi,kg/lb for graphs/history/plans',
         child: ListTile(
-          title: const Text('Show units'),
-          leading: const Icon(Icons.scale_sharp),
+          title: const Text('Show units', textAlign: TextAlign.center),
+          leading: settings.showUnits
+              ? const Icon(Icons.scale)
+              : const Icon(Icons.scale_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(showUnits: Value(!settings.showUnits)),
           ),
@@ -51,8 +55,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Enable/disable tracking body weight',
         child: ListTile(
-          title: const Text('Show body weight'),
-          leading: const Icon(Icons.scale_outlined),
+          title: const Text('Show body weight', textAlign: TextAlign.center),
+          leading: settings.showBodyWeight
+              ? const Icon(Icons.monitor_weight)
+              : const Icon(Icons.monitor_weight_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(showBodyWeight: Value(!settings.showBodyWeight)),
           ),
@@ -68,8 +74,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Enable/disable workout categories',
         child: ListTile(
-          title: const Text('Show categories'),
-          leading: const Icon(Icons.category),
+          title: const Text('Show categories', textAlign: TextAlign.center),
+          leading: settings.showCategories
+              ? const Icon(Icons.category)
+              : const Icon(Icons.category_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(showCategories: Value(!settings.showCategories)),
           ),
@@ -85,8 +93,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Record details of your lift in a text area',
         child: ListTile(
-          title: const Text('Show notes'),
-          leading: const Icon(Icons.note_alt_outlined),
+          title: const Text('Show notes', textAlign: TextAlign.center),
+          leading: settings.showNotes
+              ? const Icon(Icons.note_alt)
+              : const Icon(Icons.note_alt_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(showNotes: Value(!settings.showNotes)),
           ),
@@ -102,8 +112,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Write nice messages when a new record is hit',
         child: ListTile(
-          title: const Text('Notifications'),
-          leading: const Icon(Icons.notifications),
+          title: const Text('Notifications', textAlign: TextAlign.center),
+          leading: settings.notifications
+              ? const Icon(Icons.notifications)
+              : const Icon(Icons.notifications_outlined),
           onTap: () {
             db.settings.update().write(
               SettingsCompanion(notifications: Value(!settings.notifications)),
@@ -123,8 +135,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Try to predict the # of reps you just did',
         child: ListTile(
-          title: const Text('Rep estimation'),
-          leading: const Icon(Icons.repeat_outlined),
+          title: const Text('Rep estimation', textAlign: TextAlign.center),
+          leading: settings.repEstimation
+              ? const Icon(Icons.repeat)
+              : const Icon(Icons.repeat_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(repEstimation: Value(!settings.repEstimation)),
           ),
@@ -140,8 +154,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Try predict the duration of your cardio',
         child: ListTile(
-          title: const Text('Duration estimation'),
-          leading: const Icon(Icons.access_time),
+          title: const Text('Duration estimation', textAlign: TextAlign.center),
+          leading: settings.durationEstimation
+              ? const Icon(Icons.schedule)
+              : const Icon(Icons.schedule_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               durationEstimation: Value(!settings.durationEstimation),
@@ -159,8 +175,13 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Show time-based X axis toggle on graphs',
         child: ListTile(
-          title: const Text('Show graph X axis toggle'),
-          leading: const Icon(Icons.show_chart),
+          title: const Text(
+            'Show graph X axis toggle',
+            textAlign: TextAlign.center,
+          ),
+          leading: settings.showGraphXAxis
+              ? const Icon(Icons.show_chart)
+              : const Icon(Icons.show_chart_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(showGraphXAxis: Value(!settings.showGraphXAxis)),
           ),
@@ -176,8 +197,10 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Show the limit slider on graphs',
         child: ListTile(
-          title: const Text('Show graph limit'),
-          leading: const Icon(Icons.tune),
+          title: const Text('Show graph limit', textAlign: TextAlign.center),
+          leading: settings.showGraphLimit
+              ? const Icon(Icons.tune)
+              : const Icon(Icons.tune_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(showGraphLimit: Value(!settings.showGraphLimit)),
           ),
@@ -250,8 +273,13 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: 'Use time-based X axis by default on graphs',
         child: ListTile(
-          title: const Text('Default time-based X axis'),
-          leading: const Icon(Icons.timeline),
+          title: const Text(
+            'Default time-based X axis',
+            textAlign: TextAlign.center,
+          ),
+          leading: settings.defaultGraphTimeBasedXAxis
+              ? const Icon(Icons.timeline)
+              : const Icon(Icons.timeline_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               defaultGraphTimeBasedXAxis: Value(
