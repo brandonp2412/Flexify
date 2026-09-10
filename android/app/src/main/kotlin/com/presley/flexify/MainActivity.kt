@@ -63,18 +63,65 @@ class MainActivity : FlutterActivity() {
         val marker = File(noBackupFilesDir, PERMISSION_INSTALL_MARKER)
         if (marker.exists()) return
 
-        openDb(context)?.use { database ->
-            val values = ContentValues().apply {
-                put("notification_permission_requested", 0)
-                put("explained_permissions", 0)
+        try {
+            openDb(context)?.use { database ->
+                val columns = mutableSetOf<String>()
+                database.rawQuery("PRAGMA table_info(settings)", null).use { cursor ->
+                    val nameIndex = cursor.getColumnIndex("name")
+                    while (cursor.moveToNext()) {
+                        if (nameIndex >= 0) columns.add(cursor.getString(nameIndex))
+                    }
+                }
+
+                val values = ContentValues().apply {
+                    if (columns.contains("notification_permission_requested")) {
+                        put("notification_permission_requested", 0)
+                    }
+                    if (columns.contains("explained_permissions")) {
+                        put("explained_permissions", 0)
+                    }
+                }
+                if (values.size() > 0) database.update("settings", values, null, null)
             }
-            database.update("settings", values, null, null)
+        } catch (error: Exception) {
+            Log.w("MainActivity", "Could not reset restored permission prompt state", error)
         }
 
         try {
             marker.createNewFile()
         } catch (error: Exception) {
             Log.e("MainActivity", "Failed to create permission install marker", error)
+        }
+    }
+
+    private fun claimNotificationPermissionPrompt(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return false
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) return false
+
+        return try {
+            openDb(context)?.use { database ->
+                val cursor = database.rawQuery(
+                    "SELECT notification_permission_requested FROM settings LIMIT 1",
+                    null
+                )
+                val alreadyRequested = cursor.use {
+                    it.moveToFirst() && it.getInt(0) != 0
+                }
+                if (alreadyRequested) return@use false
+
+                val values = ContentValues().apply {
+                    put("notification_permission_requested", 1)
+                }
+                database.update("settings", values, null, null)
+                true
+            } ?: true
+        } catch (error: Exception) {
+            Log.w("MainActivity", "Could not persist notification permission request", error)
+            true
         }
     }
 
@@ -258,22 +305,10 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun requestTimerPermissions() {
-        val permissions = mutableListOf<String>()
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-        
-        if (permissions.isNotEmpty()) {
+        if (claimNotificationPermissionPrompt()) {
             ActivityCompat.requestPermissions(
                 this,
-                permissions.toTypedArray(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                 TIMER_PERMISSION_REQUEST_CODE
             )
         }
