@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
@@ -155,9 +156,18 @@ $version
       await workingDirectory.delete(recursive: true);
     }
 
+    // Permission state belongs to this Android install, not to the imported
+    // database. Force a fresh, single checklist for the imported settings.
     await (db.settings.update()).write(
-      const SettingsCompanion(alarmSound: Value('')),
+      const SettingsCompanion(
+        alarmSound: Value(''),
+        explainedPermissions: Value(false),
+        notificationPermissionRequested: Value(false),
+      ),
     );
+
+    final importedSettings =
+        await (db.settings.select()..limit(1)).getSingle();
 
     if (!ctx.mounted) return;
     final settingsState = ctx.read<SettingsState>();
@@ -168,6 +178,13 @@ $version
     await planState.updatePlans(null);
     planState.updatePlanCounts();
     await planState.updateDefaults();
+
+    if (!ctx.mounted) return;
+    await showAppPermissionsDialog(
+      ctx,
+      required: true,
+      settings: importedSettings,
+    );
 
     if (!ctx.mounted) return;
     Navigator.of(
