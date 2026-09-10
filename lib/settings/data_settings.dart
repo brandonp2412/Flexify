@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
+import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
@@ -98,7 +99,7 @@ List<Widget> getDataSettings(
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
-        title: const Text('Automatic backup'),
+        title: const Text('Automatic backup', textAlign: TextAlign.center),
         leading: settings.value.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
@@ -107,6 +108,18 @@ List<Widget> getDataSettings(
           value: settings.value.automaticBackups,
           onChanged: (value) => tapBackup(value),
         ),
+      ),
+    if ('app permissions access'.contains(term.toLowerCase()) &&
+        !kIsWeb &&
+        Platform.isAndroid)
+      ListTile(
+        title: const Text('App permissions', textAlign: TextAlign.center),
+        subtitle: const Text(
+          'Review access required by your enabled features',
+          textAlign: TextAlign.center,
+        ),
+        leading: const Icon(Icons.admin_panel_settings_outlined),
+        onTap: () => showAppPermissionsDialog(context),
       ),
     if ('share database'.contains(term.toLowerCase()) &&
         !kIsWeb &&
