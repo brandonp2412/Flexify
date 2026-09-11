@@ -92,7 +92,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     final allPlans = _state!.plans;
 
     if (_search.isEmpty) {
-      if (mounted) setState(() => _filtered = allPlans.toList());
+      if (!mounted) return;
+      setState(() => _filtered = allPlans.toList());
       return;
     }
 
@@ -139,7 +140,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _state = context.watch<PlanState>(); // Watch for changes to rebuild
+    _state = context.watch<PlanState>();
     final desktop = isDesktopLayout(context);
 
     return Scaffold(

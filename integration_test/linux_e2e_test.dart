@@ -273,8 +273,12 @@ void main() {
   testWidgets('Tab drag reorder persists navigation order', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _openSettingsSection(tester, 'Tabs');
+    final historyTile = find.ancestor(
+      of: find.text('History'),
+      matching: find.byType(ListTile),
+    );
     final historyHandle = find.descendant(
-      of: find.byKey(const Key('HistoryPage')),
+      of: historyTile,
       matching: find.byIcon(Icons.drag_handle),
     );
     await tester.drag(historyHandle, const Offset(0, 150));
