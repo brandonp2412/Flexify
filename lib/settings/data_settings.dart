@@ -99,12 +99,14 @@ List<Widget> getDataSettings(
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
+        key: const Key('automaticBackupTile'),
         title: const Text('Automatic backup', textAlign: TextAlign.center),
         leading: settings.value.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
         onTap: () => tapBackup(!settings.value.automaticBackups),
         trailing: Switch(
+          key: const Key('automaticBackupSwitch'),
           value: settings.value.automaticBackups,
           onChanged: (value) => tapBackup(value),
         ),

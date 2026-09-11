@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flexify/main.dart' as app;
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
+
+const _uiTimeout = Duration(seconds: 15);
+const _nativeTimeout = Duration(seconds: 15);
 
 void main() {
   patrolTest(
@@ -12,32 +14,42 @@ void main() {
       if (!Platform.isAndroid) return;
 
       app.main();
-      await $.pumpAndSettle();
 
-      await $(Icons.calendar_today_outlined).tap();
-      await $(Icons.insights_rounded).tap();
-      await $(Icons.timer_rounded).tap();
+      await $(
+        Icons.calendar_today_outlined,
+      ).waitUntilVisible(timeout: _uiTimeout).tap();
+      await $(
+        Icons.insights_rounded,
+      ).waitUntilVisible(timeout: _uiTimeout).tap();
+      await $(Icons.timer_rounded).waitUntilVisible(timeout: _uiTimeout).tap();
+      await $(Icons.settings).waitUntilVisible(timeout: _uiTimeout).tap();
+      await $('Data management').waitUntilVisible(timeout: _uiTimeout).tap();
 
-      await $(Icons.settings).tap();
-      await $('Data management').tap();
-      await $.pumpAndSettle();
-      expect($('Automatic backup').exists, isTrue);
-      expect($('Export data').exists, isTrue);
-      expect($('Import data').exists, isTrue);
-      expect($('Delete records').exists, isTrue);
+      final backupTile = $(#automaticBackupTile);
+      final backupSwitch = $(#automaticBackupSwitch);
+      await backupTile.waitUntilVisible(timeout: _uiTimeout);
+      await $('Export data').waitUntilVisible(timeout: _uiTimeout);
+      await $('Import data').waitUntilVisible(timeout: _uiTimeout);
+      await $('Delete records').waitUntilVisible(timeout: _uiTimeout);
 
-      if ($(Switch).which<Switch>((widget) => widget.value).exists) {
-        await $('Automatic backup').tap();
-        await $.pumpAndSettle();
+      if (backupSwitch.which<Switch>((widget) => widget.value).exists) {
+        await backupTile.tap();
+        await backupSwitch
+            .which<Switch>((widget) => !widget.value)
+            .waitUntilExists(timeout: _uiTimeout);
       }
-      expect($(Switch).which<Switch>((widget) => !widget.value).exists, isTrue);
 
-      await $('Automatic backup').tap();
+      await backupTile.tap();
+      await $.platform.android.waitUntilVisible(
+        const AndroidSelector(textContains: 'Use this folder'),
+        timeout: _nativeTimeout,
+      );
       await $.platform.android.pressBack();
-      await $.pump(const Duration(seconds: 1));
 
-      expect($('Automatic backup').exists, isTrue);
-      expect($(Switch).which<Switch>((widget) => !widget.value).exists, isTrue);
+      await backupTile.waitUntilVisible(timeout: _uiTimeout);
+      await backupSwitch
+          .which<Switch>((widget) => !widget.value)
+          .waitUntilExists(timeout: _uiTimeout);
     },
     semanticsEnabled: false,
     tags: 'backup',
