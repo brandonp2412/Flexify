@@ -188,7 +188,6 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
         title: desktop ? const Text('Timer') : null,
         actions: [
           IconButton(
-            tooltip: 'Settings',
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
