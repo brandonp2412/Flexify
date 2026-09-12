@@ -18,19 +18,19 @@ Flex on people with this swanky, lightning-quick gym tracker!
 
 <a href="https://play.google.com/store/apps/details?id=com.presley.flexify"><img alt="Get it on Google Play" style="height: 80px !important" src="./docs/get-it-on-google-play.png"/></a>
 <a href="https://f-droid.org/packages/com.presley.flexify"><img src="./docs/get-it-on-fdroid.png" alt="Get it on F-Droid" style="height: 80px !important"></a>
-<a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct"><img src="./docs/download-msstore.svg" style="height: 80px !important"/></a>
+<a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct"><img alt="Download from the Microsoft Store" src="./docs/download-msstore.svg" style="height: 80px !important"/></a>
 
 ## Screenshots
 
 <p float="left">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" height="600">
-    <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" height="600">
+    <img alt="Flexify workout plans screen showing scheduled workouts and exercises" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="600">
+    <img alt="Flexify graphs screen showing exercise performance records" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" height="600">
+    <img alt="Flexify settings screen with appearance, data, plans, tabs, timers, and workouts options" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" height="600">
+    <img alt="Flexify workout plan editor showing exercises, sets, weights, and a save button" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" height="600">
+    <img alt="Flexify exercise graph showing dumbbell shoulder press progress over time" src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_en-US.png" height="600">
+    <img alt="Flexify history screen listing recorded exercise sets and weights" src="fastlane/metadata/android/en-US/images/phoneScreenshots/6_en-US.png" height="600">
+    <img alt="Flexify workout screen showing selected days and a list of exercises" src="fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" height="600">
+    <img alt="Flexify rest timer showing 52 seconds remaining" src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" height="600">
 </p>
 
 ## Donations
