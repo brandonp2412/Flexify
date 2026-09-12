@@ -41,7 +41,9 @@ void main() {
 
       await backupTile.tap();
       await $.platform.android.waitUntilVisible(
-        const AndroidSelector(textContains: 'Use this folder'),
+        const AndroidSelector(
+          applicationPackage: 'com.google.android.documentsui',
+        ),
         timeout: _nativeTimeout,
       );
       await $.platform.android.pressBack();
