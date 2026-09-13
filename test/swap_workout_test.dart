@@ -13,14 +13,12 @@ void main() {
         await (harness.database.planExercises.select()
               ..where((exercise) => exercise.planId.equals(plan.id)))
             .get();
+    final original = planExercises.first;
 
     await harness.pump(
       tester,
       Scaffold(
-        body: SwapWorkout(
-          exercise: planExercises.first.exercise,
-          planId: plan.id,
-        ),
+        body: SwapWorkout(exercise: original.exercise, planId: plan.id),
       ),
     );
 
@@ -32,5 +30,20 @@ void main() {
     await tester.tap(find.text('Arnold press'));
     await tester.pumpAndSettle();
     expect(find.text('Swap workout'), findsNothing);
+
+    final updatedPlanExercises =
+        await (harness.database.planExercises.select()
+              ..where((exercise) => exercise.planId.equals(plan.id)))
+            .get();
+    expect(updatedPlanExercises, hasLength(planExercises.length));
+    final swapped = updatedPlanExercises.singleWhere(
+      (exercise) => exercise.id == original.id,
+    );
+    expect(swapped.exercise, 'Arnold press');
+    expect(swapped.sequence, original.sequence);
+    expect(swapped.enabled, original.enabled);
+    expect(swapped.timers, original.timers);
+    expect(swapped.maxSets, original.maxSets);
+    expect(swapped.warmupSets, original.warmupSets);
   });
 }

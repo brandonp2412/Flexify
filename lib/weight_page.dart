@@ -58,7 +58,7 @@ class _WeightPageState extends State<WeightPage> {
                 },
                 autofocus: true,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unit'),
                 initialValue: _unit,
@@ -73,13 +73,13 @@ class _WeightPageState extends State<WeightPage> {
                   });
                 },
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               TextFormField(
                 initialValue: _prev,
                 decoration: const InputDecoration(labelText: 'Previous weight'),
                 enabled: false,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Selector<SettingsState, bool>(
                 builder: (context, showImages, child) {
                   return Visibility(

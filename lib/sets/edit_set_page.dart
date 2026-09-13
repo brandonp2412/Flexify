@@ -180,7 +180,7 @@ class _EditSetPageState extends State<EditSetPage> {
             return ListView(
               children: [
                 autocomplete(showBodyWeight),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 12.0),
                 ListTile(
                   title: const Text('Cardio'),
                   leading: _cardio
@@ -198,17 +198,20 @@ class _EditSetPageState extends State<EditSetPage> {
                   ),
                 ),
                 ...exerciseFields(),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 12.0),
                 if (showBodyWeight && _name != 'Weight') ...[
                   bodyFields(showBodyWeight),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 12.0),
                 ],
-                if (showUnits) ...[unitSelector(), const SizedBox(height: 8.0)],
+                if (showUnits) ...[
+                  unitSelector(),
+                  const SizedBox(height: 12.0),
+                ],
                 if (showCategories && _name != 'Weight') ...[
                   categorySelector(),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 12.0),
                 ],
-                if (showNotes) ...[notesField(), const SizedBox(height: 8.0)],
+                if (showNotes) ...[notesField(), const SizedBox(height: 12.0)],
                 dateSelector(),
                 if (showImages) ...[const SizedBox(height: 8.0), imageField()],
               ],
@@ -226,10 +229,13 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildStrengthFields() {
     return [
-      const SizedBox(height: 8.0),
-      if (_name != 'Weight') ...[buildRepsField(), const SizedBox(height: 8.0)],
+      const SizedBox(height: 12.0),
+      if (_name != 'Weight') ...[
+        buildRepsField(),
+        const SizedBox(height: 12.0),
+      ],
       buildWeightField(),
-      if (_name != 'Weight') ...[const SizedBox(height: 8.0), buildORMField()],
+      if (_name != 'Weight') ...[const SizedBox(height: 12.0), buildORMField()],
     ];
   }
 
@@ -275,11 +281,11 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildCardioFields() {
     return [
-      SizedBox(height: 8.0),
+      SizedBox(height: 12.0),
       buildDistanceField(),
-      SizedBox(height: 8.0),
+      SizedBox(height: 12.0),
       duration(),
-      SizedBox(height: 8.0),
+      SizedBox(height: 12.0),
       buildInclineField(),
     ];
   }
@@ -687,6 +693,7 @@ class _EditSetPageState extends State<EditSetPage> {
         settings.alarmSound,
         settings.vibrate,
         settings.enableSound,
+        'history',
       );
     else
       timer.startTimer(
@@ -695,6 +702,7 @@ class _EditSetPageState extends State<EditSetPage> {
         settings.alarmSound,
         settings.vibrate,
         settings.enableSound,
+        'history',
       );
     if (!mounted) return;
     return Navigator.of(context).pop();

@@ -15,8 +15,14 @@ import 'package:flutter/material.dart';
 class SessionSets extends StatefulWidget {
   final String exercise;
   final int planId;
+  final bool compact;
 
-  const SessionSets({super.key, required this.exercise, required this.planId});
+  const SessionSets({
+    super.key,
+    required this.exercise,
+    required this.planId,
+    this.compact = false,
+  });
 
   @override
   State<SessionSets> createState() => _SessionSetsState();
@@ -69,7 +75,9 @@ class _SessionSetsState extends State<SessionSets> {
           curve: Curves.easeOut,
           alignment: Alignment.topCenter,
           child: sets == null || sets.isEmpty
-              ? _buildPlaceholder()
+              ? widget.compact
+                    ? const SizedBox.shrink()
+                    : _buildPlaceholder()
               : _buildChips(sets),
         );
       },
@@ -93,7 +101,7 @@ class _SessionSetsState extends State<SessionSets> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16.0),
+        if (!widget.compact) const SizedBox(height: 16.0),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

@@ -160,6 +160,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       return null;
                     },
                   ),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
@@ -205,6 +206,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 12),
                 TextFormField(
                   controller: _incline,
                   decoration: InputDecoration(
@@ -239,6 +241,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 12),
                 TextFormField(
                   controller: _weight,
                   decoration: InputDecoration(
@@ -256,6 +259,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   },
                 ),
               ],
+              if (_name.text != 'Weight') const SizedBox(height: 12),
               if (_name.text != 'Weight')
                 Selector<SettingsState, bool>(
                   builder: (context, showBodyWeight, child) => Visibility(
@@ -281,6 +285,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   selector: (context, settings) =>
                       settings.value.showBodyWeight,
                 ),
+              const SizedBox(height: 12),
               Selector<SettingsState, bool>(
                 builder: (context, showUnits, child) => Visibility(
                   visible: showUnits,
@@ -297,6 +302,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 ),
                 selector: (context, settings) => settings.value.showUnits,
               ),
+              const SizedBox(height: 12),
               Selector<SettingsState, bool>(
                 selector: (context, settings) => settings.value.showCategories,
                 builder: (context, showCategories, child) => Visibility(

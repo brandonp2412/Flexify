@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
@@ -122,86 +123,108 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ),
             ],
           ),
-          body: ResponsiveContent(
-            maxWidth: desktopWideContentMaxWidth,
-            desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
-            mobilePadding: const EdgeInsets.all(8),
-            child: Form(
-              key: _key,
-              child: desktop
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(
-                          width: 420,
-                          child: SingleChildScrollView(
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: colors.surfaceContainerLow,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    snapshot.data!.isNotEmpty &&
-                                            _selected < snapshot.data!.length
-                                        ? snapshot.data![_selected].exercise
-                                        : 'Set details',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  if (!_cardio) ...strengthFields(snapshot),
-                                  if (_cardio) ...cardioFields(snapshot),
-                                  unitSelector(),
-                                  notesField(),
-                                  if (snapshot.data!.isNotEmpty &&
-                                      _selected < snapshot.data!.length) ...[
-                                    const SizedBox(height: 16),
-                                    SessionSets(
-                                      exercise:
-                                          snapshot.data![_selected].exercise,
-                                      planId: widget.plan.id,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: ResponsiveContent(
+                  maxWidth: desktopWideContentMaxWidth,
+                  desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+                  mobilePadding: const EdgeInsets.all(8),
+                  child: Form(
+                    key: _key,
+                    child: desktop
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SizedBox(
+                                width: 420,
+                                child: SingleChildScrollView(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      color: colors.surfaceContainerLow,
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ],
-                                ],
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                          snapshot.data!.isNotEmpty &&
+                                                  _selected <
+                                                      snapshot.data!.length
+                                              ? snapshot
+                                                    .data![_selected]
+                                                    .exercise
+                                              : 'Set details',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        if (!_cardio)
+                                          ...strengthFields(snapshot),
+                                        if (_cardio) ...cardioFields(snapshot),
+                                        unitSelector(),
+                                        notesField(),
+                                        if (snapshot.data!.isNotEmpty &&
+                                            _selected <
+                                                snapshot.data!.length) ...[
+                                          const SizedBox(height: 16),
+                                          SessionSets(
+                                            exercise: snapshot
+                                                .data![_selected]
+                                                .exercise,
+                                            planId: widget.plan.id,
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 24),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: colors.surfaceContainerLow,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: exerciseList(),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              if (!_cardio) ...strengthFields(snapshot),
+                              if (_cardio) ...cardioFields(snapshot),
+                              unitSelector(),
+                              notesField(),
+                              Expanded(child: exerciseList()),
+                            ],
                           ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: colors.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: exerciseList(),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        if (!_cardio) ...strengthFields(snapshot),
-                        if (_cardio) ...cardioFields(snapshot),
-                        unitSelector(),
-                        notesField(),
-                        if (snapshot.data!.isNotEmpty &&
-                            _selected < snapshot.data!.length)
-                          SessionSets(
-                            exercise: snapshot.data![_selected].exercise,
-                            planId: widget.plan.id,
-                          ),
-                        Expanded(child: exerciseList()),
-                      ],
-                    ),
-            ),
+                  ),
+                ),
+              ),
+              if (!desktop &&
+                  snapshot.data!.isNotEmpty &&
+                  _selected < snapshot.data!.length)
+                Positioned(
+                  left: 16,
+                  right: 132,
+                  bottom: bottomNavHeight + 8,
+                  child: SessionSets(
+                    exercise: snapshot.data![_selected].exercise,
+                    planId: widget.plan.id,
+                    compact: true,
+                  ),
+                ),
+            ],
           ),
           floatingActionButton: desktop || snapshot.data!.isEmpty
               ? null
@@ -229,7 +252,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           return null;
         },
       ),
-      const SizedBox(height: 8.0),
+      const SizedBox(height: 12.0),
       _weightField(snapshot),
     ];
   }
@@ -275,7 +298,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ],
       ),
-      const SizedBox(height: 8.0),
+      const SizedBox(height: 12.0),
       Row(
         children: [
           if (_unit == 'kg' || _unit == 'lb' || _unit == 'stone')
@@ -357,7 +380,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 12.0),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Unit'),
               initialValue: _unit,
@@ -382,7 +405,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 12.0),
             TextFormField(
               controller: _notes,
               maxLines: 3,
@@ -666,11 +689,12 @@ class _StartPlanPageState extends State<StartPlanPage>
     final timerState = context.read<TimerState>();
     if (settings.restTimers && count > warmupSets && peTimers)
       timerState.startTimer(
-        "$exercise ($count)",
+        "$exercise ($count/${max ?? settings.maxSets})",
         Duration(milliseconds: restMs.toInt()),
         settings.alarmSound,
         settings.vibrate,
         settings.enableSound,
+        'plan:${widget.plan.id}',
       );
 
     final finishedExercise =

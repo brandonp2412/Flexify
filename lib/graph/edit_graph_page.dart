@@ -53,7 +53,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 decoration: const InputDecoration(labelText: "New name"),
                 textCapitalization: TextCapitalization.sentences,
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 12.0),
               Row(
                 children: [
                   Expanded(
@@ -95,7 +95,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 12.0),
               Selector<SettingsState, bool>(
                 selector: (p0, settings) => settings.value.showCategories,
                 builder: (context, showCategories, child) {
@@ -124,7 +124,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 8.0),
+                          const SizedBox(height: 12.0),
                         ],
                       );
                     },
@@ -146,7 +146,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 },
               ),
               if (cardio != null) ...[
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 12.0),
                 ListTile(
                   leading: cardio!
                       ? const Icon(Icons.sports_gymnastics)
@@ -157,9 +157,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   onTap: () => _setCardio(!cardio!),
                   trailing: Switch(value: cardio!, onChanged: _setCardio),
                 ),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 12.0),
               ] else
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 12.0),
               Selector<SettingsState, bool>(
                 builder: (context, showImages, child) {
                   return Visibility(

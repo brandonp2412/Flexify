@@ -99,15 +99,13 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                                   )
                                   ..limit(1))
                                 .getSingle();
-                        await db.planExercises.deleteOne(old);
-                        await db.planExercises.insertOne(
-                          PlanExercisesCompanion.insert(
-                            enabled: true,
-                            exercise: exercise,
-                            planId: widget.planId,
-                            sequence: drift.Value(old.sequence),
-                          ),
-                        );
+                        await (db.planExercises.update()
+                              ..where((tbl) => tbl.id.equals(old.id)))
+                            .write(
+                              PlanExercisesCompanion(
+                                exercise: drift.Value(exercise),
+                              ),
+                            );
 
                         if (!context.mounted) return;
 
