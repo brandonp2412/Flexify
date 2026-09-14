@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
@@ -229,23 +230,40 @@ class _StartPlanPageState extends State<StartPlanPage>
                         if (_cardio) ...cardioFields(snapshot),
                         unitSelector(),
                         notesField(),
-                        if (snapshot.data!.isNotEmpty &&
-                            _selected < snapshot.data!.length)
-                          SessionSets(
-                            exercise: snapshot.data![_selected].exercise,
-                            planId: widget.plan.id,
-                          ),
                         Expanded(child: exerciseList()),
                       ],
                     ),
             ),
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: desktop || snapshot.data!.isEmpty
               ? null
-              : AnimatedFab(
-                  onPressed: () async => await save(snapshot),
-                  label: const Text("Save"),
-                  icon: const Icon(Icons.save),
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: bottomNavHeight,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SessionSets(
+                          key: const Key('start-plan-set-preview'),
+                          exercise: snapshot.data![_selected].exercise,
+                          planId: widget.plan.id,
+                          compact: true,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      AnimatedFab(
+                        onPressed: () async => await save(snapshot),
+                        label: const Text("Save"),
+                        icon: const Icon(Icons.save),
+                        bottomPadding: 0,
+                      ),
+                    ],
+                  ),
                 ),
         );
       },
@@ -689,6 +707,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         settings.alarmSound,
         settings.vibrate,
         settings.enableSound,
+        "plan:${widget.plan.id}",
       );
 
     final finishedExercise =
