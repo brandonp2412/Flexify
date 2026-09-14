@@ -7,6 +7,7 @@ class AnimatedFab extends StatefulWidget {
   final Widget label;
   final ScrollController? scroll;
   final Widget? icon;
+  final double? bottomPadding;
 
   const AnimatedFab({
     super.key,
@@ -14,6 +15,7 @@ class AnimatedFab extends StatefulWidget {
     required this.label,
     this.scroll,
     required this.icon,
+    this.bottomPadding,
   });
 
   @override
@@ -50,7 +52,9 @@ class _AnimatedFabState extends State<AnimatedFab> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        bottom: isDesktopLayout(context) ? 16 : bottomNavHeight,
+        bottom:
+            widget.bottomPadding ??
+            (isDesktopLayout(context) ? 16 : bottomNavHeight),
       ),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
