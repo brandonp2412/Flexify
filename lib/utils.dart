@@ -56,8 +56,6 @@ DateTime parseDate(String dateString) {
 }
 
 Future<bool> requestNotificationPermission() async {
-  if (const String.fromEnvironment("FLEXIFY_DEVICE_TYPE").isNotEmpty)
-    return true;
   if (kIsWeb ||
       defaultTargetPlatform == TargetPlatform.linux ||
       defaultTargetPlatform == TargetPlatform.macOS) {

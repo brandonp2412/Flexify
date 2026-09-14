@@ -23,6 +23,43 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+Future<GymSet?> getFirstOfLastPlanSession(
+  AppDatabase database,
+  String exercise,
+  int planId,
+) async {
+  final mostRecent =
+      await (database.gymSets.select()
+            ..where(
+              (tbl) => tbl.name.equals(exercise) & tbl.planId.equals(planId),
+            )
+            ..orderBy([
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
+  if (mostRecent == null) return null;
+
+  final date = mostRecent.created.toLocal();
+  final startOfDay = DateTime(date.year, date.month, date.day);
+  final endOfDay = startOfDay.add(const Duration(days: 1));
+
+  return (database.gymSets.select()
+        ..where(
+          (tbl) =>
+              tbl.name.equals(exercise) &
+              tbl.planId.equals(planId) &
+              tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
+              tbl.created.isSmallerThanValue(endOfDay.toUtc()),
+        )
+        ..orderBy([
+          (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
+        ])
+        ..limit(1))
+      .getSingleOrNull();
+}
+
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
 
@@ -99,7 +136,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               );
 
         return Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: Text(_title),
             leading: IconButton(
@@ -123,115 +160,110 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ),
             ],
           ),
-          body: Stack(
-            children: [
-              Positioned.fill(
-                child: ResponsiveContent(
-                  maxWidth: desktopWideContentMaxWidth,
-                  desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
-                  mobilePadding: const EdgeInsets.all(8),
-                  child: Form(
-                    key: _key,
-                    child: desktop
-                        ? Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SizedBox(
-                                width: 420,
-                                child: SingleChildScrollView(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                      color: colors.surfaceContainerLow,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        Text(
-                                          snapshot.data!.isNotEmpty &&
-                                                  _selected <
-                                                      snapshot.data!.length
-                                              ? snapshot
-                                                    .data![_selected]
-                                                    .exercise
-                                              : 'Set details',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                        if (!_cardio)
-                                          ...strengthFields(snapshot),
-                                        if (_cardio) ...cardioFields(snapshot),
-                                        unitSelector(),
-                                        notesField(),
-                                        if (snapshot.data!.isNotEmpty &&
-                                            _selected <
-                                                snapshot.data!.length) ...[
-                                          const SizedBox(height: 16),
-                                          SessionSets(
-                                            exercise: snapshot
-                                                .data![_selected]
-                                                .exercise,
-                                            planId: widget.plan.id,
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ),
+          body: ResponsiveContent(
+            maxWidth: desktopWideContentMaxWidth,
+            desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+            mobilePadding: const EdgeInsets.all(8),
+            child: Form(
+              key: _key,
+              child: desktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          width: 420,
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: colors.surfaceContainerLow,
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              const SizedBox(width: 24),
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: colors.surfaceContainerLow,
-                                    borderRadius: BorderRadius.circular(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    snapshot.data!.isNotEmpty &&
+                                            _selected < snapshot.data!.length
+                                        ? snapshot.data![_selected].exercise
+                                        : 'Set details',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.w700),
                                   ),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: exerciseList(),
-                                ),
+                                  const SizedBox(height: 16),
+                                  if (!_cardio) ...strengthFields(snapshot),
+                                  if (_cardio) ...cardioFields(snapshot),
+                                  unitSelector(),
+                                  notesField(),
+                                  if (snapshot.data!.isNotEmpty &&
+                                      _selected < snapshot.data!.length) ...[
+                                    const SizedBox(height: 16),
+                                    SessionSets(
+                                      exercise:
+                                          snapshot.data![_selected].exercise,
+                                      planId: widget.plan.id,
+                                    ),
+                                  ],
+                                ],
                               ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              if (!_cardio) ...strengthFields(snapshot),
-                              if (_cardio) ...cardioFields(snapshot),
-                              unitSelector(),
-                              notesField(),
-                              Expanded(child: exerciseList()),
-                            ],
+                            ),
                           ),
-                  ),
-                ),
-              ),
-              if (!desktop &&
-                  snapshot.data!.isNotEmpty &&
-                  _selected < snapshot.data!.length)
-                Positioned(
-                  left: 16,
-                  right: 132,
-                  bottom: bottomNavHeight + 8,
-                  child: SessionSets(
-                    exercise: snapshot.data![_selected].exercise,
-                    planId: widget.plan.id,
-                    compact: true,
-                  ),
-                ),
-            ],
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colors.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: exerciseList(),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        if (!_cardio) ...strengthFields(snapshot),
+                        if (_cardio) ...cardioFields(snapshot),
+                        unitSelector(),
+                        notesField(),
+                        Expanded(child: exerciseList()),
+                      ],
+                    ),
+            ),
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: desktop || snapshot.data!.isEmpty
               ? null
-              : AnimatedFab(
-                  onPressed: () async => await save(snapshot),
-                  label: const Text("Save"),
-                  icon: const Icon(Icons.save),
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: bottomNavHeight,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SessionSets(
+                          key: const Key('start-plan-set-preview'),
+                          exercise: snapshot.data![_selected].exercise,
+                          planId: widget.plan.id,
+                          compact: true,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      AnimatedFab(
+                        onPressed: () async => await save(snapshot),
+                        label: const Text("Save"),
+                        icon: const Icon(Icons.save),
+                        bottomPadding: 0,
+                      ),
+                    ],
+                  ),
                 ),
         );
       },
@@ -252,7 +284,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           return null;
         },
       ),
-      const SizedBox(height: 12.0),
+      const SizedBox(height: 8.0),
       _weightField(snapshot),
     ];
   }
@@ -298,7 +330,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ],
       ),
-      const SizedBox(height: 12.0),
+      const SizedBox(height: 8.0),
       Row(
         children: [
           if (_unit == 'kg' || _unit == 'lb' || _unit == 'stone')
@@ -380,7 +412,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 12.0),
+            const SizedBox(height: 8.0),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Unit'),
               initialValue: _unit,
@@ -405,7 +437,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 12.0),
+            const SizedBox(height: 8.0),
             TextFormField(
               controller: _notes,
               maxLines: 3,
@@ -500,27 +532,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   /// "Most recent session" = the calendar day of the latest recorded set.
   /// Showing the first set (rather than the last) gives a better baseline for
   /// progressive overload when weights decrease across sets.
-  Future<GymSet?> getFirstOfLastSession(String exercise) async {
-    final mostRecent = await getLast(exercise);
-    if (mostRecent == null) return null;
-
-    final date = mostRecent.created.toLocal();
-    final startOfDay = DateTime(date.year, date.month, date.day);
-    final endOfDay = startOfDay.add(const Duration(days: 1));
-
-    return (db.gymSets.select()
-          ..where(
-            (tbl) =>
-                tbl.name.equals(exercise) &
-                tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
-                tbl.created.isSmallerThanValue(endOfDay.toUtc()),
-          )
-          ..orderBy([
-            (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
-  }
+  Future<GymSet?> getFirstOfLastSession(String exercise) =>
+      getFirstOfLastPlanSession(db, exercise, widget.plan.id);
 
   @override
   void initState() {
@@ -689,12 +702,12 @@ class _StartPlanPageState extends State<StartPlanPage>
     final timerState = context.read<TimerState>();
     if (settings.restTimers && count > warmupSets && peTimers)
       timerState.startTimer(
-        "$exercise ($count/${max ?? settings.maxSets})",
+        "$exercise ($count)",
         Duration(milliseconds: restMs.toInt()),
         settings.alarmSound,
         settings.vibrate,
         settings.enableSound,
-        'plan:${widget.plan.id}',
+        "plan:${widget.plan.id}",
       );
 
     final finishedExercise =
@@ -741,8 +754,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!mounted) return;
     if (weightSet == null) {
       toast('No weight entered yet');
-    } else {
-      _weight.text = toString(weightSet.weight);
+      return;
     }
+    _weight.text = toString(weightSet.weight);
   }
 }

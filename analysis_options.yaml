@@ -9,3 +9,10 @@ linter:
 analyzer: 
   exclude: 
   - "flutter/**"
+  - build/**
+  - android/**
+  - ios/**
+  - web/**
+  - windows/**
+  - macos/**
+  - linux/**

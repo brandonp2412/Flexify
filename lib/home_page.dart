@@ -74,6 +74,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final target = _timerState.consumeNotificationTarget();
     if (target == null) return;
 
+    final navigator = Navigator.of(context);
+    if (target.startsWith('plan:') && navigator.canPop()) {
+      // The notification merely foregrounded an already-open workout. Do not
+      // stack another StartPlanPage on top of the existing route.
+      return;
+    }
+
     final tabs = context.read<SettingsState>().value.tabs.split(',');
     if (target == 'history' || target == 'timer') {
       final tab = target == 'history' ? 'HistoryPage' : 'TimerPage';
@@ -81,9 +88,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (index >= 0 && index < _controller.length) {
         _controller.animateTo(index);
       } else if (target == 'timer') {
-        await Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => const TimerPage()));
+        await navigator.push(
+          MaterialPageRoute(builder: (context) => const TimerPage()),
+        );
       }
       return;
     }
@@ -95,9 +102,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         await (db.plans.select()..where((row) => row.id.equals(planId)))
             .getSingleOrNull();
     if (plan == null || !mounted) return;
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => StartPlanPage(plan: plan)));
+    await navigator.push(
+      MaterialPageRoute(builder: (context) => StartPlanPage(plan: plan)),
+    );
   }
 
   @override

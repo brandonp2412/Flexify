@@ -30,6 +30,8 @@ class SessionSets extends StatefulWidget {
 
 class _SessionSetsState extends State<SessionSets> {
   late Stream<List<GymSet>> _stream;
+  final ScrollController _scrollController = ScrollController();
+  int _lastSetCount = 0;
 
   @override
   void initState() {
@@ -41,8 +43,16 @@ class _SessionSetsState extends State<SessionSets> {
   void didUpdateWidget(SessionSets oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.exercise != widget.exercise ||
-        oldWidget.planId != widget.planId)
+        oldWidget.planId != widget.planId) {
+      _lastSetCount = 0;
       _watch();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _watch() {
@@ -63,12 +73,26 @@ class _SessionSetsState extends State<SessionSets> {
             .watch();
   }
 
+  void _scrollToNewest(int setCount) {
+    if (setCount <= _lastSetCount) return;
+    _lastSetCount = setCount;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) return;
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: _stream,
       builder: (context, snapshot) {
         final sets = snapshot.data;
+        if (sets != null && sets.isNotEmpty) _scrollToNewest(sets.length);
 
         return AnimatedSize(
           duration: const Duration(milliseconds: 200),
@@ -103,6 +127,8 @@ class _SessionSetsState extends State<SessionSets> {
       children: [
         if (!widget.compact) const SizedBox(height: 16.0),
         SingleChildScrollView(
+          key: const Key('session-set-scroll'),
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [

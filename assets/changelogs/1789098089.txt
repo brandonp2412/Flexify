@@ -1,0 +1,10 @@
+• Add reusable app permissions checklist
+• Center appearance labels and reflect toggle state in icons
+• Center plan settings labels and switchers
+• Center timer settings and use filled active icons
+• Center workout labels and use active filled icons
+• Expose app permissions checklist in settings
+• Fix CI lockfile and timer analyzer error
+• Fix one-time notification permission request
+• Fix permissions dialog analyzer error
+• Make native notification permission prompt one-time

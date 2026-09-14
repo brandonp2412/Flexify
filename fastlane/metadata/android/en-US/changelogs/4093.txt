@@ -1,0 +1,1 @@
+• Fix permissions flow and settings activation UI (#336)

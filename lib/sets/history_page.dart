@@ -261,12 +261,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       _selection.clear();
                     });
                   },
-                  onSelectAll: () => setState(() {
-                    if (snapshot.data == null) return;
-                    _selection.setAll(
-                      snapshot.data!.map((gymSet) => gymSet.id),
-                    );
-                  }),
+                  onSelectAll: selectAllFiltered,
                   onEdit: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
@@ -364,64 +359,73 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     setStream();
   }
 
-  void setStream() {
+  SimpleSelectStatement<$GymSetsTable, GymSet> _filteredQuery({int? rowLimit}) {
     final terms = search
         .toLowerCase()
         .split(" ")
         .where((term) => term.isNotEmpty);
 
-    var query = (db.gymSets.select()
+    final query = db.gymSets.select()
       ..orderBy([
         (u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc),
       ])
-      ..where((tbl) => tbl.hidden.equals(false))
-      ..limit(limit));
+      ..where((tbl) => tbl.hidden.equals(false));
+
+    if (rowLimit != null) query.limit(rowLimit);
 
     for (final term in terms) {
-      query = query..where((tbl) => tbl.name.contains(term));
+      query.where((tbl) => tbl.name.contains(term));
     }
 
-    if (category != null)
-      query = query..where((tbl) => tbl.category.equals(category!));
-    if (startDate != null)
-      query = query
-        ..where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));
-    if (endDate != null)
-      query = query
-        ..where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
-    if (repsGt.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.reps.isBiggerThanValue(double.tryParse(repsGt.text) ?? 0) &
-              tbl.cardio.equals(false),
-        );
-    if (repsLt.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.reps.isSmallerThanValue(double.tryParse(repsLt.text) ?? 0) &
-              tbl.cardio.equals(false),
-        );
-    if (weightGt.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.weight.isBiggerThanValue(
-                double.tryParse(weightGt.text) ?? 0,
-              ) &
-              tbl.cardio.equals(false),
-        );
-    if (weightLt.text.isNotEmpty)
-      query = query
-        ..where(
-          (tbl) =>
-              tbl.weight.isSmallerThanValue(
-                double.tryParse(weightLt.text) ?? 0,
-              ) &
-              tbl.cardio.equals(false),
-        );
+    if (category != null) query.where((tbl) => tbl.category.equals(category!));
+    if (startDate != null) {
+      query.where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));
+    }
+    if (endDate != null) {
+      query.where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
+    }
+    if (repsGt.text.isNotEmpty) {
+      query.where(
+        (tbl) =>
+            tbl.reps.isBiggerThanValue(double.tryParse(repsGt.text) ?? 0) &
+            tbl.cardio.equals(false),
+      );
+    }
+    if (repsLt.text.isNotEmpty) {
+      query.where(
+        (tbl) =>
+            tbl.reps.isSmallerThanValue(double.tryParse(repsLt.text) ?? 0) &
+            tbl.cardio.equals(false),
+      );
+    }
+    if (weightGt.text.isNotEmpty) {
+      query.where(
+        (tbl) =>
+            tbl.weight.isBiggerThanValue(double.tryParse(weightGt.text) ?? 0) &
+            tbl.cardio.equals(false),
+      );
+    }
+    if (weightLt.text.isNotEmpty) {
+      query.where(
+        (tbl) =>
+            tbl.weight.isSmallerThanValue(double.tryParse(weightLt.text) ?? 0) &
+            tbl.cardio.equals(false),
+      );
+    }
 
+    return query;
+  }
+
+  Future<void> selectAllFiltered() async {
+    final gymSets = await _filteredQuery().get();
+    if (!mounted) return;
+    setState(() {
+      _selection.setAll(gymSets.map((gymSet) => gymSet.id));
+    });
+  }
+
+  void setStream() {
+    final query = _filteredQuery(rowLimit: limit);
     setState(() {
       stream = query.watch();
     });

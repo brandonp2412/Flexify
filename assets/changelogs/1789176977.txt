@@ -1,0 +1,2 @@
+• Harden Patrol tests against timing
+• fix: stabilize Android folder picker check

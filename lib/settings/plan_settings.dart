@@ -63,12 +63,13 @@ List<Widget> getPlanSettings(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 4, bottom: 4),
+                padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
                   'Plan trailing display',
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
@@ -90,6 +91,7 @@ List<Widget> getPlanSettings(
                     PlanTrailing.none,
                   };
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SegmentedButton<PlanTrailing>(
                         emptySelectionAllowed: true,

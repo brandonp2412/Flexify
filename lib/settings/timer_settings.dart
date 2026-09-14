@@ -27,7 +27,7 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: 'Alarm that goes off after completing a set',
         child: ListTile(
-          title: const Text('Rest timers'),
+          title: const Text('Rest timers', textAlign: TextAlign.center),
           leading: settings.restTimers
               ? const Icon(Icons.timer)
               : const Icon(Icons.timer_outlined),
@@ -64,8 +64,10 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: 'Should rest timers vibrate?',
         child: ListTile(
-          title: const Text('Vibrate'),
-          leading: const Icon(Icons.vibration),
+          title: const Text('Vibrate', textAlign: TextAlign.center),
+          leading: settings.vibrate
+              ? const Icon(Icons.vibration)
+              : const Icon(Icons.vibration_outlined),
           onTap: () async {
             final newValue = !settings.vibrate;
             await db.settings.update().write(
@@ -108,8 +110,10 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: 'Should rest timers play a sound?',
         child: ListTile(
-          title: const Text('Enable sound'),
-          leading: const Icon(Icons.music_note_outlined),
+          title: const Text('Enable sound', textAlign: TextAlign.center),
+          leading: settings.enableSound
+              ? const Icon(Icons.music_note)
+              : const Icon(Icons.music_note_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(enableSound: Value(!settings.enableSound)),
           ),
@@ -125,10 +129,10 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: 'Keep the screen on during rest timers',
         child: ListTile(
-          title: const Text('Keep screen on'),
+          title: const Text('Keep screen on', textAlign: TextAlign.center),
           leading: settings.keepScreenOn
-              ? const Icon(Icons.brightness_5)
-              : const Icon(Icons.brightness_4_outlined),
+              ? const Icon(Icons.light_mode)
+              : const Icon(Icons.light_mode_outlined),
           onTap: () {
             final newValue = !settings.keepScreenOn;
             db.settings.update().write(
@@ -155,11 +159,13 @@ List<Widget> getTimerSettings(
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.public),
                   const SizedBox(width: 8),
                   Text(
                     "Global default",
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -319,40 +325,43 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 4),
+              padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 'Progress bar position',
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(
-                  value: 'top',
-                  label: Text('Top'),
-                  icon: Icon(Icons.vertical_align_top),
-                ),
-                ButtonSegment(
-                  value: 'bottom',
-                  label: Text('Bottom'),
-                  icon: Icon(Icons.vertical_align_bottom),
-                ),
-                ButtonSegment(
-                  value: 'none',
-                  label: Text('None'),
-                  icon: Icon(Icons.block),
-                ),
-              ],
-              selected: {widget.settings.progressPosition},
-              onSelectionChanged: (selection) {
-                db.settings.update().write(
-                  SettingsCompanion(progressPosition: Value(selection.first)),
-                );
-                if (selection.first != 'none') _triggerPreview();
-              },
+            Center(
+              child: SegmentedButton<String>(
+                segments: const [
+                  ButtonSegment(
+                    value: 'top',
+                    label: Text('Top'),
+                    icon: Icon(Icons.vertical_align_top),
+                  ),
+                  ButtonSegment(
+                    value: 'bottom',
+                    label: Text('Bottom'),
+                    icon: Icon(Icons.vertical_align_bottom),
+                  ),
+                  ButtonSegment(
+                    value: 'none',
+                    label: Text('None'),
+                    icon: Icon(Icons.block),
+                  ),
+                ],
+                selected: {widget.settings.progressPosition},
+                onSelectionChanged: (selection) {
+                  db.settings.update().write(
+                    SettingsCompanion(progressPosition: Value(selection.first)),
+                  );
+                  if (selection.first != 'none') _triggerPreview();
+                },
+              ),
             ),
           ],
         ),
@@ -621,8 +630,11 @@ class _TimerSettingsState extends State<TimerSettings> {
               ]
             : [
                 const ListTile(
-                  title: Text("Timer settings"),
-                  subtitle: Text("Audio features are not available"),
+                  title: Text("Timer settings", textAlign: TextAlign.center),
+                  subtitle: Text(
+                    "Audio features are not available",
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
       ),

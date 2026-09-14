@@ -1,0 +1,10 @@
+• Flatten settings audio initialization
+• Flatten tab content selection
+• Port portable backup system from FitBook
+• Prefer labeled Flexify action selectors
+• Prefer labeled graph action selectors
+• Prefer visible tab selector
+• Simplify early-return control flow
+• fix: bound Android CI test runtime
+• fix: enable backups after folder selection
+• refactor: prefer user-visible controls in Linux E2E

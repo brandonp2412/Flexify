@@ -112,7 +112,7 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: buildAppBar(),
       body: buildBody(showBodyWeight),
       floatingActionButton: buildSaveButton(),

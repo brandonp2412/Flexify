@@ -49,8 +49,13 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: 'Use pure black colors for AMOLED displays',
         child: ListTile(
-          leading: const Icon(Icons.contrast),
-          title: const Text('Pure black (AMOLED)'),
+          leading: settings.value.themeMode == 'ThemeMode.amoled'
+              ? const Icon(Icons.contrast)
+              : const Icon(Icons.contrast_outlined),
+          title: const Text(
+            'Pure black (AMOLED)',
+            textAlign: TextAlign.center,
+          ),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               themeMode: Value(
@@ -76,7 +81,10 @@ List<Widget> getAppearanceSettings(
         child: Tooltip(
           message: 'Use the primary color of your device for the app',
           child: ListTile(
-            title: const Text('System color scheme'),
+            title: const Text(
+              'System color scheme',
+              textAlign: TextAlign.center,
+            ),
             leading: settings.value.systemColors
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
@@ -98,7 +106,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: 'Pick/display images on the history page',
         child: ListTile(
-          title: const Text('Show images'),
+          title: const Text('Show images', textAlign: TextAlign.center),
           leading: settings.value.showImages
               ? const Icon(Icons.image)
               : const Icon(Icons.image_outlined),
@@ -117,10 +125,13 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: 'Add a graph entry charting your progress by category',
         child: ListTile(
-          title: const Text('Show global progress'),
+          title: const Text(
+            'Show global progress',
+            textAlign: TextAlign.center,
+          ),
           leading: settings.value.showGlobalProgress
               ? const Icon(Icons.public)
-              : const Icon(Icons.public_off),
+              : const Icon(Icons.public_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               showGlobalProgress: Value(!settings.value.showGlobalProgress),
@@ -138,8 +149,10 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: 'Show the first line graph on graphs page',
         child: ListTile(
-          title: const Text('Peek graph'),
-          leading: const Icon(Icons.visibility_outlined),
+          title: const Text('Peek graph', textAlign: TextAlign.center),
+          leading: settings.value.peekGraph
+              ? const Icon(Icons.visibility)
+              : const Icon(Icons.visibility_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(peekGraph: Value(!settings.value.peekGraph)),
           ),
@@ -155,8 +168,13 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: 'Use wavy curves in the graphs page',
         child: ListTile(
-          title: const Text('Curve line graphs'),
-          leading: const Icon(Icons.insights),
+          title: const Text(
+            'Curve line graphs',
+            textAlign: TextAlign.center,
+          ),
+          leading: settings.value.curveLines
+              ? const Icon(Icons.insights)
+              : const Icon(Icons.insights_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(curveLines: Value(!settings.value.curveLines)),
           ),
@@ -173,6 +191,7 @@ List<Widget> getAppearanceSettings(
         children: [
           Text(
             "Curve smoothness",
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           Slider(
@@ -194,7 +213,7 @@ List<Widget> getAppearanceSettings(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SegmentedButton<String>(
                 segments: const [

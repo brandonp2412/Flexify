@@ -53,50 +53,55 @@ class BottomNav extends StatelessWidget {
                 label: label,
                 button: true,
                 selected: isSelected,
-                child: GestureDetector(
-                  key: Key(tab),
-                  onTap: () => onTap(index),
-                  onLongPress: onLongPress != null
-                      ? () => onLongPress!(context, tab)
-                      : null,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 350),
-                    curve: Curves.easeOutCubic,
-                    height: 48,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isSelected ? 16 : 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected ? color.primary : Colors.transparent,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          iconForTab(tab),
-                          color: isSelected ? color.onPrimary : color.onSurface,
-                          size: 24,
-                          semanticLabel: label,
-                        ),
-                        AnimatedSize(
-                          duration: const Duration(milliseconds: 350),
-                          curve: Curves.easeOutCubic,
-                          child: isSelected
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    label,
-                                    maxLines: 1,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(color: color.onPrimary),
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                      ],
+                child: Tooltip(
+                  message: label,
+                  child: GestureDetector(
+                    key: Key(tab),
+                    onTap: () => onTap(index),
+                    onLongPress: onLongPress != null
+                        ? () => onLongPress!(context, tab)
+                        : null,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeOutCubic,
+                      height: 48,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isSelected ? 16 : 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected ? color.primary : Colors.transparent,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            iconForTab(tab),
+                            color: isSelected
+                                ? color.onPrimary
+                                : color.onSurface,
+                            size: 24,
+                            semanticLabel: label,
+                          ),
+                          AnimatedSize(
+                            duration: const Duration(milliseconds: 350),
+                            curve: Curves.easeOutCubic,
+                            child: isSelected
+                                ? Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(
+                                      label,
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: color.onPrimary),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
