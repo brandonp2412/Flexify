@@ -104,10 +104,6 @@ jobs:
           retention-days: 7
 
   patrol-tests:
-    # Patrol drives Android system UI and has repeatedly flaked on the hosted
-    # emulator. Keep it available for explicit diagnostics, but do not gate
-    # normal PRs or releases on the native document picker.
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -154,7 +150,7 @@ jobs:
 
   version-bump:
     if: github.event_name == 'push'
-    needs: [quality-checks, generate-screenshots]
+    needs: [quality-checks, generate-screenshots, patrol-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write

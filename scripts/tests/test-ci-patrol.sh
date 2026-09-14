@@ -37,12 +37,15 @@ EOF
 chmod +x "$test_root/bin/patrol"
 
 attempt_file="$test_root/attempt"
-PATH="$test_root/bin:$PATH" \
+if PATH="$test_root/bin:$PATH" \
   PATROL_TEST_ATTEMPT_FILE="$attempt_file" \
-  "$repo_root/scripts/ci-patrol.sh"
+  "$repo_root/scripts/ci-patrol.sh"; then
+  echo "Expected a native selector failure to fail without a retry." >&2
+  exit 1
+fi
 
-if [[ $(<"$attempt_file") -ne 2 ]]; then
-  echo "Expected Patrol to retry once after a transient test failure." >&2
+if [[ $(<"$attempt_file") -ne 1 ]]; then
+  echo "Expected a native selector failure to run only once." >&2
   exit 1
 fi
 

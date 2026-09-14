@@ -7,6 +7,28 @@ import 'package:patrol/patrol.dart';
 const _uiTimeout = Duration(seconds: 15);
 const _nativeTimeout = Duration(seconds: 15);
 
+bool _isDocumentsUi(AndroidNativeView view) {
+  final packageName = view.applicationPackage?.toLowerCase();
+  if (packageName != null && packageName.endsWith('.documentsui')) {
+    return true;
+  }
+
+  return view.children.any(_isDocumentsUi);
+}
+
+Future<void> _waitForDocumentsUi(AndroidAutomator android) async {
+  final deadline = DateTime.now().add(_nativeTimeout);
+  while (DateTime.now().isBefore(deadline)) {
+    final nativeViews = await android.getNativeViews(null);
+    if (nativeViews.roots.any(_isDocumentsUi)) return;
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+  }
+
+  throw StateError(
+    'Android document picker did not appear within $_nativeTimeout',
+  );
+}
+
 void main() {
   patrolTest(
     'core navigation and Android data management work end to end',
@@ -40,12 +62,7 @@ void main() {
       }
 
       await backupTile.tap();
-      await $.platform.android.waitUntilVisible(
-        const AndroidSelector(
-          applicationPackage: 'com.google.android.documentsui',
-        ),
-        timeout: _nativeTimeout,
-      );
+      await _waitForDocumentsUi($.platform.android);
       await $.platform.android.pressBack();
 
       await backupTile.waitUntilVisible(timeout: _uiTimeout);

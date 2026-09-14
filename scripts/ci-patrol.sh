@@ -28,12 +28,6 @@ for attempt in 1 2; do
     continue
   fi
 
-  if [[ $attempt -eq 1 ]] &&
-    grep -Fq "waitUntilVisible() failed with Invalid response: 404 selector" "$patrol_log"; then
-    echo "Android's document picker was not visible; retrying Patrol once."
-    continue
-  fi
-
   exit "$patrol_status"
 done
 
