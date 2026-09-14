@@ -42,6 +42,7 @@ class TimerService : Service() {
     private var vibrator: Vibrator? = null
     private val binder = LocalBinder()
     private var currentDescription = ""
+    private var currentTarget = "timer"
     private var alarmSound: String? = null
     private var shouldVibrate = true
     var mainActivityVisible = true
@@ -213,6 +214,7 @@ class TimerService : Service() {
 
     private fun onTimerStart(intent: Intent?) {
         currentDescription = intent?.getStringExtra("description") ?: "Alarm"
+        currentTarget = intent?.getStringExtra(MainActivity.TIMER_TARGET_EXTRA) ?: "timer"
         alarmSound = intent?.getStringExtra("alarmSound")
             ?: "android.resource://$packageName/${R.raw.argon}"
         shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
@@ -298,7 +300,9 @@ class TimerService : Service() {
 
     private fun getProgress(timeLeftInSeconds: Int): NotificationCompat.Builder {
         val channelId = "timer_channel"
-        val contentIntent = Intent(this, MainActivity::class.java)
+        val contentIntent = Intent(this, MainActivity::class.java).apply {
+            putExtra(MainActivity.TIMER_TARGET_EXTRA, currentTarget)
+        }
         val contentPending = PendingIntent.getActivity(
             this,
             0,
@@ -393,7 +397,9 @@ class TimerService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val contentIntent = Intent(this, MainActivity::class.java)
+        val contentIntent = Intent(this, MainActivity::class.java).apply {
+            putExtra(MainActivity.TIMER_TARGET_EXTRA, currentTarget)
+        }
         val contentPending = PendingIntent.getActivity(
             this,
             0,
