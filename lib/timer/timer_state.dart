@@ -17,6 +17,8 @@ class TimerState extends ChangeNotifier {
   bool starting = false;
   bool justExpired = false;
   bool _keepScreenOn = true;
+  String _target = 'timer';
+  String? _notificationTarget;
 
   FlutterLocalNotificationsPlugin? _notifications;
 
@@ -54,8 +56,36 @@ class TimerState extends ChangeNotifier {
       } else if (call.method == 'timerExpired') {
         justExpired = true;
         notifyListeners();
+      } else if (call.method == 'notificationTap') {
+        _setNotificationTarget(call.arguments as String?);
       }
     });
+    if (!kIsWeb && Platform.isAndroid) {
+      androidChannel
+          .invokeMethod<String>('getNotificationTarget')
+          .then(
+            _setNotificationTarget,
+            onError: (Object error, StackTrace stackTrace) {
+              talker.handle(
+                error,
+                stackTrace,
+                'Failed to read notification target',
+              );
+            },
+          );
+    }
+  }
+
+  String? consumeNotificationTarget() {
+    final target = _notificationTarget;
+    _notificationTarget = null;
+    return target;
+  }
+
+  void _setNotificationTarget(String? target) {
+    if (target == null || target.isEmpty) return;
+    _notificationTarget = target;
+    notifyListeners();
   }
 
   void setStarting(bool value) {
@@ -76,6 +106,7 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
       'enableSound': enableSound,
+      'target': _target,
     };
     if (!kIsWeb && Platform.isAndroid) {
       androidChannel.invokeMethod('add', args);
@@ -100,9 +131,11 @@ class TimerState extends ChangeNotifier {
     Duration rest,
     String alarmSound,
     bool vibrate,
-    bool enableSound,
-  ) async {
+    bool enableSound, [
+    String target = 'timer',
+  ]) async {
     talker.info('Starting rest timer for ${rest.inSeconds} seconds');
+    _target = target;
     if (_keepScreenOn) {
       WakelockPlus.enable().catchError((error, stackTrace) {
         talker.handle(error, stackTrace, 'Failed to enable wakelock');
@@ -122,6 +155,7 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
       'enableSound': enableSound,
+      'target': target,
     };
     if (!kIsWeb && Platform.isAndroid) {
       await androidChannel.invokeMethod('timer', args);
@@ -211,6 +245,7 @@ class TimerState extends ChangeNotifier {
 
   Future<void> stopTimer() async {
     talker.info('Stopping rest timer');
+    _target = 'timer';
     updateTimer(NativeTimerWrapper.emptyTimer());
     WakelockPlus.disable().catchError((error, stackTrace) {
       talker.handle(error, stackTrace, 'Failed to disable wakelock');

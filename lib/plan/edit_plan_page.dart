@@ -226,6 +226,24 @@ class _EditPlanPageState extends State<EditPlanPage> {
     _days = weekdays.map((day) => list.contains(day)).toList();
   }
 
+  Iterable<PlanExercisesCompanion> _orderedExercises(int planId) sync* {
+    var sequence = 0;
+    for (final exercise in _exercises) {
+      if (!exercise.enabled.value) continue;
+      yield exercise.copyWith(
+        planId: Value(planId),
+        sequence: Value(sequence++),
+      );
+    }
+    for (final exercise in _exercises) {
+      if (exercise.enabled.value) continue;
+      yield exercise.copyWith(
+        planId: Value(planId),
+        sequence: Value(sequence++),
+      );
+    }
+  }
+
   Future<void> save() async {
     final selected = [];
     for (int i = 0; i < _days.length; i++)
@@ -243,19 +261,14 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     if (widget.plan.id.present) {
+      final planId = widget.plan.id.value;
       await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
-      await db.planExercises.deleteWhere(
-        (tbl) => tbl.planId.equals(widget.plan.id.value),
-      );
-      await db.planExercises.insertAll(
-        _exercises.map((pe) => pe.copyWith(planId: widget.plan.id)),
-      );
+      await db.planExercises.deleteWhere((tbl) => tbl.planId.equals(planId));
+      await db.planExercises.insertAll(_orderedExercises(planId).toList());
     } else {
       final id = await db.into(db.plans).insert(newPlan);
       await db.planExercises.insertAll(
-        _exercises
-            .where((element) => element.enabled.value)
-            .map((pe) => pe.copyWith(planId: Value(id))),
+        _orderedExercises(id).where((exercise) => exercise.enabled.value).toList(),
       );
     }
 

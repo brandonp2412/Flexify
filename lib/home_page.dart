@@ -4,6 +4,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plans_page.dart';
+import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
@@ -11,6 +12,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/whats_new.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
+import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -25,6 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _controller;
+  late final TimerState _timerState;
 
   @override
   void initState() {
@@ -33,6 +36,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final setting = context.read<SettingsState>().value.tabs;
     final tabs = setting.split(',');
     _controller = TabController(length: tabs.length, vsync: this);
+    _timerState = context.read<TimerState>();
+    _timerState.addListener(_handleTimerNotificationTarget);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleTimerNotificationTarget();
+    });
 
     final info = PackageInfo.fromPlatform();
     info.then((pkg) async {
@@ -61,8 +69,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
+  Future<void> _handleTimerNotificationTarget() async {
+    if (!mounted) return;
+    final target = _timerState.consumeNotificationTarget();
+    if (target == null) return;
+
+    final navigator = Navigator.of(context);
+    if (target.startsWith('plan:') && navigator.canPop()) {
+      // The notification merely foregrounded an already-open workout. Do not
+      // stack another StartPlanPage on top of the existing route.
+      return;
+    }
+
+    final tabs = context.read<SettingsState>().value.tabs.split(',');
+    if (target == 'history' || target == 'timer') {
+      final tab = target == 'history' ? 'HistoryPage' : 'TimerPage';
+      final index = tabs.indexOf(tab);
+      if (index >= 0 && index < _controller.length) {
+        _controller.animateTo(index);
+      } else if (target == 'timer') {
+        await navigator.push(
+          MaterialPageRoute(builder: (context) => const TimerPage()),
+        );
+      }
+      return;
+    }
+
+    if (!target.startsWith('plan:')) return;
+    final planId = int.tryParse(target.substring('plan:'.length));
+    if (planId == null) return;
+    final plan =
+        await (db.plans.select()..where((row) => row.id.equals(planId)))
+            .getSingleOrNull();
+    if (plan == null || !mounted) return;
+    await navigator.push(
+      MaterialPageRoute(builder: (context) => StartPlanPage(plan: plan)),
+    );
+  }
+
   @override
   void dispose() {
+    _timerState.removeListener(_handleTimerNotificationTarget);
     _controller.dispose();
     super.dispose();
   }

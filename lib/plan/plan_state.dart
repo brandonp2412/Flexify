@@ -35,20 +35,36 @@ class PlanState extends ChangeNotifier {
     updateDefaults();
   }
 
+  int _compareExercises(
+    PlanExercisesCompanion a,
+    PlanExercisesCompanion b,
+  ) {
+    if (a.enabled.value != b.enabled.value) {
+      return b.enabled.value ? 1 : -1;
+    }
+    if (a.enabled.value) {
+      final bySequence = a.sequence.value.compareTo(b.sequence.value);
+      if (bySequence != 0) return bySequence;
+    }
+    return a.exercise.value.compareTo(b.exercise.value);
+  }
+
   void addExercise(GymSetsCompanion gymSet) {
+    final nextSequence = exercises
+        .where((exercise) => exercise.enabled.value)
+        .fold<int>(
+          0,
+          (next, exercise) =>
+              exercise.sequence.value >= next ? exercise.sequence.value + 1 : next,
+        );
     exercises.add(
       PlanExercisesCompanion(
         exercise: Value(gymSet.name.value),
         enabled: const Value(true),
+        sequence: Value(nextSequence),
       ),
     );
-    exercises.sort((a, b) {
-      if (a.enabled.value != b.enabled.value) {
-        return b.enabled.value ? 1 : -1;
-      }
-
-      return a.exercise.value.compareTo(b.exercise.value);
-    });
+    exercises.sort(_compareExercises);
     notifyListeners();
   }
 
@@ -67,29 +83,24 @@ class PlanState extends ChangeNotifier {
 
     final results = await query.get();
 
-    List<PlanExercisesCompanion> enabled = [];
-    List<PlanExercisesCompanion> disabled = [];
-
+    final loaded = <PlanExercisesCompanion>[];
     for (final result in results) {
-      final pe = PlanExercisesCompanion(
-        planId: plan.id,
-        id: Value.absentIfNull(result.read(db.planExercises.id)),
-        exercise: Value(result.read(db.gymSets.name)!),
-        enabled: Value(result.read(db.planExercises.enabled) ?? false),
-        maxSets: Value(result.read(db.planExercises.maxSets)),
-        warmupSets: Value(result.read(db.planExercises.warmupSets)),
-        timers: Value(result.read(db.planExercises.timers) ?? true),
-        sequence: Value(result.read(db.planExercises.sequence) ?? 0),
+      loaded.add(
+        PlanExercisesCompanion(
+          planId: plan.id,
+          id: Value.absentIfNull(result.read(db.planExercises.id)),
+          exercise: Value(result.read(db.gymSets.name)!),
+          enabled: Value(result.read(db.planExercises.enabled) ?? false),
+          maxSets: Value(result.read(db.planExercises.maxSets)),
+          warmupSets: Value(result.read(db.planExercises.warmupSets)),
+          timers: Value(result.read(db.planExercises.timers) ?? true),
+          sequence: Value(result.read(db.planExercises.sequence) ?? 0),
+        ),
       );
-      if (pe.enabled.value)
-        enabled.add(pe);
-      else
-        disabled.add(pe);
     }
 
-    enabled.sort((a, b) => a.sequence.value.compareTo(b.sequence.value));
-
-    exercises = enabled + disabled;
+    loaded.sort(_compareExercises);
+    exercises = loaded;
     notifyListeners();
   }
 
