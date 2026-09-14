@@ -31,6 +31,7 @@ class MainActivity : FlutterActivity() {
     private var timerBound = false
     private var timerService: TimerService? = null
     private var pendingPickResult: MethodChannel.Result? = null
+    private var pendingNotificationTarget: String? = null
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -45,6 +46,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        pendingNotificationTarget = intent?.getStringExtra(TIMER_TARGET_EXTRA)
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowInsetsControllerCompat(window, window.decorView)
@@ -141,7 +143,14 @@ class MainActivity : FlutterActivity() {
                     val restMs = call.argument<Int>("restMs") ?: threeMinutesThirtySeconds
                     val alarmSound = call.argument<String>("alarmSound")!!
                     val vibrate = call.argument<Boolean>("vibrate")!!
-                    timer(restMs, title, timestamp, alarmSound, vibrate)
+                    val target = call.argument<String>("target") ?: "timer"
+                    timer(restMs, title, timestamp, alarmSound, vibrate, target)
+                }
+
+                "getNotificationTarget" -> {
+                    val target = pendingNotificationTarget
+                    pendingNotificationTarget = null
+                    result.success(target)
                 }
 
                 "pick" -> {
@@ -179,7 +188,8 @@ class MainActivity : FlutterActivity() {
                         val timestamp = call.argument<Long>("timestamp")
                         val alarmSound = call.argument<String>("alarmSound")
                         val vibrate = call.argument<Boolean>("vibrate")
-                        timer(1000 * 60, "Rest timer", timestamp!!, alarmSound!!, vibrate!!)
+                        val target = call.argument<String>("target") ?: "timer"
+                        timer(1000 * 60, "Rest timer", timestamp!!, alarmSound!!, vibrate!!, target)
                     }
                 }
 
@@ -226,6 +236,14 @@ class MainActivity : FlutterActivity() {
             }
         }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        val target = intent.getStringExtra(TIMER_TARGET_EXTRA) ?: return
+        if (channel == null) pendingNotificationTarget = target
+        else channel?.invokeMethod("notificationTap", target)
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         timerService?.apply {
@@ -249,7 +267,8 @@ class MainActivity : FlutterActivity() {
         description: String,
         timeStamp: Long,
         alarmSound: String,
-        vibrate: Boolean
+        vibrate: Boolean,
+        target: String
     ) {
         Log.d("MainActivity", "Queue $description for $durationMs delay")
         val intent = Intent(context, TimerService::class.java).also { intent ->
@@ -264,6 +283,7 @@ class MainActivity : FlutterActivity() {
             putExtra("timeStamp", timeStamp)
             putExtra("alarmSound", alarmSound)
             putExtra("vibrate", vibrate)
+            putExtra(TIMER_TARGET_EXTRA, target)
         }
 
         context.startForegroundService(intent)
@@ -359,5 +379,6 @@ class MainActivity : FlutterActivity() {
         const val TIMER_PERMISSION_REQUEST_CODE = 44
         const val TICK_BROADCAST = "tick-event"
         const val PERMISSION_INSTALL_MARKER = "permission-prompt-state-v1"
+        const val TIMER_TARGET_EXTRA = "timer-target"
     }
 }
