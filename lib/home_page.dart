@@ -28,6 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _controller;
   late final TimerState _timerState;
+  final GlobalKey<PlansPageState> _plansPageKey = GlobalKey<PlansPageState>();
 
   @override
   void initState() {
@@ -75,12 +76,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (target == null) return;
 
     final navigator = Navigator.of(context);
-    if (target.startsWith('plan:') && navigator.canPop()) {
-      // The notification merely foregrounded an already-open workout. Do not
-      // stack another StartPlanPage on top of the existing route.
-      return;
-    }
-
     final tabs = context.read<SettingsState>().value.tabs.split(',');
     if (target == 'history' || target == 'timer') {
       final tab = target == 'history' ? 'HistoryPage' : 'TimerPage';
@@ -102,8 +97,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         await (db.plans.select()..where((row) => row.id.equals(planId)))
             .getSingleOrNull();
     if (plan == null || !mounted) return;
+
+    final plansIndex = tabs.indexOf('PlansPage');
+    if (plansIndex >= 0 && plansIndex < _controller.length) {
+      _controller.animateTo(plansIndex);
+      await WidgetsBinding.instance.endOfFrame;
+      if (!mounted) return;
+
+      final plansPage = _plansPageKey.currentState;
+      if (plansPage != null) {
+        await plansPage.openPlanFromNotification(plan);
+        return;
+      }
+    }
+
     await navigator.push(
-      MaterialPageRoute(builder: (context) => StartPlanPage(plan: plan)),
+      MaterialPageRoute(
+        settings: RouteSettings(name: 'start-plan:$planId'),
+        builder: (context) => StartPlanPage(plan: plan),
+      ),
     );
   }
 
@@ -209,7 +221,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               return HistoryPage(tabController: _controller);
             }
             if (tab == 'PlansPage')
-              return PlansPage(tabController: _controller);
+              return PlansPage(key: _plansPageKey, tabController: _controller);
             if (tab == 'GraphsPage') {
               return GraphsPage(tabController: _controller);
             }

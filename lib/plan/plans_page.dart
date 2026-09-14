@@ -6,12 +6,32 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plans_list.dart';
+import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+
+class _PlansNavigatorObserver extends NavigatorObserver {
+  String? currentRouteName;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    currentRouteName = route.settings.name;
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    currentRouteName = previousRoute?.settings.name;
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    currentRouteName = newRoute?.settings.name;
+  }
+}
 
 class PlansPage extends StatefulWidget {
   final TabController tabController;
@@ -25,9 +45,26 @@ class PlansPage extends StatefulWidget {
 class PlansPageState extends State<PlansPage>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+  final _routeObserver = _PlansNavigatorObserver();
 
   @override
   bool get wantKeepAlive => true;
+
+  /// Opens [plan] unless that workout is already the active Plans route.
+  Future<void> openPlanFromNotification(Plan plan) async {
+    final navigator = navKey.currentState;
+    if (navigator == null) return;
+
+    final routeName = 'start-plan:${plan.id}';
+    if (_routeObserver.currentRouteName == routeName) return;
+
+    await navigator.push(
+      MaterialPageRoute(
+        settings: RouteSettings(name: routeName),
+        builder: (context) => StartPlanPage(plan: plan),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +78,7 @@ class PlansPageState extends State<PlansPage>
       },
       child: Navigator(
         key: navKey,
+        observers: [_routeObserver],
         onGenerateRoute: (settings) => MaterialPageRoute(
           builder: (context) => _PlansPageWidget(navKey: navKey),
           settings: settings,

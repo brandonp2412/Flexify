@@ -226,6 +226,7 @@ class _PlanTileState extends State<PlanTile> {
 
           widget.navigatorKey.currentState!.push(
             MaterialPageRoute(
+              settings: RouteSettings(name: 'start-plan:${widget.plan.id}'),
               builder: (context) => StartPlanPage(plan: widget.plan),
             ),
           );
