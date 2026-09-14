@@ -52,6 +52,11 @@ dev_dependencies:
     git:
       url: https://github.com/insertjokehere/msix.git
       ref: msvc_redist
+
+dependency_overrides:
+  # https://github.com/flutter/flutter/issues/184750
+  # 2.3.x moved Android path lookup to JNI and can SIGSEGV in release mode.
+  path_provider_android: 2.2.23
 flutter:
   uses-material-design: true
   assets:
