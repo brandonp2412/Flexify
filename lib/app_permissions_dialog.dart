@@ -79,93 +79,186 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
     final needsTimerAccess = settings.restTimers;
     final needsNotifications = settings.notifications || needsTimerAccess;
     final hasRequirements = needsNotifications || needsTimerAccess;
+    final colors = Theme.of(context).colorScheme;
 
     return AlertDialog(
-      title: const Text('App access', textAlign: TextAlign.center),
+      titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: colors.primaryContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.admin_panel_settings_outlined,
+              color: colors.onPrimaryContainer,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'App access',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Needed for enabled timers and notifications.',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
       content: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
+        constraints: const BoxConstraints(maxWidth: 460),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'These are the Android permissions required by the features you currently have enabled.',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
               if (needsNotifications)
-                CheckboxListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  value: _notificationGranted,
-                  title: const Text(
-                    'Notifications on',
-                    textAlign: TextAlign.center,
-                  ),
-                  subtitle: Text(
-                    needsTimerAccess
-                        ? 'Required for timer progress and alerts.'
-                        : 'Required for enabled app notifications.',
-                    textAlign: TextAlign.center,
-                  ),
-                  onChanged: (_) => _requestNotification(),
+                _AccessCard(
+                  icon: Icons.notifications_outlined,
+                  title: 'Notifications',
+                  description: needsTimerAccess
+                      ? 'Timer progress and rest alerts'
+                      : 'Notifications you have enabled',
+                  granted: _notificationGranted,
+                  onRequest: _requestNotification,
                 ),
+              if (needsNotifications && needsTimerAccess)
+                const SizedBox(height: 10),
               if (needsTimerAccess)
-                CheckboxListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  value: _batteryOptimizationDisabled,
-                  title: const Text(
-                    'Battery optimization disabled',
-                    textAlign: TextAlign.center,
-                  ),
-                  subtitle: const Text(
-                    'Allows rest timers to keep running reliably in the background.',
-                    textAlign: TextAlign.center,
-                  ),
-                  onChanged: (_) =>
+                _AccessCard(
+                  icon: Icons.battery_saver_outlined,
+                  title: 'Background activity',
+                  description: 'Keep timers reliable in the background',
+                  granted: _batteryOptimizationDisabled,
+                  onRequest: () =>
                       _request(Permission.ignoreBatteryOptimizations),
                 ),
+              if (needsTimerAccess) const SizedBox(height: 10),
               if (needsTimerAccess)
-                CheckboxListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  value: _exactAlarmGranted,
-                  title: const Text(
-                    'Background timer alarms',
-                    textAlign: TextAlign.center,
-                  ),
-                  subtitle: const Text(
-                    'Allows timer alarms to fire at the requested time.',
-                    textAlign: TextAlign.center,
-                  ),
-                  onChanged: (_) => _request(Permission.scheduleExactAlarm),
+                _AccessCard(
+                  icon: Icons.alarm_outlined,
+                  title: 'Exact alarms',
+                  description: 'Alert exactly when a rest timer ends',
+                  granted: _exactAlarmGranted,
+                  onRequest: () => _request(Permission.scheduleExactAlarm),
                 ),
               if (!hasRequirements)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    'Your enabled settings do not currently require any additional Android access.',
-                    textAlign: TextAlign.center,
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: colors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.check_circle_outline, color: colors.primary),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Text(
+                          'No additional Android access is needed for your current settings.',
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
           ),
         ),
       ),
-      actionsAlignment: MainAxisAlignment.center,
+      actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
       actions: [
-        FilledButton(
-          onPressed: () async {
-            await db.settings.update().write(
-              const SettingsCompanion(
-                explainedPermissions: Value(true),
-                notificationPermissionRequested: Value(true),
-              ),
-            );
-            if (!context.mounted) return;
-            Navigator.pop(context);
-          },
-          child: const Text('Done'),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: () async {
+              await db.settings.update().write(
+                const SettingsCompanion(
+                  explainedPermissions: Value(true),
+                  notificationPermissionRequested: Value(true),
+                ),
+              );
+              if (!context.mounted) return;
+              Navigator.pop(context);
+            },
+            child: const Text('Done'),
+          ),
         ),
       ],
+    );
+  }
+}
+
+class _AccessCard extends StatelessWidget {
+  const _AccessCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.granted,
+    required this.onRequest,
+  });
+
+  final IconData icon;
+  final String title;
+  final String description;
+  final bool granted;
+  final VoidCallback onRequest;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, color: colors.onSurfaceVariant, size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: theme.textTheme.titleSmall),
+                const SizedBox(height: 3),
+                Text(
+                  description,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          if (granted)
+            Tooltip(
+              message: 'Allowed',
+              child: Icon(Icons.check_circle, color: colors.primary),
+            )
+          else
+            TextButton(onPressed: onRequest, child: const Text('Allow')),
+        ],
+      ),
     );
   }
 }
