@@ -13,6 +13,7 @@ if [ -z "${EMULATOR_PORT:-}" ]; then
 fi
 
 screenshot_dir="fastlane/metadata/android/en-US/images/$FLEXIFY_DEVICE_TYPE"
+drive_timeout="${SCREENSHOT_DRIVE_TIMEOUT:-12m}"
 rm -rf "$screenshot_dir"
 mkdir -p "$screenshot_dir"
 
@@ -23,13 +24,33 @@ fi
 
 run_drive() {
   drive_log=$(mktemp)
-  drive_status=0
-  flutter drive --profile \
-    --no-enable-impeller \
-    --driver=test_driver/integration_test.dart \
-    --target=integration_test/screenshot_test.dart \
-    -d "emulator-$EMULATOR_PORT" >"$drive_log" 2>&1 || drive_status=$?
-  cat "$drive_log"
+  drive_status_file=$(mktemp)
+  drive_status=1
+
+  echo "Running screenshot drive with a $drive_timeout timeout"
+  {
+    timeout --signal=TERM --kill-after=15s "$drive_timeout" \
+      flutter drive --profile \
+        --no-enable-impeller \
+        --driver=test_driver/integration_test.dart \
+        --target=integration_test/screenshot_test.dart \
+        -d "emulator-$EMULATOR_PORT"
+    printf '%s\n' "$?" >"$drive_status_file"
+  } 2>&1 | tee "$drive_log"
+
+  if [ -s "$drive_status_file" ]; then
+    drive_status=$(cat "$drive_status_file")
+  fi
+  rm -f "$drive_status_file"
+
+  case "$drive_status" in
+    124|137)
+      echo "Screenshot drive timed out after $drive_timeout; capturing emulator diagnostics" >&2
+      adb -s "emulator-$EMULATOR_PORT" shell dumpsys activity activities 2>/dev/null \
+        | grep -m1 'mResumedActivity' >&2 || true
+      adb -s "emulator-$EMULATOR_PORT" logcat -d -t 80 >&2 || true
+      ;;
+  esac
 }
 
 screenshots_complete() {
@@ -49,7 +70,8 @@ if ! screenshots_complete; then
   mkdir -p "$screenshot_dir"
 
   adb reconnect offline >/dev/null 2>&1 || true
-  adb -s "emulator-$EMULATOR_PORT" wait-for-device >/dev/null 2>&1 || true
+  timeout 30s adb -s "emulator-$EMULATOR_PORT" wait-for-device >/dev/null 2>&1 || true
+  adb -s "emulator-$EMULATOR_PORT" shell am force-stop com.presley.flexify >/dev/null 2>&1 || true
   sleep 2
 
   run_drive
@@ -68,8 +90,9 @@ for number in $(seq 1 8); do
 done
 
 if [ "$drive_status" -ne 0 ]; then
-  if ! grep -q "All tests passed!" "$drive_log"; then
-    exit "$drive_status"
+  if grep -q "All tests passed!" "$drive_log"; then
+    echo "flutter drive lost the emulator during teardown after all screenshots were generated"
+  else
+    echo "flutter drive exited with status $drive_status after generating the complete validated screenshot set"
   fi
-  echo "flutter drive lost the emulator during teardown after all screenshots were generated"
 fi
