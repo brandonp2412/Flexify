@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/sets/history_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tab_controller.dart';
@@ -132,4 +133,75 @@ void main() {
 
     expect(find.text('Search history...'), findsOne);
   });
+
+  testWidgets(
+    'HistoryPage select all includes every filtered row, not just loaded rows',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      await harness.database.gymSets.insertAll([
+        for (var i = 0; i < 150; i++)
+          gymSetFixture(
+            'Bench press',
+            reps: i + 1,
+            weight: 50,
+            created: testNow.subtract(Duration(minutes: i)),
+          ),
+        for (var i = 0; i < 10; i++)
+          gymSetFixture(
+            'Squat',
+            reps: i + 1,
+            weight: 100,
+            created: testNow.subtract(Duration(days: 1, minutes: i)),
+          ),
+      ]);
+
+      await pumpHistoryPage(tester, harness);
+      final searchField = find.descendant(
+        of: find.byType(SearchBar),
+        matching: find.byType(EditableText),
+      );
+      await tester.enterText(searchField, 'Bench');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Show menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Select all'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('150'), findsOne);
+    },
+  );
+
+  testWidgets(
+    'HistoryPage can clear selection without clearing the search filter',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      await harness.database.gymSets.insertAll([
+        gymSetFixture('Bench press', reps: 5, weight: 50),
+        gymSetFixture('Squat', reps: 5, weight: 100),
+      ]);
+
+      await pumpHistoryPage(tester, harness);
+      final searchBar = find.byType(SearchBar);
+      final searchField = find.descendant(
+        of: searchBar,
+        matching: find.byType(EditableText),
+      );
+      await tester.enterText(searchField, 'Bench');
+      await tester.pumpAndSettle();
+      expect(find.text('Squat'), findsNothing);
+
+      await tester.longPress(find.text('5 x 50 kg'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Show menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Clear selection'));
+      await tester.pumpAndSettle();
+
+      final widget = tester.widget<SearchBar>(searchBar);
+      expect(widget.controller?.text, 'Bench');
+      expect(find.text('Squat'), findsNothing);
+      expect(find.byTooltip('Delete selected'), findsNothing);
+    },
+  );
 }

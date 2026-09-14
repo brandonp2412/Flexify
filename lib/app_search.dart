@@ -44,6 +44,11 @@ class AppSearch extends StatefulWidget {
 class _AppSearchState extends State<AppSearch> {
   final TextEditingController _ctrl = TextEditingController();
 
+  void _clearSelection() {
+    widget.controller.clear();
+    widget.onChange(_ctrl.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     final sel = widget.controller;
@@ -115,10 +120,13 @@ class _AppSearchState extends State<AppSearch> {
                   child: Icon(Icons.search),
                 )
               : IconButton(
-                  tooltip: 'Clear selection',
+                  tooltip: sel.isNotEmpty ? 'Clear selection' : 'Clear search',
                   onPressed: () {
-                    widget.controller.clear();
-                    _ctrl.text = '';
+                    if (sel.isNotEmpty) {
+                      _clearSelection();
+                      return;
+                    }
+                    _ctrl.clear();
                     widget.onChange('');
                   },
                   icon: const Icon(Icons.arrow_back),
@@ -173,6 +181,16 @@ class _AppSearchState extends State<AppSearch> {
                         ),
                       ),
                       if (sel.isNotEmpty) ...[
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.clear_all),
+                            title: const Text('Clear selection'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              _clearSelection();
+                            },
+                          ),
+                        ),
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.edit),

@@ -22,6 +22,43 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+Future<GymSet?> getFirstOfLastPlanSession(
+  AppDatabase database,
+  String exercise,
+  int planId,
+) async {
+  final mostRecent =
+      await (database.gymSets.select()
+            ..where(
+              (tbl) => tbl.name.equals(exercise) & tbl.planId.equals(planId),
+            )
+            ..orderBy([
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
+  if (mostRecent == null) return null;
+
+  final date = mostRecent.created.toLocal();
+  final startOfDay = DateTime(date.year, date.month, date.day);
+  final endOfDay = startOfDay.add(const Duration(days: 1));
+
+  return (database.gymSets.select()
+        ..where(
+          (tbl) =>
+              tbl.name.equals(exercise) &
+              tbl.planId.equals(planId) &
+              tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
+              tbl.created.isSmallerThanValue(endOfDay.toUtc()),
+        )
+        ..orderBy([
+          (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
+        ])
+        ..limit(1))
+      .getSingleOrNull();
+}
+
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
 
@@ -98,7 +135,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               );
 
         return Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: Text(_title),
             leading: IconButton(
@@ -477,27 +514,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   /// "Most recent session" = the calendar day of the latest recorded set.
   /// Showing the first set (rather than the last) gives a better baseline for
   /// progressive overload when weights decrease across sets.
-  Future<GymSet?> getFirstOfLastSession(String exercise) async {
-    final mostRecent = await getLast(exercise);
-    if (mostRecent == null) return null;
-
-    final date = mostRecent.created.toLocal();
-    final startOfDay = DateTime(date.year, date.month, date.day);
-    final endOfDay = startOfDay.add(const Duration(days: 1));
-
-    return (db.gymSets.select()
-          ..where(
-            (tbl) =>
-                tbl.name.equals(exercise) &
-                tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
-                tbl.created.isSmallerThanValue(endOfDay.toUtc()),
-          )
-          ..orderBy([
-            (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
-  }
+  Future<GymSet?> getFirstOfLastSession(String exercise) =>
+      getFirstOfLastPlanSession(db, exercise, widget.plan.id);
 
   @override
   void initState() {

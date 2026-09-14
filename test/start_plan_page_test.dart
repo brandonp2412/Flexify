@@ -211,4 +211,51 @@ void main() {
     expect(find.text('Set 1'), findsOne);
     expect(find.text('50 kg × 5'), findsOne);
   });
+
+  test('StartPlanPage prefill lookup uses the same plan only', () async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final currentPlanId = await database.plans.insertOne(
+      planFixture(title: 'Current plan'),
+    );
+    final otherPlanId = await database.plans.insertOne(
+      planFixture(title: 'Other plan'),
+    );
+    final currentSessionStart = testNow.subtract(const Duration(days: 2));
+    await database.gymSets.insertAll([
+      gymSetFixture(
+        'Bench press',
+        reps: 5,
+        weight: 50,
+        planId: currentPlanId,
+        created: currentSessionStart,
+      ),
+      gymSetFixture(
+        'Bench press',
+        reps: 4,
+        weight: 55,
+        planId: currentPlanId,
+        created: currentSessionStart.add(const Duration(minutes: 5)),
+      ),
+      gymSetFixture(
+        'Bench press',
+        reps: 1,
+        weight: 100,
+        planId: otherPlanId,
+        created: testNow.subtract(const Duration(days: 1)),
+      ),
+    ]);
+
+    final first = await getFirstOfLastPlanSession(
+      database,
+      'Bench press',
+      currentPlanId,
+    );
+
+    expect(first == null, false);
+    expect(first!.planId, currentPlanId);
+    expect(first.reps, 5);
+    expect(first.weight, 50);
+  });
 }

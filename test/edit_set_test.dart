@@ -158,4 +158,24 @@ void main() {
       reason: 'Note from Bench press must not persist when Squat has no note',
     );
   });
+
+  testWidgets('EditGymSet resizes for the keyboard so notes remain reachable', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(showNotes: true),
+    );
+
+    await harness.pump(
+      tester,
+      EditSetPage(gymSet: gymSetModelFixture()),
+      surfaceSize: const Size(430, 900),
+    );
+    await tester.pumpAndSettle();
+
+    final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+    expect(scaffold.resizeToAvoidBottomInset, isTrue);
+    expect(find.bySemanticsLabel('Notes'), findsOne);
+  });
 }
