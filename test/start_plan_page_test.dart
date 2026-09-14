@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +13,6 @@ Finder textFieldWithLabel(String label) => find.descendant(
   ),
   matching: find.byType(EditableText),
 );
-
-Future<PlanState> seededPlanState(int planId) async {
-  final state = PlanState();
-  addTearDown(state.dispose);
-  await state.updatePlans(null);
-  await state.updateGymCounts(planId);
-  return state;
-}
 
 void main() {
   testWidgets(
@@ -45,12 +36,7 @@ void main() {
       final plan =
           await (database.plans.select()..where((plan) => plan.id.equals(id)))
               .getSingle();
-      final planState = await seededPlanState(plan.id);
-      await harness.pump(
-        tester,
-        StartPlanPage(plan: plan),
-        planState: planState,
-      );
+      await harness.pump(tester, StartPlanPage(plan: plan));
       await tester.pumpAndSettle();
 
       await tester.enterText(textFieldWithLabel('Reps'), '5');
@@ -77,9 +63,7 @@ void main() {
     final plan =
         await (database.plans.select()..where((plan) => plan.id.equals(id)))
             .getSingle();
-    final planState = await seededPlanState(plan.id);
-
-    await harness.pump(tester, StartPlanPage(plan: plan), planState: planState);
+    await harness.pump(tester, StartPlanPage(plan: plan));
     await tester.pumpAndSettle();
 
     expect(find.text('Save'), findsNothing);
@@ -106,12 +90,9 @@ void main() {
     final plan =
         await (database.plans.select()..where((plan) => plan.id.equals(id)))
             .getSingle();
-    final planState = await seededPlanState(plan.id);
-
     await harness.pump(
       tester,
       StartPlanPage(plan: plan),
-      planState: planState,
       surfaceSize: const Size(800, 1200),
     );
     await tester.pumpAndSettle();
@@ -151,9 +132,7 @@ void main() {
         notificationPermissionRequested: true,
       ),
     );
-    final planState = await seededPlanState(plan.id);
-
-    await harness.pump(tester, StartPlanPage(plan: plan), planState: planState);
+    await harness.pump(tester, StartPlanPage(plan: plan));
     await tester.pumpAndSettle();
 
     await tester.enterText(textFieldWithLabel('Reps'), '5');
@@ -190,12 +169,9 @@ void main() {
         notificationPermissionRequested: true,
       ),
     );
-    final planState = await seededPlanState(plan.id);
-
     await harness.pump(
       tester,
       StartPlanPage(plan: plan),
-      planState: planState,
       surfaceSize: const Size(800, 1200),
     );
     await tester.pumpAndSettle();

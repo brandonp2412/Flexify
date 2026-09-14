@@ -14,7 +14,6 @@ import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/global_progress_page.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -79,7 +78,6 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   void onDelete() async {
-    final state = context.read<PlanState>();
     final copy = _selection.toList();
     setState(() {
       _selection.clear();
@@ -89,7 +87,6 @@ class GraphsPageState extends State<GraphsPage>
     await (db.delete(
       db.planExercises,
     )..where((x) => x.exercise.isIn(copy))).go();
-    state.updatePlans(null);
   }
 
   LineTouchTooltipData tooltipData(

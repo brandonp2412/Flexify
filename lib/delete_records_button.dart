@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 
 class DeleteRecordsButton extends StatelessWidget {
   final BuildContext ctx;
@@ -89,10 +87,8 @@ class DeleteRecordsButton extends StatelessWidget {
                                 label: const Text('Delete'),
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
-                                  final planState = ctx.read<PlanState>();
                                   Navigator.pop(context);
                                   await db.delete(db.plans).go();
-                                  planState.updatePlans(null);
                                   if (!ctx.mounted) return;
                                   Navigator.pop(ctx);
                                 },

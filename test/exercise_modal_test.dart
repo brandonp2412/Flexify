@@ -21,7 +21,6 @@ Future<(FlexifyTestHarness, int)> pumpExerciseModal(WidgetTester tester) async {
         hasData: true,
         planId: id,
         onSelect: () {},
-        onMax: () {},
       ),
     ),
   );

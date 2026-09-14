@@ -34,7 +34,6 @@ void main() {
       planExerciseFixture(planId: 1, exercise: 'Barbell bench press'),
     ]);
 
-    await harness.planState.setExercises(plan);
     await harness.pump(tester, EditPlanPage(plan: plan));
 
     expect(find.text('Test title'), findsOne);
@@ -73,7 +72,6 @@ void main() {
       planExerciseFixture(planId: 1, exercise: 'Barbell bench press'),
     ]);
 
-    await harness.planState.setExercises(plan);
     await harness.pump(tester, EditPlanPage(plan: plan));
 
     await scrollTo(tester, find.text('Arnold press'));

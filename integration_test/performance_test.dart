@@ -3,7 +3,6 @@ import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,9 +21,8 @@ Future<void> appWrapper() async {
     ),
   );
   final settings = await (db.settings.select()..limit(1)).getSingle();
-  final settingsState = SettingsState(settings);
 
-  runApp(app.appProviders(settingsState));
+  runApp(app.appProviders(settings));
 }
 
 void main() {

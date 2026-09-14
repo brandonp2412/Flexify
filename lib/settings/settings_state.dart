@@ -1,31 +1,15 @@
-import 'dart:async';
-
-import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flutter/material.dart';
 
-class SettingsState extends ChangeNotifier {
-  late Setting value;
-  StreamSubscription? subscription;
+/// Persisted settings are owned by Drift. This alias keeps call sites concise
+/// while the provider layer only distributes the latest row from [watchSettings].
+typedef SettingsState = Setting;
 
-  SettingsState(Setting setting) {
-    value = setting;
-    init();
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    subscription?.cancel();
-  }
-
-  Future<void> init() async {
-    subscription = (db.settings.select()..limit(1)).watchSingle().listen((
-      event,
-    ) {
-      value = event;
-      notifyListeners();
-    });
-  }
+/// Compatibility accessor for existing `settings.value.foo` call sites.
+/// [SettingsState] is the Drift row itself; there is no duplicated mutable state.
+extension SettingsStateValue on Setting {
+  Setting get value => this;
 }
+
+Stream<Setting> watchSettings() =>
+    (db.select(db.settings)..limit(1)).watchSingle();

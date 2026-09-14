@@ -51,11 +51,10 @@ Future<SettingsState> _pumpIsolatedApp(
   );
 
   final setting = await (database.settings.select()..limit(1)).getSingle();
-  final settingsState = SettingsState(setting);
 
-  await tester.pumpWidget(app.appProviders(settingsState));
+  await tester.pumpWidget(app.appProviders(setting));
   await tester.pumpAndSettle();
-  return settingsState;
+  return setting;
 }
 
 Future<void> _tapTab(WidgetTester tester, String tab) async {

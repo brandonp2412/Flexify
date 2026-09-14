@@ -5,7 +5,7 @@ import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -16,7 +16,7 @@ class StartList extends StatefulWidget {
   final List<PlanExercise> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
-  final Function() onMax;
+  final List<GymCount> counts;
   final Plan plan;
 
   const StartList({
@@ -24,8 +24,8 @@ class StartList extends StatefulWidget {
     required this.exercises,
     required this.selected,
     required this.onSelect,
+    required this.counts,
     required this.plan,
-    required this.onMax,
   });
 
   @override
@@ -85,8 +85,7 @@ class _StartListState extends State<StartList> {
         settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
-    final state = context.watch<PlanState>();
-    final counts = state.gymCounts;
+    final counts = widget.counts;
     final desktop = isDesktopLayout(context);
 
     if (trailing == PlanTrailing.reorder)
@@ -109,11 +108,6 @@ class _StartListState extends State<StartList> {
               );
             }
           });
-
-          if (!context.mounted) return;
-          final state = context.read<PlanState>();
-          state.setExercises(widget.plan.toCompanion(false));
-          state.updatePlans(null);
         },
       );
     else
@@ -186,7 +180,6 @@ class _StartListState extends State<StartList> {
           exercise: exercise.exercise,
           hasData: count > 0,
           onSelect: () => widget.onSelect(index),
-          onMax: widget.onMax,
         ),
       ),
     );

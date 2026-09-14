@@ -21,7 +21,6 @@ library;
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -60,9 +59,11 @@ Future<int> countFramesToSettle(WidgetTester tester) async {
 Widget historyApp(Setting settings) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => SettingsState(settings)),
+      StreamProvider<SettingsState>(
+        initialData: settings,
+        create: (_) => watchSettings(),
+      ),
       ChangeNotifierProvider(create: (_) => TimerState()),
-      ChangeNotifierProvider(create: (_) => PlanState()),
     ],
     child: MaterialApp(home: HistoryPage(tabController: MockTabController())),
   );

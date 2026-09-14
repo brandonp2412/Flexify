@@ -10,11 +10,10 @@ import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/plan/exercise_tile.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class EditPlanPage extends StatefulWidget {
   final PlansCompanion plan;
@@ -27,7 +26,8 @@ class EditPlanPage extends StatefulWidget {
 
 class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> _days;
-  late var _exercises = context.read<PlanState>().exercises;
+  List<PlanExercisesCompanion> _exercises = [];
+  bool _loadingExercises = true;
 
   String _search = '';
 
@@ -41,10 +41,19 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
     if (gymSet == null || !mounted) return;
 
-    final state = context.read<PlanState>();
-    state.addExercise(gymSet);
     setState(() {
-      _exercises = state.exercises;
+      _exercises.add(
+        PlanExercisesCompanion(
+          exercise: Value(gymSet.name.value),
+          enabled: const Value(true),
+        ),
+      );
+      _exercises.sort((a, b) {
+        if (a.enabled.value != b.enabled.value) {
+          return b.enabled.value ? 1 : -1;
+        }
+        return a.exercise.value.compareTo(b.exercise.value);
+      });
       _search = '';
     });
     _searchCtrl.text = '';
@@ -90,10 +99,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    _exercises = context.select<PlanState, List<PlanExercisesCompanion>>(
-      (value) => value.exercises,
-    );
-
     var title = widget.plan.days.value.replaceAll(",", ", ");
     if (title.isNotEmpty)
       title = title[0].toUpperCase() + title.substring(1).toLowerCase();
@@ -194,7 +199,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
               ),
             ),
             const SizedBox(height: 6),
-            ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
+            if (_loadingExercises)
+              const Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else
+              ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
             SizedBox(height: desktop ? 40 : 176),
           ],
         ),
@@ -224,6 +235,16 @@ class _EditPlanPageState extends State<EditPlanPage> {
     _titleCtrl.text = widget.plan.title.value ?? "";
     final list = widget.plan.days.value.split(',');
     _days = weekdays.map((day) => list.contains(day)).toList();
+    _loadExercises();
+  }
+
+  Future<void> _loadExercises() async {
+    final exercises = await loadPlanExerciseDrafts(widget.plan);
+    if (!mounted) return;
+    setState(() {
+      _exercises = exercises;
+      _loadingExercises = false;
+    });
   }
 
   Iterable<PlanExercisesCompanion> _orderedExercises(int planId) sync* {
@@ -277,8 +298,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     if (!mounted) return;
-    final state = context.read<PlanState>();
-    state.updatePlans(null);
     Navigator.pop(context);
   }
 }

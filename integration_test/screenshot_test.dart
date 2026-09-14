@@ -7,11 +7,9 @@ import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/plan/plans_page.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +35,8 @@ Future<void> appWrapper(WidgetTester tester) async {
     ),
   );
   final settings = await (db.settings.select()..limit(1)).getSingle();
-  final settingsState = SettingsState(settings);
 
-  await tester.pumpWidget(app.appProviders(settingsState));
+  await tester.pumpWidget(app.appProviders(settings));
 }
 
 BuildContext getBuildContext(WidgetTester tester, String tabBarState) {
@@ -226,9 +223,7 @@ void main() {
         tester: tester,
         screenshotName: '7_en-US',
         navigateToPage: (context) async {
-          final state = context.read<PlanState>();
           final plan = await (db.plans.select()..limit(1)).getSingle();
-          await state.setExercises(plan.toCompanion(false));
           if (!context.mounted) return;
           navigateTo(
             context: context,

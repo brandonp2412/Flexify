@@ -4,7 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plans_list.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
@@ -56,13 +56,13 @@ class _PlansPageWidget extends StatefulWidget {
   const _PlansPageWidget({required this.navKey});
 
   @override
-  createState() => _PlansPageWidgetState();
+  State<_PlansPageWidget> createState() => _PlansPageWidgetState();
 }
 
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
-  PlanState? _state;
   String _search = '';
-  List<Plan>? _filtered;
+  late Stream<List<Plan>> _plansStream;
+  late Stream<List<PlanExercise>> _planExercisesStream;
 
   final _selection = SelectionController<int>();
   final _scroll = ScrollController();
@@ -70,69 +70,48 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   @override
   void initState() {
     super.initState();
-    _state = context.read<PlanState>();
-    _state?.addListener(_onPlansStateChanged);
-    _filterPlans();
+    _createStreams();
+    dbVersion.addListener(_onDatabaseChanged);
   }
 
   @override
   void dispose() {
-    _state?.removeListener(_onPlansStateChanged);
+    dbVersion.removeListener(_onDatabaseChanged);
     _scroll.dispose();
     super.dispose();
   }
 
-  void _onPlansStateChanged() {
-    _filterPlans();
+  void _createStreams() {
+    _plansStream = watchPlans();
+    _planExercisesStream = db.planExercises.select().watch();
   }
 
-  Future<void> _filterPlans() async {
-    if (_state == null) return;
+  void _onDatabaseChanged() {
+    if (!mounted) return;
+    setState(_createStreams);
+  }
 
-    final allPlans = _state!.plans;
+  List<Plan> _filterPlans(List<Plan> plans, List<PlanExercise> exercises) {
+    if (_search.isEmpty) return plans;
 
-    if (_search.isEmpty) {
-      if (!mounted) return;
-      setState(() => _filtered = allPlans.toList());
-      return;
-    }
+    final search = _search.toLowerCase();
+    final matchingPlanIds = exercises
+        .where((exercise) => exercise.exercise.toLowerCase().contains(search))
+        .map((exercise) => exercise.planId)
+        .toSet();
 
-    final lowerSearch = _search.toLowerCase();
-    final escapedSearch = _search
-        .replaceAll('~', '~~')
-        .replaceAll('%', '~%')
-        .replaceAll('_', '~_');
-
-    final matchingIds =
-        await (db.planExercises.selectOnly()
-              ..addColumns([db.planExercises.planId])
-              ..where(
-                db.planExercises.exercise.like(
-                  '%$escapedSearch%',
-                  escapeChar: '~',
-                ),
-              ))
-            .map((row) => row.read(db.planExercises.planId))
-            .get();
-
-    final matchingIdSet = matchingIds.whereType<int>().toSet();
-
-    final tempFiltered = allPlans
+    return plans
         .where(
           (plan) =>
-              plan.title?.toLowerCase().contains(lowerSearch) == true ||
-              plan.days.toLowerCase().contains(lowerSearch) ||
-              matchingIdSet.contains(plan.id),
+              plan.title?.toLowerCase().contains(search) == true ||
+              plan.days.toLowerCase().contains(search) ||
+              matchingPlanIds.contains(plan.id),
         )
         .toList();
-
-    if (mounted) setState(() => _filtered = tempFiltered);
   }
 
   Future<void> _addPlan() async {
     const plan = PlansCompanion(days: drift.Value(''));
-    await _state!.setExercises(plan);
-    if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const EditPlanPage(plan: plan)),
     );
@@ -140,128 +119,128 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _state = context.watch<PlanState>();
     final desktop = isDesktopLayout(context);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: desktop
-          ? AppBar(
-              title: const Text('Plans'),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: FilledButton.icon(
-                    onPressed: _addPlan,
-                    icon: const Icon(Icons.add_rounded),
-                    label: const Text('New plan'),
+    return StreamBuilder<List<Plan>>(
+      stream: _plansStream,
+      builder: (context, plansSnapshot) => StreamBuilder<List<PlanExercise>>(
+        stream: _planExercisesStream,
+        builder: (context, exercisesSnapshot) {
+          final plans = plansSnapshot.data ?? const <Plan>[];
+          final exercises = exercisesSnapshot.data ?? const <PlanExercise>[];
+          final filtered = _filterPlans(plans, exercises);
+
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: desktop
+                ? AppBar(
+                    title: const Text('Plans'),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: FilledButton.icon(
+                          onPressed: _addPlan,
+                          icon: const Icon(Icons.add_rounded),
+                          label: const Text('New plan'),
+                        ),
+                      ),
+                    ],
+                  )
+                : null,
+            body: Stack(
+              children: [
+                Positioned.fill(
+                  child: PlansList(
+                    scroll: _scroll,
+                    plans: plansSnapshot.hasData ? filtered : null,
+                    navKey: widget.navKey,
+                    selected: _selection.selected,
+                    search: _search,
+                    onSelect: (id) {
+                      setState(() => _selection.toggle(id));
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: AppSearch(
+                    hintText: 'Search plans...',
+                    controller: _selection,
+                    onShare: () async {
+                      final selectedPlans = plans
+                          .where((plan) => _selection.contains(plan.id))
+                          .toList();
+
+                      final summaries = await Future.wait(
+                        selectedPlans.map((plan) async {
+                          final days = plan.days.split(',').join(', ');
+                          final planExercises =
+                              await (db.planExercises.select()
+                                    ..where(
+                                      (tbl) =>
+                                          tbl.planId.equals(plan.id) &
+                                          tbl.enabled,
+                                    )
+                                    ..orderBy([
+                                      (u) => drift.OrderingTerm(
+                                        expression: u.sequence,
+                                      ),
+                                    ]))
+                                  .get();
+                          final exerciseSummary = planExercises
+                              .map((exercise) => '- ${exercise.exercise}')
+                              .join('\n');
+                          return '$days:\n$exerciseSummary';
+                        }),
+                      );
+
+                      await SharePlus.instance.share(
+                        ShareParams(text: summaries.join('\n\n')),
+                      );
+                      if (mounted) setState(_selection.clear);
+                    },
+                    onChange: (value) => setState(() => _search = value),
+                    onDelete: () async {
+                      final selectedIds = _selection.toList();
+                      setState(_selection.clear);
+                      await db.planExercises.deleteWhere(
+                        (tbl) => tbl.planId.isIn(selectedIds),
+                      );
+                      await db.plans.deleteWhere(
+                        (tbl) => tbl.id.isIn(selectedIds),
+                      );
+                    },
+                    onSelectAll: () => setState(() {
+                      _selection.setAll(filtered.map((plan) => plan.id));
+                    }),
+                    onEdit: () async {
+                      final plan = plans
+                          .firstWhere((plan) => plan.id == _selection.first)
+                          .toCompanion(false);
+                      if (!context.mounted) return;
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditPlanPage(plan: plan),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
-            )
-          : null,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: PlansList(
-              scroll: _scroll,
-              plans: _filtered,
-              navKey: widget.navKey,
-              selected: _selection.selected,
-              search: _search,
-              onSelect: (id) {
-                setState(() {
-                  _selection.toggle(id);
-                });
-              },
             ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: AppSearch(
-              hintText: 'Search plans...',
-              controller: _selection,
-              onShare: () async {
-                final plans = (_state?.plans)!
-                    .where((plan) => _selection.contains(plan.id))
-                    .toList();
-
-                final summaries = await Future.wait(
-                  plans.map((plan) async {
-                    final days = plan.days.split(',').join(', ');
-                    final planExercises =
-                        await (db.planExercises.select()
-                              ..where(
-                                (tbl) =>
-                                    tbl.planId.equals(plan.id) & tbl.enabled,
-                              )
-                              ..orderBy([
-                                (u) =>
-                                    drift.OrderingTerm(expression: u.sequence),
-                              ]))
-                            .get();
-                    final exercises = planExercises
-                        .map((pe) => "- ${pe.exercise}")
-                        .join('\n');
-
-                    return "$days:\n$exercises";
-                  }),
-                );
-
-                await SharePlus.instance.share(
-                  ShareParams(text: summaries.join('\n\n')),
-                );
-                if (mounted)
-                  setState(() {
-                    _selection.clear();
-                  });
-              },
-              onChange: (value) {
-                setState(() {
-                  _search = value;
-                  _filterPlans(); // Re-filter when _search changes
-                });
-              },
-              onDelete: () async {
-                final copy = _selection.toList();
-                setState(() {
-                  _selection.clear();
-                });
-                await db.plans.deleteWhere((tbl) => tbl.id.isIn(copy));
-                _state!.updatePlans(null);
-                await db.planExercises.deleteWhere(
-                  (tbl) => tbl.planId.isIn(copy),
-                );
-              },
-              onSelectAll: () => setState(() {
-                _selection.setAll(_filtered?.map((plan) => plan.id) ?? []);
-              }),
-              onEdit: () async {
-                final plan = _state!.plans
-                    .firstWhere((element) => element.id == _selection.first)
-                    .toCompanion(false);
-                await _state!.setExercises(plan);
-                if (context.mounted)
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => EditPlanPage(plan: plan),
-                    ),
-                  );
-              },
-            ),
-          ),
-        ],
+            floatingActionButton: desktop
+                ? null
+                : AnimatedFab(
+                    onPressed: _addPlan,
+                    label: const Text('Add'),
+                    icon: const Icon(Icons.add),
+                    scroll: _scroll,
+                  ),
+          );
+        },
       ),
-      floatingActionButton: desktop
-          ? null
-          : AnimatedFab(
-              onPressed: _addPlan,
-              label: const Text('Add'),
-              icon: const Icon(Icons.add),
-              scroll: _scroll,
-            ),
     );
   }
 }

@@ -11,7 +11,7 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/responsive.dart';
@@ -88,189 +88,205 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? _image;
 
   late Stream<List<PlanExercise>> _stream;
-  StreamSubscription<void>? _gymSetsSub;
-  late PlanState _planState = context.read<PlanState>();
+  late Stream<List<GymCount>> _gymCountsStream;
+  StreamSubscription<Plan?>? _planSub;
   late String _unit = 'kg';
   late String _title = widget.plan.days.replaceAll(",", ", ");
 
   @override
   Widget build(BuildContext context) {
-    _planState = context.watch<PlanState>();
-
     return StreamBuilder(
       stream: _stream,
       builder: (context, snapshot) {
         if (snapshot.data == null) return SizedBox();
 
-        final desktop = isDesktopLayout(context);
-        final colors = Theme.of(context).colorScheme;
+        return StreamBuilder<List<GymCount>>(
+          stream: _gymCountsStream,
+          builder: (context, countsSnapshot) {
+            final counts = countsSnapshot.data ?? const <GymCount>[];
+            final desktop = isDesktopLayout(context);
+            final colors = Theme.of(context).colorScheme;
 
-        Future<void> editPlan() async {
-          final plan =
-              await (db.plans.select()..whereSamePrimaryKey(widget.plan))
-                  .getSingle();
-          await _planState.setExercises(plan.toCompanion(false));
-          if (!context.mounted) return;
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => EditPlanPage(plan: plan.toCompanion(false)),
-            ),
-          );
-        }
-
-        Widget exerciseList() => snapshot.data!.isEmpty
-            ? AppEmptyState(
-                icon: Icons.fitness_center_rounded,
-                title: 'No exercises yet',
-                message: 'Add exercises to this plan before starting it.',
-                actionLabel: 'Edit plan',
-                actionIcon: Icons.edit_rounded,
-                onAction: editPlan,
-              )
-            : StartList(
-                exercises: snapshot.data!,
-                selected: _selected,
-                onSelect: select,
-                plan: widget.plan,
-                onMax: () => _planState.updateGymCounts(widget.plan.id),
+            Future<void> editPlan() async {
+              final plan =
+                  await (db.plans.select()..whereSamePrimaryKey(widget.plan))
+                      .getSingle();
+              if (!context.mounted) return;
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditPlanPage(plan: plan.toCompanion(false)),
+                ),
               );
+            }
 
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBar(
-            title: Text(_title),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
-            ),
-            actions: [
-              IconButton(
-                tooltip: 'Edit plan',
-                onPressed: editPlan,
-                icon: const Icon(Icons.edit),
-              ),
-              if (desktop && snapshot.data!.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: FilledButton.icon(
-                    onPressed: () async => await save(snapshot),
-                    icon: const Icon(Icons.save_rounded),
-                    label: const Text('Save set'),
-                  ),
+            Widget exerciseList() => snapshot.data!.isEmpty
+                ? AppEmptyState(
+                    icon: Icons.fitness_center_rounded,
+                    title: 'No exercises yet',
+                    message: 'Add exercises to this plan before starting it.',
+                    actionLabel: 'Edit plan',
+                    actionIcon: Icons.edit_rounded,
+                    onAction: editPlan,
+                  )
+                : StartList(
+                    exercises: snapshot.data!,
+                    selected: _selected,
+                    onSelect: select,
+                    counts: counts,
+                    plan: widget.plan,
+                  );
+
+            return Scaffold(
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                title: Text(_title),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
                 ),
-            ],
-          ),
-          body: ResponsiveContent(
-            maxWidth: desktopWideContentMaxWidth,
-            desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
-            mobilePadding: const EdgeInsets.all(8),
-            child: Form(
-              key: _key,
-              child: desktop
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(
-                          width: 420,
-                          child: SingleChildScrollView(
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: colors.surfaceContainerLow,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    snapshot.data!.isNotEmpty &&
-                                            _selected < snapshot.data!.length
-                                        ? snapshot.data![_selected].exercise
-                                        : 'Set details',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  if (!_cardio) ...strengthFields(snapshot),
-                                  if (_cardio) ...cardioFields(snapshot),
-                                  unitSelector(),
-                                  notesField(),
-                                  if (snapshot.data!.isNotEmpty &&
-                                      _selected < snapshot.data!.length) ...[
-                                    const SizedBox(height: 16),
-                                    SessionSets(
-                                      exercise:
-                                          snapshot.data![_selected].exercise,
-                                      planId: widget.plan.id,
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: colors.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: exerciseList(),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        if (!_cardio) ...strengthFields(snapshot),
-                        if (_cardio) ...cardioFields(snapshot),
-                        unitSelector(),
-                        notesField(),
-                        Expanded(child: exerciseList()),
-                      ],
+                actions: [
+                  IconButton(
+                    tooltip: 'Edit plan',
+                    onPressed: editPlan,
+                    icon: const Icon(Icons.edit),
+                  ),
+                  if (desktop && snapshot.data!.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: FilledButton.icon(
+                        onPressed: () async => await save(snapshot, counts),
+                        icon: const Icon(Icons.save_rounded),
+                        label: const Text('Save set'),
+                      ),
                     ),
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: desktop || snapshot.data!.isEmpty
-              ? null
-              : Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: bottomNavHeight,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: SessionSets(
-                          key: const Key('start-plan-set-preview'),
-                          exercise: snapshot.data![_selected].exercise,
-                          planId: widget.plan.id,
-                          compact: true,
+                ],
+              ),
+              body: ResponsiveContent(
+                maxWidth: desktopWideContentMaxWidth,
+                desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+                mobilePadding: const EdgeInsets.all(8),
+                child: Form(
+                  key: _key,
+                  child: desktop
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(
+                              width: 420,
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: colors.surfaceContainerLow,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        snapshot.data!.isNotEmpty &&
+                                                _selected <
+                                                    snapshot.data!.length
+                                            ? snapshot.data![_selected].exercise
+                                            : 'Set details',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      if (!_cardio)
+                                        ...strengthFields(snapshot, counts),
+                                      if (_cardio)
+                                        ...cardioFields(snapshot, counts),
+                                      unitSelector(),
+                                      notesField(),
+                                      if (snapshot.data!.isNotEmpty &&
+                                          _selected <
+                                              snapshot.data!.length) ...[
+                                        const SizedBox(height: 16),
+                                        SessionSets(
+                                          exercise: snapshot
+                                              .data![_selected]
+                                              .exercise,
+                                          planId: widget.plan.id,
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: colors.surfaceContainerLow,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                child: exerciseList(),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            if (!_cardio) ...strengthFields(snapshot, counts),
+                            if (_cardio) ...cardioFields(snapshot, counts),
+                            unitSelector(),
+                            notesField(),
+                            Expanded(child: exerciseList()),
+                          ],
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      AnimatedFab(
-                        onPressed: () async => await save(snapshot),
-                        label: const Text("Save"),
-                        icon: const Icon(Icons.save),
-                        bottomPadding: 0,
-                      ),
-                    ],
-                  ),
                 ),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: desktop || snapshot.data!.isEmpty
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: bottomNavHeight,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: SessionSets(
+                              key: const Key('start-plan-set-preview'),
+                              exercise: snapshot.data![_selected].exercise,
+                              planId: widget.plan.id,
+                              compact: true,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          AnimatedFab(
+                            onPressed: () async => await save(snapshot, counts),
+                            label: const Text("Save"),
+                            icon: const Icon(Icons.save),
+                            bottomPadding: 0,
+                          ),
+                        ],
+                      ),
+                    ),
+            );
+          },
         );
       },
     );
   }
 
-  List<Widget> strengthFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
+  List<Widget> strengthFields(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) {
     return [
       StepperField(
         controller: _reps,
@@ -285,11 +301,14 @@ class _StartPlanPageState extends State<StartPlanPage>
         },
       ),
       const SizedBox(height: 8.0),
-      _weightField(snapshot),
+      _weightField(snapshot, counts),
     ];
   }
 
-  List<Widget> cardioFields(AsyncSnapshot<List<PlanExercise>> snapshot) {
+  List<Widget> cardioFields(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) {
     return [
       Row(
         children: [
@@ -334,7 +353,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       Row(
         children: [
           if (_unit == 'kg' || _unit == 'lb' || _unit == 'stone')
-            Expanded(child: _weightField(snapshot))
+            Expanded(child: _weightField(snapshot, counts))
           else
             Expanded(
               child: TextFormField(
@@ -362,7 +381,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 decimal: true,
               ),
               onTap: () => selectAll(_incline),
-              onFieldSubmitted: (value) => save(snapshot),
+              onFieldSubmitted: (value) => save(snapshot, counts),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
                 if (double.tryParse(value) == null) return 'Invalid number';
@@ -375,7 +394,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  StepperField _weightField(AsyncSnapshot<List<PlanExercise>> snapshot) {
+  StepperField _weightField(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) {
     final exerciseName =
         snapshot.data!.isNotEmpty && _selected < snapshot.data!.length
         ? snapshot.data![_selected].exercise
@@ -395,7 +417,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ),
       ),
-      onFieldSubmitted: (value) async => await save(snapshot),
+      onFieldSubmitted: (value) async => await save(snapshot, counts),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Required';
         if (double.tryParse(value) == null) return 'Invalid number';
@@ -510,9 +532,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     _seconds.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
-    _planState.removeListener(planChanged);
-    dbVersion.removeListener(_loadExercises);
-    _gymSetsSub?.cancel();
+    dbVersion.removeListener(_reloadDatabaseStreams);
+    _planSub?.cancel();
 
     super.dispose();
   }
@@ -538,22 +559,38 @@ class _StartPlanPageState extends State<StartPlanPage>
   @override
   void initState() {
     super.initState();
-    _planState.addListener(planChanged);
     WidgetsBinding.instance.addObserver(this);
-    dbVersion.addListener(_loadExercises);
+    dbVersion.addListener(_reloadDatabaseStreams);
 
-    _planState = context.read<PlanState>();
     _title = widget.plan.title?.isNotEmpty == true
         ? widget.plan.title!
         : widget.plan.days.replaceAll(",", ", ");
 
+    _gymCountsStream = watchGymCounts(widget.plan.id);
+    _bindPlanStream();
     _loadExercises();
-    _planState.updateGymCounts(widget.plan.id);
-    _gymSetsSub = db.tableUpdates(TableUpdateQuery.onTable(db.gymSets)).listen((
-      _,
-    ) {
+  }
+
+  void _reloadDatabaseStreams() {
+    if (!mounted) return;
+    _gymCountsStream = watchGymCounts(widget.plan.id);
+    _bindPlanStream();
+    _loadExercises();
+  }
+
+  void _bindPlanStream() {
+    _planSub?.cancel();
+    _planSub = watchPlan(widget.plan.id).listen((plan) {
       if (!mounted) return;
-      _planState.updateGymCounts(widget.plan.id);
+      if (plan == null) {
+        Navigator.of(context).maybePop();
+        return;
+      }
+      setState(() {
+        _title = plan.title?.isNotEmpty == true
+            ? plan.title!
+            : plan.days.replaceAll(',', ', ');
+      });
     });
   }
 
@@ -610,22 +647,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     _notes.text = gymSet.notes ?? "";
   }
 
-  void planChanged() {
-    final index = _planState.plans.indexWhere(
-      (plan) => plan.id == widget.plan.id,
-    );
-    if (index == -1) return Navigator.pop(context);
-
-    final plan = _planState.plans[index];
-    if (!mounted) return;
-    setState(() {
-      _title = plan.title?.isNotEmpty == true
-          ? plan.title!
-          : plan.days.replaceAll(',', ', ');
-    });
-  }
-
-  Future<void> save(AsyncSnapshot<List<PlanExercise>> snapshot) async {
+  Future<void> save(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) async {
     if (!_key.currentState!.validate()) return;
     if (snapshot.data == null || snapshot.data!.isEmpty) return;
     if (_selected >= snapshot.data!.length) return;
@@ -635,6 +660,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final exercise = snapshot.data![_selected].exercise;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
+    final timerState = context.read<TimerState>();
     if (settings.showBodyWeight) {
       bodyWeight = (await getBodyWeight())?.weight;
     }
@@ -658,7 +684,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     if (!mounted) return;
-    final counts = _planState.gymCounts;
     final index = counts.indexWhere((element) => element.name == exercise);
 
     int? max;
@@ -699,7 +724,6 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     restMs ??= settings.timerDuration.toDouble();
 
-    final timerState = context.read<TimerState>();
     if (settings.restTimers && count > warmupSets && peTimers)
       timerState.startTimer(
         "$exercise ($count)",
@@ -715,13 +739,6 @@ class _StartPlanPageState extends State<StartPlanPage>
         _selected < snapshot.data!.length - 1;
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
-    await _planState.updateAfterSave(
-      planId: widget.plan.id,
-      updateCounts:
-          settings.planTrailing == 'PlanTrailing.count' ||
-          settings.planTrailing == 'PlanTrailing.ratio' ||
-          settings.planTrailing == 'PlanTrailing.percent',
-    );
     if (!mounted) return;
     setState(() {
       _updateGymSetTextFields(gymSet);

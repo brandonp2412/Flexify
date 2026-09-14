@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
@@ -45,7 +45,7 @@ void main() {
       gymSetFixture('Bench press', weight: 100, created: now),
     );
 
-    final counts = await PlanState().getGymCounts(planId);
+    final counts = await getGymCounts(planId);
 
     expect(counts, hasLength(1));
     expect(counts.single.name, 'Bench press');
@@ -83,15 +83,14 @@ void main() {
         ),
       ]);
 
-      final state = PlanState();
-      await state.setExercises(plan.toCompanion(false));
+      final exercises = await loadPlanExerciseDrafts(plan.toCompanion(false));
 
-      expect(state.exercises.map((exercise) => exercise.exercise.value), [
+      expect(exercises.map((exercise) => exercise.exercise.value), [
         'Back extension',
         'Arnold press',
         'Barbell biceps curl',
       ]);
-      expect(state.exercises.map((exercise) => exercise.enabled.value), [
+      expect(exercises.map((exercise) => exercise.enabled.value), [
         true,
         true,
         false,

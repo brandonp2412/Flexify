@@ -8,16 +8,13 @@ import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/backup_archive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ImportData extends StatelessWidget {
@@ -166,18 +163,7 @@ $version
       ),
     );
 
-    final importedSettings =
-        await (db.settings.select()..limit(1)).getSingle();
-
-    if (!ctx.mounted) return;
-    final settingsState = ctx.read<SettingsState>();
-    await settingsState.init();
-
-    if (!ctx.mounted) return;
-    final planState = ctx.read<PlanState>();
-    await planState.updatePlans(null);
-    planState.updatePlanCounts();
-    await planState.updateDefaults();
+    final importedSettings = await (db.settings.select()..limit(1)).getSingle();
 
     if (!ctx.mounted) return;
     await showAppPermissionsDialog(
@@ -406,7 +392,6 @@ $version
       );
 
       if (!ctx.mounted) return;
-      ctx.read<PlanState>().updatePlans(null);
       Navigator.pop(ctx);
 
       toast('Plans imported successfully');

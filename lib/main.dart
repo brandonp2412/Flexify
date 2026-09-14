@@ -7,7 +7,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/failed_migrations_page.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/logging.dart';
-import 'package:flexify/plan/plan_state.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +35,8 @@ Future<void> main() async {
         return runApp(FailedMigrationsPage(error: error));
       }
 
-      final state = SettingsState(setting);
       talker.info('Loaded application settings');
-      runApp(appProviders(state));
+      runApp(appProviders(setting));
     },
     (error, stack) =>
         CrashLogger.instance?.record(error, stack, context: 'zone'),
@@ -56,18 +54,25 @@ MethodChannel androidChannel = const MethodChannel(
   "com.presley.flexify/android",
 );
 
-Widget appProviders(SettingsState state) => MultiProvider(
-  providers: [
-    ChangeNotifierProvider(create: (context) => state),
-    ChangeNotifierProxyProvider<SettingsState, TimerState>(
-      create: (context) => TimerState(),
-      update: (context, settings, previous) =>
-          previous!..setKeepScreenOn(settings.value.keepScreenOn),
-    ),
-    ChangeNotifierProvider(create: (context) => PlanState()),
-  ],
-  child: App(),
-);
+Widget appProviders(SettingsState initialSettings) =>
+    ValueListenableBuilder<int>(
+      valueListenable: dbVersion,
+      builder: (context, version, child) => MultiProvider(
+        key: ValueKey(version),
+        providers: [
+          StreamProvider<SettingsState>(
+            initialData: initialSettings,
+            create: (context) => watchSettings(),
+          ),
+          ChangeNotifierProxyProvider<SettingsState, TimerState>(
+            create: (context) => TimerState(),
+            update: (context, settings, previous) =>
+                previous!..setKeepScreenOn(settings.keepScreenOn),
+          ),
+        ],
+        child: const App(),
+      ),
+    );
 
 class App extends StatelessWidget {
   static final _lightScheme = ColorScheme.fromSeed(

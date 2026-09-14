@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -17,6 +17,7 @@ class PlanTile extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final Function(int) onSelect;
   final Set<int> selected;
+  final PlanCount? count;
 
   const PlanTile({
     super.key,
@@ -26,6 +27,7 @@ class PlanTile extends StatefulWidget {
     required this.navigatorKey,
     required this.onSelect,
     required this.selected,
+    required this.count,
   });
 
   @override
@@ -195,15 +197,8 @@ class _PlanTileState extends State<PlanTile> {
                 child: const Icon(Icons.drag_handle),
               );
 
-            final state = context.watch<PlanState>();
-            final idx = state.planCounts.indexWhere(
-              (element) => element.planId == widget.plan.id,
-            );
-            PlanCount count;
-            if (idx != -1)
-              count = state.planCounts[idx];
-            else
-              return const SizedBox();
+            final count = widget.count;
+            if (count == null) return const SizedBox();
 
             if (trailing == PlanTrailing.count)
               return Text(
@@ -223,11 +218,11 @@ class _PlanTileState extends State<PlanTile> {
               );
           },
         ),
-        onTap: () async {
-          if (widget.selected.isNotEmpty)
-            return widget.onSelect(widget.plan.id);
-          final state = context.read<PlanState>();
-          await state.updateGymCounts(widget.plan.id);
+        onTap: () {
+          if (widget.selected.isNotEmpty) {
+            widget.onSelect(widget.plan.id);
+            return;
+          }
 
           widget.navigatorKey.currentState!.push(
             MaterialPageRoute(

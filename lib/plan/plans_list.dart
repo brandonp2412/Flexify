@@ -6,7 +6,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
-import 'package:flexify/plan/plan_state.dart';
+import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -38,11 +38,25 @@ class PlansList extends StatefulWidget {
 
 class _PlansListState extends State<PlansList> {
   List<Plan> _filteredPlans = [];
+  late Stream<List<PlanCount>> _planCountsStream;
 
   @override
   void initState() {
     super.initState();
     _updateFilteredPlans();
+    _planCountsStream = watchPlanCounts();
+    dbVersion.addListener(_onDatabaseChanged);
+  }
+
+  @override
+  void dispose() {
+    dbVersion.removeListener(_onDatabaseChanged);
+    super.dispose();
+  }
+
+  void _onDatabaseChanged() {
+    if (!mounted) return;
+    setState(() => _planCountsStream = watchPlanCounts());
   }
 
   @override
@@ -60,6 +74,15 @@ class _PlansListState extends State<PlansList> {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<List<PlanCount>>(
+      stream: _planCountsStream,
+      builder: (context, snapshot) =>
+          _buildList(context, snapshot.data ?? const <PlanCount>[]),
+    );
+  }
+
+  Widget _buildList(BuildContext context, List<PlanCount> planCounts) {
+    final countsByPlan = {for (final count in planCounts) count.planId: count};
     final searchLabel = widget.search.trim();
     final noneFound = Padding(
       padding: const EdgeInsets.only(top: appSearchHeight),
@@ -80,7 +103,6 @@ class _PlansListState extends State<PlansList> {
             days: const drift.Value(''),
             title: drift.Value(searchLabel),
           );
-          await context.read<PlanState>().setExercises(plan);
           if (context.mounted)
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => EditPlanPage(plan: plan)),
@@ -119,6 +141,7 @@ class _PlansListState extends State<PlansList> {
               index: index,
               navigatorKey: widget.navKey,
               selected: widget.selected,
+              count: countsByPlan[plan.id],
               onSelect: (id) => widget.onSelect(id),
             ),
           );
@@ -128,8 +151,6 @@ class _PlansListState extends State<PlansList> {
           filteredPlans.removeAt(old);
           filteredPlans.insert(idx, temp);
 
-          final state = context.read<PlanState>();
-          state.updatePlans(filteredPlans);
           await db.transaction(() async {
             for (int i = 0; i < filteredPlans.length; i++) {
               final plan = filteredPlans[i];
@@ -159,6 +180,7 @@ class _PlansListState extends State<PlansList> {
             index: index,
             navigatorKey: widget.navKey,
             selected: widget.selected,
+            count: countsByPlan[plan.id],
             onSelect: (id) => widget.onSelect(id),
           ),
         );
