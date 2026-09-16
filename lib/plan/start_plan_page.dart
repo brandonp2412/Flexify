@@ -726,7 +726,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     if (settings.restTimers && count > warmupSets && peTimers)
       timerState.startTimer(
-        "$exercise ($count)",
+        "$exercise ($count/${max ?? settings.maxSets})",
         Duration(milliseconds: restMs.toInt()),
         settings.alarmSound,
         settings.vibrate,

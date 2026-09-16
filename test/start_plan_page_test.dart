@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/stepper_field.dart';
+import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,6 +14,22 @@ Finder textFieldWithLabel(String label) => find.descendant(
   ),
   matching: find.byType(EditableText),
 );
+
+class RecordingTimerState extends TimerState {
+  String? lastTitle;
+
+  @override
+  Future<void> startTimer(
+    String title,
+    Duration rest,
+    String alarmSound,
+    bool vibrate,
+    bool enableSound, [
+    String target = 'timer',
+  ]) async {
+    lastTitle = title;
+  }
+}
 
 void main() {
   testWidgets(
@@ -149,6 +166,46 @@ void main() {
             .get();
     expect(gymSets.length, equals(2));
   });
+
+  testWidgets(
+    'StartPlanPage rest timer title includes current and total sets',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      final database = harness.database;
+      final timerState = RecordingTimerState();
+
+      final id = await database.plans.insertOne(planFixture());
+      final plan =
+          await (database.plans.select()..where((plan) => plan.id.equals(id)))
+              .getSingle();
+      await database.planExercises.insertOne(
+        planExerciseFixture(planId: plan.id, exercise: 'Dumbbell rows'),
+      );
+      await database.settings.update().write(
+        testSettings(
+          restTimers: true,
+          explainedPermissions: true,
+          notificationPermissionRequested: true,
+        ),
+      );
+      final settings = await (database.settings.select()..limit(1)).getSingle();
+
+      await harness.pump(
+        tester,
+        StartPlanPage(plan: plan),
+        timerState: timerState,
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(textFieldWithLabel('Reps'), '8');
+      await tester.enterText(textFieldWithLabel('Weight (kg)'), '30');
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(timerState.lastTitle, 'Dumbbell rows (1/${settings.maxSets})');
+      timerState.dispose();
+    },
+  );
 
   testWidgets('StartPlanPage shows this-session sets after saving', (
     WidgetTester tester,
