@@ -1,0 +1,33 @@
+# Localization
+
+Flexify uses Flutter `gen-l10n` with English as the canonical source. User-visible copy belongs in `lib/l10n/app_en.arb`; generated Dart files are written to `lib/l10n/generated/` and must not be edited by hand.
+
+## Message keys
+
+Use descriptive lowerCamelCase keys based on meaning, not widget position. Prefer names such as `deleteWorkoutTitle` or `restTimerSecondsRemaining` over generic names such as `dialogText1`. Reuse a key only when the message has the same meaning in every context.
+
+Every English message must include an `@key` resource attribute with a useful `description`. Dynamic values must be declared as placeholders in that metadata and referenced by the ARB message. Keep placeholder names stable across every locale.
+
+Example:
+
+```json
+{
+  "setsCompleted": "{count, plural, =0{No sets completed} =1{1 set completed} other{{count} sets completed}}",
+  "@setsCompleted": {
+    "description": "Number of sets completed in the current workout.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+```
+
+Use ICU plural/select messages whenever grammar depends on a count or category. Avoid building visible sentences from localized fragments or string concatenation. Preserve placeholder names, types, and meaning in every translated ARB.
+
+## Visible copy rule
+
+New user-visible English copy in Flutter UI must be added to `app_en.arb` and accessed through `context.l10n` (the thin `BuildContext` extension over generated `AppLocalizations`). Logs, route names, database identifiers, persisted enum values, API/storage values, package identifiers, and user-entered content remain unchanged unless they are separately rendered as UI copy.
+
+Do not add a locale to the app or store metadata until its active ARB contains every English message with reviewed translations and matching ICU/placeholders. English extraction is completed before the first translation wave.

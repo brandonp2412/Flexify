@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "Flexify",
+  "@appTitle": {
+    "description": "Application title shown by the operating system and app shell."
+  }
+}

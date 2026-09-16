@@ -7,6 +7,8 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/failed_migrations_page.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/logging.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +147,9 @@ class App extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           scaffoldMessengerKey: rootScaffoldMessenger,
-          title: 'Flexify',
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          onGenerateTitle: (context) => context.l10n.appTitle,
           theme: ThemeData(
             colorScheme: colors ? lightDynamic : _lightScheme,
             fontFamily: 'Manrope',

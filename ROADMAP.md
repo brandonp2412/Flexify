@@ -30,13 +30,13 @@ Additional locales can be added after the first wave using the same completeness
 
 ## 1. Localization foundation
 
-- [ ] Add Flutter SDK localization support and enable `generate: true` in `pubspec.yaml`.
-- [ ] Add `l10n.yaml` with explicit ARB/source/output configuration.
-- [ ] Create the canonical English ARB file and generated localization entry point.
-- [ ] Wire generated localization delegates, `supportedLocales`, and application title into `MaterialApp`.
-- [ ] Add a small context/helper access pattern only if it materially reduces repetitive generated-localization boilerplate; do not introduce a parallel localization abstraction.
-- [ ] Add localization smoke tests that prove English loads, an alternate locale can load, and locale fallback does not crash.
-- [ ] Document ARB key naming, placeholder metadata, plural/select usage, and the rule that visible copy must no longer be introduced as hard-coded English.
+- [x] Add Flutter SDK localization support and enable `generate: true` in `pubspec.yaml`.
+- [x] Add `l10n.yaml` with explicit ARB/source/output configuration.
+- [x] Create the canonical English ARB file and generated localization entry point.
+- [x] Wire generated localization delegates, `supportedLocales`, and application title into `MaterialApp`.
+- [x] Add a small context/helper access pattern only if it materially reduces repetitive generated-localization boilerplate; do not introduce a parallel localization abstraction.
+- [x] Add localization smoke tests that prove English loads, an alternate locale can load, and locale fallback does not crash.
+- [x] Document ARB key naming, placeholder metadata, plural/select usage, and the rule that visible copy must no longer be introduced as hard-coded English.
 
 ## 2. Locale preference and settings
 
