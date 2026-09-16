@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +37,35 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Light'), findsOne);
+  });
+
+  testWidgets('SettingsPage searches and persists language', (
+    WidgetTester tester,
+  ) async {
+    final harness = await render(tester);
+
+    await tester.enterText(find.bySemanticsLabel('Search...'), 'Language');
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(ListTile, 'Language'), findsOneWidget);
+    expect(find.text('Español'), findsNothing);
+
+    await tester.tap(find.byKey(const Key('language-setting-dropdown')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('English').last);
+    await tester.pumpAndSettle();
+
+    var settings = await (harness.database.settings.select()..limit(1))
+        .getSingle();
+    expect(settings.localeOverride, 'en');
+
+    await tester.tap(find.byKey(const Key('language-setting-dropdown')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('System default').last);
+    await tester.pumpAndSettle();
+
+    settings = await (harness.database.settings.select()..limit(1)).getSingle();
+    expect(settings.localeOverride, isNull);
   });
 
   testWidgets('SettingsPage shows images', (WidgetTester tester) async {

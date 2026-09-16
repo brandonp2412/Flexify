@@ -40,12 +40,12 @@ Additional locales can be added after the first wave using the same completeness
 
 ## 2. Locale preference and settings
 
-- [ ] Add an app language preference with `System default` plus every fully supported locale.
-- [ ] Persist only the locale identifier/override; do not persist translated display strings.
-- [ ] Apply locale changes without requiring an app restart.
-- [ ] Display language names in a clear, stable form and ensure the current choice remains understandable if the UI language changes.
-- [ ] Ensure settings search can find the language setting using the active locale's wording.
-- [ ] Add tests for system-default behavior, persisted overrides, changing locale at runtime, and invalid/removed stored locale values.
+- [x] Add an app language preference with `System default` plus every fully supported locale.
+- [x] Persist only the locale identifier/override; do not persist translated display strings.
+- [x] Apply locale changes without requiring an app restart.
+- [x] Display language names in a clear, stable form and ensure the current choice remains understandable if the UI language changes.
+- [x] Ensure settings search can find the language setting using the active locale's wording.
+- [x] Add tests for system-default behavior, persisted overrides, changing locale at runtime, and invalid/removed stored locale values.
 
 ## 3. Migrate all user-facing English strings
 

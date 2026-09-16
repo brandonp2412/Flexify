@@ -3,6 +3,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +16,61 @@ List<Widget> getAppearanceSettings(
   String term,
   SettingsState settings,
 ) {
+  final l10n = context.l10n;
+  final normalizedTerm = term.trim().toLowerCase();
+  final languageSearchText = [
+    l10n.settingsLanguage,
+    l10n.settingsLanguageDescription,
+    l10n.languageSystemDefault,
+    ...AppLocalizations.supportedLocales.map(
+      (locale) => localeDisplayName(l10n, locale),
+    ),
+  ].join(' ').toLowerCase();
+  final selectedLocale =
+      canonicalLocaleOverride(settings.value.localeOverride) ?? '';
+
   return [
+    if (languageSearchText.contains(normalizedTerm))
+      Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+        child: Column(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.language_rounded),
+              title: Text(l10n.settingsLanguage, textAlign: TextAlign.center),
+              subtitle: Text(
+                l10n.settingsLanguageDescription,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            DropdownButtonFormField<String>(
+              key: const Key('language-setting-dropdown'),
+              initialValue: selectedLocale,
+              decoration: InputDecoration(labelText: l10n.settingsLanguage),
+              items: [
+                DropdownMenuItem(
+                  value: '',
+                  child: Text(l10n.languageSystemDefault),
+                ),
+                ...AppLocalizations.supportedLocales.map(
+                  (locale) => DropdownMenuItem(
+                    value: localeIdentifier(locale),
+                    child: Text(localeDisplayName(l10n, locale)),
+                  ),
+                ),
+              ],
+              onChanged: (value) {
+                if (value == null) return;
+                db.settings.update().write(
+                  SettingsCompanion(
+                    localeOverride: Value(value.isEmpty ? null : value),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     if ('theme'.contains(term.toLowerCase()))
       Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
@@ -52,10 +109,7 @@ List<Widget> getAppearanceSettings(
           leading: settings.value.themeMode == 'ThemeMode.amoled'
               ? const Icon(Icons.contrast)
               : const Icon(Icons.contrast_outlined),
-          title: const Text(
-            'Pure black (AMOLED)',
-            textAlign: TextAlign.center,
-          ),
+          title: const Text('Pure black (AMOLED)', textAlign: TextAlign.center),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               themeMode: Value(
@@ -168,10 +222,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: 'Use wavy curves in the graphs page',
         child: ListTile(
-          title: const Text(
-            'Curve line graphs',
-            textAlign: TextAlign.center,
-          ),
+          title: const Text('Curve line graphs', textAlign: TextAlign.center),
           leading: settings.value.curveLines
               ? const Icon(Icons.insights)
               : const Icon(Icons.insights_outlined),

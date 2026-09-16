@@ -15,6 +15,7 @@ class Settings extends Table {
   BoolColumn get groupHistory => boolean()();
   IntColumn get id => integer().autoIncrement()();
   TextColumn get longDateFormat => text()();
+  TextColumn get localeOverride => text().nullable()();
   IntColumn get maxSets => integer()();
   BoolColumn get notifications => boolean().withDefault(const Constant(true))();
   BoolColumn get notificationPermissionRequested =>

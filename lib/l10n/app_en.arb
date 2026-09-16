@@ -3,5 +3,61 @@
   "appTitle": "Flexify",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
+  },
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Title for the application language preference."
+  },
+  "settingsLanguageDescription": "Choose the language used by Flexify",
+  "@settingsLanguageDescription": {
+    "description": "Description for the application language preference."
+  },
+  "languageSystemDefault": "System default",
+  "@languageSystemDefault": {
+    "description": "Language option that follows the device or operating system locale."
+  },
+  "languageNameEnglish": "English",
+  "@languageNameEnglish": {
+    "description": "Stable display name for the English locale."
+  },
+  "languageNameSpanish": "Español",
+  "@languageNameSpanish": {
+    "description": "Stable native display name for the Spanish locale."
+  },
+  "languageNameFrench": "Français",
+  "@languageNameFrench": {
+    "description": "Stable native display name for the French locale."
+  },
+  "languageNameGerman": "Deutsch",
+  "@languageNameGerman": {
+    "description": "Stable native display name for the German locale."
+  },
+  "languageNameItalian": "Italiano",
+  "@languageNameItalian": {
+    "description": "Stable native display name for the Italian locale."
+  },
+  "languageNamePortugueseBrazil": "Português (Brasil)",
+  "@languageNamePortugueseBrazil": {
+    "description": "Stable native display name for the Brazilian Portuguese locale."
+  },
+  "languageNameDutch": "Nederlands",
+  "@languageNameDutch": {
+    "description": "Stable native display name for the Dutch locale."
+  },
+  "languageNamePolish": "Polski",
+  "@languageNamePolish": {
+    "description": "Stable native display name for the Polish locale."
+  },
+  "languageNameJapanese": "日本語",
+  "@languageNameJapanese": {
+    "description": "Stable native display name for the Japanese locale."
+  },
+  "languageNameKorean": "한국어",
+  "@languageNameKorean": {
+    "description": "Stable native display name for the Korean locale."
+  },
+  "languageNameSimplifiedChinese": "简体中文",
+  "@languageNameSimplifiedChinese": {
+    "description": "Stable native display name for the Simplified Chinese locale."
   }
 }

@@ -546,10 +546,13 @@ class AppDatabase extends _$AppDatabase {
             schema.settings.notificationPermissionRequested,
           );
         },
+        from56To57: (Migrator m, Schema57 schema) async {
+          await m.addColumn(schema.settings, schema.settings.localeOverride);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 56;
+  int get schemaVersion => 57;
 }

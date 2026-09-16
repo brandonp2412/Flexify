@@ -99,6 +99,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Flexify'**
   String get appTitle;
+
+  /// Title for the application language preference.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// Description for the application language preference.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the language used by Flexify'**
+  String get settingsLanguageDescription;
+
+  /// Language option that follows the device or operating system locale.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get languageSystemDefault;
+
+  /// Stable display name for the English locale.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageNameEnglish;
+
+  /// Stable native display name for the Spanish locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Español'**
+  String get languageNameSpanish;
+
+  /// Stable native display name for the French locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Français'**
+  String get languageNameFrench;
+
+  /// Stable native display name for the German locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Deutsch'**
+  String get languageNameGerman;
+
+  /// Stable native display name for the Italian locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Italiano'**
+  String get languageNameItalian;
+
+  /// Stable native display name for the Brazilian Portuguese locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Português (Brasil)'**
+  String get languageNamePortugueseBrazil;
+
+  /// Stable native display name for the Dutch locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Nederlands'**
+  String get languageNameDutch;
+
+  /// Stable native display name for the Polish locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Polski'**
+  String get languageNamePolish;
+
+  /// Stable native display name for the Japanese locale.
+  ///
+  /// In en, this message translates to:
+  /// **'日本語'**
+  String get languageNameJapanese;
+
+  /// Stable native display name for the Korean locale.
+  ///
+  /// In en, this message translates to:
+  /// **'한국어'**
+  String get languageNameKorean;
+
+  /// Stable native display name for the Simplified Chinese locale.
+  ///
+  /// In en, this message translates to:
+  /// **'简体中文'**
+  String get languageNameSimplifiedChinese;
 }
 
 class _AppLocalizationsDelegate

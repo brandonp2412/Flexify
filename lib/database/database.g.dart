@@ -1370,6 +1370,17 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _localeOverrideMeta = const VerificationMeta(
+    'localeOverride',
+  );
+  @override
+  late final GeneratedColumn<String> localeOverride = GeneratedColumn<String>(
+    'locale_override',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _maxSetsMeta = const VerificationMeta(
     'maxSets',
   );
@@ -1796,6 +1807,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     groupHistory,
     id,
     longDateFormat,
+    localeOverride,
     maxSets,
     notifications,
     notificationPermissionRequested,
@@ -1941,6 +1953,15 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       );
     } else if (isInserting) {
       context.missing(_longDateFormatMeta);
+    }
+    if (data.containsKey('locale_override')) {
+      context.handle(
+        _localeOverrideMeta,
+        localeOverride.isAcceptableOrUnknown(
+          data['locale_override']!,
+          _localeOverrideMeta,
+        ),
+      );
     }
     if (data.containsKey('max_sets')) {
       context.handle(
@@ -2265,6 +2286,10 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         DriftSqlType.string,
         data['${effectivePrefix}long_date_format'],
       )!,
+      localeOverride: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}locale_override'],
+      ),
       maxSets: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}max_sets'],
@@ -2411,6 +2436,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool groupHistory;
   final int id;
   final String longDateFormat;
+  final String? localeOverride;
   final int maxSets;
   final bool notifications;
   final bool notificationPermissionRequested;
@@ -2455,6 +2481,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     required this.groupHistory,
     required this.id,
     required this.longDateFormat,
+    this.localeOverride,
     required this.maxSets,
     required this.notifications,
     required this.notificationPermissionRequested,
@@ -2506,6 +2533,9 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['group_history'] = Variable<bool>(groupHistory);
     map['id'] = Variable<int>(id);
     map['long_date_format'] = Variable<String>(longDateFormat);
+    if (!nullToAbsent || localeOverride != null) {
+      map['locale_override'] = Variable<String>(localeOverride);
+    }
     map['max_sets'] = Variable<int>(maxSets);
     map['notifications'] = Variable<bool>(notifications);
     map['notification_permission_requested'] = Variable<bool>(
@@ -2564,6 +2594,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       groupHistory: Value(groupHistory),
       id: Value(id),
       longDateFormat: Value(longDateFormat),
+      localeOverride: localeOverride == null && nullToAbsent
+          ? const Value.absent()
+          : Value(localeOverride),
       maxSets: Value(maxSets),
       notifications: Value(notifications),
       notificationPermissionRequested: Value(notificationPermissionRequested),
@@ -2620,6 +2653,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       groupHistory: serializer.fromJson<bool>(json['groupHistory']),
       id: serializer.fromJson<int>(json['id']),
       longDateFormat: serializer.fromJson<String>(json['longDateFormat']),
+      localeOverride: serializer.fromJson<String?>(json['localeOverride']),
       maxSets: serializer.fromJson<int>(json['maxSets']),
       notifications: serializer.fromJson<bool>(json['notifications']),
       notificationPermissionRequested: serializer.fromJson<bool>(
@@ -2677,6 +2711,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'groupHistory': serializer.toJson<bool>(groupHistory),
       'id': serializer.toJson<int>(id),
       'longDateFormat': serializer.toJson<String>(longDateFormat),
+      'localeOverride': serializer.toJson<String?>(localeOverride),
       'maxSets': serializer.toJson<int>(maxSets),
       'notifications': serializer.toJson<bool>(notifications),
       'notificationPermissionRequested': serializer.toJson<bool>(
@@ -2728,6 +2763,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     bool? groupHistory,
     int? id,
     String? longDateFormat,
+    Value<String?> localeOverride = const Value.absent(),
     int? maxSets,
     bool? notifications,
     bool? notificationPermissionRequested,
@@ -2774,6 +2810,9 @@ class Setting extends DataClass implements Insertable<Setting> {
     groupHistory: groupHistory ?? this.groupHistory,
     id: id ?? this.id,
     longDateFormat: longDateFormat ?? this.longDateFormat,
+    localeOverride: localeOverride.present
+        ? localeOverride.value
+        : this.localeOverride,
     maxSets: maxSets ?? this.maxSets,
     notifications: notifications ?? this.notifications,
     notificationPermissionRequested:
@@ -2844,6 +2883,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       longDateFormat: data.longDateFormat.present
           ? data.longDateFormat.value
           : this.longDateFormat,
+      localeOverride: data.localeOverride.present
+          ? data.localeOverride.value
+          : this.localeOverride,
       maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
       notifications: data.notifications.present
           ? data.notifications.value
@@ -2942,6 +2984,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('groupHistory: $groupHistory, ')
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
+          ..write('localeOverride: $localeOverride, ')
           ..write('maxSets: $maxSets, ')
           ..write('notifications: $notifications, ')
           ..write(
@@ -2993,6 +3036,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     groupHistory,
     id,
     longDateFormat,
+    localeOverride,
     maxSets,
     notifications,
     notificationPermissionRequested,
@@ -3041,6 +3085,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.groupHistory == this.groupHistory &&
           other.id == this.id &&
           other.longDateFormat == this.longDateFormat &&
+          other.localeOverride == this.localeOverride &&
           other.maxSets == this.maxSets &&
           other.notifications == this.notifications &&
           other.notificationPermissionRequested ==
@@ -3088,6 +3133,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> groupHistory;
   final Value<int> id;
   final Value<String> longDateFormat;
+  final Value<String?> localeOverride;
   final Value<int> maxSets;
   final Value<bool> notifications;
   final Value<bool> notificationPermissionRequested;
@@ -3132,6 +3178,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.groupHistory = const Value.absent(),
     this.id = const Value.absent(),
     this.longDateFormat = const Value.absent(),
+    this.localeOverride = const Value.absent(),
     this.maxSets = const Value.absent(),
     this.notifications = const Value.absent(),
     this.notificationPermissionRequested = const Value.absent(),
@@ -3177,6 +3224,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     required bool groupHistory,
     this.id = const Value.absent(),
     required String longDateFormat,
+    this.localeOverride = const Value.absent(),
     required int maxSets,
     this.notifications = const Value.absent(),
     this.notificationPermissionRequested = const Value.absent(),
@@ -3237,6 +3285,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? groupHistory,
     Expression<int>? id,
     Expression<String>? longDateFormat,
+    Expression<String>? localeOverride,
     Expression<int>? maxSets,
     Expression<bool>? notifications,
     Expression<bool>? notificationPermissionRequested,
@@ -3283,6 +3332,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (groupHistory != null) 'group_history': groupHistory,
       if (id != null) 'id': id,
       if (longDateFormat != null) 'long_date_format': longDateFormat,
+      if (localeOverride != null) 'locale_override': localeOverride,
       if (maxSets != null) 'max_sets': maxSets,
       if (notifications != null) 'notifications': notifications,
       if (notificationPermissionRequested != null)
@@ -3335,6 +3385,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Value<bool>? groupHistory,
     Value<int>? id,
     Value<String>? longDateFormat,
+    Value<String?>? localeOverride,
     Value<int>? maxSets,
     Value<bool>? notifications,
     Value<bool>? notificationPermissionRequested,
@@ -3380,6 +3431,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       groupHistory: groupHistory ?? this.groupHistory,
       id: id ?? this.id,
       longDateFormat: longDateFormat ?? this.longDateFormat,
+      localeOverride: localeOverride ?? this.localeOverride,
       maxSets: maxSets ?? this.maxSets,
       notifications: notifications ?? this.notifications,
       notificationPermissionRequested:
@@ -3455,6 +3507,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (longDateFormat.present) {
       map['long_date_format'] = Variable<String>(longDateFormat.value);
+    }
+    if (localeOverride.present) {
+      map['locale_override'] = Variable<String>(localeOverride.value);
     }
     if (maxSets.present) {
       map['max_sets'] = Variable<int>(maxSets.value);
@@ -3571,6 +3626,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('groupHistory: $groupHistory, ')
           ..write('id: $id, ')
           ..write('longDateFormat: $longDateFormat, ')
+          ..write('localeOverride: $localeOverride, ')
           ..write('maxSets: $maxSets, ')
           ..write('notifications: $notifications, ')
           ..write(
@@ -5531,6 +5587,7 @@ typedef $$SettingsTableCreateCompanionBuilder =
       required bool groupHistory,
       Value<int> id,
       required String longDateFormat,
+      Value<String?> localeOverride,
       required int maxSets,
       Value<bool> notifications,
       Value<bool> notificationPermissionRequested,
@@ -5577,6 +5634,7 @@ typedef $$SettingsTableUpdateCompanionBuilder =
       Value<bool> groupHistory,
       Value<int> id,
       Value<String> longDateFormat,
+      Value<String?> localeOverride,
       Value<int> maxSets,
       Value<bool> notifications,
       Value<bool> notificationPermissionRequested,
@@ -5676,6 +5734,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<String> get longDateFormat => $composableBuilder(
     column: $table.longDateFormat,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localeOverride => $composableBuilder(
+    column: $table.localeOverride,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5904,6 +5967,11 @@ class $$SettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get localeOverride => $composableBuilder(
+    column: $table.localeOverride,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get maxSets => $composableBuilder(
     column: $table.maxSets,
     builder: (column) => ColumnOrderings(column),
@@ -6128,6 +6196,11 @@ class $$SettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get localeOverride => $composableBuilder(
+    column: $table.localeOverride,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<int> get maxSets =>
       $composableBuilder(column: $table.maxSets, builder: (column) => column);
 
@@ -6311,6 +6384,7 @@ class $$SettingsTableTableManager
                 Value<bool> groupHistory = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> longDateFormat = const Value.absent(),
+                Value<String?> localeOverride = const Value.absent(),
                 Value<int> maxSets = const Value.absent(),
                 Value<bool> notifications = const Value.absent(),
                 Value<bool> notificationPermissionRequested =
@@ -6356,6 +6430,7 @@ class $$SettingsTableTableManager
                 groupHistory: groupHistory,
                 id: id,
                 longDateFormat: longDateFormat,
+                localeOverride: localeOverride,
                 maxSets: maxSets,
                 notifications: notifications,
                 notificationPermissionRequested:
@@ -6403,6 +6478,7 @@ class $$SettingsTableTableManager
                 required bool groupHistory,
                 Value<int> id = const Value.absent(),
                 required String longDateFormat,
+                Value<String?> localeOverride = const Value.absent(),
                 required int maxSets,
                 Value<bool> notifications = const Value.absent(),
                 Value<bool> notificationPermissionRequested =
@@ -6448,6 +6524,7 @@ class $$SettingsTableTableManager
                 groupHistory: groupHistory,
                 id: id,
                 longDateFormat: longDateFormat,
+                localeOverride: localeOverride,
                 maxSets: maxSets,
                 notifications: notifications,
                 notificationPermissionRequested:

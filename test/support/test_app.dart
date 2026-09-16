@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -51,6 +52,8 @@ class FlexifyTestHarness {
         ],
         child: MaterialApp(
           scaffoldMessengerKey: rootScaffoldMessenger,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: home,
         ),
       ),

@@ -9,6 +9,7 @@ import 'package:flexify/home_page.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +119,9 @@ class App extends StatelessWidget {
     final themeMode = context.select<SettingsState, String>(
       (settings) => settings.value.themeMode,
     );
+    final localeOverride = context.select<SettingsState, String?>(
+      (settings) => settings.value.localeOverride,
+    );
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
@@ -149,6 +153,7 @@ class App extends StatelessWidget {
           scaffoldMessengerKey: rootScaffoldMessenger,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          locale: localeOverrideFromIdentifier(localeOverride),
           onGenerateTitle: (context) => context.l10n.appTitle,
           theme: ThemeData(
             colorScheme: colors ? lightDynamic : _lightScheme,
