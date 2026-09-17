@@ -176,6 +176,29 @@ class MainActivity : FlutterActivity() {
                     result.success(null)
                 }
 
+                "setBackupLocalizations" -> {
+                    val keys = listOf(
+                        "backupChannelName",
+                        "backupChannelDescription",
+                        "backupCompletedTitle",
+                        "backupFailurePathNotSet",
+                        "backupFailureDirectoryUnavailable",
+                        "backupFailureCreateFile",
+                        "backupFailureAppFilesUnavailable",
+                        "backupFailureDatabaseMissing",
+                        "backupFailureOutputUnavailable",
+                        "backupFailureUnknown",
+                        "shareLabel"
+                    )
+                    setBackupLocalizations(
+                        context,
+                        keys.associateWith { call.argument<String>(it).orEmpty() }
+                    )
+                    val (automaticBackups, backupPath) = getSettings(context)
+                    if (automaticBackups && backupPath != null) scheduleBackups(context)
+                    result.success(true)
+                }
+
                 "getProgress" -> {
                     if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
                         result.success(

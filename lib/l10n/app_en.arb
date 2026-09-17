@@ -1591,6 +1591,46 @@
   "@backupSettingsChannelDescription": {
     "description": "Notification channel description for automatic backups."
   },
+  "backupChannelName": "Backup channel",
+  "@backupChannelName": {
+    "description": "Android notification channel name for completed automatic backups."
+  },
+  "backupChannelDescription": "Automatic backups of Flexify data and images",
+  "@backupChannelDescription": {
+    "description": "Android notification channel description for automatic backups."
+  },
+  "backupCompletedTitle": "Backed up data and images",
+  "@backupCompletedTitle": {
+    "description": "Android notification title shown after an automatic backup succeeds."
+  },
+  "backupFailurePathNotSet": "Backup failed: backup path not set. Automatic backups disabled.",
+  "@backupFailurePathNotSet": {
+    "description": "Android toast shown when an automatic backup has no destination path."
+  },
+  "backupFailureDirectoryUnavailable": "Backup failed: could not access backup directory. Automatic backups disabled.",
+  "@backupFailureDirectoryUnavailable": {
+    "description": "Android toast shown when the automatic backup directory cannot be accessed."
+  },
+  "backupFailureCreateFile": "Backup failed: could not create backup file. Automatic backups disabled.",
+  "@backupFailureCreateFile": {
+    "description": "Android toast shown when an automatic backup archive cannot be created."
+  },
+  "backupFailureAppFilesUnavailable": "Backup failed: could not access application files directory. Automatic backups disabled.",
+  "@backupFailureAppFilesUnavailable": {
+    "description": "Android toast shown when app files are unavailable during automatic backup."
+  },
+  "backupFailureDatabaseMissing": "Backup failed: database file not found. Automatic backups disabled.",
+  "@backupFailureDatabaseMissing": {
+    "description": "Android toast shown when the database is missing during automatic backup."
+  },
+  "backupFailureOutputUnavailable": "Backup failed: could not open output stream. Automatic backups disabled.",
+  "@backupFailureOutputUnavailable": {
+    "description": "Android toast shown when the automatic backup destination cannot be opened."
+  },
+  "backupFailureUnknown": "Backup failed. Automatic backups disabled.",
+  "@backupFailureUnknown": {
+    "description": "Android toast shown for an unexpected automatic backup failure."
+  },
   "appPermissionsDescription": "Review access required by your enabled features",
   "@appPermissionsDescription": {
     "description": "Description for the app permissions settings entry."

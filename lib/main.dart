@@ -12,11 +12,48 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
+String? _lastSyncedBackupLocale;
+
+void _syncBackupLocalizations(AppLocalizations l10n) {
+  if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+  if (_lastSyncedBackupLocale == l10n.localeName) return;
+  _lastSyncedBackupLocale = l10n.localeName;
+  unawaited(
+    androidChannel
+        .invokeMethod<bool>('setBackupLocalizations', {
+          'backupChannelName': l10n.backupChannelName,
+          'backupChannelDescription': l10n.backupChannelDescription,
+          'backupCompletedTitle': l10n.backupCompletedTitle,
+          'backupFailurePathNotSet': l10n.backupFailurePathNotSet,
+          'backupFailureDirectoryUnavailable':
+              l10n.backupFailureDirectoryUnavailable,
+          'backupFailureCreateFile': l10n.backupFailureCreateFile,
+          'backupFailureAppFilesUnavailable':
+              l10n.backupFailureAppFilesUnavailable,
+          'backupFailureDatabaseMissing': l10n.backupFailureDatabaseMissing,
+          'backupFailureOutputUnavailable': l10n.backupFailureOutputUnavailable,
+          'backupFailureUnknown': l10n.backupFailureUnknown,
+          'shareLabel': l10n.actionShare,
+        })
+        .then<void>(
+          (_) {},
+          onError: (Object error, StackTrace stackTrace) {
+            _lastSyncedBackupLocale = null;
+            talker.handle(
+              error,
+              stackTrace,
+              'Failed to sync backup localizations',
+            );
+          },
+        ),
+  );
+}
 
 Future<void> main() async {
   runZonedGuarded(
@@ -155,6 +192,7 @@ class App extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: localeOverrideFromIdentifier(localeOverride),
           builder: (context, child) {
+            _syncBackupLocalizations(context.l10n);
             context.read<TimerState>().setNotificationLocalizations(
               timerUpTitle: context.l10n.timerUp,
               openNotificationLabel: context.l10n.openNotification,

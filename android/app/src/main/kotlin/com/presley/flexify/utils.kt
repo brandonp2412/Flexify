@@ -9,7 +9,29 @@ import android.util.Log
 import java.io.File
 import java.util.Calendar
 
+private const val BACKUP_LOCALIZATION_PREFERENCES = "backup_localizations"
+
+fun setBackupLocalizations(context: Context, values: Map<String, String>) {
+    context.getSharedPreferences(BACKUP_LOCALIZATION_PREFERENCES, Context.MODE_PRIVATE)
+        .edit()
+        .apply {
+            values.forEach { (key, value) -> putString(key, value) }
+        }
+        .apply()
+}
+
+fun getBackupLocalization(context: Context, key: String): String {
+    return context.getSharedPreferences(BACKUP_LOCALIZATION_PREFERENCES, Context.MODE_PRIVATE)
+        .getString(key, "")
+        .orEmpty()
+}
+
+fun hasBackupLocalizations(context: Context): Boolean {
+    return getBackupLocalization(context, "backupCompletedTitle").isNotEmpty()
+}
+
 fun scheduleBackups(context: Context) {
+    if (!hasBackupLocalizations(context)) return
     val backupIntent =
         Intent(context, BackupReceiver::class.java).apply { setPackage(context.packageName) }
     val pendingIntent = PendingIntent.getBroadcast(

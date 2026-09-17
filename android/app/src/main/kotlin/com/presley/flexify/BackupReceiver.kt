@@ -37,7 +37,7 @@ class BackupReceiver : BroadcastReceiver() {
             if (!enabled) return
 
             if (backupPath == null) {
-                failBackup(context, "Backup path not set")
+                failBackup(context, getBackupLocalization(context, "backupFailurePathNotSet"))
                 return
             }
 
@@ -50,10 +50,10 @@ class BackupReceiver : BroadcastReceiver() {
             val notificationManager = NotificationManagerCompat.from(context)
             val channel = NotificationChannel(
                 channelId,
-                "Backup channel",
+                getBackupLocalization(context, "backupChannelName"),
                 NotificationManager.IMPORTANCE_DEFAULT
             )
-            channel.description = "Automatic backups of Flexify data and images"
+            channel.description = getBackupLocalization(context, "backupChannelDescription")
             notificationManager.createNotificationChannel(channel)
 
             if (ActivityCompat.checkSelfPermission(
@@ -64,7 +64,10 @@ class BackupReceiver : BroadcastReceiver() {
 
             val dir = DocumentFile.fromTreeUri(context, backupUri)
             if (dir == null) {
-                failBackup(context, "Could not access backup directory")
+                failBackup(
+                    context,
+                    getBackupLocalization(context, "backupFailureDirectoryUnavailable")
+                )
                 return
             }
 
@@ -72,7 +75,7 @@ class BackupReceiver : BroadcastReceiver() {
             val fileName = "flexify-$yyyyMMdd.zip"
             val file = dir.createFile("application/zip", fileName)
             if (file == null) {
-                failBackup(context, "Could not create backup file")
+                failBackup(context, getBackupLocalization(context, "backupFailureCreateFile"))
                 return
             }
 
@@ -104,24 +107,27 @@ class BackupReceiver : BroadcastReceiver() {
             )
             notificationBuilder = notificationBuilder.addAction(
                 R.drawable.baseline_arrow_downward_24,
-                "Share",
+                getBackupLocalization(context, "shareLabel"),
                 pendingShare
             )
 
             val parentDir = context.filesDir.parentFile
             if (parentDir == null) {
-                failBackup(context, "Could not access application files directory")
+                failBackup(
+                    context,
+                    getBackupLocalization(context, "backupFailureAppFilesUnavailable")
+                )
                 return
             }
             val dbFile = File(File(parentDir, "app_flutter"), "flexify.sqlite")
             if (!dbFile.exists()) {
-                failBackup(context, "Database file not found")
+                failBackup(context, getBackupLocalization(context, "backupFailureDatabaseMissing"))
                 return
             }
 
             val outputStream = context.contentResolver.openOutputStream(file.uri)
             if (outputStream == null) {
-                failBackup(context, "Could not open output stream")
+                failBackup(context, getBackupLocalization(context, "backupFailureOutputUnavailable"))
                 return
             }
 
@@ -140,24 +146,22 @@ class BackupReceiver : BroadcastReceiver() {
                         }
                     }
                 }
-                notificationBuilder = notificationBuilder.setContentTitle("Backed up data and images")
+                notificationBuilder = notificationBuilder.setContentTitle(
+                    getBackupLocalization(context, "backupCompletedTitle")
+                )
                 notificationManager.notify(2, notificationBuilder.build())
             } finally {
                 temporaryDatabase.delete()
             }
         } catch (error: Exception) {
             Log.e("BackupReceiver", "Error during backup: ${error.message}", error)
-            failBackup(context, error.message ?: "Unknown backup error")
+            failBackup(context, getBackupLocalization(context, "backupFailureUnknown"))
         }
     }
 
     private fun failBackup(context: Context, message: String) {
         setAutomaticBackups(context, false)
-        Toast.makeText(
-            context,
-            "Backup failed: $message. Automatic backups disabled.",
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
     private fun createPortableDatabaseCopy(

@@ -1191,6 +1191,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notifications explaining automatic backups';
 
   @override
+  String get backupChannelName => 'Backup channel';
+
+  @override
+  String get backupChannelDescription =>
+      'Automatic backups of Flexify data and images';
+
+  @override
+  String get backupCompletedTitle => 'Backed up data and images';
+
+  @override
+  String get backupFailurePathNotSet =>
+      'Backup failed: backup path not set. Automatic backups disabled.';
+
+  @override
+  String get backupFailureDirectoryUnavailable =>
+      'Backup failed: could not access backup directory. Automatic backups disabled.';
+
+  @override
+  String get backupFailureCreateFile =>
+      'Backup failed: could not create backup file. Automatic backups disabled.';
+
+  @override
+  String get backupFailureAppFilesUnavailable =>
+      'Backup failed: could not access application files directory. Automatic backups disabled.';
+
+  @override
+  String get backupFailureDatabaseMissing =>
+      'Backup failed: database file not found. Automatic backups disabled.';
+
+  @override
+  String get backupFailureOutputUnavailable =>
+      'Backup failed: could not open output stream. Automatic backups disabled.';
+
+  @override
+  String get backupFailureUnknown =>
+      'Backup failed. Automatic backups disabled.';
+
+  @override
   String get appPermissionsDescription =>
       'Review access required by your enabled features';
 

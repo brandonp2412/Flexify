@@ -2212,6 +2212,66 @@ abstract class AppLocalizations {
   /// **'Notifications explaining automatic backups'**
   String get backupSettingsChannelDescription;
 
+  /// Android notification channel name for completed automatic backups.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup channel'**
+  String get backupChannelName;
+
+  /// Android notification channel description for automatic backups.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic backups of Flexify data and images'**
+  String get backupChannelDescription;
+
+  /// Android notification title shown after an automatic backup succeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Backed up data and images'**
+  String get backupCompletedTitle;
+
+  /// Android toast shown when an automatic backup has no destination path.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed: backup path not set. Automatic backups disabled.'**
+  String get backupFailurePathNotSet;
+
+  /// Android toast shown when the automatic backup directory cannot be accessed.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed: could not access backup directory. Automatic backups disabled.'**
+  String get backupFailureDirectoryUnavailable;
+
+  /// Android toast shown when an automatic backup archive cannot be created.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed: could not create backup file. Automatic backups disabled.'**
+  String get backupFailureCreateFile;
+
+  /// Android toast shown when app files are unavailable during automatic backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed: could not access application files directory. Automatic backups disabled.'**
+  String get backupFailureAppFilesUnavailable;
+
+  /// Android toast shown when the database is missing during automatic backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed: database file not found. Automatic backups disabled.'**
+  String get backupFailureDatabaseMissing;
+
+  /// Android toast shown when the automatic backup destination cannot be opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed: could not open output stream. Automatic backups disabled.'**
+  String get backupFailureOutputUnavailable;
+
+  /// Android toast shown for an unexpected automatic backup failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup failed. Automatic backups disabled.'**
+  String get backupFailureUnknown;
+
   /// Description for the app permissions settings entry.
   ///
   /// In en, this message translates to:
