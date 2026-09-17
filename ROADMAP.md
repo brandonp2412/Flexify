@@ -118,6 +118,7 @@ For every locale below: translate every active ARB key from the canonical Englis
   - [x] Keep language-only `pt` and `zh` fallback catalogs synchronized with the reviewed `pt_BR` and `zh_CN` regional catalogs.
 - [x] Test representative singular/plural/count messages in languages with different plural behavior.
 - [x] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
+  - [x] Keep language-only Portuguese and Chinese system-locale fallbacks localized for relative-time formatting.
 - [x] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
 - [x] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.
 - [x] Verify CJK rendering and font fallback on Android and desktop.

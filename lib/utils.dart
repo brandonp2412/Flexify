@@ -107,8 +107,12 @@ void _registerRelativeTimeLocales() {
   timeago.setLocaleMessages('ko', timeago.KoMessages());
   timeago.setLocaleMessages('nl', timeago.NlMessages());
   timeago.setLocaleMessages('pl', timeago.PlMessages());
-  timeago.setLocaleMessages('pt_BR', timeago.PtBrMessages());
-  timeago.setLocaleMessages('zh_CN', timeago.ZhCnMessages());
+  final portuguese = timeago.PtBrMessages();
+  timeago.setLocaleMessages('pt', portuguese);
+  timeago.setLocaleMessages('pt_BR', portuguese);
+  final simplifiedChinese = timeago.ZhCnMessages();
+  timeago.setLocaleMessages('zh', simplifiedChinese);
+  timeago.setLocaleMessages('zh_CN', simplifiedChinese);
 }
 
 String formatRelativeTime(BuildContext context, DateTime value) {

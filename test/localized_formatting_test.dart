@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 Widget formattingApp(Locale locale, String Function(BuildContext) value) =>
     MaterialApp(
       locale: locale,
-      supportedLocales: const [Locale('en'), Locale('de'), Locale('pt', 'BR')],
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: [
         AppLocalizations.delegate,
         ...GlobalMaterialLocalizations.delegates,
@@ -136,5 +136,35 @@ void main() {
     );
 
     expect(find.textContaining('vor 5 Minuten'), findsOneWidget);
+  });
+
+  testWidgets('uses Brazilian Portuguese for the Portuguese fallback locale', (
+    tester,
+  ) async {
+    final fiveMinutesAgo = DateTime.now().subtract(const Duration(minutes: 5));
+
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('pt', 'PT'),
+        (context) => formatRelativeTime(context, fiveMinutesAgo),
+      ),
+    );
+
+    expect(find.textContaining('há 5 minutos'), findsOneWidget);
+  });
+
+  testWidgets('uses Simplified Chinese for the Chinese fallback locale', (
+    tester,
+  ) async {
+    final fiveMinutesAgo = DateTime.now().subtract(const Duration(minutes: 5));
+
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('zh', 'TW'),
+        (context) => formatRelativeTime(context, fiveMinutesAgo),
+      ),
+    );
+
+    expect(find.textContaining('5 分 前'), findsOneWidget);
   });
 }
