@@ -87,9 +87,7 @@ jobs:
 
       - name: Build ARM64 Matrix bridge
         working-directory: kite
-        env:
-          KITE_ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/28.2.13676358
-        run: tool/build_android_matrix_bridge.sh arm64-v8a
+        run: KITE_ANDROID_NDK_ROOT="$ANDROID_HOME/ndk/28.2.13676358" tool/build_android_matrix_bridge.sh arm64-v8a
 
       - name: Build signed ARM64 APK
         working-directory: kite
