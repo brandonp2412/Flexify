@@ -116,6 +116,21 @@ void main() {
     expect(find.text('Configurações'), findsOneWidget);
   });
 
+  testWidgets('loads Dutch localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('nl'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('Instellingen'), findsOneWidget);
+  });
+
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('zz')));
 
@@ -227,6 +242,21 @@ void main() {
     expect(l10n.editSets(4), 'Editar 4 séries');
   });
 
+  test('formats Dutch singular and plural messages', () {
+    final l10n = lookupAppLocalizations(const Locale('nl'));
+
+    expect(
+      l10n.deleteRecordsConfirmation(1),
+      'Weet je zeker dat je 1 record wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.',
+    );
+    expect(
+      l10n.deleteRecordsConfirmation(3),
+      'Weet je zeker dat je 3 records wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.',
+    );
+    expect(l10n.editSets(1), '1 set bewerken');
+    expect(l10n.editSets(4), '4 sets bewerken');
+  });
+
   test('provides localized measurement unit labels', () {
     final english = lookupAppLocalizations(const Locale('en'));
     final spanish = lookupAppLocalizations(const Locale('es'));
@@ -234,6 +264,7 @@ void main() {
     final german = lookupAppLocalizations(const Locale('de'));
     final italian = lookupAppLocalizations(const Locale('it'));
     final portuguese = lookupAppLocalizations(const Locale('pt', 'BR'));
+    final dutch = lookupAppLocalizations(const Locale('nl'));
 
     expect(english.kilogramsUnit, 'Kilograms (kg)');
     expect(english.poundsUnit, 'Pounds (lb)');
@@ -249,5 +280,7 @@ void main() {
     expect(italian.kilometersUnit, 'Chilometri (km)');
     expect(portuguese.kilogramsUnit, 'Quilogramas (kg)');
     expect(portuguese.kilometersUnit, 'Quilômetros (km)');
+    expect(dutch.kilogramsUnit, 'Kilogram (kg)');
+    expect(dutch.kilometersUnit, 'Kilometer (km)');
   });
 }
