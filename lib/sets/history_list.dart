@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -68,6 +70,7 @@ class _HistoryListState extends State<HistoryList> {
     final distance = formatDisplayNumber(context, gymSet.distance);
     final reps = formatDisplayNumber(context, gymSet.reps);
     final weight = formatDisplayNumber(context, gymSet.weight);
+    final unit = displayMeasurementUnit(context.l10n, gymSet.unit);
     String incline = '';
     if (gymSet.incline != null && gymSet.incline! > 0) {
       incline =
@@ -110,13 +113,13 @@ class _HistoryListState extends State<HistoryList> {
       );
     }
 
-    String trailing = "$reps x $weight ${gymSet.unit}";
+    String trailing = "$reps x $weight $unit";
     if (gymSet.cardio &&
         (gymSet.unit == 'kg' || gymSet.unit == 'lb' || gymSet.unit == 'stone'))
-      trailing = "$weight ${gymSet.unit} / $minutes:$seconds $incline";
+      trailing = "$weight $unit / $minutes:$seconds $incline";
     else if (gymSet.cardio &&
         (gymSet.unit == 'km' || gymSet.unit == 'mi' || gymSet.unit == 'kcal'))
-      trailing = "$distance ${gymSet.unit} / $minutes:$seconds $incline";
+      trailing = "$distance $unit / $minutes:$seconds $incline";
 
     return Column(
       children: [

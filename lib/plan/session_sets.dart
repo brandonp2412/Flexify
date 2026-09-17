@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' hide Column;
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -235,6 +236,7 @@ class _SetChip extends StatelessWidget {
   });
 
   String _value(BuildContext context) {
+    final unit = displayMeasurementUnit(context.l10n, _gymSet.unit);
     if (_gymSet.cardio &&
         (_gymSet.unit == 'kg' ||
             _gymSet.unit == 'lb' ||
@@ -244,12 +246,12 @@ class _SetChip extends StatelessWidget {
         2,
         '0',
       );
-      return "${formatDisplayNumber(context, _gymSet.weight)} ${_gymSet.unit} / $minutes:$seconds";
+      return "${formatDisplayNumber(context, _gymSet.weight)} $unit / $minutes:$seconds";
     }
     if (_gymSet.cardio) {
-      return "${formatDisplayNumber(context, _gymSet.distance)} ${_gymSet.unit}";
+      return "${formatDisplayNumber(context, _gymSet.distance)} $unit";
     }
-    return "${formatDisplayNumber(context, _gymSet.weight)} ${_gymSet.unit} × ${formatDisplayNumber(context, _gymSet.reps)}";
+    return "${formatDisplayNumber(context, _gymSet.weight)} $unit × ${formatDisplayNumber(context, _gymSet.reps)}";
   }
 
   @override

@@ -391,6 +391,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stoneUnit => 'Stone';
 
   @override
+  String get stoneUnitShort => 'st';
+
+  @override
   String get kilometersUnit => 'Kilometers (km)';
 
   @override

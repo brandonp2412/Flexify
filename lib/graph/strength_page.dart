@@ -598,8 +598,9 @@ class _StrengthPageState extends State<StrengthPage> {
             row.value,
             minimumFractionDigits: 2,
           );
+          final displayUnit = displayMeasurementUnit(context.l10n, target);
 
-          String text = "$value$target $created";
+          String text = "$value$displayUnit $created";
           switch (metric) {
             case StrengthMetric.bestReps:
             case StrengthMetric.relativeStrength:
@@ -607,7 +608,7 @@ class _StrengthPageState extends State<StrengthPage> {
               break;
             case StrengthMetric.volume:
             case StrengthMetric.oneRepMax:
-              text = "$value$target $created";
+              text = "$value$displayUnit $created";
               break;
             case StrengthMetric.bestWeight:
               break;

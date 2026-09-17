@@ -766,6 +766,12 @@ abstract class AppLocalizations {
   /// **'Stone'**
   String get stoneUnit;
 
+  /// Compact stone weight unit shown beside measurement values.
+  ///
+  /// In en, this message translates to:
+  /// **'st'**
+  String get stoneUnitShort;
+
   /// Display label for the kilometer unit option.
   ///
   /// In en, this message translates to:

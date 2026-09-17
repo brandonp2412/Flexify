@@ -170,7 +170,7 @@ class _CardioPageState extends State<CardioPage> {
         switch (metric) {
           case CardioMetric.pace:
             text =
-                "${formatDisplayNumber(context, row.value)} ${row.unit} / ${context.l10n.minutesShort}";
+                "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
             break;
           case CardioMetric.duration:
             final minutes = row.value.floor();
@@ -181,7 +181,7 @@ class _CardioPageState extends State<CardioPage> {
             text = "$minutes:$seconds";
             break;
           case CardioMetric.distance:
-            text += " ${row.unit}";
+            text += " ${displayMeasurementUnit(context.l10n, row.unit)}";
             break;
           case CardioMetric.incline:
             text = formatDisplayPercent(context, row.value / 100);
@@ -189,7 +189,7 @@ class _CardioPageState extends State<CardioPage> {
           case CardioMetric.inclineAdjustedPace:
             break;
           case CardioMetric.weight:
-            text += " ${row.unit}";
+            text += " ${displayMeasurementUnit(context.l10n, row.unit)}";
             break;
         }
         return LineTooltipItem(

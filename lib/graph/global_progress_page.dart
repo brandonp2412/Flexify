@@ -541,6 +541,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             row.value,
             minimumFractionDigits: 2,
           );
+          final displayUnit = displayMeasurementUnit(context.l10n, targetUnit);
 
           String value;
           switch (metric) {
@@ -550,11 +551,11 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
               break;
             case StrengthMetric.volume:
             case StrengthMetric.oneRepMax:
-              value = "$formattedValue$targetUnit";
+              value = "$formattedValue$displayUnit";
               break;
             case StrengthMetric.bestWeight:
               value =
-                  "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × $formattedValue$targetUnit";
+                  "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × $formattedValue$displayUnit";
               break;
           }
 

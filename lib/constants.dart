@@ -98,6 +98,9 @@ List<DropdownMenuItem<String>> cardioUnitMenuItems(AppLocalizations l10n) => [
   DropdownMenuItem(value: 'kcal', child: Text(l10n.kilocaloriesUnit)),
 ];
 
+String displayMeasurementUnit(AppLocalizations l10n, String unit) =>
+    unit == 'stone' ? l10n.stoneUnitShort : unit;
+
 List<String> positiveReinforcementMessages(AppLocalizations l10n) => [
   l10n.recordEncouragement01,
   l10n.recordEncouragement02,

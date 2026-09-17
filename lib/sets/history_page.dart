@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/filters.dart';
@@ -235,7 +236,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     final summaries = gymSets
                         .map(
                           (gymSet) =>
-                              "${toString(gymSet.reps)}x${toString(gymSet.weight)}${gymSet.unit} ${gymSet.name}",
+                              "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(context.l10n, gymSet.unit)} ${gymSet.name}",
                         )
                         .join(', ');
                     await SharePlus.instance.share(

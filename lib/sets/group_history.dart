@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/constants.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -92,6 +94,7 @@ class _GroupHistoryState extends State<GroupHistory> {
           final distance = formatDisplayNumber(context, gymSet.distance);
           final reps = formatDisplayNumber(context, gymSet.reps);
           final weight = formatDisplayNumber(context, gymSet.weight);
+          final unit = displayMeasurementUnit(context.l10n, gymSet.unit);
           String incline = '';
           if (gymSet.incline != null && gymSet.incline! > 0) {
             incline =
@@ -135,17 +138,17 @@ class _GroupHistoryState extends State<GroupHistory> {
             );
           }
 
-          String title = "$reps x $weight ${gymSet.unit}";
+          String title = "$reps x $weight $unit";
           if (gymSet.cardio &&
               (gymSet.unit == 'kg' ||
                   gymSet.unit == 'lb' ||
                   gymSet.unit == 'stone')) {
-            title = "$weight ${gymSet.unit} / $minutes:$seconds $incline";
+            title = "$weight $unit / $minutes:$seconds $incline";
           } else if (gymSet.cardio &&
               (gymSet.unit == 'km' ||
                   gymSet.unit == 'mi' ||
                   gymSet.unit == 'kcal')) {
-            title = "$distance ${gymSet.unit} / $minutes:$seconds $incline";
+            title = "$distance $unit / $minutes:$seconds $incline";
           }
 
           return Material(

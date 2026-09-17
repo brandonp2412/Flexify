@@ -5,6 +5,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -30,6 +31,7 @@ class GraphTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String trailing;
+    final unit = displayMeasurementUnit(context.l10n, gymSet.unit.value);
     final showImages = context.select<SettingsState, bool>(
       (settings) => settings.value.showImages,
     );
@@ -44,10 +46,10 @@ class GraphTile extends StatelessWidget {
           ? gymSet.weight.value
           : gymSet.distance.value;
       trailing =
-          "${formatDisplayNumber(context, value)} ${gymSet.unit.value} / $minutes:$seconds";
+          "${formatDisplayNumber(context, value)} $unit / $minutes:$seconds";
     } else {
       trailing =
-          "${formatDisplayNumber(context, gymSet.reps.value)} x ${formatDisplayNumber(context, gymSet.weight.value)} ${gymSet.unit.value}";
+          "${formatDisplayNumber(context, gymSet.reps.value)} x ${formatDisplayNumber(context, gymSet.weight.value)} $unit";
     }
 
     Widget? leading;

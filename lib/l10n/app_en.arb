@@ -522,6 +522,10 @@
   "@stoneUnit": {
     "description": "Display label for the stone weight unit option."
   },
+  "stoneUnitShort": "st",
+  "@stoneUnitShort": {
+    "description": "Compact stone weight unit shown beside measurement values."
+  },
   "kilometersUnit": "Kilometers (km)",
   "@kilometersUnit": {
     "description": "Display label for the kilometer unit option."

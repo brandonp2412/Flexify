@@ -21,7 +21,8 @@ class WeightPage extends StatefulWidget {
 
 class _WeightPageState extends State<WeightPage> {
   final TextEditingController _ctrl = TextEditingController();
-  String _prev = "";
+  GymSet? _previousWeight;
+  bool _previousWeightLoaded = false;
   String? _unit;
   String? _image;
   final _key = GlobalKey<FormState>();
@@ -37,6 +38,12 @@ class _WeightPageState extends State<WeightPage> {
 
   @override
   Widget build(BuildContext context) {
+    final previousWeightText = !_previousWeightLoaded
+        ? ''
+        : _previousWeight == null
+        ? context.l10n.noWeightEnteredYet
+        : '${formatDisplayNumber(context, _previousWeight!.weight)} ${displayMeasurementUnit(context.l10n, _previousWeight!.unit)}';
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.enterWeight)),
@@ -79,7 +86,8 @@ class _WeightPageState extends State<WeightPage> {
               ),
               const SizedBox(height: 12),
               TextFormField(
-                initialValue: _prev,
+                key: ValueKey(previousWeightText),
+                initialValue: previousWeightText,
                 decoration: InputDecoration(
                   labelText: context.l10n.previousWeight,
                 ),
@@ -175,7 +183,8 @@ class _WeightPageState extends State<WeightPage> {
       if (!mounted) return;
 
       setState(() {
-        _prev = "${value?.weight ?? 0} ${value?.unit ?? settings.strengthUnit}";
+        _previousWeight = value;
+        _previousWeightLoaded = true;
 
         if (settings.strengthUnit == 'last-entry')
           _unit = value?.unit;

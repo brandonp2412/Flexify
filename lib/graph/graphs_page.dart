@@ -104,10 +104,10 @@ class GraphsPageState extends State<GraphsPage>
         String text;
         if (row is CardioData) {
           text =
-              "${formatDisplayNumber(context, row.value)} ${row.unit} / ${context.l10n.minutesShort}";
+              "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
         } else {
           text =
-              "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × ${formatDisplayNumber(context, row.value, minimumFractionDigits: 2)}$unit $created";
+              "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × ${formatDisplayNumber(context, row.value, minimumFractionDigits: 2)}${displayMeasurementUnit(context.l10n, unit)} $created";
         }
 
         return [
@@ -341,7 +341,7 @@ class GraphsPageState extends State<GraphsPage>
     final text = sets
         .map(
           (gymSet) =>
-              "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
+              "${formatDisplayNumber(context, gymSet.reps.value)}×${formatDisplayNumber(context, gymSet.weight.value)}${displayMeasurementUnit(l10n, gymSet.unit.value)} ${gymSet.name.value}",
         )
         .join(', ');
     await SharePlus.instance.share(ShareParams(text: l10n.shareWorkout(text)));
