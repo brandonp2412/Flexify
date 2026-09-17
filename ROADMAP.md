@@ -103,7 +103,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Spanish (`es`)
 - [x] French (`fr`)
 - [x] German (`de`)
-- [ ] Italian (`it`)
+- [x] Italian (`it`)
 - [ ] Portuguese, Brazil (`pt_BR`)
 - [ ] Dutch (`nl`)
 - [ ] Polish (`pl`)
