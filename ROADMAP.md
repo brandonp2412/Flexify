@@ -53,27 +53,27 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 
 ### App shell and shared UI
 
-- [ ] App title, bottom navigation, drawers/menus, shared dialogs, confirmation actions, generic buttons, empty states, errors, permissions, search, filters, and reusable widgets.
+- [x] App title, bottom navigation, drawers/menus, shared dialogs, confirmation actions, generic buttons, empty states, errors, permissions, search, filters, and reusable widgets.
   - [x] Localize bottom navigation, tab-removal UI, version-change toast, and shared app-search actions/dialog copy.
   - [x] Localize reusable history/graph filter controls and render filter dates using the active locale.
   - [x] Localize Android app-access and missing-permission surfaces, including reusable permission actions and status copy.
-- [ ] Shared date/time, duration, count, set/rep, weight, distance, percentage, and ordinal formatting uses locale-aware APIs where appropriate.
+- [x] Shared date/time, duration, count, set/rep, weight, distance, percentage, and ordinal formatting uses locale-aware APIs where appropriate.
   - [x] Localize reusable weight, distance, and calorie unit labels while preserving stored unit identifiers.
-- [ ] Snackbar, validation, import/export, file-picker, notification-facing, and failure copy is localized.
+- [x] Snackbar, validation, import/export, file-picker, notification-facing, and failure copy is localized.
   - [x] Localize shared data import/export/delete actions, import validation, and import success/failure snackbars.
 
 ### Home, workouts, plans, and sets
 
-- [ ] Home page and workout/session flows.
+- [x] Home page and workout/session flows.
 - [x] Plans list, start-plan flow, workout swapping, session sets, and plan editing.
 - [x] Set creation/editing, history, set actions, notes, timers, and related confirmation/error states.
-- [ ] Dynamic messages use placeholders/plurals instead of string concatenation where grammar can vary.
+- [x] Dynamic messages use placeholders/plurals instead of string concatenation where grammar can vary.
 
 ### Graphs, progress, and weight
 
 - [x] Graph pages, graph controls, legends, tooltips, strength/progress views, and global progress UI.
-- [ ] Weight page, weight statistics, history actions, and related empty/error states.
-- [ ] Locale-sensitive numeric labels remain parse-safe internally while rendering with locale-aware formatting.
+- [x] Weight page, weight statistics, history actions, and related empty/error states.
+- [x] Locale-sensitive numeric labels remain parse-safe internally while rendering with locale-aware formatting.
 
 ### Settings and supporting pages
 
@@ -81,7 +81,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 - [x] Workout and plan settings.
 - [x] Timer and notification settings.
 - [x] Data/import/export settings.
-- [ ] About, permissions, changelog/release-facing in-app UI, and miscellaneous supporting pages.
+- [x] About, permissions, changelog/release-facing in-app UI, and miscellaneous supporting pages.
 - [x] Settings search indexes translated labels/descriptions without changing persisted setting identifiers.
 
 ### Platform-facing strings
@@ -92,9 +92,9 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 
 ### Migration completion gate
 
-- [ ] Audit `lib/`, native platform code, and user-facing tests for remaining hard-coded English UI strings.
+- [x] Audit `lib/`, native platform code, and user-facing tests for remaining hard-coded English UI strings.
 - [x] Add a lightweight regression check or documented review rule that makes newly introduced hard-coded UI copy easy to detect.
-- [ ] English UI behavior and layout remain functionally unchanged apart from localization plumbing.
+- [x] English UI behavior and layout remain functionally unchanged apart from localization plumbing.
 
 ## 4. Translation wave 1
 
@@ -116,23 +116,23 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
 - [x] Test representative singular/plural/count messages in languages with different plural behavior.
 - [x] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
-- [ ] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
+- [x] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
 - [ ] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.
 - [ ] Verify CJK rendering and font fallback on Android and desktop.
-- [ ] Verify screen-reader semantics use localized labels/hints where custom semantics are present.
-- [ ] Confirm user-entered exercise/plan/note text is never translated or rewritten.
+- [x] Verify screen-reader semantics use localized labels/hints where custom semantics are present.
+- [x] Confirm user-entered exercise/plan/note text is never translated or rewritten.
 
 ## 6. Tests, metadata, and release readiness
 
-- [ ] Update widget tests that depend on English labels to use generated localizations or explicitly pin English where the test is not testing localization.
-- [ ] Add focused tests for at least one Latin-script alternate locale and one CJK locale across core navigation/settings/workout flows.
-- [ ] Ensure integration/Patrol tests remain deterministic by explicitly selecting or pinning a locale where necessary.
-- [ ] Localize Play Store metadata for supported locales when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
+- [x] Update widget tests that depend on English labels to use generated localizations or explicitly pin English where the test is not testing localization.
+- [x] Add focused tests for at least one Latin-script alternate locale and one CJK locale across core navigation/settings/workout flows.
+- [x] Ensure integration/Patrol tests remain deterministic by explicitly selecting or pinning a locale where necessary.
+- [x] Localize Play Store metadata for supported locales when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
 - [ ] Add translated store screenshots only when practical; English screenshots may remain shared where store rules permit.
-- [ ] Update contributor documentation with the workflow for adding/changing English strings and updating all locale ARBs.
-- [ ] Run the full required completion checks: `flutter/bin/dart format .`, `flutter/bin/flutter analyze`, and `flutter/bin/flutter test`.
+- [x] Update contributor documentation with the workflow for adding/changing English strings and updating all locale ARBs.
+- [x] Run the full required completion checks: `dart format .`, `flutter analyze`, and `flutter test`.
 - [ ] Run relevant Android/integration smoke coverage for locale switching and a non-English workout flow.
-- [ ] Perform a final hard-coded-English audit and ARB completeness check.
+- [x] Perform a final hard-coded-English audit and ARB completeness check.
 - [ ] Confirm all first-wave locales are selectable, persist correctly, survive restart, and can complete core Flexify flows.
 
 ## Definition of done
