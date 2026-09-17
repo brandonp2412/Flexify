@@ -31,6 +31,14 @@ void main() {
       expect(localeOverrideFromIdentifier('NL'), const Locale('nl'));
       expect(localeOverrideFromIdentifier('pl'), const Locale('pl'));
       expect(localeOverrideFromIdentifier('PL'), const Locale('pl'));
+      expect(localeOverrideFromIdentifier('ja'), const Locale('ja'));
+      expect(localeOverrideFromIdentifier('JA'), const Locale('ja'));
+      expect(localeOverrideFromIdentifier('ko'), const Locale('ko'));
+      expect(localeOverrideFromIdentifier('KO'), const Locale('ko'));
+      expect(localeOverrideFromIdentifier('zh-CN'), const Locale('zh', 'CN'));
+      expect(localeOverrideFromIdentifier('zh_CN'), const Locale('zh', 'CN'));
+      expect(localeOverrideFromIdentifier('ZH-cn'), const Locale('zh', 'CN'));
+      expect(localeOverrideFromIdentifier('zh'), isNull);
       expect(localeOverrideFromIdentifier('removed-locale'), isNull);
       expect(canonicalLocaleOverride('en'), 'en');
       expect(canonicalLocaleOverride('es'), 'es');
@@ -41,6 +49,10 @@ void main() {
       expect(canonicalLocaleOverride('pt'), isNull);
       expect(canonicalLocaleOverride('nl'), 'nl');
       expect(canonicalLocaleOverride('pl'), 'pl');
+      expect(canonicalLocaleOverride('ja'), 'ja');
+      expect(canonicalLocaleOverride('ko'), 'ko');
+      expect(canonicalLocaleOverride('zh_CN'), 'zh-CN');
+      expect(canonicalLocaleOverride('zh'), isNull);
       expect(canonicalLocaleOverride('removed-locale'), isNull);
     },
   );
@@ -126,6 +138,33 @@ void main() {
 
     app = tester.widget(find.byType(MaterialApp));
     expect(app.locale, const Locale('pl'));
+
+    await database.settings.update().write(
+      const SettingsCompanion(localeOverride: Value('ja')),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    app = tester.widget(find.byType(MaterialApp));
+    expect(app.locale, const Locale('ja'));
+
+    await database.settings.update().write(
+      const SettingsCompanion(localeOverride: Value('ko')),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    app = tester.widget(find.byType(MaterialApp));
+    expect(app.locale, const Locale('ko'));
+
+    await database.settings.update().write(
+      const SettingsCompanion(localeOverride: Value('zh-CN')),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    app = tester.widget(find.byType(MaterialApp));
+    expect(app.locale, const Locale('zh', 'CN'));
 
     await database.settings.update().write(
       const SettingsCompanion(localeOverride: Value('removed-locale')),

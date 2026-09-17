@@ -107,9 +107,9 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Portuguese, Brazil (`pt_BR`)
 - [x] Dutch (`nl`)
 - [x] Polish (`pl`)
-- [ ] Japanese (`ja`)
-- [ ] Korean (`ko`)
-- [ ] Simplified Chinese (`zh_CN`)
+- [x] Japanese (`ja`)
+- [x] Korean (`ko`)
+- [x] Simplified Chinese (`zh_CN`)
 
 ## 5. Translation quality and layout QA
 

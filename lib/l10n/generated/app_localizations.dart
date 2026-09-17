@@ -10,9 +10,12 @@ import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
 import 'app_localizations_nl.dart';
 import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -105,10 +108,14 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('it'),
+    Locale('ja'),
+    Locale('ko'),
     Locale('nl'),
     Locale('pl'),
     Locale('pt'),
     Locale('pt', 'BR'),
+    Locale('zh'),
+    Locale('zh', 'CN'),
   ];
 
   /// Application title shown by the operating system and app shell.
@@ -2726,9 +2733,12 @@ class _AppLocalizationsDelegate
     'es',
     'fr',
     'it',
+    'ja',
+    'ko',
     'nl',
     'pl',
     'pt',
+    'zh',
   ].contains(locale.languageCode);
 
   @override
@@ -2746,6 +2756,14 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
         }
         break;
       }
+    case 'zh':
+      {
+        switch (locale.countryCode) {
+          case 'CN':
+            return AppLocalizationsZhCn();
+        }
+        break;
+      }
   }
 
   // Lookup logic when only language code is specified.
@@ -2760,12 +2778,18 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsFr();
     case 'it':
       return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
     case 'nl':
       return AppLocalizationsNl();
     case 'pl':
       return AppLocalizationsPl();
     case 'pt':
       return AppLocalizationsPt();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

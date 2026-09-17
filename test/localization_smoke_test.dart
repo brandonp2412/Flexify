@@ -146,6 +146,51 @@ void main() {
     expect(find.text('Ustawienia'), findsOneWidget);
   });
 
+  testWidgets('loads Japanese localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ja'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('設定'), findsOneWidget);
+  });
+
+  testWidgets('loads Korean localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ko'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('설정'), findsOneWidget);
+  });
+
+  testWidgets('loads Simplified Chinese localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('设置'), findsOneWidget);
+  });
+
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('zz')));
 
@@ -295,6 +340,30 @@ void main() {
     expect(l10n.selectedCount(5), 'Wybrano 5');
   });
 
+  test('formats CJK count messages', () {
+    final japanese = lookupAppLocalizations(const Locale('ja'));
+    final korean = lookupAppLocalizations(const Locale('ko'));
+    final chinese = lookupAppLocalizations(const Locale('zh', 'CN'));
+
+    expect(japanese.deleteRecordsConfirmation(1), '1件の記録を削除しますか？この操作は元に戻せません。');
+    expect(japanese.deleteRecordsConfirmation(3), '3件の記録を削除しますか？この操作は元に戻せません。');
+    expect(japanese.editSets(4), '4セットを編集');
+
+    expect(
+      korean.deleteRecordsConfirmation(1),
+      '기록 1개를 삭제할까요? 이 작업은 되돌릴 수 없습니다.',
+    );
+    expect(
+      korean.deleteRecordsConfirmation(3),
+      '기록 3개를 삭제할까요? 이 작업은 되돌릴 수 없습니다.',
+    );
+    expect(korean.editSets(4), '세트 4개 편집');
+
+    expect(chinese.deleteRecordsConfirmation(1), '确定要删除 1 条记录吗？此操作无法撤销。');
+    expect(chinese.deleteRecordsConfirmation(3), '确定要删除 3 条记录吗？此操作无法撤销。');
+    expect(chinese.editSets(4), '编辑 4 组');
+  });
+
   test('provides localized measurement unit labels', () {
     final english = lookupAppLocalizations(const Locale('en'));
     final spanish = lookupAppLocalizations(const Locale('es'));
@@ -304,6 +373,9 @@ void main() {
     final portuguese = lookupAppLocalizations(const Locale('pt', 'BR'));
     final dutch = lookupAppLocalizations(const Locale('nl'));
     final polish = lookupAppLocalizations(const Locale('pl'));
+    final japanese = lookupAppLocalizations(const Locale('ja'));
+    final korean = lookupAppLocalizations(const Locale('ko'));
+    final chinese = lookupAppLocalizations(const Locale('zh', 'CN'));
 
     expect(english.kilogramsUnit, 'Kilograms (kg)');
     expect(english.poundsUnit, 'Pounds (lb)');
@@ -323,5 +395,11 @@ void main() {
     expect(dutch.kilometersUnit, 'Kilometer (km)');
     expect(polish.kilogramsUnit, 'Kilogramy (kg)');
     expect(polish.kilometersUnit, 'Kilometry (km)');
+    expect(japanese.kilogramsUnit, 'キログラム (kg)');
+    expect(japanese.kilometersUnit, 'キロメートル (km)');
+    expect(korean.kilogramsUnit, '킬로그램 (kg)');
+    expect(korean.kilometersUnit, '킬로미터 (km)');
+    expect(chinese.kilogramsUnit, '千克 (kg)');
+    expect(chinese.kilometersUnit, '千米 (km)');
   });
 }

@@ -15,6 +15,9 @@ const selectableLocales = <Locale>[
   Locale('pt', 'BR'),
   Locale('nl'),
   Locale('pl'),
+  Locale('ja'),
+  Locale('ko'),
+  Locale('zh', 'CN'),
 ];
 
 /// Returns the canonical identifier persisted for a supported [locale].
