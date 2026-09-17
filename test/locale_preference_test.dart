@@ -23,12 +23,18 @@ void main() {
       expect(localeOverrideFromIdentifier('DE'), const Locale('de'));
       expect(localeOverrideFromIdentifier('it'), const Locale('it'));
       expect(localeOverrideFromIdentifier('IT'), const Locale('it'));
+      expect(localeOverrideFromIdentifier('pt-BR'), const Locale('pt', 'BR'));
+      expect(localeOverrideFromIdentifier('pt_BR'), const Locale('pt', 'BR'));
+      expect(localeOverrideFromIdentifier('PT-br'), const Locale('pt', 'BR'));
+      expect(localeOverrideFromIdentifier('pt'), isNull);
       expect(localeOverrideFromIdentifier('removed-locale'), isNull);
       expect(canonicalLocaleOverride('en'), 'en');
       expect(canonicalLocaleOverride('es'), 'es');
       expect(canonicalLocaleOverride('fr'), 'fr');
       expect(canonicalLocaleOverride('de'), 'de');
       expect(canonicalLocaleOverride('it'), 'it');
+      expect(canonicalLocaleOverride('pt_BR'), 'pt-BR');
+      expect(canonicalLocaleOverride('pt'), isNull);
       expect(canonicalLocaleOverride('removed-locale'), isNull);
     },
   );
@@ -87,6 +93,15 @@ void main() {
 
     app = tester.widget(find.byType(MaterialApp));
     expect(app.locale, const Locale('it'));
+
+    await database.settings.update().write(
+      const SettingsCompanion(localeOverride: Value('pt-BR')),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    app = tester.widget(find.byType(MaterialApp));
+    expect(app.locale, const Locale('pt', 'BR'));
 
     await database.settings.update().write(
       const SettingsCompanion(localeOverride: Value('removed-locale')),

@@ -10,6 +10,7 @@ import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_it.dart';
+import 'app_localizations_pt.dart';
 
 // ignore_for_file: type=lint
 
@@ -102,6 +103,8 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fr'),
     Locale('it'),
+    Locale('pt'),
+    Locale('pt', 'BR'),
   ];
 
   /// Application title shown by the operating system and app shell.
@@ -2713,14 +2716,32 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'es', 'fr', 'it'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'de',
+    'en',
+    'es',
+    'fr',
+    'it',
+    'pt',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+country codes are specified.
+  switch (locale.languageCode) {
+    case 'pt':
+      {
+        switch (locale.countryCode) {
+          case 'BR':
+            return AppLocalizationsPtBr();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'de':
@@ -2733,6 +2754,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsFr();
     case 'it':
       return AppLocalizationsIt();
+    case 'pt':
+      return AppLocalizationsPt();
   }
 
   throw FlutterError(

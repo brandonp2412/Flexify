@@ -86,6 +86,36 @@ void main() {
     expect(find.text('Impostazioni'), findsOneWidget);
   });
 
+  testWidgets('loads Brazilian Portuguese localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pt', 'BR'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('Configurações'), findsOneWidget);
+  });
+
+  testWidgets('loads Portuguese through language fallback', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pt', 'PT'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('Configurações'), findsOneWidget);
+  });
+
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('zz')));
 
@@ -182,12 +212,28 @@ void main() {
     expect(l10n.editSets(4), 'Modifica 4 serie');
   });
 
+  test('formats Brazilian Portuguese singular and plural messages', () {
+    final l10n = lookupAppLocalizations(const Locale('pt', 'BR'));
+
+    expect(
+      l10n.deleteRecordsConfirmation(1),
+      'Tem certeza de que deseja excluir 1 registro? Esta ação não pode ser desfeita.',
+    );
+    expect(
+      l10n.deleteRecordsConfirmation(3),
+      'Tem certeza de que deseja excluir 3 registros? Esta ação não pode ser desfeita.',
+    );
+    expect(l10n.editSets(1), 'Editar 1 série');
+    expect(l10n.editSets(4), 'Editar 4 séries');
+  });
+
   test('provides localized measurement unit labels', () {
     final english = lookupAppLocalizations(const Locale('en'));
     final spanish = lookupAppLocalizations(const Locale('es'));
     final french = lookupAppLocalizations(const Locale('fr'));
     final german = lookupAppLocalizations(const Locale('de'));
     final italian = lookupAppLocalizations(const Locale('it'));
+    final portuguese = lookupAppLocalizations(const Locale('pt', 'BR'));
 
     expect(english.kilogramsUnit, 'Kilograms (kg)');
     expect(english.poundsUnit, 'Pounds (lb)');
@@ -201,5 +247,7 @@ void main() {
     expect(german.kilometersUnit, 'Kilometer (km)');
     expect(italian.kilogramsUnit, 'Chilogrammi (kg)');
     expect(italian.kilometersUnit, 'Chilometri (km)');
+    expect(portuguese.kilogramsUnit, 'Quilogramas (kg)');
+    expect(portuguese.kilometersUnit, 'Quilômetros (km)');
   });
 }

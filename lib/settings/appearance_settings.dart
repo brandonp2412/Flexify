@@ -3,7 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/flex_line.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
@@ -25,9 +24,7 @@ List<Widget> getAppearanceSettings(
     l10n.settingsLanguage,
     l10n.settingsLanguageDescription,
     l10n.languageSystemDefault,
-    ...AppLocalizations.supportedLocales.map(
-      (locale) => localeDisplayName(l10n, locale),
-    ),
+    ...selectableLocales.map((locale) => localeDisplayName(l10n, locale)),
   ].join(' ').toLowerCase();
   final selectedLocale =
       canonicalLocaleOverride(settings.value.localeOverride) ?? '';
@@ -56,7 +53,7 @@ List<Widget> getAppearanceSettings(
                   value: '',
                   child: Text(l10n.languageSystemDefault),
                 ),
-                ...AppLocalizations.supportedLocales.map(
+                ...selectableLocales.map(
                   (locale) => DropdownMenuItem(
                     value: localeIdentifier(locale),
                     child: Text(localeDisplayName(l10n, locale)),
