@@ -106,7 +106,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Italian (`it`)
 - [x] Portuguese, Brazil (`pt_BR`)
 - [x] Dutch (`nl`)
-- [ ] Polish (`pl`)
+- [x] Polish (`pl`)
 - [ ] Japanese (`ja`)
 - [ ] Korean (`ko`)
 - [ ] Simplified Chinese (`zh_CN`)
@@ -114,7 +114,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 ## 5. Translation quality and layout QA
 
 - [x] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
-- [ ] Test representative singular/plural/count messages in languages with different plural behavior.
+- [x] Test representative singular/plural/count messages in languages with different plural behavior.
 - [ ] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
 - [ ] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
 - [ ] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.

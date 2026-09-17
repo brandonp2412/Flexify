@@ -131,6 +131,21 @@ void main() {
     expect(find.text('Instellingen'), findsOneWidget);
   });
 
+  testWidgets('loads Polish localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pl'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('Ustawienia'), findsOneWidget);
+  });
+
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('zz')));
 
@@ -257,6 +272,29 @@ void main() {
     expect(l10n.editSets(4), '4 sets bewerken');
   });
 
+  test('formats Polish plural categories', () {
+    final l10n = lookupAppLocalizations(const Locale('pl'));
+
+    expect(
+      l10n.deleteRecordsConfirmation(1),
+      'Czy na pewno chcesz usunąć 1 rekord? Tej operacji nie można cofnąć.',
+    );
+    expect(
+      l10n.deleteRecordsConfirmation(3),
+      'Czy na pewno chcesz usunąć 3 rekordy? Tej operacji nie można cofnąć.',
+    );
+    expect(
+      l10n.deleteRecordsConfirmation(5),
+      'Czy na pewno chcesz usunąć 5 rekordów? Tej operacji nie można cofnąć.',
+    );
+    expect(l10n.editSets(1), 'Edytuj 1 serię');
+    expect(l10n.editSets(3), 'Edytuj 3 serie');
+    expect(l10n.editSets(5), 'Edytuj 5 serii');
+    expect(l10n.selectedCount(1), 'Wybrano 1');
+    expect(l10n.selectedCount(3), 'Wybrano 3');
+    expect(l10n.selectedCount(5), 'Wybrano 5');
+  });
+
   test('provides localized measurement unit labels', () {
     final english = lookupAppLocalizations(const Locale('en'));
     final spanish = lookupAppLocalizations(const Locale('es'));
@@ -265,6 +303,7 @@ void main() {
     final italian = lookupAppLocalizations(const Locale('it'));
     final portuguese = lookupAppLocalizations(const Locale('pt', 'BR'));
     final dutch = lookupAppLocalizations(const Locale('nl'));
+    final polish = lookupAppLocalizations(const Locale('pl'));
 
     expect(english.kilogramsUnit, 'Kilograms (kg)');
     expect(english.poundsUnit, 'Pounds (lb)');
@@ -282,5 +321,7 @@ void main() {
     expect(portuguese.kilometersUnit, 'Quilômetros (km)');
     expect(dutch.kilogramsUnit, 'Kilogram (kg)');
     expect(dutch.kilometersUnit, 'Kilometer (km)');
+    expect(polish.kilogramsUnit, 'Kilogramy (kg)');
+    expect(polish.kilometersUnit, 'Kilometry (km)');
   });
 }
