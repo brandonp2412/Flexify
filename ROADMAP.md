@@ -88,6 +88,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 
 - [x] Android notification channel names, notification titles/bodies, permission rationale copy, and native strings that users can see.
 - [x] Review iOS, Windows, Linux, macOS, and web user-visible platform strings; localize those that participate in the app experience without renaming package IDs, executable names, or protocol identifiers.
+  - [x] Localize the native macOS application menu for every first-wave locale, including standard Edit, Find, spelling, window, and help commands.
 - [x] Ensure native timer/notification code receives already-localized or locale-safe values where Flutter is the source of truth.
 
 ### Migration completion gate

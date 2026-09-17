@@ -118,4 +118,58 @@ void main() {
           'Move user-facing literals into app_en.arb, or document a true non-translatable exception.',
     );
   });
+
+  test('macOS native menu has complete first-wave localizations', () {
+    final baseMenu = File(
+      'macos/Runner/Base.lproj/MainMenu.xib',
+    ).readAsLinesSync();
+    final idPattern = RegExp(r'\bid="([^"]+)"');
+    final titleIds = baseMenu
+        .where((line) => line.contains('title=') && line.contains('id='))
+        .map((line) => idPattern.firstMatch(line)?.group(1))
+        .whereType<String>()
+        .toSet();
+    expect(titleIds, isNotEmpty);
+
+    const localeFolders = <String>[
+      'es',
+      'fr',
+      'de',
+      'it',
+      'pt-BR',
+      'nl',
+      'pl',
+      'ja',
+      'ko',
+      'zh-Hans',
+    ];
+    final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=');
+
+    for (final locale in localeFolders) {
+      final file = File('macos/Runner/$locale.lproj/MainMenu.strings');
+      expect(file.existsSync(), isTrue, reason: 'Missing macOS $locale menu.');
+      final localizedIds = file
+          .readAsLinesSync()
+          .map((line) => localizedTitlePattern.firstMatch(line)?.group(1))
+          .whereType<String>()
+          .toSet();
+      expect(
+        localizedIds,
+        titleIds,
+        reason: '$locale must translate every native macOS menu title.',
+      );
+    }
+
+    final project = File(
+      'macos/Runner.xcodeproj/project.pbxproj',
+    ).readAsStringSync();
+    final knownRegions = RegExp(
+      r'knownRegions = \(([\s\S]*?)\);',
+    ).firstMatch(project)?.group(1);
+    expect(knownRegions, isNotNull);
+    for (final locale in localeFolders) {
+      expect(project, contains('$locale.lproj/MainMenu.strings'));
+      expect(knownRegions, contains(locale));
+    }
+  });
 }
