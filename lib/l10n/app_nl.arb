@@ -188,7 +188,7 @@
   "weekly": "Wekelijks",
   "monthly": "Maandelijks",
   "yearly": "Jaarlijks",
-  "errorWithMessage": "Fout: {error}",
+  "unexpectedError": "Er is iets misgegaan. Probeer het opnieuw.",
   "loadingExercises": "Oefeningen laden...",
   "noPlansYet": "Nog geen schema's",
   "noMatchingPlans": "Geen overeenkomende schema's",

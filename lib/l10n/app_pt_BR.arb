@@ -188,7 +188,7 @@
   "weekly": "Semanal",
   "monthly": "Mensal",
   "yearly": "Anual",
-  "errorWithMessage": "Erro: {error}",
+  "unexpectedError": "Algo deu errado. Tente novamente.",
   "loadingExercises": "Carregando exercícios...",
   "noPlansYet": "Ainda não há planos",
   "noMatchingPlans": "Nenhum plano correspondente",

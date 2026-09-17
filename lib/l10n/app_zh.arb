@@ -188,7 +188,7 @@
   "weekly": "每周",
   "monthly": "每月",
   "yearly": "每年",
-  "errorWithMessage": "错误：{error}",
+  "unexpectedError": "出现问题。请重试。",
   "loadingExercises": "正在加载动作...",
   "noPlansYet": "暂无计划",
   "noMatchingPlans": "没有匹配的计划",

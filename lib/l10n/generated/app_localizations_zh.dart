@@ -609,9 +609,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get yearly => '每年';
 
   @override
-  String errorWithMessage(String error) {
-    return '错误：$error';
-  }
+  String get unexpectedError => '出现问题。请重试。';
 
   @override
   String get loadingExercises => '正在加载动作...';
@@ -2015,9 +2013,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get yearly => '每年';
 
   @override
-  String errorWithMessage(String error) {
-    return '错误：$error';
-  }
+  String get unexpectedError => '出现问题。请重试。';
 
   @override
   String get loadingExercises => '正在加载动作...';

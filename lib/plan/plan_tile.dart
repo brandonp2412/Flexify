@@ -165,7 +165,7 @@ class _PlanTileState extends State<PlanTile> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return Text(context.l10n.errorWithMessage('${snapshot.error}'));
+                return Text(context.l10n.unexpectedError);
               }
               return Text(context.l10n.loadingExercises);
             },

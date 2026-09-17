@@ -629,9 +629,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get yearly => 'Anual';
 
   @override
-  String errorWithMessage(String error) {
-    return 'Erro: $error';
-  }
+  String get unexpectedError => 'Algo deu errado. Tente novamente.';
 
   @override
   String get loadingExercises => 'Carregando exercícios...';
@@ -2116,9 +2114,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get yearly => 'Anual';
 
   @override
-  String errorWithMessage(String error) {
-    return 'Erro: $error';
-  }
+  String get unexpectedError => 'Algo deu errado. Tente novamente.';
 
   @override
   String get loadingExercises => 'Carregando exercícios...';

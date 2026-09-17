@@ -28,6 +28,14 @@ final class _ImportValidationException implements Exception {
   String toString() => message;
 }
 
+String _localizedImportError(Object error, AppLocalizations l10n) {
+  if (error is MissingBackupDatabaseException) {
+    return l10n.backupArchiveMissingDatabase;
+  }
+  if (error is _ImportValidationException) return error.message;
+  return l10n.unexpectedError;
+}
+
 class ImportData extends StatelessWidget {
   final BuildContext ctx;
 
@@ -116,9 +124,7 @@ $version
       final url =
           'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
-      final displayError = e is MissingBackupDatabaseException
-          ? l10n.backupArchiveMissingDatabase
-          : e.toString();
+      final displayError = _localizedImportError(e, l10n);
       toast(
         l10n.failedToImportDatabase(displayError),
         duration: Duration(seconds: 10),
@@ -331,7 +337,7 @@ $version
       if (!ctx.mounted) return;
 
       toast(
-        l10n.failedToImportGraphs(e.toString()),
+        l10n.failedToImportGraphs(_localizedImportError(e, l10n)),
         duration: Duration(seconds: 10),
       );
     }
@@ -477,7 +483,7 @@ $version
           'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
       toast(
-        l10n.failedToImportPlans(e.toString()),
+        l10n.failedToImportPlans(_localizedImportError(e, l10n)),
         duration: Duration(seconds: 10),
         action: SnackBarAction(
           label: l10n.actionReport,

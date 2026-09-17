@@ -611,9 +611,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get yearly => '毎年';
 
   @override
-  String errorWithMessage(String error) {
-    return 'エラー: $error';
-  }
+  String get unexpectedError => '問題が発生しました。もう一度お試しください。';
 
   @override
   String get loadingExercises => '種目を読み込み中...';

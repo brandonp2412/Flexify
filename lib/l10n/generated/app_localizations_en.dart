@@ -626,9 +626,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yearly => 'Yearly';
 
   @override
-  String errorWithMessage(String error) {
-    return 'Error: $error';
-  }
+  String get unexpectedError => 'Something went wrong. Please try again.';
 
   @override
   String get loadingExercises => 'Loading exercises...';

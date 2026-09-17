@@ -188,7 +188,7 @@
   "weekly": "Hebdomadaire",
   "monthly": "Mensuel",
   "yearly": "Annuel",
-  "errorWithMessage": "Erreur : {error}",
+  "unexpectedError": "Une erreur s’est produite. Veuillez réessayer.",
   "loadingExercises": "Chargement des exercices...",
   "noPlansYet": "Aucun programme pour le moment",
   "noMatchingPlans": "Aucun programme correspondant",

@@ -134,11 +134,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       ),
                     if (snapshot.hasError)
                       Expanded(
-                        child: ErrorWidget(
-                          context.l10n.errorWithMessage(
-                            snapshot.error.toString(),
-                          ),
-                        ),
+                        child: ErrorWidget(context.l10n.unexpectedError),
                       ),
                     if (snapshot.hasData && snapshot.data!.isNotEmpty)
                       Expanded(

@@ -612,9 +612,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get yearly => '매년';
 
   @override
-  String errorWithMessage(String error) {
-    return '오류: $error';
-  }
+  String get unexpectedError => '문제가 발생했습니다. 다시 시도해 주세요.';
 
   @override
   String get loadingExercises => '운동 불러오는 중...';

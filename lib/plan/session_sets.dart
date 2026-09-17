@@ -203,7 +203,11 @@ class _PlaceholderChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _skeletonLine("Set 9", theme.textTheme.labelSmall, barColor),
+            _skeletonLine(
+              context.l10n.setNumber(9),
+              theme.textTheme.labelSmall,
+              barColor,
+            ),
             _skeletonLine("8 kg × 50", theme.textTheme.titleSmall, barColor),
           ],
         ),

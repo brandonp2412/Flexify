@@ -1246,11 +1246,11 @@ abstract class AppLocalizations {
   /// **'Yearly'**
   String get yearly;
 
-  /// Visible error message with details.
+  /// Generic user-facing message for an unexpected runtime or data-loading failure.
   ///
   /// In en, this message translates to:
-  /// **'Error: {error}'**
-  String errorWithMessage(String error);
+  /// **'Something went wrong. Please try again.'**
+  String get unexpectedError;
 
   /// Progress message while plan exercises load.
   ///

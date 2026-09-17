@@ -177,9 +177,7 @@ class GraphsPageState extends State<GraphsPage>
         stream: _stream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return ErrorWidget(
-              context.l10n.errorWithMessage(snapshot.error.toString()),
-            );
+            return ErrorWidget(context.l10n.unexpectedError);
           }
           if (!snapshot.hasData) return const SizedBox();
 

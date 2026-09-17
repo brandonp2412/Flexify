@@ -188,7 +188,7 @@
   "weekly": "매주",
   "monthly": "매월",
   "yearly": "매년",
-  "errorWithMessage": "오류: {error}",
+  "unexpectedError": "문제가 발생했습니다. 다시 시도해 주세요.",
   "loadingExercises": "운동 불러오는 중...",
   "noPlansYet": "아직 플랜이 없습니다",
   "noMatchingPlans": "일치하는 플랜이 없습니다",

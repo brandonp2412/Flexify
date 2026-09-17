@@ -66,11 +66,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
               stream: _distinctExercises,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      context.l10n.errorWithMessage('${snapshot.error}'),
-                    ),
-                  );
+                  return Center(child: Text(context.l10n.unexpectedError));
                 }
                 if (!snapshot.hasData) {
                   return const SizedBox();

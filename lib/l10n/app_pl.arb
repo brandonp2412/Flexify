@@ -188,7 +188,7 @@
   "weekly": "Co tydzień",
   "monthly": "Co miesiąc",
   "yearly": "Co rok",
-  "errorWithMessage": "Błąd: {error}",
+  "unexpectedError": "Coś poszło nie tak. Spróbuj ponownie.",
   "loadingExercises": "Ładowanie ćwiczeń...",
   "noPlansYet": "Brak planów",
   "noMatchingPlans": "Brak pasujących planów",

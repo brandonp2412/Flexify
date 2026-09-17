@@ -635,9 +635,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get yearly => 'Co rok';
 
   @override
-  String errorWithMessage(String error) {
-    return 'Błąd: $error';
-  }
+  String get unexpectedError => 'Coś poszło nie tak. Spróbuj ponownie.';
 
   @override
   String get loadingExercises => 'Ładowanie ćwiczeń...';

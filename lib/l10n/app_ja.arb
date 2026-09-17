@@ -188,7 +188,7 @@
   "weekly": "毎週",
   "monthly": "毎月",
   "yearly": "毎年",
-  "errorWithMessage": "エラー: {error}",
+  "unexpectedError": "問題が発生しました。もう一度お試しください。",
   "loadingExercises": "種目を読み込み中...",
   "noPlansYet": "プランはまだありません",
   "noMatchingPlans": "一致するプランがありません",

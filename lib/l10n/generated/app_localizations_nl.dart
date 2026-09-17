@@ -632,9 +632,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get yearly => 'Jaarlijks';
 
   @override
-  String errorWithMessage(String error) {
-    return 'Fout: $error';
-  }
+  String get unexpectedError => 'Er is iets misgegaan. Probeer het opnieuw.';
 
   @override
   String get loadingExercises => 'Oefeningen laden...';

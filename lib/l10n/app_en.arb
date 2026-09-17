@@ -841,14 +841,9 @@
   "@yearly": {
     "description": "Yearly interval label."
   },
-  "errorWithMessage": "Error: {error}",
-  "@errorWithMessage": {
-    "description": "Visible error message with details.",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
+  "unexpectedError": "Something went wrong. Please try again.",
+  "@unexpectedError": {
+    "description": "Generic user-facing message for an unexpected runtime or data-loading failure."
   },
   "loadingExercises": "Loading exercises...",
   "@loadingExercises": {

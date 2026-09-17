@@ -188,7 +188,7 @@
   "weekly": "Settimanale",
   "monthly": "Mensile",
   "yearly": "Annuale",
-  "errorWithMessage": "Errore: {error}",
+  "unexpectedError": "Qualcosa è andato storto. Riprova.",
   "loadingExercises": "Caricamento esercizi...",
   "noPlansYet": "Ancora nessuna scheda",
   "noMatchingPlans": "Nessuna scheda corrispondente",
