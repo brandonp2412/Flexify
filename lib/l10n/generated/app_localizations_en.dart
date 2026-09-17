@@ -202,4 +202,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nameLabel => 'Name';
+
+  @override
+  String get missingPermissions => 'Missing permissions';
+
+  @override
+  String get restTimersPermissionsMissing =>
+      'Rest timers are on, but permissions are missing.';
+
+  @override
+  String get restTimersPermissionsOptional =>
+      'If you disable rest timers, then these permissions aren\'t needed.';
+
+  @override
+  String get restTimers => 'Rest timers';
+
+  @override
+  String get disableBatteryOptimizations => 'Disable battery optimizations';
+
+  @override
+  String get batteryOptimizationWarning =>
+      'Progress may pause if battery optimizations stay on.';
+
+  @override
+  String get scheduleExactAlarm => 'Schedule exact alarm';
+
+  @override
+  String get exactAlarmWarning =>
+      'Alarms cannot be accurate if this is disabled.';
+
+  @override
+  String get postNotifications => 'Post notifications';
+
+  @override
+  String get notificationBarDescription =>
+      'Timer progress is sent to the notification bar';
+
+  @override
+  String get invalidPermissions => 'Invalid permissions';
+
+  @override
+  String get insufficientTimerPermissionsConfirmation =>
+      'Rest timers are enabled without sufficient permissions. Are you sure?';
+
+  @override
+  String get actionConfirm => 'Confirm';
+
+  @override
+  String get appAccess => 'App access';
+
+  @override
+  String get appAccessDescription =>
+      'Needed for enabled timers and notifications.';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get timerProgressAndRestAlerts => 'Timer progress and rest alerts';
+
+  @override
+  String get enabledNotificationsDescription =>
+      'Notifications you have enabled';
+
+  @override
+  String get backgroundActivity => 'Background activity';
+
+  @override
+  String get backgroundActivityDescription =>
+      'Keep timers reliable in the background';
+
+  @override
+  String get exactAlarms => 'Exact alarms';
+
+  @override
+  String get exactAlarmsDescription => 'Alert exactly when a rest timer ends';
+
+  @override
+  String get noAdditionalAndroidAccessNeeded =>
+      'No additional Android access is needed for your current settings.';
+
+  @override
+  String get actionDone => 'Done';
+
+  @override
+  String get allowed => 'Allowed';
+
+  @override
+  String get actionAllow => 'Allow';
 }

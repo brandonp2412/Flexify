@@ -259,5 +259,109 @@
   "nameLabel": "Name",
   "@nameLabel": {
     "description": "Generic name label and sort option."
+  },
+  "missingPermissions": "Missing permissions",
+  "@missingPermissions": {
+    "description": "Title for the page explaining missing Android permissions."
+  },
+  "restTimersPermissionsMissing": "Rest timers are on, but permissions are missing.",
+  "@restTimersPermissionsMissing": {
+    "description": "Message explaining that enabled rest timers require additional permissions."
+  },
+  "restTimersPermissionsOptional": "If you disable rest timers, then these permissions aren't needed.",
+  "@restTimersPermissionsOptional": {
+    "description": "Explanation that timer permissions are unnecessary when rest timers are disabled."
+  },
+  "restTimers": "Rest timers",
+  "@restTimers": {
+    "description": "Label for the rest timer feature."
+  },
+  "disableBatteryOptimizations": "Disable battery optimizations",
+  "@disableBatteryOptimizations": {
+    "description": "Android permission action for excluding Flexify from battery optimizations."
+  },
+  "batteryOptimizationWarning": "Progress may pause if battery optimizations stay on.",
+  "@batteryOptimizationWarning": {
+    "description": "Explanation of why battery optimization access is requested."
+  },
+  "scheduleExactAlarm": "Schedule exact alarm",
+  "@scheduleExactAlarm": {
+    "description": "Android permission action for scheduling exact alarms."
+  },
+  "exactAlarmWarning": "Alarms cannot be accurate if this is disabled.",
+  "@exactAlarmWarning": {
+    "description": "Explanation of why exact alarm access is requested."
+  },
+  "postNotifications": "Post notifications",
+  "@postNotifications": {
+    "description": "Android permission action for posting notifications."
+  },
+  "notificationBarDescription": "Timer progress is sent to the notification bar",
+  "@notificationBarDescription": {
+    "description": "Explanation of how rest timer notifications are used."
+  },
+  "invalidPermissions": "Invalid permissions",
+  "@invalidPermissions": {
+    "description": "Title for the warning shown when rest timers lack required permissions."
+  },
+  "insufficientTimerPermissionsConfirmation": "Rest timers are enabled without sufficient permissions. Are you sure?",
+  "@insufficientTimerPermissionsConfirmation": {
+    "description": "Confirmation shown when leaving timer permissions incomplete."
+  },
+  "actionConfirm": "Confirm",
+  "@actionConfirm": {
+    "description": "Generic confirmation action."
+  },
+  "appAccess": "App access",
+  "@appAccess": {
+    "description": "Title for the Android app access dialog."
+  },
+  "appAccessDescription": "Needed for enabled timers and notifications.",
+  "@appAccessDescription": {
+    "description": "Short explanation of why Android app access is requested."
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Generic label for notifications."
+  },
+  "timerProgressAndRestAlerts": "Timer progress and rest alerts",
+  "@timerProgressAndRestAlerts": {
+    "description": "Description of notifications used when rest timers are enabled."
+  },
+  "enabledNotificationsDescription": "Notifications you have enabled",
+  "@enabledNotificationsDescription": {
+    "description": "Description of notification access when notifications are enabled without rest timers."
+  },
+  "backgroundActivity": "Background activity",
+  "@backgroundActivity": {
+    "description": "Android app access label for background activity."
+  },
+  "backgroundActivityDescription": "Keep timers reliable in the background",
+  "@backgroundActivityDescription": {
+    "description": "Description of background activity access for timers."
+  },
+  "exactAlarms": "Exact alarms",
+  "@exactAlarms": {
+    "description": "Android app access label for exact alarms."
+  },
+  "exactAlarmsDescription": "Alert exactly when a rest timer ends",
+  "@exactAlarmsDescription": {
+    "description": "Description of exact alarm access for rest timers."
+  },
+  "noAdditionalAndroidAccessNeeded": "No additional Android access is needed for your current settings.",
+  "@noAdditionalAndroidAccessNeeded": {
+    "description": "Message shown when current settings need no extra Android permissions."
+  },
+  "actionDone": "Done",
+  "@actionDone": {
+    "description": "Generic action for finishing or dismissing a flow."
+  },
+  "allowed": "Allowed",
+  "@allowed": {
+    "description": "Status tooltip indicating that an Android permission is granted."
+  },
+  "actionAllow": "Allow",
+  "@actionAllow": {
+    "description": "Generic action for granting requested access."
   }
 }

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart';
@@ -80,6 +81,7 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
     final needsNotifications = settings.notifications || needsTimerAccess;
     final hasRequirements = needsNotifications || needsTimerAccess;
     final colors = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
 
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
@@ -105,12 +107,12 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'App access',
+                  l10n.appAccess,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Needed for enabled timers and notifications.',
+                  l10n.appAccessDescription,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: colors.onSurfaceVariant,
                   ),
@@ -130,10 +132,10 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
               if (needsNotifications)
                 _AccessCard(
                   icon: Icons.notifications_outlined,
-                  title: 'Notifications',
+                  title: l10n.notifications,
                   description: needsTimerAccess
-                      ? 'Timer progress and rest alerts'
-                      : 'Notifications you have enabled',
+                      ? l10n.timerProgressAndRestAlerts
+                      : l10n.enabledNotificationsDescription,
                   granted: _notificationGranted,
                   onRequest: _requestNotification,
                 ),
@@ -142,8 +144,8 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
               if (needsTimerAccess)
                 _AccessCard(
                   icon: Icons.battery_saver_outlined,
-                  title: 'Background activity',
-                  description: 'Keep timers reliable in the background',
+                  title: l10n.backgroundActivity,
+                  description: l10n.backgroundActivityDescription,
                   granted: _batteryOptimizationDisabled,
                   onRequest: () =>
                       _request(Permission.ignoreBatteryOptimizations),
@@ -152,8 +154,8 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
               if (needsTimerAccess)
                 _AccessCard(
                   icon: Icons.alarm_outlined,
-                  title: 'Exact alarms',
-                  description: 'Alert exactly when a rest timer ends',
+                  title: l10n.exactAlarms,
+                  description: l10n.exactAlarmsDescription,
                   granted: _exactAlarmGranted,
                   onRequest: () => _request(Permission.scheduleExactAlarm),
                 ),
@@ -168,10 +170,8 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
                     children: [
                       Icon(Icons.check_circle_outline, color: colors.primary),
                       const SizedBox(width: 12),
-                      const Expanded(
-                        child: Text(
-                          'No additional Android access is needed for your current settings.',
-                        ),
+                      Expanded(
+                        child: Text(l10n.noAdditionalAndroidAccessNeeded),
                       ),
                     ],
                   ),
@@ -195,7 +195,7 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
               if (!context.mounted) return;
               Navigator.pop(context);
             },
-            child: const Text('Done'),
+            child: Text(l10n.actionDone),
           ),
         ),
       ],
@@ -252,11 +252,14 @@ class _AccessCard extends StatelessWidget {
           const SizedBox(width: 8),
           if (granted)
             Tooltip(
-              message: 'Allowed',
+              message: context.l10n.allowed,
               child: Icon(Icons.check_circle, color: colors.primary),
             )
           else
-            TextButton(onPressed: onRequest, child: const Text('Allow')),
+            TextButton(
+              onPressed: onRequest,
+              child: Text(context.l10n.actionAllow),
+            ),
         ],
       ),
     );

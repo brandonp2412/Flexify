@@ -447,6 +447,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name'**
   String get nameLabel;
+
+  /// Title for the page explaining missing Android permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing permissions'**
+  String get missingPermissions;
+
+  /// Message explaining that enabled rest timers require additional permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest timers are on, but permissions are missing.'**
+  String get restTimersPermissionsMissing;
+
+  /// Explanation that timer permissions are unnecessary when rest timers are disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'If you disable rest timers, then these permissions aren\'t needed.'**
+  String get restTimersPermissionsOptional;
+
+  /// Label for the rest timer feature.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest timers'**
+  String get restTimers;
+
+  /// Android permission action for excluding Flexify from battery optimizations.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable battery optimizations'**
+  String get disableBatteryOptimizations;
+
+  /// Explanation of why battery optimization access is requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress may pause if battery optimizations stay on.'**
+  String get batteryOptimizationWarning;
+
+  /// Android permission action for scheduling exact alarms.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule exact alarm'**
+  String get scheduleExactAlarm;
+
+  /// Explanation of why exact alarm access is requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarms cannot be accurate if this is disabled.'**
+  String get exactAlarmWarning;
+
+  /// Android permission action for posting notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Post notifications'**
+  String get postNotifications;
+
+  /// Explanation of how rest timer notifications are used.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer progress is sent to the notification bar'**
+  String get notificationBarDescription;
+
+  /// Title for the warning shown when rest timers lack required permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid permissions'**
+  String get invalidPermissions;
+
+  /// Confirmation shown when leaving timer permissions incomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest timers are enabled without sufficient permissions. Are you sure?'**
+  String get insufficientTimerPermissionsConfirmation;
+
+  /// Generic confirmation action.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actionConfirm;
+
+  /// Title for the Android app access dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'App access'**
+  String get appAccess;
+
+  /// Short explanation of why Android app access is requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Needed for enabled timers and notifications.'**
+  String get appAccessDescription;
+
+  /// Generic label for notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// Description of notifications used when rest timers are enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer progress and rest alerts'**
+  String get timerProgressAndRestAlerts;
+
+  /// Description of notification access when notifications are enabled without rest timers.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications you have enabled'**
+  String get enabledNotificationsDescription;
+
+  /// Android app access label for background activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Background activity'**
+  String get backgroundActivity;
+
+  /// Description of background activity access for timers.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep timers reliable in the background'**
+  String get backgroundActivityDescription;
+
+  /// Android app access label for exact alarms.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact alarms'**
+  String get exactAlarms;
+
+  /// Description of exact alarm access for rest timers.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert exactly when a rest timer ends'**
+  String get exactAlarmsDescription;
+
+  /// Message shown when current settings need no extra Android permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'No additional Android access is needed for your current settings.'**
+  String get noAdditionalAndroidAccessNeeded;
+
+  /// Generic action for finishing or dismissing a flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get actionDone;
+
+  /// Status tooltip indicating that an Android permission is granted.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get allowed;
+
+  /// Generic action for granting requested access.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get actionAllow;
 }
 
 class _AppLocalizationsDelegate

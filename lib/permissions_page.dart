@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -25,20 +26,18 @@ class _PermissionsPageState extends State<PermissionsPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Missing permissions")),
+      appBar: AppBar(title: Text(context.l10n.missingPermissions)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
-              const ListTile(
-                title: Text("Rest timers are on, but permissions are missing."),
-                subtitle: Text(
-                  "If you disable rest timers, then these permissions aren't needed.",
-                ),
+              ListTile(
+                title: Text(context.l10n.restTimersPermissionsMissing),
+                subtitle: Text(context.l10n.restTimersPermissionsOptional),
               ),
               ListTile(
-                title: const Text('Rest timers'),
+                title: Text(context.l10n.restTimers),
                 onTap: () {
                   db.settings.update().write(
                     SettingsCompanion(
@@ -54,10 +53,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 ),
               ),
               ListTile(
-                title: const Text('Disable battery optimizations'),
-                subtitle: const Text(
-                  'Progress may pause if battery optimizations stay on.',
-                ),
+                title: Text(context.l10n.disableBatteryOptimizations),
+                subtitle: Text(context.l10n.batteryOptimizationWarning),
                 onTap: () async => await requestPermission(
                   Permission.ignoreBatteryOptimizations,
                 ),
@@ -69,10 +66,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 ),
               ),
               ListTile(
-                title: const Text('Schedule exact alarm'),
-                subtitle: const Text(
-                  'Alarms cannot be accurate if this is disabled.',
-                ),
+                title: Text(context.l10n.scheduleExactAlarm),
+                subtitle: Text(context.l10n.exactAlarmWarning),
                 onTap: () async =>
                     await requestPermission(Permission.scheduleExactAlarm),
                 trailing: Switch(
@@ -82,10 +77,8 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 ),
               ),
               ListTile(
-                title: const Text('Post notifications'),
-                subtitle: const Text(
-                  'Timer progress is sent to the notification bar',
-                ),
+                title: Text(context.l10n.postNotifications),
+                subtitle: Text(context.l10n.notificationBarDescription),
                 onTap: () async =>
                     await requestPermission(Permission.notification),
                 trailing: Switch(
@@ -105,19 +98,19 @@ class _PermissionsPageState extends State<PermissionsPage> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: const Text('Invalid permissions'),
-                  content: const Text(
-                    'Rest timers are enabled without sufficient permissions. Are you sure?',
+                  title: Text(context.l10n.invalidPermissions),
+                  content: Text(
+                    context.l10n.insufficientTimerPermissionsConfirmation,
                   ),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.actionCancel),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                     TextButton(
-                      child: const Text('OK'),
+                      child: Text(context.l10n.actionOk),
                       onPressed: () async {
                         Navigator.pop(context);
                         Navigator.pop(context);
@@ -139,7 +132,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
             );
           }
         },
-        label: const Text("Confirm"),
+        label: Text(context.l10n.actionConfirm),
         icon: const Icon(Icons.check),
       ),
     );
