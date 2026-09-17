@@ -1762,6 +1762,12 @@ abstract class AppLocalizations {
   /// **'Stop'**
   String get actionStop;
 
+  /// In-app toast shown when a non-Android timer finishes.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer finished!'**
+  String get timerFinishedToast;
+
   /// Action for stopping the active timer.
   ///
   /// In en, this message translates to:
@@ -1797,6 +1803,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+1 minute'**
   String get addOneMinute;
+
+  /// Compact Android notification action that adds one minute.
+  ///
+  /// In en, this message translates to:
+  /// **'Add 1 min'**
+  String get addOneMinuteNotification;
+
+  /// Generic rest timer title used when restarting a timer from a notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest timer'**
+  String get restTimer;
 
   /// Default notification title when a timer expires.
   ///
@@ -1839,6 +1857,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Timer finished'**
   String get timerFinished;
+
+  /// Android toast shown when the system battery optimization exemption screen is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests to ignore battery optimizations are disabled on your device.'**
+  String get batteryOptimizationRequestUnavailable;
+
+  /// Android toast shown when the exact alarm permission screen is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Request for SCHEDULE_EXACT_ALARM rejected on your device'**
+  String get exactAlarmRequestUnavailable;
 
   /// Explanation shown when a database migration fails.
   ///

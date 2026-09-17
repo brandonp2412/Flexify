@@ -144,7 +144,15 @@ class MainActivity : FlutterActivity() {
                     val alarmSound = call.argument<String>("alarmSound")!!
                     val vibrate = call.argument<Boolean>("vibrate")!!
                     val target = call.argument<String>("target") ?: "timer"
-                    timer(restMs, title, timestamp, alarmSound, vibrate, target)
+                    timer(
+                        restMs,
+                        title,
+                        timestamp,
+                        alarmSound,
+                        vibrate,
+                        target,
+                        timerLocalization(call)
+                    )
                 }
 
                 "getNotificationTarget" -> {
@@ -189,7 +197,16 @@ class MainActivity : FlutterActivity() {
                         val alarmSound = call.argument<String>("alarmSound")
                         val vibrate = call.argument<Boolean>("vibrate")
                         val target = call.argument<String>("target") ?: "timer"
-                        timer(1000 * 60, "Rest timer", timestamp!!, alarmSound!!, vibrate!!, target)
+                        val localization = timerLocalization(call)
+                        timer(
+                            1000 * 60,
+                            localization["restTimerTitle"].orEmpty(),
+                            timestamp!!,
+                            alarmSound!!,
+                            vibrate!!,
+                            target,
+                            localization
+                        )
                     }
                 }
 
@@ -201,7 +218,9 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "requestTimerPermissions" -> {
-                    requestTimerPermissions()
+                    requestTimerPermissions(
+                        call.argument<String>("batteryOptimizationRequestUnavailable").orEmpty()
+                    )
                     result.success(true)
                 }
 
@@ -262,13 +281,29 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    private fun timerLocalization(call: io.flutter.plugin.common.MethodCall): Map<String, String> {
+        val keys = listOf(
+            "stopLabel",
+            "addOneMinuteLabel",
+            "restTimerTitle",
+            "timerChannelName",
+            "timerChannelDescription",
+            "timerFinishedChannelName",
+            "timerFinishedChannelDescription",
+            "timerFinishedTitle",
+            "exactAlarmRequestUnavailable"
+        )
+        return keys.associateWith { call.argument<String>(it).orEmpty() }
+    }
+
     private fun timer(
         durationMs: Int,
         description: String,
         timeStamp: Long,
         alarmSound: String,
         vibrate: Boolean,
-        target: String
+        target: String,
+        localization: Map<String, String>
     ) {
         Log.d("MainActivity", "Queue $description for $durationMs delay")
         val intent = Intent(context, TimerService::class.java).also { intent ->
@@ -284,6 +319,7 @@ class MainActivity : FlutterActivity() {
             putExtra("alarmSound", alarmSound)
             putExtra("vibrate", vibrate)
             putExtra(TIMER_TARGET_EXTRA, target)
+            localization.forEach { (key, value) -> putExtra(key, value) }
         }
 
         context.startForegroundService(intent)
@@ -324,7 +360,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun requestTimerPermissions() {
+    private fun requestTimerPermissions(batteryOptimizationRequestUnavailable: String) {
         if (claimNotificationPermissionPrompt()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -334,13 +370,13 @@ class MainActivity : FlutterActivity() {
         }
         
         if (timerBound && timerService != null) {
-            timerService?.battery()
+            timerService?.battery(batteryOptimizationRequestUnavailable)
         } else {
             val intent = Intent(context, TimerService::class.java)
             bindService(intent, object : ServiceConnection {
                 override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                     val binder = service as TimerService.LocalBinder
-                    binder.getService().battery()
+                    binder.getService().battery(batteryOptimizationRequestUnavailable)
                     unbindService(this)
                 }
                 

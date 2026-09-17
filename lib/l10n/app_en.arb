@@ -1246,6 +1246,10 @@
   "@actionStop": {
     "description": "Generic stop action."
   },
+  "timerFinishedToast": "Timer finished!",
+  "@timerFinishedToast": {
+    "description": "In-app toast shown when a non-Android timer finishes."
+  },
   "stopTimer": "Stop timer",
   "@stopTimer": {
     "description": "Action for stopping the active timer."
@@ -1269,6 +1273,14 @@
   "addOneMinute": "+1 minute",
   "@addOneMinute": {
     "description": "Timer action that adds one minute."
+  },
+  "addOneMinuteNotification": "Add 1 min",
+  "@addOneMinuteNotification": {
+    "description": "Compact Android notification action that adds one minute."
+  },
+  "restTimer": "Rest timer",
+  "@restTimer": {
+    "description": "Generic rest timer title used when restarting a timer from a notification."
   },
   "timerUp": "Timer up",
   "@timerUp": {
@@ -1297,6 +1309,14 @@
   "timerFinished": "Timer finished",
   "@timerFinished": {
     "description": "Android notification title for a completed timer."
+  },
+  "batteryOptimizationRequestUnavailable": "Requests to ignore battery optimizations are disabled on your device.",
+  "@batteryOptimizationRequestUnavailable": {
+    "description": "Android toast shown when the system battery optimization exemption screen is unavailable."
+  },
+  "exactAlarmRequestUnavailable": "Request for SCHEDULE_EXACT_ALARM rejected on your device",
+  "@exactAlarmRequestUnavailable": {
+    "description": "Android toast shown when the exact alarm permission screen is unavailable."
   },
   "databaseMigrationFailureDescription": "Something went wrong when creating/upgrading your database. Usually this can be fixed by deleting & re-creating your records.",
   "@databaseMigrationFailureDescription": {

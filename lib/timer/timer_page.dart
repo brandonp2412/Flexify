@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -138,9 +139,9 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       toast(
-        'Timer finished!',
+        context.l10n.timerFinishedToast,
         action: SnackBarAction(
-          label: 'Stop',
+          label: context.l10n.actionStop,
           onPressed: widget.timerState.stopTimer,
         ),
       );
@@ -172,20 +173,24 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
       desktopAction = FilledButton.icon(
         onPressed: () async => await widget.timerState.stopTimer(),
         icon: const Icon(Icons.stop_rounded),
-        label: const Text('Stop timer'),
+        label: Text(context.l10n.stopTimer),
       );
     } else if (!countdownActive) {
       desktopAction = FilledButton.icon(
         onPressed: _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
         icon: Icon(_stopwatchRunning ? Icons.pause_rounded : Icons.play_arrow),
-        label: Text(_stopwatchRunning ? 'Pause' : 'Start stopwatch'),
+        label: Text(
+          _stopwatchRunning
+              ? context.l10n.actionPause
+              : context.l10n.startStopwatch,
+        ),
       );
     }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: desktop ? const Text('Timer') : null,
+        title: desktop ? Text(context.l10n.navTimer) : null,
         actions: [
           IconButton(
             onPressed: () {
@@ -193,7 +198,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
               );
             },
-            tooltip: 'Settings',
+            tooltip: context.l10n.navSettings,
             icon: const Icon(Icons.settings),
           ),
         ],
@@ -225,7 +230,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
                       onPressed: () async =>
                           await widget.timerState.stopTimer(),
                       icon: const Icon(Icons.stop),
-                      label: const Text("Stop"),
+                      label: Text(context.l10n.actionStop),
                     )
                   : countdownActive
                   ? const SizedBox()
@@ -236,7 +241,11 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
                       icon: Icon(
                         _stopwatchRunning ? Icons.pause : Icons.play_arrow,
                       ),
-                      label: Text(_stopwatchRunning ? "Pause" : "Start"),
+                      label: Text(
+                        _stopwatchRunning
+                            ? context.l10n.actionPause
+                            : context.l10n.actionStart,
+                      ),
                     ),
             ),
     );

@@ -154,6 +154,24 @@ class App extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: localeOverrideFromIdentifier(localeOverride),
+          builder: (context, child) {
+            context.read<TimerState>().setNotificationLocalizations(
+              timerUpTitle: context.l10n.timerUp,
+              openNotificationLabel: context.l10n.openNotification,
+              stopLabel: context.l10n.actionStop,
+              addOneMinuteLabel: context.l10n.addOneMinuteNotification,
+              restTimerTitle: context.l10n.restTimer,
+              timerChannelName: context.l10n.timerChannelName,
+              timerChannelDescription: context.l10n.timerChannelDescription,
+              timerFinishedChannelName: context.l10n.timerFinishedChannelName,
+              timerFinishedChannelDescription:
+                  context.l10n.timerFinishedChannelDescription,
+              timerFinishedTitle: context.l10n.timerFinished,
+              exactAlarmRequestUnavailable:
+                  context.l10n.exactAlarmRequestUnavailable,
+            );
+            return child ?? const SizedBox.shrink();
+          },
           onGenerateTitle: (context) => context.l10n.appTitle,
           theme: ThemeData(
             colorScheme: colors ? lightDynamic : _lightScheme,

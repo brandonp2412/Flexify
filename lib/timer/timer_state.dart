@@ -21,8 +21,47 @@ class TimerState extends ChangeNotifier {
   String? _notificationTarget;
 
   FlutterLocalNotificationsPlugin? _notifications;
+  String _timerUpTitle = '';
+  String _openNotificationLabel = '';
+  String _stopLabel = '';
+  String _addOneMinuteLabel = '';
+  String _restTimerTitle = '';
+  String _timerChannelName = '';
+  String _timerChannelDescription = '';
+  String _timerFinishedChannelName = '';
+  String _timerFinishedChannelDescription = '';
+  String _timerFinishedTitle = '';
+  String _exactAlarmRequestUnavailable = '';
 
   bool get keepScreenOn => _keepScreenOn;
+
+  void setNotificationLocalizations({
+    required String timerUpTitle,
+    required String openNotificationLabel,
+    required String stopLabel,
+    required String addOneMinuteLabel,
+    required String restTimerTitle,
+    required String timerChannelName,
+    required String timerChannelDescription,
+    required String timerFinishedChannelName,
+    required String timerFinishedChannelDescription,
+    required String timerFinishedTitle,
+    required String exactAlarmRequestUnavailable,
+  }) {
+    _timerUpTitle = timerUpTitle;
+    _stopLabel = stopLabel;
+    _addOneMinuteLabel = addOneMinuteLabel;
+    _restTimerTitle = restTimerTitle;
+    _timerChannelName = timerChannelName;
+    _timerChannelDescription = timerChannelDescription;
+    _timerFinishedChannelName = timerFinishedChannelName;
+    _timerFinishedChannelDescription = timerFinishedChannelDescription;
+    _timerFinishedTitle = timerFinishedTitle;
+    _exactAlarmRequestUnavailable = exactAlarmRequestUnavailable;
+    if (_openNotificationLabel == openNotificationLabel) return;
+    _openNotificationLabel = openNotificationLabel;
+    _notifications = null;
+  }
 
   void setKeepScreenOn(bool value) {
     _keepScreenOn = value;
@@ -107,6 +146,15 @@ class TimerState extends ChangeNotifier {
       'vibrate': vibrate,
       'enableSound': enableSound,
       'target': _target,
+      'stopLabel': _stopLabel,
+      'addOneMinuteLabel': _addOneMinuteLabel,
+      'restTimerTitle': _restTimerTitle,
+      'timerChannelName': _timerChannelName,
+      'timerChannelDescription': _timerChannelDescription,
+      'timerFinishedChannelName': _timerFinishedChannelName,
+      'timerFinishedChannelDescription': _timerFinishedChannelDescription,
+      'timerFinishedTitle': _timerFinishedTitle,
+      'exactAlarmRequestUnavailable': _exactAlarmRequestUnavailable,
     };
     if (!kIsWeb && Platform.isAndroid) {
       androidChannel.invokeMethod('add', args);
@@ -156,6 +204,15 @@ class TimerState extends ChangeNotifier {
       'vibrate': vibrate,
       'enableSound': enableSound,
       'target': target,
+      'stopLabel': _stopLabel,
+      'addOneMinuteLabel': _addOneMinuteLabel,
+      'restTimerTitle': _restTimerTitle,
+      'timerChannelName': _timerChannelName,
+      'timerChannelDescription': _timerChannelDescription,
+      'timerFinishedChannelName': _timerFinishedChannelName,
+      'timerFinishedChannelDescription': _timerFinishedChannelDescription,
+      'timerFinishedTitle': _timerFinishedTitle,
+      'exactAlarmRequestUnavailable': _exactAlarmRequestUnavailable,
     };
     if (!kIsWeb && Platform.isAndroid) {
       await androidChannel.invokeMethod('timer', args);
@@ -194,16 +251,16 @@ class TimerState extends ChangeNotifier {
   Future<FlutterLocalNotificationsPlugin?> _getNotifications() async {
     if (_notifications != null) return _notifications;
 
-    const linux = LinuxInitializationSettings(
-      defaultActionName: 'Open notification',
+    final linux = LinuxInitializationSettings(
+      defaultActionName: _openNotificationLabel,
     );
     const darwin = DarwinInitializationSettings();
-    const init = InitializationSettings(
+    final init = InitializationSettings(
       linux: linux,
       macOS: darwin,
       iOS: darwin,
-      android: AndroidInitializationSettings('ic_launcher'),
-      windows: WindowsInitializationSettings(
+      android: const AndroidInitializationSettings('ic_launcher'),
+      windows: const WindowsInitializationSettings(
         appName: 'Flexify',
         appUserModelId: 'com.presley.flexify',
         guid: '550e8400-e29b-41d4-a716-446655440000',
@@ -237,7 +294,7 @@ class TimerState extends ChangeNotifier {
 
     try {
       final plugin = await _getNotifications();
-      await plugin?.show(id: 1, title: title ?? "Timer up");
+      await plugin?.show(id: 1, title: title ?? _timerUpTitle);
     } catch (error, stack) {
       CrashLogger.instance?.record(error, stack, context: 'notify.show');
     }

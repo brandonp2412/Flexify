@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -274,7 +275,11 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
               onPressed: started
                   ? widget.onRestart
                   : () => _addOneMinute(context),
-              child: Text(started ? 'Restart' : '+1 minute'),
+              child: Text(
+                started
+                    ? context.l10n.actionRestart
+                    : context.l10n.addOneMinute,
+              ),
             ),
           ],
         );
@@ -474,7 +479,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               settings.enableSound,
             );
           },
-          child: const Text('+1 minute'),
+          child: Text(context.l10n.addOneMinute),
         ),
       ],
     );

@@ -26,11 +26,15 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         Expired
     }
 
-    fun start(context: Context, elapsedTime: Long = 0) {
+    fun start(
+        context: Context,
+        elapsedTime: Long = 0,
+        exactAlarmRequestUnavailable: String = ""
+    ) {
         if (state != State.Paused) return
         msTimerDuration -= elapsedTime
         endTime = SystemClock.elapsedRealtime() + msTimerDuration
-        registerPendingIntent(context)
+        registerPendingIntent(context, exactAlarmRequestUnavailable)
         state = State.Running
     }
 
@@ -51,12 +55,16 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         return (getRemainingMillis() / 1000).toInt()
     }
 
-    fun increaseDuration(context: Context, milli: Long) {
+    fun increaseDuration(
+        context: Context,
+        milli: Long,
+        exactAlarmRequestUnavailable: String = ""
+    ) {
         val wasRunning = isRunning()
         if (wasRunning) stop(context)
         msTimerDuration += milli
         totalTimerDuration += milli
-        if (wasRunning) start(context)
+        if (wasRunning) start(context, exactAlarmRequestUnavailable = exactAlarmRequestUnavailable)
     }
 
     fun isRunning(): Boolean {
@@ -93,7 +101,10 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         return true
     }
 
-    private fun requestPermission(context: Context): Boolean {
+    private fun requestPermission(
+        context: Context,
+        exactAlarmRequestUnavailable: String
+    ): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true
         val intent = Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
         intent.data = Uri.parse("package:" + context.packageName)
@@ -102,7 +113,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context2: Context?, intent: Intent?) {
                     context.unregisterReceiver(this)
-                    registerPendingIntent(context)
+                    registerPendingIntent(context, exactAlarmRequestUnavailable)
                 }
             }
 
@@ -116,17 +127,21 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
                 context,
-                "Request for SCHEDULE_EXACT_ALARM rejected on your device",
+                exactAlarmRequestUnavailable,
                 Toast.LENGTH_LONG
             ).show()
             false
         }
     }
 
-    private fun incorrectPermissions(context: Context, alarmManager: AlarmManager): Boolean {
+    private fun incorrectPermissions(
+        context: Context,
+        alarmManager: AlarmManager,
+        exactAlarmRequestUnavailable: String
+    ): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
                 && !alarmManager.canScheduleExactAlarms()
-                && !requestPermission(context)
+                && !requestPermission(context, exactAlarmRequestUnavailable)
     }
 
     private fun getAlarmManager(context: Context): AlarmManager {
@@ -148,7 +163,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         pendingIntent.cancel()
     }
 
-    private fun registerPendingIntent(context: Context) {
+    private fun registerPendingIntent(context: Context, exactAlarmRequestUnavailable: String) {
         val intent = Intent(context, TimerService::class.java)
             .setAction(TimerService.TIMER_EXPIRED)
         val pendingIntent = PendingIntent.getService(
@@ -158,7 +173,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val alarmManager = getAlarmManager(context)
-        if (incorrectPermissions(context, alarmManager)) return
+        if (incorrectPermissions(context, alarmManager, exactAlarmRequestUnavailable)) return
 
         alarmManager.setExactAndAllowWhileIdle(
             ELAPSED_REALTIME_WAKEUP,

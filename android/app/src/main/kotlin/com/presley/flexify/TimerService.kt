@@ -45,6 +45,14 @@ class TimerService : Service() {
     private var currentTarget = "timer"
     private var alarmSound: String? = null
     private var shouldVibrate = true
+    private var stopLabel = ""
+    private var addOneMinuteLabel = ""
+    private var timerChannelName = ""
+    private var timerChannelDescription = ""
+    private var timerFinishedChannelName = ""
+    private var timerFinishedChannelDescription = ""
+    private var timerFinishedTitle = ""
+    private var exactAlarmRequestUnavailable = ""
     var mainActivityVisible = true
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
@@ -98,7 +106,11 @@ class TimerService : Service() {
                     timeStamp ?: 0
                 )
 
-                flexifyTimer.increaseDuration(applicationContext, FlexifyTimer.ONE_MINUTE_MILLI)
+                flexifyTimer.increaseDuration(
+                    applicationContext,
+                    FlexifyTimer.ONE_MINUTE_MILLI,
+                    exactAlarmRequestUnavailable
+                )
                 updateNotification(flexifyTimer.getRemainingSeconds())
 
                 if (intent != null && intent.action == ADD_BROADCAST_INTERNAL) updateAppUI()
@@ -180,6 +192,7 @@ class TimerService : Service() {
         flexifyTimer.start(
             applicationContext,
             if (timeStamp > 0) System.currentTimeMillis() - timeStamp else 0,
+            exactAlarmRequestUnavailable
         )
 
         @SuppressLint("WrongConstant")
@@ -213,11 +226,21 @@ class TimerService : Service() {
     }
 
     private fun onTimerStart(intent: Intent?) {
-        currentDescription = intent?.getStringExtra("description") ?: "Alarm"
+        currentDescription = intent?.getStringExtra("description").orEmpty()
         currentTarget = intent?.getStringExtra(MainActivity.TIMER_TARGET_EXTRA) ?: "timer"
         alarmSound = intent?.getStringExtra("alarmSound")
             ?: "android.resource://$packageName/${R.raw.argon}"
         shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
+        stopLabel = intent?.getStringExtra("stopLabel").orEmpty()
+        addOneMinuteLabel = intent?.getStringExtra("addOneMinuteLabel").orEmpty()
+        timerChannelName = intent?.getStringExtra("timerChannelName").orEmpty()
+        timerChannelDescription = intent?.getStringExtra("timerChannelDescription").orEmpty()
+        timerFinishedChannelName = intent?.getStringExtra("timerFinishedChannelName").orEmpty()
+        timerFinishedChannelDescription =
+            intent?.getStringExtra("timerFinishedChannelDescription").orEmpty()
+        timerFinishedTitle = intent?.getStringExtra("timerFinishedTitle").orEmpty()
+        exactAlarmRequestUnavailable =
+            intent?.getStringExtra("exactAlarmRequestUnavailable").orEmpty()
         val duration = intent?.getIntExtra("milliseconds", 0) ?: (3 * 60 * 1000)
         val timestamp = intent?.getLongExtra("timeStamp", 0) ?: 0
         startTimer(duration.toLong(), timestamp)
@@ -243,7 +266,7 @@ class TimerService : Service() {
     }
 
     @SuppressLint("BatteryLife")
-    fun battery() {
+    fun battery(requestUnavailableMessage: String) {
         val powerManager =
             applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
         val ignoring =
@@ -261,7 +284,7 @@ class TimerService : Service() {
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
                 applicationContext,
-                "Requests to ignore battery optimizations are disabled on your device.",
+                requestUnavailableMessage,
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -342,20 +365,20 @@ class TimerService : Service() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setDeleteIntent(stopPending)
-            .addAction(R.drawable.ic_baseline_stop_24, "Stop", stopPending)
-            .addAction(R.drawable.ic_baseline_stop_24, "Add 1 min", addPending)
+            .addAction(R.drawable.ic_baseline_stop_24, stopLabel, stopPending)
+            .addAction(R.drawable.ic_baseline_stop_24, addOneMinuteLabel, addPending)
 
         val notificationManager = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "Timer Channel",
+                timerChannelName,
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.setSound(null, null)
             channel.setBypassDnd(true)
             channel.enableVibration(false)
-            channel.description = "Ongoing progress of rest timers."
+            channel.description = timerChannelDescription
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(channel)
         }
@@ -385,13 +408,13 @@ class TimerService : Service() {
             val channel =
                 NotificationChannel(
                     channelId,
-                    "Timer Finished Channel",
+                    timerFinishedChannelName,
                     NotificationManager.IMPORTANCE_HIGH
                 ).apply {
                     setSound(null, null)
                     setBypassDnd(true)
                     enableVibration(false)
-                    description = "Plays an alarm when a rest timer completes."
+                    description = timerFinishedChannelDescription
                     lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 }
             notificationManager.createNotificationChannel(channel)
@@ -426,7 +449,7 @@ class TimerService : Service() {
             )
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Timer finished")
+            .setContentTitle(timerFinishedTitle)
             .setContentText(currentDescription)
             .setSmallIcon(R.drawable.outline_timer_24)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -435,8 +458,8 @@ class TimerService : Service() {
             .setContentIntent(contentPending)
             .setAutoCancel(true)
             .setDeleteIntent(pendingStop)
-            .addAction(R.drawable.ic_baseline_stop_24, "Stop", pendingStop)
-            .addAction(R.drawable.ic_baseline_stop_24, "Add 1 min", addPending)
+            .addAction(R.drawable.ic_baseline_stop_24, stopLabel, pendingStop)
+            .addAction(R.drawable.ic_baseline_stop_24, addOneMinuteLabel, addPending)
 
         if (ActivityCompat.checkSelfPermission(
                 this,

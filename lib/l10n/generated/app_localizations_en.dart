@@ -926,6 +926,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionStop => 'Stop';
 
   @override
+  String get timerFinishedToast => 'Timer finished!';
+
+  @override
   String get stopTimer => 'Stop timer';
 
   @override
@@ -942,6 +945,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addOneMinute => '+1 minute';
+
+  @override
+  String get addOneMinuteNotification => 'Add 1 min';
+
+  @override
+  String get restTimer => 'Rest timer';
 
   @override
   String get timerUp => 'Timer up';
@@ -964,6 +973,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timerFinished => 'Timer finished';
+
+  @override
+  String get batteryOptimizationRequestUnavailable =>
+      'Requests to ignore battery optimizations are disabled on your device.';
+
+  @override
+  String get exactAlarmRequestUnavailable =>
+      'Request for SCHEDULE_EXACT_ALARM rejected on your device';
 
   @override
   String get databaseMigrationFailureDescription =>

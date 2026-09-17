@@ -42,7 +42,10 @@ List<Widget> getTimerSettings(
             if (newValue &&
                 !kIsWeb &&
                 defaultTargetPlatform == TargetPlatform.android) {
-              await androidChannel.invokeMethod('requestTimerPermissions');
+              await androidChannel.invokeMethod('requestTimerPermissions', {
+                'batteryOptimizationRequestUnavailable':
+                    l10n.batteryOptimizationRequestUnavailable,
+              });
             }
 
             db.settings.update().write(
@@ -55,7 +58,10 @@ List<Widget> getTimerSettings(
               if (value &&
                   !kIsWeb &&
                   defaultTargetPlatform == TargetPlatform.android) {
-                await androidChannel.invokeMethod('requestTimerPermissions');
+                await androidChannel.invokeMethod('requestTimerPermissions', {
+                  'batteryOptimizationRequestUnavailable':
+                      l10n.batteryOptimizationRequestUnavailable,
+                });
               }
 
               db.settings.update().write(
