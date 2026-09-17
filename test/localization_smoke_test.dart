@@ -26,6 +26,21 @@ void main() {
     expect(find.text('Flexify'), findsOneWidget);
   });
 
+  testWidgets('loads Spanish localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('Ajustes'), findsOneWidget);
+  });
+
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('fr')));
 
@@ -62,12 +77,30 @@ void main() {
     );
   });
 
-  test('provides localized measurement unit labels', () {
-    final l10n = lookupAppLocalizations(const Locale('en'));
+  test('formats Spanish singular and plural messages', () {
+    final l10n = lookupAppLocalizations(const Locale('es'));
 
-    expect(l10n.kilogramsUnit, 'Kilograms (kg)');
-    expect(l10n.poundsUnit, 'Pounds (lb)');
-    expect(l10n.kilometersUnit, 'Kilometers (km)');
-    expect(l10n.kilocaloriesUnit, 'Kilocalories (kcal)');
+    expect(
+      l10n.deleteRecordsConfirmation(1),
+      '¿Seguro que quieres eliminar 1 registro? Esta acción no se puede deshacer.',
+    );
+    expect(
+      l10n.deleteRecordsConfirmation(3),
+      '¿Seguro que quieres eliminar 3 registros? Esta acción no se puede deshacer.',
+    );
+    expect(l10n.editSets(1), 'Editar 1 serie');
+    expect(l10n.editSets(4), 'Editar 4 series');
+  });
+
+  test('provides localized measurement unit labels', () {
+    final english = lookupAppLocalizations(const Locale('en'));
+    final spanish = lookupAppLocalizations(const Locale('es'));
+
+    expect(english.kilogramsUnit, 'Kilograms (kg)');
+    expect(english.poundsUnit, 'Pounds (lb)');
+    expect(english.kilometersUnit, 'Kilometers (km)');
+    expect(english.kilocaloriesUnit, 'Kilocalories (kcal)');
+    expect(spanish.kilogramsUnit, 'Kilogramos (kg)');
+    expect(spanish.kilometersUnit, 'Kilómetros (km)');
   });
 }

@@ -32,6 +32,8 @@ class FlexifyTestHarness {
     Widget home, {
     TimerState? timerState,
     Size? surfaceSize,
+    Locale? locale,
+    TextScaler? textScaler,
   }) async {
     if (surfaceSize != null) {
       await tester.binding.setSurfaceSize(surfaceSize);
@@ -52,8 +54,15 @@ class FlexifyTestHarness {
         ],
         child: MaterialApp(
           scaffoldMessengerKey: rootScaffoldMessenger,
+          locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          builder: textScaler == null
+              ? null
+              : (context, child) => MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+                  child: child!,
+                ),
           home: home,
         ),
       ),

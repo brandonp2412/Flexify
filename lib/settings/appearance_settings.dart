@@ -49,6 +49,7 @@ List<Widget> getAppearanceSettings(
             DropdownButtonFormField<String>(
               key: const Key('language-setting-dropdown'),
               initialValue: selectedLocale,
+              isExpanded: true,
               decoration: InputDecoration(labelText: l10n.settingsLanguage),
               items: [
                 DropdownMenuItem(

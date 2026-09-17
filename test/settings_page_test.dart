@@ -6,9 +6,20 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_app.dart';
 
-Future<FlexifyTestHarness> render(WidgetTester tester) async {
+Future<FlexifyTestHarness> render(
+  WidgetTester tester, {
+  Locale? locale,
+  Size? surfaceSize,
+  TextScaler? textScaler,
+}) async {
   final harness = await FlexifyTestHarness.create();
-  await harness.pump(tester, const SettingsPage());
+  await harness.pump(
+    tester,
+    const SettingsPage(),
+    locale: locale,
+    surfaceSize: surfaceSize,
+    textScaler: textScaler,
+  );
   await tester.pumpAndSettle();
   return harness;
 }
@@ -66,6 +77,41 @@ void main() {
 
     settings = await (harness.database.settings.select()..limit(1)).getSingle();
     expect(settings.localeOverride, isNull);
+  });
+
+  testWidgets('SettingsPage renders Spanish at narrow scaled layout', (
+    WidgetTester tester,
+  ) async {
+    await render(
+      tester,
+      locale: const Locale('es'),
+      surfaceSize: const Size(320, 640),
+      textScaler: const TextScaler.linear(1.5),
+    );
+
+    expect(find.text('Ajustes'), findsOneWidget);
+    expect(find.text('Buscar...'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.enterText(find.bySemanticsLabel('Buscar...'), 'Idioma');
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(ListTile, 'Idioma'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('SettingsPage renders Spanish at desktop width', (
+    WidgetTester tester,
+  ) async {
+    await render(
+      tester,
+      locale: const Locale('es'),
+      surfaceSize: const Size(1200, 800),
+    );
+
+    expect(find.text('Ajustes'), findsOneWidget);
+    expect(find.text('Buscar...'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('SettingsPage shows images', (WidgetTester tester) async {
