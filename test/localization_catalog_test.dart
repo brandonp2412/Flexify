@@ -9,6 +9,22 @@ final _directTextPattern = RegExp(
 final _literalUiPropertyPattern = RegExp(
   r'''(?:labelText|hintText|helperText|errorText|tooltip|semanticLabel)\s*:\s*(["'])([A-Za-z][^"'\n]*)\1''',
 );
+final _richTextPattern = RegExp(
+  r'''TextSpan\([^)]*?\btext\s*:\s*(["'])([A-Za-z][^"'\n]*)\1''',
+  dotAll: true,
+);
+final _tooltipMessagePattern = RegExp(
+  r'''Tooltip\([^)]*?\bmessage\s*:\s*(["'])([A-Za-z][^"'\n]*)\1''',
+  dotAll: true,
+);
+final _semanticsLabelPattern = RegExp(
+  r'''Semantics\([^)]*?\b(?:label|hint|value)\s*:\s*(["'])([A-Za-z][^"'\n]*)\1''',
+  dotAll: true,
+);
+final _stringLabelWidgetPattern = RegExp(
+  r'''(?:NavigationDestination|BottomNavigationBarItem|SnackBarAction|DropdownMenuEntry|Tab)\([^)]*?\b(?:label|text)\s*:\s*(["'])([A-Za-z][^"'\n]*)\1''',
+  dotAll: true,
+);
 final _placeholderPattern = RegExp(r'\{([A-Za-z][A-Za-z0-9_]*)\s*(?:,|\})');
 
 const _allowedLiteralUiText = <String>{
@@ -119,7 +135,14 @@ void main() {
         '',
       );
       final sourceText = file.readAsStringSync();
-      for (final pattern in [_directTextPattern, _literalUiPropertyPattern]) {
+      for (final pattern in [
+        _directTextPattern,
+        _literalUiPropertyPattern,
+        _richTextPattern,
+        _tooltipMessagePattern,
+        _semanticsLabelPattern,
+        _stringLabelWidgetPattern,
+      ]) {
         for (final match in pattern.allMatches(sourceText)) {
           final literal = match.group(2)!;
           if (_allowedLiteralUiText.contains('$relativePath:$literal'))

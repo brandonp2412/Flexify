@@ -95,6 +95,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 
 - [x] Audit `lib/`, native platform code, and user-facing tests for remaining hard-coded English UI strings.
 - [x] Add a lightweight regression check or documented review rule that makes newly introduced hard-coded UI copy easy to detect.
+  - [x] Cover rich text, tooltip messages, custom semantics, and string-label Flutter widgets in the hard-coded-English audit.
 - [x] English UI behavior and layout remain functionally unchanged apart from localization plumbing.
 
 ## 4. Translation wave 1
