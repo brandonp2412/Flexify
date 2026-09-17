@@ -115,6 +115,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 ## 5. Translation quality and layout QA
 
 - [x] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
+  - [x] Keep language-only `pt` and `zh` fallback catalogs synchronized with the reviewed `pt_BR` and `zh_CN` regional catalogs.
 - [x] Test representative singular/plural/count messages in languages with different plural behavior.
 - [x] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
 - [x] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.

@@ -82,6 +82,26 @@ void main() {
     }
   });
 
+  test('regional fallback ARBs stay in sync', () {
+    const fallbackLocales = {'pt': 'pt_BR', 'zh': 'zh_CN'};
+
+    for (final entry in fallbackLocales.entries) {
+      final fallback = Map<String, dynamic>.of(
+        _readArb(File('lib/l10n/app_${entry.key}.arb')),
+      )..remove('@@locale');
+      final regional = Map<String, dynamic>.of(
+        _readArb(File('lib/l10n/app_${entry.value}.arb')),
+      )..remove('@@locale');
+
+      expect(
+        fallback,
+        regional,
+        reason:
+            '${entry.key} is the language fallback for ${entry.value} and must mirror its reviewed translations.',
+      );
+    }
+  });
+
   test('Flutter UI avoids obvious hard-coded English literals', () {
     final violations = <String>[];
     final dartFiles = Directory('lib')
