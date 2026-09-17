@@ -22,6 +22,57 @@ Finder _textFieldWithLabel(String label) => find.descendant(
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  testWidgets('renders CJK navigation with platform font fallback', (
+    tester,
+  ) async {
+    final database = AppDatabase(
+      DatabaseConnection(
+        NativeDatabase.memory(),
+        closeStreamsSynchronously: true,
+      ),
+    );
+    app.db = database;
+    addTearDown(() async {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+      await database.close();
+    });
+
+    await database.settings.update().write(
+      const SettingsCompanion(
+        explainedPermissions: Value(true),
+        notificationPermissionRequested: Value(true),
+        systemColors: Value(false),
+        localeOverride: Value('ja'),
+      ),
+    );
+    final initial = await (database.settings.select()..limit(1)).getSingle();
+    await tester.pumpWidget(app.appProviders(initial));
+    await tester.pumpAndSettle();
+
+    const localeCases = <String, Locale>{
+      'ja': Locale('ja'),
+      'ko': Locale('ko'),
+      'zh-CN': Locale('zh', 'CN'),
+    };
+    for (final entry in localeCases.entries) {
+      if (entry.key != 'ja') {
+        await database.settings.update().write(
+          SettingsCompanion(localeOverride: Value(entry.key)),
+        );
+        await tester.pump();
+        await tester.pump();
+      }
+
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.locale, entry.value, reason: entry.key);
+      final l10n = lookupAppLocalizations(entry.value);
+      expect(find.text(l10n.navHistory), findsWidgets, reason: entry.key);
+      expect(find.text(l10n.appTitle), findsWidgets, reason: entry.key);
+      expect(tester.takeException(), isNull, reason: entry.key);
+    }
+  });
+
   testWidgets('switches locale and saves a non-English workout', (
     tester,
   ) async {
