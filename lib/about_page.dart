@@ -1,3 +1,4 @@
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/whats_new.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -11,7 +12,7 @@ class AboutPage extends StatelessWidget {
     final info = PackageInfo.fromPlatform();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("About")),
+      appBar: AppBar(title: Text(context.l10n.aboutTitle)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: [
@@ -23,12 +24,12 @@ class AboutPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text("Donate"),
+            title: Text(context.l10n.donate),
             leading: const Icon(Icons.favorite_outline),
             subtitle: FutureBuilder(
               future: info,
               builder: (context, snapshot) =>
-                  const Text("Help support this project"),
+                  Text(context.l10n.helpSupportProject),
             ),
             onTap: () async {
               const url = 'https://github.com/sponsors/brandonp2412';
@@ -36,8 +37,8 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("Whats new?"),
-            subtitle: const Text("See our release notes"),
+            title: Text(context.l10n.whatsNewAbout),
+            subtitle: Text(context.l10n.seeReleaseNotes),
             leading: const Icon(Icons.change_circle_outlined),
             onTap: () => Navigator.of(
               context,
@@ -45,7 +46,7 @@ class AboutPage extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: const Text("Version"),
+            title: Text(context.l10n.versionLabel),
             subtitle: FutureBuilder(
               future: info,
               builder: (context, snapshot) =>
@@ -57,7 +58,7 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("Author"),
+            title: Text(context.l10n.authorLabel),
             leading: const Icon(Icons.person),
             subtitle: FutureBuilder(
               future: info,
@@ -69,9 +70,9 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("Privacy policy"),
+            title: Text(context.l10n.privacyPolicy),
             leading: const Icon(Icons.privacy_tip_outlined),
-            subtitle: const Text("How Flexify handles your data"),
+            subtitle: Text(context.l10n.privacyPolicyDescription),
             onTap: () async {
               const url =
                   'https://brandonp2412.github.io/Flexify/privacy-policy.html';
@@ -79,7 +80,7 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("License"),
+            title: Text(context.l10n.licenseLabel),
             leading: const Icon(Icons.balance),
             subtitle: FutureBuilder(
               future: info,
@@ -92,12 +93,12 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("Source code"),
+            title: Text(context.l10n.sourceCode),
             leading: const Icon(Icons.code),
             subtitle: FutureBuilder(
               future: info,
               builder: (context, snapshot) =>
-                  const Text("Check it out on GitHub"),
+                  Text(context.l10n.sourceCodeDescription),
             ),
             onTap: () async {
               const url = 'https://github.com/brandonp2412/Flexify';
@@ -105,9 +106,9 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("Leave a review"),
+            title: Text(context.l10n.leaveReview),
             leading: const Icon(Icons.reviews_outlined),
-            subtitle: const Text("Rate Flexify on the Play Store"),
+            subtitle: Text(context.l10n.leaveReviewDescription),
             onTap: () async {
               const url =
                   'https://play.google.com/store/apps/details?id=com.presley.flexify';
@@ -115,9 +116,9 @@ class AboutPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("Report a bug"),
+            title: Text(context.l10n.reportBug),
             leading: const Icon(Icons.bug_report),
-            subtitle: const Text("Open a ticket on GitHub"),
+            subtitle: Text(context.l10n.reportBugDescription),
             onTap: () async {
               final version = (await info).version;
               final url =

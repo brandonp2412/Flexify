@@ -425,4 +425,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionSave => 'Save';
+
+  @override
+  String get aboutTitle => 'About';
+
+  @override
+  String get donate => 'Donate';
+
+  @override
+  String get helpSupportProject => 'Help support this project';
+
+  @override
+  String get whatsNewAbout => 'Whats new?';
+
+  @override
+  String get whatsNewTitle => 'What\'s new?';
+
+  @override
+  String get seeReleaseNotes => 'See our release notes';
+
+  @override
+  String get versionLabel => 'Version';
+
+  @override
+  String get authorLabel => 'Author';
+
+  @override
+  String get privacyPolicy => 'Privacy policy';
+
+  @override
+  String get privacyPolicyDescription => 'How Flexify handles your data';
+
+  @override
+  String get licenseLabel => 'License';
+
+  @override
+  String get sourceCode => 'Source code';
+
+  @override
+  String get sourceCodeDescription => 'Check it out on GitHub';
+
+  @override
+  String get leaveReview => 'Leave a review';
+
+  @override
+  String get leaveReviewDescription => 'Rate Flexify on the Play Store';
+
+  @override
+  String get reportBug => 'Report a bug';
+
+  @override
+  String get reportBugDescription => 'Open a ticket on GitHub';
 }

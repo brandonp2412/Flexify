@@ -837,6 +837,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get actionSave;
+
+  /// Title for the About page.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get aboutTitle;
+
+  /// Action for opening the project donation page.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate'**
+  String get donate;
+
+  /// Description for the donation action.
+  ///
+  /// In en, this message translates to:
+  /// **'Help support this project'**
+  String get helpSupportProject;
+
+  /// About-page label for opening release notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Whats new?'**
+  String get whatsNewAbout;
+
+  /// Title for the in-app changelog page.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new?'**
+  String get whatsNewTitle;
+
+  /// Description for the in-app changelog action.
+  ///
+  /// In en, this message translates to:
+  /// **'See our release notes'**
+  String get seeReleaseNotes;
+
+  /// Label for the installed app version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get versionLabel;
+
+  /// Label for the app author.
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get authorLabel;
+
+  /// Label for opening the privacy policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get privacyPolicy;
+
+  /// Description for the privacy policy action.
+  ///
+  /// In en, this message translates to:
+  /// **'How Flexify handles your data'**
+  String get privacyPolicyDescription;
+
+  /// Label for opening the software license.
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get licenseLabel;
+
+  /// Label for opening the source-code repository.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code'**
+  String get sourceCode;
+
+  /// Description for the source-code repository action.
+  ///
+  /// In en, this message translates to:
+  /// **'Check it out on GitHub'**
+  String get sourceCodeDescription;
+
+  /// Label for opening the app-store review page.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave a review'**
+  String get leaveReview;
+
+  /// Description for the app-store review action.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Flexify on the Play Store'**
+  String get leaveReviewDescription;
+
+  /// Label for opening the bug-report form.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a bug'**
+  String get reportBug;
+
+  /// Description for the bug-report action.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a ticket on GitHub'**
+  String get reportBugDescription;
 }
 
 class _AppLocalizationsDelegate

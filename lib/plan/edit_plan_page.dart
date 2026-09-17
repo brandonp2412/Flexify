@@ -289,7 +289,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
     } else {
       final id = await db.into(db.plans).insert(newPlan);
       await db.planExercises.insertAll(
-        _orderedExercises(id).where((exercise) => exercise.enabled.value).toList(),
+        _orderedExercises(
+          id,
+        ).where((exercise) => exercise.enabled.value).toList(),
       );
     }
 

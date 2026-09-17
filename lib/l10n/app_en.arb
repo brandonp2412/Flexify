@@ -569,5 +569,73 @@
   "actionSave": "Save",
   "@actionSave": {
     "description": "Generic save action."
+  },
+  "aboutTitle": "About",
+  "@aboutTitle": {
+    "description": "Title for the About page."
+  },
+  "donate": "Donate",
+  "@donate": {
+    "description": "Action for opening the project donation page."
+  },
+  "helpSupportProject": "Help support this project",
+  "@helpSupportProject": {
+    "description": "Description for the donation action."
+  },
+  "whatsNewAbout": "Whats new?",
+  "@whatsNewAbout": {
+    "description": "About-page label for opening release notes."
+  },
+  "whatsNewTitle": "What's new?",
+  "@whatsNewTitle": {
+    "description": "Title for the in-app changelog page."
+  },
+  "seeReleaseNotes": "See our release notes",
+  "@seeReleaseNotes": {
+    "description": "Description for the in-app changelog action."
+  },
+  "versionLabel": "Version",
+  "@versionLabel": {
+    "description": "Label for the installed app version."
+  },
+  "authorLabel": "Author",
+  "@authorLabel": {
+    "description": "Label for the app author."
+  },
+  "privacyPolicy": "Privacy policy",
+  "@privacyPolicy": {
+    "description": "Label for opening the privacy policy."
+  },
+  "privacyPolicyDescription": "How Flexify handles your data",
+  "@privacyPolicyDescription": {
+    "description": "Description for the privacy policy action."
+  },
+  "licenseLabel": "License",
+  "@licenseLabel": {
+    "description": "Label for opening the software license."
+  },
+  "sourceCode": "Source code",
+  "@sourceCode": {
+    "description": "Label for opening the source-code repository."
+  },
+  "sourceCodeDescription": "Check it out on GitHub",
+  "@sourceCodeDescription": {
+    "description": "Description for the source-code repository action."
+  },
+  "leaveReview": "Leave a review",
+  "@leaveReview": {
+    "description": "Label for opening the app-store review page."
+  },
+  "leaveReviewDescription": "Rate Flexify on the Play Store",
+  "@leaveReviewDescription": {
+    "description": "Description for the app-store review action."
+  },
+  "reportBug": "Report a bug",
+  "@reportBug": {
+    "description": "Label for opening the bug-report form."
+  },
+  "reportBugDescription": "Open a ticket on GitHub",
+  "@reportBugDescription": {
+    "description": "Description for the bug-report action."
   }
 }

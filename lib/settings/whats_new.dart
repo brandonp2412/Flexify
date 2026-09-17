@@ -1,3 +1,4 @@
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,10 +22,14 @@ class Changelog {
 
 class _WhatsNewState extends State<WhatsNew> {
   List<Changelog> _changelogs = [];
+  String? _loadedLocale;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    if (_loadedLocale == locale) return;
+    _loadedLocale = locale;
     setChangelogs();
   }
 
@@ -37,6 +42,7 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
   Future<List<Changelog>> getChangelogFiles(BuildContext context) async {
+    final locale = Localizations.localeOf(context).toLanguageTag();
     final manifest = await AssetManifest.loadFromAssetBundle(
       DefaultAssetBundle.of(context),
     );
@@ -67,9 +73,9 @@ class _WhatsNewState extends State<WhatsNew> {
         result.add(
           Changelog(
             name: filename,
-            created: DateFormat.yMMMd().format(
-              DateTime.fromMillisecondsSinceEpoch(timestamp * 1000),
-            ),
+            created: DateFormat.yMMMd(
+              locale,
+            ).format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
             content: content,
           ),
         );
@@ -87,7 +93,7 @@ class _WhatsNewState extends State<WhatsNew> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("What's new?")),
+      appBar: AppBar(title: Text(context.l10n.whatsNewTitle)),
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 116),
         itemBuilder: (context, index) => ListTile(
@@ -102,7 +108,7 @@ class _WhatsNewState extends State<WhatsNew> {
           const url = 'https://github.com/sponsors/brandonp2412';
           if (await canLaunchUrlString(url)) await launchUrlString(url);
         },
-        label: const Text("Donate"),
+        label: Text(context.l10n.donate),
       ),
     );
   }

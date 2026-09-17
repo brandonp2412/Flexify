@@ -1,3 +1,4 @@
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/settings/whats_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,13 @@ void main() {
     expect(changelogPaths, isNotEmpty);
     final latestContent = await rootBundle.loadString(changelogPaths.first);
 
-    await tester.pumpWidget(const MaterialApp(home: WhatsNew()));
+    await tester.pumpWidget(
+      const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: WhatsNew(),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text("What's new?"), findsOneWidget);
