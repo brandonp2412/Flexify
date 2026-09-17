@@ -97,6 +97,7 @@
   "graphDataImported": "グラフデータをインポートしました。",
   "plansImported": "プランをインポートしました",
   "failedToImportDatabase": "データベースのインポートに失敗しました: {error}",
+  "backupArchiveMissingDatabase": "バックアップに Flexify のデータベースが含まれていません。",
   "failedToImportGraphs": "グラフのインポートに失敗しました: {error}",
   "failedToImportPlans": "プランのインポートに失敗しました: {error}",
   "selectedFileDoesNotExist": "選択したファイルが存在しません",

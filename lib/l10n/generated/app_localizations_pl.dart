@@ -340,6 +340,10 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase =>
+      'Kopia zapasowa nie zawiera bazy danych Flexify.';
+
+  @override
   String failedToImportGraphs(String error) {
     return 'Nie udało się zaimportować wykresów: $error';
   }

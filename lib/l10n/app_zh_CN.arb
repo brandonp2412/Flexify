@@ -97,6 +97,7 @@
   "graphDataImported": "图表数据导入成功！",
   "plansImported": "计划导入成功",
   "failedToImportDatabase": "数据库导入失败：{error}",
+  "backupArchiveMissingDatabase": "备份中不包含 Flexify 数据库。",
   "failedToImportGraphs": "图表导入失败：{error}",
   "failedToImportPlans": "计划导入失败：{error}",
   "selectedFileDoesNotExist": "所选文件不存在",

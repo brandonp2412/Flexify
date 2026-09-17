@@ -318,6 +318,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase =>
+      'バックアップに Flexify のデータベースが含まれていません。';
+
+  @override
   String failedToImportGraphs(String error) {
     return 'グラフのインポートに失敗しました: $error';
   }

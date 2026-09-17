@@ -97,6 +97,7 @@
   "graphDataImported": "Dati dei grafici importati correttamente!",
   "plansImported": "Schede importate correttamente",
   "failedToImportDatabase": "Impossibile importare il database: {error}",
+  "backupArchiveMissingDatabase": "Il backup non contiene il database di Flexify.",
   "failedToImportGraphs": "Impossibile importare i grafici: {error}",
   "failedToImportPlans": "Impossibile importare le schede: {error}",
   "selectedFileDoesNotExist": "Il file selezionato non esiste",

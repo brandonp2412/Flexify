@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
+
 import 'package:flexify/settings/backup_archive.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
@@ -50,5 +52,31 @@ void main() {
       p.join(documentsDirectory.path, '0_progress.jpg'),
     );
     expect(File(restoredImagePath).readAsBytesSync(), [1, 2, 3, 4]);
+  });
+  test('missing database in backup uses typed validation error', () async {
+    final root = await Directory.systemTemp.createTemp(
+      'flexify-backup-invalid-',
+    );
+    addTearDown(() => root.delete(recursive: true));
+
+    final documentsDirectory = Directory(p.join(root.path, 'documents'))
+      ..createSync();
+    final importDirectory = Directory(p.join(root.path, 'import'))
+      ..createSync();
+    final unrelatedFile = File(p.join(root.path, 'readme.txt'))
+      ..writeAsStringSync('not a database');
+    final archiveFile = File(p.join(root.path, 'backup.zip'));
+    final encoder = ZipFileEncoder()..create(archiveFile.path);
+    await encoder.addFile(unrelatedFile, 'readme.txt');
+    await encoder.close();
+
+    expect(
+      () => extractBackupArchive(
+        archiveFile: archiveFile,
+        workingDirectory: importDirectory,
+        documentsDirectory: documentsDirectory,
+      ),
+      throwsA(isA<MissingBackupDatabaseException>()),
+    );
   });
 }

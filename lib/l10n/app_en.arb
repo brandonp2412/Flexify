@@ -417,6 +417,10 @@
       }
     }
   },
+  "backupArchiveMissingDatabase": "The backup archive does not contain the Flexify database.",
+  "@backupArchiveMissingDatabase": {
+    "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
+  },
   "failedToImportGraphs": "Failed to import graphs: {error}",
   "@failedToImportGraphs": {
     "description": "Toast shown when a graph CSV import fails.",

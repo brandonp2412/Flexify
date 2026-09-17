@@ -97,6 +97,7 @@
   "graphDataImported": "Diagrammdaten erfolgreich importiert!",
   "plansImported": "Pläne erfolgreich importiert",
   "failedToImportDatabase": "Datenbank konnte nicht importiert werden: {error}",
+  "backupArchiveMissingDatabase": "Die Sicherung enthält die Flexify-Datenbank nicht.",
   "failedToImportGraphs": "Diagramme konnten nicht importiert werden: {error}",
   "failedToImportPlans": "Pläne konnten nicht importiert werden: {error}",
   "selectedFileDoesNotExist": "Die ausgewählte Datei ist nicht vorhanden",

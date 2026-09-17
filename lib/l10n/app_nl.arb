@@ -97,6 +97,7 @@
   "graphDataImported": "Grafiekgegevens zijn geïmporteerd!",
   "plansImported": "Schema's zijn geïmporteerd",
   "failedToImportDatabase": "Database importeren mislukt: {error}",
+  "backupArchiveMissingDatabase": "De back-up bevat de Flexify-database niet.",
   "failedToImportGraphs": "Grafieken importeren mislukt: {error}",
   "failedToImportPlans": "Schema's importeren mislukt: {error}",
   "selectedFileDoesNotExist": "Het geselecteerde bestand bestaat niet",

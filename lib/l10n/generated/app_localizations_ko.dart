@@ -319,6 +319,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase =>
+      '백업에 Flexify 데이터베이스가 포함되어 있지 않습니다.';
+
+  @override
   String failedToImportGraphs(String error) {
     return '그래프 가져오기 실패: $error';
   }

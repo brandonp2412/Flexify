@@ -334,6 +334,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase =>
+      'O backup não contém o banco de dados do Flexify.';
+
+  @override
   String failedToImportGraphs(String error) {
     return 'Falha ao importar gráficos: $error';
   }
@@ -1815,6 +1819,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String failedToImportDatabase(String error) {
     return 'Falha ao importar banco de dados: $error';
   }
+
+  @override
+  String get backupArchiveMissingDatabase =>
+      'O backup não contém o banco de dados do Flexify.';
 
   @override
   String failedToImportGraphs(String error) {

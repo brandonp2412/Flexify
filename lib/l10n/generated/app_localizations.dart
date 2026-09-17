@@ -700,6 +700,12 @@ abstract class AppLocalizations {
   /// **'Failed to import database: {error}'**
   String failedToImportDatabase(String error);
 
+  /// Validation error shown when an imported backup archive is missing the Flexify database file.
+  ///
+  /// In en, this message translates to:
+  /// **'The backup archive does not contain the Flexify database.'**
+  String get backupArchiveMissingDatabase;
+
   /// Toast shown when a graph CSV import fails.
   ///
   /// In en, this message translates to:

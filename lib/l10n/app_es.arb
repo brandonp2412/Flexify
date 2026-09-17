@@ -97,6 +97,7 @@
   "graphDataImported": "¡Los datos de gráficos se importaron correctamente!",
   "plansImported": "Los planes se importaron correctamente",
   "failedToImportDatabase": "No se pudo importar la base de datos: {error}",
+  "backupArchiveMissingDatabase": "La copia de seguridad no contiene la base de datos de Flexify.",
   "failedToImportGraphs": "No se pudieron importar los gráficos: {error}",
   "failedToImportPlans": "No se pudieron importar los planes: {error}",
   "selectedFileDoesNotExist": "El archivo seleccionado no existe",

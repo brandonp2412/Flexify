@@ -9,6 +9,11 @@ const backupDatabaseName = 'flexify.sqlite';
 
 const _imageColumns = <(String, String)>[('gym_sets', 'image')];
 
+/// Signals that an imported backup archive is missing the Flexify database.
+final class MissingBackupDatabaseException implements Exception {
+  const MissingBackupDatabaseException();
+}
+
 Future<File> createBackupArchive({
   required String databasePath,
   required Directory workingDirectory,
@@ -93,7 +98,7 @@ Future<File> extractBackupArchive({
 
   final databaseFile = File(p.join(workingDirectory.path, backupDatabaseName));
   if (!databaseFile.existsSync()) {
-    throw const FormatException('Backup does not contain flexify.sqlite');
+    throw const MissingBackupDatabaseException();
   }
 
   final imported = openBackupDatabase(databaseFile.path);

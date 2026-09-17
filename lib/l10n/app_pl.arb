@@ -97,6 +97,7 @@
   "graphDataImported": "Dane wykresów zostały pomyślnie zaimportowane!",
   "plansImported": "Plany zostały pomyślnie zaimportowane",
   "failedToImportDatabase": "Nie udało się zaimportować bazy danych: {error}",
+  "backupArchiveMissingDatabase": "Kopia zapasowa nie zawiera bazy danych Flexify.",
   "failedToImportGraphs": "Nie udało się zaimportować wykresów: {error}",
   "failedToImportPlans": "Nie udało się zaimportować planów: {error}",
   "selectedFileDoesNotExist": "Wybrany plik nie istnieje",

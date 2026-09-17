@@ -337,6 +337,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase =>
+      'La copia de seguridad no contiene la base de datos de Flexify.';
+
+  @override
   String failedToImportGraphs(String error) {
     return 'No se pudieron importar los gráficos: $error';
   }

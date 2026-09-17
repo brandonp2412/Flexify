@@ -333,6 +333,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase =>
+      'The backup archive does not contain the Flexify database.';
+
+  @override
   String failedToImportGraphs(String error) {
     return 'Failed to import graphs: $error';
   }

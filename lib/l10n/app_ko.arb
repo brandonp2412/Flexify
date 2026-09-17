@@ -97,6 +97,7 @@
   "graphDataImported": "그래프 데이터를 가져왔습니다!",
   "plansImported": "플랜을 가져왔습니다",
   "failedToImportDatabase": "데이터베이스 가져오기 실패: {error}",
+  "backupArchiveMissingDatabase": "백업에 Flexify 데이터베이스가 포함되어 있지 않습니다.",
   "failedToImportGraphs": "그래프 가져오기 실패: {error}",
   "failedToImportPlans": "플랜 가져오기 실패: {error}",
   "selectedFileDoesNotExist": "선택한 파일이 존재하지 않습니다",

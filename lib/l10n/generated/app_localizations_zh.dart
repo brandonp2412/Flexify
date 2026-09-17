@@ -317,6 +317,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get backupArchiveMissingDatabase => '备份中不包含 Flexify 数据库。';
+
+  @override
   String failedToImportGraphs(String error) {
     return '图表导入失败：$error';
   }
@@ -1718,6 +1721,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String failedToImportDatabase(String error) {
     return '数据库导入失败：$error';
   }
+
+  @override
+  String get backupArchiveMissingDatabase => '备份中不包含 Flexify 数据库。';
 
   @override
   String failedToImportGraphs(String error) {

@@ -19,6 +19,15 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+final class _ImportValidationException implements Exception {
+  const _ImportValidationException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
 class ImportData extends StatelessWidget {
   final BuildContext ctx;
 
@@ -107,8 +116,11 @@ $version
       final url =
           'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
+      final displayError = e is MissingBackupDatabaseException
+          ? l10n.backupArchiveMissingDatabase
+          : e.toString();
       toast(
-        l10n.failedToImportDatabase(e.toString()),
+        l10n.failedToImportDatabase(displayError),
         duration: Duration(seconds: 10),
         action: SnackBarAction(
           label: l10n.actionReport,
@@ -129,7 +141,7 @@ $version
 
     final selectedFile = File(result.files.single.path!);
     if (!await selectedFile.exists()) {
-      throw Exception(l10n.selectedFileDoesNotExist);
+      throw _ImportValidationException(l10n.selectedFileDoesNotExist);
     }
 
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -189,10 +201,10 @@ $version
     try {
       await result.files.single.readAsBytes();
     } catch (_) {
-      throw Exception(l10n.couldNotReadFileData);
+      throw _ImportValidationException(l10n.couldNotReadFileData);
     }
 
-    throw Exception(l10n.databaseImportWebUnsupported);
+    throw _ImportValidationException(l10n.databaseImportWebUnsupported);
   }
 
   Future<void> importGraphs(BuildContext context) async {
@@ -217,14 +229,15 @@ $version
 
       final rows = CsvDecoder().convert(csvContent);
 
-      if (rows.isEmpty) throw Exception(l10n.csvFileEmpty);
-      if (rows.length <= 1) throw Exception(l10n.csvNeedsDataRow);
+      if (rows.isEmpty) throw _ImportValidationException(l10n.csvFileEmpty);
+      if (rows.length <= 1)
+        throw _ImportValidationException(l10n.csvNeedsDataRow);
 
       final columns = rows.first;
 
       final gymSets = rows.skip(1).map((row) {
         if (row.length < 6) {
-          throw Exception(
+          throw _ImportValidationException(
             l10n.csvRowInsufficientColumns(rows.indexOf(row) + 1, row.length),
           );
         }
@@ -279,7 +292,7 @@ $version
           name: Value(row[1]?.toString() ?? ''),
           reps: reps,
           weight: weight,
-          created: Value(parseDate(row[4])),
+          created: Value(_parseDate(row[4], rows.indexOf(row) + 1, l10n)),
           unit: Value(row[5]?.toString() ?? ''),
           hidden: hidden,
           bodyWeight: bodyWeight,
@@ -324,6 +337,16 @@ $version
     }
   }
 
+  DateTime _parseDate(dynamic value, int rowNumber, AppLocalizations l10n) {
+    try {
+      return parseDate(value.toString());
+    } on FormatException {
+      throw _ImportValidationException(
+        l10n.invalidCsvValue(l10n.createdDate, rowNumber, value.toString()),
+      );
+    }
+  }
+
   Value<double> _parseDouble(
     dynamic value,
     String fieldName,
@@ -334,13 +357,13 @@ $version
     if (value is String) {
       final parsed = double.tryParse(value);
       if (parsed == null) {
-        throw Exception(
+        throw _ImportValidationException(
           l10n.invalidCsvValue(fieldName, rowNumber, value.toString()),
         );
       }
       return Value(parsed);
     }
-    throw Exception(
+    throw _ImportValidationException(
       l10n.invalidCsvDataType(
         fieldName,
         rowNumber,
@@ -371,8 +394,9 @@ $version
 
       final csvList = CsvDecoder().convert(csvContent);
 
-      if (csvList.isEmpty) throw Exception(l10n.csvFileEmpty);
-      if (csvList.length <= 1) throw Exception(l10n.csvNeedsDataRow);
+      if (csvList.isEmpty) throw _ImportValidationException(l10n.csvFileEmpty);
+      if (csvList.length <= 1)
+        throw _ImportValidationException(l10n.csvNeedsDataRow);
 
       final plansToInsert = <PlansCompanion>[];
       final planExercisesToInsert = <PlanExercisesCompanion>[];
@@ -381,7 +405,7 @@ $version
         final idStr = row[0].toString().trim();
         final id = int.tryParse(idStr);
         if (id == null) {
-          throw FormatException(l10n.expectedIntegerPlanId(idStr));
+          throw _ImportValidationException(l10n.expectedIntegerPlanId(idStr));
         }
         plansToInsert.add(
           PlansCompanion.insert(
