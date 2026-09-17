@@ -3,6 +3,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,13 @@ class GraphCurveSettings extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-                Text('${(smoothness * 100).round()}%'),
+                Text(
+                  formatDisplayPercent(
+                    context,
+                    smoothness,
+                    maximumFractionDigits: 0,
+                  ),
+                ),
               ],
             ),
             Slider(

@@ -28,40 +28,6 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSCameraUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSContactsUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSMotionUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSSiriUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>A third party API (permissions_handler) requests this</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -102,7 +68,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>A third party API (permissions_handler) requests this</string>
 </dict>
 </plist>
