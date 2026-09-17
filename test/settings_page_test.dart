@@ -114,6 +114,41 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('SettingsPage renders French at narrow scaled layout', (
+    WidgetTester tester,
+  ) async {
+    await render(
+      tester,
+      locale: const Locale('fr'),
+      surfaceSize: const Size(320, 640),
+      textScaler: const TextScaler.linear(1.5),
+    );
+
+    expect(find.text('Paramètres'), findsOneWidget);
+    expect(find.text('Rechercher...'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.enterText(find.bySemanticsLabel('Rechercher...'), 'Langue');
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(ListTile, 'Langue'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('SettingsPage renders French at desktop width', (
+    WidgetTester tester,
+  ) async {
+    await render(
+      tester,
+      locale: const Locale('fr'),
+      surfaceSize: const Size(1200, 800),
+    );
+
+    expect(find.text('Paramètres'), findsOneWidget);
+    expect(find.text('Rechercher...'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('SettingsPage shows images', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.database.settings.update().write(

@@ -101,7 +101,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 For every locale below: translate every active ARB key from the canonical English source, preserve placeholders/ICU syntax exactly, use natural gym/fitness terminology, avoid literal translations that change meaning, run generation/analyze/tests, and inspect representative narrow/wide layouts for clipping or overflow before ticking the locale complete.
 
 - [x] Spanish (`es`)
-- [ ] French (`fr`)
+- [x] French (`fr`)
 - [ ] German (`de`)
 - [ ] Italian (`it`)
 - [ ] Portuguese, Brazil (`pt_BR`)
