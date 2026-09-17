@@ -6,6 +6,7 @@ import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/graph_curve_settings.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/strength_data.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -138,12 +139,12 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
     final theme = Theme.of(context);
     final metricOptions = <(StrengthMetric, String)>[
-      (StrengthMetric.bestWeight, 'Best weight'),
-      (StrengthMetric.bestReps, 'Best reps'),
-      (StrengthMetric.oneRepMax, 'One rep max'),
-      (StrengthMetric.volume, 'Volume'),
+      (StrengthMetric.bestWeight, context.l10n.bestWeight),
+      (StrengthMetric.bestReps, context.l10n.bestReps),
+      (StrengthMetric.oneRepMax, context.l10n.oneRepMax),
+      (StrengthMetric.volume, context.l10n.volume),
       if (settings.showBodyWeight)
-        (StrengthMetric.relativeStrength, 'Relative strength'),
+        (StrengthMetric.relativeStrength, context.l10n.relativeStrength),
     ];
     final metricValue = metricOptions.any((option) => option.$1 == metric)
         ? metric
@@ -152,7 +153,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Global progress"),
+        title: Text(context.l10n.globalProgress),
         actions: [
           IconButton(icon: const Icon(Icons.language), onPressed: () {}),
         ],
@@ -209,7 +210,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   const SizedBox(width: 8),
                   IconButton.filledTonal(
                     icon: const Icon(Icons.tune),
-                    tooltip: 'Options',
+                    tooltip: context.l10n.options,
                     onPressed: _showOptions,
                   ),
                 ],
@@ -217,11 +218,23 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
               const SizedBox(height: 12),
               SegmentedButton<Period>(
                 showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(value: Period.day, label: Text('Day')),
-                  ButtonSegment(value: Period.week, label: Text('Week')),
-                  ButtonSegment(value: Period.month, label: Text('Month')),
-                  ButtonSegment(value: Period.year, label: Text('Year')),
+                segments: [
+                  ButtonSegment(
+                    value: Period.day,
+                    label: Text(context.l10n.periodDay),
+                  ),
+                  ButtonSegment(
+                    value: Period.week,
+                    label: Text(context.l10n.periodWeek),
+                  ),
+                  ButtonSegment(
+                    value: Period.month,
+                    label: Text(context.l10n.periodMonth),
+                  ),
+                  ButtonSegment(
+                    value: Period.year,
+                    label: Text(context.l10n.periodYear),
+                  ),
                 ],
                 selected: {period},
                 onSelectionChanged: (value) {
@@ -235,11 +248,10 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
               Expanded(
                 flex: 3,
                 child: data.isEmpty
-                    ? const AppEmptyState(
+                    ? AppEmptyState(
                         icon: Icons.show_chart_rounded,
-                        title: 'No data yet',
-                        message:
-                            'Complete some sets to build your progress chart.',
+                        title: context.l10n.noDataYet,
+                        message: context.l10n.completeSetsForProgress,
                       )
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
@@ -299,7 +311,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    categories[entry.key] ?? "None",
+                                    categories[entry.key] ?? context.l10n.none,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -355,23 +367,10 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (settings.showUnits) ...[
-                      sectionLabel('Unit'),
+                      sectionLabel(context.l10n.unitLabel),
                       DropdownButtonFormField<String>(
                         initialValue: targetUnit,
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'kg',
-                            child: Text("Kilograms (kg)"),
-                          ),
-                          DropdownMenuItem(
-                            value: 'lb',
-                            child: Text("Pounds (lb)"),
-                          ),
-                          DropdownMenuItem(
-                            value: 'stone',
-                            child: Text("Stone"),
-                          ),
-                        ],
+                        items: strengthUnitMenuItems(context.l10n),
                         onChanged: (value) {
                           setState(() {
                             targetUnit = value!;
@@ -382,12 +381,12 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                       ),
                       const SizedBox(height: 20),
                     ],
-                    sectionLabel('Date range'),
+                    sectionLabel(context.l10n.dateRange),
                     Row(
                       children: [
                         Expanded(
                           child: GraphDateField(
-                            label: 'Start date',
+                            label: context.l10n.startDate,
                             value: startDate,
                             hint: settings.shortDateFormat,
                             onTap: () async {
@@ -406,7 +405,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: GraphDateField(
-                            label: 'Stop date',
+                            label: context.l10n.stopDate,
                             value: endDate,
                             hint: settings.shortDateFormat,
                             onTap: () async {
@@ -429,7 +428,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Data points',
+                          context.l10n.dataPoints,
                           style: theme.textTheme.labelLarge?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -530,8 +529,11 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             (d) => d.category == category && d.created == touchedDate,
           );
 
-          final formatter = NumberFormat("#,###.00");
-          category ??= "None";
+          final formatter = NumberFormat(
+            "#,###.00",
+            Localizations.localeOf(context).toLanguageTag(),
+          );
+          category ??= context.l10n.none;
 
           String value;
           switch (metric) {

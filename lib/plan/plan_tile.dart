@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/start_plan_page.dart';
@@ -65,7 +66,7 @@ class _PlanTileState extends State<PlanTile> {
 
   @override
   Widget build(BuildContext context) {
-    Widget title = const Text("Daily");
+    Widget title = Text(context.l10n.daily);
     if (widget.plan.title?.isNotEmpty == true) {
       final today = widget.plan.days.split(',').contains(widget.weekday);
       title = Text(
@@ -138,7 +139,7 @@ class _PlanTileState extends State<PlanTile> {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                  'Today',
+                  context.l10n.todayLabel,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: colors.onPrimaryContainer,
                     fontWeight: FontWeight.w700,
@@ -163,9 +164,9 @@ class _PlanTileState extends State<PlanTile> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Text(context.l10n.errorWithMessage('${snapshot.error}'));
               }
-              return const Text('Loading exercises...');
+              return Text(context.l10n.loadingExercises);
             },
           ),
         ),
@@ -250,7 +251,7 @@ class _PlanTileState extends State<PlanTile> {
       final day = split[index];
       result.add(
         TextSpan(
-          text: day.trim(),
+          text: localizedWeekday(context.l10n, day.trim()),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: widget.weekday == day.trim() ? FontWeight.bold : null,
             decoration: widget.weekday == day.trim()

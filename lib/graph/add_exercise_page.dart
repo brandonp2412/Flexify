@@ -4,6 +4,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -42,7 +43,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text('Add exercise')),
+      appBar: AppBar(title: Text(context.l10n.addExercise)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -52,22 +53,38 @@ class _AddExercisePageState extends State<AddExercisePage> {
             children: [
               TextFormField(
                 controller: _nameCtrl,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: context.l10n.nameLabel),
                 textCapitalization: TextCapitalization.sentences,
                 autofocus: true,
-                validator: (value) =>
-                    value?.isNotEmpty == true ? null : 'Required',
+                validator: (value) => value?.isNotEmpty == true
+                    ? null
+                    : context.l10n.requiredField,
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Unit'),
+                decoration: InputDecoration(labelText: context.l10n.unitLabel),
                 initialValue: _unit,
-                items: const [
-                  DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
-                  DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
-                  DropdownMenuItem(value: 'stone', child: Text("Stone")),
-                  DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
-                  DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
+                items: [
+                  DropdownMenuItem(
+                    value: 'kg',
+                    child: Text(context.l10n.kilogramsUnit),
+                  ),
+                  DropdownMenuItem(
+                    value: 'lb',
+                    child: Text(context.l10n.poundsUnit),
+                  ),
+                  DropdownMenuItem(
+                    value: 'stone',
+                    child: Text(context.l10n.stoneUnit),
+                  ),
+                  DropdownMenuItem(
+                    value: 'km',
+                    child: Text(context.l10n.kilometersUnit),
+                  ),
+                  DropdownMenuItem(
+                    value: 'mi',
+                    child: Text(context.l10n.milesUnit),
+                  ),
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
@@ -77,7 +94,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
               ),
               const SizedBox(height: 8),
               ListTile(
-                title: _cardio ? const Text('Cardio') : const Text('Strength'),
+                title: Text(
+                  _cardio ? context.l10n.cardio : context.l10n.strength,
+                ),
                 leading: _cardio
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),
@@ -93,7 +112,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       children: [
                         TextButton.icon(
                           onPressed: pick,
-                          label: const Text('Image'),
+                          label: Text(context.l10n.imageLabel),
                           icon: const Icon(Icons.image),
                         ),
                         if (_image != null)
@@ -103,7 +122,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                                 _image = null;
                               });
                             },
-                            label: const Text("Delete"),
+                            label: Text(context.l10n.actionDelete),
                             icon: const Icon(Icons.delete),
                           ),
                       ],
@@ -115,7 +134,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                         cacheWidth: 400,
                         errorBuilder: (context, error, stackTrace) =>
                             TextButton.icon(
-                              label: const Text('Image error'),
+                              label: Text(context.l10n.imageError),
                               icon: const Icon(Icons.error),
                               onPressed: () => pick(),
                             ),
@@ -130,7 +149,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: () => save(_unit),
-        label: const Text('Save'),
+        label: Text(context.l10n.actionSave),
         icon: const Icon(Icons.save),
       ),
     );

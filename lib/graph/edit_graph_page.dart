@@ -39,7 +39,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text("Update all ${widget.name.toLowerCase()}")),
+      appBar: AppBar(
+        title: Text(context.l10n.updateAllNamed(widget.name.toLowerCase())),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
@@ -50,7 +52,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
               TextField(
                 controller: name,
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(labelText: "New name"),
+                decoration: InputDecoration(labelText: context.l10n.newName),
                 textCapitalization: TextCapitalization.sentences,
               ),
               const SizedBox(height: 12.0),
@@ -60,15 +62,15 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     child: TextFormField(
                       controller: minutes,
                       textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        labelText: "Rest minutes",
+                      decoration: InputDecoration(
+                        labelText: context.l10n.restMinutes,
                       ),
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(minutes),
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
                         if (int.tryParse(value) == null)
-                          return 'Invalid number';
+                          return context.l10n.invalidNumber;
                         return null;
                       },
                     ),
@@ -78,8 +80,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     child: TextFormField(
                       controller: seconds,
                       textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        labelText: "Rest seconds",
+                      decoration: InputDecoration(
+                        labelText: context.l10n.restSeconds,
                       ),
                       keyboardType: TextInputType.number,
                       onTap: () {
@@ -88,7 +90,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
                         if (int.tryParse(value) == null)
-                          return 'Invalid number';
+                          return context.l10n.invalidNumber;
                         return null;
                       },
                     ),
@@ -106,8 +108,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       return Column(
                         children: [
                           DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Category',
+                            decoration: InputDecoration(
+                              labelText: context.l10n.categoryLabel,
                             ),
                             initialValue: category,
                             items: snapshot.data
@@ -151,9 +153,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   leading: cardio!
                       ? const Icon(Icons.sports_gymnastics)
                       : const Icon(Icons.fitness_center),
-                  title: cardio!
-                      ? const Text('Cardio')
-                      : const Text('Strength'),
+                  title: Text(
+                    cardio! ? context.l10n.cardio : context.l10n.strength,
+                  ),
                   onTap: () => _setCardio(!cardio!),
                   trailing: Switch(value: cardio!, onChanged: _setCardio),
                 ),
@@ -171,7 +173,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                           children: [
                             TextButton.icon(
                               onPressed: pick,
-                              label: const Text('Image'),
+                              label: Text(context.l10n.imageLabel),
                               icon: const Icon(Icons.image),
                             ),
                             if (image != null)
@@ -181,7 +183,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                                     image = null;
                                   });
                                 },
-                                label: const Text("Delete"),
+                                label: Text(context.l10n.actionDelete),
                                 icon: const Icon(Icons.delete),
                               ),
                           ],
@@ -193,7 +195,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                             cacheWidth: 400,
                             errorBuilder: (context, error, stackTrace) =>
                                 TextButton.icon(
-                                  label: const Text('Image error'),
+                                  label: Text(context.l10n.imageError),
                                   icon: const Icon(Icons.error),
                                   onPressed: () => pick(),
                                 ),
@@ -211,7 +213,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: save,
-        label: const Text("Update"),
+        label: Text(context.l10n.actionUpdate),
         icon: const Icon(Icons.sync),
       ),
     );
@@ -350,12 +352,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
             content: Text(content),
             actions: <Widget>[
               TextButton.icon(
-                label: const Text('Cancel'),
+                label: Text(context.l10n.actionCancel),
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.pop(dialogContext, false),
               ),
               TextButton.icon(
-                label: const Text('Confirm'),
+                label: Text(context.l10n.actionConfirm),
                 icon: const Icon(Icons.check),
                 onPressed: () => Navigator.pop(dialogContext, true),
               ),
@@ -367,12 +369,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   Future<void> save() async {
     if (!key.currentState!.validate()) return;
+    final l10n = context.l10n;
 
     final count = await getCount();
     if (count > 0 && widget.name != name.text) {
       final confirmed = await confirmUpdate(
-        'Update conflict',
-        'Your new name exists already for $count records. Are you sure?',
+        l10n.updateConflict,
+        l10n.updateConflictDescription(count),
       );
       if (!confirmed) return;
     }
@@ -380,8 +383,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
     final shouldConvert = await needsUnitConversion();
     if (shouldConvert && await mixedUnits()) {
       final confirmed = await confirmUpdate(
-        'Units conflict',
-        'Not all of your records have the same unit. This will convert all units to $unit. Are you sure?',
+        l10n.unitsConflict,
+        l10n.unitsConflictDescription(unit ?? ''),
       );
       if (!confirmed) return;
     }

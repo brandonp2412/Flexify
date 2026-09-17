@@ -4,6 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/filters.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
@@ -95,14 +96,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       resizeToAvoidBottomInset: false,
       appBar: desktop
           ? AppBar(
-              title: const Text('History'),
+              title: Text(context.l10n.navHistory),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
                   child: FilledButton.icon(
                     onPressed: onAdd,
                     icon: const Icon(Icons.add_rounded),
-                    label: const Text('Add set'),
+                    label: Text(context.l10n.addSet),
                   ),
                 ),
               ],
@@ -122,10 +123,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                           padding: const EdgeInsets.only(top: appSearchHeight),
                           child: AppEmptyState(
                             icon: Icons.history_rounded,
-                            title: 'No entries yet',
-                            message:
-                                'Complete a set or add one manually to start your history.',
-                            actionLabel: 'Add set',
+                            title: context.l10n.noEntriesYet,
+                            message: context.l10n.historyEmptyMessage,
+                            actionLabel: context.l10n.addSet,
                             actionIcon: Icons.add_rounded,
                             onAction: onAdd,
                           ),
@@ -190,7 +190,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                 left: 0,
                 right: 0,
                 child: AppSearch(
-                  hintText: 'Search history...',
+                  hintText: context.l10n.searchHistory,
                   controller: _selection,
                   filter: Filters(
                     repsGtCtrl: repsGt,
@@ -239,7 +239,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         )
                         .join(', ');
                     await SharePlus.instance.share(
-                      ShareParams(text: "I just did $summaries"),
+                      ShareParams(text: context.l10n.shareWorkout(summaries)),
                     );
                     if (!mounted) return;
                     setState(() {
@@ -278,7 +278,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           ? null
           : AnimatedFab(
               onPressed: onAdd,
-              label: const Text('Add'),
+              label: Text(context.l10n.actionAdd),
               icon: const Icon(Icons.add),
               scroll: scroll,
             ),

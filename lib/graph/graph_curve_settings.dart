@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class GraphCurveSettings extends StatelessWidget {
           children: [
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              title: const Text('Curve line graphs'),
-              subtitle: const Text('Draw graph lines as smooth curves'),
+              title: Text(context.l10n.curveLineGraphs),
+              subtitle: Text(context.l10n.curveLineGraphsDescription),
               value: settings.curveLines,
               onChanged: (value) => db.settings.update().write(
                 SettingsCompanion(curveLines: Value(value)),
@@ -32,7 +33,7 @@ class GraphCurveSettings extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Curve smoothness',
+                  context.l10n.curveSmoothness,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),

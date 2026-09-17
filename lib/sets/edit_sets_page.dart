@@ -50,10 +50,11 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Edit ${widget.ids.length} sets'),
+        title: Text(l10n.editSets(widget.ids.length)),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
@@ -62,20 +63,20 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 context: context,
                 builder: (BuildContext dialogContext) {
                   return AlertDialog(
-                    title: const Text('Confirm Delete'),
+                    title: Text(l10n.confirmDelete),
                     content: Text(
-                      'Are you sure you want to delete ${widget.ids.length} entries?',
+                      l10n.deleteEntriesConfirmation(widget.ids.length),
                     ),
                     actions: <Widget>[
                       TextButton.icon(
-                        label: const Text('Cancel'),
+                        label: Text(l10n.actionCancel),
                         icon: const Icon(Icons.close),
                         onPressed: () {
                           Navigator.pop(dialogContext);
                         },
                       ),
                       TextButton.icon(
-                        label: const Text('Delete'),
+                        label: Text(l10n.actionDelete),
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
                           Navigator.pop(dialogContext);
@@ -102,13 +103,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
               TextField(
                 controller: _name,
                 decoration: InputDecoration(
-                  labelText: "Name",
+                  labelText: l10n.nameLabel,
                   hintText: _oldNames,
                 ),
                 textCapitalization: TextCapitalization.sentences,
               ),
               ListTile(
-                title: const Text('Cardio'),
+                title: Text(l10n.cardio),
                 leading: _cardio == true
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),
@@ -128,7 +129,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   TextFormField(
                     controller: _weight,
                     decoration: InputDecoration(
-                      labelText: 'Weight',
+                      labelText: l10n.weightLabel,
                       hintText: _oldWeights,
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
@@ -138,7 +139,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) return null;
                       if (double.tryParse(value) == null)
-                        return 'Invalid number';
+                        return l10n.invalidNumber;
                       return null;
                     },
                   )
@@ -146,7 +147,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   TextFormField(
                     controller: _distance,
                     decoration: InputDecoration(
-                      labelText: 'Distance',
+                      labelText: l10n.distanceLabel,
                       hintText: _oldDist,
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
@@ -156,7 +157,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     validator: (value) {
                       if (value == null) return null;
                       if (double.tryParse(value) == null)
-                        return 'Invalid number';
+                        return l10n.invalidNumber;
                       return null;
                     },
                   ),
@@ -167,7 +168,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       child: TextFormField(
                         controller: _minutes,
                         decoration: InputDecoration(
-                          labelText: 'Minutes',
+                          labelText: l10n.minutesLabel,
                           hintText: _oldMin,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -178,7 +179,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
-                            return 'Invalid number';
+                            return l10n.invalidNumber;
                           return null;
                         },
                       ),
@@ -188,7 +189,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       child: TextFormField(
                         controller: _seconds,
                         decoration: InputDecoration(
-                          labelText: 'Seconds',
+                          labelText: l10n.secondsLabel,
                           hintText: _oldSec,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -199,7 +200,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
-                            return 'Invalid number';
+                            return l10n.invalidNumber;
                           return null;
                         },
                       ),
@@ -210,7 +211,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 TextFormField(
                   controller: _incline,
                   decoration: InputDecoration(
-                    labelText: 'Incline %',
+                    labelText: l10n.inclinePercent,
                     hintText: _oldInc,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -219,7 +220,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   onTap: () => selectAll(_incline),
                   validator: (value) {
                     if (value == null) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
+                    if (double.tryParse(value) == null)
+                      return l10n.invalidNumber;
                     return null;
                   },
                 ),
@@ -228,7 +230,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 TextFormField(
                   controller: _reps,
                   decoration: InputDecoration(
-                    labelText: 'Reps',
+                    labelText: l10n.repsLabel,
                     hintText: _oldReps,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -237,7 +239,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   onTap: () => selectAll(_reps),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
+                    if (double.tryParse(value) == null)
+                      return l10n.invalidNumber;
                     return null;
                   },
                 ),
@@ -245,7 +248,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 TextFormField(
                   controller: _weight,
                   decoration: InputDecoration(
-                    labelText: _name.text == 'Weight' ? 'Value' : 'Weight',
+                    labelText: _name.text == 'Weight'
+                        ? l10n.valueLabel
+                        : l10n.weightLabel,
                     hintText: _oldWeights,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -254,7 +259,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   onTap: () => selectAll(_weight),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
-                    if (double.tryParse(value) == null) return 'Invalid number';
+                    if (double.tryParse(value) == null)
+                      return l10n.invalidNumber;
                     return null;
                   },
                 ),
@@ -267,7 +273,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     child: TextFormField(
                       controller: _body,
                       decoration: InputDecoration(
-                        labelText: 'Body weight',
+                        labelText: l10n.bodyWeightLabel,
                         hintText: _oldBody,
                       ),
                       keyboardType: const TextInputType.numberWithOptions(
@@ -277,7 +283,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
                         if (double.tryParse(value) == null)
-                          return 'Invalid number';
+                          return l10n.invalidNumber;
                         return null;
                       },
                     ),
@@ -290,7 +296,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 builder: (context, showUnits, child) => Visibility(
                   visible: showUnits,
                   child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Unit'),
+                    decoration: InputDecoration(labelText: l10n.unitLabel),
                     initialValue: _unit,
                     items: _getUnitItems(context),
                     onChanged: (String? newValue) {
@@ -312,7 +318,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     builder: (context, snapshot) {
                       return DropdownButtonFormField(
                         decoration: InputDecoration(
-                          labelText: 'Category',
+                          labelText: l10n.categoryLabel,
                           hintText: _oldCat,
                         ),
                         initialValue: _category,
@@ -344,7 +350,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     subtitle = DateFormat(longDateFormat).format(_created!);
 
                   return ListTile(
-                    title: const Text('Created Date'),
+                    title: Text(l10n.createdDate),
                     subtitle: Text(subtitle),
                     trailing: const Icon(Icons.calendar_today),
                     onTap: () => _selectDate(),
@@ -358,7 +364,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: save,
-        label: const Text("Update"),
+        label: Text(l10n.actionUpdate),
         icon: const Icon(Icons.sync),
       ),
     );

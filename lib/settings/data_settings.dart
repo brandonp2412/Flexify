@@ -7,6 +7,8 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/delete_records_button.dart';
 import 'package:flexify/export_data.dart';
 import 'package:flexify/import_data.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart';
@@ -18,7 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<void> notifyAutomaticBackupEnabled() async {
+Future<void> notifyAutomaticBackupEnabled(AppLocalizations l10n) async {
   if (kIsWeb) return;
 
   if (Platform.isAndroid || Platform.isIOS) {
@@ -30,10 +32,10 @@ Future<void> notifyAutomaticBackupEnabled() async {
   const android = AndroidInitializationSettings(
     '@drawable/baseline_arrow_downward_24',
   );
-  const linux = LinuxInitializationSettings(
-    defaultActionName: 'Open notification',
+  final linux = LinuxInitializationSettings(
+    defaultActionName: l10n.openNotification,
   );
-  const init = InitializationSettings(
+  final init = InitializationSettings(
     android: android,
     iOS: darwin,
     macOS: darwin,
@@ -43,14 +45,13 @@ Future<void> notifyAutomaticBackupEnabled() async {
   await plugin.initialize(settings: init);
   await plugin.show(
     id: 4,
-    title: 'Automatic backups enabled',
-    body:
-        'Flexify will automatically back up your data and images to the selected folder each day.',
-    notificationDetails: const NotificationDetails(
+    title: l10n.automaticBackupsEnabled,
+    body: l10n.automaticBackupNotificationBody,
+    notificationDetails: NotificationDetails(
       android: AndroidNotificationDetails(
         'backup-settings',
-        'Backup settings',
-        channelDescription: 'Notifications explaining automatic backups',
+        l10n.backupSettingsChannel,
+        channelDescription: l10n.backupSettingsChannelDescription,
       ),
       iOS: DarwinNotificationDetails(),
       macOS: DarwinNotificationDetails(),
@@ -59,7 +60,7 @@ Future<void> notifyAutomaticBackupEnabled() async {
   );
 }
 
-Future<void> tapBackup(bool value) async {
+Future<void> tapBackup(bool value, AppLocalizations l10n) async {
   if (kIsWeb || !Platform.isAndroid) return;
 
   if (!value) {
@@ -80,7 +81,7 @@ Future<void> tapBackup(bool value) async {
     await db.settings.update().write(
       const SettingsCompanion(automaticBackups: Value(true)),
     );
-    await notifyAutomaticBackupEnabled();
+    await notifyAutomaticBackupEnabled(l10n);
   } catch (_) {
     await db.settings.update().write(
       const SettingsCompanion(automaticBackups: Value(false)),
@@ -94,51 +95,52 @@ List<Widget> getDataSettings(
   SettingsState settings,
   BuildContext context,
 ) {
+  final l10n = context.l10n;
+  final normalizedTerm = term.trim().toLowerCase();
+  bool matches(Iterable<String> values) =>
+      values.join(' ').toLowerCase().contains(normalizedTerm);
   return [
-    if ('automatic backup'.contains(term.toLowerCase()) &&
+    if (matches([l10n.automaticBackup, l10n.automaticBackupNotificationBody]) &&
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
         key: const Key('automaticBackupTile'),
-        title: const Text('Automatic backup', textAlign: TextAlign.center),
+        title: Text(l10n.automaticBackup, textAlign: TextAlign.center),
         leading: settings.value.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
-        onTap: () => tapBackup(!settings.value.automaticBackups),
+        onTap: () => tapBackup(!settings.value.automaticBackups, l10n),
         trailing: Switch(
           key: const Key('automaticBackupSwitch'),
           value: settings.value.automaticBackups,
-          onChanged: (value) => tapBackup(value),
+          onChanged: (value) => tapBackup(value, l10n),
         ),
       ),
-    if ('app permissions access'.contains(term.toLowerCase()) &&
+    if (matches([l10n.appPermissions, l10n.appPermissionsDescription]) &&
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
-        title: const Text('App permissions', textAlign: TextAlign.center),
-        subtitle: const Text(
-          'Review access required by your enabled features',
+        title: Text(l10n.appPermissions, textAlign: TextAlign.center),
+        subtitle: Text(
+          l10n.appPermissionsDescription,
           textAlign: TextAlign.center,
         ),
         leading: const Icon(Icons.admin_panel_settings_outlined),
         onTap: () => showAppPermissionsDialog(context),
       ),
-    if ('share database'.contains(term.toLowerCase()) &&
-        !kIsWeb &&
-        !Platform.isLinux)
+    if (matches([l10n.shareDatabase]) && !kIsWeb && !Platform.isLinux)
       TextButton.icon(
         onPressed: () async {
           final dbFolder = await getApplicationDocumentsDirectory();
           final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
           await SharePlus.instance.share(ShareParams(files: [XFile(dbPath)]));
         },
-        label: const Text("Share database"),
+        label: Text(l10n.shareDatabase),
         icon: const Icon(Icons.share),
       ),
-    if ('export data'.contains(term.toLowerCase())) const ExportData(),
-    if ('import data'.contains(term.toLowerCase())) ImportData(ctx: context),
-    if ('delete records'.contains(term.toLowerCase()))
-      DeleteRecordsButton(ctx: context),
+    if (matches([l10n.exportData])) const ExportData(),
+    if (matches([l10n.importData])) ImportData(ctx: context),
+    if (matches([l10n.deleteRecords])) DeleteRecordsButton(ctx: context),
   ];
 }
 
@@ -151,7 +153,7 @@ class DataSettings extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Data management")),
+      appBar: AppBar(title: Text(context.l10n.dataManagement)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: getDataSettings('', settings, context),

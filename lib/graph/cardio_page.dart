@@ -234,17 +234,17 @@ class _CardioPageState extends State<CardioPage> {
     final theme = Theme.of(context);
 
     final metricOptions = _isWeightUnit(target)
-        ? const <(CardioMetric, String)>[
-            (CardioMetric.weight, 'Weight'),
-            (CardioMetric.duration, 'Duration'),
-            (CardioMetric.incline, 'Incline'),
+        ? <(CardioMetric, String)>[
+            (CardioMetric.weight, context.l10n.weightLabel),
+            (CardioMetric.duration, context.l10n.durationLabel),
+            (CardioMetric.incline, context.l10n.inclineLabel),
           ]
-        : const <(CardioMetric, String)>[
-            (CardioMetric.pace, 'Pace (distance / time)'),
-            (CardioMetric.inclineAdjustedPace, 'Adjusted pace'),
-            (CardioMetric.duration, 'Duration'),
-            (CardioMetric.distance, 'Distance'),
-            (CardioMetric.incline, 'Incline'),
+        : <(CardioMetric, String)>[
+            (CardioMetric.pace, context.l10n.paceDistanceTime),
+            (CardioMetric.inclineAdjustedPace, context.l10n.adjustedPace),
+            (CardioMetric.duration, context.l10n.durationLabel),
+            (CardioMetric.distance, context.l10n.distanceLabel),
+            (CardioMetric.incline, context.l10n.inclineLabel),
           ];
 
     final spots = <FlSpot>[];
@@ -296,7 +296,7 @@ class _CardioPageState extends State<CardioPage> {
               _refreshTimer = Timer(kThemeAnimationDuration, setData);
             },
             icon: const Icon(Icons.history),
-            tooltip: "History",
+            tooltip: context.l10n.navHistory,
           ),
           IconButton(
             onPressed: () async {
@@ -331,7 +331,7 @@ class _CardioPageState extends State<CardioPage> {
               }
             },
             icon: const Icon(Icons.edit),
-            tooltip: "Edit",
+            tooltip: context.l10n.actionEdit,
           ),
         ],
       ),
@@ -389,7 +389,7 @@ class _CardioPageState extends State<CardioPage> {
                   const SizedBox(width: 8),
                   IconButton.filledTonal(
                     icon: const Icon(Icons.tune),
-                    tooltip: 'Options',
+                    tooltip: context.l10n.options,
                     onPressed: _showOptions,
                   ),
                 ],
@@ -397,11 +397,23 @@ class _CardioPageState extends State<CardioPage> {
               const SizedBox(height: 8),
               SegmentedButton<Period>(
                 showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(value: Period.day, label: Text('Day')),
-                  ButtonSegment(value: Period.week, label: Text('Week')),
-                  ButtonSegment(value: Period.month, label: Text('Month')),
-                  ButtonSegment(value: Period.year, label: Text('Year')),
+                segments: [
+                  ButtonSegment(
+                    value: Period.day,
+                    label: Text(context.l10n.periodDay),
+                  ),
+                  ButtonSegment(
+                    value: Period.week,
+                    label: Text(context.l10n.periodWeek),
+                  ),
+                  ButtonSegment(
+                    value: Period.month,
+                    label: Text(context.l10n.periodMonth),
+                  ),
+                  ButtonSegment(
+                    value: Period.year,
+                    label: Text(context.l10n.periodYear),
+                  ),
                 ],
                 selected: {period},
                 onSelectionChanged: (value) {
@@ -417,9 +429,8 @@ class _CardioPageState extends State<CardioPage> {
                 child: data.isEmpty
                     ? AppEmptyState(
                         icon: Icons.monitor_heart_outlined,
-                        title: 'No data yet for $name',
-                        message:
-                            'Complete a set for this exercise to build its chart.',
+                        title: context.l10n.noDataFor(name),
+                        message: context.l10n.completeSetForChart,
                       )
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
@@ -439,9 +450,9 @@ class _CardioPageState extends State<CardioPage> {
                   controller: _notesCtrl,
                   readOnly: true,
                   onTap: _editNotes,
-                  decoration: const InputDecoration(
-                    labelText: 'Exercise notes',
-                    hintText: 'Notes for this exercise',
+                  decoration: InputDecoration(
+                    labelText: context.l10n.exerciseNotes,
+                    hintText: context.l10n.notesForExercise,
                   ),
                   minLines: 2,
                   maxLines: 5,
@@ -509,12 +520,12 @@ class _CardioPageState extends State<CardioPage> {
                       ),
                       const SizedBox(height: 20),
                     ],
-                    sectionLabel('Date range'),
+                    sectionLabel(context.l10n.dateRange),
                     Row(
                       children: [
                         Expanded(
                           child: GraphDateField(
-                            label: 'Start date',
+                            label: context.l10n.startDate,
                             value: start,
                             hint: settings.shortDateFormat,
                             onTap: () async {
@@ -533,7 +544,7 @@ class _CardioPageState extends State<CardioPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: GraphDateField(
-                            label: 'Stop date',
+                            label: context.l10n.stopDate,
                             value: end,
                             hint: settings.shortDateFormat,
                             onTap: () async {
@@ -556,7 +567,7 @@ class _CardioPageState extends State<CardioPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Data points',
+                          context.l10n.dataPoints,
                           style: theme.textTheme.labelLarge?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -598,7 +609,7 @@ class _CardioPageState extends State<CardioPage> {
                     ),
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Use time-based X axis'),
+                      title: Text(context.l10n.useTimeBasedXAxis),
                       value: useTimeBasedXAxis,
                       onChanged: (value) {
                         setState(() {

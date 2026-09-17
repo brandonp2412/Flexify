@@ -1,4 +1,5 @@
 import 'package:flexify/constants.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DaySelector extends StatefulWidget {
@@ -23,9 +24,11 @@ class _DaySelectorState extends State<DaySelector> {
     return Row(
       children: List.generate(weekdays.length, (index) {
         final isSelected = widget.daySwitches[index];
-        final dayLabel = weekdays[index].length < 3
-            ? weekdays[index]
-            : weekdays[index].substring(0, 3);
+        final dayLabel = localizedWeekday(
+          context.l10n,
+          weekdays[index],
+          abbreviated: true,
+        );
 
         return Expanded(
           child: Padding(

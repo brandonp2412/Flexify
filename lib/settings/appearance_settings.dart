@@ -18,6 +18,8 @@ List<Widget> getAppearanceSettings(
 ) {
   final l10n = context.l10n;
   final normalizedTerm = term.trim().toLowerCase();
+  bool matches(Iterable<String> values) =>
+      values.join(' ').toLowerCase().contains(normalizedTerm);
   final languageSearchText = [
     l10n.settingsLanguage,
     l10n.settingsLanguageDescription,
@@ -71,25 +73,30 @@ List<Widget> getAppearanceSettings(
           ],
         ),
       ),
-    if ('theme'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.themeLabel,
+      l10n.themeSystem,
+      l10n.themeDark,
+      l10n.themeLight,
+    ]))
       Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
         child: SegmentedButton<String>(
-          segments: const [
+          segments: [
             ButtonSegment(
               value: 'ThemeMode.system',
-              label: Text('System'),
-              icon: Icon(Icons.brightness_auto),
+              label: Text(l10n.themeSystem),
+              icon: const Icon(Icons.brightness_auto),
             ),
             ButtonSegment(
               value: 'ThemeMode.dark',
-              label: Text('Dark'),
-              icon: Icon(Icons.dark_mode),
+              label: Text(l10n.themeDark),
+              icon: const Icon(Icons.dark_mode),
             ),
             ButtonSegment(
               value: 'ThemeMode.light',
-              label: Text('Light'),
-              icon: Icon(Icons.light_mode),
+              label: Text(l10n.themeLight),
+              icon: const Icon(Icons.light_mode),
             ),
           ],
           selected: {
@@ -102,14 +109,14 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('pure black amoled'.contains(term.toLowerCase()))
+    if (matches([l10n.pureBlackAmoled, l10n.pureBlackAmoledDescription]))
       Tooltip(
-        message: 'Use pure black colors for AMOLED displays',
+        message: l10n.pureBlackAmoledDescription,
         child: ListTile(
           leading: settings.value.themeMode == 'ThemeMode.amoled'
               ? const Icon(Icons.contrast)
               : const Icon(Icons.contrast_outlined),
-          title: const Text('Pure black (AMOLED)', textAlign: TextAlign.center),
+          title: Text(l10n.pureBlackAmoled, textAlign: TextAlign.center),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               themeMode: Value(
@@ -129,16 +136,13 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('system color scheme'.contains(term.toLowerCase()))
+    if (matches([l10n.systemColorScheme, l10n.systemColorSchemeDescription]))
       Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: Tooltip(
-          message: 'Use the primary color of your device for the app',
+          message: l10n.systemColorSchemeDescription,
           child: ListTile(
-            title: const Text(
-              'System color scheme',
-              textAlign: TextAlign.center,
-            ),
+            title: Text(l10n.systemColorScheme, textAlign: TextAlign.center),
             leading: settings.value.systemColors
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
@@ -156,11 +160,11 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('show images'.contains(term.toLowerCase()))
+    if (matches([l10n.showImages, l10n.showImagesDescription]))
       Tooltip(
-        message: 'Pick/display images on the history page',
+        message: l10n.showImagesDescription,
         child: ListTile(
-          title: const Text('Show images', textAlign: TextAlign.center),
+          title: Text(l10n.showImages, textAlign: TextAlign.center),
           leading: settings.value.showImages
               ? const Icon(Icons.image)
               : const Icon(Icons.image_outlined),
@@ -175,14 +179,11 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('show global progress'.contains(term.toLowerCase()))
+    if (matches([l10n.showGlobalProgress, l10n.showGlobalProgressDescription]))
       Tooltip(
-        message: 'Add a graph entry charting your progress by category',
+        message: l10n.showGlobalProgressDescription,
         child: ListTile(
-          title: const Text(
-            'Show global progress',
-            textAlign: TextAlign.center,
-          ),
+          title: Text(l10n.showGlobalProgress, textAlign: TextAlign.center),
           leading: settings.value.showGlobalProgress
               ? const Icon(Icons.public)
               : const Icon(Icons.public_outlined),
@@ -199,11 +200,11 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('peek graph'.contains(term.toLowerCase()))
+    if (matches([l10n.peekGraph, l10n.peekGraphDescription]))
       Tooltip(
-        message: 'Show the first line graph on graphs page',
+        message: l10n.peekGraphDescription,
         child: ListTile(
-          title: const Text('Peek graph', textAlign: TextAlign.center),
+          title: Text(l10n.peekGraph, textAlign: TextAlign.center),
           leading: settings.value.peekGraph
               ? const Icon(Icons.visibility)
               : const Icon(Icons.visibility_outlined),
@@ -218,11 +219,11 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('curve line graphs'.contains(term.toLowerCase()))
+    if (matches([l10n.curveLineGraphs, l10n.curveLineGraphsDescription]))
       Tooltip(
-        message: 'Use wavy curves in the graphs page',
+        message: l10n.curveLineGraphsDescription,
         child: ListTile(
-          title: const Text('Curve line graphs', textAlign: TextAlign.center),
+          title: Text(l10n.curveLineGraphs, textAlign: TextAlign.center),
           leading: settings.value.curveLines
               ? const Icon(Icons.insights)
               : const Icon(Icons.insights_outlined),
@@ -237,11 +238,11 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if ('curve smoothness'.contains(term.toLowerCase()))
+    if (matches([l10n.curveSmoothness]))
       Column(
         children: [
           Text(
-            "Curve smoothness",
+            l10n.curveSmoothness,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
@@ -258,30 +259,30 @@ List<Widget> getAppearanceSettings(
           ),
         ],
       ),
-    if ('input style'.contains(term.toLowerCase()))
+    if (matches([l10n.inputStyle, l10n.inputStyleDescription]))
       Tooltip(
-        message: 'Visual style of text input fields',
+        message: l10n.inputStyleDescription,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SegmentedButton<String>(
-                segments: const [
+                segments: [
                   ButtonSegment(
                     value: 'underline',
-                    label: Text('Line'),
-                    icon: Icon(Icons.format_underlined),
+                    label: Text(l10n.inputStyleLine),
+                    icon: const Icon(Icons.format_underlined),
                   ),
                   ButtonSegment(
                     value: 'outlined',
-                    label: Text('Outlined'),
-                    icon: Icon(Icons.border_all),
+                    label: Text(l10n.inputStyleOutlined),
+                    icon: const Icon(Icons.border_all),
                   ),
                   ButtonSegment(
                     value: 'filled',
-                    label: Text('Filled'),
-                    icon: Icon(Icons.format_color_fill),
+                    label: Text(l10n.inputStyleFilled),
+                    icon: const Icon(Icons.format_color_fill),
                   ),
                 ],
                 selected: {settings.value.inputStyle},
@@ -290,15 +291,15 @@ List<Widget> getAppearanceSettings(
                 ),
               ),
               const SizedBox(height: 12),
-              const TextField(
-                decoration: InputDecoration(labelText: 'Input style'),
+              TextField(
+                decoration: InputDecoration(labelText: l10n.inputStyle),
                 readOnly: true,
               ),
             ],
           ),
         ),
       ),
-    if ('graph'.contains(term.toLowerCase()))
+    if (matches([l10n.navGraphs]))
       SizedBox(
         height: MediaQuery.of(context).size.height * 0.3,
         child: Padding(
@@ -353,7 +354,7 @@ class AppearanceSettings extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Appearance")),
+      appBar: AppBar(title: Text(context.l10n.appearance)),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -14,16 +15,20 @@ List<Widget> getPlanSettings(
   TextEditingController max,
   TextEditingController warmup,
 ) {
+  final l10n = context.l10n;
+  final normalizedTerm = term.trim().toLowerCase();
+  bool matches(Iterable<String> values) =>
+      values.join(' ').toLowerCase().contains(normalizedTerm);
   return [
-    if ('warmup sets'.contains(term.toLowerCase()))
+    if (matches([l10n.warmupSets, l10n.warmupSetsDescription]))
       Padding(
         padding: kSettingsInputPadding,
         child: Tooltip(
-          message: 'Warmup sets have no rest timers',
+          message: l10n.warmupSetsDescription,
           child: TextField(
             controller: warmup,
-            decoration: const InputDecoration(
-              labelText: 'Warmup sets',
+            decoration: InputDecoration(
+              labelText: l10n.warmupSets,
               hintText: '0',
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
@@ -34,16 +39,14 @@ List<Widget> getPlanSettings(
           ),
         ),
       ),
-    if ('sets per exercise'.contains(term.toLowerCase()))
+    if (matches([l10n.setsPerExerciseMax, l10n.setsPerExerciseDescription]))
       Padding(
         padding: kSettingsInputPadding,
         child: Tooltip(
-          message: 'Default # of exercises in a plan',
+          message: l10n.setsPerExerciseDescription,
           child: TextField(
             controller: max,
-            decoration: const InputDecoration(
-              labelText: 'Sets per exercise (max: 20)',
-            ),
+            decoration: InputDecoration(labelText: l10n.setsPerExerciseMax),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(max),
             onChanged: (value) {
@@ -57,9 +60,12 @@ List<Widget> getPlanSettings(
           ),
         ),
       ),
-    if ('plan trailing display'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.planTrailingDisplay,
+      l10n.planTrailingDisplayDescription,
+    ]))
       Tooltip(
-        message: 'Right side of list displays in Plans + Plan view',
+        message: l10n.planTrailingDisplayDescription,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
           child: Column(
@@ -68,7 +74,7 @@ List<Widget> getPlanSettings(
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
-                  'Plan trailing display',
+                  l10n.planTrailingDisplay,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
@@ -98,21 +104,21 @@ List<Widget> getPlanSettings(
                         selected: progressOptions.contains(current)
                             ? {current}
                             : {},
-                        segments: const [
+                        segments: [
                           ButtonSegment(
                             value: PlanTrailing.count,
-                            label: Text('Count'),
-                            icon: Icon(Icons.tag),
+                            label: Text(l10n.countLabel),
+                            icon: const Icon(Icons.tag),
                           ),
-                          ButtonSegment(
+                          const ButtonSegment(
                             value: PlanTrailing.percent,
                             label: Text('%'),
                             icon: Icon(Icons.percent),
                           ),
                           ButtonSegment(
                             value: PlanTrailing.ratio,
-                            label: Text('Ratio'),
-                            icon: Icon(Icons.format_list_numbered),
+                            label: Text(l10n.ratioLabel),
+                            icon: const Icon(Icons.format_list_numbered),
                           ),
                         ],
                         onSelectionChanged: (s) {
@@ -125,16 +131,16 @@ List<Widget> getPlanSettings(
                         selected: otherOptions.contains(current)
                             ? {current}
                             : {},
-                        segments: const [
+                        segments: [
                           ButtonSegment(
                             value: PlanTrailing.reorder,
-                            label: Text('Reorder'),
-                            icon: Icon(Icons.menu),
+                            label: Text(l10n.reorder),
+                            icon: const Icon(Icons.menu),
                           ),
                           ButtonSegment(
                             value: PlanTrailing.none,
-                            label: Text('None'),
-                            icon: Icon(Icons.block),
+                            label: Text(l10n.none),
+                            icon: const Icon(Icons.block),
                           ),
                         ],
                         onSelectionChanged: (s) {
@@ -183,7 +189,7 @@ class _PlanSettingsState extends State<PlanSettings> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Plans")),
+      appBar: AppBar(title: Text(context.l10n.navPlans)),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -233,8 +239,8 @@ class _PlanTrailingPreview extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text('Monday'),
-        subtitle: const Text('Bench Press, Squat, Deadlift'),
+        title: Text(context.l10n.monday),
+        subtitle: Text(context.l10n.examplePlanExercises),
         trailing: _buildTrailing(context),
       ),
     );

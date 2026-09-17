@@ -65,24 +65,24 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 ### Home, workouts, plans, and sets
 
 - [ ] Home page and workout/session flows.
-- [ ] Plans list, start-plan flow, workout swapping, session sets, and plan editing.
-- [ ] Set creation/editing, history, set actions, notes, timers, and related confirmation/error states.
+- [x] Plans list, start-plan flow, workout swapping, session sets, and plan editing.
+- [x] Set creation/editing, history, set actions, notes, timers, and related confirmation/error states.
 - [ ] Dynamic messages use placeholders/plurals instead of string concatenation where grammar can vary.
 
 ### Graphs, progress, and weight
 
-- [ ] Graph pages, graph controls, legends, tooltips, strength/progress views, and global progress UI.
+- [x] Graph pages, graph controls, legends, tooltips, strength/progress views, and global progress UI.
 - [ ] Weight page, weight statistics, history actions, and related empty/error states.
 - [ ] Locale-sensitive numeric labels remain parse-safe internally while rendering with locale-aware formatting.
 
 ### Settings and supporting pages
 
-- [ ] Appearance settings.
-- [ ] Workout and plan settings.
-- [ ] Timer and notification settings.
-- [ ] Data/import/export settings.
+- [x] Appearance settings.
+- [x] Workout and plan settings.
+- [x] Timer and notification settings.
+- [x] Data/import/export settings.
 - [ ] About, permissions, changelog/release-facing in-app UI, and miscellaneous supporting pages.
-- [ ] Settings search indexes translated labels/descriptions without changing persisted setting identifiers.
+- [x] Settings search indexes translated labels/descriptions without changing persisted setting identifiers.
 
 ### Platform-facing strings
 

@@ -157,12 +157,12 @@ class _StrengthPageState extends State<StrengthPage> {
     final theme = Theme.of(context);
 
     final metricOptions = <(StrengthMetric, String)>[
-      (StrengthMetric.bestWeight, 'Best weight'),
-      (StrengthMetric.bestReps, 'Best reps'),
-      (StrengthMetric.oneRepMax, 'One rep max'),
-      (StrengthMetric.volume, 'Volume'),
+      (StrengthMetric.bestWeight, context.l10n.bestWeight),
+      (StrengthMetric.bestReps, context.l10n.bestReps),
+      (StrengthMetric.oneRepMax, context.l10n.oneRepMax),
+      (StrengthMetric.volume, context.l10n.volume),
       if (showBodyWeight)
-        (StrengthMetric.relativeStrength, 'Relative strength'),
+        (StrengthMetric.relativeStrength, context.l10n.relativeStrength),
     ];
     final metricValue = metricOptions.any((option) => option.$1 == metric)
         ? metric
@@ -220,7 +220,7 @@ class _StrengthPageState extends State<StrengthPage> {
               _refreshTimer = Timer(kThemeAnimationDuration, setData);
             },
             icon: const Icon(Icons.history),
-            tooltip: "History",
+            tooltip: context.l10n.navHistory,
           ),
           IconButton(
             onPressed: () async {
@@ -235,7 +235,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 });
             },
             icon: const Icon(Icons.edit),
-            tooltip: "Edit",
+            tooltip: context.l10n.actionEdit,
           ),
         ],
       ),
@@ -296,7 +296,7 @@ class _StrengthPageState extends State<StrengthPage> {
                   const SizedBox(width: 8),
                   IconButton.filledTonal(
                     icon: const Icon(Icons.tune),
-                    tooltip: 'Options',
+                    tooltip: context.l10n.options,
                     onPressed: _showOptions,
                   ),
                 ],
@@ -304,11 +304,23 @@ class _StrengthPageState extends State<StrengthPage> {
               const SizedBox(height: 8),
               SegmentedButton<Period>(
                 showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(value: Period.day, label: Text('Day')),
-                  ButtonSegment(value: Period.week, label: Text('Week')),
-                  ButtonSegment(value: Period.month, label: Text('Month')),
-                  ButtonSegment(value: Period.year, label: Text('Year')),
+                segments: [
+                  ButtonSegment(
+                    value: Period.day,
+                    label: Text(context.l10n.periodDay),
+                  ),
+                  ButtonSegment(
+                    value: Period.week,
+                    label: Text(context.l10n.periodWeek),
+                  ),
+                  ButtonSegment(
+                    value: Period.month,
+                    label: Text(context.l10n.periodMonth),
+                  ),
+                  ButtonSegment(
+                    value: Period.year,
+                    label: Text(context.l10n.periodYear),
+                  ),
                 ],
                 selected: {period},
                 onSelectionChanged: (value) {
@@ -342,8 +354,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'One rep max estimates are less accurate for '
-                            'sets of 10+ reps',
+                            context.l10n.oneRepMaxAccuracyWarning,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onErrorContainer,
                             ),
@@ -356,11 +367,10 @@ class _StrengthPageState extends State<StrengthPage> {
               const SizedBox(height: 8),
               Expanded(
                 child: data.isEmpty
-                    ? const AppEmptyState(
+                    ? AppEmptyState(
                         icon: Icons.fitness_center_rounded,
-                        title: 'No data yet',
-                        message:
-                            'Complete a set for this exercise to build its chart.',
+                        title: context.l10n.noDataYet,
+                        message: context.l10n.completeSetForChart,
                       )
                     : Padding(
                         padding: const EdgeInsets.only(top: 16.0, right: 45.0),
@@ -381,9 +391,9 @@ class _StrengthPageState extends State<StrengthPage> {
                     controller: _notesCtrl,
                     readOnly: true,
                     onTap: _editNotes,
-                    decoration: const InputDecoration(
-                      labelText: 'Exercise notes',
-                      hintText: 'Notes for this exercise',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.exerciseNotes,
+                      hintText: context.l10n.notesForExercise,
                     ),
                     minLines: 2,
                     maxLines: 5,
@@ -447,12 +457,12 @@ class _StrengthPageState extends State<StrengthPage> {
                       ),
                       const SizedBox(height: 20),
                     ],
-                    sectionLabel('Date range'),
+                    sectionLabel(context.l10n.dateRange),
                     Row(
                       children: [
                         Expanded(
                           child: GraphDateField(
-                            label: 'Start date',
+                            label: context.l10n.startDate,
                             value: start,
                             hint: settings.shortDateFormat,
                             onTap: () async {
@@ -471,7 +481,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: GraphDateField(
-                            label: 'Stop date',
+                            label: context.l10n.stopDate,
                             value: end,
                             hint: settings.shortDateFormat,
                             onTap: () async {
@@ -494,7 +504,7 @@ class _StrengthPageState extends State<StrengthPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Data points',
+                          context.l10n.dataPoints,
                           style: theme.textTheme.labelLarge?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -536,7 +546,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     ),
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Use time-based X axis'),
+                      title: Text(context.l10n.useTimeBasedXAxis),
                       value: useTimeBasedXAxis,
                       onChanged: (value) {
                         setState(() {

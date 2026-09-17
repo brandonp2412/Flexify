@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
@@ -48,9 +49,8 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
             if (sets.isEmpty) {
               return AppEmptyState(
                 icon: Icons.history_rounded,
-                title: 'No history yet for ${widget.name}',
-                message:
-                    'Complete some sets to see this exercise history here.',
+                title: context.l10n.noHistoryFor(widget.name),
+                message: context.l10n.completeSetsForHistory,
               );
             }
 
@@ -78,15 +78,15 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     return AppBar(
       leading: IconButton(
         key: const ValueKey('clearGraphHistorySelection'),
-        tooltip: 'Cancel selection',
+        tooltip: context.l10n.cancelSelection,
         icon: const Icon(Icons.close),
         onPressed: () => setState(_selection.clear),
       ),
-      title: Text('${_selection.length} selected'),
+      title: Text(context.l10n.selectedCount(_selection.length)),
       actions: [
         IconButton(
           key: const ValueKey('selectAllGraphHistory'),
-          tooltip: 'Select all',
+          tooltip: context.l10n.selectAll,
           icon: const Icon(Icons.done_all),
           onPressed: () => setState(
             () => _selection.setAll(sets.map((gymSet) => gymSet.id)),
@@ -94,13 +94,13 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
         ),
         IconButton(
           key: const ValueKey('editGraphHistorySelection'),
-          tooltip: 'Edit selected',
+          tooltip: context.l10n.editSelected,
           icon: const Icon(Icons.edit),
           onPressed: _editSelected,
         ),
         IconButton(
           key: const ValueKey('deleteGraphHistorySelection'),
-          tooltip: 'Delete selected',
+          tooltip: context.l10n.deleteSelected,
           icon: const Icon(Icons.delete),
           onPressed: _deleteSelected,
         ),
@@ -124,19 +124,17 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: Text(
-          'Are you sure you want to delete $count ${count == 1 ? 'record' : 'records'}? This action is not reversible.',
-        ),
+        title: Text(context.l10n.confirmDelete),
+        content: Text(context.l10n.deleteRecordsConfirmation(count)),
         actions: [
           TextButton.icon(
             icon: const Icon(Icons.close),
-            label: const Text('Cancel'),
+            label: Text(context.l10n.actionCancel),
             onPressed: () => Navigator.pop(dialogContext, false),
           ),
           TextButton.icon(
             icon: const Icon(Icons.delete),
-            label: const Text('Delete'),
+            label: Text(context.l10n.actionDelete),
             onPressed: () => Navigator.pop(dialogContext, true),
           ),
         ],

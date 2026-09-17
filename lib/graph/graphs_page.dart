@@ -13,6 +13,7 @@ import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/global_progress_page.dart';
 import 'package:flexify/graphs_filters.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
@@ -153,7 +154,7 @@ class GraphsPageState extends State<GraphsPage>
       resizeToAvoidBottomInset: false,
       appBar: desktop
           ? AppBar(
-              title: const Text('Graphs'),
+              title: Text(context.l10n.navGraphs),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
@@ -164,7 +165,7 @@ class GraphsPageState extends State<GraphsPage>
                       ),
                     ),
                     icon: const Icon(Icons.add_rounded),
-                    label: const Text('New exercise'),
+                    label: Text(context.l10n.newExercise),
                   ),
                 ),
               ],
@@ -226,7 +227,9 @@ class GraphsPageState extends State<GraphsPage>
                       builder: (context, showGlobal, child) {
                         final showEmpty =
                             gymSets.isEmpty &&
-                            !'global progress'.contains(_search.toLowerCase());
+                            !context.l10n.globalProgress.toLowerCase().contains(
+                              _search.toLowerCase(),
+                            );
                         return Expanded(
                           child: showEmpty
                               ? Padding(
@@ -235,13 +238,16 @@ class GraphsPageState extends State<GraphsPage>
                                   ),
                                   child: AppEmptyState(
                                     icon: Icons.search_off_rounded,
-                                    title: 'No graphs found',
+                                    title: context.l10n.noGraphsFound,
                                     message: _search.trim().isEmpty
-                                        ? 'Complete a set to create your first exercise graph.'
-                                        : 'Nothing matches “${_search.trim()}”. You can create it as a new exercise.',
+                                        ? context.l10n.completeSetForFirstGraph
+                                        : context.l10n
+                                              .nothingMatchesGraphSearch(
+                                                _search.trim(),
+                                              ),
                                     actionLabel: _search.trim().isEmpty
-                                        ? 'Add exercise'
-                                        : 'Add “${_search.trim()}”',
+                                        ? context.l10n.addExercise
+                                        : context.l10n.addNamed(_search.trim()),
                                     actionIcon: Icons.add_rounded,
                                     onAction: () => Navigator.of(context).push(
                                       MaterialPageRoute(
@@ -263,7 +269,7 @@ class GraphsPageState extends State<GraphsPage>
                 left: 0,
                 right: 0,
                 child: AppSearch(
-                  hintText: 'Search graphs...',
+                  hintText: context.l10n.searchGraphs,
                   controller: _selection,
                   filter: GraphsFilters(
                     category: _category,
@@ -297,8 +303,9 @@ class GraphsPageState extends State<GraphsPage>
                           EditGraphPage(name: _selection.first),
                     ),
                   ),
-                  confirmText:
-                      "This will delete $_total records. Are you sure?",
+                  confirmText: context.l10n.deleteGraphRecordsConfirmation(
+                    _total,
+                  ),
                 ),
               ),
             ],
@@ -313,7 +320,7 @@ class GraphsPageState extends State<GraphsPage>
                   builder: (context) => const AddExercisePage(),
                 ),
               ),
-              label: const Text('Add'),
+              label: Text(context.l10n.actionAdd),
               scroll: _scroll,
               icon: const Icon(Icons.add),
             ),
@@ -321,6 +328,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Future<void> onShare() async {
+    final l10n = context.l10n;
     final copy = _selection.toList();
     setState(() {
       _selection.clear();
@@ -334,7 +342,7 @@ class GraphsPageState extends State<GraphsPage>
               "${toString(gymSet.reps.value)}x${toString(gymSet.weight.value)}${gymSet.unit.value} ${gymSet.name.value}",
         )
         .join(', ');
-    await SharePlus.instance.share(ShareParams(text: "I just did $text"));
+    await SharePlus.instance.share(ShareParams(text: l10n.shareWorkout(text)));
   }
 
   void longPressGlobal() {
@@ -347,7 +355,7 @@ class GraphsPageState extends State<GraphsPage>
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.visibility_off),
-                title: const Text('Hide global progress'),
+                title: Text(context.l10n.hideGlobalProgress),
                 onTap: () {
                   db.settings.update().write(
                     const SettingsCompanion(showGlobalProgress: Value(false)),
@@ -357,7 +365,7 @@ class GraphsPageState extends State<GraphsPage>
               ),
               ListTile(
                 leading: const Icon(Icons.clear),
-                title: const Text('Cancel'),
+                title: Text(context.l10n.actionCancel),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -371,8 +379,11 @@ class GraphsPageState extends State<GraphsPage>
 
   ListView graphList(List<GymSetsCompanion> gymSets, bool showGlobalProgress) {
     var itemCount = gymSets.length + 1;
+    final globalSearchTerms =
+        '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
+            .toLowerCase();
     final showGlobal =
-        'global graphs'.contains(_search.toLowerCase()) &&
+        globalSearchTerms.contains(_search.toLowerCase()) &&
         _category == null &&
         showGlobalProgress;
     if (showGlobal) itemCount++;
@@ -418,14 +429,14 @@ class GraphsPageState extends State<GraphsPage>
                         : null,
                     leading: const Icon(Icons.language),
                     title: Text(
-                      "Global progress",
+                      context.l10n.globalProgress,
                       style: isDesktopLayout(context)
                           ? Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                             )
                           : null,
                     ),
-                    subtitle: const Text("A chart grouped by category"),
+                    subtitle: Text(context.l10n.chartGroupedByCategory),
                     trailing: isDesktopLayout(context)
                         ? const Icon(Icons.chevron_right_rounded)
                         : null,

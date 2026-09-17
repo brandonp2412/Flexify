@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -37,6 +38,8 @@ void main() async {
       MultiProvider(
         providers: [Provider<SettingsState>.value(value: settings)],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: PlanTile(
               plan: Plan(days: 'Monday', id: 1, sequence: null, title: null),

@@ -121,14 +121,16 @@ class _EditSetPageState extends State<EditSetPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text(widget.gymSet.id > 0 ? widget.gymSet.name : 'Add set'),
+      title: Text(
+        widget.gymSet.id > 0 ? widget.gymSet.name : context.l10n.addSet,
+      ),
       actions: [if (widget.gymSet.id > 0) buildDeleteButton()],
     );
   }
 
   Widget buildDeleteButton() {
     return IconButton(
-      tooltip: 'Delete set',
+      tooltip: context.l10n.deleteSet,
       icon: const Icon(Icons.delete),
       onPressed: () => showDeleteDialog(),
     );
@@ -139,18 +141,16 @@ class _EditSetPageState extends State<EditSetPage> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: Text(
-            'Are you sure you want to delete ${widget.gymSet.name}?',
-          ),
+          title: Text(context.l10n.confirmDelete),
+          content: Text(context.l10n.deleteSetConfirmation(widget.gymSet.name)),
           actions: [
             TextButton.icon(
-              label: const Text('Cancel'),
+              label: Text(context.l10n.actionCancel),
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(dialogContext),
             ),
             TextButton.icon(
-              label: const Text('Delete'),
+              label: Text(context.l10n.actionDelete),
               icon: const Icon(Icons.delete),
               onPressed: () async {
                 Navigator.pop(dialogContext);
@@ -182,7 +182,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 autocomplete(showBodyWeight),
                 const SizedBox(height: 12.0),
                 ListTile(
-                  title: const Text('Cardio'),
+                  title: Text(context.l10n.cardio),
                   leading: _cardio
                       ? const Icon(Icons.sports_gymnastics)
                       : const Icon(Icons.fitness_center),
@@ -243,14 +243,14 @@ class _EditSetPageState extends State<EditSetPage> {
     return StepperField(
       controller: _reps,
       focusNode: _repsNode,
-      labelText: 'Reps',
+      labelText: context.l10n.repsLabel,
       step: 1,
       onChanged: (value) => setORM(),
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => selectAll(_weight),
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Required';
-        if (double.tryParse(value) == null) return 'Invalid number';
+        if (value == null || value.isEmpty) return context.l10n.requiredField;
+        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -259,13 +259,15 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget buildWeightField() {
     return StepperField(
       controller: _weight,
-      labelText: _name == 'Weight' ? 'Value ' : 'Weight ($_unit)',
+      labelText: _name == 'Weight'
+          ? context.l10n.valueLabel
+          : context.l10n.weightWithUnit(_unit),
       step: weightStep(_name, _unit),
       onFieldSubmitted: (value) => save(),
       onChanged: (value) => setORM(),
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Required';
-        if (double.tryParse(value) == null) return 'Invalid number';
+        if (value == null || value.isEmpty) return context.l10n.requiredField;
+        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -274,7 +276,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget buildORMField() {
     return TextField(
       controller: _orm,
-      decoration: const InputDecoration(labelText: 'One rep max (estimate)'),
+      decoration: InputDecoration(labelText: context.l10n.oneRepMaxEstimate),
       enabled: false,
     );
   }
@@ -297,7 +299,9 @@ class _EditSetPageState extends State<EditSetPage> {
       controller: _distance,
       focusNode: _distNode,
       decoration: InputDecoration(
-        labelText: _unit == 'kcal' ? 'Amount ($_unit)' : 'Distance ($_unit)',
+        labelText: _unit == 'kcal'
+            ? context.l10n.amountWithUnit(_unit)
+            : context.l10n.distanceWithUnit(_unit),
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(_distance),
@@ -305,7 +309,7 @@ class _EditSetPageState extends State<EditSetPage> {
       textInputAction: TextInputAction.next,
       validator: (value) {
         if (value == null || value.isEmpty) return null;
-        if (double.tryParse(value) == null) return 'Invalid number';
+        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -314,12 +318,12 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget buildInclineField() {
     return TextFormField(
       controller: _incline,
-      decoration: const InputDecoration(labelText: 'Incline %'),
+      decoration: InputDecoration(labelText: context.l10n.inclinePercent),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       onTap: () => selectAll(_incline),
       validator: (value) {
         if (value == null || value.isEmpty) return null;
-        if (int.tryParse(value) == null) return 'Invalid number';
+        if (int.tryParse(value) == null) return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -330,13 +334,15 @@ class _EditSetPageState extends State<EditSetPage> {
       visible: showBodyWeight && _name != 'Weight',
       child: TextFormField(
         controller: _body,
-        decoration: InputDecoration(labelText: 'Body weight ($_unit)'),
+        decoration: InputDecoration(
+          labelText: context.l10n.bodyWeightWithUnit(_unit),
+        ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onTap: () => selectAll(_body),
         validator: (value) {
           if (value == null) return null;
           if (value.isNotEmpty && double.tryParse(value) == null)
-            return 'Invalid number';
+            return context.l10n.invalidNumber;
           return null;
         },
       ),
@@ -348,7 +354,7 @@ class _EditSetPageState extends State<EditSetPage> {
       builder: (context, showUnits, child) => Visibility(
         visible: showUnits,
         child: DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Unit'),
+          decoration: InputDecoration(labelText: context.l10n.unitLabel),
           initialValue: _unit,
           items: getUnitItems(context),
           onChanged: (String? newValue) {
@@ -404,9 +410,9 @@ class _EditSetPageState extends State<EditSetPage> {
                     return TextFormField(
                       controller: textEditingController,
                       focusNode: focusNode,
-                      decoration: const InputDecoration(
-                        labelText: 'Category',
-                        helperText: 'Muscle group, e.g. Chest or Legs',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.categoryLabel,
+                        helperText: context.l10n.categoryHelper,
                       ),
                       onChanged: (value) => setState(() {
                         _category = value.isNotEmpty ? value : null;
@@ -426,7 +432,7 @@ class _EditSetPageState extends State<EditSetPage> {
         visible: showNotes,
         child: TextField(
           maxLines: 3,
-          decoration: const InputDecoration(labelText: 'Notes'),
+          decoration: InputDecoration(labelText: context.l10n.notesLabel),
           controller: _notes,
         ),
       ),
@@ -437,7 +443,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget dateSelector() {
     return Selector<SettingsState, String>(
       builder: (context, longDateFormat, child) => ListTile(
-        title: const Text('Created date'),
+        title: Text(context.l10n.createdDate),
         subtitle: Text(
           longDateFormat == 'timeago'
               ? timeago.format(_created)
@@ -453,7 +459,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget buildSaveButton() {
     return AnimatedFab(
       onPressed: save,
-      label: const Text("Save"),
+      label: Text(context.l10n.actionSave),
       icon: const Icon(Icons.save),
     );
   }
@@ -468,13 +474,13 @@ class _EditSetPageState extends State<EditSetPage> {
               if (_image == null)
                 TextButton.icon(
                   onPressed: pick,
-                  label: const Text('Image'),
+                  label: Text(context.l10n.imageLabel),
                   icon: const Icon(Icons.image),
                 ),
               if (_image != null) ...[
                 const SizedBox(height: 8),
                 Tooltip(
-                  message: 'Long-press to delete',
+                  message: context.l10n.longPressToDelete,
                   child: GestureDetector(
                     onTap: () => pick(),
                     onLongPress: () => setState(() {
@@ -485,7 +491,7 @@ class _EditSetPageState extends State<EditSetPage> {
                       cacheWidth: 400,
                       errorBuilder: (context, error, stackTrace) =>
                           TextButton.icon(
-                            label: const Text('Image error'),
+                            label: Text(context.l10n.imageError),
                             icon: const Icon(Icons.error),
                             onPressed: () => pick(),
                           ),
@@ -507,14 +513,15 @@ class _EditSetPageState extends State<EditSetPage> {
         Expanded(
           child: TextFormField(
             controller: _minutes,
-            decoration: const InputDecoration(labelText: 'Minutes'),
+            decoration: InputDecoration(labelText: context.l10n.minutesLabel),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(_minutes),
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (value) => selectAll(_seconds),
             validator: (value) {
               if (value == null || value.isEmpty) return null;
-              if (int.tryParse(value) == null) return 'Invalid number';
+              if (int.tryParse(value) == null)
+                return context.l10n.invalidNumber;
               return null;
             },
           ),
@@ -523,14 +530,15 @@ class _EditSetPageState extends State<EditSetPage> {
         Expanded(
           child: TextFormField(
             controller: _seconds,
-            decoration: const InputDecoration(labelText: 'Seconds'),
+            decoration: InputDecoration(labelText: context.l10n.secondsLabel),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(_seconds),
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (value) => selectAll(_incline),
             validator: (value) {
               if (value == null || value.isEmpty) return null;
-              if (int.tryParse(value) == null) return 'Invalid number';
+              if (int.tryParse(value) == null)
+                return context.l10n.invalidNumber;
               return null;
             },
           ),
@@ -564,7 +572,7 @@ class _EditSetPageState extends State<EditSetPage> {
           ) {
             _nameCtrl = textEditingController;
             return TextFormField(
-              decoration: const InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: context.l10n.nameLabel),
               controller: textEditingController,
               textInputAction: TextInputAction.next,
               onTap: () {
@@ -578,7 +586,8 @@ class _EditSetPageState extends State<EditSetPage> {
                 _name = value;
               }),
               validator: (value) {
-                if (value == null || value.isEmpty) return 'Required';
+                if (value == null || value.isEmpty)
+                  return context.l10n.requiredField;
                 return null;
               },
             );
@@ -654,6 +663,8 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     final settings = context.read<SettingsState>().value;
+    if (!mounted) return;
+    final messages = positiveReinforcementMessages(context.l10n);
 
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
@@ -674,8 +685,7 @@ class _EditSetPageState extends State<EditSetPage> {
       final best = await isBest(gymSet);
       if (best) {
         final random = Random();
-        final randomMessage =
-            positiveReinforcement[random.nextInt(positiveReinforcement.length)];
+        final randomMessage = messages[random.nextInt(messages.length)];
         if (mounted) toast(randomMessage);
       }
     }
