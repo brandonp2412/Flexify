@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -118,6 +119,62 @@ void main() {
     expect(find.textContaining('Bench press'), findsOne);
     expect(find.textContaining('Barbell row'), findsOne);
     expect(find.textContaining('Squat'), findsOne);
+  });
+
+  testWidgets('all translated locales complete the core workout save flow', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    for (final locale in selectableLocales.skip(1)) {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+      final l10n = lookupAppLocalizations(locale);
+      final exercise = 'User lift ${locale.toLanguageTag()}';
+      final id = await database.plans.insertOne(planFixture());
+      await database.planExercises.insertOne(
+        planExerciseFixture(planId: id, exercise: exercise),
+      );
+      await database.settings.update().write(
+        testSettings(
+          explainedPermissions: true,
+          notificationPermissionRequested: true,
+        ),
+      );
+      final plan =
+          await (database.plans.select()..where((plan) => plan.id.equals(id)))
+              .getSingle();
+
+      await harness.pump(
+        tester,
+        StartPlanPage(plan: plan),
+        locale: locale,
+        surfaceSize: const Size(430, 900),
+        textScaler: const TextScaler.linear(1.1),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining(exercise), findsOneWidget);
+      await tester.enterText(textFieldWithLabel(l10n.repsLabel), '5');
+      await tester.enterText(
+        textFieldWithLabel(l10n.weightWithUnit('kg')),
+        '50',
+      );
+      await tester.tap(find.text(l10n.actionSave));
+      await tester.pumpAndSettle();
+
+      final saved =
+          await (database.gymSets.select()
+                ..where((set) => set.name.equals(exercise))
+                ..orderBy([(set) => OrderingTerm.desc(set.created)])
+                ..limit(1))
+              .getSingle();
+      expect(saved.name, exercise, reason: locale.toLanguageTag());
+      expect(saved.reps, 5, reason: locale.toLanguageTag());
+      expect(saved.weight, 50, reason: locale.toLanguageTag());
+      expect(tester.takeException(), isNull, reason: locale.toLanguageTag());
+    }
   });
 
   testWidgets('StartPlanPage saves localized German decimal input', (

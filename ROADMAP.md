@@ -117,7 +117,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Test representative singular/plural/count messages in languages with different plural behavior.
 - [x] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
 - [x] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
-- [ ] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.
+- [x] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.
 - [ ] Verify CJK rendering and font fallback on Android and desktop.
 - [x] Verify screen-reader semantics use localized labels/hints where custom semantics are present.
 - [x] Confirm user-entered exercise/plan/note text is never translated or rewritten.
@@ -133,7 +133,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Run the full required completion checks: `dart format .`, `flutter analyze`, and `flutter test`.
 - [ ] Run relevant Android/integration smoke coverage for locale switching and a non-English workout flow.
 - [x] Perform a final hard-coded-English audit and ARB completeness check.
-- [ ] Confirm all first-wave locales are selectable, persist correctly, survive restart, and can complete core Flexify flows.
+- [x] Confirm all first-wave locales are selectable, persist correctly, survive restart, and can complete core Flexify flows.
 
 ## Definition of done
 

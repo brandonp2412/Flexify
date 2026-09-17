@@ -54,8 +54,58 @@ void main() {
       expect(canonicalLocaleOverride('zh_CN'), 'zh-CN');
       expect(canonicalLocaleOverride('zh'), isNull);
       expect(canonicalLocaleOverride('removed-locale'), isNull);
+      expect(selectableLocales.map((locale) => locale.toLanguageTag()), [
+        'en',
+        'es',
+        'fr',
+        'de',
+        'it',
+        'pt-BR',
+        'nl',
+        'pl',
+        'ja',
+        'ko',
+        'zh-CN',
+      ]);
     },
   );
+
+  testWidgets('all translated locale choices survive app provider restart', (
+    tester,
+  ) async {
+    await mockTests();
+    final database = testDb();
+    db = database;
+    addTearDown(database.close);
+    final localeCases = <String, Locale>{
+      'es': const Locale('es'),
+      'fr': const Locale('fr'),
+      'de': const Locale('de'),
+      'it': const Locale('it'),
+      'pt-BR': const Locale('pt', 'BR'),
+      'nl': const Locale('nl'),
+      'pl': const Locale('pl'),
+      'ja': const Locale('ja'),
+      'ko': const Locale('ko'),
+      'zh-CN': const Locale('zh', 'CN'),
+    };
+
+    for (final entry in localeCases.entries) {
+      await database.settings.update().write(
+        SettingsCompanion(localeOverride: Value(entry.key)),
+      );
+      final reloaded = await (database.settings.select()..limit(1)).getSingle();
+      expect(reloaded.localeOverride, entry.key);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      await tester.pumpWidget(appProviders(reloaded));
+      await tester.pump();
+
+      final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(app.locale, entry.value, reason: entry.key);
+    }
+  });
 
   testWidgets('app applies persisted locale changes without restart', (
     tester,
