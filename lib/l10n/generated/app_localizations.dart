@@ -1270,6 +1270,12 @@ abstract class AppLocalizations {
   /// **'Minutes'**
   String get minutesLabel;
 
+  /// Compact abbreviation for minutes in pace and duration labels.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get minutesShort;
+
   /// Label for a duration in seconds.
   ///
   /// In en, this message translates to:

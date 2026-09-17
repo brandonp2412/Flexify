@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FlexLine extends StatelessWidget {
@@ -85,7 +85,7 @@ class FlexLine extends StatelessWidget {
             nearestIndex >= 0 &&
             nearestIndex < data.length) {
           DateTime created = data[nearestIndex].created;
-          text = Text(DateFormat(format).format(created));
+          text = Text(formatDisplayDate(context, created, format));
         } else {
           text = const Text('');
         }
@@ -97,7 +97,7 @@ class FlexLine extends StatelessWidget {
 
       if (indices.contains(value.toInt())) {
         DateTime created = data[value.toInt()].created;
-        text = Text(DateFormat(format).format(created));
+        text = Text(formatDisplayDate(context, created, format));
       } else {
         text = const Text('');
       }

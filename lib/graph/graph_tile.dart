@@ -9,9 +9,7 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class GraphTile extends StatelessWidget {
   final GymSetsCompanion gymSet;
@@ -45,10 +43,11 @@ class GraphTile extends StatelessWidget {
       final value = _isWeightUnit(gymSet.unit.value)
           ? gymSet.weight.value
           : gymSet.distance.value;
-      trailing = "${toString(value)} ${gymSet.unit.value} / $minutes:$seconds";
+      trailing =
+          "${formatDisplayNumber(context, value)} ${gymSet.unit.value} / $minutes:$seconds";
     } else {
       trailing =
-          "${toString(gymSet.reps.value)} x ${toString(gymSet.weight.value)} ${gymSet.unit.value}";
+          "${formatDisplayNumber(context, gymSet.reps.value)} x ${formatDisplayNumber(context, gymSet.weight.value)} ${gymSet.unit.value}";
     }
 
     Widget? leading;
@@ -118,8 +117,12 @@ class GraphTile extends StatelessWidget {
             padding: const EdgeInsets.only(top: 3),
             child: Text(
               dateFormat == 'timeago'
-                  ? timeago.format(gymSet.created.value)
-                  : DateFormat(dateFormat).format(gymSet.created.value),
+                  ? formatRelativeTime(context, gymSet.created.value)
+                  : formatDisplayDate(
+                      context,
+                      gymSet.created.value,
+                      dateFormat,
+                    ),
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),

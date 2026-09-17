@@ -18,8 +18,8 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class StrengthPage extends StatefulWidget {
@@ -592,18 +592,22 @@ class _StrengthPageState extends State<StrengthPage> {
           if (spot.barIndex != 0) return null;
 
           final row = data.elementAt(spot.spotIndex);
-          final created = DateFormat(format).format(row.created);
-          final formatter = NumberFormat("#,###.00");
+          final created = formatDisplayDate(context, row.created, format);
+          final value = formatDisplayNumber(
+            context,
+            row.value,
+            minimumFractionDigits: 2,
+          );
 
-          String text = "${row.value.toStringAsFixed(2)}$target $created";
+          String text = "$value$target $created";
           switch (metric) {
             case StrengthMetric.bestReps:
             case StrengthMetric.relativeStrength:
-              text = "${row.value.toStringAsFixed(2)} $created";
+              text = "$value $created";
               break;
             case StrengthMetric.volume:
             case StrengthMetric.oneRepMax:
-              text = "${formatter.format(row.value)}$target $created";
+              text = "$value$target $created";
               break;
             case StrengthMetric.bestWeight:
               break;

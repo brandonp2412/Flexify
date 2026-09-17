@@ -234,7 +234,7 @@ class _SetChip extends StatelessWidget {
     required this._best,
   });
 
-  String get _value {
+  String _value(BuildContext context) {
     if (_gymSet.cardio &&
         (_gymSet.unit == 'kg' ||
             _gymSet.unit == 'lb' ||
@@ -244,10 +244,12 @@ class _SetChip extends StatelessWidget {
         2,
         '0',
       );
-      return "${toString(_gymSet.weight)} ${_gymSet.unit} / $minutes:$seconds";
+      return "${formatDisplayNumber(context, _gymSet.weight)} ${_gymSet.unit} / $minutes:$seconds";
     }
-    if (_gymSet.cardio) return "${toString(_gymSet.distance)} ${_gymSet.unit}";
-    return "${toString(_gymSet.weight)} ${_gymSet.unit} × ${toString(_gymSet.reps)}";
+    if (_gymSet.cardio) {
+      return "${formatDisplayNumber(context, _gymSet.distance)} ${_gymSet.unit}";
+    }
+    return "${formatDisplayNumber(context, _gymSet.weight)} ${_gymSet.unit} × ${formatDisplayNumber(context, _gymSet.reps)}";
   }
 
   @override
@@ -285,7 +287,7 @@ class _SetChip extends StatelessWidget {
                   ],
                 ],
               ),
-              Text(_value, style: theme.textTheme.titleSmall),
+              Text(_value(context), style: theme.textTheme.titleSmall),
             ],
           ),
         ),

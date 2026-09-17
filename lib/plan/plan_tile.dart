@@ -7,6 +7,7 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -203,18 +204,22 @@ class _PlanTileState extends State<PlanTile> {
 
             if (trailing == PlanTrailing.count)
               return Text(
-                "${count.total}",
+                formatDisplayNumber(
+                  context,
+                  count.total,
+                  maximumFractionDigits: 0,
+                ),
                 style: const TextStyle(fontSize: 16),
               );
 
             if (trailing == PlanTrailing.percent)
               return Text(
-                "${((count.total) / count.maxSets * 100).toStringAsFixed(2)}%",
+                formatDisplayPercent(context, count.total / count.maxSets),
                 style: const TextStyle(fontSize: 16),
               );
             else
               return Text(
-                "${count.total} / ${count.maxSets}",
+                "${formatDisplayNumber(context, count.total, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, count.maxSets, maximumFractionDigits: 0)}",
                 style: const TextStyle(fontSize: 16),
               );
           },

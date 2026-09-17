@@ -651,6 +651,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get minutesLabel => 'Minutes';
 
   @override
+  String get minutesShort => 'min';
+
+  @override
   String get secondsLabel => 'Seconds';
 
   @override

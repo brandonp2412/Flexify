@@ -9,6 +9,7 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -149,16 +150,22 @@ class _StartListState extends State<StartList> {
         break;
 
       case PlanTrailing.ratio:
-        trail = Text("$count / $max", style: const TextStyle(fontSize: 16));
+        trail = Text(
+          "${formatDisplayNumber(context, count, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, max, maximumFractionDigits: 0)}",
+          style: const TextStyle(fontSize: 16),
+        );
         break;
 
       case PlanTrailing.count:
-        trail = Text(count.toString(), style: const TextStyle(fontSize: 16));
+        trail = Text(
+          formatDisplayNumber(context, count, maximumFractionDigits: 0),
+          style: const TextStyle(fontSize: 16),
+        );
         break;
 
       case PlanTrailing.percent:
         trail = Text(
-          "${(count / max * 100).toStringAsFixed(2)}%",
+          formatDisplayPercent(context, count / max),
           style: const TextStyle(fontSize: 16),
         );
         break;
@@ -240,7 +247,7 @@ class _StartListState extends State<StartList> {
                           if (trailing == PlanTrailing.reorder ||
                               trailing == PlanTrailing.none) ...[
                             Text(
-                              '$count / $max',
+                              '${formatDisplayNumber(context, count, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, max, maximumFractionDigits: 0)}',
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(color: colors.onSurfaceVariant),
                             ),

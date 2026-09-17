@@ -878,6 +878,10 @@
   "@minutesLabel": {
     "description": "Label for a duration in minutes."
   },
+  "minutesShort": "min",
+  "@minutesShort": {
+    "description": "Compact abbreviation for minutes in pace and duration labels."
+  },
   "secondsLabel": "Seconds",
   "@secondsLabel": {
     "description": "Label for a duration in seconds."

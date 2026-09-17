@@ -1,5 +1,5 @@
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 /// A tappable filled control that displays a labelled date, showing the
 /// formatted value or a placeholder hint. Long-press clears the date.
@@ -58,7 +58,7 @@ class GraphDateField extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    hasValue ? DateFormat(hint).format(value!) : hint,
+                    hasValue ? formatDisplayDate(context, value!, hint) : hint,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(

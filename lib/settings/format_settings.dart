@@ -4,10 +4,9 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 final List<String> long = [
   'timeago',
@@ -100,16 +99,15 @@ List<Widget> getFormatSettings(
           message: l10n.longDateFormatDescription,
           child: Builder(
             builder: (context) {
-              var format = timeago.format(
-                DateTime.now(),
-                locale: Localizations.localeOf(context).languageCode,
-              );
+              var format = formatRelativeTime(context, DateTime.now());
 
-              if (settings.longDateFormat != 'timeago')
-                format = DateFormat(
+              if (settings.longDateFormat != 'timeago') {
+                format = formatDisplayDate(
+                  context,
+                  DateTime.now(),
                   settings.longDateFormat,
-                  Localizations.localeOf(context).toLanguageTag(),
-                ).format(DateTime.now());
+                );
+              }
 
               return DropdownButtonFormField<String>(
                 initialValue: settings.longDateFormat,
@@ -146,10 +144,11 @@ List<Widget> getFormatSettings(
             ),
             decoration: InputDecoration(
               labelText: l10n.shortDateFormat(
-                DateFormat(
+                formatDisplayDate(
+                  context,
+                  DateTime.now(),
                   settings.shortDateFormat,
-                  Localizations.localeOf(context).toLanguageTag(),
-                ).format(DateTime.now()),
+                ),
               ),
             ),
           ),

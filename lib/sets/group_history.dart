@@ -7,9 +7,7 @@ import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class GroupHistory extends StatefulWidget {
   final List<HistoryDay> days;
@@ -75,11 +73,14 @@ class _GroupHistoryState extends State<GroupHistory> {
   ) {
     return [
       ExpansionTile(
-        title: Text("${history.name} (${history.gymSets.length})"),
+        title: Text(
+          "${history.name} (${formatDisplayNumber(context, history.gymSets.length, maximumFractionDigits: 0)})",
+        ),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.shortDateFormat,
-          builder: (context, value, child) =>
-              Text(DateFormat(value).format(history.gymSets.first.created)),
+          builder: (context, value, child) => Text(
+            formatDisplayDate(context, history.gymSets.first.created, value),
+          ),
         ),
         shape: const Border.symmetric(),
         children: history.gymSets.map((gymSet) {
@@ -88,12 +89,14 @@ class _GroupHistoryState extends State<GroupHistory> {
               .floor()
               .toString()
               .padLeft(2, '0');
-          final distance = toString(gymSet.distance);
-          final reps = toString(gymSet.reps);
-          final weight = toString(gymSet.weight);
+          final distance = formatDisplayNumber(context, gymSet.distance);
+          final reps = formatDisplayNumber(context, gymSet.reps);
+          final weight = formatDisplayNumber(context, gymSet.weight);
           String incline = '';
-          if (gymSet.incline != null && gymSet.incline! > 0)
-            incline = '@ ${gymSet.incline}%';
+          if (gymSet.incline != null && gymSet.incline! > 0) {
+            incline =
+                '@ ${formatDisplayPercent(context, gymSet.incline! / 100, maximumFractionDigits: 0)}';
+          }
 
           Widget? leading;
 
@@ -156,8 +159,8 @@ class _GroupHistoryState extends State<GroupHistory> {
                 selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, dateFormat, child) => Text(
                   dateFormat == 'timeago'
-                      ? timeago.format(gymSet.created)
-                      : DateFormat(dateFormat).format(gymSet.created),
+                      ? formatRelativeTime(context, gymSet.created)
+                      : formatDisplayDate(context, gymSet.created, dateFormat),
                 ),
               ),
               onLongPress: () {

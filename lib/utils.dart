@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void toast(String message, {SnackBarAction? action, Duration? duration}) {
   rootScaffoldMessenger.currentState!.showSnackBar(
@@ -36,6 +37,68 @@ bool isSameDay(DateTime date1, DateTime date2) {
   return date1.year == date2.year &&
       date1.month == date2.month &&
       date1.day == date2.day;
+}
+
+String formatDisplayDate(
+  BuildContext context,
+  DateTime value,
+  String pattern,
+) => DateFormat(
+  pattern,
+  Localizations.localeOf(context).toLanguageTag(),
+).format(value);
+
+String formatDisplayNumber(
+  BuildContext context,
+  num value, {
+  int minimumFractionDigits = 0,
+  int maximumFractionDigits = 2,
+}) {
+  final formatter =
+      NumberFormat.decimalPattern(
+          Localizations.localeOf(context).toLanguageTag(),
+        )
+        ..minimumFractionDigits = minimumFractionDigits
+        ..maximumFractionDigits = maximumFractionDigits;
+  return formatter.format(value);
+}
+
+String formatDisplayPercent(
+  BuildContext context,
+  num ratio, {
+  int maximumFractionDigits = 2,
+}) {
+  final formatter = NumberFormat.percentPattern(
+    Localizations.localeOf(context).toLanguageTag(),
+  )..maximumFractionDigits = maximumFractionDigits;
+  return formatter.format(ratio);
+}
+
+bool _relativeTimeLocalesRegistered = false;
+
+void _registerRelativeTimeLocales() {
+  if (_relativeTimeLocalesRegistered) return;
+  _relativeTimeLocalesRegistered = true;
+  timeago.setLocaleMessages('de', timeago.DeMessages());
+  timeago.setLocaleMessages('fr', timeago.FrMessages());
+  timeago.setLocaleMessages('it', timeago.ItMessages());
+  timeago.setLocaleMessages('ja', timeago.JaMessages());
+  timeago.setLocaleMessages('ko', timeago.KoMessages());
+  timeago.setLocaleMessages('nl', timeago.NlMessages());
+  timeago.setLocaleMessages('pl', timeago.PlMessages());
+  timeago.setLocaleMessages('pt_BR', timeago.PtBrMessages());
+  timeago.setLocaleMessages('zh_CN', timeago.ZhCnMessages());
+}
+
+String formatRelativeTime(BuildContext context, DateTime value) {
+  _registerRelativeTimeLocales();
+  final locale = Localizations.localeOf(context);
+  final localeName = switch ((locale.languageCode, locale.countryCode)) {
+    ('pt', 'BR') => 'pt_BR',
+    ('zh', 'CN') => 'zh_CN',
+    _ => locale.languageCode,
+  };
+  return timeago.format(value, locale: localeName);
 }
 
 DateTime parseDate(String dateString) {

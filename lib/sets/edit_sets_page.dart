@@ -8,9 +8,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class EditSetsPage extends StatefulWidget {
   final List<int> ids;
@@ -345,9 +343,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   var subtitle = _oldCreated ?? "";
 
                   if (longDateFormat == 'timeago' && _created != null)
-                    subtitle = timeago.format(_created!);
+                    subtitle = formatRelativeTime(context, _created!);
                   else if (longDateFormat != 'timeago' && _created != null)
-                    subtitle = DateFormat(longDateFormat).format(_created!);
+                    subtitle = formatDisplayDate(
+                      context,
+                      _created!,
+                      longDateFormat,
+                    );
 
                   return ListTile(
                     title: Text(l10n.createdDate),
@@ -422,14 +424,16 @@ class _EditSetsPageState extends State<EditSetsPage> {
             _oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
             if (settings.longDateFormat == 'timeago')
               _oldCreated = gymSets
-                  .map((gymSet) => timeago.format(gymSet.created))
+                  .map((gymSet) => formatRelativeTime(context, gymSet.created))
                   .join(', ');
             else
               _oldCreated = gymSets
                   .map(
-                    (gymSet) => DateFormat(
+                    (gymSet) => formatDisplayDate(
+                      context,
+                      gymSet.created,
                       settings.longDateFormat,
-                    ).format(gymSet.created),
+                    ),
                   )
                   .join(', ');
             _oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');

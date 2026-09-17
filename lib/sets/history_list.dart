@@ -9,9 +9,7 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class HistoryList extends StatefulWidget {
   final List<GymSet> sets;
@@ -67,12 +65,13 @@ class _HistoryListState extends State<HistoryList> {
       2,
       '0',
     );
-    final distance = toString(gymSet.distance);
-    final reps = toString(gymSet.reps);
-    final weight = toString(gymSet.weight);
+    final distance = formatDisplayNumber(context, gymSet.distance);
+    final reps = formatDisplayNumber(context, gymSet.reps);
+    final weight = formatDisplayNumber(context, gymSet.weight);
     String incline = '';
     if (gymSet.incline != null && gymSet.incline! > 0) {
-      incline = '@ ${gymSet.incline}%';
+      incline =
+          '@ ${formatDisplayPercent(context, gymSet.incline! / 100, maximumFractionDigits: 0)}';
     }
 
     Widget? leading;
@@ -138,8 +137,9 @@ class _HistoryListState extends State<HistoryList> {
                   Selector<SettingsState, String>(
                     selector: (context, settings) =>
                         settings.value.shortDateFormat,
-                    builder: (context, value, child) =>
-                        Text(DateFormat(value).format(previousGymSet.created)),
+                    builder: (context, value, child) => Text(
+                      formatDisplayDate(context, previousGymSet.created, value),
+                    ),
                   ),
                   const SizedBox(width: 4),
                   const Expanded(child: Divider()),
@@ -179,8 +179,12 @@ class _HistoryListState extends State<HistoryList> {
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
                       dateFormat == 'timeago'
-                          ? timeago.format(gymSet.created)
-                          : DateFormat(dateFormat).format(gymSet.created),
+                          ? formatRelativeTime(context, gymSet.created)
+                          : formatDisplayDate(
+                              context,
+                              gymSet.created,
+                              dateFormat,
+                            ),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: colors.onSurfaceVariant,
                       ),

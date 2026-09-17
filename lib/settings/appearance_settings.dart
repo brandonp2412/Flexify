@@ -8,6 +8,7 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -314,7 +315,11 @@ List<Widget> getAppearanceSettings(
               getTooltipItems: (touchedSpots) => touchedSpots
                   .map(
                     (spot) => LineTooltipItem(
-                      spot.y.toStringAsFixed(2),
+                      formatDisplayNumber(
+                        context,
+                        spot.y,
+                        minimumFractionDigits: 2,
+                      ),
                       TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),

@@ -15,9 +15,7 @@ import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class EditSetPage extends StatefulWidget {
   final GymSet gymSet;
@@ -446,8 +444,8 @@ class _EditSetPageState extends State<EditSetPage> {
         title: Text(context.l10n.createdDate),
         subtitle: Text(
           longDateFormat == 'timeago'
-              ? timeago.format(_created)
-              : DateFormat(longDateFormat).format(_created),
+              ? formatRelativeTime(context, _created)
+              : formatDisplayDate(context, _created, longDateFormat),
         ),
         trailing: const Icon(Icons.calendar_today),
         onTap: () => selectDate(),
@@ -613,10 +611,16 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setORM();
+  }
+
+  @override
   void initState() {
     super.initState();
 
-    updateFields(widget.gymSet);
+    updateFields(widget.gymSet, formatOrm: false);
     setState(() {
       _created = widget.gymSet.created;
     });
@@ -738,12 +742,11 @@ class _EditSetPageState extends State<EditSetPage> {
     final parsedReps = double.tryParse(_reps.text);
     final parsedWeight = double.tryParse(_weight.text);
     if (parsedReps == null || parsedWeight == null) return;
-    if (parsedReps > 0)
-      _orm.text =
-          "${(double.parse(_weight.text) / (1.0278 - (0.0278 * double.parse(_reps.text)))).toStringAsFixed(2)} $_unit";
-    else
-      _orm.text =
-          "${(double.parse(_weight.text) * (1.0278 - (0.0278 * double.parse(_reps.text)))).toStringAsFixed(2)} $_unit";
+    final estimate = parsedReps > 0
+        ? parsedWeight / (1.0278 - (0.0278 * parsedReps))
+        : parsedWeight * (1.0278 - (0.0278 * parsedReps));
+    _orm.text =
+        "${formatDisplayNumber(context, estimate, minimumFractionDigits: 2)} $_unit";
   }
 
   List<DropdownMenuItem<String>> getUnitItems(BuildContext context) {
@@ -753,7 +756,7 @@ class _EditSetPageState extends State<EditSetPage> {
     ];
   }
 
-  void updateFields(GymSet gymSet) {
+  void updateFields(GymSet gymSet, {bool formatOrm = true}) {
     _nameCtrl?.text = gymSet.name;
     setState(() {
       _category = gymSet.category;
@@ -766,7 +769,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
     if (gymSet.reps != 0) _reps.text = toString(gymSet.reps);
     _weight.text = toString(gymSet.weight);
-    setORM();
+    if (formatOrm) setORM();
     if (gymSet.bodyWeight != 0) _body.text = toString(gymSet.bodyWeight);
     if (gymSet.duration != 0) {
       _minutes.text = gymSet.duration.floor().toString();

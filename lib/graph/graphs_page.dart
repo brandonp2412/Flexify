@@ -20,7 +20,6 @@ import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -100,13 +99,16 @@ class GraphsPageState extends State<GraphsPage>
       getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
       getTooltipItems: (touchedSpots) {
         final row = data.elementAt(touchedSpots.last.spotIndex);
-        final created = DateFormat(format).format(row.created);
+        final created = formatDisplayDate(context, row.created, format);
 
         String text;
-        if (row is CardioData)
-          text = "${row.value} ${row.unit} / min";
-        else
-          text = "${row.reps} x ${row.value.toStringAsFixed(2)}$unit $created";
+        if (row is CardioData) {
+          text =
+              "${formatDisplayNumber(context, row.value)} ${row.unit} / ${context.l10n.minutesShort}";
+        } else {
+          text =
+              "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × ${formatDisplayNumber(context, row.value, minimumFractionDigits: 2)}$unit $created";
+        }
 
         return [
           LineTooltipItem(

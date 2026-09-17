@@ -8,8 +8,8 @@ import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class GlobalProgressPage extends StatefulWidget {
@@ -264,21 +264,27 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      DateFormat(
+                      formatDisplayDate(
+                        context,
+                        data.first.created,
                         settings.shortDateFormat,
-                      ).format(data.first.created),
+                      ),
                     ),
                     if (data.length > 2)
                       Text(
-                        DateFormat(
+                        formatDisplayDate(
+                          context,
+                          data[data.length ~/ 2].created,
                           settings.shortDateFormat,
-                        ).format(data[data.length ~/ 2].created),
+                        ),
                       ),
                     if (data.length > 1)
                       Text(
-                        DateFormat(
+                        formatDisplayDate(
+                          context,
+                          data.last.created,
                           settings.shortDateFormat,
-                        ).format(data.last.created),
+                        ),
                       ),
                   ],
                 ),
@@ -529,25 +535,26 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
             (d) => d.category == category && d.created == touchedDate,
           );
 
-          final formatter = NumberFormat(
-            "#,###.00",
-            Localizations.localeOf(context).toLanguageTag(),
-          );
           category ??= context.l10n.none;
+          final formattedValue = formatDisplayNumber(
+            context,
+            row.value,
+            minimumFractionDigits: 2,
+          );
 
           String value;
           switch (metric) {
             case StrengthMetric.bestReps:
             case StrengthMetric.relativeStrength:
-              value = row.value.toStringAsFixed(2);
+              value = formattedValue;
               break;
             case StrengthMetric.volume:
             case StrengthMetric.oneRepMax:
-              value = "${formatter.format(row.value)}$targetUnit";
+              value = "$formattedValue$targetUnit";
               break;
             case StrengthMetric.bestWeight:
               value =
-                  "${row.reps} x ${row.value.toStringAsFixed(2)}$targetUnit";
+                  "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × $formattedValue$targetUnit";
               break;
           }
 
