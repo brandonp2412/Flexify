@@ -52,7 +52,13 @@ jobs:
           cache: true
 
       - name: Android NDK
-        run: sdkmanager 'ndk;28.2.13676358'
+        run: |
+          sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [[ ! -x "$sdkmanager" ]]; then
+            sdkmanager="$(find "$ANDROID_HOME/cmdline-tools" -type f -path '*/bin/sdkmanager' | sort -V | tail -1)"
+          fi
+          test -x "$sdkmanager"
+          "$sdkmanager" 'ndk;28.2.13676358'
 
       - name: Dependencies
         working-directory: kite
