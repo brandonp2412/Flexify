@@ -603,6 +603,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Allow'**
   String get actionAllow;
+
+  /// Label for backup import, export, and data-management actions.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get backupLabel;
+
+  /// Label for database data-management actions.
+  ///
+  /// In en, this message translates to:
+  /// **'Database'**
+  String get databaseLabel;
+
+  /// Action for opening destructive data deletion options.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete records'**
+  String get deleteRecords;
+
+  /// Confirmation text for deleting all graph records.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all graphs? This action is not reversible.'**
+  String get deleteAllGraphsConfirmation;
+
+  /// Confirmation text for deleting all plans.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all plans? This action is not reversible.'**
+  String get deleteAllPlansConfirmation;
+
+  /// Confirmation text for deleting the complete Flexify database.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your database? This action is not reversible and will destroy all your data.'**
+  String get deleteDatabaseConfirmation;
+
+  /// Action for opening data import options.
+  ///
+  /// In en, this message translates to:
+  /// **'Import data'**
+  String get importData;
+
+  /// Action for opening data export options.
+  ///
+  /// In en, this message translates to:
+  /// **'Export data'**
+  String get exportData;
+
+  /// Action for reporting an import failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get actionReport;
+
+  /// Toast shown after graph CSV data is imported.
+  ///
+  /// In en, this message translates to:
+  /// **'Graph data imported successfully!'**
+  String get graphDataImported;
+
+  /// Toast shown after plan CSV data is imported.
+  ///
+  /// In en, this message translates to:
+  /// **'Plans imported successfully'**
+  String get plansImported;
+
+  /// Toast shown when a database import fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import database: {error}'**
+  String failedToImportDatabase(String error);
+
+  /// Toast shown when a graph CSV import fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import graphs: {error}'**
+  String failedToImportGraphs(String error);
+
+  /// Toast shown when a plan CSV import fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import plans: {error}'**
+  String failedToImportPlans(String error);
+
+  /// Validation error when an import file no longer exists.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected file does not exist'**
+  String get selectedFileDoesNotExist;
+
+  /// Validation error when import file bytes cannot be read.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read file data'**
+  String get couldNotReadFileData;
+
+  /// Validation error explaining the supported web data-import workflow.
+  ///
+  /// In en, this message translates to:
+  /// **'Database import on web requires manual data migration. Please export your data as CSV files and import those instead.'**
+  String get databaseImportWebUnsupported;
+
+  /// Validation error for an empty CSV import file.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV file is empty'**
+  String get csvFileEmpty;
+
+  /// Validation error for a CSV containing only headings.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV file must contain at least one data row'**
+  String get csvNeedsDataRow;
+
+  /// Validation error when an imported CSV row has too few columns.
+  ///
+  /// In en, this message translates to:
+  /// **'Row {row} has insufficient columns: {count}'**
+  String csvRowInsufficientColumns(int row, int count);
+
+  /// Validation error for a malformed value in an imported CSV row.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid {field} value in row {row}: {value}'**
+  String invalidCsvValue(String field, int row, String value);
+
+  /// Validation error for an unsupported value type in an imported CSV row.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid {field} data type in row {row}: {type}'**
+  String invalidCsvDataType(String field, int row, String type);
+
+  /// Validation error for a non-integer plan identifier in an imported CSV file.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected an integer plan id, got \"{value}\"'**
+  String expectedIntegerPlanId(String value);
 }
 
 class _AppLocalizationsDelegate

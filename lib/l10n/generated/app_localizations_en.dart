@@ -290,4 +290,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionAllow => 'Allow';
+
+  @override
+  String get backupLabel => 'Backup';
+
+  @override
+  String get databaseLabel => 'Database';
+
+  @override
+  String get deleteRecords => 'Delete records';
+
+  @override
+  String get deleteAllGraphsConfirmation =>
+      'Are you sure you want to delete all graphs? This action is not reversible.';
+
+  @override
+  String get deleteAllPlansConfirmation =>
+      'Are you sure you want to delete all plans? This action is not reversible.';
+
+  @override
+  String get deleteDatabaseConfirmation =>
+      'Are you sure you want to delete your database? This action is not reversible and will destroy all your data.';
+
+  @override
+  String get importData => 'Import data';
+
+  @override
+  String get exportData => 'Export data';
+
+  @override
+  String get actionReport => 'Report';
+
+  @override
+  String get graphDataImported => 'Graph data imported successfully!';
+
+  @override
+  String get plansImported => 'Plans imported successfully';
+
+  @override
+  String failedToImportDatabase(String error) {
+    return 'Failed to import database: $error';
+  }
+
+  @override
+  String failedToImportGraphs(String error) {
+    return 'Failed to import graphs: $error';
+  }
+
+  @override
+  String failedToImportPlans(String error) {
+    return 'Failed to import plans: $error';
+  }
+
+  @override
+  String get selectedFileDoesNotExist => 'Selected file does not exist';
+
+  @override
+  String get couldNotReadFileData => 'Could not read file data';
+
+  @override
+  String get databaseImportWebUnsupported =>
+      'Database import on web requires manual data migration. Please export your data as CSV files and import those instead.';
+
+  @override
+  String get csvFileEmpty => 'CSV file is empty';
+
+  @override
+  String get csvNeedsDataRow => 'CSV file must contain at least one data row';
+
+  @override
+  String csvRowInsufficientColumns(int row, int count) {
+    return 'Row $row has insufficient columns: $count';
+  }
+
+  @override
+  String invalidCsvValue(String field, int row, String value) {
+    return 'Invalid $field value in row $row: $value';
+  }
+
+  @override
+  String invalidCsvDataType(String field, int row, String type) {
+    return 'Invalid $field data type in row $row: $type';
+  }
+
+  @override
+  String expectedIntegerPlanId(String value) {
+    return 'Expected an integer plan id, got \"$value\"';
+  }
 }

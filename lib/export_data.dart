@@ -2,6 +2,7 @@ import 'package:csv/csv.dart';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/backup_archive.dart';
@@ -33,7 +34,7 @@ class _ExportDataState extends State<ExportData> {
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.insights),
-                    title: const Text('Graphs'),
+                    title: Text(context.l10n.navGraphs),
                     onTap: () async {
                       Navigator.pop(context);
                       if (!await requestNotificationPermission()) return;
@@ -83,7 +84,7 @@ class _ExportDataState extends State<ExportData> {
                   ),
                   ListTile(
                     leading: const Icon(Icons.event),
-                    title: const Text('Plans'),
+                    title: Text(context.l10n.navPlans),
                     onTap: () async {
                       Navigator.pop(context);
                       final plans = await db.plans.select().get();
@@ -120,7 +121,7 @@ class _ExportDataState extends State<ExportData> {
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage),
-                    title: const Text('Backup'),
+                    title: Text(context.l10n.backupLabel),
                     onTap: () async {
                       Navigator.pop(context);
                       setState(() => exporting = true);
@@ -164,7 +165,7 @@ class _ExportDataState extends State<ExportData> {
               width: 20,
               child: CircularProgressIndicator(),
             )
-          : const Text('Export data'),
+          : Text(context.l10n.exportData),
     );
   }
 }

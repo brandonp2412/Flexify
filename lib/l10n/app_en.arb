@@ -363,5 +363,147 @@
   "actionAllow": "Allow",
   "@actionAllow": {
     "description": "Generic action for granting requested access."
+  },
+  "backupLabel": "Backup",
+  "@backupLabel": {
+    "description": "Label for backup import, export, and data-management actions."
+  },
+  "databaseLabel": "Database",
+  "@databaseLabel": {
+    "description": "Label for database data-management actions."
+  },
+  "deleteRecords": "Delete records",
+  "@deleteRecords": {
+    "description": "Action for opening destructive data deletion options."
+  },
+  "deleteAllGraphsConfirmation": "Are you sure you want to delete all graphs? This action is not reversible.",
+  "@deleteAllGraphsConfirmation": {
+    "description": "Confirmation text for deleting all graph records."
+  },
+  "deleteAllPlansConfirmation": "Are you sure you want to delete all plans? This action is not reversible.",
+  "@deleteAllPlansConfirmation": {
+    "description": "Confirmation text for deleting all plans."
+  },
+  "deleteDatabaseConfirmation": "Are you sure you want to delete your database? This action is not reversible and will destroy all your data.",
+  "@deleteDatabaseConfirmation": {
+    "description": "Confirmation text for deleting the complete Flexify database."
+  },
+  "importData": "Import data",
+  "@importData": {
+    "description": "Action for opening data import options."
+  },
+  "exportData": "Export data",
+  "@exportData": {
+    "description": "Action for opening data export options."
+  },
+  "actionReport": "Report",
+  "@actionReport": {
+    "description": "Action for reporting an import failure."
+  },
+  "graphDataImported": "Graph data imported successfully!",
+  "@graphDataImported": {
+    "description": "Toast shown after graph CSV data is imported."
+  },
+  "plansImported": "Plans imported successfully",
+  "@plansImported": {
+    "description": "Toast shown after plan CSV data is imported."
+  },
+  "failedToImportDatabase": "Failed to import database: {error}",
+  "@failedToImportDatabase": {
+    "description": "Toast shown when a database import fails.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToImportGraphs": "Failed to import graphs: {error}",
+  "@failedToImportGraphs": {
+    "description": "Toast shown when a graph CSV import fails.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToImportPlans": "Failed to import plans: {error}",
+  "@failedToImportPlans": {
+    "description": "Toast shown when a plan CSV import fails.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "selectedFileDoesNotExist": "Selected file does not exist",
+  "@selectedFileDoesNotExist": {
+    "description": "Validation error when an import file no longer exists."
+  },
+  "couldNotReadFileData": "Could not read file data",
+  "@couldNotReadFileData": {
+    "description": "Validation error when import file bytes cannot be read."
+  },
+  "databaseImportWebUnsupported": "Database import on web requires manual data migration. Please export your data as CSV files and import those instead.",
+  "@databaseImportWebUnsupported": {
+    "description": "Validation error explaining the supported web data-import workflow."
+  },
+  "csvFileEmpty": "CSV file is empty",
+  "@csvFileEmpty": {
+    "description": "Validation error for an empty CSV import file."
+  },
+  "csvNeedsDataRow": "CSV file must contain at least one data row",
+  "@csvNeedsDataRow": {
+    "description": "Validation error for a CSV containing only headings."
+  },
+  "csvRowInsufficientColumns": "Row {row} has insufficient columns: {count}",
+  "@csvRowInsufficientColumns": {
+    "description": "Validation error when an imported CSV row has too few columns.",
+    "placeholders": {
+      "row": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "invalidCsvValue": "Invalid {field} value in row {row}: {value}",
+  "@invalidCsvValue": {
+    "description": "Validation error for a malformed value in an imported CSV row.",
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "row": {
+        "type": "int"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "invalidCsvDataType": "Invalid {field} data type in row {row}: {type}",
+  "@invalidCsvDataType": {
+    "description": "Validation error for an unsupported value type in an imported CSV row.",
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "row": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "expectedIntegerPlanId": "Expected an integer plan id, got \"{value}\"",
+  "@expectedIntegerPlanId": {
+    "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }

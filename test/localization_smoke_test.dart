@@ -44,4 +44,21 @@ void main() {
       'Are you sure you want to delete 3 records? This action is not reversible.',
     );
   });
+
+  test('formats localized data import validation messages', () {
+    final l10n = lookupAppLocalizations(const Locale('en'));
+
+    expect(
+      l10n.csvRowInsufficientColumns(4, 3),
+      'Row 4 has insufficient columns: 3',
+    );
+    expect(
+      l10n.invalidCsvValue('Reps', 2, 'abc'),
+      'Invalid Reps value in row 2: abc',
+    );
+    expect(
+      l10n.failedToImportGraphs('CSV file is empty'),
+      'Failed to import graphs: CSV file is empty',
+    );
+  });
 }

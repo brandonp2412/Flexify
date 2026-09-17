@@ -6,6 +6,8 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/backup_archive.dart';
@@ -35,17 +37,17 @@ class ImportData extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.insights),
-                    title: const Text('Graphs'),
+                    title: Text(context.l10n.navGraphs),
                     onTap: () => importGraphs(context),
                   ),
                   ListTile(
                     leading: const Icon(Icons.event),
-                    title: const Text('Plans'),
+                    title: Text(context.l10n.navPlans),
                     onTap: () => importPlans(context),
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage),
-                    title: const Text('Backup'),
+                    title: Text(context.l10n.backupLabel),
                     onTap: () => importDatabase(context),
                   ),
                 ],
@@ -55,19 +57,20 @@ class ImportData extends StatelessWidget {
         );
       },
       icon: const Icon(Icons.upload),
-      label: const Text('Import data'),
+      label: Text(context.l10n.importData),
     );
   }
 
   Future<void> importDatabase(BuildContext context) async {
+    final l10n = ctx.l10n;
     Navigator.pop(context);
     talker.info('Starting Flexify database import');
 
     try {
       if (kIsWeb) {
-        await _importDatabaseWeb(context);
+        await _importDatabaseWeb(l10n);
       } else {
-        await _importDatabaseNative(context);
+        await _importDatabaseNative(l10n);
       }
     } catch (e, stackTrace) {
       talker.handle(e, stackTrace, 'Failed to import Flexify database');
@@ -105,10 +108,10 @@ $version
           'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
       toast(
-        'Failed to import database: ${e.toString()}',
+        l10n.failedToImportDatabase(e.toString()),
         duration: Duration(seconds: 10),
         action: SnackBarAction(
-          label: 'Report',
+          label: l10n.actionReport,
           onPressed: () async {
             await launchUrl(
               Uri.parse(url),
@@ -120,13 +123,13 @@ $version
     }
   }
 
-  Future<void> _importDatabaseNative(BuildContext context) async {
+  Future<void> _importDatabaseNative(AppLocalizations l10n) async {
     final result = await FilePicker.pickFiles();
     if (result == null) return;
 
     final selectedFile = File(result.files.single.path!);
     if (!await selectedFile.exists()) {
-      throw Exception('Selected file does not exist');
+      throw Exception(l10n.selectedFileDoesNotExist);
     }
 
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -179,22 +182,21 @@ $version
     ).pushNamedAndRemoveUntil('/', (_) => false);
   }
 
-  Future<void> _importDatabaseWeb(BuildContext context) async {
+  Future<void> _importDatabaseWeb(AppLocalizations l10n) async {
     FilePickerResult? result = await FilePicker.pickFiles();
     if (result == null) return;
 
     try {
       await result.files.single.readAsBytes();
     } catch (_) {
-      throw Exception('Could not read file data');
+      throw Exception(l10n.couldNotReadFileData);
     }
 
-    throw Exception(
-      'Database import on web requires manual data migration. Please export your data as CSV files and import those instead.',
-    );
+    throw Exception(l10n.databaseImportWebUnsupported);
   }
 
   Future<void> importGraphs(BuildContext context) async {
+    final l10n = ctx.l10n;
     Navigator.pop(context);
 
     try {
@@ -215,21 +217,30 @@ $version
 
       final rows = CsvDecoder().convert(csvContent);
 
-      if (rows.isEmpty) throw Exception('CSV file is empty');
-      if (rows.length <= 1)
-        throw Exception('CSV file must contain at least one data row');
+      if (rows.isEmpty) throw Exception(l10n.csvFileEmpty);
+      if (rows.length <= 1) throw Exception(l10n.csvNeedsDataRow);
 
       final columns = rows.first;
 
       final gymSets = rows.skip(1).map((row) {
         if (row.length < 6) {
           throw Exception(
-            'Row ${rows.indexOf(row) + 1} has insufficient columns: ${row.length}',
+            l10n.csvRowInsufficientColumns(rows.indexOf(row) + 1, row.length),
           );
         }
 
-        final reps = _parseDouble(row[2], 'reps', rows.indexOf(row) + 1);
-        final weight = _parseDouble(row[3], 'weight', rows.indexOf(row) + 1);
+        final reps = _parseDouble(
+          row[2],
+          l10n.repsLabel,
+          rows.indexOf(row) + 1,
+          l10n,
+        );
+        final weight = _parseDouble(
+          row[3],
+          l10n.weightLabel,
+          rows.indexOf(row) + 1,
+          l10n,
+        );
 
         Value<bool> hidden;
         var bodyWeight = const Value(0.0);
@@ -301,33 +312,45 @@ $version
       if (!ctx.mounted) return;
       Navigator.pop(ctx);
 
-      toast('Graph data imported successfully!');
+      toast(l10n.graphDataImported);
     } catch (e, stackTrace) {
       talker.handle(e, stackTrace, 'Failed to import graph data');
       if (!ctx.mounted) return;
 
       toast(
-        'Failed to import graphs: ${e.toString()}',
+        l10n.failedToImportGraphs(e.toString()),
         duration: Duration(seconds: 10),
       );
     }
   }
 
-  Value<double> _parseDouble(dynamic value, String fieldName, int rowNumber) {
+  Value<double> _parseDouble(
+    dynamic value,
+    String fieldName,
+    int rowNumber,
+    AppLocalizations l10n,
+  ) {
     if (value is num) return Value(value.toDouble());
     if (value is String) {
       final parsed = double.tryParse(value);
       if (parsed == null) {
-        throw Exception('Invalid $fieldName value in row $rowNumber: $value');
+        throw Exception(
+          l10n.invalidCsvValue(fieldName, rowNumber, value.toString()),
+        );
       }
       return Value(parsed);
     }
     throw Exception(
-      'Invalid $fieldName data type in row $rowNumber: ${value.runtimeType}',
+      l10n.invalidCsvDataType(
+        fieldName,
+        rowNumber,
+        value.runtimeType.toString(),
+      ),
     );
   }
 
   Future<void> importPlans(BuildContext context) async {
+    final l10n = ctx.l10n;
     Navigator.pop(context);
 
     try {
@@ -348,9 +371,8 @@ $version
 
       final csvList = CsvDecoder().convert(csvContent);
 
-      if (csvList.isEmpty) throw Exception('CSV file is empty');
-      if (csvList.length <= 1)
-        throw Exception('CSV file must contain at least one data row');
+      if (csvList.isEmpty) throw Exception(l10n.csvFileEmpty);
+      if (csvList.length <= 1) throw Exception(l10n.csvNeedsDataRow);
 
       final plansToInsert = <PlansCompanion>[];
       final planExercisesToInsert = <PlanExercisesCompanion>[];
@@ -359,7 +381,7 @@ $version
         final idStr = row[0].toString().trim();
         final id = int.tryParse(idStr);
         if (id == null) {
-          throw FormatException('Expected an integer plan id, got "$idStr"');
+          throw FormatException(l10n.expectedIntegerPlanId(idStr));
         }
         plansToInsert.add(
           PlansCompanion.insert(
@@ -394,7 +416,7 @@ $version
       if (!ctx.mounted) return;
       Navigator.pop(ctx);
 
-      toast('Plans imported successfully');
+      toast(l10n.plansImported);
     } catch (e, stackTrace) {
       talker.handle(e, stackTrace, 'Failed to import plan data');
       if (!ctx.mounted) return;
@@ -431,10 +453,10 @@ $version
           'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
       toast(
-        'Failed to import plans: ${e.toString()}',
+        l10n.failedToImportPlans(e.toString()),
         duration: Duration(seconds: 10),
         action: SnackBarAction(
-          label: 'Report',
+          label: l10n.actionReport,
           onPressed: () async {
             await launchUrl(
               Uri.parse(url),

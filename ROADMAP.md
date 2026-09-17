@@ -59,6 +59,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
   - [x] Localize Android app-access and missing-permission surfaces, including reusable permission actions and status copy.
 - [ ] Shared date/time, duration, count, set/rep, weight, distance, percentage, and ordinal formatting uses locale-aware APIs where appropriate.
 - [ ] Snackbar, validation, import/export, file-picker, notification-facing, and failure copy is localized.
+  - [x] Localize shared data import/export/delete actions, import validation, and import success/failure snackbars.
 
 ### Home, workouts, plans, and sets
 

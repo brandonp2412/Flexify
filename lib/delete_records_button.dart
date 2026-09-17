@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,27 +26,27 @@ class DeleteRecordsButton extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.insights),
-                    title: const Text('Graphs'),
+                    title: Text(context.l10n.navGraphs),
                     onTap: () async {
                       Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Confirm Delete'),
-                            content: const Text(
-                              'Are you sure you want to delete all graphs? This action is not reversible.',
+                            title: Text(context.l10n.confirmDelete),
+                            content: Text(
+                              context.l10n.deleteAllGraphsConfirmation,
                             ),
                             actions: <Widget>[
                               TextButton.icon(
-                                label: const Text('Cancel'),
+                                label: Text(context.l10n.actionCancel),
                                 icon: const Icon(Icons.close),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                               ),
                               TextButton.icon(
-                                label: const Text('Delete'),
+                                label: Text(context.l10n.actionDelete),
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
                                   Navigator.pop(context);
@@ -64,27 +65,27 @@ class DeleteRecordsButton extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.event),
-                    title: const Text('Plans'),
+                    title: Text(context.l10n.navPlans),
                     onTap: () async {
                       Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Confirm Delete'),
-                            content: const Text(
-                              'Are you sure you want to delete all plans? This action is not reversible.',
+                            title: Text(context.l10n.confirmDelete),
+                            content: Text(
+                              context.l10n.deleteAllPlansConfirmation,
                             ),
                             actions: <Widget>[
                               TextButton.icon(
-                                label: const Text('Cancel'),
+                                label: Text(context.l10n.actionCancel),
                                 icon: const Icon(Icons.close),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                               ),
                               TextButton.icon(
-                                label: const Text('Delete'),
+                                label: Text(context.l10n.actionDelete),
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
                                   Navigator.pop(context);
@@ -101,27 +102,27 @@ class DeleteRecordsButton extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.storage),
-                    title: const Text('Database'),
+                    title: Text(context.l10n.databaseLabel),
                     onTap: () async {
                       Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Confirm Delete'),
-                            content: const Text(
-                              'Are you sure you want to delete your database? This action is not reversible and will destroy all your data.',
+                            title: Text(context.l10n.confirmDelete),
+                            content: Text(
+                              context.l10n.deleteDatabaseConfirmation,
                             ),
                             actions: <Widget>[
                               TextButton.icon(
-                                label: const Text('Cancel'),
+                                label: Text(context.l10n.actionCancel),
                                 icon: const Icon(Icons.close),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                               ),
                               TextButton.icon(
-                                label: const Text('Delete'),
+                                label: Text(context.l10n.actionDelete),
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
                                   final dbFolder =
@@ -154,7 +155,7 @@ class DeleteRecordsButton extends StatelessWidget {
         );
       },
       icon: const Icon(Icons.delete),
-      label: const Text('Delete records'),
+      label: Text(context.l10n.deleteRecords),
     );
   }
 }
