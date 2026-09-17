@@ -61,4 +61,13 @@ void main() {
       'Failed to import graphs: CSV file is empty',
     );
   });
+
+  test('provides localized measurement unit labels', () {
+    final l10n = lookupAppLocalizations(const Locale('en'));
+
+    expect(l10n.kilogramsUnit, 'Kilograms (kg)');
+    expect(l10n.poundsUnit, 'Pounds (lb)');
+    expect(l10n.kilometersUnit, 'Kilometers (km)');
+    expect(l10n.kilocaloriesUnit, 'Kilocalories (kcal)');
+  });
 }

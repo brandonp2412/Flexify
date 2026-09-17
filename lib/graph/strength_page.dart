@@ -14,6 +14,7 @@ import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
 import 'package:flexify/graph/strength_data.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -432,10 +433,10 @@ class _StrengthPageState extends State<StrengthPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (settings.showUnits) ...[
-                      sectionLabel('Unit'),
+                      sectionLabel(context.l10n.unitLabel),
                       DropdownButtonFormField<String>(
                         initialValue: target,
-                        items: strengthUnitMenuItems,
+                        items: strengthUnitMenuItems(context.l10n),
                         onChanged: (value) {
                           setState(() {
                             target = value!;

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:drift/drift.dart' as drift;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -37,7 +39,7 @@ class _WeightPageState extends State<WeightPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text('Enter Weight')),
+      appBar: AppBar(title: Text(context.l10n.enterWeight)),
       body: Form(
         key: _key,
         child: Padding(
@@ -50,23 +52,25 @@ class _WeightPageState extends State<WeightPage> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(labelText: 'Weight'),
+                decoration: InputDecoration(
+                  labelText: context.l10n.weightLabel,
+                ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'Required';
-                  if (double.tryParse(value) == null) return 'Invalid number';
+                  if (value == null || value.isEmpty) {
+                    return context.l10n.requiredField;
+                  }
+                  if (double.tryParse(value) == null) {
+                    return context.l10n.invalidNumber;
+                  }
                   return null;
                 },
                 autofocus: true,
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Unit'),
+                decoration: InputDecoration(labelText: context.l10n.unitLabel),
                 initialValue: _unit,
-                items: const [
-                  DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
-                  DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
-                  DropdownMenuItem(value: 'stone', child: Text("Stone")),
-                ],
+                items: strengthUnitMenuItems(context.l10n),
                 onChanged: (String? newValue) {
                   setState(() {
                     _unit = newValue!;
@@ -76,7 +80,9 @@ class _WeightPageState extends State<WeightPage> {
               const SizedBox(height: 12),
               TextFormField(
                 initialValue: _prev,
-                decoration: const InputDecoration(labelText: 'Previous weight'),
+                decoration: InputDecoration(
+                  labelText: context.l10n.previousWeight,
+                ),
                 enabled: false,
               ),
               const SizedBox(height: 12),
@@ -89,13 +95,13 @@ class _WeightPageState extends State<WeightPage> {
                         if (_image == null)
                           TextButton.icon(
                             onPressed: pick,
-                            label: const Text('Image'),
+                            label: Text(context.l10n.imageLabel),
                             icon: const Icon(Icons.image),
                           ),
                         if (_image != null) ...[
                           const SizedBox(height: 8),
                           Tooltip(
-                            message: 'Long-press to delete',
+                            message: context.l10n.longPressToDelete,
                             child: GestureDetector(
                               onTap: () => pick(),
                               onLongPress: () => setState(() {
@@ -106,7 +112,7 @@ class _WeightPageState extends State<WeightPage> {
                                 cacheWidth: 400,
                                 errorBuilder: (context, error, stackTrace) =>
                                     TextButton.icon(
-                                      label: const Text('Image error'),
+                                      label: Text(context.l10n.imageError),
                                       icon: const Icon(Icons.error),
                                       onPressed: () => pick(),
                                     ),
@@ -148,7 +154,7 @@ class _WeightPageState extends State<WeightPage> {
 
           if (context.mounted) Navigator.pop(context);
         },
-        label: const Text("Save"),
+        label: Text(context.l10n.actionSave),
         icon: const Icon(Icons.save),
       ),
     );

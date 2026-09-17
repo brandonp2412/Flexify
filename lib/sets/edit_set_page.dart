@@ -7,6 +7,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -349,7 +350,7 @@ class _EditSetPageState extends State<EditSetPage> {
         child: DropdownButtonFormField<String>(
           decoration: const InputDecoration(labelText: 'Unit'),
           initialValue: _unit,
-          items: getUnitItems(),
+          items: getUnitItems(context),
           onChanged: (String? newValue) {
             setState(() {
               _unit = newValue!;
@@ -735,8 +736,11 @@ class _EditSetPageState extends State<EditSetPage> {
           "${(double.parse(_weight.text) * (1.0278 - (0.0278 * double.parse(_reps.text)))).toStringAsFixed(2)} $_unit";
   }
 
-  List<DropdownMenuItem<String>> getUnitItems() {
-    return [...strengthUnitMenuItems, ...cardioUnitMenuItems];
+  List<DropdownMenuItem<String>> getUnitItems(BuildContext context) {
+    return [
+      ...strengthUnitMenuItems(context.l10n),
+      ...cardioUnitMenuItems(context.l10n),
+    ];
   }
 
   void updateFields(GymSet gymSet) {

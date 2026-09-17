@@ -741,6 +741,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expected an integer plan id, got \"{value}\"'**
   String expectedIntegerPlanId(String value);
+
+  /// Generic label for measurement units.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get unitLabel;
+
+  /// Display label for the kilogram unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Kilograms (kg)'**
+  String get kilogramsUnit;
+
+  /// Display label for the pound unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Pounds (lb)'**
+  String get poundsUnit;
+
+  /// Display label for the stone weight unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Stone'**
+  String get stoneUnit;
+
+  /// Display label for the kilometer unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Kilometers (km)'**
+  String get kilometersUnit;
+
+  /// Display label for the mile unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Miles (mi)'**
+  String get milesUnit;
+
+  /// Display label for the meter unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Meters (m)'**
+  String get metersUnit;
+
+  /// Display label for the kilocalorie unit option.
+  ///
+  /// In en, this message translates to:
+  /// **'Kilocalories (kcal)'**
+  String get kilocaloriesUnit;
+
+  /// Title for the bodyweight entry page.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Weight'**
+  String get enterWeight;
+
+  /// Validation message for a required input.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredField;
+
+  /// Validation message for a malformed numeric input.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid number'**
+  String get invalidNumber;
+
+  /// Label for the previously recorded bodyweight.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous weight'**
+  String get previousWeight;
+
+  /// Generic label for an attached image.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get imageLabel;
+
+  /// Tooltip explaining how to remove an attached image.
+  ///
+  /// In en, this message translates to:
+  /// **'Long-press to delete'**
+  String get longPressToDelete;
+
+  /// Action label shown when an attached image cannot be rendered.
+  ///
+  /// In en, this message translates to:
+  /// **'Image error'**
+  String get imageError;
+
+  /// Generic save action.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get actionSave;
 }
 
 class _AppLocalizationsDelegate

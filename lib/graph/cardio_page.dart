@@ -14,6 +14,7 @@ import 'package:flexify/graph/graph_curve_settings.dart';
 import 'package:flexify/graph/graph_date_field.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -492,12 +493,12 @@ class _CardioPageState extends State<CardioPage> {
                     if ((metric == CardioMetric.distance ||
                             metric == CardioMetric.weight) &&
                         settings.showUnits) ...[
-                      sectionLabel('Unit'),
+                      sectionLabel(context.l10n.unitLabel),
                       DropdownButtonFormField<String>(
                         initialValue: target,
                         items: metric == CardioMetric.weight
-                            ? strengthUnitMenuItems
-                            : cardioDistanceUnitMenuItems,
+                            ? strengthUnitMenuItems(context.l10n)
+                            : cardioDistanceUnitMenuItems(context.l10n),
                         onChanged: (value) {
                           setState(() {
                             target = value!;

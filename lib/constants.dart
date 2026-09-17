@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Consistent padding for input fields (dropdowns, text fields) in settings screens.
@@ -64,23 +65,25 @@ final defaultSettings = SettingsCompanion.insert(
   showNotes: const Value(false),
 );
 
-const strengthUnitMenuItems = <DropdownMenuItem<String>>[
-  DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
-  DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
-  DropdownMenuItem(value: 'stone', child: Text("Stone")),
+List<DropdownMenuItem<String>> strengthUnitMenuItems(AppLocalizations l10n) => [
+  DropdownMenuItem(value: 'kg', child: Text(l10n.kilogramsUnit)),
+  DropdownMenuItem(value: 'lb', child: Text(l10n.poundsUnit)),
+  DropdownMenuItem(value: 'stone', child: Text(l10n.stoneUnit)),
 ];
 
-const cardioDistanceUnitMenuItems = <DropdownMenuItem<String>>[
-  DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
-  DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
-  DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
+List<DropdownMenuItem<String>> cardioDistanceUnitMenuItems(
+  AppLocalizations l10n,
+) => [
+  DropdownMenuItem(value: 'km', child: Text(l10n.kilometersUnit)),
+  DropdownMenuItem(value: 'mi', child: Text(l10n.milesUnit)),
+  DropdownMenuItem(value: 'm', child: Text(l10n.metersUnit)),
 ];
 
-const cardioUnitMenuItems = <DropdownMenuItem<String>>[
-  DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
-  DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
-  DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
-  DropdownMenuItem(value: 'kcal', child: Text("Kilocalories (kcal)")),
+List<DropdownMenuItem<String>> cardioUnitMenuItems(AppLocalizations l10n) => [
+  DropdownMenuItem(value: 'km', child: Text(l10n.kilometersUnit)),
+  DropdownMenuItem(value: 'mi', child: Text(l10n.milesUnit)),
+  DropdownMenuItem(value: 'm', child: Text(l10n.metersUnit)),
+  DropdownMenuItem(value: 'kcal', child: Text(l10n.kilocaloriesUnit)),
 ];
 
 const positiveReinforcement = [

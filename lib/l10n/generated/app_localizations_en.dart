@@ -377,4 +377,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String expectedIntegerPlanId(String value) {
     return 'Expected an integer plan id, got \"$value\"';
   }
+
+  @override
+  String get unitLabel => 'Unit';
+
+  @override
+  String get kilogramsUnit => 'Kilograms (kg)';
+
+  @override
+  String get poundsUnit => 'Pounds (lb)';
+
+  @override
+  String get stoneUnit => 'Stone';
+
+  @override
+  String get kilometersUnit => 'Kilometers (km)';
+
+  @override
+  String get milesUnit => 'Miles (mi)';
+
+  @override
+  String get metersUnit => 'Meters (m)';
+
+  @override
+  String get kilocaloriesUnit => 'Kilocalories (kcal)';
+
+  @override
+  String get enterWeight => 'Enter Weight';
+
+  @override
+  String get requiredField => 'Required';
+
+  @override
+  String get invalidNumber => 'Invalid number';
+
+  @override
+  String get previousWeight => 'Previous weight';
+
+  @override
+  String get imageLabel => 'Image';
+
+  @override
+  String get longPressToDelete => 'Long-press to delete';
+
+  @override
+  String get imageError => 'Image error';
+
+  @override
+  String get actionSave => 'Save';
 }

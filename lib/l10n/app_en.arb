@@ -505,5 +505,69 @@
         "type": "String"
       }
     }
+  },
+  "unitLabel": "Unit",
+  "@unitLabel": {
+    "description": "Generic label for measurement units."
+  },
+  "kilogramsUnit": "Kilograms (kg)",
+  "@kilogramsUnit": {
+    "description": "Display label for the kilogram unit option."
+  },
+  "poundsUnit": "Pounds (lb)",
+  "@poundsUnit": {
+    "description": "Display label for the pound unit option."
+  },
+  "stoneUnit": "Stone",
+  "@stoneUnit": {
+    "description": "Display label for the stone weight unit option."
+  },
+  "kilometersUnit": "Kilometers (km)",
+  "@kilometersUnit": {
+    "description": "Display label for the kilometer unit option."
+  },
+  "milesUnit": "Miles (mi)",
+  "@milesUnit": {
+    "description": "Display label for the mile unit option."
+  },
+  "metersUnit": "Meters (m)",
+  "@metersUnit": {
+    "description": "Display label for the meter unit option."
+  },
+  "kilocaloriesUnit": "Kilocalories (kcal)",
+  "@kilocaloriesUnit": {
+    "description": "Display label for the kilocalorie unit option."
+  },
+  "enterWeight": "Enter Weight",
+  "@enterWeight": {
+    "description": "Title for the bodyweight entry page."
+  },
+  "requiredField": "Required",
+  "@requiredField": {
+    "description": "Validation message for a required input."
+  },
+  "invalidNumber": "Invalid number",
+  "@invalidNumber": {
+    "description": "Validation message for a malformed numeric input."
+  },
+  "previousWeight": "Previous weight",
+  "@previousWeight": {
+    "description": "Label for the previously recorded bodyweight."
+  },
+  "imageLabel": "Image",
+  "@imageLabel": {
+    "description": "Generic label for an attached image."
+  },
+  "longPressToDelete": "Long-press to delete",
+  "@longPressToDelete": {
+    "description": "Tooltip explaining how to remove an attached image."
+  },
+  "imageError": "Image error",
+  "@imageError": {
+    "description": "Action label shown when an attached image cannot be rendered."
+  },
+  "actionSave": "Save",
+  "@actionSave": {
+    "description": "Generic save action."
   }
 }

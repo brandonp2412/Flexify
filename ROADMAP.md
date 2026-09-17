@@ -58,6 +58,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
   - [x] Localize reusable history/graph filter controls and render filter dates using the active locale.
   - [x] Localize Android app-access and missing-permission surfaces, including reusable permission actions and status copy.
 - [ ] Shared date/time, duration, count, set/rep, weight, distance, percentage, and ordinal formatting uses locale-aware APIs where appropriate.
+  - [x] Localize reusable weight, distance, and calorie unit labels while preserving stored unit identifiers.
 - [ ] Snackbar, validation, import/export, file-picker, notification-facing, and failure copy is localized.
   - [x] Localize shared data import/export/delete actions, import validation, and import success/failure snackbars.
 

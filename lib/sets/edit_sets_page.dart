@@ -3,6 +3,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -291,7 +292,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Unit'),
                     initialValue: _unit,
-                    items: _getUnitItems(),
+                    items: _getUnitItems(context),
                     onChanged: (String? newValue) {
                       setState(() {
                         _unit = newValue!;
@@ -363,11 +364,14 @@ class _EditSetsPageState extends State<EditSetsPage> {
     );
   }
 
-  List<DropdownMenuItem<String>> _getUnitItems() {
+  List<DropdownMenuItem<String>> _getUnitItems(BuildContext context) {
     if (_cardio == true) {
-      return [...strengthUnitMenuItems, ...cardioUnitMenuItems];
+      return [
+        ...strengthUnitMenuItems(context.l10n),
+        ...cardioUnitMenuItems(context.l10n),
+      ];
     }
-    return strengthUnitMenuItems;
+    return strengthUnitMenuItems(context.l10n);
   }
 
   void _setCardio(bool value) {

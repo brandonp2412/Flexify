@@ -6,6 +6,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -131,12 +132,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
                 },
               ),
               DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: 'Unit'),
+                decoration: InputDecoration(labelText: context.l10n.unitLabel),
                 initialValue: unit,
                 items: [
                   const DropdownMenuItem(value: null, child: Text("")),
-                  ...strengthUnitMenuItems,
-                  ...cardioUnitMenuItems,
+                  ...strengthUnitMenuItems(context.l10n),
+                  ...cardioUnitMenuItems(context.l10n),
                 ],
                 onChanged: (value) {
                   setState(() {
