@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/swap_workout.dart';
 import 'package:flexify/sets/edit_set_page.dart';
@@ -68,7 +69,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.settings),
-          title: const Text('Settings'),
+          title: Text(context.l10n.navSettings),
           onTap: () async {
             final rootContext = Navigator.of(
               context,
@@ -98,7 +99,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                             onTap: () => selectAll(warmupController),
                             onChanged: changeWarmup,
                             decoration: InputDecoration(
-                              labelText: "Warmup sets",
+                              labelText: dialogContext.l10n.warmupSets,
                               border: const OutlineInputBorder(),
                               hintText: (value ?? 0).toString(),
                             ),
@@ -116,7 +117,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                             onTap: () => selectAll(maxController),
                             onChanged: changeMax,
                             decoration: InputDecoration(
-                              labelText: "Working sets (max: 20)",
+                              labelText: dialogContext.l10n.workingSetsMax,
                               border: const OutlineInputBorder(),
                               hintText: value.toString(),
                             ),
@@ -125,7 +126,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         const SizedBox(height: 16),
                         StatefulBuilder(
                           builder: (context, setDialogState) => ListTile(
-                            title: const Text('Rest timers'),
+                            title: Text(dialogContext.l10n.restTimers),
                             trailing: Switch(
                               value: timers,
                               onChanged: (value) {
@@ -143,7 +144,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                   actions: [
                     TextButton.icon(
                       onPressed: () => Navigator.pop(dialogContext),
-                      label: const Text("OK"),
+                      label: Text(dialogContext.l10n.actionOk),
                       icon: const Icon(Icons.check),
                     ),
                   ],
@@ -157,7 +158,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
         if (widget.hasData)
           ListTile(
             leading: const Icon(Icons.edit),
-            title: const Text('Edit'),
+            title: Text(context.l10n.actionEdit),
             onTap: () async {
               Navigator.pop(context);
               final gymSet =
@@ -184,7 +185,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
         if (widget.hasData)
           ListTile(
             leading: const Icon(Icons.undo),
-            title: const Text('Undo'),
+            title: Text(context.l10n.actionUndo),
             onTap: () async {
               Navigator.pop(context);
               final gymSet =
@@ -209,7 +210,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
         if (!widget.hasData)
           ListTile(
             leading: const Icon(Icons.swap_horiz),
-            title: const Text('Swap'),
+            title: Text(context.l10n.actionSwap),
             onTap: () async {
               Navigator.pop(context);
               final result = await Navigator.of(context).push(

@@ -8,6 +8,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
@@ -91,7 +92,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   late Stream<List<GymCount>> _gymCountsStream;
   StreamSubscription<Plan?>? _planSub;
   late String _unit = 'kg';
-  late String _title = widget.plan.days.replaceAll(",", ", ");
+  late String _title = widget.plan.days;
+  late bool _titleFromDays = widget.plan.title?.isNotEmpty != true;
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +125,9 @@ class _StartPlanPageState extends State<StartPlanPage>
             Widget exerciseList() => snapshot.data!.isEmpty
                 ? AppEmptyState(
                     icon: Icons.fitness_center_rounded,
-                    title: 'No exercises yet',
-                    message: 'Add exercises to this plan before starting it.',
-                    actionLabel: 'Edit plan',
+                    title: context.l10n.noExercisesYet,
+                    message: context.l10n.addExerciseToPlan,
+                    actionLabel: context.l10n.editPlan,
                     actionIcon: Icons.edit_rounded,
                     onAction: editPlan,
                   )
@@ -140,14 +142,14 @@ class _StartPlanPageState extends State<StartPlanPage>
             return Scaffold(
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
-                title: Text(_title),
+                title: Text(_displayTitle(context)),
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
                   IconButton(
-                    tooltip: 'Edit plan',
+                    tooltip: context.l10n.editPlan,
                     onPressed: editPlan,
                     icon: const Icon(Icons.edit),
                   ),
@@ -157,7 +159,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                       child: FilledButton.icon(
                         onPressed: () async => await save(snapshot, counts),
                         icon: const Icon(Icons.save_rounded),
-                        label: const Text('Save set'),
+                        label: Text(context.l10n.saveSet),
                       ),
                     ),
                 ],
@@ -190,7 +192,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                                                 _selected <
                                                     snapshot.data!.length
                                             ? snapshot.data![_selected].exercise
-                                            : 'Set details',
+                                            : context.l10n.setDetails,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleLarge
@@ -269,7 +271,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                           const SizedBox(width: 8),
                           AnimatedFab(
                             onPressed: () async => await save(snapshot, counts),
-                            label: const Text("Save"),
+                            label: Text(context.l10n.actionSave),
                             icon: const Icon(Icons.save),
                             bottomPadding: 0,
                           ),
@@ -290,13 +292,13 @@ class _StartPlanPageState extends State<StartPlanPage>
     return [
       StepperField(
         controller: _reps,
-        labelText: 'Reps',
+        labelText: context.l10n.repsLabel,
         step: 1,
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (value) => selectAll(_weight),
         validator: (value) {
-          if (value == null || value.isEmpty) return 'Required';
-          if (double.tryParse(value) == null) return 'Invalid number';
+          if (value == null || value.isEmpty) return context.l10n.requiredField;
+          if (double.tryParse(value) == null) return context.l10n.invalidNumber;
           return null;
         },
       ),
@@ -315,7 +317,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           Expanded(
             child: TextFormField(
               controller: _minutes,
-              decoration: const InputDecoration(labelText: 'Minutes'),
+              decoration: InputDecoration(labelText: context.l10n.minutesLabel),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: false,
               ),
@@ -324,7 +326,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               onFieldSubmitted: (value) => selectAll(_seconds),
               validator: (value) {
                 if (value?.isNotEmpty == true && int.tryParse(value!) == null)
-                  return 'Invalid number';
+                  return context.l10n.invalidNumber;
                 return null;
               },
             ),
@@ -333,7 +335,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           Expanded(
             child: TextFormField(
               controller: _seconds,
-              decoration: const InputDecoration(labelText: 'Seconds'),
+              decoration: InputDecoration(labelText: context.l10n.secondsLabel),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: false,
               ),
@@ -342,7 +344,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               onFieldSubmitted: (value) => selectAll(_distance),
               validator: (value) {
                 if (value?.isNotEmpty == true && int.tryParse(value!) == null)
-                  return 'Invalid number';
+                  return context.l10n.invalidNumber;
                 return null;
               },
             ),
@@ -359,7 +361,9 @@ class _StartPlanPageState extends State<StartPlanPage>
               child: TextFormField(
                 textInputAction: TextInputAction.next,
                 controller: _distance,
-                decoration: const InputDecoration(labelText: 'Distance'),
+                decoration: InputDecoration(
+                  labelText: context.l10n.distanceLabel,
+                ),
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -367,7 +371,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                 onTap: () => selectAll(_distance),
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
-                  if (double.tryParse(value) == null) return 'Invalid number';
+                  if (double.tryParse(value) == null)
+                    return context.l10n.invalidNumber;
                   return null;
                 },
               ),
@@ -376,7 +381,9 @@ class _StartPlanPageState extends State<StartPlanPage>
           Expanded(
             child: TextFormField(
               controller: _incline,
-              decoration: const InputDecoration(labelText: 'Incline %'),
+              decoration: InputDecoration(
+                labelText: context.l10n.inclinePercent,
+              ),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
@@ -384,7 +391,8 @@ class _StartPlanPageState extends State<StartPlanPage>
               onFieldSubmitted: (value) => save(snapshot, counts),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
-                if (double.tryParse(value) == null) return 'Invalid number';
+                if (double.tryParse(value) == null)
+                  return context.l10n.invalidNumber;
                 return null;
               },
             ),
@@ -404,14 +412,14 @@ class _StartPlanPageState extends State<StartPlanPage>
         : '';
     return StepperField(
       controller: _weight,
-      labelText: 'Weight ($_unit)',
+      labelText: context.l10n.weightWithUnit(_unit),
       step: weightStep(exerciseName, _unit),
       suffixIcon: Selector<SettingsState, bool>(
         selector: (context, settings) => settings.value.showBodyWeight,
         builder: (context, showBodyWeight, child) => Visibility(
           visible: showBodyWeight,
           child: IconButton(
-            tooltip: "Use body weight",
+            tooltip: context.l10n.useBodyWeight,
             icon: const Icon(Icons.scale),
             onPressed: useBodyWeight,
           ),
@@ -419,8 +427,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       ),
       onFieldSubmitted: (value) async => await save(snapshot, counts),
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Required';
-        if (double.tryParse(value) == null) return 'Invalid number';
+        if (value == null || value.isEmpty) return context.l10n.requiredField;
+        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -436,7 +444,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           children: [
             const SizedBox(height: 8.0),
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Unit'),
+              decoration: InputDecoration(labelText: context.l10n.unitLabel),
               initialValue: _unit,
               items: _unitItems,
               onChanged: (String? newValue) {
@@ -463,7 +471,7 @@ class _StartPlanPageState extends State<StartPlanPage>
             TextFormField(
               controller: _notes,
               maxLines: 3,
-              decoration: const InputDecoration(labelText: 'Notes'),
+              decoration: InputDecoration(labelText: context.l10n.notesLabel),
             ),
           ],
         ),
@@ -471,14 +479,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
-  static const _unitItems = [
-    DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
-    DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
-    DropdownMenuItem(value: 'stone', child: Text("Stone")),
-    DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
-    DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
-    DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
-    DropdownMenuItem(value: 'kcal', child: Text("Kilocalories (kcal)")),
+  List<DropdownMenuItem<String>> get _unitItems => [
+    ...strengthUnitMenuItems(context.l10n),
+    ...cardioUnitMenuItems(context.l10n),
   ];
 
   @override
@@ -562,9 +565,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     WidgetsBinding.instance.addObserver(this);
     dbVersion.addListener(_reloadDatabaseStreams);
 
-    _title = widget.plan.title?.isNotEmpty == true
-        ? widget.plan.title!
-        : widget.plan.days.replaceAll(",", ", ");
+    _titleFromDays = widget.plan.title?.isNotEmpty != true;
+    _title = _titleFromDays ? widget.plan.days : widget.plan.title!;
 
     _gymCountsStream = watchGymCounts(widget.plan.id);
     _bindPlanStream();
@@ -587,11 +589,19 @@ class _StartPlanPageState extends State<StartPlanPage>
         return;
       }
       setState(() {
-        _title = plan.title?.isNotEmpty == true
-            ? plan.title!
-            : plan.days.replaceAll(',', ', ');
+        _titleFromDays = plan.title?.isNotEmpty != true;
+        _title = _titleFromDays ? plan.days : plan.title!;
       });
     });
+  }
+
+  String _displayTitle(BuildContext context) {
+    if (!_titleFromDays) return _title;
+    return _title
+        .split(',')
+        .where((day) => day.trim().isNotEmpty)
+        .map((day) => localizedWeekday(context.l10n, day.trim()))
+        .join(', ');
   }
 
   Future<void> _loadExercises() async {
@@ -740,6 +750,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
     if (!mounted) return;
+    final messages = positiveReinforcementMessages(context.l10n);
     setState(() {
       _updateGymSetTextFields(gymSet);
       _lastSaved = DateTime.now();
@@ -751,8 +762,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final best = await isBest(gymSet);
     if (!best) return;
     final random = Random();
-    final randomMessage =
-        positiveReinforcement[random.nextInt(positiveReinforcement.length)];
+    final randomMessage = messages[random.nextInt(messages.length)];
     if (mounted && random.nextDouble() < 0.3) toast(randomMessage);
   }
 
@@ -770,7 +780,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final weightSet = await getBodyWeight();
     if (!mounted) return;
     if (weightSet == null) {
-      toast('No weight entered yet');
+      toast(context.l10n.noWeightEnteredYet);
       return;
     }
     _weight.text = toString(weightSet.weight);

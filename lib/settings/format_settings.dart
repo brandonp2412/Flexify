@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -35,19 +36,31 @@ final List<String> short = [
   'dd.MM.yy',
 ];
 
-List<Widget> getFormatSettings(String term, Setting settings) {
+List<Widget> getFormatSettings(
+  BuildContext context,
+  String term,
+  Setting settings,
+) {
+  final l10n = context.l10n;
+  final normalizedTerm = term.trim().toLowerCase();
+  bool matches(Iterable<String> values) =>
+      values.join(' ').toLowerCase().contains(normalizedTerm);
   return [
-    if ('strength unit'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.strengthUnit,
+      l10n.lastEntry,
+      l10n.kilogramsUnit,
+      l10n.poundsUnit,
+      l10n.stoneUnit,
+    ]))
       Padding(
         padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Strength unit'),
+          decoration: InputDecoration(labelText: l10n.strengthUnit),
           initialValue: settings.strengthUnit,
-          items: const [
-            DropdownMenuItem(value: "last-entry", child: Text("Last entry")),
-            DropdownMenuItem(value: 'kg', child: Text("Kilograms (kg)")),
-            DropdownMenuItem(value: 'lb', child: Text("Pounds (lb)")),
-            DropdownMenuItem(value: 'stone', child: Text("Stone")),
+          items: [
+            DropdownMenuItem(value: "last-entry", child: Text(l10n.lastEntry)),
+            ...strengthUnitMenuItems(l10n),
           ],
           onChanged: (value) {
             db.settings.update().write(
@@ -56,18 +69,22 @@ List<Widget> getFormatSettings(String term, Setting settings) {
           },
         ),
       ),
-    if ('cardio unit'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.cardioUnit,
+      l10n.lastEntry,
+      l10n.kilometersUnit,
+      l10n.milesUnit,
+      l10n.metersUnit,
+      l10n.kilocaloriesUnit,
+    ]))
       Padding(
         padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Cardio unit'),
+          decoration: InputDecoration(labelText: l10n.cardioUnit),
           initialValue: settings.cardioUnit,
-          items: const [
-            DropdownMenuItem(value: "last-entry", child: Text("Last entry")),
-            DropdownMenuItem(value: 'km', child: Text("Kilometers (km)")),
-            DropdownMenuItem(value: 'mi', child: Text("Miles (mi)")),
-            DropdownMenuItem(value: 'm', child: Text("Meters (m)")),
-            DropdownMenuItem(value: 'kcal', child: Text("Kilocalories (kcal)")),
+          items: [
+            DropdownMenuItem(value: "last-entry", child: Text(l10n.lastEntry)),
+            ...cardioUnitMenuItems(l10n),
           ],
           onChanged: (value) {
             db.settings.update().write(
@@ -76,18 +93,22 @@ List<Widget> getFormatSettings(String term, Setting settings) {
           },
         ),
       ),
-    if ('long date format'.contains(term.toLowerCase()))
+    if (matches([l10n.longDateFormat(''), l10n.longDateFormatDescription]))
       Padding(
         padding: kSettingsInputPadding,
         child: Tooltip(
-          message: 'Used where space is abundant',
+          message: l10n.longDateFormatDescription,
           child: Builder(
             builder: (context) {
-              var format = timeago.format(DateTime.now());
+              var format = timeago.format(
+                DateTime.now(),
+                locale: Localizations.localeOf(context).languageCode,
+              );
 
               if (settings.longDateFormat != 'timeago')
                 format = DateFormat(
                   settings.longDateFormat,
+                  Localizations.localeOf(context).toLanguageTag(),
                 ).format(DateTime.now());
 
               return DropdownButtonFormField<String>(
@@ -103,18 +124,18 @@ List<Widget> getFormatSettings(String term, Setting settings) {
                   SettingsCompanion(longDateFormat: Value(value!)),
                 ),
                 decoration: InputDecoration(
-                  labelText: 'Long date format ($format)',
+                  labelText: l10n.longDateFormat(format),
                 ),
               );
             },
           ),
         ),
       ),
-    if ('short date format'.contains(term.toLowerCase()))
+    if (matches([l10n.shortDateFormat(''), l10n.shortDateFormatDescription]))
       Padding(
         padding: kSettingsInputPadding,
         child: Tooltip(
-          message: 'For where space is cramped (Graph lines)',
+          message: l10n.shortDateFormatDescription,
           child: DropdownButtonFormField<String>(
             initialValue: settings.shortDateFormat,
             items: short.map((String value) {
@@ -124,8 +145,12 @@ List<Widget> getFormatSettings(String term, Setting settings) {
               SettingsCompanion(shortDateFormat: Value(value!)),
             ),
             decoration: InputDecoration(
-              labelText:
-                  'Short date format (${DateFormat(settings.shortDateFormat).format(DateTime.now())})',
+              labelText: l10n.shortDateFormat(
+                DateFormat(
+                  settings.shortDateFormat,
+                  Localizations.localeOf(context).toLanguageTag(),
+                ).format(DateTime.now()),
+              ),
             ),
           ),
         ),
@@ -142,10 +167,10 @@ class FormatSettings extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Formats")),
+      appBar: AppBar(title: Text(context.l10n.formats)),
       body: ListView(
         children: [
-          ...getFormatSettings('', settings.value),
+          ...getFormatSettings(context, '', settings.value),
           const SizedBox(height: 116),
         ],
       ),

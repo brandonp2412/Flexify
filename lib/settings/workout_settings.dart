@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -12,12 +13,16 @@ List<Widget> getWorkoutSettings(
   String term,
   Setting settings,
 ) {
+  final l10n = context.l10n;
+  final normalizedTerm = term.trim().toLowerCase();
+  bool matches(Iterable<String> values) =>
+      values.join(' ').toLowerCase().contains(normalizedTerm);
   return [
-    if ('group history'.contains(term.toLowerCase()))
+    if (matches([l10n.groupHistory, l10n.groupHistoryDescription]))
       Tooltip(
-        message: 'Combine history entries by day',
+        message: l10n.groupHistoryDescription,
         child: ListTile(
-          title: const Text('Group history', textAlign: TextAlign.center),
+          title: Text(l10n.groupHistory, textAlign: TextAlign.center),
           leading: settings.groupHistory
               ? const Icon(Icons.view_agenda)
               : const Icon(Icons.view_agenda_outlined),
@@ -32,11 +37,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show units'.contains(term.toLowerCase()))
+    if (matches([l10n.showUnits, l10n.showUnitsDescription]))
       Tooltip(
-        message: 'Show km/mi,kg/lb for graphs/history/plans',
+        message: l10n.showUnitsDescription,
         child: ListTile(
-          title: const Text('Show units', textAlign: TextAlign.center),
+          title: Text(l10n.showUnits, textAlign: TextAlign.center),
           leading: settings.showUnits
               ? const Icon(Icons.scale)
               : const Icon(Icons.scale_outlined),
@@ -51,11 +56,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show body weight'.contains(term.toLowerCase()))
+    if (matches([l10n.showBodyWeight, l10n.showBodyWeightDescription]))
       Tooltip(
-        message: 'Enable/disable tracking body weight',
+        message: l10n.showBodyWeightDescription,
         child: ListTile(
-          title: const Text('Show body weight', textAlign: TextAlign.center),
+          title: Text(l10n.showBodyWeight, textAlign: TextAlign.center),
           leading: settings.showBodyWeight
               ? const Icon(Icons.monitor_weight)
               : const Icon(Icons.monitor_weight_outlined),
@@ -70,11 +75,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show categories'.contains(term.toLowerCase()))
+    if (matches([l10n.showCategories, l10n.showCategoriesDescription]))
       Tooltip(
-        message: 'Enable/disable workout categories',
+        message: l10n.showCategoriesDescription,
         child: ListTile(
-          title: const Text('Show categories', textAlign: TextAlign.center),
+          title: Text(l10n.showCategories, textAlign: TextAlign.center),
           leading: settings.showCategories
               ? const Icon(Icons.category)
               : const Icon(Icons.category_outlined),
@@ -89,11 +94,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show notes'.contains(term.toLowerCase()))
+    if (matches([l10n.showNotes, l10n.showNotesDescription]))
       Tooltip(
-        message: 'Record details of your lift in a text area',
+        message: l10n.showNotesDescription,
         child: ListTile(
-          title: const Text('Show notes', textAlign: TextAlign.center),
+          title: Text(l10n.showNotes, textAlign: TextAlign.center),
           leading: settings.showNotes
               ? const Icon(Icons.note_alt)
               : const Icon(Icons.note_alt_outlined),
@@ -108,11 +113,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('notifications'.contains(term.toLowerCase()))
+    if (matches([l10n.notifications, l10n.positiveNotificationsDescription]))
       Tooltip(
-        message: 'Write nice messages when a new record is hit',
+        message: l10n.positiveNotificationsDescription,
         child: ListTile(
-          title: const Text('Notifications', textAlign: TextAlign.center),
+          title: Text(l10n.notifications, textAlign: TextAlign.center),
           leading: settings.notifications
               ? const Icon(Icons.notifications)
               : const Icon(Icons.notifications_outlined),
@@ -120,8 +125,7 @@ List<Widget> getWorkoutSettings(
             db.settings.update().write(
               SettingsCompanion(notifications: Value(!settings.notifications)),
             );
-            if (!settings.notifications)
-              toast('Positive messages appear now like this!');
+            if (!settings.notifications) toast(l10n.positiveMessagesEnabled);
           },
           trailing: Switch(
             value: settings.notifications,
@@ -131,11 +135,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('rep estimation'.contains(term.toLowerCase()))
+    if (matches([l10n.repEstimation, l10n.repEstimationDescription]))
       Tooltip(
-        message: 'Try to predict the # of reps you just did',
+        message: l10n.repEstimationDescription,
         child: ListTile(
-          title: const Text('Rep estimation', textAlign: TextAlign.center),
+          title: Text(l10n.repEstimation, textAlign: TextAlign.center),
           leading: settings.repEstimation
               ? const Icon(Icons.repeat)
               : const Icon(Icons.repeat_outlined),
@@ -150,11 +154,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('duration estimation'.contains(term.toLowerCase()))
+    if (matches([l10n.durationEstimation, l10n.durationEstimationDescription]))
       Tooltip(
-        message: 'Try predict the duration of your cardio',
+        message: l10n.durationEstimationDescription,
         child: ListTile(
-          title: const Text('Duration estimation', textAlign: TextAlign.center),
+          title: Text(l10n.durationEstimation, textAlign: TextAlign.center),
           leading: settings.durationEstimation
               ? const Icon(Icons.schedule)
               : const Icon(Icons.schedule_outlined),
@@ -171,14 +175,14 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show graph x axis'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.showGraphXAxisToggle,
+      l10n.showGraphXAxisToggleDescription,
+    ]))
       Tooltip(
-        message: 'Show time-based X axis toggle on graphs',
+        message: l10n.showGraphXAxisToggleDescription,
         child: ListTile(
-          title: const Text(
-            'Show graph X axis toggle',
-            textAlign: TextAlign.center,
-          ),
+          title: Text(l10n.showGraphXAxisToggle, textAlign: TextAlign.center),
           leading: settings.showGraphXAxis
               ? const Icon(Icons.show_chart)
               : const Icon(Icons.show_chart_outlined),
@@ -193,11 +197,11 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('show graph limit'.contains(term.toLowerCase()))
+    if (matches([l10n.showGraphLimit, l10n.showGraphLimitDescription]))
       Tooltip(
-        message: 'Show the limit slider on graphs',
+        message: l10n.showGraphLimitDescription,
         child: ListTile(
-          title: const Text('Show graph limit', textAlign: TextAlign.center),
+          title: Text(l10n.showGraphLimit, textAlign: TextAlign.center),
           leading: settings.showGraphLimit
               ? const Icon(Icons.tune)
               : const Icon(Icons.tune_outlined),
@@ -212,21 +216,29 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('default graph metric'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.defaultGraphMetric,
+      l10n.bestWeight,
+      l10n.bestReps,
+      l10n.oneRepMax,
+      l10n.volume,
+      l10n.paceCardio,
+      l10n.distanceCardio,
+    ]))
       Padding(
         padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Default graph metric'),
+          decoration: InputDecoration(labelText: l10n.defaultGraphMetric),
           initialValue: settings.defaultGraphMetric,
-          items: const [
-            DropdownMenuItem(value: 'bestWeight', child: Text("Best weight")),
-            DropdownMenuItem(value: 'bestReps', child: Text("Best reps")),
-            DropdownMenuItem(value: 'oneRepMax', child: Text("One rep max")),
-            DropdownMenuItem(value: 'volume', child: Text("Volume")),
-            DropdownMenuItem(value: 'pace', child: Text("Pace (cardio)")),
+          items: [
+            DropdownMenuItem(value: 'bestWeight', child: Text(l10n.bestWeight)),
+            DropdownMenuItem(value: 'bestReps', child: Text(l10n.bestReps)),
+            DropdownMenuItem(value: 'oneRepMax', child: Text(l10n.oneRepMax)),
+            DropdownMenuItem(value: 'volume', child: Text(l10n.volume)),
+            DropdownMenuItem(value: 'pace', child: Text(l10n.paceCardio)),
             DropdownMenuItem(
               value: 'distance',
-              child: Text("Distance (cardio)"),
+              child: Text(l10n.distanceCardio),
             ),
           ],
           onChanged: (value) => db.settings.update().write(
@@ -234,28 +246,34 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('default graph period'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.defaultGraphPeriod,
+      l10n.daily,
+      l10n.weekly,
+      l10n.monthly,
+      l10n.yearly,
+    ]))
       Padding(
         padding: kSettingsInputPadding,
         child: DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Default graph period'),
+          decoration: InputDecoration(labelText: l10n.defaultGraphPeriod),
           initialValue: settings.defaultGraphPeriod,
-          items: const [
-            DropdownMenuItem(value: 'day', child: Text("Daily")),
-            DropdownMenuItem(value: 'week', child: Text("Weekly")),
-            DropdownMenuItem(value: 'month', child: Text("Monthly")),
-            DropdownMenuItem(value: 'year', child: Text("Yearly")),
+          items: [
+            DropdownMenuItem(value: 'day', child: Text(l10n.daily)),
+            DropdownMenuItem(value: 'week', child: Text(l10n.weekly)),
+            DropdownMenuItem(value: 'month', child: Text(l10n.monthly)),
+            DropdownMenuItem(value: 'year', child: Text(l10n.yearly)),
           ],
           onChanged: (value) => db.settings.update().write(
             SettingsCompanion(defaultGraphPeriod: Value(value!)),
           ),
         ),
       ),
-    if ('default graph limit'.contains(term.toLowerCase()))
+    if (matches([l10n.defaultGraphLimit]))
       Padding(
         padding: kSettingsInputPadding,
         child: DropdownButtonFormField<int>(
-          decoration: const InputDecoration(labelText: 'Default graph limit'),
+          decoration: InputDecoration(labelText: l10n.defaultGraphLimit),
           initialValue: settings.defaultGraphLimit,
           items: const [
             DropdownMenuItem(value: 10, child: Text("10")),
@@ -269,14 +287,14 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if ('default time based x axis'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.defaultTimeBasedXAxis,
+      l10n.defaultTimeBasedXAxisDescription,
+    ]))
       Tooltip(
-        message: 'Use time-based X axis by default on graphs',
+        message: l10n.defaultTimeBasedXAxisDescription,
         child: ListTile(
-          title: const Text(
-            'Default time-based X axis',
-            textAlign: TextAlign.center,
-          ),
+          title: Text(l10n.defaultTimeBasedXAxis, textAlign: TextAlign.center),
           leading: settings.defaultGraphTimeBasedXAxis
               ? const Icon(Icons.timeline)
               : const Icon(Icons.timeline_outlined),
@@ -319,7 +337,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Workouts")),
+      appBar: AppBar(title: Text(context.l10n.workouts)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: getWorkoutSettings(context, '', _settings),

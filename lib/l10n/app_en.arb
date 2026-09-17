@@ -637,5 +637,1234 @@
   "reportBugDescription": "Open a ticket on GitHub",
   "@reportBugDescription": {
     "description": "Description for the bug-report action."
+  },
+  "failedMigrations": "Failed migrations",
+  "@failedMigrations": {
+    "description": "Title for the database migration failure page."
+  },
+  "errorMessageLabel": "Error message:",
+  "@errorMessageLabel": {
+    "description": "Label preceding a database migration error message."
+  },
+  "createIssue": "Create issue",
+  "@createIssue": {
+    "description": "Action for opening a new issue report."
+  },
+  "addExercise": "Add exercise",
+  "@addExercise": {
+    "description": "Title and action for adding an exercise graph."
+  },
+  "cardio": "Cardio",
+  "@cardio": {
+    "description": "Label for cardiovascular exercises."
+  },
+  "strength": "Strength",
+  "@strength": {
+    "description": "Label for strength exercises."
+  },
+  "options": "Options",
+  "@options": {
+    "description": "Tooltip for opening view options."
+  },
+  "periodDay": "Day",
+  "@periodDay": {
+    "description": "One-day graph period."
+  },
+  "periodWeek": "Week",
+  "@periodWeek": {
+    "description": "One-week graph period."
+  },
+  "periodMonth": "Month",
+  "@periodMonth": {
+    "description": "One-month graph period."
+  },
+  "periodYear": "Year",
+  "@periodYear": {
+    "description": "One-year graph period."
+  },
+  "noDataFor": "No data yet for {name}",
+  "@noDataFor": {
+    "description": "Empty-state message for an exercise without graph data.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noDataYet": "No data yet",
+  "@noDataYet": {
+    "description": "Generic empty state when a graph has no data."
+  },
+  "exerciseNotes": "Exercise notes",
+  "@exerciseNotes": {
+    "description": "Label and title for notes attached to an exercise."
+  },
+  "notesForExercise": "Notes for this exercise",
+  "@notesForExercise": {
+    "description": "Hint for exercise notes."
+  },
+  "useTimeBasedXAxis": "Use time-based X axis",
+  "@useTimeBasedXAxis": {
+    "description": "Graph option that uses elapsed time on the horizontal axis."
+  },
+  "updateAllNamed": "Update all {name}",
+  "@updateAllNamed": {
+    "description": "Title for updating all records for a named exercise.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "newName": "New name",
+  "@newName": {
+    "description": "Label for renaming an exercise."
+  },
+  "restMinutes": "Rest minutes",
+  "@restMinutes": {
+    "description": "Label for the minutes component of an exercise rest timer."
+  },
+  "restSeconds": "Rest seconds",
+  "@restSeconds": {
+    "description": "Label for the seconds component of an exercise rest timer."
+  },
+  "globalProgress": "Global progress",
+  "@globalProgress": {
+    "description": "Title for the global progress graph."
+  },
+  "curveLineGraphs": "Curve line graphs",
+  "@curveLineGraphs": {
+    "description": "Setting that renders graph lines as curves."
+  },
+  "curveLineGraphsDescription": "Draw graph lines as smooth curves",
+  "@curveLineGraphsDescription": {
+    "description": "Description for the curved graph-line setting."
+  },
+  "noHistoryFor": "No history yet for {name}",
+  "@noHistoryFor": {
+    "description": "Empty history message for a named exercise.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelSelection": "Cancel selection",
+  "@cancelSelection": {
+    "description": "Tooltip for leaving multi-select mode."
+  },
+  "editSelected": "Edit selected",
+  "@editSelected": {
+    "description": "Tooltip for editing selected records."
+  },
+  "newExercise": "New exercise",
+  "@newExercise": {
+    "description": "Action for creating a new exercise graph."
+  },
+  "noGraphsFound": "No graphs found",
+  "@noGraphsFound": {
+    "description": "Empty state after graph search or filtering."
+  },
+  "searchGraphs": "Search graphs...",
+  "@searchGraphs": {
+    "description": "Hint for searching exercise graphs."
+  },
+  "actionAdd": "Add",
+  "@actionAdd": {
+    "description": "Generic add action."
+  },
+  "actionUpdate": "Update",
+  "@actionUpdate": {
+    "description": "Generic update action."
+  },
+  "hideGlobalProgress": "Hide global progress",
+  "@hideGlobalProgress": {
+    "description": "Action for hiding the global progress graph."
+  },
+  "chartGroupedByCategory": "A chart grouped by category",
+  "@chartGroupedByCategory": {
+    "description": "Description of the global progress chart."
+  },
+  "noExercisesFound": "No exercises found",
+  "@noExercisesFound": {
+    "description": "Empty state after searching for exercises."
+  },
+  "savePlan": "Save plan",
+  "@savePlan": {
+    "description": "Action for saving a workout plan."
+  },
+  "titleOptional": "Title (optional)",
+  "@titleOptional": {
+    "description": "Optional plan title field label."
+  },
+  "searchExercises": "Search exercises...",
+  "@searchExercises": {
+    "description": "Hint for searching exercises."
+  },
+  "warmupSets": "Warmup sets",
+  "@warmupSets": {
+    "description": "Label for the number of warmup sets."
+  },
+  "workingSetsMax": "Working sets (max: 20)",
+  "@workingSetsMax": {
+    "description": "Label for the maximum number of working sets."
+  },
+  "actionUndo": "Undo",
+  "@actionUndo": {
+    "description": "Generic undo action."
+  },
+  "actionSwap": "Swap",
+  "@actionSwap": {
+    "description": "Generic swap action."
+  },
+  "daily": "Daily",
+  "@daily": {
+    "description": "Daily interval label."
+  },
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": "Weekly interval label."
+  },
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": "Monthly interval label."
+  },
+  "yearly": "Yearly",
+  "@yearly": {
+    "description": "Yearly interval label."
+  },
+  "errorWithMessage": "Error: {error}",
+  "@errorWithMessage": {
+    "description": "Visible error message with details.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loadingExercises": "Loading exercises...",
+  "@loadingExercises": {
+    "description": "Progress message while plan exercises load."
+  },
+  "noPlansYet": "No plans yet",
+  "@noPlansYet": {
+    "description": "Empty state when no workout plans exist."
+  },
+  "noMatchingPlans": "No matching plans",
+  "@noMatchingPlans": {
+    "description": "Empty state when no plans match a search."
+  },
+  "newPlan": "New plan",
+  "@newPlan": {
+    "description": "Action for creating a workout plan."
+  },
+  "searchPlans": "Search plans...",
+  "@searchPlans": {
+    "description": "Hint for searching workout plans."
+  },
+  "noExercisesYet": "No exercises yet",
+  "@noExercisesYet": {
+    "description": "Empty state for a plan without exercises."
+  },
+  "editPlan": "Edit plan",
+  "@editPlan": {
+    "description": "Tooltip and action for editing a workout plan."
+  },
+  "saveSet": "Save set",
+  "@saveSet": {
+    "description": "Action for saving a workout set."
+  },
+  "minutesLabel": "Minutes",
+  "@minutesLabel": {
+    "description": "Label for a duration in minutes."
+  },
+  "secondsLabel": "Seconds",
+  "@secondsLabel": {
+    "description": "Label for a duration in seconds."
+  },
+  "distanceLabel": "Distance",
+  "@distanceLabel": {
+    "description": "Generic distance label."
+  },
+  "inclinePercent": "Incline %",
+  "@inclinePercent": {
+    "description": "Label for incline as a percentage."
+  },
+  "weightWithUnit": "Weight ({unit})",
+  "@weightWithUnit": {
+    "description": "Weight field label including the selected unit.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "useBodyWeight": "Use body weight",
+  "@useBodyWeight": {
+    "description": "Tooltip for filling a set with the recorded bodyweight."
+  },
+  "noWeightEnteredYet": "No weight entered yet",
+  "@noWeightEnteredYet": {
+    "description": "Message shown when body weight cannot be used because no weight has been recorded."
+  },
+  "notesLabel": "Notes",
+  "@notesLabel": {
+    "description": "Generic notes field label."
+  },
+  "swapWorkout": "Swap workout",
+  "@swapWorkout": {
+    "description": "Title for replacing an exercise in a workout."
+  },
+  "addSet": "Add set",
+  "@addSet": {
+    "description": "Action and title for adding a workout set."
+  },
+  "deleteSet": "Delete set",
+  "@deleteSet": {
+    "description": "Tooltip for deleting a workout set."
+  },
+  "oneRepMaxEstimate": "One rep max (estimate)",
+  "@oneRepMaxEstimate": {
+    "description": "Label for an estimated one-repetition maximum."
+  },
+  "valueLabel": "Value",
+  "@valueLabel": {
+    "description": "Generic numeric value field label."
+  },
+  "amountWithUnit": "Amount ({unit})",
+  "@amountWithUnit": {
+    "description": "Amount field label including the selected unit.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceWithUnit": "Distance ({unit})",
+  "@distanceWithUnit": {
+    "description": "Distance field label including the selected unit.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "bodyWeightLabel": "Body weight",
+  "@bodyWeightLabel": {
+    "description": "Generic bodyweight field label."
+  },
+  "bodyWeightWithUnit": "Body weight ({unit})",
+  "@bodyWeightWithUnit": {
+    "description": "Bodyweight field label including the selected unit.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryHelper": "Muscle group, e.g. Chest or Legs",
+  "@categoryHelper": {
+    "description": "Helper text explaining the exercise category field."
+  },
+  "createdDate": "Created date",
+  "@createdDate": {
+    "description": "Label for the date a workout record was created."
+  },
+  "editSets": "{count, plural, =1{Edit 1 set} other{Edit {count} sets}}",
+  "@editSets": {
+    "description": "Title for bulk editing workout sets.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noEntriesYet": "No entries yet",
+  "@noEntriesYet": {
+    "description": "Empty state when workout history has no entries."
+  },
+  "historyEmptyMessage": "Complete a set or add one manually to start your history.",
+  "@historyEmptyMessage": {
+    "description": "Explanation shown when workout history has no entries."
+  },
+  "deleteSetConfirmation": "Are you sure you want to delete {name}?",
+  "@deleteSetConfirmation": {
+    "description": "Confirmation shown before deleting one workout set for a named exercise.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteEntriesConfirmation": "{count, plural, =1{Are you sure you want to delete 1 entry?} other{Are you sure you want to delete {count} entries?}}",
+  "@deleteEntriesConfirmation": {
+    "description": "Confirmation shown before deleting one or more selected workout history entries.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchHistory": "Search history...",
+  "@searchHistory": {
+    "description": "Hint for searching workout history."
+  },
+  "themeSystem": "System",
+  "@themeSystem": {
+    "description": "Theme option that follows the system appearance."
+  },
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Dark theme option."
+  },
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Light theme option."
+  },
+  "pureBlackAmoled": "Pure black (AMOLED)",
+  "@pureBlackAmoled": {
+    "description": "Appearance setting for pure-black dark surfaces."
+  },
+  "showImages": "Show images",
+  "@showImages": {
+    "description": "Appearance setting for exercise images."
+  },
+  "peekGraph": "Peek graph",
+  "@peekGraph": {
+    "description": "Appearance setting for graph previews."
+  },
+  "inputStyleLine": "Line",
+  "@inputStyleLine": {
+    "description": "Line input-field style."
+  },
+  "inputStyleOutlined": "Outlined",
+  "@inputStyleOutlined": {
+    "description": "Outlined input-field style."
+  },
+  "inputStyleFilled": "Filled",
+  "@inputStyleFilled": {
+    "description": "Filled input-field style."
+  },
+  "inputStyle": "Input style",
+  "@inputStyle": {
+    "description": "Label for choosing the text-input style."
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Title for appearance settings."
+  },
+  "automaticBackupsEnabled": "Automatic backups enabled",
+  "@automaticBackupsEnabled": {
+    "description": "Status text confirming automatic backups are enabled."
+  },
+  "automaticBackup": "Automatic backup",
+  "@automaticBackup": {
+    "description": "Data setting for automatic backups."
+  },
+  "appPermissions": "App permissions",
+  "@appPermissions": {
+    "description": "Data/settings action for app permissions."
+  },
+  "shareDatabase": "Share database",
+  "@shareDatabase": {
+    "description": "Action for sharing the app database file."
+  },
+  "dataManagement": "Data management",
+  "@dataManagement": {
+    "description": "Title for data-management settings."
+  },
+  "strengthUnit": "Strength unit",
+  "@strengthUnit": {
+    "description": "Label for the default strength measurement unit."
+  },
+  "lastEntry": "Last entry",
+  "@lastEntry": {
+    "description": "Option that reuses the unit from the previous entry."
+  },
+  "cardioUnit": "Cardio unit",
+  "@cardioUnit": {
+    "description": "Label for the default cardio measurement unit."
+  },
+  "longDateFormat": "Long date format ({format})",
+  "@longDateFormat": {
+    "description": "Label for the long date format preview.",
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "formats": "Formats",
+  "@formats": {
+    "description": "Title for measurement and date formatting settings."
+  },
+  "setsPerExerciseMax": "Sets per exercise (max: 20)",
+  "@setsPerExerciseMax": {
+    "description": "Plan setting for the maximum working sets per exercise."
+  },
+  "countLabel": "Count",
+  "@countLabel": {
+    "description": "Label for count-based plan distribution."
+  },
+  "ratioLabel": "Ratio",
+  "@ratioLabel": {
+    "description": "Label for ratio-based plan distribution."
+  },
+  "reorder": "Reorder",
+  "@reorder": {
+    "description": "Action or option for reordering exercises."
+  },
+  "none": "None",
+  "@none": {
+    "description": "Generic option indicating no selection."
+  },
+  "monday": "Monday",
+  "@monday": {
+    "description": "Monday weekday label in the plan example."
+  },
+  "examplePlanExercises": "Bench Press, Squat, Deadlift",
+  "@examplePlanExercises": {
+    "description": "Example list of exercises shown in plan settings."
+  },
+  "tabs": "Tabs",
+  "@tabs": {
+    "description": "Title for navigation tab settings."
+  },
+  "swipeBetweenTabs": "Swipe between tabs",
+  "@swipeBetweenTabs": {
+    "description": "Setting for swipe navigation between tabs."
+  },
+  "vibrate": "Vibrate",
+  "@vibrate": {
+    "description": "Timer setting for vibration."
+  },
+  "enableSound": "Enable sound",
+  "@enableSound": {
+    "description": "Timer setting for alarm sound playback."
+  },
+  "keepScreenOn": "Keep screen on",
+  "@keepScreenOn": {
+    "description": "Timer setting that prevents screen sleep."
+  },
+  "alarmSound": "Alarm sound",
+  "@alarmSound": {
+    "description": "Label for choosing a timer alarm sound."
+  },
+  "top": "Top",
+  "@top": {
+    "description": "Top position option."
+  },
+  "bottom": "Bottom",
+  "@bottom": {
+    "description": "Bottom position option."
+  },
+  "removeCustomTimer": "Remove custom timer (use global default)",
+  "@removeCustomTimer": {
+    "description": "Tooltip for removing an exercise-specific rest timer."
+  },
+  "timers": "Timers",
+  "@timers": {
+    "description": "Title for timer settings."
+  },
+  "timerSettings": "Timer settings",
+  "@timerSettings": {
+    "description": "Heading for timer configuration."
+  },
+  "groupHistory": "Group history",
+  "@groupHistory": {
+    "description": "Workout setting for grouping history entries."
+  },
+  "showUnits": "Show units",
+  "@showUnits": {
+    "description": "Workout setting for displaying measurement units."
+  },
+  "showBodyWeight": "Show body weight",
+  "@showBodyWeight": {
+    "description": "Workout setting for displaying bodyweight input."
+  },
+  "showCategories": "Show categories",
+  "@showCategories": {
+    "description": "Workout setting for exercise categories."
+  },
+  "showNotes": "Show notes",
+  "@showNotes": {
+    "description": "Workout setting for exercise notes."
+  },
+  "repEstimation": "Rep estimation",
+  "@repEstimation": {
+    "description": "Workout setting for repetition estimation."
+  },
+  "durationEstimation": "Duration estimation",
+  "@durationEstimation": {
+    "description": "Workout setting for duration estimation."
+  },
+  "showGraphLimit": "Show graph limit",
+  "@showGraphLimit": {
+    "description": "Workout setting controlling graph-limit display."
+  },
+  "defaultGraphMetric": "Default graph metric",
+  "@defaultGraphMetric": {
+    "description": "Label for choosing the default graph metric."
+  },
+  "bestWeight": "Best weight",
+  "@bestWeight": {
+    "description": "Graph metric for highest weight."
+  },
+  "bestReps": "Best reps",
+  "@bestReps": {
+    "description": "Graph metric for highest repetition count."
+  },
+  "oneRepMax": "One rep max",
+  "@oneRepMax": {
+    "description": "Graph metric for one-repetition maximum."
+  },
+  "volume": "Volume",
+  "@volume": {
+    "description": "Graph metric for training volume."
+  },
+  "paceCardio": "Pace (cardio)",
+  "@paceCardio": {
+    "description": "Cardio graph metric for pace."
+  },
+  "distanceCardio": "Distance (cardio)",
+  "@distanceCardio": {
+    "description": "Cardio graph metric for distance."
+  },
+  "defaultGraphPeriod": "Default graph period",
+  "@defaultGraphPeriod": {
+    "description": "Label for choosing the default graph period."
+  },
+  "defaultGraphLimit": "Default graph limit",
+  "@defaultGraphLimit": {
+    "description": "Label for choosing the default graph record limit."
+  },
+  "workouts": "Workouts",
+  "@workouts": {
+    "description": "Title for workout settings."
+  },
+  "actionStop": "Stop",
+  "@actionStop": {
+    "description": "Generic stop action."
+  },
+  "stopTimer": "Stop timer",
+  "@stopTimer": {
+    "description": "Action for stopping the active timer."
+  },
+  "actionPause": "Pause",
+  "@actionPause": {
+    "description": "Generic pause action."
+  },
+  "startStopwatch": "Start stopwatch",
+  "@startStopwatch": {
+    "description": "Action for starting the stopwatch."
+  },
+  "actionStart": "Start",
+  "@actionStart": {
+    "description": "Generic start action."
+  },
+  "actionRestart": "Restart",
+  "@actionRestart": {
+    "description": "Generic restart action."
+  },
+  "addOneMinute": "+1 minute",
+  "@addOneMinute": {
+    "description": "Timer action that adds one minute."
+  },
+  "timerUp": "Timer up",
+  "@timerUp": {
+    "description": "Default notification title when a timer expires."
+  },
+  "openNotification": "Open notification",
+  "@openNotification": {
+    "description": "Desktop notification action label."
+  },
+  "timerChannelName": "Timer Channel",
+  "@timerChannelName": {
+    "description": "Android notification channel name for ongoing timers."
+  },
+  "timerChannelDescription": "Ongoing progress of rest timers.",
+  "@timerChannelDescription": {
+    "description": "Android notification channel description for ongoing timers."
+  },
+  "timerFinishedChannelName": "Timer Finished Channel",
+  "@timerFinishedChannelName": {
+    "description": "Android notification channel name for completed timers."
+  },
+  "timerFinishedChannelDescription": "Plays an alarm when a rest timer completes.",
+  "@timerFinishedChannelDescription": {
+    "description": "Android notification channel description for completed timers."
+  },
+  "timerFinished": "Timer finished",
+  "@timerFinished": {
+    "description": "Android notification title for a completed timer."
+  },
+  "databaseMigrationFailureDescription": "Something went wrong when creating/upgrading your database. Usually this can be fixed by deleting & re-creating your records.",
+  "@databaseMigrationFailureDescription": {
+    "description": "Explanation shown when a database migration fails."
+  },
+  "curveSmoothness": "Curve smoothness",
+  "@curveSmoothness": {
+    "description": "Label for graph curve smoothness."
+  },
+  "actionBack": "Back",
+  "@actionBack": {
+    "description": "Generic back-navigation tooltip."
+  },
+  "atLeastOneTab": "You need at least one tab",
+  "@atLeastOneTab": {
+    "description": "Toast shown when trying to disable the final visible tab."
+  },
+  "invalidTabSettings": "Invalid tab settings.",
+  "@invalidTabSettings": {
+    "description": "Error shown when a saved tab identifier is unsupported."
+  },
+  "noSettingsFound": "No settings found",
+  "@noSettingsFound": {
+    "description": "Empty state when settings search has no matches."
+  },
+  "nothingMatchesSearch": "Nothing matches “{query}”.",
+  "@nothingMatchesSearch": {
+    "description": "Settings-search empty-state detail.",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "appearanceDescription": "Theme, colors and interface styling",
+  "@appearanceDescription": {
+    "description": "Description of appearance settings."
+  },
+  "dataManagementDescription": "Import, export and manage your workout data",
+  "@dataManagementDescription": {
+    "description": "Description of data-management settings."
+  },
+  "formatsDescription": "Dates, numbers and measurement formatting",
+  "@formatsDescription": {
+    "description": "Description of format settings."
+  },
+  "plansSettingsDescription": "Defaults and behaviour for workout plans",
+  "@plansSettingsDescription": {
+    "description": "Description of plan settings."
+  },
+  "tabsDescription": "Choose and arrange primary navigation tabs",
+  "@tabsDescription": {
+    "description": "Description of tab settings."
+  },
+  "timersDescription": "Rest timer duration, sound and behaviour",
+  "@timersDescription": {
+    "description": "Description of timer settings."
+  },
+  "workoutsDescription": "Exercise tracking and workout preferences",
+  "@workoutsDescription": {
+    "description": "Description of workout settings."
+  },
+  "completeSetForChart": "Complete a set for this exercise to build its chart.",
+  "@completeSetForChart": {
+    "description": "Empty graph guidance for a specific exercise."
+  },
+  "dateRange": "Date range",
+  "@dateRange": {
+    "description": "Label for graph date-range controls."
+  },
+  "stopDate": "Stop date",
+  "@stopDate": {
+    "description": "Label for the end of a graph date range."
+  },
+  "dataPoints": "Data points",
+  "@dataPoints": {
+    "description": "Label for the number of graph data points."
+  },
+  "completeSetsForProgress": "Complete some sets to build your progress chart.",
+  "@completeSetsForProgress": {
+    "description": "Empty guidance for the global progress graph."
+  },
+  "relativeStrength": "Relative strength",
+  "@relativeStrength": {
+    "description": "Strength graph metric relative to bodyweight."
+  },
+  "selectedCount": "{count, plural, =1{1 selected} other{{count} selected}}",
+  "@selectedCount": {
+    "description": "Number of currently selected records.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completeSetsForHistory": "Complete some sets to see this exercise history here.",
+  "@completeSetsForHistory": {
+    "description": "Empty guidance for exercise history."
+  },
+  "completeSetForFirstGraph": "Complete a set to create your first exercise graph.",
+  "@completeSetForFirstGraph": {
+    "description": "Empty guidance when no exercise graphs exist."
+  },
+  "nothingMatchesGraphSearch": "Nothing matches “{query}”. You can create it as a new exercise.",
+  "@nothingMatchesGraphSearch": {
+    "description": "Empty graph search guidance.",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "addNamed": "Add “{name}”",
+  "@addNamed": {
+    "description": "Action for adding an item with a typed name.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteGraphRecordsConfirmation": "This will delete {count} records. Are you sure?",
+  "@deleteGraphRecordsConfirmation": {
+    "description": "Confirmation for deleting records associated with selected graphs.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shareWorkout": "I just did {summary}",
+  "@shareWorkout": {
+    "description": "Text shared from the workout graph screen.",
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "updateConflict": "Update conflict",
+  "@updateConflict": {
+    "description": "Title for an exercise rename conflict dialog."
+  },
+  "updateConflictDescription": "Your new name exists already for {count} records. Are you sure?",
+  "@updateConflictDescription": {
+    "description": "Explanation for an exercise rename conflict.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unitsConflict": "Units conflict",
+  "@unitsConflict": {
+    "description": "Title for an exercise unit conversion conflict dialog."
+  },
+  "unitsConflictDescription": "Not all of your records have the same unit. This will convert all units to {unit}. Are you sure?",
+  "@unitsConflictDescription": {
+    "description": "Explanation before converting mixed exercise units.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "durationLabel": "Duration",
+  "@durationLabel": {
+    "description": "Generic duration label."
+  },
+  "inclineLabel": "Incline",
+  "@inclineLabel": {
+    "description": "Generic incline label."
+  },
+  "paceDistanceTime": "Pace (distance / time)",
+  "@paceDistanceTime": {
+    "description": "Cardio graph metric for distance divided by time."
+  },
+  "adjustedPace": "Adjusted pace",
+  "@adjustedPace": {
+    "description": "Cardio graph metric adjusted for incline."
+  },
+  "oneRepMaxAccuracyWarning": "One rep max estimates are less accurate for sets of 10+ reps",
+  "@oneRepMaxAccuracyWarning": {
+    "description": "Warning about one-repetition maximum estimate accuracy."
+  },
+  "addPlan": "Add plan",
+  "@addPlan": {
+    "description": "Action or title for creating a workout plan."
+  },
+  "planDetails": "Plan details",
+  "@planDetails": {
+    "description": "Heading for editable workout plan details."
+  },
+  "exercisesLabel": "Exercises",
+  "@exercisesLabel": {
+    "description": "Generic heading for exercises."
+  },
+  "addExerciseToPlan": "Add an exercise to this plan.",
+  "@addExerciseToPlan": {
+    "description": "Empty-state guidance for a workout plan with no exercises."
+  },
+  "nothingMatchesExerciseSearch": "Nothing matches “{query}”. You can add it as a new exercise.",
+  "@nothingMatchesExerciseSearch": {
+    "description": "Empty-state guidance when a plan exercise search has no matches.",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "selectDays": "Select days",
+  "@selectDays": {
+    "description": "Validation message requiring at least one workout plan day."
+  },
+  "selectExercises": "Select exercises",
+  "@selectExercises": {
+    "description": "Validation message requiring at least one workout plan exercise."
+  },
+  "todayLabel": "Today",
+  "@todayLabel": {
+    "description": "Label indicating the current day."
+  },
+  "setDetails": "Set details",
+  "@setDetails": {
+    "description": "Heading for workout set entry fields."
+  },
+  "themeLabel": "Theme",
+  "@themeLabel": {
+    "description": "Label for choosing the application theme."
+  },
+  "pureBlackAmoledDescription": "Use pure black colors for AMOLED displays",
+  "@pureBlackAmoledDescription": {
+    "description": "Description of the AMOLED pure-black appearance option."
+  },
+  "systemColorScheme": "System color scheme",
+  "@systemColorScheme": {
+    "description": "Appearance setting for using system colors."
+  },
+  "systemColorSchemeDescription": "Use the primary color of your device for the app",
+  "@systemColorSchemeDescription": {
+    "description": "Description of the system color scheme setting."
+  },
+  "showImagesDescription": "Pick/display images on the history page",
+  "@showImagesDescription": {
+    "description": "Description of the setting that shows workout images."
+  },
+  "showGlobalProgress": "Show global progress",
+  "@showGlobalProgress": {
+    "description": "Setting that controls the global progress graph."
+  },
+  "showGlobalProgressDescription": "Add a graph entry charting your progress by category",
+  "@showGlobalProgressDescription": {
+    "description": "Description of the global progress setting."
+  },
+  "peekGraphDescription": "Show the first line graph on graphs page",
+  "@peekGraphDescription": {
+    "description": "Description of the graph preview setting."
+  },
+  "inputStyleDescription": "Visual style of text input fields",
+  "@inputStyleDescription": {
+    "description": "Description of the text input style setting."
+  },
+  "automaticBackupNotificationBody": "Flexify will automatically back up your data and images to the selected folder each day.",
+  "@automaticBackupNotificationBody": {
+    "description": "Notification body shown when automatic backups are enabled."
+  },
+  "backupSettingsChannel": "Backup settings",
+  "@backupSettingsChannel": {
+    "description": "Notification channel name for backup settings."
+  },
+  "backupSettingsChannelDescription": "Notifications explaining automatic backups",
+  "@backupSettingsChannelDescription": {
+    "description": "Notification channel description for automatic backups."
+  },
+  "appPermissionsDescription": "Review access required by your enabled features",
+  "@appPermissionsDescription": {
+    "description": "Description for the app permissions settings entry."
+  },
+  "shareDatabase": "Share database",
+  "@shareDatabase": {
+    "description": "Action for sharing the application database."
+  },
+  "longDateFormatDescription": "Used where space is abundant",
+  "@longDateFormatDescription": {
+    "description": "Description of the long date-format setting."
+  },
+  "shortDateFormat": "Short date format ({example})",
+  "@shortDateFormat": {
+    "description": "Label for short date formatting with an example.",
+    "placeholders": {
+      "example": {
+        "type": "String"
+      }
+    }
+  },
+  "shortDateFormatDescription": "For where space is cramped (Graph lines)",
+  "@shortDateFormatDescription": {
+    "description": "Description of the short date-format setting."
+  },
+  "warmupSetsDescription": "Warmup sets have no rest timers",
+  "@warmupSetsDescription": {
+    "description": "Description of the default warmup sets setting."
+  },
+  "setsPerExerciseDescription": "Default # of exercises in a plan",
+  "@setsPerExerciseDescription": {
+    "description": "Description of the default sets-per-exercise setting."
+  },
+  "planTrailingDisplay": "Plan trailing display",
+  "@planTrailingDisplay": {
+    "description": "Label for choosing information shown on the right side of plan rows."
+  },
+  "planTrailingDisplayDescription": "Right side of list displays in Plans + Plan view",
+  "@planTrailingDisplayDescription": {
+    "description": "Description of the plan trailing display setting."
+  },
+  "restTimersDescription": "Alarm that goes off after completing a set",
+  "@restTimersDescription": {
+    "description": "Description of rest timers."
+  },
+  "vibrateDescription": "Should rest timers vibrate?",
+  "@vibrateDescription": {
+    "description": "Description of timer vibration."
+  },
+  "enableSoundDescription": "Should rest timers play a sound?",
+  "@enableSoundDescription": {
+    "description": "Description of timer sound."
+  },
+  "keepScreenOnDescription": "Keep the screen on during rest timers",
+  "@keepScreenOnDescription": {
+    "description": "Description of keeping the display awake during timers."
+  },
+  "restDurationDescription": "How long before rest alarms go off?",
+  "@restDurationDescription": {
+    "description": "Description of the default rest duration."
+  },
+  "globalDefault": "Global default",
+  "@globalDefault": {
+    "description": "Label for a global default setting value."
+  },
+  "alarmSoundDescription": "Music to play at the end of a rest timer",
+  "@alarmSoundDescription": {
+    "description": "Description of the timer alarm sound setting."
+  },
+  "progressBarPosition": "Progress bar position",
+  "@progressBarPosition": {
+    "description": "Label for choosing the rest timer progress bar position."
+  },
+  "progressBarPositionDescription": "Where should the rest timers progress bar be placed?",
+  "@progressBarPositionDescription": {
+    "description": "Description of the rest timer progress bar position setting."
+  },
+  "perExerciseRestTimes": "Per-exercise rest times",
+  "@perExerciseRestTimes": {
+    "description": "Heading for exercise-specific rest timer durations."
+  },
+  "perExerciseRestTimesDescription": "These exercises have custom rest durations",
+  "@perExerciseRestTimesDescription": {
+    "description": "Description of exercise-specific rest timer durations."
+  },
+  "audioFeaturesUnavailable": "Audio features are not available",
+  "@audioFeaturesUnavailable": {
+    "description": "Message shown when timer audio features cannot be initialized."
+  },
+  "groupHistoryDescription": "Combine history entries by day",
+  "@groupHistoryDescription": {
+    "description": "Description of history grouping."
+  },
+  "showUnitsDescription": "Show km/mi,kg/lb for graphs/history/plans",
+  "@showUnitsDescription": {
+    "description": "Description of displaying measurement units."
+  },
+  "showBodyWeightDescription": "Enable/disable tracking body weight",
+  "@showBodyWeightDescription": {
+    "description": "Description of bodyweight tracking."
+  },
+  "showCategoriesDescription": "Enable/disable workout categories",
+  "@showCategoriesDescription": {
+    "description": "Description of workout categories."
+  },
+  "showNotesDescription": "Record details of your lift in a text area",
+  "@showNotesDescription": {
+    "description": "Description of workout notes."
+  },
+  "positiveNotificationsDescription": "Write nice messages when a new record is hit",
+  "@positiveNotificationsDescription": {
+    "description": "Description of positive record notifications."
+  },
+  "positiveMessagesEnabled": "Positive messages appear now like this!",
+  "@positiveMessagesEnabled": {
+    "description": "Example toast shown when positive messages are enabled."
+  },
+  "recordEncouragement01": "Great work! You are incredible.",
+  "@recordEncouragement01": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement02": "Nice king! Your progress is inspiring.",
+  "@recordEncouragement02": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement03": "I kneel...",
+  "@recordEncouragement03": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement04": "What's that? A new record!",
+  "@recordEncouragement04": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement05": "Incredible stuff! You are an inspiration.",
+  "@recordEncouragement05": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement06": "Wow. Nice.",
+  "@recordEncouragement06": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement07": "Getting strong much?",
+  "@recordEncouragement07": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement08": "Yeah. You're a pretty big guy.",
+  "@recordEncouragement08": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement09": "Amazing. Incredible.",
+  "@recordEncouragement09": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement10": "Arnie would be proud.",
+  "@recordEncouragement10": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement11": "Ronnie C looks upon you with glee.",
+  "@recordEncouragement11": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement12": "YEAH! LIGHTWEIGHT BABY!!!!!!!",
+  "@recordEncouragement12": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement13": "Is that a new record? I knew you could do it.",
+  "@recordEncouragement13": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement14": "Great work! I am proud of you.",
+  "@recordEncouragement14": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement15": "Yeah baby! Light weight!",
+  "@recordEncouragement15": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement16": "Keep it up! Great progress.",
+  "@recordEncouragement16": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement17": "You are doing so well.",
+  "@recordEncouragement17": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement18": "That's my boy!",
+  "@recordEncouragement18": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement19": "Keep it up.",
+  "@recordEncouragement19": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement20": "You are getting very strong.",
+  "@recordEncouragement20": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement21": "Powerful.",
+  "@recordEncouragement21": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement22": "Powerful stuff!",
+  "@recordEncouragement22": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement23": "I am proud of you.",
+  "@recordEncouragement23": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement24": "Keep up the great work.",
+  "@recordEncouragement24": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement25": "Stand tall! You just made a new record.",
+  "@recordEncouragement25": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement26": "New record! You just pushed further than ever!",
+  "@recordEncouragement26": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement27": "Yep! That's a record.",
+  "@recordEncouragement27": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement28": "Wow! New record!",
+  "@recordEncouragement28": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "recordEncouragement29": "Very good stuff.",
+  "@recordEncouragement29": {
+    "description": "Positive message shown after a new exercise record."
+  },
+  "repEstimationDescription": "Try to predict the # of reps you just did",
+  "@repEstimationDescription": {
+    "description": "Description of repetition estimation."
+  },
+  "durationEstimationDescription": "Try predict the duration of your cardio",
+  "@durationEstimationDescription": {
+    "description": "Description of cardio duration estimation."
+  },
+  "showGraphXAxisToggle": "Show graph X axis toggle",
+  "@showGraphXAxisToggle": {
+    "description": "Setting for showing the graph X-axis mode toggle."
+  },
+  "showGraphXAxisToggleDescription": "Show time-based X axis toggle on graphs",
+  "@showGraphXAxisToggleDescription": {
+    "description": "Description of the graph X-axis toggle setting."
+  },
+  "showGraphLimitDescription": "Show the limit slider on graphs",
+  "@showGraphLimitDescription": {
+    "description": "Description of the graph limit setting."
+  },
+  "defaultTimeBasedXAxis": "Default time-based X axis",
+  "@defaultTimeBasedXAxis": {
+    "description": "Setting for using time-based graph X axes by default."
+  },
+  "defaultTimeBasedXAxisDescription": "Use time-based X axis by default on graphs",
+  "@defaultTimeBasedXAxisDescription": {
+    "description": "Description of the default time-based X-axis setting."
+  },
+  "createFirstTrainingPlan": "Create your first training plan to get started.",
+  "@createFirstTrainingPlan": {
+    "description": "Empty-state guidance when no workout plans exist."
+  },
+  "nothingMatchesPlanSearch": "Nothing matches “{query}”. You can create it as a new plan.",
+  "@nothingMatchesPlanSearch": {
+    "description": "Empty-state guidance when a plan search has no matches.",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "createPlan": "Create plan",
+  "@createPlan": {
+    "description": "Action for creating a workout plan."
+  },
+  "createNamedPlan": "Create “{name}”",
+  "@createNamedPlan": {
+    "description": "Action for creating a plan with a typed name.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "setNumber": "Set {number}",
+  "@setNumber": {
+    "description": "Label for a numbered workout set.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
   }
 }

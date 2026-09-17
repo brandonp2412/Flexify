@@ -7,6 +7,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/day_selector.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/plan/exercise_tile.dart';
@@ -70,11 +71,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
           height: 260,
           child: AppEmptyState(
             icon: Icons.search_off_rounded,
-            title: 'No exercises found',
+            title: context.l10n.noExercisesFound,
             message: _search.isEmpty
-                ? 'Add an exercise to this plan.'
-                : 'Nothing matches “$_search”. You can add it as a new exercise.',
-            actionLabel: _search.isEmpty ? 'Add exercise' : 'Add “$_search”',
+                ? context.l10n.addExerciseToPlan
+                : context.l10n.nothingMatchesExerciseSearch(_search),
+            actionLabel: _search.isEmpty
+                ? context.l10n.addExercise
+                : context.l10n.addNamed(_search),
             actionIcon: Icons.add_rounded,
             onAction: addExercise,
           ),
@@ -99,11 +102,14 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    var title = widget.plan.days.value.replaceAll(",", ", ");
-    if (title.isNotEmpty)
-      title = title[0].toUpperCase() + title.substring(1).toLowerCase();
-    else
-      title = "Add plan";
+    final storedDays = widget.plan.days.value
+        .split(',')
+        .where((day) => day.isNotEmpty);
+    final title = storedDays.isEmpty
+        ? context.l10n.addPlan
+        : storedDays
+              .map((day) => localizedWeekday(context.l10n, day))
+              .join(', ');
 
     final desktop = isDesktopLayout(context);
     final colors = Theme.of(context).colorScheme;
@@ -119,7 +125,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               child: FilledButton.icon(
                 onPressed: save,
                 icon: const Icon(Icons.save_rounded),
-                label: const Text('Save plan'),
+                label: Text(context.l10n.savePlan),
               ),
             ),
         ],
@@ -132,7 +138,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
           children: [
             if (desktop)
               Text(
-                'Plan details',
+                context.l10n.planDetails,
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
@@ -149,8 +155,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
               child: Column(
                 children: [
                   TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Title (optional)',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.titleOptional,
                     ),
                     controller: _titleCtrl,
                     textCapitalization: TextCapitalization.sentences,
@@ -165,7 +171,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(
-                  'Exercises',
+                  context.l10n.exercisesLabel,
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
@@ -178,7 +184,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 child: Icon(Icons.search),
               ),
               textCapitalization: TextCapitalization.sentences,
-              hintText: 'Search exercises...',
+              hintText: context.l10n.searchExercises,
               onChanged: (value) => setState(() {
                 _search = value;
               }),
@@ -190,7 +196,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
               child: ListTile(
                 leading: const Icon(Icons.add_rounded),
                 title: Text(
-                  _search.isEmpty ? 'Add exercise' : 'Add "$_search"',
+                  _search.isEmpty
+                      ? context.l10n.addExercise
+                      : context.l10n.addNamed(_search),
                 ),
                 trailing: desktop
                     ? const Icon(Icons.chevron_right_rounded)
@@ -214,7 +222,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
           ? null
           : AnimatedFab(
               onPressed: save,
-              label: const Text("Save"),
+              label: Text(context.l10n.actionSave),
               icon: const Icon(Icons.save),
             ),
     );
@@ -271,10 +279,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
       if (_days[i]) selected.add(weekdays[i]);
 
     if (selected.isEmpty && _titleCtrl.text.isEmpty)
-      return toast('Select days');
+      return toast(context.l10n.selectDays);
 
     if (_exercises.where((exercise) => exercise.enabled.value).isEmpty)
-      return toast('Select exercises');
+      return toast(context.l10n.selectExercises);
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
@@ -46,17 +47,17 @@ class _SwapWorkoutState extends State<SwapWorkout> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text('Swap workout')),
+      appBar: AppBar(title: Text(context.l10n.swapWorkout)),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Search Exercises',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
+              decoration: InputDecoration(
+                labelText: context.l10n.searchExercises,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
           ),
@@ -65,7 +66,11 @@ class _SwapWorkoutState extends State<SwapWorkout> {
               stream: _distinctExercises,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return Center(
+                    child: Text(
+                      context.l10n.errorWithMessage('${snapshot.error}'),
+                    ),
+                  );
                 }
                 if (!snapshot.hasData) {
                   return const SizedBox();

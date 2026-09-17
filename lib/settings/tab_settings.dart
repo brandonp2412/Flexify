@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -40,7 +41,7 @@ class _TabSettingsState extends State<TabSettings> {
 
   void setTab(String name, bool enabled) {
     if (!enabled && _tabs.where((tab) => tab.enabled == true).length == 1)
-      return toast('You need at least one tab');
+      return toast(context.l10n.atLeastOneTab);
     final index = _tabs.indexWhere((tappedTab) => tappedTab.name == name);
     setState(() {
       _tabs[index] = (name: name, enabled: enabled);
@@ -60,7 +61,7 @@ class _TabSettingsState extends State<TabSettings> {
     final settings = context.watch<SettingsState>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Tabs")),
+      appBar: AppBar(title: Text(context.l10n.tabs)),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -70,7 +71,7 @@ class _TabSettingsState extends State<TabSettings> {
                 children: [
                   const Icon(Icons.swipe),
                   SizedBox(width: 8),
-                  const Text("Swipe between tabs"),
+                  Text(context.l10n.swipeBetweenTabs),
                 ],
               ),
               onTap: () => db.settings.update().write(
@@ -122,7 +123,7 @@ class _TabSettingsState extends State<TabSettings> {
                         children: [
                           const Icon(Icons.history),
                           SizedBox(width: 8),
-                          const Text("History"),
+                          Text(context.l10n.navHistory),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(
@@ -142,7 +143,7 @@ class _TabSettingsState extends State<TabSettings> {
                         children: [
                           const Icon(Icons.calendar_today_outlined),
                           SizedBox(width: 8),
-                          const Text("Plans"),
+                          Text(context.l10n.navPlans),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(
@@ -162,7 +163,7 @@ class _TabSettingsState extends State<TabSettings> {
                         children: [
                           const Icon(Icons.insights_rounded),
                           SizedBox(width: 8),
-                          const Text("Graphs"),
+                          Text(context.l10n.navGraphs),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(
@@ -182,7 +183,7 @@ class _TabSettingsState extends State<TabSettings> {
                         children: [
                           const Icon(Icons.timer),
                           SizedBox(width: 8),
-                          const Text("Timer"),
+                          Text(context.l10n.navTimer),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(
@@ -202,7 +203,7 @@ class _TabSettingsState extends State<TabSettings> {
                         children: [
                           const Icon(Icons.settings),
                           SizedBox(width: 8),
-                          const Text("Settings"),
+                          Text(context.l10n.navSettings),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(
@@ -211,7 +212,7 @@ class _TabSettingsState extends State<TabSettings> {
                       ),
                     );
                   } else
-                    return ErrorWidget("Invalid tab settings.");
+                    return ErrorWidget(context.l10n.invalidTabSettings);
                 },
                 itemCount: _tabs.length,
               ),

@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/appearance_settings.dart';
@@ -49,7 +50,9 @@ class _SettingsPageState extends State<SettingsPage>
       filtered.addAll(
         getAppearanceSettings(context, _searchCtrl.text, settings),
       );
-      filtered.addAll(getFormatSettings(_searchCtrl.text, settings.value));
+      filtered.addAll(
+        getFormatSettings(context, _searchCtrl.text, settings.value),
+      );
       filtered.addAll(
         getWorkoutSettings(context, _searchCtrl.text, settings.value),
       );
@@ -82,9 +85,9 @@ class _SettingsPageState extends State<SettingsPage>
           height: 360,
           child: AppEmptyState(
             icon: Icons.search_off_rounded,
-            title: 'No settings found',
-            message: 'Nothing matches “${_searchCtrl.text.trim()}”.',
-            actionLabel: 'Clear search',
+            title: context.l10n.noSettingsFound,
+            message: context.l10n.nothingMatchesSearch(_searchCtrl.text.trim()),
+            actionLabel: context.l10n.clearSearch,
             actionIcon: Icons.close_rounded,
             onAction: () {
               _searchCtrl.clear();
@@ -97,11 +100,11 @@ class _SettingsPageState extends State<SettingsPage>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(context.l10n.navSettings),
         actions: [
           if (!kIsWeb && !Platform.isIOS && !Platform.isMacOS)
             IconButton(
-              tooltip: 'About',
+              tooltip: context.l10n.aboutTitle,
               onPressed: () async {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const AboutPage()),
@@ -118,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage>
         child: Column(
           children: <Widget>[
             SearchBar(
-              hintText: "Search...",
+              hintText: context.l10n.searchHint,
               controller: _searchCtrl,
               padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -229,48 +232,48 @@ class _SettingsPageState extends State<SettingsPage>
     );
   }
 
-  List<(IconData, String, String, Widget)> get _categories => const [
+  List<(IconData, String, String, Widget)> get _categories => [
     (
       Icons.color_lens_rounded,
-      'Appearance',
-      'Theme, colors and interface styling',
-      AppearanceSettings(),
+      context.l10n.appearance,
+      context.l10n.appearanceDescription,
+      const AppearanceSettings(),
     ),
     (
       Icons.storage_rounded,
-      'Data management',
-      'Import, export and manage your workout data',
-      DataSettings(),
+      context.l10n.dataManagement,
+      context.l10n.dataManagementDescription,
+      const DataSettings(),
     ),
     (
       Icons.format_bold_rounded,
-      'Formats',
-      'Dates, numbers and measurement formatting',
-      FormatSettings(),
+      context.l10n.formats,
+      context.l10n.formatsDescription,
+      const FormatSettings(),
     ),
     (
       Icons.calendar_today_rounded,
-      'Plans',
-      'Defaults and behaviour for workout plans',
-      PlanSettings(),
+      context.l10n.navPlans,
+      context.l10n.plansSettingsDescription,
+      const PlanSettings(),
     ),
     (
       Icons.tab_rounded,
-      'Tabs',
-      'Choose and arrange primary navigation tabs',
-      TabSettings(),
+      context.l10n.tabs,
+      context.l10n.tabsDescription,
+      const TabSettings(),
     ),
     (
       Icons.timer_rounded,
-      'Timers',
-      'Rest timer duration, sound and behaviour',
-      TimerSettings(),
+      context.l10n.timers,
+      context.l10n.timersDescription,
+      const TimerSettings(),
     ),
     (
       Icons.fitness_center_rounded,
-      'Workouts',
-      'Exercise tracking and workout preferences',
-      WorkoutSettings(),
+      context.l10n.workouts,
+      context.l10n.workoutsDescription,
+      const WorkoutSettings(),
     ),
   ];
 

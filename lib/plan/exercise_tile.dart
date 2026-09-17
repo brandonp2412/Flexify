@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: IconButton(
-        tooltip: 'Settings',
+        tooltip: context.l10n.navSettings,
         icon: const Icon(Icons.settings),
         onPressed: () {
           showDialog(
@@ -70,7 +71,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                             widget.onChange(pe);
                           },
                           decoration: InputDecoration(
-                            labelText: "Warmup sets",
+                            labelText: context.l10n.warmupSets,
                             border: const OutlineInputBorder(),
                             hintText: (value ?? 0).toString(),
                           ),
@@ -96,7 +97,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                             }
                           },
                           decoration: InputDecoration(
-                            labelText: "Working sets (max: 20)",
+                            labelText: context.l10n.workingSetsMax,
                             border: const OutlineInputBorder(),
                             hintText: value.toString(),
                           ),
@@ -104,7 +105,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                       ),
                       StatefulBuilder(
                         builder: (context, setState) => ListTile(
-                          title: const Text('Rest timers'),
+                          title: Text(context.l10n.restTimers),
                           trailing: Switch(
                             value: timers,
                             onChanged: (value) {
@@ -128,7 +129,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    label: const Text("OK"),
+                    label: Text(context.l10n.actionOk),
                     icon: const Icon(Icons.check),
                   ),
                 ],

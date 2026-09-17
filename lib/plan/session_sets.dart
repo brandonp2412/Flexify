@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
@@ -210,12 +211,14 @@ class _PlaceholderChip extends StatelessWidget {
   }
 
   Widget _skeletonLine(String text, TextStyle? style, Color barColor) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: barColor,
-        borderRadius: BorderRadius.circular(4),
+    return ExcludeSemantics(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: barColor,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Text(text, style: style?.copyWith(color: Colors.transparent)),
       ),
-      child: Text(text, style: style?.copyWith(color: Colors.transparent)),
     );
   }
 }
@@ -267,7 +270,7 @@ class _SetChip extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Set $_number",
+                    context.l10n.setNumber(_number),
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),

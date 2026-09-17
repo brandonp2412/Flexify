@@ -1,3 +1,4 @@
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// A full-screen editor for an exercise's notes.
@@ -20,9 +21,9 @@ class GraphNotesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercise notes'),
+        title: Text(context.l10n.exerciseNotes),
         leading: IconButton(
-          tooltip: 'Back',
+          tooltip: context.l10n.actionBack,
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
@@ -39,9 +40,9 @@ class GraphNotesPage extends StatelessWidget {
             minLines: null,
             textAlignVertical: TextAlignVertical.top,
             keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Notes for this exercise',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              hintText: context.l10n.notesForExercise,
             ),
           ),
         ),

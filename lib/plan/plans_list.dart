@@ -4,6 +4,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
@@ -90,13 +91,15 @@ class _PlansListState extends State<PlansList> {
         icon: searchLabel.isEmpty
             ? Icons.fitness_center_rounded
             : Icons.search_off_rounded,
-        title: searchLabel.isEmpty ? 'No plans yet' : 'No matching plans',
+        title: searchLabel.isEmpty
+            ? context.l10n.noPlansYet
+            : context.l10n.noMatchingPlans,
         message: searchLabel.isEmpty
-            ? 'Create your first training plan to get started.'
-            : 'Nothing matches “$searchLabel”. You can create it as a new plan.',
+            ? context.l10n.createFirstTrainingPlan
+            : context.l10n.nothingMatchesPlanSearch(searchLabel),
         actionLabel: searchLabel.isEmpty
-            ? 'Create plan'
-            : 'Create “$searchLabel”',
+            ? context.l10n.createPlan
+            : context.l10n.createNamedPlan(searchLabel),
         actionIcon: Icons.add_rounded,
         onAction: () async {
           final plan = PlansCompanion(

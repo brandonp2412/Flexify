@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
@@ -138,14 +140,18 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
         .map((exercise) => exercise.planId)
         .toSet();
 
-    return plans
-        .where(
-          (plan) =>
-              plan.title?.toLowerCase().contains(search) == true ||
-              plan.days.toLowerCase().contains(search) ||
-              matchingPlanIds.contains(plan.id),
-        )
-        .toList();
+    return plans.where((plan) {
+      final localizedDays = plan.days
+          .split(',')
+          .where((day) => day.isNotEmpty)
+          .map((day) => localizedWeekday(context.l10n, day))
+          .join(' ')
+          .toLowerCase();
+      return plan.title?.toLowerCase().contains(search) == true ||
+          plan.days.toLowerCase().contains(search) ||
+          localizedDays.contains(search) ||
+          matchingPlanIds.contains(plan.id);
+    }).toList();
   }
 
   Future<void> _addPlan() async {
@@ -172,14 +178,14 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             resizeToAvoidBottomInset: false,
             appBar: desktop
                 ? AppBar(
-                    title: const Text('Plans'),
+                    title: Text(context.l10n.navPlans),
                     actions: [
                       Padding(
                         padding: const EdgeInsets.only(right: 16),
                         child: FilledButton.icon(
                           onPressed: _addPlan,
                           icon: const Icon(Icons.add_rounded),
-                          label: const Text('New plan'),
+                          label: Text(context.l10n.newPlan),
                         ),
                       ),
                     ],
@@ -204,16 +210,21 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                   left: 0,
                   right: 0,
                   child: AppSearch(
-                    hintText: 'Search plans...',
+                    hintText: context.l10n.searchPlans,
                     controller: _selection,
                     onShare: () async {
+                      final l10n = context.l10n;
                       final selectedPlans = plans
                           .where((plan) => _selection.contains(plan.id))
                           .toList();
 
                       final summaries = await Future.wait(
                         selectedPlans.map((plan) async {
-                          final days = plan.days.split(',').join(', ');
+                          final days = plan.days
+                              .split(',')
+                              .where((day) => day.isNotEmpty)
+                              .map((day) => localizedWeekday(l10n, day))
+                              .join(', ');
                           final planExercises =
                               await (db.planExercises.select()
                                     ..where(
@@ -272,7 +283,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 ? null
                 : AnimatedFab(
                     onPressed: _addPlan,
-                    label: const Text('Add'),
+                    label: Text(context.l10n.actionAdd),
                     icon: const Icon(Icons.add),
                     scroll: _scroll,
                   ),

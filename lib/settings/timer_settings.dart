@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/native_timer_wrapper.dart';
@@ -22,12 +23,16 @@ List<Widget> getTimerSettings(
   AudioPlayer player,
   BuildContext context,
 ) {
+  final l10n = context.l10n;
+  final normalizedTerm = term.trim().toLowerCase();
+  bool matches(Iterable<String> values) =>
+      values.join(' ').toLowerCase().contains(normalizedTerm);
   return [
-    if ('rest timers'.contains(term.toLowerCase()))
+    if (matches([l10n.restTimers, l10n.restTimersDescription]))
       Tooltip(
-        message: 'Alarm that goes off after completing a set',
+        message: l10n.restTimersDescription,
         child: ListTile(
-          title: const Text('Rest timers', textAlign: TextAlign.center),
+          title: Text(l10n.restTimers, textAlign: TextAlign.center),
           leading: settings.restTimers
               ? const Icon(Icons.timer)
               : const Icon(Icons.timer_outlined),
@@ -60,11 +65,11 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
-    if ('vibrate'.contains(term.toLowerCase()))
+    if (matches([l10n.vibrate, l10n.vibrateDescription]))
       Tooltip(
-        message: 'Should rest timers vibrate?',
+        message: l10n.vibrateDescription,
         child: ListTile(
-          title: const Text('Vibrate', textAlign: TextAlign.center),
+          title: Text(l10n.vibrate, textAlign: TextAlign.center),
           leading: settings.vibrate
               ? const Icon(Icons.vibration)
               : const Icon(Icons.vibration_outlined),
@@ -106,11 +111,11 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
-    if ('enable sound'.contains(term.toLowerCase()))
+    if (matches([l10n.enableSound, l10n.enableSoundDescription]))
       Tooltip(
-        message: 'Should rest timers play a sound?',
+        message: l10n.enableSoundDescription,
         child: ListTile(
-          title: const Text('Enable sound', textAlign: TextAlign.center),
+          title: Text(l10n.enableSound, textAlign: TextAlign.center),
           leading: settings.enableSound
               ? const Icon(Icons.music_note)
               : const Icon(Icons.music_note_outlined),
@@ -125,11 +130,11 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
-    if ('keep screen'.contains(term.toLowerCase()))
+    if (matches([l10n.keepScreenOn, l10n.keepScreenOnDescription]))
       Tooltip(
-        message: 'Keep the screen on during rest timers',
+        message: l10n.keepScreenOnDescription,
         child: ListTile(
-          title: const Text('Keep screen on', textAlign: TextAlign.center),
+          title: Text(l10n.keepScreenOn, textAlign: TextAlign.center),
           leading: settings.keepScreenOn
               ? const Icon(Icons.light_mode)
               : const Icon(Icons.light_mode_outlined),
@@ -151,11 +156,16 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
-    if ('rest minutes seconds'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.restMinutes,
+      l10n.secondsLabel,
+      l10n.restDurationDescription,
+      l10n.globalDefault,
+    ]))
       Padding(
         padding: const EdgeInsets.all(16),
         child: Tooltip(
-          message: 'How long before rest alarms go off?',
+          message: l10n.restDurationDescription,
           child: Column(
             children: [
               Row(
@@ -164,7 +174,7 @@ List<Widget> getTimerSettings(
                   const Icon(Icons.public),
                   const SizedBox(width: 8),
                   Text(
-                    "Global default",
+                    l10n.globalDefault,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -175,9 +185,7 @@ List<Widget> getTimerSettings(
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Rest minutes',
-                      ),
+                      decoration: InputDecoration(labelText: l10n.restMinutes),
                       controller: minCtrl,
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(minCtrl),
@@ -200,7 +208,7 @@ List<Widget> getTimerSettings(
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(labelText: 'seconds'),
+                      decoration: InputDecoration(labelText: l10n.secondsLabel),
                       controller: secCtrl,
                       keyboardType: TextInputType.number,
                       onTap: () => selectAll(secCtrl),
@@ -224,11 +232,14 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
-    if ('progress position'.contains(term.toLowerCase()))
+    if (matches([
+      l10n.progressBarPosition,
+      l10n.progressBarPositionDescription,
+    ]))
       _ProgressPositionSetting(settings: settings),
-    if ('alarm sound'.contains(term.toLowerCase()))
+    if (matches([l10n.alarmSound, l10n.alarmSoundDescription]))
       Tooltip(
-        message: 'Music to play at the end of a rest timer',
+        message: l10n.alarmSoundDescription,
         child: Wrap(
           alignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -246,7 +257,7 @@ List<Widget> getTimerSettings(
               },
               icon: const Icon(Icons.music_note),
               label: settings.alarmSound.isEmpty
-                  ? const Text("Alarm sound")
+                  ? Text(l10n.alarmSound)
                   : Text(settings.alarmSound.split('/').last),
             ),
             if (settings.alarmSound.isNotEmpty)
@@ -256,7 +267,7 @@ List<Widget> getTimerSettings(
                     const SettingsCompanion(alarmSound: Value('')),
                   );
                 },
-                label: const Text("Delete"),
+                label: Text(l10n.actionDelete),
                 icon: const Icon(Icons.delete),
               ),
           ],
@@ -321,7 +332,7 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Where should the rest timers progress bar be placed?',
+      message: context.l10n.progressBarPositionDescription,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
         child: Column(
@@ -330,28 +341,28 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                'Progress bar position',
+                context.l10n.progressBarPosition,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             Center(
               child: SegmentedButton<String>(
-                segments: const [
+                segments: [
                   ButtonSegment(
                     value: 'top',
-                    label: Text('Top'),
-                    icon: Icon(Icons.vertical_align_top),
+                    label: Text(context.l10n.top),
+                    icon: const Icon(Icons.vertical_align_top),
                   ),
                   ButtonSegment(
                     value: 'bottom',
-                    label: Text('Bottom'),
-                    icon: Icon(Icons.vertical_align_bottom),
+                    label: Text(context.l10n.bottom),
+                    icon: const Icon(Icons.vertical_align_bottom),
                   ),
                   ButtonSegment(
                     value: 'none',
-                    label: Text('None'),
-                    icon: Icon(Icons.block),
+                    label: Text(context.l10n.none),
+                    icon: const Icon(Icons.block),
                   ),
                 ],
                 selected: {widget.settings.progressPosition},
@@ -504,14 +515,14 @@ class _TimerSettingsState extends State<TimerSettings> {
               const Icon(Icons.fitness_center),
               const SizedBox(width: 8),
               Text(
-                "Per-exercise rest times",
+                context.l10n.perExerciseRestTimes,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            "These exercises have custom rest durations",
+            context.l10n.perExerciseRestTimesDescription,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(
                 context,
@@ -545,7 +556,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
                           onPressed: () => _removeCustomTimer(exerciseName),
-                          tooltip: 'Remove custom timer (use global default)',
+                          tooltip: context.l10n.removeCustomTimer,
                         ),
                       ],
                     ),
@@ -554,9 +565,9 @@ class _TimerSettingsState extends State<TimerSettings> {
                       children: [
                         Expanded(
                           child: TextField(
-                            decoration: const InputDecoration(
-                              labelText: 'Minutes',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l10n.minutesLabel,
+                              border: const OutlineInputBorder(),
                             ),
                             controller: minController,
                             keyboardType: TextInputType.number,
@@ -576,9 +587,9 @@ class _TimerSettingsState extends State<TimerSettings> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: TextField(
-                            decoration: const InputDecoration(
-                              labelText: 'Seconds',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: context.l10n.secondsLabel,
+                              border: const OutlineInputBorder(),
                             ),
                             controller: secController,
                             keyboardType: TextInputType.number,
@@ -613,7 +624,7 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text("Timers")),
+      appBar: AppBar(title: Text(context.l10n.timers)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
         children: _player != null
@@ -629,10 +640,13 @@ class _TimerSettingsState extends State<TimerSettings> {
                 _buildPerExerciseSection(),
               ]
             : [
-                const ListTile(
-                  title: Text("Timer settings", textAlign: TextAlign.center),
+                ListTile(
+                  title: Text(
+                    context.l10n.timerSettings,
+                    textAlign: TextAlign.center,
+                  ),
                   subtitle: Text(
-                    "Audio features are not available",
+                    context.l10n.audioFeaturesUnavailable,
                     textAlign: TextAlign.center,
                   ),
                 ),
