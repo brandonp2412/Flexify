@@ -176,7 +176,11 @@ class GraphsPageState extends State<GraphsPage>
       body: StreamBuilder(
         stream: _stream,
         builder: (context, snapshot) {
-          if (snapshot.hasError) return ErrorWidget(snapshot.error.toString());
+          if (snapshot.hasError) {
+            return ErrorWidget(
+              context.l10n.errorWithMessage(snapshot.error.toString()),
+            );
+          }
           if (!snapshot.hasData) return const SizedBox();
 
           final terms = _search

@@ -133,7 +133,13 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                         ),
                       ),
                     if (snapshot.hasError)
-                      Expanded(child: ErrorWidget(snapshot.error.toString())),
+                      Expanded(
+                        child: ErrorWidget(
+                          context.l10n.errorWithMessage(
+                            snapshot.error.toString(),
+                          ),
+                        ),
+                      ),
                     if (snapshot.hasData && snapshot.data!.isNotEmpty)
                       Expanded(
                         child: Builder(

@@ -1,11 +1,10 @@
 {
-    "name": "flexify",
-    "short_name": "flexify",
+    "name": "Flexify",
+    "short_name": "Flexify",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",
     "theme_color": "#hexcode",
-    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
