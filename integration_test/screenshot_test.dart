@@ -32,6 +32,7 @@ Future<void> appWrapper(WidgetTester tester) async {
       curveLines: const Value(true),
       showImages: const Value(false),
       showGlobalProgress: const Value(false),
+      localeOverride: const Value('en'),
     ),
   );
   final settings = await (db.settings.select()..limit(1)).getSingle();

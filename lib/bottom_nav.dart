@@ -42,72 +42,77 @@ class BottomNav extends StatelessWidget {
               ),
             ],
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: tabs.asMap().entries.map((entry) {
-              final index = entry.key;
-              final tab = entry.value;
-              final isSelected = index == currentIndex;
-              final label = labelForTab(context, tab);
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: tabs.asMap().entries.map((entry) {
+                final index = entry.key;
+                final tab = entry.value;
+                final isSelected = index == currentIndex;
+                final label = labelForTab(context, tab);
 
-              return Semantics(
-                label: label,
-                button: true,
-                selected: isSelected,
-                child: Tooltip(
-                  message: label,
-                  child: GestureDetector(
-                    key: Key(tab),
-                    onTap: () => onTap(index),
-                    onLongPress: onLongPress != null
-                        ? () => onLongPress!(context, tab)
-                        : null,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeOutCubic,
-                      height: 48,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isSelected ? 16 : 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? color.primary : Colors.transparent,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            iconForTab(tab),
-                            color: isSelected
-                                ? color.onPrimary
-                                : color.onSurface,
-                            size: 24,
-                            semanticLabel: label,
-                          ),
-                          AnimatedSize(
-                            duration: const Duration(milliseconds: 350),
-                            curve: Curves.easeOutCubic,
-                            child: isSelected
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: Text(
-                                      label,
-                                      maxLines: 1,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(color: color.onPrimary),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                          ),
-                        ],
+                return Semantics(
+                  label: label,
+                  button: true,
+                  selected: isSelected,
+                  child: Tooltip(
+                    message: label,
+                    child: GestureDetector(
+                      key: Key(tab),
+                      onTap: () => onTap(index),
+                      onLongPress: onLongPress != null
+                          ? () => onLongPress!(context, tab)
+                          : null,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeOutCubic,
+                        height: 48,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSelected ? 16 : 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? color.primary
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              iconForTab(tab),
+                              color: isSelected
+                                  ? color.onPrimary
+                                  : color.onSurface,
+                              size: 24,
+                              semanticLabel: label,
+                            ),
+                            AnimatedSize(
+                              duration: const Duration(milliseconds: 350),
+                              curve: Curves.easeOutCubic,
+                              child: isSelected
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Text(
+                                        label,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(color: color.onPrimary),
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
         ),
       ),

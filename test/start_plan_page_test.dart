@@ -1,4 +1,5 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -118,6 +119,101 @@ void main() {
     expect(find.textContaining('Barbell row'), findsOne);
     expect(find.textContaining('Squat'), findsOne);
   });
+
+  testWidgets('StartPlanPage saves localized German decimal input', (
+    WidgetTester tester,
+  ) async {
+    const locale = Locale('de');
+    const exercise = 'Custom dragon press';
+    const planTitle = 'Untranslated custom plan';
+    const note = 'Keep tempo 3-1-1';
+    final l10n = lookupAppLocalizations(locale);
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(planFixture(title: planTitle));
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: id, exercise: exercise),
+    );
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
+        showNotes: true,
+      ),
+    );
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+
+    await harness.pump(
+      tester,
+      StartPlanPage(plan: plan),
+      locale: locale,
+      surfaceSize: const Size(430, 900),
+      textScaler: const TextScaler.linear(1.25),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining(exercise), findsOneWidget);
+    expect(find.text(planTitle), findsOneWidget);
+    await tester.enterText(textFieldWithLabel(l10n.repsLabel), '5');
+    await tester.enterText(
+      textFieldWithLabel(l10n.weightWithUnit('kg')),
+      '50,5',
+    );
+    await tester.enterText(find.bySemanticsLabel(l10n.notesLabel), note);
+    await tester.tap(find.text(l10n.actionSave));
+    await tester.pumpAndSettle();
+
+    final saved =
+        await (database.gymSets.select()
+              ..where((set) => set.name.equals(exercise))
+              ..orderBy([(set) => OrderingTerm.desc(set.created)])
+              ..limit(1))
+            .getSingle();
+    expect(saved.name, exercise);
+    expect(saved.notes, note);
+    expect(saved.weight, 50.5);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'StartPlanPage renders Japanese without rewriting exercise text',
+    (WidgetTester tester) async {
+      const locale = Locale('ja');
+      const exercise = 'User-defined dragon press';
+      final l10n = lookupAppLocalizations(locale);
+      final harness = await FlexifyTestHarness.create();
+      final database = harness.database;
+
+      final id = await database.plans.insertOne(planFixture());
+      await database.planExercises.insertOne(
+        planExerciseFixture(planId: id, exercise: exercise),
+      );
+      await database.settings.update().write(
+        testSettings(explainedPermissions: true),
+      );
+      final plan =
+          await (database.plans.select()..where((plan) => plan.id.equals(id)))
+              .getSingle();
+
+      await harness.pump(
+        tester,
+        StartPlanPage(plan: plan),
+        locale: locale,
+        surfaceSize: const Size(320, 720),
+        textScaler: const TextScaler.linear(1.5),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining(exercise), findsOneWidget);
+      expect(textFieldWithLabel(l10n.repsLabel), findsOneWidget);
+      expect(textFieldWithLabel(l10n.weightWithUnit('kg')), findsOneWidget);
+      expect(find.text(l10n.actionSave), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();

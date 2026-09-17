@@ -54,7 +54,7 @@ class FlexifyTestHarness {
         ],
         child: MaterialApp(
           scaffoldMessengerKey: rootScaffoldMessenger,
-          locale: locale,
+          locale: locale ?? const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           builder: textScaler == null

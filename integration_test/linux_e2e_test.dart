@@ -48,6 +48,7 @@ Future<SettingsState> _pumpIsolatedApp(
       showUnits: Value(true),
       scrollableTabs: Value(true),
       systemColors: Value(false),
+      localeOverride: Value('en'),
     ),
   );
 

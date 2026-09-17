@@ -18,6 +18,7 @@ Future<void> appWrapper() async {
       systemColors: const Value(false),
       curveLines: const Value(true),
       scrollableTabs: const Value(true),
+      localeOverride: const Value('en'),
     ),
   );
   final settings = await (db.settings.select()..limit(1)).getSingle();

@@ -446,6 +446,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           children: [
             const SizedBox(height: 8.0),
             DropdownButtonFormField<String>(
+              isExpanded: true,
               decoration: InputDecoration(labelText: context.l10n.unitLabel),
               initialValue: _unit,
               items: _unitItems,
