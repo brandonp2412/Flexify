@@ -93,7 +93,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 ### Migration completion gate
 
 - [ ] Audit `lib/`, native platform code, and user-facing tests for remaining hard-coded English UI strings.
-- [ ] Add a lightweight regression check or documented review rule that makes newly introduced hard-coded UI copy easy to detect.
+- [x] Add a lightweight regression check or documented review rule that makes newly introduced hard-coded UI copy easy to detect.
 - [ ] English UI behavior and layout remain functionally unchanged apart from localization plumbing.
 
 ## 4. Translation wave 1
@@ -113,7 +113,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 
 ## 5. Translation quality and layout QA
 
-- [ ] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
+- [x] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
 - [ ] Test representative singular/plural/count messages in languages with different plural behavior.
 - [ ] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
 - [ ] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.

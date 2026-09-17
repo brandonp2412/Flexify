@@ -31,3 +31,9 @@ Use ICU plural/select messages whenever grammar depends on a count or category. 
 New user-visible English copy in Flutter UI must be added to `app_en.arb` and accessed through `context.l10n` (the thin `BuildContext` extension over generated `AppLocalizations`). Logs, route names, database identifiers, persisted enum values, API/storage values, package identifiers, and user-entered content remain unchanged unless they are separately rendered as UI copy.
 
 Do not add a locale to the app or store metadata until its active ARB contains every English message with reviewed translations and matching ICU/placeholders. English extraction is completed before the first translation wave.
+
+## Validation
+
+`test/localization_catalog_test.dart` enforces the localization catalog contract. It checks that English placeholder metadata matches the source messages, every translated ARB has the same active keys and placeholders as English, and obvious literal English passed directly to common Flutter text/label APIs is rejected unless it is a documented non-translatable proper name.
+
+Run `flutter gen-l10n` after changing any ARB, then run the normal analyzer and test suite. Generated localization files are committed so CI and release builds use the same catalog that was validated locally.

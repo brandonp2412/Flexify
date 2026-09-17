@@ -14,6 +14,7 @@ import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
 import 'device_features_test.dart' as device_features_test;
+
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {

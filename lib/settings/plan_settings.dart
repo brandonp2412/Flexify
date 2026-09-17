@@ -209,12 +209,18 @@ class _PlanTrailingPreview extends StatelessWidget {
 
   Widget _buildTrailing(BuildContext context) {
     return switch (trailing) {
-      PlanTrailing.count => const Text('5', style: TextStyle(fontSize: 16)),
-      PlanTrailing.percent => const Text(
-        '83.33%',
-        style: TextStyle(fontSize: 16),
+      PlanTrailing.count => Text(
+        formatDisplayNumber(context, 5, maximumFractionDigits: 0),
+        style: const TextStyle(fontSize: 16),
       ),
-      PlanTrailing.ratio => const Text('5 / 6', style: TextStyle(fontSize: 16)),
+      PlanTrailing.percent => Text(
+        formatDisplayPercent(context, 5 / 6),
+        style: const TextStyle(fontSize: 16),
+      ),
+      PlanTrailing.ratio => Text(
+        '${formatDisplayNumber(context, 5, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, 6, maximumFractionDigits: 0)}',
+        style: const TextStyle(fontSize: 16),
+      ),
       PlanTrailing.reorder => const Icon(Icons.drag_handle),
       PlanTrailing.none => const SizedBox(),
     };
@@ -230,9 +236,9 @@ class _PlanTrailingPreview extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).primaryColor,
-          child: const Text(
-            'M',
-            style: TextStyle(
+          child: Text(
+            localizedWeekday(context.l10n, 'Monday', abbreviated: true),
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontFamily: 'monospace',
