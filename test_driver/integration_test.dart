@@ -17,6 +17,10 @@ Future<void> main() async => await integrationDriver(
         Platform.environment["FLUTTER_DRIVER_DEVICE"]?.contains("chrome") ==
             true;
 
+    final storeLocale =
+        RegExp(r'_([a-z]{2}(?:-[A-Z]{2})?)$').firstMatch(name)?.group(1) ??
+        'en-US';
+
     File imgFile;
     if (isWeb) {
       imgFile = await File(
@@ -28,7 +32,7 @@ Future<void> main() async => await integrationDriver(
       ).create(recursive: true);
     } else {
       imgFile = await File(
-        'fastlane/metadata/android/en-US/images/$deviceType/$name.png',
+        'fastlane/metadata/android/$storeLocale/images/$deviceType/$name.png',
       ).create(recursive: true);
     }
     await imgFile.writeAsBytes(image);

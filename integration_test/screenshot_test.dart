@@ -22,7 +22,10 @@ import '../test/mock_tab_controller.dart';
 import '../test/support/graph_fixtures.dart';
 import 'test_database.dart';
 
-Future<void> appWrapper(WidgetTester tester) async {
+Future<void> appWrapper(
+  WidgetTester tester, {
+  required String localeIdentifier,
+}) async {
   await app.db.settings.update().write(
     SettingsCompanion(
       themeMode: Value(ThemeMode.dark.toString()),
@@ -32,7 +35,7 @@ Future<void> appWrapper(WidgetTester tester) async {
       curveLines: const Value(true),
       showImages: const Value(false),
       showGlobalProgress: const Value(false),
-      localeOverride: const Value('en'),
+      localeOverride: Value(localeIdentifier),
     ),
   );
   final settings = await (db.settings.select()..limit(1)).getSingle();
@@ -69,10 +72,11 @@ Future<void> generateScreenshot({
   required WidgetTester tester,
   required String screenshotName,
   required String tabBarState,
+  required String localeIdentifier,
   Future<void> Function(BuildContext context)? navigateToPage,
   bool skipSettle = false,
 }) async {
-  await appWrapper(tester);
+  await appWrapper(tester, localeIdentifier: localeIdentifier);
   await tester.pumpAndSettle();
 
   await tester.tap(find.byKey(Key(tabBarState)));
@@ -90,8 +94,44 @@ Future<void> generateScreenshot({
 }
 
 const _only = String.fromEnvironment('SCREENSHOT_ONLY');
+const _screenshotLocales = String.fromEnvironment(
+  'SCREENSHOT_LOCALES',
+  defaultValue: 'en-US',
+);
+
+const _storeLocaleToAppLocale = <String, String>{
+  'en-US': 'en',
+  'de-DE': 'de',
+  'es-ES': 'es',
+  'fr-FR': 'fr',
+  'it-IT': 'it',
+  'ja-JP': 'ja',
+  'ko-KR': 'ko',
+  'nl-NL': 'nl',
+  'pl-PL': 'pl',
+  'pt-BR': 'pt-BR',
+  'zh-CN': 'zh-CN',
+};
 
 bool _skip(String name) => _only.isNotEmpty && _only != name;
+
+List<MapEntry<String, String>> _requestedScreenshotLocales() =>
+    _screenshotLocales
+        .split(',')
+        .map((locale) => locale.trim())
+        .where((locale) => locale.isNotEmpty)
+        .map(
+          (storeLocale) => MapEntry(
+            storeLocale,
+            _storeLocaleToAppLocale[storeLocale] ??
+                (throw ArgumentError.value(
+                  storeLocale,
+                  'SCREENSHOT_LOCALES',
+                  'Unsupported store locale',
+                )),
+          ),
+        )
+        .toList(growable: false);
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -117,139 +157,152 @@ void main() {
     await database.close();
   });
 
-  group('Generate default screenshots ', () {
-    testWidgets(
-      'PlanPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '1_en-US',
-        tabBarState: 'PlansPage',
-      ),
-      skip: _skip('PlanPage'),
-    );
+  for (final screenshotLocale in _requestedScreenshotLocales()) {
+    final storeLocale = screenshotLocale.key;
+    final appLocale = screenshotLocale.value;
 
-    testWidgets(
-      'GraphPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '2_en-US',
-        navigateToPage: (context) async => navigateTo(
-          context: context,
-          page: GraphsPage(tabController: MockTabController()),
+    group('Generate $storeLocale default screenshots ', () {
+      testWidgets(
+        'PlanPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '1_$storeLocale',
+          tabBarState: 'PlansPage',
+          localeIdentifier: appLocale,
         ),
-        tabBarState: 'GraphsPage',
-      ),
-      skip: _skip('GraphPage'),
-    );
+        skip: _skip('PlanPage'),
+      );
 
-    testWidgets(
-      'SettingsPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '3_en-US',
-        navigateToPage: (context) async =>
-            navigateTo(context: context, page: const SettingsPage()),
-        tabBarState: 'PlansPage',
-      ),
-      skip: _skip('SettingsPage'),
-    );
-
-    testWidgets(
-      'StartPlanPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '4_en-US',
-        navigateToPage: (context) async {
-          await tester.tap(find.text('Monday'));
-          await tester.pumpAndSettle();
-        },
-        tabBarState: 'PlansPage',
-      ),
-      skip: _skip('StartPlanPage'),
-    );
-  });
-
-  group('Generate extra screenshots', () {
-    testWidgets(
-      'ViewGraphPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '5_en-US',
-        navigateToPage: (context) async {
-          final data = await getStrengthData(
-            target: 'kg',
-            name: screenshotExercise,
-            metric: StrengthMetric.bestWeight,
-            period: Period.day,
-            start: null,
-            end: null,
-            limit: 11,
-          );
-          if (!context.mounted) return;
-          navigateTo(
+      testWidgets(
+        'GraphPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '2_$storeLocale',
+          localeIdentifier: appLocale,
+          navigateToPage: (context) async => navigateTo(
             context: context,
-            page: StrengthPage(
-              tabCtrl: MockTabController(),
+            page: GraphsPage(tabController: MockTabController()),
+          ),
+          tabBarState: 'GraphsPage',
+        ),
+        skip: _skip('GraphPage'),
+      );
+
+      testWidgets(
+        'SettingsPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '3_$storeLocale',
+          localeIdentifier: appLocale,
+          navigateToPage: (context) async =>
+              navigateTo(context: context, page: const SettingsPage()),
+          tabBarState: 'PlansPage',
+        ),
+        skip: _skip('SettingsPage'),
+      );
+
+      testWidgets(
+        'StartPlanPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '4_$storeLocale',
+          localeIdentifier: appLocale,
+          navigateToPage: (context) async {
+            await tester.tap(find.text('Monday'));
+            await tester.pumpAndSettle();
+          },
+          tabBarState: 'PlansPage',
+        ),
+        skip: _skip('StartPlanPage'),
+      );
+    });
+
+    group('Generate $storeLocale extra screenshots', () {
+      testWidgets(
+        'ViewGraphPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '5_$storeLocale',
+          localeIdentifier: appLocale,
+          navigateToPage: (context) async {
+            final data = await getStrengthData(
+              target: 'kg',
               name: screenshotExercise,
-              unit: 'kg',
-              data: data,
-            ),
-          );
-        },
-        tabBarState: 'GraphsPage',
-      ),
-      skip: _skip('ViewGraphPage'),
-    );
+              metric: StrengthMetric.bestWeight,
+              period: Period.day,
+              start: null,
+              end: null,
+              limit: 11,
+            );
+            if (!context.mounted) return;
+            navigateTo(
+              context: context,
+              page: StrengthPage(
+                tabCtrl: MockTabController(),
+                name: screenshotExercise,
+                unit: 'kg',
+                data: data,
+              ),
+            );
+          },
+          tabBarState: 'GraphsPage',
+        ),
+        skip: _skip('ViewGraphPage'),
+      );
 
-    testWidgets(
-      'GraphHistory',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '6_en-US',
-        tabBarState: 'HistoryPage',
-      ),
-      skip: _skip('GraphHistory'),
-    );
+      testWidgets(
+        'GraphHistory',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '6_$storeLocale',
+          tabBarState: 'HistoryPage',
+          localeIdentifier: appLocale,
+        ),
+        skip: _skip('GraphHistory'),
+      );
 
-    testWidgets(
-      'EditPlanPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '7_en-US',
-        navigateToPage: (context) async {
-          final plan = await (db.plans.select()..limit(1)).getSingle();
-          if (!context.mounted) return;
-          navigateTo(
-            context: context,
-            page: EditPlanPage(plan: plan.toCompanion(false)),
-          );
-        },
-        tabBarState: 'GraphsPage',
-      ),
-      skip: _skip('EditPlanPage'),
-    );
+      testWidgets(
+        'EditPlanPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '7_$storeLocale',
+          localeIdentifier: appLocale,
+          navigateToPage: (context) async {
+            final plan = await (db.plans.select()..limit(1)).getSingle();
+            if (!context.mounted) return;
+            navigateTo(
+              context: context,
+              page: EditPlanPage(plan: plan.toCompanion(false)),
+            );
+          },
+          tabBarState: 'GraphsPage',
+        ),
+        skip: _skip('EditPlanPage'),
+      );
 
-    testWidgets(
-      'TimerPage',
-      (tester) async => generateScreenshot(
-        binding: binding,
-        tester: tester,
-        screenshotName: '8_en-US',
-        skipSettle: true,
-        navigateToPage: (context) async {
-          context.read<TimerState>().setTimer(60, 7);
-          await tester.pump();
-        },
-        tabBarState: 'TimerPage',
-      ),
-      skip: _skip('TimerPage'),
-    );
-  });
+      testWidgets(
+        'TimerPage',
+        (tester) async => generateScreenshot(
+          binding: binding,
+          tester: tester,
+          screenshotName: '8_$storeLocale',
+          localeIdentifier: appLocale,
+          skipSettle: true,
+          navigateToPage: (context) async {
+            context.read<TimerState>().setTimer(60, 7);
+            await tester.pump();
+          },
+          tabBarState: 'TimerPage',
+        ),
+        skip: _skip('TimerPage'),
+      );
+    });
+  }
 }

@@ -37,3 +37,9 @@ Do not add a locale to the app or store metadata until its active ARB contains e
 `test/localization_catalog_test.dart` enforces the localization catalog contract. It checks that English placeholder metadata matches the source messages, every translated ARB has the same active keys and placeholders as English, and obvious literal English passed directly to common Flutter text/label APIs is rejected unless it is a documented non-translatable proper name.
 
 Run `flutter gen-l10n` after changing any ARB, then run the normal analyzer and test suite. Generated localization files are committed so CI and release builds use the same catalog that was validated locally.
+
+## Store screenshots
+
+Android screenshot generation defaults to the existing English (`en-US`) listing. To generate translated Play Store screenshots, set `FLEXIFY_SCREENSHOT_LOCALES` to a comma-separated list of store locale identifiers before running `scripts/screenshots-android.sh` or `scripts/screenshots-waydroid.sh`, for example `de-DE,ja-JP,zh-CN`. The integration harness maps each store locale to Flexify's persisted app locale and writes screenshots under that locale's `fastlane/metadata/android/<locale>/images/` directory.
+
+Keep user-entered fixture content unchanged in screenshots. Locale selection applies only to Flexify-owned interface copy, formatting, and semantics.

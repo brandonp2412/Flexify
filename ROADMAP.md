@@ -118,7 +118,8 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
 - [x] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
 - [x] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.
-- [ ] Verify CJK rendering and font fallback on Android and desktop.
+- [x] Verify CJK rendering and font fallback on Android and desktop.
+  - [x] Exercise Japanese, Korean, and Simplified Chinese navigation/title rendering through the real app on Linux and Android integration targets without bundled fonts, validating platform font fallback.
 - [x] Verify screen-reader semantics use localized labels/hints where custom semantics are present.
 - [x] Confirm user-entered exercise/plan/note text is never translated or rewritten.
 
@@ -128,10 +129,12 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Add focused tests for at least one Latin-script alternate locale and one CJK locale across core navigation/settings/workout flows.
 - [x] Ensure integration/Patrol tests remain deterministic by explicitly selecting or pinning a locale where necessary.
 - [x] Localize Play Store metadata for supported locales when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
-- [ ] Add translated store screenshots only when practical; English screenshots may remain shared where store rules permit.
+- [x] Add translated store screenshots only when practical; English screenshots may remain shared where store rules permit.
+  - [x] Generate all eight Play Store phone screenshots for every first-wave non-English store locale, while keeping English as the default screenshot pipeline and shared tablet/desktop artwork where appropriate.
 - [x] Update contributor documentation with the workflow for adding/changing English strings and updating all locale ARBs.
 - [x] Run the full required completion checks: `dart format .`, `flutter analyze`, and `flutter test`.
-- [ ] Run relevant Android/integration smoke coverage for locale switching and a non-English workout flow.
+- [x] Run relevant Android/integration smoke coverage for locale switching and a non-English workout flow.
+  - [x] Run `integration_test/localization_smoke_test.dart` on Linux and Android, covering runtime Japanese-to-German switching and saving a German-localized workout with locale-aware decimal input.
 - [x] Perform a final hard-coded-English audit and ARB completeness check.
 - [x] Confirm all first-wave locales are selectable, persist correctly, survive restart, and can complete core Flexify flows.
 

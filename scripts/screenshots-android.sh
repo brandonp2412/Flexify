@@ -8,6 +8,7 @@ source "$SCRIPT_DIR/screenshot-names.sh"
 device="${1:?Usage: screenshots-android.sh <device-id> [device-type] [screenshot]}"
 device_type="${2:-phoneScreenshots}"
 only="${3:-}"
+screenshot_locales="${FLEXIFY_SCREENSHOT_LOCALES:-en-US}"
 
 echo "Running screenshot tests on Android device $device..."
 
@@ -17,10 +18,13 @@ echo "Running screenshot tests on Android device $device..."
 
 export FLEXIFY_DEVICE_TYPE="$device_type"
 
-dart_define=()
+dart_define=(--dart-define=SCREENSHOT_LOCALES="$screenshot_locales")
+if [ "$screenshot_locales" != "en-US" ]; then
+    echo "Capturing store locales: $screenshot_locales"
+fi
 if [ -n "$only" ]; then
     only="$(screenshot_name "$only")"
-    dart_define=(--dart-define=SCREENSHOT_ONLY="$only")
+    dart_define+=(--dart-define=SCREENSHOT_ONLY="$only")
     echo "Capturing only: $only"
 fi
 
