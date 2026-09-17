@@ -1,0 +1,17 @@
+Protokolliere deine Workouts im Fitnessstudio, verfolge deine Kraftentwicklung und behalte deine Trainingsdaten für dich.
+
+Flexify ist ein schneller Offline-Workout-Tracker für Krafttraining und Cardio. Erfasse Sätze, Wiederholungen und Gewichte, nutze Pausentimer für den richtigen Rhythmus und sieh dir nach jeder Einheit übersichtliche Fortschrittsdiagramme an.
+
+FÜHRE EIN BESSERES TRAININGSTAGEBUCH
+
+• Erfasse Krafttraining, Übungen, Sätze, Wiederholungen und Gewicht
+• Zeichne Cardio-Einheiten und Cardio-Arten auf
+• Nutze Pausentimer und Alarme zwischen den Sätzen
+• Prüfe Trainingsverlauf und Kraftfortschritt in Diagrammen
+• Passe Funktionen, Einstellungen sowie helles oder dunkles Design an deine Routine an
+
+PRIVAT, SCHNELL UND OFFLINE
+
+Flexify benötigt weder ein Konto noch eine Internetverbindung. Deine Trainingsdaten bleiben auf deinem Gerät, sodass du überall trainieren und Einheiten erfassen kannst. Die App ist Open Source und enthält weder Werbung noch Tracking.
+
+Egal, ob du gerade mit einer Fitnessroutine beginnst oder einen bestehenden Trainingsplan verfeinerst: Flexify bietet dir ein fokussiertes Trainingstagebuch ohne unnötigen Ballast.

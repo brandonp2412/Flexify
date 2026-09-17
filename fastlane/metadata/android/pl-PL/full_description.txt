@@ -1,0 +1,17 @@
+Zapisuj treningi na siłowni, śledź postępy siłowe i zachowaj prywatność swoich danych treningowych.
+
+Flexify to szybki, działający offline dziennik treningowy do treningu siłowego i cardio. Zapisuj serie, powtórzenia i ciężary, używaj timerów przerw, aby utrzymać tempo, i przeglądaj czytelne wykresy postępów po każdej sesji.
+
+PROWADŹ LEPSZY DZIENNIK TRENINGOWY
+
+• Zapisuj treningi siłowe, ćwiczenia, serie, powtórzenia i ciężar
+• Rejestruj sesje i rodzaje cardio
+• Używaj timerów przerw i alarmów między seriami
+• Przeglądaj historię treningów i postępy siłowe na wykresach
+• Dopasuj funkcje, ustawienia oraz jasny lub ciemny motyw do swojej rutyny
+
+PRYWATNIE, SZYBKO I OFFLINE
+
+Flexify nie wymaga konta ani połączenia z internetem. Twoje dane treningowe pozostają na urządzeniu, więc możesz trenować i zapisywać sesje w dowolnym miejscu. Aplikacja jest open source i nie zawiera reklam ani śledzenia.
+
+Niezależnie od tego, czy dopiero zaczynasz ćwiczyć na siłowni, czy dopracowujesz ustalony plan, Flexify zapewnia przejrzysty dziennik treningowy bez zbędnych elementów.
