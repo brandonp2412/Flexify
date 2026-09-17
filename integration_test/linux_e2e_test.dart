@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/home_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -58,7 +59,10 @@ Future<SettingsState> _pumpIsolatedApp(
 }
 
 Future<void> _tapTab(WidgetTester tester, String tab) async {
-  final label = BottomNav.labelForTab(tab);
+  final label = BottomNav.labelForTab(
+    tester.element(find.byType(HomePage)),
+    tab,
+  );
   final textFinder = find.text(label);
   if (textFinder.evaluate().isNotEmpty) {
     await tester.tap(textFinder.last);

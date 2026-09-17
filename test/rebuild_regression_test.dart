@@ -20,6 +20,7 @@ library;
 
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -65,7 +66,12 @@ Widget historyApp(Setting settings) {
       ),
       ChangeNotifierProvider(create: (_) => TimerState()),
     ],
-    child: MaterialApp(home: HistoryPage(tabController: MockTabController())),
+    child: MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: HistoryPage(tabController: MockTabController()),
+    ),
   );
 }
 

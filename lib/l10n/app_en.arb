@@ -59,5 +59,205 @@
   "languageNameSimplifiedChinese": "简体中文",
   "@languageNameSimplifiedChinese": {
     "description": "Stable native display name for the Simplified Chinese locale."
+  },
+  "navHistory": "History",
+  "@navHistory": {
+    "description": "Navigation label for workout history."
+  },
+  "navPlans": "Plans",
+  "@navPlans": {
+    "description": "Navigation label for workout plans."
+  },
+  "navGraphs": "Graphs",
+  "@navGraphs": {
+    "description": "Navigation label for exercise graphs."
+  },
+  "navTimer": "Timer",
+  "@navTimer": {
+    "description": "Navigation label for the rest timer."
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Navigation label for app settings."
+  },
+  "errorLabel": "Error",
+  "@errorLabel": {
+    "description": "Generic short error label."
+  },
+  "tabContentError": "Couldn't build tab content.",
+  "@tabContentError": {
+    "description": "Error shown when a configured app tab cannot be rendered."
+  },
+  "cannotHideAllTabs": "Can't hide everything!",
+  "@cannotHideAllTabs": {
+    "description": "Message shown when the user tries to hide the last visible navigation tab."
+  },
+  "removeTabQuestion": "Remove {tab} tab?",
+  "@removeTabQuestion": {
+    "description": "Confirmation title shown before hiding a navigation tab.",
+    "placeholders": {
+      "tab": {
+        "type": "String",
+        "example": "History"
+      }
+    }
+  },
+  "restoreTabFromSettings": "You can add it back later from settings.",
+  "@restoreTabFromSettings": {
+    "description": "Explanation shown when removing a navigation tab."
+  },
+  "removedTab": "Removed {tab}",
+  "@removedTab": {
+    "description": "Toast shown after a navigation tab has been hidden.",
+    "placeholders": {
+      "tab": {
+        "type": "String",
+        "example": "History"
+      }
+    }
+  },
+  "newVersion": "New version {version}",
+  "@newVersion": {
+    "description": "Toast announcing that the installed app version changed.",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "2.2.5"
+      }
+    }
+  },
+  "changes": "Changes",
+  "@changes": {
+    "description": "Action that opens the app changelog."
+  },
+  "searchHint": "Search...",
+  "@searchHint": {
+    "description": "Default hint shown in reusable search fields."
+  },
+  "deleteSelected": "Delete selected",
+  "@deleteSelected": {
+    "description": "Tooltip for deleting the currently selected records."
+  },
+  "confirmDelete": "Confirm Delete",
+  "@confirmDelete": {
+    "description": "Title for a generic delete confirmation dialog."
+  },
+  "deleteRecordsConfirmation": "{count, plural, =1{Are you sure you want to delete 1 record? This action is not reversible.} other{Are you sure you want to delete {count} records? This action is not reversible.}}",
+  "@deleteRecordsConfirmation": {
+    "description": "Generic confirmation text for deleting one or more records.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "actionCancel": "Cancel",
+  "@actionCancel": {
+    "description": "Generic cancel action."
+  },
+  "actionDelete": "Delete",
+  "@actionDelete": {
+    "description": "Generic delete action."
+  },
+  "actionRemove": "Remove",
+  "@actionRemove": {
+    "description": "Generic remove action."
+  },
+  "actionEdit": "Edit",
+  "@actionEdit": {
+    "description": "Generic edit action."
+  },
+  "actionShare": "Share",
+  "@actionShare": {
+    "description": "Generic share action."
+  },
+  "clearSelection": "Clear selection",
+  "@clearSelection": {
+    "description": "Action or tooltip for clearing selected records."
+  },
+  "clearSearch": "Clear search",
+  "@clearSearch": {
+    "description": "Tooltip for clearing the current search query."
+  },
+  "showMenu": "Show menu",
+  "@showMenu": {
+    "description": "Tooltip for opening a contextual actions menu."
+  },
+  "selectAll": "Select all",
+  "@selectAll": {
+    "description": "Action for selecting every visible record."
+  },
+  "weightLabel": "Weight",
+  "@weightLabel": {
+    "description": "Generic label for body or exercise weight."
+  },
+  "filter": "Filter",
+  "@filter": {
+    "description": "Tooltip for opening filtering controls."
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Title for a filtering dialog."
+  },
+  "categoryLabel": "Category",
+  "@categoryLabel": {
+    "description": "Generic exercise category label."
+  },
+  "repsLabel": "Reps",
+  "@repsLabel": {
+    "description": "Short label for exercise repetitions."
+  },
+  "repsFilter": "Reps filter",
+  "@repsFilter": {
+    "description": "Title for filtering records by repetition count."
+  },
+  "weightFilter": "Weight filter",
+  "@weightFilter": {
+    "description": "Title for filtering records by weight."
+  },
+  "greaterThan": "Greater than",
+  "@greaterThan": {
+    "description": "Label for a numeric lower-bound filter."
+  },
+  "lessThan": "Less than",
+  "@lessThan": {
+    "description": "Label for a numeric upper-bound filter."
+  },
+  "startDate": "Start date",
+  "@startDate": {
+    "description": "Label for the beginning of a date range."
+  },
+  "endDate": "End date",
+  "@endDate": {
+    "description": "Label for the end of a date range."
+  },
+  "actionClear": "Clear",
+  "@actionClear": {
+    "description": "Generic action for clearing a value, selection, or filter."
+  },
+  "actionOk": "OK",
+  "@actionOk": {
+    "description": "Generic confirmation action."
+  },
+  "actionClose": "Close",
+  "@actionClose": {
+    "description": "Generic close action."
+  },
+  "sortBy": "Sort by",
+  "@sortBy": {
+    "description": "Label for selecting a sort order."
+  },
+  "dateNewest": "Date (newest)",
+  "@dateNewest": {
+    "description": "Sort option that places newest records first."
+  },
+  "dateOldest": "Date (oldest)",
+  "@dateOldest": {
+    "description": "Sort option that places oldest records first."
+  },
+  "nameLabel": "Name",
+  "@nameLabel": {
+    "description": "Generic name label and sort option."
   }
 }

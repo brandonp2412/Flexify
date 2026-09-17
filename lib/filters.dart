@@ -1,4 +1,5 @@
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -53,7 +54,7 @@ class _FiltersState extends State<Filters> {
       isLabelVisible: filtersCount > 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: IconButton(
-        tooltip: "Filter",
+        tooltip: context.l10n.filter,
         icon: const Icon(Icons.filter_list),
         onPressed: () => _showFilterDialog(context),
       ),
@@ -64,7 +65,7 @@ class _FiltersState extends State<Filters> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Filters"),
+        title: Text(context.l10n.filters),
         content: SizedBox(
           width: double.maxFinite,
           child: StreamBuilder(
@@ -87,7 +88,9 @@ class _FiltersState extends State<Filters> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: 'Category'),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.categoryLabel,
+                      ),
                       initialValue: widget.category,
                       items: snapshot.data
                           ?.map(
@@ -104,22 +107,22 @@ class _FiltersState extends State<Filters> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.repeat),
-                      title: const Text('Reps'),
+                      title: Text(context.l10n.repsLabel),
                       subtitle: reps != null ? Text(reps) : null,
                       onTap: () {
                         Navigator.pop(context);
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text("Reps filter"),
+                            title: Text(context.l10n.repsFilter),
                             content: SingleChildScrollView(
                               child: Column(
                                 children: [
                                   TextField(
                                     onChanged: (value) => widget.setStream(),
                                     controller: widget.repsGtCtrl,
-                                    decoration: const InputDecoration(
-                                      labelText: "Greater than",
+                                    decoration: InputDecoration(
+                                      labelText: context.l10n.greaterThan,
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
@@ -129,8 +132,8 @@ class _FiltersState extends State<Filters> {
                                   TextField(
                                     onChanged: (value) => widget.setStream(),
                                     controller: widget.repsLtCtrl,
-                                    decoration: const InputDecoration(
-                                      labelText: "Less than",
+                                    decoration: InputDecoration(
+                                      labelText: context.l10n.lessThan,
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
@@ -142,7 +145,7 @@ class _FiltersState extends State<Filters> {
                             ),
                             actions: <Widget>[
                               TextButton(
-                                child: const Text('Clear'),
+                                child: Text(context.l10n.actionClear),
                                 onPressed: () async {
                                   widget.repsGtCtrl.text = '';
                                   widget.repsLtCtrl.text = '';
@@ -151,7 +154,7 @@ class _FiltersState extends State<Filters> {
                                 },
                               ),
                               TextButton(
-                                child: const Text('OK'),
+                                child: Text(context.l10n.actionOk),
                                 onPressed: () async {
                                   Navigator.pop(context);
                                 },
@@ -163,22 +166,22 @@ class _FiltersState extends State<Filters> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.scale),
-                      title: const Text('Weight'),
+                      title: Text(context.l10n.weightLabel),
                       subtitle: weight != null ? Text(weight) : null,
                       onTap: () {
                         Navigator.pop(context);
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text("Weight filter"),
+                            title: Text(context.l10n.weightFilter),
                             content: SingleChildScrollView(
                               child: Column(
                                 children: [
                                   TextField(
                                     onChanged: (value) => widget.setStream(),
                                     controller: widget.weightGtCtrl,
-                                    decoration: const InputDecoration(
-                                      labelText: "Greater than",
+                                    decoration: InputDecoration(
+                                      labelText: context.l10n.greaterThan,
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
@@ -188,8 +191,8 @@ class _FiltersState extends State<Filters> {
                                   TextField(
                                     onChanged: (value) => widget.setStream(),
                                     controller: widget.weightLtCtrl,
-                                    decoration: const InputDecoration(
-                                      labelText: "Less than",
+                                    decoration: InputDecoration(
+                                      labelText: context.l10n.lessThan,
                                     ),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
@@ -201,7 +204,7 @@ class _FiltersState extends State<Filters> {
                             ),
                             actions: <Widget>[
                               TextButton(
-                                child: const Text('Clear'),
+                                child: Text(context.l10n.actionClear),
                                 onPressed: () async {
                                   widget.weightGtCtrl.text = '';
                                   widget.weightLtCtrl.text = '';
@@ -210,7 +213,7 @@ class _FiltersState extends State<Filters> {
                                 },
                               ),
                               TextButton(
-                                child: const Text('OK'),
+                                child: Text(context.l10n.actionOk),
                                 onPressed: () async {
                                   Navigator.pop(context);
                                 },
@@ -222,7 +225,7 @@ class _FiltersState extends State<Filters> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.calendar_today),
-                      title: const Text("Start date"),
+                      title: Text(context.l10n.startDate),
                       onLongPress: () {
                         widget.setStart(null);
                         Navigator.pop(context);
@@ -235,6 +238,9 @@ class _FiltersState extends State<Filters> {
                             ? Text(
                                 DateFormat(
                                   shortDateFormat,
+                                  Localizations.localeOf(
+                                    context,
+                                  ).toLanguageTag(),
                                 ).format(widget.startDate!),
                               )
                             : Text(shortDateFormat),
@@ -253,7 +259,7 @@ class _FiltersState extends State<Filters> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.calendar_month),
-                      title: const Text("End date"),
+                      title: Text(context.l10n.endDate),
                       subtitle: Selector<SettingsState, String>(
                         selector: (p0, settings) =>
                             settings.value.shortDateFormat,
@@ -262,6 +268,9 @@ class _FiltersState extends State<Filters> {
                             ? Text(
                                 DateFormat(
                                   shortDateFormat,
+                                  Localizations.localeOf(
+                                    context,
+                                  ).toLanguageTag(),
                                 ).format(widget.endDate!),
                               )
                             : Text(shortDateFormat),
@@ -290,7 +299,7 @@ class _FiltersState extends State<Filters> {
         ),
         actions: <Widget>[
           TextButton(
-            child: const Text('Clear'),
+            child: Text(context.l10n.actionClear),
             onPressed: () async {
               widget.repsGtCtrl.text = '';
               widget.repsLtCtrl.text = '';
@@ -303,7 +312,7 @@ class _FiltersState extends State<Filters> {
             },
           ),
           TextButton(
-            child: const Text('Close'),
+            child: Text(context.l10n.actionClose),
             onPressed: () => Navigator.pop(context),
           ),
         ],

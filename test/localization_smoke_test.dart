@@ -31,4 +31,17 @@ void main() {
 
     expect(find.text('Flexify'), findsOneWidget);
   });
+
+  test('formats shared delete confirmation plurals', () {
+    final l10n = lookupAppLocalizations(const Locale('en'));
+
+    expect(
+      l10n.deleteRecordsConfirmation(1),
+      'Are you sure you want to delete 1 record? This action is not reversible.',
+    );
+    expect(
+      l10n.deleteRecordsConfirmation(3),
+      'Are you sure you want to delete 3 records? This action is not reversible.',
+    );
+  });
 }

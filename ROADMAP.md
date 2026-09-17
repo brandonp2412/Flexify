@@ -54,6 +54,8 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 ### App shell and shared UI
 
 - [ ] App title, bottom navigation, drawers/menus, shared dialogs, confirmation actions, generic buttons, empty states, errors, permissions, search, filters, and reusable widgets.
+  - [x] Localize bottom navigation, tab-removal UI, version-change toast, and shared app-search actions/dialog copy.
+  - [x] Localize reusable history/graph filter controls and render filter dates using the active locale.
 - [ ] Shared date/time, duration, count, set/rep, weight, distance, percentage, and ordinal formatting uses locale-aware APIs where appropriate.
 - [ ] Snackbar, validation, import/export, file-picker, notification-facing, and failure copy is localized.
 

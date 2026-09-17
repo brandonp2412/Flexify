@@ -1,3 +1,4 @@
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// Total height this floating dock occupies, including outer padding.
@@ -47,7 +48,7 @@ class BottomNav extends StatelessWidget {
               final index = entry.key;
               final tab = entry.value;
               final isSelected = index == currentIndex;
-              final label = labelForTab(tab);
+              final label = labelForTab(context, tab);
 
               return Semantics(
                 label: label,
@@ -130,20 +131,21 @@ class BottomNav extends StatelessWidget {
     }
   }
 
-  static String labelForTab(String tab) {
+  static String labelForTab(BuildContext context, String tab) {
+    final l10n = context.l10n;
     switch (tab) {
       case 'HistoryPage':
-        return 'History';
+        return l10n.navHistory;
       case 'PlansPage':
-        return 'Plans';
+        return l10n.navPlans;
       case 'GraphsPage':
-        return 'Graphs';
+        return l10n.navGraphs;
       case 'TimerPage':
-        return 'Timer';
+        return l10n.navTimer;
       case 'SettingsPage':
-        return 'Settings';
+        return l10n.navSettings;
       default:
-        return 'Error';
+        return l10n.errorLabel;
     }
   }
 }

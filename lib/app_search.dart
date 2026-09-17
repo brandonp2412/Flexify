@@ -1,3 +1,4 @@
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_page.dart';
@@ -58,27 +59,27 @@ class _AppSearchState extends State<AppSearch> {
       trailingMain = IconButton(
         key: const ValueKey('deleteButton'),
         icon: const Icon(Icons.delete),
-        tooltip: "Delete selected",
+        tooltip: context.l10n.deleteSelected,
         onPressed: () {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('Confirm Delete'),
+                title: Text(context.l10n.confirmDelete),
                 content: Text(
                   widget.confirmText ??
-                      'Are you sure you want to delete ${sel.length} records? This action is not reversible.',
+                      context.l10n.deleteRecordsConfirmation(sel.length),
                 ),
                 actions: <Widget>[
                   TextButton.icon(
-                    label: const Text('Cancel'),
+                    label: Text(context.l10n.actionCancel),
                     icon: const Icon(Icons.close),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                   TextButton.icon(
-                    label: const Text('Delete'),
+                    label: Text(context.l10n.actionDelete),
                     icon: const Icon(Icons.delete),
                     onPressed: () async {
                       Navigator.pop(context);
@@ -105,7 +106,7 @@ class _AppSearchState extends State<AppSearch> {
       desktopPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       mobilePadding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: SearchBar(
-        hintText: widget.hintText ?? "Search...",
+        hintText: widget.hintText ?? context.l10n.searchHint,
         controller: _ctrl,
         padding: WidgetStateProperty.all(const EdgeInsets.only(right: 8.0)),
         textCapitalization: TextCapitalization.sentences,
@@ -120,7 +121,9 @@ class _AppSearchState extends State<AppSearch> {
                   child: Icon(Icons.search),
                 )
               : IconButton(
-                  tooltip: sel.isNotEmpty ? 'Clear selection' : 'Clear search',
+                  tooltip: sel.isNotEmpty
+                      ? context.l10n.clearSelection
+                      : context.l10n.clearSearch,
                   onPressed: () {
                     if (sel.isNotEmpty) {
                       _clearSelection();
@@ -148,7 +151,7 @@ class _AppSearchState extends State<AppSearch> {
               selector: (p0, settings) => settings.value.showBodyWeight,
               builder: (context, showBodyWeight, child) => IconButton(
                 icon: const Icon(Icons.more_vert),
-                tooltip: "Show menu",
+                tooltip: context.l10n.showMenu,
                 onPressed: () async {
                   final RenderBox button =
                       context.findRenderObject() as RenderBox;
@@ -173,7 +176,7 @@ class _AppSearchState extends State<AppSearch> {
                       PopupMenuItem(
                         child: ListTile(
                           leading: const Icon(Icons.done_all),
-                          title: const Text('Select all'),
+                          title: Text(context.l10n.selectAll),
                           onTap: () {
                             Navigator.pop(context);
                             widget.onSelectAll();
@@ -184,7 +187,7 @@ class _AppSearchState extends State<AppSearch> {
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.clear_all),
-                            title: const Text('Clear selection'),
+                            title: Text(context.l10n.clearSelection),
                             onTap: () {
                               Navigator.pop(context);
                               _clearSelection();
@@ -194,7 +197,7 @@ class _AppSearchState extends State<AppSearch> {
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.edit),
-                            title: const Text('Edit'),
+                            title: Text(context.l10n.actionEdit),
                             onTap: () async {
                               await widget.onEdit();
                               if (!context.mounted) return;
@@ -205,7 +208,7 @@ class _AppSearchState extends State<AppSearch> {
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.share),
-                            title: const Text('Share'),
+                            title: Text(context.l10n.actionShare),
                             onTap: () async {
                               await widget.onShare();
                               if (!context.mounted) return;
@@ -218,7 +221,7 @@ class _AppSearchState extends State<AppSearch> {
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.scale),
-                            title: const Text('Weight'),
+                            title: Text(context.l10n.weightLabel),
                             onTap: () async {
                               Navigator.pop(context);
                               await Navigator.of(context).push(
@@ -233,7 +236,7 @@ class _AppSearchState extends State<AppSearch> {
                         PopupMenuItem(
                           child: ListTile(
                             leading: const Icon(Icons.settings),
-                            title: const Text('Settings'),
+                            title: Text(context.l10n.navSettings),
                             onTap: () async {
                               Navigator.pop(context);
                               await Navigator.of(context).push(

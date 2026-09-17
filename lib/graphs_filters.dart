@@ -1,4 +1,5 @@
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -37,26 +38,26 @@ class _GraphsFiltersState extends State<GraphsFilters> {
         stream: getCategoriesStream(),
         builder: (context, snapshot) {
           return PopupMenuButton(
-            tooltip: "Filter",
+            tooltip: context.l10n.filter,
             icon: const Icon(Icons.filter_list),
             itemBuilder: (context) => [
               PopupMenuItem(
                 enabled: false,
                 child: DropdownButtonFormField<GraphSort>(
-                  decoration: const InputDecoration(labelText: 'Sort by'),
+                  decoration: InputDecoration(labelText: context.l10n.sortBy),
                   initialValue: widget.sort,
-                  items: const [
+                  items: [
                     DropdownMenuItem(
                       value: GraphSort.dateDesc,
-                      child: Text('Date (newest)'),
+                      child: Text(context.l10n.dateNewest),
                     ),
                     DropdownMenuItem(
                       value: GraphSort.dateAsc,
-                      child: Text('Date (oldest)'),
+                      child: Text(context.l10n.dateOldest),
                     ),
                     DropdownMenuItem(
                       value: GraphSort.name,
-                      child: Text('Name'),
+                      child: Text(context.l10n.nameLabel),
                     ),
                   ],
                   onChanged: (value) {
@@ -69,7 +70,9 @@ class _GraphsFiltersState extends State<GraphsFilters> {
               PopupMenuItem(
                 enabled: false,
                 child: DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Category'),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.categoryLabel,
+                  ),
                   initialValue: widget.category,
                   items: snapshot.data
                       ?.map(
@@ -88,7 +91,7 @@ class _GraphsFiltersState extends State<GraphsFilters> {
               PopupMenuItem(
                 child: ListTile(
                   leading: const Icon(Icons.clear),
-                  title: const Text("Clear"),
+                  title: Text(context.l10n.actionClear),
                   onTap: () {
                     widget.setCategory(null);
                     widget.setSort(GraphSort.dateDesc);

@@ -183,6 +183,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'简体中文'**
   String get languageNameSimplifiedChinese;
+
+  /// Navigation label for workout history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get navHistory;
+
+  /// Navigation label for workout plans.
+  ///
+  /// In en, this message translates to:
+  /// **'Plans'**
+  String get navPlans;
+
+  /// Navigation label for exercise graphs.
+  ///
+  /// In en, this message translates to:
+  /// **'Graphs'**
+  String get navGraphs;
+
+  /// Navigation label for the rest timer.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get navTimer;
+
+  /// Navigation label for app settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navSettings;
+
+  /// Generic short error label.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorLabel;
+
+  /// Error shown when a configured app tab cannot be rendered.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t build tab content.'**
+  String get tabContentError;
+
+  /// Message shown when the user tries to hide the last visible navigation tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t hide everything!'**
+  String get cannotHideAllTabs;
+
+  /// Confirmation title shown before hiding a navigation tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {tab} tab?'**
+  String removeTabQuestion(String tab);
+
+  /// Explanation shown when removing a navigation tab.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add it back later from settings.'**
+  String get restoreTabFromSettings;
+
+  /// Toast shown after a navigation tab has been hidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed {tab}'**
+  String removedTab(String tab);
+
+  /// Toast announcing that the installed app version changed.
+  ///
+  /// In en, this message translates to:
+  /// **'New version {version}'**
+  String newVersion(String version);
+
+  /// Action that opens the app changelog.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes'**
+  String get changes;
+
+  /// Default hint shown in reusable search fields.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get searchHint;
+
+  /// Tooltip for deleting the currently selected records.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete selected'**
+  String get deleteSelected;
+
+  /// Title for a generic delete confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDelete;
+
+  /// Generic confirmation text for deleting one or more records.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Are you sure you want to delete 1 record? This action is not reversible.} other{Are you sure you want to delete {count} records? This action is not reversible.}}'**
+  String deleteRecordsConfirmation(int count);
+
+  /// Generic cancel action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get actionCancel;
+
+  /// Generic delete action.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get actionDelete;
+
+  /// Generic remove action.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get actionRemove;
+
+  /// Generic edit action.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get actionEdit;
+
+  /// Generic share action.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get actionShare;
+
+  /// Action or tooltip for clearing selected records.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear selection'**
+  String get clearSelection;
+
+  /// Tooltip for clearing the current search query.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
+  /// Tooltip for opening a contextual actions menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Show menu'**
+  String get showMenu;
+
+  /// Action for selecting every visible record.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAll;
+
+  /// Generic label for body or exercise weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weightLabel;
+
+  /// Tooltip for opening filtering controls.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// Title for a filtering dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filters;
+
+  /// Generic exercise category label.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// Short label for exercise repetitions.
+  ///
+  /// In en, this message translates to:
+  /// **'Reps'**
+  String get repsLabel;
+
+  /// Title for filtering records by repetition count.
+  ///
+  /// In en, this message translates to:
+  /// **'Reps filter'**
+  String get repsFilter;
+
+  /// Title for filtering records by weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight filter'**
+  String get weightFilter;
+
+  /// Label for a numeric lower-bound filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Greater than'**
+  String get greaterThan;
+
+  /// Label for a numeric upper-bound filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than'**
+  String get lessThan;
+
+  /// Label for the beginning of a date range.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get startDate;
+
+  /// Label for the end of a date range.
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get endDate;
+
+  /// Generic action for clearing a value, selection, or filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get actionClear;
+
+  /// Generic confirmation action.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get actionOk;
+
+  /// Generic close action.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get actionClose;
+
+  /// Label for selecting a sort order.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get sortBy;
+
+  /// Sort option that places newest records first.
+  ///
+  /// In en, this message translates to:
+  /// **'Date (newest)'**
+  String get dateNewest;
+
+  /// Sort option that places oldest records first.
+  ///
+  /// In en, this message translates to:
+  /// **'Date (oldest)'**
+  String get dateOldest;
+
+  /// Generic name label and sort option.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get nameLabel;
 }
 
 class _AppLocalizationsDelegate

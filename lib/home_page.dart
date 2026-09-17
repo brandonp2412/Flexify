@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plans_page.dart';
 import 'package:flexify/plan/start_plan_page.dart';
@@ -59,9 +60,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
       if (mounted)
         toast(
-          "New version ${pkg.version}",
+          context.l10n.newVersion(pkg.version),
           action: SnackBarAction(
-            label: 'Changes',
+            label: context.l10n.changes,
             onPressed: () => Navigator.of(
               context,
             ).push(MaterialPageRoute(builder: (context) => const WhatsNew())),
@@ -130,9 +131,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final state = context.read<SettingsState>();
     final tabs = state.value.tabs.split(',');
 
-    if (tabs.length == 1) return toast("Can't hide everything!");
+    if (tabs.length == 1) return toast(context.l10n.cannotHideAllTabs);
 
-    final label = BottomNav.labelForTab(tab);
+    final label = BottomNav.labelForTab(context, tab);
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
       showDragHandle: true,
@@ -148,14 +149,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Icon(BottomNav.iconForTab(tab)),
                   const SizedBox(width: 12),
                   Text(
-                    'Remove $label tab?',
+                    context.l10n.removeTabQuestion(label),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                'You can add it back later from settings.',
+                context.l10n.restoreTabFromSettings,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
@@ -164,14 +165,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context, false),
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.actionCancel),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: FilledButton(
                       onPressed: () => Navigator.pop(context, true),
-                      child: const Text('Remove'),
+                      child: Text(context.l10n.actionRemove),
                     ),
                   ),
                 ],
@@ -188,7 +189,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     await db.settings.update().write(
       SettingsCompanion(tabs: Value(tabs.join(','))),
     );
-    if (context.mounted) toast('Removed $label');
+    if (context.mounted) toast(context.l10n.removedTab(label));
   }
 
   @override
@@ -228,7 +229,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             if (tab == 'TimerPage')
               return TimerPage(tabController: _controller);
             if (tab == 'SettingsPage') return const SettingsPage();
-            return ErrorWidget("Couldn't build tab content.");
+            return ErrorWidget(context.l10n.tabContentError);
           }).toList(),
         ),
         if (!desktop)
@@ -306,7 +307,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  'Flexify',
+                                  context.l10n.appTitle,
                                   style: Theme.of(context).textTheme.titleLarge
                                       ?.copyWith(fontWeight: FontWeight.w700),
                                 ),
@@ -319,7 +320,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   icon: Icon(BottomNav.iconForTab(tab)),
                                   selectedIcon: Icon(BottomNav.iconForTab(tab)),
                                   label: Text(
-                                    BottomNav.labelForTab(tab),
+                                    BottomNav.labelForTab(context, tab),
                                     key: Key(tab),
                                   ),
                                 ),
