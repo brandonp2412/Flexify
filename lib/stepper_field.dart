@@ -31,11 +31,11 @@ class StepperField extends StatelessWidget {
     this.validator,
   });
 
-  void _bump(double delta) {
-    final next = ((double.tryParse(controller.text) ?? 0) + delta)
+  void _bump(BuildContext context, double delta) {
+    final next = ((parseDisplayNumber(context, controller.text) ?? 0) + delta)
         .clamp(0, double.infinity)
         .toDouble();
-    final text = toString(next);
+    final text = formatEditableNumber(context, next);
     controller.value = TextEditingValue(
       text: text,
       selection: TextSelection.collapsed(offset: text.length),
@@ -59,13 +59,13 @@ class StepperField extends StatelessWidget {
             suffixIcon ?? SizedBox(),
             IconButton(
               icon: const Icon(Icons.remove),
-              onPressed: () => _bump(-step),
-              onLongPress: () => _bump(-big),
+              onPressed: () => _bump(context, -step),
+              onLongPress: () => _bump(context, -big),
             ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => _bump(step),
-              onLongPress: () => _bump(big),
+              onPressed: () => _bump(context, step),
+              onLongPress: () => _bump(context, big),
             ),
           ],
         ),

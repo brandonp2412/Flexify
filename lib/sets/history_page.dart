@@ -394,28 +394,36 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     if (repsGt.text.isNotEmpty) {
       query.where(
         (tbl) =>
-            tbl.reps.isBiggerThanValue(double.tryParse(repsGt.text) ?? 0) &
+            tbl.reps.isBiggerThanValue(
+              parseDisplayNumber(context, repsGt.text) ?? 0,
+            ) &
             tbl.cardio.equals(false),
       );
     }
     if (repsLt.text.isNotEmpty) {
       query.where(
         (tbl) =>
-            tbl.reps.isSmallerThanValue(double.tryParse(repsLt.text) ?? 0) &
+            tbl.reps.isSmallerThanValue(
+              parseDisplayNumber(context, repsLt.text) ?? 0,
+            ) &
             tbl.cardio.equals(false),
       );
     }
     if (weightGt.text.isNotEmpty) {
       query.where(
         (tbl) =>
-            tbl.weight.isBiggerThanValue(double.tryParse(weightGt.text) ?? 0) &
+            tbl.weight.isBiggerThanValue(
+              parseDisplayNumber(context, weightGt.text) ?? 0,
+            ) &
             tbl.cardio.equals(false),
       );
     }
     if (weightLt.text.isNotEmpty) {
       query.where(
         (tbl) =>
-            tbl.weight.isSmallerThanValue(double.tryParse(weightLt.text) ?? 0) &
+            tbl.weight.isSmallerThanValue(
+              parseDisplayNumber(context, weightLt.text) ?? 0,
+            ) &
             tbl.cardio.equals(false),
       );
     }

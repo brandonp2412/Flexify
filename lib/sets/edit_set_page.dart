@@ -248,7 +248,8 @@ class _EditSetPageState extends State<EditSetPage> {
       onFieldSubmitted: (_) => selectAll(_weight),
       validator: (value) {
         if (value == null || value.isEmpty) return context.l10n.requiredField;
-        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
+        if (parseDisplayNumber(context, value) == null)
+          return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -265,7 +266,8 @@ class _EditSetPageState extends State<EditSetPage> {
       onChanged: (value) => setORM(),
       validator: (value) {
         if (value == null || value.isEmpty) return context.l10n.requiredField;
-        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
+        if (parseDisplayNumber(context, value) == null)
+          return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -307,7 +309,8 @@ class _EditSetPageState extends State<EditSetPage> {
       textInputAction: TextInputAction.next,
       validator: (value) {
         if (value == null || value.isEmpty) return null;
-        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
+        if (parseDisplayNumber(context, value) == null)
+          return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -339,7 +342,7 @@ class _EditSetPageState extends State<EditSetPage> {
         onTap: () => selectAll(_body),
         validator: (value) {
           if (value == null) return null;
-          if (value.isNotEmpty && double.tryParse(value) == null)
+          if (value.isNotEmpty && parseDisplayNumber(context, value) == null)
             return context.l10n.invalidNumber;
           return null;
         },
@@ -651,10 +654,10 @@ class _EditSetPageState extends State<EditSetPage> {
       name: _name,
       unit: _unit,
       created: _created,
-      reps: double.tryParse(_reps.text),
-      weight: double.tryParse(_weight.text),
-      bodyWeight: double.tryParse(_body.text),
-      distance: double.tryParse(_distance.text),
+      reps: parseDisplayNumber(context, _reps.text),
+      weight: parseDisplayNumber(context, _weight.text),
+      bodyWeight: parseDisplayNumber(context, _body.text),
+      distance: parseDisplayNumber(context, _distance.text),
       duration:
           (int.tryParse(_seconds.text) ?? 0) / 60 +
           (int.tryParse(_minutes.text) ?? 0),
@@ -739,8 +742,8 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   void setORM() {
-    final parsedReps = double.tryParse(_reps.text);
-    final parsedWeight = double.tryParse(_weight.text);
+    final parsedReps = parseDisplayNumber(context, _reps.text);
+    final parsedWeight = parseDisplayNumber(context, _weight.text);
     if (parsedReps == null || parsedWeight == null) return;
     final estimate = parsedReps > 0
         ? parsedWeight / (1.0278 - (0.0278 * parsedReps))

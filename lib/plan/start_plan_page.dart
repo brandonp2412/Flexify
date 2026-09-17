@@ -298,7 +298,8 @@ class _StartPlanPageState extends State<StartPlanPage>
         onFieldSubmitted: (value) => selectAll(_weight),
         validator: (value) {
           if (value == null || value.isEmpty) return context.l10n.requiredField;
-          if (double.tryParse(value) == null) return context.l10n.invalidNumber;
+          if (parseDisplayNumber(context, value) == null)
+            return context.l10n.invalidNumber;
           return null;
         },
       ),
@@ -371,7 +372,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 onTap: () => selectAll(_distance),
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
-                  if (double.tryParse(value) == null)
+                  if (parseDisplayNumber(context, value) == null)
                     return context.l10n.invalidNumber;
                   return null;
                 },
@@ -428,7 +429,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       onFieldSubmitted: (value) async => await save(snapshot, counts),
       validator: (value) {
         if (value == null || value.isEmpty) return context.l10n.requiredField;
-        if (double.tryParse(value) == null) return context.l10n.invalidNumber;
+        if (parseDisplayNumber(context, value) == null)
+          return context.l10n.invalidNumber;
         return null;
       },
     );
@@ -497,7 +499,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       _minutes.text = difference.inMinutes.toString();
       _seconds.text = (difference.inSeconds % 60).toString();
     } else if (!_cardio && settings.repEstimation) {
-      final parsedWeight = double.parse(_weight.text);
+      final parsedWeight = parseDisplayNumber(context, _weight.text);
+      if (parsedWeight == null) return;
       _stream.first.then((planExercises) {
         if (!mounted) return;
         final matches = _rpms!.where(
@@ -721,10 +724,10 @@ class _StartPlanPageState extends State<StartPlanPage>
       planId: Value(widget.plan.id),
       category: Value(_category),
       image: Value(_image),
-      reps: double.tryParse(_reps.text) ?? 0,
-      weight: double.tryParse(_weight.text) ?? 0,
+      reps: parseDisplayNumber(context, _reps.text) ?? 0,
+      weight: parseDisplayNumber(context, _weight.text) ?? 0,
       incline: Value(int.tryParse(_incline.text)),
-      distance: Value(double.tryParse(_distance.text) ?? 0),
+      distance: Value(parseDisplayNumber(context, _distance.text) ?? 0),
       notes: Value(_notes.text),
     );
 

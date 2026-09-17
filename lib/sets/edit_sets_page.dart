@@ -136,7 +136,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     onTap: () => selectAll(_weight),
                     validator: (value) {
                       if (value == null || value.isEmpty) return null;
-                      if (double.tryParse(value) == null)
+                      if (parseDisplayNumber(context, value) == null)
                         return l10n.invalidNumber;
                       return null;
                     },
@@ -154,7 +154,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     onTap: () => selectAll(_distance),
                     validator: (value) {
                       if (value == null) return null;
-                      if (double.tryParse(value) == null)
+                      if (parseDisplayNumber(context, value) == null)
                         return l10n.invalidNumber;
                       return null;
                     },
@@ -237,7 +237,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   onTap: () => selectAll(_reps),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
-                    if (double.tryParse(value) == null)
+                    if (parseDisplayNumber(context, value) == null)
                       return l10n.invalidNumber;
                     return null;
                   },
@@ -257,7 +257,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   onTap: () => selectAll(_weight),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
-                    if (double.tryParse(value) == null)
+                    if (parseDisplayNumber(context, value) == null)
                       return l10n.invalidNumber;
                     return null;
                   },
@@ -280,7 +280,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       onTap: () => selectAll(_body),
                       validator: (value) {
                         if (value == null || value.isEmpty) return null;
-                        if (double.tryParse(value) == null)
+                        if (parseDisplayNumber(context, value) == null)
                           return l10n.invalidNumber;
                         return null;
                       },
@@ -488,10 +488,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
       cardio: Value.absentIfNull(_cardio),
       restMs: Value.absentIfNull(_restMs),
       incline: Value.absentIfNull(int.tryParse(_incline.text)),
-      reps: Value.absentIfNull(double.tryParse(_reps.text)),
-      weight: Value.absentIfNull(double.tryParse(_weight.text)),
-      bodyWeight: Value.absentIfNull(double.tryParse(_body.text)),
-      distance: Value.absentIfNull(double.tryParse(_distance.text)),
+      reps: Value.absentIfNull(parseDisplayNumber(context, _reps.text)),
+      weight: Value.absentIfNull(parseDisplayNumber(context, _weight.text)),
+      bodyWeight: Value.absentIfNull(parseDisplayNumber(context, _body.text)),
+      distance: Value.absentIfNull(parseDisplayNumber(context, _distance.text)),
       duration:
           int.tryParse(_seconds.text) == null &&
               int.tryParse(_minutes.text) == null

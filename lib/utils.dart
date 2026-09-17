@@ -63,6 +63,27 @@ String formatDisplayNumber(
   return formatter.format(value);
 }
 
+String formatEditableNumber(BuildContext context, num value) => NumberFormat(
+  '0.##',
+  Localizations.localeOf(context).toLanguageTag(),
+).format(value);
+
+double? parseDisplayNumber(BuildContext context, String value) {
+  final input = value.trim();
+  if (input.isEmpty) return null;
+
+  final canonical = double.tryParse(input);
+  if (canonical != null) return canonical;
+
+  try {
+    return NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toLanguageTag(),
+    ).parse(input).toDouble();
+  } on FormatException {
+    return null;
+  }
+}
+
 String formatDisplayPercent(
   BuildContext context,
   num ratio, {

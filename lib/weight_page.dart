@@ -66,7 +66,7 @@ class _WeightPageState extends State<WeightPage> {
                   if (value == null || value.isEmpty) {
                     return context.l10n.requiredField;
                   }
-                  if (double.tryParse(value) == null) {
+                  if (parseDisplayNumber(context, value) == null) {
                     return context.l10n.invalidNumber;
                   }
                   return null;
@@ -146,7 +146,7 @@ class _WeightPageState extends State<WeightPage> {
           if (settings.strengthUnit != 'last-entry')
             _unit = settings.strengthUnit;
 
-          final value = double.parse(_ctrl.text);
+          final value = parseDisplayNumber(context, _ctrl.text)!;
           await db.gymSets.insertOne(
             GymSetsCompanion.insert(
               created: DateTime.now().toLocal(),

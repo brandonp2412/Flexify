@@ -115,7 +115,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 
 - [x] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
 - [x] Test representative singular/plural/count messages in languages with different plural behavior.
-- [ ] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
+- [x] Test locale-aware dates, decimal/group separators, durations, percentages, weights, and distances without changing stored numeric values.
 - [ ] Exercise text scaling and long-string layouts on phone and desktop widths; fix clipping/overflow by improving layouts rather than shortening translations unnaturally.
 - [ ] Verify dialogs, segmented controls, chips, navigation labels, settings rows, graph labels, timer UI, and notification copy with long translations.
 - [ ] Verify CJK rendering and font fallback on Android and desktop.

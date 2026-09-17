@@ -1,3 +1,6 @@
+import 'package:flexify/constants.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,7 +10,10 @@ Widget formattingApp(Locale locale, String Function(BuildContext) value) =>
     MaterialApp(
       locale: locale,
       supportedLocales: const [Locale('en'), Locale('de'), Locale('pt', 'BR')],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
       home: Builder(builder: (context) => Text(value(context))),
     );
 
@@ -21,6 +27,75 @@ void main() {
     );
 
     expect(find.text('1.234,5'), findsOneWidget);
+  });
+
+  testWidgets('parses localized decimal input using the active locale', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('de'),
+        (context) => '${parseDisplayNumber(context, '1.234,5')}',
+      ),
+    );
+
+    expect(find.text('1234.5'), findsOneWidget);
+  });
+
+  testWidgets('keeps canonical decimal input parse-safe in any locale', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('de'),
+        (context) => '${parseDisplayNumber(context, '12.5')}',
+      ),
+    );
+
+    expect(find.text('12.5'), findsOneWidget);
+  });
+
+  testWidgets('formats editable decimals using the active locale', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('de'),
+        (context) => formatEditableNumber(context, 12.5),
+      ),
+    );
+
+    expect(find.text('12,5'), findsOneWidget);
+  });
+
+  testWidgets('formats weight without changing its stored numeric value', (
+    tester,
+  ) async {
+    const storedWeight = 1234.5;
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('de'),
+        (context) =>
+            '${formatDisplayNumber(context, storedWeight)} ${displayMeasurementUnit(context.l10n, 'kg')}|$storedWeight',
+      ),
+    );
+
+    expect(find.text('1.234,5 kg|1234.5'), findsOneWidget);
+  });
+
+  testWidgets('formats distance without changing its stored numeric value', (
+    tester,
+  ) async {
+    const storedDistance = 12.5;
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('de'),
+        (context) =>
+            '${formatDisplayNumber(context, storedDistance)} ${displayMeasurementUnit(context.l10n, 'km')}|$storedDistance',
+      ),
+    );
+
+    expect(find.text('12,5 km|12.5'), findsOneWidget);
   });
 
   testWidgets('formats percentages using the active locale', (tester) async {
