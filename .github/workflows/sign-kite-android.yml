@@ -1,0 +1,114 @@
+name: Sign Kite Android
+run-name: Sign Kite ARM64 ${{ inputs.request_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      kite_sha:
+        description: Kite commit SHA to build
+        required: true
+        type: string
+      build_number:
+        description: Android build number
+        required: true
+        type: string
+      request_id:
+        description: Unique Kite workflow request ID
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  sign-kite-arm64:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Kite
+        uses: actions/checkout@v4
+        with:
+          repository: brandonp2412/Kite
+          ref: ${{ inputs.kite_sha }}
+          path: kite
+          persist-credentials: false
+
+      - name: Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '21'
+
+      - name: Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.2'
+          channel: stable
+          cache: true
+
+      - name: Android NDK
+        run: sdkmanager 'ndk;28.2.13676358'
+
+      - name: Dependencies
+        working-directory: kite
+        run: flutter pub get
+
+      - name: Restore Flexify F-Droid signing key
+        working-directory: kite
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          test -n "$ANDROID_STORE_PASSWORD"
+          test -n "$ANDROID_KEY_PASSWORD"
+          test -n "$ANDROID_KEY_ALIAS"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+          {
+            printf 'storePassword=%s\n' "$ANDROID_STORE_PASSWORD"
+            printf 'keyPassword=%s\n' "$ANDROID_KEY_PASSWORD"
+            printf 'keyAlias=%s\n' "$ANDROID_KEY_ALIAS"
+            printf 'storeFile=keystore.jks\n'
+          } > android/key.properties
+
+      - name: Build ARM64 Matrix bridge
+        working-directory: kite
+        env:
+          KITE_ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/28.2.13676358
+        run: tool/build_android_matrix_bridge.sh arm64-v8a
+
+      - name: Build signed ARM64 APK
+        working-directory: kite
+        run: |
+          flutter build apk \
+            --release \
+            --split-per-abi \
+            --target-platform android-arm64 \
+            --build-number '${{ inputs.build_number }}'
+          tool/verify_android_matrix_bridge.sh build/app/outputs/flutter-apk/app-arm64-v8a-release.apk arm64-v8a
+
+      - name: Verify Flexify F-Droid signer
+        working-directory: kite
+        run: |
+          set -euo pipefail
+          apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)"
+          test -n "$apksigner"
+          actual="$($apksigner verify --print-certs build/app/outputs/flutter-apk/app-arm64-v8a-release.apk | sed -n 's/^V2 Signer: certificate SHA-256 digest: //p' | tr -d ':[:space:]' | tr 'A-F' 'a-f')"
+          expected='011ee1a6e4e5ecd675f67fbf3d78ad82614a7a7a3f24ed71cc9c417154a0f0fd'
+          test "$actual" = "$expected"
+
+      - name: Upload signed ARM64 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: kite-arm64-${{ inputs.request_id }}
+          path: kite/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          if-no-files-found: error
+          retention-days: 1
