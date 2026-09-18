@@ -140,6 +140,7 @@ GymSetsCompanion graphGymSet(
   double weight, {
   double reps = 12,
   DateTime? date,
+  int? planId,
 }) {
   return GymSetsCompanion.insert(
     name: exercise,
@@ -148,6 +149,7 @@ GymSetsCompanion graphGymSet(
     unit: 'kg',
     created: date ?? graphFixtureNow,
     category: const Value('Arms'),
+    planId: Value.absentIfNull(planId),
   );
 }
 

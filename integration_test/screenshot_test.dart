@@ -204,21 +204,53 @@ void main() {
         skip: _skip('SettingsPage'),
       );
 
-      testWidgets(
-        'StartPlanPage',
-        (tester) async => generateScreenshot(
-          binding: binding,
-          tester: tester,
-          screenshotName: '4_$storeLocale',
-          localeIdentifier: appLocale,
-          navigateToPage: (context) async {
-            await tester.tap(find.text('Monday'));
-            await tester.pumpAndSettle();
-          },
-          tabBarState: 'PlansPage',
-        ),
-        skip: _skip('StartPlanPage'),
-      );
+      testWidgets('StartPlanPage', (tester) async {
+        final today = DateTime.now().toLocal();
+        for (var index = 0; index < 3; index++) {
+          await db
+              .into(db.gymSets)
+              .insert(
+                graphGymSet(
+                  'Barbell shoulder press',
+                  50 + (index * 2.5),
+                  reps: 8,
+                  date: today.subtract(Duration(minutes: index)),
+                  planId: 3,
+                ),
+              );
+        }
+        for (var index = 0; index < 2; index++) {
+          await db
+              .into(db.gymSets)
+              .insert(
+                graphGymSet(
+                  'Crunch',
+                  25,
+                  reps: 12,
+                  date: today.subtract(Duration(minutes: 10 + index)),
+                  planId: 3,
+                ),
+              );
+        }
+
+        try {
+          await generateScreenshot(
+            binding: binding,
+            tester: tester,
+            screenshotName: '4_$storeLocale',
+            localeIdentifier: appLocale,
+            navigateToPage: (context) async {
+              await tester.tap(find.text('Monday'));
+              await tester.pumpAndSettle();
+            },
+            tabBarState: 'PlansPage',
+          );
+        } finally {
+          await (db.delete(
+            db.gymSets,
+          )..where((tbl) => tbl.planId.equals(3))).go();
+        }
+      }, skip: _skip('StartPlanPage'));
     });
 
     group('Generate $storeLocale extra screenshots', () {
@@ -244,7 +276,7 @@ void main() {
               context: context,
               page: StrengthPage(
                 tabCtrl: MockTabController(),
-                name: screenshotExercise,
+                name: 'Shoulder press',
                 unit: 'kg',
                 data: data,
               ),
@@ -267,25 +299,55 @@ void main() {
         skip: _skip('GraphHistory'),
       );
 
-      testWidgets(
-        'EditPlanPage',
-        (tester) async => generateScreenshot(
-          binding: binding,
-          tester: tester,
-          screenshotName: '7_$storeLocale',
-          localeIdentifier: appLocale,
-          navigateToPage: (context) async {
-            final plan = await (db.plans.select()..limit(1)).getSingle();
-            if (!context.mounted) return;
-            navigateTo(
-              context: context,
-              page: EditPlanPage(plan: plan.toCompanion(false)),
-            );
-          },
-          tabBarState: 'GraphsPage',
-        ),
-        skip: _skip('EditPlanPage'),
-      );
+      testWidgets('EditPlanPage', (tester) async {
+        const planId = 99;
+        final plan = PlansCompanion.insert(
+          id: const Value(planId),
+          days: 'Tuesday,Thursday,Saturday',
+          title: const Value('Upper body strength'),
+        );
+        await db.into(db.plans).insert(plan);
+        await db.planExercises.insertAll(
+          [
+            'Barbell bench press',
+            'Barbell bent-over row',
+            'Dumbbell chest press',
+            'Dumbbell lateral raise',
+            'Barbell biceps curl',
+            'Triceps dip',
+          ].map(
+            (exercise) => PlanExercisesCompanion.insert(
+              planId: planId,
+              enabled: true,
+              exercise: exercise,
+            ),
+          ),
+        );
+
+        try {
+          await generateScreenshot(
+            binding: binding,
+            tester: tester,
+            screenshotName: '7_$storeLocale',
+            localeIdentifier: appLocale,
+            navigateToPage: (context) async {
+              if (!context.mounted) return;
+              navigateTo(
+                context: context,
+                page: EditPlanPage(plan: plan),
+              );
+            },
+            tabBarState: 'GraphsPage',
+          );
+        } finally {
+          await (db.delete(
+            db.planExercises,
+          )..where((tbl) => tbl.planId.equals(planId))).go();
+          await (db.delete(
+            db.plans,
+          )..where((tbl) => tbl.id.equals(planId))).go();
+        }
+      }, skip: _skip('EditPlanPage'));
 
       testWidgets(
         'TimerPage',

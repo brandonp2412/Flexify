@@ -40,29 +40,6 @@ Contributing to Flexify is directly correlated with Gains
 - Monero (XMR) `85tmLfWKbpd8nxQnUY878DDuFjmfcoCFXPWR7XYKLHBSbDZV8wxgoKYUtHtq1kHWJg4m14sdBXhYuUSbxEDA29d19XuREL5`
 - [GitHub sponsor](https://github.com/sponsors/brandonp2412)
 
-## Getting Started
-
-To get started with Flexify, follow these steps:
-
-1. **Clone the Repository**: Clone the Flexify repository to your local machine using Git:
-
-   ```bash
-   git clone --recursive https://github.com/brandonp2412/Flexify flexify
-   ```
-
-2. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies:
-
-   ```bash
-   cd flexify
-   flutter pub get
-   ```
-
-3. **Run the App**: Launch the Flexify app on your preferred device or emulator:
-
-   ```bash
-   flutter run
-   ```
-
 ## License
 
 Flexify is licensed under the [MIT License](LICENSE.md).
