@@ -98,12 +98,13 @@ packages:
     source: hosted
     version: "5.3.0"
   audioplayers_windows:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: audioplayers_windows
-      sha256: a70ae82bba2dfcb6eb03dd4815d737a2d46d33ea5a96a03f535cfcaac490e413
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/audioplayers_windows"
+      ref: "1dab3825cba3b21fd2fe2ec0cf333271da6c49e6"
+      resolved-ref: "1dab3825cba3b21fd2fe2ec0cf333271da6c49e6"
+      url: "https://github.com/bluefireteam/audioplayers.git"
+    source: git
     version: "4.4.1"
   badges:
     dependency: "direct main"

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flexify/audio/safe_audio_player.dart';
 import 'package:flexify/crash_logger.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
@@ -13,7 +13,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 class TimerState extends ChangeNotifier {
   NativeTimerWrapper timer = NativeTimerWrapper.emptyTimer();
   Timer? next;
-  AudioPlayer? player;
+  final SafeAudioPlayer player = SafeAudioPlayer(enabled: !kIsWeb);
   bool starting = false;
   bool justExpired = false;
   bool _keepScreenOn = true;
@@ -74,14 +74,6 @@ class TimerState extends ChangeNotifier {
 
   TimerState({bool keepScreenOn = true}) {
     _keepScreenOn = keepScreenOn;
-    if (!kIsWeb) {
-      try {
-        player = AudioPlayer();
-      } catch (error, stackTrace) {
-        talker.handle(error, stackTrace, 'Failed to create timer audio player');
-        player = null;
-      }
-    }
 
     androidChannel.setMethodCallHandler((call) async {
       if (call.method == 'tick') {
@@ -170,7 +162,7 @@ class TimerState extends ChangeNotifier {
   @override
   void dispose() {
     next?.cancel();
-    player?.dispose();
+    player.dispose();
     super.dispose();
   }
 
@@ -280,15 +272,11 @@ class TimerState extends ChangeNotifier {
     bool enableSound,
   ) async {
     talker.info('Rest timer expired');
-    if (player != null && enableSound) {
-      try {
-        await player!.play(
-          alarmSound?.isNotEmpty == true
-              ? DeviceFileSource(alarmSound!)
-              : AssetSource('argon.mp3'),
-        );
-      } catch (error, stack) {
-        CrashLogger.instance?.record(error, stack, context: 'notify.play');
+    if (enableSound) {
+      if (alarmSound?.isNotEmpty == true) {
+        await player.playFile(alarmSound!);
+      } else {
+        await player.playAsset('argon.mp3');
       }
     }
 
@@ -308,7 +296,7 @@ class TimerState extends ChangeNotifier {
       talker.handle(error, stackTrace, 'Failed to disable wakelock');
     });
     if (kIsWeb || !Platform.isAndroid) {
-      player?.stop();
+      player.stop();
       next?.cancel();
     } else {
       androidChannel.invokeMethod('stop');

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:flexify/audio/safe_audio_player.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -20,7 +20,7 @@ List<Widget> getTimerSettings(
   Setting settings,
   TextEditingController minCtrl,
   TextEditingController secCtrl,
-  AudioPlayer player,
+  SafeAudioPlayer player,
   BuildContext context,
 ) {
   final l10n = context.l10n;
@@ -259,7 +259,7 @@ List<Widget> getTimerSettings(
                     alarmSound: Value(result.files.single.path!),
                   ),
                 );
-                player.play(DeviceFileSource(result.files.single.path!));
+                await player.playFile(result.files.single.path!);
               },
               icon: const Icon(Icons.music_note),
               label: settings.alarmSound.isEmpty
@@ -407,7 +407,7 @@ class _TimerSettingsState extends State<TimerSettings> {
             .toString(),
   );
 
-  AudioPlayer? _player;
+  final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);
   List<GymSetsCompanion> _exercisesWithCustomTimers = [];
   final Map<String, TextEditingController> _minuteControllers = {};
   final Map<String, TextEditingController> _secondControllers = {};
@@ -415,16 +415,6 @@ class _TimerSettingsState extends State<TimerSettings> {
   @override
   void initState() {
     super.initState();
-
-    if (!kIsWeb) {
-      try {
-        _player = AudioPlayer();
-      } catch (error, stackTrace) {
-        talker.handle(error, stackTrace, 'Failed to create timer audio player');
-        _player = null;
-      }
-    }
-
     _loadExercisesWithCustomTimers();
   }
 
@@ -633,14 +623,14 @@ class _TimerSettingsState extends State<TimerSettings> {
       appBar: AppBar(title: Text(context.l10n.timers)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 116),
-        children: _player != null
+        children: _player.isAvailable
             ? [
                 ...getTimerSettings(
                   '',
                   settings.value,
                   _minCtrl,
                   _secCtrl,
-                  _player!,
+                  _player,
                   context,
                 ),
                 _buildPerExerciseSection(),
@@ -673,8 +663,8 @@ class _TimerSettingsState extends State<TimerSettings> {
       controller.dispose();
     }
 
-    _player?.stop();
-    _player?.dispose();
+    _player.stop();
+    _player.dispose();
     super.dispose();
   }
 }

@@ -56,6 +56,13 @@ dev_dependencies:
       ref: msvc_redist
 
 dependency_overrides:
+  # https://github.com/bluefireteam/audioplayers/pull/2019
+  # Prevent native Windows crashes when Media Foundation is unavailable.
+  audioplayers_windows:
+    git:
+      url: https://github.com/bluefireteam/audioplayers.git
+      ref: 1dab3825cba3b21fd2fe2ec0cf333271da6c49e6
+      path: packages/audioplayers_windows
   # https://github.com/flutter/flutter/issues/184750
   # 2.3.x moved Android path lookup to JNI and can SIGSEGV in release mode.
   path_provider_android: 2.2.23

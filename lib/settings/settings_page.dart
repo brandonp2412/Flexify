@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flexify/about_page.dart';
+import 'package:flexify/audio/safe_audio_player.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/logging.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/data_settings.dart';
@@ -36,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage>
   late final TextEditingController _minutes;
   late final TextEditingController _seconds;
 
-  AudioPlayer? _player;
+  final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);
 
   @override
   bool get wantKeepAlive => true;
@@ -56,14 +55,14 @@ class _SettingsPageState extends State<SettingsPage>
       filtered.addAll(
         getWorkoutSettings(context, _searchCtrl.text, settings.value),
       );
-      if (_player != null)
+      if (_player.isAvailable)
         filtered.addAll(
           getTimerSettings(
             _searchCtrl.text,
             settings.value,
             _minutes,
             _seconds,
-            _player!,
+            _player,
             context,
           ),
         );
@@ -288,7 +287,7 @@ class _SettingsPageState extends State<SettingsPage>
     _warmupSets.dispose();
     _minutes.dispose();
     _seconds.dispose();
-    _player?.dispose();
+    _player.dispose();
 
     super.dispose();
   }
@@ -309,18 +308,5 @@ class _SettingsPageState extends State<SettingsPage>
       text: (Duration(milliseconds: _settings.timerDuration).inSeconds % 60)
           .toString(),
     );
-
-    if (kIsWeb) return;
-
-    try {
-      _player = AudioPlayer();
-    } catch (error, stackTrace) {
-      talker.handle(
-        error,
-        stackTrace,
-        'Failed to create settings audio player',
-      );
-      _player = null;
-    }
   }
 }
