@@ -28,6 +28,12 @@ for attempt in 1 2; do
     continue
   fi
 
+  if [[ $attempt -eq 1 ]] &&
+    grep -Fq "Android document picker did not appear within" "$patrol_log"; then
+    echo "Android document picker did not appear; retrying Patrol once."
+    continue
+  fi
+
   exit "$patrol_status"
 done
 
