@@ -24,16 +24,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-Future<GymSet?> getFirstOfLastPlanSession(
+Future<GymSet?> _getFirstOfLastSession(
   AppDatabase database,
   String exercise,
-  int planId,
+  int? planId,
 ) async {
   final mostRecent =
       await (database.gymSets.select()
-            ..where(
-              (tbl) => tbl.name.equals(exercise) & tbl.planId.equals(planId),
-            )
+            ..where((tbl) {
+              final planScope = planId == null
+                  ? tbl.planId.isNull()
+                  : tbl.planId.equals(planId);
+              return tbl.name.equals(exercise) &
+                  planScope &
+                  tbl.hidden.equals(false);
+            })
             ..orderBy([
               (u) =>
                   OrderingTerm(expression: u.created, mode: OrderingMode.desc),
@@ -47,19 +52,41 @@ Future<GymSet?> getFirstOfLastPlanSession(
   final endOfDay = startOfDay.add(const Duration(days: 1));
 
   return (database.gymSets.select()
-        ..where(
-          (tbl) =>
-              tbl.name.equals(exercise) &
-              tbl.planId.equals(planId) &
+        ..where((tbl) {
+          final planScope = planId == null
+              ? tbl.planId.isNull()
+              : tbl.planId.equals(planId);
+          return tbl.name.equals(exercise) &
+              planScope &
+              tbl.hidden.equals(false) &
               tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
-              tbl.created.isSmallerThanValue(endOfDay.toUtc()),
-        )
+              tbl.created.isSmallerThanValue(endOfDay.toUtc());
+        })
         ..orderBy([
           (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
         ])
         ..limit(1))
       .getSingleOrNull();
 }
+
+/// Returns the first set from the most recent session for [exercise] in [planId].
+Future<GymSet?> getFirstOfLastPlanSession(
+  AppDatabase database,
+  String exercise,
+  int planId,
+) => _getFirstOfLastSession(database, exercise, planId);
+
+/// Returns the best StartPlan prefill without borrowing another plan's targets.
+///
+/// Existing history from [planId] wins. Before an exercise has ever been saved
+/// in that plan, standalone history is used as its initial baseline.
+Future<GymSet?> getStartPlanPrefill(
+  AppDatabase database,
+  String exercise,
+  int planId,
+) async =>
+    await getFirstOfLastPlanSession(database, exercise, planId) ??
+    await _getFirstOfLastSession(database, exercise, null);
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
@@ -120,6 +147,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                       EditPlanPage(plan: plan.toCompanion(false)),
                 ),
               );
+              if (!mounted) return;
+              await select(_selected);
             }
 
             Widget exerciseList() => snapshot.data!.isEmpty
@@ -249,7 +278,10 @@ class _StartPlanPageState extends State<StartPlanPage>
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: desktop || snapshot.data!.isEmpty
+              floatingActionButton:
+                  desktop ||
+                      snapshot.data!.isEmpty ||
+                      _selected >= snapshot.data!.length
                   ? null
                   : Padding(
                       padding: const EdgeInsets.only(
@@ -561,7 +593,19 @@ class _StartPlanPageState extends State<StartPlanPage>
   /// Showing the first set (rather than the last) gives a better baseline for
   /// progressive overload when weights decrease across sets.
   Future<GymSet?> getFirstOfLastSession(String exercise) =>
-      getFirstOfLastPlanSession(db, exercise, widget.plan.id);
+      getStartPlanPrefill(db, exercise, widget.plan.id);
+
+  Future<GymSet?> getExerciseTemplate(String exercise) =>
+      (db.gymSets.select()
+            ..where(
+              (tbl) => tbl.name.equals(exercise) & tbl.hidden.equals(true),
+            )
+            ..orderBy([
+              (u) =>
+                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
 
   @override
   void initState() {
@@ -771,13 +815,59 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> select(int index) async {
-    setState(() => _selected = index);
-    final first = await _stream.first;
-    if (first.isEmpty || index >= first.length) return;
-    final last = await getFirstOfLastSession(first[index].exercise);
-    if (last == null || !mounted) return;
+    final exercises =
+        await (db.planExercises.select()
+              ..where((pe) => pe.planId.equals(widget.plan.id) & pe.enabled)
+              ..orderBy([
+                (u) => OrderingTerm(
+                  expression: u.sequence,
+                  mode: OrderingMode.asc,
+                ),
+              ]))
+            .get();
+    if (!mounted) return;
 
-    setState(() => _updateGymSetTextFields(last));
+    if (exercises.isEmpty) {
+      setState(() {
+        _selected = 0;
+        _clearGymSetTextFields();
+      });
+      return;
+    }
+
+    final selected = index.clamp(0, exercises.length - 1);
+    final exercise = exercises[selected].exercise;
+    final last = await getFirstOfLastSession(exercise);
+    final template = last == null ? await getExerciseTemplate(exercise) : null;
+    if (!mounted) return;
+
+    setState(() {
+      _selected = selected;
+      if (last != null) {
+        _updateGymSetTextFields(last);
+      } else if (template != null) {
+        _updateGymSetTextFields(template);
+      } else {
+        _clearGymSetTextFields();
+      }
+    });
+  }
+
+  void _clearGymSetTextFields() {
+    final settings = context.read<SettingsState>().value;
+    _unit = settings.strengthUnit == 'last-entry'
+        ? 'kg'
+        : settings.strengthUnit;
+    _reps.text = '0';
+    _weight.text = '0';
+    _distance.text = '0';
+    _minutes.text = '0';
+    _seconds.text = '0';
+    _incline.text = '';
+    _cardio = false;
+    _category = null;
+    _image = null;
+    _notes.text = '';
   }
 
   void useBodyWeight() async {

@@ -272,6 +272,95 @@ void main() {
     },
   );
 
+  testWidgets('StartPlanPage swap immediately loads replacement defaults', (
+    WidgetTester tester,
+  ) async {
+    const originalExercise = 'Machine chest press';
+    const replacementExercise = 'Dumbbell chest press';
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final planId = await database.plans.insertOne(
+      planFixture(title: 'Chest day'),
+    );
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: planId, exercise: originalExercise),
+    );
+    await database.gymSets.insertAll([
+      gymSetFixture(
+        originalExercise,
+        reps: 10,
+        weight: 50,
+        planId: planId,
+        created: testNow.subtract(const Duration(days: 7)),
+      ),
+      gymSetFixture(
+        replacementExercise,
+        reps: 8,
+        weight: 30,
+        created: testNow.subtract(const Duration(days: 2)),
+      ),
+      gymSetFixture(
+        replacementExercise,
+        reps: 0,
+        weight: 0,
+        hidden: true,
+        created: testNow.subtract(const Duration(days: 1)),
+      ),
+    ]);
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
+      ),
+    );
+    final plan =
+        await (database.plans.select()..where((p) => p.id.equals(planId)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.widget<EditableText>(textFieldWithLabel('Reps')).controller.text,
+      '10',
+    );
+    expect(
+      tester
+          .widget<EditableText>(textFieldWithLabel('Weight (kg)'))
+          .controller
+          .text,
+      '50',
+    );
+
+    await tester.longPress(find.byKey(const Key(originalExercise)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Swap'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), replacementExercise);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ListTile, replacementExercise));
+    await tester.pumpAndSettle();
+
+    final swapped =
+        await (database.planExercises.select()
+              ..where((exercise) => exercise.planId.equals(planId)))
+            .getSingle();
+    expect(swapped.exercise, replacementExercise);
+    expect(find.text(replacementExercise), findsWidgets);
+    expect(
+      tester.widget<EditableText>(textFieldWithLabel('Reps')).controller.text,
+      '8',
+    );
+    expect(
+      tester
+          .widget<EditableText>(textFieldWithLabel('Weight (kg)'))
+          .controller
+          .text,
+      '30',
+    );
+  });
+
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     final database = harness.database;
@@ -397,6 +486,81 @@ void main() {
     expect(find.text('Set 1'), findsOne);
     expect(find.text('50 kg × 5'), findsOne);
   });
+
+  test(
+    'StartPlanPage prefill uses standalone history only before plan history',
+    () async {
+      final harness = await FlexifyTestHarness.create();
+      final database = harness.database;
+
+      final currentPlanId = await database.plans.insertOne(
+        planFixture(title: 'Current plan'),
+      );
+      final otherPlanId = await database.plans.insertOne(
+        planFixture(title: 'Other plan'),
+      );
+      const exercise = 'Dumbbell chest press';
+      await database.gymSets.insertAll([
+        gymSetFixture(
+          exercise,
+          reps: 8,
+          weight: 30,
+          created: testNow.subtract(const Duration(days: 4)),
+        ),
+        gymSetFixture(
+          exercise,
+          reps: 0,
+          weight: 0,
+          hidden: true,
+          created: testNow.subtract(const Duration(days: 3)),
+        ),
+        gymSetFixture(
+          exercise,
+          reps: 1,
+          weight: 100,
+          planId: otherPlanId,
+          created: testNow.subtract(const Duration(days: 2)),
+        ),
+      ]);
+
+      final initial = await getStartPlanPrefill(
+        database,
+        exercise,
+        currentPlanId,
+      );
+      expect(initial == null, false);
+      expect(initial!.planId, isNull);
+      expect(initial.reps, 8);
+      expect(initial.weight, 30);
+
+      await database.gymSets.insertAll([
+        gymSetFixture(
+          exercise,
+          reps: 6,
+          weight: 35,
+          planId: currentPlanId,
+          created: testNow.subtract(const Duration(days: 1)),
+        ),
+        gymSetFixture(
+          exercise,
+          reps: 5,
+          weight: 37.5,
+          planId: currentPlanId,
+          created: testNow.subtract(const Duration(days: 1, minutes: -5)),
+        ),
+      ]);
+
+      final planned = await getStartPlanPrefill(
+        database,
+        exercise,
+        currentPlanId,
+      );
+      expect(planned == null, false);
+      expect(planned!.planId, currentPlanId);
+      expect(planned.reps, 6);
+      expect(planned.weight, 35);
+    },
+  );
 
   test('StartPlanPage prefill lookup uses the same plan only', () async {
     final harness = await FlexifyTestHarness.create();
