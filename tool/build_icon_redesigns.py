@@ -36,6 +36,9 @@ class Design:
     title: str
     description: str
     paths: tuple[PathSpec, ...]
+    scale: float = 0.74
+    offset_x: float = 0.0
+    offset_y: float = 0.0
 
 
 CLASSIC = (
@@ -87,11 +90,11 @@ WIDE = (
 )
 
 DESIGNS = (
-    Design("solid-swoop", "Solid Swoop", "Compact solid silhouette with a smooth elbow sweep.", (PathSpec(CLASSIC, fill="#FFFFFF"),)),
-    Design("fine-outline", "Fine Outline", "Light single-line contour for a very minimal launcher mark.", (PathSpec(CLASSIC, stroke="#FFFFFF", stroke_width=5.2),)),
-    Design("angular-cut", "Angular Cut", "Geometric faceted silhouette with crisp corners.", (PathSpec(ANGULAR, fill="#FFFFFF"),)),
-    Design("soft-curve", "Soft Curve", "Rounder organic silhouette with a gentler bicep peak.", (PathSpec(SOFT, fill="#FFFFFF"),)),
-    Design("peak-flex", "Peak Flex", "Higher bicep peak and narrow wrist for a more athletic profile.", (PathSpec(PEAK, fill="#FFFFFF"),)),
+    Design("solid-swoop", "Solid Swoop", "Compact solid silhouette with a smooth elbow sweep.", (PathSpec(CLASSIC, fill="#FFFFFF"),), scale=0.72),
+    Design("fine-outline", "Fine Outline", "Light single-line contour for a very minimal launcher mark.", (PathSpec(CLASSIC, stroke="#FFFFFF", stroke_width=5.2),), scale=0.76),
+    Design("angular-cut", "Angular Cut", "Geometric faceted silhouette with crisp corners.", (PathSpec(ANGULAR, fill="#FFFFFF"),), scale=0.70),
+    Design("soft-curve", "Soft Curve", "Rounder organic silhouette with a gentler bicep peak.", (PathSpec(SOFT, fill="#FFFFFF"),), scale=0.72),
+    Design("peak-flex", "Peak Flex", "Higher bicep peak and narrow wrist for a more athletic profile.", (PathSpec(PEAK, fill="#FFFFFF"),), scale=0.72),
     Design(
         "split-stroke", "Split Stroke", "Two bold strokes that imply the arm without filling the silhouette.",
         (
@@ -108,6 +111,7 @@ DESIGNS = (
                 stroke="#FFFFFF", stroke_width=8.2,
             ),
         ),
+        scale=0.74,
     ),
     Design(
         "minimal-arc", "Minimal Arc", "Three heavy arcs reduced to the essential bicep gesture.",
@@ -116,6 +120,7 @@ DESIGNS = (
             PathSpec("M47 60 C58 52 71 53 80 61", stroke="#FFFFFF", stroke_width=9.5),
             PathSpec("M32 77 C40 85 51 84 58 77", stroke="#FFFFFF", stroke_width=9.5),
         ),
+        scale=0.76,
     ),
     Design(
         "contour-accent", "Contour Accent", "Outlined arm with a short inner muscle accent.",
@@ -123,9 +128,10 @@ DESIGNS = (
             PathSpec(CLASSIC, stroke="#FFFFFF", stroke_width=6.2),
             PathSpec("M53 61 C61 57 70 58 77 64", stroke="#FFFFFF", stroke_width=4.0),
         ),
+        scale=0.74,
     ),
-    Design("block-flex", "Block Flex", "Heavy squared silhouette tuned for tiny launcher sizes.", (PathSpec(BLOCK, fill="#FFFFFF"),)),
-    Design("wide-flex", "Wide Flex", "Broad confident silhouette with the fullest bicep shape.", (PathSpec(WIDE, fill="#FFFFFF"),)),
+    Design("block-flex", "Block Flex", "Heavy squared silhouette tuned for tiny launcher sizes.", (PathSpec(BLOCK, fill="#FFFFFF"),), scale=0.70),
+    Design("wide-flex", "Wide Flex", "Broad confident silhouette with the fullest bicep shape.", (PathSpec(WIDE, fill="#FFFFFF"),), scale=0.70),
 )
 
 
@@ -144,12 +150,17 @@ def svg_for(design: Design) -> str:
                 f'stroke-linecap="{path.linecap}"',
                 f'stroke-linejoin="{path.linejoin}"',
             ]
-        path_lines.append("  <path " + " ".join(attrs) + "/>")
+        path_lines.append("    <path " + " ".join(attrs) + "/>")
+    transform = (
+        f"translate({54 + design.offset_x} {54 + design.offset_y}) "
+        f"scale({design.scale}) translate(-54 -54)"
+    )
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108">\n'
         '  <rect width="108" height="108" rx="24" fill="#000000"/>\n'
+        f'  <g transform="{transform}">\n'
         + "\n".join(path_lines)
-        + "\n</svg>\n"
+        + "\n  </g>\n</svg>\n"
     )
 
 
@@ -165,15 +176,18 @@ def android_vector_for(design: Design) -> str:
                 f'android:strokeLineCap="{path.linecap}"',
                 f'android:strokeLineJoin="{path.linejoin}"',
             ]
-        path_lines.append("    <path\n        " + "\n        ".join(attrs) + "/>")
+        path_lines.append("        <path\n            " + "\n            ".join(attrs) + "/>")
     return (
         '<vector xmlns:android="http://schemas.android.com/apk/res/android"\n'
         '    android:width="108dp"\n'
         '    android:height="108dp"\n'
         '    android:viewportWidth="108"\n'
         '    android:viewportHeight="108">\n'
+        f'    <group android:pivotX="54" android:pivotY="54" '
+        f'android:scaleX="{design.scale}" android:scaleY="{design.scale}" '
+        f'android:translateX="{design.offset_x}" android:translateY="{design.offset_y}">\n'
         + "\n".join(path_lines)
-        + "\n</vector>\n"
+        + "\n    </group>\n</vector>\n"
     )
 
 
@@ -225,9 +239,9 @@ def generate_assets() -> None:
     readme = [
         "# Flexify icon redesigns", "",
         "Ten monochrome flexing-bicep launcher concepts. Each source SVG is 108x108 and",
-        "uses a black rounded-square preview background with white artwork. The Android",
-        "comparison APK generator uses the white artwork as the adaptive foreground and",
-        "supplies the black background separately.", "",
+        "uses a black rounded-square preview background with white artwork. The artwork",
+        "is deliberately inset into the Android adaptive-icon safe area so it retains",
+        "breathing room under Samsung and other launcher masks.", "",
         "| # | Design | Intent |", "|---|---|---|",
     ]
     for index, design in enumerate(DESIGNS, start=1):
@@ -362,7 +376,7 @@ def build_one_apk(output_dir: Path, index: int, design: Design) -> Path:
         run([
             str(BUILD_TOOLS / "aapt2"), "link", "-o", str(unsigned), "-I", str(ANDROID_JAR),
             "--manifest", str(work / "AndroidManifest.xml"), "--min-sdk-version", "26",
-            "--target-sdk-version", "37", "--version-code", str(index), "--version-name", "1.0",
+            "--target-sdk-version", "37", "--version-code", str(100 + index), "--version-name", "2.0",
             str(compiled),
         ])
 

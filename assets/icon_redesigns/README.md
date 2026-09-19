@@ -1,9 +1,9 @@
 # Flexify icon redesigns
 
 Ten monochrome flexing-bicep launcher concepts. Each source SVG is 108x108 and
-uses a black rounded-square preview background with white artwork. The Android
-comparison APK generator uses the white artwork as the adaptive foreground and
-supplies the black background separately.
+uses a black rounded-square preview background with white artwork. The artwork
+is deliberately inset into the Android adaptive-icon safe area so it retains
+breathing room under Samsung and other launcher masks.
 
 | # | Design | Intent |
 |---|---|---|
