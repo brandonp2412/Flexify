@@ -15,6 +15,7 @@ import 'app_localizations_ko.dart';
 import 'app_localizations_nl.dart';
 import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
+import 'app_localizations_tr.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -114,6 +115,7 @@ abstract class AppLocalizations {
     Locale('pl'),
     Locale('pt'),
     Locale('pt', 'BR'),
+    Locale('tr'),
     Locale('zh'),
     Locale('zh', 'CN'),
   ];
@@ -207,6 +209,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'简体中文'**
   String get languageNameSimplifiedChinese;
+
+  /// Stable native display name for the Turkish locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get languageNameTurkish;
 
   /// Navigation label for workout history.
   ///
@@ -1540,7 +1548,7 @@ abstract class AppLocalizations {
   /// **'App permissions'**
   String get appPermissions;
 
-  /// Action for sharing the application database.
+  /// Action for sharing the app database file.
   ///
   /// In en, this message translates to:
   /// **'Share database'**
@@ -2744,6 +2752,7 @@ class _AppLocalizationsDelegate
     'nl',
     'pl',
     'pt',
+    'tr',
     'zh',
   ].contains(locale.languageCode);
 
@@ -2794,6 +2803,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsPl();
     case 'pt':
       return AppLocalizationsPt();
+    case 'tr':
+      return AppLocalizationsTr();
     case 'zh':
       return AppLocalizationsZh();
   }
