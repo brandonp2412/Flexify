@@ -1642,10 +1642,6 @@
   "@appPermissionsDescription": {
     "description": "Description for the app permissions settings entry."
   },
-  "shareDatabase": "Share database",
-  "@shareDatabase": {
-    "description": "Action for sharing the application database."
-  },
   "longDateFormatDescription": "Used where space is abundant",
   "@longDateFormatDescription": {
     "description": "Description of the long date-format setting."
