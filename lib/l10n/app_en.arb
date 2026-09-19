@@ -60,6 +60,12 @@
   "@languageNameSimplifiedChinese": {
     "description": "Stable native display name for the Simplified Chinese locale."
   },
+
+  "languageNameTurkish": "Turkish",
+  "@languageNameTurkish": {
+    "description": "Stable native display name for the Turkish locale."
+  },
+
   "navHistory": "History",
   "@navHistory": {
     "description": "Navigation label for workout history."

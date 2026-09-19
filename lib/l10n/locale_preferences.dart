@@ -18,6 +18,7 @@ const selectableLocales = <Locale>[
   Locale('ja'),
   Locale('ko'),
   Locale('zh', 'CN'),
+  Locale('tr'),
 ];
 
 /// Returns the canonical identifier persisted for a supported [locale].
@@ -56,6 +57,7 @@ String localeDisplayName(AppLocalizations l10n, Locale locale) {
     'ja' => l10n.languageNameJapanese,
     'ko' => l10n.languageNameKorean,
     'zh-CN' => l10n.languageNameSimplifiedChinese,
+    'tr' => l10n.languageNameTurkish,
     _ => locale.toLanguageTag(),
   };
 }
