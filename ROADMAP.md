@@ -131,7 +131,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 
 - [x] Update widget tests that depend on English labels to use generated localizations or explicitly pin English where the test is not testing localization.
 - [x] Add focused tests for at least one Latin-script alternate locale and one CJK locale across core navigation/settings/workout flows.
-- [x] Ensure integration/Patrol tests remain deterministic by explicitly selecting or pinning a locale where necessary.
+- [x] Ensure integration tests remain deterministic by explicitly selecting or pinning a locale where necessary.
 - [x] Localize Play Store metadata for supported locales when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
 - [x] Add translated store screenshots only when practical; English screenshots may remain shared where store rules permit.
   - [x] Generate all eight Play Store phone screenshots for every first-wave non-English store locale, while keeping English as the default screenshot pipeline and shared tablet/desktop artwork where appropriate.

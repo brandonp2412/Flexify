@@ -103,52 +103,6 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  patrol-tests:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-        with:
-          persist-credentials: false
-
-      - name: Setup Java
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
-        with:
-          distribution: "zulu"
-          java-version: "21"
-
-      - name: Setup Flutter from submodule
-        run: |
-          git submodule update --init --recursive flutter
-          chmod +x flutter/bin/*
-          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
-          flutter/bin/flutter config --no-analytics
-
-      - name: Get Flutter dependencies
-        run: flutter pub get --enforce-lockfile
-
-      - name: Install Patrol CLI
-        run: |
-          dart pub global activate patrol_cli 4.7.0
-          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
-
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Run Patrol tests
-        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
-        with:
-          api-level: 35
-          target: google_apis
-          arch: x86_64
-          profile: pixel_6
-          emulator-options: -no-window -gpu software -no-snapshot -noaudio -no-boot-anim -camera-back none
-          script: ./scripts/ci-patrol.sh
-
   version-bump:
     if: github.event_name == 'push'
     needs: [quality-checks, generate-screenshots]

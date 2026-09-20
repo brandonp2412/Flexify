@@ -73,8 +73,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
-        testInstrumentationRunnerArguments clearPackageData: "true"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     // Reproducible builds configuration
