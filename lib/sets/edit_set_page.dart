@@ -179,22 +179,6 @@ class _EditSetPageState extends State<EditSetPage> {
               children: [
                 autocomplete(showBodyWeight),
                 const SizedBox(height: 12.0),
-                ListTile(
-                  title: Text(context.l10n.cardio),
-                  leading: _cardio
-                      ? const Icon(Icons.sports_gymnastics)
-                      : const Icon(Icons.fitness_center),
-                  contentPadding: EdgeInsets.zero,
-                  onTap: () => setState(() {
-                    _cardio = !_cardio;
-                  }),
-                  trailing: Switch(
-                    value: _cardio,
-                    onChanged: (value) => setState(() {
-                      _cardio = value;
-                    }),
-                  ),
-                ),
                 ...exerciseFields(),
                 const SizedBox(height: 12.0),
                 if (showBodyWeight && _name != 'Weight') ...[
@@ -211,6 +195,22 @@ class _EditSetPageState extends State<EditSetPage> {
                 ],
                 if (showNotes) ...[notesField(), const SizedBox(height: 12.0)],
                 dateSelector(),
+                ListTile(
+                  title: Text(context.l10n.cardio),
+                  leading: _cardio
+                      ? const Icon(Icons.sports_gymnastics)
+                      : const Icon(Icons.fitness_center),
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () => setState(() {
+                    _cardio = !_cardio;
+                  }),
+                  trailing: Switch(
+                    value: _cardio,
+                    onChanged: (value) => setState(() {
+                      _cardio = value;
+                    }),
+                  ),
+                ),
                 if (showImages) ...[const SizedBox(height: 8.0), imageField()],
               ],
             );

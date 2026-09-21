@@ -17,6 +17,11 @@ Finder textFieldWithLabel(String label) => find.descendant(
   matching: find.byType(EditableText),
 );
 
+Finder formFieldWithLabel(String label) => find.descendant(
+  of: find.widgetWithText(TextFormField, label),
+  matching: find.byType(EditableText),
+);
+
 class RecordingTimerState extends TimerState {
   String? lastTitle;
 
@@ -407,6 +412,122 @@ void main() {
               ..where((set) => set.name.equals('Barbell bench press')))
             .get();
     expect(gymSets.length, equals(2));
+  });
+
+  testWidgets('submit advances through strength fields and saves at the end', (
+    WidgetTester tester,
+  ) async {
+    const exercise = 'Keyboard press';
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final id = await database.plans.insertOne(planFixture());
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: id, exercise: exercise),
+    );
+    final plan = await (database.plans.select()..where((p) => p.id.equals(id)))
+        .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    final reps = textFieldWithLabel('Reps');
+    final weight = textFieldWithLabel('Weight (kg)');
+    await tester.enterText(reps, '8');
+    await tester.enterText(weight, '42');
+
+    await tester.tap(reps);
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(weight).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    final saved =
+        await (database.gymSets.select()
+              ..where((set) => set.name.equals(exercise) & set.hidden.not()))
+            .get();
+    expect(saved, hasLength(1));
+    expect(saved.single.reps, 8);
+    expect(saved.single.weight, 42);
+  });
+
+  testWidgets('submit advances to notes before saving when notes are enabled', (
+    WidgetTester tester,
+  ) async {
+    const exercise = 'Notes press';
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final id = await database.plans.insertOne(planFixture());
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: id, exercise: exercise),
+    );
+    await database.settings.update().write(testSettings(showNotes: true));
+    final plan = await (database.plans.select()..where((p) => p.id.equals(id)))
+        .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    final reps = textFieldWithLabel('Reps');
+    final weight = textFieldWithLabel('Weight (kg)');
+    final notes = formFieldWithLabel('Notes');
+    await tester.enterText(reps, '6');
+    await tester.enterText(weight, '31');
+    await tester.enterText(notes, 'controlled');
+
+    await tester.tap(weight);
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(notes).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    final saved =
+        await (database.gymSets.select()
+              ..where((set) => set.name.equals(exercise) & set.hidden.not()))
+            .getSingle();
+    expect(saved.notes, 'controlled');
+  });
+
+  testWidgets('weighted cardio submit follows visible fields', (
+    WidgetTester tester,
+  ) async {
+    const exercise = 'Weighted cardio';
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final id = await database.plans.insertOne(planFixture());
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: id, exercise: exercise),
+    );
+    await database.gymSets.insertOne(
+      gymSetFixture(
+        exercise,
+        cardio: true,
+        hidden: true,
+        unit: 'kg',
+        duration: 2,
+      ),
+    );
+    final plan = await (database.plans.select()..where((p) => p.id.equals(id)))
+        .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    final seconds = formFieldWithLabel('Seconds');
+    final weight = textFieldWithLabel('Weight (kg)');
+    final incline = formFieldWithLabel('Incline %');
+
+    await tester.tap(seconds);
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(weight).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(incline).focusNode.hasFocus, isTrue);
   });
 
   testWidgets(

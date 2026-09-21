@@ -106,6 +106,13 @@ class _StartPlanPageState extends State<StartPlanPage>
   final _minutes = TextEditingController(text: "0.0");
   final _seconds = TextEditingController(text: "0.0");
   final _incline = TextEditingController(text: "0");
+  final _repsFocus = FocusNode();
+  final _weightFocus = FocusNode();
+  final _notesFocus = FocusNode();
+  final _distanceFocus = FocusNode();
+  final _minutesFocus = FocusNode();
+  final _secondsFocus = FocusNode();
+  final _inclineFocus = FocusNode();
   final _key = GlobalKey<FormState>();
 
   int _selected = 0;
@@ -235,7 +242,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                                       if (_cardio)
                                         ...cardioFields(snapshot, counts),
                                       unitSelector(),
-                                      notesField(),
+                                      notesField(snapshot, counts),
                                       if (snapshot.data!.isNotEmpty &&
                                           _selected <
                                               snapshot.data!.length) ...[
@@ -270,7 +277,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                             if (!_cardio) ...strengthFields(snapshot, counts),
                             if (_cardio) ...cardioFields(snapshot, counts),
                             unitSelector(),
-                            notesField(),
+                            notesField(snapshot, counts),
                             Expanded(child: exerciseList()),
                           ],
                         ),
@@ -317,6 +324,30 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
+  bool get _usesWeightUnit =>
+      _unit == 'kg' || _unit == 'lb' || _unit == 'stone';
+
+  bool get _showNotes => context.read<SettingsState>().value.showNotes;
+
+  TextInputAction get _lastNumericInputAction =>
+      _showNotes ? TextInputAction.next : TextInputAction.done;
+
+  void _focusField(FocusNode focusNode, TextEditingController controller) {
+    focusNode.requestFocus();
+    selectAll(controller);
+  }
+
+  Future<void> _finishNumericInput(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) async {
+    if (_showNotes) {
+      _focusField(_notesFocus, _notes);
+      return;
+    }
+    await save(snapshot, counts);
+  }
+
   List<Widget> strengthFields(
     AsyncSnapshot<List<PlanExercise>> snapshot,
     List<GymCount> counts,
@@ -324,10 +355,11 @@ class _StartPlanPageState extends State<StartPlanPage>
     return [
       StepperField(
         controller: _reps,
+        focusNode: _repsFocus,
         labelText: context.l10n.repsLabel,
         step: 1,
         textInputAction: TextInputAction.next,
-        onFieldSubmitted: (value) => selectAll(_weight),
+        onFieldSubmitted: (value) => _focusField(_weightFocus, _weight),
         validator: (value) {
           if (value == null || value.isEmpty) return context.l10n.requiredField;
           if (parseDisplayNumber(context, value) == null)
@@ -350,13 +382,14 @@ class _StartPlanPageState extends State<StartPlanPage>
           Expanded(
             child: TextFormField(
               controller: _minutes,
+              focusNode: _minutesFocus,
               decoration: InputDecoration(labelText: context.l10n.minutesLabel),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: false,
               ),
               onTap: () => selectAll(_minutes),
               textInputAction: TextInputAction.next,
-              onFieldSubmitted: (value) => selectAll(_seconds),
+              onFieldSubmitted: (value) => _focusField(_secondsFocus, _seconds),
               validator: (value) {
                 if (value?.isNotEmpty == true && int.tryParse(value!) == null)
                   return context.l10n.invalidNumber;
@@ -368,13 +401,16 @@ class _StartPlanPageState extends State<StartPlanPage>
           Expanded(
             child: TextFormField(
               controller: _seconds,
+              focusNode: _secondsFocus,
               decoration: InputDecoration(labelText: context.l10n.secondsLabel),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: false,
               ),
               onTap: () => selectAll(_seconds),
               textInputAction: TextInputAction.next,
-              onFieldSubmitted: (value) => selectAll(_distance),
+              onFieldSubmitted: (value) => _usesWeightUnit
+                  ? _focusField(_weightFocus, _weight)
+                  : _focusField(_distanceFocus, _distance),
               validator: (value) {
                 if (value?.isNotEmpty == true && int.tryParse(value!) == null)
                   return context.l10n.invalidNumber;
@@ -387,20 +423,22 @@ class _StartPlanPageState extends State<StartPlanPage>
       const SizedBox(height: 8.0),
       Row(
         children: [
-          if (_unit == 'kg' || _unit == 'lb' || _unit == 'stone')
+          if (_usesWeightUnit)
             Expanded(child: _weightField(snapshot, counts))
           else
             Expanded(
               child: TextFormField(
                 textInputAction: TextInputAction.next,
                 controller: _distance,
+                focusNode: _distanceFocus,
                 decoration: InputDecoration(
                   labelText: context.l10n.distanceLabel,
                 ),
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                onFieldSubmitted: (value) => selectAll(_incline),
+                onFieldSubmitted: (value) =>
+                    _focusField(_inclineFocus, _incline),
                 onTap: () => selectAll(_distance),
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
@@ -414,6 +452,8 @@ class _StartPlanPageState extends State<StartPlanPage>
           Expanded(
             child: TextFormField(
               controller: _incline,
+              focusNode: _inclineFocus,
+              textInputAction: _lastNumericInputAction,
               decoration: InputDecoration(
                 labelText: context.l10n.inclinePercent,
               ),
@@ -421,7 +461,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                 decimal: true,
               ),
               onTap: () => selectAll(_incline),
-              onFieldSubmitted: (value) => save(snapshot, counts),
+              onFieldSubmitted: (value) =>
+                  _finishNumericInput(snapshot, counts),
               validator: (value) {
                 if (value == null || value.isEmpty) return null;
                 if (double.tryParse(value) == null)
@@ -445,6 +486,10 @@ class _StartPlanPageState extends State<StartPlanPage>
         : '';
     return StepperField(
       controller: _weight,
+      focusNode: _weightFocus,
+      textInputAction: _cardio && _usesWeightUnit
+          ? TextInputAction.next
+          : _lastNumericInputAction,
       labelText: context.l10n.weightWithUnit(_unit),
       step: weightStep(exerciseName, _unit),
       suffixIcon: Selector<SettingsState, bool>(
@@ -458,7 +503,9 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ),
       ),
-      onFieldSubmitted: (value) async => await save(snapshot, counts),
+      onFieldSubmitted: (value) => _cardio && _usesWeightUnit
+          ? _focusField(_inclineFocus, _incline)
+          : _finishNumericInput(snapshot, counts),
       validator: (value) {
         if (value == null || value.isEmpty) return context.l10n.requiredField;
         if (parseDisplayNumber(context, value) == null)
@@ -494,7 +541,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
-  Widget notesField() {
+  Widget notesField(
+    AsyncSnapshot<List<PlanExercise>> snapshot,
+    List<GymCount> counts,
+  ) {
     return Selector<SettingsState, bool>(
       selector: (context, settings) => settings.value.showNotes,
       builder: (context, showNotes, child) => Visibility(
@@ -505,7 +555,10 @@ class _StartPlanPageState extends State<StartPlanPage>
             const SizedBox(height: 8.0),
             TextFormField(
               controller: _notes,
+              focusNode: _notesFocus,
               maxLines: 3,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (value) => save(snapshot, counts),
               decoration: InputDecoration(labelText: context.l10n.notesLabel),
             ),
           ],
@@ -569,6 +622,13 @@ class _StartPlanPageState extends State<StartPlanPage>
     _incline.dispose();
     _notes.dispose();
     _seconds.dispose();
+    _repsFocus.dispose();
+    _weightFocus.dispose();
+    _notesFocus.dispose();
+    _distanceFocus.dispose();
+    _minutesFocus.dispose();
+    _secondsFocus.dispose();
+    _inclineFocus.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
     dbVersion.removeListener(_reloadDatabaseStreams);
