@@ -71,16 +71,39 @@ void main() {
     expect(find.bySemanticsLabel('Reps'), findsOne);
     expect(find.bySemanticsLabel('Minutes'), findsNothing);
 
-    await tester.tap(find.byType(Switch));
+    final cardio = find.widgetWithText(ListTile, 'Cardio');
+    await tester.ensureVisible(cardio);
+    await tester.tap(cardio);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsNothing);
     expect(find.bySemanticsLabel('Minutes'), findsOne);
 
-    await tester.tap(find.byType(Switch));
+    await tester.ensureVisible(cardio);
+    await tester.tap(cardio);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
+  });
+
+  testWidgets('cardio appears below created date', (WidgetTester tester) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(
+      tester,
+      EditSetPage(gymSet: gymSetModelFixture()),
+      surfaceSize: const Size(800, 1600),
+    );
+    await tester.pumpAndSettle();
+
+    final createdDate = find.widgetWithText(ListTile, 'Created date');
+    final cardio = find.widgetWithText(ListTile, 'Cardio');
+
+    expect(createdDate, findsOne);
+    expect(cardio, findsOne);
+    expect(
+      tester.getTopLeft(createdDate).dy,
+      lessThan(tester.getTopLeft(cardio).dy),
+    );
   });
 
   testWidgets('EditGymSet updates', (WidgetTester tester) async {

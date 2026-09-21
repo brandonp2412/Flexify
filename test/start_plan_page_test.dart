@@ -17,6 +17,11 @@ Finder textFieldWithLabel(String label) => find.descendant(
   matching: find.byType(EditableText),
 );
 
+Finder editableWithSemanticsLabel(String label) => find.descendant(
+  of: find.bySemanticsLabel(label),
+  matching: find.byType(EditableText),
+);
+
 class RecordingTimerState extends TimerState {
   String? lastTitle;
 
@@ -359,6 +364,117 @@ void main() {
           .text,
       '30',
     );
+  });
+
+  testWidgets('StartPlanPage submit focuses notes before saving', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(planFixture());
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: id, exercise: 'Bench press'),
+    );
+    await database.settings.update().write(testSettings(showNotes: true));
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    final reps = textFieldWithLabel('Reps');
+    final weight = textFieldWithLabel('Weight (kg)');
+    final notes = editableWithSemanticsLabel('Notes');
+
+    await tester.tap(reps);
+    await tester.showKeyboard(reps);
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+
+    expect(tester.widget<EditableText>(weight).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+
+    expect(notes, findsOne);
+    expect(tester.widget<EditableText>(notes).focusNode.hasFocus, isTrue);
+    expect(
+      await (database.gymSets.select()..where(
+            (set) => set.name.equals('Bench press') & set.hidden.equals(false),
+          ))
+          .get(),
+      isEmpty,
+    );
+
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    expect(
+      await (database.gymSets.select()..where(
+            (set) => set.name.equals('Bench press') & set.hidden.equals(false),
+          ))
+          .get(),
+      hasLength(1),
+    );
+  });
+
+  testWidgets('StartPlanPage cardio submit follows visible fields then saves', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(planFixture());
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: id, exercise: 'Sled push'),
+    );
+    await database.gymSets.insertOne(
+      gymSetFixture(
+        'Sled push',
+        hidden: true,
+        cardio: true,
+        unit: 'kg',
+        duration: 1,
+        weight: 20,
+      ),
+    );
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    final minutes = editableWithSemanticsLabel('Minutes');
+    final seconds = editableWithSemanticsLabel('Seconds');
+    final weight = textFieldWithLabel('Weight (kg)');
+    final incline = editableWithSemanticsLabel('Incline %');
+
+    await tester.tap(minutes);
+    await tester.showKeyboard(minutes);
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(seconds).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(weight).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(tester.widget<EditableText>(incline).focusNode.hasFocus, isTrue);
+
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    final saved =
+        await (database.gymSets.select()..where(
+              (set) => set.name.equals('Sled push') & set.hidden.equals(false),
+            ))
+            .get();
+    expect(saved, hasLength(1));
   });
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
