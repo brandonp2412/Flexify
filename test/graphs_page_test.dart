@@ -23,6 +23,9 @@ Future<void> pumpGraphsPage(
 void main() {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(showGlobalProgress: true),
+    );
     await pumpGraphsPage(tester, harness);
 
     expect(find.text('Search graphs...'), findsOne);
@@ -52,6 +55,9 @@ void main() {
 
   testWidgets('GraphsPage taps global progress', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(showGlobalProgress: true),
+    );
     await pumpGraphsPage(tester, harness, withTabController: true);
 
     await tester.tap(find.text('Global progress'));

@@ -94,6 +94,9 @@ SettingsCompanion testSettings({
   bool? groupHistory,
   bool? restTimers,
   bool? showNotes,
+  bool? showUnits,
+  bool? showImages,
+  bool? showGlobalProgress,
 }) {
   return SettingsCompanion(
     explainedPermissions: explainedPermissions == null
@@ -110,5 +113,10 @@ SettingsCompanion testSettings({
         : Value(groupHistory),
     restTimers: restTimers == null ? const Value.absent() : Value(restTimers),
     showNotes: showNotes == null ? const Value.absent() : Value(showNotes),
+    showUnits: showUnits == null ? const Value.absent() : Value(showUnits),
+    showImages: showImages == null ? const Value.absent() : Value(showImages),
+    showGlobalProgress: showGlobalProgress == null
+        ? const Value.absent()
+        : Value(showGlobalProgress),
   );
 }

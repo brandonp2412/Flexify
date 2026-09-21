@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,6 +36,9 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(showImages: true),
+    );
     final scroll = ScrollController();
     addTearDown(scroll.dispose);
 
