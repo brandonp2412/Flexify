@@ -1,0 +1,1 @@
+• bultar la versión mínima de ios a 14.0

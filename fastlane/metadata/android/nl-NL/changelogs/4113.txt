@@ -1,0 +1,2 @@
+• Harden Patrol testen tegen de tijd
+• fix: stabiliseren Android mappickerscontrole

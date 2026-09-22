@@ -1,0 +1,2 @@
+- Adicionar capacidade para esconder o progresso global
+- Fixar os cálculos de uma rep-max para os negativos

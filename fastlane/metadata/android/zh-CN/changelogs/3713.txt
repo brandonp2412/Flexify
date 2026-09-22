@@ -1,0 +1,1 @@
+• 在Waydroid工作流中使用预装adb而不是安装-android

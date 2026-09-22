@@ -1,0 +1,3 @@
+- Planlar için ekran görüntüsünde egzersizleri etkinleştir
+- Eklentili eğri grafikleri
+- Başarısız göçleri yönetmek

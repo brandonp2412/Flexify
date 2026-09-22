@@ -1,0 +1,5 @@
+- Correzione di problemi di app dopo 1.1.36
+- Utilizzare la barra di ricerca e aggiungere la toggle visibilità ai piani
+- Abilitare i timer di riposo sulle piattaforme desktop
+- Fare eseguire i timer sul desktop
+- Ritornare il lavoro sui timer desktop

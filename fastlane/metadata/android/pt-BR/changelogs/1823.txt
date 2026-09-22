@@ -1,0 +1,2 @@
+- Adicionar dicas de ferramentas para configurações
+- Corrigir backups automáticos acontecendo a cada 15 minutos

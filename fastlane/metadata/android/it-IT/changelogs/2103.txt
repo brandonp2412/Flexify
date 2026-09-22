@@ -1,0 +1,9 @@
+- Prendi tutte le screenshot in modalità scura
+- Mettila sui distintivi X in fila
+- Rettifica alcuni oscuri errori Android
+- Tocca per creare sui piani
+- Aggiornare la formulazione sulla pagina grafici non trovata
+- Mostra gli esercizi migliori dalla pagina grafici
+- Raggiustare il riempimento zero sulla pagina di storia del grafico non ci sono ancora dati
+- Altezze del grafico abbreviate
+- Rettificare il bug di peek grafico

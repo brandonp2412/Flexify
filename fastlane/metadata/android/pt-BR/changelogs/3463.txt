@@ -1,0 +1,2 @@
+• Corrigir muitos bugs potenciais
+• Incluir o divisor de data ao selecionar

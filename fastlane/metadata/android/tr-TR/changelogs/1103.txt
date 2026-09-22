@@ -1,0 +1,3 @@
+- Ayarlama testleri için kayıp çanaklar konusunda uyarı durdur
+- Github.com:brandonp2412/Flexify'nin ana şubesini birleştir
+- Ayarlar sayfası için test uyarıları düzelt

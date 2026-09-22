@@ -1,0 +1,5 @@
+- Dodaj multdex do Androida/aplikacji/build.gradle
+- Aktualizuj tętno do 3,22,0
+- Aktualizacja pubspec.lock
+- Aktualnianie ustawień kodów
+- Naprawianie wstawiania zapisów z strony historii

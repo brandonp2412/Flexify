@@ -1,0 +1,2 @@
+- Fixar repetições/peso iniciales a zero nos planos
+- Remover os zeros principais após salvar planos

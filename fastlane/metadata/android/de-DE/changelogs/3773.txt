@@ -1,0 +1,10 @@
+• Befestigen Sie die unteren Leiste, die nicht auf Bildschirmbildern für die Historie-Seite angezeigt wird
+• Befestigen Sie die unteren Balken, die in Bildschirmbildern verschleiert werden
+• Verbergen Sie ui vor Chrombildschirmen standardmäßig
+• Verhindern Sie, dass Timer laufen, wenn sie von der Planseite deaktiviert werden
+• Entfernen Sie die überflüssige sqlite3_flutter_libs
+• Aktualisieren .serena
+• Aktualisierung von flutter
+• Aktualisieren Sie Screenshots
+• Aktualisierung von serena
+• chore: android-Buildwarnungen zu beheben, gradle auf 8.14 zu aktualisieren

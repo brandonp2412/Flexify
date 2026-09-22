@@ -1,0 +1,1 @@
+- Corrección de la vista previa de las versiones de GitHub

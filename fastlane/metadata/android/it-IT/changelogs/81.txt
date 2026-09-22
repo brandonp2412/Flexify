@@ -1,0 +1,3 @@
+- Utilizzare la data di lunga data per la modifica di set di palestra
+- Correzione selezionando il primo elemento nella storia della palestra
+- Rettifica della linea nuova mancante nel commit di rilascio

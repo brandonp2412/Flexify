@@ -1,0 +1,10 @@
+• Ajouter le sous-module flutter à l'analyse Liste d'ignorance
+• Ajouter l' espacement manquant à add_exercise_page.dart
+• Fixer l' espacement des champs cardio
+• Correction d'une erreur déroulante dans weight_page.dart
+• Correction de l'erreur getSingle dans exercise_modal.dart
+• Correction d'une erreur de contexte étrange dans main.dart
+• Formatation
+• Faites un peu moins de lumière des boutons sur la page de l'heureuse
+• Supprimer la case de contrôle principale de l' historique de groupe
+• Supprimer les importations non utilisées

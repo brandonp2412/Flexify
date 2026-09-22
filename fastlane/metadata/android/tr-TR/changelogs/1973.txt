@@ -1,0 +1,1 @@
+- Planlardan eklenenden sonra egzersiz listesini yenilenti

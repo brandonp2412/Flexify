@@ -1,0 +1,2 @@
+• Kullanıcı tarafından görünür zamanlama ayarları iddiasını tercih edin
+• refactor: ölü masaüstü zamanlayıcı kodu kaldır

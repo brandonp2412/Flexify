@@ -1,0 +1,10 @@
+• Aşağı ilerleme göstergesine yatay dolgu ekle
+• Planlar sayfasında Android için kayıp yeniden düzenleme düğmesini ekle
+• Sekmeler arasında kaydırılan animasyon
+• Seçili göstergeyi değiştir
+• Öntanımlı dinlenme zamanları yanlış
+• Navigasyonun arkasında giden alt levhaları düzelt
+• Telefon bağlantılı olduğunda deploy.sh'i düzelt
+• Değiştirdikten sonra sekmeleri arasında kaydırılan gecikmeyi düzelt
+• Düzeltme tasarruf seti
+• Yıkılmış tarih sayfasının üstündeki doldurmayı artır

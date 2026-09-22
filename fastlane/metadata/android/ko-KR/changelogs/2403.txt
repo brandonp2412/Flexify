@@ -1,0 +1,2 @@
+- pubspec.lock를 업데이트
+- GitHub Actions 배포 작업 흐름 문제를 해결

@@ -1,0 +1,5 @@
+- Verbessern Sie die Leistung von Plänen
+- Fix-One-Rep-Max-Graphen
+- Fixplan zählt global
+- Lassen Sie sich leeren
+- Verbesserung der Startleistung

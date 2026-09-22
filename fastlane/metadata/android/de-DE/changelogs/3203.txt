@@ -1,0 +1,9 @@
+• Fehler beim Import von Daten behoben
+• die Einfuhr von Daten durch Einfügen von planExercises-Daten zu beheben und plans_list.dart zu aktualisieren, um einen nullsicheren Bewusstsein für den Betreiber zu verwenden
+• Beheben Sie das Problem #206 durch Aktualisierung der Art und Weise, wie Übungen gespeichert und aufgeteilt werden
+• Befestigen Sie die in Sicht schwebenden Ladegeräte
+• Festlegung von Migrationsplan-Betriebsanleitungen
+• Ändern Sie die Logik für die Aufnahme von Übungen in einen Plan, indem Sie PlanExercises-Daten nur für ausgewählte Übungen erstellen und sie nicht in der Plan.Exercises-Spalte speichern
+• Pause für die Reise
+• Erledigt die Datenmigration für bestehende Daten so, dass nur diese Übungen aus dem Plan entfernt werden, für den PlanExercises.enabled = false
+• Aktualisieren Sie die Testdateien, um sicherzustellen, dass alle Tests bestehen

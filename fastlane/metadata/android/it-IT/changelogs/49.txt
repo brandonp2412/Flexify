@@ -1,0 +1,1 @@
+Rettificare il messaggio di commit in bump

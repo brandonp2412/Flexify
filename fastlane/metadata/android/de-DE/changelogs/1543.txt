@@ -1,0 +1,5 @@
+- Behebt App-Abstürze nach 1.1.36
+- Verwenden Sie die Suchleiste und fügen Sie den Sichtveränderungspläne hinzu
+- Aktivieren Sie Ruhezeitgeber auf Desktop-Plattformen
+- Lassen Sie die Timer auf dem Desktop laufen
+- Arbeiten auf Desktop-Timern zurück

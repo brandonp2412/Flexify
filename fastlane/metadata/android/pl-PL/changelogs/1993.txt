@@ -1,0 +1,2 @@
+- Ustawić, że początkowe powtarzania/waga są zerowe w planach
+- Usunięcie wiodących zera po zapisanie planów

@@ -1,0 +1,4 @@
+• Hinzufügen von Punkten auf die Trendlinie
+• Fügen Sie einen kleinen Knopf am Ende des Timerkreises hinzu
+• Entfernen Sie die Differenz von migrate.sh
+• Kategorie festlegen, wenn Sie eine Übung auswählen

@@ -1,0 +1,2 @@
+- Google Play'e göndermek için deploy.sh için -p bayrağını istemek
+- Planlar için sayma sorgularını basitleştir

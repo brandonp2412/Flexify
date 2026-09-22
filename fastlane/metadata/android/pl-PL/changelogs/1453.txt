@@ -1,0 +1,2 @@
+- Naprawianie awarii aplikacji w czasie przerwy
+- Naprawianie ćwiczeń wyboru z strony historii

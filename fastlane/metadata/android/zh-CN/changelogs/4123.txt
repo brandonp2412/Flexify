@@ -1,0 +1,5 @@
+• 在 README 中修改项目描述
+• 更新README以修改项目标题
+• 在 README 中更新项目名称
+• 在pubspec.yaml中更新到2.2.0版本
+• fix: 解决开放历史和计划错误

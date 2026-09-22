@@ -1,0 +1,2 @@
+- Badania jednostkowe
+- Wyłącz siłę wcisku git z deploy.sh

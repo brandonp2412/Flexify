@@ -1,0 +1,3 @@
+• Fixer la capture d'écran de la page de l'heureuse
+• Fixer les tests de capture d'écran de la page de l'heureuse
+• Ne pas indiquer la notification de changement de fichier pour les captures d'écran

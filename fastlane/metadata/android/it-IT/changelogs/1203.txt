@@ -1,0 +1,3 @@
+- Rimuovere le stampe di debug dalle prove di migrazione
+- Rimuovere git push --force da deploy.sh
+- Risolvere tutti i problemi di migrazione della banca dati

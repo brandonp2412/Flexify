@@ -1,0 +1,6 @@
+• Microsoft Store dağıtımının sonlandırılması kontrollerini düzelt
+• Parse multiline Store dağıtım cevapları
+• Polonya'nın boş devletleri
+• Hedef yayınlanan Mağazanın gönderileri
+• ci: geçici Android seçicisi başarısızlığı tekrar deneyin
+• test: çizelge tarihi boş durum

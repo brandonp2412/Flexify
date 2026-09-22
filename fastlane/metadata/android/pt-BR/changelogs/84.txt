@@ -1,0 +1,6 @@
+- Remover texto sobre exercícios do plano
+- Fixar a poupança do plano inicial
+- Faça o máximo de # de conjuntos por exercício
+- Adicionar vírgulas seguidas
+- Simplificar a inicialização de configurações
+- Tirar do git depois de criar uma versão do GitHub

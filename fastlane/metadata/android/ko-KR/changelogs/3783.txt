@@ -1,0 +1,6 @@
+• 아래쪽 탐색 변종을 더해
+• 리눅스 실행 실패 시 스크립트를 추가
+• nav 변수를 삭제
+• 아래쪽 탐색을 업데이트하여 이 디자인됩니다
+• fix: gradle.properties에서 하드코드된 로컬 JDK 경로를 제거
+• fix: 침묵 MSVC coroutine deprecation 오류 Windows CI 빌드

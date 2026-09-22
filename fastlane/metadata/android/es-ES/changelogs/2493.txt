@@ -1,0 +1,2 @@
+- Actualizar pubspec.lock
+- Instalar los paquetes faltantes en deploy-windows-store

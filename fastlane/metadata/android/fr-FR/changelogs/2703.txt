@@ -1,0 +1,2 @@
+• Fixer la phase de déplacement finale du pipeline
+• Réparer le téléchargement des objets android

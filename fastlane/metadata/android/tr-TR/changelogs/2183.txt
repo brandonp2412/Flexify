@@ -1,0 +1,11 @@
+- Küresel grafikler ekle
+- Fastlane icon.png güncelleme
+- Egzersiz çekme elleri daha büyük yapın
+- Garip açık simgeler değiştir .
+- iOS'un sayı girişleri için onluk seçenekleri olduğundan emin olun
+- Tabları değiştirdiğinizde zamanlayıcı animasyonu önleyin
+- Uygulama simgesini karanlık tema yap
+- Tarih listesinde animate ekleme/kısıtlama
+- Tarih için göreceli zaman seçeneğini ekle
+- Sistemyi tekrar zamanlayıcı sayfasına ayarlayın
+- Grafın adını güncelleştirdikten sonra yanlış düzelt

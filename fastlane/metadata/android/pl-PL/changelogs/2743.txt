@@ -1,0 +1,4 @@
+• Dodaj kropkowaną linię trendu do wykresów
+• Dodaj mały przycisk na koniec obwodu zegarka
+• Usunięcie diffing z migrate.sh
+• Ustaw kategorię podczas wyboru ćwiczeń

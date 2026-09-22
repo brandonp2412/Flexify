@@ -1,0 +1,11 @@
+- Actualización de flutter
+- Doblar un ejercicio lo abre
+- Clarificar la eliminación de la página de gráficos
+- Toque largo en las pestañas para ocultarlas
+- Automaticamente capitalizar la búsqueda de ejercicios de plan
+- Corrección de errores en los gráficos de resistencia
+- Utilice la página en los gráficos -> añadir
+- Utilice la ruta en el cronómetro -> Configuraciones
+- Añadir gráfico de mirado
+- Corrección de error en la página de fuerza
+- Espera a que el gimnasio se establezca para guardar antes de actualizar las imágenes

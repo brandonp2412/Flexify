@@ -1,0 +1,4 @@
+• Rettificare le screenshot automatiche
+• Risolvere i problemi di spaziamento sulla pagina di set di modifica
+• Disaggregare la cronologia predefinita
+• Tirare prima dell' ultimo spinto

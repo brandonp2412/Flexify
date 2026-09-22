@@ -1,0 +1,5 @@
+• Ajouter une configuration de construction reproduisable pour F-Droid
+• Fixer les références à la construction windows msix
+• Réparation des problèmes de construction reproduisables - alignement des versions avec Flutter 3.29.3
+• Éviter le crash après l' importation de la base de données
+• Mise à jour de pubspec.lock

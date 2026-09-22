@@ -1,0 +1,11 @@
+- Festsetzung der Bereitstellung
+- Befestigen Sie die Ausfahrt von deploy.sh ohne Änderungen
+- Zurück "Erinnern Sie sich an die Stärke-Graph-Einstellungen"
+- Zurück "Erinnern Sie sich an Einstellungen für Cardio-Grafiken"
+- Verbergen Sie den Fortschritt beim Verbergen der Tab
+- Liste die heutigen Übungen zuerst auf der Grafikseite
+- Denken Sie an die Einstellungen für Cardio-Grafiken
+- Denken Sie an die Stärke-Graph-Einstellungen
+- Fügen Sie fehlende setState zu strength_line hinzu
+- Ermöglicht die Massenbearbeitung von Einheiten für Grafiken
+- Bearbeiten Sie die Tap-Grafiken für Kardio-Übungen

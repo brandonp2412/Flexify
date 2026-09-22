@@ -1,0 +1,10 @@
+• fix: guard screenshot contesto di navigazione
+• fix: riapertura della cartella picker dopo l'assegnazione di autorizzazione
+• fix: tentare di nuovo l'emulatore di screenshot transitorio si disconnette
+• fix: autorizzazione di backup di sequenza prima di scegliere la cartella
+• fix: stabilizzare Android test di selezionatore di cartelle
+• fix: stabilizzare le screenshot automatiche del timer
+• test: aggiungere apparecchi di database riutilizzabili
+• test: aggiungere il colpo di prova del widget condiviso
+• test: allineare i test StartPlanPage con i campi correnti
+• test: affermare il picker di documenti Android per pacchetto

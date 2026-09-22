@@ -1,0 +1,3 @@
+• Aggiungere il test di prestazioni del campione
+• Migliorare le prestazioni
+• Provare a risolvere le implementazioni di msstore

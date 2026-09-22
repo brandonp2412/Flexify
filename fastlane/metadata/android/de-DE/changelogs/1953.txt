@@ -1,0 +1,3 @@
+- Animation von Fortschrittsleisten von links nach rechts
+- Schärfen Sie den heutigen Plan mit benutzerdefinierten Titeln
+- Komprimieren Sie den Tagesauswahlgerät auf Plan-Editor

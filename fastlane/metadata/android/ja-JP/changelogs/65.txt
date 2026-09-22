@@ -1,0 +1,2 @@
+- アプリバーでグラフの名前編集を有効にする
+- Navigator.of(context.pop() => Navigator.pop(context)

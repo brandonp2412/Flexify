@@ -1,0 +1,3 @@
+• Permettre l'activation manuelle du flux de travail github
+• Réduction de la note à ruby 3.3 pour déployer-google-play
+• Fixer le nom de l'éditeur dans pubspec.yaml

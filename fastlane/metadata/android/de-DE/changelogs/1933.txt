@@ -1,0 +1,4 @@
+- Hinzufügen des benutzerdefinierten Tag-Selektors
+- Befestigen Sie die Verzögerungsvorgeschichte der Grafik
+- Wiederberechnen der ORM bei der Bearbeitung von Wiederholungen/Gewicht
+- Fügen Sie das Polster am Ende der Bearbeitungsplanseite hinzu

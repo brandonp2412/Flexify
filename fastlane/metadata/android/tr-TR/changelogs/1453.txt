@@ -1,0 +1,2 @@
+- Timeout'da uygulama çöküşünü düzelt
+- Tarih sayfasından seçme egzersizlerini düzelt

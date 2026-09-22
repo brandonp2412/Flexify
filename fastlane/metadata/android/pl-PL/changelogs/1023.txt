@@ -1,0 +1,8 @@
+- Dodaj ustawienie do ukrycia śledzenia masy ciała
+- Naprawianie zmian w wersjach fastlane
+- Usuń funkcję automatycznych kopii zapasowych
+- Dodaj ustawienie dla maksymalnego # zestawów
+- Dodaj minuty spoczynku/sekundy globalne przedawnienie
+- Ustawić ustawienia rozmiarów wypełnienia zgodne
+- Wstawić pasek wyszukiwania na górę ustawień
+- Przemianowanie widgetówSettings -> SettingsLine

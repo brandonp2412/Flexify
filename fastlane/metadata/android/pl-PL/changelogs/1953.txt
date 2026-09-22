@@ -1,0 +1,3 @@
+- Animowanie pasów postępu z lewej do prawej
+- Podkreśnij dzisiejszy plan z tytułami
+- Wybierz dzień na edytorie planu

@@ -1,0 +1,11 @@
+- Adicionar gráficos globais
+- Atualizar fastlane icon.png
+- Tornar as asas de arrastar o exercício maiores
+- Troca de ícones claros estranhos
+- Certifique-se de que o iOS tem opções decimais para entradas de números
+- Evite a animação do cronómetro sempre que trocar as guias
+- Faça um ícone de aplicativo temática escura
+- Adição/retiro de animação na lista de histórico
+- Adicionar opção de tempo relativo para data
+- Fix o sistema de volta na página do temporizador
+- Corrigir o nome do gráfico que está errado após a atualização

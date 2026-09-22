@@ -1,0 +1,2 @@
+- Utilisez le sous-module flutter et spécifiez la version Kotlin
+- Réglage de déploiement-windows-store

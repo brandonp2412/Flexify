@@ -1,0 +1,16 @@
+- Actualización de capturas de pantalla
+- Eliminar la facturación del nombre del proyecto en github.sh
+- Corrección de advertencias obsoletas
+- Pasar la búsqueda perdida a plan_list_test
+- Mover la vista de la zona segura al cuerpo del andamio
+- Toma todas las capturas de pantalla en modo oscuro
+- Ponlo en las insignias X en una fila
+- Corrección de algunos errores oscuros android
+- Añadir el número de versión a la política de privacidad
+- Añadir la versión de la política de privacidad a privacy_url
+- Toque para crear en los planes
+- Actualizar la redacción en la página de gráficos no se encuentra
+- Muestre los mejores ejercicios de la página de gráficos
+- Corrección de relleno cero en la página de historial del gráfico no hay datos todavía
+- Alturas de gráfico acortadas
+- Corrección de error de mirado del gráfico

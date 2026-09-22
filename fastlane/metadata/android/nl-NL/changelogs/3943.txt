@@ -1,0 +1,3 @@
+• Fix nieuwe installaties die geen melding vragen
+• Bepaalde eenheidstest
+• Schakel de notities uit voor nieuwe installaties

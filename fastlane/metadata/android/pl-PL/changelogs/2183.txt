@@ -1,0 +1,11 @@
+- Dodaj globalne wykresy
+- Aktualizuj ikonę fastlane.png
+- Uszczęśliwić ręczniki
+- Wymienisz dziwne wyraźne ikony
+- Upewnij się , że iOS ma decymalne opcje dla wprowadzania liczb
+- Zapobiegać animacji z czasem za każdym razem , gdy wymieniacie karty
+- Wykonać ikonę aplikacji tematycznie ciemne
+- Animacja dodaje/usuwa w wykazie historii
+- Dodaj opcję czasu względnego dla daty
+- Naprawianie systemu na stronie zegarka
+- Naprawić niewłaściwe nazwy grafu po aktualizacji

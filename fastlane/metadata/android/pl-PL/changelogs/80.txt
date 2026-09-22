@@ -1,0 +1,4 @@
+- Strona zestawów gimnastycznych na historię
+- Użyj znaczników w stronach wyszukiwania
+- Wykorzystaj jako domyślne ostatni wpis w ustawienie siłowni
+- Zestaw wykresów po datowej

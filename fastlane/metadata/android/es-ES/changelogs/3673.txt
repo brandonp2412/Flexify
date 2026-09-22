@@ -1,0 +1,1 @@
+• ci: hacer que la sección VirusTotal sea plegable en las liberaciones

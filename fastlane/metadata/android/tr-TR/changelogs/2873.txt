@@ -1,0 +1,3 @@
+• Zamanlayıcı sayfa ekran görüntüsünü düzelt
+• Zamanlayıcı sayfa ekran görüntüsü testlerini düzelt
+• Ekran çekimleri için değişim logunu gizle

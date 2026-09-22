@@ -1,0 +1,11 @@
+- Mise à niveau du flutter
+- Un exercice de double tapage l'ouvre.
+- Éliminer la suppression de la page graphiques
+- Touchez à des onglets pour les cacher
+- Capitalement automatique de recherche pour les exercices de plan
+- Correction des bugs sur les graphiques de résistance
+- Utilisez la page encastrée sur les graphiques -> ajouter
+- Utilisez le chemin en temps de pointe -> paramètres
+- Ajouter des graphiques en regardant
+- Correction du bug sur la page de résistance
+- Attendez que le réglage de salle de gym soit enregistré avant de mettre à jour les images

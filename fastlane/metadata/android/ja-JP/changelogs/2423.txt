@@ -1,0 +1,2 @@
+- pubspec.lock を更新する
+- GitHub Actions のワークフローから macOS/iOS のビルドを削除する

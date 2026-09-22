@@ -1,0 +1,5 @@
+- Android/app/build.gradle に multidex を追加する
+- フレッターを 3.22.0 に更新する
+- pubspec.lock を更新する
+- コード設定を更新する
+- 履歴ページから記録を挿入する修正

@@ -1,0 +1,3 @@
+- Bepaal niet-opgestelde afbeeldingen uit plannen
+- Fix desktop timers nog steeds op te schieten
+- Voeg kcal toe, meter aan afstandseenheid

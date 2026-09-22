@@ -1,0 +1,1 @@
+• ci: definir dias de retenção em etapas de upload de artefatos para limitar o uso de armazenamento

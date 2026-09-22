@@ -1,0 +1,3 @@
+- Les barres de progression d'animation de gauche à droite
+- Résumez le plan d' aujourd'hui avec des titres personnalisés
+- Compresser le sélecteur de jour sur l'éditeur de plan

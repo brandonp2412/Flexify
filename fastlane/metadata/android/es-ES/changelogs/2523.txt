@@ -1,0 +1,1 @@
+- Añadir etapa de desarreglo para la tienda de deploym-windows

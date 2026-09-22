@@ -1,0 +1,2 @@
+- Voeg de mogelijkheid toe om wereldwijde vooruitgang te verbergen
+- Fix een maximum van de berekening van de negatieven

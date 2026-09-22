@@ -1,0 +1,1 @@
+Utilisez flutter au lieu du sous-module dans deploy.sh

@@ -1,0 +1,8 @@
+- Gizleme geçmişi sekmeyi ekle
+- Otomatik yedeklemeyi değiştir
+- Düzenle sanat salonunun adı güncellenmiyor
+- Otomatik yedekleme ekle
+- Geçersiz kimlik ve oluşturmaları olan yeni spor setlerini düzelt
+- Import_data'da biçimlendirme kodu
+- Yeni bir spor setini eklerken jank düzelt
+- Dışarıya/İçkize veriler için file_picker kullanın

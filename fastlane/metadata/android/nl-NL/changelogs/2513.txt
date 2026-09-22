@@ -1,0 +1,2 @@
+- Fix msstore publish commando
+- Garandyspellen voor het testen in grafieken pagina

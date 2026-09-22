@@ -1,0 +1,5 @@
+- Befestigen Sie deploy.sh
+- Entfernen Sie windows + macos-Workflow nach dem Einsatz
+- Bearbeiten Sie die leere Seite nach dem Import von Datenbanken
+- Hinzufügen von Einheiten zu Cardio-Grafiken
+- Umstrukturieren Sie den lib-Ordner

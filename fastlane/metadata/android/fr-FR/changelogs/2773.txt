@@ -1,0 +1,4 @@
+• Fixer les répétitions en fonction de l'évolution par défaut
+• Allumez le bout du bouton de l'heureuse
+• Mettre à niveau les dépendances flutter
+• La mise à niveau de flutter vers 3.32.8

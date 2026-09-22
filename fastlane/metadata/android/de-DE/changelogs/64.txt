@@ -1,0 +1,7 @@
+- Alle Kommit-Nachrichten in die Release-Noten aufnehmen
+- Umbenennen von Export-/Importdatendateien
+- Refactor-Pläne Seite
+- Hinzufügen von Bearbeitungs-Ikonen für Grafiken Seite
+- Hinzufügen von Einstellungen für kurve Liniengrafiken
+- Liniengrafiken verkrümmt
+- Fix-Tooltips auf Zeilengraphen

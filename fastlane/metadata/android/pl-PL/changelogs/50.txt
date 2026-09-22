@@ -1,0 +1,1 @@
+Ustawić priorytet łupki w deploy.sh

@@ -1,0 +1,3 @@
+- Rifiutare le immagini non impostate dai piani
+- Ristabilire i timer desktop ancora in funzione
+- Aggiungere kcal, metri all'unità di distanza

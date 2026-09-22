@@ -1,0 +1,4 @@
+- Ajout d'estimation de représentation
+- Ajouter une estimation de durée
+- Ajouter le paramètre de chauffage manquant
+- Réparation du paquet windows

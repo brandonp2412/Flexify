@@ -1,0 +1,3 @@
+• Voeg screenshots toe aan github workflow [skip ci]
+• Fix flutter cache-toestemmingen
+• Speer sets uit de geschiedenis na het indienen van gewicht

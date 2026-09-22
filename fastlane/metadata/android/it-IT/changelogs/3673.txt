@@ -1,0 +1,1 @@
+• ci: rendere collabile la sezione VirusTotal in rilasci

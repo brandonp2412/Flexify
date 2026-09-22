@@ -1,0 +1,10 @@
+• Couvrir les préférences locales turques
+• Révoquer les actifs de redessinage temporaire d' icônes
+• chore(l10n): languageNameTurkish ajouté
+• chore: adresse révision de la localisation turque
+• feat(l10n): Localisation turque ajoutée
+• feat: ajouter des concepts d'icône de bicep pliante
+• feat: ajouter des ensembles de raffinement à l'icône 7 et 8
+• fix(l10n): Les entrées dupliquées supprimées
+• fix(tests): ajouter .gitignore pour exclure test_bundle.dart
+• fix(tests): ajouter la langue tr à la locale_preference_test

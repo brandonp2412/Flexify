@@ -1,0 +1,1 @@
+Satır grafiklerinin performansını geliştir

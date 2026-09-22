@@ -1,0 +1,6 @@
+• Tüm iç aletlerin adı _ prefiks ile değiştirildi
+• Fit-book'dan otomatik ekran görüntüleri ve e2e testlerini kopyalayın
+• chore: güncelleme deposu otomasyon kontrolleri
+• ci: Tamir Patrol ve Play dağıtım çalışma akışı
+• fix: Android JVM komisyon hedeflerini ayarlayın
+• fix: Gruplanmış geçmişte kardio ağırlığı korunması

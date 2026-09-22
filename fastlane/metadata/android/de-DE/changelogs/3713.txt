@@ -1,0 +1,1 @@
+• Verwenden Sie vorinstallierte adb anstelle von Setup-android im Waydroid-Workflow

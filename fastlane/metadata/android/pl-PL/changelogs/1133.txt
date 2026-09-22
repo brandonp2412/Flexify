@@ -1,0 +1,3 @@
+- Badania jednostkowe
+- Zmniejszyć ikonę w stronie ustawień
+- Użyj przycisków do wyboru okresu

@@ -1,0 +1,6 @@
+• Risolto i controlli di finalizzazione della distribuzione di Microsoft Store
+• Parse multiline Stores risposte di distribuzione
+• Stati vuoti polacchi
+• Pubblicato Target Invio in negozio
+• ci: riprova fallimento del picker Android transitorio
+• test: allineare la cronologia grafica stato vuoto

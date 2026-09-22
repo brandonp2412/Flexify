@@ -1,0 +1,3 @@
+- 자동 백업이 종료된 경우 백업 수신기를 중지
+- deploy.sh에서 macos로 rsync를 제거
+- macos.sh에서 zsh를 사용

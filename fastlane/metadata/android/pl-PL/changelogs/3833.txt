@@ -1,0 +1,6 @@
+• ci: automatyczne APK PR tylko dla PR właścicieli, instrukcje dla innych
+• ci: budować i przyłączać APK na żądania pull
+• ci: naprawić nieznaną wersję Flutter w budowie PR APK
+• ci: naprawić przytoczony URL artefakt w komentarzu APK PR
+• ci: zainstalowanie budowli PR obok siebie za pomocą odpowiednika .pr
+• ci: Sign PR builds z zaangażowanym publicznym testem

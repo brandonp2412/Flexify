@@ -1,0 +1,3 @@
+- Test strony ustawień
+- Wykorzystaj odpowiednią jednostkę dla grafik domyślnie
+- Dodaj ustawienie dla jednostek siłowych i kardio

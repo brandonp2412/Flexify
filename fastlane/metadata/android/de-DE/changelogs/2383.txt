@@ -1,0 +1,2 @@
+- Aktualisieren Sie flutter & pubspec.lock
+- Fix-Deploy nicht laufen

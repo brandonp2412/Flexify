@@ -1,0 +1,1 @@
+- Reverte mejor repetición métrica

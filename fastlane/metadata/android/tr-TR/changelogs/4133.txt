@@ -1,0 +1,10 @@
+• Çöpçü
+• README'de proje tanımını gözden geçir
+• Proje sloganını değiştirmek için README'yi güncelle
+• README'de proje adını güncelle
+• Pubspec.yaml'de 2.2.0'a güncelleme sürümü
+• ci: Patrol test kapı çıkartmalarını durdur
+• docs: README görüntülerine alternatif metin ekle
+• fix: Android yol sağlayıcısı JNI'nin kazalarını önlemek
+• fix: Doppel antrenman bildirim rotasından kaçının
+• fix: Bağlı ekran görüntüsü CI asılı

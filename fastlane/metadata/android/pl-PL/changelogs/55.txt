@@ -1,0 +1,1 @@
+Poprawa wydajności wykresów linii

@@ -1,0 +1,13 @@
+- Graphhöhen ändern
+- Hinzufügen von Einstellungen zur Verbergung von Kategorien
+- Verwenden Sie Symbolknopfen für die Löschung von Modalen
+- Hinzufügen von Benachrichtigungen zu neuen Aufzeichnungen
+- Hinzufügen der Kurvenglatteinstellung
+- Erhöhen Sie die Polsterung in der Suchbar
+- Aktualisieren Sie Grafiken nach Bearbeitung aus dem Historischen Blick
+- Festsetzung von Wiederholungen/Gewicht nach Abschluss einer Übung
+- Zurück nach Speicherung von Tab-Einstellungen
+- Vermischen Sie das System mit App-Themen
+- Vorbilder unterhalb der Aussehenseinstellungen
+- Festsetzung der Kurven, die nicht auf den Graphen-Spieck zutrifft
+- Mach Grafiken sexy aussehen 😎

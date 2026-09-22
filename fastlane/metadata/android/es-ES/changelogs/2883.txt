@@ -1,0 +1,10 @@
+• Añadir un contorno suave al círculo de cronometraje
+• Correcta +1 minuto en linux
+• Corrección de los cambios
+• Fija el github de la lectura de estilo [skip ci]
+• Corrección de la marca de anchura msstore [skip ci]
+• Frecuencia límite de las implementaciones de google play [skip ci]
+• Hacer las insignias más grandes [skip ci]
+• Hacer que las insignias sean consistentes con [skip ci]
+• Reverte "Fix msstore ancho de la insignia [skip ci]"
+• Utilice la liberación de github en lugar del artefacto [skip ci]

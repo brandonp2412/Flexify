@@ -1,0 +1,10 @@
+• Serena yapılandırmasını ekle
+• Sonsuza dek devam eden tostlar ayarlayın
+• Stepper'in görsellerini iyileştir
+• Düzenleme ayar sayfasını daha uyumlu hale getir
+• Girdi biçimi için çift etiketleri kaldır
+• Sıralama alanını basitleştir
+• Ekran çekimlerini güncelle
+• Flatter'ı 3.44.1'e yükselt.
+• Kotlin sürümünü yükselt
+• feat: +/- stepperler tekrarlama ve ağırlık alanlarına ekle

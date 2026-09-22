@@ -1,0 +1,3 @@
+• Toelaten aan hand te starten van github workflow
+• Verlaag naar ruby 3.3 voor deploy-google-play
+• Verdachte naam in pubspec.yaml

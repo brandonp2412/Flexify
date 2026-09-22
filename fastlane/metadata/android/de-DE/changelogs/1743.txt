@@ -1,0 +1,2 @@
+- Anpassungsleisten für die Pläne
+- Automatische Sicherungen hinzufügen

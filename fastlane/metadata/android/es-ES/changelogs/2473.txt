@@ -1,0 +1,10 @@
+- Pruebas de unidad fija
+- Instalación de corrección en windows store
+- Añadir paso de depuración a la lista de archivos descargados en la implementación Windows Store
+- Corrección de la implementación de Windows Store: utilice el archivo local MSIX en lugar de la URL de liberación de GitHub
+- Corrección de la implementación de Windows Store: asegúrese de que se crea la versión de GitHub antes de la implementación de Windows Store
+- Actualizar las capturas de pantalla del escritorio
+- Corrección de todas las capturas de pantalla automáticas para escritorio
+- Actualizar pubspec.lock
+- Añadir guión para actualizar cromedriver
+- Correcta lo que es nueva página

@@ -1,0 +1,3 @@
+- Ritornazione degli esercizi di piano di fissazione
+- Sostituire il pulsante + con la voce di ricerca per nuovi piani
+- Rimuovere il blocco di informazioni di dipendenza per f-droid

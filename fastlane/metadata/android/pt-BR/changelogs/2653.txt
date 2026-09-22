@@ -1,0 +1,4 @@
+• Mudar o fluxo de trabalho do github
+• Fixar o fluxo de trabalho do github
+• Remover o git redundante puxar
+• Replicar o sistema de construção fdroid para versões de construção android

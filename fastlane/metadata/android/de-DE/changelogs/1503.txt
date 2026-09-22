@@ -1,0 +1,2 @@
+- Behebt App-Abstürze nach 1.1.36
+- Verbessern Sie das Kardioredigerlebnis

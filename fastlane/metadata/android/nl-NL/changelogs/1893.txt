@@ -1,0 +1,4 @@
+- Fix terug navigatie soms niet werken
+- Verberg een rep max schattingen op cardio-oefeningen
+- Verbeteren van de prestaties van de krachtigheidsblad
+- Verbeteren van de prestaties van de plannen

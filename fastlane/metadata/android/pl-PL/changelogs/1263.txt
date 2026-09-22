@@ -1,0 +1,6 @@
+- Badania stałe
+- Dodaj menu podział
+- Naprawić klawiaturę błyskawice w przesyłaniu
+- Przedwzór poprzednio utworzonych dat na wielokrotnym edycji
+- Użyj nowego selektora jednostki do wykresu kardiologicznego
+- Kopiowanie rozmiaru grafiki siły do kardio

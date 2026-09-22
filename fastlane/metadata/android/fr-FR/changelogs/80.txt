@@ -1,0 +1,4 @@
+- Pagine des séries de gym sur l'histoire
+- Capitalizer les phrases de la barre de recherche
+- Utilisez le dernier réglage entré en salle de gym comme par défaut
+- Les graphiques de commande par date créée

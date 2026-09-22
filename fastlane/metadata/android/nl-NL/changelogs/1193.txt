@@ -1,0 +1,2 @@
+- Vernoem macos zip-bestand
+- Fix ios controle voor integratieproeven

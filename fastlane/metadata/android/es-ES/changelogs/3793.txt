@@ -1,0 +1,6 @@
+• Paralelamente inferior para gradle basado en la acción github
+• Actualización de capturas de pantalla
+• feat: aclarar el campo de categoría es para etiquetado de grupos musculares
+• fix: aplicar la categoría sembrada al registrar un ejercicio por primera vez
+• fix: sólo las etiquetas se lanzan después de que todas las construcciones de plataforma tienen éxito
+• fix: pin liberación construye y etiqueta a un SHA de compromiso exacto

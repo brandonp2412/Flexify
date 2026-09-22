@@ -1,0 +1,1 @@
+• fix(android): AGP를 9.3.2로 업데이트

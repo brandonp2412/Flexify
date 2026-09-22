@@ -1,0 +1,2 @@
+- pubspec.lock를 업데이트
+- deploy-windows-store에 실종된 패키지를 설치

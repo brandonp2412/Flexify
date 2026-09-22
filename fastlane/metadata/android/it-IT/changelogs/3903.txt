@@ -1,0 +1,1 @@
+• Bump IOS versione minima a 14.0

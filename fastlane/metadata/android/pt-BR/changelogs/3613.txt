@@ -1,0 +1,10 @@
+• Adicionar mensagem para plano vazio
+• Faça com que a tela fique desligada por padrão e mude o toque nas configurações
+• feat: Adicionar um monitor de manutenção na configuração de temporizadores de descanso
+• feat: substituir o tema dropdown por SegmentedButton + AMOLED toggle
+• fix: proteção contra a lista de exercícios vazia no StartPlanPage salvar e selecionar
+• fix: Prevenir o segmento de embalagem de teclado SegmentedButton corrigindo o enchimento
+• fix: Reduzir o tamanho do texto de 16 para 14 nas listas de história e gráficos
+• fix: liberar o bloqueio de alarme quando o cronómetro expirar ou não estiver em funcionamento
+• fix: Mostre bar de lanches no aplicativo e corrija a notificação quando o cronómetro expirar com a tela ligada
+• fix: encolher e silenciar texto de seguimento na história e gráficos de lista de azulejos

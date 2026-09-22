@@ -1,0 +1,3 @@
+- Dodaj przycisk ustawienia do aktywnych planów
+- Naprawianie przycisków przepisu na komputerze
+- Wyłącz czasy odpoczynku w zestawach rozgrzewania

@@ -1,0 +1,1 @@
+- Fixes de setos máximos contam com os planos

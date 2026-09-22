@@ -1,0 +1,2 @@
+- Atualizar pubspec.lock
+- Remover as construtores macOS/iOS do fluxo de trabalho Ações do GitHub

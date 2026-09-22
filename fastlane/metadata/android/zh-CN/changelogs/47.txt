@@ -1,0 +1,1 @@
+在 deploy.sh 中使用 flutter 而不是子模块

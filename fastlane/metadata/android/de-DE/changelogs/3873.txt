@@ -1,0 +1,1 @@
+• fix: commit_sha aus dem richtigen Schritt im Freisetzungsworkflow zu erfassen

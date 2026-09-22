@@ -1,0 +1,3 @@
+- Fix edit fitness set verwijdering
+- Verwijder verwijderen oproepen naar instellingen
+- Maak de luisteraars op de verwerking schoon

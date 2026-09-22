@@ -1,0 +1,2 @@
+- Actualizar pubspec.lock
+- Corrección de problemas de flujo de trabajo de implementación de GitHub Actions

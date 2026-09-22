@@ -1,0 +1,5 @@
+- Corrección de fallas de la aplicación después de 1.1.36
+- Utilice la barra de búsqueda y añada el interruptor de visibilidad a los planes
+- Habilitar temporizadores de descanso en plataformas de escritorio
+- Hacer que los temporizadores se ejecuten en el escritorio
+- Revertir el trabajo en los temporizadores de escritorio

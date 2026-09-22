@@ -1,0 +1,4 @@
+• Réparation de deploy.sh
+• Faire plus facile à toucher les feuilles inférieures
+• Faire plus facile de voir/taper sur les dernières entrées
+• Utiliser des poids de garçon précédemment insérés dans la page plans

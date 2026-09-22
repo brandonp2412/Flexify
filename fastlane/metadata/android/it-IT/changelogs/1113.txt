@@ -1,0 +1,3 @@
+- Aggiungere pagina
+- Aggiungere icone alla pagina impostazioni
+- Cambiare l'icona dei piani

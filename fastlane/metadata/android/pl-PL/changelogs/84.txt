@@ -1,0 +1,6 @@
+- Usunięcie tekstu na temat ćwiczeń planu
+- Utrzymanie oszczędności od planu startowego
+- Wykonuj maksymalne # zestawów na ćwiczenia
+- Dodaj kolejne komaty
+- Uproszczenie inicjalizacji ustawień
+- Wyciągnij z git po utworzeniu wersji GitHub

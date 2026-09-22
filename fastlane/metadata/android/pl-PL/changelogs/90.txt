@@ -1,0 +1,10 @@
+- Badania stałe
+- Dodaj metrykę najlepszych odtwarzań
+- Przejmieszczenie AppGroupBy -> Okres
+- Poprawa wydajności grafiki kardio
+- Wzrost wersjiKód w wersjach uniwersalnych
+- Naprawa dodawania minut z strony z czasem
+- Komentarz na zaopatrzenie w szybkie
+- W stosownych przypadkach użyj lokalnego czasu
+- Logika ustawień refaktorów
+- Kod refaktorów

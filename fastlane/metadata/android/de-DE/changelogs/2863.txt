@@ -1,0 +1,10 @@
+• Erlaubt die Konfiguration von Ruhezeitpunkten pro Übung von der Einstellungsseite
+• Animieren von Tasten auf Suchbalken
+• Animation von Kontrollkästen auf select
+• Animation Fab auf der Seite Plane
+• Fehler beim Bearbeiten von Einheiten für ein Graph
+• Befestigen Sie den ersten/letzten Werkzeugstip auf den Schweifdiagrammen
+• Befestigen Sie die Leitungskonen für Pläne mit Titeln
+• Festlegung von Planlisten
+• Behebung der Entfernung von benutzerdefinierten Timern auf der Einstellungsseite
+• Machen Sie den Tagesauswahlmaschinen dunkler

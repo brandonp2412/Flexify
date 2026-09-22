@@ -1,0 +1,6 @@
+• Adicionar um monte de variantes de navegação inferior
+• Adicionar script para quando o Linux não funciona
+• Eliminar as variantes de navegação
+• Atualizar navegação inferior para ser um desenho de pílula
+• fix: remover o caminho do JDK local com código rígido de gradele.properties
+• fix: Silêncio MSVC coroutine erro de deprecação quebra de Windows CI construção

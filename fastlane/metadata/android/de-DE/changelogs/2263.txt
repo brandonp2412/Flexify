@@ -1,0 +1,1 @@
+- Festlegen von Statusleisten auf android 15

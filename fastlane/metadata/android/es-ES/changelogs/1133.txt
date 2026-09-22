@@ -1,0 +1,3 @@
+- Pruebas de unidad fija
+- Reducir los iconos en la página de configuración
+- Usar botones para seleccionar el período

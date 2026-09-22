@@ -1,0 +1,4 @@
+- 更新 pubspec.lock
+- 设置 msstore 部署
+- 配置Google Play版本
+- 删除 . actrc 和 MIGRATION_GUIDE.md

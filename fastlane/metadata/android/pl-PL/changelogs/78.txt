@@ -1,0 +1,5 @@
+- Naprawa prób ekranu
+- Uczyń import danych bardziej solidnym
+- Jasne plany przed przywozem
+- Zapobieganie otwarciu punktu grafu na szczupku
+- Włącz w tryb zwolnienia telefon po rozmieszczeniu

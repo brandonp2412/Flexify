@@ -1,0 +1,3 @@
+• Permettere l' attivazione manuale del flusso di lavoro di github
+• Riduzione al rubin 3.3 per lo sviluppo-google-play
+• Fissare il nome dell'editore in pubspec.yaml

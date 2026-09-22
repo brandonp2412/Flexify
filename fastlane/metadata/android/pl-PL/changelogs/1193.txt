@@ -1,0 +1,2 @@
+- Przemianowanie pliku macOS zip
+- Sprawdzenie iokreślenia w celu wykonania testów integracyjnych

@@ -1,0 +1,5 @@
+- Fijación de los temporizadores
+- Optimiza los temporizadores
+- Corrección de copias de seguridad automáticas
+- Añadir ajustes de vibración y sonido de alarma
+- Optimiza la página de grafico de edición

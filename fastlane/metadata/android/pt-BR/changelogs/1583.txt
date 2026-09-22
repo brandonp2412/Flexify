@@ -1,0 +1,4 @@
+- Adicionar estimativa de repetição
+- Adicionar estimativa de duração
+- Adicionar configuração de aquecimento faltante
+- Fixar o pacote de janelas

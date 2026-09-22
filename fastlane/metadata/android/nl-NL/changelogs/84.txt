@@ -1,0 +1,6 @@
+- Verwijder tekst over plan oefeningen
+- Fix besparing vanaf startplan
+- Maak maximaal # sets per oefening
+- Voeg achtervolgkommen toe
+- Vergemakkelijken van de initialisatie van instellingen
+- Trek van git na het maken van een GitHub release

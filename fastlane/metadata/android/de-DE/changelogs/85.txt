@@ -1,0 +1,5 @@
+- Sicherung automatisch am Ende eines Plans
+- Aktualisieren Sie den Startplan nach Bearbeitung eines Eintrags
+- Gruppengewicht nach Woche nach Standard
+- Aktualisierung von Abhängigkeiten
+- Befestigen Sie den Variablenamen der Einstellungsseite

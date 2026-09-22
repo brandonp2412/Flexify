@@ -1,0 +1,3 @@
+- /Pokonać wykrycie końca planów
+- Dodaj więcej testów jednostkowych ustawień
+- Naprawa odwołanie , gdy deploy.sh nie działa

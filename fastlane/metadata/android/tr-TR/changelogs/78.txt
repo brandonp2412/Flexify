@@ -1,0 +1,5 @@
+- Ekran çekimleri testlerini düzelt
+- Verileri aktarmayı daha güçlü hale getir
+- İçe aktarmadan önce net planlar
+- Çıkışta grafik noktasının açılmasını engelle
+- Uygulama sonrası telefonuma serbest bırakma modunu koy

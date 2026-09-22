@@ -1,0 +1,3 @@
+• Fija el directorio de trabajo de Java Stage
+• Asegúrese de que la caja de flutter siempre sea ejecutable
+• Mover la configuración de java

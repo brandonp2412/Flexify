@@ -1,0 +1,10 @@
+• Permettere la configurazione di temporizzatori di riposo per esercizio dalla pagina impostazioni
+• Animatore dei pulsanti sulle barre di ricerca
+• Animare le caselle di controllo su selezionare
+• Animatoriale Fab sulla pagina dei piani
+• Risolto il bug quando si modificano le unità di un grafico
+• Rettifica del primo/ultimo suggerimento su grafici di galleggiamento
+• Fissare icone di punta per piani con titoli
+• Test di lista di pianificazione
+• Rettificare la rimozione di temporizzatori personalizzati sulla pagina impostazioni
+• Rendi il selettore di giorno più scuro

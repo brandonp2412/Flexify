@@ -1,0 +1,3 @@
+- Aclara qué hace la edición del gráfico
+- Tamaño límite claro al buscar historial
+- Permite desplazarse por el extremo anterior en listas

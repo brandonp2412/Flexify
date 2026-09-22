@@ -1,0 +1,4 @@
+• Añadir línea de tendencia pontuada a los gráficos
+• Añadir un pequeño botón al final del círculo de cronometraje
+• Eliminar la diferenciación de migrate.sh
+• Establezca categoría cuando seleccione un ejercicio

@@ -1,0 +1,10 @@
+• Dodaj miękkie otoczenie do koła zegarka
+• Naprawianie +1 minuty na linux
+• Naprawa zmian
+• Naprawiamy github readme styling [wyprzedzając ci]
+• Napraw rozmiar msstore
+• Ogranicz częstotliwość wdrażania Google Play [skip ci]
+• /Urobić odznaki większe.
+• /Uczyńcie rozmiary zgodne.
+• Odwróć "Fix msstore width badge [skip ci]"
+• Użyj github release zamiast artefakt [skip ci]

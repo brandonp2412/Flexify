@@ -1,0 +1,8 @@
+• Fissare la barra di progresso inferiore non aggiornata
+• Fissare la coerenza del riempimento sui piani
+• Fix sistema di navigazione verso l' indietro
+• Test di unità fissa
+• Link shields.io su downloads badge
+• Spazio di corrispondenza da set di modifica sulla pagina di modifica del peso
+• Prevenire i set di modifica a doppio tocco che non sono ancora stati inseriti
+• Rimuovi, mettila a X spaziamento.

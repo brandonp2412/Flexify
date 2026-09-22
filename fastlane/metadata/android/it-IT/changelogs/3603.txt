@@ -1,0 +1,5 @@
+• feat: aggiungere un link di recensione alla pagina su
+• fix: aggiungere il rivestimento inferiore mancante su tutte le pagine scorrevoli (#301)
+• fix: riprendere il timer stop quando l'app torna in primo piano
+• fix: utilizzare il tempo di orologio per il cronometro di fermo per sopravvivere al screen-off
+• fix: Impostazioni di allenamento rivestimento inferiore e etichetta di tab stopwatch

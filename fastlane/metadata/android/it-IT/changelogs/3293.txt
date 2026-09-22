@@ -1,0 +1,5 @@
+• Piani di esportazione fissi
+• Rettificare l'importazione di file da finestre
+• Migliorare la gestione degli errori
+• Conserva il progresso del timer anche se la pagina del timer è nascosta
+• Selezionare correttamente il primo esercizio nei piani

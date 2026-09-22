@@ -1,0 +1,4 @@
+- Aggiungere la stima di rappresentanza
+- Aggiungere la stima della durata
+- Aggiungere impostazione di riscaldamento mancante
+- Fissare il pacchetto finestre

@@ -1,0 +1,10 @@
+• Hinzufügen von Env für Web-Screenshots
+• Löschen Sie duplizierte Change-Logs
+• Behebung von buildConfig-Fragen
+• Fixer Chromedriver-Port
+• Fix der Chromedriver-Einstellung
+• Befestigen Sie den Emulatornamen in android-Screenschüssen
+• Git fügen Sie den gesamten fastlane-DIR zum Workflow hinzu
+• Installieren und starten von Chromedriver in Workflows
+• Stellen Sie sicher, dass die Screenshots im Comit enthalten sind
+• Verhindern Sie Duplikate beim Schalterlogkopie

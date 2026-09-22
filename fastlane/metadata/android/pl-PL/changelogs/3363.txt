@@ -1,0 +1,8 @@
+• Dodaj sortowanie temp do strony grafu
+• Kategorie stałe nie aktualizowane po przywozie
+• Naprawianie ostatniego wskazówki na wykresach
+• Naprawić system ui zaciemniający o stronie
+• Naprawianie systemów i elementów ukrywających na stronie ustawień
+• Nazwa automatycznych plików zapasowych
+• Usunięcie animacji z listy historii
+• Usunięta logika podziału z strony grafu

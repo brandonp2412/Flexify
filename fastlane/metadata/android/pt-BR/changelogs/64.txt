@@ -1,0 +1,7 @@
+- Incluir todas as mensagens de compromisso nas notas de liberação
+- Renomear arquivos de dados de exportação/importação
+- Página de planos de refactor
+- Adicionar ícone de edição para a página de gráficos
+- Adicionar configuração para gráficos de linha curva
+- Faça os gráficos de linha curvos
+- Fixar as pontas de ferramentas em gráficos de linhas

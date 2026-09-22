@@ -1,0 +1,2 @@
+• ci: automatyczne zderzenie wersji i uwalnianie przy naciśnięciu do głównego
+• fix: zapobiegać podwójnym alarmowi odpoczynku , gdy jest uruchomiony i AlarmManager zarówno wypalił

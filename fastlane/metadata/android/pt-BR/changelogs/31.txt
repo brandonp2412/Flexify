@@ -1,0 +1,1 @@
+Fixar a consulta de volume para gráficos

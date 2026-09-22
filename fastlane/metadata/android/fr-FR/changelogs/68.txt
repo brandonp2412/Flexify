@@ -1,0 +1,4 @@
+- Réparer les défaillances en cas d'activation des temporisateurs de repos
+- Fixer les noms des fichiers de données d'importation/exportation
+- Liste des exercices du réfacteur
+- Fixer les notes de libération

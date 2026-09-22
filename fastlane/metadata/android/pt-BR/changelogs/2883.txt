@@ -1,0 +1,10 @@
+• Adicionar contorno leve ao círculo de temporizador
+• Corrigir +1 minuto no Linux
+• Fixar os trocadores
+• Fix github readme estilo [skip ci]
+• Fix msstore width badge [skip ci]
+• Limitar a frequência de implementações do Google Play [skip ci]
+• Faça os crachetes maiores.
+• Tornar os crachetes consistentes [skip ci]
+• Revert "Fix msstore width badge [skip ci]"
+• Use o Github release em vez de artefato [skip ci]

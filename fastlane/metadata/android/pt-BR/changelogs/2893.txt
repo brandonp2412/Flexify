@@ -1,0 +1,10 @@
+• Adicionar contorno leve ao círculo de temporizador
+• Anima a existência do botão stop na página do temporizador
+• Clarificar edição de imagem
+• Explicar as implementações do Google Play
+• Corrigir +1 minuto no Linux
+• Fixar capturas de tela automáticas para versões
+• Fixar os trocadores
+• Fix github readme estilo [skip ci]
+• Fix download de versão do github na implementação do google play
+• Fix msstore width badge [skip ci]

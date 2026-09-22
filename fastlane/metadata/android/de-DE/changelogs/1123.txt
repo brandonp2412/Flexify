@@ -1,0 +1,1 @@
+- Zugabe universeller apk zu GitHub-Veröffentlichungen

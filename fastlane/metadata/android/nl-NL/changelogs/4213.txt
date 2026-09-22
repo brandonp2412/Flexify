@@ -1,0 +1,2 @@
+• docs: Readme-instelling vereenvoudigen
+• test: verbeteren van de status van de screenshot

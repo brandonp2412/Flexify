@@ -1,0 +1,10 @@
+• Permite configurar los temporizadores de descanso por ejercicio desde la página de configuración
+• Botones de animación en las barras de búsqueda
+• Anima las casillas de verificación en select
+• Animación de las fábricas en la página de planes
+• Corrección de error al editar unidades para un gráfico
+• Fija la primera y última punta de herramienta en los gráficos de hover
+• Fija iconos de dirección para los planes con títulos
+• Prueba de lista de planes fijos
+• Corrección de la eliminación de cronómetros personalizados en la página de configuración
+• Hacer más oscuro el selector de día

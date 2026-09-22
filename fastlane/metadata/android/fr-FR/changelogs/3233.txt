@@ -1,0 +1,3 @@
+• Réparer les réordonnements cassés sur les plans
+• Simplifier considérablement les exercices de réglage dans l'état de planification
+• Revert "Simplifier considérablement les exercices de réglage dans l'état de planification"

@@ -1,0 +1,3 @@
+- Wyłącz odbiór kopii zapasowej , jeśli automatyczne kopie zapasowe są wyłączone
+- Usunięcie rsync z deploy.sh na macos
+- Użyj zsh w macOS.sh

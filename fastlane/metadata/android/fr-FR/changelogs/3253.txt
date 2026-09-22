@@ -1,0 +1,2 @@
+• Réparer la recherche vide sur la page plans
+• Optimiser la page de démarrage

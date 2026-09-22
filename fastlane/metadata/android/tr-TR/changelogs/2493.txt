@@ -1,0 +1,2 @@
+- Pubspec.lock güncelleme
+- Deploy-windows-store'da eksik paketleri yükle

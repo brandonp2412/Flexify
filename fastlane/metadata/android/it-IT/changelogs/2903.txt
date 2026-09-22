@@ -1,0 +1,3 @@
+• Includere app-release.aab nella creazione di rilascio su github
+• Rendere scorrevole il grafico
+• Utilizzare le corrette note di rilascio

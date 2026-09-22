@@ -1,0 +1,10 @@
+• トルコのローカル・プレフィアンスをカバーする
+• 暫定アイコンリニューデザイン資産を逆転する
+• chore(l10n): 追加言語名 トルコ語
+• chore: アドレス トルコの地域化レビュー
+• feat(l10n): トルコ の 地域 化 が 追加 さ れ た
+• feat: 柔軟な双子座アイコンのコンセプトを追加する
+• feat: アイコン7と8の洗練セットを追加する
+• fix(l10n): 削除された複製エントリ
+• fix(tests): test_bundle.dart を除外するために .gitignore を追加する
+• fix(tests): locale_preference_test に tr 言語を追加する

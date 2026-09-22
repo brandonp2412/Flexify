@@ -1,0 +1,4 @@
+• Selezione dei contenuti delle schede piatte
+• Preferire selezionatore di schede visibili
+• Semplificare il flusso di controllo del ritorno anticipato
+• refactor: preferire controlli visibili all'utente in Linux E2E

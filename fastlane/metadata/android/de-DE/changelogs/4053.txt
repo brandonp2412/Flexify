@@ -1,0 +1,2 @@
+• Benutzersichtliche Timer-Einstellungen-Ansprüche bevorzugen
+• refactor: entfernen Sie den toten Desktop-Timer-Code

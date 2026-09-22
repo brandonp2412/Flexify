@@ -1,0 +1,2 @@
+- Importation fixe à partir d'exports de ensembles massifs
+- Crash de graphes de lignes fixes pour les forces relatives vides

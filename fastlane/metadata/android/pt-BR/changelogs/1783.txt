@@ -1,0 +1,3 @@
+- Dobrar o toque para abrir qualquer métrica
+- Mostre ORM ao editar um conjunto
+- Adicionar interruptor para som de alarme

@@ -1,0 +1,2 @@
+- Fusione della filiale "principale" di github.com:brandonp2412/Flexify
+- Distanza fissa rimane sottolineato - 1.0.64

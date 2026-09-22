@@ -1,0 +1,3 @@
+- Maak het bewerken van fitness sets doordrolbaar
+- De controle is in het hoofd van de ci_post_clone
+- Terug naar de dropdowns voor periode

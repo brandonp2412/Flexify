@@ -1,0 +1,10 @@
+• Añadir un contorno suave al círculo de cronometraje
+• Anima la existencia del botón de parada en la página del cronómetro
+• Clarificar la edición de imágenes
+• Explica las implementaciones de google play
+• Correcta +1 minuto en linux
+• Corrección de capturas de pantalla automáticas para las versiones
+• Corrección de los cambios
+• Fija el github de la lectura de estilo [skip ci]
+• Corrección de descarga de la versión de github en la implementación de google play
+• Corrección de la marca de anchura msstore [skip ci]

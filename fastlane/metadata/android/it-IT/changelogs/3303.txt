@@ -1,0 +1,2 @@
+• Indicatore di progresso del timer di avvolgimento in zona sicura
+• Rettificare i grafici non aggiornati

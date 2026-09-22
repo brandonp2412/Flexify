@@ -1,0 +1,2 @@
+- Fusion 'hoofd' deel van github.com:brandonp2412/Flexify
+- Voorbeeld van de trillingen bij het schakelen van de timer

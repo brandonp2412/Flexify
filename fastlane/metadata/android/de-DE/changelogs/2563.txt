@@ -1,0 +1,7 @@
+• Hinzufügen von Migrationsdaten-Tests
+• Arbeitsabläufe in einer
+• Löschen Sie einige sinnlose Kommentare
+• Link Brzycki-Formel in der Kommentar
+• Entfernen Sie mehr sinnlose Kommentare
+• Entfernen Sie einige Kommentare
+• Verkürzung von Variablennamen

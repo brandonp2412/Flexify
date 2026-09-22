@@ -1,0 +1,5 @@
+• Plan d'exportation fixe csvs
+• Réparer les fichiers importés à partir de windows
+• Améliorer la gestion des erreurs
+• Gardez l'avancement du timer même si la page du timer est cachée
+• Sélectionner correctement le premier exercice dans les plans

@@ -1,0 +1,1 @@
+• Use adb pré-instalado em vez de configuração-android no fluxo de trabalho do Waydroid

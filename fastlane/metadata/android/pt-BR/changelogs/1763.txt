@@ -1,0 +1,3 @@
+- Corrigir backups automáticos
+- Corrigir acidentes de alarme inconsistentes
+- Melhorar a precisão das estimativas de repetições

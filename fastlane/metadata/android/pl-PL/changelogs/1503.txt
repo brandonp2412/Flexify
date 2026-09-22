@@ -1,0 +1,2 @@
+- Naprawa awarii aplikacji po 1.1.36
+- Poprawa doświadczenia edycji kardiologicznych

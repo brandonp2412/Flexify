@@ -1,0 +1,2 @@
+• Hinzufügen von Logik zur Ermittlung des Emulator-Id
+• Bildschirmbilder zu beheben

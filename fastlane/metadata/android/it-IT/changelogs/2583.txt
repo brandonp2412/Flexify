@@ -1,0 +1,9 @@
+• Aggiungere la gestione degli errori all'importazione di dati
+• Aggiungere ulteriori test di migrazione dei dati
+• Elimina i commenti
+• Abilitare la configurazione di build in android/app/build.gradle
+• Risolto problema di linting in edit_set_page
+• Elimina i prefissi sottolineati in alcune modalità di pagina di piano di inizio
+• Rimuovere il selettore dell'unità e fissare le prove
+• Abbreviare tutti i nomi delle variabili
+• Dividere tutto nella pagina di set di modifica più

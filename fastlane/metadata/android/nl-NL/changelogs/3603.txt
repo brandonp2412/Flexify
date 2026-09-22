@@ -1,0 +1,5 @@
+• feat: Voeg een reviewlink toe naar pagina Over
+• fix: voeg ontbrekende onderpolstering toe aan alle scrollable pagina's (#301)
+• fix: hervatten stopwatch ticker wanneer de app terugkomt naar het voorgrond
+• fix: gebruik van de wandklok tijd voor stopwatch om te overleven screen-off
+• fix: Beoefening instellingen onderpolster en stopwatch tab label

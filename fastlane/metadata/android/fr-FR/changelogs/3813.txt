@@ -1,0 +1,10 @@
+• Ajouter le test à l'analyse dart
+• Permettez à la liste d'exercices de dépasser la barre de navigation lors de la réalisation d' un plan
+• Modifier le style de la page de résistance
+• Utilisez constamment le bottomNavHeight
+• Fixer la hauteur du fond
+• Fixer les graphiques à l' espace et cacher les notes si la réglage est désactivée
+• Fixer les tests d' unité pour la barre de recherche
+• Améliorer le style des graphiques
+• Faites l'espacement des jetons de plan cohérent
+• Style de match dans la page cardio

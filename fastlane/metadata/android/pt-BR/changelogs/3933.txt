@@ -1,0 +1,10 @@
+• Adicionar submodule flutter para análise lista ignorar
+• Adicionar espaçamento faltante para add_exercise_page.dart
+• Fixar espaçamento de campos cardio
+• Corrigir erro de saída em weight_page.dart
+• Corrigir o erro getSingle em exercise_modal.dart
+• Corrigir erro de contexto estranho em main.dart
+• Formatar
+• Tornar o botão brilhar um pouco menos na página do temporizador
+• Remover a caixa de seleção de antecedentes do grupo
+• Remover importações não utilizadas

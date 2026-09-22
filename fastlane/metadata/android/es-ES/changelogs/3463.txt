@@ -1,0 +1,2 @@
+• Corrección de muchos posibles errores
+• Incluya el divisor de fecha al seleccionar

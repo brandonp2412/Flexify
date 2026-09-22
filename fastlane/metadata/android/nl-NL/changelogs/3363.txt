@@ -1,0 +1,8 @@
+• Voeg temp sortering toe aan grafiek pagina
+• Vaste categorieën die na invoer niet worden bijgewerkt
+• Bevestig het laatste tooltip op grafieken
+• Fix systeem ui verdoezing over pagina
+• Fix system ui verdoezende elementen op de instellingen pagina
+• Naam van automatische back-upbestanden
+• Verwijder animaties uit de geschiedenislijst
+• Verwijderde deelteloog van de grafieken pagina

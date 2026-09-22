@@ -1,0 +1,5 @@
+• Serbestlere virustotal bağlantı bağlama düzeni
+• feat: ayar seçicilerine canlı ön görüntüler ekle ve ağırlık biçimlendirmeyi düzelt
+• fix: çizilen etiket kesilmesini önlemek için plan sayfasını başlatmak için üst boyutlu doldurma ekleyin
+• fix: Başlangıç plan sayfasındaki girişler arasında tutarlı 8dp mesafe
+• fix: ilerleme pozisyon ön görünümü gerçek Zaman Gelişme İndikatörü kullanır

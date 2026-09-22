@@ -1,0 +1,3 @@
+• Dodaj logiczną metodę do określenia identyfikatu emulatoru
+• Naprawianie zdjęć ekranu
+• Spróbuj naprawić zdjęcia ekranu ponownie

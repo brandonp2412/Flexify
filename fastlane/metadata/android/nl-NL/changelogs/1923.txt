@@ -1,0 +1,5 @@
+- Upgrade flutter naar 3.24.0
+- Gebruik uitgebreide drijvende actiebutons
+- Fix deployment op github & f-droid repro
+- Verhinderen dat de pagina met toestemming op iOS wordt weergegeven
+- Fix cardio grafieken niet onmiddellijk bijwerken

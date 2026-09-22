@@ -1,0 +1,1 @@
+- Corrigir o problema de assinatura do código de construção do macOS

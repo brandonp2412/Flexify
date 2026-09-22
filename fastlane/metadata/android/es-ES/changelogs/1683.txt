@@ -1,0 +1,5 @@
+- Hacer que los interruptores de configuración sean consistentes
+- Aumentar la precisión de las estimaciones de repeticiones
+- Permitir la eliminación de tiempos de descanso personalizados por gráfico
+- Categoría fija que está vacía para los planes
+- Fija el orden de edición del plan

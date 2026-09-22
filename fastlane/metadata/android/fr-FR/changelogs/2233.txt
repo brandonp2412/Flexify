@@ -1,0 +1,4 @@
+- Activer les exercices sur capture d'écran pour les plans
+- Graphiques de courbe par défaut
+- Mise à jour de README.md
+- Gérer les migrations ratées

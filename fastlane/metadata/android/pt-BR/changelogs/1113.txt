@@ -1,0 +1,3 @@
+- Adicionar sobre página
+- Adicionar ícones à página de configurações
+- Alteração do ícone dos planos

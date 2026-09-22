@@ -1,0 +1,5 @@
+- Yerle ilgili tüm açıklama doğru
+- Github sürümünü oluşturduktan sonra git çek --tagları belirtin
+- Google Play dağıtımlarını yeniden etkinleştir
+- İhraca/İçkize Eğilim Ekle
+- Kardio tipine eğilimi ekle

@@ -1,0 +1,7 @@
+• Dodaj strony github do hostingu Flexify web
+• Dodać brakujące zmiany
+• Pozwoli użytkownikowi na usuwanie maksymalnych zestawów
+• Usunięcie nieużywanych skryptów
+• Naprawiamy nowe kopie.
+• Tylko w jednym pliku za każdym razem
+• Usunięcie powtórzeń z grafu siły

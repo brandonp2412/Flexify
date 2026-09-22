@@ -1,0 +1,2 @@
+• Mettez tout à jour
+• chore: Le système de configuration automatique/lint/client généré [pré-push]

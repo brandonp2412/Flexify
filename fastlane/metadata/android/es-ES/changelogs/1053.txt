@@ -1,0 +1,1 @@
+- Recoger errores en las migraciones

@@ -1,0 +1,4 @@
+- Android APK를 포함하기 위해 GitHub 발매 파일 경로를 수정
+- 2.0.27
+- pubspec.lock를 업데이트
+- GitHub 액션 작업 흐름에서 macOS/iOS 빌드를 제거하십시오

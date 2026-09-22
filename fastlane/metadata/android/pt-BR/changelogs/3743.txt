@@ -1,0 +1,1 @@
+• Adicionar passo de depuração de sessão do Waydroid

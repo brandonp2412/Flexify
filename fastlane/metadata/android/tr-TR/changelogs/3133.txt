@@ -1,0 +1,3 @@
+• Örnek performans testi eklenir
+• Performansları iyileştir
+• MSstore dağıtımlarını düzeltmeye çalış

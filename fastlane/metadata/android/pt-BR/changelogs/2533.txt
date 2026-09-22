@@ -1,0 +1,1 @@
+- Fixar a referência de diretório de construção no pipeline de janelas de implantação

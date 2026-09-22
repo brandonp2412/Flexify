@@ -1,0 +1,3 @@
+- Włącz ćwiczenia na zdjęciu ekranu do planów
+- Grafy krzywej domyślnie
+- Przeprowadzenie nieudanych migracji

@@ -1,0 +1,2 @@
+• İletiler ön görünümünü göster
+• Kardio birimi planlarda bir ağırlık tipi ise ağırlık alanını göster

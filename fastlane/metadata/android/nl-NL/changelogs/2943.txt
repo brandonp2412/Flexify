@@ -1,0 +1,3 @@
+• Agp verlaag naar 8.11.1
+• Trek achter het systeem UI & schakel scrollen van tabbladen
+• Fix voorbevolking van de herhaling/gewicht

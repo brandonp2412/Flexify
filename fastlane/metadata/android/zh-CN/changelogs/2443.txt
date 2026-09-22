@@ -1,0 +1,2 @@
+- 更新 pubspec.lock
+- 修复GitHub版本的文物文件路径

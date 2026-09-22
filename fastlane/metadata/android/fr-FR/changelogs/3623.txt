@@ -1,0 +1,1 @@
+• ci: ajouter VirusTotal de numérisation sur la sortie des APK

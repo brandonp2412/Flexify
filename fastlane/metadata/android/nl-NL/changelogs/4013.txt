@@ -1,0 +1,10 @@
+• fix: bewakingsschermopname navigatie context
+• fix: heropenen van het mapje na toestemming
+• fix: opnieuw proberen de emulator voor screenshots te loslaten
+• fix: Sequentie back-up toestemming voor het opnemen van mappen
+• fix: stabiliseren Android-mappickers test
+• fix: stabiliseren van automatische schermopnames
+• test: herbruikbare database-instellingen toevoegen
+• test: toevoegen van gedeelde testharness
+• test: StartPlanPage-testen in lijn brengen met huidige velden
+• test: bevestigen Android documentpickers per pakket

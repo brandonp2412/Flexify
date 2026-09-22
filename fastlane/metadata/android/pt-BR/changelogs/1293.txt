@@ -1,0 +1,2 @@
+- Desligue zeros atrás dos menus de compartilhamento
+- Corrigir a unidade de buggy ao alternar o cardio

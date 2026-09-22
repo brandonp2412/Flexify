@@ -1,0 +1,2 @@
+- Lasily bekommt Zählen für Planübungen
+- Stellen Sie sicher, dass gym_sets Index hat

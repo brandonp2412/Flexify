@@ -1,0 +1,3 @@
+• Düzenleme ayarları sayfasını değiştir & history sayfasını değiştir
+• Çözümleri düzelt
+• Birim testleri

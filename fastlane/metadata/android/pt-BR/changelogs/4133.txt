@@ -1,0 +1,10 @@
+• A seleção de nitros
+• Revisar a descrição do projeto no README
+• Atualizar README para modificar o slogan do projeto
+• Atualizar o nome do projeto no README
+• Atualização para 2.2.0 em pubspec.yaml
+• ci: Parar as emissões de fechaduras de patrulha
+• docs: adicionar texto alternativo para imagens README
+• fix: evitar o acidente do fornecedor de caminho Android JNI
+• fix: evitar duplicadas rotas de notificação de treino
+• fix: Imagem de tela ligada CI pendurado

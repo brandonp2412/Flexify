@@ -1,0 +1,10 @@
+• Dodaj miękkie otoczenie do koła zegarka
+• Animowanie istnienia przycisku stop na stronie z czasem
+• Wyjaśnij edycję obrazu
+• Wyjaśnij wdrożenie Google Play
+• Naprawianie +1 minuty na linux
+• Naprawianie automatycznych zdjęć ekranu dla wersji
+• Naprawa zmian
+• Naprawiamy github readme styling [wyprzedzając ci]
+• Naprawić wersję github w aplikacji Google Play
+• Napraw rozmiar msstore

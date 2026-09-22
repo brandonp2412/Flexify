@@ -1,0 +1,1 @@
+Fija el temporizador siempre reiniciado a cero

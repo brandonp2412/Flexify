@@ -1,0 +1,4 @@
+• Grafiklere nokta çizgisi ekle
+• Zamanlama döngüsünün sonuna küçük düğme ekle
+• Migrate.sh'ten diffing kaldır
+• Bir egzersiz seçerken kategorileri ayarlayın

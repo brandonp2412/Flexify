@@ -1,0 +1,1 @@
+Bump versie naar 1.0.40

@@ -1,0 +1,3 @@
+• Corrección de captura de pantalla de la página del cronómetro
+• Fija las pruebas de captura de pantalla de la página del cronómetro
+• Oculta notificación de cambio para capturas de pantalla

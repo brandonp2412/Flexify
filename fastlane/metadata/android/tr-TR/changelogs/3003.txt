@@ -1,0 +1,2 @@
+• Emülatör kimliğini bulmak için mantık ekle
+• Ekran çekimlerini düzelt

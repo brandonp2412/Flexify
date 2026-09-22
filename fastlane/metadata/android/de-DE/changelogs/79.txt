@@ -1,0 +1,12 @@
+- Bildschirmbilder zu beheben
+- Fixen von versteckten und cardio-artigen Export-/Import-Typen
+- Behebt das Ausstellen von Cardio beim Bearbeiten eines Sets
+- Beenden Sie die Animation auf Tabs nach dem Löschen
+- Bewegen Sie die leere Eintragungsnachricht auf die Spitze der Geschichte
+- Hinzufügen von Verlauf
+- Aktualisieren Sie Screenshots
+- Aktualisieren Sie screenShots zum Vergleich
+- tabBarState zu jedem Test hinzugefügt
+- Hinzugefügt globaler Kontext nicht mehr abhängig davon , ob PlansPage die erste Seite ist
+- Hinzugefügt aktualisierte Screenshots zum Vergleich
+- Verfeinern Sie Screenshots

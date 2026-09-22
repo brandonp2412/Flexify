@@ -1,0 +1,7 @@
+• Añadir páginas github alojadas para la web Flexify
+• Añadir los cambios faltantes
+• Permite al usuario despejar los conjuntos máximos
+• Eliminar los scripts no utilizados
+• Correcta lo que es nuevo copiar
+• Sólo copia de seguridad a un archivo cada vez
+• Eliminar repeticiones del gráfico de fuerza

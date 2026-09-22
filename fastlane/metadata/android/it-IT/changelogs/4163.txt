@@ -1,0 +1,1 @@
+• fix: ripristinare il timer di riposo set totali

@@ -1,0 +1,4 @@
+- Dodać szacunek przedstawicieli
+- Dodaj szacunek czasu trwania
+- Dodaj brak ustawienia rozgrzewania
+- Naprawa pakietu okna

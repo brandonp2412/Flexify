@@ -1,0 +1,4 @@
+• Dodaj ustawienia do granicy pokazywania/zachowania i osi x na wykresach
+• Zawsze uruchomić zegarek w aktywowanych planach
+• Naprawianie nowych nie działających typów kardiobiegania
+• Długa prasowa aksa x / ograniczona prześlizgacz do ukrycia

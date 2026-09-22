@@ -1,0 +1,3 @@
+- Voorbeeld van het aangepaste alarmgelijk bij het instellen
+- Refactor cardio grafieken
+- Toevoegen van de knop delen database in instellingen

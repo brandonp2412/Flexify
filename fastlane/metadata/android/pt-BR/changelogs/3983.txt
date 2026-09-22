@@ -1,0 +1,1 @@
+• fix: fazer o Google Play implantar idempotent

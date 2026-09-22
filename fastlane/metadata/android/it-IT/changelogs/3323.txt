@@ -1,0 +1,6 @@
+• Aggiungere nuovi formati di data (ad esempio per il tedesco)
+• Aggiungere l'opzione dell'asse x basata sul tempo per il grafico
+• Risolto i problemi di memoria
+• Fissare il rapporto trailing del piano e il conteggio
+• Lascia che gli utenti decidano la capitalizzazione dei titoli del piano
+• Spostare il pulsante Storico alla barra di navigazione

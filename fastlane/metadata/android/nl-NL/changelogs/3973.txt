@@ -1,0 +1,2 @@
+• fix: Houd formatter uit de Flutter submodule
+• fix: Tolereer Patrol teardown vals negatief

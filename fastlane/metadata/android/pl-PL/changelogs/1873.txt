@@ -1,0 +1,6 @@
+- Dodaj weryfikację
+- Poprawa wydajności dla dużych baz danych
+- Spraw , aby dodać ćwiczenia i waga strona przewijania
+- Dodaj obraz do nowej strony ćwiczeń
+- Naprawa dodać wypełnienie ćwiczeń
+- Powiadomienia w przypadku automatycznych kopii zapasowych

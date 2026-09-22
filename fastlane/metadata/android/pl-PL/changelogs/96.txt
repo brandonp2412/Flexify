@@ -1,0 +1,3 @@
+- Przedwzorowy dźwięk alarmu podczas ustawienia
+- Reaktory kardio-graficzne
+- Dodaj przycisk podzielić się bazą danych do ustawień

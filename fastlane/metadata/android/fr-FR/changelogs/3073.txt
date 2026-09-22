@@ -1,0 +1,2 @@
+• Réglage de l'équilibre autour du progrès mondial
+• Réglage de la deploy.sh [skip ci]

@@ -1,0 +1,5 @@
+- Adicionar apoio para unidades em cardio
+- Grupos fixes por semana para linhas de cardio
+- Grupagem fixa por semanas para gráfico
+- Grupos fixos por semana
+- Planejamento de refratários

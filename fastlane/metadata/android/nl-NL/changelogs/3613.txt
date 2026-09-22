@@ -1,0 +1,10 @@
+• Voeg bericht toe voor leeg plan
+• Maak het scherm standaard uit en verplaats het schakel in instellingen
+• feat: Voeg een beveiligingsscherm toe op de instelling voor rusttimers
+• feat: vervangen door onderstaande thema's met SegmentedButton + AMOLED-toegeschakeling
+• fix: bewaken tegen lege oefenlijst in StartPlanPage
+• fix: Vermijd SegmentedButton label wrap door het oppakken te corrigeren
+• fix: Vermindering van de achtergrondtekstgrootte van 16 naar 14 in geschiedenis- en grafieklijsten
+• fix: losmaak alarm slot wanneer de timer verstrijkt of niet werkt
+• fix: toon in de app snackbar en fix melding wanneer timer verstrijkt met scherm op
+• fix: schrimp en stom achterstaande tekst in geschiedenis en grafieklijst tegels

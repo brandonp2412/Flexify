@@ -1,0 +1,5 @@
+- Hinzufügen von Unterstützung für Einheiten im Cardio
+- Festlegung der Gruppen nach Woche für Cardio-Linien
+- Feststellungsgruppen nach Wochen für Grafik
+- Feststellungsgruppen nach Woche
+- Refactor-Pläne

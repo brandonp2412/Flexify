@@ -1,0 +1,4 @@
+- Redesign di giorno selector
+- Rettificare il cronometro di apertura del grafico di ritardo
+- Rilanciare ORM quando si modificano le ripetizioni/peso
+- Aggiungere rivestimento alla fine della pagina di piani di modifica

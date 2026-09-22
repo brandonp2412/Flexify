@@ -1,0 +1,5 @@
+- Fixation des délais
+- Optimiser les timers
+- Réparation de sauvegardes automatiques
+- Ajoutez des réglages de vibration et de son d'alarme
+- Optimiser la page de modification du graphique

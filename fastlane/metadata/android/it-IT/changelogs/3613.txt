@@ -1,0 +1,10 @@
+• Aggiungere messaggio per il piano vuoto
+• Fai spegnere la schermata per impostazione predefinita e spostare il cambio nelle impostazioni
+• feat: aggiungere schermo di mantenimento sulla impostazione per i timer di riposo
+• feat: sostituire il tema a discesa con SegmentedButton + AMOLED toggle
+• fix: proteggere contro l' esercizio vuoto lista in StartPlanPage salvare e selezionare
+• fix: prevenire l'impalcatura di segmentazione delle etichette con il corretto riempimento
+• fix: ridurre la dimensione del testo trail da 16 a 14 nelle liste di storia e grafici
+• fix: rilasciare il lucchetto di sveglia quando il timer scade o non funziona
+• fix: mostrare la barra degli snack in app e correggere la notifica quando il timer scade con lo schermo acceso
+• fix: contenere e muovere il testo di seguito nella storia e nelle piastrelle di liste grafiche

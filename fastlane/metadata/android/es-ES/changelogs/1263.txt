@@ -1,0 +1,6 @@
+- Pruebas fijas
+- Añadir menús de compartir
+- Corrección de parpadeo de teclado en el envío
+- Previsión de fechas creadas anteriormente en multi-editar
+- Utilice el nuevo selector de unidades para gráficos de cardio
+- Copia de la disposición de los gráficos de resistencia a cardio

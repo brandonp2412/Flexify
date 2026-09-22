@@ -1,0 +1,1 @@
+- Invalida la stima di replicazione e durata per impostazione predefinita

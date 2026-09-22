@@ -1,0 +1,10 @@
+• Permettre la configuration des temporiseurs de repos par exercice à partir de la page paramètres
+• Bouton d'animation sur les barres de recherche
+• Animation des coffres à cocher sur select
+• Facts animés sur la page des plans
+• Correction de bug lors de l'édition d'unités pour un graphique
+• Fixer le premier ou le dernier bout d'outil sur les graphiques de planche
+• Fixer les icônes de tête pour les plans avec des titres
+• Test de liste de plans
+• Correction de la suppression des temporiseurs personnalisés sur la page paramètres
+• Faites le sélecteur de jour plus sombre

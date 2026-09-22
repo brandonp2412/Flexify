@@ -1,0 +1,5 @@
+- Poids rond
+- Fixer la navigation des onglets derrière la navigation du système
+- Mettre en place l'étiquette de lustre de la courbe avant le glisser
+- Réparer la couleur de la piste manquante avec les couleurs du système
+- Normalizer les unités lors de leur changement à partir de graphiques

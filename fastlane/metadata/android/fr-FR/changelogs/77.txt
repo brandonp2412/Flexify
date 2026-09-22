@@ -1,0 +1,6 @@
+- Permettre la suppression multiple des plans
+- Rénommer "Enter poids" en "Poids" sur la page des graphiques
+- Ajouter le bouton de modification à la page déroulante des graphiques
+- Distances de concentration après la présentation de la durée
+- Réparation des accidents avec des types cardio incohérents
+- Supprimer le suffixe historique de graph_history

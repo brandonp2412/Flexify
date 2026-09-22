@@ -1,0 +1,2 @@
+• Bepaal de laatste bewegingstage van de pijpleiding
+• Fix uploaden android artefacten

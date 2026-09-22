@@ -1,0 +1,3 @@
+• Hinzufügen von Logik zur Ermittlung des Emulator-Id
+• Bildschirmbilder zu beheben
+• Versuchen Sie noch einmal, Screenshots zu reparieren.

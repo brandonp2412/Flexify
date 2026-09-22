@@ -1,0 +1,1 @@
+Fixer le temporisateur toujours réinitialisé à zéro

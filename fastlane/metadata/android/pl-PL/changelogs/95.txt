@@ -1,0 +1,5 @@
+- /Właściwie wykres pełnego opisu
+- Wyznacz git pull --tags po utworzeniu wydania github
+- Wykonać ponownie wdrożenie Google Play
+- Dodawanie skłonności do eksportu/importu
+- Dodaj skłonność do typu kardio

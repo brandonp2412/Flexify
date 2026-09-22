@@ -1,0 +1,2 @@
+- Lazily dostaje liczebności za ćwiczenia planu
+- Upewnij się, że gym_sets ma indeks

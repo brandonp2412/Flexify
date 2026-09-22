@@ -1,0 +1,3 @@
+- Animatore delle barre di progresso da sinistra a destra
+- Sottolineare il piano di oggi con titoli personalizzati
+- Comprimere il selettore di giorno sul programma di programmazione

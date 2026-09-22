@@ -1,0 +1,3 @@
+- Kategori ekle
+- Eğim ve ayarlanmış hız grafiklerini ekle
+- Zamanlayıcı ayarlarında kopyalanmış bezleri kaldır

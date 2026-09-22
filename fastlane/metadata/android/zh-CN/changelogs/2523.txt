@@ -1,0 +1,1 @@
+- 添加 deploy-windows-store 的调试阶段

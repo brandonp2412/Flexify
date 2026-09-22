@@ -1,0 +1,3 @@
+- Verhelder wat grafiek bewerken doet
+- De limietgrootte duidelijk bij het zoeken naar geschiedenis
+- Laat het scrollen van voorbij eind op lijsten toe

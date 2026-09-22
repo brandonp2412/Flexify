@@ -1,0 +1,2 @@
+- Exiger que le drapeau -p de deploy.sh soit envoyé à google play
+- Simplifier la requête de compte pour les plans

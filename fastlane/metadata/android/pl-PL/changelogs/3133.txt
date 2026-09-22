@@ -1,0 +1,3 @@
+• Dodaj próbkę do badania wydajności
+• Poprawa wydajności
+• Spróbuj naprawić rozmieszczenia msstore

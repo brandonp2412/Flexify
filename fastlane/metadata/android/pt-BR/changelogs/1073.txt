@@ -1,0 +1,2 @@
+- Contagem fixa do plano
+- Corrigir esquema de banco de dados de vigilância parando às vezes

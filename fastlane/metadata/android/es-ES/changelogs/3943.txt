@@ -1,0 +1,3 @@
+• Corrección de las instalaciones nuevas que no soliciten notificación
+• Prueba de unidad fija
+• Desactivar las notas para las nuevas instalaciones

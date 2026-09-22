@@ -1,0 +1,4 @@
+- Dodaj przycisk stop do gotowych zegarek
+- Naprawianie danych w historii nowych zestawów
+- Napraw alarmy nie zatrzymujące się
+- Zastąpienie nadmiernego użycia MaterialStateProperty

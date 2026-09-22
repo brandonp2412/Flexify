@@ -1,0 +1,4 @@
+- Inclure les paramètres dans les sauvegardes de base de données
+- Fixer la base de données à exporter sur le bureau
+- Ajouter le plan suivant la page d'accueil
+- Ajouter des options pour le plan de suivi

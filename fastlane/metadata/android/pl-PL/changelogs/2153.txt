@@ -1,0 +1,3 @@
+- Dodaj wybieranie obrazu do wagi
+- Ukrycie nieistotnych pól w pozycjach o masie
+- Zrób kategorie dynamicznymi

@@ -1,0 +1,1 @@
+Push git antes de fazer o lançamento do github

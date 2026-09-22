@@ -1,0 +1,5 @@
+- Bearbeiten Sie das Überschreiten von Grafiken für Tab-Bewegung
+- Löschen Sie Timers.webm
+- Fehler erstellte Termine bei der Bearbeitung von Fitness-Sets zu beheben
+- Einstellungen/Eingabe von Gewichtsseite zu beheben, die entsorgt werden
+- Deaktivieren Sie die Systemfarben im Screenshot-Test

@@ -1,0 +1,7 @@
+• Aggiungere indicatori di icona di forza/cardio ai toggles in set/set di modifica
+• Aggiungere le impostazioni per la posizione della barra di progresso
+• Permettere la compensazione di categoria
+• Cambiare l'icona dei piani nella nave inferiore
+• Sistema di apparenza fissa ui grafico oscurante
+• Aggiornare immediatamente le impostazioni dell' scheda e rimuovere il pulsante Salvare
+• Evita il testo di suggerimento nullo su categorie o inclinare quando imposta un set di modifica multi-

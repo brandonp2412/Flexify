@@ -1,0 +1,2 @@
+• Kahraman etiket hatalarını düzelt
+• Bazen sekme sınırının çok geniş olduğunu düzelt

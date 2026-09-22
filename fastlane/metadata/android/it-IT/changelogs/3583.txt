@@ -1,0 +1,1 @@
+• fix: campo di note chiare quando si passa all'esercizio senza nota precedente

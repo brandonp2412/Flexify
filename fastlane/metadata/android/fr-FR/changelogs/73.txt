@@ -1,0 +1,2 @@
+- Utiliser le sous-module flutter dans le déploiement
+- Fixer les tailles de graphique pour les écrans plus courts

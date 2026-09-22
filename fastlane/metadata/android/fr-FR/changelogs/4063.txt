@@ -1,0 +1,4 @@
+• Sélection de contenu de l'onglet plat
+• Préférer le sélecteur d' onglets visibles
+• Simplifier le flux de contrôle du retour anticipé
+• refactor: préférer les commandes visibles par l'utilisateur dans Linux E2E

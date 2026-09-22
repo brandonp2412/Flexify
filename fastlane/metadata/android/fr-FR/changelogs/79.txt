@@ -1,0 +1,12 @@
+- Réparation des captures d'écran
+- Fixer les types cachés et cardio à l'exportation/à l'importation
+- Fixer l'éteinte de cardio lors de l'édition d'un ensemble
+- Arrêter d' animer les onglets après suppression
+- déplacer le message des entrées vides vers le haut de l' histoire
+- Ajouter l'onglet historique
+- Mise à jour des captures d'écran
+- Mise à jour de screenShots pour la comparaison
+- tabBarState ajouté à chaque test
+- Ajout de contexte global Ne dépend plus du fait que PlansPage soit la première page
+- Ajout de captures d'écran mises à jour pour comparer
+- Simplifier les captures d'écran

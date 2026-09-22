@@ -1,0 +1,7 @@
+- Prevenir la eliminación de los preestablecidos de ejercicio
+- Anulación de unidades predeterminadas con la configuración
+- Hacer el gráfico ligeramente más corto
+- Añadir deslizador límite a los gráficos
+- Digamos # de conjuntos en la historia colapsada
+- Mejorar el estilo de los divisores de día para la historia
+- Los divisores de etiquetas en la página de gráficos

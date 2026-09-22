@@ -1,0 +1,3 @@
+- Previsualizar el sonido de alarma personalizado al configurarlo
+- Graficos de cardio de refactor
+- Añadir botón de base de datos de compartir a las configuraciones

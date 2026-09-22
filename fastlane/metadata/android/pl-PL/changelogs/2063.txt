@@ -1,0 +1,1 @@
+- Dodaj skrót do selektoru jednostek

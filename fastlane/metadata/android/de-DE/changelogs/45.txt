@@ -1,0 +1,1 @@
+Fügen Sie einige Emulator-Flaggen zu deploy.sh hinzu

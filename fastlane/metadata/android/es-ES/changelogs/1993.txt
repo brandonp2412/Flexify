@@ -1,0 +1,2 @@
+- Fija que las repeticiones iniciales/peso sean cero en los planes
+- Eliminar los ceros principales después de guardar los planes

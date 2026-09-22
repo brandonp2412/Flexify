@@ -1,0 +1,10 @@
+• Naprawianie banerów odbudowy wyświetlane w zdjęciach ekranu
+• Aktualne zdjęcia ekranu
+• Użyj przycisku tekstowego przez +1 minutę
+• chore: Dodaj skrypt zdjęcia ekranu Androida z flagą profilu
+• feat: poprawa interfejsu użytkownika w celu zapewnienia płynności krzywej, zegarów, śledzenia planów, stylu wprowadzania danych
+• fix: Centrum zegarka okrąża pionowo i ruszać +1 min przycisk poniżej okręgu
+• fix: wyłączyć banner odbudowy w MaterialApp
+• fix: wyeliminować uniqueKey anty-motyw w widgetie z okruchem zegarka
+• fix: przeprojektowanie koła z czasem z minimalną, nowoczesną estetyką
+• fix: zastąpić runApp testerem.pumpWidget w testowaniach na zdjęciach ekranu

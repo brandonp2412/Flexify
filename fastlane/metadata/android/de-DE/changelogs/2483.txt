@@ -1,0 +1,1 @@
+- Hinzufügen von Dotnet zu windows store-Deploy-Stage

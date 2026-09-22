@@ -1,0 +1,2 @@
+• Raggiustare la ricerca vuota sulla pagina piani
+• Ottimizzare la pagina di partenza

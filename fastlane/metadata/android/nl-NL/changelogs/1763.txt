@@ -1,0 +1,3 @@
+- Automatische back-ups oplossen
+- Herstel van inconsistent alarm crashen
+- Verbeteren van de exacte schatting van herhalingen

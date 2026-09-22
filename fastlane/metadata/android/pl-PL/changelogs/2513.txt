@@ -1,0 +1,2 @@
+- Naprawić polecenie msstore publish
+- Gwarancja zestawów fitness przed testowaniem ich w grafikach strona

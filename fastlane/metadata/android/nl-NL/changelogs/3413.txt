@@ -1,0 +1,4 @@
+• Voeg instellingen toe aan de display/hide limiet en de x-as op grafieken
+• Start altijd de timer op geactiveerde plannen
+• Herstel van nieuwe cardio-typen die niet werken
+• Lang druk op de x-as / grensgleider om te verbergen

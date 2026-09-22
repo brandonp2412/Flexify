@@ -1,0 +1,10 @@
+- Fix testen
+- Voeg de beste herhalingsmetric toe
+- Vernoem AppGroupBy -> Periode
+- Verbeteren van de prestaties van cardio-grafieken
+- Verhoogde versieCode op universele versies
+- Fix het toevoegen van minuten van de timersite
+- Commentaar op Fastlane levering
+- Gebruik de lokale tijd waar nodig
+- Refactorinstellingen
+- Refactorcode

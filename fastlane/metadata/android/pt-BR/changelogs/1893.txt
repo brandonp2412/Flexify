@@ -1,0 +1,4 @@
+- Fixar a navegação de volta às vezes não funciona
+- Escondir uma estimativa máxima de exercícios de cardio
+- Melhorar o desempenho da resistência da página
+- Melhorar o desempenho dos planos

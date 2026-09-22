@@ -1,0 +1,4 @@
+• Befestigen Sie die Polsterung auf Grafikseiten
+• Fix Toasts, die nie abgesagt werden
+• Gerätetipps auf Grafiken fixieren
+• Bewahren Sie Ordnung, wenn Sie eine Übung wechseln

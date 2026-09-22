@@ -1,0 +1,3 @@
+• Aggiungere la logica per capire l' id dell' emulatore
+• Rettificare le screenshot
+• Prova a riparare le screenshot di nuovo

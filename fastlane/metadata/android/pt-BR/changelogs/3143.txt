@@ -1,0 +1,4 @@
+• Permitir todos os tipos de unidades para cardio
+• Mudança de estilo de configuração de guia página
+• Corrigir adicionando um exercício cardio da página Graficos
+• Prevenição de dizer o logue de mudança na primeira instalação

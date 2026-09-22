@@ -1,0 +1,2 @@
+- Edytuj # ćwiczeń na planach zamiast grafik
+- Poprawa wydajności aplikacji

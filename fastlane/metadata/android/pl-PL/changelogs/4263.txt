@@ -1,0 +1,10 @@
+• Okryj preferencje lokalne w języku tureckim
+• Odwrócić aktywa przeprojektowania ikon
+• chore(l10n): Dodawany językNameTurkijski
+• chore: adres przegląd lokalizacji w Turcji
+• feat(l10n): Dodatkowa lokalizacja turecka
+• feat: dodanie koncepcji ikony bicep
+• feat: dodać zestawy doskonalenia ikony 7 i 8
+• fix(l10n): Usunięte podwójne wpisy
+• fix(tests): dodać .gitignore do wykluczenia test_bundle.dart
+• fix(tests): dodać język tr do locale_preference_test

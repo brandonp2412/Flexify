@@ -1,0 +1,5 @@
+- Corrigir falhas de aplicativos após 1.1.36
+- Use a barra de pesquisa e adicione a configuração de visão aos planos
+- Ativar temporizadores de descanso em plataformas de desktop
+- Fazer o cronómetro funcionar no desktop
+- Revert trabalho em temporizadores de desktop

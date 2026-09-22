@@ -1,0 +1,6 @@
+• Renombrar todos los accesorios internos con prefijo _
+• Replicar capturas de pantalla automatizadas y pruebas e2e de Fit-book
+• chore: actualización de los controles de automatización del repositorio
+• ci: reparación Patrol y Play flujo de trabajo de implementación
+• fix: alinear los objetivos de compilación de Android JVM
+• fix: retener el peso cardio en el historial de grupo

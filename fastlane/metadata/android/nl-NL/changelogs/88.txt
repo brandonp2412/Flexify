@@ -1,0 +1,4 @@
+- Voeg stopknop toe aan de afgeronde timers
+- Fix geschapen data op de geschiedenispagina voor nieuwe sets
+- Fix alarmen niet stoppen
+- Vervang het overbodige gebruik van MaterialStateProperty

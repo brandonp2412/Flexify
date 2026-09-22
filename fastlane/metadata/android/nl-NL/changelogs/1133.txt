@@ -1,0 +1,3 @@
+- Fix eenheidsonderzoek
+- Verminder de iconen in de instellingen pagina
+- Gebruik knoppen voor periode selector

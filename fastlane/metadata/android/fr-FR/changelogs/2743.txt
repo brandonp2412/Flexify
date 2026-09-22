@@ -1,0 +1,4 @@
+• Ajouter une ligne de tendance ponctuée aux graphiques
+• Ajoutez un petit bouton à la fin du cercle de l'horloge
+• Supprimer le différent de migrate.sh
+• Définir la catégorie lorsque vous sélectionnez un exercice

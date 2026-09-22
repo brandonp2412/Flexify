@@ -1,0 +1,1 @@
+- Voeg dotnet toe aan windows store deployment stage

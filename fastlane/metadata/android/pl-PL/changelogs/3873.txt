@@ -1,0 +1,1 @@
+• fix: przechwycić commit_sha z właściwego kroku w przepływie pracy uwalniania

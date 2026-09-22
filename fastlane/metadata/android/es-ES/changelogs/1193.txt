@@ -1,0 +1,2 @@
+- Renombrar el archivo zip macos
+- Corrección de la verificación de ios para las pruebas de integración

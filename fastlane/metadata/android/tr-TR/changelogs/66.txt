@@ -1,0 +1,6 @@
+- Deploy.sh'ten etiketleri kaldır
+- Spor set sayfasını düzenlemek için sil düğmesini ekle
+- Graf noktalarını çift dokunarak düzenle
+- Tarih ayarlarını etiketlere taşı
+- Kısa tarih biçimi ayarını ekle
+- Refactor çizgi grafikleri

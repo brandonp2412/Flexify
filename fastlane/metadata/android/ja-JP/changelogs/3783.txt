@@ -1,0 +1,6 @@
+• 底部ナビバリエーションをいくつか追加
+• Linux が失敗するときにスクリプトを追加する
+• ブラウザのバリエーションを削除する
+• 下のナビをアップデートして,ピルルのデザインになる
+• fix: gradle.properties からハードコードのローカル JDK パースを削除する
+• fix: 沈黙 MSVC coroutine deprecation 誤り Windows CI 構築を壊す

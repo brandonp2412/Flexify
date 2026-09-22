@@ -1,0 +1,7 @@
+• Voeg github-pagina's toe die worden gehost voor Flexify web
+• Voeg ontbrekende veranderlogen toe
+• Toestellen van gebruikers om max. sets te verwijderen
+• Niet gebruikte scripts verwijderen
+• Fix wat is nieuw kopieer
+• Alleen een back-up naar een enkel bestand elke keer
+• Verwijder herhalingen uit de krachtegraaf

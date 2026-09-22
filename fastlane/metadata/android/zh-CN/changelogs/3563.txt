@@ -1,0 +1,3 @@
+• 逆转"ci:用subosito/flutter-action取代飞子模块设置"
+• 意外删除 .git模块的逆转
+• ci: 替换飞子模块设置为subosito/flutter-action

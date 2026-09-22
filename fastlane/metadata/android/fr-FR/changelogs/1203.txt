@@ -1,0 +1,3 @@
+- Supprimer les empreintes de débogage des tests de migration
+- Retirez le git poussé --force de deploy.sh
+- Réparation de tous les problèmes de migration de base de données

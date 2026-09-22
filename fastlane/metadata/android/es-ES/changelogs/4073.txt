@@ -1,0 +1,10 @@
+• Inicialización de audio de configuración plana
+• Selección de contenido de pestañas planas
+• Sistema portátil de respaldo de FitBook
+• Preferir selectores de acción Flexify etiquetados
+• Prefiere selectores de acción de gráfico etiquetados
+• Prefiere seleccionar pestañas visibles
+• Simplificar el flujo de control de devolución temprana
+• fix: tiempo de ejecución de ensayo Android CI
+• fix: habilitar copias de seguridad después de seleccionar la carpeta
+• refactor: Preferir controles visibles para el usuario en Linux E2E

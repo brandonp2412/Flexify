@@ -1,0 +1,11 @@
+- Poprawa zdjęć ekranu
+- Wykrywacz jednostki ukryć na wykresach, jeśli jednostki są wyłączone
+- Dodaj grupę według pola dla wykresów (dzień/tygodzień/miesiąc/rok)
+- Animowanie karty graficzne podczas przeglądania ćwiczeń z planów
+- Grafy wykonania z planów
+- Usunięcie tagów z deploy.sh - 1.0.59
+- Dodaj przycisk wymazać do edycji strona ustawień siłowni
+- Edytoruj punkty wykresu poprzez podwójne naciśnięcie
+- Przenieść ustawienia daty pomocnik tekstu do etykiety
+- Dodaj ustawienie krótkiego terminu
+- Grafy linii refaktorów

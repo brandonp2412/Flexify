@@ -1,0 +1,2 @@
+- Aktualisieren Sie pubspec.lock
+- Installieren fehlender Pakete in deploy-windows-store

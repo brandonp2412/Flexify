@@ -1,0 +1,2 @@
+• Indicateur de progression du timer d'emballage dans la zone sûre
+• Correction des graphiques qui ne sont pas mis à jour

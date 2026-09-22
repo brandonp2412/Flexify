@@ -1,0 +1,2 @@
+- Fixation du compte du plan
+- Correction de la base de données schéma de surveillance arrêt parfois

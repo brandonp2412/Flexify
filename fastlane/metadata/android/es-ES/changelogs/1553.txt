@@ -1,0 +1,2 @@
+- Habilitar temporizadores en ios
+- Fija los temporizadores terminados en macos

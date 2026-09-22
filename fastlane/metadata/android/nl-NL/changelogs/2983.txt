@@ -1,0 +1,10 @@
+• Voeg horizontale vulwerk toe aan de onderstaande progressie-indicator
+• Voeg de ontbrekende herbestelknop voor Android toe op de pagina Plans
+• Animeren tussen tabbladen
+• Verander de geselecteerde indicator
+• De standaard rusttimer is vals
+• Fix onderblaaie achter de nav
+• Fix deploy.sh wanneer de telefoon is aangesloten
+• Fix lag flick tussen tabbladen na het veranderen van hen
+• Fix opsparingssets
+• Verhoog het opvulling boven de ingestort historische pagina

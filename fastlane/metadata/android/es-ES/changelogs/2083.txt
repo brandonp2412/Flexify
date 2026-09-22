@@ -1,0 +1,13 @@
+- Cambiar las alturas del gráfico
+- Añadir la configuración para ocultar categorías
+- Utiliza los botones de icono para borrar los módulos
+- Añadir notificaciones a los nuevos registros
+- Añadir la configuración de la suavidad de la curva
+- Aumenta el relleno en la barra de búsqueda
+- Actualizar los gráficos después de editar desde el historial
+- Fijación de la configuración de repeticiones/peso después de terminar un ejercicio
+- Regresa después de guardar la configuración de pestañas
+- Mezcla navegación del sistema con temas de aplicaciones
+- Grafico de vista previa debajo de la configuración de apariencia
+- Fija la configuración de curva que no se aplica a la mirada del gráfico
+- Hacer que los gráficos se vean sexy 😎

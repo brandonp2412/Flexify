@@ -1,0 +1,10 @@
+• Analizde Flatter alt modülü ekle İlgilenme listesi
+• add_exercise_page.dart'a eksik boşluk ekle
+• Kardiyo alanları arasında bir mesafe ayarlayın
+• weight_page.dart'ta düşüş hatası düzeltildi
+• Get_modal.dart'ta tek hata düzelt
+• main.dart'da garip bağlam hatası düzeltildi
+• Format
+• Zamanlayıcı sayfada düğme parıltısını biraz daha az yap
+• Grup geçmişindeki ön kontrol kutusunu kaldır
+• Kullanılmamış ithalatı kaldır

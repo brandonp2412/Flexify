@@ -1,0 +1,6 @@
+• Przemianowanie wszystkich wewnętrznych rekwizytów z prefiksem _
+• Replikuj automatyczne zdjęcia ekranu i testy e2e z fit-book
+• chore: aktualizacja kontroli automatyki rejestru
+• ci: naprawia proces pracy w zakresie rozmieszczania patrolu i gry
+• fix: dostosować cele kompilacji JVM z systemem Android
+• fix: utrzymanie wagi kardiologicznej w historii grupy

@@ -1,0 +1,1 @@
+• Przenoszenie importu w bazie danych

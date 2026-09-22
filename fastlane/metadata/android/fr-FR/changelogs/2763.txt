@@ -1,0 +1,2 @@
+• Fixer les exercices de mise à jour après édition des plans
+• Fixer le point d'outil sur les premiers et derniers points de données

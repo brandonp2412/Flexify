@@ -1,0 +1,3 @@
+• Permitir el desencadenamiento manual del flujo de trabajo github
+• Descenso a rubí 3.3 para desplegar-google-play
+• Fija el nombre del editor en pubspec.yaml

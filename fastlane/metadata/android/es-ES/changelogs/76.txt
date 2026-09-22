@@ -1,0 +1,5 @@
+- Ir al siguiente ejercicio una vez que alcances los conjuntos máximos
+- Revier el plan de hoy en la página de gráficos
+- Detener los temporizadores de descanso una vez que el entrenamiento se complete
+- Mejorar el rendimiento de las configuraciones
+- Añadir la configuración de conjuntos máximos

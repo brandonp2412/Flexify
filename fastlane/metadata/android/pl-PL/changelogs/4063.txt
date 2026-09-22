@@ -1,0 +1,4 @@
+• Wybór zawartości płaskich kart
+• Wybór karty widocznej
+• Uproszczenie przepływu kontroli wczesnego powrotu
+• refactor: preferuj kontrolki widoczne dla użytkownika w systemie Linux E2E

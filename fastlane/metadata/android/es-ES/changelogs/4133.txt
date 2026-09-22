@@ -1,0 +1,10 @@
+• El producto de la industria de la pesca
+• Revisar la descripción del proyecto en README
+• Actualizar README para modificar el lema del proyecto
+• Actualizar el nombre del proyecto en README
+• La versión actualizada a 2.2.0 en pubspec.yaml
+• ci: las emisiones de cerraduras de ensayo Patrol de suspensión escamosas
+• docs: añadir texto alternativo a las imágenes README
+• fix: evitar el choque del proveedor de ruta Android JNI
+• fix: evitar la ruta de notificación de entrenamiento duplicada
+• fix: captura de pantalla ligada CI cuelga

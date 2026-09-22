@@ -1,0 +1,2 @@
+• Mostre antevisão das notificações
+• Mostre o campo de peso se a unidade de cardio é um tipo de peso nos planos

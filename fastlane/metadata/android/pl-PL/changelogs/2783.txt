@@ -1,0 +1,4 @@
+• Dodać do planów wymianę ćwiczeń
+• Dodaj wyszukiwanie do wymiany treningu
+• Dodaj test jednostkowy do widgetów swap workout
+• Naprawa importy bazy danych na komputerze

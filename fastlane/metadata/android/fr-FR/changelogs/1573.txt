@@ -1,0 +1,4 @@
+- Ajouter des ensembles de chauffage
+- Modifier le style de liste d'exercices dans les plans
+- Fixation des ensembles maximaux
+- Ne montre que des valeurs non zéro

@@ -1,0 +1,1 @@
+Festlegen Sie die Vorrangszahl der Schale in deploy.sh

@@ -1,0 +1,1 @@
+- Cambiar las barras de progreso del plan

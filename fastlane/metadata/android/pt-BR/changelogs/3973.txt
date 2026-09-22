@@ -1,0 +1,2 @@
+• fix: Mantém o formatador fora do submodule Flutter
+• fix: Tolerar Patrulha desmontagem falso negativo

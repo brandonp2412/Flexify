@@ -1,0 +1,5 @@
+• feat: dodać link do strony O
+• fix: dodać brakujące podłogi na wszystkich stronach przewijania (#301)
+• fix: włącz stopwatch tykacz , gdy aplikacja wraca do pierwszego punktu
+• fix: używać czasu zegarka ścienne do zegarka stopów, aby przetrwać ekran
+• fix: Ustawienia treningu wypełnienie dolnej części i etykieta tab stopwatch

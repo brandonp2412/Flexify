@@ -1,0 +1,2 @@
+• Planlar sayfasında boş arama düzelt
+• Başlangıç plan sayfasını optimize edin

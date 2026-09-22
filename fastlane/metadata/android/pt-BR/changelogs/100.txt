@@ -1,0 +1,2 @@
+- Fixar planos de contagem
+- Força do refactor e linhas de cardio

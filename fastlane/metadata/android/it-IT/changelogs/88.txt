@@ -1,0 +1,4 @@
+- Aggiungere il pulsante stop ai timer finiti
+- Rettificare le date create nella pagina di storia per i nuovi set
+- Riparazione di allarmi non interrotti
+- Rimpiazzare l'uso ridondante di MaterialStateProperty

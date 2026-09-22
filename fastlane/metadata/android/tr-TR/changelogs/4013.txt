@@ -1,0 +1,10 @@
+• fix: koruyucu ekran görüntüsü navigasyon bağlamı
+• fix: izin verildikten sonra klasör seçicisini yeniden aç
+• fix: geçici ekran görüntüsü emülatörü yeniden çalıştır
+• fix: Dizin seçicisi öncesinde sırayla yedekleme izinleri
+• fix: Android klasör seçicisi testini istikrarlandır
+• fix: Otomatik zamanlayıcı ekran görüntüleri sabitleştir
+• test: Yeniden kullanılabilir veritabanı armatürleri ekle
+• test: paylaşılan widget test harness ekle
+• test: StartPlanPage testlerini mevcut alanlarla uyumlandır
+• test: Android belge seçicisini paketleri olarak belirtin

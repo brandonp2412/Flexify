@@ -1,0 +1,2 @@
+- Exige que la bandera -p de deploy.sh sea enviada a google play
+- Simplificar la consulta de conteo para los planes

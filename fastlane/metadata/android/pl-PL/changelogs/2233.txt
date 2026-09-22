@@ -1,0 +1,4 @@
+- Włącz ćwiczenia na zdjęciu ekranu do planów
+- Grafy krzywej domyślnie
+- Aktualizacja README.md
+- Przeprowadzenie nieudanych migracji

@@ -1,0 +1,2 @@
+• Corrección de errores de etiqueta de héroe
+• Correcta el borde de la pestaña siendo demasiado ancho a veces

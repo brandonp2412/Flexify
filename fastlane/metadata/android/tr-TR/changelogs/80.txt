@@ -1,0 +1,4 @@
+- Tarih hakkında spor setlerini sayfalara çevirin
+- Arama çubuğu cümleleri başlıklı
+- Öntanımlı olarak son girdiği spor salonunu kullan
+- Oluşturma tarihi ile sıralama grafikleri

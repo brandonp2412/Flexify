@@ -1,0 +1,1 @@
+.gitmodules에서 flutter 버전을 지정

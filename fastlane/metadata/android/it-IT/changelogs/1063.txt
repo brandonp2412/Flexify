@@ -1,0 +1,3 @@
+- Fix rilevare la fine dei piani
+- Aggiungere ulteriori test di unità di impostazione
+- Correzione annullare quando deploy.sh fallisce

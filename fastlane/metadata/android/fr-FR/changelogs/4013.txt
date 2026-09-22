@@ -1,0 +1,10 @@
+• fix: le contexte de navigation de capture d'écran de garde
+• fix: réouvrir le choix des dossiers après accord de l'autorisation
+• fix: essayez à nouveau l'émulateur de capture d'écran transitoire se déconnecte
+• fix: séquence de sauvegarde d'autorisation avant le choix des dossiers
+• fix: stabiliser le test de sélection de dossiers Android
+• fix: stabiliser les captures d'écran automatiques du temporisateur
+• test: ajouter des appareils de base de données réutilisables
+• test: ajouter le harnais d'essai du widget partagé
+• test: aligner les tests StartPlanPage avec les champs courants
+• test: affirmer le détecteur de documents Android par paquet

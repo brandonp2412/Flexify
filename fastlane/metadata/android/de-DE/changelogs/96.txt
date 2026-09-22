@@ -1,0 +1,3 @@
+- Anzeige des benutzerdefinierten Alarmgeräts beim Einstellen
+- Refactor-Kardiographen
+- Hinzufügen von Sharing-Datenbank-Taste zu Einstellungen

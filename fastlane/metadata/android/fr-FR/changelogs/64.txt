@@ -1,0 +1,7 @@
+- Inclure tous les messages de commande dans les notes de sortie
+- Renommer les fichiers de données d'exportation/importation
+- Page des plans de réfacteurs
+- Ajouter l' icône de modification pour la page graphiques
+- Ajouter le réglage pour les graphiques de lignes courbes
+- Faites courber les graphiques de ligne
+- Fixer les astuces sur les graphiques de lignes

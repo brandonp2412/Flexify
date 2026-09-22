@@ -1,0 +1,4 @@
+• WIP: Transferência Flexibilizar o trabalho de lista de verificação de Nox
+• chore: refrescar Configuração do projeto Serena
+• test: Defaultes de opção de cobertura
+• test: Remover o cinto de integração da patrulha

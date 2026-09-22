@@ -1,0 +1,6 @@
+• Rénommez tous les accessoires internes avec préfixe _
+• Répliquer des captures d'écran automatisées et des tests e2e à partir de fit-book
+• chore: vérifications d'automatisation de référentiel de mise à jour
+• ci: réparer le flux de travail de déploiement Patrol et Play
+• fix: aligner les objectifs de compilation de la JVM Android
+• fix: conserver le poids cardio dans l'histoire du groupe

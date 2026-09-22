@@ -1,0 +1,10 @@
+• A inicialização de áudio de configurações planas
+• Seleção de conteúdo de guia plano
+• Sistema de backup portátil do FitBook
+• Preferir selectores de ação flexíveis rotulados
+• Preferir selectores de ação de gráfico rotulados
+• Preferir selector de guia visível
+• Simplificar o fluxo de controlo de retorno precoce
+• fix: Tempo de execução do teste de CI de Android ligado
+• fix: ativar backups após a seleção de pasta
+• refactor: Preferir controles visíveis ao usuário no Linux E2E

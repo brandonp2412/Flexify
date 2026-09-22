@@ -1,0 +1,4 @@
+• WIP: Verplaatsing Flexify checklist werk van Nox
+• chore: vernieuwen Serena project config
+• test: Deelname aan de aanmeldingsregeling
+• test: verwijderen Patrouille integratie harnas

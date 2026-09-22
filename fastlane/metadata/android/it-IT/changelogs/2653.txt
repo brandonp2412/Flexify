@@ -1,0 +1,4 @@
+• Cambiare il flusso di lavoro di github
+• Rettificare il flusso di lavoro di github
+• Rimuovere i ritagli ridondanti
+• Replicare il sistema di build di fdroid per le versioni di build di android

@@ -1,0 +1,1 @@
+- Behebung der neuesten Sets, die nicht auf Grafiken angezeigt werden

@@ -1,0 +1,4 @@
+- ısıtıcı setler ekle
+- Planlarda egzersiz listesi tarzını değiştir
+- Maksimum ayarları sabitle
+- Sadece sıfır dışı değerler için eğilimi göster

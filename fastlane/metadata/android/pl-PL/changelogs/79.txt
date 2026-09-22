@@ -1,0 +1,12 @@
+- Naprawianie zdjęć ekranu
+- Ustawić ukryte i kardio typy eksportujące/importujące
+- Naprawa wyłączenia kardiobitów podczas edycji zestawu
+- Przestań animować do karetki po usunięciu
+- Przenieś wiadomość o pustych wpisach na górę historii
+- Dodaj kartę History
+- Aktualne zdjęcia ekranu
+- Aktualne zdjęcia ekranu
+- Dodał tab BarState do każdego testu
+- Dodany globalny kontekst Nie zależy już od tego , czy PlansPage jest pierwszą stroną
+- Dodawane zaktualizowane zdjęcia ekranu do porównania
+- Uproszczenie zdjęć ekranu

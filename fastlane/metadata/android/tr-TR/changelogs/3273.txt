@@ -1,0 +1,2 @@
+• Eklenmiş eğri düzlüğünün başarısız olmasına izin verin
+• Windows'tan plan/graflar ithal etmesini düzelt

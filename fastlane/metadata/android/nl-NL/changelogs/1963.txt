@@ -1,0 +1,5 @@
+- Verbeteren van de plannen bewerken van de prestaties
+- Fix een rep-max grafieken
+- Het vaste plan telt als wereldwijd
+- Laat de neiging leeg zijn
+- Verbeteren van de startprestaties

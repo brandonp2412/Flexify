@@ -1,0 +1,10 @@
+• Fixar a barra inferior não mostrada nas capturas de tela para a página de histórico
+• Fixar a barra inferior obscurecendo em capturas de tela
+• Esconda UI de imagens de tela cromadas por padrão
+• Prevenir o cronometragem executado quando desativado da página planos
+• Remover sqlite3_flutter_libs redundantes
+• Atualização . Serena
+• Actualização de flutter
+• Atualizar capturas de tela
+• Atualizar serena
+• chore: Corrigir as advertências de construção do Android, atualizar Grade para 8.14

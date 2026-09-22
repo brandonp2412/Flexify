@@ -1,0 +1,4 @@
+- Paginazione di set di palestra sulla storia
+- Capitalizzare le frasi della barra di ricerca
+- Utilizzare l'ultimo set di palestra inserito come predefinito
+- Ordinazione grafici per data creata

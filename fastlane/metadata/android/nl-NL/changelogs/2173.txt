@@ -1,0 +1,3 @@
+- Stop de back-up ontvanger als automatische back-ups uitgeschakeld zijn
+- Verwijder rsync van deploy.sh naar macOS
+- Gebruik zsh in macos.sh

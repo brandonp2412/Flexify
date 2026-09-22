@@ -1,0 +1,8 @@
+• Ajouter le tri temp à la page graphique
+• Catégories fixes non mises à jour après importation
+• Fixer le dernier conseil d' outil sur les graphiques
+• Fixé le système ui obscurcissant la page
+• Fixer le système ui obscurcissant les éléments sur la page de paramètres
+• Nom des fichiers de sauvegarde automatiques
+• Supprimer les animations de la liste d'historique
+• Logique de division supprimée de la page graphiques

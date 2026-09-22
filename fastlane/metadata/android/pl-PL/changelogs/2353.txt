@@ -1,0 +1,7 @@
+- Aktualizacja
+- Ustawić spójność osi X w grafikach globalnych
+- Po prostu poprosić o zezwolenia tła raz
+- Ustawić logikę postępu zegarka
+- Pokaż najnowsze wykresy zamiast najlepszej wagi
+- Wyświetlanie błędu przed pustym pultem władzy na stronie graficznych
+- Dodaj wyszukiwanie dynamiczne

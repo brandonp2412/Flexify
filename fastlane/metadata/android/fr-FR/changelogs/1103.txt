@@ -1,0 +1,3 @@
+- Arrêter l' avertissement sur les robinets manqués pour les tests de réglage
+- Le groupe de fusion "main" de github.com:brandonp2412/Flexify
+- Fixer les avertissements d'essai pour la page de paramètres

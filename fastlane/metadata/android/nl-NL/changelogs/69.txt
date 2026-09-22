@@ -1,0 +1,9 @@
+- Zorg ervoor dat de Y-waarden 2dp zijn voor cardio-lijn
+- Voeg het bewerkingsknopje aan de rechterbovenkant van de plannen toe
+- Voeg het geschiedenissoffix toe aan de grafiekgeschiedenis titel
+- Voeg cardio-types toe
+- Grafiekpagina van het weergaveverslag
+- Fix zoeken naar import/exportgegevens in instellingen
+- Refactor start_plan_pagina
+- Refactor plannen pagina
+- Testbesparingsplannen

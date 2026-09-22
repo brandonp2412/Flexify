@@ -1,0 +1,10 @@
+• Boş plan için mesaj ekle
+• Öntanımlı olarak ekranı kapatıp ayarlarda düğmeyi değiştir
+• feat: Dinlenme zamanları ayarında ekran tut
+• feat: Temaları SegmentedButton + AMOLED düğmesi ile değiştir
+• fix: StartPlanPage'de boş egzersiz listesi önüne geç
+• fix: SegmentedButton etiketini kapatmayı düzeltmekle önle
+• fix: Tarih ve grafik listelerinde arka metin boyutunu 16'dan 14'e düşürmek
+• fix: zamanın sona erdiği veya çalışmadığı zaman alarm kilitini serbest bırakın
+• fix: uygulamada atıştırmalık çubuğunu göster ve ekranı açıkken zamanlama sona erdiğinde bildirimi düzelt
+• fix: Tarih ve grafik listesi kapaklarında geri kalan metinleri küçült ve sustur

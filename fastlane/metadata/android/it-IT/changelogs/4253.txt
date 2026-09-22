@@ -1,0 +1,4 @@
+• WIP: Trasferimento Flessificare il lavoro della lista di controllo da Nox
+• chore: aggiornare Configurazione del progetto Serena
+• test: default di opt-in di copertura
+• test: rimuovere il guarnizione di integrazione della Pattuglia

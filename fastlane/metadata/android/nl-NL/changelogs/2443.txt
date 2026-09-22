@@ -1,0 +1,2 @@
+- Updateren van pubspec.lock
+- Fix artefact bestandpaden voor GitHub release

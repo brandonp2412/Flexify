@@ -1,0 +1,5 @@
+- Migliorare le screenshot
+- Includere screenshot nelle versioni di GitHub
+- Selettore di unità di riempimento
+- Elimina le menzioni duplicate di unità
+- Aggiungere molteplici modifiche di storia

@@ -1,0 +1,1 @@
+• feat: użyj ikony 08 jako ikony uruchamiacza Flexify

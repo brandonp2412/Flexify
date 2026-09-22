@@ -1,0 +1,2 @@
+• ci: Ritorna prova di fallimento del pick pick
+• fix: ripristinare le impostazioni di default di StartPlan

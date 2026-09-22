@@ -1,0 +1,6 @@
+- Entfernen Sie Text über Planübungen
+- Fix-Einsparungen vom Startplan
+- Machen Sie maximal # von Sets pro Übung
+- Hinzufügen von Verfolgungskommen
+- Einfachere Initialisierung von Einstellungen
+- Ziehen Sie aus git nach Erstellung einer GitHub-Veröffentlichung

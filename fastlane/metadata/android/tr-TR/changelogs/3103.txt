@@ -1,0 +1,2 @@
+• Deploy.sh'i düzelt .
+• Tab navigasyonunun listeler üzerinde yüzen olmadığını düzelt

@@ -1,0 +1,2 @@
+- Corrigir o crash do aplicativo no timeout
+- Corrigir exercícios de seleção na página de histórico

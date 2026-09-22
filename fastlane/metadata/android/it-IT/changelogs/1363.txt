@@ -1,0 +1,3 @@
+- La durata del cardio è di minuti: secondi
+- Fissare set massimi tutti 3 per esercizio
+- Abilitare i timer di riposo per Linux

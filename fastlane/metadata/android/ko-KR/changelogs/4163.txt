@@ -1,0 +1,1 @@
+• fix: rest timer를 복원할 수 있는 전체

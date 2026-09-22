@@ -1,0 +1,2 @@
+• Wykorzystuj ustawienia zegarka widoczne dla użytkownika
+• refactor: usuwanie martwego kodu zegarka

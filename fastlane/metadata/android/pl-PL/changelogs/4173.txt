@@ -1,0 +1,3 @@
+• Dodaj przepływ pracy podpisywania Android Kite (#347)
+• Naprawa podpisacza Kite Android SDK wyszukiwanie (#348)
+• Naprawianie środowiska NDK (#349)

@@ -1,0 +1,3 @@
+- Voeg beeldpicking toe aan gewicht
+- Verberg onbelangrijke velden op gewichtsinvoeringen
+- Maak categorieën dynamisch

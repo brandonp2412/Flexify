@@ -1,0 +1,2 @@
+• Permettre aux pipelines de déclencher des changements de flux de travail
+• Essayez de réparer msstore publier

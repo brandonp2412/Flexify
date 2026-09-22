@@ -1,0 +1,3 @@
+- Przestań ostrzegać o braku kanap w przypadku testów ustawień
+- Połączenie głównej oddziału github.com:brandonp2412/Flexify
+- Naprawianie ostrzeżeń o testowaniu dla strony ustawień

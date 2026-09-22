@@ -1,0 +1,4 @@
+- Zmiana czasu na pozycję planu
+- Dodaj filtr grupy mięśni do strony graficznej
+- Ustawić wypełnienie jednostki na stronie ustawień
+- Naprawić nieusunięte obrazy ćwiczeń

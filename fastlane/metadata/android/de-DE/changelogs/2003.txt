@@ -1,0 +1,3 @@
+- Fixplan-Übungen-Reset
+- Ersetzen Sie den +-Button mit der Suche nach neuen Plänen
+- Entfernen Sie den Abhängigkeits-Info-Block für f-droid

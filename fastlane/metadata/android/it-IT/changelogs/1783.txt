@@ -1,0 +1,3 @@
+- Appuntare doppio per aprire qualsiasi metrica
+- Mostra ORM durante la modifica di un set
+- Aggiungere il cambio per il suono dell' allarme

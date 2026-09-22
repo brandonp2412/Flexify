@@ -1,0 +1,3 @@
+• Änderungen der Auswahlindikatoren
+• Fix-Scheiding-Übungen nicht-Reinigung-Plan-Übungen
+• Korrigieren Sie Grafiken ohne Aktualisierung

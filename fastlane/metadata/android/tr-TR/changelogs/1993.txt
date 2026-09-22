@@ -1,0 +1,2 @@
+- Planlarda başlangıç tekrarları/koşul ağırlığı sıfır olarak ayarlayın
+- Planları kaydettikten sonra önde gelen sıfırları kaldır

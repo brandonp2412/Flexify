@@ -1,0 +1,3 @@
+• İletişim istemeyen yeni yüklemeleri düzelt
+• Düzeltme birimi testi
+• Yeni yüklemeler için notları kapat

@@ -1,0 +1,7 @@
+- Aggiornamento
+- Fissare la coerenza dell'asse X nei grafici globali
+- Richiedi solo una volta le autorizzazioni di sfondo
+- Fix logico di progresso del timer
+- Mostra i grafici più recenti invece del peso migliore
+- Mostra l' errore prima della casella di caricamento vuota nella pagina grafici
+- Aggiungere una ricerca dinamica

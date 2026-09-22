@@ -1,0 +1,1 @@
+- Grafiklerin ilk öğesini sayfa gizlemesini düzelt

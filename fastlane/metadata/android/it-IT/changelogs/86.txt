@@ -1,0 +1,5 @@
+- Aggiungere multidex a android/app/build.gradle
+- Aggiorna il flutter a 3.22.0
+- Aggiornamento pubspec.lock
+- Aggiornare le impostazioni vscode
+- Rettificare l' inserimento di record dalla pagina di storia

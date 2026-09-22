@@ -1,0 +1,11 @@
+- flutter zu aktualisieren
+- Ein zweimaler Tast auf eine Übung öffnet sie.
+- Verkleinern Sie die Löschung von Grafiken
+- Lange Schlagzeilen auf Tabs zu verstecken
+- Automatisierte Kapitalsuche nach Planübungen
+- Fehler auf Stärkegraphen beheben
+- Verwenden Sie verknüpfte Seiten auf Grafiken -> hinzufügen
+- Verwenden Sie die verknüpfte Route im Timer -> Einstellungen
+- Hinzufügen von Grafiken
+- Fehler auf Stärke-Seite beheben
+- Warten Sie auf die Speicherung des Fitnessstudio-Set, bevor Sie Bilder aktualisieren

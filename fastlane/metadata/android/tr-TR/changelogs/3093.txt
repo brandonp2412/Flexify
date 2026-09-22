@@ -1,0 +1,4 @@
+• Deploy.sh'i düzelt .
+• Alt levhaları daha kolay vur
+• Son girişleri daha kolay görmeyi/tıklamayı kolaylaştırın
+• Planlar sayfasında daha önce girdiği erkek ağırlıklarını kullan

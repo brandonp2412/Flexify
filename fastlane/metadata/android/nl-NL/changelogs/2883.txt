@@ -1,0 +1,10 @@
+• Voeg een lichte omtrek toe aan de timercirkel
+• Fix +1 minuut op Linux
+• Veranderingsblokken
+• Fix github readme styling [skip ci]
+• Fix msstore breedte badge [skip ci]
+• Beperking van de frequentie van Google Play-implementaties [skip ci]
+• Maak de badges groter.
+• Maak de badges consistent.
+• Verander "Fix msstore width badge [skip ci]"
+• Gebruik github release in plaats van artefact [skip ci]

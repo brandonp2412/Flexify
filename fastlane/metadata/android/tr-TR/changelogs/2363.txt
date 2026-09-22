@@ -1,0 +1,11 @@
+- Yq'in .deploy.yml'de kullanımı düzelt
+- Çekme sorunlarını düzelt
+- Baskı bozukluğu kuralını kaldır
+- Akıllı Çıktı biçimi
+- Ana üzerinde iş akışları çalıştır
+- Github iş akışlarını ekle
+- GitHub çalışma akışlarını hareket testi ile başa çıkmak için düzelt
+- Masaüstü ekran görüntüleri nesillerinin çoğunu düzelt
+- Chrome için entegrasyon testlerini çalıştırmak için ayar ekle
+- Web'de ayar sayfasını düzelt
+- Web üzerinde çalıştırılan ayar

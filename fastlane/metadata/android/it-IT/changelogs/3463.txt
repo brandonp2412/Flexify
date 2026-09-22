@@ -1,0 +1,2 @@
+• Rettificare molti potenziali bug
+• Include il divisore di data quando si seleziona

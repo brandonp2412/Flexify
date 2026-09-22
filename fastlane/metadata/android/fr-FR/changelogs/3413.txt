@@ -1,0 +1,4 @@
+• Ajouter des paramètres à la limite de mise en évidence/masque et à l'axe x sur les graphiques
+• Toujours démarrer le timer sur les plans activés
+• Réparer les nouveaux types de cardio qui ne fonctionnent pas
+• Presser à long terme l'axe x / glisserie limite pour cacher

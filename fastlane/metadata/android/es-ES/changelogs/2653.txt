@@ -1,0 +1,4 @@
+• Cambiar el flujo de trabajo github
+• Corrección del flujo de trabajo github
+• Eliminar los tiros redundantes de git
+• Replicar el sistema de construcción fdroid para las versiones de construcción android

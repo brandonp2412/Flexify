@@ -1,0 +1,9 @@
+- Assurez-vous que les valeurs Y sont de 2dp pour la ligne cardio
+- Ajouter le bouton de modification en haut à droite des plans
+- Ajouter le suffixe historique au titre historique du graphique
+- Ajouter des types de cardio
+- Page de graphique de la vue du réfacteur
+- Fixer la recherche des données d'importation/exportation dans les paramètres
+- Le réfacteur start_plan_page
+- Page des plans de réfacteurs
+- Plans d'épargne de tests

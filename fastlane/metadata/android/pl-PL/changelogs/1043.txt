@@ -1,0 +1,3 @@
+- Odprawa ustawienia w siłowni
+- Usunięcie połączeń do ustawień
+- Wyczyść słuchacze na zlikwidowanie

@@ -1,0 +1,6 @@
+• Github eyleminde oluşturulan gradle için daha düşük paralellik
+• Ekran çekimlerini güncelle
+• feat: kategorinin alanını açıklayın kas grubu etiketleme için
+• fix: İlk kez bir egzersiz yaparak tohumlu kategorileri uygula
+• fix: Tek etiket yayınları tüm platform inşaatları başarılı sonra
+• fix: Pin serbest bırakma oluşturur ve tam bir commit SHA ile etiketlenir

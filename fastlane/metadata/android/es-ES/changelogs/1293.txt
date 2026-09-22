@@ -1,0 +1,2 @@
+- Descargar los ceros traseros de los menús de participación
+- Corrección de la unidad de buggy al cambiar el cardio

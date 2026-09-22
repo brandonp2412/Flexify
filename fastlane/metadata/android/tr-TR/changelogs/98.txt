@@ -1,0 +1,1 @@
+- Maksimum ayarları planlara göre hesaplanır

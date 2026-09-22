@@ -1,0 +1,5 @@
+• Fix attaccando virustotal link alle release
+• feat: aggiungere preview dal vivo ai selezionatori di impostazioni e fissare la formattazione del peso
+• fix: aggiungere un rivestimento superiore per iniziare la pagina di pianificazione per evitare il taglio delineato
+• fix: spaziamento di 8dp coerente tra le entrate sulla pagina del piano di partenza
+• fix: Progresso di posizione di preview utilizza reale TimerProgressIndicator

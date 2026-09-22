@@ -1,0 +1,1 @@
+• İzin akışını ve ayarları etkinleştirme UI'si (#336)

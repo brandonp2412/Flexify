@@ -1,0 +1,5 @@
+- / Użyj odpowiednich ustawień /
+- Zwiększenie dokładności oceny odtwarzania
+- Pozwala na odprawianie dostosowanych czasów odpoczynku na wykres
+- Kategoria stałych nie jest dostępna dla planów
+- Ustawić kolejność edycji planu

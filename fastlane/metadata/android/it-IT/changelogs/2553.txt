@@ -1,0 +1,2 @@
+- Fusione della filiale "principale" di github.com:brandonp2412/Flexify
+- Vibrazione di anteprima quando si toglie la impostazione del timer

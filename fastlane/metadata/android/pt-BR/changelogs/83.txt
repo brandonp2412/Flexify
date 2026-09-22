@@ -1,0 +1,5 @@
+- Fixar temporizadores
+- Optimize os temporizadores
+- Corrigir backups automáticos
+- Adicionar configurações de vibração e som de alarme
+- Optimize a página de edição gráfica

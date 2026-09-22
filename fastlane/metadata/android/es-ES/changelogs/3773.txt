@@ -1,0 +1,10 @@
+• Corrección de la barra inferior no se muestra en las capturas de pantalla para la página de historial
+• Corrección de la barra inferior que se oscurece en capturas de pantalla
+• Escondir ui de las capturas de pantalla cromadas por defecto
+• Prevenir que los cronómetros se ejecuten cuando se deshabilita de la página de planes
+• Eliminar el sqlite3_flutter_libs redundante
+• Actualización . serena
+• Actualización de flutter
+• Actualización de capturas de pantalla
+• Actualización de serena
+• chore: Corrección de las advertencias de construcción de android, actualización de gradle a 8.14

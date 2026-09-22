@@ -1,0 +1,3 @@
+- Fügen Sie die Einstellungs-Schaltfläche zu aktiven Plänen hinzu
+- Befestigen Sie die nachfolgenden Umordnungs-Taste auf dem Desktop
+- Schalten Sie die Ruhezeiten bei Warmup-Sets aus

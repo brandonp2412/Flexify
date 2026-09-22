@@ -1,0 +1,2 @@
+- Odstęp od 0 z menu podziału
+- Naprawa urządzenia do przechowywania węzłów podczas przełączania kardio

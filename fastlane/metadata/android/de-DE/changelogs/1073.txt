@@ -1,0 +1,2 @@
+- Festlegung des Planes
+- Beheben Sie das Datenbank-Schema-Aufhörung manchmal

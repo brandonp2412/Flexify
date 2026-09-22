@@ -1,0 +1,9 @@
+• ci: automatische PR-APK's voor eigenaren alleen, handleiding voor anderen
+• ci: bouwen en bevestigen APK op trekverzoeken
+• ci: Fix 0.0.0-unknown Flutter versie in PR APK bouw
+• ci: Fix de aangehaalde artifact URL in PR APK commentaar
+• ci: installeer PR bouwt naast elkaar via .pr app id-aanvoeging
+• ci: sign PR builds met een vastgestelde openbare testkeystore
+• fix: Reset plan set tellen op middernacht
+• fix: stop rust timer geluid/vibreren wanneer een nieuwe set begint
+• refactor: gebruik AlertDialog voor Filters en de gedeelde onderste nav constante

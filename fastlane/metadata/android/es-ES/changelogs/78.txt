@@ -1,0 +1,5 @@
+- Corrección de pruebas de capturas de pantalla
+- Hacer que la importación de datos sea más robusta
+- Planes claros antes de la importación
+- Prevenir la apertura del punto del gráfico en pincha
+- Ponga el modo de liberación en mi teléfono después de desplegar

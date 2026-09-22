@@ -1,0 +1,1 @@
+• ci: fazer a secção VirusTotal colapsável em libertações

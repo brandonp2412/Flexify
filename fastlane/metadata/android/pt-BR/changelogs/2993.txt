@@ -1,0 +1,4 @@
+• Corrigir imagens de tela automáticas
+• Corrigir problemas de espaçamento na página de configuração de edição
+• Desagrupar o histórico padrão
+• Puxar antes do último empurrão

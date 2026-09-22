@@ -1,0 +1,10 @@
+• Ajouter la configuration serena
+• Fixer des toasts qui durent éternellement
+• Améliorer la visualisation du stepper
+• Faites la page de modification plus cohérente avec son rembourrage
+• Supprimer les étiquettes dupliquées pour le style d'entrée
+• Simplifier le champ de la vitesse
+• Mise à jour des captures d'écran
+• La mise à niveau de flutter vers 3.44.1
+• Mise à niveau de la version Kotlin
+• feat: ajouter des pasteurs à des répéteurs et des champs de poids

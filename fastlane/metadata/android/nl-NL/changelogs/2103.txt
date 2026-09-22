@@ -1,0 +1,9 @@
+- Neem alle screenshots in donkere modus
+- Zet het op de X-badges in een rij.
+- Fix een aantal obscure android fouten
+- Tik om te maken op plannen
+- Update van de tekst op grafieken pagina niet gevonden
+- Toon de beste oefeningen van grafieken pagina
+- Fix nul verpakking op grafiek geschiedenis pagina geen gegevens nog
+- Verkorte grafiekhoogten
+- Fix grafiek peek bug

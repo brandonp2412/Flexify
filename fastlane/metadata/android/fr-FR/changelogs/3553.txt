@@ -1,0 +1,4 @@
+• Régler la hauteur maximale sur les paramètres de format
+• feat: ajouter l'onglet Stopwatch (#268)
+• feat: réglages de graphique par exercice et notes d'exercice (#257 #267)
+• fix: pointe d'outil de regard superposant la barre de recherche et le clavier couvrant les notes d'exercice

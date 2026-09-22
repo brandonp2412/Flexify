@@ -1,0 +1,7 @@
+• Göçme verileri testlerini ekle
+• İş akışlarını tek bir iş akışına birleştirin
+• Bazı anlamsız yorumları sil
+• Yorumlarda link brzycki formülü
+• Daha fazla anlamsız yorumları kaldır
+• Bazı yorumları kaldır
+• Değişken isimlerini kısalt

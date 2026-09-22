@@ -1,0 +1,1 @@
+• feat: advertencia sobre la baja precisión de una estimación de repetición máxima

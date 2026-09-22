@@ -1,0 +1,4 @@
+• github 작업 흐름을 변경
+• github 작업 흐름을 수정
+• 과잉 git pull을 제거
+• 안드로이드 빌드 버전의 fdroid 빌드 시스템을 복제

@@ -1,0 +1,10 @@
+• Aggiungere serena
+• Cambiare larghezza della scheda di set di scheletro nel piano di partenza
+• I dati del grafico di clip in modo che le linee non volino fuori
+• Elimina l' azione di screenshot di waydroid
+• Raggiustare la compatibilità con le azioni GitHub
+• Fissare il gancio di pre-push
+• Fissare gli anagrafi di pre-push
+• Fissare lo spaziamento tra campo cardio e distanza sul cronometro di modifica
+• Nascondere i progressi globali su screenshot
+• Nascondere le immagini nelle prove di screenshot

@@ -1,0 +1,4 @@
+• Adicionar troca de exercícios aos planos
+• Adicionar pesquisa para troca de treino
+• Adicionar teste de unidade para widget de exercício de troca
+• Corrigir base de dados de importação no desktop

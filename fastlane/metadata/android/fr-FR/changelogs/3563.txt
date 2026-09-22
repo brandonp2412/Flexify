@@ -1,0 +1,3 @@
+• Retour "ci: remplacez la configuration du sous-module flutter par l'action subosito/flutter"
+• Revenir en arrière en supprimant accidentellement les .gitmodules
+• ci: remplacer la configuration du sous-module flutter par l'action subosito/flutter

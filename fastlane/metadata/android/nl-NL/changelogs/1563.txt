@@ -1,0 +1,3 @@
+- Categorieën toevoegen
+- Voeg hellings & aangepaste tempo grafieken toe
+- Verwijder dupliceerde tegels in timerinstellingen

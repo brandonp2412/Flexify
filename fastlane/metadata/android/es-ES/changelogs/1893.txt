@@ -1,0 +1,4 @@
+- Corrección de navegación hacia atrás a veces no funciona
+- Escondir una estimación de rep max en ejercicios de cardio
+- Mejorar el rendimiento de la página de resistencia
+- Mejorar el rendimiento de los planes

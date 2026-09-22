@@ -1,0 +1,10 @@
+• Permitir a configuração de temporizadores de descanso por exercício da página de configurações
+• Botões de animação nas barras de busca
+• Animação de caixas de verificação no selecionar
+• Animação fab na página dos planos
+• Corrigir bugs ao editar unidades para um gráfico
+• Fixar a primeira ou última ponta de ferramenta nos gráficos de hover
+• Fixar ícones de liderança para planos com títulos
+• Teste de lista de planos
+• Corrigir removendo temporizadores personalizados na página de configurações
+• Tornar o selector de dia mais escuro

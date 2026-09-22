@@ -1,0 +1,2 @@
+• Fixar o exercício de atualização após a edição dos planos
+• Fixar a dica de ferramenta nos primeiros e últimos pontos de dados

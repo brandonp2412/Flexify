@@ -1,0 +1,2 @@
+• Agp'yi 8.11.1'e düşürmek
+• Tahmin edilmeden önce yapılan tekrarları/koşul ağırlığını ayarlayın

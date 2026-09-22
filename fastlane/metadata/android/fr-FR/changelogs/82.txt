@@ -1,0 +1,8 @@
+- Ajouter la définition de l'onglet cache
+- Modifier les sauvegardes automatiques
+- Fixation du nom non mis à jour pour modifier le jeu de gym
+- Ajouter des sauvegardes automatiques
+- Réparer de nouveaux kits de gymnase ayant des identifiants et des créations invalides
+- Codes de formatage en import_data
+- Réparer les problèmes lors de l'ajout d'un nouveau kit de gym
+- Utilisation de file_picker pour les données d'exportation/importation

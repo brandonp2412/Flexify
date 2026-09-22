@@ -1,0 +1,1 @@
+- Rettificare il primo elemento di grafici pagina nascosto

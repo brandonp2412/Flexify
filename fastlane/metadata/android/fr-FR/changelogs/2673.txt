@@ -1,0 +1,3 @@
+• Fixer le répertoire de travail de la phase java
+• Assurez-vous que le bac flutter est toujours exécutable
+• Mettre en place le java

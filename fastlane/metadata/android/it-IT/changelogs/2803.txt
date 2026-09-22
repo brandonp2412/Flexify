@@ -1,0 +1,4 @@
+• Rettifica di flutter linting
+• Fissare le deprecazioni delle quote
+• Formatare la freccia
+• Utilizzare caselle di controllo per selezionare

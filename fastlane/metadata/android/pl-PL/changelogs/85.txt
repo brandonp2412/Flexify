@@ -1,0 +1,5 @@
+- Zabezpieczenie automatyczne na koniec planu
+- Aktualizowanie planu rozpoczęcia po edycji wpisu
+- Waga grupy w tygodniu w formie domyślnej
+- Aktualizacja zależności
+- Ustawić nazwę zmiennej strony ustawień

@@ -1,0 +1,4 @@
+- Adicionar conjuntos de aquecimento
+- Mudança de estilo de lista de exercícios nos planos
+- Fixar conjuntos máximos
+- Só mostrar inclinação para valores não-zero

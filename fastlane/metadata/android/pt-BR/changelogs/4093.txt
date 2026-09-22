@@ -1,0 +1,1 @@
+• Fixar fluxo de permissões e configurações de ativação UI (#336)

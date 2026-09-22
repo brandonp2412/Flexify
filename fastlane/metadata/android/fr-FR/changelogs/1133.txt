@@ -1,0 +1,3 @@
+- Tests d'unité fixe
+- Réduire les icônes dans la page de paramètres
+- Utilisez des boutons pour le sélecteur de période

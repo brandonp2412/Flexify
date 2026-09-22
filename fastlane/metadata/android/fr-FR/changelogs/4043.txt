@@ -1,0 +1,6 @@
+• Correction des contrôles de finalisation du déploiement de Microsoft Store
+• Parse multiline Réponses de déploiement de magasin
+• États vides polonais
+• Objectif publié Les soumissions du magasin
+• ci: réessayer une défaillance transitoire du pick-up Android
+• test: aligner l'historique du graphique à l'état vide

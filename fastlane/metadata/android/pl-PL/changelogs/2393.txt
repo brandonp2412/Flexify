@@ -1,0 +1,1 @@
+- Naprawić rozmieszczenie włączenia workflow dodając workflow_dispatch i API połączenie

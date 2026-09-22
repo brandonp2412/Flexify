@@ -1,0 +1,1 @@
+Voeg enkele emulator vlaggen toe om te deploy.sh

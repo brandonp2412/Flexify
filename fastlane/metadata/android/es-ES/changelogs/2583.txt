@@ -1,0 +1,9 @@
+• Añadir el manejo de errores a la importación de datos
+• Añadir más pruebas de migración de datos
+• Eliminar los comentarios
+• Habilitar la configuración de la construcción en android/aplicación/construcción.gradle
+• Se solucionó el problema de enlace en edit_set_page
+• Eliminar los prefijos de subtítulo en algunos métodos de la página de plan de inicio
+• Eliminar el selector de unidad y fijar las pruebas
+• Acortar todos los nombres de variables
+• Dividir todo en la página de configuración de edición más

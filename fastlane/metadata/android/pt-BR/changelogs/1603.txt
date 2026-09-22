@@ -1,0 +1,3 @@
+- Clarificar o que o gráfico de edição faz
+- Dimensão limite clara ao pesquisar o histórico
+- Permitir rolar o fim passado nas listas

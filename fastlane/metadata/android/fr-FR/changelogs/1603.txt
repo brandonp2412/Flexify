@@ -1,0 +1,3 @@
+- Clarifier ce que le graphique de modification fait
+- Taille limite claire lors de la recherche de l'historique
+- Permettre de faire défiler le bout passé sur les listes

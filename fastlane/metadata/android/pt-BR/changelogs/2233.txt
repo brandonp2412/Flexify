@@ -1,0 +1,4 @@
+- Ativar exercícios em captura de tela para planos
+- Graficos de curvas por padrão
+- Atualizar README.md
+- Manusear migrações falhadas

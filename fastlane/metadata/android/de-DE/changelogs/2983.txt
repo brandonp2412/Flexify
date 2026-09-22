@@ -1,0 +1,10 @@
+• Hinzufügen des horizontalen Polsterungsanzeigers auf den unteren Fortschrittsindikator
+• Fügen Sie den fehlenden Umordnungsbutton für Android auf der Seite Plans hinzu
+• Animate zwischen Tabs schieben
+• Ändern Sie den ausgewählten Indikator
+• Standardruhezeitpunkte auf falsche
+• Befestigen Sie die Unterbodenbänder hinter der Navigation
+• Fix deploy.sh, wenn das Telefon angeschlossen ist
+• Befestigen Sie die Verzögerung zwischen den Registerkarten nach dem Wechseln
+• Fix-Sparsätze
+• Erhöhen Sie die Polsterung über der abgestürzten Historikseite

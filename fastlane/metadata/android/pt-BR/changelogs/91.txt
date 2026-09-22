@@ -1,0 +1,1 @@
+- Fixar o bug de dias gráficos

@@ -1,0 +1,5 @@
+• Herziening van de projectbeschrijving in README
+• Update README om de projecttagline te wijzigen
+• Update van de projectnaam in README
+• Versijn bijgewerkt naar 2.2.0 in pubspec.yaml
+• fix: open geschiedenis en plan bugs oplossen

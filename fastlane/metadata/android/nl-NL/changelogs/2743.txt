@@ -1,0 +1,4 @@
+• Voeg een gedotste trendlijn toe aan grafieken
+• Voeg een kleine knop aan het einde van de timercirkel toe
+• Verwijder diffing van migrate.sh
+• Stel categorie op wanneer u een oefening selecteert

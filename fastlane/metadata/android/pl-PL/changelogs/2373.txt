@@ -1,0 +1,17 @@
+- Oddzielone oznakowanie od wypuszczania działań github
+- Usunięcie nieważnego etapu deploy.yml
+- Usunięcie przesyłek przepływu pracy
+- Odkodowanie Android keystore w deploy.yml
+- Uproszczenie start_plan_page
+- 2.0.21
+- Naprawianie użycia yq w .deploy.yml
+- Rozwiązanie problemów z przeciągnięciem
+- Usunięcie zasady nieprzyciśnienia
+- Format strzałów
+- Wykonaj przepływy pracy na głównym
+- Dodaj przepływy pracy github
+- Naprawić przepływy pracy GitHub do obsługi testów aktywności
+- Naprawić większość pokoleń zdjęć ekranu na komputerze
+- Dodaj ustawienie do uruchomienia testów integracji chromu
+- Popraw stronę ustawień w sieci
+- Naprawa w sieci

@@ -1,0 +1,11 @@
+- Düzeltme dağıtım
+- Deploy.sh'in hiçbir değişiklik olmadan çıkışını düzelt
+- "Kesinlik grafi ayarlarını hatırla"yı geri çevir
+- "Kardio grafikleri için ayarları hatırlayın"yı geri çevirin
+- Zamanlama sekmesi gizlendiğinde zamanlama süresi ilerlemesi
+- Günümüzün egzersizlerini ilk önce grafik sayfasında listele
+- Kardio grafikleri için ayarları hatırlayın
+- Güç grafik ayarlarını hatırlayın
+- Kayıp setState'i strength_line'e ekle
+- Grafikler için birimlerin kütle düzenlemesini etkinleştir
+- Kardio egzersizleri için dokunma grafiklerini düzelt

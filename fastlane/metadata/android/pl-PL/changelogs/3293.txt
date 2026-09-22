@@ -1,0 +1,5 @@
+• Ustawiony plan eksportu csvs
+• Naprawa plików importowanych z okna
+• Poprawa obsługi błędów
+• Utrzymać postęp zegarka nawet jeśli strona zegarka jest ukryta
+• Wybierz pierwszą odpowiednią praktykę w planach

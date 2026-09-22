@@ -1,0 +1,10 @@
+• Ajouter un message pour le plan vide
+• Faites démarrer l'écran par défaut et déplacez la commutation dans les paramètres
+• feat: ajouter un écran de conservation sur la réglage des temporisateurs de repos
+• feat: remplacer le thème déroulant par le bouton segmenté + AMOLED
+• fix: garde contre la liste de l'exercice vide dans StartPlanPage sauvegarder et sélectionner
+• fix: prévenir l'emballage de l'étiquette SegmentedButton en corrigeant le rembourrage
+• fix: réduire la taille du texte suivant de 16 à 14 dans les listes d'histoire et de graphiques
+• fix: libérer le verrou de réveil lorsque le temporisateur expire ou ne fonctionne pas
+• fix: afficher la barre de collation dans l'application et corriger la notification lorsque le temporisateur expire avec l'écran allumé
+• fix: rétrécir et réduire la voix du texte de suivi dans l'histoire et les carreaux de liste graphique

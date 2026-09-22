@@ -1,0 +1,8 @@
+• Añadir la clasificación de tiempo a la página del gráfico
+• Categorías fijas no actualizadas después de las importaciones
+• Corrección de la última herramienta en los gráficos
+• Sistema de fijación ui oscureciendo sobre la página
+• Sistema de fijación ui oscurecer elementos en la página de configuración
+• Nombre de archivos de copia de seguridad automática
+• Eliminar las animaciones de la lista de historias
+• Eliminación de la lógica del divisor de la página de gráficos

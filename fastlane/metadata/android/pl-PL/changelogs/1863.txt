@@ -1,0 +1,3 @@
+- Naprawianie obrazków nieostosowanych z planów
+- Napraw czasów do pracy
+- Dodaj kcal, metr do jednostki odległości

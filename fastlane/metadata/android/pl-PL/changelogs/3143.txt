@@ -1,0 +1,4 @@
+• Pozwalają na wszystkie rodzaje jednostek do ćwiczeń kardiologicznych
+• Zmiana stylu strony ustawień karty
+• Naprawa dodawania ćwiczeń kardio na stronie Grafy
+• Nie mów "zmiana" w pierwszej instalacji

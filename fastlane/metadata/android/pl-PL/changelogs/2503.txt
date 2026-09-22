@@ -1,0 +1,1 @@
+- Użyj biegacza okna do wdrożenia-windows-store

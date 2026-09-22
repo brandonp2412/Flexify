@@ -1,0 +1,5 @@
+• feat: ajouter un lien d'avis à la page À propos
+• fix: ajouter le rembourrage inférieur manquant sur toutes les pages roulables (# 301)
+• fix: reprendre le ticker de l'horloge d'arrêt lorsque l'application revient en premier plan
+• fix: utiliser le temps de l'horloge murale pour la montre d'arrêt pour survivre à l'écransage
+• fix: réglages d'entraînement le rembourrage inférieur et l'étiquette de l'onglet de l'horloge

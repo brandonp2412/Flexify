@@ -1,0 +1,4 @@
+- Verwijder de afbrekingen als de rusttimer is ingeschakeld
+- Bepaalde namen van import/export gegevensbestanden
+- Lijst van oefeningen voor de refactor
+- Fix release notities

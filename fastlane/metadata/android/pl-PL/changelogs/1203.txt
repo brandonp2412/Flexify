@@ -1,0 +1,3 @@
+- Usunięcie odcisków debugowania z testów migracji
+- Wyłącz git push --force z deploy.sh
+- Rozwiązanie wszystkich problemów z migracją baz danych

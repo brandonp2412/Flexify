@@ -1,0 +1,1 @@
+• Fixar a detecção de versão do submodule Flutter no fluxo de trabalho do Waydroid

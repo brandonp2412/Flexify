@@ -1,0 +1,3 @@
+• Github sürüm oluşturma programına app-release.aab ekle
+• Grafik bakışını kaydırılabilir hale getir
+• Doğru serbest bırakma notlarını kullan

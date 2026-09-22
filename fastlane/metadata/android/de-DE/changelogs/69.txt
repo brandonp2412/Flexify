@@ -1,0 +1,9 @@
+- Stellen Sie sicher, dass die Werte von Y für die Kardio-Linie 2dp sind
+- Hinzufügen von Bearbeitungs-Button oben rechts von Plänen
+- Hinzufügen von Historie Suffix zu Graphen-Historie-Titel
+- Hinzufügen von Cardio-Typen
+- Refactor-Ansicht Graphseite
+- Festsetzung der Suche nach Import-/Exportdaten in Einstellungen
+- Refactor start_plan_page
+- Refactor-Pläne Seite
+- Test-Sparpläne

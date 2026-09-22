@@ -1,0 +1,1 @@
+Corrección de la barra de búsqueda faltante en los gráficos

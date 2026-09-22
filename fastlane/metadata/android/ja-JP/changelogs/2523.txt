@@ -1,0 +1,1 @@
+- deploy-windows-store のデバッグステージを追加する

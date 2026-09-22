@@ -1,0 +1,10 @@
+- Birim testleri
+- Windows Store'a dağıtımı düzelt
+- Windows Store dağıtımında indirilmiş dosyaların listesine hata düzeni ekle
+- Windows Store dağıtımını düzelt: GitHub yayın URL yerine yerel MSIX dosyasını kullan
+- Windows Store dağıtımını düzelt: Windows Store dağıtımından önce GitHub sürümünün oluşturulduğunu emin olun
+- Masaüstü ekran görüntüleri güncelle
+- Masaüstü için tüm otomatik ekran görüntüleri düzelt
+- Pubspec.lock güncelleme
+- ChromeDriver güncelleme için senaryo ekle
+- Yeni sayfayı düzelt.

@@ -1,0 +1,4 @@
+- Updateren van pubspec.lock
+- Installatie msstore-implementatie
+- Configureer Google Play-vertalingen
+- Verwijder .actrc en MIGRATION_GUIDE.md

@@ -1,0 +1,3 @@
+- Preview suono di allarme personalizzato quando lo imposta
+- Grafici cardio rifattoriali
+- Aggiungere il pulsante condividere database alle impostazioni

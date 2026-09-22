@@ -1,0 +1,1 @@
+Fix shell prioriteit in deploy.sh

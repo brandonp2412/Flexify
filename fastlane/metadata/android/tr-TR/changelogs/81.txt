@@ -1,0 +1,3 @@
+- Spor setlerini düzenlemek için uzun tarih ayarlarını kullanın
+- Spor tarihindeki ilk öğenin seçimini düzelt
+- İptal commitinde eksik olan yeni çizgiyi düzelt

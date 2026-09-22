@@ -1,0 +1,2 @@
+• ci: Automatisierte Versionen, die auf die Hauptverschiebung stoßen und freisetzen
+• fix: Verhindern Sie duplizierte Ruhe-Alarm, wenn AlarmManager und AlarmManager beide ausgehen

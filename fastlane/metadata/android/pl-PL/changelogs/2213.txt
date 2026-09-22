@@ -1,0 +1,7 @@
+- Dodaj notatki do aktywacji planu
+- Zapobieganie wykresowym liniom wykraczającym poza granice
+- Usunięcie "Nie ma jeszcze danych" z globalnego postępu
+- Wyjąć białą linię poniżej paski wyszukiwania w prześwieceniu
+- Przenieś przycisk "przejść" z odruchu w lewo od paska wyszukiwania
+- Naprawianie zdjęcia ekranu planu edycji
+- Grafy linii krzywej w zdjęciach ekranu

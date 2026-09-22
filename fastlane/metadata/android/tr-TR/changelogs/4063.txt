@@ -1,0 +1,4 @@
+• Düz katrak içeriği seçimi
+• Görünür seksiyon seçicisini tercih edin
+• Erken dönüş kontrol akışını basitleştir
+• refactor: Linux E2E'de kullanıcı tarafından görünür kontrolleri tercih edin

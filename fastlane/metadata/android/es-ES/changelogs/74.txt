@@ -1,0 +1,5 @@
+- Añadir soporte para unidades en cardio
+- Grupo fijo por semana para las líneas de cardio
+- Grupo fijo por semanas para el gráfico
+- Grupos fijos por semana
+- Planes de refáctores

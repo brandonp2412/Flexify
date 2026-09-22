@@ -1,0 +1,2 @@
+• Siempre despliega 100% en la msstore
+• Dejar de cambiar el tamaño de la aplicación para el teclado virtual

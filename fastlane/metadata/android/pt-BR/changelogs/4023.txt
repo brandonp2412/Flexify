@@ -1,0 +1,8 @@
+• Corrigir vista de logueiro vazio
+• Esconda testes de integração do Linux no dwl
+• feat: melhorar os controles de selecção de gráficos
+• feat: integrar o registro de conversadores
+• fix: Forçar captura de tela de sete polegadas compatível
+• fix: Navegação e testes de desktop rígidos
+• fix: Base de dados de testes de integração isolada
+• test: Retorno de tela de câmbio de cobertura

@@ -1,0 +1,5 @@
+- Fix app crashs na 1.1.36
+- Gebruik de zoekbalk en voeg de zichtbaarheidskoppeling toe aan de plannen
+- Ruittimers in staat stellen op desktopplatformen
+- Maak timers op desktop
+- Werk op desktoptimers terug

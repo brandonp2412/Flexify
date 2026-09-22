@@ -1,0 +1,1 @@
+• fix: Przeprojektuj dialog dostępu do aplikacji

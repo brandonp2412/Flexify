@@ -1,0 +1,10 @@
+• Réservation de la quantité de nitrate
+• Réviser la description du projet dans README
+• Mettre à jour README pour modifier le slogan du projet
+• Mise à jour du nom du projet dans README
+• La version mise à jour vers 2.2.0 dans pubspec.yaml
+• ci: les décharges de fermeture de l'essai Patrol en éclats de fermeture de fermeture de l'essai Patrol
+• docs: ajouter du texte alternatif aux images README
+• fix: éviter le crash du fournisseur de chemin Android JNI
+• fix: éviter la route de notification de l'entraînement
+• fix: capture d'écran liée CI suspendu

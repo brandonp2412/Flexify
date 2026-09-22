@@ -1,0 +1,5 @@
+- Een back-up automatisch aan het einde van een plan
+- Startplan bijwerken na het bewerken van een bericht
+- Groepgewicht per week
+- Updates van afhankelijkheden
+- Fix variabele naam van de instellingen pagina

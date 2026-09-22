@@ -1,0 +1,3 @@
+• Toevoegen van de werkstroom van de ondertekening van Kite Android (#347)
+• Fix Kite-ondertekenaar Android SDK zoek (#348)
+• Fix Kite-signer NDK-omgeving (#349)

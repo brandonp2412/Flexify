@@ -1,0 +1,2 @@
+• docs: simplifier la configuration du rédacteur
+• test: améliorer les états de l'échantillon

@@ -1,0 +1,3 @@
+- Dubbeltikken om elke metric te openen
+- ORM laten zien tijdens het bewerken van een set
+- Voeg een schakelaar toe voor alarmgeluid

@@ -1,0 +1,10 @@
+• Aggiungere il contorno lieve al cerchio del timer
+• Risolvi +1 minuto su Linux
+• Rettifica dei cambi
+• Fix github readme stile [skip ci]
+• Fix msstore width badge [skip ci]
+• Limitazione della frequenza di implementazione di Google Play [skip ci]
+• Fai i distintivi più grandi.
+• Fate coerente i distintivi.
+• Invertire "Fix msstore width badge [skip ci]"
+• Utilizzare Github release invece di artefact [skip ci]

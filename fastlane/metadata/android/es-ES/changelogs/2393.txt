@@ -1,0 +1,1 @@
+- Correcta la activación de los flujos de trabajo de implementación añadiendo llamada workflow_dispatch y API

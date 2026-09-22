@@ -1,0 +1,4 @@
+- Pagina's van fitness-sets over de geschiedenis
+- Beide zoekbalkzinnen in hoofdstukken
+- Gebruik de laatste ingegane fitness set als standaard
+- Bestelgrafieken per geschapen datum

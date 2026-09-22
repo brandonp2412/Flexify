@@ -1,0 +1,1 @@
+• Waydroid iş akışında ayar-android yerine ön monte edilmiş adb kullanın

@@ -1,0 +1,2 @@
+• Descenso de la categoría agp a 8.11.1
+• Fijación de las repeticiones/peso pre-población

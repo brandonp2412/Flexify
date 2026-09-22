@@ -1,0 +1,1 @@
+• Fija el flujo de permisos y la activación de la configuración UI (#336)

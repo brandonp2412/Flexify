@@ -1,0 +1,4 @@
+• Permettere a tutti i tipi di unità per cardio
+• Modifica lo stile della pagina impostazioni delle schede
+• Correzione aggiungendo un esercizio cardio dalla pagina Grafici
+• Non dire il log di cambiamento al primo momento di installazione

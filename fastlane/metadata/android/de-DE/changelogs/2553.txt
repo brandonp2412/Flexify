@@ -1,0 +1,2 @@
+- Zusammenschluss "Hauptsitz" von github.com:brandonp2412/Flexify
+- Vibrationen bei der Schaltung des Timers vorbesichern

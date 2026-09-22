@@ -1,0 +1,2 @@
+- Ajouter la capacité de cacher les progrès mondiaux
+- Fixer les calculs d'un récapitulatif maximum pour les négatifs

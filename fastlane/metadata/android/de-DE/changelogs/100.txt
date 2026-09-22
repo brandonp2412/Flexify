@@ -1,0 +1,2 @@
+- Festlegen von Zählplänen
+- Refactor Stärke & Cardio-Linien

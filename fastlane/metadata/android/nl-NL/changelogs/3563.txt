@@ -1,0 +1,3 @@
+• Verander "ci: vervang de opstelling van de flutter-submodule door subosito/flutter-action"
+• Verwijder het per ongeluk verwijderen van .gitmodules
+• ci: vervangen van de opstelling van de flutter-submodule door subosito/flutter-action

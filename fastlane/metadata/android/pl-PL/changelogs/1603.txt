@@ -1,0 +1,3 @@
+- Wyjaśnij , co grafika edycji robi
+- Wyjaśnij limit wielkości podczas wyszukiwania historii
+- Pozwalać przewijanie przeszłości w listach

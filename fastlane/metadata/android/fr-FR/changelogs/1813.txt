@@ -1,0 +1,3 @@
+- Ajouter le bouton paramètres aux plans actifs
+- Fixer les boutons de réaménagement de suivi sur le bureau
+- Désactiver les temporisateurs de repos sur les appareils de réchauffement

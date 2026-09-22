@@ -1,0 +1,4 @@
+- Hinzufügen von Warmup-Sets
+- Änderung des Übungsstiles in den Plänen
+- Festsetzung von Max-Sätzen
+- Nur für nicht-nullwerte zeigen sie eine Neigung

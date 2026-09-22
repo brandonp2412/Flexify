@@ -1,0 +1,1 @@
+Añadir algunas banderas de emulador a deploy.sh

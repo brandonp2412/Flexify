@@ -1,0 +1,3 @@
+- Chiarificare cosa fa la grafica di modifica
+- Dimensione limite chiara quando si cerca la cronologia
+- Permettere la scorrere in precedenza nelle liste

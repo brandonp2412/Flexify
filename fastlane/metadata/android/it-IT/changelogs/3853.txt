@@ -1,0 +1,9 @@
+• ci: APK di PR auto-construzione solo per i PR di proprietario, manuale per altri
+• ci: costruire e attaccare APK su richieste di pull
+• ci: correzione di versione Flutter 0.0.0 sconosciuta nella versione APK PR
+• ci: correggere l'URL dell'artefatto citato nel commento APK PR
+• ci: installare PR build fianco a fianco tramite .pr app id suffix
+• ci: segno PR builds con committe test pubblici keystore
+• fix: il piano di ripristino imposta il conto alla mezzanotte locale
+• fix: fermare il suono/vibrazione del timer di riposo quando viene avviato un nuovo set
+• refactor: utilizzare AlertDialog per i filtri e la costante di navigazione inferiore condivisa

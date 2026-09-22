@@ -1,0 +1,3 @@
+- Tornar os conjuntos de ginásio de edição rolagíveis
+- Checkout para flutter principal em ci_post_clone
+- Voltar para a lista de descontos para período

@@ -1,0 +1,1 @@
+- Sadece Android'de izin sayfasını aç

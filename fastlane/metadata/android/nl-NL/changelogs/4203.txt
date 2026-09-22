@@ -1,0 +1,2 @@
+• ci: herbetoon: tijdelijk patrouillepickers falen
+• fix: herstel van de standaardvoorwaarden van StartPlan-uitvoer

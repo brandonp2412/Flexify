@@ -1,0 +1,10 @@
+• Adicionar serena
+• Mudança de largura do cartão de conjunto esqueleto no plano de início
+• Clip gráfico dados para que as linhas não voar fora
+• Excluir a ação de screenshots do waydroid
+• Fixar compatibilidade com o tempo de execução de Ações do GitHub
+• Fixar o gancho pré- empurrão
+• Fixar os ganchos pré-empurrados
+• Fixar o espaço entre o campo cardio e distância no histórico de edição
+• Esconda o progresso global em capturas de tela
+• Esconde imagens em testes de captura de tela

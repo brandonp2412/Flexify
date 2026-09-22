@@ -1,0 +1,2 @@
+• Herstel van de fout met het helden-tag
+• Fix tab grens te breed soms

@@ -1,0 +1,3 @@
+- Herhangi bir metrik açmak için çift dokun
+- Bir set düzenlerken ORM göster
+- Alarm sesi için düğme ekle

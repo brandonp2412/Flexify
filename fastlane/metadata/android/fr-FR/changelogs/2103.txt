@@ -1,0 +1,9 @@
+- Prenez toutes les captures d'écran en mode sombre
+- Mettez-le sur les badges X en rangée
+- Correction de certaines erreurs obscures android
+- Cliquez sur Créer sur les plans
+- Mise à jour de la formule sur la page graphiques non trouvée
+- Afficher les meilleurs exercices de la page graphiques
+- Fixer le rembourrage zéro sur la page d' histoire du graphique pas de données encore
+- Hauts graphes raccourcis
+- Correction du bug de regard de graphe

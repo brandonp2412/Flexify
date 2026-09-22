@@ -1,0 +1,3 @@
+- Stoppen Sie den Sicherungsergänzungsreceiver, wenn automatische Sicherungen ausgeschaltet sind
+- Entfernen Sie rsync von deploy.sh auf macos
+- Verwendung von zsh in macos.sh

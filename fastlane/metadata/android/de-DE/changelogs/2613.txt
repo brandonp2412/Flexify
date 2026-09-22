@@ -1,0 +1,3 @@
+• Hinzufügen von Screenshots in github-Arbeitsfluss [skip ci]
+• Beheben Sie die flutter Cache-Zulassungen
+• Speichern Sie Sätze aus der Geschichte nach dem Einreichen von Gewicht

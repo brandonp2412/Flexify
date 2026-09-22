@@ -1,0 +1,6 @@
+- Teste de fixação
+- Adicionar menus de compartilhamento
+- Corrigir o batedor piscando no submeter
+- Análise de datas criadas anteriormente em edição múltipla
+- Use um novo selector de unidade para gráficos cardio
+- Copiar o layout dos gráficos de resistência para cardio

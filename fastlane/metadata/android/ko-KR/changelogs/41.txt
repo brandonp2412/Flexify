@@ -1,0 +1,1 @@
+deploy.sh에서 git 컴백 명령어를 수정

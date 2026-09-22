@@ -1,0 +1,1 @@
+Fix-Sparplan mit abgeschalteten Timern

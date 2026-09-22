@@ -1,0 +1,11 @@
+- Verbessern von Bildschirmbildern
+- Verbergen Sie die Einheit auf Grafiken, wenn die Einheiten ausgeschaltet sind
+- Hinzufügen von Gruppen nach Feldern für Grafiken (Tag/Woche/Monat/Jahr)
+- Animieren Sie die Tab Grafiken beim Anzeigen einer Übung aus Plänen
+- Anzeige von Grafiken für eine Übung aus Plänen
+- Entfernen Sie die Tags von deploy.sh - 1.0.59
+- Hinzufügen von Löschknopfen zur Bearbeitung der Fitnessstudio-Set-Seite
+- Bearbeiten Sie die Graphpunkte mit doppeltem Tapping
+- Bewegen Sie die Dateneinstellungen-Helfertext in das Etikett
+- Hinzufügen von Kurzdatumformat
+- Refactor-Liniengrafiken

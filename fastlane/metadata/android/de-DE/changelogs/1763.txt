@@ -1,0 +1,3 @@
+- Reparatur von automatischen Sicherungen
+- Reparatur von unkonsequenten Alarmstörungen
+- Verbesserung der Schätzungsgenauigkeit der Wiederholungen

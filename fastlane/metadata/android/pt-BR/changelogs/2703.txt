@@ -1,0 +1,2 @@
+• Fixar a fase final de movimento do oleoduto
+• Corrigir upload artefatos Android

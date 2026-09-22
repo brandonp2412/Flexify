@@ -1,0 +1,6 @@
+• Bir sürü alt navigasyon variansı ekle
+• Linux çalıştırılmadığında senaryo ekle
+• Navigasyon variantlarını sil
+• Aşağı navigasyonu tablet tasarımı olarak güncelle
+• fix: gradle.properties'ten sert kodlanmış yerel JDK yolu kaldır
+• fix: MSVC coroutine deprecation hatası Windows CI yapılandırmasını kırıyor

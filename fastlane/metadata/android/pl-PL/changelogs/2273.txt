@@ -1,0 +1,2 @@
+- Dodaj zdolność do ukrycia globalnego postępu
+- Określ obliczenia maksymalnej liczby jednego odwrotu w przypadku negatywów

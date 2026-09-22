@@ -1,0 +1,1 @@
+- Naprawić paski stanu na Androida 15

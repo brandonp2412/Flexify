@@ -1,0 +1,3 @@
+- Test di pagina di impostazione
+- Utilizzare l'unità corretta per i grafici per impostazione predefinita
+- Aggiungere impostazioni per unità di forza e cardio

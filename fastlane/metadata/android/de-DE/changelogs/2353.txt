@@ -1,0 +1,7 @@
+- Aktualisierung von flutter
+- Festsetzung der Achsenkonformität von X in globalen Graphen
+- Nur einmal um Hintergrundberechtigungen bitten
+- Fix-Timer-Progress-Logik
+- Zeigen Sie die jüngsten Grafiken statt des besten Gewichts
+- Fehler vor dem Leerladen auf der Grafikseite angezeigt
+- Hinzufügen von dynamischen Suchanfragen

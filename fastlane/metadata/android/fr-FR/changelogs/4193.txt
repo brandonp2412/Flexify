@@ -1,0 +1,10 @@
+• chore: concilier la tranche de localisation en même temps
+• chore: refresh Flutter fichier de verrouillage de dépendance
+• docs: ajouter la feuille de route de la traduction
+• docs: mise à jour de l'état de finalisation de la localisation
+• feat: ajouter la localisation brésilienne portugaise
+• feat: ajouter des localizations CJK
+• feat: ajouter la localisation néerlandaise
+• feat: ajouter la localisation française
+• feat: ajouter la localisation allemande
+• feat: ajouter la localisation italienne

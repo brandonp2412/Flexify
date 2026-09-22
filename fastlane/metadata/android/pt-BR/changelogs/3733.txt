@@ -1,0 +1,1 @@
+• Adicionar compositor Weston sem cabeça para sessão Waydroid

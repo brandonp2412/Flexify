@@ -1,0 +1,2 @@
+- Verwendung des flutter-Untermodules bei der Bereitstellung
+- Festlegen von Graphengrößen für kürzere Bildschirme

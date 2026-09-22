@@ -1,0 +1,3 @@
+• Permitir o desencadeamento manual do fluxo de trabalho do github
+• Reduzir para rubí 3.3 para deploym-google-play
+• Fixar o nome do editor no pubspec.yaml

@@ -1,0 +1,2 @@
+- Aggiungere la capacità di nascondere il progresso globale
+- Calcolo di un massimo di ripetizione per i negativi

@@ -1,0 +1,2 @@
+- Określenie liczby
+- Naprawić schemat bazy danych czasami zatrzymuje

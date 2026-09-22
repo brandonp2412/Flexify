@@ -1,0 +1,3 @@
+- Rendere gli assemblaggi di ginnastica di edizione scorrevoli
+- Checkout per flutter principale in ci_post_clone
+- Torna a declinazione per periodo

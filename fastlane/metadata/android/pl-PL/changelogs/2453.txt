@@ -1,0 +1,1 @@
+- Naprawianie odniesienia do wydania github

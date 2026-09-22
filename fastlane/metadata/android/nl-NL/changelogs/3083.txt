@@ -1,0 +1,8 @@
+• Fix bottom progress bar niet bijgewerkt
+• Bepaal de verpakkingsconsistentie op plannen
+• Fix systeem terug navigatie
+• Fix eenheidsonderzoek
+• Link shields.io op downloads badge
+• Match spacing van het edit set op het edit gewicht pagina
+• Verhinderen dat tweekastbewerkingssets die nog niet zijn ingevoerd
+• Verwijder, haal het op X-afstand.

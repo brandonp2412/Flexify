@@ -1,0 +1,2 @@
+• Permitir que a adição de suavidade da curva falhe
+• Corrigir planos/grafos de importação a partir do Windows

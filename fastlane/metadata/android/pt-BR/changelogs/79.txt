@@ -1,0 +1,12 @@
+- Corrigir capturas de tela
+- Fixar os tipos ocultos e cardio de exportação/importação
+- Corrigir desligar cardio quando editar um conjunto
+- Pare de animar para as guias após a exclusão
+- Mover mensagem de entradas vazias para o topo do histórico
+- Adicionar guia de histórico
+- Atualizar capturas de tela
+- Atualizar imagens de tela para comparação
+- Adicionado tabBarState a cada teste
+- Adicionado contexto global Não depende mais de PlansPage ser a primeira página
+- Adicionado captura de tela atualizada para comparação
+- Simplificar capturas de tela

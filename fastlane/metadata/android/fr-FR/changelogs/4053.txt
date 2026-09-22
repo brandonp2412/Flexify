@@ -1,0 +1,2 @@
+• Préférer les affirmations de réglages de minuterie visibles par l'utilisateur
+• refactor: supprimer le code de l'heureuse de bureau morte

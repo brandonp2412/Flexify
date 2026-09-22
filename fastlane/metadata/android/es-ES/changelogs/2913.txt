@@ -1,0 +1,6 @@
+• Copie la configuración gradle desde fitbook
+• Corrección de las implementaciones de google play
+• Mover el gráfico de mirado 1 punto hacia abajo
+• Retirar la mesa de conseguir en X readme [skip ci]
+• Las características de reordenar en README [skip ci]
+• Las insignias de espacio [skip ci]

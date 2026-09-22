@@ -1,0 +1,2 @@
+- Wprowadzanie stałego z zestawów masowych
+- W przypadku zderzenia grafu linii stałej dla pustych sil względnych

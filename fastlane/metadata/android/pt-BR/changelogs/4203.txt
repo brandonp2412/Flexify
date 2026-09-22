@@ -1,0 +1,2 @@
+• ci: Reprova falha transitória da coleta de patrulhas
+• fix: restaurar as configurações padrão do exercício StartPlan

@@ -1,0 +1,2 @@
+- Bearbeiten von Graphennamen in der Appleiste aktivieren
+- Navigator.of(context.pop() => Navigator.pop(context)

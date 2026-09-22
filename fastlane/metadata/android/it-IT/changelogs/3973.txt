@@ -1,0 +1,2 @@
+• fix: mantenere il formatore fuori dal submodulo Flutter
+• fix: tollerare la pattuglia di disastro falso negativo

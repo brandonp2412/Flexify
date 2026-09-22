@@ -1,0 +1,2 @@
+• Tests de Harden Patrol contre le timing
+• fix: stabiliser le détecteur de dossiers Android

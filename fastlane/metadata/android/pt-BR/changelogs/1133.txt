@@ -1,0 +1,3 @@
+- Ensaios de unidade fixa
+- Reduzir ícones na página de configurações
+- Use botões para selector de período

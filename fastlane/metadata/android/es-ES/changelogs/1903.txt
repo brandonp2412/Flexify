@@ -1,0 +1,5 @@
+- Mejorar el rendimiento del gráfico
+- Eliminar "Peso" de la edición de cardio
+- Corrección de navegación hacia atrás a veces no funciona
+- Escondir una estimación de rep max en ejercicios de cardio
+- Mejorar el rendimiento de los planes

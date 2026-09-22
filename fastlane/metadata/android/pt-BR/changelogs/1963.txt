@@ -1,0 +1,5 @@
+- Melhorar os planos editar desempenho
+- Corrigir gráficos de uma repetição máxima
+- O plano de fixação conta para ser global
+- Permitir que a inclinação seja vazia
+- Melhorar o desempenho de arranque

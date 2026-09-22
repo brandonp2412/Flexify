@@ -1,0 +1,1 @@
+• Corrección de la detección de la versión de submodules Flutter en el flujo de trabajo Waydroid

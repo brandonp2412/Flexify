@@ -1,0 +1,4 @@
+• Corrección de la correa de flutter
+• Fijación de las depreciaciones de las acciones
+• El formato de dart
+• Utilice los cuadros de verificación para seleccionar

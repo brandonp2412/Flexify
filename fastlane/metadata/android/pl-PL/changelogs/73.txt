@@ -1,0 +1,2 @@
+- Użyj podmodułu flutter w rozmieszczeniu
+- Określ rozmiary wykresu dla krótszych ekranów

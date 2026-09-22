@@ -1,0 +1,3 @@
+• Aggiungere il flusso di lavoro di firma di Android Kite (#347)
+• Fix Kite signer Android SDK ricerca (#348)
+• Ripristino dell'ambiente NDK del firmato Kite (#349)

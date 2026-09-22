@@ -1,0 +1,2 @@
+• ci: automática de la versión de choque y liberación en empuje a la principal
+• fix: evitar alarmas de reposo duplicadas cuando se ejecuta y AlarmManager ambos disparar

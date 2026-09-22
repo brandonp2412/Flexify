@@ -1,0 +1,2 @@
+- Lazily krijgt rekeningen voor de plan oefeningen
+- Zorg dat gym_sets index heeft

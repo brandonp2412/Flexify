@@ -1,0 +1,2 @@
+- Lazily consigue recuentos por los ejercicios de plan
+- Asegúrese de que gym_sets tiene índice

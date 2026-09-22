@@ -1,0 +1,16 @@
+- Updates van screenshots
+- Verwijder het projectnaamfactoren in github.sh
+- Vervalste waarschuwingen oplossen
+- Verlies zoek naar plan_list_test
+- Verplaats het veilig gebied van het lichaam van het plank
+- Neem alle screenshots in donkere modus
+- Zet het op de X-badges in een rij.
+- Fix een aantal obscure android fouten
+- Voeg versienummer toe aan privacybeleid
+- Voeg privacybeleid versie toe aan privacy_url
+- Tik om te maken op plannen
+- Update van de tekst op grafieken pagina niet gevonden
+- Toon de beste oefeningen van grafieken pagina
+- Fix nul verpakking op grafiek geschiedenis pagina geen gegevens nog
+- Verkorte grafiekhoogten
+- Fix grafiek peek bug

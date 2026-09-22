@@ -1,0 +1,1 @@
+Melhorar o desempenho dos gráficos de linhas

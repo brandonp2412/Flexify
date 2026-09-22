@@ -1,0 +1,9 @@
+• Hinzufügen von Fehlerbearbeitung bei der Datenimporte
+• Fügen Sie weitere Datenmigrationstests hinzu
+• Löschen von Kommentaren
+• Aktivieren Sie die Konfiguration von Build in android/App/build.gradle
+• Behebung eines Problems mit der Verknüpfung in edit_set_page
+• Entfernen Sie Unterstrichervorvoegungen in einigen Methoden des Startplans
+• Entfernen Sie den Einheitsselektor und reparieren Sie die Prüfungen
+• Verkürzen Sie alle Variablen
+• Teilen Sie alles in bearbeiten Sie die Seite mehr

@@ -1,0 +1,7 @@
+- Adicionar notas para a ativação do plano
+- Prevenir que as linhas de gráfico se excedam dos limites
+- Remover "Não há dados ainda" do progresso global
+- Remova linha branca abaixo da barra de pesquisa no rolamento
+- Mover o botão limpo da barra de pesquisa para a esquerda
+- Fixar imagem de tela do plano de edição
+- Graficos de linhas de curva em capturas de tela

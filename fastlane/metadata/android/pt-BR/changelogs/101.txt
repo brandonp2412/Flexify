@@ -1,0 +1,2 @@
+- Exigir -p bandeira para deploy.sh para enviar para google play
+- Simplificar a consulta de contagem para planos

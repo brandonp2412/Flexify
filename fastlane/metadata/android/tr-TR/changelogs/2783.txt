@@ -1,0 +1,4 @@
+• Planlara egzersiz değişikliği ekle
+• Değişken egzersiz için arama ekle
+• Değişken egzersiz widget için birim testi ekle
+• Masaüstü üzerinde aktarılan veritabanını düzelt

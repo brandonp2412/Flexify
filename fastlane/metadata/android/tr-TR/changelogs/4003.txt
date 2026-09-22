@@ -1,0 +1,3 @@
+• Google Play mağazası metadatalarını otomatik olarak senkronize edin (#333)
+• fix: uyumlu bir gizlilik politikasını yayınlamak
+• fix: Sayfa dağıtımında gizlilik politikasını korumak

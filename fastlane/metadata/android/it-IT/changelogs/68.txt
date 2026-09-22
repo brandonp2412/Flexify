@@ -1,0 +1,4 @@
+- Rettificare le rotte salvo quando i timer di riposo sono abilitati
+- Fissare i nomi dei file di dati di importazione/esportazione
+- Elenco di esercizi per rifattorie
+- Fissare le note di rilascio

@@ -1,0 +1,3 @@
+- Die Cardio-Dauerzeit wird in Minuten: Sekunden betrachtet.
+- Fix max setzt alle 3 pro Übung
+- Einwegs Ruhezeitgeber für Linux

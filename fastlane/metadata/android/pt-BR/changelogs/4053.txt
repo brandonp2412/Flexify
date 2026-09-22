@@ -1,0 +1,2 @@
+• Preferir asserções de configurações de temporizador visíveis ao usuário
+• refactor: remover código de cronometragem de desktop morto

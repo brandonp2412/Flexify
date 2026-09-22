@@ -1,0 +1,10 @@
+• Ajouter env pour les captures d'écran Web
+• Supprimer les changelogs dupliqués
+• Réparation des problèmes de buildConfig
+• Port de chroméducteur fixe
+• Fixation de l'installation du chrome-river
+• Fixer le nom de l'émulateur dans les captures d'écran android
+• Git ajouter tout fastlane dir pour le flux de travail
+• Installer et démarrer le chromériver dans les flux de travail
+• Assurez-vous que les captures d'écran sont dans le commande
+• Éviter les duplicates dans la copie du changelog

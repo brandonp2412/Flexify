@@ -1,0 +1,2 @@
+- Raggiustare l' app crash in timeout
+- Rettificare le esercizi di selezione dalla pagina di storia

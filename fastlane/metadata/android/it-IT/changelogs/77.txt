@@ -1,0 +1,6 @@
+- Permettere la cancellazione multipla dei piani
+- Rinalizzare "Inserire peso" come "Peso" nella pagina grafica
+- Aggiungere il pulsante di modifica alla pagina a discesa dei grafici
+- Distanza di concentrazione dopo la presentazione della durata
+- Rettificare i crash con tipi cardio incoerenti
+- Rimuovere il suffisso di storia da graph_history

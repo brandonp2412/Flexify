@@ -1,0 +1,1 @@
+- Ajouter dotnet à windows store étape de déploiement

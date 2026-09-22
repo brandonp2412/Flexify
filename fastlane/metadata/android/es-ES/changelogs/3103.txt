@@ -1,0 +1,2 @@
+• Corrección de deploy.sh
+• Corrección de la navegación de pestañas no flotando sobre listas

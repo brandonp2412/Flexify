@@ -1,0 +1,2 @@
+• Permettre de défiler au-delà de la fin de la page de plans de modification
+• Réparation des séances d'entraînement

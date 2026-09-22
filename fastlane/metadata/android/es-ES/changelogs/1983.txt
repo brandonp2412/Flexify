@@ -1,0 +1,1 @@
+- Actualizar la lista de ejercicios después de añadir uno de los planes

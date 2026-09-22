@@ -1,0 +1,7 @@
+- Includere tutti i messaggi di commit nelle note di rilascio
+- Rinalizzare i file dati di esportazione/importazione
+- Pagina dei piani di rifazione
+- Aggiungere l' icona di modifica per la pagina grafici
+- Aggiungere impostazioni per grafici di linee curve
+- Rendere i grafici di linea curvi
+- Fissare i suggerimenti degli strumenti sui grafici di linea

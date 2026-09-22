@@ -1,0 +1,4 @@
+• Çekilen çakmak
+• Paylaşma eksikliklerini düzelt
+• Dart biçimi
+• Seçilen için kontrol kutularını kullan

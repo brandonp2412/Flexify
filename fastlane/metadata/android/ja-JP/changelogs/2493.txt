@@ -1,0 +1,2 @@
+- pubspec.lock を更新する
+- deploy-windows-store に欠落したパッケージをインストールする

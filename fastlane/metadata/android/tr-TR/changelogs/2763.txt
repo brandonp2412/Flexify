@@ -1,0 +1,2 @@
+• Planlardan düzenlenmeden sonra egzersiz güncellemeyi düzelt
+• İlk/son veri noktalarında araç ipucu düzelt

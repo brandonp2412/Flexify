@@ -1,0 +1,4 @@
+• Format ayarlarında maksimum yüksekliği ayarlayın
+• feat: Stopwatch sekmesi ekle (#268)
+• feat: Egzersiz başına grafik ayarları ve egzersiz notları (#257 #267)
+• fix: Peek araç ipucu üst üstelik arama çubuğu ve klavyesi egzersiz notları kapsamaktadır

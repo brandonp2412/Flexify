@@ -1,0 +1,10 @@
+• Dodaj env do zdjęć ekranu
+• Usunięcie duplikowanych plików zmian
+• Naprawa problemów z buildConfig
+• Ustawiony port chromedriver
+• Ustawienie chromedriver
+• Naprawić nazwę emulatoru w zdjęciach ekranu Androida
+• Git dodać cały szybki pas dir do przepływu pracy
+• Zainstalowanie i uruchomienie chromedriver w przepływach roboczych
+• Upewnij się, że zdjęcia ekranu są w komitcie
+• Zapobieganie kopiowaniu w kopiowaniu w rejestrze zmian

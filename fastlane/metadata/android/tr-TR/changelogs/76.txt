@@ -1,0 +1,5 @@
+- Bir sonraki egzersiz için en yüksek seviyeye ulaştıktan sonra git .
+- Günümüz planını grafik sayfasında ters çevir
+- Eğitim bittikten sonra dinlenme zamanlarını durdurun
+- Ayarların performansını geliştir
+- Maksimum set ayarını ekle

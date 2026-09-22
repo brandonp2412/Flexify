@@ -1,0 +1,9 @@
+• ci: APK de relations publiques automatiques uniquement pour les relations publiques du propriétaire, manuel pour les autres
+• ci: construire et attacher APK sur demande de tirage
+• ci: réparer la version 0.0.0-inconnue Flutter dans la construction PR APK
+• ci: réparer l'URL de l'artefact cité dans le commentaire PR APK
+• ci: installer les constructions de relations publiques côte à côte via le suffixe .pr app id
+• ci: sign PR construit avec un serveur clé d'essais publics engagé
+• fix: compte de plan de réinitialisation à minuit locale
+• fix: Arrêter le son/vibration du temporisateur de repos lorsqu'un nouvel ensemble démarre
+• refactor: utiliser AlertDialog pour les filtres et la constante de navigation partagée en bas

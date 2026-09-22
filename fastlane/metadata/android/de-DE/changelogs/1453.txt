@@ -1,0 +1,2 @@
+- Behebt den App-Absturz bei Timeout
+- Bearbeiten von Auswahlübungen aus der Historie-Seite

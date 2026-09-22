@@ -1,0 +1,2 @@
+- Büyük setlerden yapılan sabit ithalat
+- Boş nispetel güçler için sabit çizgi grafi çarpması

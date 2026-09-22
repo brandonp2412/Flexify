@@ -1,0 +1,9 @@
+• Verilerin ithal edilmesine hata işlemini ekle
+• Daha fazla veri göç testi ekle
+• Yorumları sil
+• Android/app/build.gradle'de yapılandırmayı etkinleştir
+• edit_set_page'de linting sorunu çöz
+• Başlangıç plan sayfasının bazı yöntemlerinde altüst önlükleri kaldır
+• Birim seçicisini çıkar ve testleri düzelt
+• Tüm değişken isimlerini kısalt
+• Düzenleme ayarlama sayfasında her şeyi bölün

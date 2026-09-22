@@ -1,0 +1,5 @@
+- Migliorare i piani di modifica delle prestazioni
+- Rettificare i grafici di una ripetizione massima
+- Il piano di fissazione conta per essere globale
+- Lascia che la inclinazione sia vuota
+- Migliorare le prestazioni di avvio

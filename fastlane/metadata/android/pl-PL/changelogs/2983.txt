@@ -1,0 +1,10 @@
+• Dodaj poziome wypełnienie do dolnego wskaźnika postępu
+• Dodaj brakujący przycisk przepisu na Androida na stronie Plany
+• Animacja prześlizgująca się między zakładkami
+• Zmiana wybranej wskaźnika
+• Domyślne zegarki odpoczynku do fałszywych
+• Naprawiać płyty dolne za navigatorem
+• Naprawić deploy.sh , gdy telefon jest podłączony
+• Naprawić przebieg między klikaczami po ich zmianie
+• Zestawy oszczędnościowe
+• Zwiększ wypełnienie nad stroną historii złamanej

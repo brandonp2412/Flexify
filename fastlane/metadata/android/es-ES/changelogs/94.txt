@@ -1,0 +1,2 @@
+- Añadir el gráfico de las mejores repeticiones
+- Comentario sobre el suministro de fastlane en deploy.sh

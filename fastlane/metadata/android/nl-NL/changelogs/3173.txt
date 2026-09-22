@@ -1,0 +1,2 @@
+• Bepaalde afstandsveld voor cardio-sets met een gewichtseenheid
+• Fix de geschiedenislijst weergave voor cardio-oefeningen met een gewicht

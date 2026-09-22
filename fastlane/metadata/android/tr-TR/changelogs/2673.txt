@@ -1,0 +1,3 @@
+• Java aşamasının iş dizini düzelt
+• Flatter bin her zaman çalıştırılabilir olduğundan emin olun
+• Java ayarını taşı

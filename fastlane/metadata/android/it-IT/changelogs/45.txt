@@ -1,0 +1,1 @@
+Aggiungi alcune bandiere di emulatore per implementare.sh

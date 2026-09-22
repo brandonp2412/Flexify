@@ -1,0 +1,2 @@
+- Ensaios de unidade fixa
+- Remover a força de empurrão da deployment.sh

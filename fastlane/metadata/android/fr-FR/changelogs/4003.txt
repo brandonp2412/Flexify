@@ -1,0 +1,3 @@
+• Synchronisez automatiquement les métadonnées stockées par Google Play (#333)
+• fix: publier une politique de confidentialité conforme
+• fix: conserver la politique de confidentialité dans le déploiement Pages

@@ -1,0 +1,11 @@
+- Melhorar capturas de tela
+- Esconde o selector de unidade em gráficos se as unidades estiverem desligadas
+- Adicionar grupo por campo para gráficos (dia/semana/mês/ano)
+- Animação para gráficos guia quando visualizar um exercício de planos
+- Veja gráficos para um exercício a partir de planos
+- Remover tags de deploy.sh - 1.0.59
+- Adicionar botão excluir para editar página de configuração de ginásio
+- Editar pontos do gráfico através de dois toques
+- Mover as configurações de data texto auxiliar para o rótulo
+- Adicionar configuração de formato de data curta
+- Graficos de linha de refactor

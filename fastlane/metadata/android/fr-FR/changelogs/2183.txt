@@ -1,0 +1,11 @@
+- Ajouter des graphiques globaux
+- Mise à jour de fastlane icon.png
+- Faites les poignées de traction plus grandes
+- Échangez des icônes claires étranges
+- Assurez-vous que iOS a des options décimales pour les entrées de nombre
+- Évitez l'animation du temporisateur chaque fois que vous changez d' onglets
+- Faites une icône d'application à thème sombre
+- Ajout/suppression d'animaux dans la liste d'historique
+- Ajouter l'option de temps relatif pour la date
+- Réglage du système à la page de l'heureuse
+- Correction du nom du graphique étant incorrect après mise à jour

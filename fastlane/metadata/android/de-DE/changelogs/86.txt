@@ -1,0 +1,5 @@
+- Mehrdex hinzufügen zu android/App/build.gradle
+- Aktualisieren Sie flutter auf 3.22.0
+- Aktualisieren Sie pubspec.lock
+- Aktualisieren vscode-Einstellungen
+- Behebung der Einfügung von Aufzeichnungen aus der Historie-Seite

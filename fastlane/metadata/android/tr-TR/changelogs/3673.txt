@@ -1,0 +1,1 @@
+• ci: VirusTotal bölümünü serbest bırakılarak katlanabilir hale getirir.

@@ -1,0 +1,5 @@
+- Geht zum nächsten Training, sobald ihr maximal erreicht habt.
+- Umkehren Sie den heutigen Plan auf der Grafikseite
+- Haltet die Ruhezeit ein, sobald das Training abgeschlossen ist.
+- Verbessern Sie die Leistung der Einstellungen
+- Hinzufügen max-Sets-Einstellung

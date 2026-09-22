@@ -1,0 +1,3 @@
+• Adicionar lógica para descobrir o id do emulador
+• Corrigir capturas de tela
+• Tente corrigir as capturas de tela novamente

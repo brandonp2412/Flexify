@@ -1,0 +1,2 @@
+- Edit # di esercizi sui piani invece di grafici
+- Migliorare le prestazioni delle app

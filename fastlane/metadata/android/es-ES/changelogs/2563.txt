@@ -1,0 +1,7 @@
+• Añadir pruebas de datos de migración
+• Combinar los flujos de trabajo en uno
+• Eliminar algunos comentarios sin sentido
+• Enlace la fórmula brzycki en el comentario
+• Elimine más comentarios inútiles
+• Eliminar algunos comentarios
+• Acortar los nombres de variables

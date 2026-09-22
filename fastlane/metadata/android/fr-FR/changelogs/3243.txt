@@ -1,0 +1,4 @@
+• Afficher toujours les titres des onglets
+• Correction de l' incapacité de faire défiler les graphiques globaux
+• Fixer les catégories de mise à jour
+• Réduire le désordre global des graphiques sur la pointe des outils

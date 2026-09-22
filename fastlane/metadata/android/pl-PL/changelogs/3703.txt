@@ -1,0 +1,1 @@
+• Naprawianie wykrycia wersji podmodułu Flutter w przepływie pracy Waydroid

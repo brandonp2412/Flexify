@@ -1,0 +1,5 @@
+- Verbesserung der Graphikleistung
+- Entfernen Sie "Gewicht" aus Cardio-Bearbeitung
+- Reparatur der Rücknavigation manchmal nicht funktioniert
+- Verbergen Sie eine maximale Schätzung für Cardio-Übungen
+- Verbesserung der Leistung der Pläne

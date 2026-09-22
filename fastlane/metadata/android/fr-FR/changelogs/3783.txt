@@ -1,0 +1,6 @@
+• Ajouter un tas de variantes de navigation basse
+• Ajouter le script pour l' exécution de linux échoue
+• Supprimer les variantes de navigation
+• Mettre à jour la navigation basse pour être un design de pilule
+• fix: supprimer le chemin local JDK hardcodé de gradle.properties
+• fix: silence MSVC corroutine erreur de déprécation de rupture Windows CI construire

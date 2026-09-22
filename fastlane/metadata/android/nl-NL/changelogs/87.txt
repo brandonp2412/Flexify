@@ -1,0 +1,5 @@
+- Fix swiping over grafieken voor tabblad beweging
+- Verwijder timers.webm
+- Verkeerde date opstellen bij het bewerken van fitness sets
+- Bepaal instellingen/invoer gewichtspagina wordt weggegooid
+- Systeemkleuren uitschakelen in screenshot test

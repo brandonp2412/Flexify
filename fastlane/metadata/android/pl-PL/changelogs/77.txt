@@ -1,0 +1,6 @@
+- Pozwala na wielokrotne usunięcie planów
+- Na stronie grafu zmieniono nazwę "Wprowadź wagę" na "Tegor"
+- Dodaj przycisk edytowania do wycofanego wyświetlacza
+- Odległość odbioru po złożeniu czasu trwania
+- Naprawa awarii z niezgodnymi typami kardioterapii
+- Usunięcie przedezwiedzenia historyczne z graph_history

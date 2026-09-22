@@ -1,0 +1,2 @@
+• Permettere l'aggiunta di un'allinezza della curva di fallire
+• Rettificare l'importazione di piani/grafici da Windows

@@ -1,0 +1,8 @@
+- Adicionar configuração para ocultar o seguimento do peso corporal
+- Fixar logs de mudança para versões de fastlane
+- Remover recurso de backups automáticos
+- Adicionar a configuração para o máximo # de conjuntos
+- Adicionar minutos/segundos de descanso
+- Tornar as configurações de tamanhos de enchimento consistentes
+- Coloque a barra de pesquisa no topo das configurações
+- Redescrição de WidgetSettings -> SettingsLine

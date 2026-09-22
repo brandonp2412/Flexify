@@ -1,0 +1,4 @@
+- Schakel tijdschema's per plan item
+- Voeg spiergroepenfilter toe aan grafieken pagina
+- Fix eenheidsopvulling op de instellingen pagina
+- Bepaal geen afwijzingen van de oefeningbeelden

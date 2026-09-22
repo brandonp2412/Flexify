@@ -1,0 +1,3 @@
+• Sincronize automaticamente os metadados do Google Play Store (#333)
+• fix: publicar a política de privacidade conforme
+• fix: manter a política de privacidade na implementação de páginas

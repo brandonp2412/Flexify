@@ -1,0 +1,3 @@
+• "ci: Flutter alt modül ayarını subosito/flutter-action ile değiştirin"
+• Tesadüfen .git modüllerini kaldırarak geri dön
+• ci: Flutter alt modül ayarını subosito/flutter-action ile değiştirin

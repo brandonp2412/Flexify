@@ -1,0 +1,10 @@
+• Hinzufügen von serena
+• Ändern Sie die Breite der Skelett-Setkarte im Startplan
+• Die Daten des Clip Chart, damit die Linien nicht abfliegen
+• Löschen Sie die Aktion waydroid Screenshots
+• Befestigen Sie die Laufzeitkompatibilität von GitHub Actions
+• Befestigen Sie den Vor-Push-Hauch
+• Vor-Schubhaken
+• Fix-Ausstand zwischen Cardio und Abstand Feld auf der Bearbeitung Geschichte
+• Verbergen Sie den globalen Fortschritt auf Screenshots
+• Verbergen Sie Bilder bei Screenshot-Tests

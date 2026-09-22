@@ -1,0 +1,5 @@
+- Kardiyo birimleri için destek ekle
+- Kardiyo çizgilerinde haftalık gruplama ayarlayın
+- Grafik için haftalar halinde gruplama ayarları
+- Haftalık gruplama
+- Refactor planları

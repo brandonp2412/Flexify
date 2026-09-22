@@ -1,0 +1,9 @@
+- Kardio hattı için Y değerlerinin 2 dp olduğunu emin olun
+- Düzenleme düğmesini planların sağ üstüne ekle
+- Grafik Tarihi Adı için Tarih İpucu Ekle
+- Kardio türlerini ekle
+- Refactor görünümü grafik sayfası
+- Import/İçkiş verilerini ayarlarda arama ayarları
+- Refactor start_plan_page
+- Refactor planları sayfası
+- Test tasarrufu planları

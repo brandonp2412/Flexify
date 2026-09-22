@@ -1,0 +1,5 @@
+- Mejorar el rendimiento de los planes
+- Corrección de gráficos de una repetición máxima
+- El plan fijo cuenta como global
+- Permitir que la inclinación sea vacía
+- Mejorar el rendimiento de la puesta en marcha

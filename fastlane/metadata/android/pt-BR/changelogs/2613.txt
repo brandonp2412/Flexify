@@ -1,0 +1,3 @@
+• Adicionar capturas de tela ao fluxo de trabalho do github [skip ci]
+• Corrigir permissões do cache flutter
+• Salvar conjuntos do histórico após a submissão de peso

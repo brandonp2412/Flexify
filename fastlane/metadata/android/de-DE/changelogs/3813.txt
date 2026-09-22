@@ -1,0 +1,10 @@
+• Hinzufügen von Tests zur dart-Analyse
+• Erlaubt der Übungsliste, die Navigationsleiste zu überschreiten, wenn Sie einen Plan abschließen
+• Ändern Sie den Stärkstijl der Seite
+• Verwenden Sie bottomNavHeight stetig
+• Festsetzung der Bodenhöhe
+• Korrigieren Sie die Abstandsbilder und verbergen Sie Notizen , wenn die Einstellung aus ist
+• Festsetzung von Einheitstests für die Suche
+• Verbessern Sie den Stil der Grafiken
+• Machen Sie die Plan-Chips-Ausweitung konsistent
+• Spiel-Stil in Cardio-Seite

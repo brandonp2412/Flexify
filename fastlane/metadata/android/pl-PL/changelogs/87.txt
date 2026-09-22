@@ -1,0 +1,5 @@
+- Naprawianie przewijania przez wykresy dla ruchu karty
+- Usunięcie timers.webm
+- Naprawianie niewłaściwych dat stworzonych podczas edycji zestawów fitness
+- Ustawienie ustawień/nawiadanie masy strony, która jest odrzucona
+- Wyłączyć kolory systemu w badaniu zdjęć ekranu

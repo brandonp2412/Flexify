@@ -1,0 +1,4 @@
+- Réparation de la navigation en arrière parfois pas fonctionne
+- Cacher une estimation maximale de répétition sur les exercices cardio
+- Améliorer les performances de la page de résistance
+- Améliorer les performances des plans

@@ -1,0 +1,2 @@
+- Feststeuerung von Massivsätzen Export
+- Festliniengraphen-Krach für leere relative Stärken

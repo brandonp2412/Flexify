@@ -1,0 +1,5 @@
+• Aggiungere configurazione di build riproducibile per F-Droid
+• Rettificare i riferimenti a windows build msix
+• Risolvere i problemi di costruzione riproducibili - allineare le versioni con Flutter 3.29.3
+• Prevenire il crash dopo l' importazione di database
+• Aggiornamento pubspec.lock

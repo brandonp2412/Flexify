@@ -1,0 +1,3 @@
+• Fix werk directory van java stage
+• Zorg ervoor dat de vlammenbak altijd uitvoerbaar is.
+• Verplaats java-instelling

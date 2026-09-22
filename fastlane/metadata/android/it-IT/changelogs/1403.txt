@@ -1,0 +1,4 @@
+- Includere le impostazioni nei backup di database
+- Rettifica database di esportazione su desktop
+- Aggiungere il piano che segue la pagina iniziale
+- Aggiungere opzioni per il trailing del piano

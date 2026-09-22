@@ -1,0 +1,3 @@
+- Wzrost w pubie
+- Nie używaj kolorów systemu do zdjęć ekranu
+- Wykonuj pakiet aplikacji tylko wysyłając do sklepu

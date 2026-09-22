@@ -1,0 +1,1 @@
+• feat: ostrzeżenie w przypadku niskiej dokładności

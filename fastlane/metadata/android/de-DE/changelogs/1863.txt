@@ -1,0 +1,3 @@
+- Bearbeiten von nicht aus den Plänen eingestellten Bildern
+- Fix Desktop-Timer noch zu schalten
+- Hinzufügen kcal, Meter zur Entfernungseinheit

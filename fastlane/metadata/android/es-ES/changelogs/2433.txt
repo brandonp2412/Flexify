@@ -1,0 +1,4 @@
+- Corrección de las vías de archivo de liberación GitHub para incluir APK Android
+- 2.0.27
+- Actualizar pubspec.lock
+- Eliminar las construcciones macOS/iOS del flujo de trabajo GitHub Actions

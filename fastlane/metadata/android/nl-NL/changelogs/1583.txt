@@ -1,0 +1,4 @@
+- Voeg de reputatie-schatting toe
+- Voeg de duursschatstelling toe
+- Voeg de ontbrekende opwarminginstelling toe
+- Pakket vensters repareren

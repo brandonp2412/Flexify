@@ -1,0 +1,4 @@
+• Wechseln Sie den github-Workflow
+• Befestigen Sie den github-Workflow
+• Entfernen Sie überflüssige git-Träger
+• Replizieren Sie fdroid-Build-System für android-Build-Releases

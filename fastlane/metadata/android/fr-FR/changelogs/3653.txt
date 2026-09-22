@@ -1,0 +1,10 @@
+• Correction des bannières de débogage affichées dans les captures d'écran
+• Mise à jour des captures d'écran
+• Utilisez le bouton texte pendant +1 minute
+• chore: ajouter le script de capture d'écran Android avec le drapeau --profile
+• feat: améliorer le UI pour la douceur de la courbe, les temporisateurs, le trailage du plan, le style d'entrée
+• fix: tourner le centre du timer verticalement et déplacer le bouton +1 min en dessous du cercle
+• fix: désactiver la bannière de débogage dans MaterialApp
+• fix: supprimer le modèle anti-UniqueKey dans le widget de cercle de minuterie
+• fix: redessin de cercle de temporisation avec une esthétique moderne et minimale
+• fix: remplacer le runApp par un testeur.pumpWidget dans les tests de capture d'écran

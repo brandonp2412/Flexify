@@ -1,0 +1,8 @@
+• Hinzufügen von Temp-Sortierung auf Graph-Seite
+• Festgeordnete Kategorien, die nach der Einfuhr nicht aktualisiert werden
+• Bearbeiten Sie den letzten Tooltip auf Grafiken
+• Fix-System ui verbirgt über Seite
+• Fix System ui Verdeckungselemente auf der Einstellungsseite
+• Benennen Sie automatische Sicherungsdateien
+• Entfernen von Animationen aus der Historikliste
+• Entferntes Splitterlogik aus Grafiken Seite

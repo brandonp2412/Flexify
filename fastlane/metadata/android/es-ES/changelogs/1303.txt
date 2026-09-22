@@ -1,0 +1,3 @@
+- Hacer que los juegos de gimnasio de edición sean desplazables
+- El pago en flutter principal en ci_post_clone
+- Regresa a la lista desplegable para el período

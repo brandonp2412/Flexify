@@ -1,0 +1,8 @@
+• Fixar barra de progresso de fundo não atualização
+• Fixar a consistência do enchimento nos planos
+• Fixar a navegação de volta do sistema
+• Ensaios de unidade fixa
+• Link shields.io em downloads badge
+• Aparecimento de espaçamento de editar definido na página de peso de edição
+• Previnir conjuntos de edição de toque duplo que ainda não foram inseridos
+• Remover, coloca-o no espaçamento X

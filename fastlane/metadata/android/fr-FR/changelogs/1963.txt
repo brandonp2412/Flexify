@@ -1,0 +1,5 @@
+- Améliorer les performances de l'édition des plans
+- Fixer les graphiques à une répétition maximale
+- Le plan de fixation compte pour être mondial
+- Laissez l'inclinaison être vide
+- Améliorer les performances de démarrage

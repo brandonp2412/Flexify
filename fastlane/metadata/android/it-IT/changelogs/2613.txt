@@ -1,0 +1,3 @@
+• Aggiungere screenshot al flusso di lavoro di github [skip ci]
+• Rettificare le autorizzazioni di flutter cache
+• Salvare i set dalla cronologia dopo aver inviato il peso

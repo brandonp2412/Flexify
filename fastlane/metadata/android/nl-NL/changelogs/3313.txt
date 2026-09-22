@@ -1,0 +1,4 @@
+• Fix padding op grafiek pagina 's
+• Fix toasts nooit afwijzen
+• Fix tooltips op grafieken
+• Behoud orde bij het uitwisselen van een oefening

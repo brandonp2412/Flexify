@@ -1,0 +1,1 @@
+- Fixer les barres d'état sur android 15

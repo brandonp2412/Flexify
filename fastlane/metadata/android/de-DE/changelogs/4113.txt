@@ -1,0 +1,2 @@
+• Harden Patrol-Tests gegen Zeit
+• fix: stabilisieren Android Ordner-Picker-Check

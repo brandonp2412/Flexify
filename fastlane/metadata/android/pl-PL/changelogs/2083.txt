@@ -1,0 +1,13 @@
+- Zmiana wysokości wykresu
+- Dodaj ustawienie do ukrycia kategorii
+- Użyj przycisków ikony do usunięcia modali
+- Dodawanie powiadomień do nowych zapisów
+- Dodaj ustawienie gładkości krzywej
+- Zwiększ wypełnienie w pasku wyszukiwania
+- Aktualizowanie grafik po edycji z przeglądu historii
+- Ustawienie ustawienia po zakończeniu ćwiczenia
+- Po zapisanie ustawień karty wróć
+- Mieszanie nawigacji systemu z tematami aplikacji
+- Graf przeglądu poniżej ustawień wyglądu
+- Ustawienie krzywej nieodpowiednie dla grafu
+- /Uczyńcie, że grafiki będą wyglądać seksownie.

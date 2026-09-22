@@ -1,0 +1,3 @@
+• app-release.aab in die Erstellung von github-Release einbeziehen
+• Erstellen Sie den Grafik-Spieck scrollabel
+• Verwenden Sie korrekte Veröffentlichungsnotizen

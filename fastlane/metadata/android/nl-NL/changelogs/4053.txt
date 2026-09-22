@@ -1,0 +1,2 @@
+• Voorkeur voor gebruikerszijnde timerinstellingen
+• refactor: verwijder dode desktop timer code

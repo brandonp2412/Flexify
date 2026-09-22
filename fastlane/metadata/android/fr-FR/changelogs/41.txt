@@ -1,0 +1,1 @@
+Fixer la commande de commande git dans deploy.sh

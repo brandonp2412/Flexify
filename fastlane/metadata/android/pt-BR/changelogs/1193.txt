@@ -1,0 +1,2 @@
+- Renomear arquivo zip macOS
+- Verificação fixa de testes de integração

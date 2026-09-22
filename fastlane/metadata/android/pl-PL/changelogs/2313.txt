@@ -1,0 +1,7 @@
+- Zapobieganie usunięciu ustawień ćwiczeń
+- Przekręć domyślne jednostki z ustawieniem
+- Zmniejsz wykres
+- Dodaj prześwietlacz graniczny do wykresów
+- Powiedzmy, że zestawy z upadłą historią
+- Poprawa stylu dzielnic dzienników dla historii
+- Podzielniki etykiet na stronie graficznej

@@ -1,0 +1,5 @@
+- Flatter'ı 3.24.0'a yükselt
+- Uzatılmış yüzen eylem düğmelerini kullan
+- Github & f-droid repro'da dağıtım düzeltme
+- İzin sayfasının iOS' da gösterilmesini engelle
+- Kardio grafikleri anında güncellenmiyor

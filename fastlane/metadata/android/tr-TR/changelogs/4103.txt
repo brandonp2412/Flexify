@@ -1,0 +1,10 @@
+• Yeniden kullanılabilir uygulama izinleri kontrol listesini ekle
+• Merkezi görünüm etiketleri ve simgelerde oynatma durumu yansıt
+• Merkez plan ayarları etiketleri ve anahtarları
+• Merkezi zamanlayıcı ayarları ve doldurulmuş aktif simgeler kullanın
+• Merkez egzersiz etiketleri ve aktif dolmuş simgeler kullanın
+• Ayarlardaki uygulama izinleri kontrol listesini göster
+• CI kilitleme dosyası ve zamanlayıcı analizör hatası düzelt
+• Tek seferlik bildirim izin talebini düzelt
+• İzinler iletişim analizatörü hatası
+• Doğal bildirim izinini tek bir kez istekle

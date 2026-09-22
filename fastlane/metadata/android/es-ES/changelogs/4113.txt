@@ -1,0 +1,2 @@
+• Pruebas de Harden Patrol contra el tiempo
+• fix: estabilizar Android control de la carpeta

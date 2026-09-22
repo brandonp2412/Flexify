@@ -1,0 +1,8 @@
+- Aggiungere impostazione scheda Storia nascosto
+- Cambiare i backup automatici
+- Nome non aggiornato per il set di edizione di palestra
+- Aggiungere backup automatici
+- Rettificare nuovi set di palestra con ID e creati non validi
+- Codice di formato in import_data
+- Rettificare jank quando si aggiunge un nuovo set di palestra
+- Utilizzare file_picker per i dati di esportazione/importazione

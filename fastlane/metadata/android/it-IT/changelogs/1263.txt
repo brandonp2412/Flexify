@@ -1,0 +1,6 @@
+- Test fissi
+- Aggiungere menu condivisi
+- Rettificare il lampeggiamento della tastiera durante la presentazione
+- Preview delle date precedentemente create su multi-edit
+- Utilizzare il nuovo selettore di unità per grafici cardio
+- Copia di layout di grafici di forza a cardio

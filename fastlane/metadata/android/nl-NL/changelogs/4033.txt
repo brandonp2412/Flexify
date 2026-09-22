@@ -1,0 +1,10 @@
+• Bepaal leeg schakelblad
+• Verberg Linux-integratie-tests op dwl
+• chore: Dartformatting toepassen op tests
+• feat: verbeteren van de grafiekkeuzecontroles
+• feat: integreren Talker logging
+• feat: De desktop interface opnieuw ontwerpen
+• fix: handhaaf conform 7-inch screenshots
+• fix: Hard Linux trainingsgrafiek en timers
+• fix: Hard desktop navigatie en testen
+• fix: isolatie-integratie-testdatabases

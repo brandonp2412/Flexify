@@ -1,0 +1,2 @@
+• Wyświetlacz przeglądu powiadomień
+• Wyświetlać pole wagi, jeśli jednostka kardio jest typem wagi w planach

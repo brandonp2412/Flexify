@@ -1,0 +1,6 @@
+• Corrigir verificações de finalização de implantação da Microsoft Store
+• Parse multiline Depositar respostas de implantação
+• Estados vazios polacos
+• Objetivo publicado Submissões de loja
+• ci: Tente novamente falha transitória do selector Android
+• test: alinhar histórico de gráfico estado vazio

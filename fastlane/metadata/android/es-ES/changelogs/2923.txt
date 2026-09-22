@@ -1,0 +1,3 @@
+• Cambiar la página de configuración de edición y la página de historial
+• Las instalaciones de reparación
+• Pruebas de unidad fija

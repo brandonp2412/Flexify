@@ -1,0 +1,3 @@
+- Abilitare esercizi su screenshot per i piani
+- Grafici di curva di default
+- Gestire le migrazioni fallite

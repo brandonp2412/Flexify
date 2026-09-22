@@ -1,0 +1,5 @@
+• feat: hakkında sayfaya bir inceleme bağlantısı bırak
+• fix: Tüm kaydırılabilir sayfalarda eksik alt dolgu ekle (#301)
+• fix: uygulamanın ön planda olduğu zaman durak saatini tekrar başlat
+• fix: Sıcak saat için duvar saati zamanı kullanın ekran dışı kalmak için
+• fix: Egzersiz ayarları Alt dolgu ve saat etiketleri

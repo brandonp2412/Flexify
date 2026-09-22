@@ -1,0 +1,10 @@
+• Ekran çekimlerinde görünen hata düzeltme pankartları
+• Ekran çekimlerini güncelle
+• + 1 dakika için metin düğmesini kullan
+• chore: --profil bayrağı ile Android ekran görüntüsü senaryosunu ekle
+• feat: Yolaşma süresini iyileştirmek, eğrilik düzlüğü, zamanlayıcılar, plan takip, giriş biçimi
+• fix: Merkezi zamanlama döngüsü dikey ve +1 dakika düğmesini döngüsün altına taşı
+• fix: MaterialApp' da hata düzeltme pankartını devre dışı bırak
+• fix: UniqueKey anti-önümünü zamanlayıcı döngü widgetinde kaldır
+• fix: minimalleri, modern estetik ile yeniden tasarlanmış zamanlayıcı döngüsü
+• fix: Screenshot testlerinde runApp ' ı tester.pumpWidget ile değiştirin

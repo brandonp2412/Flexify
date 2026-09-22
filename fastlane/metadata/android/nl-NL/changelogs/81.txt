@@ -1,0 +1,3 @@
+- Gebruik de lange datuminstelling voor het bewerken van fitness sets
+- Fix selecteren van het eerste item in de sportschrijving
+- Vermiste nieuwe lijn in release commit oplossen

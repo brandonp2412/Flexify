@@ -1,0 +1,1 @@
+- Çoklu düzenleme ön izleme seçeneklerini düzelt

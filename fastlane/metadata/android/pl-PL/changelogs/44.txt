@@ -1,0 +1,1 @@
+Wykonuj pakiet aplikacji i aplikacji za pomocą podmodułów

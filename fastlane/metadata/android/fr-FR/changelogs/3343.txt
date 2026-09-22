@@ -1,0 +1,1 @@
+• Ajouter un espacement pour afficher l'axe x sur la page de résistance

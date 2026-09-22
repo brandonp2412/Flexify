@@ -1,0 +1,1 @@
+- Fijación de la referencia de la directorio de construcción en la tubería de despliegue-windows

@@ -1,0 +1,6 @@
+• Kopieren Sie die gradle-Einstellung von fitbook
+• Beheben Sie google play-Betrieb
+• Bewegt die Grafik 1 nach unten
+• Entfernen Sie den Tisch von X auf [skip ci]
+• Funktionen für die Neubeuführung in README [skip ci]
+• Auswärtige Abzeichen [skip ci]

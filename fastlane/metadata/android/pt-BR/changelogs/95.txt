@@ -1,0 +1,5 @@
+- Espaço para descrição completa adequadamente
+- Especifique git pull --tags após criar o lançamento do github
+- Reactivação de implementações do Google Play
+- Adicionar a inclinação para exportação/importação
+- Adicionar inclinação ao tipo cardio

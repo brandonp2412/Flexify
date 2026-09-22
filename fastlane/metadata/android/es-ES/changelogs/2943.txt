@@ -1,0 +1,3 @@
+• Descenso de la categoría agp a 8.11.1
+• Descargar detrás del sistema UI y cambiar el desplazamiento de pestañas
+• Fijación de las repeticiones/peso pre-población

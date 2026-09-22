@@ -1,0 +1,10 @@
+• Aggiungere il contorno lieve al cerchio del timer
+• Animare l'esistenza di pulsante stop nella pagina timer
+• Clarificare l'editing dell'immagine
+• Spiega le implementazioni di Google Play
+• Risolvi +1 minuto su Linux
+• Rettificare le screenshot automatiche per le versioni
+• Rettifica dei cambi
+• Fix github readme stile [skip ci]
+• Fix Github release download in Google Play
+• Fix msstore width badge [skip ci]

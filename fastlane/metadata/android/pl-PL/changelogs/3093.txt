@@ -1,0 +1,4 @@
+• Naprawianie rozmieszczenia.sh
+• Ułatwić naciśnięcie płyt
+• Ułatwić przeglądanie/pływanie ostatnich pozycji
+• Użyj wcześniej wpisanych wag chłopców na stronie planów

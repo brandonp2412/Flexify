@@ -1,0 +1,2 @@
+- Ativar temporizadores em iOS
+- Fixar temporizadores acabados em macOS

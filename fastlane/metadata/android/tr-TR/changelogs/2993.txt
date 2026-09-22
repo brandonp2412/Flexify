@@ -1,0 +1,4 @@
+• Otomatik ekran görüntüleri düzelt
+• Düzenleme ayar sayfasında boşluk sorunlarını düzelt
+• Öntanımlı geçmişi gruplandırmadan ayır
+• Son basmadan çek

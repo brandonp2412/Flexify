@@ -1,0 +1,1 @@
+- Pokaż jednostkę na dotyku grafu kardiologicznego

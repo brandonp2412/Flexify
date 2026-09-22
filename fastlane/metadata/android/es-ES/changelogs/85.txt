@@ -1,0 +1,5 @@
+- Backup automático al final de un plan
+- Actualizar el plan de inicio después de editar una entrada
+- Peso por semana del grupo por defecto
+- Las dependencias de actualización
+- Fija el nombre de la variable de la página de configuración

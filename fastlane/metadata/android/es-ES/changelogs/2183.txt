@@ -1,0 +1,11 @@
+- Añadir gráficos globales
+- Actualizar fastlane icon.png
+- Hacer las manijas de arrastre más grandes
+- Cambiar iconos extraños y claros
+- Asegúrese de que iOS tiene opciones decimales para las entradas de números
+- Prevenir la animación del cronómetro cada vez que cambias las pestañas
+- Hacer el icono de la aplicación temática oscura
+- Añadir/retirar animación en la lista de historias
+- Añadir la opción de tiempo relativo para la fecha
+- Corrección del sistema de nuevo en la página de temporizador
+- Corrección del nombre del gráfico que está equivocado después de actualizar

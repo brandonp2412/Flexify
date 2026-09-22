@@ -1,0 +1,4 @@
+• Corrigir repetições que mudam por padrão
+• Acender o botão de ponta do temporizador
+• Avaliar as dependências de flutter
+• Avaliar o flutter para 3,32,8

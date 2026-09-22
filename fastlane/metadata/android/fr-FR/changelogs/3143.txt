@@ -1,0 +1,4 @@
+• Permettez à tous les types d'unités de cardio
+• Modifier le style de la page des paramètres des onglets
+• Correction de l'ajout d' un exercice cardio à partir de la page Graphs
+• Éviter de dire le changelog lors de la première installation

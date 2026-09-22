@@ -1,0 +1,2 @@
+• ci: otomatik sürüm çarpma ve ana basmak için serbest bırakma
+• fix: AlarmManager ve AlarmManager her iki ateşken iki kez dinlenme alarmını önlemek için

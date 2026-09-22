@@ -1,0 +1,2 @@
+• Laat het toevoegen van curve smoothness om te falen
+• Fix van het importeren van plannen/grafieken vanaf Windows

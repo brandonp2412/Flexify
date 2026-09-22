@@ -1,0 +1,8 @@
+- Vücut ağırlığını izlemek için ayar ekle
+- Fastlane sürümleri için değişken logları düzelt
+- Otomatik yedekleme özelliğini kaldır
+- En fazla # seti için ayar ekle
+- Rest dakika/seküntleri global override ekle
+- Ayarları boyutları tutarlı hale getirin
+- Arama çubuğunu ayarların üstüne koy
+- Adını değiştir WidgetSettings -> SettingsLine

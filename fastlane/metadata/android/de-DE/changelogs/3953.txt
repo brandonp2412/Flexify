@@ -1,0 +1,6 @@
+• Alle internen Requisiten mit Vorbezeichnung _
+• Replizieren Sie automatisierte Screenshots und e2e-Tests aus Fit-Book
+• chore: Aktualisierungs-Automatisierungskontrollen
+• ci: Reparatur Patrol und Play-Entwicklungsablauf
+• fix: Zielvorgaben für die Kompilierung von Android JVM ausrichten
+• fix: Bei der Gruppe der Patienten ist das Cardio-Gewicht aufrechtzuerhalten.

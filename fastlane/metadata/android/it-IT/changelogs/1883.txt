@@ -1,0 +1,4 @@
+- Consegna di tempo per elemento del piano
+- Aggiungere il filtro dei gruppi muscolari alla pagina grafici
+- Fissare il riempimento dell'unità sulla pagina delle impostazioni
+- Ristituire le immagini di esercizio che non vengono rimosse

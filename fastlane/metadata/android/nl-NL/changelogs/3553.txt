@@ -1,0 +1,4 @@
+• Stel maximale hoogte op formatinstellingen
+• feat: toevoegen stopwatch tabblad (#268)
+• feat: De volgende punten worden behandeld:
+• fix: peek tooltip overlappende zoekbalk en toetsenbord met oefennootschappen

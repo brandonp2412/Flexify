@@ -1,0 +1,10 @@
+• Voeg test toe aan de pijlanalyse
+• Laat de oefenlijst langs de nav-balk scrollen bij het voltooien van een plan
+• Verander de stijl van de krachtpagina
+• Gebruik bottomNavHeight
+• Bepaalde bodemhoogte
+• Fix grafieken tussen en verbergen notities als de instelling is uitgeschakeld
+• Fix eenheidscontroles voor zoekbalk
+• Verbeter de stijl van de grafieken
+• Maak de planchips spacing consistent
+• Match stijl in cardio pagina

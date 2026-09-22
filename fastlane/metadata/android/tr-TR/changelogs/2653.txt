@@ -1,0 +1,4 @@
+• Github iş akışını değiştir
+• Github iş akışını düzelt
+• Boş git çekmelerini kaldır
+• Android için fdroid oluşturma sistemini kopyalayın

@@ -1,0 +1,4 @@
+• 改变gituhub工作流程
+• 修复 github 工作流程
+• 删除冗余的 git 拉
+• 复制Android版本的fdroid构建系统

@@ -1,0 +1,5 @@
+- Fixar deslizamento através de gráficos para movimento de guia
+- Eliminar timers.webm
+- Corrigir datas criadas erroneamente ao editar conjuntos de ginásio
+- A correcção das configurações/entrada de peso da página é descartada
+- Desativar cores do sistema no teste de imagem de tela

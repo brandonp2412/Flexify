@@ -1,0 +1,10 @@
+• Voeg herbruikbare app-toestemmingen toe
+• Centrum uiterlijk etiketten en weerspiegelen omschakeling staat in iconen
+• Centrumplaninstellingen, etiketten en schakelaars
+• Centrum timer instellingen en gebruik gevulde actieve icoons
+• Centrum-trainingetiketten en gebruik actieve gevulde icoons
+• Vertoon de lijst met toepassingsbevoegdheden in instellingen
+• Fix van CI-slotfile en timer-analysefout
+• Bepaal eenmalig verzoek om toestemming voor kennisgeving
+• Bepaal de dialooganalyseerfout met de toelating
+• Maak eenmalig native notificatie-toestemming prompt

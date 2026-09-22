@@ -1,0 +1,1 @@
+Fix timer altijd opnieuw instellen op nul

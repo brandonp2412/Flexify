@@ -1,0 +1,6 @@
+• Naprawianie kontroli finalizacji wdrożenia Microsoft Store
+• Odpowiedzi na rozmieszczenie magazynu
+• Polskie pusty państwa
+• Celem opublikowane zgłoszenia w sklepie
+• ci: ponownie próbuj przejściowy awariusz zbiorcy Android
+• test: wykazać historyjkę wykresu w stanie pustym

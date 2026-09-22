@@ -1,0 +1,10 @@
+• Geçmiş sayfası ekran görünümlerinde görünmeyen alt çubuğu düzelt
+• Ekran çekimlerinde gizlenmiş alt çubuğu düzelt
+• Varsayılan olarak Chrome ekran görüntüleri gizle
+• Planlar sayfasından devre dışı bırakıldığında zamanlayıcıların çalışmasını engelle
+• İptal edilmiş sqlite3_flutter_libs kaldır
+• UPDATE . Serena
+• Güncelleme sürüşü
+• Ekran çekimlerini güncelle
+• Serena güncelleme
+• chore: Android'in uyarıları düzelt, gradle'yi 8.14'e yükselt.

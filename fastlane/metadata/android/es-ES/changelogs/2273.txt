@@ -1,0 +1,2 @@
+- Añadir capacidad para ocultar el progreso mundial
+- Corrección de los cálculos de una rep-max para los negativos

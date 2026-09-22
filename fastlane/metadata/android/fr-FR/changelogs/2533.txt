@@ -1,0 +1,1 @@
+- Fixer la référence de l'annuaire de construction dans le pipeline déploiement-windows

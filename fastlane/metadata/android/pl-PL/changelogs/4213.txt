@@ -1,0 +1,2 @@
+• docs: uproszczenie konfiguracji readme
+• test: poprawić stan próbki zdjęć ekranu

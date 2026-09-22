@@ -1,0 +1,3 @@
+- Voeg de knop instellingen toe aan actieve plannen
+- Fix achtervolg herbestelknoppen op desktop
+- De rusttimer uitschakelen op warm-up-sets

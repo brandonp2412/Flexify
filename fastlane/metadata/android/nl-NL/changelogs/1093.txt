@@ -1,0 +1,3 @@
+- Fix-instellingen pagina test
+- Gebruik de juiste eenheid voor grafieken standaard
+- Voeg de instelling toe voor krachttraining en cardio-eenheden

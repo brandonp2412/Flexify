@@ -1,0 +1,3 @@
+- Tratar a duração do cardio como minutos:segundos
+- Fixar o máximo de conjuntos sendo todos 3 por exercício
+- Ativar temporizadores de descanso para Linux

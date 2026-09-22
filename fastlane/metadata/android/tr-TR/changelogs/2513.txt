@@ -1,0 +1,2 @@
+- msstore yayın komutunu düzelt
+- Grafikler sayfasında test etmeden önce garanti spor setleri

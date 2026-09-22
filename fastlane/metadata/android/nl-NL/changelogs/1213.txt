@@ -1,0 +1,5 @@
+- Fix deploy.sh
+- Verwijder windows + macOS werkstroom na het uitvoeren
+- Vaststellen van een lege pagina na het importeren van databases
+- Voeg eenheden toe aan cardio-grafieken
+- Herorganiseren lib map

@@ -1,0 +1,3 @@
+- Corrección de copias de seguridad automáticas
+- Corrección de los accidentes de alarma inconsistentes
+- Mejorar la precisión de las estimaciones de las repeticiones

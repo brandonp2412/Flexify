@@ -1,0 +1,3 @@
+• Invoeg app-release.aab in het maken van github-releases
+• Maak de grafiekpeek doordrolbaar
+• Gebruik correcte release notities

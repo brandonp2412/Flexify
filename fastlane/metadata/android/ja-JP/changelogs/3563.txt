@@ -1,0 +1,3 @@
+• "ci: フラッターサブモジュール設定を subosito/flutter-action に置き換える"
+• 誤った .gitmodule を削除する際に逆転する
+• ci: フラッターサブモジュール設定を,subosito/flutter-action に置き換える

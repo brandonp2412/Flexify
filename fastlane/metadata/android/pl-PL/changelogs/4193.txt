@@ -1,0 +1,10 @@
+• chore: zjednoczyć równoczesny fragment lokalizacji
+• chore: odświeżyć zamek zależności Flutter
+• docs: dodanie planu tłumaczeń
+• docs: aktualizować stan zakończenia lokalizacji
+• feat: dodać lokalizację portugalską brazylijską
+• feat: dodać lokalizacje CJK
+• feat: dodać holenderską lokalizację
+• feat: dodać lokalność francuską
+• feat: dodać niemiecką lokalizację
+• feat: dodać lokalizację włoską

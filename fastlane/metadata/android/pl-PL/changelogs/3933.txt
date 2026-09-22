@@ -1,0 +1,10 @@
+• Dodaj podmoduł flutter do analizy Ignoruj listę
+• Dodaj brakujące odstępy do add_exercise_page.dart
+• Ustawić rozstanie pola kardiologicznych
+• Naprawianie błędu w pozycji dropdown w pozycji weight_page.dart
+• Naprawione getSingle error w ćwiczeniach_modal.dart
+• Naprawić dziwny błąd kontekstowy w main.dart
+• Format
+• /Uprosz światło przycisków /w stronie z czasem
+• Usunięcie głównego pole wyboru w historii grupy
+• Usunięcie niewykorzystanej przywozu

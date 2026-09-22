@@ -1,0 +1,2 @@
+• Aggiungere la logica per capire l' id dell' emulatore
+• Rettificare le screenshot

@@ -1,0 +1,2 @@
+• Permitir que las tuberías activen cambios en el flujo de trabajo
+• Intentar arreglar msstore publicar

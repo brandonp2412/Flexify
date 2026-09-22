@@ -1,0 +1,1 @@
+- Corrección de macOS problema de firma de código de construcción

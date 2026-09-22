@@ -1,0 +1,8 @@
+• Boş değişken log görünümünü düzelt
+• dwl üzerinde Linux entegrasyon testlerini gizle
+• feat: Grafik seçimi kontrollerini geliştir
+• feat: Konuşmacı kayıtlarını entegre et
+• fix: uyumlu 7 inç ekran görüntüleri uygula
+• fix: sert masaüstü navigasyonu ve testleri
+• fix: İzolat entegrasyon test veritabanları
+• test: kaplama değişken ekrani görüntüleme

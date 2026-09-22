@@ -1,0 +1,4 @@
+- Einstellungen in Datenbank-Backups einbeziehen
+- Behebung der Exportdatenbank auf Desktop
+- Fügen Sie einen Plan auf der Startseite hinzu
+- Hinzufügen von Optionen für Plan-Trailing

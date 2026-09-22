@@ -1,0 +1,4 @@
+- Geri yönlendirme ayarlama bazen çalışmıyor
+- Kardio egzersizleri için bir rep max tahminlerini gizle
+- Güçlü sayfa performansını geliştir
+- Planların performansını geliştirmek

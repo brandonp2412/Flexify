@@ -1,0 +1,3 @@
+• Rettifica delle installazioni nuove che non richiedono la notifica
+• Prova di unità fissa
+• Spegni le note per le nuove installazioni

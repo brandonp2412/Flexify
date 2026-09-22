@@ -1,0 +1,5 @@
+• Adicionar configuração de construção reprodutível para F-Droid
+• Fixar referências para janelas edificar msix
+• Corrigir problemas de construção reprodutíveis - alinhar versões com Flutter 3.29.3
+• Prevenir o acidente após a importação de bases de dados
+• Atualizar pubspec.lock

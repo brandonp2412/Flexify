@@ -1,0 +1,9 @@
+• Ajouter des indicateurs d'icône de cardio/forte aux commutateurs dans les réglages de modification
+• Ajouter les paramètres pour la position de la barre de progression
+• Permettre la déduction de catégorie
+• Modifier l' icône des plans dans la navigation basse
+• Résoudre tous les problèmes de liens
+• Système d'apparence fixe ui graphique obscurcissant
+• Réparer des sauvegardes automatiques parfois corrompues de base de données
+• Mettre à jour instantanément les paramètres de l' onglet et supprimer le bouton sauvegarder
+• Éviter le texte de suggestion nulle sur les catégories ou incliner lors de l'édition multi-ensembles

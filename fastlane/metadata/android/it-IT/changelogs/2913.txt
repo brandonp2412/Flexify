@@ -1,0 +1,6 @@
+• Impostazione di copiatura da fitbook
+• Riprendere le implementazioni di Google Play
+• Spostare il grafico di sguardo 1 punto verso il basso
+• Togli la tavola dal riceverla su X Readme [skip ci]
+• Ritornazione delle funzionalità di README [skip ci]
+• - Scalza il segnale.

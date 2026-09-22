@@ -1,0 +1,10 @@
+• Serena ekle
+• Başlangıç planında iskelet set kartının genişliğini değiştir
+• Çizgi grafik verileri , çizgiler uçmaz
+• Waydroid ekran görüntüleri eylemini sil
+• GitHub Eylemleri Çalışma Zamanı Uygunluğu Düzelt
+• Önceden itme kaçağı düzelt
+• Önceden itme kancalarını düzelt
+• Düzenleme geçmişinde kardio ve mesafe alanı arasındaki mesafeyi düzelt
+• Küresel ilerlemeyi ekran görüntüleri ile gizle
+• Ekran çekimleri testlerinde görüntüleri gizle

@@ -1,0 +1,13 @@
+- Mudança de altura do gráfico
+- Adicionar configuração para ocultar categorias
+- Use botões de ícone para excluir os módulos
+- Adicionar notificações a novos registos
+- Adicionar a configuração de suavidade da curva
+- Aumentar o enchimento na barra de busca
+- Atualizar gráficos após edição do histórico
+- Fixar a configuração de repetições/peso após o término de um exercício
+- Volte depois de salvar as configurações de guia
+- Misture navegação do sistema com temas de aplicativos
+- Grafico de visualização abaixo das configurações de aparência
+- Fixar a configuração da curva não aplicável ao pico do gráfico
+- Faça os gráficos parecerem sexy 😎

@@ -1,0 +1,3 @@
+- Görüntü seçimi ağırlığa ekle
+- Ağırlık girişlerinde ilgili olmayan alanları gizle
+- Kategorileri dinamik yapın

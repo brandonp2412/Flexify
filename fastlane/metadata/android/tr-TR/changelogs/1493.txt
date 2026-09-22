@@ -1,0 +1,3 @@
+- Resim yüklemede yapılan hataları nazikçe ele alın
+- Resim düzenleyicisinden ekleme/ekleme düğmelerini kaldır
+- Kullanıcı dosya seçicisini iptal ettiğinde görüntüyü bırak

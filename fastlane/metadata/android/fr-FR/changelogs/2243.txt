@@ -1,0 +1,3 @@
+- Activer les exercices sur capture d'écran pour les plans
+- Graphiques de courbe par défaut
+- Gérer les migrations ratées

@@ -1,0 +1,5 @@
+- Réparation de deploy.sh
+- Retirez le flux de travail windows + macos exécuté après déploiement
+- Fixer une page vide après avoir importé des bases de données
+- Ajouter des unités aux graphes cardio
+- Réorganiser le dossier lib

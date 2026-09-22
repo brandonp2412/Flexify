@@ -1,0 +1,7 @@
+- Egzersiz ön ayarlarını silmeyi önleyin
+- Öntanımlı birimleri ayarla geçersiz kıl
+- Grafiği biraz daha kısa yapın
+- Grafiklere sınır kaydırıcı ekle
+- # Düşmüş tarihte bir dizi #
+- Tarih için gün bölücülerinin stilini geliştir
+- Grafikler sayfasındaki etiket bölücüleri

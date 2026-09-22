@@ -1,0 +1,10 @@
+• Adicionar configuração de serena
+• Fixos de brindes duradouros para sempre
+• Melhorar a visão do passo
+• Tornar a página de configuração de edição mais consistente com o seu enchimento
+• Remover rótulos duplicados para o estilo de entrada
+• Simplificar o campo de passo
+• Atualizar capturas de tela
+• Avaliar o flutter para 3,44,1
+• Atualizar a versão kotlin
+• feat: adicionar +/- passeios a repetições e campos de peso

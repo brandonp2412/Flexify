@@ -1,0 +1,5 @@
+- Ajouter un support pour les unités de cardio
+- Groupe fixe par semaine pour les lignes cardio
+- Fixer le regroupement par semaine pour le graphique
+- Groupe fixe par semaine
+- Plan de réfacteurs

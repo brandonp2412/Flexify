@@ -1,0 +1,5 @@
+- Befestigen von Screenshot-Tests
+- Datenimporte robuster machen
+- Klarer Plan vor der Einfuhr
+- Verhindern Sie, dass die Grafikpunktöffnung auf der Klemmung
+- Setzen Sie den Freisetzungsmodus auf mein Telefon nach dem Einsetzen

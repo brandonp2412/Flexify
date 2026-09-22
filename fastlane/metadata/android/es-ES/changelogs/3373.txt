@@ -1,0 +1,3 @@
+• Cambiar los indicadores de selección
+• Corrección de ejercicios de eliminación no limpieza ejercicios de plan
+• Corrección de gráficos no actualizados

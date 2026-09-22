@@ -1,0 +1,2 @@
+- Fix app crashs na 1.1.36
+- Verbeter de ervaring met cardio-bewerking

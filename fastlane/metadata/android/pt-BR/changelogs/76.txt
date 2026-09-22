@@ -1,0 +1,5 @@
+- Vai ao próximo exercício quando chegares a um máximo.
+- Reverte o plano de hoje na página de gráficos
+- Parar o tempo de descanso quando o treino estiver concluído
+- Melhorar o desempenho das configurações
+- Adicionar configuração de conjuntos máximos

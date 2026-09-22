@@ -1,0 +1,4 @@
+- Cambiar los tiempos por elemento del plan
+- Añadir el filtro de grupos musculares a la página de gráficos
+- Fija el relleno de la unidad en la página de configuración
+- Fija las imágenes del ejercicio que no se eliminan

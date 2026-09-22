@@ -1,0 +1,3 @@
+- Añadir la configuración de pestañas
+- Añadir la configuración del plan
+- Corrección de la información de bloqueo de la gráfica

@@ -1,0 +1,3 @@
+- Test di unità fissa
+- Riduzione delle icone nella pagina impostazioni
+- Utilizzare pulsanti per il selezionatore di periodo

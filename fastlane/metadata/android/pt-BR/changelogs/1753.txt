@@ -1,0 +1,3 @@
+- Adicionar configuração de guia
+- Adicionar configurações de plano
+- Fix grafico fab bloqueio de informações

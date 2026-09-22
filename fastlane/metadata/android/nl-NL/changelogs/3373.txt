@@ -1,0 +1,3 @@
+• Verander selectieindicatoren
+• Fix verwijderings oefeningen niet oplossen plan oefeningen
+• Grafieken niet bijgewerkt

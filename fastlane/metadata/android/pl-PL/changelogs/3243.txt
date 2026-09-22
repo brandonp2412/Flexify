@@ -1,0 +1,4 @@
+• Zawsze wyświetlać tytuły tab
+• Naprawa niezdolności do przewijania globalnych wykresów
+• Ustawić kategorie aktualizacji
+• Zmniejszenie globalnego nieporozumienia grafu na wskazówce narzędzia

@@ -1,0 +1,5 @@
+- Naprawa awarii aplikacji po 1.1.36
+- Użyj paska wyszukiwania i dodać widoczność przełączanie do planów
+- Włącz czasy odpoczynku na platformach stacjonarnych
+- /Wykorzystaj czasów na komputerze
+- Odwróć pracę na zegarkach stacjonarnych

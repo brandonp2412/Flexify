@@ -1,0 +1,2 @@
+- Erhöhung der Fähigkeit, den globalen Fortschritt zu verbergen
+- Berechnungen für Negative mit einem Re-Max fixieren

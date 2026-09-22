@@ -1,0 +1,10 @@
+• Dodaj wiadomość do pusty plan
+• Wystarczy wyłączyć ekran i przesunąć przełącznik w ustawieniach
+• feat: dodanie ekranu w ustawie na czas odpoczynku
+• feat: zastąpić odbiór tematyczny SegmentedButton + AMOLED
+• fix: strona strona StartPlanPage zapisać i wybrać
+• fix: zapobiega segmentowaniu butonu w opakowaniu etykiety poprzez korekty wypełnienia
+• fix: zmniejszenie wielkości tekstu śladu z 16 do 14 w listach historycznych i graficznych
+• fix: wypuścić alarm lock, gdy czas wygasa lub nie działa
+• fix: pokazać w aplikacji bar przekąski i naprawić powiadomienie, gdy czas wygasa z ekranem włączony
+• fix: skręcić i zmuszyć tekst ślad w historii i płytki listy grafu

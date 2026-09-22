@@ -1,0 +1,3 @@
+- Utilisez la définition de longue date pour modifier les kits de gym
+- Fixer la sélection du premier élément dans l'histoire de la salle de gym
+- Réparer la nouvelle ligne manquante dans le communiqué de mise en œuvre

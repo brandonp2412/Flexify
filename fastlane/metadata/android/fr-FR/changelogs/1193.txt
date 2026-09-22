@@ -1,0 +1,2 @@
+- Rénommer le fichier zip macos
+- Réparation des contrôles ios pour les essais d'intégration

@@ -1,0 +1,4 @@
+- Veritabanı yedeklemelerinde ayarları ekle
+- Masaüstü üzerinde ihraç edilen veritabanını düzelt
+- Ana sayfaya plan izini ekle
+- Plan takip için seçenekler ekle

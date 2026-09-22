@@ -1,0 +1,1 @@
+- Capture d'erreurs dans les migrations

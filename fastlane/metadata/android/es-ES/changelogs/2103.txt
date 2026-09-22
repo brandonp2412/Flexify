@@ -1,0 +1,9 @@
+- Toma todas las capturas de pantalla en modo oscuro
+- Ponlo en las insignias X en una fila
+- Corrección de algunos errores oscuros android
+- Toque para crear en los planes
+- Actualizar la redacción en la página de gráficos no se encuentra
+- Muestre los mejores ejercicios de la página de gráficos
+- Corrección de relleno cero en la página de historial del gráfico no hay datos todavía
+- Alturas de gráfico acortadas
+- Corrección de error de mirado del gráfico

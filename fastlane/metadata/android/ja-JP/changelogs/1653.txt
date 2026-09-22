@@ -1,0 +1,1 @@
+- deploy.sh で cmd の代わりに powershell を使います

@@ -1,0 +1,3 @@
+- Sekmeler ayarlarını ekle
+- Plan ayarlarını ekle
+- Grafik Fab engelleme bilgilerini düzelt

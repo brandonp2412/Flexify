@@ -1,0 +1,6 @@
+• Paralelamente inferior para gradle construído em ação github
+• Atualizar capturas de tela
+• feat: aclarar o campo de categoria é para marcação de grupos musculares
+• fix: aplicar a categoria sementeada ao registar um exercício pela primeira vez
+• fix: apenas tag lançamentos após todas as construções de plataforma ter sucesso
+• fix: Pin release builds e tag para um exato commit SHA

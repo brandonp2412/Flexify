@@ -1,0 +1,13 @@
+- Modifier les hauteurs du graphique
+- Ajouter des paramètres pour cacher les catégories
+- Utilisez des boutons d' icône pour supprimer les modèles
+- Ajouter des notifications à de nouveaux enregistrements
+- Ajouter la réglage de la douceur de la courbe
+- Augmenter le rembourrage dans la barre de recherche
+- Mise à jour des graphiques après modification à partir de l' historique
+- Fixer la réglage des répétitions/poids après la fin d'un exercice
+- Revenir après avoir sauvegardé les paramètres des onglets
+- Mélanger le navigateur système avec des thèmes d'application
+- Graphique d'aperçu en dessous des paramètres d'apparence
+- Fixer la réglage de la courbe qui ne s'applique pas au point de vue du graphique
+- Faites que les graphiques soient sexy 😎

@@ -1,0 +1,4 @@
+- Combineer de instelling "Vertoont herbestelling" en "Vertoont tellen"
+- Refactorenplannen
+- Refactor grafieken pagina
+- Refactoren voor fitness

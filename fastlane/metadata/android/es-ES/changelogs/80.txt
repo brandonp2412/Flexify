@@ -1,0 +1,4 @@
+- Paginar los juegos de gimnasio sobre la historia
+- Capitaliza las oraciones de la barra de búsqueda
+- Utilice el último juego de gimnasio ingresado como el predeterminado
+- Los gráficos de orden por fecha creada

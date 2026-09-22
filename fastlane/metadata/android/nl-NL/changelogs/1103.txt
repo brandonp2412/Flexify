@@ -1,0 +1,3 @@
+- Stop waarschuwing op gemiste kraan voor instellingen testen
+- Fusion 'hoofd' deel van github.com:brandonp2412/Flexify
+- Bepaal testwaarschuwingen voor instellingenpagina

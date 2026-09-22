@@ -1,0 +1,7 @@
+- Voeg aantekeningen toe aan het plan
+- Vermijd dat grafieklijnen uit de grenzen gaan
+- Verwijder "Geen gegevens nog" van de wereldwijde vooruitgang
+- Verwijder de witte lijn onder de zoekbalk op de rollen
+- Verplaats de knop "Clear" van de dropdown naar links van de zoekbalk
+- Fix screenshot van het bewerken plan
+- Grafieken van de curvelijnen in screenshots

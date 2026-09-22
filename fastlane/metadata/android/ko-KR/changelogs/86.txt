@@ -1,0 +1,5 @@
+- multdex를 android/app/build.gradle에 추가합니다
+- 3.22.0로 업데이트
+- pubspec.lock를 업데이트
+- 코드 설정에 대한 업데이트
+- 역사 페이지에서 기록을 삽입하는 것을 수정

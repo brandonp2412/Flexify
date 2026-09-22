@@ -1,0 +1,4 @@
+• Siempre muestra los títulos de las pestañas
+• Corrección de no poder desplazar los gráficos globales
+• Fija las categorías de actualización
+• Reducir el desorden global de los gráficos en la punta de herramienta

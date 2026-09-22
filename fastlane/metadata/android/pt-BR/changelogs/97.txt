@@ -1,0 +1,4 @@
+- Combinar a configuração "Reexibir a reordem" e "Exibir as contagens"
+- Planejamento de refratários
+- Página de gráficos de refactor
+- Refactor de ginástica

@@ -1,0 +1,2 @@
+- Actualizar pubspec.lock
+- Fija las rutas de archivos de artefactos para la liberación de GitHub

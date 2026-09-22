@@ -1,0 +1,1 @@
+• fix: Önceki not olmadan egzersiz için geçiş yaparken açık not alanı

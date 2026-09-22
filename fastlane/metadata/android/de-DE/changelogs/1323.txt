@@ -1,0 +1,1 @@
+- Beheben Sie die automatischen Einsätze von macos

@@ -1,0 +1,3 @@
+• Agp'yi 8.11.1'e düşürmek
+• Sistem UI'nin arkasına çek &amp; apos; sekme kaydırma &amp; apos; yı değiştir
+• Tahmin edilmeden önce yapılan tekrarları/koşul ağırlığını ayarlayın

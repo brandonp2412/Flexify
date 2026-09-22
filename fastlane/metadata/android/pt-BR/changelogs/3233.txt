@@ -1,0 +1,3 @@
+• Corrigir a reordenação quebrada nos planos
+• Simplificar significativamente os exercícios de fixação no estado de planeamento
+• Revert "Simplificar muito os exercícios de configuração no estado de planejamento"

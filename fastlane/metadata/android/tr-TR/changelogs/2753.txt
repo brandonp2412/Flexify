@@ -1,0 +1,1 @@
+• Kullanıcıyı webdeki CSV içe aktarmaya yönlendir

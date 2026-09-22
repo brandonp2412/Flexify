@@ -1,0 +1,3 @@
+- Ejecutar dart actualización de pub
+- No utilice los colores del sistema para capturas de pantalla
+- Sólo construir appbundle cuando se envía a play store

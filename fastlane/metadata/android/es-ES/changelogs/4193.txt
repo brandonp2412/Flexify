@@ -1,0 +1,10 @@
+• chore: reconciliar la parte de localización simultánea
+• chore: actualizar Flutter archivo de bloqueo de dependencia
+• docs: añadir una hoja de ruta de traducción
+• docs: actualizar el estado de finalización de la localización
+• feat: añadir localización portuguesa brasileña
+• feat: añadir localizaciones CJK
+• feat: añadir localización holandesa
+• feat: añadir localización francesa
+• feat: añadir localización alemana
+• feat: añadir localización italiana

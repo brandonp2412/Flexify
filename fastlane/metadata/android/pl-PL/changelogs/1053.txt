@@ -1,0 +1,1 @@
+- Uładowanie błędów w migracjach

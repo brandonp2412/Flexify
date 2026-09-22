@@ -1,0 +1,2 @@
+• Visualizzazione delle notifiche
+• Mostra il campo di peso se l'unità cardio è un tipo di peso sui piani

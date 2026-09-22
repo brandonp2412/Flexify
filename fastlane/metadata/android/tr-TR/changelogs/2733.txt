@@ -1,0 +1,7 @@
+• Flexify web için github barındırma sayfalarını ekle
+• Kayıp değişken ekle
+• Kullanıcıya maksimum setleri temizlemesini izin verin
+• Kullanılmamış senaryoları sil
+• Yeni kopyalı olanı düzelt
+• Sadece her seferinde tek bir dosyaya geri dön .
+• Güç grafından tekrarları çıkar

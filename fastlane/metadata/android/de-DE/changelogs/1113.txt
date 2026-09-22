@@ -1,0 +1,3 @@
+- Hinzufügen von Seite
+- Symbole auf der Einstellungsseite hinzufügen
+- Ändern Sie das Pläne-Ikon

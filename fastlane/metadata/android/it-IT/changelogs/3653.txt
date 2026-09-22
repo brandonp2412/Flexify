@@ -1,0 +1,10 @@
+• Rettificare i banner di debug che vengono visualizzati nelle screenshot
+• Aggiornare le screenshot
+• Utilizzare il pulsante di testo per +1 minuto
+• chore: Aggiungere la scheda di screenshot Android con bandiera --profile
+• feat: migliorare l'interfaccia utente per la fluidità della curva, i timer, il trailing del piano, lo stile di input
+• fix: centro timer circolo verticalmente e spostare +1 min pulsante sotto il cerchio
+• fix: disabilitare il banner di debug in MaterialApp
+• fix: eliminare il modello anti-patrono UniqueKey nel widget del cerchio del timer
+• fix: Redesignare il cerchio del timer con un'estetica minima e moderna
+• fix: sostituire runApp con tester.pumpWidget nelle prove di screenshot

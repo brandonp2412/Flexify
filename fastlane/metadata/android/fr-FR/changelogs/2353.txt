@@ -1,0 +1,7 @@
+- Mise à jour de flutter
+- Fixer la cohérence de l'axe X dans les graphiques globaux
+- Ne demandez que les autorisations d' arrière-plan une fois
+- Fixer la logique de progression du temporisateur
+- Afficher les graphiques les plus récents au lieu du poids le plus élevé
+- Afficher l'erreur avant la case de chargement vide dans la page graphiques
+- Ajouter une recherche dynamique

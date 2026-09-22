@@ -1,0 +1,7 @@
+- Prevenire la cancellazione dei preset di esercizio
+- Inserire unità predefinite con l'impostazione
+- Riduci il grafico leggermente più breve
+- Aggiungere il controllibile limite ai grafici
+- Diciamo # di set in storia crollato
+- Migliorare lo stile dei divisioni di giorno per la storia
+- Dividerie di etichette sulla pagina dei grafici

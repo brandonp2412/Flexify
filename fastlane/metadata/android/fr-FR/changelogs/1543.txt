@@ -1,0 +1,5 @@
+- Réparer les pannes d'application après 1.1.36
+- Utilisez la barre de recherche et ajoutez la commutation de visibilité aux plans
+- Activer les temporiseurs de repos sur les plateformes de bureau
+- Faites exécuter les temporisateurs sur le bureau
+- Réinitialiser le travail sur les temporiseurs de bureau

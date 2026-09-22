@@ -1,0 +1,5 @@
+- Utilice botones de acción flotantes extendidos
+- Fixo el despliegue en github y f-droid repro
+- Prevenir la visualización de la página de permisos en ios
+- La actualización de flutter a 3.24.0
+- Corrección de gráficos cardio no actualización instantánea

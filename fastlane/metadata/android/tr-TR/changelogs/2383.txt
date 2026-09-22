@@ -1,0 +1,2 @@
+- Flatter & pubspec.lock güncelleme
+- Çekilme çalışmıyor

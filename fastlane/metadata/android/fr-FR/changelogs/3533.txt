@@ -1,0 +1,2 @@
+- Améliorer les performances
+- Fixer la construction pour le web

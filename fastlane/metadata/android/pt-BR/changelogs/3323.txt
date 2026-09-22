@@ -1,0 +1,6 @@
+• Adicionar novos formatos de datação (por exemplo, para alemão)
+• Adicionar opção de eixo x baseada no tempo para o gráfico
+• Resolver problemas de memória
+• Fixar o plano de trailings ratio & contagem
+• Deixe os utilizadores decidirem a capitalização dos títulos do plano
+• Mover o botão histórico para a barra de navegação

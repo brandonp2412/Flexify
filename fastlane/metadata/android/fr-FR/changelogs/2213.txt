@@ -1,0 +1,7 @@
+- Ajouter des notes à l' activation du plan
+- Éviter que les lignes graphiques ne dépassent les limites
+- Retirer "Aucune donnée encore" des progrès mondiaux
+- Retirez la ligne blanche au-dessous de la barre de recherche sur le rouleau
+- déplacer le bouton clair de la barre déroulante à gauche de la barre de recherche
+- Fixer la capture d'écran du plan de modification
+- Graphiques de lignes de courbe dans les captures d'écran

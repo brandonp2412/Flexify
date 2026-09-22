@@ -1,0 +1,3 @@
+- Festsetzung von Einstellungsseiten
+- Verwenden Sie die richtige Einheit für Grafiken standardmäßig
+- Hinzufügen der Einstellung für Kraft- und Kardio-Einheiten

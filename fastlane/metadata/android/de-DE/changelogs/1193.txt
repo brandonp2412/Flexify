@@ -1,0 +1,2 @@
+- Umbenennen Sie die macos-Zip-Datei
+- Befestigen Sie die ios-Kontrollen für Integrationsprüfungen

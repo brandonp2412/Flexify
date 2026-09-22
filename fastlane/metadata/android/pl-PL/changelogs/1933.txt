@@ -1,0 +1,4 @@
+- Dodaj specjalny wybór dnia
+- Naprawianie historii otwarcia grafu opóźnienia
+- Przeliczenie ORM przy edycji odtwarzań/ciężenia
+- Dodaj wypełnienie na końcu strony planu edycji

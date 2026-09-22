@@ -1,0 +1,4 @@
+• WIP: transferencia de Flexify trabajo de lista de verificación de Nox
+• chore: actualizar la configuración del proyecto Serena
+• test: Default de opción de cobertura
+• test: remover el arnés de integración Patrol

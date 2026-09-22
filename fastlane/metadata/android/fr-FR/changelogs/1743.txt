@@ -1,0 +1,2 @@
+- Personnaliser les barres de progression des plans
+- Ajouter des sauvegardes automatiques

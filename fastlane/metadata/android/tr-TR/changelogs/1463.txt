@@ -1,0 +1,2 @@
+- # düzenleme grafik yerine planlar üzerinde egzersizler
+- Uygulama performansını geliştir

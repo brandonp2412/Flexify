@@ -1,0 +1,3 @@
+- Rettificare i backup automatici
+- Rettificare le crisi di allarme incoerenti
+- Migliorare l'accuratezza delle stime di ripetizione

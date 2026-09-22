@@ -1,0 +1,2 @@
+• Agp verlaag naar 8.11.1
+• Fix voorbevolking van de herhaling/gewicht

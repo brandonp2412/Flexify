@@ -1,0 +1,5 @@
+- Poprawa wyników edycji planów
+- Naprawianie grafiki o maksymalnej liczbie jednego odnowy
+- Plan ustawienia jest globalny
+- Pozwolić, by skłonność była pusta
+- Poprawa wyników wprowadzania do użytku

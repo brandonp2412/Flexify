@@ -1,0 +1,4 @@
+• Alle Arten von Cardio-Einheiten dürfen
+• Ändern Sie den Stil der Tab-Einstellungen-Seite
+• Behebung des Hinzufügen einer Kardio-Übung von der Seite Graphs
+• Verhindern Sie, dass der Wechsellog beim ersten Installation gesprochen wird

@@ -1,0 +1,1 @@
+• ci: Dodaj skaning VirusTotal w wersji APK

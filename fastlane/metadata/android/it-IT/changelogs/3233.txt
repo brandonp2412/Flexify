@@ -1,0 +1,3 @@
+• Rendificare il riordinamento rotto sui piani
+• Semplificare notevolmente gli esercizi di impostazione in stato di pianificazione
+• Invertire "Semplificare notevolmente le attività di impostazione in stato di pianificazione"

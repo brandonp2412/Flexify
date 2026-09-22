@@ -1,0 +1,5 @@
+- Planları geliştirme düzenleme performans
+- Bir rep-max grafikleri düzelt
+- Düzenleme planı küresel olarak sayılır
+- Boş kalmaya izin ver
+- Başlangıç performansının iyileştirilmesi

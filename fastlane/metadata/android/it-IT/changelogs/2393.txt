@@ -1,0 +1,1 @@
+- Rettificare l'implementazione di workflow innescando workflow_dispatch e API call

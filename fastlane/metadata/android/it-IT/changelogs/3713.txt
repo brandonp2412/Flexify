@@ -1,0 +1,1 @@
+• Utilizzare adb preinstallato invece di setup-android nel flusso di lavoro Waydroid

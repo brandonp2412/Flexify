@@ -1,0 +1,10 @@
+• fix: Schutz Bildschirmbezeichnung Navigationskontext
+• fix: Folder-Picker nach Erteilung der Erlaubnis wieder öffnen
+• fix: Wieder versuchen Sie, den Emulator für einen Übergangsbildschirm abzuschalten
+• fix: Sequenz-Backup-Erlaubnis vor Ordner-Picker
+• fix: stabilisieren Android Ordner-Pick-Test
+• fix: Stabilisieren Sie automatisierte Timer-Screenshots
+• test: hinzufügen wiederverwendbarer Datenbank-Fixtures
+• test: Hinzufügen von gemeinsamem Widget-Testharness
+• test: StartPlanPage-Tests mit aktuellen Feldern ausrichten
+• test: Android Dokumentenverwäser nach Paket

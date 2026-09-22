@@ -1,0 +1,2 @@
+- Festlegen, dass die ursprünglichen Wiederholungen/Gewicht auf den Plänen null sind
+- Entfernen Sie die ersten Nullen nach Speicherung von Plänen

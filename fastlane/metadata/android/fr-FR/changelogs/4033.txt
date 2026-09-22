@@ -1,0 +1,10 @@
+• Correction de la vue du changelog vide
+• Cacher les essais d'intégration Linux sur dwl
+• chore: appliquer le formatage Dart aux essais
+• feat: améliorer les contrôles de sélection des graphiques
+• feat: intégrer l'exploitation de la zone de logement Talker
+• feat: redessin d'interface de bureau
+• fix: appliquer des captures d'écran de 7 pouces conformes
+• fix: Linux durcissement graphique d'entraînement et flux de timers
+• fix: navigation et tests de bureau durci
+• fix: bases de données de tests d'intégration isolées

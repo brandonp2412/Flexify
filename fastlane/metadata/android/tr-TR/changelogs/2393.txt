@@ -1,0 +1,1 @@
+- İş akışı_ gönderisi ve API çağrısı ekleyerek iş akışı tetiklemeyi düzelt

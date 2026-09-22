@@ -1,0 +1,1 @@
+• fix: Google Play를 idempotent으로 배포하도록

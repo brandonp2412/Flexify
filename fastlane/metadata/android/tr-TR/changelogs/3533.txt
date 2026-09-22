@@ -1,0 +1,2 @@
+- Performansları iyileştir
+- Web için yapılandırma düzelt

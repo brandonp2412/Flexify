@@ -1,0 +1,3 @@
+• Incluer app-release.aab dans la création de la libération de github
+• Faire scrollable le regard du graphique
+• Utilisez les notes de libération correctes

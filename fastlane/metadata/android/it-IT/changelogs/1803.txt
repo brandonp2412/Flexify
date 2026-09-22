@@ -1,0 +1,1 @@
+- Correzione di app crash al lancio

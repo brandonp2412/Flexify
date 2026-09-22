@@ -1,0 +1,2 @@
+• Test di Harden Patrol contro il tempo
+• fix: stabilizzare Android controllo di selezionatore di cartelle

@@ -1,0 +1,13 @@
+- Cambiare le altezze del grafico
+- Aggiungere impostazioni per nascondere le categorie
+- Utilizzare pulsanti di icona per eliminare i modali
+- Aggiungere notifiche ai nuovi record
+- Aggiungere l' impostazione della curva
+- Aumentare il riempimento nella barra di ricerca
+- Aggiornare i grafici dopo l'elaborazione dal peek della storia
+- Fissare le impostazioni di ripetizioni/peso dopo il completamento di un esercizio
+- Torna dopo aver salvato le impostazioni delle schede
+- Miscelazione di navigazione del sistema con temi di app
+- Grafico di anteprima sotto le impostazioni di aspetto
+- Impostazione della curva non applicabile al picco del grafico
+- Fate sembrare sexy i grafici 😎

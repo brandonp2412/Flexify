@@ -1,0 +1,5 @@
+- Ayarlar anahtarlarını tutarlı hale getirin
+- Tekrarlama tahminlerinin doğruluğunu artırmak
+- Graf başına özel dinlenme sürelerini temizlemeyi izin verin
+- Planlar için boş olan sabit kategoriler
+- Plan düzenlemesi düzenlenmesi

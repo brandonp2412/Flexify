@@ -1,0 +1,5 @@
+- Fija deslizar a través de gráficos para el movimiento de pestañas
+- Eliminar los tiempos.webm
+- Corrección de fechas creadas incorrectamente al editar los juegos de gimnasio
+- Se desecha la página de ajustes/peso de entrada
+- Deshabilitar los colores del sistema en la prueba de capturas de pantalla

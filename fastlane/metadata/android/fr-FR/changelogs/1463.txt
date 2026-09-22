@@ -1,0 +1,2 @@
+- Modifier les exercices sur les plans au lieu de graphes
+- Améliorer les performances des applications

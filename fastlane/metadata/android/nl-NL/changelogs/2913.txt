@@ -1,0 +1,6 @@
+• Kopieer- en afschrijvingsopstelling van fitbook
+• Google Play-implementaties oplossen
+• Verplaats grafiek 1 item naar beneden
+• Verwijder de tafel van het krijgen op X readme [skip ci]
+• Herbestel functies in README [skip ci]
+• - De badges van de ruimte.

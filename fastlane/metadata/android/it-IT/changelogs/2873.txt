@@ -1,0 +1,3 @@
+• Fix screenshot di pagina timer
+• Fix screensack test di pagina timer
+• Nascondere la notifica di cambiamento per le screenshot

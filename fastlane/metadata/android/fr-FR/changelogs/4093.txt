@@ -1,0 +1,1 @@
+• Fixer le flux d'autorisations et l'activation des paramètres UI (#336)

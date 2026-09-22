@@ -1,0 +1,7 @@
+• Voeg cardio/sterk-iconindicatoren toe aan de aansteken in het bewerken van set/sets
+• Voeg instellingen toe voor progressbalkpositie
+• Toelating tot de afrekening van categorieën
+• Verander het plan-icon in de onderste navigatie
+• Fix appearance systeem ui verduisterende grafiek
+• Instant updates tabbladinstellingen & verwijder knop Save
+• Vermijd nul hint tekst op categorieën of neiging bij multirectivering sets

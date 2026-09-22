@@ -1,0 +1,1 @@
+- Aggiungere dotnet a Windows Store Stage di distribuzione

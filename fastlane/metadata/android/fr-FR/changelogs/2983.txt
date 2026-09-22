@@ -1,0 +1,10 @@
+• Ajouter un rembourrage horizontal à l'indicateur de progression inférieur
+• Ajouter le bouton de ré-ordre manquant pour Android sur la page Plans
+• Animation glissant entre les onglets
+• Modifier l'indicateur sélectionné
+• Temps de repos par défaut à faux
+• Fixer les feuilles inférieures qui vont derrière la navigation
+• Réparer deploy.sh lorsque le téléphone est connecté
+• Fixer le retard de décalage entre les onglets après les avoir changés
+• Fixation des ensembles d'épargne
+• Augmenter le rembourrage au-dessus de la page d' histoire effondrée

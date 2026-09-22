@@ -1,0 +1,6 @@
+- Entfernen von deploy.sh
+- Hinzufügen von Löschknopfen zur Bearbeitung der Fitnessstudio-Set-Seite
+- Bearbeiten Sie die Graphpunkte mit doppeltem Tapping
+- Bewegen Sie die Dateneinstellungen-Helfertext in das Etikett
+- Hinzufügen von Kurzdatumformat
+- Refactor-Liniengrafiken

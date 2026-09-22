@@ -1,0 +1,1 @@
+- Corrigir conjuntos mais recentes que não aparecem em gráficos

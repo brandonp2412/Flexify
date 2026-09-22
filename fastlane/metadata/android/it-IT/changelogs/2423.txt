@@ -1,0 +1,2 @@
+- Aggiornamento pubspec.lock
+- Rimuovere le build di macOS/iOS dal flusso di lavoro Azioni di GitHub

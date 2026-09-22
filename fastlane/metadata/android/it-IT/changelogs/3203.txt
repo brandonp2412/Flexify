@@ -1,0 +1,9 @@
+• Rettifica degli errori nell'importazione di dati
+• corre l'importazione di dati inserendo planExercises record e aggiornare plans_list.dart per utilizzare l'operatore non sicuro
+• risolvere il problema 206 aggiornando il modo in cui gli esercizi vengono memorizzati e suddivisi
+• Fixare i caricatori che si accendono
+• Esercizi di rottura del piano di migrazione
+• Modificare la logica per l'inclusione di esercizi in un piano creando i registri di esercizi di piano solo per esercizi selezionati e non memorizzandoli nella colonna di piani.
+• Pausa di lavoro per il viaggio
+• Eseguire la migrazione dei dati per i dati esistenti in modo tale che solo gli esercizi siano rimossi dal piano per il quale PlanExercises.enabled = false
+• aggiornare i file di prova per assicurarsi che tutte le prove siano passate

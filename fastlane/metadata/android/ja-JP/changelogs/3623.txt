@@ -1,0 +1,1 @@
+• ci: リリースされたAPKに VirusTotalスキャンを追加する

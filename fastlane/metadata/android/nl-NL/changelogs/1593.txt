@@ -1,0 +1,1 @@
+- Fix overschrijving lichaamGewicht in grafiekimport

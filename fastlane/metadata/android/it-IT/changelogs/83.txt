@@ -1,0 +1,5 @@
+- Fissare i timer
+- Ottimizzare i timer
+- Rettificare i backup automatici
+- Aggiungere le impostazioni di vibrazione e di allarme
+- Ottimizzare la pagina di grafica di modifica

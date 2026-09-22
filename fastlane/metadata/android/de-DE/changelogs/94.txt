@@ -1,0 +1,2 @@
+- Hinzufügen der besten Wiederholungsgraph
+- Kommentar zur fastlane-Zufuhr in deploy.sh

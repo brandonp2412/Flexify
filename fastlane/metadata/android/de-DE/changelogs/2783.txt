@@ -1,0 +1,4 @@
+• Fügen Sie den Planen einen Übungs-Swap hinzu
+• Fügen Sie Suche nach Austausch-Workout hinzu
+• Hinzufügen eines Tests für das Swap-Workout-Widget
+• Behebung der Datenbank für den Import auf dem Desktop

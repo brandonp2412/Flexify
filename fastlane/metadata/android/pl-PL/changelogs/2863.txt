@@ -1,0 +1,10 @@
+• Umożliwić konfigurację czasów odpoczynku na ćwiczenia z strony ustawień
+• Przyciski do animowania na paskach wyszukiwania
+• Zanimacja skrzynek czekowych w wybranym
+• Animowe fab na stronie planów
+• Naprawa błędu podczas edycji jednostek dla wykresu
+• Naprawianie pierwszego/ostatniego wskaźnika narzędzia na wykresach hover
+• Naprawianie ikon głównych dla planów z tytułami
+• Badanie listy planowania
+• Naprawa usunięcia nawykowych czasów na stronie ustawień
+• /Uczyńcie wybór dnia ciemniejszym

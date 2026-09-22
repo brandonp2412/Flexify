@@ -1,0 +1,5 @@
+- 1.1.36'dan sonra uygulama çöküşlerini düzelt
+- Arama çubuğunu kullanın ve planlara görünürlük düğmesini ekleyin
+- Masaüstü platformlarda dinlenme zamanlayıcılarını etkinleştir
+- Zamanlayıcıları masaüstü üzerinde çalıştır
+- Masaüstü zamanlayıcılarında çalışmayı geri çevir

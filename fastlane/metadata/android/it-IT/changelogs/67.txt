@@ -1,0 +1,11 @@
+- Migliorare le screenshot
+- Selezionatore di unità nascosto su grafici se le unità sono spinte
+- Aggiungere gruppi per campo per grafici (giorno/settimana/mese/anno)
+- Animare l' scheda grafici quando si visualizza un esercizio da piani
+- Visualizza grafici per un esercizio da piani
+- Rimuovere le etichette da deploy.sh - 1.0.59
+- Aggiungere il pulsante cancellare per modificare la pagina di set di palestra
+- Modificare i punti del grafico con doppio tocco
+- Trasferire il testo di aiuto per le impostazioni di data sull'etichetta
+- Aggiungere impostazione di formato di data corta
+- Grafici di linee del rifattor

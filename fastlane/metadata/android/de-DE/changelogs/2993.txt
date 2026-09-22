@@ -1,0 +1,4 @@
+• Bearbeiten von automatischen Screenshots
+• Behebt Abstandsveränderungsprobleme auf der Bearbeitungs- und Einstellungsseite
+• Entgruppieren Sie die Standardhistorie
+• Ziehen Sie vor dem letzten Schub

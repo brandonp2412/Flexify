@@ -1,0 +1,10 @@
+• Behebung des leeren Wechsellog-Aufrufs
+• Verbergen Sie Linux-Integrationsprüfungen auf dwl
+• chore: die Dart-Formatierung auf die Prüfungen anwenden
+• feat: Verbesserung der Graphenauswahlsteuerung
+• feat: Talker-Logging integrieren
+• feat: Desktop-Schnittstelle neu gestalten
+• fix: Durchsetzen von kompatiblen 7-Zoll-Screenshots
+• fix: Verhärtet Linux Trainingsgraph und Timerflüsse
+• fix: Hard-Desktop-Navigation und -Tests
+• fix: Isolierten Integrationsprüfungsdatenbanken

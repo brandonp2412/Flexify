@@ -1,0 +1,5 @@
+- Migliorare le prestazioni del grafico
+- Rimuovere "Peso" dalla modifica cardio
+- Rettifica della navigazione verso l' indietro a volte non funziona
+- Nascondere una stima massima di repetizione sugli esercizi cardio
+- Migliorare le prestazioni dei piani

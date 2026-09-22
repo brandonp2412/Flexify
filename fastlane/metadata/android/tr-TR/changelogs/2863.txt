@@ -1,0 +1,10 @@
+• Ayarlar sayfasından egzersiz başına dinlenme zamanlarının yapılandırılmasına izin verin
+• Arama çubuğunda animasyon düğmeleri
+• Select'te animasyon çek kutuları
+• Planlar sayfasında animasyon
+• Bir grafik için birimleri düzenlerken hata düzelt
+• Uçuş grafiklerinde ilk/son araç noktalarını düzelt
+• Başlıklı planlar için önde gelen simgeler düzelt
+• Düzenleme plan listesi testi
+• Ayarlar sayfasındaki özel zamanlayıcıları kaldırmayı düzelt
+• Gün seçicisini daha karanlık yap

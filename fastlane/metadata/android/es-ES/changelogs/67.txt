@@ -1,0 +1,11 @@
+- Mejorar las capturas de pantalla
+- Esconder el selector de unidades en los gráficos si las unidades están apagadas
+- Añadir grupo por campo para los gráficos (día/semana/mes/año)
+- Animación a gráficos pestaña cuando se ve un ejercicio de los planes
+- Visualizar gráficos para un ejercicio de los planes
+- Eliminar las etiquetas de deploy.sh - 1.0.59
+- Añadir botón de eliminación para editar la página de ajustes de gimnasio
+- Editar puntos del gráfico con doble toque
+- Mover el texto del asistente de configuración de fecha en la etiqueta
+- Añadir la configuración de formato de fecha corta
+- Gráficos de líneas de refactor

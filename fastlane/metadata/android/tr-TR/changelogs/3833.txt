@@ -1,0 +1,6 @@
+• ci: Otomatik inşaat PR APK'leri sadece sahiplerin PR'leri için, diğerleri için el kitabı
+• ci: çekme istekleri üzerine APK oluşturun ve ekleyin
+• ci: PR APK yapısında 0.0.0 bilinmeyen Flutter sürümünü düzelt
+• ci: PR APK yorumunda alıntılanan eser URL'sini düzelt
+• ci: PR oluşturmalarını .pr app id eklentisi ile birbiriyle yükle
+• ci: PR'ler, açık test anahtar depoları ile oluşturulur

@@ -1,0 +1,5 @@
+• Hinzufügen reproduzierbarer Baukonfiguration für F-Droid
+• Befestigen Sie Verweise auf windows-Build msix
+• Behebung reproduzierbarer Bauprobleme - Ausrichtung von Versionen mit Flutter 3.29.3
+• Verhindern Sie einen Absturz nach dem Import von Datenbanken
+• Aktualisieren Sie pubspec.lock

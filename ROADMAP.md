@@ -138,6 +138,7 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Ensure integration tests remain deterministic by explicitly selecting or pinning a locale where necessary.
 - [x] Localize Play Store metadata for every supported locale when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
 - [x] Localize App Store description, keywords, and release notes for every supported locale using Fastlane metadata folders.
+- [x] Localize the full Google Play release changelog history and in-app What's New history for every supported locale.
 - [x] Add translated store screenshots only when practical; English screenshots may remain shared where store rules permit.
   - [x] Generate all eight Play Store phone screenshots for every first-wave non-English store locale, while keeping English as the default screenshot pipeline and shared tablet/desktop artwork where appropriate.
 - [x] Update contributor documentation with the workflow for adding/changing English strings and updating all locale ARBs.

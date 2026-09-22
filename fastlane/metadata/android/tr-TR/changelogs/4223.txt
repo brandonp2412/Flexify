@@ -1,0 +1,1 @@
+• fix: Windows zamanlayıcı sesini sertleştir

@@ -1,0 +1,2 @@
+- A fusão da filial "principal" do github.com:brandonp2412/Flexify
+- Visualizar vibração ao desligar a configuração do temporizador

@@ -1,0 +1,3 @@
+• Die agp wird auf 8.11.1 herabgesetzt
+• Ziehen Sie hinter System UI & Schalten Sie das Scrollen von Registerkarten
+• Festsetzung der vorherigen Bevölkerung/Gewicht

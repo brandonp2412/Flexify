@@ -1,0 +1,2 @@
+• Zwiększ wszystko
+• chore: automatyczne opracowywanie/przesłania/generowany klient [pre-push]

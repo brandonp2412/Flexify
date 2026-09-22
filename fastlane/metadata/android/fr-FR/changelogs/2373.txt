@@ -1,0 +1,17 @@
+- Étiquetage séparé de la libération de github actions
+- Supprimer l'étape invalide de deploy.yml
+- Supprimer les envois de flux de travail
+- Décodez le stockage de clés android en deploy.yml
+- Simplifier le start_plan_page
+- 2.0.21
+- Utilisation fixe de yq dans le .deploy.yml
+- Réparation des problèmes de liant
+- Supprimer éviter la règle de lentille d' imprimerie
+- Exécutez le format dart
+- Exécuter des flux de travail sur main
+- Ajouter des flux de travail github
+- Réparer les flux de travail GitHub pour gérer les tests d'acte
+- Correction de la plupart des générations de captures d'écran de bureau
+- Ajouter la configuration pour exécuter des tests d'intégration pour chrome
+- Fixer la page de paramètres sur le web
+- Réparation en cours d' exécution sur le web

@@ -1,0 +1,17 @@
+- Afzonderlijk taggen van het vrijgeven van github-acties
+- Verwijder ongeldig stadium van deploy.yml
+- Verwijder werkstroom-dispatches
+- Decodeer Android keystore in deploy.yml
+- Begin_plan_pagina vergemakkelijken
+- 2.0.21
+- Fix gebruik van yq in .deploy.yml
+- Beheersing van lintingsproblemen
+- Verwijder vermijd print linting regel
+- Uitvoeren van dart-formaat
+- Run workflows op main
+- Github werkstromen toevoegen
+- Fix GitHub werkstromen om te handhaven handeling testen
+- Het maken van de meeste desktop screenshot generaties
+- Voeg een setup toe voor het uitvoeren van integratietests voor chrome
+- Bepaal de instellingen pagina op het web
+- Fix op het web

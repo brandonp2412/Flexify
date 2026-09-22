@@ -1,0 +1,11 @@
+- Flutter di aggiornamento
+- Un doppio tocco di un esercizio lo apre
+- Clarificare la cancellazione dalla pagina grafici
+- Appiccare a lungo le schede per nascondere
+- Automaticamente capitalizzare la ricerca di esercizi di piano
+- Rettificare bug su grafici di forza
+- Utilizzare pagina annidata su grafici -> aggiungere
+- Utilizzare la rotta inchiesta nel timer -> impostazioni
+- Aggiungere il grafico peeking
+- Rettifica bug sulla pagina di forza
+- Aspetta che la sala da ginnastica sia impostata per salvare prima di aggiornare le immagini

@@ -1,0 +1,9 @@
+• Corrección de los datos de importación de errores
+• fijar la importación de datos mediante la inserción de registros planExercises y actualizar plans_list.dart para utilizar el operador consciente de la seguridad nula
+• solucionar el problema #206 actualizando la forma en que los ejercicios se almacenan y se dividen
+• Fija los cargadores que se muestran
+• Ejercicios para romper el plan de migración fijo
+• Modificar la lógica para incluir ejercicios en un plan creando registros de ejercicios de plan sólo para ejercicios seleccionados y no almacenándolos en la columna de planes.
+• Pausa de trabajo para el viaje
+• Realizar una migración de datos para los datos existentes de tal manera que sólo se eliminen esos ejercicios del plan para el que PlanExercises.enabled = false
+• actualizar los archivos de prueba para asegurarse de que todas las pruebas están pasando

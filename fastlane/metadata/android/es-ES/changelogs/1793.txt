@@ -1,0 +1,3 @@
+- Doble toque para abrir cualquier métrica
+- Muestre ORM mientras se edita un conjunto
+- Añadir el interruptor para el sonido de alarma

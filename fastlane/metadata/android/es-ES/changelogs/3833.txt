@@ -1,0 +1,6 @@
+• ci: APK de relaciones públicas de construcción automática sólo para relaciones públicas de propietarios, manual para otros
+• ci: construir y adjuntar APK en las solicitudes de puesta
+• ci: fijar la versión 0.0.0-desconocida Flutter en la versión PR APK
+• ci: fijar la URL del artefacto citado en el comentario PR APK
+• ci: instalar PR construye lado a lado a través de .pr app id sufijo
+• ci: signo PR construye con un keystore de pruebas públicas comprometido

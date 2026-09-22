@@ -1,0 +1,17 @@
+- Trennbarmachung von github actions freisetzen
+- Entfernen Sie das ungültige Stadium von deploy.yml
+- Entfernen von Workflow-Dispets
+- Die android-Schlüssellager in deploy.yml zu dekodieren
+- Verfeinern Sie start_plan_page
+- 2.0.21
+- Festlegung der Verwendung von yq in .deploy.yml
+- Behebung von Schleifproblemen
+- Entfernen Sie die Regel des Druckverbandes vermeiden
+- Ausführen von dart-Format
+- Arbeitsabläufe auf Main ausführen
+- github-Arbeitsflüsse hinzufügen
+- Bearbeiten Sie GitHub-Workflows, um die Tests zu bewältigen
+- Beheben Sie die meisten Desktop-Screenshot-Generationen
+- Hinzufügen von Einstellungen für die Ausführung von Integrationsprüfungen für Chrome
+- Befestigen Sie die Einstellungsseite im Web
+- Behebt die Funktion im Web
