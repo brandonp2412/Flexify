@@ -32,6 +32,106 @@ const _allowedLiteralUiText = <String>{
   'lib/about_page.dart:MIT',
 };
 
+const _alwaysEnglishEquivalentKeys = <String>{
+  'appTitle',
+  'languageNameEnglish',
+  'languageNameSpanish',
+  'languageNameFrench',
+  'languageNameGerman',
+  'languageNameItalian',
+  'languageNamePortugueseBrazil',
+  'languageNameDutch',
+  'languageNamePolish',
+  'languageNameJapanese',
+  'languageNameKorean',
+  'languageNameSimplifiedChinese',
+  'languageNameTurkish',
+  'stoneUnitShort',
+};
+
+const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
+  'de': {
+    'stoneUnit',
+    'actionOk',
+    'cardio',
+    'navTimer',
+    'actionPause',
+    'filter',
+    'versionLabel',
+    'nameLabel',
+    'tabs',
+    'themeSystem',
+  },
+  'es': {'stoneUnit', 'cardio', 'minutesShort', 'errorLabel'},
+  'fr': {
+    'stoneUnit',
+    'actionOk',
+    'cardio',
+    'minutesShort',
+    'volume',
+    'actionPause',
+    'addOneMinute',
+    'distanceCardio',
+    'distanceLabel',
+    'distanceWithUnit',
+    'formats',
+    'imageLabel',
+    'kilocaloriesUnit',
+    'milesUnit',
+    'minutesLabel',
+    'notesLabel',
+    'notifications',
+    'options',
+    'versionLabel',
+  },
+  'it': {
+    'stoneUnit',
+    'actionOk',
+    'cardio',
+    'minutesShort',
+    'volume',
+    'navTimer',
+    'backupLabel',
+    'databaseLabel',
+  },
+  'ja': {'actionOk'},
+  'ko': {},
+  'nl': {
+    'stoneUnit',
+    'actionOk',
+    'cardio',
+    'minutesShort',
+    'volume',
+    'navTimer',
+    'filter',
+    'databaseLabel',
+    'filters',
+    'periodWeek',
+    'setNumber',
+    'timers',
+  },
+  'pl': {'stoneUnit', 'actionOk', 'cardio', 'minutesShort', 'actionStart'},
+  'pt': {
+    'stoneUnit',
+    'actionOk',
+    'cardio',
+    'minutesShort',
+    'volume',
+    'backupLabel',
+  },
+  'pt_BR': {
+    'stoneUnit',
+    'actionOk',
+    'cardio',
+    'minutesShort',
+    'volume',
+    'backupLabel',
+  },
+  'tr': {'stoneUnit', 'examplePlanExercises'},
+  'zh': {},
+  'zh_CN': {},
+};
+
 const _postWaveReviewedKeys = <String>{
   'categoryHelper',
   'manageCategories',
@@ -154,6 +254,45 @@ void main() {
     }
   });
 
+  test('translated ARBs do not silently fall back to English', () {
+    final localeFiles =
+        Directory('lib/l10n')
+            .listSync()
+            .whereType<File>()
+            .where(
+              (file) =>
+                  file.path.endsWith('.arb') &&
+                  !file.path.endsWith('app_en.arb'),
+            )
+            .toList()
+          ..sort((a, b) => a.path.compareTo(b.path));
+
+    for (final file in localeFiles) {
+      final translated = _readArb(file);
+      final locale = translated['@@locale'] as String;
+      final allowedEnglishEquivalentKeys = <String>{
+        ..._alwaysEnglishEquivalentKeys,
+        ...?_localeSpecificEnglishEquivalentKeys[locale],
+      };
+      final accidentalEnglishKeys =
+          sourceKeys
+              .where(
+                (key) =>
+                    translated[key] == source[key] &&
+                    !allowedEnglishEquivalentKeys.contains(key),
+              )
+              .toList()
+            ..sort();
+
+      expect(
+        accidentalEnglishKeys,
+        isEmpty,
+        reason:
+            '${file.path} has English-equivalent values that have not been explicitly reviewed.',
+      );
+    }
+  });
+
   test('post-wave feature strings stay translated', () {
     final localeFiles = Directory('lib/l10n')
         .listSync()
@@ -195,10 +334,14 @@ void main() {
           isTrue,
           reason: 'Missing $filename for Play Store locale $locale.',
         );
+        final localized = file.readAsStringSync().trim();
+        final english = File(
+          'fastlane/metadata/android/en-US/$filename',
+        ).readAsStringSync().trim();
         expect(
-          file.readAsStringSync().trim(),
-          isNotEmpty,
-          reason: '$filename for $locale must not be empty.',
+          localized,
+          allOf(isNotEmpty, isNot(equals(english))),
+          reason: '$filename for $locale must be localized.',
         );
       }
     }
@@ -255,6 +398,36 @@ void main() {
           file.readAsStringSync().trim(),
           isNotEmpty,
           reason: '$filename for $locale must not be empty.',
+        );
+      }
+    }
+  });
+
+  test('App Store textual metadata is localized where English has copy', () {
+    const translatedFiles = <String>[
+      'description.txt',
+      'keywords.txt',
+      'release_notes.txt',
+      'subtitle.txt',
+      'promotional_text.txt',
+    ];
+
+    for (final filename in translatedFiles) {
+      final english = File(
+        'fastlane/metadata/en-AU/$filename',
+      ).readAsStringSync().trim();
+      if (english.isEmpty) continue;
+
+      for (final locale in _appStoreLocales.where(
+        (locale) => locale != 'en-AU',
+      )) {
+        final localized = File(
+          'fastlane/metadata/$locale/$filename',
+        ).readAsStringSync().trim();
+        expect(
+          localized,
+          allOf(isNotEmpty, isNot(equals(english))),
+          reason: '$filename for App Store locale $locale must be localized.',
         );
       }
     }
