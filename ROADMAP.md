@@ -26,7 +26,7 @@ English is the source locale. The first translation wave is:
 - Korean (`ko`)
 - Simplified Chinese (`zh_CN`)
 
-Additional locales can be added after the first wave using the same completeness and QA rules.
+Additional locales can be added after the first wave using the same completeness and QA rules. Turkish (`tr`) has since been added and is fully supported.
 
 ## 1. Localization foundation
 
@@ -88,7 +88,7 @@ Move hard-coded user-visible copy into the canonical English ARB. Preserve non-u
 
 - [x] Android notification channel names, notification titles/bodies, permission rationale copy, and native strings that users can see.
 - [x] Review iOS, Windows, Linux, macOS, and web user-visible platform strings; localize those that participate in the app experience without renaming package IDs, executable names, or protocol identifiers.
-  - [x] Localize the native macOS application menu for every first-wave locale, including standard Edit, Find, spelling, window, and help commands.
+  - [x] Localize the native macOS application menu for every supported locale, including Turkish and standard Edit, Find, spelling, window, and help commands.
 - [x] Ensure native timer/notification code receives already-localized or locale-safe values where Flutter is the source of truth.
 
 ### Migration completion gate
@@ -113,6 +113,10 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Korean (`ko`)
 - [x] Simplified Chinese (`zh_CN`)
 
+### Additional supported locales
+
+- [x] Turkish (`tr`)
+
 ## 5. Translation quality and layout QA
 
 - [x] Add automated ARB completeness validation: every supported locale has the same active keys as English and valid placeholder metadata/ICU syntax.
@@ -132,7 +136,8 @@ For every locale below: translate every active ARB key from the canonical Englis
 - [x] Update widget tests that depend on English labels to use generated localizations or explicitly pin English where the test is not testing localization.
 - [x] Add focused tests for at least one Latin-script alternate locale and one CJK locale across core navigation/settings/workout flows.
 - [x] Ensure integration tests remain deterministic by explicitly selecting or pinning a locale where necessary.
-- [x] Localize Play Store metadata for supported locales when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
+- [x] Localize Play Store metadata for every supported locale when the in-app translation for that locale is complete; do not advertise a locale before the app ships it.
+- [x] Localize App Store description, keywords, and release notes for every supported locale using Fastlane metadata folders.
 - [x] Add translated store screenshots only when practical; English screenshots may remain shared where store rules permit.
   - [x] Generate all eight Play Store phone screenshots for every first-wave non-English store locale, while keeping English as the default screenshot pipeline and shared tablet/desktop artwork where appropriate.
 - [x] Update contributor documentation with the workflow for adding/changing English strings and updating all locale ARBs.
@@ -144,4 +149,4 @@ For every locale below: translate every active ARB key from the canonical Englis
 
 ## Definition of done
 
-Translation work is complete when every checkbox above is satisfied, all first-wave locales have complete reviewed ARBs, locale switching is stable, core layouts tolerate translated text, required tests pass, and no known user-facing English string remains outside the localization system without a documented reason.
+Translation work is complete when every checkbox above is satisfied, every supported locale has complete reviewed ARBs and store metadata, locale switching is stable, core layouts tolerate translated text, required tests pass, and no known user-facing English string remains outside the localization system without a documented reason.

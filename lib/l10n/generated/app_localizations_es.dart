@@ -725,38 +725,39 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Grupo muscular, p. ej., pecho o piernas';
+  String get categoryHelper =>
+      'Elige una categoría existente o escribe una nueva.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gestionar categorías';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Crea, cambia el nombre, combina o elimina categorías';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nueva categoría';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Renombrar categoría';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Combinar con otra categoría';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Aún no hay categorías';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Introduce un nombre de categoría';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Se usa en $count entradas',
+      one: 'Se usa en 1 entrada',
+      zero: 'No se usa en ninguna entrada',
     );
     return '$_temp0';
   }
@@ -766,9 +767,9 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: '¿Eliminar esta categoría y quitarla de $count entradas?',
+      one: '¿Eliminar esta categoría y quitarla de 1 entrada?',
+      zero: '¿Eliminar esta categoría?',
     );
     return '$_temp0';
   }

@@ -1,0 +1,4 @@
+• Aggiunta la localizzazione in turco e la relativa preferenza della lingua.
+• Riviste le traduzioni in turco e rimosse le voci di localizzazione duplicate.
+• Perfezionati i concept dell'icona di Flexify e ripristinate le risorse dell'icona di produzione.
+• Migliorata la copertura dei test di localizzazione e la gestione dei file di test.

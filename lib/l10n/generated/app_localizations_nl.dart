@@ -724,38 +724,39 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Spiergroep, bijvoorbeeld borst of benen';
+  String get categoryHelper =>
+      'Kies een bestaande categorie of typ een nieuwe.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Categorieën beheren';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Categorieën maken, hernoemen, samenvoegen of verwijderen';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nieuwe categorie';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Categorie hernoemen';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Samenvoegen met een andere categorie';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Nog geen categorieën';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Voer een categorienaam in';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Wordt door $count items gebruikt',
+      one: 'Wordt door 1 item gebruikt',
+      zero: 'Wordt door geen items gebruikt',
     );
     return '$_temp0';
   }
@@ -765,9 +766,9 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Deze categorie verwijderen en bij $count items weghalen?',
+      one: 'Deze categorie verwijderen en bij 1 item weghalen?',
+      zero: 'Deze categorie verwijderen?',
     );
     return '$_temp0';
   }

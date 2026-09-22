@@ -34,9 +34,15 @@ Do not add a locale to the app or store metadata until its active ARB contains e
 
 ## Validation
 
-`test/localization_catalog_test.dart` enforces the localization catalog contract. It checks that English placeholder metadata matches the source messages, every translated ARB has the same active keys and placeholders as English, the language-only `pt` and `zh` fallback catalogs stay identical to their reviewed `pt_BR` and `zh_CN` regional catalogs, and obvious literal English passed directly to common Flutter text/label APIs is rejected unless it is a documented non-translatable proper name. The UI-literal audit also covers rich text spans, tooltip messages, custom semantics labels/hints/values, and Flutter widgets whose `label` or `text` property is itself a user-visible string.
+`test/localization_catalog_test.dart` enforces the localization catalog contract. It checks that English placeholder metadata matches the source messages, every translated ARB has the same active keys and placeholders as English, post-wave feature strings have reviewed non-English translations, the language-only `pt` and `zh` fallback catalogs stay identical to their reviewed `pt_BR` and `zh_CN` regional catalogs, every shipped locale has the required Play/App Store metadata, and obvious literal English passed directly to common Flutter text/label APIs is rejected unless it is a documented non-translatable proper name. The UI-literal audit also covers rich text spans, tooltip messages, custom semantics labels/hints/values, and Flutter widgets whose `label` or `text` property is itself a user-visible string.
 
 Run `flutter gen-l10n` after changing any ARB, then run the normal analyzer and test suite. Generated localization files are committed so CI and release builds use the same catalog that was validated locally.
+
+## Store metadata
+
+Keep Google Play localized listing files under `fastlane/metadata/android/<locale>/`. Every shipped non-English app locale must have a localized title, short description, and full description.
+
+Keep App Store Connect localized metadata under `fastlane/metadata/<locale>/` using Fastlane/Apple locale identifiers. Every shipped app locale must have localized description, keywords, and release notes; the Flexify brand name and support/marketing/privacy URLs may remain shared. When adding a new app locale, add both store mappings in the same translation slice.
 
 ## Store screenshots
 

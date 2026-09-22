@@ -720,38 +720,39 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Gruppo muscolare, ad es. petto o gambe';
+  String get categoryHelper =>
+      'Scegli una categoria esistente o inseriscine una nuova.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gestisci categorie';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Crea, rinomina, unisci o rimuovi categorie';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nuova categoria';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Rinomina categoria';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Unisci a un\'altra categoria';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Nessuna categoria';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Inserisci un nome per la categoria';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Usata da $count voci',
+      one: 'Usata da 1 voce',
+      zero: 'Non usata da nessuna voce',
     );
     return '$_temp0';
   }
@@ -761,9 +762,9 @@ class AppLocalizationsIt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Eliminare questa categoria e rimuoverla da $count voci?',
+      one: 'Eliminare questa categoria e rimuoverla da 1 voce?',
+      zero: 'Eliminare questa categoria?',
     );
     return '$_temp0';
   }
