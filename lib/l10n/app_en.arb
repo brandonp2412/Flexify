@@ -60,12 +60,10 @@
   "@languageNameSimplifiedChinese": {
     "description": "Stable native display name for the Simplified Chinese locale."
   },
-
-  "languageNameTurkish": "Turkish",
+  "languageNameTurkish": "Türkçe",
   "@languageNameTurkish": {
     "description": "Stable native display name for the Turkish locale."
   },
-
   "navHistory": "History",
   "@navHistory": {
     "description": "Navigation label for workout history."
@@ -1011,14 +1009,20 @@
   "@categoryUsageCount": {
     "description": "Number of workout entries using a category.",
     "placeholders": {
-      "count": {"type": "int", "example": "3"}
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
   "deleteCategoryConfirmation": "{count, plural, =0{Delete this category?} =1{Delete this category and remove it from 1 entry?} other{Delete this category and remove it from {count} entries?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
     "placeholders": {
-      "count": {"type": "int", "example": "3"}
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
     }
   },
   "createdDate": "Created date",

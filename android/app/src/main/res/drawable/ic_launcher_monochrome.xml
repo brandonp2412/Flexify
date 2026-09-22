@@ -9,14 +9,14 @@
         android:scaleX="0.74"
         android:scaleY="0.74">
         <path
-            android:pathData="M29 81 C24 77 22 70 25 63 L35 39 C38 32 43 27 50 25 L56 23 C60 22 64 25 65 29 C66 33 64 37 60 39 L54 41 C51 42 49 44 48 48 L45 58 C51 53 58 50 65 50 C77 50 86 57 89 67 C92 77 85 86 75 87 C68 88 61 85 56 80 C49 86 40 88 33 84 Z"
+            android:pathData="M29 80 C24 76 23 69 26 62 L36 39 C39 32 44 27 51 25 L57 23 C61 22 65 25 66 29 C67 33 65 37 61 39 L55 41 C52 42 50 45 49 49 L46 58 C52 53 59 50 66 50 C78 50 87 57 90 67 C92 76 86 84 76 86 C65 88 51 85 34 80 Z"
             android:fillColor="#00000000"
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="6.2"
             android:strokeLineCap="round"
             android:strokeLineJoin="round"/>
         <path
-            android:pathData="M53 61 C61 57 70 58 77 64"
+            android:pathData="M54 61 C63 56 72 58 79 65"
             android:fillColor="#00000000"
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="4.0"
