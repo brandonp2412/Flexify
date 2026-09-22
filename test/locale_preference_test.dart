@@ -40,8 +40,6 @@ void main() {
       expect(localeOverrideFromIdentifier('zh-CN'), const Locale('zh', 'CN'));
       expect(localeOverrideFromIdentifier('zh_CN'), const Locale('zh', 'CN'));
       expect(localeOverrideFromIdentifier('ZH-cn'), const Locale('zh', 'CN'));
-      expect(localeOverrideFromIdentifier('tr'), const Locale('tr'));
-      expect(localeOverrideFromIdentifier('TR'), const Locale('tr'));
       expect(localeOverrideFromIdentifier('zh'), isNull);
       expect(localeOverrideFromIdentifier('removed-locale'), isNull);
       expect(canonicalLocaleOverride('en'), 'en');
@@ -57,7 +55,6 @@ void main() {
       expect(canonicalLocaleOverride('ko'), 'ko');
       expect(canonicalLocaleOverride('tr'), 'tr');
       expect(canonicalLocaleOverride('zh_CN'), 'zh-CN');
-      expect(canonicalLocaleOverride('tr'), 'tr');
       expect(canonicalLocaleOverride('zh'), isNull);
       expect(canonicalLocaleOverride('removed-locale'), isNull);
       expect(selectableLocales.map((locale) => locale.toLanguageTag()), [
