@@ -726,38 +726,39 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Groupe musculaire, p. ex. poitrine ou jambes';
+  String get categoryHelper =>
+      'Choisissez une catégorie existante ou saisissez-en une nouvelle.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gérer les catégories';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Créer, renommer, fusionner ou supprimer des catégories';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nouvelle catégorie';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Renommer la catégorie';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Fusionner avec une autre catégorie';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Aucune catégorie pour le moment';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Saisissez un nom de catégorie';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Utilisée par $count entrées',
+      one: 'Utilisée par 1 entrée',
+      zero: 'Utilisée par aucune entrée',
     );
     return '$_temp0';
   }
@@ -767,9 +768,9 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Supprimer cette catégorie et la retirer de $count entrées ?',
+      one: 'Supprimer cette catégorie et la retirer de 1 entrée ?',
+      zero: 'Supprimer cette catégorie ?',
     );
     return '$_temp0';
   }

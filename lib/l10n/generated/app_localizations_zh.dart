@@ -701,38 +701,37 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => '肌群，例如胸部或腿部';
+  String get categoryHelper => '选择现有分类或输入新分类。';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => '管理分类';
 
   @override
-  String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+  String get manageCategoriesDescription => '创建、重命名、合并或删除分类';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => '新建分类';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => '重命名分类';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => '合并到其他分类';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => '暂无分类';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => '请输入分类名称';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: '$count 个条目使用此分类',
+      one: '1 个条目使用此分类',
+      zero: '没有条目使用此分类',
     );
     return '$_temp0';
   }
@@ -742,9 +741,9 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: '删除此分类并将其从 $count 个条目中移除？',
+      one: '删除此分类并将其从 1 个条目中移除？',
+      zero: '删除此分类？',
     );
     return '$_temp0';
   }
@@ -2154,38 +2153,37 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   }
 
   @override
-  String get categoryHelper => '肌群，例如胸部或腿部';
+  String get categoryHelper => '选择现有分类或输入新分类。';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => '管理分类';
 
   @override
-  String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+  String get manageCategoriesDescription => '创建、重命名、合并或删除分类';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => '新建分类';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => '重命名分类';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => '合并到其他分类';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => '暂无分类';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => '请输入分类名称';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: '$count 个条目使用此分类',
+      one: '1 个条目使用此分类',
+      zero: '没有条目使用此分类',
     );
     return '$_temp0';
   }
@@ -2195,9 +2193,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: '删除此分类并将其从 $count 个条目中移除？',
+      one: '删除此分类并将其从 1 个条目中移除？',
+      zero: '删除此分类？',
     );
     return '$_temp0';
   }

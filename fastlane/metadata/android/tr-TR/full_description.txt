@@ -1,0 +1,17 @@
+Salon antrenmanlarını kaydet, güç gelişimini takip et ve antrenman verilerini gizli tut.
+
+Flexify, kuvvet antrenmanı ve kardiyo için hızlı, çevrimdışı bir antrenman takip uygulamasıdır. Setleri, tekrarları ve ağırlıkları kaydet; ritmini korumak için dinlenme zamanlayıcılarını kullan ve her seansın ardından net ilerleme grafiklerini incele.
+
+DAHA İYİ BİR ANTRENMAN GÜNLÜĞÜ OLUŞTUR
+
+• Kuvvet antrenmanlarını, egzersizleri, setleri, tekrarları ve ağırlıkları kaydet
+• Kardiyo seanslarını ve kardiyo türlerini kaydet
+• Setler arasında dinlenme zamanlayıcıları ve alarmlar kullan
+• Antrenman geçmişini ve güç gelişimini grafiklerle incele
+• Özellikleri, ayarları ve açık veya koyu görünümü rutinine göre özelleştir
+
+GİZLİ, HIZLI VE ÇEVRİMDIŞI
+
+Flexify hesap veya internet bağlantısı gerektirmez. Antrenman verilerin cihazında kalır; böylece istediğin yerde antrenman yapabilir ve seanslarını kaydedebilirsin. Uygulama açık kaynaklıdır; reklam ve takip içermez.
+
+İster spor salonuna yeni başlıyor ol ister mevcut programını geliştiriyor ol, Flexify gereksiz kalabalık olmadan odaklı bir antrenman günlüğü sunar.

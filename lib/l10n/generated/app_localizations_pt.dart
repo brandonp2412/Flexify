@@ -721,38 +721,39 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Grupo muscular, por exemplo Peito ou Pernas';
+  String get categoryHelper =>
+      'Escolha uma categoria existente ou digite uma nova.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gerenciar categorias';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Crie, renomeie, mescle ou remova categorias';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nova categoria';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Renomear categoria';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Mesclar com outra categoria';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Nenhuma categoria ainda';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Digite um nome para a categoria';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Usada por $count registros',
+      one: 'Usada por 1 registro',
+      zero: 'Não usada por nenhum registro',
     );
     return '$_temp0';
   }
@@ -762,9 +763,9 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Excluir esta categoria e removê-la de $count registros?',
+      one: 'Excluir esta categoria e removê-la de 1 registro?',
+      zero: 'Excluir esta categoria?',
     );
     return '$_temp0';
   }
@@ -2255,38 +2256,39 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get categoryHelper => 'Grupo muscular, por exemplo Peito ou Pernas';
+  String get categoryHelper =>
+      'Escolha uma categoria existente ou digite uma nova.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gerenciar categorias';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Crie, renomeie, mescle ou remova categorias';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nova categoria';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Renomear categoria';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Mesclar com outra categoria';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Nenhuma categoria ainda';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Digite um nome para a categoria';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Usada por $count registros',
+      one: 'Usada por 1 registro',
+      zero: 'Não usada por nenhum registro',
     );
     return '$_temp0';
   }
@@ -2296,9 +2298,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Excluir esta categoria e removê-la de $count registros?',
+      one: 'Excluir esta categoria e removê-la de 1 registro?',
+      zero: 'Excluir esta categoria?',
     );
     return '$_temp0';
   }

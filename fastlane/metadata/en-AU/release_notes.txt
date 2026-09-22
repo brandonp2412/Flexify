@@ -1,10 +1,4 @@
-• Cover Turkish locale preferences
-• Revert temporary icon redesign assets
-• chore(l10n): Added languageNameTurkish
-• chore: address Turkish localization review
-• feat(l10n): Added Turkish Localization
-• feat: add flexing bicep icon concepts
-• feat: add icon 7 and 8 refinement sets
-• fix(l10n): Removed duplicate entries
-• fix(tests): add .gitignore to exclude test_bundle.dart
-• fix(tests): add tr language to the locale_preference_test
+• Added Turkish localization and language preference support.
+• Reviewed Turkish translations and removed duplicate localization entries.
+• Refined Flexify icon concepts and restored production icon assets.
+• Improved localization test coverage and test file handling.

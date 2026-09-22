@@ -719,38 +719,39 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Kas grubu, örn. Göğüs veya Bacaklar';
+  String get categoryHelper =>
+      'Mevcut bir kategori seçin veya yeni bir kategori yazın.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Kategorileri yönet';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Kategori oluşturun, yeniden adlandırın, birleştirin veya kaldırın';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Yeni kategori';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Kategoriyi yeniden adlandır';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Başka bir kategoriyle birleştir';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Henüz kategori yok';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Bir kategori adı girin';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: '$count kayıtta kullanılıyor',
+      one: '1 kayıtta kullanılıyor',
+      zero: 'Hiçbir kayıtta kullanılmıyor',
     );
     return '$_temp0';
   }
@@ -760,9 +761,9 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Bu kategori silinsin ve $count kayıttan kaldırılsın mı?',
+      one: 'Bu kategori silinsin ve 1 kayıttan kaldırılsın mı?',
+      zero: 'Bu kategori silinsin mi?',
     );
     return '$_temp0';
   }

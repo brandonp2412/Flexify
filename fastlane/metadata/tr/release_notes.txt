@@ -1,0 +1,4 @@
+• Türkçe yerelleştirme ve dil tercihi desteği eklendi.
+• Türkçe çeviriler gözden geçirildi ve yinelenen yerelleştirme girdileri kaldırıldı.
+• Flexify simge tasarımları geliştirildi ve üretim simge varlıkları geri yüklendi.
+• Yerelleştirme test kapsamı ve test dosyası işleme iyileştirildi.

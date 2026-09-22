@@ -1,0 +1,4 @@
+• Türkische Lokalisierung und Sprachauswahl hinzugefügt.
+• Türkische Übersetzungen geprüft und doppelte Lokalisierungseinträge entfernt.
+• Flexify-Iconkonzepte verfeinert und die produktiven Icon-Assets wiederhergestellt.
+• Lokalisierungstests und den Umgang mit Testdateien verbessert.

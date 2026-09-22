@@ -727,38 +727,40 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Grupa mięśniowa, np. klatka piersiowa lub nogi';
+  String get categoryHelper => 'Wybierz istniejącą kategorię lub wpisz nową.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Zarządzaj kategoriami';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Twórz, zmieniaj nazwy, łącz lub usuwaj kategorie';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Nowa kategoria';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Zmień nazwę kategorii';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Połącz z inną kategorią';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Brak kategorii';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Wpisz nazwę kategorii';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Używana przez $count wpisu',
+      many: 'Używana przez $count wpisów',
+      few: 'Używana przez $count wpisy',
+      one: 'Używana przez $count wpis',
+      zero: 'Nie jest używana przez żaden wpis',
     );
     return '$_temp0';
   }
@@ -768,9 +770,11 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Usunąć tę kategorię i usunąć ją z $count wpisu?',
+      many: 'Usunąć tę kategorię i usunąć ją z $count wpisów?',
+      few: 'Usunąć tę kategorię i usunąć ją z $count wpisów?',
+      one: 'Usunąć tę kategorię i usunąć ją z $count wpisu?',
+      zero: 'Usunąć tę kategorię?',
     );
     return '$_temp0';
   }

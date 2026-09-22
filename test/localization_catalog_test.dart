@@ -32,6 +32,48 @@ const _allowedLiteralUiText = <String>{
   'lib/about_page.dart:MIT',
 };
 
+const _postWaveReviewedKeys = <String>{
+  'categoryHelper',
+  'manageCategories',
+  'manageCategoriesDescription',
+  'newCategory',
+  'renameCategory',
+  'mergeCategory',
+  'noCategories',
+  'categoryNameRequired',
+  'categoryUsageCount',
+  'deleteCategoryConfirmation',
+};
+
+const _playStoreLocales = <String>{
+  'de-DE',
+  'es-ES',
+  'fr-FR',
+  'it-IT',
+  'ja-JP',
+  'ko-KR',
+  'nl-NL',
+  'pl-PL',
+  'pt-BR',
+  'tr-TR',
+  'zh-CN',
+};
+
+const _appStoreLocales = <String>{
+  'en-AU',
+  'de-DE',
+  'es-ES',
+  'fr-FR',
+  'it',
+  'ja',
+  'ko',
+  'nl-NL',
+  'pl',
+  'pt-BR',
+  'tr',
+  'zh-Hans',
+};
+
 Map<String, dynamic> _readArb(File file) =>
     jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
 
@@ -93,6 +135,89 @@ void main() {
           _messagePlaceholders(translated[key] as String),
           _metadataPlaceholders(source, key),
           reason: '${file.path} has different placeholders for "$key".',
+        );
+      }
+    }
+  });
+
+  test('post-wave feature strings stay translated', () {
+    final localeFiles = Directory('lib/l10n')
+        .listSync()
+        .whereType<File>()
+        .where(
+          (file) =>
+              file.path.endsWith('.arb') && !file.path.endsWith('app_en.arb'),
+        );
+
+    for (final file in localeFiles) {
+      final translated = _readArb(file);
+      for (final key in _postWaveReviewedKeys) {
+        expect(
+          translated[key],
+          isNot(source[key]),
+          reason: '${file.path} still uses English for "$key".',
+        );
+      }
+    }
+  });
+
+  test('Play Store metadata covers every shipped non-English locale', () {
+    for (final locale in _playStoreLocales) {
+      final directory = Directory('fastlane/metadata/android/$locale');
+      expect(
+        directory.existsSync(),
+        isTrue,
+        reason: 'Missing Play Store metadata directory for $locale.',
+      );
+
+      for (final filename in const [
+        'title.txt',
+        'short_description.txt',
+        'full_description.txt',
+      ]) {
+        final file = File('${directory.path}/$filename');
+        expect(
+          file.existsSync(),
+          isTrue,
+          reason: 'Missing $filename for Play Store locale $locale.',
+        );
+        expect(
+          file.readAsStringSync().trim(),
+          isNotEmpty,
+          reason: '$filename for $locale must not be empty.',
+        );
+      }
+    }
+  });
+
+  test('App Store metadata covers every shipped locale', () {
+    for (final locale in _appStoreLocales) {
+      final directory = Directory('fastlane/metadata/$locale');
+      expect(
+        directory.existsSync(),
+        isTrue,
+        reason: 'Missing App Store metadata directory for $locale.',
+      );
+
+      for (final filename in const [
+        'name.txt',
+        'keywords.txt',
+        'description.txt',
+        'release_notes.txt',
+        'support_url.txt',
+        'marketing_url.txt',
+        'privacy_url.txt',
+      ]) {
+        final file = File('${directory.path}/$filename');
+        expect(
+          file.existsSync(),
+          isTrue,
+          reason: 'Missing $filename for App Store locale $locale.',
+        );
+        expect(
+          file.readAsStringSync().trim(),
+          isNotEmpty,
+          reason: '$filename for $locale must not be empty.',
         );
       }
     }
@@ -162,7 +287,7 @@ void main() {
     );
   });
 
-  test('macOS native menu has complete first-wave localizations', () {
+  test('macOS native menu covers every supported non-English locale', () {
     final baseMenu = File(
       'macos/Runner/Base.lproj/MainMenu.xib',
     ).readAsLinesSync();
@@ -185,6 +310,7 @@ void main() {
       'ja',
       'ko',
       'zh-Hans',
+      'tr',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=');
 

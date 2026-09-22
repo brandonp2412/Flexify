@@ -1,0 +1,4 @@
+• Turkse lokalisatie en taalvoorkeur toegevoegd.
+• Turkse vertalingen gecontroleerd en dubbele lokalisatie-items verwijderd.
+• Flexify-pictogramconcepten verfijnd en de productie-assets hersteld.
+• Dekking van lokalisatietests en verwerking van testbestanden verbeterd.

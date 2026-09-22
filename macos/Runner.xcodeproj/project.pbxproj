@@ -83,6 +83,7 @@
                 A10000000000000000000008 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MainMenu.strings; sourceTree = "<group>"; };
                 A10000000000000000000009 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/MainMenu.strings; sourceTree = "<group>"; };
                 A1000000000000000000000A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MainMenu.strings"; sourceTree = "<group>"; };
+                A1000000000000000000000B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		33CC10F72044A3C60003C045 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Runner/Info.plist; sourceTree = "<group>"; };
 		33CC11122044BFA00003C045 /* MainFlutterWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlutterWindow.swift; sourceTree = "<group>"; };
 		33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -311,6 +312,7 @@
                                 ja,
                                 ko,
                                 "zh-Hans",
+                                tr,
 			);
 			mainGroup = 33CC10E42044A3C60003C045;
 			productRefGroup = 33CC10EE2044A3C60003C045 /* Products */;
@@ -494,6 +496,7 @@
                                 A10000000000000000000008 /* ja */,
                                 A10000000000000000000009 /* ko */,
                                 A1000000000000000000000A /* zh-Hans */,
+                                A1000000000000000000000B /* tr */,
 			);
 			name = MainMenu.xib;
 			path = Runner;

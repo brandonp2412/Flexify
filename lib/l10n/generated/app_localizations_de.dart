@@ -725,38 +725,39 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => 'Muskelgruppe, z. B. Brust oder Beine';
+  String get categoryHelper =>
+      'Wähle eine vorhandene Kategorie oder gib eine neue ein.';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Kategorien verwalten';
 
   @override
   String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+      'Kategorien erstellen, umbenennen, zusammenführen oder entfernen';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => 'Neue Kategorie';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'Kategorie umbenennen';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => 'Mit einer anderen Kategorie zusammenführen';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'Noch keine Kategorien';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'Gib einen Kategorienamen ein';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: 'Von $count Einträgen verwendet',
+      one: 'Von 1 Eintrag verwendet',
+      zero: 'Von keinem Eintrag verwendet',
     );
     return '$_temp0';
   }
@@ -766,9 +767,9 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'Diese Kategorie löschen und aus $count Einträgen entfernen?',
+      one: 'Diese Kategorie löschen und aus 1 Eintrag entfernen?',
+      zero: 'Diese Kategorie löschen?',
     );
     return '$_temp0';
   }

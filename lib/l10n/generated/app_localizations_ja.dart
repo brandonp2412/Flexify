@@ -703,38 +703,37 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get categoryHelper => '筋群（例: 胸、脚）';
+  String get categoryHelper => '既存のカテゴリを選ぶか、新しいカテゴリ名を入力してください。';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'カテゴリを管理';
 
   @override
-  String get manageCategoriesDescription =>
-      'Create, rename, merge or remove categories';
+  String get manageCategoriesDescription => 'カテゴリの作成、名前変更、統合、削除';
 
   @override
-  String get newCategory => 'New category';
+  String get newCategory => '新しいカテゴリ';
 
   @override
-  String get renameCategory => 'Rename category';
+  String get renameCategory => 'カテゴリ名を変更';
 
   @override
-  String get mergeCategory => 'Merge into another category';
+  String get mergeCategory => '別のカテゴリに統合';
 
   @override
-  String get noCategories => 'No categories yet';
+  String get noCategories => 'カテゴリはまだありません';
 
   @override
-  String get categoryNameRequired => 'Enter a category name';
+  String get categoryNameRequired => 'カテゴリ名を入力してください';
 
   @override
   String categoryUsageCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
+      other: '$count件の項目で使用中',
+      one: '1件の項目で使用中',
+      zero: '使用している項目はありません',
     );
     return '$_temp0';
   }
@@ -744,9 +743,9 @@ class AppLocalizationsJa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Delete this category and remove it from $count entries?',
-      one: 'Delete this category and remove it from 1 entry?',
-      zero: 'Delete this category?',
+      other: 'このカテゴリを削除し、$count件の項目から解除しますか？',
+      one: 'このカテゴリを削除し、1件の項目から解除しますか？',
+      zero: 'このカテゴリを削除しますか？',
     );
     return '$_temp0';
   }

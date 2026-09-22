@@ -1,0 +1,4 @@
+• Dodano turecką lokalizację i wybór języka.
+• Sprawdzono tureckie tłumaczenia i usunięto zduplikowane wpisy lokalizacyjne.
+• Dopracowano koncepcje ikony Flexify i przywrócono produkcyjne zasoby ikony.
+• Ulepszono testy lokalizacji i obsługę plików testowych.
