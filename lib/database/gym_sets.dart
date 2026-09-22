@@ -306,11 +306,9 @@ Future<List<StrengthData>> getStrengthData({
 }
 
 Future<List<String?>> getCategories() {
-  return (db.selectOnly(db.gymSets)
-        ..addColumns([db.gymSets.category])
-        ..where(db.gymSets.category.isNotNull())
-        ..groupBy([db.gymSets.category]))
-      .map((result) => result.read(db.gymSets.category))
+  return (db.select(db.categories)
+        ..orderBy([(category) => OrderingTerm.asc(category.name)]))
+      .map((category) => category.name)
       .get();
 }
 
@@ -478,13 +476,9 @@ class GymSets extends Table {
 }
 
 Stream<List<String>> getCategoriesStream() {
-  return (db.gymSets.selectOnly(distinct: true)
-        ..addColumns([db.gymSets.category])
-        ..where(db.gymSets.category.isNotNull()))
-      .watch()
-      .map(
-        (results) => results
-            .map((result) => result.read(db.gymSets.category) ?? "")
-            .toList(),
-      );
+  return (db.select(
+    db.categories,
+  )..orderBy([(category) => OrderingTerm.asc(category.name)])).watch().map(
+    (categories) => categories.map((category) => category.name).toList(),
+  );
 }

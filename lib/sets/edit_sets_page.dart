@@ -2,10 +2,12 @@ import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -311,30 +313,45 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 selector: (context, settings) => settings.value.showCategories,
                 builder: (context, showCategories, child) => Visibility(
                   visible: showCategories,
-                  child: StreamBuilder(
+                  child: StreamBuilder<List<String>>(
                     stream: getCategoriesStream(),
-                    builder: (context, snapshot) {
-                      return DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          labelText: l10n.categoryLabel,
-                          hintText: _oldCat,
-                        ),
-                        initialValue: _category,
-                        items: snapshot.data
-                            ?.map(
-                              (category) => DropdownMenuItem(
-                                value: category,
-                                child: Text(category),
+                    builder: (context, snapshot) => Autocomplete<String>(
+                      initialValue: TextEditingValue(text: _category ?? ''),
+                      optionsBuilder: (value) =>
+                          snapshot.data
+                              ?.where(
+                                (category) => category.toLowerCase().contains(
+                                  value.text.toLowerCase(),
+                                ),
+                              )
+                              .toList() ??
+                          [],
+                      onSelected: (category) =>
+                          setState(() => _category = category),
+                      fieldViewBuilder: (context, controller, focusNode, _) =>
+                          TextFormField(
+                            controller: controller,
+                            focusNode: focusNode,
+                            decoration: InputDecoration(
+                              labelText: l10n.categoryLabel,
+                              hintText: _oldCat,
+                              helperText: l10n.categoryHelper,
+                              suffixIcon: IconButton(
+                                tooltip: l10n.manageCategories,
+                                icon: const Icon(Icons.settings),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const CategoryManagementPage(),
+                                  ),
+                                ),
                               ),
-                            )
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _category = value!;
-                          });
-                        },
-                      );
-                    },
+                            ),
+                            onChanged: (value) => setState(
+                              () => _category = value.isEmpty ? null : value,
+                            ),
+                          ),
+                    ),
                   ),
                 ),
               ),
@@ -481,6 +498,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
     Navigator.pop(context);
 
+    _category = _category?.trim();
+    if (_category?.isEmpty ?? false) _category = null;
+
     final gymSet = GymSetsCompanion(
       name: _name.text.isNotEmpty ? Value(_name.text) : const Value.absent(),
       unit: Value.absentIfNull(_unit),
@@ -503,6 +523,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
       category: Value.absentIfNull(_category),
     );
 
+    if (_category != null) await createCategory(_category!);
     await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(
       gymSet,
     );

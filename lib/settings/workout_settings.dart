@@ -3,6 +3,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,15 @@ List<Widget> getWorkoutSettings(
               SettingsCompanion(showCategories: Value(value)),
             ),
           ),
+        ),
+      ),
+    if (matches([l10n.manageCategories, l10n.manageCategoriesDescription]))
+      ListTile(
+        leading: const Icon(Icons.category),
+        title: Text(l10n.manageCategories, textAlign: TextAlign.center),
+        subtitle: Text(l10n.manageCategoriesDescription),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const CategoryManagementPage()),
         ),
       ),
     if (matches([l10n.showNotes, l10n.showNotesDescription]))

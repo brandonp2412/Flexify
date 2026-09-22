@@ -704,6 +704,52 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoryHelper => '肌群，例如胸部或腿部';
 
   @override
+  String get manageCategories => 'Manage categories';
+
+  @override
+  String get manageCategoriesDescription =>
+      'Create, rename, merge or remove categories';
+
+  @override
+  String get newCategory => 'New category';
+
+  @override
+  String get renameCategory => 'Rename category';
+
+  @override
+  String get mergeCategory => 'Merge into another category';
+
+  @override
+  String get noCategories => 'No categories yet';
+
+  @override
+  String get categoryNameRequired => 'Enter a category name';
+
+  @override
+  String categoryUsageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Used by $count entries',
+      one: 'Used by 1 entry',
+      zero: 'Not used by any entries',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deleteCategoryConfirmation(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Delete this category and remove it from $count entries?',
+      one: 'Delete this category and remove it from 1 entry?',
+      zero: 'Delete this category?',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get createdDate => '创建日期';
 
   @override
@@ -2109,6 +2155,52 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get categoryHelper => '肌群，例如胸部或腿部';
+
+  @override
+  String get manageCategories => 'Manage categories';
+
+  @override
+  String get manageCategoriesDescription =>
+      'Create, rename, merge or remove categories';
+
+  @override
+  String get newCategory => 'New category';
+
+  @override
+  String get renameCategory => 'Rename category';
+
+  @override
+  String get mergeCategory => 'Merge into another category';
+
+  @override
+  String get noCategories => 'No categories yet';
+
+  @override
+  String get categoryNameRequired => 'Enter a category name';
+
+  @override
+  String categoryUsageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Used by $count entries',
+      one: 'Used by 1 entry',
+      zero: 'Not used by any entries',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deleteCategoryConfirmation(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Delete this category and remove it from $count entries?',
+      one: 'Delete this category and remove it from 1 entry?',
+      zero: 'Delete this category?',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get createdDate => '创建日期';

@@ -96,7 +96,6 @@ void main() {
       'ko': const Locale('ko'),
       'tr': const Locale('tr'),
       'zh-CN': const Locale('zh', 'CN'),
-      'tr': const Locale('tr'),
     };
 
     for (final entry in localeCases.entries) {
