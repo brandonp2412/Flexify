@@ -190,6 +190,29 @@ void main() {
     }
   });
 
+  test('Play Store phone screenshots cover every shipped locale', () {
+    const screenshotLocales = {'en-US', ..._playStoreLocales};
+
+    for (final locale in screenshotLocales) {
+      final directory = Directory(
+        'fastlane/metadata/android/$locale/images/phoneScreenshots',
+      );
+      expect(
+        directory.existsSync(),
+        isTrue,
+        reason: 'Missing Play Store phone screenshots for $locale.',
+      );
+
+      for (var index = 1; index <= 8; index++) {
+        expect(
+          File('${directory.path}/${index}_$locale.png').existsSync(),
+          isTrue,
+          reason: 'Missing Play Store screenshot $index for $locale.',
+        );
+      }
+    }
+  });
+
   test('App Store metadata covers every shipped locale', () {
     for (final locale in _appStoreLocales) {
       final directory = Directory('fastlane/metadata/$locale');
