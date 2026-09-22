@@ -1419,8 +1419,62 @@ abstract class AppLocalizations {
   /// Helper text explaining the exercise category field.
   ///
   /// In en, this message translates to:
-  /// **'Muscle group, e.g. Chest or Legs'**
+  /// **'Choose an existing category or type a new one.'**
   String get categoryHelper;
+
+  /// Navigation label for the workout category manager.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage categories'**
+  String get manageCategories;
+
+  /// Description of the category management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Create, rename, merge or remove categories'**
+  String get manageCategoriesDescription;
+
+  /// Action for creating a workout category.
+  ///
+  /// In en, this message translates to:
+  /// **'New category'**
+  String get newCategory;
+
+  /// Action for renaming a workout category.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename category'**
+  String get renameCategory;
+
+  /// Action for moving a category's workout entries to another category.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge into another category'**
+  String get mergeCategory;
+
+  /// Empty state for the category manager.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet'**
+  String get noCategories;
+
+  /// Validation error for an empty category name.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a category name'**
+  String get categoryNameRequired;
+
+  /// Number of workout entries using a category.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Not used by any entries} =1{Used by 1 entry} other{Used by {count} entries}}'**
+  String categoryUsageCount(int count);
+
+  /// Confirmation shown before removing a category and clearing it from workout entries.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Delete this category?} =1{Delete this category and remove it from 1 entry?} other{Delete this category and remove it from {count} entries?}}'**
+  String deleteCategoryConfirmation(int count);
 
   /// Label for the date a workout record was created.
   ///

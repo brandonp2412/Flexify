@@ -723,6 +723,52 @@ class AppLocalizationsIt extends AppLocalizations {
   String get categoryHelper => 'Gruppo muscolare, ad es. petto o gambe';
 
   @override
+  String get manageCategories => 'Manage categories';
+
+  @override
+  String get manageCategoriesDescription =>
+      'Create, rename, merge or remove categories';
+
+  @override
+  String get newCategory => 'New category';
+
+  @override
+  String get renameCategory => 'Rename category';
+
+  @override
+  String get mergeCategory => 'Merge into another category';
+
+  @override
+  String get noCategories => 'No categories yet';
+
+  @override
+  String get categoryNameRequired => 'Enter a category name';
+
+  @override
+  String categoryUsageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Used by $count entries',
+      one: 'Used by 1 entry',
+      zero: 'Not used by any entries',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deleteCategoryConfirmation(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Delete this category and remove it from $count entries?',
+      one: 'Delete this category and remove it from 1 entry?',
+      zero: 'Delete this category?',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get createdDate => 'Data di creazione';
 
   @override

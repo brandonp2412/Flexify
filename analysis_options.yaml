@@ -16,3 +16,4 @@ analyzer:
   - windows/**
   - macos/**
   - linux/**
+  - patrol_test/**

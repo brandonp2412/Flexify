@@ -1,6 +1,7 @@
 // ignore_for_file: experimental_member_use
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
 import 'package:flexify/database/graph_preferences.dart';
@@ -26,7 +27,15 @@ LazyDatabase openConnection() {
 }
 
 @DriftDatabase(
-  tables: [Plans, GymSets, Settings, PlanExercises, Metadata, GraphPreferences],
+  tables: [
+    Categories,
+    Plans,
+    GymSets,
+    Settings,
+    PlanExercises,
+    Metadata,
+    GraphPreferences,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   /// Creates a database backed by the provided [executor].
@@ -75,6 +84,11 @@ class AppDatabase extends _$AppDatabase {
           batch.insertAll(plans, defaultPlans);
           batch.insertAll(planExercises, defaultPlanExercises);
         });
+        await customStatement('''
+          INSERT OR IGNORE INTO categories (name)
+          SELECT DISTINCT category FROM gym_sets
+          WHERE category IS NOT NULL AND TRIM(category) != ''
+        ''');
 
         await settings.insertOne(defaultSettings);
         talker.info(
@@ -549,10 +563,18 @@ class AppDatabase extends _$AppDatabase {
         from56To57: (Migrator m, Schema57 schema) async {
           await m.addColumn(schema.settings, schema.settings.localeOverride);
         },
+        from57To58: (Migrator m, Schema58 schema) async {
+          await m.createTable(schema.categories);
+          await m.database.customStatement('''
+            INSERT OR IGNORE INTO categories (name)
+            SELECT DISTINCT category FROM gym_sets
+            WHERE category IS NOT NULL AND TRIM(category) != ''
+          ''');
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 57;
+  int get schemaVersion => 58;
 }

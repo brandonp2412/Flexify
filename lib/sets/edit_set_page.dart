@@ -6,11 +6,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -414,6 +416,15 @@ class _EditSetPageState extends State<EditSetPage> {
                       decoration: InputDecoration(
                         labelText: context.l10n.categoryLabel,
                         helperText: context.l10n.categoryHelper,
+                        suffixIcon: IconButton(
+                          tooltip: context.l10n.manageCategories,
+                          icon: const Icon(Icons.settings),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const CategoryManagementPage(),
+                            ),
+                          ),
+                        ),
                       ),
                       onChanged: (value) => setState(() {
                         _category = value.isNotEmpty ? value : null;
@@ -650,6 +661,9 @@ class _EditSetPageState extends State<EditSetPage> {
   Future<void> save() async {
     if (!_key.currentState!.validate()) return;
 
+    _category = _category?.trim();
+    if (_category?.isEmpty ?? false) _category = null;
+
     final gymSet = widget.gymSet.copyWith(
       name: _name,
       unit: _unit,
@@ -669,8 +683,10 @@ class _EditSetPageState extends State<EditSetPage> {
       category: Value(_category),
     );
 
-    final settings = context.read<SettingsState>().value;
+    if (_category != null) await createCategory(_category!);
     if (!mounted) return;
+
+    final settings = context.read<SettingsState>().value;
     final messages = positiveReinforcementMessages(context.l10n);
 
     if (widget.gymSet.id > 0) {
