@@ -1,4 +1,9 @@
 {
+  "dart.flutterSdkPath": "/home/brandon/flexify/flutter",
+  "dart.devToolsLocation": {
+    "default": "external",
+    "inspector": "external"
+  },
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "always",
