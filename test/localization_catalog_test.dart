@@ -132,6 +132,20 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
   'zh_CN': {},
 };
 
+const _macOsEnglishEquivalentTitles = <String, Set<String>>{
+  'de': {},
+  'es': {'Zoom'},
+  'fr': {'Services', 'Substitutions', 'Transformations', 'Zoom'},
+  'it': {'Zoom'},
+  'ja': {},
+  'ko': {},
+  'nl': {'Spelling', 'Zoom', 'Help'},
+  'pl': {},
+  'pt-BR': {'Zoom'},
+  'tr': {},
+  'zh-Hans': {},
+};
+
 const _postWaveReviewedKeys = <String>{
   'categoryHelper',
   'manageCategories',
@@ -635,11 +649,14 @@ void main() {
       'macos/Runner/Base.lproj/MainMenu.xib',
     ).readAsLinesSync();
     final idPattern = RegExp(r'\bid="([^"]+)"');
-    final titleIds = baseMenu
-        .where((line) => line.contains('title=') && line.contains('id='))
-        .map((line) => idPattern.firstMatch(line)?.group(1))
-        .whereType<String>()
-        .toSet();
+    final titlePattern = RegExp(r'\btitle="([^"]*)"');
+    final baseTitles = <String, String>{};
+    for (final line in baseMenu) {
+      final id = idPattern.firstMatch(line)?.group(1);
+      final title = titlePattern.firstMatch(line)?.group(1);
+      if (id != null && title != null) baseTitles[id] = title;
+    }
+    final titleIds = baseTitles.keys.toSet();
     expect(titleIds, isNotEmpty);
 
     const localeFolders = <String>[
@@ -655,20 +672,39 @@ void main() {
       'zh-Hans',
       'tr',
     ];
-    final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=');
+    final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');
 
     for (final locale in localeFolders) {
       final file = File('macos/Runner/$locale.lproj/MainMenu.strings');
       expect(file.existsSync(), isTrue, reason: 'Missing macOS $locale menu.');
-      final localizedIds = file
-          .readAsLinesSync()
-          .map((line) => localizedTitlePattern.firstMatch(line)?.group(1))
-          .whereType<String>()
-          .toSet();
+      final localizedTitles = <String, String>{};
+      for (final line in file.readAsLinesSync()) {
+        final match = localizedTitlePattern.firstMatch(line.trim());
+        if (match != null) {
+          localizedTitles[match.group(1)!] = match.group(2)!;
+        }
+      }
       expect(
-        localizedIds,
+        localizedTitles.keys.toSet(),
         titleIds,
         reason: '$locale must translate every native macOS menu title.',
+      );
+
+      final allowedEnglishTitles =
+          _macOsEnglishEquivalentTitles[locale] ?? const <String>{};
+      final accidentalEnglishTitles = localizedTitles.entries
+          .where(
+            (entry) =>
+                baseTitles[entry.key] == entry.value &&
+                !allowedEnglishTitles.contains(entry.value),
+          )
+          .map((entry) => entry.value)
+          .toSet();
+      expect(
+        accidentalEnglishTitles,
+        isEmpty,
+        reason:
+            '$locale has English-equivalent macOS menu titles that have not been explicitly reviewed.',
       );
     }
 
