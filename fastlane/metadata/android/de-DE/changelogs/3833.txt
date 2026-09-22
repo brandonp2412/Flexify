@@ -1,0 +1,6 @@
+• ci: Automatisierte PR-APKs nur für Besitzer-PR-APKs, Handbuch für andere
+• ci: Auf Anfrage nach APK zu bauen und anzubinden
+• ci: Fix 0.0.0-unknown Flutter Version in PR APK Bauteil
+• ci: Befestigen Sie die URL des zitierten Artefakts in PR APK Kommentar
+• ci: Installieren Sie PR-Builds Seite an Seite über .pr App-Id-Suffix
+• ci: Sign PR-Builds mit einem engagierten öffentlichen Test-Keystore

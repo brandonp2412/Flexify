@@ -1,0 +1,2 @@
+- Bewerk # van oefeningen op plannen in plaats van grafieken
+- Verbeter de prestaties van de app

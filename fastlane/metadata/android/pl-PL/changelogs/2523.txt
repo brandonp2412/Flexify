@@ -1,0 +1,1 @@
+- Dodaj etap odbudowy w systemie deploy-windows-store

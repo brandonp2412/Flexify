@@ -1,0 +1,5 @@
+- Verbeteren van screenshots
+- Schermopnamen in GitHub-vertalingen opnemen
+- Vernieuwings-eenheidselector
+- Verwijder duplicate vermeldingen van eenheden
+- Meervoudige bewerking van geschiedenis toevoegen

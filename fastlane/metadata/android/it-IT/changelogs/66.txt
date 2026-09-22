@@ -1,0 +1,6 @@
+- Rimuovere le etichette da deploy.sh
+- Aggiungere il pulsante cancellare per modificare la pagina di set di palestra
+- Modificare i punti del grafico con doppio tocco
+- Trasferire il testo di aiuto per le impostazioni di data sull'etichetta
+- Aggiungere impostazione di formato di data corta
+- Grafici di linee del rifattor

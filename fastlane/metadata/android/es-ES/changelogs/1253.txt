@@ -1,0 +1,1 @@
+- Corrección de las selecciones de vista previa de múltiples ediciones

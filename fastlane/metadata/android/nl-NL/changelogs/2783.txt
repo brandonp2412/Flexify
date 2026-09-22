@@ -1,0 +1,4 @@
+• Voeg oefenschaal toe aan de plannen
+• Voeg zoekopdracht toe voor uitwisseling van training
+• Voeg eenheidstest toe voor swap-training widget
+• De invoerdatabase op desktop oplossen

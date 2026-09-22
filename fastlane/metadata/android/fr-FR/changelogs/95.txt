@@ -1,0 +1,5 @@
+- L'espace de la description complète correctement
+- Indiquez git tirer --tags après avoir créé la sortie github
+- Récupération des déploiements google play
+- Ajouter une tendance à l'exportation/à l'importation
+- Ajouter une inclinaison au type cardio

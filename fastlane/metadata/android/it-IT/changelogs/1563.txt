@@ -1,0 +1,3 @@
+- Aggiungere categorie
+- Aggiungere grafici di inclinazione e ritmo regolato
+- Rimuovere le piastrelle duplicate nelle impostazioni del timer

@@ -1,0 +1,5 @@
+• Plan de exportación fijo csvs
+• Corrección de archivos de importación de windows
+• Mejorar el manejo de errores
+• Mantenga el progreso del cronómetro incluso si la página del cronómetro está oculta
+• Seleccione correctamente el primer ejercicio en los planes

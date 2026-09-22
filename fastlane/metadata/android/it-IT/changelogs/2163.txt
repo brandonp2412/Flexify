@@ -1,0 +1,5 @@
+- Pese rotonde
+- Rettificare la navigazione dell' scheda che si trova dietro la navigazione del sistema
+- Spostare l' etichetta di liscia della curva prima del slider
+- Rettificare il colore della pista mancante con i colori del sistema
+- Normalizza le unità quando le cambia da grafici

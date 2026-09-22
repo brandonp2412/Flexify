@@ -1,0 +1,6 @@
+• Fix Microsoft Store-uitrusting afwerking controles
+• Parse multiline Store uitrol antwoorden
+• Pools lege staten
+• Doel gepubliceerde Instellingen
+• ci: opnieuw proberen voorbijgaande Android picker mislukking
+• test: lijn grafiek geschiedenis lege staat

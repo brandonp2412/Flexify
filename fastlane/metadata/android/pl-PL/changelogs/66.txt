@@ -1,0 +1,6 @@
+- Usunięcie tagów z deploy.sh
+- Dodaj przycisk wymazać do edycji strona ustawień siłowni
+- Edytoruj punkty wykresu poprzez podwójne naciśnięcie
+- Przenieść ustawienia daty pomocnik tekstu do etykiety
+- Dodaj ustawienie krótkiego terminu
+- Grafy linii refaktorów

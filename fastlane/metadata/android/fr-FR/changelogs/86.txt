@@ -1,0 +1,5 @@
+- Ajouter un multidex à android/applications/construction.gradle
+- Mise à jour de flutter à 3.22.0
+- Mise à jour de pubspec.lock
+- Mise à jour des paramètres verscode
+- Correction de l'insertion des enregistrements à partir de la page d' histoire

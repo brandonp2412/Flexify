@@ -1,0 +1,5 @@
+• Rivedere la descrizione del progetto in README
+• Aggiorna README per modificare il tagline del progetto
+• Aggiornare il nome del progetto in README
+• Aggiornamento alla versione 2.2.0 in pubspec.yaml
+• fix: risolvere i bug di apertura e pianificazione

@@ -1,0 +1,2 @@
+- Tests d'unité fixe
+- Supprimer la force de poussée git de deploy.sh

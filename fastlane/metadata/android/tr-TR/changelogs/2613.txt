@@ -1,0 +1,3 @@
+• Github iş akışına ekran görüntüleri ekle [skip ci]
+• Flatter önbelleği izinlerini düzelt
+• Ağırlık gönderildikten sonra tarihten setleri kaydet

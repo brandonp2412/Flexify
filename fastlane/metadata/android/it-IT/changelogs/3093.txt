@@ -1,0 +1,4 @@
+• Fix deploy.sh
+• Rendere più facile toccare i fogli inferiori
+• Rendere più facile vedere/toccare le ultime voci
+• Utilizzare i pesi di ragazzi precedentemente inseriti nella pagina piani

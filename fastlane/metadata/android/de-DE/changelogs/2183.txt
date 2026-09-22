@@ -1,0 +1,11 @@
+- Hinzufügen von globalen Graphen
+- Aktualisieren Sie fastlane icon.png
+- Machen Sie die Trainings-Trag-Handle größer
+- Ich tausche seltsame, klare Symbole aus.
+- Stellen Sie sicher, dass iOS für Zahleninput-Optionen
+- Verhindern Sie Timer-Animierung jedes Mal, wenn Sie Tabs tauschen
+- Machen Sie das App-Icon dunkel
+- Animate Hinzufügen/Entfernen in der Historikliste
+- Hinzufügen der Zeitoption für Datum
+- System wieder auf Timer-Seite
+- Beheben Sie den falschen Namen des Graphs nach dem Update

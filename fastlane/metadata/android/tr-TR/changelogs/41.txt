@@ -1,0 +1,1 @@
+Git commit komutunu deploy.sh'te düzelt

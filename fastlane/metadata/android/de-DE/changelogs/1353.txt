@@ -1,0 +1,2 @@
+- Feststellungs- und Einheitsprüfungen
+- Entfernen Sie die git-Schubkraft von deploy.sh

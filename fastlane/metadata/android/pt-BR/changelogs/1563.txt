@@ -1,0 +1,3 @@
+- Adicionar categorias
+- Adicionar gráficos de inclinação e ritmo ajustado
+- Remover azulejos duplicados em configurações de temporizador

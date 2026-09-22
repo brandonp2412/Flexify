@@ -1,0 +1,10 @@
+• fix: el contexto de navegación de capturas de pantalla de guardia
+• fix: reabrir el recoger carpetas después de otorgar permiso
+• fix: retraso emulador de capturas de pantalla transitorias desconecta
+• fix: permiso de copia de seguridad de secuencia antes de seleccionador de carpetas
+• fix: estabilizar la prueba de recogida de carpetas Android
+• fix: estabilizar las capturas de pantalla automáticas del temporizador
+• test: añadir fichas de base de datos reutilizables
+• test: añadir el arnés de prueba de widget compartido
+• test: alinear las pruebas de StartPlanPage con los campos actuales
+• test: afirmar el seleccionador de documentos Android por paquete

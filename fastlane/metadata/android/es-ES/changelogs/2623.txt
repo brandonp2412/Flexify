@@ -1,0 +1,1 @@
+• Utilice el emulador android-runner

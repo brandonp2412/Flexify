@@ -1,0 +1,3 @@
+- Las barras de progreso de animación de izquierda a derecha
+- Destaque el plan de hoy con títulos personalizados
+- Selector de día de compresión en el editor de plan

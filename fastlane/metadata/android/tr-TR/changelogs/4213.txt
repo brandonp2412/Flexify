@@ -1,0 +1,2 @@
+• docs: Readme ayarını basitleştir
+• test: ekran görüntüsünün örnek durumunu iyileştir

@@ -1,0 +1,2 @@
+- Adicionar melhor repetição gráfico
+- Comentário sobre o fornecimento de fastlane em deploy.sh

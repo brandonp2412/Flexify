@@ -1,0 +1,1 @@
+Fix git commit commando in deploy.sh

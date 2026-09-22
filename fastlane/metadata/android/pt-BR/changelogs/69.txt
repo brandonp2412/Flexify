@@ -1,0 +1,9 @@
+- Assegurar que os valores de Y são 2dp para a linha cardio
+- Adicionar botão de edição para a direita superior dos planos
+- Adicionar sufixo de histórico para título de histórico do gráfico
+- Adicionar tipos de cardio
+- Página de gráfico de visualização de refactor
+- Fixar a busca de dados de importação/exportamento em configurações
+- Refactor start_plan_page
+- Página de planos de refactor
+- Planejamento de poupança de testes

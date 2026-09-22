@@ -1,0 +1,3 @@
+• Voeg een steekproefprestatietest toe
+• Verbeteren van de prestaties
+• Probeer de msstore-implementaties te repareren

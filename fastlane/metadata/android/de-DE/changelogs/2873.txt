@@ -1,0 +1,3 @@
+• Fix Schaltbildschirm der Timerseite
+• Fix-Screenshoot-Tests der Timerseite
+• Verbergen Sie die Benachrichtigung über den Wechsellog für Screenshots

@@ -1,0 +1,4 @@
+- Değerlendirme eklenmesi
+- Süresi tahminini ekle
+- Kayıp ısılandırma ayarlarını ekle
+- Pencere paketini düzelt

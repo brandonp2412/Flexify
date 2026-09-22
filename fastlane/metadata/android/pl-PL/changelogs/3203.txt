@@ -1,0 +1,9 @@
+• Naprawa błędów przy importie danych
+• naprawić przywóz danych poprzez wprowadzenie planExercises records i aktualizować plans_list.dart w celu wykorzystania operatora zero-safe aware
+• rozwiązać problem #206 aktualizując sposób przechowywania i rozdzielania ćwiczeń
+• Naprawianie ładowarek widocznych
+• Uprawnienia w sprawie przerwania planu migracji
+• Zmieniać logikę włączenia ćwiczeń do planu poprzez tworzenie rekordów PlanExercises tylko dla wybranych ćwiczeń i nie przechowywanie ich w kolumnie Plan.Exercises
+• Przestań pracę na podróż
+• Wykonuj migrację danych dla istniejących danych w taki sposób, aby wyłącznie te ćwiczenia zostały usunięte z planu, dla którego PlanExercises.enabled = false
+• aktualizuj pliki testowe , aby upewnić się , że wszystkie testy są przejście

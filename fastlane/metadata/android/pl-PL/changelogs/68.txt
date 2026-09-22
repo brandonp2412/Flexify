@@ -1,0 +1,4 @@
+- Naprawa uszkodzenia, jeśli włączono zegarki odpoczynku
+- Ustawić nazwy plików danych importowych/eksportowych
+- Lista ćwiczeń refaktorów
+- Określ notatki o wydaniu

@@ -1,0 +1,11 @@
+- Verbeteren van screenshots
+- Verstop eenheidsselektor op grafieken als eenheden uitgeschakeld zijn
+- Voeg groep per veld toe voor grafieken (dag/week/maand/jaar)
+- Animeren naar grafieken tab bij het bekijken van een oefening uit plannen
+- Grafieken voor een oefening uit plannen bekijken
+- Verwijder tags uit deploy.sh - 1.0.59
+- Voeg verwijder knop toe om de fitness-pagina te bewerken
+- Bewerk grafiekpunten door op het dubbel te tikken
+- Verplaats datuminstellingen helpertext naar het etiket
+- Voeg de instelling van het kortdatumformaat toe
+- Refactor lijngrafieken

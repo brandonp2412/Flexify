@@ -1,0 +1,4 @@
+- Combina la configuración "Mostrar reordenamiento" y "Mostrar recuentos"
+- Planes de refáctores
+- Página de gráficos de refactor
+- Refactor gym_sets

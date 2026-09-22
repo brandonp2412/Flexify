@@ -1,0 +1,2 @@
+- Aggiornamento pubspec.lock
+- Risolvere i problemi di flusso di lavoro per la distribuzione di azioni di GitHub

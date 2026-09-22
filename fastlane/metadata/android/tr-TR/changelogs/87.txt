@@ -1,0 +1,5 @@
+- Sekme hareketleri için grafikler üzerinden kaydırmayı düzelt
+- Timers.webm'i sil
+- Spor setlerini düzenlerken yanlış oluşturulan tarihleri düzelt
+- Yapılandırmaları/Kütle sayfasını girme atılması
+- Ekran çekimi testi sırasında sistem renklerini devre dışı bırak

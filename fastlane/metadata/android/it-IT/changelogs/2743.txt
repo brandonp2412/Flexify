@@ -1,0 +1,4 @@
+• Aggiungere la linea di tendenza puntata ai grafici
+• Aggiungere un piccolo pulsante alla fine del cerchio del timer
+• Rimuovere diffing da migrate.sh
+• Imposta la categoria quando selezioni un esercizio

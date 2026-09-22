@@ -1,0 +1,1 @@
+- deploy-windows-store에 디버깅 단계를 추가

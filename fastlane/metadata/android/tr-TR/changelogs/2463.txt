@@ -1,0 +1,4 @@
+- Pubspec.lock güncelleme
+- MSstore dağıtımını ayarlayın
+- Google Play sürümlerini yapılandır
+- .actrc ve MIGRATION_GUIDE.md sil

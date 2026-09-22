@@ -1,0 +1,10 @@
+• Adicionar env para capturas de tela da web
+• Excluir os registos de mudanças duplicados
+• Corrigir problemas de construçãoConfig
+• Portos de transmissão de cromedriver fixos
+• Estabelecimento do cromedriver
+• Fix emulator nome em capturas de tela android
+• Adicionar dir fastlane inteiro para o fluxo de trabalho
+• Instalar e iniciar o cromedriver em fluxos de trabalho
+• Certifique-se de que as capturas de tela estão no comit
+• Prevenir duplicados na cópia de logue de mudanças

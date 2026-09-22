@@ -1,0 +1,2 @@
+- Fix eenheidsonderzoek
+- Verwijder git push force van deploy.sh

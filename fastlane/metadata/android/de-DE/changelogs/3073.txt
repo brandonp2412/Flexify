@@ -1,0 +1,2 @@
+• Gleichgewichtung der globalen Fortschritte
+• Befestigen Sie deploy.sh [skip ci]

@@ -1,0 +1,2 @@
+- Réparer le crash de l'application en temps de pause
+- Fixer les exercices de sélection à partir de la page d'historique

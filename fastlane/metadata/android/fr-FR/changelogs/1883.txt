@@ -1,0 +1,4 @@
+- Modifier les temporisateurs par élément du plan
+- Ajouter le filtre de groupe musculaire à la page graphiques
+- Fixer le rembourrage de l'unité sur la page des paramètres
+- Fixer les images d'exercice qui ne sont pas enlevées

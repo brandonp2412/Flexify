@@ -1,0 +1,3 @@
+• Verwijder de gebroken herbestelling op Plans
+• De aanpassing van de oefeningen in de planstaat wordt sterk vereenvoudigd
+• Revert "Vast vereenvoudigde instellen oefeningen in de plan staat"

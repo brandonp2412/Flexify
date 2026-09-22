@@ -1,0 +1,3 @@
+- Fix edit fitness set eliminação
+- Remover desligar chamadas para configurações
+- Limpe os ouvintes no disparo

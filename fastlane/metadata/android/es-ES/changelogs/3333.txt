@@ -1,0 +1,2 @@
+• Anuncio de un botón de error a la página sobre
+• Fija el receptor de sonido de la alarma

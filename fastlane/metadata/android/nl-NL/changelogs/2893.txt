@@ -1,0 +1,10 @@
+• Voeg een lichte omtrek toe aan de timercirkel
+• Animeren van het bestaan van stopknop in timer pagina
+• Verhelder beeldbewerking
+• Verklaar Google Play-implementaties
+• Fix +1 minuut op Linux
+• Fix automatische screenshots voor releases
+• Veranderingsblokken
+• Fix github readme styling [skip ci]
+• Fix github release download in google play deployment
+• Fix msstore breedte badge [skip ci]

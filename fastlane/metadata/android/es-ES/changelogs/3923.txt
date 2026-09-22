@@ -1,0 +1,2 @@
+• Actualice todo
+• chore: El sistema de configuración automática/lint/generado de cliente [pre-push]

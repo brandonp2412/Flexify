@@ -1,0 +1,1 @@
+• ci: Voeg VirusTotal scannen bij release APK's toe

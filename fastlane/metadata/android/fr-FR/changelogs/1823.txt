@@ -1,0 +1,2 @@
+- Ajouter des conseils d' outils aux paramètres
+- Réparer les sauvegardes automatiques qui se produisent toutes les 15 minutes

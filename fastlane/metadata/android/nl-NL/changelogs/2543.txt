@@ -1,0 +1,2 @@
+- Gebruik de submodule Flutter en geef de Kotlin versie
+- Fix deploy-windows-store

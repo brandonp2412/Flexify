@@ -1,0 +1,10 @@
+• Aggiungere test per l'analisi delle frecce
+• Permettere che la lista di esercizi si scorrga oltre la barra di navigazione quando si completa un piano
+• Cambiare lo stile della pagina di forza
+• Utilizzare costantemente bottomNavHeight
+• Altizza fissa del fondo
+• Rettificare i grafici spaziati e nascondere le note se l'impostazione è disattivata
+• Fissare le prove di unità per la barra di ricerca
+• Migliorare lo stile dei grafici
+• Rendere il piano di spaziamento dei chip coerente
+• Stile di corrispondenza nella pagina cardio

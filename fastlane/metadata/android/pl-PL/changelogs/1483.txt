@@ -1,0 +1,2 @@
+- Dodaj wsparcie obrazu
+- Dodaj ikonę aplikacji w kolorze jednorokowym

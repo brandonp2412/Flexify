@@ -1,0 +1,4 @@
+- Zeitpläne pro Planelement
+- Fügen Sie Muskelgruppenfilter zu Grafiken Seite hinzu
+- Befestigen Sie die Einheitspülung auf der Einstellungsseite
+- Befestigen Sie, dass keine Übungsbilder entfernt werden

@@ -1,0 +1,1 @@
+- Grafiklerde görünmeyen son setleri düzelt

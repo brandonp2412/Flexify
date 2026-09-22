@@ -1,0 +1,3 @@
+• feat: ajouter définitivement des exercices dans le plan de modification; restaurer les graphiques FAB défilement
+• fix: aligner ajouter l'icône de l'exercice avec les icônes de la carreaux d'exercice
+• fix: supprimer le bouton de commutation, garder le bouton d'ajout visible, corriger la vérification des dossiers cardio

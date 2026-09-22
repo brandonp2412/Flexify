@@ -1,0 +1,11 @@
+- Upgrade-flatter
+- Door een oefening dubbel te tikken wordt het geopend.
+- Verhelder verwijdering van grafieken pagina
+- Lang aan de tabbladen te tikken om ze te verbergen
+- Automatisch kapitaaliseren zoek naar planningsoefeningen
+- Fix bugs op krachtegrafieken
+- Gebruik vernielde pagina op grafieken -> toevoegen
+- Gebruik gestelde route op timer -> instellingen
+- Voeg grafiek peeking toe
+- Fix bug op krachtpagina
+- Wacht tot de fitness-instelling is opgeslagen voordat je de beelden bijgewerkt hebt

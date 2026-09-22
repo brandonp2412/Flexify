@@ -1,0 +1,3 @@
+- Dodaj o stronie
+- Dodaj ikony do strony ustawień
+- Symbol zmiany planów

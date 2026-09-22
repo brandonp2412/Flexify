@@ -1,0 +1,2 @@
+• Naprawić puste wyszukiwanie na stronie planów
+• Optymalizuj stronę planu startu

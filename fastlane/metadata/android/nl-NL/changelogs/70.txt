@@ -1,0 +1,2 @@
+- Vast invoer uit Massive sets export
+- Fixlijn grafiek crash voor lege relatieve sterkte

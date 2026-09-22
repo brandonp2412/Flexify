@@ -1,0 +1,2 @@
+- En iyi tekrarlama grafikini ekle
+- Deploy.sh'te hızlı yol tedarikleri hakkında yorum yapın .

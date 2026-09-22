@@ -1,0 +1,3 @@
+- Adicionar botão de configuração para planos ativos
+- Fixar os botões de reordem de rastreamento no desktop
+- Desativar os temporizadores de descanso nos conjuntos de aquecimento

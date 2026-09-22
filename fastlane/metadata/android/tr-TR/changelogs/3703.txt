@@ -1,0 +1,1 @@
+• Waydroid iş akışında Flutter alt modül sürüm algısını düzelt

@@ -1,0 +1,7 @@
+- Actualización de flutter
+- Fija la consistencia del eje X en gráficos globales
+- Solo solicite permisos de fondo una vez
+- Fija la lógica de progreso del cronómetro
+- Muestre los gráficos más recientes en lugar del peso mejor
+- Muestre el error antes de la casilla de carga en blanco en la página de gráficos
+- Añadir búsqueda dinámica

@@ -1,0 +1,3 @@
+- Aggiungere il piccheggio di immagini al peso
+- Nascondere campi irrilevanti nelle voci di peso
+- Rendere dinamiche le categorie

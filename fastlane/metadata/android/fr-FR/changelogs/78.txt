@@ -1,0 +1,5 @@
+- Fixer les tests de capture d'écran
+- Rendre l'importation de données plus robuste
+- Plan clair avant l'importation
+- Éviter l'ouverture du point de graphique sur pince
+- Mettez le mode de sortie sur mon téléphone après déploiement

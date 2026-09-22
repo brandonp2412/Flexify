@@ -1,0 +1,4 @@
+- Ajouter le bouton d'arrêt aux temporisateurs finis
+- Fixer les dates créées sur la page d' histoire pour les nouveaux ensembles
+- Réparation des alarmes sans arrêt
+- Remplacez l'utilisation redondante de MaterialStateProperty

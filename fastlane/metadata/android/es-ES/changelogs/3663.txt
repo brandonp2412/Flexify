@@ -1,0 +1,5 @@
+• Corrección de la conexión virustotal a las liberaciones
+• feat: añadir vistas previas en vivo a los seleccionadores de configuración y fijar el formato de peso
+• fix: añadir relleno superior para comenzar la página de plan para evitar el recorte de etiquetas delineadas
+• fix: espaciamiento consistente de 8dp entre las entradas en la página del plan de inicio
+• fix: Previsión de la posición de progreso utiliza el Indicador de progreso de tiempo real

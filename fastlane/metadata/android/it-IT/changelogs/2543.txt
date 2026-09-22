@@ -1,0 +1,2 @@
+- Utilizzare il sottomodulo flutter e specificare la versione kotlin
+- Rettificare deploy-windows-store

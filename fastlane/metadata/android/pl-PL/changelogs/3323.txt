@@ -1,0 +1,6 @@
+• Dodawanie nowych formatów daty (np. dla niemieckiego)
+• Dodaj opcję osi x opartą na czasie do wykresu
+• /Rozwiązanie problemów z pamięcią
+• Ustawić współczynnik i liczbę opóźnień planu
+• Pozwolenie użytkownikom decydować o kapitalizacji tytułów planów
+• Przenieść przycisk historyczny do pasku nawigacyjnego

@@ -1,0 +1,4 @@
+- Aggiungere set di riscaldamento
+- Modifica dello stile di esercizio nelle pianifiche
+- Set fissi massimi
+- Indicare solo inclinamento per valori non zero

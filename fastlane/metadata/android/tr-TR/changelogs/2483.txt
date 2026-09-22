@@ -1,0 +1,1 @@
+- Windows Store dağıtım aşamasına dotnet ekle

@@ -1,0 +1,2 @@
+- Lazily si conta per gli esercizi di piano
+- Assicurati che i set di ginnastica abbiano un indice

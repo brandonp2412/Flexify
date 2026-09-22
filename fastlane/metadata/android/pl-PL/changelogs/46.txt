@@ -1,0 +1,1 @@
+Wskaźć wersję flutter w modułach .git

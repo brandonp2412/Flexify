@@ -1,0 +1,5 @@
+- Adicionar multidex para android/app/build.gradle
+- Atualizar o flutter para 3.22.0
+- Atualizar pubspec.lock
+- Atualizar as configurações de código
+- Corrigir inserção de registros da página de histórico

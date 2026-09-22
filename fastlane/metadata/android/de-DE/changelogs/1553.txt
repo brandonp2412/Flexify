@@ -1,0 +1,2 @@
+- Aktivieren Sie Timer auf ios
+- Festsetzung der fertigen Timer auf macos

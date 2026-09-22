@@ -1,0 +1,2 @@
+• Afficher l'aperçu des notifications
+• Afficher le champ de poids si l'unité cardio est un type de poids sur les plans

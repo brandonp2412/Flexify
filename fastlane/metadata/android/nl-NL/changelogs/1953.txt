@@ -1,0 +1,3 @@
+- Animeren progress bars van links naar rechts
+- Houd het plan van vandaag in het licht met aangepaste titels
+- Compressie dag selector op plan editor

@@ -1,0 +1,4 @@
+• Fix deploy.sh
+• Tornar as folhas inferiores mais fáceis de tocar
+• Tornar mais fácil ver/apertar nas últimas entradas
+• Use pesos de menino previamente inseridos na página planos

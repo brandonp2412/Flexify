@@ -1,0 +1,5 @@
+- Bir planın sonunda otomatik olarak yedekleme
+- Bir giriş düzenledikten sonra başlangıç planını güncelle
+- Grup ağırlığı, haftalık olarak varsayılan olarak
+- Güncelleme bağımlılıkları
+- Ayarlar sayfasının değişken adını düzelt

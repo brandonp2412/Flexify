@@ -1,0 +1,2 @@
+• Réparer de nombreux bugs potentiels
+• Incluez le diviser de date lors de la sélection

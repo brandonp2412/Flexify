@@ -1,0 +1,8 @@
+• Bepaal leeg schakelblad
+• Verberg Linux-integratie-tests op dwl
+• feat: verbeteren van de grafiekkeuzecontroles
+• feat: integreren Talker logging
+• fix: handhaaf conform 7-inch screenshots
+• fix: Hard desktop navigatie en testen
+• fix: isolatie-integratie-testdatabases
+• test: De afbeelding van het scherm van het dekket van de wissellog

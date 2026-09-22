@@ -1,0 +1,4 @@
+- Incluir configuraciones en las copias de seguridad de la base de datos
+- Corrección de la base de datos exportada en el escritorio
+- Añadir el plan tras la página de inicio
+- Añadir opciones para el seguimiento del plan

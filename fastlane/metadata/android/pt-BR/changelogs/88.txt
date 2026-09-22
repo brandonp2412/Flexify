@@ -1,0 +1,4 @@
+- Adicionar botão de parada para temporizadores acabados
+- Fixar datas criadas na página de histórico para novos conjuntos
+- Fixar alarmes sem parar
+- Substitua o uso redundante de MaterialStateProperty

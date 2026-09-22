@@ -1,0 +1,2 @@
+- Verbeteren van de prestaties
+- Fix build voor web

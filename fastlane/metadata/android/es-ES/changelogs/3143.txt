@@ -1,0 +1,4 @@
+• Permitir todos los tipos de unidades para el cardio
+• Cambiar el estilo de la página de configuración de pestañas
+• Corrección añadiendo un ejercicio de cardio de la página de gráficos
+• Prevenir la modificación en la primera instalación

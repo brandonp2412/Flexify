@@ -1,0 +1,1 @@
+• fix: Stabilizuj Patrol test zbierania dokumentów

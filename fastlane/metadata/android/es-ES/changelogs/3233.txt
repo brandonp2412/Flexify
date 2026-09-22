@@ -1,0 +1,3 @@
+• Corrección de la reordenada rota en los planes
+• Simplificar en gran medida los ejercicios de configuración en el estado de plan
+• Revert "Simplificar mucho los ejercicios de configuración en estado de plan"

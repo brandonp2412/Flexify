@@ -1,0 +1,11 @@
+- Améliorer les captures d'écran
+- Sélecteur d'unité caché sur les graphiques si les unités sont éteintes
+- Ajouter des groupes par champs pour les graphiques (jour/semaine/mois/an)
+- Animation à l'onglet graphiques lors de la visualisation d'un exercice à partir de plans
+- Afficher des graphiques pour un exercice à partir de plans
+- Supprimer les balises de deploy.sh - 1.0.59
+- Ajouter le bouton supprimer pour modifier la page de réglage de gym
+- Modifier les points du graphique en tapant deux fois
+- déplacer le texte auxiliaire des paramètres de date dans l'étiquette
+- Ajouter la définition du format de date courte
+- Graphiques de lignes de réfacteur

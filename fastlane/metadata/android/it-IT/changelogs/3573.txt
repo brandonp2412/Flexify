@@ -1,0 +1,2 @@
+• ci: automatizzare il colpiscio della versione e rilasciare con il push to main
+• fix: prevenire il duplicato di riposo alarma quando eseguibile e AlarmManager entrambi incendi

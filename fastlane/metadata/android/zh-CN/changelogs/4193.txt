@@ -1,0 +1,10 @@
+• chore: 调整同时定位分片
+• chore: 刷新Flutter依赖锁文件
+• docs: 添加翻译路线图
+• docs: 更新本地化完成状态
+• feat: 添加巴西葡萄牙语本地化
+• feat: 添加CJK本地化
+• feat: 添加荷兰本地化
+• feat: 添加法语本地化
+• feat: 添加德国本地化
+• feat: 添加意大利本地化

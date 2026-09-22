@@ -1,0 +1,2 @@
+• ci: automatiser la version de choc et de libération sur poussée à main
+• fix: empêcher la duplication de l' alarme de repos lorsque la fonctionnalité et AlarmManager sont en panne

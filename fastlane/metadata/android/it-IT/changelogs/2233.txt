@@ -1,0 +1,4 @@
+- Abilitare esercizi su screenshot per i piani
+- Grafici di curva di default
+- Aggiornamento README.md
+- Gestire le migrazioni fallite

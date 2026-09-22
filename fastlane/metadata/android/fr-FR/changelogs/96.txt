@@ -1,0 +1,3 @@
+- Prévisualiser le son d'alarme personnalisé lors de sa réglage
+- Graphiques cardio réfacteurs
+- Ajouter le bouton partage de base de données aux paramètres

@@ -1,0 +1,10 @@
+• Añadir relleno horizontal al indicador de progreso inferior
+• Añadir el botón de reordenamiento faltante para Android en la página de planes
+• Deslizamiento entre pestañas
+• Cambiar el indicador seleccionado
+• Temporales de descanso por defecto a falsos
+• Fija las hojas de fondo que van detrás de la navegación
+• Corrección de deploy.sh cuando el teléfono está conectado
+• Correcta el retraso de girar entre las pestañas después de cambiarlo
+• Setios de ahorro fijos
+• Aumenta el relleno por encima de la página de historial colapsada

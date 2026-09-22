@@ -1,0 +1,2 @@
+- Aanpassingsbalken op plannen aanpassen
+- Automatische back-ups toevoegen

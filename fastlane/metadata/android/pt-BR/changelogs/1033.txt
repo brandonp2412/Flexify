@@ -1,0 +1,3 @@
+- Avaliar o bar de dardo
+- Não use cores do sistema para capturas de tela
+- Construir appbundle apenas quando enviado para play store

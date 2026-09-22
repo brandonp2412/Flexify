@@ -1,0 +1,2 @@
+- Wpchnięcie siły w rozmieszczenie
+- Dodaj ikonę do przełącznika kardio - 1.1.20

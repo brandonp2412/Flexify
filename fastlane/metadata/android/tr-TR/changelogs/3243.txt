@@ -1,0 +1,4 @@
+• Her zaman sekme başlıklarını göster
+• Küresel grafikleri kaydetemediği için çözüm
+• Güncelleme kategorilerini düzelt
+• Araç noktalarındaki küresel grafik karışıklığını azaltmak

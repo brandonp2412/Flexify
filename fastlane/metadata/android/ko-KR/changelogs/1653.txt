@@ -1,0 +1,1 @@
+- deploy.sh에서 cmd 대신 powershell을 사용하세요

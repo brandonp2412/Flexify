@@ -1,0 +1,5 @@
+- Voeg ondersteuning toe aan eenheden in cardio
+- Stel een groepering per week voor cardiolijnen vast
+- Fix groepering per week voor grafiek
+- Vaste groepering per week
+- Refactorenplannen

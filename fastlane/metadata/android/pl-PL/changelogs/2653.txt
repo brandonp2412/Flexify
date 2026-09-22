@@ -1,0 +1,4 @@
+• Zmiana przepływu pracy github
+• Naprawa przepływu pracy github
+• Usunięcie redundant git pull
+• Replikuj system budowy fdroid dla wersji budowy Androida

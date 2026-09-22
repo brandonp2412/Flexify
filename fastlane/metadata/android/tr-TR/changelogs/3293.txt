@@ -1,0 +1,5 @@
+• Sıkılaştırılmış ihracat planı csvs
+• Windows'tan aktarılan dosyaları düzelt
+• Hata işlemeyi geliştir
+• Zamanlama sayfası gizlenmiş olsa bile zamanlama ilerlemesini koruyun
+• Planlarda ilk egzersiz doğru seçin

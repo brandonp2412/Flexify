@@ -1,0 +1,1 @@
+• Adicionar dependência faltante para criar-github-libere

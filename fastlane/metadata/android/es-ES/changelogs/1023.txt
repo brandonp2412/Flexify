@@ -1,0 +1,8 @@
+- Añadir ajuste para ocultar el seguimiento del peso corporal
+- Corrección de los cambios de las versiones de fastlane
+- Eliminar la función de copias de seguridad automáticas
+- Añadir la configuración para el máximo # de conjuntos
+- Añadir minutos de descanso/segundos de anulación global
+- Hacer que las configuraciones de tamaño de relleno sean consistentes
+- Coloque la barra de búsqueda en la parte superior de las configuraciones
+- Renombrar WidgetSettings -> ConfiguracionesLina

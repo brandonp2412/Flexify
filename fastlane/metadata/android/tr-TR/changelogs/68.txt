@@ -1,0 +1,4 @@
+- Dinlenme zamanlayıcıları etkin olduğunda kırıklıkları düzelt
+- İhraç/İçki Veri Dosyalarının Adlarını Düzelt
+- Refactor egzersiz listesi
+- Çıkarma notlarını düzelt

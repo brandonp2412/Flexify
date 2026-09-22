@@ -1,0 +1,7 @@
+- Prevenção da exclusão dos pré-configurados de exercício
+- Oficinar unidades padrão com a configuração
+- Tornar o gráfico um pouco mais curto
+- Adicionar deslizador limite para gráficos
+- Dizem que os conjuntos da história desmoronaram
+- Melhorar o estilo dos divisores de dia para a história
+- Dividores de rótulos na página de gráficos

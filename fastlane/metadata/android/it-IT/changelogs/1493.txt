@@ -1,0 +1,3 @@
+- Gestire con grazia gli errori nel caricamento delle immagini
+- Rimuovere i pulsanti aggiunta/remove dall'editore immagine
+- Lasciare l' immagine sola se l' utente cancella file picker

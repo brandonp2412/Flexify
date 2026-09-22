@@ -1,0 +1,3 @@
+- Önceden ayarladığınızda özel alarm sesini görüntüleyin
+- Refactor kardio grafikleri
+- Ayarlara paylaşılan veritabanı düğmesini ekle

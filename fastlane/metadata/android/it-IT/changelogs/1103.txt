@@ -1,0 +1,3 @@
+- Smettere di avvertire i rubinetti mancati per le impostazioni di prova
+- Fusione della filiale "principale" di github.com:brandonp2412/Flexify
+- Fissare gli avvertimenti di prova per la pagina impostazioni

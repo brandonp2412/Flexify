@@ -1,0 +1,4 @@
+• WIP: 转移 从Nox 进行复杂的检查清单工作
+• chore: 更新Serenas项目配置
+• test: 覆盖选择的默认
+• test: 移除巡逻集成带

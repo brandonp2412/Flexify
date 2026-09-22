@@ -1,0 +1,4 @@
+• Setzen Sie maximale Höhe auf Format-Einstellungen
+• feat: Hinzufügen von Stopwatch-Tab (#268)
+• feat: Einheitliche Anwendungsbedingungen für die Anwendung von Systemen
+• fix: Peek Tooltip überlappende Suchleiste und Tastatur, die Übungsnoten abdecken

@@ -1,0 +1,10 @@
+• Añadir env para capturas de pantalla web
+• Eliminar los registros de cambios duplicados
+• Corrección de los problemas de buildConfig
+• Puerto de cromedrilla fijo
+• Fijación de la configuración del cromedrilla
+• Fija el nombre del emulador en capturas de pantalla android
+• Git añadir todo fastlane dir para el flujo de trabajo
+• Instalar y iniciar el cromedriver en los flujos de trabajo
+• Asegúrese de que las capturas de pantalla están en el commit
+• Prevenir las copias en la copia de un registro de cambios

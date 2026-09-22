@@ -1,0 +1,7 @@
+• Adicionar indicadores de ícone de cardio/força para os toques em editar set/sets
+• Adicionar configurações para a posição da barra de progressos
+• Permitir a compensação de categorias
+• Alteração do ícone de planos no navegador inferior
+• Sistema de aparência fixa ui gráfico obscurecimento
+• Atualizar instantaneamente as configurações de guia e remover o botão salvar
+• Evitar o texto de sugestão nula em categorias ou inclinação quando conjuntos de edição múltipla

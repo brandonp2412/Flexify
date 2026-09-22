@@ -1,0 +1,1 @@
+Ajouter des messages pour la vue graphique vide + l' historique

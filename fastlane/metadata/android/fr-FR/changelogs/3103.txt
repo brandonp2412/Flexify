@@ -1,0 +1,2 @@
+• Réparation de deploy.sh
+• Fixer la navigation des onglets qui ne flotte pas sur les listes

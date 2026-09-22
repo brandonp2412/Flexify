@@ -1,0 +1,2 @@
+- Aktualisieren Sie pubspec.lock
+- Fix Artfakta-Dateiwege für GitHub-Veröffentlichung

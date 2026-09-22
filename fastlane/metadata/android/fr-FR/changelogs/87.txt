@@ -1,0 +1,5 @@
+- Fixer le glisser-déposer sur les graphiques pour le mouvement des onglets
+- Supprimer le timers.webm
+- Correction de dates créées incorrectement lors de l'édition de jeux de gym
+- Fixer les paramètres/entrer la page de poids qui est rejetée
+- Désactiver les couleurs du système lors du test de capture d'écran

@@ -1,0 +1,5 @@
+- Fix tijers
+- Optimaliseren van timers
+- Automatische back-ups oplossen
+- Voeg vibratie- en alarmgeluidinstellingen toe
+- Verbeter de pagina van het grafiek

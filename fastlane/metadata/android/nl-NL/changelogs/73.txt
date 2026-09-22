@@ -1,0 +1,2 @@
+- Gebruik de submodule Flutter bij de implementatie
+- Grafiekgroottes vaststellen voor kortere schermen

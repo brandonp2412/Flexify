@@ -1,0 +1,10 @@
+• Zamanlayıcı döngüye hafif bir çizgi ekleyin
+• Linux'ta +1 dakikayı düzelt
+• Değişken kayıpları düzelt
+• Github Readme Styling'i düzelt
+• MSstore genişliği badgesini düzelt
+• Google Play dağıtımlarının sıklığını sınırlayın [skip ci]
+• Bejleri daha büyük yap.
+• Bejleri tutarlı yapın.
+• "Fix msstore width badge [skip ci]"'yi geri çevir
+• Artefact yerine github serbest bırakımı kullan [skip ci]

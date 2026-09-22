@@ -1,0 +1,8 @@
+- Adicionar configuração de cache histórico
+- Alterar backups automáticos
+- Nome de correcção não atualização para editar conjunto de ginásio
+- Adicionar backups automáticos
+- Corrigir novos conjuntos de ginásio com identidades e criados inválidos
+- Código de formato em import_data
+- Corrigir jank ao adicionar um novo conjunto de ginásio
+- Use file_picker para exportar/importar dados

@@ -1,0 +1,5 @@
+- Dodaj wsparcie dla jednostek w kardio
+- Ustaw grupy w tygodniu dla linii kardio
+- Ustaw grupy na tygodnie dla wykresu
+- Ustawione grupy w tygodniu
+- Plany refactorów

@@ -1,0 +1,1 @@
+- Utilisez une coque de puissance au lieu de cmd dans deploy.sh

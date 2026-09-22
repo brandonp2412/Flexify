@@ -1,0 +1,2 @@
+- Vervolgens moet je -p vlag voor deploy.sh sturen naar Google Play.
+- Vergemakkelijken van de berekening van plannen

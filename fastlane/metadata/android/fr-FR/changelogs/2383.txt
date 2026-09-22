@@ -1,0 +1,2 @@
+- Mise à jour flutter & pubspec.lock
+- Fixer le déploiement non exécuté

@@ -1,0 +1,3 @@
+- Habilitar ejercicios en capturas de pantalla para planes
+- Gráficos de curvas por defecto
+- Manejar las migraciones fallidas

@@ -1,0 +1,4 @@
+- Voeg warmte-sets toe
+- Verander de stijl van de oefenlijst in de plannen
+- Fix max sets
+- Vertoon alleen neiging voor niet-nulwaarden

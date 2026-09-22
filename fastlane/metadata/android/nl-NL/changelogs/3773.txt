@@ -1,0 +1,10 @@
+• Fix de onderstaande lijn die niet op schermopnamen voor geschiedenispagina wordt weergegeven
+• Fix onderstaande lijn verdoezend in screenshots
+• Verberg UI voor standaard screenshots
+• Verhinderen dat timers worden uitgevoerd wanneer ze worden uitgeschakeld van de pagina plannen
+• Verwijder overbodige sqlite3_flutter_libs
+• Update . Serena
+• Update flater
+• Updates van screenshots
+• Updateren serena
+• chore: Fix Android build waarschuwingen, upgrade Grade naar 8.14

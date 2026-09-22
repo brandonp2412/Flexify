@@ -1,0 +1,11 @@
+- Yükleme sürüşü
+- İki kez dokunarak bir egzersiz açılır.
+- Grafikler sayfasından silinmeyi netleştir
+- Onları saklamak için sekmeleri uzun bir şekilde dokun
+- Plan egzersizleri için arama otomatik olarak kapitalise
+- Güç grafiklerinde hatalar düzelt
+- Grafiklerde yuva sayfasını kullan -> ekle
+- Zamanlayıcıda yerleşmiş rota kullan -> ayarlar
+- Grafik izleme ekle
+- Güç sayfasında hata düzelt
+- Resimleri güncelleştirmeden önce spor salonunun kaydedilmesini bekleyin

@@ -1,0 +1,1 @@
+• Utilisez adb préinstallé au lieu de android dans le flux de travail Waydroid

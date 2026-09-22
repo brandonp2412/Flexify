@@ -1,0 +1,2 @@
+• fix: Formatörü Flutter alt modülünden uzak tut
+• fix: Patrol yıkımı yanlış negatif

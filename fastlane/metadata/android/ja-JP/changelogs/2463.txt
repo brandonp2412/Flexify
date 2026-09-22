@@ -1,0 +1,4 @@
+- pubspec.lock を更新する
+- msstoreの展開を設定する
+- Google Play のリリースを設定する
+- .actrc と MIGRATION_GUIDE.md を削除する

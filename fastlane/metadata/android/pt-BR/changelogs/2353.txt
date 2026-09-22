@@ -1,0 +1,7 @@
+- Actualização de flutter
+- Fixar a consistência do eixo X em gráficos globais
+- Só solicitar permissões de fundo uma vez
+- Fixar a lógica de progresso do temporizador
+- Mostre os gráficos mais recentes em vez do peso ideal
+- Mostre erro antes de caixa de carregamento em branco na página de gráficos
+- Adicionar pesquisa dinâmica

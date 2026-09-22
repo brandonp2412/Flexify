@@ -1,0 +1,1 @@
+- Récupérer la liste des exercices après avoir ajouté les plans

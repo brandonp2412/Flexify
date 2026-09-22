@@ -1,0 +1,3 @@
+- Reparar la edición del juego de gimnasio eliminación
+- Eliminar deshacerse de las llamadas a las configuraciones
+- Limpiar los oyentes en la eliminación

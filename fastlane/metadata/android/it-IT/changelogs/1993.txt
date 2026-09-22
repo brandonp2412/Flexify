@@ -1,0 +1,2 @@
+- Fissare che le ripetizioni iniziali/il peso siano zero sui piani
+- Rimuovere i primi zero dopo aver risparmiato i piani

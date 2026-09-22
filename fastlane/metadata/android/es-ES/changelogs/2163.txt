@@ -1,0 +1,5 @@
+- Peso redondo
+- Fija la navegación de pestañas detrás de la navegación del sistema
+- Mover la etiqueta de suavidad de la curva antes de deslizar
+- Corre el color de la pista que falta con los colores del sistema
+- Normaliza las unidades al cambiarlas de los gráficos

@@ -1,0 +1,4 @@
+• WIP: transfert de Flexify à Nox
+• chore: refroidir la configuration du projet Serena
+• test: couverture par défaut
+• test: supprimer le harnais d'intégration Patrol

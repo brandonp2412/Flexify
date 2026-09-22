@@ -1,0 +1,3 @@
+- Réparer les images qui ne sont pas configurées dans les plans
+- Fixer les temporiseurs de bureau qui fonctionnent encore
+- Ajouter kcal, mètre à l'unité de distance

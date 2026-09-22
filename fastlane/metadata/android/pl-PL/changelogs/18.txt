@@ -1,0 +1,1 @@
+Dodaj wiadomości do pustego widoku grafu + historii

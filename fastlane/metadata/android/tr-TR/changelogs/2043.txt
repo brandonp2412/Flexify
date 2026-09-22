@@ -1,0 +1,1 @@
+- Default olarak tekrarlama ve süresi tahminini devre dışı bırak

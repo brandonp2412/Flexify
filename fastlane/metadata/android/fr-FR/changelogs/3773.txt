@@ -1,0 +1,10 @@
+• Fixer la barre inférieure qui ne s'affiche pas sur les captures d'écran de la page d'historique
+• Fixer la barre inférieure obscurcissant dans les captures d'écran
+• Masquer ui par défaut des captures d'écran chromiques
+• Éviter que les temporisateurs s' exécutent lorsque vous êtes désactivé de la page plans
+• Supprimer le sqlite3_flutter_libs redondant
+• Mise à jour . serena
+• Mise à jour de flutter
+• Mise à jour des captures d'écran
+• Mise à jour de serena
+• chore: réparer les avertissements de construction android, mettre à niveau gradle vers 8.14

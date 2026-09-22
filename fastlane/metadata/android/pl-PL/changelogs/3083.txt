@@ -1,0 +1,8 @@
+• Ustawić bieg biegówki nie aktualizowanie
+• Ustawić spójność wypełniania na planach
+• Naprawa nawigacji z tyłu systemu
+• Badania jednostkowe
+• Link shields.io na pobrania odznaka
+• Odstęp od ustawienia edycji na stronie wagi edycji
+• Zapobiegać podwójnym naciśnięciem zestawów edycji, które nie zostały jeszcze wprowadzone
+• Wyciąć, włącz w X.

@@ -1,0 +1,2 @@
+• El equilibrio entre el progreso mundial
+• Corrección de deploy.sh [skip ci]

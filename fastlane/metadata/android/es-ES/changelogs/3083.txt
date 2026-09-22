@@ -1,0 +1,8 @@
+• Fija la barra de progreso de abajo no actualización
+• Fija la consistencia de relleno en los planos
+• Fija la navegación de regreso del sistema
+• Pruebas de unidad fija
+• Enlace shields.io en descargas insignia
+• Aparecimiento de espacios desde el conjunto de edición en la página de peso de edición
+• Prevenir los conjuntos de edición de doble toque que aún no se han introducido
+• Retirarlo en el espacio X

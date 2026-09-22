@@ -1,0 +1,1 @@
+- Desativar a estimativa de repetição e duração por padrão

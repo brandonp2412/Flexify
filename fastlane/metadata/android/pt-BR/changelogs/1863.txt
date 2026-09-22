@@ -1,0 +1,3 @@
+- Corrigir imagens que não estão sendo definidas nos planos
+- Corrigir temporizadores de desktop ainda a disparar
+- Adicionar kcal, metros à unidade de distância

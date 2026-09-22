@@ -1,0 +1,3 @@
+- Otomatik yedekleme işlemleri kapatıldığında yedekleme alıcısını durdur
+- deploy.sh'ten rsync'i macos'a kaldır
+- macos.sh'de zsh kullan

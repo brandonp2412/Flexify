@@ -1,0 +1,5 @@
+- Utilizzare pulsanti di azione galleggianti estesi
+- Rettifica di distribuzione su github e f-droid repro
+- Non mostrare le autorizzazioni sulla pagina iOS
+- Aggiornare il flutter a 3.24.0
+- Ristituire i grafici cardio non aggiornare immediatamente

@@ -1,0 +1,5 @@
+• feat: adicionar um link de revisão para página Sobre
+• fix: adicionar padding inferior faltante em todas as páginas rolaveis (# 301)
+• fix: retomar o ticker do relógio de parada quando o aplicativo voltar ao primeiro plano
+• fix: usar o tempo do relógio de parede para o relógio de parada para sobreviver ao screen-off
+• fix: Configurações de treino de embalagem e etiqueta de guia de relógio de parada

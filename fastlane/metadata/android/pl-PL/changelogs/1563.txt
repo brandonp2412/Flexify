@@ -1,0 +1,3 @@
+- Dodaj kategorii
+- Dodaj grafiky skłonności i dostosowanego tempu
+- Usunięcie podwójnego płytka w ustawieniach zegarka

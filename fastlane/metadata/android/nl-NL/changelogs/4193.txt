@@ -1,0 +1,10 @@
+• chore: vergelijk gelijktijdige locatie slice
+• chore: vernieuwen Flutter afhankelijkheidslokbestand
+• docs: toevoegen van een vertaalroutekaart
+• docs: update locatie voltooiing staat
+• feat: voeg Braziliaans-Portugees toe
+• feat: toevoegen van CJK-localisaties
+• feat: toevoegen Nederlandse localisatie
+• feat: voeg Franse localisatie toe
+• feat: voeg Duitse localisatie toe
+• feat: toevoegen van Italiaanse localisatie

@@ -1,0 +1,6 @@
+- Ajouter une validation
+- Améliorer les performances des grandes bases de données
+- Faites glisser la page d' exercice et de poids
+- Ajouter une image à la nouvelle page d'exercice
+- Fixer ajouter un rembourrage d'exercice
+- Demandez des notifications lorsque vous activez des sauvegardes automatiques

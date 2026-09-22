@@ -1,0 +1,2 @@
+• Güvenli bölgede paketleme zamanlayıcı ilerleme göstergesi
+• Güncelleme yapmayan grafikleri düzelt

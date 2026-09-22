@@ -1,0 +1,3 @@
+- Teste de page de réglage
+- Utilisez l'unité correcte pour les graphiques par défaut
+- Ajoutez le réglage pour les unités de force et de cardio

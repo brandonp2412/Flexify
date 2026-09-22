@@ -1,0 +1,6 @@
+• Configuração de graus de cópia do fitbook
+• Corrigir as implementações do Google Play
+• Mover o gráfico de olho 1 item para baixo
+• Remova a mesa de o fazer na X readme [skip ci]
+• Reordenação de recursos no README [skip ci]
+• - Não. - Não.

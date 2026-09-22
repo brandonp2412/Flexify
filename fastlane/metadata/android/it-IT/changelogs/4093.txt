@@ -1,0 +1,1 @@
+• Fix flux di autorizzazioni e impostazioni UI di attivazione (#336)

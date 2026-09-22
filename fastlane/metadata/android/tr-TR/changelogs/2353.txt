@@ -1,0 +1,7 @@
+- Güncelleme sürüşü
+- Küresel grafiklerde X eksesi tutarlılığını sabitle
+- Arka plan izinlerini sadece bir kez isteyin
+- Zamanlayıcı ilerleme mantığını ayarlayın
+- En iyi ağırlık yerine en son grafikleri göster
+- Grafikler sayfasında boş yükleme kutusundan önce hata göster
+- Dinamik arama ekle

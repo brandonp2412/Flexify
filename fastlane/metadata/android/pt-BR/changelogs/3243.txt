@@ -1,0 +1,4 @@
+• Sempre mostrar títulos de guia
+• Corrigir não conseguir deslizar gráficos globais
+• Fixar categorias de atualização
+• Reduzir a confusão global do gráfico na ponta de ferramenta

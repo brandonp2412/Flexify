@@ -1,0 +1,3 @@
+- Aggiungere il pulsante impostazioni ai piani attivi
+- Rettificare i pulsanti di riordino trail su desktop
+- Disattivare i timer di riposo dei sistemi di riscaldamento

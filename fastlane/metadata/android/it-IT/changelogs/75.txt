@@ -1,0 +1,11 @@
+- Imploizione fissa
+- Rettifica deploy.sh uscita senza modifiche
+- Invertire "Ricordare le impostazioni della grafica di forza"
+- Invertire "Ricordare le impostazioni per le grafiche cardio"
+- Nascondere il timer progresso quando tab del timer è nascosto
+- Elenca gli esercizi di oggi prima sulla pagina grafici
+- Ricordate le impostazioni per i grafici cardio
+- Ricordare le impostazioni del grafico di forza
+- Aggiungere setState mancante alla linea strength_line
+- Abilitare l'editing di massa delle unità per i grafici
+- Rettificare i grafici di tocco per gli esercizi cardio

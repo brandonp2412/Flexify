@@ -1,0 +1,10 @@
+• Ajouter une liste de contrôle des autorisations d'application réutilisables
+• Étiquettes d'apparence du centre et reflète l'état de commutation dans les icônes
+• Étiquettes et commutateurs de réglage du plan central
+• Configuration du centre du chronomètre et utilisation des icônes actives remplies
+• Étiquettes de centre d'entraînement et utilisez des icônes actives remplies
+• Exposer la liste de contrôle des autorisations des applications dans les paramètres
+• Correction de l'erreur de verrouillage CI et de l'analyseur de minuterie
+• Fixer une demande d'autorisation de notification unique
+• Correction de l'erreur d'analyseur de dialogue
+• Faites une demande d' autorisation de notification native une seule fois

@@ -1,0 +1,10 @@
+• Adicionar teste para análise de dardos
+• Permitir que a lista de exercícios passe pela barra de navegação ao concluir um plano
+• Mudança de estilo de página de força
+• Use consistentemente bottomNavHeight
+• Fixa a altura do fundo
+• Corrigir gráficos espaçados e esconder notas se a configuração está desativada
+• Fixa os testes de unidade para a barra de pesquisa
+• Melhorar o estilo dos gráficos
+• Tornar o espaço entre os chips consistente
+• Estilo de correspondência na página cardio

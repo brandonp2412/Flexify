@@ -1,0 +1,10 @@
+- 固定单位测试
+- 修复将部署到窗口存储
+- 添加调试步骤到 Windows Store 部署中下载的文件列表
+- 修复Windows Store部署:使用本地MSIX文件而不是GitHub发布URL
+- 修复Windows Store部署:确保在Windows Store部署之前创建 GitHub版本
+- 更新桌面截图
+- 修复所有机动屏幕截图
+- 更新 pubspec.lock
+- 添加更新Chromedriver的脚本
+- 修复什么是新的页面

@@ -1,0 +1,4 @@
+• Kardiyo için tüm birim türlerini izin verin
+• Sekmeler Ayarları sayfasının biçimini değiştir
+• Grafikler sayfasından kardio egzersiz eklemeyi düzelt
+• İlk yükleme sırasında değişim logunu söylemeni engelle

@@ -1,0 +1,5 @@
+- Festsetzung von Zeitungen
+- Optimieren Sie die Timer
+- Reparatur von automatischen Sicherungen
+- Fügen Sie Schwingungs- und Alarmgeräusche hinzu
+- Optimieren Sie die Bearbeitungs-Grafikseite

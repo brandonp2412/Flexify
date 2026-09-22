@@ -1,0 +1,10 @@
+• Voeg serena-config toe
+• Fix toasts die eeuwig duren
+• Verbeter de visuele weergave van de stapper
+• Maak de pagina van het set meer in overeenstemming met de verpakking
+• Verwijder dupliceerde etiketten voor de ingangsstijl
+• Vergemakkelijken van het stapveld
+• Updates van screenshots
+• Verbetering van de flutter naar 3,44,1
+• Upgrade kotlin versie
+• feat: +/- stappers toevoegen aan herhalingen en gewichtsvelden

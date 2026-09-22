@@ -1,0 +1,1 @@
+- Voeg debug-fase toe voor deploy-windows-store

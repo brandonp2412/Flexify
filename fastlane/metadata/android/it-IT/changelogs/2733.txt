@@ -1,0 +1,7 @@
+• Aggiungere pagine github per l'hosting per Flexify web
+• Aggiungere i cambiatori mancanti
+• Permettere all'utente di eliminare i set mass
+• Elimina i script non utilizzati
+• - Rendi il nuovo copiatore.
+• Solo un backup su un unico file ogni volta
+• Rimuovere le ripetizioni dal grafico di forza

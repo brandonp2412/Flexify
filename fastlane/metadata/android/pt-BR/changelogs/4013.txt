@@ -1,0 +1,10 @@
+• fix: guarda de imagem de tela contexto de navegação
+• fix: reabrir o selector de pastas após a concessão de permissão
+• fix: tentativa de retomada emulador de imagem de tela transitorio desconecta
+• fix: Permissão de backup de sequência antes do selector de pasta
+• fix: Estabilizar Android test de seleção de pastas
+• fix: Estabilizar imagens de tela automáticas do temporizador
+• test: adicionar dispositivos de base de dados reutilizáveis
+• test: adicionar arame de teste de widget compartilhado
+• test: alinhar os testes StartPlanPage com os campos atuais
+• test: Acerte selector de documentos Android por pacote

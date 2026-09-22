@@ -1,0 +1,10 @@
+• Corrección de la vista de registro de cambios vacío
+• Escondir las pruebas de integración Linux en dwl
+• chore: aplicar el formato Dart a los ensayos
+• feat: mejorar los controles de selección de gráficos
+• feat: integrar la explotación de madera Talker
+• feat: rediseño de la interfaz de escritorio
+• fix: hacer cumplir las capturas de pantalla de siete pulgadas
+• fix: Linux gráfico de entrenamiento y flujos de temporizador
+• fix: navegación y pruebas de escritorio duras
+• fix: bases de datos de pruebas de integración aislada

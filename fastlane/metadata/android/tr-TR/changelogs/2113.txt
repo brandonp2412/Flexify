@@ -1,0 +1,16 @@
+- Ekran çekimlerini güncelle
+- Github.sh'te proje adı faktörünü kaldır
+- Geçmişte uyarıları düzeltmek
+- Kayıp arama plan_list_test'e geç
+- Güvenli alanı görünümünü heykel bedenine taşı
+- Tüm ekran görüntüleri karanlık modda çek
+- - Yedi kartı da bir sıra.
+- Bazı belirsiz android hataları düzelt
+- Gizlilik politikasına sürüm numarasını ekle
+- Privacy_url'a gizlilik politikası sürümünü ekle
+- Planlar oluşturmak için dokun
+- Grafikler sayfasındaki ifadeleri güncelleme bulunamadı
+- Grafikler sayfasından en iyi egzersizleri göster
+- Grafik geçmiş sayfasında sıfır dolgulamayı düzeltmek henüz veriler yok
+- Grafik yüksekliği kısalt
+- Grafik bakış hatalarını düzelt

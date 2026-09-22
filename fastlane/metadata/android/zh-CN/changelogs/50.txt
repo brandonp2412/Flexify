@@ -1,0 +1,1 @@
+在 deploy.sh 中设置 shell优先级

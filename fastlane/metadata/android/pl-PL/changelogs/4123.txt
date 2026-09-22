@@ -1,0 +1,5 @@
+• Przeanalizować opis projektu w README
+• Aktualizacja README w celu modyfikacji taglina projektu
+• Aktualizacja nazwy projektu w README
+• Aktualizacja wersji do 2.2.0 w pubspec.yaml
+• fix: rozwiązać historyczne otwarte i plan błędy

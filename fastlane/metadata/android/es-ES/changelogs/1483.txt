@@ -1,0 +1,2 @@
+- Añadir soporte de imágenes
+- Añadir iconos monocromáticos de la aplicación

@@ -1,0 +1,2 @@
+- Deployasyonda flutter alt modülünü kullan
+- Daha kısa ekranlar için grafik boyutlarını düzelt

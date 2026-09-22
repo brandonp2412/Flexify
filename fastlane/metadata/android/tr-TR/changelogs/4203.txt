@@ -1,0 +1,2 @@
+• ci: Tekrar denemek geçici devriye alıcı başarısızlığı
+• fix: StartPlan uygulamasını öntanımlı olarak geri yükle

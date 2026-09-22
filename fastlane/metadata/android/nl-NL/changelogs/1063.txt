@@ -1,0 +1,3 @@
+- Fix detecteren van het einde van plannen
+- Voeg meer instellingen-eenheidstests toe
+- Fix herstellen wanneer deploy.sh faalt

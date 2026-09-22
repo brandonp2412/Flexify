@@ -1,0 +1,6 @@
+- Hinzufügen von Validierung
+- Verbesserung der Leistung für große Datenbanken
+- Machen Sie die Seite mit zusätzlichen Übungen und Gewichten scrollable
+- Hinzufügen von Bildern auf neue Übungsseite
+- Fix, füge Übungspolster hinzu
+- Anforderung von Benachrichtigungen bei der Aktivierung von automatischen Backups

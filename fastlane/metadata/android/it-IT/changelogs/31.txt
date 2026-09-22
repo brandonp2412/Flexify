@@ -1,0 +1,1 @@
+Fissare la query volume per i grafici

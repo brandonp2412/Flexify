@@ -1,0 +1,10 @@
+• Adicionar um enchimento horizontal ao indicador de progresso inferior
+• Adicionar botão de reordem faltante para Android na página Plans
+• Animação deslizando entre as guias
+• Mudança do indicador selecionado
+• Tempos de repouso padrão para falsos
+• Fixar as folhas de fundo que vão para trás da navegação
+• Corrigir deploy.sh quando o telefone está ligado
+• Fixar lag balançando entre as fichas após trocá-las
+• Fixar conjuntos de poupança
+• Aumentar o enchimento acima da página de história desmoronada

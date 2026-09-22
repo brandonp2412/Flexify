@@ -1,0 +1,1 @@
+Gebruik flutter in plaats van submodule in deploy.sh

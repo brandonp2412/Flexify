@@ -1,0 +1,3 @@
+- Göçme testlerinden hata hatlarını kaldır
+- Git push--force deploy.sh'ten kaldır
+- Tüm veritabanı göç sorunlarını düzelt

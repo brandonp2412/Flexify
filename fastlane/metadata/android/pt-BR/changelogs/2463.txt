@@ -1,0 +1,4 @@
+- Atualizar pubspec.lock
+- Configuração de MSstore
+- Configurar as versões do Google Play
+- Eliminar .actrc e MIGRATION_GUIDE.md

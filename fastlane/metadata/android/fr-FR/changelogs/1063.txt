@@ -1,0 +1,3 @@
+- Fixer la détection de la fin des plans
+- Ajouter plus de tests d' unité de réglage
+- Réparer le défaut de deploy.sh

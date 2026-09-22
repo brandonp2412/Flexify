@@ -1,0 +1,1 @@
+• ci: fixer des jours de conservation sur les étapes de téléchargement des artefacts pour limiter l'utilisation du stockage

@@ -1,0 +1,4 @@
+• Aggiungere le impostazioni al limite di visualizzazione/nasconda e all'asse x sui grafici
+• Inizia sempre il timer sui piani attivati
+• Rettificare nuovi tipi di cardio non funzionanti
+• Presione lunga di asse x / limite slider per nascondere

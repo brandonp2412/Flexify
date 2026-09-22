@@ -1,0 +1,2 @@
+- Voeg het beste herhalingsgrafiek toe
+- Commentaar op Fastlane-voorziening in deploy.sh

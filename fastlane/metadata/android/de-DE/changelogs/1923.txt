@@ -1,0 +1,5 @@
+- flutter auf 3.24.0 aktualisieren
+- Verwenden Sie erweiterte schwebende Aktionstasten
+- Festsetzung des Einsatzes auf github und f-droid
+- Verhindern Sie, dass die Berechtigungsseite auf ios angezeigt wird
+- Korrigieren Sie Kardiographen , die nicht sofort aktualisiert werden

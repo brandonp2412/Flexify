@@ -1,0 +1,2 @@
+• Erlaubt, dass die Hinzufügung von Kurvenglattigkeit fehlschlägt
+• Festsetzung von Einfuhrplänen/Grafiken von Windows

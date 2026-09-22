@@ -1,0 +1,3 @@
+• feat: aggiungere permanentemente la piastrella di esercizio nel piano di modifica; ripristinare i grafici FAB scroll
+• fix: allineare aggiungere l'icona dell'esercizio con le icone di guida dell'esercizio
+• fix: rimuovere il cambio oculare, mantenere visibile il pulsante aggiunta, correggere il controllo del record cardio

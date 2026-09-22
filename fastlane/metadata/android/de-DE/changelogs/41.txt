@@ -1,0 +1,1 @@
+Beheben Sie den Kommando git in deploy.sh

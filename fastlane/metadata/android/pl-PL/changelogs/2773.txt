@@ -1,0 +1,4 @@
+• Naprawianie zmian w przypadku zmian w ustawie
+• Zmniejsz końcowy przycisk zegarka
+• Wzrost zależności od fluttera
+• Wzrost węgla do 3,32,8

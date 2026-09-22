@@ -1,0 +1,10 @@
+• Hinzufügen flutter Untermodul zur Analyse Ignorieren Liste
+• Fügen Sie fehlende Abstandsweite zu add_exercise_page.dart hinzu
+• Feststellen von Cardio-Feldern
+• Fehler in der Ablegerung in weight_page.dart behoben
+• Behebung des getSingle-Fehlers in exercise_modal.dart
+• Behebt einen seltsamen Kontextfehler in main.dart
+• Format
+• Schaltet den Schaltflächenschalter auf der Timerseite etwas weniger auf
+• Entfernen Sie das Vorgänger-Scheckfeld der Gruppenverlauf
+• Entfernen von nicht verwendeten Importen

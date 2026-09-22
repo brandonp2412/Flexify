@@ -1,0 +1,6 @@
+- Permitir la eliminación múltiple de los planes
+- Renombrar "Enter peso" como "Peso" en la página de gráficos
+- Añadir botón de edición a la página desplegable de gráficos
+- Distancia de enfoque después de presentar la duración
+- Corrección de accidentes con tipos cardio inconsistentes
+- Eliminar el sufijo de historial de graph_history

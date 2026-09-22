@@ -1,0 +1,2 @@
+- Añadir consejos de herramientas a la configuración
+- Corrección de copias de seguridad automáticas que ocurren cada 15 minutos

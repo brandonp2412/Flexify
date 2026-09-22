@@ -1,0 +1,3 @@
+- Arrêtez le récepteur de sauvegarde si les sauvegardes automatiques sont désactivées
+- Supprimer la synchronisation de deploy.sh à macos
+- Utiliser zsh dans macos.sh

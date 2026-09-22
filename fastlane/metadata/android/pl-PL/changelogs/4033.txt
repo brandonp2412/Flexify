@@ -1,0 +1,10 @@
+• Naprawa pusty widok logu zmian
+• Ukryj testy integracji linuksowej w dwl
+• chore: stosowanie formatowania strzałów do badań
+• feat: poprawa kontroli wyboru wykresu
+• feat: integracja logistyki w rozmowach
+• feat: przeprojektowanie interfejsu stacjonarnego
+• fix: wykonywanie zgodnych 7-calowych zdjęć ekranu
+• fix: Harden Linux grafika treningu i przepływy zegarka
+• fix: twardy napływ i testy na biurku
+• fix: bazy danych badań integracyjnych

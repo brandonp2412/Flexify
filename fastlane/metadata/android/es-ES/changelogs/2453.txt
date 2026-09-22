@@ -1,0 +1,1 @@
+- Corrección de referencias de liberación de github

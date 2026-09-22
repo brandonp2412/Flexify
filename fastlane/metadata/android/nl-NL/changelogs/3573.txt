@@ -1,0 +1,2 @@
+• ci: automatische versie botsen en vrijlaten op druk op de hoofd
+• fix: voorkomen dat een duplicate rust alarm wanneer het kan worden uitgevoerd en AlarmManager beide brandt

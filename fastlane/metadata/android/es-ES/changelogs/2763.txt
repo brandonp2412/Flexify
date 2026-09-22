@@ -1,0 +1,2 @@
+• Corrección de la actualización de ejercicios después de la edición de los planes
+• Corrección de la herramienta en los primeros y últimos puntos de datos

@@ -1,0 +1,10 @@
+• Naprawić barkę dolną nie wyświetlającą na zdjęciach ekranu dla strony historii
+• Naprawić barkę dolną, która zaciemnia w zdjęciach ekranu
+• Ukryj UI z wykryć ekranu chromowych domyślnie
+• Zapobieganie uruchomieniu zegarów w momencie wyłączania z strony planów
+• Usunięcie redundant sqlite3_flutter_libs
+• Użyj sereny
+• Aktualizacja
+• Aktualne zdjęcia ekranu
+• Użyj sereny
+• chore: Naprawić ostrzeżenia budowania Androida, ulepszyć Gradle do 8.14

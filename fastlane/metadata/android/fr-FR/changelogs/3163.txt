@@ -1,0 +1,2 @@
+• Correction des erreurs de balise de héros
+• Fixer la bordure de l'onglet étant trop large parfois

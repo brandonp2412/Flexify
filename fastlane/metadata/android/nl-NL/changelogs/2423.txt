@@ -1,0 +1,2 @@
+- Updateren van pubspec.lock
+- Verwijder macOS/iOS-builds uit GitHub Actions-werkstroom

@@ -1,0 +1,1 @@
+• fix: captura commit_sha desde el paso correcto en el flujo de trabajo de liberación

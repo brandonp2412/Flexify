@@ -1,0 +1,2 @@
+- Mise à jour de pubspec.lock
+- Fixer les chemins de fichier d'artefact pour la sortie GitHub

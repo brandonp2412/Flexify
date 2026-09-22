@@ -1,0 +1,1 @@
+Añadir mensajes para la vista de gráfico vacío + historial

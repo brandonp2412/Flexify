@@ -1,0 +1,4 @@
+• Ustaw maksymalną wysokość w ustawieniach formatu
+• feat: dodanie karty Stopwatch (#268)
+• feat: ustawienia grafu na ćwiczenia i notatki na ćwiczenia (#257 #267)
+• fix: Przykład do przeglądu nadmiaru wyszukiwarki i klawiatury obejmujące notatki ćwiczeń

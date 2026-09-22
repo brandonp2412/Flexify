@@ -1,0 +1,4 @@
+- Hinzufügen des Stopp-Tasts zu den fertigen Timern
+- Bearbeiten von erstellten Daten auf der Historie-Seite für neue Sets
+- Alarme nicht abhalten
+- Ersetzen Sie die überflüssige Nutzung von MaterialStateProperty

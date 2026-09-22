@@ -1,0 +1,2 @@
+- Personalizzare le barre di progresso dei piani
+- Aggiungere backup automatici

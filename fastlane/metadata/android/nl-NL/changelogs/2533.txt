@@ -1,0 +1,1 @@
+- Fix build directory-referentie in de deploy-windows-pipeline

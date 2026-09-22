@@ -1,0 +1,1 @@
+- Fixer le premier élément de la page de graphes caché

@@ -1,0 +1,3 @@
+- Dodać ustawienie karty
+- Dodaj ustawienia planu
+- Popraw grafik Fab blokowanie informacji

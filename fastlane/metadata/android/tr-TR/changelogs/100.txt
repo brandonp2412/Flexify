@@ -1,0 +1,2 @@
+- Sayım planlarını düzelt
+- Refactor Güç & Kardio Lines

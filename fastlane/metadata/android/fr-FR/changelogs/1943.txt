@@ -1,0 +1,4 @@
+- Réinitialiser le sélecteur jour
+- Fixer l' historique de l' ouverture du graphique de retard
+- Récalculer le ORM lors de l'édition des répétitions/poids
+- Ajouter des rembourrages à la fin de la page de plan d'édition

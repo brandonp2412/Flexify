@@ -1,0 +1,4 @@
+- Corrigir falhas salvo quando os temporizadores de descanso estiverem ativados
+- Fixa os nomes dos ficheiros de dados de importação/export
+- Lista de exercícios do refactor
+- Fixar notas de liberação

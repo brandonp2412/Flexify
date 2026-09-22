@@ -1,0 +1,1 @@
+Incluir apk universal em versões do github

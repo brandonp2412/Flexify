@@ -1,0 +1,4 @@
+- Acompanhar os temporizadores por item do plano
+- Adicionar o filtro de grupo muscular para a página gráficos
+- Fix padding da unidade na página de configurações
+- Fixar imagens de exercício não sendo removidas

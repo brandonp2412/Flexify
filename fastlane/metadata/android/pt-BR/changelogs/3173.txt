@@ -1,0 +1,2 @@
+• Campo de distância fixa para conjuntos de cardio com unidade de peso
+• Fixar o histórico de exames de cardio com peso

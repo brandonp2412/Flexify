@@ -1,0 +1,6 @@
+• Neue Datumsformate hinzufügen (z.B. für Deutsch)
+• Hinzufügen der Zeitbasierten x-Achseoption für die Grafik
+• Löschen Sie Speicherprobleme
+• Festlegen des Planverfahrens und -zahlen
+• Die Benutzer entscheiden über die Kapitalisierung der Planbezeichnungen
+• Verlegen Sie den Historik-Button in die Navigationsleiste

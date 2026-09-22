@@ -1,0 +1,5 @@
+- Utilisez des boutons d'action flottants étendus
+- Déploiement fixe à github et f-droid
+- Éviter de montrer la page d'autorisation sur ios
+- La mise à niveau de flutter vers 3.24.0
+- Réparer les graphes cardio qui ne sont pas mis à jour instantanément

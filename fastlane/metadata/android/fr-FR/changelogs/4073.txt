@@ -1,0 +1,10 @@
+• Initialization de l'audio des paramètres plats
+• Sélection de contenu de l'onglet plat
+• Système de sauvegarde portable porté de FitBook
+• préférer les sélecteurs d'action Flexify étiquetés
+• Préférer les sélecteurs d'action de graphes étiquetés
+• Préférer le sélecteur d' onglets visibles
+• Simplifier le flux de contrôle du retour anticipé
+• fix: temps d'exécution des essais liés Android CI
+• fix: activer les sauvegardes après sélection du dossier
+• refactor: préférer les commandes visibles par l'utilisateur dans Linux E2E

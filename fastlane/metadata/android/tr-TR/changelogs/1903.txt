@@ -1,0 +1,5 @@
+- Grafik performansını geliştir
+- Kardio düzenlemesinden "Kilo" kaldır
+- Geri yönlendirme ayarlama bazen çalışmıyor
+- Kardio egzersizleri için bir rep max tahminlerini gizle
+- Planların performansını geliştirmek

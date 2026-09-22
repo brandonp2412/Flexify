@@ -1,0 +1,3 @@
+- Faites scrollable les kits de gymnase
+- Réservation à flutter principal dans ci_post_clone
+- Revenir aux déroulants pour la période

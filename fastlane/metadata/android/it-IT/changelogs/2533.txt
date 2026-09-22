@@ -1,0 +1,1 @@
+- Fix di costruire il riferimento di directory in deploy-windows pipeline

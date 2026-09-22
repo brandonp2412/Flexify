@@ -1,0 +1,5 @@
+- Melhorar capturas de tela
+- Incluir capturas de tela em versões do GitHub
+- Selector de unidade de revampamento
+- Remover menções duplicadas de unidades
+- Adicionar edição múltipla do histórico

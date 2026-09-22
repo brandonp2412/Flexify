@@ -1,0 +1,10 @@
+• Dodaj konfigurację sereny
+• /Pokój toastów /trwających na zawsze
+• Poprawa wizualności stepera
+• Spraw, aby strona edycji ustawiona była bardziej zgodna z jej wypełnieniem
+• Usunięcie duplikowanych etykiet dla stylu wprowadzania
+• Uproszczenie pola stopniowego
+• Aktualne zdjęcia ekranu
+• Wzrost wstrząsu do 3,44,1
+• Wzrost wersji kotlin
+• feat: dodać +/- stopniki do połączeń odtwarzania i masy

@@ -1,0 +1,1 @@
+• ci: 발매 APK에 VirusTotal 스캔을 추가

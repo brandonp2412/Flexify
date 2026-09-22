@@ -1,0 +1,3 @@
+- Réparation de l'équipement de gymnase
+- Supprimer les appels à déposer sur les paramètres
+- Nettoyer les écouteurs sur la décharge

@@ -1,0 +1,1 @@
+- Nur die Berechtigungsseite auf android offen

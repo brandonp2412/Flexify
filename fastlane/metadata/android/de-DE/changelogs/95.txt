@@ -1,0 +1,5 @@
+- Aus der vollständigen Beschreibung ordnungsgemäß
+- Geben Sie git ziehen --tags nach Erstellung github Release
+- Wieder aktivierte google play-Entwicklungen
+- Hinzufügen von Ausfuhr-/Import-Neigung
+- Hinzufügen von Neigung zum Cardio-Typ

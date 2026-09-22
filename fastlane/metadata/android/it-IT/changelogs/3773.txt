@@ -1,0 +1,10 @@
+• Rettificare la barra inferiore non mostrata nelle screenshot per la pagina di storia
+• Rettificare la barra inferiore oscurante nelle screenshot
+• Nascondere ui dalle screenshot cromate per impostazione predefinita
+• Prevenire l' esecuzione di timer quando disabilitato dalla pagina piani
+• Rimuovere sqlite3_flutter_libs ridondanti
+• Aggiornamento . Serena
+• Aggiornamento
+• Aggiornare le screenshot
+• Aggiornamento serena
+• chore: Rettifica gli avvertimenti di build di Android, aggiornamento di gradle a 8.14

@@ -1,0 +1,1 @@
+- Risolto il problema di firma del codice di build di macOS

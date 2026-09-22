@@ -1,0 +1,5 @@
+- Espacio fuera descripción completa correctamente
+- Especifique git tirar --tags después de crear la liberación github
+- Despliegue de nuevo de google play
+- Añadir inclinación a la exportación/importación
+- Añadir inclinación al tipo cardio

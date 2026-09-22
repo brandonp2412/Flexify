@@ -1,0 +1,2 @@
+- github.com:brandonp2412/Flexify의 '주' 지부를 합병
+- 타이머 설정을 변경할 때 미리 보시기 비브레이션

@@ -1,0 +1,1 @@
+- MacOS oluşturma kodu imzalımasında sorun çöz

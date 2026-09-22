@@ -1,0 +1,3 @@
+- Haltet die Warnung auf verpassten Klopfen für Einstellungsprüfungen ab
+- Zusammenschluss "Hauptsitz" von github.com:brandonp2412/Flexify
+- Befestigen Sie Prüfwarnungen für die Einstellungsseite

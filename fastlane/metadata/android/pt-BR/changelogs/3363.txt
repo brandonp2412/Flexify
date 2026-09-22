@@ -1,0 +1,8 @@
+• Adicionar classificação de tempo para a página gráfica
+• Categorias fixas não actualizadas após importação
+• Corrigir a última dica de ferramenta em gráficos
+• Fix sistema ui obscurecer sobre página
+• Fixar os elementos de sistema que ocultavam na página de configurações
+• Nome de arquivos de backup automático
+• Remover animações da lista de histórico
+• Lógicas de divisor removidas da página de gráficos

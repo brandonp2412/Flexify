@@ -1,0 +1,10 @@
+• Aggiungere un rivestimento orizzontale all'indicatore di progresso inferiore
+• Aggiungere il pulsante di riordine mancante per Android sulla pagina Piani
+• Animato scorre tra schede
+• Modifica dell'indicatore selezionato
+• Calendario di riposo predefinito a falso
+• Rettificare le foglie di fondo che vanno dietro la nave
+• Correzione deploy.sh quando il telefono è connesso
+• Rettificare il ritardo che si sposta tra le schede dopo averle cambiate
+• Fissare i set di risparmio
+• Aumentare il riempimento sopra la pagina di storia crollato

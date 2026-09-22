@@ -1,0 +1,3 @@
+- Verwenden Sie die Einstellung der langen Datum für die Bearbeitung von Fitness-Sets
+- Behebung der Auswahl des ersten Artikels in der Fitnessstorie
+- Behebung fehlender Neuline im Freisetzungskommit

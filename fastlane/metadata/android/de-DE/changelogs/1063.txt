@@ -1,0 +1,3 @@
+- Fix-Funktion für das Ende der Pläne
+- Fügen Sie weitere Einstellungs-Einheitstests hinzu
+- Reparatur-Abweichung, wenn deploy.sh fehlschlägt

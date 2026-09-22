@@ -1,0 +1,10 @@
+- Fix eenheidsonderzoek
+- Fix deployment in windows store
+- Voeg de debuggetaps toe aan de lijst van gedownloade bestanden in de Windows Store-implementatie
+- Fix Windows Store-implementatie: gebruik een lokaal MSIX-bestand in plaats van GitHub-verlaten URL
+- Fix Windows Store-implementatie: zorg ervoor dat GitHub-version is gemaakt voordat Windows Store-implementatie
+- Update schermopnamen
+- Alle automatische screenshots voor desktop oplossen
+- Updateren van pubspec.lock
+- Voeg script toe voor het bijwerken van chromedriver
+- Fix wat is de nieuwe pagina

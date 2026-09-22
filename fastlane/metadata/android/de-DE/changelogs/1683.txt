@@ -1,0 +1,5 @@
+- Stellen Sie die Einstellungsschalter einheitlich
+- Erhöhung der Genauigkeit der Wiederholungsschätzungen
+- Erlaubt die Berechnung von benutzerdefinierten Ruhezeiten pro Grafik
+- Feste Kategorie für Pläne leer
+- Festlegen Sie die Planbearbeitung

@@ -1,0 +1,10 @@
+• Boş değişken log görünümünü düzelt
+• dwl üzerinde Linux entegrasyon testlerini gizle
+• chore: Testlere Dart biçimlendirmeyi uygula
+• feat: Grafik seçimi kontrollerini geliştir
+• feat: Konuşmacı kayıtlarını entegre et
+• feat: Masaüstü arayüzünü yeniden tasarlayın
+• fix: uyumlu 7 inç ekran görüntüleri uygula
+• fix: Linux harden egzersiz grafik ve zamanlayıcı akışları
+• fix: sert masaüstü navigasyonu ve testleri
+• fix: İzolat entegrasyon test veritabanları

@@ -1,0 +1,3 @@
+- Doppelt aufzudrücken, um eine Metrik zu öffnen
+- ORM während der Bearbeitung eines Sets anzeigen
+- Hinzufügen von Schalter für Alarmgeräusche

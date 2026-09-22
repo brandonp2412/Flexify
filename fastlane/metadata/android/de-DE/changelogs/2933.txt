@@ -1,0 +1,2 @@
+• Die agp wird auf 8.11.1 herabgesetzt
+• Festsetzung der vorherigen Bevölkerung/Gewicht

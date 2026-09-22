@@ -1,0 +1,8 @@
+- Dodaj ustawienie karty skryć historię
+- Zmiana kopii zapasowych automatycznie
+- Nazwa nie aktualizowana do edycji zestawu gimnastycznego
+- Dodaj automatyczne kopie zapasowe
+- Naprawa nowych zestawów fitness z nieważnymi identyfikatorami i kreatywami
+- Kod w formatowaniu w import_data
+- Naprawa jank przy dodawaniu nowego zestawu siłowni
+- Użyj fil_picker do danych eksportowych/importowych

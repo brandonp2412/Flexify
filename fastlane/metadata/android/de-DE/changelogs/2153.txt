@@ -1,0 +1,3 @@
+- Hinzufügen von Bild-Picking zu Gewicht
+- Verbergen Sie irrelevante Felder auf Gewichtsbeiträgen
+- Kategorien dynamisch gestalten

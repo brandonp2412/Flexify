@@ -1,0 +1,2 @@
+• Fija la etapa final de movimiento de la tubería
+• Corrección de cargar artefactos android

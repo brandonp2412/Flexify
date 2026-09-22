@@ -1,0 +1,2 @@
+• Añadir lógica para averiguar el id del emulador
+• Corrección de capturas de pantalla

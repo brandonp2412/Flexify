@@ -1,0 +1,2 @@
+• fix: Mantenga el formatador fuera del submodule Flutter
+• fix: tolerar el desgarro de Patrol falso negativo

@@ -1,0 +1,5 @@
+- Rendere le impostazioni dei commutatori coerenti
+- Aumentare l'accuratezza delle stime di ripetizione
+- Permettere la compensazione di tempi di riposo personalizzati per grafico
+- Categoria fissa che è vuota per i piani
+- Fissare l'ordine di modifica del piano

@@ -1,0 +1,1 @@
+- Fix voorbeeld selecties voor meer bewerkingen

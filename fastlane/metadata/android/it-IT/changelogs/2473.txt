@@ -1,0 +1,10 @@
+- Test di unità fissa
+- Rettifica di distribuzione in Windows store
+- Aggiungere il passo di debug per elencare i file scaricati nell'implementazione di Windows Store
+- Correzione della distribuzione di Windows Store: utilizzare il file MSIX locale invece dell'URL di rilascio di GitHub
+- Correzione della distribuzione di Windows Store: assicurarsi che la versione di GitHub sia creata prima della distribuzione di Windows Store
+- Aggiornare le screenshot del desktop
+- Ripristare tutte le screenshot automatiche per desktop
+- Aggiornamento pubspec.lock
+- Aggiungere lo script per l' aggiornamento di chromedriver
+- - Rendi una pagina nuova.

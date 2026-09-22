@@ -1,0 +1,2 @@
+• Wrap timer progressie-indicator in veilig gebied
+• Grafieken niet bijgewerkt

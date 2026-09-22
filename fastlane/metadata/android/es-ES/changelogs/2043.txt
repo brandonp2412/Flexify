@@ -1,0 +1,1 @@
+- Deshabilitar la estimación de repetición y duración por defecto

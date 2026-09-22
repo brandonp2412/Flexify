@@ -1,0 +1,10 @@
+• Añadir la configuración serena
+• Fija los brindes que duran para siempre
+• Mejorar la visualización del paso
+• Hacer la página de edición de la configuración más consistente con su relleno
+• Eliminar las etiquetas duplicadas para el estilo de entrada
+• Simplificar el campo de paso
+• Actualización de capturas de pantalla
+• La actualización de flutter a 3.44.1
+• Actualización de la versión kotlin
+• feat: añadir +/- pasos a los campos de repetición y peso

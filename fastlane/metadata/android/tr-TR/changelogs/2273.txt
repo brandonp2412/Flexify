@@ -1,0 +1,2 @@
+- Küresel ilerlemeyi gizleme yeteneği ekle
+- Negatifler için bir rep-maksimum hesaplamaları düzelt

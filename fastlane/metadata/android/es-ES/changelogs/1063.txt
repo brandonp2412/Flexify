@@ -1,0 +1,3 @@
+- Corrección de detección del final de los planes
+- Añadir más pruebas de configuración
+- Corrección de deshacer cuando deploy.sh falla

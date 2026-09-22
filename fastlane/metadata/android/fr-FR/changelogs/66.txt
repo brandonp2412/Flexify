@@ -1,0 +1,6 @@
+- Supprimer les balises de deploy.sh
+- Ajouter le bouton supprimer pour modifier la page de réglage de gym
+- Modifier les points du graphique en tapant deux fois
+- déplacer le texte auxiliaire des paramètres de date dans l'étiquette
+- Ajouter la définition du format de date courte
+- Graphiques de lignes de réfacteur

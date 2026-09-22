@@ -1,0 +1,2 @@
+- Alet ipuçlarını ayarlara ekle
+- Her 15 dakikada otomatik yedekleme ayarlama

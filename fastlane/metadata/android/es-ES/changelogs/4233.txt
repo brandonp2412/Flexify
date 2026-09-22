@@ -1,0 +1,1 @@
+• feat: utilizar el icono 08 como el icono del lanzador Flexify

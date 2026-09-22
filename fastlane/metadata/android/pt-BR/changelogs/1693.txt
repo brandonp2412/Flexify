@@ -1,0 +1,1 @@
+- Mudança de barras de progresso nos planos

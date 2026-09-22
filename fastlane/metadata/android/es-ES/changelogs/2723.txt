@@ -1,0 +1,1 @@
+• Añadir dependencia faltante para crear-github-liberación

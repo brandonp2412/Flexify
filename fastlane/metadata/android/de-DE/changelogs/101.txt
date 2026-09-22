@@ -1,0 +1,2 @@
+- -p-Flagge für deploy.sh zu verlangen, um an google play zu senden
+- Vereinfachen Sie die Count Query für Pläne

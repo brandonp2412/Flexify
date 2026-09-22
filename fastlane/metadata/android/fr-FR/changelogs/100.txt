@@ -1,0 +1,2 @@
+- Fixer les plans de comptage
+- Résistance du réfacteur et lignes cardio

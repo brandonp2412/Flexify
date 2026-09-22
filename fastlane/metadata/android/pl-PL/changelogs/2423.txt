@@ -1,0 +1,2 @@
+- Aktualizacja pubspec.lock
+- Usunięcie budowli macOS/iOS z przepływu pracy GitHub Actions

@@ -1,0 +1,3 @@
+• Riduzione dell'agp a 8.11.1
+• Tracciare dietro l' UI del sistema e togliere lo scorrere delle schede
+• Fissare le ripetizioni/peso pre-pollinazione

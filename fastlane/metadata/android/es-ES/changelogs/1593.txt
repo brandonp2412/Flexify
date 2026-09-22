@@ -1,0 +1,1 @@
+- Supercrición fija de bodyWeight en las importaciones de gráficos

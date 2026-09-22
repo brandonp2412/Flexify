@@ -1,0 +1,11 @@
+- Wzrost wzdłuż
+- Dwa razy uderzenie ćwiczenia otwiera go
+- Wyjaśnij usunięcie z strony grafu
+- Długie naciśnięcie na karty , aby je ukryć
+- Automatycznie wykorzystaj znalezienie znaczników
+- Naprawa błędów na grafikach siły
+- Użyj stron w gniazdach na wykresach -> dodać
+- Użyj przemieszczonego trasy w czasie -> ustawienia
+- Dodaj wykres wglądający
+- Naprawa błędu na stronie siły
+- Poczekaj na ustawienie salonu przed aktualizacją zdjęć

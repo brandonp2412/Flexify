@@ -1,0 +1,3 @@
+- Naprawa kopii zapasowych automatycznych
+- Naprawa niespójnych awary
+- Poprawa dokładności oceny odtwarzania

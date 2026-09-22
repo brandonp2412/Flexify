@@ -1,0 +1,5 @@
+- Backup automático no final de um plano
+- Atualizar o plano de início após a edição de uma entrada
+- Peso do grupo por semana por defeito
+- Dependências de atualização
+- Fixar o nome da variável da página de configuração

@@ -1,0 +1,4 @@
+- Inzetten in database-backups opnemen
+- Het opstellen van een exportdatabase op desktop
+- Voeg het plan aan op de startpagina toe
+- Voeg opties toe voor plan trailing

@@ -1,9 +1,54 @@
+import 'dart:convert';
+
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+const _changelogCatalogByLanguage = <String, String>{
+  'de': 'de',
+  'es': 'es',
+  'fr': 'fr',
+  'it': 'it',
+  'ja': 'ja',
+  'ko': 'ko',
+  'nl': 'nl',
+  'pl': 'pl',
+  'pt': 'pt_BR',
+  'tr': 'tr',
+  'zh': 'zh_CN',
+};
+
+Future<Map<String, String>> loadLocalizedChangelogCatalog(
+  AssetBundle bundle,
+  Set<String> assets,
+  Locale locale,
+) async {
+  final catalogLocale = _changelogCatalogByLanguage[locale.languageCode];
+  if (catalogLocale == null) return const {};
+
+  final path = 'assets/changelogs/l10n/$catalogLocale.json';
+  if (!assets.contains(path)) return const {};
+
+  try {
+    final data = await bundle.load(path);
+    final content = utf8.decode(
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+    );
+    final decoded = jsonDecode(content);
+    if (decoded is! Map<String, dynamic>) return const {};
+    return decoded.map((key, value) => MapEntry(key, value.toString()));
+  } catch (error, stackTrace) {
+    talker.handle(
+      error,
+      stackTrace,
+      'Unable to load localized changelog catalog: $path',
+    );
+    return const {};
+  }
+}
 
 class WhatsNew extends StatefulWidget {
   const WhatsNew({super.key});
@@ -42,14 +87,21 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
   Future<List<Changelog>> getChangelogFiles(BuildContext context) async {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    final manifest = await AssetManifest.loadFromAssetBundle(
-      DefaultAssetBundle.of(context),
+    final locale = Localizations.localeOf(context);
+    final localeTag = locale.toLanguageTag();
+    final bundle = DefaultAssetBundle.of(context);
+    final manifest = await AssetManifest.loadFromAssetBundle(bundle);
+    final assets = manifest.listAssets().toSet();
+    final localizedChangelogs = await loadLocalizedChangelogCatalog(
+      bundle,
+      assets,
+      locale,
     );
 
-    final files = manifest
-        .listAssets()
-        .where((key) => key.startsWith('assets/changelogs/'))
+    final files = assets
+        .where(
+          (key) => key.startsWith('assets/changelogs/') && key.endsWith('.txt'),
+        )
         .toList();
 
     files.sort((a, b) {
@@ -63,18 +115,20 @@ class _WhatsNewState extends State<WhatsNew> {
     final result = <Changelog>[];
     for (final path in files) {
       try {
-        final content = await rootBundle.loadString(path);
         final filename = path.split('/').last.replaceAll('.txt', '');
         final timestamp = int.tryParse(filename);
         if (timestamp == null || filename.isEmpty) {
           talker.warning('Skipping invalid changelog asset: $path');
           continue;
         }
+
+        final content =
+            localizedChangelogs[filename] ?? await bundle.loadString(path);
         result.add(
           Changelog(
             name: filename,
             created: DateFormat.yMMMd(
-              locale,
+              localeTag,
             ).format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
             content: content,
           ),

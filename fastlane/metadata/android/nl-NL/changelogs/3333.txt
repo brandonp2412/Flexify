@@ -1,0 +1,2 @@
+• Advertensie meld een bug knop op over pagina
+• Fix alarm geluidspeler

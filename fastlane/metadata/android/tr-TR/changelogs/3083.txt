@@ -1,0 +1,8 @@
+• Alt ilerleme çubuğunu güncelleme
+• Planlarda yastık tutarlılığını ayarlayın
+• Sistem geri yönlendirmeyi düzelt
+• Birim testleri
+• Link shields.io indirme badge
+• Düzenleme ağırlığı sayfasındaki düzenleme ayarından eşleşen mesafe
+• Henüz girilmemiş çift dokunma düzenleme setlerini engelle
+• Çıkarın. X aralığında alın.

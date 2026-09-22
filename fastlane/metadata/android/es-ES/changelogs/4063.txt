@@ -1,0 +1,4 @@
+• Selección de contenido de pestañas planas
+• Prefiere seleccionar pestañas visibles
+• Simplificar el flujo de control de devolución temprana
+• refactor: Preferir controles visibles para el usuario en Linux E2E

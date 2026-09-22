@@ -1,0 +1,1 @@
+• déplacer l' importation dans la base de données

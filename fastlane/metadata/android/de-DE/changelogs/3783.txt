@@ -1,0 +1,6 @@
+• Fügen Sie eine Reihe von unten nav Varianten hinzu
+• Hinzufügen von Schrift für Ausführung von linux fehlschlägt
+• Löschen Sie die Navigationsvarianten
+• Aktualisieren Sie die unteren Navigationsschritte, um ein Pille-Design zu sein
+• fix: entfernen Sie den festcodierten lokalen JDK-Pfad von gradle.properties
+• fix: Schweigen MSVC coroutine Abweichungsfehler Brechen Windows CI Bauen

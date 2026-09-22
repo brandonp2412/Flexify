@@ -1,0 +1,3 @@
+- Detener la advertencia en los taps perdidos para las pruebas de configuración
+- Fusión de la sucursal "principal" de github.com:brandonp2412/Flexify
+- Corrección de las advertencias de prueba para la página de configuración

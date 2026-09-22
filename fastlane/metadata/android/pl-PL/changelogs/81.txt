@@ -1,0 +1,3 @@
+- Użyj ustawienia długości daty do edycji zestawów gimnastycznych
+- Naprawia wybór pierwszego elementu w historii siłowni
+- Naprawianie brakującej linii w zobowiązaniu do uwolnienia

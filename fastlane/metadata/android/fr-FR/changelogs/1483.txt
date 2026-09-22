@@ -1,0 +1,2 @@
+- Ajouter le support d'image
+- Ajouter des icônes monochromes

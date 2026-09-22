@@ -1,0 +1,2 @@
+- Importação fixa de conjuntos massivos exportação
+- Crash de gráfico de linha fixa para forças relativas vazias

@@ -1,0 +1,5 @@
+- Corrección de deploy.sh
+- Eliminar el flujo de trabajo windows + macos ejecutado después de la implementación
+- Corrección de la página en blanco después de importar bases de datos
+- Añadir unidades a los gráficos de cardio
+- Reorganizar la carpeta lib

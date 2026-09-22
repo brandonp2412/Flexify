@@ -1,0 +1,3 @@
+• Dodaj zdjęcia ekranu do przepływu pracy github [skip ci]
+• Naprawianie uprawnień do zapisu flottera
+• Zapisz zestawy z historii po przesłaniu masy

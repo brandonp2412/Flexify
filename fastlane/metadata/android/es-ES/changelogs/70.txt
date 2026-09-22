@@ -1,0 +1,2 @@
+- Importación fija de conjuntos masivos exportación
+- Colisión de gráfico de línea fija para fuertes relativas vacías

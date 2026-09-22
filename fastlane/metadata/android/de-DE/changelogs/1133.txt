@@ -1,0 +1,3 @@
+- Feststellungs- und Einheitsprüfungen
+- Verringern Sie die Symbole auf der Einstellungsseite
+- Verwenden Sie Schaltflächen für den Periodenselektor

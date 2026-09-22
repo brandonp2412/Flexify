@@ -1,0 +1,10 @@
+- Ensaios de unidade fixa
+- Correção de implantação no Windows Store
+- Adicionar passo de depuração para lista de arquivos baixados na implementação do Windows Store
+- Corrigir a implantação do Windows Store: use o arquivo MSIX local em vez do URL de lançamento do GitHub
+- Corrigir a implantação do Windows Store: certifique-se de que a versão do GitHub seja criada antes da implantação do Windows Store
+- Atualizar capturas de tela de desktop
+- Corrigir todas as capturas de tela automáticas para desktop
+- Atualizar pubspec.lock
+- Adicionar script para atualizar o cromedriver
+- Corrigir o que é nova página

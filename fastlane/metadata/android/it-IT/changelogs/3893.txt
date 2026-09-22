@@ -1,0 +1,1 @@
+• ci: fissare i giorni di conservazione per le fasi di caricamento degli artefatti per limitare l'utilizzo di stoccaggio

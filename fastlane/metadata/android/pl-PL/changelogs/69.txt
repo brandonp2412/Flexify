@@ -1,0 +1,9 @@
+- Zapewnić wartość Y 2dp dla linii kardio
+- Dodaj przycisk edycji w górnej prawej części planów
+- Dodaj sufiks historyczny do tytułu historii wykresu
+- Dodaj rodzaje kardio
+- Strona grafu widoku reaktora
+- Ustawienie wyszukiwania danych dotyczących przywozu/wywozu w ustawieniach
+- Refactor start_plan_page
+- Strona planów refactor
+- Plany oszczędzania w testach

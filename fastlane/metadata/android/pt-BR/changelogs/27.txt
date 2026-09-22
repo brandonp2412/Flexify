@@ -1,0 +1,1 @@
+Fixar ordens por peso na página de gráficos

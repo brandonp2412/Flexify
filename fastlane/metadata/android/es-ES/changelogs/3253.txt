@@ -1,0 +1,2 @@
+• Corrección de búsqueda vacía en la página de planes
+• Optimiza la página de inicio del plan

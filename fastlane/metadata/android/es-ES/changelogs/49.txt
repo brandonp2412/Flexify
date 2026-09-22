@@ -1,0 +1,1 @@
+Corrección de mensaje de compromiso en el bloqueo

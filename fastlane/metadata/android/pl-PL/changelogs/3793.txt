@@ -1,0 +1,6 @@
+• Niskie paralellism dla gradle budować na github akcji
+• Aktualne zdjęcia ekranu
+• feat: Wyjaśnij kategorię pola jest dla grupy mięśni tagging
+• fix: stosuje się kategorię nasionych w czasie pierwszego przechowywania rozważań
+• fix: wypuszczenia tagów tylko po wszystkich platform budowy odnieść sukces
+• fix: Wyróżnienie pin i oznakowanie do dokładnego commit SHA

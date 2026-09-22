@@ -1,0 +1,3 @@
+- Traiter avec grace les erreurs lors du chargement d'images
+- Retirer les boutons ajouter/enlever de l'éditeur d'image
+- Laissez l'image seule si l'utilisateur annule le sélecteur de fichiers

@@ -1,0 +1,10 @@
+• Aggiungere configurazione serena
+• Fissare i brindisi per sempre
+• Migliorare le visibilità del stepper
+• Rendere la pagina di modifica più coerente con il riempimento
+• Elimina le etichette duplicate per lo stile di input
+• Semplificare il campo di passaggio
+• Aggiornare le screenshot
+• Aggiornare il flutter a 3.44.1
+• Aggiornamento della versione kotlin
+• feat: aggiungere +/- stepper alle repetizioni e ai campi di peso

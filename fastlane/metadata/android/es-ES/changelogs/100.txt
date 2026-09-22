@@ -1,0 +1,2 @@
+- Fija los planes de conteo
+- Fuerza del refactor y líneas de cardio

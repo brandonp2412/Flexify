@@ -1,0 +1,2 @@
+- Le groupe de fusion "main" de github.com:brandonp2412/Flexify
+- Le champ de distance fixe reste mis en évidence - 1.0.64

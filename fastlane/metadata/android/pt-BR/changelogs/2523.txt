@@ -1,0 +1,1 @@
+- Adicionar etapa de depósito para deploym-windows-store

@@ -1,0 +1,5 @@
+• README'de proje tanımını gözden geçir
+• Proje sloganını değiştirmek için README'yi güncelle
+• README'de proje adını güncelle
+• Pubspec.yaml'de 2.2.0'a güncelleme sürümü
+• fix: Açık geçmişi ve plan hatalarını çöz

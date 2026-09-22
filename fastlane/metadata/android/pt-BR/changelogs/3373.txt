@@ -1,0 +1,3 @@
+• Mudança dos indicadores de seleção
+• Fixar exercícios de exclusão não limpar exercícios de plano
+• Corrigir gráficos não atualizados

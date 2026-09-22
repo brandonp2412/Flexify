@@ -1,0 +1,1 @@
+- Añadir la pestaña de configuración como opción

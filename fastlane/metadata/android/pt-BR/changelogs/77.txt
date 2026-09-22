@@ -1,0 +1,6 @@
+- Permitir a exclusão múltipla de planos
+- Renomear "Enter peso" como "Peso" na página de gráficos
+- Adicionar botão de edição para gráficos página desplegavel
+- Distância de foco após a apresentação da duração
+- Corrigir acidentes com tipos de cardio inconsistentes
+- Remover o sufixo histórico do graph_history

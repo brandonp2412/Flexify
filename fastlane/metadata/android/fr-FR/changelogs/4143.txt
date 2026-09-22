@@ -1,0 +1,1 @@
+• fix: stabiliser le test de sélection de documents Patrol

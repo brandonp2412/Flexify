@@ -1,0 +1,4 @@
+• Defina a altura máxima em configurações de formato
+• feat: adicionar guia relógio de parada (#268)
+• feat: Configurações de gráfico por exercício e notas de exercício (#257 #267)
+• fix: Peek tip de ferramenta sobreposição de barra de pesquisa e teclado cobrindo notas de exercício

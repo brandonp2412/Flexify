@@ -1,0 +1,10 @@
+• Türkçe yerel tercihleri kapsar
+• Geçici simge yeniden tasarlama aktivelerini geri çevir
+• chore(l10n): Dil EklendiNameTürkçe
+• chore: adres Türk yerleşim incelemesi
+• feat(l10n): Türk Yerleşimi Eklendi
+• feat: Eğlence ikici simge kavramlarını ekle
+• feat: İkon 7 ve 8 rafine setlerini ekle
+• fix(l10n): Çıkarılmış kopya yazıları
+• fix(tests): test_bundle.dart'ı dışlamak için .gitignore ekle
+• fix(tests): locale_preference_test'e tr dili ekle

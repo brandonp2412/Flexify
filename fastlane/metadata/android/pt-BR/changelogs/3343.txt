@@ -1,0 +1,1 @@
+• Adicionar espaçamento para ver o eixo x na página de força

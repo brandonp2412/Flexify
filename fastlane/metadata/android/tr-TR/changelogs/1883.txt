@@ -1,0 +1,4 @@
+- Plan öğesi başına zamanlama ayarları
+- Grafikler sayfasına kas grubu filtre ekle
+- Ayarlar sayfasında birim dolgulamasını ayarlayın
+- Çıkarılmayan egzersiz görüntüleri düzelt

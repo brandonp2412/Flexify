@@ -1,0 +1,2 @@
+- Corrección del comando msstore publicar
+- Los juegos de gimnasio de garantía antes de probarlos en la página de gráficos

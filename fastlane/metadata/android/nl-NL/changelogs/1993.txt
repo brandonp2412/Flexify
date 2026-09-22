@@ -1,0 +1,2 @@
+- Fix de eerste herhalingen/gewicht op nul op plannen
+- Verwijder de voorgaande nullen na het opslaan van plannen

@@ -1,0 +1,5 @@
+• feat: Fügen Sie einen Überprüfungslink auf die Seite Über
+• fix: Fügen Sie fehlende Bodenpolster auf allen scrollable Seiten hinzu (#301)
+• fix: Wiederholen Sie die Stopwatch-Tickers, wenn die App wieder im Vordergrund ist
+• fix: die Zeit der Wanduhr für die Stoppuhr zu nutzen, um die Ausstrahlung zu überleben
+• fix: Trainingseinstellungen Unterpolsterung und Stoppuhr Tab-Etikette

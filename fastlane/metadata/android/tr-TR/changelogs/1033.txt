@@ -1,0 +1,3 @@
+- Run Dart pub yükseltme
+- Ekran çekimleri için sistem renklerini kullanmayın
+- Sadece Play Store'a gönderirken uygulama paketini oluştur

@@ -1,0 +1,3 @@
+- Düzenleme spor setlerini kaydırılabilir hale getir
+- Ci_post_clone'da en büyük flotter için çek çek
+- Period için düşüşe geri dön

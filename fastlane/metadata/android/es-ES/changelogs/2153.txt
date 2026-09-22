@@ -1,0 +1,3 @@
+- Añadir la selección de imágenes al peso
+- Escondir campos irrelevantes en las entradas de peso
+- Hacer que las categorías sean dinámicas

@@ -1,0 +1,3 @@
+- Detener el receptor de copia de seguridad si las copias de seguridad automáticas están apagadas
+- Eliminar la rsync de deploy.sh a macos
+- Usar zsh en macos.sh

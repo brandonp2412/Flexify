@@ -1,0 +1,6 @@
+- Eliminar las etiquetas de deploy.sh
+- Añadir botón de eliminación para editar la página de ajustes de gimnasio
+- Editar puntos del gráfico con doble toque
+- Mover el texto del asistente de configuración de fecha en la etiqueta
+- Añadir la configuración de formato de fecha corta
+- Gráficos de líneas de refactor

@@ -1,0 +1,3 @@
+• Wystarczy uruchomić ruch pracy github
+• Docenie do rubina 3.3 dla wdrożenia-google-play
+• Popraw nazwę wydawcy w pubspec.yaml

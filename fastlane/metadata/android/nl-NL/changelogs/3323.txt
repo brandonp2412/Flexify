@@ -1,0 +1,6 @@
+• Voeg nieuwe datumformaten toe (bijv. voor het Duits)
+• Voeg tijdgebaseerde x-asoptie toe voor grafiek
+• Oplossen van geheugenproblemen
+• Fix plan trailing ratio & count
+• Laat gebruikers beslissen over de kapitaalverdeling van de plannetijdels
+• Verplaats de geschiedenisknop naar de nav-balk

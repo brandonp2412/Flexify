@@ -1,0 +1,6 @@
+• Vervang alle interne rekwisieten met prefix _
+• Repliceer geautomatiseerde screenshots & e2e-tests uit fit-book
+• chore: up-to-date register automatische controles
+• ci: reparatie Patrol en Play-deploiement werkstroom
+• fix: Aangelijk de Android JVM-compilatie doelen worden gelijnd
+• fix: Cardio-gewicht behouden in de geschiedenis van groepen

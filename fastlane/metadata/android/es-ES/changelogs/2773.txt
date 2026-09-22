@@ -1,0 +1,4 @@
+• Corrección de repeticiones que cambian por defecto
+• Acender el botón de la hora
+• Actualización de las dependencias de flutter
+• La actualización de flutter a 3.32.8

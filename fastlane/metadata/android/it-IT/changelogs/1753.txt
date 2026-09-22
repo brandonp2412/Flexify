@@ -1,0 +1,3 @@
+- Aggiungere impostazioni di schede
+- Aggiungere impostazioni di piano
+- Correzione di informazioni di blocco di grafico

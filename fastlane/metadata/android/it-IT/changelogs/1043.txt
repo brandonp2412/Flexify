@@ -1,0 +1,3 @@
+- Riparazione di set di ginnastica
+- Rimuovere le chiamate di scarico alle impostazioni
+- - Pulire gli ascoltatori

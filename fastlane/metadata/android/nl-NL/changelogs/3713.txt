@@ -1,0 +1,1 @@
+• Gebruik vooraf geïnstalleerde adb in plaats van setup-android in Waydroid workflow

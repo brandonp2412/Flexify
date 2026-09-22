@@ -1,0 +1,5 @@
+• Fix bevestiging van virustotal link aan releases
+• feat: voeg live previews toe aan instellingen pickers en corrigeer gewichtsformatting
+• fix: voeg bovenste vulling toe om de pagina te starten om te voorkomen dat de beschreven etiketten worden geknipt
+• fix: consistente 8dp-afstand tussen de ingangen op het startplanpagina
+• fix: Progresspositievoorziening gebruikt echte TimerProgressIndicator

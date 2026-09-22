@@ -1,0 +1,6 @@
+• Dodaj kilka wariantów nawigacji dolnej
+• Dodaj skrypt do wybuchu systemu linux
+• Wykryć warianty nav
+• Uaktualnij podnóżkę na pigułkę
+• fix: usuwanie ścieżki JDK lokalnej z grable.properties
+• fix: milczenie MSVC coroutine deprecation error breaking Windows CI build

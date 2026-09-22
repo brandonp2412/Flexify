@@ -1,0 +1,5 @@
+- Voeg multidex toe aan android/app/build.gradle
+- Update flutter naar 3.22.0
+- Updateren van pubspec.lock
+- Update vscode-instellingen
+- Het bewerken van het invoeren van records van de geschiedenispagina

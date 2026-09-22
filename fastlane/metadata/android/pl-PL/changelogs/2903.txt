@@ -1,0 +1,3 @@
+• Włączyć app-release.aab w tworzenie wydania w github
+• Wykorzystać wzorzec grafu
+• Użyj prawidłowych notatek

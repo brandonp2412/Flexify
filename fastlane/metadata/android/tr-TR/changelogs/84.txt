@@ -1,0 +1,6 @@
+- Plan egzersizleri üzerine metin kaldır
+- Başlangıç planından tasarruf düzelt
+- Egzersiz başına maksimum #'ler yapın.
+- Arka komları ekle
+- Ayarların başlangıcını basitleştir
+- GitHub sürümünü oluşturduktan sonra git'ten çek

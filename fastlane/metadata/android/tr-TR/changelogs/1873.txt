@@ -1,0 +1,6 @@
+- Valide ekle
+- Büyük veri tabanları için performans geliştirmek
+- Ek ek egzersiz ve kilo sayfasını kaydırılabilir hale getir
+- Yeni egzersiz sayfasına resim ekle
+- Düzeltme ek egzersiz dolgu
+- Otomatik yedeklemeyi etkinleştirirken bildirim istemek

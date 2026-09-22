@@ -1,0 +1,3 @@
+• Naprawić zdjęcie ekranu strony zegarka
+• Naprawianie testów zdjęć ekranu strony z czasem
+• Ukryj powiadomienie o zmianie wpisów do zdjęć ekranu

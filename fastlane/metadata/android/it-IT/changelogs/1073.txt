@@ -1,0 +1,2 @@
+- Conteggio di piano fisso
+- Rettificare schema di database di controllo di fermo a volte

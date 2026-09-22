@@ -1,0 +1,9 @@
+• Corrigir erros de importação de dados
+• corrigir a importação de dados inserindo planExercises registros e atualizar plans_list.dart para usar o operador de segurança nula
+• Corrigir o problema # 206 atualizando a forma como os exercícios são armazenados e divididos
+• Fixar os carregadores que se deslocam para a vista
+• Exercícios de quebra de planos de migração
+• Modificar a lógica para a inclusão de exercícios num plano criando registros de exercícios do plano apenas para exercícios selecionados e não armazenando-os na coluna de exercícios do plano
+• Pausa de trabalho para viagem
+• Realizar migração de dados para dados existentes de modo a que apenas os exercícios sejam removidos do plano para o qual PlanExercises.enabled = false
+• atualizar os arquivos de teste para garantir que todos os testes estão a passar

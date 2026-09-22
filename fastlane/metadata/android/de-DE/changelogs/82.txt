@@ -1,0 +1,8 @@
+- Hinzufügen von Verbergen-Tab-Einstellung
+- Ändern Sie automatische Sicherungen
+- Fix Name nicht aktualisiert für die Bearbeitung von Fitnessstudio-Set
+- Automatische Sicherungen hinzufügen
+- Reparatur neuer Fitnessstätten mit ungültigen IDs und Creates
+- Formatcode in import_data
+- Fix jank beim Hinzufügen eines neuen Fitness-Sets
+- Verwendung von file_picker für Ausfuhr-/Importdaten

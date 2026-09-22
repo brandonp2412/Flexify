@@ -1,0 +1,16 @@
+- Aktualisieren Sie Screenshots
+- Entfernen Sie die Projektnamenfaktorisierung in github.sh
+- Behebung von veralteten Warnungen
+- Überschreiten Sie die fehlende Suche an plan_list_test
+- Bewegen Sie die Sicht auf den Sicherheitsbereich zum Gerüst
+- Schalten Sie alle Bildschirmbilder im dunklen Modus
+- Setzen Sie es auf die X-Bads in einer Reihe
+- Behebt einige obskure android-Fehler
+- Fügen Sie die Versionnummer der Datenschutzerklärung hinzu
+- Hinzufügen von Datenschutzerklärung zu privacy_url
+- Tippen Sie auf die Planung
+- Aktualisieren Sie die Formulierung auf Grafiken Seite nicht gefunden
+- Zeigen Sie die besten Übungen von Grafiken Seite
+- Bearbeiten Sie die Null-Padding auf der Graphen-Geschichtsseite noch keine Daten
+- Verkürzte Graphhöhen
+- Fix Graph Peek Fehler

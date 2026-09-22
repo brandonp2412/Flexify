@@ -1,0 +1,2 @@
+• Corrigir a pesquisa vazia na página dos planos
+• Optimize a página do plano de início

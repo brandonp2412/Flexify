@@ -1,0 +1,6 @@
+• Ajouter de nouveaux formats de dates (par exemple en allemand)
+• Ajouter l'option x-axe basée sur le temps pour le graphique
+• Résoudre les problèmes de mémoire
+• Fixer le rapport de trailage et le nombre de plans
+• Laissez les utilisateurs décider de la capitalisation des titres de plans
+• déplacer le bouton d'historique à la barre de navigation

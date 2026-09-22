@@ -1,0 +1,3 @@
+- Fix plan oefeningen resetting
+- Vervang + knop met zoekopdracht voor nieuwe plannen
+- Verwijder afhankelijkheidsinformatieblok voor f-droid

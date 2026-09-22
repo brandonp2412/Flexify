@@ -1,0 +1,2 @@
+- Fixer la commande msstore publier
+- Garantir les jeux de gym avant de les tester sur la page graphiques

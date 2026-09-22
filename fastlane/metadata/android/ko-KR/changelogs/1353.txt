@@ -1,0 +1,2 @@
+- 고정된 단위 시험
+- git push 힘을 deploy.sh에서 제거

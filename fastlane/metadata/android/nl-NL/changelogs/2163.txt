@@ -1,0 +1,5 @@
+- Ronde gewichten
+- Fix tabblad navigatie achter het systeem navigatie
+- Verplaats het lichte bord van de curve voor het schuiven
+- Verwijder de vermiste spoorkleur met systeemkleur
+- Normering van eenheden bij het veranderen van grafieken

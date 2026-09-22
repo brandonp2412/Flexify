@@ -1,0 +1,10 @@
+- Teste de fixação
+- Adicionar melhores repetições métricas
+- Renomear AppGroupBy -> Período
+- Melhorar o desempenho dos gráficos cardio
+- Versao aumentadaCode em versões universais
+- Corrigir adição de minutos da página de cronometragem
+- Comentário sobre o fornecimento de fastlane
+- Use o horário local quando for relevante
+- Logic de configuração do refactor
+- Código de refactor

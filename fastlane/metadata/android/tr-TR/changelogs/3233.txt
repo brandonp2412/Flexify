@@ -1,0 +1,3 @@
+• Planlardaki bozuk yeniden düzenlemeyi düzelt
+• Planlı durumdaki ayarlama egzersizlerini büyük ölçüde basitleştir
+• "Plan durumunda ayarlama egzersizlerini çok basitleştir"

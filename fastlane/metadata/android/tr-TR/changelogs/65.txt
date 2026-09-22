@@ -1,0 +1,2 @@
+- Uygulama çubuğunda grafik isimlerini düzenlemeyi etkinleştir
+- Navigator.of(context.pop() => Navigator.pop(context)

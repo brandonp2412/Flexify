@@ -1,0 +1,2 @@
+• Naprawa błędów w znakich bohaterów
+• Naprawić, że granica karty jest zbyt szeroka czasami

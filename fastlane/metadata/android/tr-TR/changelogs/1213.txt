@@ -1,0 +1,5 @@
+- Deploy.sh'i düzelt .
+- Windows + macOS çalışma akışını dağıtma sonrasında çalıştır
+- Veritabanı aktarıldıktan sonra boş sayfaları düzelt
+- Kardio grafiklerine birim ekle
+- Lib klasörünü yeniden düzenle

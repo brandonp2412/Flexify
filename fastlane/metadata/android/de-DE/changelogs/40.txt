@@ -1,0 +1,1 @@
+Fix-Timer immer auf Null zurückgesetzt

@@ -1,0 +1,5 @@
+- Spazio fuori descrizione completa correttamente
+- Specifica i tag di pull git dopo aver creato la versione di github
+- Riapiabilitare le implementazioni di Google Play
+- Aggiungere l'inclinazione verso l'esportazione/importazione
+- Aggiungere inclinazione al tipo cardio

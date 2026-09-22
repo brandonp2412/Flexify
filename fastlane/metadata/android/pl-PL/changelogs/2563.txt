@@ -1,0 +1,7 @@
+• Dodaj testy danych migracji
+• Połączymy przepływy pracy w jeden
+• Usunięcie niepotrzebnych komentarzy
+• W komentarzu link brzycki
+• Usunąć więcej bezsensownych komentarzy
+• Usunięcie niektórych komentarzy
+• Zmniejszenie nazw zmiennych

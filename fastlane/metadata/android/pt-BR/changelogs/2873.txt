@@ -1,0 +1,3 @@
+• Fixar imagem de tela da página do cronómetro
+• Fixar testes de imagem de tela da página do cronómetro
+• Esconde notificação de mudança para capturas de tela

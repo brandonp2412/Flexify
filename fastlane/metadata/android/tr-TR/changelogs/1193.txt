@@ -1,0 +1,2 @@
+- MacOS zip dosyasını yeniden adlandır
+- Entegre testleri için sabit kontroller

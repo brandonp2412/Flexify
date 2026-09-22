@@ -1,0 +1,2 @@
+• ci: retraso de la toma de Patrol transitorio
+• fix: restablecer las configuraciones de ejercicio de StartPlan

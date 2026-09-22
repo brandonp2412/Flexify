@@ -1,0 +1,4 @@
+- Özel gün seçicisini ekle
+- Açılış gecikmesi grafik tarihi düzelt
+- Tekrarlamalar/koşulları düzenlerken ORM yeniden hesaplanmalıdır
+- Düzenleme planı sayfasının sonuna doldurma ekle

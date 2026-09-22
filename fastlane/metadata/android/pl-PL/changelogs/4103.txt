@@ -1,0 +1,10 @@
+• Dodaj listę sprawdzania zezwoleń na ponowne użycie aplikacji
+• Etykiety centralnego wyglądu i odzwierciedlenie stanu przełączania w ikonach
+• Edytujące ustawę planu centralnego etykiety i przełączniki
+• Ustawienia zestawu czasu i użycie wypełnionych ikon aktywnych
+• Centrum etykiety treningu i użyć aktywnych wypełnionych ikon
+• Wyświetlać listę sprawdzania uprawnień aplikacji w ustawieniach
+• Naprawianie błędu w pliku zamknięcia CI i analizatorze zegarka
+• Określenie jednorazowego wniosku o zezwolenie na powiadomienie
+• Naprawianie błędu analizatora dialogu
+• Wykonać natywny powiadomienie pozwolenie prasowe raz

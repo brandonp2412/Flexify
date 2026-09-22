@@ -1,0 +1,4 @@
+• Seleção de conteúdo de guia plano
+• Preferir selector de guia visível
+• Simplificar o fluxo de controlo de retorno precoce
+• refactor: Preferir controles visíveis ao usuário no Linux E2E

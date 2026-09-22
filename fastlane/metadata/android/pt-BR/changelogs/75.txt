@@ -1,0 +1,11 @@
+- Deploição fixa
+- Fix deploy.sh sair sem alterações
+- Revert "Lembrar configurações de gráfico de força"
+- Revert "Lembrar as configurações para gráficos cardio"
+- Esconde o cronometrista avanço quando a guia cronometrista está oculta
+- Lista os exercícios de hoje em primeiro lugar na página de gráficos
+- Lembre-se das configurações para gráficos cardio
+- Lembre-se de configurações de gráfico de força
+- Adicionar setState faltante para force_line
+- Ativar a edição em massa de unidades para gráficos
+- Corrigir gráficos de toque para exercícios de cardio

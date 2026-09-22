@@ -1,0 +1,3 @@
+• Réduction de la note agp à 8.11.1
+• Tirez derrière le système UI et déplacez le défilement des onglets
+• Fixation des répétitions/poids pré-populations

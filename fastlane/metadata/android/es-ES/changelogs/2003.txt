@@ -1,0 +1,3 @@
+- Reinicio de los ejercicios de fijación del plan
+- Sustituir el botón + con la entrada de búsqueda de nuevos planes
+- Eliminar el bloque de información de dependencia para f-droid

@@ -1,0 +1,2 @@
+• Toujours déployer 100% sur le msstore
+• Arrêtez de redimensionner les applications pour le clavier virtuel

@@ -1,0 +1,1 @@
+- Başlatma sırasında uygulama çöküşünü düzelt

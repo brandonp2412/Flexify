@@ -1,0 +1,3 @@
+- Use a definição de data longa para editar conjuntos de ginásio
+- Corrigir a seleção do primeiro item no histórico do ginásio
+- Corrigir a linha nova que falta no compromisso de liberação

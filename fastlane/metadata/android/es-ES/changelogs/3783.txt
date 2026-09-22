@@ -1,0 +1,6 @@
+• Añadir un montón de variantes de navegación de fondo
+• Añadir guión para cuando se ejecuta linux falla
+• Eliminar las variantes de navegación
+• Actualizar la navegación inferior para ser un diseño de píldoras
+• fix: eliminar el camino local de JDK codificado en forma dura de gradle.properties
+• fix: silencio MSVC coroutine error de deprecación quebrantando Windows CI construcción

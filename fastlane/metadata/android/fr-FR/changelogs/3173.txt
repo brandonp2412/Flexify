@@ -1,0 +1,2 @@
+• champ de distance fixe pour les ensembles cardio avec unité de poids
+• Fixer l'affichage de l'historique des exercices cardio avec un poids

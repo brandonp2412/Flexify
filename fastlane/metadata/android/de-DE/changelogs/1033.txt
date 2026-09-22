@@ -1,0 +1,3 @@
+- Führen Sie dart Pub Upgrade aus
+- Verwenden Sie keine Systemfarben für Screenshots
+- Erstellen Sie nur Appbundle beim Versenden an play store

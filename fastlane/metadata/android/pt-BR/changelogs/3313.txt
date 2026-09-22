@@ -1,0 +1,4 @@
+• Fix padding em páginas de gráficos
+• Fixos de brindes nunca descartados
+• Fixar as pontas de ferramentas em gráficos
+• Manter ordem ao trocar um exercício

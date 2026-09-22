@@ -1,0 +1,1 @@
+- Fix macOS implantações automáticas

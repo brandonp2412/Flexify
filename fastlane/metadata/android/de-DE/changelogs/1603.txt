@@ -1,0 +1,3 @@
+- Klarstellen Sie, was die Grafik bearbeitet
+- Klarer Grenzwert bei der Suche nach Historien
+- Erlaubt das Scrollen von Vergangenheit auf Listen

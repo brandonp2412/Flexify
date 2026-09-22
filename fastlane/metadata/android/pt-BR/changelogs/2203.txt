@@ -1,0 +1,1 @@
+- Fixar o primeiro item de gráficos página escondido

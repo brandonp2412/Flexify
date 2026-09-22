@@ -1,0 +1,6 @@
+- Düzeltme testleri
+- Paylaşım menüslerini ekle
+- Gönderken klavyeler parlamalarını düzelt
+- Önceden oluşturulan tarihleri çoklu düzenlemelerde gör
+- Kardio grafikler için yeni birim seçicisi kullanın
+- Güç grafiklerinin düzenini kardiyona kopyalayın

@@ -1,0 +1,2 @@
+- pubspec.lock를 업데이트
+- GitHub 버전의 유물 파일 경로를 수정

@@ -1,0 +1,3 @@
+- Kardiyo süresi dakika: saniye olarak değerlendirin.
+- Maksimum ayarları ayarlayın . Her egzersiz için 3 .
+- Linux için dinlenme zamanlayıcılarını etkinleştir

@@ -1,0 +1,10 @@
+• serena-Konfiguration hinzufügen
+• Fix Toasts für immer
+• Verbessern Sie die Sichtbarkeit des Stufenfahrers
+• Machen Sie die Bearbeitungsset-Seite mit der Polsterung konsistenter
+• Entfernen Sie duplizierte Etiketten für den Eingabe-Stil
+• Einfachere Schrittfelder
+• Aktualisieren Sie Screenshots
+• flutter auf 3.44.1 aktualisieren
+• Upgrade Kotlin-Version
+• feat: +/- Stufen zu Wiederholungen und Gewichtsfeldern hinzufügen

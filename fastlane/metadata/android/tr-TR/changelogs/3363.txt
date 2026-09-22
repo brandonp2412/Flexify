@@ -1,0 +1,8 @@
+• Grafik sayfasına temp sıralamasını ekle
+• İndirimden sonra güncellenmeyen sabit kategoriler
+• Grafiklerde son araç ipucu düzelt
+• Sistem UI'nin sayfa hakkında gizlenmesini düzelt
+• Ayarlar sayfasındaki sistem UI gizleyen öğeleri düzelt
+• Otomatik yedekleme dosyalarının adı
+• Tarih listesinden animasyonları kaldır
+• Grafikler sayfasından bölücü mantığı kaldırıldı

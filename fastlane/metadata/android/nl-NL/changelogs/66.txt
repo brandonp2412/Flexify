@@ -1,0 +1,6 @@
+- Verwijder tags van deploy.sh
+- Voeg verwijder knop toe om de fitness-pagina te bewerken
+- Bewerk grafiekpunten door op het dubbel te tikken
+- Verplaats datuminstellingen helpertext naar het etiket
+- Voeg de instelling van het kortdatumformaat toe
+- Refactor lijngrafieken

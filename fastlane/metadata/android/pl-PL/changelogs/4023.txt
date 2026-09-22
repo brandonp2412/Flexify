@@ -1,0 +1,8 @@
+• Naprawa pusty widok logu zmian
+• Ukryj testy integracji linuksowej w dwl
+• feat: poprawa kontroli wyboru wykresu
+• feat: integracja logistyki w rozmowach
+• fix: wykonywanie zgodnych 7-calowych zdjęć ekranu
+• fix: twardy napływ i testy na biurku
+• fix: bazy danych badań integracyjnych
+• test: odbiór ekranu wpisów zmian

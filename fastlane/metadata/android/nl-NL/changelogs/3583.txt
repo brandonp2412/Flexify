@@ -1,0 +1,1 @@
+• fix: het veld van de notities duidelijk bij het overschakelen naar de oefening zonder voorafgaande notitie

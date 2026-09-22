@@ -1,0 +1,1 @@
+- Naprawić pierwszy element grafu strona ukrywa

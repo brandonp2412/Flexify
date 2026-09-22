@@ -1,0 +1,1 @@
+• ci: añadir virusTotal de escaneo en la liberación de APK

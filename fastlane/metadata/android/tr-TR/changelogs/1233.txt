@@ -1,0 +1,5 @@
+- Ekran çekimlerini geliştir
+- GitHub sürümlerinde ekran görüntüleri ekle
+- Yeniden değiştirme birimi seçicisi
+- Birimlerin ikili isimlerini kaldır
+- Tarihlerin çoklu düzenlenmesini ekle

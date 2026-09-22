@@ -1,0 +1,2 @@
+• Campo de distancia fija para equipos de cardio con unidad de peso
+• Fija la lista de historial de los ejercicios de cardio con peso

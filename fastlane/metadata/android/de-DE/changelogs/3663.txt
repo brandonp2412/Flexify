@@ -1,0 +1,5 @@
+• Fix-Verbindung mit Virustotal-Verbindungen zu Releases
+• feat: Fügen Sie Live-Vorführungen zu Einstellungs-Pickern und fixieren Sie Gewichtsformatierung
+• fix: Hinzufügen von oberen Polsterungen, um die Planseite zu starten, um die Beschreibung von Etiketten zu verhindern
+• fix: einheitlicher 8dp-Ausstand zwischen den Eingaben auf der Startplanseite
+• fix: Progress-Positions-Vorsicht verwendet den realen TimerProgressIndicator

@@ -1,0 +1,9 @@
+- Assicurarsi che i valori Y siano 2dp per la linea cardio
+- Aggiungere il pulsante di modifica in alto a destra dei piani
+- Aggiungere il suffisso di storia al titolo di storia del grafico
+- Aggiungere tipi di cardio
+- Pagina grafica di visualizzazione del rifatto
+- Fix per la ricerca dei dati di importazione/esportazione in impostazioni
+- Refactor start_plan_page
+- Pagina dei piani di rifazione
+- Piani di risparmio per test

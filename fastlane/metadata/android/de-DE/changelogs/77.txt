@@ -1,0 +1,6 @@
+- Erlaubt mehrere Löschungen von Plänen
+- Umbenennen von "Eingabegewicht" als "Gewicht" auf der Grafikseite
+- Hinzufügen von Bearbeitungs- und Verarbeitungsknopfen auf der abgleitenden Seite von Graphen
+- Fokusentfernung nach der Einreichung der Dauer
+- Abfälle mit inkonsistenten Cardio-Typen zu beheben
+- Entfernen Sie das Historik-Suffix von graph_history

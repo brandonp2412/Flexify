@@ -1,0 +1,2 @@
+- Strippen van achtergebleven nullen uit de menus
+- Fix buggy unit bij het wisselen van cardio

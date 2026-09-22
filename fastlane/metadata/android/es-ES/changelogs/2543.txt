@@ -1,0 +1,2 @@
+- Utilice el submodule flutter y especifique la versión de kotlin
+- Fijación de la instalación-windows- tienda

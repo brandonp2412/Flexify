@@ -1,0 +1,2 @@
+• Upgrade alles
+• chore: automatische opmaak/lint/genereerde client [pre-push]

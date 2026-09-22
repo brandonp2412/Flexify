@@ -1,0 +1,1 @@
+- Użyj różnych tokenów github dla wydania

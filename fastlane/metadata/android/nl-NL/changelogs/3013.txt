@@ -1,0 +1,3 @@
+• Logika toevoegen voor het uitzoeken van emulator-id
+• Bepaal screenshots
+• Probeer weer screenshots te repareren.

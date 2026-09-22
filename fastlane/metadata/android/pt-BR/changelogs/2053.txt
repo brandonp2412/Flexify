@@ -1,0 +1,11 @@
+- A evolução
+- Dobrar um exercício abre-o.
+- Clarificar a exclusão da página de gráficos
+- Toque em compridas para as esconder
+- Automaticamente capitalizar a pesquisa de exercícios de plano
+- Corrigir bugs em gráficos de força
+- Use página aninhada em gráficos -> adicionar
+- Use rota aninhada no cronómetro -> configurações
+- Adicionar gráfico de espião
+- Corrigir bugs na página de força
+- Aguarde o salário de ginásio para salvar antes de atualizar as imagens

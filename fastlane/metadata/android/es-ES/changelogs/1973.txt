@@ -1,0 +1,1 @@
+- Refrenchar la lista de ejercicios después de añadir de los planes

@@ -1,0 +1,10 @@
+• Corrigir banners de depuração que aparecem em capturas de tela
+• Atualizar capturas de tela
+• Use o botão de texto por +1 minuto
+• chore: Adicionar Android captura de tela script com --profile flag
+• feat: melhorar a interface de interface para a suavidade da curva, timers, trailing de planos, estilo de entrada
+• fix: centro cronometrista círculo vertical e mover +1 min botão abaixo do círculo
+• fix: desativar o banner debug no MaterialApp
+• fix: Eliminar o padrão anti-UniqueKey no widget de círculo de temporizador
+• fix: redesenhar o círculo de temporizador com estética mínima e moderna
+• fix: substituir runApp por tester.pumpWidget em testes de captura de tela

@@ -1,0 +1,2 @@
+- Pubspec.lock güncelleme
+- GitHub Eylemleri dağıtım iş akışı sorunlarını düzelt

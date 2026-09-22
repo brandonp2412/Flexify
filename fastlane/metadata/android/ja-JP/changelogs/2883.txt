@@ -1,0 +1,10 @@
+• タイムリング・サイクルに軽いスケジュールを追加する
+• Linux で +1 分を修正する
+• 変形を修正する
+• [スキップ・シ]
+• 固定 msstore 幅のバッジ [スキップ ci]
+• Google Play の 展開の頻度 制限 [skip ci]
+• 章を大きくする
+• 標識を一貫して
+• "msstore width badge [skip ci]"を修正する
+• 芸術品ではなく github のリリースを使用する [skip ci]

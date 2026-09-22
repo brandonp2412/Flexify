@@ -1,0 +1,5 @@
+• Naprawka przyłączenia wirustotal link do wypuści
+• feat: dodanie przeglądu na żywo do wyborców ustawień i poprawienie formatowania wagi
+• fix: dodać wypełnienie na górze, aby rozpocząć stronę planu, aby zapobiec obcięciu etykiety
+• fix: spójne odstępy 8dp między wprowadzeniami na stronie planu startowego
+• fix: Przejrzenie pozycji postępu wykorzystuje prawdziwy wskaźnik czasu postępu

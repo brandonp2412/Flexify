@@ -1,0 +1,8 @@
+• Behebung des leeren Wechsellog-Aufrufs
+• Verbergen Sie Linux-Integrationsprüfungen auf dwl
+• feat: Verbesserung der Graphenauswahlsteuerung
+• feat: Talker-Logging integrieren
+• fix: Durchsetzen von kompatiblen 7-Zoll-Screenshots
+• fix: Hard-Desktop-Navigation und -Tests
+• fix: Isolierten Integrationsprüfungsdatenbanken
+• test: Verarbeitung des Schaltplatzes

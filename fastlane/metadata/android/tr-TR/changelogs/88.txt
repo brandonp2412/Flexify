@@ -1,0 +1,4 @@
+- Bitmiş zamanlayıcılara dur düğmesini ekle
+- Yeni setler için tarih sayfasında oluşturulan tarihleri düzelt
+- Alarmları durdurmak için ayarlayın
+- MaterialStateProperty'nin fazladan kullanımı değiştir

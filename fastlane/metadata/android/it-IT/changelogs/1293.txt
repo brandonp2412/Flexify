@@ -1,0 +1,2 @@
+- Scarica i zero tracciati dai menu di condivisione
+- Rettifica dell'unità buggy quando si toglia il cardio

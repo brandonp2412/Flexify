@@ -1,0 +1,7 @@
+• Ajouter des pages github hébergées pour le web Flexify
+• Ajouter des changelogs manquants
+• Permettre à l' utilisateur de dégager les ensembles max
+• Supprimer les scripts non utilisés
+• Réparer ce qui est nouveau copier
+• Ne sauvegarder qu'un seul fichier à chaque fois
+• Retirer les répétitions du graphique de résistance

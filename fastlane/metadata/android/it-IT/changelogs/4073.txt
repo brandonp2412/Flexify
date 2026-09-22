@@ -1,0 +1,10 @@
+• Iniziazione audio per impostazioni piatte
+• Selezione dei contenuti delle schede piatte
+• Sistema di backup portatile di FitBook
+• Preferire i selettori di azione Flexify etichettati
+• Preferire i selettori di azione grafica etichettati
+• Preferire selezionatore di schede visibili
+• Semplificare il flusso di controllo del ritorno anticipato
+• fix: tempo di esecuzione del test di Android CI
+• fix: abilitare i backup dopo la selezione della cartella
+• refactor: preferire controlli visibili all'utente in Linux E2E

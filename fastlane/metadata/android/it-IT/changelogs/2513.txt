@@ -1,0 +1,2 @@
+- Rettificare il comando msstore publish
+- Guarantino set di palestra prima di testare in pagina grafici

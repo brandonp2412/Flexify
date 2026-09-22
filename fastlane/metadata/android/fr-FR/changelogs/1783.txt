@@ -1,0 +1,3 @@
+- Double tap pour ouvrir une mesure
+- Afficher ORM lors de la modification d' un ensemble
+- Ajouter le commutateur pour le son d' alarme

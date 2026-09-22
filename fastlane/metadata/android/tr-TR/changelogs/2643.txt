@@ -1,0 +1,10 @@
+• Web ekran görüntüleri için env ekle
+• Doppled changelogları sil
+• buildKonfig sorunlarını düzelt
+• Sıkılaştırılmış krom akıcı port
+• ChromeDriver ayarını düzelt
+• Android ekran görüntüleri için emülatör adını düzelt
+• Git iş akışı için tüm hızlı yol dir ekle
+• Çalışma akışlarında chromedriver kur & başlat
+• Ekran çekimlerinin commit'de olduğundan emin olun
+• Değişken kopyalamaları önle

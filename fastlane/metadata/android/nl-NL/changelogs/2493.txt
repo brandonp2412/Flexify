@@ -1,0 +1,2 @@
+- Updateren van pubspec.lock
+- Installeer ontbrekende pakketten in deploy-windows-store

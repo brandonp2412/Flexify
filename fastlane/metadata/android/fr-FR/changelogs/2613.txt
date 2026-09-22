@@ -1,0 +1,3 @@
+• Ajouter des captures d'écran au flux de travail github [skip ci]
+• Correction des autorisations de cache flutter
+• Sauvegarder des ensembles de l'historique après avoir soumis le poids

@@ -1,0 +1,2 @@
+- 앱 바에서 그래프 이름을 편집할 수 있습니다
+- Navigator.of(context.pop() => Navigator.pop(context)

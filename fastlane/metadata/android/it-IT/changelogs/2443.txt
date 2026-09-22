@@ -1,0 +1,2 @@
+- Aggiornamento pubspec.lock
+- Rettificare i percorsi di file di artefatti per la versione di GitHub

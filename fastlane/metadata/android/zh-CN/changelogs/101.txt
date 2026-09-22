@@ -1,0 +1,2 @@
+- 要求 deploy.sh 的 - p 旗,才能发送到 Google Play
+- 简化计划的计数查询

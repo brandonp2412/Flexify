@@ -1,0 +1,3 @@
+• Modifica pagina di set di modifica e pagina di storia
+• Sviluppo di sistemi di correzione
+• Test di unità fissa

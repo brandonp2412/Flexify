@@ -1,0 +1,2 @@
+• Fix leeg zoeken op de pagina plannen
+• Optimaliseren van startplanpagina

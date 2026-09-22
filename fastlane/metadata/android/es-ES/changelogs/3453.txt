@@ -1,0 +1,9 @@
+• Añadir indicadores de ícono de cardio/fuerza a los interruptores en los conjuntos de edición
+• Añadir la configuración para la posición de la barra de progreso
+• Permitir la compensación de categorías
+• Cambiar el icono de los planes en la navegación inferior
+• Corrección de todos los problemas de enlace
+• Sistema de apariencia fija ui gráfico de oscurecimiento
+• Corrección de copias de seguridad automáticas a veces corrupción de la base de datos
+• Actualizar instantáneamente la configuración de pestañas y eliminar el botón guardar
+• Prevenir el texto de indicación nula en categorías o inclinar cuando los conjuntos de edición múltiple

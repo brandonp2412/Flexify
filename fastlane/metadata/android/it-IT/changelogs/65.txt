@@ -1,0 +1,2 @@
+- Abilitare l'editing di nomi di grafici nella barra app
+- Navigator.of(context.pop() => Navigator.pop(context)

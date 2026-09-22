@@ -1,0 +1,5 @@
+- Dört ağırlık
+- Sistem navigasyonunun arkasında olan sekmeyi ayarlayın
+- Kaydırıcıdan önce eğri düzlük etiketini taşı
+- Sistem renkleriyle kayıp iz rengini düzelt
+- Grafiklerden değiştirirken birimleri normalleştir

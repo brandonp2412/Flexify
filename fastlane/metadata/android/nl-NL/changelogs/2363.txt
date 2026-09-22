@@ -1,0 +1,11 @@
+- Fix gebruik van yq in .deploy.yml
+- Beheersing van lintingsproblemen
+- Verwijder vermijd print linting regel
+- Uitvoeren van dart-formaat
+- Run workflows op main
+- Github werkstromen toevoegen
+- Fix GitHub werkstromen om te handhaven handeling testen
+- Het maken van de meeste desktop screenshot generaties
+- Voeg een setup toe voor het uitvoeren van integratietests voor chrome
+- Bepaal de instellingen pagina op het web
+- Fix op het web

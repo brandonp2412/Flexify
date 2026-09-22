@@ -1,0 +1,10 @@
+- Feststellungs- und Einheitsprüfungen
+- Fix-Deployment auf windows store
+- Hinzufügen des Debug-Schritts auf die Liste der heruntergeladenen Dateien in der Windows Store-Implementierung
+- Behebt Windows Store-Verbindung: Verwenden Sie die lokale MSIX-Datei anstelle der GitHub-Release-URL
+- Beheben Sie die Windows Store-Initiative: Stellen Sie sicher, dass die GitHub-Version vor der Windows Store-Initiative erstellt wird
+- Aktualisieren Sie Desktop-Screenshots
+- Alle automatisierten Screenshots für Desktop beheben
+- Aktualisieren Sie pubspec.lock
+- Hinzufügen von Schrift für die Aktualisierung von chromedriver
+- - Das ist eine neue Seite.

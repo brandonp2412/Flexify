@@ -1,0 +1,2 @@
+• Indicador de progresso do tempo de envelhecimento na zona segura
+• Corrigir gráficos não atualizados

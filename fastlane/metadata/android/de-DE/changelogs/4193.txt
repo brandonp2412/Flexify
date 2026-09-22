@@ -1,0 +1,10 @@
+• chore: Vergleichen Sie die gleichzeitige Lokalisierung
+• chore: erfrischen Flutter Abhängigkeitsschlossdatei
+• docs: Übersetzungs-Roadmap hinzufügen
+• docs: Update Lokalisierung Vollendungsstaat
+• feat: hinzufügen Brasilianisch-portugiesische Lokalisierung
+• feat: hinzufügen CJK-Lokalisierungen
+• feat: hinzufügen niederländische Lokalisierung
+• feat: französische Lokalisierung hinzufügen
+• feat: hinzufügen deutsche Lokalisierung
+• feat: italienische Lokalisierung hinzufügen

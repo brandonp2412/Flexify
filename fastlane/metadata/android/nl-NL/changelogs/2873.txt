@@ -1,0 +1,3 @@
+• Fix schermopname van de tijdschema pagina
+• Fix screenshot tests van de tijdschema pagina
+• Verberg de kennisgeving van het veranderlog voor screenshots

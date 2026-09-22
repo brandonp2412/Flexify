@@ -1,0 +1,16 @@
+- Atualizar capturas de tela
+- Remover o nome do projeto em github.sh
+- Corrigir avisos desatualizados
+- Passar a pesquisa faltante para plan_list_test
+- Mover a visão da área segura para o corpo do andaime
+- Tire todas as capturas de tela no modo escuro
+- Coloque-o nos badges X em fila.
+- Corrigir alguns erros Android obscuros
+- Adicionar o número de versão à política de privacidade
+- Adicionar a versão da política de privacidade para privacy_url
+- Toque para criar em planos
+- Atualizar a redação na página de gráficos não encontrada
+- Mostre os melhores exercícios da página gráficos
+- Corrigir zero de empolgação na página de histórico de gráfico não há dados ainda
+- Alturas de gráfico reduzidas
+- Fixar bug de pico de gráfico

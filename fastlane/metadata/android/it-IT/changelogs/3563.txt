@@ -1,0 +1,3 @@
+• Invertire "ci: sostituire la configurazione del sottomodulo flutter con subosito/azione flutter"
+• Ritornare accidentalmente la rimozione di .gitmodules
+• ci: sostituire la configurazione del sottomodulo flutter con subosito/azione flutter

@@ -1,0 +1,5 @@
+- Mejorar las capturas de pantalla
+- Incluye capturas de pantalla en las versiones de GitHub
+- Selector de unidad de revamp
+- Eliminar las menciones duplicadas de unidades
+- Añadir varias ediciones de historial

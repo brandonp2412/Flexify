@@ -1,0 +1,2 @@
+- Włącz edycję nazw grafu w pasku aplikacji
+- Navigator.of(context.pop() => Navigator.pop(context)

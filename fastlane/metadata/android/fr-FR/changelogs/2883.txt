@@ -1,0 +1,10 @@
+• Ajouter un contour léger au cercle de l'horloge
+• Fixer +1 minute sur linux
+• Réparation des changements
+• Fixer le style de lecture github [skip ci]
+• Fixer le badge de largeur msstore [skip ci]
+• La fréquence limite des déploiements google play [skip ci]
+• Faire les badges plus grands [skip ci]
+• Faire les badges cohérents avec [skip ci]
+• Retourner "Réparer le badge de largeur msstore [skip ci]"
+• Utilisez la libération github au lieu de l'artefact [skip ci]

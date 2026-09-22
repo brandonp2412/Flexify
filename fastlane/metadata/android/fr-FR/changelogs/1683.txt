@@ -1,0 +1,5 @@
+- Faites en sorte que les commutateurs de paramètres soient cohérents
+- Augmentation de l'exactitude des estimations de répétitions
+- Permettre la déduction des temps de repos personnalisés par graphique
+- Catégorie fixe étant vide pour les plans
+- Fixer l'ordre de modification du plan

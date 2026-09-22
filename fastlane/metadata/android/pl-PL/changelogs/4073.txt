@@ -1,0 +1,10 @@
+• Wykres włączenia w ruch
+• Wybór zawartości płaskich kart
+• Port przenośny system kopii zapasowej z FitBook
+• Wykrywacze działania Flexify
+• Wykrywacze graficzne z oznaczeniem
+• Wybór karty widocznej
+• Uproszczenie przepływu kontroli wczesnego powrotu
+• fix: czas uruchomienia testu Android CI
+• fix: włącz kopie zapasowe po wyborze folderów
+• refactor: preferuj kontrolki widoczne dla użytkownika w systemie Linux E2E

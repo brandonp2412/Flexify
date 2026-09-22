@@ -1,0 +1,17 @@
+- Segmentar as ações do github
+- Remover estágio inválido de deploy.yml
+- Remover despachos de fluxo de trabalho
+- Decodificar Android keystore em deploy.yml
+- Simplificar start_plan_page
+- 2.0.21
+- Fixar o uso de yq em .deploy.yml
+- Corrigir problemas de enxaguamento
+- Remover evitar regra de imprensa
+- Formário de execução
+- Execute fluxos de trabalho no main
+- Adicionar fluxos de trabalho do github
+- Corrigir os fluxos de trabalho do GitHub para lidar com testes de atos
+- Corrigir a maioria das gerações de imagens de tela do desktop
+- Adicionar configuração para executar testes de integração para cromo
+- Fixar a página de configuração na web
+- Corrigir a execução na web

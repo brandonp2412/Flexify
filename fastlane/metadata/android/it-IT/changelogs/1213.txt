@@ -1,0 +1,5 @@
+- Fix deploy.sh
+- Rimuovere Windows + macOS flusso di lavoro eseguito dopo la distribuzione
+- Rettificare la pagina vuota dopo l'importazione di database
+- Aggiungere unità ai grafici cardio
+- Riorganizzare la cartella lib

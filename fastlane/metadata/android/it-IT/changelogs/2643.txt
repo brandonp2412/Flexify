@@ -1,0 +1,10 @@
+• Aggiungere env per le screenshot web
+• Elimina i cambiamenti duplicati
+• Risolvere i problemi di buildConfig
+• Port di navigazione
+• Impostazione di cromedi
+• Fix nome dell'emulatore nelle screenshot di android
+• Git aggiungere intera fastlane dir per il flusso di lavoro
+• Installazione e avvio di cromedriver nei flussi di lavoro
+• Assicurati che le screenshot siano nel commit
+• Prevenire le duplicazioni nella copia del changelog

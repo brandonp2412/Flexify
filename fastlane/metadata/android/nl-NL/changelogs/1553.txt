@@ -1,0 +1,2 @@
+- Tijdschema's in iOS
+- Fix klaar timers op macOS

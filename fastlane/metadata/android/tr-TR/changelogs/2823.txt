@@ -1,0 +1,3 @@
+• Github iş akışının manuel tetiklenmesini izin verin
+• Google Play için Ruby 3.3'e düşüş
+• Pubspec.yaml'de yayıncı adını düzelt

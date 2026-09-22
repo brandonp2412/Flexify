@@ -1,0 +1,8 @@
+• Rettificare la vista del cambiamento vuoto
+• Nascondere le prove di integrazione Linux su dwl
+• feat: migliorare i controlli di selezione dei grafici
+• feat: integrare la registrazione di Talker
+• fix: applicare le riprese di schermo di 7 pollici conformi
+• fix: navigazione e test per desktop
+• fix: Isolare database di test di integrazione
+• test: Rendering della schermata del cambiamento della copertura

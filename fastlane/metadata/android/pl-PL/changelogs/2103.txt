@@ -1,0 +1,9 @@
+- /Wykorzystaj wszystkie zdjęcia ekranu /w trybie ciemności
+- Włóż to na odznaki X w kolejności
+- Naprawić niektóre niejasne błędy Androida
+- Kliknij do tworzenia w planach
+- Aktualizacja brzmienia na stronie graficznych nie znaleziono
+- Pokaż najlepsze ćwiczenia z strony grafu
+- Naprawić zero wypełnienie na stronie historii wykresu nie ma jeszcze danych
+- Wzgórza wykresu skróconego
+- Naprawa grafu wpadek

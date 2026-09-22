@@ -1,0 +1,5 @@
+- Melhorar o desempenho do gráfico
+- Remover "Peso" da edição cardio
+- Fixar a navegação de volta às vezes não funciona
+- Escondir uma estimativa máxima de exercícios de cardio
+- Melhorar o desempenho dos planos

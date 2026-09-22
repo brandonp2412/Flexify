@@ -1,0 +1,1 @@
+• Fix permissiestroom en instellingen activering UI (#336)

@@ -1,0 +1,3 @@
+• feat: stałe dodać płytkę ćwiczeń w planie edycji; przywrócić wykresy FAB przewijanie
+• fix: wyrównanie dodać ikonę ćwiczeń z ikonami wiodącymi z płytki ćwiczeń
+• fix: /wyłączyć przełącznik oka, /trzymać przycisk dodania widoczny, /wyruchować kontrolę rekordów kardiologicznych

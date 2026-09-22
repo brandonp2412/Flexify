@@ -1,0 +1,2 @@
+- Wymagamy flagę -p dla deploy.sh do przesyłania do Google Play
+- Uproszczenie zapytania o liczbę planów

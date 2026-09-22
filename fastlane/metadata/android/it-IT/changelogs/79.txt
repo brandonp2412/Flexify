@@ -1,0 +1,12 @@
+- Rettificare le screenshot
+- Fissare i tipi nascosti e cardio di esportazione/importazione
+- Rettifica di spegnere il cardio durante la modifica di un set
+- Smettere di animare le schede dopo aver eliminato
+- Spostare messaggi di voci vuote in cima alla storia
+- Aggiungere scheda di storia
+- Aggiornare le screenshot
+- Aggiornare le schermate
+- Aggiunto tabBarState a ogni test
+- Context globale aggiunto Non dipende più da come la prima pagina sia la PlansPage
+- Aggiunto uno schermo aggiornato per confrontare
+- Semplificare le screenshot

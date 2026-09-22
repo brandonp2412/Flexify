@@ -1,0 +1,3 @@
+• Réparation des installations neuves qui ne demandent pas de notification
+• Teste d'unité fixe
+• Éteindre les notes pour les nouvelles installations

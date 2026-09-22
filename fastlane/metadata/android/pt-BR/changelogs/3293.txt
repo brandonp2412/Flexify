@@ -1,0 +1,5 @@
+• Planos de exportação fixos
+• Corrigir arquivos de importação a partir de janelas
+• Melhorar a manipulação de erros
+• Mantenha o progresso do cronómetro mesmo que a página do cronómetro esteja oculta
+• Selecionar o primeiro exercício corretamente nos planos

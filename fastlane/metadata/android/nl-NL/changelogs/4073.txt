@@ -1,0 +1,10 @@
+• Flatte instellingen audio-initialisatie
+• Selectie van het blad
+• Portpoortbaar back-up systeem van FitBook
+• Voorkeur aan de op de beurt gemarkeerde Flexify-actie selectoren
+• Voorkeur voor gekoppelde grafiek actie selectoren
+• Voorkeur voor zichtbaar tabblad selector
+• Vergemakkelijken van de controle van de vroegtijdige terugkeer
+• fix: gebonden Android CI-testlooptijd
+• fix: Backup-opties in staat stellen na het selecteren van het map
+• refactor: prefereren gebruikerszichtige besturing in Linux E2E

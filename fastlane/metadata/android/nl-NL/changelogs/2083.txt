@@ -1,0 +1,13 @@
+- Verander grafiekhoogte
+- Voeg instellingen toe om categorieën te verbergen
+- Gebruik iconeknoppen voor het verwijderen van modalen
+- Voeg meldingen toe aan nieuwe gegevens
+- Voeg de curve gladheid instelling toe
+- Verhoog het opvulling in de zoekbalk
+- Grafieken bijwerken na bewerking van geschiedenispeek
+- Fixering van herhalingen/gewicht na afloop van een oefening
+- Ga terug na het opslaan van de tabbladinstellingen
+- Blend systeem navigatie met app thema ' s
+- Voorbeeldgrafiek onder de uiterlijksainstellingen
+- Bepaal de curve-instelling die niet van toepassing is op grafiekpeek
+- Maak grafieken sexy

@@ -1,0 +1,2 @@
+- Użyj podmodułu flutter i okreś wersję kotlin
+- Naprawa wprowadzenia-windows-store

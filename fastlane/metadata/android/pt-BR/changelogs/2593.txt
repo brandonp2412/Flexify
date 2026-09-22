@@ -1,0 +1,2 @@
+• Permitir que as canalizações desencadeem alterações no fluxo de trabalho
+• Tente corrigir msstore publicar

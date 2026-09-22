@@ -44,6 +44,14 @@ Keep Google Play localized listing files under `fastlane/metadata/android/<local
 
 Keep App Store Connect localized metadata under `fastlane/metadata/<locale>/` using Fastlane/Apple locale identifiers. Every shipped app locale must have localized description, keywords, and release notes; the Flexify brand name and support/marketing/privacy URLs may remain shared. When adding a new app locale, add both store mappings in the same translation slice.
 
+Every Google Play changelog under `fastlane/metadata/android/en-US/changelogs/` must have a localized counterpart under `fastlane/metadata/android/<locale>/changelogs/` for each shipped non-English locale. New releases must add all locale variants in the same change.
+
+## In-app changelog
+
+The canonical in-app release history remains under `assets/changelogs/<timestamp>.txt`. Localized content lives in `assets/changelogs/l10n/<locale>.json`, keyed by the source timestamp without `.txt`. The app loads the active language catalog and falls back to the canonical English entry only when a historical translation is not yet present. Portuguese maps to `pt_BR` and Simplified Chinese maps to `zh_CN`.
+
+Every new release must add its newest changelog entry to every shipped locale catalog. `test/localization_catalog_test.dart` enforces current-release and full historical coverage for every shipped locale catalog.
+
 ## Store screenshots
 
 Android screenshot generation defaults to the existing English (`en-US`) listing. To generate translated Play Store screenshots, set `FLEXIFY_SCREENSHOT_LOCALES` to a comma-separated list of store locale identifiers before running `scripts/screenshots-android.sh` or `scripts/screenshots-waydroid.sh`, for example `de-DE,ja-JP,zh-CN`. The integration harness maps each store locale to Flexify's persisted app locale and writes screenshots under that locale's `fastlane/metadata/android/<locale>/images/` directory.

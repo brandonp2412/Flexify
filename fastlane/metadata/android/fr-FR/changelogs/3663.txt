@@ -1,0 +1,5 @@
+• Fixer le lien virustotal à la libération
+• feat: ajouter des prévisualisations en direct aux paramètres et corriger la mise en forme du poids
+• fix: ajouter un rembourrage supérieur pour démarrer la page de planification pour éviter la coupe des étiquettes décrite
+• fix: espacement de 8dp entre les entrées sur la page du plan de démarrage
+• fix: Prévisualisation de la position de progression utilise un réel Indicateur de progression de temps

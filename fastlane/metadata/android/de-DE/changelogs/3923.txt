@@ -1,0 +1,2 @@
+• Alles verbessern
+• chore: Automatisierte Formatierung/Lint/generierte Client [Präpush]

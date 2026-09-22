@@ -1,0 +1,2 @@
+• Permettere la scorrimento oltre la fine di pagina di piani di modifica
+• Correzione di allenamenti di scambio

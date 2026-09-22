@@ -1,0 +1,5 @@
+- Zamanlama ayarları
+- Zamanlayıcıları optimize edin
+- Otomatik yedeklemeyi düzelt
+- Vibratör ve alarm ses ayarlarını ekle
+- Grafik sayfasını optimize et

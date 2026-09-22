@@ -1,0 +1,5 @@
+- Fix deploy.sh
+- Remover janelas + macOS fluxo de trabalho executado após a implantação
+- Fixar página em branco após importar bancos de dados
+- Adicionar unidades para gráficos cardio
+- Reorganizar o mapa lib

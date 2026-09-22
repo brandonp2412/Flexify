@@ -1,0 +1,10 @@
+• 터키어 로컬 선호도를 커버
+• 임시 아이콘 재설계 자산을 되돌려
+• chore(l10n): 추가 언어명터키어
+• chore: 주소 터키 현지화 검토
+• feat(l10n): 터키어 로컬라이징 이 추가 되었습니다
+• feat: 형 양면 아이콘 개념을 추가
+• feat: 아이콘 7 및 8 정제 세트를 추가
+• fix(l10n): 복제 항목을 삭제
+• fix(tests): test_bundle.dart를 제외하기 위해 .gitignore를 추가합니다
+• fix(tests): locale_preference_test에 tr 언어를 추가

@@ -1,0 +1,1 @@
+- Festgeschriebene Überschreibung bodyWeight bei Graphimporten

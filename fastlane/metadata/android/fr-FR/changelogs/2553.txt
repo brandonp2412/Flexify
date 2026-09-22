@@ -1,0 +1,2 @@
+- Le groupe de fusion "main" de github.com:brandonp2412/Flexify
+- Vérifier la vibration lors de la commutation du réglage du timer

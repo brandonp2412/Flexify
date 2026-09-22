@@ -1,0 +1,1 @@
+Dodaj kilka flag emulatorów do wdrożenia.sh

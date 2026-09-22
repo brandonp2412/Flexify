@@ -1,0 +1,4 @@
+- Voeg aangepaste dag selector toe
+- Fix lag openen grafiek geschiedenis
+- Herbereken van ORM bij het bewerken van herhalingen/gewicht
+- Voeg verpakking toe aan het einde van het bewerken van het plan pagina

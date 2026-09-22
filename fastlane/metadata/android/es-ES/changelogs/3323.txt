@@ -1,0 +1,6 @@
+• Añadir nuevos formatos de fecha (por ejemplo, en alemán)
+• Añadir la opción de eje x basado en el tiempo para el gráfico
+• Resolver problemas de memoria
+• Fija la relación de seguimiento del plan y el recuento
+• Deje que los usuarios decidan la capitalización de los títulos del plan
+• Mover el botón de historial a la barra de navegación

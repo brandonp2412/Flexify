@@ -1,0 +1,3 @@
+- Birim testleri
+- Ayarlar sayfasındaki simgeleri azalt
+- Zaman seçicisi için düğmeler kullan

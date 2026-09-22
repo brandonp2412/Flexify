@@ -1,0 +1,4 @@
+- Re-desenho selector dia
+- Fixar o histórico de abertura de atraso gráfico
+- Re-calculação do ORM ao editar repetições/peso
+- Adicionar enchimento ao final da página de plano de edição

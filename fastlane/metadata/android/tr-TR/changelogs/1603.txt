@@ -1,0 +1,3 @@
+- Grafiği düzenlemenin ne yaptığını açıklayın
+- Tarih arama yaparken sınır boyutunu netleştir
+- Listelerde geçmiş sonları kaydırmayı izin verin

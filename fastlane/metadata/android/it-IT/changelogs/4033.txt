@@ -1,0 +1,10 @@
+• Rettificare la vista del cambiamento vuoto
+• Nascondere le prove di integrazione Linux su dwl
+• chore: applicare la formattazione Dart alle prove
+• feat: migliorare i controlli di selezione dei grafici
+• feat: integrare la registrazione di Talker
+• feat: Redesignare l'interfaccia desktop
+• fix: applicare le riprese di schermo di 7 pollici conformi
+• fix: Hard Linux grafico di allenamento e flussi timer
+• fix: navigazione e test per desktop
+• fix: Isolare database di test di integrazione

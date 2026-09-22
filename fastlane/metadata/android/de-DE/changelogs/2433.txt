@@ -1,0 +1,4 @@
+- Bearbeiten Sie die GitHub-Ausgabe-Dateiwege, um Android-APKs einzubeziehen
+- 2.0.27
+- Aktualisieren Sie pubspec.lock
+- Entfernen Sie macOS/iOS-Builds aus dem GitHub Actions-Workflow

@@ -1,0 +1,2 @@
+- Plan sayımını sabitle
+- Veritabanı şema kontrolü zaman zaman durur

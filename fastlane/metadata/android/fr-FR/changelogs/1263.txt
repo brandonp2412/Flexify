@@ -1,0 +1,6 @@
+- Tests de fixation
+- Ajouter des menus de partage
+- Fixer le clavier qui clignote sur le soumettre
+- Vue d' avant les dates précédemment créées sur la version multi-édition
+- Utilisez un nouveau sélecteur d' unité pour les graphiques cardio
+- Copie de la disposition des graphiques de résistance à cardio

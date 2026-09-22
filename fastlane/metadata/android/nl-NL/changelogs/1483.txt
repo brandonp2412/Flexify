@@ -1,0 +1,2 @@
+- Beeldondersteuning toevoegen
+- Voeg monochrome app-iconen toe

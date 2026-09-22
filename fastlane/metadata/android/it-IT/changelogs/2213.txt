@@ -1,0 +1,7 @@
+- Aggiungere note all'attivazione del piano
+- Prevenire che le linee del grafico si allontanino dai limiti
+- Rimuovere "Non ci sono ancora dati" dal progresso globale
+- Rimuovere la linea bianca sotto la barra di ricerca sul rollo
+- Spostare il pulsante "Clara" dalla barra discesa a sinistra della barra di ricerca
+- Rettificare la schermata del piano di modifica
+- Grafici di linee curve in screenshot

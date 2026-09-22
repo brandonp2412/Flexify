@@ -1,0 +1,3 @@
+- Spraw , aby montaż zestawów fitness można było przewiesić
+- Wykonane w ci_post_clone
+- Wracaj do pozycji odruchowych

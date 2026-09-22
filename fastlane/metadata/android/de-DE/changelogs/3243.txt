@@ -1,0 +1,4 @@
+• Zeigen Sie immer Tab-Titel
+• Behebung der Nicht-Scroll-Globalargebnisse
+• Festsetzung von Aktualisierungskategorien
+• Verringern Sie die globale Graphenverschmutzung auf dem Tooltip

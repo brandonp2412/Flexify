@@ -1,0 +1,2 @@
+- Réparer les pannes d'application après 1.1.36
+- Améliorer l'expérience de montage cardio

@@ -1,0 +1,5 @@
+- Backup automatico alla fine di un piano
+- Aggiornare il piano di avvio dopo aver modificato un' entrata
+- Peso del gruppo per settimana in default
+- Aggiornamento delle dipendenze
+- Fix variable name di pagina impostazioni

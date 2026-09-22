@@ -1,0 +1,10 @@
+• Dart analizi için test ekle
+• Bir planı tamamlarken egzersiz listesi navigasyon çubuğunun ötesine kaydırılmasına izin verin
+• Güç sayfasının stilini değiştir
+• Devamlı olarak bottomNavHeight kullan
+• Altınlık sabitlenir
+• Grafikler arasında uzananları düzeltmek ve ayarlar kapatıldığında notları gizlemek
+• Arama çubuğu için birim testlerini sabitle
+• Grafiklerin stilini geliştir
+• Plan çipler arasını tutarlı yapın
+• Kardio sayfasındaki maç tarzı

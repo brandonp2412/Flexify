@@ -1,0 +1,2 @@
+- Correzione di problemi di app dopo 1.1.36
+- Migliorare l'esperienza di curriculum cardio

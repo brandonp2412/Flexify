@@ -1,0 +1,3 @@
+- Łatwo zarządzaj błędami w ładowaniu obrazu
+- Wyłączyć przyciski dodać/wyłączyć z edytoru obrazu
+- Zostaw obraz w spokoju jeśli użytkownik anuluje wybór plików

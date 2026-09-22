@@ -1,0 +1,3 @@
+- Aktivieren Sie Übungen auf Screenshot für Pläne
+- Kurvengrafiken nach Standard
+- Umgang mit fehlgeschlagenen Migrationen

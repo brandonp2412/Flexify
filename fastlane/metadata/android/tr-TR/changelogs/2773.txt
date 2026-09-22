@@ -1,0 +1,4 @@
+• Öntanımlı olarak değişen tekrarları düzelt
+• Zamanlayıcı düğmesinin sonunu hafiflet
+• Flatter bağımlılıklarını yükselt
+• Flatter'ı 3.32.8'e yükselt.

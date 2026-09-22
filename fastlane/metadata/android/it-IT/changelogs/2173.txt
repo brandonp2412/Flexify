@@ -1,0 +1,3 @@
+- Spegni il ricevitore di backup se i backup automatici sono disattivati
+- Rimuovere rsync da deploy.sh a macOS
+- Utilizzare zsh in macOS.sh

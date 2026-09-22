@@ -1,0 +1,5 @@
+• Überprüfung der Projektbeschreibung in README
+• Update README, um den Projekttagline zu ändern
+• Aktualisieren Sie den Projektnamen in README
+• Aktualisierte Version zu 2.2.0 in pubspec.yaml
+• fix: Löschen Sie die offenen Historien und Planungsfehler

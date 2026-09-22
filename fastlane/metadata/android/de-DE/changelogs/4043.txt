@@ -1,0 +1,6 @@
+• Behebt Microsoft Store-Roll-Out-Finalisierungskontrollen
+• Parse Multiline Store-Roll-out-Antworten
+• Polnische leere Staaten
+• Ziel veröffentlichte Einreichungen im Store
+• ci: Wiederversuch mit Übergangsversagen des Android-Pickers
+• test: Ausrichten Graphen Geschichte leer Zustand

@@ -1,0 +1,4 @@
+- Połączenie ustawień "Pokaż kolejność" i "Pokaż liczby"
+- Plany refactorów
+- Strona wykresów refaktorów
+- Zestawy do ćwiczeń

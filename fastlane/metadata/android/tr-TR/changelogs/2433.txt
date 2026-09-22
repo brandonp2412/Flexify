@@ -1,0 +1,4 @@
+- GitHub'un yayım dosya yollarını Android APK'leri dahil etmek için düzelt
+- 2.0.27
+- Pubspec.lock güncelleme
+- GitHub Actions iş akışından macOS / iOS yapılandırmalarını kaldır

@@ -1,0 +1,2 @@
+• Pozwolić dodawaniu gładkości krzywej do niepowodzenia
+• Naprawianie planów/grafów importowanych z systemu Windows

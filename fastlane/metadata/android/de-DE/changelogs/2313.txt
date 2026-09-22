@@ -1,0 +1,7 @@
+- Verhindern Sie, dass die Vorgaben für die Übung gelöscht werden
+- Überschreiten Sie Standard-Einheiten mit der Einstellung
+- Verkürzen Sie den Graph
+- Hinzufügen von Grenzschiebern zu Grafiken
+- Sagen wir von Sätzen in kollabierter Geschichte
+- Verbesserung des Styles der Tageteiler für die Geschichte
+- Etikettenteilnehmer auf der Grafikseite

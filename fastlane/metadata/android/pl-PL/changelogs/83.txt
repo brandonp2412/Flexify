@@ -1,0 +1,5 @@
+- Określenie czasu
+- Optymalizuj zegarki
+- Naprawa kopii zapasowych automatycznych
+- Dodaj ustawienia wibracji i dźwięku alarmu
+- Optymalizuj stronę edycji grafu

@@ -1,0 +1,10 @@
+• Voeg env toe voor webschermfoto's
+• Verwijder dupliceerde veranderloggen
+• Fix buildConfig problemen
+• Fix chromedriver-poort
+• Fix chromedriver-instelling
+• Fix emulator naam in Android screenshots
+• Git voeg volledige fastlane dir toe voor workflow
+• Installeer en start chromedriver in werkstromen
+• Zorg ervoor dat de screenshots in de commit zijn
+• Vermijd duplicaten bij het kopiëren van het changelog

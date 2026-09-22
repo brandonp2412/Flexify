@@ -59,6 +59,20 @@ const _playStoreLocales = <String>{
   'zh-CN',
 };
 
+const _changelogCatalogLocales = <String>{
+  'de',
+  'es',
+  'fr',
+  'it',
+  'ja',
+  'ko',
+  'nl',
+  'pl',
+  'pt_BR',
+  'tr',
+  'zh_CN',
+};
+
 const _appStoreLocales = <String>{
   'en-AU',
   'de-DE',
@@ -245,6 +259,139 @@ void main() {
       }
     }
   });
+
+  test('current in-app changelog is localized for every shipped locale', () {
+    final changelogFiles =
+        Directory('assets/changelogs')
+            .listSync()
+            .whereType<File>()
+            .where((file) => file.path.endsWith('.txt'))
+            .toList()
+          ..sort((a, b) {
+            final aName = int.parse(a.uri.pathSegments.last.split('.').first);
+            final bName = int.parse(b.uri.pathSegments.last.split('.').first);
+            return bName.compareTo(aName);
+          });
+
+    expect(changelogFiles, isNotEmpty);
+    final latestFile = changelogFiles.first;
+    final latestKey = latestFile.uri.pathSegments.last.split('.').first;
+    final english = latestFile.readAsStringSync().trim();
+
+    for (final locale in _changelogCatalogLocales) {
+      final file = File('assets/changelogs/l10n/$locale.json');
+      expect(
+        file.existsSync(),
+        isTrue,
+        reason: 'Missing in-app changelog catalog for $locale.',
+      );
+      final catalog =
+          jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+      expect(
+        catalog[latestKey],
+        isA<String>(),
+        reason: '$locale is missing the current changelog $latestKey.',
+      );
+      expect(
+        (catalog[latestKey] as String).trim(),
+        allOf(isNotEmpty, isNot(equals(english))),
+        reason: '$locale must localize the current in-app changelog.',
+      );
+    }
+
+    final sourceKeys = changelogFiles
+        .map((file) => file.uri.pathSegments.last.split('.').first)
+        .toSet();
+    for (final locale in _changelogCatalogLocales) {
+      final catalog =
+          jsonDecode(
+                File('assets/changelogs/l10n/$locale.json').readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      expect(
+        catalog.keys.toSet(),
+        sourceKeys,
+        reason: '$locale historical changelog catalog must be complete.',
+      );
+    }
+  });
+
+  test('Play Store changelog history is localized for every locale', () {
+    final englishFiles =
+        Directory('fastlane/metadata/android/en-US/changelogs')
+            .listSync()
+            .whereType<File>()
+            .where((file) => file.path.endsWith('.txt'))
+            .toList()
+          ..sort((a, b) => a.path.compareTo(b.path));
+    expect(englishFiles, isNotEmpty);
+
+    final englishByName = <String, String>{
+      for (final file in englishFiles)
+        file.uri.pathSegments.last: file.readAsStringSync().trim(),
+    };
+    final expectedNames = englishByName.keys.toSet();
+
+    for (final locale in _playStoreLocales) {
+      final directory = Directory(
+        'fastlane/metadata/android/$locale/changelogs',
+      );
+      expect(
+        directory.existsSync(),
+        isTrue,
+        reason: 'Missing Play Store changelog directory for $locale.',
+      );
+
+      final localizedFiles = directory
+          .listSync()
+          .whereType<File>()
+          .where((file) => file.path.endsWith('.txt'))
+          .toList();
+      final localizedNames = localizedFiles
+          .map((file) => file.uri.pathSegments.last)
+          .toSet();
+      expect(
+        localizedNames,
+        expectedNames,
+        reason:
+            '$locale must mirror the complete English Play changelog history.',
+      );
+
+      for (final file in localizedFiles) {
+        final filename = file.uri.pathSegments.last;
+        final english = englishByName[filename]!;
+        final localized = file.readAsStringSync().trim();
+        if (english.isEmpty || english == 'last_commit') continue;
+        expect(
+          localized,
+          allOf(isNotEmpty, isNot(equals(english))),
+          reason: '$locale must localize Play Store changelog $filename.',
+        );
+      }
+    }
+  });
+
+  test(
+    'App Store release notes are localized for every non-English locale',
+    () {
+      final english = File(
+        'fastlane/metadata/en-AU/release_notes.txt',
+      ).readAsStringSync().trim();
+
+      for (final locale in _appStoreLocales.where(
+        (locale) => locale != 'en-AU',
+      )) {
+        final notes = File(
+          'fastlane/metadata/$locale/release_notes.txt',
+        ).readAsStringSync().trim();
+        expect(
+          notes,
+          allOf(isNotEmpty, isNot(equals(english))),
+          reason: '$locale must localize current App Store release notes.',
+        );
+      }
+    },
+  );
 
   test('regional fallback ARBs stay in sync', () {
     const fallbackLocales = {'pt': 'pt_BR', 'zh': 'zh_CN'};

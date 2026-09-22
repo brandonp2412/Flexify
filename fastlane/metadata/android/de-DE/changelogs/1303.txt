@@ -1,0 +1,3 @@
+- Bearbeiten Sie Fitnessstudio-Sets scrollable
+- Abrechnung an flutter Haupt in ci_post_clone
+- Zurück zu den Dropdowns für die Periode

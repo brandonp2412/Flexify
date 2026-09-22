@@ -1,0 +1,5 @@
+- Maak de instellingen-schakelaars consistent
+- Verhoog de nauwkeurigheid van de herhalingsschatting
+- Toestemming van het afsplitsen van aangepaste rusttijden per grafiek
+- Vaste categorie voor plannen
+- Fix plan bewerkings volgorde

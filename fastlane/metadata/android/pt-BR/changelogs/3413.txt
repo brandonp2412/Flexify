@@ -1,0 +1,4 @@
+• Adicionar configurações para o limite de exibição/ocultura e o eixo x nos gráficos
+• Sempre iniciar o cronograma em planos ativados
+• Corrigir novos tipos de cardio que não funcionam
+• Presião longa do eixo x / limite de deslizador para esconder

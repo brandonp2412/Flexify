@@ -1,0 +1,5 @@
+- Verbessern von Bildschirmbildern
+- Schaltfotos in GitHub-Versionen ein
+- Auswahlgerät für die Überarbeitung
+- Entfernen Sie duplizierte Erwähnung von Einheiten
+- Mehrfach-Bearbeiten von Historie hinzufügen

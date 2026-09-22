@@ -1,0 +1,2 @@
+- Aktualizacja flutter & pubspec.lock
+- Naprawa rozmieszczenia nie działa

@@ -1,0 +1,6 @@
+- Multi-deleting van plannen toestaan
+- Vervang "Invoergewicht" naar "Gewicht" op de pagina grafieken
+- Voeg bewerkingsknoppen toe aan de aflopende pagina grafieken
+- Focusafstand na indiening van de duur
+- Verbetering van crashen met inconsistente cardio-typen
+- Verwijder het achtervoegsel geschiedenis uit graph_history

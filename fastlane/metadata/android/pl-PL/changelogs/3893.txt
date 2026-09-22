@@ -1,0 +1,1 @@
+• ci: ustalenie dni przechowywania w krokich przesyłania artefaktów w celu ograniczenia wykorzystania przechowywania

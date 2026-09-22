@@ -1,0 +1,3 @@
+- Beheer fouten bij het laden van afbeeldingen op een vriendelijke manier
+- Verwijder toevoeging/verwijdering knoppen van beeld editor
+- Laat het beeld alleen als de gebruiker het bestandsafnemer annuleert

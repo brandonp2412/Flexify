@@ -1,0 +1,1 @@
+• fix: Google Play'i idempotent olarak kullan

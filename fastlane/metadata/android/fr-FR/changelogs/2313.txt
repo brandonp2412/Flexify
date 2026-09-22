@@ -1,0 +1,7 @@
+- Éviter de supprimer les préréglages d'exercice
+- Ouvrez les unités par défaut avec la réglage
+- Récupérer légèrement le graphique
+- Ajouter le curseur limite aux graphiques
+- Disons que des séries dans l'histoire s'effondrent
+- Améliorer le style des diviseurs de jour pour l'histoire
+- Les étiquettes de division sur la page des graphiques

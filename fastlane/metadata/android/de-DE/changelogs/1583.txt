@@ -1,0 +1,4 @@
+- Hinzufügen von Nachschätzungen
+- Hinzufügen der Dauerschätzung
+- Hinzufügen fehlende Aufwärm-Einstellung
+- Fix windows-Paket

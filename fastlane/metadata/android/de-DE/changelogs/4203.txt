@@ -1,0 +1,2 @@
+• ci: Wiederversuch mit Übergangsversagen des Patrol-Pickers
+• fix: Wiederherstellen von Standardfunktionen von StartPlan

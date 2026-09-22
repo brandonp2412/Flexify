@@ -1,0 +1,12 @@
+- Ekran çekimlerini düzelt
+- Dışarıya/geleneklere gizli ve kardio türleri ayarlayın
+- Bir set düzenlerken kardiyopayı kapatmayı düzelt
+- Sildikten sonra sekmelere animasyonu durdur
+- Boş girişleri mesajını geçmişin üst kısmına taşı
+- Tarih sekmesini ekle
+- Ekran çekimlerini güncelle
+- Ekran görüntüleri için güncelleme
+- Her testte TabBarState eklendi
+- Eklenmiş küresel bağlam Artık PlanSite'nin ilk sayfası olmaktan bağımsız
+- Karşılaştırmak için güncellenmiş ekran görüntüleri eklendi
+- Ekran çekimlerini basitleştir

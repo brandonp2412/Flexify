@@ -1,0 +1,1 @@
+- Naprawa problemu z podpisaniem kodu budowy macOS

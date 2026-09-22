@@ -1,0 +1,9 @@
+- Tire todas as capturas de tela no modo escuro
+- Coloque-o nos badges X em fila.
+- Corrigir alguns erros Android obscuros
+- Toque para criar em planos
+- Atualizar a redação na página de gráficos não encontrada
+- Mostre os melhores exercícios da página gráficos
+- Corrigir zero de empolgação na página de histórico de gráfico não há dados ainda
+- Alturas de gráfico reduzidas
+- Fixar bug de pico de gráfico

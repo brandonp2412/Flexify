@@ -1,0 +1,10 @@
+- Düzeltme testleri
+- En iyi tekrarlama metriklerini ekle
+- AppGroupBy -> Period adını değiştir
+- Kardio grafiklerin performansını geliştir
+- Genişle versiyonUnsel yayınlarda kod
+- Zamanlayıcı sayfasından dakika eklemeyi düzelt
+- Şarkı yayımlı hızlı yollar
+- Önemli olduğunda yerel saat kullanın
+- Refactor ayarları mantığı
+- Refactor kodu

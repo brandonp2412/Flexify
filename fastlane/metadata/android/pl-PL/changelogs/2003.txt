@@ -1,0 +1,3 @@
+- Ustalenie ćwiczeń planu
+- Wykorzystaj pozycję + w wyszukiwarce nowych planów
+- Usunięcie bloku informacji o zależności dla f- droida

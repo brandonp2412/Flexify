@@ -1,0 +1,3 @@
+- Bearbeitung von Fitnessstudio-Systemen
+- Entfernen Sie die Aufrufe auf Einstellungen
+- Reinigen Sie die Hörer auf der Abgabe

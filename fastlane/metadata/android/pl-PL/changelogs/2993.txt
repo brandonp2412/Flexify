@@ -1,0 +1,4 @@
+• Naprawianie automatycznych zdjęć ekranu
+• Rozwiązanie problemów z oddaleniem na stronie edycji
+• Odgrupowanie domyślnej historii
+• Pociąg przed ostatnim ciosem

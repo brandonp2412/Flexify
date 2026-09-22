@@ -1,0 +1,6 @@
+• Aggiungi un gruppo di varianti di navigazione inferiore
+• Aggiungere script per quando l' esecuzione di Linux fallisce
+• Eliminazione delle varianti di navigazione
+• Aggiornare la nave inferiore per essere un disegno di pillola
+• fix: rimuovere il percorso JDK locale codificato in modo rigido da gradle.properties
+• fix: silenzio MSVC coroutine errore di deprecazione rompendo Windows CI build

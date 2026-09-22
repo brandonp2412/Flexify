@@ -1,0 +1,1 @@
+• fix: capture commit_sha vanaf de juiste stap in release workflow

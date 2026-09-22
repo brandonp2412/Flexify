@@ -1,0 +1,7 @@
+- Añadir notas a la activación del plan
+- Prevenir que las líneas del gráfico se excedan de los límites
+- Eliminar "No hay datos todavía" del progreso global
+- Eliminar la línea blanca debajo de la barra de búsqueda en el rollo
+- Mover el botón limpio desde abajo a la izquierda de la barra de búsqueda
+- Corrección de capturas de pantalla del plan de edición
+- Graficos de líneas de curva en capturas de pantalla

@@ -1,0 +1,3 @@
+• Mudança de edição de configuração de página & página de histórico
+• Deploições de correcção
+• Ensaios de unidade fixa

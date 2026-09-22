@@ -1,0 +1,2 @@
+- Importazione fissa da Massive sets esportazione
+- Crash del grafico di linea fissa per le forze relative vuote

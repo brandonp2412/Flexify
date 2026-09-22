@@ -1,0 +1,10 @@
+• Añadir mensaje para plan vacío
+• Hacer que la pantalla se mantenga encendido por defecto y mover el interruptor en la configuración
+• feat: añadir pantalla de mantenimiento en la configuración de temporizadores de descanso
+• feat: reemplazar el tema desplegable con el botón segmentado + AMOLED
+• fix: proteja contra la lista de ejercicios vacíos en StartPlanPage guardar y seleccionar
+• fix: evitar el embalaje de etiqueta SegmentedButton corregindo el relleno
+• fix: Reducir el tamaño del texto de la secuencia de 16 a 14 en las listas de historia y gráficos
+• fix: libera el bloqueo de despertador cuando el temporizador expira o no está funcionando
+• fix: mostrar bar de bocadillos en la aplicación y fijar la notificación cuando el temporizador expira con la pantalla encendida
+• fix: reducir y silenciar el texto trasero en la historia y las listas de gráficos

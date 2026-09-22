@@ -1,0 +1,2 @@
+- Atualizar pubspec.lock
+- Corrigir os caminhos de arquivo de artefatos para a versão do GitHub

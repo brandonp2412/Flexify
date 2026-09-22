@@ -1,0 +1,2 @@
+• Corrigir erros de etiqueta de herói
+• Corrigir a borda de guia sendo muito larga às vezes

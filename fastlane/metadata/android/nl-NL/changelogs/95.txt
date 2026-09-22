@@ -1,0 +1,5 @@
+- Ruimte uit volledige beschrijving correct
+- Specificeer git pull --tags na het maken van github release
+- Google Play-implementaties opnieuw in staat stellen
+- Voeg de neiging toe aan export/import
+- Voeg de neiging toe aan cardio type

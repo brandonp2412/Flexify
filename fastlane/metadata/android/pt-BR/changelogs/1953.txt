@@ -1,0 +1,3 @@
+- Animação de progressos barras de esquerda para direita
+- Destaque o plano de hoje com títulos personalizados
+- Compressor de dia selector no editor de plano

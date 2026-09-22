@@ -1,0 +1,3 @@
+• Ustawić katalog pracy etapu java
+• Upewnij się, że płynny zbiornik jest zawsze wykonywalny
+• Przenieść ustawienie javy

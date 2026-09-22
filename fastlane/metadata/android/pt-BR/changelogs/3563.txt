@@ -1,0 +1,3 @@
+• Revert "ci: substitua a configuração do submodule de flutter com subosito/ação de flutter"
+• Revert removendo acidentalmente .gitmodules
+• ci: Substitua a configuração do submodule de flutter por subosito/ação de flutter

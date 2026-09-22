@@ -1,0 +1,2 @@
+• Fix oefening bijwerken na bewerking van plannen
+• Fix tooltip op eerste/laatste gegevenspunten

@@ -1,0 +1,1 @@
+• Corrigir bugs de temporizador em alguns dispositivos

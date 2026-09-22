@@ -1,0 +1,10 @@
+• Behebt Fehlerbehebungsschilder, die in Bildschirmbildern angezeigt werden
+• Aktualisieren Sie Screenshots
+• Verwenden Sie den Textknopf für +1 Minute
+• chore: Fügen Sie Android Screenshot-Skript mit --profile Flagge hinzu
+• feat: Verbesserung der UI für Kurvenglattigkeit, Timer, Planverfolgung, Eingabe-Stil
+• fix: Zentrum-Timerkreis vertikal und bewegen +1 Min-Taste unterhalb des Kreises
+• fix: Debug-Banner in MaterialApp deaktivieren
+• fix: Entfernen Sie das Anti-Muster von UniqueKey im Timer-Circle-Widget
+• fix: Umgestaltung des Timerkreises mit minimaler, moderner Ästhetik
+• fix: Ersetzen Sie runApp durch Tester.pumpWidget bei Screenshot-Tests

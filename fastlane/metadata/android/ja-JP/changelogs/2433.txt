@@ -1,0 +1,4 @@
+- Android APK を含む GitHub のリリースファイル経路を修正
+- 2.0.27
+- pubspec.lock を更新する
+- GitHub Actions のワークフローから macOS/iOS のビルドを削除する

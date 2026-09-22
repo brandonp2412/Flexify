@@ -1,0 +1,2 @@
+- Dodaj wskazówki narzędzi do ustawień
+- Naprawa automatycznych kopii zapasowych zdarza się co 15 minut

@@ -1,0 +1,12 @@
+- Corrección de capturas de pantalla
+- Fijación de los tipos ocultos y cardio de exportación/importación
+- Corrección de apagar el cardio al editar un set
+- Deja de animar a las pestañas después de borrar
+- Mover mensajes de entradas vacías a la parte superior del historial
+- Añadir pestaña de historial
+- Actualización de capturas de pantalla
+- Actualizar screenShots para la comparación
+- Se añade tabBarState a cada ensayo
+- Contexto global añadido Ya no depende de que PlansPage sea la primera página
+- Añadido actualización de capturas de pantalla para comparar
+- Simplificar las capturas de pantalla

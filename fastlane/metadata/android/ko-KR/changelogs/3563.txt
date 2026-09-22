@@ -1,0 +1,3 @@
+• "ci: 플래터 하위 모듈 설정을 subosito/flutter-action로 교체한다"
+• 실수로 .gitmodules를 제거하는 것을 되돌려
+• ci: 플래터 하위 모듈 설정을 subosito/flutter-action로 교체

@@ -1,0 +1,5 @@
+• Revisar a descrição do projeto no README
+• Atualizar README para modificar o slogan do projeto
+• Atualizar o nome do projeto no README
+• Atualização para 2.2.0 em pubspec.yaml
+• fix: Resolver histórias abertas e planejar bugs

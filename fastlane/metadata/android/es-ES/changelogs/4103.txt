@@ -1,0 +1,10 @@
+• Añadir la lista de verificación de permisos de aplicaciones reutilizables
+• Etiquetas de aspecto del centro y reflejan el estado de conmutación en iconos
+• Etiquetas y interruptores de configuración de la planta central
+• Configuración del cronómetro central y uso de iconos activos llenos
+• Etiquetas de entrenamiento central y usar iconos llenos activos
+• Exponer la lista de verificación de permisos de la aplicación en la configuración
+• Corrección de CI archivo de bloqueo y el análisis del cronómetro error
+• Corrección de la solicitud de autorización de notificación única
+• Corrección de error del analizador de diálogo de permisos
+• Hacer que la autorización de notificación nativa se solicite una sola vez

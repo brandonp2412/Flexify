@@ -1,0 +1,5 @@
+• Fixed exportplan csvs
+• Fix importeren van bestanden uit windows
+• Verbeteren van de foutbehandeling
+• Houd de progressie van de timer in stand, zelfs als de timerpagina verborgen is
+• Selecteer de eerste oefening correct in de plannen

@@ -1,0 +1,2 @@
+- Utilizzare il sottomodulo flutter in distribuzione
+- Fissare le dimensioni dei grafici per schermi più brevi

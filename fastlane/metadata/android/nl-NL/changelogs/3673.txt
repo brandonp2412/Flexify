@@ -1,0 +1,1 @@
+• ci: Maak het VirusTotal-onderdeel in vrijstellingen omvouwbaar

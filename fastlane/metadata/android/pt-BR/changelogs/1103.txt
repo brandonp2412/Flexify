@@ -1,0 +1,3 @@
+- Pare de avisar sobre as tocas perdidas para testes de configuração
+- A fusão da filial "principal" do github.com:brandonp2412/Flexify
+- Fixar avisos de teste para a página de configuração

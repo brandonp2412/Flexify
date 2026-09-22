@@ -1,0 +1,2 @@
+• docs: Einfachere Readme-Einstellung
+• test: Verbesserung der Bildschirmbild-Ausnahmezustände

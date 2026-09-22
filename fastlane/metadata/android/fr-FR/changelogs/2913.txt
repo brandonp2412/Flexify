@@ -1,0 +1,6 @@
+• Copiez la configuration gradle à partir de fitbook
+• Réparer les déploiements google play
+• déplacer le graphique de regard 1 point vers le bas
+• Retirez la table de la prise sur X rédacteur [skip ci]
+• Les fonctionnalités de ré-commande dans README [skip ci]
+• Les badges de sortie de l'espace [skip ci]

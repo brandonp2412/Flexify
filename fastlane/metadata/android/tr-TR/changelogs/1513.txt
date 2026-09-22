@@ -1,0 +1,2 @@
+- 1.1.36'dan sonra uygulama çöküşlerini düzelt
+- Kardiyo düzenleme deneyimini geliştir

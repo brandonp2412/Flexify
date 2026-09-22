@@ -1,0 +1,10 @@
+• Auswahl von Nit
+• Überprüfung der Projektbeschreibung in README
+• Update README, um den Projekttagline zu ändern
+• Aktualisieren Sie den Projektnamen in README
+• Aktualisierte Version zu 2.2.0 in pubspec.yaml
+• ci: Stoppschlackige Patrol-Test-Gates freisetzen
+• docs: Fügen Sie Alt-Text zu README-Bilder hinzu
+• fix: Vermeiden Sie den Android-Pfadversorger JNI-Krach
+• fix: Vermeiden Sie duplizierte Anmeldungswege für Training
+• fix: Verknüpfte Bildschirmschirm CI hängt

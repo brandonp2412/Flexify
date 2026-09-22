@@ -1,0 +1,2 @@
+• ci: Złamacz patrolujący
+• fix: odzyskać domyślne ustawienia ćwiczeń StartPlan

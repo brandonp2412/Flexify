@@ -1,0 +1,4 @@
+• Alle soorten cardio-eenheden mogen worden toegestaan
+• Stijl van de pagina instellingen van tabbladen wijzigen
+• Fix het toevoegen van een cardio-oefening vanaf de Grafieken pagina
+• Vermijd het zeggen van het veranderlog bij eerste installatie

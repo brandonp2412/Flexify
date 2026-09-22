@@ -1,0 +1,2 @@
+- Hinzufügen von Tooltips zu Einstellungen
+- Reparatur automatischer Backups alle 15 Minuten

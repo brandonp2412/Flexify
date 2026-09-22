@@ -1,0 +1,2 @@
+• Riduzione dell'agp a 8.11.1
+• Fissare le ripetizioni/peso pre-pollinazione

@@ -1,0 +1,5 @@
+• Festlegter Exportplan csvs
+• Beheben von Importdateien aus windows
+• Verbesserung der Fehlerbearbeitung
+• Halten Sie den Timerfortschritt aufrecht, auch wenn die Timerseite verborgen ist
+• Wählen Sie die erste Übung in den Plänen richtig aus

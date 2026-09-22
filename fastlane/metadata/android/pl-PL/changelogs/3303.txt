@@ -1,0 +1,2 @@
+• Wykrywanie wskaźnika postępu zegarka w bezpiecznym obszarze
+• Naprawa nieaktualizowanych wykresów

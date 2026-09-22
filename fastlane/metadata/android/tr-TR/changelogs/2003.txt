@@ -1,0 +1,3 @@
+- Düzenleme planı egzersizleri yeniden ayarlama
+- Yeni planlar için arama girişini + düğmesine değiştir
+- F- droid için bağımlılık bilgisi blokunu kaldır

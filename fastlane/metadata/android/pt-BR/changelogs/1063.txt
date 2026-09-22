@@ -1,0 +1,3 @@
+- Fixar a detecção do fim dos planos
+- Adicionar mais testes de unidade de configuração
+- Corrigir desativar quando deploy.sh falhar

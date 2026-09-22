@@ -1,0 +1,2 @@
+• Teste de Harden Patrol contra o tempo
+• fix: estabilizar Android selector de pastas

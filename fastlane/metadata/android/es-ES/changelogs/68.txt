@@ -1,0 +1,4 @@
+- Reparar las roturas salvo cuando los temporizadores de descanso están activados
+- Fijación de nombres de archivos de datos de importación/exportación
+- Lista de ejercicios del refactor
+- Corrección de las notas de liberación

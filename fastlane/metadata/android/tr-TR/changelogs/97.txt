@@ -1,0 +1,4 @@
+- "Show reorder" ve "Show counts" ayarlarını birleştirin
+- Refactor planları
+- Refactor grafikleri sayfası
+- Refactor spor takımları

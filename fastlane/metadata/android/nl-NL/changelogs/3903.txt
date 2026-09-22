@@ -1,0 +1,1 @@
+• Bump IOS versie tot 14,0

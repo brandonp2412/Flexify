@@ -1,0 +1,5 @@
+- Runde Gewichte
+- Befestigen Sie die Navigation von Tabs hinter der Systemnavigation
+- Bewegt das Schleife-Schleife-Label vor dem Schieber
+- Beheben fehlende Spurfarbe mit Systemfarben
+- Normalisieren Sie Einheiten, wenn Sie sie von Grafiken ändern

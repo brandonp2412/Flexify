@@ -1,0 +1,3 @@
+- Kategorie hinzufügen
+- Hinzufügen von Neigung & angepasste Tempo Grafiken
+- Entfernen Sie duplizierte Fliesen in Timer-Einstellungen

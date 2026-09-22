@@ -1,0 +1,5 @@
+- Naprawianie rozmieszczenia.sh
+- Usunięcie okna + przepływ pracy macOS
+- Naprawianie pustych stron po importowaniu bazy danych
+- Dodaj jednostki do graficznych graficznych
+- Przeorganizowanie folderu lib

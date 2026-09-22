@@ -1,0 +1,2 @@
+- Corrigir falhas de aplicativos após 1.1.36
+- Melhorar a experiência de edição cardiovascular

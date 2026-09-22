@@ -1,0 +1,7 @@
+• Voeg migratiedata-testen toe
+• Werkstromen combineren in één
+• Verwijder enkele zinloze opmerkingen
+• Link brzycki formule in commentaar
+• Verwijder meer zinloze opmerkingen
+• Verwijder enkele opmerkingen
+• Verkorte variabele namen

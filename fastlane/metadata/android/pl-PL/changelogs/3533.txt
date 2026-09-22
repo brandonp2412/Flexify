@@ -1,0 +1,2 @@
+- Poprawa wydajności
+- Naprawa budowy dla sieci

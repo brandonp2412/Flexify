@@ -1,0 +1,3 @@
+- Etkin planlara ayar düğmesini ekle
+- Masaüstündeki arkadan yeniden düzenleme düğmelerini düzelt
+-

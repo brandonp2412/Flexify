@@ -1,0 +1,3 @@
+• Ajouter la logique pour déterminer l' id de l' émulateur
+• Réparation des captures d'écran
+• Essayez de réparer les captures d'écran

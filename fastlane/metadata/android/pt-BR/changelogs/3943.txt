@@ -1,0 +1,3 @@
+• Corrigir instalações novas que não solicitem notificação
+• Teste de unidade fixa
+• Desligue notas para novas instalações

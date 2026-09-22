@@ -1,0 +1,10 @@
+• Hinzufügen eines milden Umrisses zum Timerkreis
+• Animation der Existenz von Stop-Button in der Timer-Seite
+• Bildbearbeitung klären
+• Erklären Sie die google play-Integrationen
+• Fix +1 Minute auf linux
+• Fix automatische Screenshots für Veröffentlichungen
+• Befestigen von Wechselträgern
+• Fix github Lese-Styling [skip ci]
+• Behebt github-Veröffentlichung im google play-Einsatz
+• Fix msstore breite Abzeichen [skip ci]

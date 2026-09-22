@@ -1,0 +1,4 @@
+• Corrección de deploy.sh
+• Hacer que las hojas de fondo sean más fáciles de tocar
+• Facilitar la visualización/apertar las últimas entradas
+• Utilice pesos de niños previamente introducidos en la página de planes

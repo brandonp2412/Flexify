@@ -1,0 +1,10 @@
+- Tests de fixation
+- Ajouter la métrique des meilleures répétitions
+- Rénommer AppGroupBy -> Période
+- Améliorer les performances des graphes cardio
+- Augmentation de la versionCode sur les versions universelles
+- Correction de l'ajout de minutes à partir de la page de l'heureuse
+- Commentaire sur la fourniture de fastlane
+- Utilisez l'heure locale si nécessaire
+- Logique des réglages de réfacteur
+- Code de réfacteur

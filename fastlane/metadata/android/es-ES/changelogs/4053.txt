@@ -1,0 +1,2 @@
+• Preferir las afirmaciones de configuración de cronometraje visibles por el usuario
+• refactor: quitar el código de cronometrador de escritorio muerto

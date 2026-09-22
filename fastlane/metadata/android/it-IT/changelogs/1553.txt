@@ -1,0 +1,2 @@
+- Abilitare i timer su iOS
+- Fix finiti timer su macOS

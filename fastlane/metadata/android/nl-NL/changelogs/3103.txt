@@ -1,0 +1,2 @@
+• Fix deploy.sh
+• Fix tab navigatie niet drijven over lijsten

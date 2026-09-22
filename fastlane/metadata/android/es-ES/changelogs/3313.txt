@@ -1,0 +1,4 @@
+• Fija el relleno en las páginas de gráficos
+• Fija los brindes nunca descartando
+• Corrección de las herramientas en los gráficos
+• Mantenga el orden al cambiar un ejercicio

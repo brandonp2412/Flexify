@@ -1,0 +1,4 @@
+• Auswahl des Inhalts von flachen Tabs
+• Vorgehender Sichtbarkeits-Tab-Selektor
+• Einfachheit der Steuerung von Frührückkehr
+• refactor: die Benutzersichtlichen Steuerungen in Linux E2E bevorzugen

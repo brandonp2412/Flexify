@@ -1,0 +1,3 @@
+- Eliminar las impresiones de desactivación de las pruebas de migración
+- Retirada de git empujar --force de deploy.sh
+- Resolver todos los problemas de migración de bases de datos

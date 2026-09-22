@@ -1,0 +1,3 @@
+• Synchronisieren Sie Google Play-Speichermetadaten automatisch (#333)
+• fix: die einheitliche Datenschutzrichtlinie veröffentlichen
+• fix: Verwahren Sie die Datenschutzerklärung in der Bereitstellung von Seiten

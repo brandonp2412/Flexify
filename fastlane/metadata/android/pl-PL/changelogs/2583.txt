@@ -1,0 +1,9 @@
+• Dodaj obsługę błędów do importowania danych
+• Dodaj więcej testów migracji danych
+• Usunięcie komentarzy
+• Aktywować konfigurację budowy w android/app/build.gradle
+• Rozwiązanie problemu z lintowaniem w edit_set_page
+• Usunięcie prefiksów podkreślania w niektórych metodach strony planu startowego
+• Wyklucz selektor jednostki i naprawi badania
+• Zmniejszenie wszystkich nazw zmiennych
+• Podzielić wszystko w edycji ustawione strony więcej

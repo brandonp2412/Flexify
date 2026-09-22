@@ -1,0 +1,2 @@
+- Połączenie głównej oddziału github.com:brandonp2412/Flexify
+- Wystarczy wyświetlić wibrację podczas ustawienia zegarka

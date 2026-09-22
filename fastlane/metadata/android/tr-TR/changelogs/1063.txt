@@ -1,0 +1,3 @@
+- Planların sonunu tespit etmeyi düzelt
+- Daha fazla ayar birimi testlerini ekle
+- Deployment.sh başarısız olduğunda iptal yap

@@ -1,0 +1,1 @@
+• ci: adicionar VirusTotal de digitalização em APKs de lançamento

@@ -1,0 +1,10 @@
+• Hinzufügen eines milden Umrisses zum Timerkreis
+• Fix +1 Minute auf linux
+• Befestigen von Wechselträgern
+• Fix github Lese-Styling [skip ci]
+• Fix msstore breite Abzeichen [skip ci]
+• Grenzfrequenz der google play-Integrationen [skip ci]
+• Die Abzeichen größer machen [skip ci]
+• Vergleiche die Abzeichen mit [skip ci]
+• Zurückschreiten "Fix msstore breite Abzeichen [skip ci]"
+• Verwenden Sie github-Veröffentlichung anstelle von Artefakten [skip ci]

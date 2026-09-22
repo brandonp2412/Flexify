@@ -1,0 +1,8 @@
+• Fixer la barre de progression inférieure non mise à jour
+• Fixer la cohérence du rembourrage sur les plans
+• Fixation de la navigation vers l' arrière du système
+• Tests d'unité fixe
+• Link shields.io sur le badge téléchargements
+• Parallèle de l' espacement de l' ensemble de modification sur la page de la page de la taille de modification
+• Éviter les ensembles d'édition en double tap qui n'ont pas encore été saisis
+• Retirez le mettre sur X espace

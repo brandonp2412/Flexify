@@ -1,0 +1,7 @@
+- Tüm commit mesajlarını açıklama notlarına ekle
+- Dışarıya aktarım/import verileri dosyalarının adını değiştir
+- Refactor planları sayfası
+- Grafikler sayfası için düzenleme simgesini ekle
+- Kürük çizgi grafikleri için ayar ekle
+- Satır grafiklerini eğri yap
+- Satır grafiklerinde araç noktalarını düzelt

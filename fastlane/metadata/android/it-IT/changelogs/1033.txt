@@ -1,0 +1,3 @@
+- - Aggiornamento del bar Run Dart
+- Non utilizzare i colori del sistema per le screenshot
+- Constructare appbundle solo quando inviare al play store

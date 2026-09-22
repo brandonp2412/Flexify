@@ -1,0 +1,3 @@
+- Podwójne naciśnięcie , aby otworzyć dowolną metrykę
+- Wyświetlać ORM podczas edycji zestawu
+- Dodaj przełącznik do dźwięku alarmu

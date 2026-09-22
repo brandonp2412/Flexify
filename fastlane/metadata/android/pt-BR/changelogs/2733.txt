@@ -1,0 +1,7 @@
+• Adicionar páginas github hospedagem para Flexify web
+• Adicionar os trocadores faltantes
+• Permitir que o usuário limpe os conjuntos máximos
+• Excluir scripts não utilizados
+• Corrigir o que é novo copiar
+• Só fazer backup para um único arquivo a cada vez
+• Remover repetições do gráfico de força

@@ -1,0 +1,2 @@
+- Flutter alt modülünü kullan ve kotlin versiyonunu belirt
+- Deploy-windows-store ayarlama

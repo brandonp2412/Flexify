@@ -1,0 +1,2 @@
+- Richiedi -p bandiera per deploy.sh per inviare a google play
+- Semplificare la query di conteggio per i piani

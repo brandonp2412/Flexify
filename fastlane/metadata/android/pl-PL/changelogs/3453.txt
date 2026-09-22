@@ -1,0 +1,9 @@
+• Dodaj wskaźniki ikony kardio/silności do przełączników w zestawie edycji/zestawie
+• Dodaj ustawienia pozycji paska postępu
+• Pozwala na rozliczenie kategorii
+• Zmiana ikony planów w dolnej stronie
+• Rozwiązanie wszystkich problemów z przeciągnięciem
+• System stałego wyglądu ui grafika zaciemniająca
+• Naprawa automatycznych kopii zapasowych czasami uszkodzenia bazy danych
+• Natychmiast aktualizuj ustawienia karty i usuwaj przycisk zapisywania
+• Zapobieganie nieistotnym tekstem wskazówek na kategoriach lub skłaniając się do wielu zestawów edycji

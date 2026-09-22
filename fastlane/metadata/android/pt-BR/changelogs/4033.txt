@@ -1,0 +1,10 @@
+• Corrigir vista de logueiro vazio
+• Esconda testes de integração do Linux no dwl
+• chore: Aplicar a formatagem de dardos aos ensaios
+• feat: melhorar os controles de selecção de gráficos
+• feat: integrar o registro de conversadores
+• feat: redesenhar interface de desktop
+• fix: Forçar captura de tela de sete polegadas compatível
+• fix: grafico de treinamento do Linux e fluxos de temporizador
+• fix: Navegação e testes de desktop rígidos
+• fix: Base de dados de testes de integração isolada

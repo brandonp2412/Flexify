@@ -1,0 +1,2 @@
+- iOS'da zamanlayıcıları etkinleştir
+- MacOS'larda bitmiş zamanlayıcıları düzelt

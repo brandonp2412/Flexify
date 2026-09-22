@@ -1,0 +1,2 @@
+- Lazily plan egzersizleri için hesaplar alır.
+- Gym_sets'in indekslenmiş olduğundan emin olun

@@ -1,0 +1,5 @@
+- Fix screenshot tests
+- Maak het importeren van gegevens robuuster
+- De voor invoer duidelijke plannen
+- Vermijd het openen van grafiekpunten op pinch
+- Zet de release-modus op mijn telefoon na het uitzetten

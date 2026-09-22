@@ -1,0 +1,4 @@
+• WIP: Transfer Nox'ten kontrol listesini değiştir
+• chore: Serena projesi yapılandırmasını yenilentile
+• test: kapsam opt-in öntanımlıları
+• test: Patrol entegrasyon harnesini çıkar

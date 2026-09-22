@@ -1,0 +1,4 @@
+- Paginar os conjuntos de ginásio sobre a história
+- Capitalize frases de barra de pesquisa
+- Use o último conjunto de ginásio inserido como padrão
+- Ordenar gráficos por data criada

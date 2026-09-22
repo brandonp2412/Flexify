@@ -1,0 +1,6 @@
+• Fitbook'dan kopyalı bir ayar
+• Google Play dağıtımlarını düzelt
+• Çeviri grafik 1 öğesini aşağıya taşı
+• Masayı X'e göndermekten uzak tut.
+• README'de yeniden sipariş özellikleri [skip ci]
+• Yer dışı rozetleri [skip ci]

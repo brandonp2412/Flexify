@@ -1,0 +1,4 @@
+- Naprawa nawigacji wstecznej czasami nie działa
+- Ukryj jeden wynik odceny ćwiczeń kardio
+- Poprawa wydajności wytrzymałości strony
+- Poprawa wyników planów

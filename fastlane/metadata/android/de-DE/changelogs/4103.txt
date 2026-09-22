@@ -1,0 +1,10 @@
+• Hinzufügen einer Liste mit wiederverwendbaren Appberechtigungen
+• Zentrum-Aussehen-Labels und reflektieren Wechselzustand in Ikonen
+• Kennzeichnungen und Schalter für die Einstellung von Zentrumplan
+• Einstellungen des Zentrums und Verwendung von ausgefüllten aktiven Symbolen
+• Zentrum-Workout-Labels und aktive ausgefüllte Symbole
+• Berechtigungen der App in Einstellungen ausstellen
+• Behebung von CI-Schlossdatei und Timer-Analyzer-Fehler
+• Behebung eines einmaligen Antrags auf Genehmigung für die Notifizierung
+• Fehler im Dialog-Analyzer
+• Machen Sie einmalige Native-Notifikationsberechtigung

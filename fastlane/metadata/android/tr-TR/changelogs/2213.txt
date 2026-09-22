@@ -1,0 +1,7 @@
+- Plan etkinleştirme notlarını ekle
+- Graf çizgilerini sınır dışı bırakın
+- Küresel ilerlemeden "Hala veriler yok" kaldır
+- Çubuğunda arama çubuğunun altındaki beyaz çizgiyi kaldır
+- Arama çubuğunun soluna düşen yerden açık düğmeyi taşı
+- Düzenleme planının ekran görüntüsünü düzelt
+- Ekran çekimlerinde eğri çizgi grafikleri

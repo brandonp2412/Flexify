@@ -1,0 +1,4 @@
+- Combina l'impostazione "Mostra riordine" e "Mostra conteggi"
+- Piani di rifazione
+- Pagina di grafici del rifattor
+- Dispositivi di ginnastica

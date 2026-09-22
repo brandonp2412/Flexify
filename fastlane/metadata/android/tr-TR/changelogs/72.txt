@@ -1,0 +1,2 @@
+- Github.com:brandonp2412/Flexify'nin ana şubesini birleştir
+- Sıkı mesafe alanı belirgin kalır - 1.0.64

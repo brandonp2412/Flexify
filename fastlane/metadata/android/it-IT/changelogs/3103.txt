@@ -1,0 +1,2 @@
+• Fix deploy.sh
+• Rettificare la navigazione delle schede non galleggiante su liste

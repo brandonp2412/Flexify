@@ -1,0 +1,4 @@
+• Aggiungere lo scambio di esercizi ai piani
+• Aggiungere la ricerca per lo svolgimento di un allenamento di scambio
+• Aggiungere test unitario per lo swap workout widget
+• Rettificare la banca dati di importazione sul desktop

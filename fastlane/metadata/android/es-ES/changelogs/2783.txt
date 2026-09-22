@@ -1,0 +1,4 @@
+• Añadir el intercambio de ejercicios a los planes
+• Añadir búsqueda para el ejercicio de intercambio
+• Añadir prueba de unidad para el widget de ejercicio de intercambio
+• Corrección de la base de datos de importación en el escritorio

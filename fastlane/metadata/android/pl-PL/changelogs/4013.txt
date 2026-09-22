@@ -1,0 +1,10 @@
+• fix: środowisko nawigacji strona
+• fix: ponownie otwierać kolektor folderów po udzieleniu zezwolenia
+• fix: ponownie próbuj odłączyć emulator przejściowego zdjęcia ekranu
+• fix: uprawnienia do kopiowania sekwencji przed wyborcem folderów
+• fix: stabilize Android test wybiercy folderów
+• fix: stabilizować automatyczne zestawienia ekranu zegarka
+• test: dodać wielokrotnie użyte urządzenia do bazy danych
+• test: dodanie podzielonych widgetów test harnes
+• test: Uprawnienie testów StartPlanPage z bieżącymi pola
+• test: zaznaczyć wybierka dokumentów Android po pakietach

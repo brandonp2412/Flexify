@@ -1,0 +1,1 @@
+- Ajouter la phase de débogage pour déployer-windows-store

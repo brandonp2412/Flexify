@@ -1,0 +1,7 @@
+- Update flater
+- Fix X-as consistentie in globale grafieken
+- Vraag alleen een keer om achtergrondbevoegdheden
+- Fix timer progress logica
+- Toon de meest recente grafieken in plaats van het beste gewicht
+- Vertoon fout voor leeg laden in grafieken pagina
+- Dynamisch zoeken toevoegen

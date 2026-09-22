@@ -1,0 +1,9 @@
+• İçe aktarımdaki hataları düzelt
+• planExercises kayıtları ekleyerek verilerin ithal edilmesini düzeltir ve null-safe-aware operatörünü kullanmak için plans_list.dart güncelleyebilir
+• # 206 sorunu, egzersizlerin depolanıp bölünmesinin yolunu güncelleyerek çözün
+• Görüşe doğru kaydırıcıları sabitle
+• Göçme planını bozma egzersizlerini düzelt
+• Plan.Eksersizler sütununda saklanmadan sadece seçilen egzersizler için PlanEksersizler kayıtları oluşturarak bir planda egzersizlerin dahil edilmesi için mantığı değiştirin
+• Gezi için işten kesin
+• Mevcut veriler için veri göçünü gerçekleştirin, böylece PlanExercises.enabled = false planından sadece o egzersizler çıkarılır.
+• Tüm testlerin geçtiğinden emin olmak için test dosyalarını güncelle

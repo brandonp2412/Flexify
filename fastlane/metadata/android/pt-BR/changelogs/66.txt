@@ -1,0 +1,6 @@
+- Remover tags de deploy.sh
+- Adicionar botão excluir para editar página de configuração de ginásio
+- Editar pontos do gráfico através de dois toques
+- Mover as configurações de data texto auxiliar para o rótulo
+- Adicionar configuração de formato de data curta
+- Graficos de linha de refactor

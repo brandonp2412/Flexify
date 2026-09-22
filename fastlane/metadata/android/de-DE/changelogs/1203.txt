@@ -1,0 +1,3 @@
+- Entfernen Sie Debug-Drucks aus Migrationsprüfungen
+- Entfernen Sie git Schieben --force aus deploy.sh
+- Behebung aller Datenbank-Migrationprobleme

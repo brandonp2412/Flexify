@@ -1,0 +1,13 @@
+- Grafik yüksekliğini değiştir
+- Kategori gizlemek için ayar ekle
+- Modal silmek için simge düğmelerini kullan
+- Yeni kayıtlara bildirim ekle
+- Kürek düzlemini ekle
+- Arama çubuğunda dolgulamayı artır
+- Tarih izleme üzerinden düzenleme sonrası grafikleri güncelle
+- Bir egzersiz bittikten sonra tekrarlama/koşullama ağırlığı ayarlayın
+- Sekme ayarlarını kaydettikten sonra geri dön
+- Uygulama temaları ile sistem navigasyonunu karıştır
+- Görünüm ayarlarının altındaki ön görünüm grafik
+- Grafik bakışına uygulanmayan eğri ayarını sabitle
+- Grafikleri seksi yapın 😎

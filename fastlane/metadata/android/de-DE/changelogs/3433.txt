@@ -1,0 +1,7 @@
+• Fügen Sie Kardio-/Kraft-Symbolindikatoren zu den Schaltzügen in der Bearbeitung von Set/Sets hinzu
+• Hinzufügen von Einstellungen für die Position der Fortschrittsleiste
+• Erlaubt die Kategorieabrechnung
+• Ändern Sie das Pläne-Icon im unteren Navigationsbereich
+• Festgestelltes Aussehen System ui Verdeckungsgraph
+• Aktualisieren Sie die Tab-Einstellungen sofort und entfernen Sie den Schaltfläche "Speichern "
+• Verhindern Sie null-Hin-Text auf Kategorien oder Neigung bei mehrere Bearbeitungs-Sets

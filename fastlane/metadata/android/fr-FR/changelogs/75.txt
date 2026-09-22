@@ -1,0 +1,11 @@
+- Déploiement de fixation
+- Fixer la sortie deploy.sh sans aucune modification
+- Revenir à "Remember les paramètres du graphique de résistance"
+- Revenir à "Remember les paramètres pour les graphiques cardio"
+- Couvrir le progression du timer lorsque l'onglet Timer est caché
+- Listez les exercices d'aujourd'hui en premier sur la page graphiques
+- Rappelez-vous les paramètres pour les graphiques cardio
+- Rappelez-vous les paramètres du graphique de résistance
+- Ajouter le setState manquant au strength_line
+- Activer l'édition en masse des unités pour les graphiques
+- Fixer des graphiques de tapage pour les exercices cardio

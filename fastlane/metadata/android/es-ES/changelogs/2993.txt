@@ -1,0 +1,4 @@
+• Corrección de capturas de pantalla automáticas
+• Resolver los problemas de espaciamiento en la página de configuración de edición
+• Desagrupar el historial predeterminado
+• Pull antes de empujar final

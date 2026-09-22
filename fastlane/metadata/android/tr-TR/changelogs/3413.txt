@@ -1,0 +1,4 @@
+• Grafiklerde göster / gizleme sınırı ve x eksesi ayarlarını ekle
+• Sürekli çalıştırılan planlarda zamanlama başlat
+• Çalışmayan yeni kardio tiplerini düzelt
+• Saklamak için uzun bir basın x ekseni / sınır kaydırıcı

@@ -1,0 +1,2 @@
+- Aggiungere suggerimenti di strumenti alle impostazioni
+- Rettificare le copie di backup automatiche che accadono ogni 15 minuti

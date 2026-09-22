@@ -1,0 +1,2 @@
+- pubspec.lock를 업데이트
+- GitHub 액션 작업 흐름에서 macOS/iOS 빌드를 제거하십시오

@@ -1,0 +1,2 @@
+• Testy Harden Patrol w stosunku do czasu
+• fix: stabilize Android sprawdzenie wybiercy folderów

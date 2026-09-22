@@ -1,0 +1,10 @@
+• Añadir la prueba al análisis de dart
+• Permitir que la lista de ejercicios se desplace más allá de la barra de navegación al completar un plan
+• Cambiar el estilo de la página de resistencia
+• Utilice constantemente el bottomNavHeight
+• Fija la altura del fondo
+• Fija los gráficos espaciados y oculta notas si la configuración está apagada
+• Fija pruebas de unidad para la barra de búsqueda
+• Mejorar el estilo de los gráficos
+• Hacer que el espacio entre los chips del plan sea consistente
+• Estilo de juego en la página de cardio

@@ -1,0 +1,6 @@
+- Supprimer le texte des exercices de plan
+- Réparation de l'épargne à partir du plan de départ
+- Faites un maximum de # par exercice
+- Ajouter des virgules arrière
+- Simplifier l'initialisation des paramètres
+- Retirez de git après avoir créé une version GitHub

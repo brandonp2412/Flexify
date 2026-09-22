@@ -1,0 +1,3 @@
+• Añadir prueba de rendimiento de la muestra
+• Mejorar el rendimiento
+• Intentar arreglar las implementaciones de msstore

@@ -1,0 +1,5 @@
+- Use botões de ação flutuantes extendidos
+- Fix deployment para github & f-droid repro
+- Previnir a exibição de permisões na página no iOS
+- Avaliar o flutter para 3.24.0
+- Corrigir gráficos cardio não atualizar instantaneamente

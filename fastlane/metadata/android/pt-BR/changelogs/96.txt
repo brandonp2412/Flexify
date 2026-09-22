@@ -1,0 +1,3 @@
+- Analisar o som de alarme personalizado ao configurá-lo
+- Graficos de cardio de refactor
+- Adicionar botão compartilhar banco de dados para configurações

@@ -1,0 +1,3 @@
+• Baixação do agp para 8.11.1
+• Desenhar para trás da interface do sistema e alternar rolamento de guias
+• Fixar repetições/peso pré-povoamento

@@ -1,0 +1,1 @@
+- Fixer les sélections d'aperçu multi-édition

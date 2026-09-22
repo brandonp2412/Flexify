@@ -1,0 +1,7 @@
+- Vermijd het verwijderen van oefenvoorschriften
+- Verval standaard eenheden met de instelling
+- Maak de grafiek iets korter
+- Voeg grensslider toe aan grafieken
+- Zeg # van sets in ineenstorting geschiedenis
+- Verbeter de stijl van dagdeelers voor de geschiedenis
+- Verdeelers van etiketten op de pagina van grafieken

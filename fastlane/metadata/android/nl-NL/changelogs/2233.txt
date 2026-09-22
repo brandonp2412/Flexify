@@ -1,0 +1,4 @@
+- Bevoegd oefeningen op schermopname voor plannen
+- Gevormd curve grafieken
+- Update README.md
+- Beheer van mislukte migraties

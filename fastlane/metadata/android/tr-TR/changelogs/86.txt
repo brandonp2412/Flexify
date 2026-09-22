@@ -1,0 +1,5 @@
+- Android/app/build.gradle'a multidex ekle
+- Flatter'ı 3.22.0'a güncelle.
+- Pubspec.lock güncelleme
+- Kod ayarlarını güncelle
+- Tarih sayfasından kayıt eklemeyi düzelt

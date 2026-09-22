@@ -1,0 +1,1 @@
+- Correggere bug con l'aggiunta di esercizi tramite piani

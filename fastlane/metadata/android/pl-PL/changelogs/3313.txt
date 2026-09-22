@@ -1,0 +1,4 @@
+• Naprawa wypełniania na stronach grafu
+• /Pokładamy toasty /nie odrzucając
+• Naprawianie wskazówek na wykresy
+• Zachowuj porządek podczas wymiany ćwiczeń

@@ -1,0 +1,3 @@
+- Czas trwania kardio jest określany jako minuty:sekundy
+- Ustaw maksymalne zestawy wszystkie 3 na ćwiczenie
+- Włącz czasów odpoczynku dla linuksa

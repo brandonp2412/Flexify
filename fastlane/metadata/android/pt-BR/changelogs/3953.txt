@@ -1,0 +1,6 @@
+• Renomear todos os adereços internos com prefixo _
+• Replicar capturas de tela automatizadas e testes e2e a partir de fit-book
+• chore: actualização de verificações de automação do repositório
+• ci: Reparação Fluxo de trabalho de implantação de Patrulha e Jogos
+• fix: alinhar os objetivos de compilação do Android JVM
+• fix: Manter peso cardio na história agrupada

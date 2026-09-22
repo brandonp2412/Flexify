@@ -1,0 +1,2 @@
+• Viele mögliche Fehler beheben
+• Die Datumsteilung ist bei der Auswahl einzubeziehen.

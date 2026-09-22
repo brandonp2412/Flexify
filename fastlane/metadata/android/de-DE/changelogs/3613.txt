@@ -1,0 +1,10 @@
+• Hinzufügen von Nachrichten für leere Plan
+• Machen Sie den Bildschirm standardmäßig ausgeschaltet und bewegen Sie die Schaltfläche in den Einstellungen
+• feat: Fügen Sie den Schirm auf die Einstellung für Ruhezeiten hinzu
+• feat: Ersetzen Sie die Themen dropdown durch SegmentedButton + AMOLED-Tooggle
+• fix: Schutz gegen leere Übungslisten in StartPlanPage Speichern und Auswählen
+• fix: Verhindern Sie SegmentedButton-Etikettenverpackung durch Korrektur von Polsterungen
+• fix: Verringerung der Nachfolgendtextgröße von 16 auf 14 in den Historien und Grafiklisten
+• fix: Freisetzung von Alarmschließung, wenn der Timer abläuft oder nicht läuft
+• fix: Anzeigen Sie die Snackbar in der App und beheben Sie die Benachrichtigung, wenn der Timer abläuft und der Bildschirm eingeschaltet ist
+• fix: Schrumpfen und stummen Nachtext in Geschichte und Grafiklistenfliesen

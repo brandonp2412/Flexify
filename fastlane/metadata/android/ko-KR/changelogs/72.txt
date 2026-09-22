@@ -1,0 +1,2 @@
+- github.com:brandonp2412/Flexify의 '주' 지부를 합병
+- 고정 거리 필드 하이라이트 유지 - 1.0.64

@@ -1,0 +1,2 @@
+- Mise à jour de pubspec.lock
+- Installer les paquets manquants dans le déployer-windows-store

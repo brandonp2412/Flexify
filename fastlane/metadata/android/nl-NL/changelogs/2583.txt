@@ -1,0 +1,9 @@
+• Voeg foutbeheersing toe aan het importeren van gegevens
+• Voeg meer gegevensmigratietests toe
+• Verwijder opmerkingen
+• Build config in android/app/build.gradle
+• Het probleem met het opzetten van de pagina op het edit_set_page
+• Verwijder onderstreepprefixen in sommige methoden van startplanpagina
+• Verwijder de selector en fix de tests
+• Verkorten van alle variabele namen
+• Verdeel alles in het bewerken van de pagina meer

@@ -1,0 +1,2 @@
+- Dodaj grafikę najlepszych odtwarzań
+- Komentarz w deploy.sh

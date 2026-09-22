@@ -1,0 +1,11 @@
+- Voeg wereldwijde grafieken toe
+- Update van fastlane icon.png
+- Maak de oefendraghandvatsels groter
+- Ruil vreemde duidelijke iconen
+- Zorg ervoor dat iOS decimale opties heeft voor getallen-invoer
+- Vermijd de timer-animatie telkens als je tabbladen wisselt
+- Maak het app-icon een donkere thema
+- Animatie toevoeging/ verwijdering in de geschiedenislijst
+- Voeg de relatieve tijdoptie toe voor datum
+- Herstel van het systeem op de tijdschema pagina
+- Verval van de grafiek na het bijwerken

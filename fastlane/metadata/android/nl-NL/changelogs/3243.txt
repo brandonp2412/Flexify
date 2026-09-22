@@ -1,0 +1,4 @@
+• Toon altijd tabbladtitels
+• Fix niet in staat om globale grafieken te scrollen
+• Fix actualisatiecategorieën
+• Verminder de globale grafiekverwarring op tooltip

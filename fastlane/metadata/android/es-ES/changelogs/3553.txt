@@ -1,0 +1,4 @@
+• Establezca la altura máxima en la configuración de formato
+• feat: añadir la pestaña de cronómetro de parada (#268)
+• feat: Configuración de gráfico por ejercicio y notas de ejercicio (#257 #267)
+• fix: punta de herramienta de mirado superponiendo la barra de búsqueda y el teclado que cubre las notas de ejercicio

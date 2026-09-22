@@ -1,0 +1,4 @@
+• Mostra sempre i titoli delle schede
+• Risolto non riuscire a scorrere le grafiche globali
+• Fissare le categorie di aggiornamento
+• Riduzione del disordine globale del grafico su tooltip

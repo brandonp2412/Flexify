@@ -1,0 +1,2 @@
+• Aggiorna tutto
+• chore: Formattazione/lint/client generato [pre-push]

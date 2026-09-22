@@ -1,0 +1,8 @@
+- Ajouter un réglage pour cacher le suivi du poids corporel
+- Fixer les changelog pour les versions fastlane
+- Supprimer la fonctionnalité de sauvegarde automatique
+- Ajouter le réglage pour le maximum de # d' ensembles
+- Ajouter des minutes de repos/seconde de surride globale
+- Rendre les paramètres de taille de rembourrage cohérents
+- Cliquez sur la barre de recherche en haut des paramètres
+- Rénommé WidgetSettings -> ParamètresLine

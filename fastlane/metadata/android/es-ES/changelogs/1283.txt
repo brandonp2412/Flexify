@@ -1,0 +1,2 @@
+- Empuje de fuerza en el despliegue
+- Añadir icono al cambio de cardio - 1.1.20

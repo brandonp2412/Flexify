@@ -1,0 +1,5 @@
+• Réviser la description du projet dans README
+• Mettre à jour README pour modifier le slogan du projet
+• Mise à jour du nom du projet dans README
+• La version mise à jour vers 2.2.0 dans pubspec.yaml
+• fix: résoudre les bugs d' historique ouverte et de planification

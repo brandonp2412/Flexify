@@ -1,0 +1,1 @@
+- Corrigir o crash da aplicação no lançamento

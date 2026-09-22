@@ -1,0 +1,6 @@
+• Parallellismo inferiore per gradle costruito su github azione
+• Aggiornare le screenshot
+• feat: chiarire campo di categoria è per la tagging del gruppo muscolare
+• fix: applicare la categoria seminata quando si registra per la prima volta un esercizio
+• fix: Solo tag rilasci dopo tutti i build di piattaforma di successo
+• fix: Pin release build e tag ad un commit SHA esatto

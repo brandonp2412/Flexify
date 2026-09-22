@@ -1,0 +1,1 @@
+• ci: fijar días de retención en las etapas de carga de artefactos para limitar el uso de almacenamiento

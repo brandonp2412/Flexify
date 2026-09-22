@@ -1,0 +1,8 @@
+- Hinzufügen der Einstellung zur Verborgenheit des Körpergewichts
+- Fix-Change-Logs für fastlane-Veröffentlichungen
+- Entfernen Sie die Funktion automatischer Sicherungen
+- Hinzufügen der Einstellung für maximale # von Sets
+- Hinzufügen von Ruheminuten/Sekunden globale Überschrift
+- Stell die Einstellungen für Polstergrößen einheitlich
+- Stecken Sie die Suchleiste an die Oberseite der Einstellungen
+- Widget-Settings -> EinstellungenLine

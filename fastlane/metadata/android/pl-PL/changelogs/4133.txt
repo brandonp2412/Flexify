@@ -1,0 +1,10 @@
+• Wybór nitów
+• Przeanalizować opis projektu w README
+• Aktualizacja README w celu modyfikacji taglina projektu
+• Aktualizacja nazwy projektu w README
+• Aktualizacja wersji do 2.2.0 w pubspec.yaml
+• ci: Stop flaky Patrol test gating releases
+• docs: dodać tekst alternatywny do obrazów README
+• fix: uniknąć awarii dostawcy ścieżki Android JNI
+• fix: unikać duplikowanej drogi powiadomienia o treningu
+• fix: Wiązany obraz ekranu CI zawiesza

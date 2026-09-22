@@ -1,0 +1,10 @@
+• 类类
+• 在 README 中修改项目描述
+• 更新README以修改项目标题
+• 在 README 中更新项目名称
+• 在pubspec.yaml中更新到2.2.0版本
+• ci: 停止的巡逻检测门释放
+• docs: 添加替代文本到 README图像
+• fix: 避免Android路径提供者JNI崩
+• fix: 避免重复训练通知路线
+• fix: 绑定屏幕截图CI挂

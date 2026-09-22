@@ -1,0 +1,5 @@
+- Idź na następne ćwiczenia , jak tylko osiągniesz maksymalne ustawienia .
+- Odwróć dzisiejszy plan na stronie grafu
+- Zatrzymaj czas odpoczynku po zakończeniu treningu
+- Poprawa wydajności ustawień
+- Dodaj ustawienie maksymalnych zestawów

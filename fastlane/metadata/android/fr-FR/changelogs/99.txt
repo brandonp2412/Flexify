@@ -1,0 +1,2 @@
+- Lazily a reçu des comptes pour les exercices de plan
+- Assurez-vous que gym_sets a un index

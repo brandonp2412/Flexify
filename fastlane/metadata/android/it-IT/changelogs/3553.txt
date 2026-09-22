@@ -1,0 +1,4 @@
+• Impostare l'altezza massima sulle impostazioni di formato
+• feat: aggiungere tab stopwatch (#268)
+• feat: Impostazioni grafiche per esercizio e note di esercizio (#257 #267)
+• fix: peek tooltip sovrapposizione della barra di ricerca e della tastiera che copre le note di esercizio

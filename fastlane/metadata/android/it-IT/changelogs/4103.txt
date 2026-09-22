@@ -1,0 +1,10 @@
+• Aggiungere una lista di controllo delle autorizzazioni delle app riutilizzabili
+• Etichette di aspetto centrale e riflettere lo stato di toggle nelle icone
+• Etichette e interruttori per impostazioni di piano centrale
+• Impostazioni del timer centrale e uso di icone attive riempite
+• Etichette di allenamento centrale e uso di icone di riempimento attivo
+• Esporre la lista di controllo delle autorizzazioni delle app nelle impostazioni
+• Rettifica di errori di blocco CI e di analisi del timer
+• Rettificare la richiesta di autorizzazione di notifica unica
+• Rettificare l'errore di analisi di dialogo per le autorizzazioni
+• Fare l' autorizzazione di notifica nativa immediata una volta

@@ -1,0 +1,6 @@
+• Voeg een stel ondernavvarianten toe
+• Voeg script toe voor wanneer Linux faalt
+• Verwijder nav-varianten
+• Upgrade de onderkant nav om een pil ontwerp
+• fix: verwijder hardcoded lokale JDK pad van gradle.properties
+• fix: stilte MSVC coroutine afwijking fout breekt Windows CI bouw

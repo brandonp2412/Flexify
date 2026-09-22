@@ -1,0 +1,3 @@
+• Synchroniseren van Google Play-opslag metadata automatisch (#333)
+• fix: publiceren van een conform privacybeleid
+• fix: bewaren van het privacybeleid in Pages deployment

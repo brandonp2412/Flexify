@@ -1,0 +1,10 @@
+• Adicionar lista de verificação de permissões de aplicativos reutilizáveis
+• Redes de aparência do centro e refletir o estado de toque em ícones
+• Redes de configuração do plano central
+• Configurações do cronómetro do centro e uso de ícones ativos preenchidos
+• Rótulos de treino central e usar ícones de preenchimento ativo
+• Expor lista de verificação de permissões de aplicativos em configurações
+• Corrigir o erro de bloqueio do ficheiro CI e do analista do cronometrista
+• Fixar o pedido de permissão de notificação única
+• Corrigir o erro do analista de diálogo de permissões
+• Fazer a permissão de notificação nativa urgente uma vez

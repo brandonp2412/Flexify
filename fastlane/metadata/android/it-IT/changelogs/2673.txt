@@ -1,0 +1,3 @@
+• Fix directory di lavoro di Java stage
+• Assicurati che la scatola di flutter sia sempre eseguibile
+• Spostare la configurazione java

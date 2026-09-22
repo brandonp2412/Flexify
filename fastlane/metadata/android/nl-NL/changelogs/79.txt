@@ -1,0 +1,12 @@
+- Bepaal screenshots
+- Fix export/import verborgen en cardio-types
+- Fix het uitschakelen van cardio bij het bewerken van een set
+- Stop met het animeren naar tabbladen na verwijdering
+- Verplaats het bericht met lege gegevens naar de top van het geschiedenis
+- Toevoegen van het blad geschiedenis
+- Updates van screenshots
+- Update screenShots voor vergelijking
+- Bij elke test is tabBarState toegevoegd
+- Gevoegde wereldwijde context Niet langer afhankelijk van het feit dat PlansPage de eerste pagina is
+- Geactualiseerde screenshots toegevoegd om te vergelijken
+- Vergemakkelijken van screenshots

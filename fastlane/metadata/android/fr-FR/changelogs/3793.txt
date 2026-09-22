@@ -1,0 +1,6 @@
+• Une parallélisme inférieur pour gradle s'appuie sur l'action github
+• Mise à jour des captures d'écran
+• feat: clarifier champ de catégorie est pour l' étiquetage des groupes musculaires
+• fix: appliquer la catégorie semée lors de la première enregistrement d'un exercice
+• fix: seulement les étiquettes sont publiées après toutes les constructions de plateforme réussir
+• fix: les modèles de libération de pin et les balises à un SHA de commande exact

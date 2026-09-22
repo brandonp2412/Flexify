@@ -1,0 +1,4 @@
+- Incluir configurações em backups de banco de dados
+- Fixar base de dados exportando no desktop
+- Adicionar um plano seguindo para a página inicial
+- Adicionar opções para trailing plano

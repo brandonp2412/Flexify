@@ -1,0 +1,10 @@
+• chore: Eş zamanlı yerleşim kesimi uyumlandır
+• chore: Flutter bağımlılık kilitleme dosyası
+• docs: tercüme yol haritasını ekle
+• docs: güncelleme yerleşim tamamlama durumu
+• feat: Brezilya Portekiz yerelleşmesini ekle
+• feat: CJK yerleşimlerini ekle
+• feat: Hollanda'nın yerleşimini ekle
+• feat: Fransızca yerleşimi ekle
+• feat: Almanca yerleşimi ekle
+• feat: İtalyan lokalizasyonu ekle

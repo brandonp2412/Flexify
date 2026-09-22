@@ -1,0 +1,11 @@
+- Fix l'uso di yq in .deploy.yml
+- Risolvere i problemi di rivestimento
+- Rimuovere evitare regola di stampa
+- Formatto di esecuzione
+- Eseguire flussi di lavoro su main
+- Aggiungere flussi di lavoro di github
+- Rettificare i flussi di lavoro di GitHub per gestire i test di atto
+- Rettifica la maggior parte delle generazioni di screenshot desktop
+- Aggiungere la configurazione per eseguire le prove di integrazione per il cromo
+- Fissare la pagina delle impostazioni sul web
+- Risoluzione di esecuzione su web

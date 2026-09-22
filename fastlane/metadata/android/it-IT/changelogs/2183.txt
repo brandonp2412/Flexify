@@ -1,0 +1,11 @@
+- Aggiungere grafici globali
+- Aggiornare fastlane icon.png
+- Rendere le maniglie di trascinamento più grandi
+- Scambia strani icone chiare
+- Assicurati che iOS abbia opzioni decimali per le entrate di numeri
+- Evita l'animazione del timer ogni volta che scambi tab
+- Fai scuro l'icona dell'app
+- Aggiunta/eliminazione di animazione nell'elenco di storia
+- Aggiungere l' opzione relativa per la data
+- Rilanciare il sistema sulla pagina timer
+- Rettificare il nome del grafico che è sbagliato dopo l' aggiornamento

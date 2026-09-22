@@ -1,0 +1,7 @@
+• Ajouter des tests de données de migration
+• Combiner les flux de travail en un seul
+• Supprimer certains commentaires inutiles
+• Link brzycki formule dans le commentaire
+• Supprimez les commentaires inutiles.
+• Supprimer certains commentaires
+• Abréviation des noms de variables

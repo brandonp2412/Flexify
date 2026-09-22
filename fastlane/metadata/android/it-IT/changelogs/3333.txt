@@ -1,0 +1,2 @@
+• Annuncio segnalare un bottone di bug a circa pagina
+• Fissa il raccoglitore sonoro dell' allarme

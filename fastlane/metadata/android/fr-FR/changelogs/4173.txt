@@ -1,0 +1,3 @@
+• Ajouter le flux de travail de signature de Kite Android (#347)
+• Fixer le signeur de Kite Android SDK recherche (#348)
+• Fixer l'environnement NDK de la signature Kite (#349)

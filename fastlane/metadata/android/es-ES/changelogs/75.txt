@@ -1,0 +1,11 @@
+- Despliegue de fijación
+- Corrección de deploy.sh de salida sin cambios
+- Revierten "Recuerda las configuraciones del gráfico de fuerza"
+- Revier "Recuerda las configuraciones para los gráficos de cardio"
+- Escondir el cronómetro progreso cuando la pestaña cronómetro está oculta
+- Enumera los ejercicios de hoy primero en la página de gráficos
+- Recuerde las configuraciones para los gráficos de cardio
+- Recuerde la configuración del gráfico de fuerza
+- Añadir setState faltante a strength_line
+- Habilitar la edición masiva de unidades para gráficos
+- Corrección de gráficos de toque para ejercicios de cardio

@@ -1,0 +1,10 @@
+• Ajouter serena
+• Modifier la largeur de la carte de jeu de squelette dans le plan de départ
+• Les données des graphiques de clip afin que les lignes ne volent pas
+• Supprimer l'action de captures d'écran waydroid
+• Correction de la compatibilité avec le GitHub Actions
+• Fixer le crochet pré-poussé
+• Fixation des crochets pré-poussés
+• Fixer l' espacement entre le champ cardio et la distance sur l' historique de modification
+• Cacher les progrès mondiaux sur des captures d'écran
+• Masquer des images lors de tests de captures d'écran

@@ -1,0 +1,2 @@
+- Personalizar las barras de progreso en los planes
+- Añadir copias de seguridad automáticas

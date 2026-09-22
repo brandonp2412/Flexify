@@ -1,0 +1,6 @@
+• Niedrigerer Parallellismus für gradle auf der Grundlage der github-Aktion
+• Aktualisieren Sie Screenshots
+• feat: Klarstellen Kategorie Feld ist für die Muskelgruppen Tagging
+• fix: die Kategorie der Saatgut verwendet, wenn eine Übung zum ersten Mal gezeichnet wird
+• fix: Nur Tag-Releases nach allen Plattform-Builds erfolgreich
+• fix: Pin-Release-Builds und Tagungen zu einem genauen Commit-SHA

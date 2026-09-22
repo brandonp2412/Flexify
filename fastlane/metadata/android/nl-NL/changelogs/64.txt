@@ -1,0 +1,7 @@
+- Alle commit-berichten in de release-noot opnemen
+- Vernaam de uitvoer/import gegevensbestanden
+- Refactor plannen pagina
+- Voeg het bewerkingsicon toe voor grafieken pagina
+- Voeg instellingen toe voor gebogen lijngrafieken
+- Maak lijngrafieken gebogen
+- Fix tooltips op lijngrafieken

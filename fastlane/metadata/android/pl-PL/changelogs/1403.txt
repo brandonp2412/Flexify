@@ -1,0 +1,4 @@
+- Włączyć ustawienia w kopie zapasowej bazy danych
+- Naprawa bazy danych eksportowanych na komputerze
+- Dodaj plan w śladzie do strony głównej
+- Dodaj opcje do śledzenia planu

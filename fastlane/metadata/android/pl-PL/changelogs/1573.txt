@@ -1,0 +1,4 @@
+- Dodaj zestawy ogrzewania
+- Zmiana stylu listy ćwiczeń w planach
+- Ustawione zestawy maksymalne
+- Wykazać tylko skłonność dla wartości niezerowych

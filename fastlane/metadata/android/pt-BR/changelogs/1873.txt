@@ -1,0 +1,6 @@
+- Adicionar validação
+- Melhorar o desempenho das grandes bases de dados
+- Faça o exercício adicionado & peso página rolable
+- Adicionar imagem para nova página de exercícios
+- Fixar adicionar enchimento de exercício
+- Solicitar notificações quando habilitar backups automáticos

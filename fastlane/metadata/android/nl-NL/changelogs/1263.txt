@@ -1,0 +1,6 @@
+- Fix testen
+- Voeg delenmenus toe
+- Fix klavier flikkerend op het indienen
+- Voorbeeld van eerder gecreëerde data op multirectivering
+- Gebruik een nieuwe selector voor cardio-grafieken
+- Kopieer de uitleg van krachtegrafieken naar cardio

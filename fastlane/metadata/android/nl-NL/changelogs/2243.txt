@@ -1,0 +1,3 @@
+- Bevoegd oefeningen op schermopname voor plannen
+- Gevormd curve grafieken
+- Beheer van mislukte migraties

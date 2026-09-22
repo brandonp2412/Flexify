@@ -1,0 +1,2 @@
+- Paylaşım menülerinden geri kalan sıfırları çıkar
+- Kardio'yu değiştirirken buggy birimini düzelt

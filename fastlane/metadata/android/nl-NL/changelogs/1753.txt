@@ -1,0 +1,3 @@
+- Toevoeging van tabbladen
+- Voeg planningsinstellingen toe
+- Fix grafiek fab blokkering informatie

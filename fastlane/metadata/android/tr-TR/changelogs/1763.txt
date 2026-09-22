@@ -1,0 +1,3 @@
+- Otomatik yedeklemeyi düzelt
+- Düzgün olmayan alarm kazalarını düzelt
+- Tekrarlama tahminlerinin doğruluğunu geliştirmek

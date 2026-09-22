@@ -1,0 +1,16 @@
+- Aggiornare le screenshot
+- Rimuovere il nome del progetto in github.sh
+- Rettificare gli avvertimenti in ritardo
+- Passare la ricerca mancante a plan_list_test
+- Traslocare la vista della zona sicura al corpo dello scaffale
+- Prendi tutte le screenshot in modalità scura
+- Mettila sui distintivi X in fila
+- Rettifica alcuni oscuri errori Android
+- Aggiungere il numero di versione alla politica sulla privacy
+- Aggiungere la versione della politica sulla privacy a privacy_url
+- Tocca per creare sui piani
+- Aggiornare la formulazione sulla pagina grafici non trovata
+- Mostra gli esercizi migliori dalla pagina grafici
+- Raggiustare il riempimento zero sulla pagina di storia del grafico non ci sono ancora dati
+- Altezze del grafico abbreviate
+- Rettificare il bug di peek grafico

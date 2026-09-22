@@ -1,0 +1,6 @@
+- Añadir validación
+- Mejorar el rendimiento de las grandes bases de datos
+- Hacer que la página de ejercicios y peso adicionales se desplace
+- Añadir imagen a la nueva página de ejercicios
+- Corrección añadir relleno de ejercicio
+- Solicitar notificaciones cuando se habiliten las copias de seguridad automáticas

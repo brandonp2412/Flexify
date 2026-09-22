@@ -1,0 +1,4 @@
+• Rettificare le repetizioni che cambiano per impostazione predefinita
+• Allentare il pulsante di fine timer
+• Migliorare le dipendenze dal flutter
+• Aggiornare il flutter a 3.32.8

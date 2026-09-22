@@ -1,0 +1,2 @@
+- Rinalizzare macOS zip file
+- Controlli fissi per le prove di integrazione

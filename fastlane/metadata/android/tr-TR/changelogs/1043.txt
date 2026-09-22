@@ -1,0 +1,3 @@
+- Düzenle düzenleme spor salonu kurulum atı
+- Ayarlara yapılan çağrıları kaldır
+- İzleyiciyi temizleyin .

@@ -1,0 +1,2 @@
+- Fix plan tellen
+- Fix database schema kijken stoppen soms

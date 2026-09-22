@@ -1,0 +1,2 @@
+- Hinzufügen von Bildunterstützung
+- Hinzufügen von monochromen App-Ikonen

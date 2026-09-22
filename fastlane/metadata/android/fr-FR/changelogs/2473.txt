@@ -1,0 +1,10 @@
+- Tests d'unité fixe
+- Déploiement de fichiers à windows store
+- Ajouter une étape de débogage à la liste des fichiers téléchargés dans le déploiement Windows Store
+- Réparer le déploiement Windows Store: utiliser le fichier local MSIX au lieu de l'URL de sortie GitHub
+- Fixer le déploiement Windows Store: assurez-vous que la version GitHub est créée avant le déploiement Windows Store
+- Mise à jour des captures d'écran de bureau
+- Réparer toutes les captures d'écran automatisées pour bureau
+- Mise à jour de pubspec.lock
+- Ajouter le script pour mettre à jour chromedriver
+- Réparer ce qui est la nouvelle page

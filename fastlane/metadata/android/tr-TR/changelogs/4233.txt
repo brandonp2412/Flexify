@@ -1,0 +1,1 @@
+• feat: Flexify başlatıcı simgesi olarak 08 simgesini kullanın

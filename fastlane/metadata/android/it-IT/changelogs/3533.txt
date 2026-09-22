@@ -1,0 +1,2 @@
+- Migliorare le prestazioni
+- Fix build per web

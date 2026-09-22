@@ -1,0 +1,4 @@
+- pubspec.lock를 업데이트
+- msstore 배포를 설정
+- 구글 플레이 버전을 구성
+- .actrc 및 MIGRATION_GUIDE.md를 삭제

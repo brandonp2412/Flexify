@@ -1,0 +1,6 @@
+- Eliminar el texto de los ejercicios del plan
+- Ahorro de la salida
+- Hacer un máximo de # de conjuntos por ejercicio
+- Añadir vírgenes traseras
+- Simplificar la inicialización de las configuraciones
+- Retirada de git después de crear una versión de GitHub

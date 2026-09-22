@@ -1,0 +1,4 @@
+- Reparatur von kaputtem Gerät, wenn die Ruhezeitvorrichtungen aktiviert sind
+- Festsetzung der Namen von Import-/Exportdatendateien
+- Refactor-Übungsliste
+- Festsetzung von Freisetzungsanmerkungen

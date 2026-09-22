@@ -1,0 +1,5 @@
+- Une sauvegarde automatique à la fin d'un plan
+- Mise à jour du plan de démarrage après avoir modifié une entrée
+- Poids par semaine par défaut
+- Mise à jour des dépendances
+- Fixer le nom de la variable de la page de paramètres

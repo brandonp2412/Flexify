@@ -1,0 +1,2 @@
+- Corrección de la aplicación en tiempo de espera
+- Corrección de ejercicios de selección de la página de historial

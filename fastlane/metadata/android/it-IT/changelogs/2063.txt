@@ -1,0 +1,1 @@
+- Aggiungere nomi abbreviati al selettore di unità

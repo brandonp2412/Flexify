@@ -1,0 +1,5 @@
+- Fixar testes de imagem de tela
+- Tornar a importação de dados mais robusta
+- Planejamento claro antes da importação
+- Prevenir a abertura do ponto do gráfico em pinça
+- Coloque o modo de liberação no meu telefone após a implantação

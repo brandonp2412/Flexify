@@ -1,0 +1,11 @@
+- Uso fijo de yq en .deploy.yml
+- Corrección de problemas de enlace
+- Eliminar evitar la regla de impresión
+- Ejecutar el formato dart
+- Ejecutar flujos de trabajo en el principal
+- Añadir los flujos de trabajo github
+- Corrección de los flujos de trabajo GitHub para manejar las pruebas de acción
+- Corrección de la mayoría de las generaciones de capturas de pantalla de escritorio
+- Añadir configuración para ejecutar pruebas de integración para cromo
+- Fija la página de configuración en la web
+- Corrección de la ejecución en la web

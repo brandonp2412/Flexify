@@ -1,0 +1,4 @@
+• Hinzufügen von Einstellungen zu der Zeigungs-/Versteckgrenze und zur Achse x auf Grafiken
+• Immer Start-Timer bei aktivierten Plänen
+• Reparatur neuer Kardiotypen, die nicht funktionieren
+• Langer Druck auf die Achse / Grenzschieber x

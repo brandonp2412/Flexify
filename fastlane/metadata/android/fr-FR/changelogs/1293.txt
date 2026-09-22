@@ -1,0 +1,2 @@
+- Détailler les zéros arrière des menus de partage
+- Réparation de l'unité de buggy lors du changement de cardio

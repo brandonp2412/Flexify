@@ -1,0 +1,6 @@
+- Elimina il testo sugli esercizi del piano
+- Risparmio fisso dal piano di partenza
+- Fate un massimo di set per esercizio
+- Aggiungere comme di seguito
+- Semplificare l' inizializzazione delle impostazioni
+- Tirare da git dopo aver creato una versione di GitHub

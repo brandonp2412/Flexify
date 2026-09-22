@@ -1,0 +1,11 @@
+- Rozwiązanie rozmieszczenia
+- Naprawianie wyjścia deploy.sh bez zmian
+- Odwróć "Pamiętaj ustawienia grafu siły"
+- Odwróć "Pamiętaj ustawienia dla graficznych kardio"
+- Ukryć rozwój zegarka , gdy zakryto zakładkę zegarka
+- Wypisz najpierw dzisiejsze ćwiczenia na stronie grafu
+- Pamiętaj ustawienia dla graficznych graficz
+- Pamiętaj ustawienia grafu siły
+- Dodaj brakujący setState do linii strength_line
+- Umożliwić masowe edycję jednostek dla wykresów
+- Naprawianie grafiki nacisku na ćwiczenia kardio

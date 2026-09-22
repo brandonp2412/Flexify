@@ -1,0 +1,4 @@
+- Reparatur der Rücknavigation manchmal nicht funktioniert
+- Verbergen Sie eine maximale Schätzung für Cardio-Übungen
+- Verbesserung der Leistung der Stärke
+- Verbesserung der Leistung der Pläne

@@ -1,0 +1,9 @@
+• Verval van de invoer van gegevens
+• Fix import van gegevens door in planExercises records en update plans_list.dart om nul-safe aware operator te gebruiken
+• Het probleem #206 oplossen door de manier waarop oefeningen worden opgeslagen en gesplitst te updaten
+• Fixen van de laaders die in het zicht flikken
+• Bepaalde migratieplanbreaking oefeningen
+• Verander de logica voor het opnemen van oefeningen in een plan door alleen voor geselecteerde oefeningen PlanExercises-records te maken en deze niet in de Plan.Exercises-kolom te bewaren
+• Pauze werk voor de reis
+• Vervoer van gegevensmigratie voor bestaande gegevens, zodat alleen die oefeningen worden verwijderd van het plan waarvoor PlanExercises.enabled = false
+• update testbestanden om ervoor te zorgen dat alle tests zijn geslaagd

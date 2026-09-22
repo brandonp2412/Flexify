@@ -1,0 +1,4 @@
+• Añadir la configuración al límite de muestra/ocultación y al eje x en los gráficos
+• Siempre arranque el cronómetro en los planes activados
+• Corrección de nuevos tipos de cardio que no funcionan
+• Presione largo el eje x / deslizador límite para ocultar

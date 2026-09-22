@@ -1,0 +1,3 @@
+- Réparation de sauvegardes automatiques
+- Réparation des accidents d' alarme inconsistants
+- Améliorer la précision des estimations de répétitions

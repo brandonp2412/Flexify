@@ -1,0 +1,10 @@
+• Ajouter un contour léger au cercle de l'horloge
+• Animation de l'existence du bouton d'arrêt dans la page de l'heureuse
+• Édition d'image clarifiée
+• Expliquer les déploiements de google play
+• Fixer +1 minute sur linux
+• Fixer des captures d'écran automatiques pour les versions
+• Réparation des changements
+• Fixer le style de lecture github [skip ci]
+• Correction du téléchargement de la version github dans le déploiement google play
+• Fixer le badge de largeur msstore [skip ci]

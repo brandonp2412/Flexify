@@ -1,0 +1,2 @@
+- Contiendo el plan
+- Corrección de esquema de base de datos de control de pararse a veces

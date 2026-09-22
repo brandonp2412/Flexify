@@ -1,0 +1,3 @@
+- Prueba de página de configuración de fijación
+- Utilice la unidad correcta para los gráficos por defecto
+- Añadir ajustes para unidades de fuerza y cardio

@@ -1,0 +1,5 @@
+- Poprawa zdjęć ekranu
+- Włączyć zdjęcia ekranu w wersjach GitHub
+- Wybór jednostki przebudowy
+- Usunięcie duplikatów wspomnień o jednostkach
+- Dodać wielokrotne edycje historii

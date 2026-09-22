@@ -1,0 +1,10 @@
+- Test fissi
+- Aggiungere la metrica delle migliori ripetizioni
+- Rinasimare AppGroupBy -> Periodo
+- Migliorare le prestazioni dei grafici cardio
+- Versione aumentataCodice su versioni universali
+- Correzione aggiungendo minuti dalla pagina timer
+- Commento di fornitura di fastlane
+- Se del caso, utilizzare l'ora locale
+- Logico delle impostazioni del rifattor
+- Codice del rifattore

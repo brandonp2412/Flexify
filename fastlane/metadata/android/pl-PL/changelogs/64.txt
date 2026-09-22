@@ -1,0 +1,7 @@
+- Włączyć wszystkie wiadomości commit w notatkach do wydania
+- Przeniemienie plików danych eksportowych/importowych
+- Strona planów refactor
+- Dodaj ikonę edycji dla strony graficznej
+- Dodaj ustawienie dla wykresów krzywych linii
+- Wykorzenienie wykresów linii
+- Naprawianie wskaźników narzędzi na wykresach linii

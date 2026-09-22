@@ -1,0 +1,4 @@
+• Fix deploy.sh
+• Maak de onderblaaie makkelijker te tikken
+• Vergemakkelijken het zien/tikken op laatste inzendingen
+• Gebruik eerder ingegeven boyweights in de pagina plannen

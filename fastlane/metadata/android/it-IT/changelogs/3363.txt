@@ -1,0 +1,8 @@
+• Aggiungere la classificazione temp alla pagina grafica
+• Categorie fisse non aggiornate dopo le importazioni
+• Rettificare l' ultimo suggerimento su grafici
+• Rettifica sistema ui oscurare sulla pagina
+• Rettificare gli elementi oscuranti della pagina impostazioni
+• Nome dei file di backup automatico
+• Rimuovere le animazioni dalla lista di storia
+• Rimuovere la logica del divisore dalla pagina grafici

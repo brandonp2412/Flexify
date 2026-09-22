@@ -1,0 +1,3 @@
+- Ajoutez la définition des onglets
+- Ajouter les paramètres du plan
+- Fixer les informations de blocage de la graphie

@@ -1,0 +1,10 @@
+• Corrección de las pancartas de desactivación que se muestran en capturas de pantalla
+• Actualización de capturas de pantalla
+• Utilice el botón de texto durante +1 minuto
+• chore: añadir Android guión de capturas de pantalla con bandera --profile
+• feat: mejorar el UI para la suavidad de la curva, los temporizadores, el seguimiento de los planos, el estilo de entrada
+• fix: centro del cronómetro círculo vertical y mover +1 min botón por debajo del círculo
+• fix: deshabilitar el banner de depuración en MaterialApp
+• fix: eliminar el antipatrón UniqueKey en el widget del círculo de cronometraje
+• fix: rediseño del círculo de temporizador con estética mínima y moderna
+• fix: sustituir runApp por un tester.pumpWidget en las pruebas de capturas de pantalla

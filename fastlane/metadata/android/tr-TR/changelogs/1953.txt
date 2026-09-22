@@ -1,0 +1,3 @@
+- Animasyon ilerleme çubuğu soldan sağa
+- Günümüz planını özel başlıklar ile vurgulayın
+- Plan editöründe gün seçicisini sıkıştır

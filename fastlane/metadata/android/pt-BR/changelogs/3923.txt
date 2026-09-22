@@ -1,0 +1,2 @@
+• Avaliar tudo
+• chore: Formatação automática/lint/cliente gerado [pre-push]

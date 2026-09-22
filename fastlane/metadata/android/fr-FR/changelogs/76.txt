@@ -1,0 +1,5 @@
+- Allez à l' exercice suivant une fois que vous avez atteint le maximum de sets
+- Revenir à l' actuel sur la page graphique
+- Arrêtez les horaires de repos une fois l'entraînement terminé
+- Améliorer les performances des paramètres
+- Ajoutez la définition de sets max

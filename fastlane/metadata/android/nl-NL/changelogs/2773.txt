@@ -1,0 +1,4 @@
+• Fix replicaties die standaard veranderen
+• Verlicht het einde van de timer knop
+• Verbetering van de flutter afhankelijkheden
+• Verbetering van de flutter naar 3,32,8

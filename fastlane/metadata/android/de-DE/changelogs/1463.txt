@@ -1,0 +1,2 @@
+- Bearbeiten # von Übungen auf Plänen statt auf Grafiken
+- Verbessern Sie die Leistung der App

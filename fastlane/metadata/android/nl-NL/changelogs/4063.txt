@@ -1,0 +1,4 @@
+• Selectie van het blad
+• Voorkeur voor zichtbaar tabblad selector
+• Vergemakkelijken van de controle van de vroegtijdige terugkeer
+• refactor: prefereren gebruikerszichtige besturing in Linux E2E

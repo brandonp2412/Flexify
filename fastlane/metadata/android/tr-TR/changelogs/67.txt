@@ -1,0 +1,11 @@
+- Ekran çekimlerini geliştir
+- Birimler kapanırsa grafiklerde birim seçicisini gizle
+- Grafikler için alanlar doğrultusunda grup ekle (gün/hafta/ay/yıl)
+- Bir egzersiz planlardan görüntülerken grafikler sekmesine animasyon
+- Planlardan bir egzersiz için grafikleri görün
+- Deploy.sh'ten etiketleri çıkar - 1.0.59
+- Spor set sayfasını düzenlemek için sil düğmesini ekle
+- Graf noktalarını çift dokunarak düzenle
+- Tarih ayarlarını etiketlere taşı
+- Kısa tarih biçimi ayarını ekle
+- Refactor çizgi grafikleri

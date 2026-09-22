@@ -1,0 +1,1 @@
+• Fixen von Timer-Bugs auf einigen Geräten

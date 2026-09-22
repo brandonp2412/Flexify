@@ -1,0 +1,2 @@
+• Preferire le affermazioni di impostazioni del timer visibili all'utente
+• refactor: rimuovere il codice temporizzante desktop morto

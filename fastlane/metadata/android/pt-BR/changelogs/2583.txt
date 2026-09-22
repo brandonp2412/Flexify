@@ -1,0 +1,9 @@
+• Adicionar o tratamento de erros para a importação de dados
+• Adicionar mais testes de migração de dados
+• Eliminar comentários
+• Ativar configuração de construção em android/app/build.gradle
+• Corrigir o problema de linting em edit_set_page
+• Remover prefixos de subtítulo em alguns métodos de página de plano de início
+• Remover o selector de unidade e corrigir os testes
+• Cortar todos os nomes de variáveis
+• Dividir tudo na página de configuração de edição mais

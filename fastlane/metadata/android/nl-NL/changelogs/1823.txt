@@ -1,0 +1,2 @@
+- Toolstips toevoegen aan instellingen
+- Fix automatische back-ups die elke 15 minuten gebeuren

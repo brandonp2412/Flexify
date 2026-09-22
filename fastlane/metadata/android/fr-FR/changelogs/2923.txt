@@ -1,0 +1,3 @@
+• Modifier la page de l' édition et l' historique
+• Réparation des déploiements
+• Tests d'unité fixe

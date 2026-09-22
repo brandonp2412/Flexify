@@ -1,0 +1,4 @@
+- Corrigir GitHub lançamento de arquivos de caminhos para incluir Android APKs
+- 2.0.27
+- Atualizar pubspec.lock
+- Remover as construtores macOS/iOS do fluxo de trabalho Ações do GitHub

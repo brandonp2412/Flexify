@@ -1,0 +1,3 @@
+- Planlardan ayarlanmayan görüntüleri düzelt
+- Masaüstü zamanlayıcıları hâlâ çalışmaktadır
+- Kcal, metreyi mesafe birimine ekleyin

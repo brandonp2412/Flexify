@@ -1,0 +1,10 @@
+- Feststellungsprüfungen
+- Hinzufügen der Best Reps Metrik
+- Umbenennen Sie AppGroupBy -> Periode
+- Verbesserung der Leistung von Cardio-Grafiken
+- Zunahme von versionCode bei universellen Veröffentlichungen
+- Behebung der Hinzufügung von Minuten von Timer-Seite
+- Kommentar zur fastlane-Versorgung
+- Verwenden Sie gegebenenfalls die lokale Zeit
+- Refactor-Einstellungslogik
+- Refactorcode

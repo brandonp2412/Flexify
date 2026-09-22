@@ -1,0 +1,2 @@
+- Edição # de exercícios em planos em vez de gráficos
+- Melhorar o desempenho do aplicativo

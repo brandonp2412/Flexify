@@ -1,0 +1,6 @@
+- Aggiungere convalida
+- Migliorare le prestazioni per le grandi banche dati
+- Rendi la pagina di aggiunta di esercizio e peso scorrevole
+- Aggiungere immagine alla nuova pagina di esercizi
+- Fissare aggiungere rivestimento per esercizi
+- Richiedere notifiche quando si attivano i backup automatici

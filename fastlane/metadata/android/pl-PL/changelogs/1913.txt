@@ -1,0 +1,5 @@
+- Użyj rozszerzonych pływających przycisków działania
+- Naprawa wdrożenia do github & f-droid repro
+- Zapobieganie wyświetleniu strony uprawnień w systemie iOS
+- Wzrost wstrząsu do 3,24,0
+- Naprawianie graficznych kardio nie aktualizujących się natychmiast

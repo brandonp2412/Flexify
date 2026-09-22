@@ -1,0 +1,8 @@
+- Voeg een instelling toe om het lichaamsgewicht te verbergen
+- Fix changelog voor fastlane releases
+- Verwijder de functie automatische back-ups
+- Voeg de instelling toe voor maximaal # van sets
+- Voeg restminuten/seconden toe globale overschrijving
+- Maak de instellingen van het opvullingsgrootte consistent
+- Sluit de zoekbalk aan boven de instellingen
+- Vernaam WidgetSettings -> SettingsLine

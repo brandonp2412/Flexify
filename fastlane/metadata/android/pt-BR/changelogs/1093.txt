@@ -1,0 +1,3 @@
+- Teste de página de configuração de correção
+- Use a unidade correta para gráficos por padrão
+- Adicionar configuração para unidades de força e cardio

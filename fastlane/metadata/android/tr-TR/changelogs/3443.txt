@@ -1,0 +1,9 @@
+• Düzenleme set/set'lerinde düğmelerine kardio/güç simgesi göstergeleri ekle
+• Gelişme çubuğu pozisyonu için ayarları ekle
+• Kategori temizliğine izin verin
+• Planları alt navigasyon simgesinde değiştir
+• Sıkı görünüm sistemi, gizleyen grafik
+• Bazen otomatik yedekleme işlemleri düzeltmek
+• Birim testleri
+• Sekme ayarlarını hemen güncelle ve kaydet düğmesini kaldır
+• Kategorielerde sıfır ipucu metnini önlemek veya çoklu düzenleme setlerinde eğilmek

@@ -1,0 +1,3 @@
+- La duración del cardio debe ser de minutos: segundos.
+- Fix max sets todos siendo 3 por ejercicio
+- Habilitar temporizadores de descanso para Linux

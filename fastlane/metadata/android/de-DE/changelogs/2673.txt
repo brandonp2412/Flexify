@@ -1,0 +1,3 @@
+• Fix-Arbeitsverzeichnis der java-Stage
+• Stellen Sie sicher, dass der flutter-Binn immer ausführbar ist
+• Verlegen Sie die Java-Einstellung

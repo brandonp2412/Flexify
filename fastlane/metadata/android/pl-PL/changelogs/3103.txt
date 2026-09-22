@@ -1,0 +1,2 @@
+• Naprawianie rozmieszczenia.sh
+• Naprawić nav tab nie pływające nad listami

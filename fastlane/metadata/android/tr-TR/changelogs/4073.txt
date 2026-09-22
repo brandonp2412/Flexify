@@ -1,0 +1,10 @@
+• Düz ayarlar ses başlangıcı
+• Düz katrak içeriği seçimi
+• FitBook'dan portal yedekleme sistemi
+• Etiketlenmiş Fleksify eylem seçicileri tercih edilir
+• Etiketlenmiş grafik eylem seçicilerini tercih edin
+• Görünür seksiyon seçicisini tercih edin
+• Erken dönüş kontrol akışını basitleştir
+• fix: Bağlı Android CI test çalıştırma süresi
+• fix: klasör seçiminden sonra yedeklemeyi etkinleştir
+• refactor: Linux E2E'de kullanıcı tarafından görünür kontrolleri tercih edin

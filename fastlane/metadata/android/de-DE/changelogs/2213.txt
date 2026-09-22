@@ -1,0 +1,7 @@
+- Hinzufügen von Notizen zur Planaktivierung
+- Verhindern Sie, dass Graphlinien über die Grenzen hinausgehen
+- Entfernen Sie "Keine Daten noch" aus dem globalen Fortschritt
+- Entfernen Sie die weiße Linie unterhalb der Suchleiste auf dem Scroll
+- Bewegen Sie den Schaltfläche von der Spüllecke nach links der Suche
+- Befestigen Sie Screenshot des Bearbeitungsplans
+- Kurvenliniengraphen in Screenshots

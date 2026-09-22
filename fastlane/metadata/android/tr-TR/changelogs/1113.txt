@@ -1,0 +1,3 @@
+- Sayfa Ekle
+- Ayarlar sayfasına simge ekle
+- Planlar simgesini değiştir

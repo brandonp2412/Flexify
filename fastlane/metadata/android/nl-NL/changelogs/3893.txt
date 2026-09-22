@@ -1,0 +1,1 @@
+• ci: de opslagdagen vaststellen voor upload-artifact-stappen om het opslaggebruik te beperken

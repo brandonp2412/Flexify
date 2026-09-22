@@ -1,0 +1,2 @@
+• Połowiu odległości stałej wyświetlanego dla zestawów kardio z jednostką masy
+• Popraw wyświetlenie wykazu historii ćwiczeń kardio z ciężarem

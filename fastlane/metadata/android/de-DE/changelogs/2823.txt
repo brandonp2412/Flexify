@@ -1,0 +1,3 @@
+• Erlaubt die manuelle Auslösung des github-Workflows
+• Abgraderung auf Rubin 3.3 für Google-Play
+• Fixer Verlegername in pubspec.yaml

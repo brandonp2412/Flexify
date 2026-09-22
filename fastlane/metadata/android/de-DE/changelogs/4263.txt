@@ -1,0 +1,10 @@
+• Decken Sie die türkischen Lokalpräferenzen ab
+• Zurücksetzen von temporären Symbol-Redesign-Assets
+• chore(l10n): Zusätzlich languageNameTurkish
+• chore: Adresse Türkischer Lokalisierungsüberprüfung
+• feat(l10n): Zusätzliche türkische Lokalisierung
+• feat: Hinzufügen von Flexing-Biccep-Icon-Konzepten
+• feat: Hinzufügen von Symbol- und Symbol-Verfeinerungssätzen 7 und 8
+• fix(l10n): Entferntes Duplikat
+• fix(tests): hinzufügen .gitignore, um test_bundle.dart auszuschließen
+• fix(tests): locale_preference_test wird die Sprache tr hinzugefügt

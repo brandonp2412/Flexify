@@ -1,0 +1,10 @@
+• 타이머 서클에 가벼운 스케일을 추가
+• 리눅스에서 +1 분 정정
+• 변동기들을 수정
+• github 리드미 스타일링을 수정 [skip ci]
+• MSstore 너비 배지를 수정 [skip ci]
+• 구글 플레이 배포의 주파수 제한 [skip ci]
+• 배지를 더 크게 만들
+• 배지를 일관되게 만들어 [skip ci]
+• "Fix msstore width badge [skip ci]"를 되돌려 놓습니다
+• 기구 대신 github 릴리스를 사용하세요

@@ -1,0 +1,10 @@
+• Voeg de submodule Flutter toe aan de analyse ignoreer lijst
+• Voeg ontbrekende spacing toe aan add_exercise_page.dart
+• Fix cardio-veld afstand
+• Oplossen van dropdown fout in weight_page.dart
+• Fix getSingle fout in exercise_modal.dart
+• Fix vreemde contextfout in main.dart
+• Format
+• Maak knoppen licht minder in de timer pagina
+• Verwijder het voorpunt in het groepsgeschiedenis
+• Verwijder ongebruikte invoer

@@ -1,0 +1,10 @@
+• Scatto di nitro
+• Rivedere la descrizione del progetto in README
+• Aggiorna README per modificare il tagline del progetto
+• Aggiornare il nome del progetto in README
+• Aggiornamento alla versione 2.2.0 in pubspec.yaml
+• ci: STOP flaky Patrol test gating release
+• docs: aggiungere testo alternativo alle immagini README
+• fix: evitare il crash del provider di percorso Android JNI
+• fix: evitare duplicate modalità di notifica di allenamento
+• fix: Scatto di schermata legato CI appeso

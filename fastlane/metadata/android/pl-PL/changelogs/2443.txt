@@ -1,0 +1,2 @@
+- Aktualizacja pubspec.lock
+- Naprawianie ścieżek plików artefaktów do wydania GitHub

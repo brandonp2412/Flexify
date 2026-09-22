@@ -1,0 +1,10 @@
+• Dodać sereny
+• Zmiana szerokości karty zestawu szkieletów w planie startowym
+• Dane z wykresu, tak aby linie nie odleciały
+• Wykryć działania wideo
+• Naprawianie zgodności z biegiem działań GitHub
+• Naprawa haków przedpchniętych
+• Przystosowanie haków przedpuszczalnych
+• Naprawić odstęp między pola kardio i odległości w historii edycji
+• Ukryj globalny postęp na zdjęciach ekranu
+• Ukryj obrazy na badaniu zdjęć ekranu

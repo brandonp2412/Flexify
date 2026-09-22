@@ -1,0 +1,3 @@
+- Utilice la configuración de fecha larga para editar los conjuntos de gimnasio
+- Corrección de la selección del primer elemento en la historia del gimnasio
+- Corrección de la línea nueva que falta en el compromiso de liberación

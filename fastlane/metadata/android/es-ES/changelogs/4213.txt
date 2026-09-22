@@ -1,0 +1,2 @@
+• docs: simplificar la configuración de readme
+• test: mejorar los estados de muestra de capturas de pantalla

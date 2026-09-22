@@ -1,0 +1,4 @@
+- Combinez la réglage "Montre le réordre" et "Montre le nombre"
+- Plan de réfacteurs
+- Page de graphiques de réfacteurs
+- Le réfacteur gym_sets

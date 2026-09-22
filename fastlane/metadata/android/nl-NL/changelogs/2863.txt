@@ -1,0 +1,10 @@
+• Toestemming van de configuratie van rusttimer per training vanaf de pagina instellingen
+• Animeren knoppen op zoekbalken
+• Animeren van checkboxen op selecteer
+• Animeren fab op de plannen pagina
+• Fix bug bij het bewerken van eenheden voor een grafiek
+• Bevestig het eerste/laatste tooltip op hover grafieken
+• Fix voor plannen met titels
+• Fixed plan list test
+• Fix verwijderen van aangepaste timers op de instellingen pagina
+• Maak de dagselector donkerder

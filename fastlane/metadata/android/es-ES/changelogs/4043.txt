@@ -1,0 +1,6 @@
+• Corrección de los controles de finalización de la implementación de Microsoft Store
+• Parse multiline Tienda respuestas de despliegue
+• Estados vacíos polacos
+• Objetivo publicado Envíos de la tienda
+• ci: retraso de la toma de Android transitorio
+• test: alinear el historial del gráfico estado vacío

@@ -1,0 +1,1 @@
+- Fix bar di stato su android 15

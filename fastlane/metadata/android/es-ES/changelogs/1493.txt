@@ -1,0 +1,3 @@
+- Maneja con gracia los errores en la carga de imágenes
+- Eliminar botones de añadir/remover del editor de imágenes
+- Deja la imagen en paz si el usuario cancela el seleccionador de archivos

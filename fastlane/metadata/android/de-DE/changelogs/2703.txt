@@ -1,0 +1,2 @@
+• Festsetzung der letzten Bewegungsschritte der Pipeline
+• Behebung von android-Artefakten

@@ -1,0 +1,8 @@
+- Añadir la configuración de la pestaña de historial ocultar
+- Cambiar las copias de seguridad automáticas
+- Nombre de fijación no actualización para editar el juego de gimnasio
+- Añadir copias de seguridad automáticas
+- Corrección de nuevos equipos de gimnasio con ID y creaciones inválidas
+- Código de formato en import_data
+- Correccionar jank cuando se añade un nuevo equipo de gimnasio
+- Utilice file_picker para los datos de exportación/importación

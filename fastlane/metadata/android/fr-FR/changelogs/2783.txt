@@ -1,0 +1,4 @@
+• Ajouter des exercices de swap aux plans
+• Ajoutez la recherche pour l' entraînement de swap
+• Ajoutez un test d' unité pour le widget d' entraînement de swap
+• Réparer la base de données d'importation sur le bureau

@@ -1,0 +1,2 @@
+- Behebt den Befehl msstore veröffentlichen
+- Garantie-Fest-Sets vor dem Testen in Grafiken Seite

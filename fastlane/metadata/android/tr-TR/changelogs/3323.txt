@@ -1,0 +1,6 @@
+• Yeni tarih biçimleri eklenir (örneğin Almanca için)
+• Grafiğe zaman tabanlı x-öksü seçeneğini ekle
+• Hatırlama sorunlarını düzelt
+• Planın geriye gitme oranı ve sayımı sabitle
+• Kullanıcıların plan başlıklarının başlıklandırılmasını karar vermesine izin verin
+• Tarih düğmesini navigasyon çubuğuna taşı

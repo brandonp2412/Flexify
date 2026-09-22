@@ -1,0 +1,2 @@
+• L' annonce de signalement d' un bouton de bug à la page sur
+• Fixer le prélèvement sonore de l'alarme

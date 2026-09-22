@@ -1,0 +1,2 @@
+• Permitir que la inclusión de la curva se vea defectuosa
+• Fijación de los planes/grafos de importación de Windows

@@ -1,0 +1,2 @@
+- Actualizar flutter y pubspec.lock
+- Corrección de despliegue no está funcionando

@@ -1,0 +1,5 @@
+- Węgielkowe
+- Napraw tabę nawigacji za systemem nawigacji
+- Przenieś etykietę płynności krzywej przed prześlizgiem
+- Naprawianie brakującego koloru ścieżki z kolorami systemu
+- Normalizacja jednostek podczas zmiany ich z grafik

@@ -1,0 +1,5 @@
+- Aggiungere supporto per unità in cardio
+- Gruppo fisso per settimana per le linee cardio
+- Gruppo fisso per settimane per grafico
+- Gruppo fisso per settimana
+- Piani di rifazione

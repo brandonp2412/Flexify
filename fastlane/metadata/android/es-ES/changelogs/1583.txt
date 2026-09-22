@@ -1,0 +1,4 @@
+- Añadir la estimación de la representación
+- Añadir estimación de duración
+- Añadir la configuración de calentamiento faltante
+- Se puede fijar el paquete windows

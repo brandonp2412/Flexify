@@ -1,0 +1,2 @@
+- Fix msstore publicar comando
+- Guarantem os conjuntos de ginásio antes de testá-los na página de gráficos

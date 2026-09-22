@@ -1,0 +1,3 @@
+• Incluir app-release.aab na criação de versões do github
+• Tornar o gráfico de pistas rolable
+• Use notas de liberação corretas

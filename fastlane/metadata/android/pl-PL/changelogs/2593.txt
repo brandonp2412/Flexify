@@ -1,0 +1,2 @@
+• Pozwolić przewodom uruchomić zmiany w przepływie pracy
+• Spróbuj naprawić msstore

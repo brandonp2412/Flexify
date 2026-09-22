@@ -1,0 +1,2 @@
+- Fixer les répétitions/poids initiaux à zéro sur les plans
+- Retirer les zéros avant après avoir enregistré les plans

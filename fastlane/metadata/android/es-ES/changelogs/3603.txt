@@ -1,0 +1,5 @@
+• feat: añadir un enlace de revisión a la página de Sobre
+• fix: añadir relleno inferior faltante en todas las páginas deslizantes (#301)
+• fix: reanudar el marcador de cronómetro de parada cuando la aplicación vuelve al primer plano
+• fix: usar el tiempo del reloj de pared para el cronómetro para sobrevivir a la pantalla
+• fix: Configuración de entrenamiento relleno inferior y etiqueta de pestaña de cronómetro

@@ -1,0 +1,3 @@
+• Fixar o diretório de trabalho do Java stage
+• Certifique-se de que o candeeiro de flutter é sempre executável
+• Mover configuração java

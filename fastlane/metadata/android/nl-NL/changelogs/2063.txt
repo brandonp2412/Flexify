@@ -1,0 +1,1 @@
+- Voeg korte namen toe aan de selector

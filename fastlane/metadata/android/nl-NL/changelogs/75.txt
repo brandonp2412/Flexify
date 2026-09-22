@@ -1,0 +1,11 @@
+- Fix deployment
+- Fix deploy.sh uitgaan zonder wijzigingen
+- Herstel "Herinner je aan de krachtegraafinstellingen"
+- Herstel "Herinner instellingen voor cardio-grafieken"
+- Verberg de progressie van de timer wanneer het tabblad van de timer verborgen is
+- Lijst de oefeningen van vandaag eerst op de grafieken pagina
+- Onthoud instellingen voor cardio-grafieken
+- Herinner de krachtegraafinstellingen
+- Voeg ontbrekende setState toe aan strength_line
+- Massebewerking van eenheden voor grafieken mogelijk maken
+- Fix taping grafieken voor cardio-oefeningen

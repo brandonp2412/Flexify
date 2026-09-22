@@ -1,0 +1,3 @@
+• Incluir app-release.aab en la creación de liberación de github
+• Hacer que el gráfico de mirado sea desplazable
+• Utilice las notas de liberación correctas

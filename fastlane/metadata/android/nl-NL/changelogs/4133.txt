@@ -1,0 +1,10 @@
+• Verzameling van niet-gewassen
+• Herziening van de projectbeschrijving in README
+• Update README om de projecttagline te wijzigen
+• Update van de projectnaam in README
+• Versijn bijgewerkt naar 2.2.0 in pubspec.yaml
+• ci: Stop vlekkelijke patrouille test gating vrijlatingen
+• docs: voeg alternatieve tekst toe aan README-afbeeldingen
+• fix: vermijden dat de Android-padprovider JNI crasht
+• fix: Vermijd duplicate trainingmeldingsroute
+• fix: gebonden schermopname CI hangt

@@ -1,0 +1,8 @@
+- Voeg het tabblad verbergen van het geschiedenis toe
+- Automatische back-ups wijzigen
+- Fix naam niet bijwerken voor edit fitness set
+- Automatische back-ups toevoegen
+- Herstel van nieuwe fitness-sets met ongeldige ID's en creates
+- Formatcode in import_data
+- Fix jank bij het toevoegen van een nieuwe fitness set
+- Gebruik file_picker voor export/import gegevens

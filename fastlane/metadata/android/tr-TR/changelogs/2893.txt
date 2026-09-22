@@ -1,0 +1,10 @@
+• Zamanlayıcı döngüye hafif bir çizgi ekleyin
+• Zamanlayıcı sayfasında durdur düğmesinin varlığını animate
+• Resim düzenlemesini netleştir
+• Google Play dağıtımlarını açıklayın
+• Linux'ta +1 dakikayı düzelt
+• Sürümler için otomatik ekran görüntüleri düzelt
+• Değişken kayıpları düzelt
+• Github Readme Styling'i düzelt
+• Github sürümünü yüklemeyi Google Play dağıtımında düzelt
+• MSstore genişliği badgesini düzelt

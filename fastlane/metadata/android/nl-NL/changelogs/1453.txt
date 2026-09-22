@@ -1,0 +1,2 @@
+- Fix app crash op tijd uit
+- Bepaal de selectie oefeningen van de geschiedenis pagina

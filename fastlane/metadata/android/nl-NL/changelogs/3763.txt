@@ -1,0 +1,1 @@
+• Uitbreiden van debug: dump lxc/waydroid logs

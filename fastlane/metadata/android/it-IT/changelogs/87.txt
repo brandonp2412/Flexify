@@ -1,0 +1,5 @@
+- Rettificare la scorrere tra i grafici per il movimento delle schede
+- Eliminazione di timers.webm
+- Rettificare date create erroneamente quando si modificano i set di palestra
+- Impostazione di impostazioni/pagina di inserimento del peso che viene scartata
+- Disattivare i colori del sistema nella prova di screenshot

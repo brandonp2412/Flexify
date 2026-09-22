@@ -1,0 +1,5 @@
+• Fixar o vínculo virustotal para as libertações
+• feat: adicionar exibições ao vivo para selecionadores de configurações e corrigir formatamento de peso
+• fix: adicionar um tampão superior para iniciar a página de planejamento para evitar o corte de rótulos delineados
+• fix: intervalo consistente de 8 dp entre as entradas na página do plano de início
+• fix: Progress position preview usa real TimerProgressIndicator

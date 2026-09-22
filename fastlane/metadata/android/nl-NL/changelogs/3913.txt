@@ -1,0 +1,10 @@
+• Voeg serena toe
+• Verander breedte van de skelet setkaart in het startplan
+• Clip chart data zodat lijnen niet vliegen
+• Wegdroid screenshots actie verwijderen
+• Fix GitHub Acties runtime compatibiliteit
+• Fix pre-push hook
+• Verbetering van de voordrukhakken
+• Fix spacing tussen cardio en afstand veld op bewerken geschiedenis
+• Verberg de wereldwijde vooruitgang op screenshots
+• Verberg beelden op screenshot-tests

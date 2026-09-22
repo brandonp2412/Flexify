@@ -1,0 +1,4 @@
+- Planlar için ekran görüntüsünde egzersizleri etkinleştir
+- Eklentili eğri grafikleri
+- README.md güncelleme
+- Başarısız göçleri yönetmek

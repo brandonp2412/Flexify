@@ -1,0 +1,6 @@
+- Voeg validering toe
+- Verbeteren van de prestaties van grote databases
+- Maak de pagina bewegen en het gewicht toevoegen
+- Beeld toevoegen aan nieuwe oefenpagina
+- Fix voeg oefenvulling toe
+- Verzoek meldingen wanneer automatische back-ups worden ingeschakeld

@@ -1,0 +1,9 @@
+• ci: APKs de PR automáticos apenas para os PR de proprietário, manual para outros
+• ci: criar e anexar APK em pedidos de puxão
+• ci: Correção de versão Flutter 0.0.0 desconhecida na edição APK PR
+• ci: corrigir o URL do artefato citado no comentário APK PR
+• ci: instalar PR builds lado a lado através do suffix .pr app id
+• ci: signo PR builds com o keystore de testes públicos comprometidos
+• fix: Set de contagem do plano de reset na meia-noite local
+• fix: parar o som/vibração do cronómetro de repouso quando um novo conjunto é iniciado
+• refactor: Use AlertDialog para Filtros e a constante de navegação de fundo compartilhada

@@ -1,0 +1,5 @@
+• Dodaj konfigurację budowy odtwarzalnej dla F-Droid
+• Naprawianie odniesień do systemu windows
+• Naprawa problemów z odtworzeniem - dostosowanie wersji do Flutter 3.29.3
+• Zapobieganie awarii po przywozie bazy danych
+• Aktualizacja pubspec.lock

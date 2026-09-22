@@ -1,0 +1,4 @@
+- Selector de día de rediseño
+- Fija el historial de apertura de la gráfica de retraso
+- Recalculación de la ORM al editar repeticiones/peso
+- Añadir relleno al final de la página de plan de edición

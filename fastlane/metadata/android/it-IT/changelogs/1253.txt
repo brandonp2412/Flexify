@@ -1,0 +1,1 @@
+- Correzione delle selezioni di anteprima di più modifiche

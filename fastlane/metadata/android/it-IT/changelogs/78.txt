@@ -1,0 +1,5 @@
+- Correzione delle prove di screenshot
+- Rendere più robuste le importazioni di dati
+- Piani chiari prima dell'importazione
+- Prevenire l'apertura del punto grafico in pizzico
+- Metti la modalità di rilascio sul mio telefono dopo l'impiego

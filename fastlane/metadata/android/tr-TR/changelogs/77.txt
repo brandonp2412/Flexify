@@ -1,0 +1,6 @@
+- Planların birden fazla silinmesine izin verin
+- Grafikler sayfasında "Kütle" olarak "Kütle" adını değiştirin
+- Grafikler sayfasının düşüşüne düzenleme düğmesini ekle
+- Durumu gönderildikten sonra odak mesafesi
+- Kardiyo türleri ile kazaları düzeltmek
+- Graph_history'den tarih eklentisi kaldır

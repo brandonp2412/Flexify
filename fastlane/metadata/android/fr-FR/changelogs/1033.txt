@@ -1,0 +1,3 @@
+- Exécutez la mise à niveau du pub dart
+- Ne pas utiliser les couleurs du système pour les captures d'écran
+- Ne construisez un appbundle que lors de l'envoi à play store

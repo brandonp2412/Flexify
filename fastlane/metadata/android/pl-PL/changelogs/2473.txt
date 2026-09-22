@@ -1,0 +1,10 @@
+- Badania jednostkowe
+- Naprawa wprowadzania do sklepu Windows
+- Dodaj krok odbudowy do wykazu pobranych plików w systemie Windows Store
+- Naprawianie wdrożenia Windows Store: użyj lokalnego pliku MSIX zamiast adresu URL wydania GitHub
+- Naprawianie wdrożenia Windows Store: upewnij się, że wersja GitHub została utworzona przed wdrożeniem Windows Store
+- Aktualizowanie zdjęć ekranu
+- Naprawić wszystkie automatyczne zdjęcia ekranu na komputerze
+- Aktualizacja pubspec.lock
+- Dodaj skrypt do aktualizacji chromedriver
+- Naprawiamy nową stronę.

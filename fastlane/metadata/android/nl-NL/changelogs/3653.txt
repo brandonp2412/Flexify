@@ -1,0 +1,10 @@
+• Fix debug banners die worden weergegeven in screenshots
+• Updates van screenshots
+• Gebruik de tekstknop voor +1 minuut
+• chore: Voeg Android-scrimpot-scripts toe met --profielvlag
+• feat: verbeteren van de gebruikersinterface voor de gladheid van de curve, timers, plan trailing, inputstijl
+• fix: Centrum timer cirkel verticaal en bewegen +1 min knop onder de cirkel
+• fix: Debug-banner in MaterialApp uitschakelen
+• fix: verwijderen UniqueKey anti-patroon in timer cirkel widget
+• fix: herontwerp van timercirkel met minimale, moderne esthetiek
+• fix: vervangen van runApp door tester.pumpWidget in screenshot tests

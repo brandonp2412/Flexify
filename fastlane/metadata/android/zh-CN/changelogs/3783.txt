@@ -1,0 +1,6 @@
+• 添加一堆下面的导航变体
+• 添加运行Linux失败时的脚本
+• 删除 nav 变体
+• 更新下面的导航,成为药丸设计
+• fix: 从gradle.properties中删除硬码的本地JDK路径
+• fix: 默默 MSVC 规律误差 破解 Windows CI 构建

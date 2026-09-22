@@ -1,0 +1,4 @@
+• Verander de werkstroom van github
+• Fix github werkstroom
+• Verwijder overbodige git-trekkingen
+• Repliceer fdroid build systeem voor android build releases

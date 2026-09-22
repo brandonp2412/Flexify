@@ -1,0 +1,10 @@
+• Aggiungere flutter submodule per l'analisi ignorare elenco
+• Aggiungere spazi mancanti ad add_exercise_page.dart
+• Fissare il spaziamento dei campi cardio
+• Risolto errore dropdown in weight_page.dart
+• Correzione di getErro singolo in exercise_modal.dart
+• Correzione di errore di contesto strano in main.dart
+• Formattazione
+• Rendere il pulsante brillazione leggermente meno in pagina timer
+• Rimuovere la casella di controllo principale sulla cronologia del gruppo
+• Eliminazione delle importazioni non utilizzate

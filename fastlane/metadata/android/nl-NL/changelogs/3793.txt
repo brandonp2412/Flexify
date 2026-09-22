@@ -1,0 +1,6 @@
+• Lagere parallelisme voor gradle bouwen op github actie
+• Updates van screenshots
+• feat: verduidelijken categorie veld is voor het markeren van spiergroepen
+• fix: de voor het eerst belevende oefening in de zaadcategorie toe te passen
+• fix: Alleen tag releases na alle platform bouwen slagen
+• fix: Pin release builds en tag naar een exacte commit SHA

@@ -1,0 +1,10 @@
+• Dodaj test do analizy strzałów
+• Pozwolić, aby lista ćwiczeń przewietlała się po pasku nawigacyjnego podczas realizacji planu
+• Zmiana stylu strony siły
+• Konsekwentnie używać bottomNavHeight
+• Ustawić wysokość dna
+• Naprawić rozbieżność wykresów i ukryć notatki jeśli ustawienie jest wyłączone
+• Ustawić testy jednostkowe dla paski wyszukiwania
+• Poprawa stylu wykresów
+• /Uczyń to w sposób zgodny /z rozmieszczeniem żetonów
+• Styl dopasowania w stronie kardio

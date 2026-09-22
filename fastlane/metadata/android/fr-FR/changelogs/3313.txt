@@ -1,0 +1,4 @@
+• Fixer le rembourrage sur les pages graphiques
+• Fixer les toasts sans jamais rejeter
+• Fixer les astuces sur les graphiques
+• Garder l'ordre lors de l'échange d'un exercice

@@ -1,0 +1,3 @@
+- Voeg pagina toe
+- Ikons toevoegen aan de pagina instellingen
+- Verander het plan-icon

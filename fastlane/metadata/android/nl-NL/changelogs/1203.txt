@@ -1,0 +1,3 @@
+- Verwijder debugg afdrukken van migratie testen
+- Verwijder git push --force van deploy.sh
+- Alle migraties van databases oplossen

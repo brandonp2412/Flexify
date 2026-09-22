@@ -1,0 +1,8 @@
+- Aggiungere impostazioni per nascondere il monitoraggio del peso corporeo
+- Rettificare i cambiamenti per le versioni di fastlane
+- Rimuovere la funzione di backup automatico
+- Aggiungere l' impostazione per il numero massimo di set
+- Aggiungere minuti di riposo/secondi sovrastamento globale
+- Rendere le impostazioni delle dimensioni dei rivestimenti coerenti
+- Metti la barra di ricerca in cima alle impostazioni
+- Rinasimare WidgetSettings -> SettingsLine

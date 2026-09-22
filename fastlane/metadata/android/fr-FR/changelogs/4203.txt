@@ -1,0 +1,2 @@
+• ci: réessayer une défaillance transitoire du pick-up Patrol
+• fix: restaurer les défauts d'exercice StartPlan
