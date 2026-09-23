@@ -87,15 +87,16 @@ def configuredReleaseCertificateSha256 = signingCertificateSha256(configuredRele
 // outside this repo.
 def requestedAppIdSuffix = System.getenv('FLEXIFY_APP_ID_SUFFIX') ?: ''
 def requestedAppLabel = System.getenv('FLEXIFY_APP_LABEL')
-def runningInCi = (System.getenv('CI') ?: '').equalsIgnoreCase('true')
 
 def appIdSuffix = requestedAppIdSuffix
 def appLabel = requestedAppLabel ?: 'Flexify'
 
-// A local machine without the upstream release key must never replace the
-// production package. Make its build side-by-side automatically instead.
-if (!runningInCi &&
-    !appIdSuffix &&
+// A configured non-upstream key must never sign the production package.
+// A completely absent key is different: release builds must remain unsigned
+// with the production application ID so F-Droid can reproduce the upstream
+// APK and copy/verify its signature externally.
+if (!appIdSuffix &&
+    configuredReleaseSigning != null &&
     configuredReleaseCertificateSha256 != expectedReleaseCertificateSha256) {
     appIdSuffix = '.dev'
     appLabel = requestedAppLabel ?: 'Flexify Dev'
