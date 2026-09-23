@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FlexLine extends StatelessWidget {
+  static const double _edgePaddingFraction = 0.02;
+
   final List<FlSpot> spots;
   final List<dynamic> data;
   final bool? hideBottom;
@@ -137,6 +139,10 @@ class FlexLine extends StatelessWidget {
       maxY = center + 0.5;
     }
 
+    final yPadding = (maxY - minY) * _edgePaddingFraction;
+    minY -= yPadding;
+    maxY += yPadding;
+
     List<FlSpot> trendSpots = showTrendLine == true
         ? _calculateTrendLine(spots)
         : [];
@@ -189,7 +195,7 @@ class FlexLine extends StatelessWidget {
 
     return LineChart(
       LineChartData(
-        clipData: FlClipData.all(),
+        clipData: const FlClipData.vertical(),
         borderData: FlBorderData(show: false),
         minY: minY,
         maxY: maxY,

@@ -14,6 +14,7 @@ fi
 
 screenshot_dir="fastlane/metadata/android/en-US/images/$FLEXIFY_DEVICE_TYPE"
 drive_timeout="${SCREENSHOT_DRIVE_TIMEOUT:-12m}"
+app_id="com.presley.flexify"
 rm -rf "$screenshot_dir"
 mkdir -p "$screenshot_dir"
 
@@ -71,7 +72,7 @@ if ! screenshots_complete; then
 
   adb reconnect offline >/dev/null 2>&1 || true
   timeout 30s adb -s "emulator-$EMULATOR_PORT" wait-for-device >/dev/null 2>&1 || true
-  adb -s "emulator-$EMULATOR_PORT" shell am force-stop com.presley.flexify >/dev/null 2>&1 || true
+  adb -s "emulator-$EMULATOR_PORT" shell am force-stop "$app_id" >/dev/null 2>&1 || true
   sleep 2
 
   run_drive

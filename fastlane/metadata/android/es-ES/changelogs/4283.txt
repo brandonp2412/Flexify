@@ -1,0 +1,4 @@
+• Añadir espacio encima del campo de nombre nuevo en la edición de gráficos
+• Volver a generar pubspec.lock
+• Eliminar el espaciado incorrecto en edit_set_page
+• docs: alinear las insignias de descarga del README

@@ -54,3 +54,5 @@ chromedriver.zip
 chromedriver-win64/
 
 coverage/
+# Widget Preview related
+.widget_preview/

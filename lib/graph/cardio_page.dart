@@ -10,12 +10,12 @@ import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
-import 'package:flexify/graph/graph_curve_settings.dart';
-import 'package:flexify/graph/graph_date_field.dart';
+import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -236,6 +236,10 @@ class _CardioPageState extends State<CardioPage> {
     final shortDateFormat = context.select<SettingsState, String>(
       (settings) => settings.value.shortDateFormat,
     );
+    final showUnits = context.select<SettingsState, bool>(
+      (settings) => settings.value.showUnits,
+    );
+    final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
 
     final metricOptions = _isWeightUnit(target)
@@ -251,6 +255,68 @@ class _CardioPageState extends State<CardioPage> {
             (CardioMetric.distance, context.l10n.distanceLabel),
             (CardioMetric.incline, context.l10n.inclineLabel),
           ];
+
+    final metricSelector = DropdownButton<CardioMetric>(
+      value: metric,
+      isExpanded: true,
+      underline: const SizedBox.shrink(),
+      borderRadius: BorderRadius.circular(12),
+      items: metricOptions
+          .map(
+            (option) => DropdownMenuItem(
+              value: option.$1,
+              child: Text(option.$2, style: theme.textTheme.titleLarge),
+            ),
+          )
+          .toList(),
+      selectedItemBuilder: (context) => metricOptions
+          .map(
+            (option) => Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                option.$2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleLarge,
+              ),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        setState(() {
+          metric = value!;
+        });
+        setData();
+        _savePreferences();
+      },
+    );
+    final periodSelector = SegmentedButton<Period>(
+      showSelectedIcon: false,
+      segments: [
+        ButtonSegment(value: Period.day, label: Text(context.l10n.periodDay)),
+        ButtonSegment(value: Period.week, label: Text(context.l10n.periodWeek)),
+        ButtonSegment(
+          value: Period.month,
+          label: Text(context.l10n.periodMonth),
+        ),
+        ButtonSegment(value: Period.year, label: Text(context.l10n.periodYear)),
+      ],
+      selected: {period},
+      onSelectionChanged: (value) {
+        setState(() {
+          period = value.first;
+        });
+        setData();
+        _savePreferences();
+      },
+    );
+    final showUnitControl =
+        showUnits &&
+        (metric == CardioMetric.distance || metric == CardioMetric.weight);
+    final unitItems = showUnitControl
+        ? (metric == CardioMetric.weight
+              ? strengthUnitMenuItems(context.l10n)
+              : cardioDistanceUnitMenuItems(context.l10n))
+        : <DropdownMenuItem<String>>[];
 
     final spots = <FlSpot>[];
     for (var index = 0; index < data.length; index++) {
@@ -342,93 +408,85 @@ class _CardioPageState extends State<CardioPage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             left: 16.0,
             right: 16.0,
-            bottom: bottomNavHeight,
+            bottom: desktop ? 24.0 : bottomNavHeight,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton<CardioMetric>(
-                      value: metric,
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      borderRadius: BorderRadius.circular(12),
-                      items: metricOptions
-                          .map(
-                            (option) => DropdownMenuItem(
-                              value: option.$1,
-                              child: Text(
-                                option.$2,
-                                style: theme.textTheme.titleLarge,
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      selectedItemBuilder: (context) => metricOptions
-                          .map(
-                            (option) => Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                option.$2,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleLarge,
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          metric = value!;
-                        });
-                        setData();
-                        _savePreferences();
-                      },
+              if (desktop)
+                Row(
+                  children: [
+                    Expanded(child: metricSelector),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 2, child: periodSelector),
+                  ],
+                )
+              else ...[
+                Row(
+                  children: [
+                    Expanded(child: metricSelector),
+                    const SizedBox(width: 8),
+                    IconButton.filledTonal(
+                      icon: const Icon(Icons.tune),
+                      tooltip: context.l10n.options,
+                      onPressed: _showOptions,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton.filledTonal(
-                    icon: const Icon(Icons.tune),
-                    tooltip: context.l10n.options,
-                    onPressed: _showOptions,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              SegmentedButton<Period>(
-                showSelectedIcon: false,
-                segments: [
-                  ButtonSegment(
-                    value: Period.day,
-                    label: Text(context.l10n.periodDay),
-                  ),
-                  ButtonSegment(
-                    value: Period.week,
-                    label: Text(context.l10n.periodWeek),
-                  ),
-                  ButtonSegment(
-                    value: Period.month,
-                    label: Text(context.l10n.periodMonth),
-                  ),
-                  ButtonSegment(
-                    value: Period.year,
-                    label: Text(context.l10n.periodYear),
-                  ),
-                ],
-                selected: {period},
-                onSelectionChanged: (value) {
-                  setState(() {
-                    period = value.first;
-                  });
-                  setData();
-                  _savePreferences();
-                },
-              ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                periodSelector,
+              ],
+              if (desktop) ...[
+                const SizedBox(height: 12),
+                GraphOptionsControls(
+                  compact: true,
+                  shortDateFormat: shortDateFormat,
+                  unitValue: showUnitControl ? target : null,
+                  unitItems: unitItems,
+                  onUnitChanged: (value) {
+                    setState(() {
+                      target = value;
+                    });
+                    setData();
+                  },
+                  startDate: start,
+                  endDate: end,
+                  onSelectStart: _selectStart,
+                  onClearStart: () {
+                    setState(() {
+                      start = null;
+                    });
+                    setData();
+                  },
+                  onSelectEnd: _selectEnd,
+                  onClearEnd: () {
+                    setState(() {
+                      end = null;
+                    });
+                    setData();
+                  },
+                  limit: limit,
+                  maxLimit: 100,
+                  onLimitChanged: (value) {
+                    setState(() {
+                      limit = value;
+                    });
+                    setData();
+                    _savePreferences();
+                  },
+                  timeBasedXAxis: useTimeBasedXAxis,
+                  onTimeBasedXAxisChanged: (value) {
+                    setState(() {
+                      useTimeBasedXAxis = value;
+                    });
+                    _savePreferences();
+                  },
+                ),
+              ],
               const SizedBox(height: 8),
               Expanded(
                 child: data.isEmpty
@@ -480,19 +538,17 @@ class _CardioPageState extends State<CardioPage> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
-            final theme = Theme.of(sheetContext);
-            final colorScheme = theme.colorScheme;
             final settings = context.read<SettingsState>().value;
-
-            Widget sectionLabel(String text) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                text,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-            );
+            final showUnitControl =
+                settings.showUnits &&
+                (metric == CardioMetric.distance ||
+                    metric == CardioMetric.weight);
+            final unitItems = showUnitControl
+                ? (metric == CardioMetric.weight
+                      ? strengthUnitMenuItems(context.l10n)
+                      : cardioDistanceUnitMenuItems(context.l10n))
+                : <DropdownMenuItem<String>>[];
+            void refreshSheet() => setSheet(() {});
 
             return SafeArea(
               child: Padding(
@@ -502,130 +558,60 @@ class _CardioPageState extends State<CardioPage> {
                   16,
                   16 + MediaQuery.of(sheetContext).viewInsets.bottom,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if ((metric == CardioMetric.distance ||
-                            metric == CardioMetric.weight) &&
-                        settings.showUnits) ...[
-                      sectionLabel(context.l10n.unitLabel),
-                      DropdownButtonFormField<String>(
-                        initialValue: target,
-                        items: metric == CardioMetric.weight
-                            ? strengthUnitMenuItems(context.l10n)
-                            : cardioDistanceUnitMenuItems(context.l10n),
-                        onChanged: (value) {
-                          setState(() {
-                            target = value!;
-                          });
-                          setData();
-                          setSheet(() {});
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                    sectionLabel(context.l10n.dateRange),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GraphDateField(
-                            label: context.l10n.startDate,
-                            value: start,
-                            hint: settings.shortDateFormat,
-                            onTap: () async {
-                              await _selectStart();
-                              if (sheetContext.mounted) setSheet(() {});
-                            },
-                            onClear: () {
-                              setState(() {
-                                start = null;
-                              });
-                              setData();
-                              setSheet(() {});
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: GraphDateField(
-                            label: context.l10n.stopDate,
-                            value: end,
-                            hint: settings.shortDateFormat,
-                            onTap: () async {
-                              await _selectEnd();
-                              if (sheetContext.mounted) setSheet(() {});
-                            },
-                            onClear: () {
-                              setState(() {
-                                end = null;
-                              });
-                              setData();
-                              setSheet(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          context.l10n.dataPoints,
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colorScheme.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '$limit',
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: limit.toDouble(),
-                      inactiveColor: colorScheme.primary.withValues(
-                        alpha: 0.24,
-                      ),
-                      min: 10,
-                      max: 100,
-                      onChanged: (value) {
-                        setState(() {
-                          limit = value.toInt();
-                        });
-                        setData();
-                        _savePreferences();
-                        setSheet(() {});
-                      },
-                    ),
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(context.l10n.useTimeBasedXAxis),
-                      value: useTimeBasedXAxis,
-                      onChanged: (value) {
-                        setState(() {
-                          useTimeBasedXAxis = value;
-                        });
-                        _savePreferences();
-                        setSheet(() {});
-                      },
-                    ),
-                    const GraphCurveSettings(),
-                  ],
+                child: GraphOptionsControls(
+                  compact: false,
+                  shortDateFormat: settings.shortDateFormat,
+                  unitValue: showUnitControl ? target : null,
+                  unitItems: unitItems,
+                  onUnitChanged: (value) {
+                    setState(() {
+                      target = value;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
+                  startDate: start,
+                  endDate: end,
+                  onSelectStart: () async {
+                    await _selectStart();
+                    if (sheetContext.mounted) refreshSheet();
+                  },
+                  onClearStart: () {
+                    setState(() {
+                      start = null;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
+                  onSelectEnd: () async {
+                    await _selectEnd();
+                    if (sheetContext.mounted) refreshSheet();
+                  },
+                  onClearEnd: () {
+                    setState(() {
+                      end = null;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
+                  limit: limit,
+                  maxLimit: 100,
+                  onLimitChanged: (value) {
+                    setState(() {
+                      limit = value;
+                    });
+                    setData();
+                    _savePreferences();
+                    refreshSheet();
+                  },
+                  timeBasedXAxis: useTimeBasedXAxis,
+                  onTimeBasedXAxisChanged: (value) {
+                    setState(() {
+                      useTimeBasedXAxis = value;
+                    });
+                    _savePreferences();
+                    refreshSheet();
+                  },
                 ),
               ),
             );

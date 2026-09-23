@@ -1,0 +1,2 @@
+• fix: imzasız F-Droid sürüm kimliğini koru
+• fix: Android imza kaymasını önle

@@ -513,5 +513,9 @@
   "1789804588": "• fix(android): 更新AGP到9.3.2",
   "1790025613": "• WIP: 转移 从Nox 进行复杂的检查清单工作\n• chore: 更新Serenas项目配置\n• test: 覆盖选择的默认\n• test: 移除巡逻集成带",
   "1790107764": "• 覆盖土耳其地区偏好\n• 逆转临时图标重新设计的资产\n• chore(l10n): 增加语言名称 土耳其语\n• chore: 地址 土耳其局部化审查\n• feat(l10n): 增加土耳其地区化\n• feat: 添加曲双脑标志概念\n• feat: 添加图标7和8的精炼组\n• fix(l10n): 删除复制条目\n• fix(tests): 添加 .gitignore 排除 test_bundle.dart\n• fix(tests): 在 locale_preference_test 中添加tr语言",
-  "1790111019": "• 更新 README.md\n• feat: 添加分类管理\n• feat: 将图标 2 设为 Flexify 启动器图标\n• fix: 恢复内嵌 Flutter DevTools\n• fix: 提升 VS Code 中 Flutter 调试的稳定性"
+  "1790111019": "• 更新 README.md\n• feat: 添加分类管理\n• feat: 将图标 2 设为 Flexify 启动器图标\n• fix: 恢复内嵌 Flutter DevTools\n• fix: 提升 VS Code 中 Flutter 调试的稳定性",
+  "1790128482": "• 在编辑图表的新名称字段上方添加间距\n• 重新生成 pubspec.lock\n• 移除 edit_set_page 中多余的间距\n• docs: 对齐 README 中的下载徽章",
+  "1790130666": "• fix: 保留 F-Droid 未签名版本的身份标识\n• fix: 防止 Android 签名漂移",
+  "1790132278": "• fix: 强制仅使用一个 Flexify 应用和一个签名密钥",
+  "1790159359": "• chore: 添加土耳其语 Play 商店截图\n• chore: 本地化最新版本元数据\n• feat: 完成所有受支持语言的翻译\n• feat: 在桌面端显示图表控件\n• feat: 本地化完整版本历史\n• feat: 优化计时器毫秒显示\n• fix: 让缩放后的计时器文字保持在圆圈内\n• fix: 缓和折线图边缘裁切\n• test: 加强本地化完整性检查\n• test: 保持商店语言映射同步"
 }

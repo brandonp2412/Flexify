@@ -1,0 +1,2 @@
+• fix: identiteit van de niet-ondertekende F-Droid-release behouden
+• fix: ongewenste wijzigingen in Android-ondertekening voorkomen

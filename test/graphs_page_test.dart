@@ -11,11 +11,13 @@ Future<void> pumpGraphsPage(
   WidgetTester tester,
   FlexifyTestHarness harness, {
   bool withTabController = false,
+  Size? surfaceSize,
 }) async {
   final page = GraphsPage(tabController: MockTabController());
   await harness.pump(
     tester,
     withTabController ? DefaultTabController(length: 1, child: page) : page,
+    surfaceSize: surfaceSize,
   );
   await tester.pumpAndSettle();
 }
@@ -64,6 +66,35 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Best weight'), findsOne);
+  });
+
+  testWidgets('Global progress exposes options inline on desktop', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1200, 800);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await harness.database.settings.update().write(
+      testSettings(showGlobalProgress: true),
+    );
+    await pumpGraphsPage(
+      tester,
+      harness,
+      withTabController: true,
+      surfaceSize: const Size(1200, 800),
+    );
+
+    await tester.tap(find.text('Global progress'));
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Options'), findsNothing);
+    expect(find.text('Start date'), findsOne);
+    expect(find.text('Stop date'), findsOne);
+    expect(find.text('Data points'), findsOne);
+    expect(find.text('Curve line graphs'), findsOne);
+    expect(tester.takeException(), null);
   });
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {

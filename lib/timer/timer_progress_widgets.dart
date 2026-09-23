@@ -142,6 +142,60 @@ class _TimerCircularProgressIndicatorState
   }
 }
 
+class _TimeWithMilliseconds extends StatelessWidget {
+  final String time;
+  final Duration duration;
+  final double fontSize;
+  final Color color;
+
+  const _TimeWithMilliseconds({
+    required this.time,
+    required this.duration,
+    required this.fontSize,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final milliseconds = duration.inMilliseconds
+        .remainder(1000)
+        .toString()
+        .padLeft(3, '0');
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            time,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: fontSize,
+              color: color,
+              fontWeight: FontWeight.w300,
+              letterSpacing: 2,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+        ),
+        Text(
+          '.$milliseconds',
+          style: TextStyle(
+            fontSize: fontSize * 0.32,
+            color: color.withValues(alpha: 0.45),
+            fontWeight: FontWeight.w300,
+            letterSpacing: 1,
+            height: 0.9,
+            fontFeatures: const [FontFeature.tabularFigures()],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class StopwatchProgressIndicator extends StatefulWidget {
   final DateTime? startedAt;
   final Duration accumulated;
@@ -257,15 +311,11 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
                       ),
                     ),
                   ),
-                  Text(
-                    _formatElapsed(_elapsed),
-                    style: TextStyle(
-                      fontSize: timeFontSize,
-                      color: onSurface,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 2,
-                      fontFeatures: [const FontFeature.tabularFigures()],
-                    ),
+                  _TimeWithMilliseconds(
+                    time: _formatElapsed(_elapsed),
+                    duration: _elapsed,
+                    fontSize: timeFontSize,
+                    color: onSurface,
                   ),
                 ],
               ),
@@ -302,11 +352,8 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
     final hours = elapsed.inHours;
     final minutes = elapsed.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = elapsed.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final centiseconds = (elapsed.inMilliseconds.remainder(1000) ~/ 10)
-        .toString()
-        .padLeft(2, '0');
-    if (hours > 0) return '$hours:$minutes:$seconds.$centiseconds';
-    return '$minutes:$seconds.$centiseconds';
+    if (hours > 0) return '$hours:$minutes:$seconds';
+    return '$minutes:$seconds';
   }
 }
 
@@ -416,6 +463,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
 
     final primary = Theme.of(context).colorScheme.primary;
     final onSurface = Theme.of(context).colorScheme.onSurface;
+    final remaining = timerState.timer.getRemaining();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -455,14 +503,11 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                     ),
                   ),
                 ),
-              Text(
-                generateTitleText(timerState.timer.getRemaining()),
-                style: TextStyle(
-                  fontSize: 60,
-                  color: onSurface,
-                  fontWeight: FontWeight.w300,
-                  letterSpacing: 2,
-                ),
+              _TimeWithMilliseconds(
+                time: generateTitleText(remaining),
+                duration: remaining,
+                fontSize: 60,
+                color: onSurface,
               ),
             ],
           ),

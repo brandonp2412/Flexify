@@ -1,0 +1,4 @@
+• 그래프 편집의 새 이름 필드 위에 여백 추가
+• pubspec.lock 다시 생성
+• edit_set_page의 잘못된 여백 제거
+• docs: README 다운로드 배지 정렬

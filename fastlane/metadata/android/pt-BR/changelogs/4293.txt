@@ -1,0 +1,2 @@
+• fix: preservar a identidade da versão não assinada do F-Droid
+• fix: evitar alterações inesperadas na assinatura do Android

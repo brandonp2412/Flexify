@@ -1,4 +1,6 @@
 import 'package:flexify/timer/timer_page.dart';
+import 'package:flexify/timer/timer_progress_widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications_platform_interface/flutter_local_notifications_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -139,6 +141,83 @@ void main() {
 
     expect(find.text('Stop'), findsNothing);
 
+    timerState.dispose();
+  });
+
+  testWidgets('Timer and stopwatch show smaller muted milliseconds', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: StopwatchProgressIndicator(
+          startedAt: null,
+          accumulated: const Duration(
+            minutes: 1,
+            seconds: 2,
+            milliseconds: 345,
+          ),
+          isRunning: false,
+          timerState: timerState,
+          onRestart: () {},
+        ),
+      ),
+    );
+
+    final stopwatchTime = tester.widget<Text>(find.text('01:02'));
+    final stopwatchMilliseconds = tester.widget<Text>(find.text('.345'));
+
+    expect(
+      stopwatchMilliseconds.style!.fontSize,
+      lessThan(stopwatchTime.style!.fontSize!),
+    );
+    expect(
+      stopwatchMilliseconds.style!.color!.a,
+      lessThan(stopwatchTime.style!.color!.a),
+    );
+
+    await timerState.startTimer(
+      'Test Timer',
+      const Duration(seconds: 10),
+      '',
+      false,
+      true,
+    );
+    await harness.pump(
+      tester,
+      const Scaffold(body: TimerCircularProgressIndicator()),
+    );
+    await tester.pump(const Duration(milliseconds: 16));
+
+    final timerTimeFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          RegExp(r'^\d{2}:\d{2}$').hasMatch(widget.data ?? ''),
+    );
+    final timerMillisecondsFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text && RegExp(r'^\.\d{3}$').hasMatch(widget.data ?? ''),
+    );
+
+    expect(timerTimeFinder, findsOneWidget);
+    expect(timerMillisecondsFinder, findsOneWidget);
+
+    final timerTime = tester.widget<Text>(timerTimeFinder);
+    final timerMilliseconds = tester.widget<Text>(timerMillisecondsFinder);
+
+    expect(
+      timerMilliseconds.style!.fontSize,
+      lessThan(timerTime.style!.fontSize!),
+    );
+    expect(
+      timerMilliseconds.style!.color!.a,
+      lessThan(timerTime.style!.color!.a),
+    );
+
+    await timerState.stopTimer();
     timerState.dispose();
   });
 }

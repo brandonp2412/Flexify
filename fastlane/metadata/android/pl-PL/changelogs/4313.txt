@@ -1,0 +1,10 @@
+• chore: dodać tureckie zrzuty ekranu z Google Play
+• chore: zlokalizować metadane najnowszego wydania
+• feat: uzupełnić tłumaczenia wszystkich obsługiwanych języków
+• feat: udostępnić kontrolki wykresów na komputerze
+• feat: zlokalizować pełną historię wydań
+• feat: dopracować wyświetlanie milisekund timera
+• fix: utrzymać skalowany tekst timera wewnątrz okręgu
+• fix: złagodzić przycinanie krawędzi wykresu liniowego
+• test: wzmocnić kontrole kompletności lokalizacji
+• test: utrzymać synchronizację mapowań języków sklepów

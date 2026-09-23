@@ -1,0 +1,10 @@
+• chore: adicionar capturas da Play Store em turco
+• chore: localizar os metadados da versão mais recente
+• feat: concluir as traduções de todos os idiomas compatíveis
+• feat: disponibilizar os controles dos gráficos no desktop
+• feat: localizar todo o histórico de versões
+• feat: aprimorar a exibição de milissegundos do temporizador
+• fix: manter o texto redimensionado do temporizador dentro do círculo
+• fix: suavizar o corte nas bordas do gráfico de linhas
+• test: reforçar as verificações de integridade da localização
+• test: manter sincronizados os mapeamentos de idiomas das lojas

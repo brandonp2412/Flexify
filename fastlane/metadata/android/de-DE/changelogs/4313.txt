@@ -1,0 +1,10 @@
+• chore: Türkische Play-Screenshots hinzufügen
+• chore: Metadaten der neuesten Version lokalisieren
+• feat: Übersetzungen für alle unterstützten Sprachen vervollständigen
+• feat: Diagrammsteuerungen auf dem Desktop verfügbar machen
+• feat: vollständigen Versionsverlauf lokalisieren
+• feat: Millisekundenanzeige des Timers verfeinern
+• fix: skalierten Timertext innerhalb des Kreises halten
+• fix: Abschneiden an den Rändern des Liniendiagramms abmildern
+• test: Prüfungen auf vollständige Lokalisierung verschärfen
+• test: Zuordnungen der Store-Sprachen synchron halten

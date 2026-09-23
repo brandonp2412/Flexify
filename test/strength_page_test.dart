@@ -11,8 +11,9 @@ import 'support/test_app.dart';
 
 Future<void> pumpStrengthPage(
   WidgetTester tester,
-  FlexifyTestHarness harness,
-) async {
+  FlexifyTestHarness harness, {
+  Size? surfaceSize,
+}) async {
   await harness.database.planExercises.deleteAll();
   await harness.database.plans.deleteAll();
   await seedGraphFixtures(harness.database);
@@ -37,6 +38,7 @@ Future<void> pumpStrengthPage(
         ),
       ),
     ),
+    surfaceSize: surfaceSize,
   );
 
   await tester.pumpAndSettle();
@@ -50,6 +52,24 @@ void main() {
     expect(find.text(screenshotExercise), findsOne);
     expect(find.text('Best weight'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
+  });
+
+  testWidgets('StrengthPage exposes options inline on desktop', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(900, 800);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await pumpStrengthPage(tester, harness, surfaceSize: const Size(900, 800));
+
+    expect(find.byTooltip('Options'), findsNothing);
+    expect(find.text('Start date'), findsOne);
+    expect(find.text('Stop date'), findsOne);
+    expect(find.text('Data points'), findsOne);
+    expect(find.text('Curve line graphs'), findsOne);
+    expect(tester.takeException(), null);
   });
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {

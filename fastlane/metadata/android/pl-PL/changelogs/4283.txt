@@ -1,0 +1,4 @@
+• Dodać odstęp nad polem nowej nazwy podczas edycji wykresów
+• Ponownie wygenerować pubspec.lock
+• Usunąć zbędny odstęp w edit_set_page
+• docs: wyrównać odznaki pobierania w README

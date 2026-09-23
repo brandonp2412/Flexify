@@ -5,14 +5,14 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/database/categories.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/settings/category_management_page.dart';
+import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -193,7 +193,6 @@ class _EditSetPageState extends State<EditSetPage> {
                 ],
                 if (showCategories && _name != 'Weight') ...[
                   categorySelector(),
-                  const SizedBox(height: 12.0),
                 ],
                 if (showNotes) ...[notesField(), const SizedBox(height: 12.0)],
                 dateSelector(),
@@ -229,7 +228,6 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildStrengthFields() {
     return [
-      const SizedBox(height: 12.0),
       if (_name != 'Weight') ...[
         buildRepsField(),
         const SizedBox(height: 12.0),

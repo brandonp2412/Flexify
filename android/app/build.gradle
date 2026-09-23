@@ -21,19 +21,61 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def isFdroidBuild = System.getenv('fdroidserver') != null &&
+    System.getenv('home_vagrant') != null
+
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-   keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def projectKeystorePropertiesFile = rootProject.file('key.properties')
+def userKeystorePropertiesFile = new File(System.getProperty('user.home'), '.config/android-signing/flexify-release.properties')
+def keystorePropertiesFile = projectKeystorePropertiesFile.isFile()
+    ? projectKeystorePropertiesFile
+    : (!isFdroidBuild && userKeystorePropertiesFile.isFile()
+        ? userKeystorePropertiesFile
+        : projectKeystorePropertiesFile)
+if (keystorePropertiesFile.isFile()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-// Optional env vars used by CI to build a side-by-side testing app
-// (e.g. PR builds with applicationId com.presley.flexify.pr). Deliberately
-// not product flavors: declaring productFlavors would force --flavor onto
-// every existing build command, including the F-Droid recipe maintained
-// outside this repo. Unset, the build output is unchanged.
-def appIdSuffix = System.getenv('FLEXIFY_APP_ID_SUFFIX') ?: ''
-def appLabel = System.getenv('FLEXIFY_APP_LABEL') ?: 'Flexify'
+def signingPolicy = new Properties()
+def signingPolicyFile = rootProject.file('signing-policy.properties')
+if (!signingPolicyFile.isFile()) {
+    throw new GradleException("Missing Android signing policy: " + signingPolicyFile)
+}
+signingPolicyFile.withInputStream { signingPolicy.load(it) }
+
+def productionApplicationId = signingPolicy.getProperty('productionApplicationId')
+def expectedReleaseCertificateSha256 = signingPolicy
+    .getProperty('githubReleaseCertificateSha256', '')
+    .replaceAll('[^0-9A-Fa-f]', '')
+    .toLowerCase()
+
+if (!productionApplicationId || expectedReleaseCertificateSha256.size() != 64) {
+    throw new GradleException("Invalid Android signing policy in " + signingPolicyFile)
+}
+
+def signingCertificateSha256 = { signingConfig ->
+    if (signingConfig == null ||
+        signingConfig.storeFile == null ||
+        !signingConfig.storeFile.isFile() ||
+        !signingConfig.storePassword ||
+        !signingConfig.keyAlias) {
+        return null
+    }
+
+    def keyStore = java.security.KeyStore.getInstance(java.security.KeyStore.getDefaultType())
+    signingConfig.storeFile.withInputStream {
+        keyStore.load(it, signingConfig.storePassword.toCharArray())
+    }
+    def certificate = keyStore.getCertificate(signingConfig.keyAlias)
+    if (certificate == null) {
+        return null
+    }
+
+    return java.security.MessageDigest.getInstance('SHA-256')
+        .digest(certificate.encoded)
+        .collect { String.format('%02x', it & 0xff) }
+        .join()
+}
 
 android {
     namespace "com.presley.flexify"
@@ -56,17 +98,10 @@ android {
 
     sourceSets {
         main.kotlin.srcDirs += 'src/main/kotlin'
-        if (appIdSuffix) {
-            main.res.srcDirs += 'src/pr/res'
-        }
     }
 
     defaultConfig {
-        applicationId "com.presley.flexify" + appIdSuffix
-        manifestPlaceholders += [
-            appLabel: appLabel,
-            appIcon: appIdSuffix ? "@mipmap/ic_launcher_pr" : "@mipmap/ic_launcher",
-        ]
+        applicationId productionApplicationId
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -121,7 +156,9 @@ android {
            buildConfigField "long", "BUILD_TIME", "0L"
        }
        release {
-           signingConfig signingConfigs.release
+           if (keystorePropertiesFile.isFile()) {
+               signingConfig signingConfigs.release
+           }
            // Reproducible builds
            buildConfigField "long", "BUILD_TIME", "0L"
        }
@@ -134,6 +171,55 @@ android {
         includeInBundle = false
     }
 
+}
+
+// Every installable Flexify build must use the one canonical release key.
+// The only unsigned exception is the F-Droid reproducible-build environment,
+// where F-Droid intentionally builds unsigned and applies/verifies signing
+// externally.
+gradle.taskGraph.whenReady { taskGraph ->
+
+    def packagingTasks = taskGraph.allTasks.findAll { task ->
+        task.project == project &&
+            task.name ==~ /(?i)^(assemble|bundle|package|install).*/
+    }
+    if (packagingTasks.isEmpty()) {
+        return
+    }
+
+    android.buildTypes.each { buildType ->
+        def buildTypeRequested = packagingTasks.any { task ->
+            task.name.toLowerCase().contains(buildType.name.toLowerCase())
+        }
+        if (!buildTypeRequested) {
+            return
+        }
+
+        def signingConfig = buildType.signingConfig
+        if (signingConfig == null ||
+            signingConfig.storeFile == null ||
+            !signingConfig.storeFile.isFile()) {
+            if (buildType.name == 'release' && isFdroidBuild) {
+                // F-Droid's reproducible build is intentionally unsigned;
+                // F-Droid applies/verifies signing externally.
+                return
+            }
+            throw new GradleException(
+                "Refusing to package " + productionApplicationId +
+                " without the canonical Flexify release signing key."
+            )
+        }
+
+        def actualCertificateSha256 = signingCertificateSha256(signingConfig)
+        if (actualCertificateSha256 != expectedReleaseCertificateSha256) {
+            throw new GradleException(
+                "Refusing to package " + productionApplicationId +
+                " with a non-canonical signing key. Expected SHA-256 " +
+                expectedReleaseCertificateSha256 + " but got " +
+                (actualCertificateSha256 ?: '<missing>') + "."
+            )
+        }
+    }
 }
 
 ext.abiCodes = ["x86_64": 1, "armeabi-v7a": 2, "arm64-v8a": 3]

@@ -1,0 +1,4 @@
+• Ruimte toevoegen boven het veld voor de nieuwe naam bij grafiekbewerking
+• pubspec.lock opnieuw genereren
+• Onbedoelde witruimte in edit_set_page verwijderen
+• docs: downloadbadges in de README uitlijnen

@@ -1,0 +1,4 @@
+• Add space above edit graphs new name field
+• Re-generate pubspec.lock
+• Remove errant spacing in edit_set_page
+• docs: align README download badges
