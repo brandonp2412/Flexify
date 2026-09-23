@@ -14,7 +14,7 @@ fi
 
 screenshot_dir="fastlane/metadata/android/en-US/images/$FLEXIFY_DEVICE_TYPE"
 drive_timeout="${SCREENSHOT_DRIVE_TIMEOUT:-12m}"
-app_id="com.presley.flexify${FLEXIFY_APP_ID_SUFFIX:-}"
+app_id="com.presley.flexify"
 rm -rf "$screenshot_dir"
 mkdir -p "$screenshot_dir"
 

@@ -1,8 +1,8 @@
 name: PR APK
 
-# Runs automatically only for PRs authored by the repo owner. For
-# contributor PRs, the owner triggers it manually from the Actions tab
-# with the PR number after reviewing the changes.
+# APKs always use the canonical Flexify release key, so this workflow
+# only builds PRs whose source branch lives in this repository. Fork PRs
+# intentionally do not produce installable APK artifacts.
 on:
   pull_request:
     branches: [main]
@@ -27,9 +27,26 @@ permissions:
 
 jobs:
   build-apk:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.user.login == github.repository_owner
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     steps:
+      - name: Validate manual PR source
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+        with:
+          script: |
+            const prNumber = Number(process.env.PR_NUMBER);
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+            if (pr.head.repo.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
+              core.setFailed('PR APKs can only be built from branches in this repository because every APK uses the canonical Flexify release signing key.');
+            }
+
       # Submodules are deliberately not fetched here: actions/checkout clones
       # them with --depth=1, leaving the Flutter submodule without tags and
       # reporting version 0.0.0-unknown. The manual submodule update below
@@ -68,27 +85,28 @@ jobs:
             -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
             android/gradle.properties
 
-      # Fork PRs cannot access the real keystore secrets, so sign with the
-      # committed, deliberately public pr-testing-public.jks. Every PR build
-      # shares its signature, so testers can update Flexify PR in place, and
-      # the .pr application id keeps it from conflicting with the real app.
-      - name: Configure PR testing signing key
+      - name: Decode canonical Android keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+
+      - name: Configure canonical Android signing
+        env:
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          cat > android/key.properties <<EOF
-          storePassword=pr-testing-public
-          keyPassword=pr-testing-public
-          keyAlias=pr
-          storeFile=pr-testing-public.jks
-          EOF
+          echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+          echo "storeFile=keystore.jks" >> android/key.properties
 
       - name: Build APK
-        env:
-          FLEXIFY_APP_ID_SUFFIX: .pr
-          FLEXIFY_APP_LABEL: Flexify PR
         run: |
           flutter build apk --release
           mv build/app/outputs/flutter-apk/app-release.apk \
             "flexify-pr-${PR_NUMBER}.apk"
+          ./scripts/verify-android-release-signing.sh "flexify-pr-${PR_NUMBER}.apk"
 
       - name: Upload APK artifact
         id: upload
@@ -107,7 +125,7 @@ jobs:
             echo ""
             echo "[Download the APK]($ARTIFACT_URL) (zipped, expires in 14 days)."
             echo ""
-            echo "Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. All PR builds share a signing key, so installing one replaces any previous *Flexify PR* build in place."
+            echo "This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the canonical release key, so it updates the existing Flexify installation in place."
           } >> "$GITHUB_STEP_SUMMARY"
 
       # The GITHUB_TOKEN on fork PRs is read-only, so commenting only works
@@ -133,7 +151,7 @@ jobs:
               '',
               `[Download the APK](${process.env.ARTIFACT_URL}) (zipped, expires in 14 days) to test this change.`,
               '',
-              `Built from ${pr.head.sha}. Installs side by side with regular Flexify as **Flexify PR** (\`com.presley.flexify.pr\`) — your real install and its data are untouched. All PR builds share a signing key, so installing one replaces any previous *Flexify PR* build in place.`,
+              `Built from ${pr.head.sha}. This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the canonical release key, so it updates the existing Flexify installation in place.`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({

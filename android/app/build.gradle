@@ -21,10 +21,19 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def isFdroidBuild = System.getenv('fdroidserver') != null &&
+    System.getenv('home_vagrant') != null
+
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-   keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def projectKeystorePropertiesFile = rootProject.file('key.properties')
+def userKeystorePropertiesFile = new File(System.getProperty('user.home'), '.config/android-signing/flexify-release.properties')
+def keystorePropertiesFile = projectKeystorePropertiesFile.isFile()
+    ? projectKeystorePropertiesFile
+    : (!isFdroidBuild && userKeystorePropertiesFile.isFile()
+        ? userKeystorePropertiesFile
+        : projectKeystorePropertiesFile)
+if (keystorePropertiesFile.isFile()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 def signingPolicy = new Properties()
@@ -68,40 +77,6 @@ def signingCertificateSha256 = { signingConfig ->
         .join()
 }
 
-def configuredReleaseSigning = null
-if (keystorePropertiesFile.exists() && keystoreProperties['storeFile']) {
-    def configuredStoreFile = file(keystoreProperties['storeFile'])
-    configuredReleaseSigning = [
-        storeFile: configuredStoreFile,
-        storePassword: keystoreProperties['storePassword'],
-        keyAlias: keystoreProperties['keyAlias'],
-    ]
-}
-
-def configuredReleaseCertificateSha256 = signingCertificateSha256(configuredReleaseSigning)
-
-// Optional env vars used by CI to build a side-by-side testing app
-// (e.g. PR builds with applicationId com.presley.flexify.pr). Deliberately
-// not product flavors: declaring productFlavors would force --flavor onto
-// every existing build command, including the F-Droid recipe maintained
-// outside this repo.
-def requestedAppIdSuffix = System.getenv('FLEXIFY_APP_ID_SUFFIX') ?: ''
-def requestedAppLabel = System.getenv('FLEXIFY_APP_LABEL')
-
-def appIdSuffix = requestedAppIdSuffix
-def appLabel = requestedAppLabel ?: 'Flexify'
-
-// A configured non-upstream key must never sign the production package.
-// A completely absent key is different: release builds must remain unsigned
-// with the production application ID so F-Droid can reproduce the upstream
-// APK and copy/verify its signature externally.
-if (!appIdSuffix &&
-    configuredReleaseSigning != null &&
-    configuredReleaseCertificateSha256 != expectedReleaseCertificateSha256) {
-    appIdSuffix = '.dev'
-    appLabel = requestedAppLabel ?: 'Flexify Dev'
-}
-
 android {
     namespace "com.presley.flexify"
     compileSdkVersion 37
@@ -123,17 +98,10 @@ android {
 
     sourceSets {
         main.kotlin.srcDirs += 'src/main/kotlin'
-        if (appIdSuffix) {
-            main.res.srcDirs += 'src/pr/res'
-        }
     }
 
     defaultConfig {
-        applicationId "com.presley.flexify" + appIdSuffix
-        manifestPlaceholders += [
-            appLabel: appLabel,
-            appIcon: appIdSuffix ? "@mipmap/ic_launcher_pr" : "@mipmap/ic_launcher",
-        ]
+        applicationId productionApplicationId
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -188,7 +156,9 @@ android {
            buildConfigField "long", "BUILD_TIME", "0L"
        }
        release {
-           signingConfig signingConfigs.release
+           if (keystorePropertiesFile.isFile()) {
+               signingConfig signingConfigs.release
+           }
            // Reproducible builds
            buildConfigField "long", "BUILD_TIME", "0L"
        }
@@ -203,13 +173,11 @@ android {
 
 }
 
-// Fail closed for any signed production-package build. F-Droid can still
-// produce an unsigned release for external signing, while local development
-// uses the side-by-side .dev package when the upstream key is unavailable.
+// Every installable Flexify build must use the one canonical release key.
+// The only unsigned exception is the F-Droid reproducible-build environment,
+// where F-Droid intentionally builds unsigned and applies/verifies signing
+// externally.
 gradle.taskGraph.whenReady { taskGraph ->
-    if (appIdSuffix) {
-        return
-    }
 
     def packagingTasks = taskGraph.allTasks.findAll { task ->
         task.project == project &&
@@ -231,15 +199,14 @@ gradle.taskGraph.whenReady { taskGraph ->
         if (signingConfig == null ||
             signingConfig.storeFile == null ||
             !signingConfig.storeFile.isFile()) {
-            if (buildType.name == 'release') {
-                // F-Droid's build is intentionally unsigned here and signed
-                // externally by its own distribution pipeline.
+            if (buildType.name == 'release' && isFdroidBuild) {
+                // F-Droid's reproducible build is intentionally unsigned;
+                // F-Droid applies/verifies signing externally.
                 return
             }
             throw new GradleException(
                 "Refusing to package " + productionApplicationId +
-                " without the upstream GitHub release signing key. " +
-                "Use FLEXIFY_APP_ID_SUFFIX for a side-by-side test build."
+                " without the canonical Flexify release signing key."
             )
         }
 
@@ -247,10 +214,9 @@ gradle.taskGraph.whenReady { taskGraph ->
         if (actualCertificateSha256 != expectedReleaseCertificateSha256) {
             throw new GradleException(
                 "Refusing to package " + productionApplicationId +
-                " with a non-upstream signing key. Expected SHA-256 " +
+                " with a non-canonical signing key. Expected SHA-256 " +
                 expectedReleaseCertificateSha256 + " but got " +
-                (actualCertificateSha256 ?: '<missing>') +
-                ". Use FLEXIFY_APP_ID_SUFFIX for a side-by-side test build."
+                (actualCertificateSha256 ?: '<missing>') + "."
             )
         }
     }
