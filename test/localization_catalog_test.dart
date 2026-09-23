@@ -167,47 +167,43 @@ const _postWaveReviewedKeys = <String>{
   'deleteCategoryConfirmation',
 };
 
-const _playStoreLocales = <String>{
-  'de-DE',
-  'es-ES',
-  'fr-FR',
-  'it-IT',
-  'ja-JP',
-  'ko-KR',
-  'nl-NL',
-  'pl-PL',
-  'pt-BR',
-  'tr-TR',
-  'zh-CN',
+const _playStoreLocaleByAppLocale = <String, String>{
+  'de': 'de-DE',
+  'es': 'es-ES',
+  'fr': 'fr-FR',
+  'it': 'it-IT',
+  'ja': 'ja-JP',
+  'ko': 'ko-KR',
+  'nl': 'nl-NL',
+  'pl': 'pl-PL',
+  'pt_BR': 'pt-BR',
+  'tr': 'tr-TR',
+  'zh_CN': 'zh-CN',
 };
 
-const _changelogCatalogLocales = <String>{
-  'de',
-  'es',
-  'fr',
-  'it',
-  'ja',
-  'ko',
-  'nl',
-  'pl',
-  'pt_BR',
-  'tr',
-  'zh_CN',
+const _appStoreLocaleByAppLocale = <String, String>{
+  'de': 'de-DE',
+  'es': 'es-ES',
+  'fr': 'fr-FR',
+  'it': 'it',
+  'ja': 'ja',
+  'ko': 'ko',
+  'nl': 'nl-NL',
+  'pl': 'pl',
+  'pt_BR': 'pt-BR',
+  'tr': 'tr',
+  'zh_CN': 'zh-Hans',
 };
 
-const _appStoreLocales = <String>{
+const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
+
+final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
+
+final _changelogCatalogLocales = _playStoreLocaleByAppLocale.keys.toSet();
+
+final _appStoreLocales = <String>{
   'en-AU',
-  'de-DE',
-  'es-ES',
-  'fr-FR',
-  'it',
-  'ja',
-  'ko',
-  'nl-NL',
-  'pl',
-  'pt-BR',
-  'tr',
-  'zh-Hans',
+  ..._appStoreLocaleByAppLocale.values,
 };
 
 Map<String, dynamic> _readArb(File file) =>
@@ -336,6 +332,34 @@ void main() {
     }
   });
 
+  test('store locale mappings cover every shipped translated locale', () {
+    final translatedAppLocales =
+        Directory('lib/l10n')
+            .listSync()
+            .whereType<File>()
+            .where(
+              (file) =>
+                  file.path.endsWith('.arb') &&
+                  !file.path.endsWith('app_en.arb'),
+            )
+            .map((file) => _readArb(file)['@@locale'] as String)
+            .toSet()
+          ..removeAll(_storeFallbackOnlyAppLocales);
+
+    expect(
+      _playStoreLocaleByAppLocale.keys.toSet(),
+      translatedAppLocales,
+      reason:
+          'Every shipped translated app locale must map to Google Play metadata.',
+    );
+    expect(
+      _appStoreLocaleByAppLocale.keys.toSet(),
+      translatedAppLocales,
+      reason:
+          'Every shipped translated app locale must map to App Store metadata.',
+    );
+  });
+
   test('Play Store metadata covers every shipped non-English locale', () {
     for (final locale in _playStoreLocales) {
       final directory = Directory('fastlane/metadata/android/$locale');
@@ -370,7 +394,7 @@ void main() {
   });
 
   test('Play Store phone screenshots cover every shipped locale', () {
-    const screenshotLocales = {'en-US', ..._playStoreLocales};
+    final screenshotLocales = {'en-US', ..._playStoreLocales};
 
     for (final locale in screenshotLocales) {
       final directory = Directory(
