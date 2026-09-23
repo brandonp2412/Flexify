@@ -11,8 +11,9 @@ import 'support/test_app.dart';
 
 Future<void> pumpCardioPage(
   WidgetTester tester,
-  FlexifyTestHarness harness,
-) async {
+  FlexifyTestHarness harness, {
+  Size? surfaceSize,
+}) async {
   for (final element in graphData) {
     await harness.database
         .into(harness.database.gymSets)
@@ -44,6 +45,7 @@ Future<void> pumpCardioPage(
         ),
       ),
     ),
+    surfaceSize: surfaceSize,
   );
   await tester.pumpAndSettle();
 }
@@ -61,6 +63,25 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
+  });
+
+  testWidgets('CardioPage exposes options inline on desktop', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1200, 800);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await pumpCardioPage(tester, harness, surfaceSize: const Size(1200, 800));
+
+    expect(find.byTooltip('Options'), findsNothing);
+    expect(find.text('Start date'), findsOne);
+    expect(find.text('Stop date'), findsOne);
+    expect(find.text('Data points'), findsOne);
+    expect(find.text('Use time-based X axis'), findsOne);
+    expect(find.text('Curve line graphs'), findsOne);
+    expect(tester.takeException(), null);
   });
 
   testWidgets('CardioPage edits', (WidgetTester tester) async {

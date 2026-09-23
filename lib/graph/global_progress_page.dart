@@ -3,10 +3,10 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/empty_state.dart';
-import 'package:flexify/graph/graph_curve_settings.dart';
-import 'package:flexify/graph/graph_date_field.dart';
+import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -137,6 +137,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       ),
     );
 
+    final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
     final metricOptions = <(StrengthMetric, String)>[
       (StrengthMetric.bestWeight, context.l10n.bestWeight),
@@ -150,6 +151,58 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
         ? metric
         : null;
 
+    final metricSelector = DropdownButton<StrengthMetric>(
+      value: metricValue,
+      isExpanded: true,
+      underline: const SizedBox.shrink(),
+      borderRadius: BorderRadius.circular(12),
+      items: metricOptions
+          .map(
+            (option) =>
+                DropdownMenuItem(value: option.$1, child: Text(option.$2)),
+          )
+          .toList(),
+      selectedItemBuilder: (context) => metricOptions
+          .map(
+            (option) => Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                option.$2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        setState(() {
+          metric = value!;
+        });
+        setData();
+      },
+    );
+    final periodSelector = SegmentedButton<Period>(
+      showSelectedIcon: false,
+      segments: [
+        ButtonSegment(value: Period.day, label: Text(context.l10n.periodDay)),
+        ButtonSegment(value: Period.week, label: Text(context.l10n.periodWeek)),
+        ButtonSegment(
+          value: Period.month,
+          label: Text(context.l10n.periodMonth),
+        ),
+        ButtonSegment(value: Period.year, label: Text(context.l10n.periodYear)),
+      ],
+      selected: {period},
+      onSelectionChanged: (value) {
+        setState(() {
+          period = value.first;
+        });
+        setData();
+      },
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -160,90 +213,79 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             left: 16,
             top: 16,
             right: 16,
-            bottom: bottomNavHeight,
+            bottom: desktop ? 24.0 : bottomNavHeight,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton<StrengthMetric>(
-                      value: metricValue,
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      borderRadius: BorderRadius.circular(12),
-                      items: metricOptions
-                          .map(
-                            (option) => DropdownMenuItem(
-                              value: option.$1,
-                              child: Text(option.$2),
-                            ),
-                          )
-                          .toList(),
-                      selectedItemBuilder: (context) => metricOptions
-                          .map(
-                            (option) => Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                option.$2,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          metric = value!;
-                        });
-                        setData();
-                      },
+              if (desktop)
+                Row(
+                  children: [
+                    Expanded(child: metricSelector),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 2, child: periodSelector),
+                  ],
+                )
+              else ...[
+                Row(
+                  children: [
+                    Expanded(child: metricSelector),
+                    const SizedBox(width: 8),
+                    IconButton.filledTonal(
+                      icon: const Icon(Icons.tune),
+                      tooltip: context.l10n.options,
+                      onPressed: _showOptions,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton.filledTonal(
-                    icon: const Icon(Icons.tune),
-                    tooltip: context.l10n.options,
-                    onPressed: _showOptions,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              SegmentedButton<Period>(
-                showSelectedIcon: false,
-                segments: [
-                  ButtonSegment(
-                    value: Period.day,
-                    label: Text(context.l10n.periodDay),
-                  ),
-                  ButtonSegment(
-                    value: Period.week,
-                    label: Text(context.l10n.periodWeek),
-                  ),
-                  ButtonSegment(
-                    value: Period.month,
-                    label: Text(context.l10n.periodMonth),
-                  ),
-                  ButtonSegment(
-                    value: Period.year,
-                    label: Text(context.l10n.periodYear),
-                  ),
-                ],
-                selected: {period},
-                onSelectionChanged: (value) {
-                  setState(() {
-                    period = value.first;
-                  });
-                  setData();
-                },
-              ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                periodSelector,
+              ],
+              if (desktop) ...[
+                const SizedBox(height: 12),
+                GraphOptionsControls(
+                  compact: true,
+                  shortDateFormat: settings.shortDateFormat,
+                  unitValue: settings.showUnits ? targetUnit : null,
+                  unitItems: settings.showUnits
+                      ? strengthUnitMenuItems(context.l10n)
+                      : const [],
+                  onUnitChanged: (value) {
+                    setState(() {
+                      targetUnit = value;
+                    });
+                    setData();
+                  },
+                  startDate: startDate,
+                  endDate: endDate,
+                  onSelectStart: selectStart,
+                  onClearStart: () {
+                    setState(() {
+                      startDate = null;
+                    });
+                    setData();
+                  },
+                  onSelectEnd: selectEnd,
+                  onClearEnd: () {
+                    setState(() {
+                      endDate = null;
+                    });
+                    setData();
+                  },
+                  limit: limit,
+                  maxLimit: 200,
+                  onLimitChanged: (value) {
+                    setState(() {
+                      limit = value;
+                    });
+                    setData();
+                  },
+                ),
+              ],
               const SizedBox(height: 8),
               Expanded(
                 flex: 3,
@@ -346,19 +388,8 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
-            final theme = Theme.of(sheetContext);
-            final colorScheme = theme.colorScheme;
             final settings = context.read<SettingsState>().value;
-
-            Widget sectionLabel(String text) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                text,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-            );
+            void refreshSheet() => setSheet(() {});
 
             return SafeArea(
               child: Padding(
@@ -368,113 +399,53 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   16,
                   16 + MediaQuery.of(sheetContext).viewInsets.bottom,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (settings.showUnits) ...[
-                      sectionLabel(context.l10n.unitLabel),
-                      DropdownButtonFormField<String>(
-                        initialValue: targetUnit,
-                        items: strengthUnitMenuItems(context.l10n),
-                        onChanged: (value) {
-                          setState(() {
-                            targetUnit = value!;
-                          });
-                          setData();
-                          setSheet(() {});
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                    sectionLabel(context.l10n.dateRange),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GraphDateField(
-                            label: context.l10n.startDate,
-                            value: startDate,
-                            hint: settings.shortDateFormat,
-                            onTap: () async {
-                              await selectStart();
-                              if (sheetContext.mounted) setSheet(() {});
-                            },
-                            onClear: () {
-                              setState(() {
-                                startDate = null;
-                              });
-                              setData();
-                              setSheet(() {});
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: GraphDateField(
-                            label: context.l10n.stopDate,
-                            value: endDate,
-                            hint: settings.shortDateFormat,
-                            onTap: () async {
-                              await selectEnd();
-                              if (sheetContext.mounted) setSheet(() {});
-                            },
-                            onClear: () {
-                              setState(() {
-                                endDate = null;
-                              });
-                              setData();
-                              setSheet(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          context.l10n.dataPoints,
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: colorScheme.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '$limit',
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: limit.toDouble(),
-                      inactiveColor: colorScheme.primary.withValues(
-                        alpha: 0.24,
-                      ),
-                      min: 10,
-                      max: 200,
-                      onChanged: (value) {
-                        setState(() {
-                          limit = value.toInt();
-                        });
-                        setData();
-                        setSheet(() {});
-                      },
-                    ),
-                    const GraphCurveSettings(),
-                  ],
+                child: GraphOptionsControls(
+                  compact: false,
+                  shortDateFormat: settings.shortDateFormat,
+                  unitValue: settings.showUnits ? targetUnit : null,
+                  unitItems: settings.showUnits
+                      ? strengthUnitMenuItems(context.l10n)
+                      : const [],
+                  onUnitChanged: (value) {
+                    setState(() {
+                      targetUnit = value;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
+                  startDate: startDate,
+                  endDate: endDate,
+                  onSelectStart: () async {
+                    await selectStart();
+                    if (sheetContext.mounted) refreshSheet();
+                  },
+                  onClearStart: () {
+                    setState(() {
+                      startDate = null;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
+                  onSelectEnd: () async {
+                    await selectEnd();
+                    if (sheetContext.mounted) refreshSheet();
+                  },
+                  onClearEnd: () {
+                    setState(() {
+                      endDate = null;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
+                  limit: limit,
+                  maxLimit: 200,
+                  onLimitChanged: (value) {
+                    setState(() {
+                      limit = value;
+                    });
+                    setData();
+                    refreshSheet();
+                  },
                 ),
               ),
             );
