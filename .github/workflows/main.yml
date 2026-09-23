@@ -86,6 +86,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         env:
           FLEXIFY_DEVICE_TYPE: ${{ matrix.device_type }}
+          FLEXIFY_APP_ID_SUFFIX: .ci
+          FLEXIFY_APP_LABEL: Flexify CI
           SCREENSHOT_SCREEN_SIZE: ${{ matrix.screen_size }}
         with:
           api-level: 35
@@ -286,6 +288,7 @@ jobs:
           flutter build apk --release
           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
           flutter build appbundle
+          ./scripts/verify-android-release-signing.sh build/app/outputs/flutter-apk/*.apk
           mkdir -p "${GITHUB_WORKSPACE}/build"
           mv build/* "${GITHUB_WORKSPACE}/build"
 
