@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="80" viewBox="0 0 270 80" role="img" aria-labelledby="title">
+  <title id="title">Get it on Web</title>
+  <rect x="1" y="1" width="268" height="78" rx="8" fill="#000" stroke="#a6a6a6" stroke-width="2"/>
+  <g fill="none" stroke="#c4a7ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="38" cy="40" r="20"/>
+    <path d="M18 40h40M38 20c6 5 9 12 9 20s-3 15-9 20M38 20c-6 5-9 12-9 20s3 15 9 20"/>
+  </g>
+  <g fill="#fff" font-family="Arial, Helvetica, sans-serif">
+    <text x="70" y="31" font-size="13" font-weight="600" letter-spacing=".5">GET IT ON</text>
+    <text x="69" y="61" font-size="31" font-weight="700">Web</text>
+  </g>
+</svg>

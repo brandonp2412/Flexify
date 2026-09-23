@@ -7,7 +7,12 @@
 
 Flexify is a private, offline-first workout tracker for logging gym sessions and building strength over time.
 
-  <a href="https://play.google.com/store/apps/details?id=com.presley.flexify"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="72" /></a><a href="https://f-droid.org/packages/com.presley.flexify"><img src="docs/get-it-on-fdroid.png" alt="Get it on F-Droid" height="72" /></a><a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct"><img src="docs/download-msstore.svg" alt="Download from the Microsoft Store" height="72" /></a>
+<p>
+  <a href="https://f-droid.org/packages/com.presley.flexify"><img src="docs/get-it-on-fdroid.png" alt="Get it on F-Droid" height="56" /></a>
+  <a href="https://play.google.com/store/apps/details?id=com.presley.flexify"><img src="docs/get-it-on-google-play.png" alt="Get it on Google Play" height="56" /></a>
+  <a href="https://apps.microsoft.com/detail/Flexify/9P13THVK7F69?mode=direct"><img src="docs/download-msstore.png" alt="Download from the Microsoft Store" height="56" /></a>
+  <a href="https://brandonp2412.github.io/Flexify/"><img src="docs/get-it-on-web.png" alt="Open Flexify on the web" height="56" /></a>
+</p>
 </div>
 
 ## Train your way
