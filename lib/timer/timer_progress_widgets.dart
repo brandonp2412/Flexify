@@ -166,14 +166,18 @@ class _TimeWithMilliseconds extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          time,
-          style: TextStyle(
-            fontSize: fontSize,
-            color: color,
-            fontWeight: FontWeight.w300,
-            letterSpacing: 2,
-            fontFeatures: const [FontFeature.tabularFigures()],
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            time,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: fontSize,
+              color: color,
+              fontWeight: FontWeight.w300,
+              letterSpacing: 2,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
           ),
         ),
         Text(
