@@ -513,5 +513,8 @@
   "1789804588": "• fix(android): aggiornare l'AGP a 9.3.2",
   "1790025613": "• WIP: Trasferimento Flessificare il lavoro della lista di controllo da Nox\n• chore: aggiornare Configurazione del progetto Serena\n• test: default di opt-in di copertura\n• test: rimuovere il guarnizione di integrazione della Pattuglia",
   "1790107764": "• Coprire le preferenze locali turche\n• Riduzione delle risorse di riprogettazione temporanea dell'icona\n• chore(l10n): Linguaggio aggiuntoNometurco\n• chore: indirizzo revisione della localizzazione turca\n• feat(l10n): Ulteriore localizzazione turca\n• feat: aggiungere concetti di icona bicep flessibile\n• feat: aggiungere i set di raffinazione dell'icona 7 e 8\n• fix(l10n): Rimuovere le voci duplicate\n• fix(tests): aggiungere .gitignore per escludere test_bundle.dart\n• fix(tests): aggiungere la lingua tr alla locale_preference_test",
-  "1790111019": "• Aggiornare README.md\n• feat: aggiungere la gestione delle categorie\n• feat: usare l’icona 2 come icona di avvio di Flexify\n• fix: ripristinare Flutter DevTools integrati\n• fix: stabilizzare il debug di Flutter in VS Code"
+  "1790111019": "• Aggiornare README.md\n• feat: aggiungere la gestione delle categorie\n• feat: usare l’icona 2 come icona di avvio di Flexify\n• fix: ripristinare Flutter DevTools integrati\n• fix: stabilizzare il debug di Flutter in VS Code",
+  "1790128482": "• Aggiungere spazio sopra il campo del nuovo nome nella modifica dei grafici\n• Rigenerare pubspec.lock\n• Rimuovere la spaziatura indesiderata in edit_set_page\n• docs: allineare i badge di download nel README",
+  "1790130666": "• fix: mantenere l’identità della release F-Droid non firmata\n• fix: impedire variazioni della firma Android",
+  "1790132278": "• fix: imporre una sola app Flexify e una sola chiave di firma"
 }

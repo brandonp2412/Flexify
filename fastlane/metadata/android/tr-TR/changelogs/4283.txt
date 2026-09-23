@@ -1,0 +1,4 @@
+• Grafik düzenlemedeki yeni ad alanının üstüne boşluk ekle
+• pubspec.lock dosyasını yeniden oluştur
+• edit_set_page içindeki hatalı boşluğu kaldır
+• docs: README indirme rozetlerini hizala

@@ -513,5 +513,8 @@
   "1789804588": "• fix(android): AGP bijwerken tot 9.3.2",
   "1790025613": "• WIP: Verplaatsing Flexify checklist werk van Nox\n• chore: vernieuwen Serena project config\n• test: Deelname aan de aanmeldingsregeling\n• test: verwijderen Patrouille integratie harnas",
   "1790107764": "• Bedek de lokale voorkeuren in het Turkse\n• Verwijder tijdelijke icoonherontwerp-activiteiten\n• chore(l10n): Toegevoegde taalNameTurks\n• chore: adres Turkse localisatiebeoordeling\n• feat(l10n): Toegevoegde Turkse locatie\n• feat: toevoegen van flexieve bicep-iconconcepten\n• feat: toevoegen van verfijningssets met icoon 7 en 8\n• fix(l10n): Verwijderde duplicaten\n• fix(tests): toevoegen .gitignore om test_bundle.dart te uitsluiten\n• fix(tests): voeg de taal tr toe aan de locale_preference_test",
-  "1790111019": "• README.md bijwerken\n• feat: categoriebeheer toevoegen\n• feat: pictogram 2 gebruiken als Flexify-opstartpictogram\n• fix: ingebouwde Flutter DevTools herstellen\n• fix: Flutter-foutopsporing in VS Code stabiliseren"
+  "1790111019": "• README.md bijwerken\n• feat: categoriebeheer toevoegen\n• feat: pictogram 2 gebruiken als Flexify-opstartpictogram\n• fix: ingebouwde Flutter DevTools herstellen\n• fix: Flutter-foutopsporing in VS Code stabiliseren",
+  "1790128482": "• Ruimte toevoegen boven het veld voor de nieuwe naam bij grafiekbewerking\n• pubspec.lock opnieuw genereren\n• Onbedoelde witruimte in edit_set_page verwijderen\n• docs: downloadbadges in de README uitlijnen",
+  "1790130666": "• fix: identiteit van de niet-ondertekende F-Droid-release behouden\n• fix: ongewenste wijzigingen in Android-ondertekening voorkomen",
+  "1790132278": "• fix: één Flexify-app en één ondertekeningssleutel afdwingen"
 }

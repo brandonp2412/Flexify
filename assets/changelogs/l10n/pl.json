@@ -513,5 +513,8 @@
   "1789804588": "• fix(android): aktualizować AGP do 9.3.2",
   "1790025613": "• WIP: Przesun Flexyfikuj pracę z listy kontrolnej z Nox\n• chore: odświeżyć konfiguracja projektu Serena\n• test: opcje włączenia\n• test: Zdejmij złącze z patrolą",
   "1790107764": "• Okryj preferencje lokalne w języku tureckim\n• Odwrócić aktywa przeprojektowania ikon\n• chore(l10n): Dodawany językNameTurkijski\n• chore: adres przegląd lokalizacji w Turcji\n• feat(l10n): Dodatkowa lokalizacja turecka\n• feat: dodanie koncepcji ikony bicep\n• feat: dodać zestawy doskonalenia ikony 7 i 8\n• fix(l10n): Usunięte podwójne wpisy\n• fix(tests): dodać .gitignore do wykluczenia test_bundle.dart\n• fix(tests): dodać język tr do locale_preference_test",
-  "1790111019": "• Zaktualizuj README.md\n• feat: dodaj zarządzanie kategoriami\n• feat: ustaw ikonę 2 jako ikonę uruchamiania Flexify\n• fix: przywróć wbudowane Flutter DevTools\n• fix: ustabilizuj debugowanie Fluttera w VS Code"
+  "1790111019": "• Zaktualizuj README.md\n• feat: dodaj zarządzanie kategoriami\n• feat: ustaw ikonę 2 jako ikonę uruchamiania Flexify\n• fix: przywróć wbudowane Flutter DevTools\n• fix: ustabilizuj debugowanie Fluttera w VS Code",
+  "1790128482": "• Dodać odstęp nad polem nowej nazwy podczas edycji wykresów\n• Ponownie wygenerować pubspec.lock\n• Usunąć zbędny odstęp w edit_set_page\n• docs: wyrównać odznaki pobierania w README",
+  "1790130666": "• fix: zachować tożsamość niepodpisanego wydania F-Droid\n• fix: zapobiec nieoczekiwanym zmianom podpisu Androida",
+  "1790132278": "• fix: wymusić jedną aplikację Flexify i jeden klucz podpisywania"
 }

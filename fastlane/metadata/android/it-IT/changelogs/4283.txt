@@ -1,0 +1,4 @@
+• Aggiungere spazio sopra il campo del nuovo nome nella modifica dei grafici
+• Rigenerare pubspec.lock
+• Rimuovere la spaziatura indesiderata in edit_set_page
+• docs: allineare i badge di download nel README

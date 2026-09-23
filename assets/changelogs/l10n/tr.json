@@ -513,5 +513,8 @@
   "1789804588": "• fix(android): AGP'yi 9.3.2'ye güncelle",
   "1790025613": "• WIP: Transfer Nox'ten kontrol listesini değiştir\n• chore: Serena projesi yapılandırmasını yenilentile\n• test: kapsam opt-in öntanımlıları\n• test: Patrol entegrasyon harnesini çıkar",
   "1790107764": "• Türkçe yerel tercihleri kapsar\n• Geçici simge yeniden tasarlama aktivelerini geri çevir\n• chore(l10n): Dil EklendiNameTürkçe\n• chore: adres Türk yerleşim incelemesi\n• feat(l10n): Türk Yerleşimi Eklendi\n• feat: Eğlence ikici simge kavramlarını ekle\n• feat: İkon 7 ve 8 rafine setlerini ekle\n• fix(l10n): Çıkarılmış kopya yazıları\n• fix(tests): test_bundle.dart'ı dışlamak için .gitignore ekle\n• fix(tests): locale_preference_test'e tr dili ekle",
-  "1790111019": "• README.md dosyasını güncelle\n• feat: kategori yönetimi ekle\n• feat: 2 numaralı simgeyi Flexify başlatıcı simgesi olarak kullan\n• fix: gömülü Flutter DevTools'u geri yükle\n• fix: VS Code'da Flutter hata ayıklamasını kararlı hâle getir"
+  "1790111019": "• README.md dosyasını güncelle\n• feat: kategori yönetimi ekle\n• feat: 2 numaralı simgeyi Flexify başlatıcı simgesi olarak kullan\n• fix: gömülü Flutter DevTools'u geri yükle\n• fix: VS Code'da Flutter hata ayıklamasını kararlı hâle getir",
+  "1790128482": "• Grafik düzenlemedeki yeni ad alanının üstüne boşluk ekle\n• pubspec.lock dosyasını yeniden oluştur\n• edit_set_page içindeki hatalı boşluğu kaldır\n• docs: README indirme rozetlerini hizala",
+  "1790130666": "• fix: imzasız F-Droid sürüm kimliğini koru\n• fix: Android imza kaymasını önle",
+  "1790132278": "• fix: tek bir Flexify uygulaması ve tek bir imzalama anahtarı kullanılmasını zorunlu kıl"
 }

@@ -1,0 +1,4 @@
+• Abstand über dem Feld für den neuen Diagrammnamen hinzufügen
+• pubspec.lock neu generieren
+• Unbeabsichtigten Abstand in edit_set_page entfernen
+• docs: Download-Badges in der README ausrichten

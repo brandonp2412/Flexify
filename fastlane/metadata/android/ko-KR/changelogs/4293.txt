@@ -1,0 +1,2 @@
+• fix: F-Droid 미서명 릴리스 식별자 유지
+• fix: Android 서명 변경 방지

@@ -513,5 +513,8 @@
   "1789804588": "• fix(android): AGP를 9.3.2로 업데이트",
   "1790025613": "• WIP: 이전 Nox에서 체크리스트 작업을 유연하게\n• chore: Serena 프로젝트 구성을 업데이트\n• test: 커버 오프트-인 기본\n• test: 경찰 통합 배지",
   "1790107764": "• 터키어 로컬 선호도를 커버\n• 임시 아이콘 재설계 자산을 되돌려\n• chore(l10n): 추가 언어명터키어\n• chore: 주소 터키 현지화 검토\n• feat(l10n): 터키어 로컬라이징 이 추가 되었습니다\n• feat: 형 양면 아이콘 개념을 추가\n• feat: 아이콘 7 및 8 정제 세트를 추가\n• fix(l10n): 복제 항목을 삭제\n• fix(tests): test_bundle.dart를 제외하기 위해 .gitignore를 추가합니다\n• fix(tests): locale_preference_test에 tr 언어를 추가",
-  "1790111019": "• README.md 업데이트\n• feat: 카테고리 관리 추가\n• feat: 아이콘 2를 Flexify 런처 아이콘으로 적용\n• fix: 내장 Flutter DevTools 복원\n• fix: VS Code의 Flutter 디버깅 안정화"
+  "1790111019": "• README.md 업데이트\n• feat: 카테고리 관리 추가\n• feat: 아이콘 2를 Flexify 런처 아이콘으로 적용\n• fix: 내장 Flutter DevTools 복원\n• fix: VS Code의 Flutter 디버깅 안정화",
+  "1790128482": "• 그래프 편집의 새 이름 필드 위에 여백 추가\n• pubspec.lock 다시 생성\n• edit_set_page의 잘못된 여백 제거\n• docs: README 다운로드 배지 정렬",
+  "1790130666": "• fix: F-Droid 미서명 릴리스 식별자 유지\n• fix: Android 서명 변경 방지",
+  "1790132278": "• fix: Flexify 앱과 서명 키를 각각 하나로 강제"
 }

@@ -1,0 +1,2 @@
+• fix: 保留 F-Droid 未签名版本的身份标识
+• fix: 防止 Android 签名漂移
