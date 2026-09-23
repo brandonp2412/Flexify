@@ -25,6 +25,14 @@ final _stringLabelWidgetPattern = RegExp(
   r'''(?:NavigationDestination|BottomNavigationBarItem|SnackBarAction|DropdownMenuEntry|Tab)\([^)]*?\b(?:label|text)\s*:\s*(["'])([A-Za-z][^"'\n]*)\1''',
   dotAll: true,
 );
+final _androidNativeLiteralPatterns = <RegExp>[
+  RegExp(r'''Toast\.makeText\(\s*[^,\n]+,\s*["'][A-Za-z]''', dotAll: true),
+  RegExp(r'''\.setContent(?:Title|Text)\(\s*["'][A-Za-z]'''),
+  RegExp(r'''NotificationChannel\(\s*[^,]+,\s*["'][A-Za-z]''', dotAll: true),
+  RegExp(r'''\.addAction\(\s*[^,]+,\s*["'][A-Za-z]''', dotAll: true),
+  RegExp(r'''\bdescription\s*=\s*["'][A-Za-z]'''),
+];
+
 final _placeholderPattern = RegExp(r'\{([A-Za-z][A-Za-z0-9_]*)\s*(?:,|\})');
 
 const _allowedLiteralUiText = <String>{
@@ -447,23 +455,23 @@ void main() {
     }
   });
 
-  test('current in-app changelog is localized for every shipped locale', () {
+  test('in-app changelog history is localized for every shipped locale', () {
     final changelogFiles =
         Directory('assets/changelogs')
             .listSync()
             .whereType<File>()
             .where((file) => file.path.endsWith('.txt'))
             .toList()
-          ..sort((a, b) {
-            final aName = int.parse(a.uri.pathSegments.last.split('.').first);
-            final bName = int.parse(b.uri.pathSegments.last.split('.').first);
-            return bName.compareTo(aName);
-          });
-
+          ..sort((a, b) => a.path.compareTo(b.path));
     expect(changelogFiles, isNotEmpty);
-    final latestFile = changelogFiles.first;
-    final latestKey = latestFile.uri.pathSegments.last.split('.').first;
-    final english = latestFile.readAsStringSync().trim();
+
+    final englishByKey = <String, String>{
+      for (final file in changelogFiles)
+        file.uri.pathSegments.last.split('.').first: file
+            .readAsStringSync()
+            .trim(),
+    };
+    final expectedKeys = englishByKey.keys.toSet();
 
     for (final locale in _changelogCatalogLocales) {
       final file = File('assets/changelogs/l10n/$locale.json');
@@ -472,34 +480,31 @@ void main() {
         isTrue,
         reason: 'Missing in-app changelog catalog for $locale.',
       );
+
       final catalog =
           jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
       expect(
-        catalog[latestKey],
-        isA<String>(),
-        reason: '$locale is missing the current changelog $latestKey.',
-      );
-      expect(
-        (catalog[latestKey] as String).trim(),
-        allOf(isNotEmpty, isNot(equals(english))),
-        reason: '$locale must localize the current in-app changelog.',
-      );
-    }
-
-    final sourceKeys = changelogFiles
-        .map((file) => file.uri.pathSegments.last.split('.').first)
-        .toSet();
-    for (final locale in _changelogCatalogLocales) {
-      final catalog =
-          jsonDecode(
-                File('assets/changelogs/l10n/$locale.json').readAsStringSync(),
-              )
-              as Map<String, dynamic>;
-      expect(
         catalog.keys.toSet(),
-        sourceKeys,
+        expectedKeys,
         reason: '$locale historical changelog catalog must be complete.',
       );
+
+      for (final entry in englishByKey.entries) {
+        final localized = catalog[entry.key];
+        expect(
+          localized,
+          isA<String>(),
+          reason: '$locale changelog ${entry.key} must contain text.',
+        );
+
+        final english = entry.value;
+        if (english.isEmpty || english == 'last_commit') continue;
+        expect(
+          (localized as String).trim(),
+          allOf(isNotEmpty, isNot(equals(english))),
+          reason: '$locale must localize in-app changelog ${entry.key}.',
+        );
+      }
     }
   });
 
@@ -641,6 +646,38 @@ void main() {
       isEmpty,
       reason:
           'Move user-facing literals into app_en.arb, or document a true non-translatable exception.',
+    );
+  });
+
+  test('Android native UI avoids hard-coded English literals', () {
+    final violations = <String>[];
+    final nativeFiles = Directory('android/app/src/main')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where(
+          (file) => file.path.endsWith('.kt') || file.path.endsWith('.java'),
+        );
+
+    for (final file in nativeFiles) {
+      final relativePath = file.path.replaceFirst(
+        '${Directory.current.path}/',
+        '',
+      );
+      final sourceText = file.readAsStringSync();
+      for (final pattern in _androidNativeLiteralPatterns) {
+        for (final match in pattern.allMatches(sourceText)) {
+          final line =
+              '\n'.allMatches(sourceText.substring(0, match.start)).length + 1;
+          violations.add('$relativePath:$line: ${match.group(0)}');
+        }
+      }
+    }
+
+    expect(
+      violations,
+      isEmpty,
+      reason:
+          'Pass Android user-visible text through localized Flutter/native values instead of hard-coded English.',
     );
   });
 
