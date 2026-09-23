@@ -49,6 +49,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
           child: ListView(
             padding: const EdgeInsets.only(bottom: 116),
             children: [
+              const SizedBox(height: 8.0),
               TextField(
                 controller: name,
                 textInputAction: TextInputAction.next,
