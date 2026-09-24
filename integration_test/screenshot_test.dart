@@ -111,6 +111,7 @@ const _storeLocaleToAppLocale = <String, String>{
   'pl-PL': 'pl',
   'pt-BR': 'pt-BR',
   'tr-TR': 'tr',
+  'ru-RU': 'ru',
   'zh-CN': 'zh-CN',
 };
 

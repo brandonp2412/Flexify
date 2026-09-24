@@ -1,0 +1,2 @@
+- Обновление pubspec.lock
+- Удалить macOS/iOS сборки из GitHub Рабочий процесс

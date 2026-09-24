@@ -1,0 +1,2 @@
+- Испытания на фиксацию
+- Удалить git push force из deploy.sh

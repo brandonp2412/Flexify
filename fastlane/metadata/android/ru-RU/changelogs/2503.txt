@@ -1,0 +1,1 @@
+- Используйте Windows Runner для развертывания Windows Store

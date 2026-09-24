@@ -1,0 +1,3 @@
+• Обновление: Revert "ci: replace flutter submodule setup with subosito/flutter-action"
+• Обратно случайно удаляя .gitmodules
+• ci: заменить установку подмодулей трепета субосито/флаттер-действием

@@ -68,6 +68,10 @@
   "@languageNameTurkish": {
     "description": "Stable native display name for the Turkish locale."
   },
+  "languageNameRussian": "Русский",
+  "@languageNameRussian": {
+    "description": "Stable native display name for the Russian locale."
+  },
   "navHistory": "History",
   "@navHistory": {
     "description": "Navigation label for workout history."

@@ -1,0 +1,2 @@
+- Добавить лучший график Reps
+- Комментарии к записи Fastlane supply in deploy.sh

@@ -107,6 +107,7 @@ void _registerRelativeTimeLocales() {
   timeago.setLocaleMessages('ko', timeago.KoMessages());
   timeago.setLocaleMessages('nl', timeago.NlMessages());
   timeago.setLocaleMessages('pl', timeago.PlMessages());
+  timeago.setLocaleMessages('ru', timeago.RuMessages());
   final portuguese = timeago.PtBrMessages();
   timeago.setLocaleMessages('pt', portuguese);
   timeago.setLocaleMessages('pt_BR', portuguese);
