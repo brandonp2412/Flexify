@@ -1,0 +1,10 @@
+• 類類
+• 在 README 中修改專案描述
+• 更新README以修改專案標題
+• 在 README 中更新專案名稱
+• 在pubspec.yaml中更新到2.2.0版本
+• ci: 停止的巡邏檢測門釋放
+• docs: 新增替代文字到 README影象
+• fix: 避免Android路徑提供者JNI崩
+• fix: 避免重複訓練通知路線
+• fix: 繫結螢幕截圖CI掛

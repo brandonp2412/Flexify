@@ -1,0 +1,10 @@
+• 覆蓋土耳其地區偏好
+• 逆轉臨時圖示重新設計的資產
+• chore(l10n): 增加語言名稱 土耳其語
+• chore: 地址 土耳其區域性化審查
+• feat(l10n): 增加土耳其地區化
+• feat: 新增曲雙腦標誌概念
+• feat: 新增圖示7和8的精煉組
+• fix(l10n): 刪除複製條目
+• fix(tests): 新增 .gitignore 排除 test_bundle.dart
+• fix(tests): 在 locale_preference_test 中新增tr語言

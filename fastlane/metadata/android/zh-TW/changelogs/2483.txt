@@ -1,0 +1,1 @@
+- 新增 dotnet 到 Windows 儲存部署階段

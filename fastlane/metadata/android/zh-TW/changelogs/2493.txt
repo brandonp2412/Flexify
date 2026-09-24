@@ -1,0 +1,2 @@
+- 更新 pubspec.lock
+- 在 deploy-windows-store中安裝缺失的包

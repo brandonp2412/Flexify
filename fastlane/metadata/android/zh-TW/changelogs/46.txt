@@ -1,0 +1,1 @@
+在 .gitmodules 中指定 flutter 版本

@@ -73,4 +73,25 @@ void main() {
       expect(manifest.listAssets(), contains(path));
     },
   );
+
+  test('localized changelog loader distinguishes Chinese regions', () async {
+    const simplifiedPath = 'assets/changelogs/l10n/zh_CN.json';
+    const traditionalPath = 'assets/changelogs/l10n/zh_TW.json';
+    final bundle = _MemoryAssetBundle({
+      simplifiedPath: '{"123": "简体"}',
+      traditionalPath: '{"123": "繁體"}',
+    });
+
+    final simplified = await loadLocalizedChangelogCatalog(bundle, const {
+      simplifiedPath,
+      traditionalPath,
+    }, const Locale('zh', 'CN'));
+    final traditional = await loadLocalizedChangelogCatalog(bundle, const {
+      simplifiedPath,
+      traditionalPath,
+    }, const Locale('zh', 'TW'));
+
+    expect(simplified, {'123': '简体'});
+    expect(traditional, {'123': '繁體'});
+  });
 }

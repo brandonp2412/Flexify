@@ -1,0 +1,1 @@
+- 新增 deploy-windows-store 的除錯階段

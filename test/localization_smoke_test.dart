@@ -191,6 +191,21 @@ void main() {
     expect(find.text('设置'), findsOneWidget);
   });
 
+  testWidgets('loads Traditional Chinese localization', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'TW'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('設定'), findsOneWidget);
+  });
+
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('zz')));
 
@@ -344,6 +359,7 @@ void main() {
     final japanese = lookupAppLocalizations(const Locale('ja'));
     final korean = lookupAppLocalizations(const Locale('ko'));
     final chinese = lookupAppLocalizations(const Locale('zh', 'CN'));
+    final traditionalChinese = lookupAppLocalizations(const Locale('zh', 'TW'));
 
     expect(japanese.deleteRecordsConfirmation(1), '1件の記録を削除しますか？この操作は元に戻せません。');
     expect(japanese.deleteRecordsConfirmation(3), '3件の記録を削除しますか？この操作は元に戻せません。');
@@ -362,6 +378,16 @@ void main() {
     expect(chinese.deleteRecordsConfirmation(1), '确定要删除 1 条记录吗？此操作无法撤销。');
     expect(chinese.deleteRecordsConfirmation(3), '确定要删除 3 条记录吗？此操作无法撤销。');
     expect(chinese.editSets(4), '编辑 4 组');
+
+    expect(
+      traditionalChinese.deleteRecordsConfirmation(1),
+      '確定要刪除 1 筆紀錄嗎？此操作無法撤銷。',
+    );
+    expect(
+      traditionalChinese.deleteRecordsConfirmation(3),
+      '確定要刪除 3 筆紀錄嗎？此操作無法撤銷。',
+    );
+    expect(traditionalChinese.editSets(4), '編輯 4 組');
   });
 
   test('provides localized measurement unit labels', () {

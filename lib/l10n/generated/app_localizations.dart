@@ -118,6 +118,7 @@ abstract class AppLocalizations {
     Locale('tr'),
     Locale('zh'),
     Locale('zh', 'CN'),
+    Locale('zh', 'TW'),
   ];
 
   /// Application title shown by the operating system and app shell.
@@ -209,6 +210,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'简体中文'**
   String get languageNameSimplifiedChinese;
+
+  /// Display name for Traditional Chinese in the language picker.
+  ///
+  /// In en, this message translates to:
+  /// **'繁體中文'**
+  String get languageNameTraditionalChinese;
 
   /// Stable native display name for the Turkish locale.
   ///
@@ -2830,6 +2837,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
         switch (locale.countryCode) {
           case 'CN':
             return AppLocalizationsZhCn();
+          case 'TW':
+            return AppLocalizationsZhTw();
         }
         break;
       }

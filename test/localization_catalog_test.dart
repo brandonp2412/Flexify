@@ -53,6 +53,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameJapanese',
   'languageNameKorean',
   'languageNameSimplifiedChinese',
+  'languageNameTraditionalChinese',
   'languageNameTurkish',
   'stoneUnitShort',
 };
@@ -138,6 +139,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
   'tr': {'stoneUnit', 'examplePlanExercises'},
   'zh': {},
   'zh_CN': {},
+  'zh_TW': {},
 };
 
 const _macOsEnglishEquivalentTitles = <String, Set<String>>{
@@ -152,6 +154,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'pt-BR': {'Zoom'},
   'tr': {},
   'zh-Hans': {},
+  'zh-Hant': {},
 };
 
 const _postWaveReviewedKeys = <String>{
@@ -179,6 +182,7 @@ const _playStoreLocaleByAppLocale = <String, String>{
   'pt_BR': 'pt-BR',
   'tr': 'tr-TR',
   'zh_CN': 'zh-CN',
+  'zh_TW': 'zh-TW',
 };
 
 const _appStoreLocaleByAppLocale = <String, String>{
@@ -193,11 +197,14 @@ const _appStoreLocaleByAppLocale = <String, String>{
   'pt_BR': 'pt-BR',
   'tr': 'tr',
   'zh_CN': 'zh-Hans',
+  'zh_TW': 'zh-Hant',
 };
 
 const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
+
+const _playStoreScreenshotFallbackLocales = <String>{'zh-TW'};
 
 final _changelogCatalogLocales = _playStoreLocaleByAppLocale.keys.toSet();
 
@@ -393,8 +400,15 @@ void main() {
     }
   });
 
-  test('Play Store phone screenshots cover every shipped locale', () {
-    final screenshotLocales = {'en-US', ..._playStoreLocales};
+  test('Play Store localized screenshot sets are complete', () {
+    expect(
+      _playStoreScreenshotFallbackLocales.difference(_playStoreLocales),
+      isEmpty,
+    );
+    final screenshotLocales = {
+      'en-US',
+      ..._playStoreLocales.difference(_playStoreScreenshotFallbackLocales),
+    };
 
     for (final locale in screenshotLocales) {
       final directory = Directory(
@@ -731,6 +745,7 @@ void main() {
       'ja',
       'ko',
       'zh-Hans',
+      'zh-Hant',
       'tr',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');

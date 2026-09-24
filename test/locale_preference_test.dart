@@ -40,6 +40,9 @@ void main() {
       expect(localeOverrideFromIdentifier('zh-CN'), const Locale('zh', 'CN'));
       expect(localeOverrideFromIdentifier('zh_CN'), const Locale('zh', 'CN'));
       expect(localeOverrideFromIdentifier('ZH-cn'), const Locale('zh', 'CN'));
+      expect(localeOverrideFromIdentifier('zh-TW'), const Locale('zh', 'TW'));
+      expect(localeOverrideFromIdentifier('zh_TW'), const Locale('zh', 'TW'));
+      expect(localeOverrideFromIdentifier('ZH-tw'), const Locale('zh', 'TW'));
       expect(localeOverrideFromIdentifier('zh'), isNull);
       expect(localeOverrideFromIdentifier('removed-locale'), isNull);
       expect(canonicalLocaleOverride('en'), 'en');
@@ -55,6 +58,7 @@ void main() {
       expect(canonicalLocaleOverride('ko'), 'ko');
       expect(canonicalLocaleOverride('tr'), 'tr');
       expect(canonicalLocaleOverride('zh_CN'), 'zh-CN');
+      expect(canonicalLocaleOverride('zh_TW'), 'zh-TW');
       expect(canonicalLocaleOverride('zh'), isNull);
       expect(canonicalLocaleOverride('removed-locale'), isNull);
       expect(selectableLocales.map((locale) => locale.toLanguageTag()), [
@@ -69,6 +73,7 @@ void main() {
         'ja',
         'ko',
         'zh-CN',
+        'zh-TW',
         'tr',
       ]);
     },
@@ -93,6 +98,7 @@ void main() {
       'ko': const Locale('ko'),
       'tr': const Locale('tr'),
       'zh-CN': const Locale('zh', 'CN'),
+      'zh-TW': const Locale('zh', 'TW'),
     };
 
     for (final entry in localeCases.entries) {
@@ -220,6 +226,15 @@ void main() {
 
     app = tester.widget(find.byType(MaterialApp));
     expect(app.locale, const Locale('zh', 'CN'));
+
+    await database.settings.update().write(
+      const SettingsCompanion(localeOverride: Value('zh-TW')),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    app = tester.widget(find.byType(MaterialApp));
+    expect(app.locale, const Locale('zh', 'TW'));
 
     await database.settings.update().write(
       const SettingsCompanion(localeOverride: Value('tr')),

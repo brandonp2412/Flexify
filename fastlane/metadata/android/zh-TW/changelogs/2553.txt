@@ -1,0 +1,2 @@
+- 結合了 github.com:brandonp2412/Flexify的主要分支
+- 在切換計時器設定時預覽振動

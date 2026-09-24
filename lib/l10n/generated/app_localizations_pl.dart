@@ -55,6 +55,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get languageNameSimplifiedChinese => '简体中文';
 
   @override
+  String get languageNameTraditionalChinese => '繁體中文';
+
+  @override
   String get languageNameTurkish => 'Türkçe';
 
   @override

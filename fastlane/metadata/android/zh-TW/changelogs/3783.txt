@@ -1,0 +1,6 @@
+• 新增一堆下面的導航變體
+• 新增執行Linux失敗時的指令碼
+• 刪除 nav 變體
+• 更新下面的導航,成為藥丸設計
+• fix: 從gradle.properties中刪除硬碼的本地JDK路徑
+• fix: 默默 MSVC 規律誤差 破解 Windows CI 構建
