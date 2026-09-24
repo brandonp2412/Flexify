@@ -55,7 +55,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageNameSimplifiedChinese => '简体中文';
 
   @override
-  String get languageNameTurkish => 'Turkish';
+  String get languageNameTurkish => 'Türkçe';
 
   @override
   String get navHistory => 'Historique';

@@ -1,0 +1,10 @@
+• chore: Turkse Play-schermafbeeldingen toevoegen
+• chore: metadata van de nieuwste release lokaliseren
+• feat: vertalingen voor alle ondersteunde talen voltooien
+• feat: grafiekbediening op desktop beschikbaar maken
+• feat: volledige releasegeschiedenis lokaliseren
+• feat: millisecondenweergave van timer verfijnen
+• fix: geschaalde timertekst binnen de cirkel houden
+• fix: afkappen aan randen van lijngrafiek verzachten
+• test: controles op volledige lokalisatie aanscherpen
+• test: toewijzingen van winkeltalen gesynchroniseerd houden

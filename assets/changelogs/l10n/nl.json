@@ -516,5 +516,6 @@
   "1790111019": "• README.md bijwerken\n• feat: categoriebeheer toevoegen\n• feat: pictogram 2 gebruiken als Flexify-opstartpictogram\n• fix: ingebouwde Flutter DevTools herstellen\n• fix: Flutter-foutopsporing in VS Code stabiliseren",
   "1790128482": "• Ruimte toevoegen boven het veld voor de nieuwe naam bij grafiekbewerking\n• pubspec.lock opnieuw genereren\n• Onbedoelde witruimte in edit_set_page verwijderen\n• docs: downloadbadges in de README uitlijnen",
   "1790130666": "• fix: identiteit van de niet-ondertekende F-Droid-release behouden\n• fix: ongewenste wijzigingen in Android-ondertekening voorkomen",
-  "1790132278": "• fix: één Flexify-app en één ondertekeningssleutel afdwingen"
+  "1790132278": "• fix: één Flexify-app en één ondertekeningssleutel afdwingen",
+  "1790159359": "• chore: Turkse Play-schermafbeeldingen toevoegen\n• chore: metadata van de nieuwste release lokaliseren\n• feat: vertalingen voor alle ondersteunde talen voltooien\n• feat: grafiekbediening op desktop beschikbaar maken\n• feat: volledige releasegeschiedenis lokaliseren\n• feat: millisecondenweergave van timer verfijnen\n• fix: geschaalde timertekst binnen de cirkel houden\n• fix: afkappen aan randen van lijngrafiek verzachten\n• test: controles op volledige lokalisatie aanscherpen\n• test: toewijzingen van winkeltalen gesynchroniseerd houden"
 }

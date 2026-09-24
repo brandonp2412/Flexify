@@ -1,0 +1,10 @@
+• chore: Türkçe Play ekran görüntüleri ekle
+• chore: en son sürüm meta verilerini yerelleştir
+• feat: desteklenen tüm yerel ayar çevirilerini tamamla
+• feat: masaüstünde grafik kontrollerini göster
+• feat: tüm sürüm geçmişini yerelleştir
+• feat: zamanlayıcının milisaniye gösterimini iyileştir
+• fix: ölçeklenen zamanlayıcı metnini dairenin içinde tut
+• fix: çizgi grafiği kenar kırpmasını yumuşat
+• test: yerelleştirme tamlığı kontrollerini güçlendir
+• test: mağaza yerel ayar eşlemelerini senkronize tut

@@ -516,5 +516,6 @@
   "1790111019": "• Zaktualizuj README.md\n• feat: dodaj zarządzanie kategoriami\n• feat: ustaw ikonę 2 jako ikonę uruchamiania Flexify\n• fix: przywróć wbudowane Flutter DevTools\n• fix: ustabilizuj debugowanie Fluttera w VS Code",
   "1790128482": "• Dodać odstęp nad polem nowej nazwy podczas edycji wykresów\n• Ponownie wygenerować pubspec.lock\n• Usunąć zbędny odstęp w edit_set_page\n• docs: wyrównać odznaki pobierania w README",
   "1790130666": "• fix: zachować tożsamość niepodpisanego wydania F-Droid\n• fix: zapobiec nieoczekiwanym zmianom podpisu Androida",
-  "1790132278": "• fix: wymusić jedną aplikację Flexify i jeden klucz podpisywania"
+  "1790132278": "• fix: wymusić jedną aplikację Flexify i jeden klucz podpisywania",
+  "1790159359": "• chore: dodać tureckie zrzuty ekranu z Google Play\n• chore: zlokalizować metadane najnowszego wydania\n• feat: uzupełnić tłumaczenia wszystkich obsługiwanych języków\n• feat: udostępnić kontrolki wykresów na komputerze\n• feat: zlokalizować pełną historię wydań\n• feat: dopracować wyświetlanie milisekund timera\n• fix: utrzymać skalowany tekst timera wewnątrz okręgu\n• fix: złagodzić przycinanie krawędzi wykresu liniowego\n• test: wzmocnić kontrole kompletności lokalizacji\n• test: utrzymać synchronizację mapowań języków sklepów"
 }

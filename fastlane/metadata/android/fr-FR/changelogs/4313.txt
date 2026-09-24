@@ -1,0 +1,10 @@
+• chore: ajouter les captures d’écran Play en turc
+• chore: localiser les métadonnées de la dernière version
+• feat: terminer les traductions de toutes les langues prises en charge
+• feat: afficher les contrôles des graphiques sur ordinateur
+• feat: localiser l’historique complet des versions
+• feat: affiner l’affichage des millisecondes du minuteur
+• fix: garder le texte redimensionné du minuteur dans le cercle
+• fix: adoucir le rognage des bords du graphique en courbes
+• test: renforcer les contrôles d’exhaustivité de la localisation
+• test: garder les correspondances de langues des stores synchronisées

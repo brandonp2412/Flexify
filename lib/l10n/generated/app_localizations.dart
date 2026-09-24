@@ -213,7 +213,7 @@ abstract class AppLocalizations {
   /// Stable native display name for the Turkish locale.
   ///
   /// In en, this message translates to:
-  /// **'Turkish'**
+  /// **'Türkçe'**
   String get languageNameTurkish;
 
   /// Navigation label for workout history.

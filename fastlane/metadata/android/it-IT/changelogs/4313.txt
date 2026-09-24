@@ -1,0 +1,10 @@
+• chore: aggiungere screenshot Play in turco
+• chore: localizzare i metadati dell'ultima versione
+• feat: completare le traduzioni di tutte le lingue supportate
+• feat: rendere disponibili i controlli dei grafici su desktop
+• feat: localizzare l'intera cronologia delle versioni
+• feat: perfezionare la visualizzazione dei millisecondi del timer
+• fix: mantenere il testo ridimensionato del timer all'interno del cerchio
+• fix: attenuare il ritaglio ai bordi del grafico a linee
+• test: rafforzare i controlli di completezza della localizzazione
+• test: mantenere sincronizzate le mappature delle lingue degli store

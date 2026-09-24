@@ -1,0 +1,10 @@
+• chore: añadir capturas de Play en turco
+• chore: localizar los metadatos de la última versión
+• feat: completar las traducciones de todos los idiomas compatibles
+• feat: mostrar los controles de gráficos en escritorio
+• feat: localizar todo el historial de versiones
+• feat: perfeccionar la visualización de milisegundos del temporizador
+• fix: mantener el texto escalado del temporizador dentro del círculo
+• fix: suavizar el recorte en los bordes del gráfico de líneas
+• test: reforzar las comprobaciones de integridad de la localización
+• test: mantener sincronizadas las asignaciones de idiomas de las tiendas

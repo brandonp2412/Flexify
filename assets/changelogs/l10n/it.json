@@ -516,5 +516,6 @@
   "1790111019": "• Aggiornare README.md\n• feat: aggiungere la gestione delle categorie\n• feat: usare l’icona 2 come icona di avvio di Flexify\n• fix: ripristinare Flutter DevTools integrati\n• fix: stabilizzare il debug di Flutter in VS Code",
   "1790128482": "• Aggiungere spazio sopra il campo del nuovo nome nella modifica dei grafici\n• Rigenerare pubspec.lock\n• Rimuovere la spaziatura indesiderata in edit_set_page\n• docs: allineare i badge di download nel README",
   "1790130666": "• fix: mantenere l’identità della release F-Droid non firmata\n• fix: impedire variazioni della firma Android",
-  "1790132278": "• fix: imporre una sola app Flexify e una sola chiave di firma"
+  "1790132278": "• fix: imporre una sola app Flexify e una sola chiave di firma",
+  "1790159359": "• chore: aggiungere screenshot Play in turco\n• chore: localizzare i metadati dell'ultima versione\n• feat: completare le traduzioni di tutte le lingue supportate\n• feat: rendere disponibili i controlli dei grafici su desktop\n• feat: localizzare l'intera cronologia delle versioni\n• feat: perfezionare la visualizzazione dei millisecondi del timer\n• fix: mantenere il testo ridimensionato del timer all'interno del cerchio\n• fix: attenuare il ritaglio ai bordi del grafico a linee\n• test: rafforzare i controlli di completezza della localizzazione\n• test: mantenere sincronizzate le mappature delle lingue degli store"
 }

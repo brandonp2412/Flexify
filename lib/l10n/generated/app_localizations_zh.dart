@@ -54,7 +54,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageNameSimplifiedChinese => '简体中文';
 
   @override
-  String get languageNameTurkish => 'Turkish';
+  String get languageNameTurkish => 'Türkçe';
 
   @override
   String get navHistory => '历史';
@@ -1506,7 +1506,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get languageNameSimplifiedChinese => '简体中文';
 
   @override
-  String get languageNameTurkish => 'Turkish';
+  String get languageNameTurkish => 'Türkçe';
 
   @override
   String get navHistory => '历史';
