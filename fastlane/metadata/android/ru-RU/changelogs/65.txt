@@ -1,0 +1,2 @@
+- Включите редактирование имен графов в панели приложений
+- Обновление: Navigator.of(context).pop() => Navigator.pop(context)

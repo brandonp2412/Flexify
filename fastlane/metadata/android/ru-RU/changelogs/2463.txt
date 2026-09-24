@@ -1,0 +1,4 @@
+- Обновление pubspec.lock
+- Настройка развертывания msstore
+- Настройка Google Play Releases
+- Удалить .actrc и MIGRATION GUIDE.md

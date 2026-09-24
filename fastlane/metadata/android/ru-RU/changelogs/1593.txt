@@ -1,0 +1,1 @@
+- Fix overwriting bodyWeight в графе импорт

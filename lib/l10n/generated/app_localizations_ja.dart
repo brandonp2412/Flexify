@@ -60,6 +60,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get languageNameTurkish => 'Türkçe';
 
   @override
+  String get languageNameRussian => 'Русский';
+
+  @override
   String get navHistory => '履歴';
 
   @override

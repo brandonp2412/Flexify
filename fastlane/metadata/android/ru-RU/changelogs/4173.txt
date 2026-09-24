@@ -1,0 +1,3 @@
+• Добавьте рабочий процесс подписи Kite Android (#347)
+• Fix Kite Signer Android SDK Lookup (#348)
+• Fix Kite Signer NDK Environment (#349)

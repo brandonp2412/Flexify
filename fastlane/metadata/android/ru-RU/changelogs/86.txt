@@ -1,0 +1,5 @@
+- Добавить multidex в android/app/build.gradle
+- Обновление Flutter до 3.22.0
+- Обновление pubspec.lock
+- Обновление vscode settings
+- Исправить вставку записей со страницы истории

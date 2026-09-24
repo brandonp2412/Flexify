@@ -1,0 +1,10 @@
+• Добавить мягкий контур в круг таймера
+• Фиксация +1 минута на Linux
+• Исправить changelogs
+• Обновление: Fix github readme styling [skip ci]
+• Обновление: Fix msstore width badge [skip ci]
+• Ограничение частоты развертывания Google Play [skip ci]
+• Сделайте значки больше [skip ci]
+• Сделайте значки последовательными [skip ci]
+• Вернуть "Fix msstore width badge [skip ci]"
+• Используйте github release вместо artifact [skip ci]

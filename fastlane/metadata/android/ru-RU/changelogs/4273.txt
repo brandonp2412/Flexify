@@ -1,0 +1,5 @@
+• Обновление README.md
+• Исполнитель: Add Category Management
+• Продвигайте значок 2 как значок запуска Flexify
+• исправление: восстановление встроенного Flutter DevTools
+• фиксация: стабилизация отладки Flutter в VS Code

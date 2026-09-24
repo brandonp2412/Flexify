@@ -1,0 +1,1 @@
+• Заставить Google Play развернуть idempotent

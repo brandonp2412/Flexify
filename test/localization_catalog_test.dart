@@ -55,6 +55,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameSimplifiedChinese',
   'languageNameTraditionalChinese',
   'languageNameTurkish',
+  'languageNameRussian',
   'stoneUnitShort',
 };
 
@@ -137,6 +138,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
     'backupLabel',
   },
   'tr': {'stoneUnit', 'examplePlanExercises'},
+  'ru': {},
   'zh': {},
   'zh_CN': {},
   'zh_TW': {},
@@ -153,6 +155,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'pl': {},
   'pt-BR': {'Zoom'},
   'tr': {},
+  'ru': {},
   'zh-Hans': {},
   'zh-Hant': {},
 };
@@ -181,6 +184,7 @@ const _playStoreLocaleByAppLocale = <String, String>{
   'pl': 'pl-PL',
   'pt_BR': 'pt-BR',
   'tr': 'tr-TR',
+  'ru': 'ru-RU',
   'zh_CN': 'zh-CN',
   'zh_TW': 'zh-TW',
 };
@@ -196,6 +200,7 @@ const _appStoreLocaleByAppLocale = <String, String>{
   'pl': 'pl',
   'pt_BR': 'pt-BR',
   'tr': 'tr',
+  'ru': 'ru',
   'zh_CN': 'zh-Hans',
   'zh_TW': 'zh-Hant',
 };
@@ -747,6 +752,7 @@ void main() {
       'zh-Hans',
       'zh-Hant',
       'tr',
+      'ru',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');
 

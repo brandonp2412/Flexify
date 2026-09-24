@@ -1,0 +1,2 @@
+• Обновить все
+• chore: auto-fix formating/lint/generated client [pre-push]

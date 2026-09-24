@@ -1,0 +1,4 @@
+- Исправьте файлы GitHub, чтобы включить Android APKs
+- 2.0.27
+- Обновление pubspec.lock
+- Удалить macOS/iOS сборки из GitHub Рабочий процесс
