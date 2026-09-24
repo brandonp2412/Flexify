@@ -1,0 +1,1 @@
+在 deploy.sh 中設定 shell優先順序

@@ -1,0 +1,1 @@
+• ci: 新增 VirusTotal 掃描在釋出的APK

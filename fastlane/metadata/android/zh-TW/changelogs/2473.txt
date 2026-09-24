@@ -1,0 +1,10 @@
+- 固定單位測試
+- 修復將部署到視窗儲存
+- 新增除錯步驟到 Windows Store 部署中下載的檔案列表
+- 修復Windows Store部署:使用本地MSIX檔案而不是GitHub釋出URL
+- 修復Windows Store部署:確保在Windows Store部署之前建立 GitHub版本
+- 更新桌面截圖
+- 修復所有機動螢幕截圖
+- 更新 pubspec.lock
+- 新增更新Chromedriver的指令碼
+- 修復什麼是新的頁面

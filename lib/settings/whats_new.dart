@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-const _changelogCatalogByLanguage = <String, String>{
+const _changelogCatalogByLocale = <String, String>{
   'de': 'de',
   'es': 'es',
   'fr': 'fr',
@@ -17,8 +17,11 @@ const _changelogCatalogByLanguage = <String, String>{
   'nl': 'nl',
   'pl': 'pl',
   'pt': 'pt_BR',
+  'pt-BR': 'pt_BR',
   'tr': 'tr',
   'zh': 'zh_CN',
+  'zh-CN': 'zh_CN',
+  'zh-TW': 'zh_TW',
 };
 
 Future<Map<String, String>> loadLocalizedChangelogCatalog(
@@ -26,7 +29,9 @@ Future<Map<String, String>> loadLocalizedChangelogCatalog(
   Set<String> assets,
   Locale locale,
 ) async {
-  final catalogLocale = _changelogCatalogByLanguage[locale.languageCode];
+  final catalogLocale =
+      _changelogCatalogByLocale[locale.toLanguageTag()] ??
+      _changelogCatalogByLocale[locale.languageCode];
   if (catalogLocale == null) return const {};
 
   final path = 'assets/changelogs/l10n/$catalogLocale.json';

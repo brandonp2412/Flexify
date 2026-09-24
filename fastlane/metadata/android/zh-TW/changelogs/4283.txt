@@ -1,0 +1,4 @@
+• 在編輯圖表的新名稱欄位上方新增間距
+• 重新生成 pubspec.lock
+• 移除 edit_set_page 中多餘的間距
+• docs: 對齊 README 中的下載徽章

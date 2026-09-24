@@ -1,0 +1,1 @@
+• ci: 讓 VirusTotal 部分在釋放中可摺疊

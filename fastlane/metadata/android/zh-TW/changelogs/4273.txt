@@ -1,0 +1,5 @@
+• 更新 README.md
+• feat: 新增分類管理
+• feat: 將圖示 2 設為 Flexify 啟動器圖示
+• fix: 恢復內嵌 Flutter DevTools
+• fix: 提升 VS Code 中 Flutter 除錯的穩定性

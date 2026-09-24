@@ -60,6 +60,10 @@
   "@languageNameSimplifiedChinese": {
     "description": "Stable native display name for the Simplified Chinese locale."
   },
+  "languageNameTraditionalChinese": "繁體中文",
+  "@languageNameTraditionalChinese": {
+    "description": "Display name for Traditional Chinese in the language picker."
+  },
   "languageNameTurkish": "Türkçe",
   "@languageNameTurkish": {
     "description": "Stable native display name for the Turkish locale."

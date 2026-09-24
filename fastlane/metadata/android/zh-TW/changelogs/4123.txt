@@ -1,0 +1,5 @@
+• 在 README 中修改專案描述
+• 更新README以修改專案標題
+• 在 README 中更新專案名稱
+• 在pubspec.yaml中更新到2.2.0版本
+• fix: 解決開放歷史和計畫錯誤

@@ -1,0 +1,3 @@
+- 如果自動備份已關閉,則停止備份接收器
+- 從 deploy.sh 移動rsync到macOS
+- 在macOS.sh中使用zsh

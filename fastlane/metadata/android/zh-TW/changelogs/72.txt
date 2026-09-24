@@ -1,0 +1,2 @@
+- 結合了 github.com:brandonp2412/Flexify的主要分支
+- 固定距離的欄位保持突出 - 1.0.64

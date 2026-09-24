@@ -113,6 +113,7 @@ void _registerRelativeTimeLocales() {
   final simplifiedChinese = timeago.ZhCnMessages();
   timeago.setLocaleMessages('zh', simplifiedChinese);
   timeago.setLocaleMessages('zh_CN', simplifiedChinese);
+  timeago.setLocaleMessages('zh_TW', timeago.ZhMessages());
 }
 
 String formatRelativeTime(BuildContext context, DateTime value) {
@@ -121,6 +122,7 @@ String formatRelativeTime(BuildContext context, DateTime value) {
   final localeName = switch ((locale.languageCode, locale.countryCode)) {
     ('pt', 'BR') => 'pt_BR',
     ('zh', 'CN') => 'zh_CN',
+    ('zh', 'TW') => 'zh_TW',
     _ => locale.languageCode,
   };
   return timeago.format(value, locale: localeName);

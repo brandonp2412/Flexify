@@ -1,0 +1,5 @@
+- 新增多索引到Android/app/build.gradle
+- 更新到3.22.0
+- 更新 pubspec.lock
+- 更新對程式碼設定
+- 修復從歷史頁面插入記錄

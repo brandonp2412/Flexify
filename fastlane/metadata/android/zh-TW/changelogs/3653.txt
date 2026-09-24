@@ -1,0 +1,10 @@
+• 修復顯示螢幕截圖中的除錯標誌
+• 更新截圖
+• 使用簡訊按 +1 分鐘
+• chore: 新增Android截圖指令碼,使用--profile旗
+• feat: 改善曲線平滑性,計時器,計畫追蹤,輸入風格的UI
+• fix: 圓的中心時間點,並移動1分鐘按
+• fix: 在 MaterialApp 中停用bug 標誌
+• fix: 消除UniqueKey反模式在計時圈小工具中
+• fix: 設計重新定時器圈,以最小的現代美學
+• fix: 在截圖測試中,將 runApp 取代為 tester.pumpWidget

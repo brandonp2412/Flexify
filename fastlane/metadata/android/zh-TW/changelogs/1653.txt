@@ -1,0 +1,1 @@
+- 在 deploy.sh 中使用Powershell而不是 cmd

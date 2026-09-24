@@ -1,0 +1,3 @@
+• 新增Kite Android簽名工作流 (#347)
+• 修復Kite簽名器Android SDK查詢 (#348)
+• 修復Kite簽名器 NDK環境 (#349)

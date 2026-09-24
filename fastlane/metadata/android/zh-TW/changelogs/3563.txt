@@ -1,0 +1,3 @@
+• 逆轉"ci:用subosito/flutter-action取代飛子模組設定"
+• 意外刪除 .git模組的逆轉
+• ci: 替換飛子模組設定為subosito/flutter-action

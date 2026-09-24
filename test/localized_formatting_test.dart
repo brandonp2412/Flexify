@@ -153,18 +153,33 @@ void main() {
     expect(find.textContaining('há 5 minutos'), findsOneWidget);
   });
 
-  testWidgets('uses Simplified Chinese for the Chinese fallback locale', (
+  testWidgets('uses Simplified Chinese for an unsupported Chinese region', (
     tester,
   ) async {
-    final fiveMinutesAgo = DateTime.now().subtract(const Duration(minutes: 5));
+    final oneMinuteAgo = DateTime.now().subtract(const Duration(minutes: 1));
+
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('zh', 'HK'),
+        (context) => formatRelativeTime(context, oneMinuteAgo),
+      ),
+    );
+
+    expect(find.textContaining('约1分钟 前'), findsOneWidget);
+  });
+
+  testWidgets('uses Traditional Chinese relative time for Taiwan', (
+    tester,
+  ) async {
+    final oneMinuteAgo = DateTime.now().subtract(const Duration(minutes: 1));
 
     await tester.pumpWidget(
       formattingApp(
         const Locale('zh', 'TW'),
-        (context) => formatRelativeTime(context, fiveMinutesAgo),
+        (context) => formatRelativeTime(context, oneMinuteAgo),
       ),
     );
 
-    expect(find.textContaining('5 分 前'), findsOneWidget);
+    expect(find.textContaining('約1分鐘 前'), findsOneWidget);
   });
 }
