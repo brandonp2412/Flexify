@@ -1,0 +1,1 @@
+• fix(l10n): sincronizar el historial de la versión actual
