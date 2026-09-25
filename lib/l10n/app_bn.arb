@@ -101,6 +101,10 @@
   "@languageNameThai": {
     "description": "Stable native display name for the Thai locale."
   },
+  "languageNameMalay": "Bahasa Melayu",
+  "@languageNameMalay": {
+    "description": "Stable native display name for the Malay locale."
+  },
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
