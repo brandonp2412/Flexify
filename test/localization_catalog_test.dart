@@ -57,6 +57,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameTurkish',
   'languageNameRussian',
   'languageNameHindi',
+  'languageNameArabic',
   'stoneUnitShort',
 };
 
@@ -141,6 +142,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
   'tr': {'stoneUnit', 'examplePlanExercises'},
   'ru': {},
   'hi': {},
+  'ar': {},
   'zh': {},
   'zh_CN': {},
   'zh_TW': {},
@@ -159,6 +161,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'tr': {},
   'ru': {},
   'hi': {},
+  'ar': {},
   'zh-Hans': {},
   'zh-Hant': {},
 };
@@ -211,6 +214,10 @@ const _appStoreLocaleByAppLocale = <String, String>{
 };
 
 const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
+
+// Arabic currently ships as an in-app locale; localized store metadata will
+// follow in a separate translation slice.
+const _appOnlyLocales = <String>{'ar'};
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
 
@@ -363,7 +370,7 @@ void main() {
             )
             .map((file) => _readArb(file)['@@locale'] as String)
             .toSet()
-          ..removeAll(_storeFallbackOnlyAppLocales);
+          ..removeAll({..._storeFallbackOnlyAppLocales, ..._appOnlyLocales});
 
     expect(
       _playStoreLocaleByAppLocale.keys.toSet(),
@@ -761,6 +768,7 @@ void main() {
       'tr',
       'ru',
       'hi',
+      'ar',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');
 

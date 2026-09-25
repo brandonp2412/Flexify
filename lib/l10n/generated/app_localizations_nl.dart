@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -64,6 +65,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get languageNameHindi => 'हिन्दी';
+
+  @override
+  String get languageNameArabic => 'العربية';
 
   @override
   String get navHistory => 'Geschiedenis';
