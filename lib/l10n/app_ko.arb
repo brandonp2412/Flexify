@@ -50,6 +50,10 @@
   "@languageNameThai": {
     "description": "Stable native display name for the Thai locale."
   },
+  "languageNameMalay": "Bahasa Melayu",
+  "@languageNameMalay": {
+    "description": "Stable native display name for the Malay locale."
+  },
   "navHistory": "기록",
   "navPlans": "플랜",
   "navGraphs": "그래프",

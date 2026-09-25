@@ -17,6 +17,7 @@ import 'app_localizations_id.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_ja.dart';
 import 'app_localizations_ko.dart';
+import 'app_localizations_ms.dart';
 import 'app_localizations_nl.dart';
 import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
@@ -125,6 +126,7 @@ abstract class AppLocalizations {
     Locale('it'),
     Locale('ja'),
     Locale('ko'),
+    Locale('ms'),
     Locale('nl'),
     Locale('pl'),
     Locale('pt'),
@@ -294,6 +296,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ไทย'**
   String get languageNameThai;
+
+  /// Stable native display name for the Malay locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Bahasa Melayu'**
+  String get languageNameMalay;
 
   /// Navigation label for workout history.
   ///
@@ -2887,6 +2895,7 @@ class _AppLocalizationsDelegate
     'it',
     'ja',
     'ko',
+    'ms',
     'nl',
     'pl',
     'pt',
@@ -2951,6 +2960,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsJa();
     case 'ko':
       return AppLocalizationsKo();
+    case 'ms':
+      return AppLocalizationsMs();
     case 'nl':
       return AppLocalizationsNl();
     case 'pl':

@@ -4,9 +4,9 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Indonesian (`id`).
-class AppLocalizationsId extends AppLocalizations {
-  AppLocalizationsId([String locale = 'id']) : super(locale);
+/// The translations for Malay (`ms`).
+class AppLocalizationsMs extends AppLocalizations {
+  AppLocalizationsMs([String locale = 'ms']) : super(locale);
 
   @override
   String get appTitle => 'Flexify';
@@ -19,7 +19,7 @@ class AppLocalizationsId extends AppLocalizations {
       'Pilih bahasa yang digunakan Flexify';
 
   @override
-  String get languageSystemDefault => 'Default sistem';
+  String get languageSystemDefault => 'Lalai sistem';
 
   @override
   String get languageNameEnglish => 'English';
@@ -91,41 +91,41 @@ class AppLocalizationsId extends AppLocalizations {
   String get languageNameMalay => 'Bahasa Melayu';
 
   @override
-  String get navHistory => 'Riwayat';
+  String get navHistory => 'Sejarah';
 
   @override
-  String get navPlans => 'Rencana';
+  String get navPlans => 'Pelan';
 
   @override
-  String get navGraphs => 'Grafik';
+  String get navGraphs => 'Graf';
 
   @override
-  String get navTimer => 'Pewaktu';
+  String get navTimer => 'Pemasa';
 
   @override
-  String get navSettings => 'Pengaturan';
+  String get navSettings => 'Tetapan';
 
   @override
-  String get errorLabel => 'Galat';
+  String get errorLabel => 'Ralat';
 
   @override
   String get tabContentError => 'Konten tab tidak dapat dibuat.';
 
   @override
-  String get cannotHideAllTabs => 'Tidak bisa menyembunyikan semuanya!';
+  String get cannotHideAllTabs => 'Tidak boleh menyembunyikan semuanya!';
 
   @override
   String removeTabQuestion(String tab) {
-    return 'Hapus tab $tab?';
+    return 'Buang tab $tab?';
   }
 
   @override
   String get restoreTabFromSettings =>
-      'Anda dapat menambahkannya kembali nanti dari pengaturan.';
+      'Anda boleh menambahkannya semula kemudian daripada tetapan.';
 
   @override
   String removedTab(String tab) {
-    return 'Tab $tab dihapus';
+    return 'Tab $tab dibuang';
   }
 
   @override
@@ -140,10 +140,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get searchHint => 'Cari...';
 
   @override
-  String get deleteSelected => 'Hapus yang dipilih';
+  String get deleteSelected => 'Padam yang dipilih';
 
   @override
-  String get confirmDelete => 'Konfirmasi penghapusan';
+  String get confirmDelete => 'Sahkan pemadaman';
 
   @override
   String deleteRecordsConfirmation(int count) {
@@ -151,9 +151,9 @@ class AppLocalizationsId extends AppLocalizations {
       count,
       locale: localeName,
       other:
-          'Anda yakin ingin menghapus $count catatan? Tindakan ini tidak dapat dibatalkan.',
+          'Adakah anda pasti mahu memadam $count rekod? Tindakan ini tidak boleh dibuat asal.',
       one:
-          'Anda yakin ingin menghapus 1 catatan? Tindakan ini tidak dapat dibatalkan.',
+          'Adakah anda pasti mahu memadam 1 rekod? Tindakan ini tidak boleh dibuat asal.',
     );
     return '$_temp0';
   }
@@ -162,25 +162,25 @@ class AppLocalizationsId extends AppLocalizations {
   String get actionCancel => 'Batal';
 
   @override
-  String get actionDelete => 'Hapus';
+  String get actionDelete => 'Padam';
 
   @override
-  String get actionRemove => 'Hapus';
+  String get actionRemove => 'Padam';
 
   @override
   String get actionEdit => 'Sunting';
 
   @override
-  String get actionShare => 'Bagikan';
+  String get actionShare => 'Kongsi';
 
   @override
-  String get clearSelection => 'Hapus pilihan';
+  String get clearSelection => 'Padam pilihan';
 
   @override
-  String get clearSearch => 'Hapus pencarian';
+  String get clearSearch => 'Padam carian';
 
   @override
-  String get showMenu => 'Tampilkan menu';
+  String get showMenu => 'Tunjukkan menu';
 
   @override
   String get selectAll => 'Pilih semua';
@@ -198,10 +198,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get categoryLabel => 'Kategori';
 
   @override
-  String get repsLabel => 'Repetisi';
+  String get repsLabel => 'Ulangan';
 
   @override
-  String get repsFilter => 'Filter repetisi';
+  String get repsFilter => 'Filter ulangan';
 
   @override
   String get weightFilter => 'Filter berat';
@@ -222,7 +222,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get actionClear => 'Bersihkan';
 
   @override
-  String get actionOk => 'Oke';
+  String get actionOk => 'OK';
 
   @override
   String get actionClose => 'Tutup';
@@ -240,46 +240,46 @@ class AppLocalizationsId extends AppLocalizations {
   String get nameLabel => 'Nama';
 
   @override
-  String get missingPermissions => 'Izin tidak lengkap';
+  String get missingPermissions => 'Kebenaran tidak lengkap';
 
   @override
   String get restTimersPermissionsMissing =>
-      'Pewaktu istirahat aktif, tetapi izin yang diperlukan belum diberikan.';
+      'Pemasa rehat dihidupkan, tetapi kebenaran belum diberikan.';
 
   @override
   String get restTimersPermissionsOptional =>
-      'Jika Anda menonaktifkan pewaktu istirahat, izin ini tidak diperlukan.';
+      'Jika anda mematikan pemasa rehat, kebenaran ini tidak diperlukan.';
 
   @override
-  String get restTimers => 'Pewaktu istirahat';
+  String get restTimers => 'Pemasa rehat';
 
   @override
-  String get disableBatteryOptimizations => 'Nonaktifkan optimasi baterai';
+  String get disableBatteryOptimizations => 'Lumpuhkan optimasi baterai';
 
   @override
   String get batteryOptimizationWarning =>
       'Kemajuan mungkin akan berhenti jika optimasi baterai tetap berjalan.';
 
   @override
-  String get scheduleExactAlarm => 'Jadwalkan alarm tepat waktu';
+  String get scheduleExactAlarm => 'Jadwalkan alarm tepat masa';
 
   @override
   String get exactAlarmWarning =>
-      'Alarm tidak dapat akurat jika ini dinonaktifkan.';
+      'Alarm tidak dapat akurat jika ini dilumpuhkan.';
 
   @override
-  String get postNotifications => 'Kirim notifikasi';
+  String get postNotifications => 'Hantar pemberitahuan';
 
   @override
   String get notificationBarDescription =>
-      'Kemajuan pewaktu dikirim ke bilah notifikasi';
+      'Kemajuan pemasa dihantar ke bar pemberitahuan';
 
   @override
-  String get invalidPermissions => 'Izin tidak valid';
+  String get invalidPermissions => 'Kebenaran tidak valid';
 
   @override
   String get insufficientTimerPermissionsConfirmation =>
-      'Pewaktu istirahat diaktifkan tanpa izin yang memadai. Anda yakin?';
+      'Pemasa rehat dihidupkan tanpa kebenaran yang mencukupi. Adakah anda pasti?';
 
   @override
   String get actionConfirm => 'Konfirmasi';
@@ -289,135 +289,135 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get appAccessDescription =>
-      'Diperlukan untuk pewaktu dan notifikasi yang diaktifkan.';
+      'Diperlukan untuk pemasa dan pemberitahuan yang diaktifkan.';
 
   @override
   String get notifications => 'Pemberitahuan';
 
   @override
-  String get timerProgressAndRestAlerts =>
-      'Kemajuan pewaktu dan peringatan istirahat';
+  String get timerProgressAndRestAlerts => 'Kemajuan pemasa dan amaran rehat';
 
   @override
-  String get enabledNotificationsDescription => 'Notifikasi yang Anda aktifkan';
+  String get enabledNotificationsDescription =>
+      'Pemberitahuan yang anda aktifkan';
 
   @override
   String get backgroundActivity => 'Aktivitas latar belakang';
 
   @override
   String get backgroundActivityDescription =>
-      'Jaga agar pewaktu tetap andal di latar belakang';
+      'Jaga agar pemasa tetap andal di latar belakang';
 
   @override
-  String get exactAlarms => 'Alarm tepat waktu';
+  String get exactAlarms => 'Alarm tepat masa';
 
   @override
   String get exactAlarmsDescription =>
-      'Beri tahu tepat saat pewaktu istirahat berakhir';
+      'Beri amaran tepat apabila pemasa rehat tamat';
 
   @override
   String get noAdditionalAndroidAccessNeeded =>
-      'Tidak diperlukan akses Android tambahan untuk pengaturan Anda saat ini.';
+      'Tiada akses Android tambahan diperlukan untuk tetapan semasa anda.';
 
   @override
   String get actionDone => 'Selesai';
 
   @override
-  String get allowed => 'Diizinkan';
+  String get allowed => 'Dikebenarankan';
 
   @override
-  String get actionAllow => 'Izinkan';
+  String get actionAllow => 'Kebenarankan';
 
   @override
   String get backupLabel => 'Cadangan';
 
   @override
-  String get databaseLabel => 'Basis data';
+  String get databaseLabel => 'Pangkalan data';
 
   @override
-  String get deleteRecords => 'Hapus catatan';
+  String get deleteRecords => 'Padam rekod';
 
   @override
   String get deleteAllGraphsConfirmation =>
-      'Anda yakin ingin menghapus semua grafik? Tindakan ini tidak dapat dibatalkan.';
+      'Adakah anda pasti mahu memadam semua graf? Tindakan ini tidak boleh dibuat asal.';
 
   @override
   String get deleteAllPlansConfirmation =>
-      'Anda yakin ingin menghapus semua rencana? Tindakan ini tidak dapat dibatalkan.';
+      'Adakah anda pasti mahu memadam semua pelan? Tindakan ini tidak boleh dibuat asal.';
 
   @override
   String get deleteDatabaseConfirmation =>
-      'Anda yakin ingin menghapus basis data Anda? Tindakan ini tidak dapat dibatalkan dan akan menghapus seluruh data Anda.';
+      'Adakah anda pasti mahu memadam pangkalan data anda? Tindakan ini tidak boleh dibuat asal dan akan memadam semua data anda.';
 
   @override
-  String get importData => 'Impor data';
+  String get importData => 'Import data';
 
   @override
-  String get exportData => 'Ekspor data';
+  String get exportData => 'Eksport data';
 
   @override
   String get actionReport => 'Laporkan';
 
   @override
-  String get graphDataImported => 'Data grafik diimpor dengan sukses!';
+  String get graphDataImported => 'Data graf diimportt dengan sukses!';
 
   @override
-  String get plansImported => 'Rencana diimpor dengan sukses';
+  String get plansImported => 'Pelan diimportt dengan sukses';
 
   @override
   String failedToImportDatabase(String error) {
-    return 'Gagal mengimpor basis data: $error';
+    return 'Gagal mengimportt pangkalan data: $error';
   }
 
   @override
   String get backupArchiveMissingDatabase =>
-      'Arsip cadangan tidak berisi basis data Flexify.';
+      'Arsip cadangan tidak berisi pangkalan data Flexify.';
 
   @override
   String failedToImportGraphs(String error) {
-    return 'Gagal mengimpor grafik: $error';
+    return 'Gagal mengimportt graf: $error';
   }
 
   @override
   String failedToImportPlans(String error) {
-    return 'Gagal mengimpor rencana: $error';
+    return 'Gagal mengimportt pelan: $error';
   }
 
   @override
-  String get selectedFileDoesNotExist => 'Berkas yang dipilih tidak ada';
+  String get selectedFileDoesNotExist => 'Fail yang dipilih tidak wujud';
 
   @override
-  String get couldNotReadFileData => 'Data berkas tidak dapat dibaca';
+  String get couldNotReadFileData => 'Tidak dapat membaca data fail';
 
   @override
   String get databaseImportWebUnsupported =>
-      'Impor basis data di web memerlukan migrasi data manual. Ekspor data Anda sebagai berkas CSV lalu impor berkas tersebut.';
+      'Import pangkalan data di web memerlukan pemindahan data secara manual. Sila eksport data anda sebagai fail CSV dan import fail tersebut.';
 
   @override
-  String get csvFileEmpty => 'Berkas CSV kosong';
+  String get csvFileEmpty => 'Fail CSV kosong';
 
   @override
   String get csvNeedsDataRow =>
-      'Berkas CSV harus memuat setidaknya satu baris data';
+      'Fail CSV mesti mengandungi sekurang-kurangnya satu baris data';
 
   @override
   String csvRowInsufficientColumns(int row, int count) {
-    return 'Baris $row tidak memiliki kolom yang cukup: $count';
+    return 'Baris $row tidak mempunyai lajur yang mencukupi: $count';
   }
 
   @override
   String invalidCsvValue(String field, int row, String value) {
-    return 'Nilai $field tidak valid dalam baris $row: $value';
+    return 'Nilai $field tidak sah pada baris $row: $value';
   }
 
   @override
   String invalidCsvDataType(String field, int row, String type) {
-    return 'Tipe data $field tidak valid dalam baris $row: $type';
+    return 'Jenis data $field tidak sah pada baris $row: $type';
   }
 
   @override
   String expectedIntegerPlanId(String value) {
-    return 'ID rencana harus berupa bilangan bulat, tetapi diperoleh \"$value\"';
+    return 'ID pelan mestilah integer, tetapi menerima \"$value\"';
   }
 
   @override
@@ -439,7 +439,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get kilometersUnit => 'Kilometer (km)';
 
   @override
-  String get milesUnit => 'Mil (mi)';
+  String get milesUnit => 'Batu (mi)';
 
   @override
   String get metersUnit => 'Meter (m)';
@@ -457,16 +457,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get invalidNumber => 'Nomor tidak valid';
 
   @override
-  String get previousWeight => 'Berat sebelumnya';
+  String get previousWeight => 'Berat sebelum ini';
 
   @override
   String get imageLabel => 'Gambar';
 
   @override
-  String get longPressToDelete => 'Tekan lama untuk menghapus';
+  String get longPressToDelete => 'Tekan lama untuk memadam';
 
   @override
-  String get imageError => 'Kesalahan gambar';
+  String get imageError => 'Ralat imej';
 
   @override
   String get actionSave => 'Simpan';
@@ -475,7 +475,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get aboutTitle => 'Tentang';
 
   @override
-  String get donate => 'Donasi';
+  String get donate => 'Derma';
 
   @override
   String get helpSupportProject => 'Bantu mendukung proyek ini';
@@ -487,7 +487,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get whatsNewTitle => 'Apa yang baru?';
 
   @override
-  String get seeReleaseNotes => 'Lihat catatan rilis kami';
+  String get seeReleaseNotes => 'Lihat nota keluaran kami';
 
   @override
   String get versionLabel => 'Versi';
@@ -526,13 +526,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get failedMigrations => 'Migrasi gagal';
 
   @override
-  String get errorMessageLabel => 'Pesan galat:';
+  String get errorMessageLabel => 'Mesej galat:';
 
   @override
   String get createIssue => 'Buat isu';
 
   @override
-  String get addExercise => 'Tambah latihan';
+  String get addExercise => 'Tambah senaman';
 
   @override
   String get cardio => 'Kardio';
@@ -564,41 +564,41 @@ class AppLocalizationsId extends AppLocalizations {
   String get noDataYet => 'Belum ada data';
 
   @override
-  String get exerciseNotes => 'Catatan latihan';
+  String get exerciseNotes => 'Nota senaman';
 
   @override
-  String get notesForExercise => 'Catatan untuk latihan ini';
+  String get notesForExercise => 'Nota untuk senaman ini';
 
   @override
-  String get useTimeBasedXAxis => 'Gunakan sumbu X berbasis waktu';
+  String get useTimeBasedXAxis => 'Gunakan paksi X berasaskan masa';
 
   @override
   String updateAllNamed(String name) {
-    return 'Perbarui semua $name';
+    return 'Kemas kini semua $name';
   }
 
   @override
   String get newName => 'Nama baru';
 
   @override
-  String get restMinutes => 'Menit istirahat';
+  String get restMinutes => 'Minit rehat';
 
   @override
-  String get restSeconds => 'Detik istirahat';
+  String get restSeconds => 'Saat rehat';
 
   @override
   String get globalProgress => 'Kemajuan global';
 
   @override
-  String get curveLineGraphs => 'Lengkungkan grafik garis';
+  String get curveLineGraphs => 'Lengkungkan graf garis';
 
   @override
   String get curveLineGraphsDescription =>
-      'Gambar garis grafik sebagai kurva halus';
+      'Gambar garis graf sebagai lengkung halus';
 
   @override
   String noHistoryFor(String name) {
-    return 'Belum ada riwayat untuk $name';
+    return 'Belum ada sejarah untuk $name';
   }
 
   @override
@@ -608,38 +608,38 @@ class AppLocalizationsId extends AppLocalizations {
   String get editSelected => 'Sunting yang dipilih';
 
   @override
-  String get newExercise => 'Latihan baru';
+  String get newExercise => 'Senaman baru';
 
   @override
-  String get noGraphsFound => 'Tidak ada grafik';
+  String get noGraphsFound => 'Tidak ada graf';
 
   @override
-  String get searchGraphs => 'Cari grafik…';
+  String get searchGraphs => 'Cari graf…';
 
   @override
   String get actionAdd => 'Tambah';
 
   @override
-  String get actionUpdate => 'Perbarui';
+  String get actionUpdate => 'Kemas kini';
 
   @override
   String get hideGlobalProgress => 'Sembunyikan kemajuan global';
 
   @override
   String get chartGroupedByCategory =>
-      'Grafik yang dikelompokkan berdasarkan kategori';
+      'Graf yang dikelompokkan berdasarkan kategori';
 
   @override
-  String get noExercisesFound => 'Tidak ada latihan';
+  String get noExercisesFound => 'Tidak ada senaman';
 
   @override
-  String get savePlan => 'Simpan rencana';
+  String get savePlan => 'Simpan pelan';
 
   @override
-  String get titleOptional => 'Judul (opsional)';
+  String get titleOptional => 'Tajuk (pilihan)';
 
   @override
-  String get searchExercises => 'Cari latihan…';
+  String get searchExercises => 'Cari senaman…';
 
   @override
   String get warmupSets => 'Set pemanasan';
@@ -648,7 +648,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get workingSetsMax => 'Set kerja (maks: 20)';
 
   @override
-  String get actionUndo => 'Urungkan';
+  String get actionUndo => 'Buat asal';
 
   @override
   String get actionSwap => 'Tukar';
@@ -666,46 +666,46 @@ class AppLocalizationsId extends AppLocalizations {
   String get yearly => 'Tahunan';
 
   @override
-  String get unexpectedError => 'Terjadi kesalahan. Silakan coba lagi.';
+  String get unexpectedError => 'Terjadi kesalahan. Sila coba lagi.';
 
   @override
-  String get loadingExercises => 'Memuat latihan…';
+  String get loadingExercises => 'Memuat senaman…';
 
   @override
-  String get noPlansYet => 'Belum ada rencana.';
+  String get noPlansYet => 'Belum ada pelan.';
 
   @override
-  String get noMatchingPlans => 'Tidak ada rencana yang cocok';
+  String get noMatchingPlans => 'Tidak ada pelan yang cocok';
 
   @override
-  String get newPlan => 'Rencana baru';
+  String get newPlan => 'Pelan baru';
 
   @override
-  String get searchPlans => 'Cari rencana…';
+  String get searchPlans => 'Cari pelan…';
 
   @override
-  String get noExercisesYet => 'Belum ada latihan.';
+  String get noExercisesYet => 'Belum ada senaman.';
 
   @override
-  String get editPlan => 'Sunting rencana';
+  String get editPlan => 'Sunting pelan';
 
   @override
   String get saveSet => 'Simpan set';
 
   @override
-  String get minutesLabel => 'Menit';
+  String get minutesLabel => 'Minit';
 
   @override
   String get minutesShort => 'mnt';
 
   @override
-  String get secondsLabel => 'Detik';
+  String get secondsLabel => 'Saat';
 
   @override
   String get distanceLabel => 'Jarak';
 
   @override
-  String get inclinePercent => 'Kemiringan %';
+  String get inclinePercent => 'Kecondongan %';
 
   @override
   String weightWithUnit(String unit) {
@@ -719,19 +719,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get noWeightEnteredYet => 'Belum ada berat yang dimasukkan';
 
   @override
-  String get notesLabel => 'Catatan';
+  String get notesLabel => 'Nota';
 
   @override
-  String get swapWorkout => 'Tukar latihan';
+  String get swapWorkout => 'Tukar senaman';
 
   @override
   String get addSet => 'Tambah set';
 
   @override
-  String get deleteSet => 'Hapus set';
+  String get deleteSet => 'Padam set';
 
   @override
-  String get oneRepMaxEstimate => 'Maksimum 1 repetisi (perkiraan)';
+  String get oneRepMaxEstimate => 'Maksimum 1 ulangan (perkiraan)';
 
   @override
   String get valueLabel => 'Nilai';
@@ -762,7 +762,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get manageCategoriesDescription =>
-      'Buat, ubah nama, gabung atau hapus kategori';
+      'Buat, ubah nama, gabung atau padam kategori';
 
   @override
   String get newCategory => 'Kategori baru';
@@ -786,7 +786,7 @@ class AppLocalizationsId extends AppLocalizations {
       locale: localeName,
       other: 'Digunakan oleh $count entri',
       one: 'Digunakan oleh 1 entri',
-      zero: 'Tidak digunakan oleh entri apa pun',
+      zero: 'Tidak digunakan oleh mana-mana entri',
     );
     return '$_temp0';
   }
@@ -796,9 +796,9 @@ class AppLocalizationsId extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hapus kategori ini dan keluarkan dari $count entri?',
-      one: 'Hapus kategori ini dan keluarkan dari 1 entri?',
-      zero: 'Hapus kategori ini?',
+      other: 'Padam kategori ini dan keluarkannya daripada $count entri?',
+      one: 'Padam kategori ini dan keluarkannya daripada 1 entri?',
+      zero: 'Padam kategori ini?',
     );
     return '$_temp0';
   }
@@ -822,11 +822,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get historyEmptyMessage =>
-      'Selesaikan satu set atau tambahkan satu secara manual untuk memulai riwayat Anda.';
+      'Lengkapkan satu set atau tambah satu secara manual untuk memulakan sejarah anda.';
 
   @override
   String deleteSetConfirmation(String name) {
-    return 'Anda yakin ingin menghapus $name?';
+    return 'Adakah anda pasti mahu memadam $name?';
   }
 
   @override
@@ -834,14 +834,14 @@ class AppLocalizationsId extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anda yakin ingin menghapus $count entri?',
-      one: 'Anda yakin ingin menghapus 1 entri?',
+      other: 'Adakah anda pasti mahu memadam $count entri?',
+      one: 'Adakah anda pasti mahu memadam 1 entri?',
     );
     return '$_temp0';
   }
 
   @override
-  String get searchHistory => 'Cari riwayat...';
+  String get searchHistory => 'Cari sejarah...';
 
   @override
   String get themeSystem => 'Sistem';
@@ -853,13 +853,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get themeLight => 'Terang';
 
   @override
-  String get pureBlackAmoled => 'Hitam murni (AMOLED)';
+  String get pureBlackAmoled => 'Hitam tulen (AMOLED)';
 
   @override
-  String get showImages => 'Tampilkan gambar';
+  String get showImages => 'Tunjukkan gambar';
 
   @override
-  String get peekGraph => 'Pratinjau grafik';
+  String get peekGraph => 'Pratinjau graf';
 
   @override
   String get inputStyleLine => 'Baris';
@@ -871,22 +871,22 @@ class AppLocalizationsId extends AppLocalizations {
   String get inputStyleFilled => 'Terisi';
 
   @override
-  String get inputStyle => 'Gaya masukan';
+  String get inputStyle => 'Gaya input';
 
   @override
-  String get appearance => 'Tampilan';
+  String get appearance => 'Paparan';
 
   @override
-  String get automaticBackupsEnabled => 'Pencadangan otomatis diaktifkan';
+  String get automaticBackupsEnabled => 'Sandaran automatik diaktifkan';
 
   @override
-  String get automaticBackup => 'Pencadangan otomatis';
+  String get automaticBackup => 'Sandaran automatik';
 
   @override
-  String get appPermissions => 'Izin aplikasi';
+  String get appPermissions => 'Kebenaran aplikasi';
 
   @override
-  String get shareDatabase => 'Bagikan basis data';
+  String get shareDatabase => 'Kongsi pangkalan data';
 
   @override
   String get dataManagement => 'Pengelolaan data';
@@ -909,19 +909,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get formats => 'Format';
 
   @override
-  String get setsPerExerciseMax => 'Set per latihan (maks: 20)';
+  String get setsPerExerciseMax => 'Set per senaman (maks: 20)';
 
   @override
-  String get countLabel => 'Jumlah';
+  String get countLabel => 'Kiraan';
 
   @override
-  String get ratioLabel => 'Rasio';
+  String get ratioLabel => 'Nisbah';
 
   @override
   String get reorder => 'Urutkan ulang';
 
   @override
-  String get none => 'Tidak ada';
+  String get none => 'Tiada';
 
   @override
   String get monday => 'Senin';
@@ -933,7 +933,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get tabs => 'Tab';
 
   @override
-  String get swipeBetweenTabs => 'Geser antar-tab';
+  String get swipeBetweenTabs => 'Leret antara tab';
 
   @override
   String get vibrate => 'Getar';
@@ -942,7 +942,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get enableSound => 'Aktifkan suara';
 
   @override
-  String get keepScreenOn => 'Biarkan layar menyala';
+  String get keepScreenOn => 'Biarkan skrin menyala';
 
   @override
   String get alarmSound => 'Suara alarm';
@@ -955,52 +955,52 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get removeCustomTimer =>
-      'Hapus pewaktu khusus (gunakan default global)';
+      'Padam pemasa khusus (gunakan default global)';
 
   @override
-  String get timers => 'Pewaktu';
+  String get timers => 'Pemasa';
 
   @override
-  String get timerSettings => 'Pengaturan pewaktu';
+  String get timerSettings => 'Tetapan pemasa';
 
   @override
-  String get groupHistory => 'Kelompokkan riwayat';
+  String get groupHistory => 'Kelompokkan sejarah';
 
   @override
-  String get showUnits => 'Tampilkan satuan';
+  String get showUnits => 'Tunjukkan satuan';
 
   @override
-  String get showBodyWeight => 'Tampilkan berat badan';
+  String get showBodyWeight => 'Tunjukkan berat badan';
 
   @override
-  String get showCategories => 'Tampilkan kategori';
+  String get showCategories => 'Tunjukkan kategori';
 
   @override
-  String get showNotes => 'Tampilkan catatan';
+  String get showNotes => 'Tunjukkan nota';
 
   @override
-  String get repEstimation => 'Perkiraan repetisi';
+  String get repEstimation => 'Perkiraan ulangan';
 
   @override
   String get durationEstimation => 'Perkiraan durasi';
 
   @override
-  String get showGraphLimit => 'Tampilkan batas grafik';
+  String get showGraphLimit => 'Tunjukkan batas graf';
 
   @override
-  String get defaultGraphMetric => 'Metrik grafik default';
+  String get defaultGraphMetric => 'Metrik graf default';
 
   @override
   String get bestWeight => 'Berat terbaik';
 
   @override
-  String get bestReps => 'Repetisi terbaik';
+  String get bestReps => 'Ulangan terbaik';
 
   @override
-  String get oneRepMax => 'Maksimum 1 repetisi';
+  String get oneRepMax => 'Maksimum 1 ulangan';
 
   @override
-  String get volume => 'Volume latihan';
+  String get volume => 'Volume senaman';
 
   @override
   String get paceCardio => 'Laju (kardio)';
@@ -1009,22 +1009,22 @@ class AppLocalizationsId extends AppLocalizations {
   String get distanceCardio => 'Jarak (kardio)';
 
   @override
-  String get defaultGraphPeriod => 'Periode grafik default';
+  String get defaultGraphPeriod => 'Periode graf default';
 
   @override
-  String get defaultGraphLimit => 'Batas grafik default';
+  String get defaultGraphLimit => 'Batas graf default';
 
   @override
-  String get workouts => 'Latihan';
+  String get workouts => 'Senaman';
 
   @override
   String get actionStop => 'Berhenti';
 
   @override
-  String get timerFinishedToast => 'Pewaktu selesai!';
+  String get timerFinishedToast => 'Pemasa selesai!';
 
   @override
-  String get stopTimer => 'Hentikan pewaktu';
+  String get stopTimer => 'Hentikan pemasa';
 
   @override
   String get actionPause => 'Jeda';
@@ -1039,51 +1039,51 @@ class AppLocalizationsId extends AppLocalizations {
   String get actionRestart => 'Mulai ulang';
 
   @override
-  String get addOneMinute => '+1 menit';
+  String get addOneMinute => '+1 minit';
 
   @override
-  String get addOneMinuteNotification => 'Tambah 1 menit';
+  String get addOneMinuteNotification => 'Tambah 1 minit';
 
   @override
-  String get restTimer => 'Pewaktu istirahat';
+  String get restTimer => 'Pemasa rehat';
 
   @override
-  String get timerUp => 'Waktu habis';
+  String get timerUp => 'Masa habis';
 
   @override
-  String get openNotification => 'Buka notifikasi';
+  String get openNotification => 'Buka pemberitahuan';
 
   @override
-  String get timerChannelName => 'Kanal pewaktu';
+  String get timerChannelName => 'Saluran pemasa';
 
   @override
   String get timerChannelDescription =>
-      'Menampilkan kemajuan pewaktu istirahat.';
+      'Kemajuan pemasa rehat yang sedang berjalan.';
 
   @override
-  String get timerFinishedChannelName => 'Kanal pewaktu selesai';
+  String get timerFinishedChannelName => 'Saluran pemasa selesai';
 
   @override
   String get timerFinishedChannelDescription =>
-      'Memutar alarm saat pewaktu istirahat selesai.';
+      'Mainkan penggera apabila pemasa rehat tamat.';
 
   @override
-  String get timerFinished => 'Pewaktu selesai';
+  String get timerFinished => 'Pemasa selesai';
 
   @override
   String get batteryOptimizationRequestUnavailable =>
-      'Permintaan untuk mengabaikan pengoptimalan baterai tidak tersedia di perangkat Anda.';
+      'Permintaan untuk mengabaikan pengoptimuman bateri dilumpuhkan pada peranti anda.';
 
   @override
   String get exactAlarmRequestUnavailable =>
-      'Permintaan SCHEDULE_EXACT_ALARM ditolak pada perangkat Anda.';
+      'Permintaan SCHEDULE_EXACT_ALARM ditolak pada peranti anda';
 
   @override
   String get databaseMigrationFailureDescription =>
-      'Terjadi kesalahan saat membuat atau memperbarui basis data. Biasanya hal ini dapat diperbaiki dengan menghapus lalu memulihkan catatan Anda.';
+      'Sesuatu tidak kena semasa mencipta atau menaik taraf pangkalan data anda. Biasanya ini boleh diperbaiki dengan memadam dan mencipta semula rekod anda.';
 
   @override
-  String get curveSmoothness => 'Kehalusan kurva';
+  String get curveSmoothness => 'Kehalusan lengkung';
 
   @override
   String get actionBack => 'Kembali';
@@ -1092,10 +1092,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get atLeastOneTab => 'Anda memerlukan setidaknya satu tab';
 
   @override
-  String get invalidTabSettings => 'Pengaturan tab tidak valid.';
+  String get invalidTabSettings => 'Tetapan tab tidak sah.';
 
   @override
-  String get noSettingsFound => 'Tidak ada pengaturan yang ditemukan';
+  String get noSettingsFound => 'Tidak ada tetapan yang ditemukan';
 
   @override
   String nothingMatchesSearch(String query) {
@@ -1103,31 +1103,31 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get appearanceDescription => 'Tema, warna, dan tampilan antarmuka';
+  String get appearanceDescription => 'Tema, warna, dan paparan antarmuka';
 
   @override
   String get dataManagementDescription =>
-      'Impor, ekspor, dan kelola data latihan Anda';
+      'Import, eksport, dan kelola data senaman Anda';
 
   @override
   String get formatsDescription => 'Format tanggal, angka, dan pengukuran';
 
   @override
   String get plansSettingsDescription =>
-      'Default dan perilaku untuk rencana latihan';
+      'Default dan perilaku untuk pelan senaman';
 
   @override
   String get tabsDescription => 'Pilih dan atur tab navigasi utama';
 
   @override
-  String get timersDescription => 'Durasi istirahat, suara, dan perilaku';
+  String get timersDescription => 'Tempoh, bunyi dan tingkah laku pemasa rehat';
 
   @override
-  String get workoutsDescription => 'Preferensi pelacakan latihan dan gerakan';
+  String get workoutsDescription => 'Preferensi pelacakan senaman dan gerakan';
 
   @override
   String get completeSetForChart =>
-      'Selesaikan satu set untuk latihan ini agar grafik dapat dibuat.';
+      'Selesaikan satu set untuk senaman ini agar graf dapat dibuat.';
 
   @override
   String get dateRange => 'Rentang tanggal';
@@ -1140,7 +1140,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get completeSetsForProgress =>
-      'Selesaikan beberapa set untuk membuat grafik kemajuan Anda.';
+      'Selesaikan beberapa set untuk membuat graf kemajuan Anda.';
 
   @override
   String get relativeStrength => 'Kekuatan relatif';
@@ -1158,38 +1158,38 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get completeSetsForHistory =>
-      'Selesaikan beberapa set untuk melihat riwayat latihan ini di sini.';
+      'Selesaikan beberapa set untuk melihat sejarah senaman ini di sini.';
 
   @override
   String get completeSetForFirstGraph =>
-      'Selesaikan satu set untuk membuat grafik latihan pertama Anda.';
+      'Selesaikan satu set untuk membuat graf senaman pertama Anda.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
-    return 'Tidak ada yang cocok dengan “$query”. Anda dapat membuatnya sebagai latihan baru.';
+    return 'Tiada yang sepadan dengan “$query”. Anda boleh menciptanya sebagai senaman baharu.';
   }
 
   @override
   String addNamed(String name) {
-    return 'Tambahkan “$name”';
+    return 'Tambah “$name”';
   }
 
   @override
   String deleteGraphRecordsConfirmation(int count) {
-    return 'Ini akan menghapus $count catatan. Anda yakin?';
+    return 'Ini akan memadam $count rekod. Adakah anda pasti?';
   }
 
   @override
   String shareWorkout(String summary) {
-    return 'Saya baru saja melakukan $summary';
+    return 'Saya baru sahaja melakukan $summary';
   }
 
   @override
-  String get updateConflict => 'Konflik pembaruan';
+  String get updateConflict => 'Konflik kemas kini';
 
   @override
   String updateConflictDescription(int count) {
-    return 'Nama baru Anda sudah digunakan oleh $count catatan. Anda yakin?';
+    return 'Nama baharu anda sudah wujud untuk $count rekod sejarah. Adakah anda pasti?';
   }
 
   @override
@@ -1197,47 +1197,47 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String unitsConflictDescription(String unit) {
-    return 'Tidak semua catatan Anda menggunakan satuan yang sama. Semua satuan akan dikonversi ke $unit. Anda yakin?';
+    return 'Tidak semua rekod anda menggunakan unit yang sama. Ini akan menukar semua unit kepada $unit. Adakah anda pasti?';
   }
 
   @override
   String get durationLabel => 'Durasi';
 
   @override
-  String get inclineLabel => 'Kemiringan';
+  String get inclineLabel => 'Kecondongan';
 
   @override
-  String get paceDistanceTime => 'Laju (jarak / waktu)';
+  String get paceDistanceTime => 'Laju (jarak / masa)';
 
   @override
   String get adjustedPace => 'Laju yang disesuaikan';
 
   @override
   String get oneRepMaxAccuracyWarning =>
-      'Perkiraan maksimum 1 repetisi kurang akurat untuk set dengan 10+ repetisi';
+      'Perkiraan maksimum 1 ulangan kurang akurat untuk set dengan 10+ ulangan';
 
   @override
-  String get addPlan => 'Tambah rencana';
+  String get addPlan => 'Tambah pelan';
 
   @override
-  String get planDetails => 'Rincian rencana';
+  String get planDetails => 'Rincian pelan';
 
   @override
-  String get exercisesLabel => 'Latihan';
+  String get exercisesLabel => 'Senaman';
 
   @override
-  String get addExerciseToPlan => 'Tambahkan latihan ke rencana ini.';
+  String get addExerciseToPlan => 'Tambah senaman ke pelan ini.';
 
   @override
   String nothingMatchesExerciseSearch(String query) {
-    return 'Tidak ada yang cocok dengan “$query”. Anda dapat menambahkannya sebagai latihan baru.';
+    return 'Tiada yang sepadan dengan “$query”. Anda boleh menambahnya sebagai senaman baharu.';
   }
 
   @override
   String get selectDays => 'Pilih hari';
 
   @override
-  String get selectExercises => 'Pilih latihan';
+  String get selectExercises => 'Pilih senaman';
 
   @override
   String get todayLabel => 'Hari ini';
@@ -1250,81 +1250,81 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get pureBlackAmoledDescription =>
-      'Gunakan warna hitam murni untuk layar AMOLED';
+      'Gunakan warna hitam tulen untuk paparan AMOLED';
 
   @override
   String get systemColorScheme => 'Skema warna sistem';
 
   @override
   String get systemColorSchemeDescription =>
-      'Gunakan warna utama perangkat Anda untuk aplikasi';
+      'Gunakan warna utama peranti anda untuk aplikasi';
 
   @override
   String get showImagesDescription =>
-      'Pilih atau tampilkan gambar di halaman Riwayat';
+      'Pilih atau tunjukkan gambar di halaman Sejarah';
 
   @override
-  String get showGlobalProgress => 'Tampilkan kemajuan global';
+  String get showGlobalProgress => 'Tunjukkan kemajuan keseluruhan';
 
   @override
   String get showGlobalProgressDescription =>
-      'Tambahkan entri grafik yang memetakan kemajuan Anda berdasarkan kategori';
+      'Tambah entri graf yang memetakan kemajuan Anda berdasarkan kategori';
 
   @override
   String get peekGraphDescription =>
-      'Tampilkan grafik garis pertama di halaman Grafik';
+      'Tunjukkan graf garis pertama di halaman Graf';
 
   @override
-  String get inputStyleDescription => 'Gaya visual kolom input teks';
+  String get inputStyleDescription => 'Gaya visual lajur input teks';
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify akan mencadangkan data dan gambar Anda secara otomatis ke folder yang dipilih setiap hari.';
+      'Flexify akan mencadangkan data dan gambar Anda secara automatik ke folder yang dipilih setiap hari.';
 
   @override
-  String get backupSettingsChannel => 'Pengaturan cadangan';
+  String get backupSettingsChannel => 'Tetapan sandaran';
 
   @override
   String get backupSettingsChannelDescription =>
-      'Notifikasi yang menjelaskan pencadangan otomatis';
+      'Pemberitahuan yang menerangkan sandaran automatik';
 
   @override
-  String get backupChannelName => 'Kanal cadangan';
+  String get backupChannelName => 'Saluran cadangan';
 
   @override
   String get backupChannelDescription =>
-      'Pencadangan otomatis data dan gambar Flexify';
+      'Sandaran automatik data dan gambar Flexify';
 
   @override
-  String get backupCompletedTitle => 'Data dan gambar berhasil dicadangkan';
+  String get backupCompletedTitle => 'Data dan gambar berjaya dicadangkan';
 
   @override
   String get backupFailurePathNotSet =>
-      'Pencadangan gagal: lokasi cadangan belum diatur. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal: laluan sandaran belum ditetapkan. Sandaran automatik dilumpuhkan.';
 
   @override
   String get backupFailureDirectoryUnavailable =>
-      'Pencadangan gagal: direktori cadangan tidak dapat diakses. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal: direktori sandaran tidak dapat diakses. Sandaran automatik dilumpuhkan.';
 
   @override
   String get backupFailureCreateFile =>
-      'Pencadangan gagal: berkas cadangan tidak dapat dibuat. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal: tidak dapat mencipta fail sandaran. Sandaran automatik dilumpuhkan.';
 
   @override
   String get backupFailureAppFilesUnavailable =>
-      'Pencadangan gagal: direktori berkas aplikasi tidak dapat diakses. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal: tidak dapat mengakses direktori fail aplikasi. Sandaran automatik dilumpuhkan.';
 
   @override
   String get backupFailureDatabaseMissing =>
-      'Pencadangan gagal: berkas basis data tidak ditemukan. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal: fail pangkalan data tidak ditemui. Sandaran automatik dilumpuhkan.';
 
   @override
   String get backupFailureOutputUnavailable =>
-      'Pencadangan gagal: aliran keluaran tidak dapat dibuka. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal: destinasi output tidak dapat dibuka. Sandaran automatik dilumpuhkan.';
 
   @override
   String get backupFailureUnknown =>
-      'Pencadangan gagal. Pencadangan otomatis dinonaktifkan.';
+      'Sandaran gagal secara tidak dijangka. Sandaran automatik dilumpuhkan.';
 
   @override
   String get appPermissionsDescription =>
@@ -1341,93 +1341,93 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get shortDateFormatDescription =>
-      'Digunakan saat ruang terbatas (garis grafik)';
+      'Digunakan saat ruang terbatas (garis graf)';
 
   @override
   String get warmupSetsDescription =>
-      'Set pemanasan tidak memiliki pewaktu istirahat';
+      'Set pemanasan tidak mempunyai pemasa rehat';
 
   @override
   String get setsPerExerciseDescription =>
-      'Jumlah latihan default dalam sebuah rencana';
+      'Jumlah senaman default dalam sebuah pelan';
 
   @override
-  String get planTrailingDisplay => 'Tampilan sisi kanan rencana';
+  String get planTrailingDisplay => 'Paparan sebelah kanan pelan';
 
   @override
   String get planTrailingDisplayDescription =>
-      'Informasi yang ditampilkan di sisi kanan daftar pada tampilan Rencana dan detail rencana';
+      'Maklumat yang ditunjukkan di sebelah kanan senarai pada paparan Pelan dan butiran pelan';
 
   @override
   String get restTimersDescription =>
       'Alarm yang berbunyi setelah menyelesaikan satu set';
 
   @override
-  String get vibrateDescription => 'Apakah pewaktu istirahat harus bergetar?';
+  String get vibrateDescription => 'Adakah pemasa rehat perlu bergetar?';
 
   @override
   String get enableSoundDescription =>
-      'Apakah pewaktu istirahat harus memutar suara?';
+      'Adakah pemasa rehat perlu memainkan bunyi?';
 
   @override
   String get keepScreenOnDescription =>
-      'Biarkan layar menyala selama pewaktu istirahat';
+      'Kekalkan skrin hidup semasa pemasa rehat';
 
   @override
   String get restDurationDescription =>
-      'Berapa lama sebelum alarm istirahat berbunyi?';
+      'Berapa lama sebelum alarm rehat berbunyi?';
 
   @override
   String get globalDefault => 'Default global';
 
   @override
   String get alarmSoundDescription =>
-      'Musik yang diputar saat pewaktu istirahat berakhir';
+      'Muzik yang dimainkan apabila pemasa rehat tamat';
 
   @override
-  String get progressBarPosition => 'Posisi bilah kemajuan';
+  String get progressBarPosition => 'Kedudukan bar kemajuan';
 
   @override
   String get progressBarPositionDescription =>
-      'Di mana bilah kemajuan pewaktu istirahat ditempatkan?';
+      'Di manakah bar kemajuan pemasa rehat perlu diletakkan?';
 
   @override
-  String get perExerciseRestTimes => 'Waktu istirahat per latihan';
+  String get perExerciseRestTimes => 'Masa rehat bagi setiap senaman';
 
   @override
   String get perExerciseRestTimesDescription =>
-      'Latihan ini memiliki durasi istirahat khusus';
+      'Senaman ini mempunyai tempoh rehat tersuai';
 
   @override
   String get audioFeaturesUnavailable => 'Fitur audio tidak tersedia';
 
   @override
   String get groupHistoryDescription =>
-      'Gabungkan entri riwayat berdasarkan hari';
+      'Gabungkan entri sejarah berdasarkan hari';
 
   @override
   String get showUnitsDescription =>
-      'Tampilkan km/mi dan kg/lb pada grafik, riwayat, dan rencana';
+      'Tunjukkan km/mi dan kg/lb pada graf, sejarah, dan pelan';
 
   @override
   String get showBodyWeightDescription =>
-      'Aktifkan atau nonaktifkan pelacakan berat badan';
+      'Aktifkan atau lumpuhkan pelacakan berat badan';
 
   @override
   String get showCategoriesDescription =>
-      'Aktifkan atau nonaktifkan kategori latihan';
+      'Aktifkan atau lumpuhkan kategori senaman';
 
   @override
   String get showNotesDescription =>
-      'Catat detail angkatan Anda dalam kolom teks';
+      'Catat detail angkatan Anda dalam lajur teks';
 
   @override
   String get positiveNotificationsDescription =>
-      'Tampilkan pesan positif saat rekor baru tercapai';
+      'Tunjukkan mesej positif saat rekor baru tercapai';
 
   @override
   String get positiveMessagesEnabled =>
-      'Pesan positif kini akan tampil seperti ini!';
+      'Mesej positif kini akan tampil seperti ini!';
 
   @override
   String get recordEncouragement01 => 'Kerja bagus! Kamu luar biasa.';
@@ -1465,16 +1465,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get recordEncouragement11 => 'Ronnie C melihatmu dengan bangga.';
 
   @override
-  String get recordEncouragement12 => 'YEAH! RINGAN BANGET, BABY!!!!!!!';
+  String get recordEncouragement12 => 'YA! RINGAN SAHAJA!!!!!!!';
 
   @override
-  String get recordEncouragement13 => 'Rekor baru? Sudah kuduga kamu bisa.';
+  String get recordEncouragement13 => 'Rekor baru? Sudah kuduga kamu boleh.';
 
   @override
   String get recordEncouragement14 => 'Kerja bagus! Aku bangga padamu.';
 
   @override
-  String get recordEncouragement15 => 'YEAH BABY! Ringan banget!';
+  String get recordEncouragement15 => 'YA! RINGAN SAHAJA!';
 
   @override
   String get recordEncouragement16 => 'Teruskan! Kemajuanmu hebat.';
@@ -1483,7 +1483,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get recordEncouragement17 => 'Kamu melakukannya dengan sangat baik.';
 
   @override
-  String get recordEncouragement18 => 'Nah, begitu dong!';
+  String get recordEncouragement18 => 'Itulah dia!';
 
   @override
   String get recordEncouragement19 => 'Teruskan.';
@@ -1495,13 +1495,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get recordEncouragement21 => 'Kuat.';
 
   @override
-  String get recordEncouragement22 => 'Kuat sekali!';
+  String get recordEncouragement22 => 'Sangat hebat!';
 
   @override
   String get recordEncouragement23 => 'Aku bangga padamu.';
 
   @override
-  String get recordEncouragement24 => 'Pertahankan kerja hebat ini.';
+  String get recordEncouragement24 => 'Teruskan usaha hebat ini.';
 
   @override
   String get recordEncouragement25 =>
@@ -1509,7 +1509,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get recordEncouragement26 =>
-      'Rekor baru! Kamu baru saja melampaui pencapaian sebelumnya!';
+      'Rekod baharu! Anda baru sahaja melangkaui pencapaian sebelum ini!';
 
   @override
   String get recordEncouragement27 => 'Yap! Itu rekor.';
@@ -1518,45 +1518,44 @@ class AppLocalizationsId extends AppLocalizations {
   String get recordEncouragement28 => 'Wow! Rekor baru!';
 
   @override
-  String get recordEncouragement29 => 'Bagus sekali.';
+  String get recordEncouragement29 => 'Bagus!';
 
   @override
   String get repEstimationDescription =>
-      'Coba perkirakan jumlah repetisi yang baru saja Anda lakukan';
+      'Coba perkirakan jumlah ulangan yang baru saja Anda lakukan';
 
   @override
   String get durationEstimationDescription =>
       'Coba perkirakan durasi kardio Anda';
 
   @override
-  String get showGraphXAxisToggle => 'Tampilkan tombol sumbu X grafik';
+  String get showGraphXAxisToggle => 'Suis paksi X berasaskan masa';
 
   @override
   String get showGraphXAxisToggleDescription =>
-      'Tampilkan tombol sumbu X berbasis waktu pada grafik';
+      'Tunjukkan suis paksi X berasaskan masa pada graf';
 
   @override
-  String get showGraphLimitDescription =>
-      'Tampilkan penggeser batas pada grafik';
+  String get showGraphLimitDescription => 'Tunjukkan peluncur had pada graf';
 
   @override
-  String get defaultTimeBasedXAxis => 'Sumbu X berbasis waktu secara default';
+  String get defaultTimeBasedXAxis => 'Paksi X berasaskan masa secara lalai';
 
   @override
   String get defaultTimeBasedXAxisDescription =>
-      'Gunakan sumbu X berbasis waktu secara default pada grafik';
+      'Gunakan paksi X berasaskan masa secara lalai pada graf';
 
   @override
   String get createFirstTrainingPlan =>
-      'Buat rencana latihan pertama Anda untuk memulai.';
+      'Cipta pelan latihan pertama anda untuk bermula.';
 
   @override
   String nothingMatchesPlanSearch(String query) {
-    return 'Tidak ada yang cocok dengan “$query”. Anda dapat membuatnya sebagai rencana baru.';
+    return 'Tiada yang sepadan dengan “$query”. Anda boleh menciptanya sebagai pelan baharu.';
   }
 
   @override
-  String get createPlan => 'Buat rencana';
+  String get createPlan => 'Buat pelan';
 
   @override
   String createNamedPlan(String name) {
