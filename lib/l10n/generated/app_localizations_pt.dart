@@ -77,6 +77,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageNameVietnamese => 'Tiếng Việt';
 
   @override
+  String get languageNameBengali => 'বাংলা';
+
+  @override
   String get navHistory => 'Histórico';
 
   @override
@@ -1628,6 +1631,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get languageNameVietnamese => 'Tiếng Việt';
+
+  @override
+  String get languageNameBengali => 'বাংলা';
 
   @override
   String get navHistory => 'Histórico';
