@@ -521,5 +521,6 @@
   "1790261378": "• Aggiornare README.md\n• chore(l10n): sincronizzare le traduzioni della release corrente\n• chore: aggiungere screenshot Play in turco\n• feat(l10n): aggiungere le traduzioni in cinese tradizionale\n• feat(l10n): completare la copertura attuale delle traduzioni (#353)\n• feat: aggiungere la gestione delle categorie\n• feat: completare le traduzioni di tutte le lingue supportate\n• feat: localizzare l'intera cronologia delle versioni\n• fix: ripristinare Flutter DevTools integrato\n• fix: stabilizzare il debug di Flutter in VS Code",
   "1790283564": "• fix(l10n): sincronizzare la cronologia della versione corrente",
   "1790291811": "• Aggiunte le traduzioni in russo\n• Sincronizzata la cronologia della versione 2.2.22",
-  "1790306111": "• feat(l10n): aggiungere le traduzioni in hindi"
+  "1790306111": "• feat(l10n): aggiungere le traduzioni in hindi",
+  "1790335192": "• feat(l10n): aggiungere traduzioni in arabo\n• feat(l10n): aggiungi traduzioni indonesiane"
 }

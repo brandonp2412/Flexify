@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -71,6 +72,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get languageNameIndonesian => 'Bahasa Indonesia';
+
+  @override
+  String get languageNameVietnamese => 'Tiếng Việt';
 
   @override
   String get navHistory => 'Histórico';
@@ -1621,6 +1625,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get languageNameIndonesian => 'Bahasa Indonesia';
+
+  @override
+  String get languageNameVietnamese => 'Tiếng Việt';
 
   @override
   String get navHistory => 'Histórico';

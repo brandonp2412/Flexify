@@ -1,18 +1,18 @@
 {
-  "@@locale": "en",
+  "@@locale": "vi",
   "appTitle": "Flexify",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
-  "settingsLanguage": "Language",
+  "settingsLanguage": "Ngôn ngữ",
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Choose the language used by Flexify",
+  "settingsLanguageDescription": "Chọn ngôn ngữ được Flexify sử dụng",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
-  "languageSystemDefault": "System default",
+  "languageSystemDefault": "Mặc định hệ thống",
   "@languageSystemDefault": {
     "description": "Language option that follows the device or operating system locale."
   },
@@ -88,39 +88,39 @@
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
-  "navHistory": "History",
+  "navHistory": "Lịch sử",
   "@navHistory": {
     "description": "Navigation label for workout history."
   },
-  "navPlans": "Plans",
+  "navPlans": "Kế hoạch",
   "@navPlans": {
     "description": "Navigation label for workout plans."
   },
-  "navGraphs": "Graphs",
+  "navGraphs": "Đồ thị",
   "@navGraphs": {
     "description": "Navigation label for exercise graphs."
   },
-  "navTimer": "Timer",
+  "navTimer": "Hẹn giờ",
   "@navTimer": {
     "description": "Navigation label for the rest timer."
   },
-  "navSettings": "Settings",
+  "navSettings": "Cài đặt",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },
-  "errorLabel": "Error",
+  "errorLabel": "Lỗi",
   "@errorLabel": {
     "description": "Generic short error label."
   },
-  "tabContentError": "Couldn't build tab content.",
+  "tabContentError": "Không thể xây dựng nội dung tab.",
   "@tabContentError": {
     "description": "Error shown when a configured app tab cannot be rendered."
   },
-  "cannotHideAllTabs": "Can't hide everything!",
+  "cannotHideAllTabs": "Không thể che giấu mọi thứ!",
   "@cannotHideAllTabs": {
     "description": "Message shown when the user tries to hide the last visible navigation tab."
   },
-  "removeTabQuestion": "Remove {tab} tab?",
+  "removeTabQuestion": "Xóa tab {tab}?",
   "@removeTabQuestion": {
     "description": "Confirmation title shown before hiding a navigation tab.",
     "placeholders": {
@@ -130,11 +130,11 @@
       }
     }
   },
-  "restoreTabFromSettings": "You can add it back later from settings.",
+  "restoreTabFromSettings": "Bạn có thể thêm lại nó sau từ cài đặt.",
   "@restoreTabFromSettings": {
     "description": "Explanation shown when removing a navigation tab."
   },
-  "removedTab": "Removed {tab}",
+  "removedTab": "Đã xóa {tab}",
   "@removedTab": {
     "description": "Toast shown after a navigation tab has been hidden.",
     "placeholders": {
@@ -144,7 +144,7 @@
       }
     }
   },
-  "newVersion": "New version {version}",
+  "newVersion": "Phiên bản mới {version}",
   "@newVersion": {
     "description": "Toast announcing that the installed app version changed.",
     "placeholders": {
@@ -154,23 +154,23 @@
       }
     }
   },
-  "changes": "Changes",
+  "changes": "Thay đổi",
   "@changes": {
     "description": "Action that opens the app changelog."
   },
-  "searchHint": "Search...",
+  "searchHint": "Tìm kiếm...",
   "@searchHint": {
     "description": "Default hint shown in reusable search fields."
   },
-  "deleteSelected": "Delete selected",
+  "deleteSelected": "Xóa đã chọn",
   "@deleteSelected": {
     "description": "Tooltip for deleting the currently selected records."
   },
-  "confirmDelete": "Confirm Delete",
+  "confirmDelete": "Xác nhận Xóa",
   "@confirmDelete": {
     "description": "Title for a generic delete confirmation dialog."
   },
-  "deleteRecordsConfirmation": "{count, plural, =1{Are you sure you want to delete 1 record? This action is not reversible.} other{Are you sure you want to delete {count} records? This action is not reversible.}}",
+  "deleteRecordsConfirmation": "{count, plural, =1{Bạn có chắc chắn muốn xóa 1 bản ghi không? Thao tác này không thể hoàn tác.} other{Bạn có chắc chắn muốn xóa {count} bản ghi không? Thao tác này không thể hoàn tác.}}",
   "@deleteRecordsConfirmation": {
     "description": "Generic confirmation text for deleting one or more records.",
     "placeholders": {
@@ -180,263 +180,263 @@
       }
     }
   },
-  "actionCancel": "Cancel",
+  "actionCancel": "Hủy bỏ",
   "@actionCancel": {
     "description": "Generic cancel action."
   },
-  "actionDelete": "Delete",
+  "actionDelete": "Xóa bỏ",
   "@actionDelete": {
     "description": "Generic delete action."
   },
-  "actionRemove": "Remove",
+  "actionRemove": "Di dời",
   "@actionRemove": {
     "description": "Generic remove action."
   },
-  "actionEdit": "Edit",
+  "actionEdit": "Biên tập",
   "@actionEdit": {
     "description": "Generic edit action."
   },
-  "actionShare": "Share",
+  "actionShare": "Chia sẻ",
   "@actionShare": {
     "description": "Generic share action."
   },
-  "clearSelection": "Clear selection",
+  "clearSelection": "Xóa lựa chọn",
   "@clearSelection": {
     "description": "Action or tooltip for clearing selected records."
   },
-  "clearSearch": "Clear search",
+  "clearSearch": "Xóa tìm kiếm",
   "@clearSearch": {
     "description": "Tooltip for clearing the current search query."
   },
-  "showMenu": "Show menu",
+  "showMenu": "Hiển thị thực đơn",
   "@showMenu": {
     "description": "Tooltip for opening a contextual actions menu."
   },
-  "selectAll": "Select all",
+  "selectAll": "Chọn tất cả",
   "@selectAll": {
     "description": "Action for selecting every visible record."
   },
-  "weightLabel": "Weight",
+  "weightLabel": "Cân nặng",
   "@weightLabel": {
     "description": "Generic label for body or exercise weight."
   },
-  "filter": "Filter",
+  "filter": "Lọc",
   "@filter": {
     "description": "Tooltip for opening filtering controls."
   },
-  "filters": "Filters",
+  "filters": "Bộ lọc",
   "@filters": {
     "description": "Title for a filtering dialog."
   },
-  "categoryLabel": "Category",
+  "categoryLabel": "Loại",
   "@categoryLabel": {
     "description": "Generic exercise category label."
   },
-  "repsLabel": "Reps",
+  "repsLabel": "Lần lặp",
   "@repsLabel": {
     "description": "Short label for exercise repetitions."
   },
-  "repsFilter": "Reps filter",
+  "repsFilter": "Lọc số lần lặp",
   "@repsFilter": {
     "description": "Title for filtering records by repetition count."
   },
-  "weightFilter": "Weight filter",
+  "weightFilter": "Bộ lọc trọng lượng",
   "@weightFilter": {
     "description": "Title for filtering records by weight."
   },
-  "greaterThan": "Greater than",
+  "greaterThan": "Lớn hơn",
   "@greaterThan": {
     "description": "Label for a numeric lower-bound filter."
   },
-  "lessThan": "Less than",
+  "lessThan": "Ít hơn",
   "@lessThan": {
     "description": "Label for a numeric upper-bound filter."
   },
-  "startDate": "Start date",
+  "startDate": "Ngày bắt đầu",
   "@startDate": {
     "description": "Label for the beginning of a date range."
   },
-  "endDate": "End date",
+  "endDate": "Ngày kết thúc",
   "@endDate": {
     "description": "Label for the end of a date range."
   },
-  "actionClear": "Clear",
+  "actionClear": "Thông thoáng",
   "@actionClear": {
     "description": "Generic action for clearing a value, selection, or filter."
   },
-  "actionOk": "OK",
+  "actionOk": "ĐƯỢC RỒI",
   "@actionOk": {
     "description": "Generic confirmation action."
   },
-  "actionClose": "Close",
+  "actionClose": "Đóng",
   "@actionClose": {
     "description": "Generic close action."
   },
-  "sortBy": "Sort by",
+  "sortBy": "Sắp xếp theo",
   "@sortBy": {
     "description": "Label for selecting a sort order."
   },
-  "dateNewest": "Date (newest)",
+  "dateNewest": "Ngày (mới nhất)",
   "@dateNewest": {
     "description": "Sort option that places newest records first."
   },
-  "dateOldest": "Date (oldest)",
+  "dateOldest": "Ngày (cũ nhất)",
   "@dateOldest": {
     "description": "Sort option that places oldest records first."
   },
-  "nameLabel": "Name",
+  "nameLabel": "Tên",
   "@nameLabel": {
     "description": "Generic name label and sort option."
   },
-  "missingPermissions": "Missing permissions",
+  "missingPermissions": "Thiếu quyền",
   "@missingPermissions": {
     "description": "Title for the page explaining missing Android permissions."
   },
-  "restTimersPermissionsMissing": "Rest timers are on, but permissions are missing.",
+  "restTimersPermissionsMissing": "Bộ hẹn giờ nghỉ ngơi đang bật nhưng thiếu quyền.",
   "@restTimersPermissionsMissing": {
     "description": "Message explaining that enabled rest timers require additional permissions."
   },
-  "restTimersPermissionsOptional": "If you disable rest timers, then these permissions aren't needed.",
+  "restTimersPermissionsOptional": "Nếu bạn tắt tính năng hẹn giờ nghỉ ngơi thì những quyền này sẽ không cần thiết.",
   "@restTimersPermissionsOptional": {
     "description": "Explanation that timer permissions are unnecessary when rest timers are disabled."
   },
-  "restTimers": "Rest timers",
+  "restTimers": "Hẹn giờ nghỉ ngơi",
   "@restTimers": {
     "description": "Label for the rest timer feature."
   },
-  "disableBatteryOptimizations": "Disable battery optimizations",
+  "disableBatteryOptimizations": "Vô hiệu hóa tối ưu hóa pin",
   "@disableBatteryOptimizations": {
     "description": "Android permission action for excluding Flexify from battery optimizations."
   },
-  "batteryOptimizationWarning": "Progress may pause if battery optimizations stay on.",
+  "batteryOptimizationWarning": "Tiến trình có thể tạm dừng nếu tối ưu hóa pin vẫn tiếp tục.",
   "@batteryOptimizationWarning": {
     "description": "Explanation of why battery optimization access is requested."
   },
-  "scheduleExactAlarm": "Schedule exact alarm",
+  "scheduleExactAlarm": "Lên lịch báo động chính xác",
   "@scheduleExactAlarm": {
     "description": "Android permission action for scheduling exact alarms."
   },
-  "exactAlarmWarning": "Alarms cannot be accurate if this is disabled.",
+  "exactAlarmWarning": "Cảnh báo không thể chính xác nếu tính năng này bị tắt.",
   "@exactAlarmWarning": {
     "description": "Explanation of why exact alarm access is requested."
   },
-  "postNotifications": "Post notifications",
+  "postNotifications": "Đăng thông báo",
   "@postNotifications": {
     "description": "Android permission action for posting notifications."
   },
-  "notificationBarDescription": "Timer progress is sent to the notification bar",
+  "notificationBarDescription": "Tiến trình hẹn giờ được gửi đến thanh thông báo",
   "@notificationBarDescription": {
     "description": "Explanation of how rest timer notifications are used."
   },
-  "invalidPermissions": "Invalid permissions",
+  "invalidPermissions": "Quyền không hợp lệ",
   "@invalidPermissions": {
     "description": "Title for the warning shown when rest timers lack required permissions."
   },
-  "insufficientTimerPermissionsConfirmation": "Rest timers are enabled without sufficient permissions. Are you sure?",
+  "insufficientTimerPermissionsConfirmation": "Bộ hẹn giờ nghỉ ngơi được bật mà không có đủ quyền. Bạn có chắc không?",
   "@insufficientTimerPermissionsConfirmation": {
     "description": "Confirmation shown when leaving timer permissions incomplete."
   },
-  "actionConfirm": "Confirm",
+  "actionConfirm": "Xác nhận",
   "@actionConfirm": {
     "description": "Generic confirmation action."
   },
-  "appAccess": "App access",
+  "appAccess": "Quyền truy cập ứng dụng",
   "@appAccess": {
     "description": "Title for the Android app access dialog."
   },
-  "appAccessDescription": "Needed for enabled timers and notifications.",
+  "appAccessDescription": "Cần thiết để bật tính giờ và thông báo.",
   "@appAccessDescription": {
     "description": "Short explanation of why Android app access is requested."
   },
-  "notifications": "Notifications",
+  "notifications": "Thông báo",
   "@notifications": {
     "description": "Generic label for notifications."
   },
-  "timerProgressAndRestAlerts": "Timer progress and rest alerts",
+  "timerProgressAndRestAlerts": "Tiến trình hẹn giờ và cảnh báo nghỉ ngơi",
   "@timerProgressAndRestAlerts": {
     "description": "Description of notifications used when rest timers are enabled."
   },
-  "enabledNotificationsDescription": "Notifications you have enabled",
+  "enabledNotificationsDescription": "Thông báo bạn đã bật",
   "@enabledNotificationsDescription": {
     "description": "Description of notification access when notifications are enabled without rest timers."
   },
-  "backgroundActivity": "Background activity",
+  "backgroundActivity": "Hoạt động nền",
   "@backgroundActivity": {
     "description": "Android app access label for background activity."
   },
-  "backgroundActivityDescription": "Keep timers reliable in the background",
+  "backgroundActivityDescription": "Giữ bộ hẹn giờ đáng tin cậy ở chế độ nền",
   "@backgroundActivityDescription": {
     "description": "Description of background activity access for timers."
   },
-  "exactAlarms": "Exact alarms",
+  "exactAlarms": "Báo động chính xác",
   "@exactAlarms": {
     "description": "Android app access label for exact alarms."
   },
-  "exactAlarmsDescription": "Alert exactly when a rest timer ends",
+  "exactAlarmsDescription": "Cảnh báo chính xác khi hết giờ nghỉ",
   "@exactAlarmsDescription": {
     "description": "Description of exact alarm access for rest timers."
   },
-  "noAdditionalAndroidAccessNeeded": "No additional Android access is needed for your current settings.",
+  "noAdditionalAndroidAccessNeeded": "Không cần quyền truy cập Android bổ sung cho cài đặt hiện tại của bạn.",
   "@noAdditionalAndroidAccessNeeded": {
     "description": "Message shown when current settings need no extra Android permissions."
   },
-  "actionDone": "Done",
+  "actionDone": "Xong",
   "@actionDone": {
     "description": "Generic action for finishing or dismissing a flow."
   },
-  "allowed": "Allowed",
+  "allowed": "Cho phép",
   "@allowed": {
     "description": "Status tooltip indicating that an Android permission is granted."
   },
-  "actionAllow": "Allow",
+  "actionAllow": "Cho phép",
   "@actionAllow": {
     "description": "Generic action for granting requested access."
   },
-  "backupLabel": "Backup",
+  "backupLabel": "Hỗ trợ",
   "@backupLabel": {
     "description": "Label for backup import, export, and data-management actions."
   },
-  "databaseLabel": "Database",
+  "databaseLabel": "Cơ sở dữ liệu",
   "@databaseLabel": {
     "description": "Label for database data-management actions."
   },
-  "deleteRecords": "Delete records",
+  "deleteRecords": "Xóa bản ghi",
   "@deleteRecords": {
     "description": "Action for opening destructive data deletion options."
   },
-  "deleteAllGraphsConfirmation": "Are you sure you want to delete all graphs? This action is not reversible.",
+  "deleteAllGraphsConfirmation": "Bạn có chắc chắn muốn xóa tất cả các biểu đồ không? Hành động này không thể đảo ngược.",
   "@deleteAllGraphsConfirmation": {
     "description": "Confirmation text for deleting all graph records."
   },
-  "deleteAllPlansConfirmation": "Are you sure you want to delete all plans? This action is not reversible.",
+  "deleteAllPlansConfirmation": "Bạn có chắc chắn muốn xóa tất cả kế hoạch không? Thao tác này không thể hoàn tác.",
   "@deleteAllPlansConfirmation": {
     "description": "Confirmation text for deleting all plans."
   },
-  "deleteDatabaseConfirmation": "Are you sure you want to delete your database? This action is not reversible and will destroy all your data.",
+  "deleteDatabaseConfirmation": "Bạn có chắc chắn muốn xóa cơ sở dữ liệu của mình không? Hành động này không thể đảo ngược và sẽ hủy tất cả dữ liệu của bạn.",
   "@deleteDatabaseConfirmation": {
     "description": "Confirmation text for deleting the complete Flexify database."
   },
-  "importData": "Import data",
+  "importData": "Nhập dữ liệu",
   "@importData": {
     "description": "Action for opening data import options."
   },
-  "exportData": "Export data",
+  "exportData": "Xuất dữ liệu",
   "@exportData": {
     "description": "Action for opening data export options."
   },
-  "actionReport": "Report",
+  "actionReport": "Báo cáo",
   "@actionReport": {
     "description": "Action for reporting an import failure."
   },
-  "graphDataImported": "Graph data imported successfully!",
+  "graphDataImported": "Dữ liệu đồ thị đã được nhập thành công!",
   "@graphDataImported": {
     "description": "Toast shown after graph CSV data is imported."
   },
-  "plansImported": "Plans imported successfully",
+  "plansImported": "Kế hoạch đã được nhập thành công",
   "@plansImported": {
     "description": "Toast shown after plan CSV data is imported."
   },
-  "failedToImportDatabase": "Failed to import database: {error}",
+  "failedToImportDatabase": "Không thể nhập cơ sở dữ liệu: {error}",
   "@failedToImportDatabase": {
     "description": "Toast shown when a database import fails.",
     "placeholders": {
@@ -445,11 +445,11 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "The backup archive does not contain the Flexify database.",
+  "backupArchiveMissingDatabase": "Kho lưu trữ sao lưu không chứa cơ sở dữ liệu Flexify.",
   "@backupArchiveMissingDatabase": {
     "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
   },
-  "failedToImportGraphs": "Failed to import graphs: {error}",
+  "failedToImportGraphs": "Không thể nhập biểu đồ: {error}",
   "@failedToImportGraphs": {
     "description": "Toast shown when a graph CSV import fails.",
     "placeholders": {
@@ -458,7 +458,7 @@
       }
     }
   },
-  "failedToImportPlans": "Failed to import plans: {error}",
+  "failedToImportPlans": "Không thể nhập kế hoạch: {error}",
   "@failedToImportPlans": {
     "description": "Toast shown when a plan CSV import fails.",
     "placeholders": {
@@ -467,27 +467,27 @@
       }
     }
   },
-  "selectedFileDoesNotExist": "Selected file does not exist",
+  "selectedFileDoesNotExist": "Tệp đã chọn không tồn tại",
   "@selectedFileDoesNotExist": {
     "description": "Validation error when an import file no longer exists."
   },
-  "couldNotReadFileData": "Could not read file data",
+  "couldNotReadFileData": "Không thể đọc dữ liệu tập tin",
   "@couldNotReadFileData": {
     "description": "Validation error when import file bytes cannot be read."
   },
-  "databaseImportWebUnsupported": "Database import on web requires manual data migration. Please export your data as CSV files and import those instead.",
+  "databaseImportWebUnsupported": "Nhập cơ sở dữ liệu trên web yêu cầu di chuyển dữ liệu thủ công. Vui lòng xuất dữ liệu của bạn dưới dạng tệp CSV và nhập chúng thay thế.",
   "@databaseImportWebUnsupported": {
     "description": "Validation error explaining the supported web data-import workflow."
   },
-  "csvFileEmpty": "CSV file is empty",
+  "csvFileEmpty": "Tệp CSV trống",
   "@csvFileEmpty": {
     "description": "Validation error for an empty CSV import file."
   },
-  "csvNeedsDataRow": "CSV file must contain at least one data row",
+  "csvNeedsDataRow": "Tệp CSV phải chứa ít nhất một hàng dữ liệu",
   "@csvNeedsDataRow": {
     "description": "Validation error for a CSV containing only headings."
   },
-  "csvRowInsufficientColumns": "Row {row} has insufficient columns: {count}",
+  "csvRowInsufficientColumns": "Hàng {row} không đủ cột: {count}",
   "@csvRowInsufficientColumns": {
     "description": "Validation error when an imported CSV row has too few columns.",
     "placeholders": {
@@ -499,7 +499,7 @@
       }
     }
   },
-  "invalidCsvValue": "Invalid {field} value in row {row}: {value}",
+  "invalidCsvValue": "Giá trị {field} không hợp lệ trong hàng {row}: {value}",
   "@invalidCsvValue": {
     "description": "Validation error for a malformed value in an imported CSV row.",
     "placeholders": {
@@ -514,7 +514,7 @@
       }
     }
   },
-  "invalidCsvDataType": "Invalid {field} data type in row {row}: {type}",
+  "invalidCsvDataType": "Kiểu dữ liệu {field} không hợp lệ trong hàng {row}: {type}",
   "@invalidCsvDataType": {
     "description": "Validation error for an unsupported value type in an imported CSV row.",
     "placeholders": {
@@ -529,7 +529,7 @@
       }
     }
   },
-  "expectedIntegerPlanId": "Expected an integer plan id, got \"{value}\"",
+  "expectedIntegerPlanId": "ID kế hoạch phải là số nguyên, nhận được \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
     "placeholders": {
@@ -538,15 +538,15 @@
       }
     }
   },
-  "unitLabel": "Unit",
+  "unitLabel": "Đơn vị",
   "@unitLabel": {
     "description": "Generic label for measurement units."
   },
-  "kilogramsUnit": "Kilograms (kg)",
+  "kilogramsUnit": "Kilôgam (kg)",
   "@kilogramsUnit": {
     "description": "Display label for the kilogram unit option."
   },
-  "poundsUnit": "Pounds (lb)",
+  "poundsUnit": "Pound (lb)",
   "@poundsUnit": {
     "description": "Display label for the pound unit option."
   },
@@ -558,167 +558,167 @@
   "@stoneUnitShort": {
     "description": "Compact stone weight unit shown beside measurement values."
   },
-  "kilometersUnit": "Kilometers (km)",
+  "kilometersUnit": "Km (km)",
   "@kilometersUnit": {
     "description": "Display label for the kilometer unit option."
   },
-  "milesUnit": "Miles (mi)",
+  "milesUnit": "Dặm (mi)",
   "@milesUnit": {
     "description": "Display label for the mile unit option."
   },
-  "metersUnit": "Meters (m)",
+  "metersUnit": "Mét (m)",
   "@metersUnit": {
     "description": "Display label for the meter unit option."
   },
-  "kilocaloriesUnit": "Kilocalories (kcal)",
+  "kilocaloriesUnit": "Calo (kcal)",
   "@kilocaloriesUnit": {
     "description": "Display label for the kilocalorie unit option."
   },
-  "enterWeight": "Enter Weight",
+  "enterWeight": "Nhập trọng lượng",
   "@enterWeight": {
     "description": "Title for the bodyweight entry page."
   },
-  "requiredField": "Required",
+  "requiredField": "Yêu cầu",
   "@requiredField": {
     "description": "Validation message for a required input."
   },
-  "invalidNumber": "Invalid number",
+  "invalidNumber": "Số không hợp lệ",
   "@invalidNumber": {
     "description": "Validation message for a malformed numeric input."
   },
-  "previousWeight": "Previous weight",
+  "previousWeight": "Cân nặng trước đây",
   "@previousWeight": {
     "description": "Label for the previously recorded bodyweight."
   },
-  "imageLabel": "Image",
+  "imageLabel": "Hình ảnh",
   "@imageLabel": {
     "description": "Generic label for an attached image."
   },
-  "longPressToDelete": "Long-press to delete",
+  "longPressToDelete": "Nhấn và giữ để xóa",
   "@longPressToDelete": {
     "description": "Tooltip explaining how to remove an attached image."
   },
-  "imageError": "Image error",
+  "imageError": "Lỗi hình ảnh",
   "@imageError": {
     "description": "Action label shown when an attached image cannot be rendered."
   },
-  "actionSave": "Save",
+  "actionSave": "Cứu",
   "@actionSave": {
     "description": "Generic save action."
   },
-  "aboutTitle": "About",
+  "aboutTitle": "Về",
   "@aboutTitle": {
     "description": "Title for the About page."
   },
-  "donate": "Donate",
+  "donate": "Quyên tặng",
   "@donate": {
     "description": "Action for opening the project donation page."
   },
-  "helpSupportProject": "Help support this project",
+  "helpSupportProject": "Giúp hỗ trợ dự án này",
   "@helpSupportProject": {
     "description": "Description for the donation action."
   },
-  "whatsNewAbout": "Whats new?",
+  "whatsNewAbout": "Có gì mới?",
   "@whatsNewAbout": {
     "description": "About-page label for opening release notes."
   },
-  "whatsNewTitle": "What's new?",
+  "whatsNewTitle": "Có gì mới?",
   "@whatsNewTitle": {
     "description": "Title for the in-app changelog page."
   },
-  "seeReleaseNotes": "See our release notes",
+  "seeReleaseNotes": "Xem ghi chú phát hành của chúng tôi",
   "@seeReleaseNotes": {
     "description": "Description for the in-app changelog action."
   },
-  "versionLabel": "Version",
+  "versionLabel": "Phiên bản",
   "@versionLabel": {
     "description": "Label for the installed app version."
   },
-  "authorLabel": "Author",
+  "authorLabel": "Tác giả",
   "@authorLabel": {
     "description": "Label for the app author."
   },
-  "privacyPolicy": "Privacy policy",
+  "privacyPolicy": "Chính sách bảo mật",
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "How Flexify handles your data",
+  "privacyPolicyDescription": "Cách Flexify xử lý dữ liệu của bạn",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
-  "licenseLabel": "License",
+  "licenseLabel": "Giấy phép",
   "@licenseLabel": {
     "description": "Label for opening the software license."
   },
-  "sourceCode": "Source code",
+  "sourceCode": "Mã nguồn",
   "@sourceCode": {
     "description": "Label for opening the source-code repository."
   },
-  "sourceCodeDescription": "Check it out on GitHub",
+  "sourceCodeDescription": "Hãy kiểm tra nó trên GitHub",
   "@sourceCodeDescription": {
     "description": "Description for the source-code repository action."
   },
-  "leaveReview": "Leave a review",
+  "leaveReview": "Để lại đánh giá",
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Rate Flexify on the Play Store",
+  "leaveReviewDescription": "Xếp hạng Flexify trên Cửa hàng Play",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
-  "reportBug": "Report a bug",
+  "reportBug": "Báo cáo lỗi",
   "@reportBug": {
     "description": "Label for opening the bug-report form."
   },
-  "reportBugDescription": "Open a ticket on GitHub",
+  "reportBugDescription": "Mở một issue trên GitHub",
   "@reportBugDescription": {
     "description": "Description for the bug-report action."
   },
-  "failedMigrations": "Failed migrations",
+  "failedMigrations": "Di chuyển không thành công",
   "@failedMigrations": {
     "description": "Title for the database migration failure page."
   },
-  "errorMessageLabel": "Error message:",
+  "errorMessageLabel": "Thông báo lỗi:",
   "@errorMessageLabel": {
     "description": "Label preceding a database migration error message."
   },
-  "createIssue": "Create issue",
+  "createIssue": "Tạo vấn đề",
   "@createIssue": {
     "description": "Action for opening a new issue report."
   },
-  "addExercise": "Add exercise",
+  "addExercise": "Thêm bài tập",
   "@addExercise": {
     "description": "Title and action for adding an exercise graph."
   },
-  "cardio": "Cardio",
+  "cardio": "tim mạch",
   "@cardio": {
     "description": "Label for cardiovascular exercises."
   },
-  "strength": "Strength",
+  "strength": "Sức mạnh",
   "@strength": {
     "description": "Label for strength exercises."
   },
-  "options": "Options",
+  "options": "Tùy chọn",
   "@options": {
     "description": "Tooltip for opening view options."
   },
-  "periodDay": "Day",
+  "periodDay": "Ngày",
   "@periodDay": {
     "description": "One-day graph period."
   },
-  "periodWeek": "Week",
+  "periodWeek": "Tuần",
   "@periodWeek": {
     "description": "One-week graph period."
   },
-  "periodMonth": "Month",
+  "periodMonth": "Tháng",
   "@periodMonth": {
     "description": "One-month graph period."
   },
-  "periodYear": "Year",
+  "periodYear": "Năm",
   "@periodYear": {
     "description": "One-year graph period."
   },
-  "noDataFor": "No data yet for {name}",
+  "noDataFor": "Chưa có dữ liệu cho {name}",
   "@noDataFor": {
     "description": "Empty-state message for an exercise without graph data.",
     "placeholders": {
@@ -727,23 +727,23 @@
       }
     }
   },
-  "noDataYet": "No data yet",
+  "noDataYet": "Chưa có dữ liệu",
   "@noDataYet": {
     "description": "Generic empty state when a graph has no data."
   },
-  "exerciseNotes": "Exercise notes",
+  "exerciseNotes": "Ghi chú bài tập",
   "@exerciseNotes": {
     "description": "Label and title for notes attached to an exercise."
   },
-  "notesForExercise": "Notes for this exercise",
+  "notesForExercise": "Lưu ý cho bài tập này",
   "@notesForExercise": {
     "description": "Hint for exercise notes."
   },
-  "useTimeBasedXAxis": "Use time-based X axis",
+  "useTimeBasedXAxis": "Sử dụng trục X dựa trên thời gian",
   "@useTimeBasedXAxis": {
     "description": "Graph option that uses elapsed time on the horizontal axis."
   },
-  "updateAllNamed": "Update all {name}",
+  "updateAllNamed": "Cập nhật tất cả {name}",
   "@updateAllNamed": {
     "description": "Title for updating all records for a named exercise.",
     "placeholders": {
@@ -752,31 +752,31 @@
       }
     }
   },
-  "newName": "New name",
+  "newName": "Tên mới",
   "@newName": {
     "description": "Label for renaming an exercise."
   },
-  "restMinutes": "Rest minutes",
+  "restMinutes": "Phút nghỉ ngơi",
   "@restMinutes": {
     "description": "Label for the minutes component of an exercise rest timer."
   },
-  "restSeconds": "Rest seconds",
+  "restSeconds": "Giây nghỉ ngơi",
   "@restSeconds": {
     "description": "Label for the seconds component of an exercise rest timer."
   },
-  "globalProgress": "Global progress",
+  "globalProgress": "Tiến bộ toàn cầu",
   "@globalProgress": {
     "description": "Title for the global progress graph."
   },
-  "curveLineGraphs": "Curve line graphs",
+  "curveLineGraphs": "Đồ thị đường cong",
   "@curveLineGraphs": {
     "description": "Setting that renders graph lines as curves."
   },
-  "curveLineGraphsDescription": "Draw graph lines as smooth curves",
+  "curveLineGraphsDescription": "Vẽ các đường biểu đồ dưới dạng đường cong mượt mà",
   "@curveLineGraphsDescription": {
     "description": "Description for the curved graph-line setting."
   },
-  "noHistoryFor": "No history yet for {name}",
+  "noHistoryFor": "Chưa có lịch sử nào cho {name}",
   "@noHistoryFor": {
     "description": "Empty history message for a named exercise.",
     "placeholders": {
@@ -785,147 +785,147 @@
       }
     }
   },
-  "cancelSelection": "Cancel selection",
+  "cancelSelection": "Hủy lựa chọn",
   "@cancelSelection": {
     "description": "Tooltip for leaving multi-select mode."
   },
-  "editSelected": "Edit selected",
+  "editSelected": "Đã chọn chỉnh sửa",
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "New exercise",
+  "newExercise": "Bài tập mới",
   "@newExercise": {
     "description": "Action for creating a new exercise graph."
   },
-  "noGraphsFound": "No graphs found",
+  "noGraphsFound": "Không tìm thấy biểu đồ nào",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
   },
-  "searchGraphs": "Search graphs...",
+  "searchGraphs": "Tìm kiếm biểu đồ...",
   "@searchGraphs": {
     "description": "Hint for searching exercise graphs."
   },
-  "actionAdd": "Add",
+  "actionAdd": "Thêm vào",
   "@actionAdd": {
     "description": "Generic add action."
   },
-  "actionUpdate": "Update",
+  "actionUpdate": "Cập nhật",
   "@actionUpdate": {
     "description": "Generic update action."
   },
-  "hideGlobalProgress": "Hide global progress",
+  "hideGlobalProgress": "Ẩn tiến trình toàn cầu",
   "@hideGlobalProgress": {
     "description": "Action for hiding the global progress graph."
   },
-  "chartGroupedByCategory": "A chart grouped by category",
+  "chartGroupedByCategory": "Biểu đồ được nhóm theo danh mục",
   "@chartGroupedByCategory": {
     "description": "Description of the global progress chart."
   },
-  "noExercisesFound": "No exercises found",
+  "noExercisesFound": "Không tìm thấy bài tập nào",
   "@noExercisesFound": {
     "description": "Empty state after searching for exercises."
   },
-  "savePlan": "Save plan",
+  "savePlan": "Lưu kế hoạch",
   "@savePlan": {
     "description": "Action for saving a workout plan."
   },
-  "titleOptional": "Title (optional)",
+  "titleOptional": "Tiêu đề (tùy chọn)",
   "@titleOptional": {
     "description": "Optional plan title field label."
   },
-  "searchExercises": "Search exercises...",
+  "searchExercises": "Tìm kiếm bài tập...",
   "@searchExercises": {
     "description": "Hint for searching exercises."
   },
-  "warmupSets": "Warmup sets",
+  "warmupSets": "Hiệp khởi động",
   "@warmupSets": {
     "description": "Label for the number of warmup sets."
   },
-  "workingSetsMax": "Working sets (max: 20)",
+  "workingSetsMax": "Hiệp tập chính (tối đa: 20)",
   "@workingSetsMax": {
     "description": "Label for the maximum number of working sets."
   },
-  "actionUndo": "Undo",
+  "actionUndo": "Hoàn tác",
   "@actionUndo": {
     "description": "Generic undo action."
   },
-  "actionSwap": "Swap",
+  "actionSwap": "Tráo đổi",
   "@actionSwap": {
     "description": "Generic swap action."
   },
-  "daily": "Daily",
+  "daily": "Hằng ngày",
   "@daily": {
     "description": "Daily interval label."
   },
-  "weekly": "Weekly",
+  "weekly": "hàng tuần",
   "@weekly": {
     "description": "Weekly interval label."
   },
-  "monthly": "Monthly",
+  "monthly": "hàng tháng",
   "@monthly": {
     "description": "Monthly interval label."
   },
-  "yearly": "Yearly",
+  "yearly": "Hàng năm",
   "@yearly": {
     "description": "Yearly interval label."
   },
-  "unexpectedError": "Something went wrong. Please try again.",
+  "unexpectedError": "Đã xảy ra lỗi. Vui lòng thử lại.",
   "@unexpectedError": {
     "description": "Generic user-facing message for an unexpected runtime or data-loading failure."
   },
-  "loadingExercises": "Loading exercises...",
+  "loadingExercises": "Đang tải bài tập...",
   "@loadingExercises": {
     "description": "Progress message while plan exercises load."
   },
-  "noPlansYet": "No plans yet",
+  "noPlansYet": "Chưa có kế hoạch nào",
   "@noPlansYet": {
     "description": "Empty state when no workout plans exist."
   },
-  "noMatchingPlans": "No matching plans",
+  "noMatchingPlans": "Không có kế hoạch phù hợp",
   "@noMatchingPlans": {
     "description": "Empty state when no plans match a search."
   },
-  "newPlan": "New plan",
+  "newPlan": "Kế hoạch mới",
   "@newPlan": {
     "description": "Action for creating a workout plan."
   },
-  "searchPlans": "Search plans...",
+  "searchPlans": "Tìm kiếm kế hoạch...",
   "@searchPlans": {
     "description": "Hint for searching workout plans."
   },
-  "noExercisesYet": "No exercises yet",
+  "noExercisesYet": "Chưa có bài tập nào",
   "@noExercisesYet": {
     "description": "Empty state for a plan without exercises."
   },
-  "editPlan": "Edit plan",
+  "editPlan": "Chỉnh sửa kế hoạch",
   "@editPlan": {
     "description": "Tooltip and action for editing a workout plan."
   },
-  "saveSet": "Save set",
+  "saveSet": "Lưu hiệp",
   "@saveSet": {
     "description": "Action for saving a workout set."
   },
-  "minutesLabel": "Minutes",
+  "minutesLabel": "Phút",
   "@minutesLabel": {
     "description": "Label for a duration in minutes."
   },
-  "minutesShort": "min",
+  "minutesShort": "phút",
   "@minutesShort": {
     "description": "Compact abbreviation for minutes in pace and duration labels."
   },
-  "secondsLabel": "Seconds",
+  "secondsLabel": "Giây",
   "@secondsLabel": {
     "description": "Label for a duration in seconds."
   },
-  "distanceLabel": "Distance",
+  "distanceLabel": "Khoảng cách",
   "@distanceLabel": {
     "description": "Generic distance label."
   },
-  "inclinePercent": "Incline %",
+  "inclinePercent": "Nghiêng %",
   "@inclinePercent": {
     "description": "Label for incline as a percentage."
   },
-  "weightWithUnit": "Weight ({unit})",
+  "weightWithUnit": "Trọng lượng ({unit})",
   "@weightWithUnit": {
     "description": "Weight field label including the selected unit.",
     "placeholders": {
@@ -934,39 +934,39 @@
       }
     }
   },
-  "useBodyWeight": "Use body weight",
+  "useBodyWeight": "Sử dụng trọng lượng cơ thể",
   "@useBodyWeight": {
     "description": "Tooltip for filling a set with the recorded bodyweight."
   },
-  "noWeightEnteredYet": "No weight entered yet",
+  "noWeightEnteredYet": "Chưa nhập cân nặng",
   "@noWeightEnteredYet": {
     "description": "Message shown when body weight cannot be used because no weight has been recorded."
   },
-  "notesLabel": "Notes",
+  "notesLabel": "Ghi chú",
   "@notesLabel": {
     "description": "Generic notes field label."
   },
-  "swapWorkout": "Swap workout",
+  "swapWorkout": "Đổi buổi tập",
   "@swapWorkout": {
     "description": "Title for replacing an exercise in a workout."
   },
-  "addSet": "Add set",
+  "addSet": "Thêm hiệp",
   "@addSet": {
     "description": "Action and title for adding a workout set."
   },
-  "deleteSet": "Delete set",
+  "deleteSet": "Xóa hiệp",
   "@deleteSet": {
     "description": "Tooltip for deleting a workout set."
   },
-  "oneRepMaxEstimate": "One rep max (estimate)",
+  "oneRepMaxEstimate": "1RM (ước tính)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
   },
-  "valueLabel": "Value",
+  "valueLabel": "Giá trị",
   "@valueLabel": {
     "description": "Generic numeric value field label."
   },
-  "amountWithUnit": "Amount ({unit})",
+  "amountWithUnit": "Số lượng ({unit})",
   "@amountWithUnit": {
     "description": "Amount field label including the selected unit.",
     "placeholders": {
@@ -975,7 +975,7 @@
       }
     }
   },
-  "distanceWithUnit": "Distance ({unit})",
+  "distanceWithUnit": "Khoảng cách ({unit})",
   "@distanceWithUnit": {
     "description": "Distance field label including the selected unit.",
     "placeholders": {
@@ -984,11 +984,11 @@
       }
     }
   },
-  "bodyWeightLabel": "Body weight",
+  "bodyWeightLabel": "Trọng lượng cơ thể",
   "@bodyWeightLabel": {
     "description": "Generic bodyweight field label."
   },
-  "bodyWeightWithUnit": "Body weight ({unit})",
+  "bodyWeightWithUnit": "Trọng lượng cơ thể ({unit})",
   "@bodyWeightWithUnit": {
     "description": "Bodyweight field label including the selected unit.",
     "placeholders": {
@@ -997,39 +997,39 @@
       }
     }
   },
-  "categoryHelper": "Choose an existing category or type a new one.",
+  "categoryHelper": "Chọn một danh mục hiện có hoặc nhập một danh mục mới.",
   "@categoryHelper": {
     "description": "Helper text explaining the exercise category field."
   },
-  "manageCategories": "Manage categories",
+  "manageCategories": "Quản lý danh mục",
   "@manageCategories": {
     "description": "Navigation label for the workout category manager."
   },
-  "manageCategoriesDescription": "Create, rename, merge or remove categories",
+  "manageCategoriesDescription": "Tạo, đổi tên, hợp nhất hoặc xóa danh mục",
   "@manageCategoriesDescription": {
     "description": "Description of the category management screen."
   },
-  "newCategory": "New category",
+  "newCategory": "Danh mục mới",
   "@newCategory": {
     "description": "Action for creating a workout category."
   },
-  "renameCategory": "Rename category",
+  "renameCategory": "Đổi tên danh mục",
   "@renameCategory": {
     "description": "Action for renaming a workout category."
   },
-  "mergeCategory": "Merge into another category",
+  "mergeCategory": "Hợp nhất vào một danh mục khác",
   "@mergeCategory": {
     "description": "Action for moving a category's workout entries to another category."
   },
-  "noCategories": "No categories yet",
+  "noCategories": "Chưa có danh mục nào",
   "@noCategories": {
     "description": "Empty state for the category manager."
   },
-  "categoryNameRequired": "Enter a category name",
+  "categoryNameRequired": "Nhập tên danh mục",
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{Not used by any entries} =1{Used by 1 entry} other{Used by {count} entries}}",
+  "categoryUsageCount": "{count, plural, =0{Không được mục nào sử dụng} =1{Được 1 mục sử dụng} other{Được {count} mục sử dụng}}",
   "@categoryUsageCount": {
     "description": "Number of workout entries using a category.",
     "placeholders": {
@@ -1039,7 +1039,7 @@
       }
     }
   },
-  "deleteCategoryConfirmation": "{count, plural, =0{Delete this category?} =1{Delete this category and remove it from 1 entry?} other{Delete this category and remove it from {count} entries?}}",
+  "deleteCategoryConfirmation": "{count, plural, =0{Xóa danh mục này?} =1{Xóa danh mục này và xóa nó khỏi 1 mục?} other{Xóa danh mục này và xóa nó khỏi {count} mục?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
     "placeholders": {
@@ -1049,11 +1049,11 @@
       }
     }
   },
-  "createdDate": "Created date",
+  "createdDate": "Ngày tạo",
   "@createdDate": {
     "description": "Label for the date a workout record was created."
   },
-  "editSets": "{count, plural, =1{Edit 1 set} other{Edit {count} sets}}",
+  "editSets": "{count, plural, =1{Chỉnh sửa 1 hiệp} other{Chỉnh sửa {count} hiệp}}",
   "@editSets": {
     "description": "Title for bulk editing workout sets.",
     "placeholders": {
@@ -1062,15 +1062,15 @@
       }
     }
   },
-  "noEntriesYet": "No entries yet",
+  "noEntriesYet": "Chưa có mục nào",
   "@noEntriesYet": {
     "description": "Empty state when workout history has no entries."
   },
-  "historyEmptyMessage": "Complete a set or add one manually to start your history.",
+  "historyEmptyMessage": "Hoàn thành một hiệp hoặc thêm thủ công để bắt đầu lịch sử.",
   "@historyEmptyMessage": {
     "description": "Explanation shown when workout history has no entries."
   },
-  "deleteSetConfirmation": "Are you sure you want to delete {name}?",
+  "deleteSetConfirmation": "Bạn có chắc chắn muốn xóa {name} không?",
   "@deleteSetConfirmation": {
     "description": "Confirmation shown before deleting one workout set for a named exercise.",
     "placeholders": {
@@ -1079,7 +1079,7 @@
       }
     }
   },
-  "deleteEntriesConfirmation": "{count, plural, =1{Are you sure you want to delete 1 entry?} other{Are you sure you want to delete {count} entries?}}",
+  "deleteEntriesConfirmation": "{count, plural, =1{Bạn có chắc chắn muốn xóa 1 mục không?} other{Bạn có chắc chắn muốn xóa {count} mục không?}}",
   "@deleteEntriesConfirmation": {
     "description": "Confirmation shown before deleting one or more selected workout history entries.",
     "placeholders": {
@@ -1088,87 +1088,87 @@
       }
     }
   },
-  "searchHistory": "Search history...",
+  "searchHistory": "Lịch sử tìm kiếm...",
   "@searchHistory": {
     "description": "Hint for searching workout history."
   },
-  "themeSystem": "System",
+  "themeSystem": "Hệ thống",
   "@themeSystem": {
     "description": "Theme option that follows the system appearance."
   },
-  "themeDark": "Dark",
+  "themeDark": "Tối tăm",
   "@themeDark": {
     "description": "Dark theme option."
   },
-  "themeLight": "Light",
+  "themeLight": "Ánh sáng",
   "@themeLight": {
     "description": "Light theme option."
   },
-  "pureBlackAmoled": "Pure black (AMOLED)",
+  "pureBlackAmoled": "Màu đen tuyền (AMOLED)",
   "@pureBlackAmoled": {
     "description": "Appearance setting for pure-black dark surfaces."
   },
-  "showImages": "Show images",
+  "showImages": "Hiển thị hình ảnh",
   "@showImages": {
     "description": "Appearance setting for exercise images."
   },
-  "peekGraph": "Peek graph",
+  "peekGraph": "Biểu đồ nhìn trộm",
   "@peekGraph": {
     "description": "Appearance setting for graph previews."
   },
-  "inputStyleLine": "Line",
+  "inputStyleLine": "Đường kẻ",
   "@inputStyleLine": {
     "description": "Line input-field style."
   },
-  "inputStyleOutlined": "Outlined",
+  "inputStyleOutlined": "phác thảo",
   "@inputStyleOutlined": {
     "description": "Outlined input-field style."
   },
-  "inputStyleFilled": "Filled",
+  "inputStyleFilled": "Điền",
   "@inputStyleFilled": {
     "description": "Filled input-field style."
   },
-  "inputStyle": "Input style",
+  "inputStyle": "Kiểu nhập",
   "@inputStyle": {
     "description": "Label for choosing the text-input style."
   },
-  "appearance": "Appearance",
+  "appearance": "Vẻ bề ngoài",
   "@appearance": {
     "description": "Title for appearance settings."
   },
-  "automaticBackupsEnabled": "Automatic backups enabled",
+  "automaticBackupsEnabled": "Đã bật sao lưu tự động",
   "@automaticBackupsEnabled": {
     "description": "Status text confirming automatic backups are enabled."
   },
-  "automaticBackup": "Automatic backup",
+  "automaticBackup": "Tự động sao lưu",
   "@automaticBackup": {
     "description": "Data setting for automatic backups."
   },
-  "appPermissions": "App permissions",
+  "appPermissions": "Quyền ứng dụng",
   "@appPermissions": {
     "description": "Data/settings action for app permissions."
   },
-  "shareDatabase": "Share database",
+  "shareDatabase": "Chia sẻ cơ sở dữ liệu",
   "@shareDatabase": {
     "description": "Action for sharing the app database file."
   },
-  "dataManagement": "Data management",
+  "dataManagement": "Quản lý dữ liệu",
   "@dataManagement": {
     "description": "Title for data-management settings."
   },
-  "strengthUnit": "Strength unit",
+  "strengthUnit": "Đơn vị sức mạnh",
   "@strengthUnit": {
     "description": "Label for the default strength measurement unit."
   },
-  "lastEntry": "Last entry",
+  "lastEntry": "Mục nhập cuối cùng",
   "@lastEntry": {
     "description": "Option that reuses the unit from the previous entry."
   },
-  "cardioUnit": "Cardio unit",
+  "cardioUnit": "Đơn vị tim mạch",
   "@cardioUnit": {
     "description": "Label for the default cardio measurement unit."
   },
-  "longDateFormat": "Long date format ({format})",
+  "longDateFormat": "Định dạng ngày dài ({format})",
   "@longDateFormat": {
     "description": "Label for the long date format preview.",
     "placeholders": {
@@ -1177,31 +1177,31 @@
       }
     }
   },
-  "formats": "Formats",
+  "formats": "Định dạng",
   "@formats": {
     "description": "Title for measurement and date formatting settings."
   },
-  "setsPerExerciseMax": "Sets per exercise (max: 20)",
+  "setsPerExerciseMax": "Số hiệp cho mỗi bài tập (tối đa: 20)",
   "@setsPerExerciseMax": {
     "description": "Plan setting for the maximum working sets per exercise."
   },
-  "countLabel": "Count",
+  "countLabel": "Đếm",
   "@countLabel": {
     "description": "Label for count-based plan distribution."
   },
-  "ratioLabel": "Ratio",
+  "ratioLabel": "Tỷ lệ",
   "@ratioLabel": {
     "description": "Label for ratio-based plan distribution."
   },
-  "reorder": "Reorder",
+  "reorder": "Sắp xếp lại",
   "@reorder": {
     "description": "Action or option for reordering exercises."
   },
-  "none": "None",
+  "none": "Không có",
   "@none": {
     "description": "Generic option indicating no selection."
   },
-  "monday": "Monday",
+  "monday": "Thứ hai",
   "@monday": {
     "description": "Monday weekday label in the plan example."
   },
@@ -1209,223 +1209,223 @@
   "@examplePlanExercises": {
     "description": "Example list of exercises shown in plan settings."
   },
-  "tabs": "Tabs",
+  "tabs": "Tab",
   "@tabs": {
     "description": "Title for navigation tab settings."
   },
-  "swipeBetweenTabs": "Swipe between tabs",
+  "swipeBetweenTabs": "Vuốt giữa các tab",
   "@swipeBetweenTabs": {
     "description": "Setting for swipe navigation between tabs."
   },
-  "vibrate": "Vibrate",
+  "vibrate": "Rung",
   "@vibrate": {
     "description": "Timer setting for vibration."
   },
-  "enableSound": "Enable sound",
+  "enableSound": "Bật âm thanh",
   "@enableSound": {
     "description": "Timer setting for alarm sound playback."
   },
-  "keepScreenOn": "Keep screen on",
+  "keepScreenOn": "Giữ màn hình luôn bật",
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
-  "alarmSound": "Alarm sound",
+  "alarmSound": "Âm thanh báo động",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
   },
-  "top": "Top",
+  "top": "Đứng đầu",
   "@top": {
     "description": "Top position option."
   },
-  "bottom": "Bottom",
+  "bottom": "Đáy",
   "@bottom": {
     "description": "Bottom position option."
   },
-  "removeCustomTimer": "Remove custom timer (use global default)",
+  "removeCustomTimer": "Xóa bộ hẹn giờ tùy chỉnh (sử dụng mặc định chung)",
   "@removeCustomTimer": {
     "description": "Tooltip for removing an exercise-specific rest timer."
   },
-  "timers": "Timers",
+  "timers": "Bộ hẹn giờ",
   "@timers": {
     "description": "Title for timer settings."
   },
-  "timerSettings": "Timer settings",
+  "timerSettings": "Cài đặt hẹn giờ",
   "@timerSettings": {
     "description": "Heading for timer configuration."
   },
-  "groupHistory": "Group history",
+  "groupHistory": "Lịch sử nhóm",
   "@groupHistory": {
     "description": "Workout setting for grouping history entries."
   },
-  "showUnits": "Show units",
+  "showUnits": "Hiển thị đơn vị",
   "@showUnits": {
     "description": "Workout setting for displaying measurement units."
   },
-  "showBodyWeight": "Show body weight",
+  "showBodyWeight": "Hiển thị trọng lượng cơ thể",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
   },
-  "showCategories": "Show categories",
+  "showCategories": "Hiển thị danh mục",
   "@showCategories": {
     "description": "Workout setting for exercise categories."
   },
-  "showNotes": "Show notes",
+  "showNotes": "Hiển thị ghi chú",
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "Rep estimation",
+  "repEstimation": "Ước tính số lần lặp",
   "@repEstimation": {
     "description": "Workout setting for repetition estimation."
   },
-  "durationEstimation": "Duration estimation",
+  "durationEstimation": "Ước tính thời lượng",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
   },
-  "showGraphLimit": "Show graph limit",
+  "showGraphLimit": "Hiển thị giới hạn biểu đồ",
   "@showGraphLimit": {
     "description": "Workout setting controlling graph-limit display."
   },
-  "defaultGraphMetric": "Default graph metric",
+  "defaultGraphMetric": "Chỉ số biểu đồ mặc định",
   "@defaultGraphMetric": {
     "description": "Label for choosing the default graph metric."
   },
-  "bestWeight": "Best weight",
+  "bestWeight": "Trọng lượng tốt nhất",
   "@bestWeight": {
     "description": "Graph metric for highest weight."
   },
-  "bestReps": "Best reps",
+  "bestReps": "Số lần lặp tốt nhất",
   "@bestReps": {
     "description": "Graph metric for highest repetition count."
   },
-  "oneRepMax": "One rep max",
+  "oneRepMax": "1RM",
   "@oneRepMax": {
     "description": "Graph metric for one-repetition maximum."
   },
-  "volume": "Volume",
+  "volume": "Khối lượng tập",
   "@volume": {
     "description": "Graph metric for training volume."
   },
-  "paceCardio": "Pace (cardio)",
+  "paceCardio": "Nhịp độ (tim mạch)",
   "@paceCardio": {
     "description": "Cardio graph metric for pace."
   },
-  "distanceCardio": "Distance (cardio)",
+  "distanceCardio": "Khoảng cách (tim mạch)",
   "@distanceCardio": {
     "description": "Cardio graph metric for distance."
   },
-  "defaultGraphPeriod": "Default graph period",
+  "defaultGraphPeriod": "Khoảng thời gian biểu đồ mặc định",
   "@defaultGraphPeriod": {
     "description": "Label for choosing the default graph period."
   },
-  "defaultGraphLimit": "Default graph limit",
+  "defaultGraphLimit": "Giới hạn biểu đồ mặc định",
   "@defaultGraphLimit": {
     "description": "Label for choosing the default graph record limit."
   },
-  "workouts": "Workouts",
+  "workouts": "Buổi tập",
   "@workouts": {
     "description": "Title for workout settings."
   },
-  "actionStop": "Stop",
+  "actionStop": "Dừng lại",
   "@actionStop": {
     "description": "Generic stop action."
   },
-  "timerFinishedToast": "Timer finished!",
+  "timerFinishedToast": "Đã hết giờ!",
   "@timerFinishedToast": {
     "description": "In-app toast shown when a non-Android timer finishes."
   },
-  "stopTimer": "Stop timer",
+  "stopTimer": "Dừng hẹn giờ",
   "@stopTimer": {
     "description": "Action for stopping the active timer."
   },
-  "actionPause": "Pause",
+  "actionPause": "Tạm dừng",
   "@actionPause": {
     "description": "Generic pause action."
   },
-  "startStopwatch": "Start stopwatch",
+  "startStopwatch": "Bắt đầu đồng hồ bấm giờ",
   "@startStopwatch": {
     "description": "Action for starting the stopwatch."
   },
-  "actionStart": "Start",
+  "actionStart": "Bắt đầu",
   "@actionStart": {
     "description": "Generic start action."
   },
-  "actionRestart": "Restart",
+  "actionRestart": "Khởi động lại",
   "@actionRestart": {
     "description": "Generic restart action."
   },
-  "addOneMinute": "+1 minute",
+  "addOneMinute": "+1 phút",
   "@addOneMinute": {
     "description": "Timer action that adds one minute."
   },
-  "addOneMinuteNotification": "Add 1 min",
+  "addOneMinuteNotification": "Thêm 1 phút",
   "@addOneMinuteNotification": {
     "description": "Compact Android notification action that adds one minute."
   },
-  "restTimer": "Rest timer",
+  "restTimer": "Hẹn giờ nghỉ ngơi",
   "@restTimer": {
     "description": "Generic rest timer title used when restarting a timer from a notification."
   },
-  "timerUp": "Timer up",
+  "timerUp": "Hẹn giờ lên",
   "@timerUp": {
     "description": "Default notification title when a timer expires."
   },
-  "openNotification": "Open notification",
+  "openNotification": "Mở thông báo",
   "@openNotification": {
     "description": "Desktop notification action label."
   },
-  "timerChannelName": "Timer Channel",
+  "timerChannelName": "Kênh hẹn giờ",
   "@timerChannelName": {
     "description": "Android notification channel name for ongoing timers."
   },
-  "timerChannelDescription": "Ongoing progress of rest timers.",
+  "timerChannelDescription": "Tiến trình liên tục của bộ tính giờ nghỉ ngơi.",
   "@timerChannelDescription": {
     "description": "Android notification channel description for ongoing timers."
   },
-  "timerFinishedChannelName": "Timer Finished Channel",
+  "timerFinishedChannelName": "Kênh hẹn giờ đã kết thúc",
   "@timerFinishedChannelName": {
     "description": "Android notification channel name for completed timers."
   },
-  "timerFinishedChannelDescription": "Plays an alarm when a rest timer completes.",
+  "timerFinishedChannelDescription": "Phát báo thức khi hết giờ nghỉ.",
   "@timerFinishedChannelDescription": {
     "description": "Android notification channel description for completed timers."
   },
-  "timerFinished": "Timer finished",
+  "timerFinished": "Đã hết giờ",
   "@timerFinished": {
     "description": "Android notification title for a completed timer."
   },
-  "batteryOptimizationRequestUnavailable": "Requests to ignore battery optimizations are disabled on your device.",
+  "batteryOptimizationRequestUnavailable": "Yêu cầu bỏ qua tối ưu hóa pin bị tắt trên thiết bị của bạn.",
   "@batteryOptimizationRequestUnavailable": {
     "description": "Android toast shown when the system battery optimization exemption screen is unavailable."
   },
-  "exactAlarmRequestUnavailable": "Request for SCHEDULE_EXACT_ALARM rejected on your device",
+  "exactAlarmRequestUnavailable": "Yêu cầu SCHEDULE_EXACT_ALARM bị từ chối trên thiết bị của bạn",
   "@exactAlarmRequestUnavailable": {
     "description": "Android toast shown when the exact alarm permission screen is unavailable."
   },
-  "databaseMigrationFailureDescription": "Something went wrong when creating/upgrading your database. Usually this can be fixed by deleting & re-creating your records.",
+  "databaseMigrationFailureDescription": "Đã xảy ra lỗi khi tạo/nâng cấp cơ sở dữ liệu của bạn. Thông thường điều này có thể được khắc phục bằng cách xóa và tạo lại hồ sơ của bạn.",
   "@databaseMigrationFailureDescription": {
     "description": "Explanation shown when a database migration fails."
   },
-  "curveSmoothness": "Curve smoothness",
+  "curveSmoothness": "Độ mịn của đường cong",
   "@curveSmoothness": {
     "description": "Label for graph curve smoothness."
   },
-  "actionBack": "Back",
+  "actionBack": "Mặt sau",
   "@actionBack": {
     "description": "Generic back-navigation tooltip."
   },
-  "atLeastOneTab": "You need at least one tab",
+  "atLeastOneTab": "Bạn cần ít nhất một tab",
   "@atLeastOneTab": {
     "description": "Toast shown when trying to disable the final visible tab."
   },
-  "invalidTabSettings": "Invalid tab settings.",
+  "invalidTabSettings": "Cài đặt tab không hợp lệ.",
   "@invalidTabSettings": {
     "description": "Error shown when a saved tab identifier is unsupported."
   },
-  "noSettingsFound": "No settings found",
+  "noSettingsFound": "Không tìm thấy cài đặt nào",
   "@noSettingsFound": {
     "description": "Empty state when settings search has no matches."
   },
-  "nothingMatchesSearch": "Nothing matches “{query}”.",
+  "nothingMatchesSearch": "Không có gì khớp với “{query}”.",
   "@nothingMatchesSearch": {
     "description": "Settings-search empty-state detail.",
     "placeholders": {
@@ -1434,59 +1434,59 @@
       }
     }
   },
-  "appearanceDescription": "Theme, colors and interface styling",
+  "appearanceDescription": "Chủ đề, màu sắc và kiểu dáng giao diện",
   "@appearanceDescription": {
     "description": "Description of appearance settings."
   },
-  "dataManagementDescription": "Import, export and manage your workout data",
+  "dataManagementDescription": "Nhập, xuất và quản lý dữ liệu tập luyện của bạn",
   "@dataManagementDescription": {
     "description": "Description of data-management settings."
   },
-  "formatsDescription": "Dates, numbers and measurement formatting",
+  "formatsDescription": "Ngày, số và định dạng đo lường",
   "@formatsDescription": {
     "description": "Description of format settings."
   },
-  "plansSettingsDescription": "Defaults and behaviour for workout plans",
+  "plansSettingsDescription": "Mặc định và hành vi cho kế hoạch tập luyện",
   "@plansSettingsDescription": {
     "description": "Description of plan settings."
   },
-  "tabsDescription": "Choose and arrange primary navigation tabs",
+  "tabsDescription": "Chọn và sắp xếp các tab điều hướng chính",
   "@tabsDescription": {
     "description": "Description of tab settings."
   },
-  "timersDescription": "Rest timer duration, sound and behaviour",
+  "timersDescription": "Thời lượng, âm thanh và hành vi của bộ hẹn giờ nghỉ ngơi",
   "@timersDescription": {
     "description": "Description of timer settings."
   },
-  "workoutsDescription": "Exercise tracking and workout preferences",
+  "workoutsDescription": "Theo dõi bài tập và sở thích tập luyện",
   "@workoutsDescription": {
     "description": "Description of workout settings."
   },
-  "completeSetForChart": "Complete a set for this exercise to build its chart.",
+  "completeSetForChart": "Hoàn thành một hiệp cho bài tập này để tạo biểu đồ.",
   "@completeSetForChart": {
     "description": "Empty graph guidance for a specific exercise."
   },
-  "dateRange": "Date range",
+  "dateRange": "Phạm vi ngày",
   "@dateRange": {
     "description": "Label for graph date-range controls."
   },
-  "stopDate": "Stop date",
+  "stopDate": "Ngày dừng",
   "@stopDate": {
     "description": "Label for the end of a graph date range."
   },
-  "dataPoints": "Data points",
+  "dataPoints": "Điểm dữ liệu",
   "@dataPoints": {
     "description": "Label for the number of graph data points."
   },
-  "completeSetsForProgress": "Complete some sets to build your progress chart.",
+  "completeSetsForProgress": "Hoàn thành một vài hiệp để tạo biểu đồ tiến trình.",
   "@completeSetsForProgress": {
     "description": "Empty guidance for the global progress graph."
   },
-  "relativeStrength": "Relative strength",
+  "relativeStrength": "Sức mạnh tương đối",
   "@relativeStrength": {
     "description": "Strength graph metric relative to bodyweight."
   },
-  "selectedCount": "{count, plural, =1{1 selected} other{{count} selected}}",
+  "selectedCount": "{count, plural, =1{Đã chọn 1} other{Đã chọn {count}}}",
   "@selectedCount": {
     "description": "Number of currently selected records.",
     "placeholders": {
@@ -1495,15 +1495,15 @@
       }
     }
   },
-  "completeSetsForHistory": "Complete some sets to see this exercise history here.",
+  "completeSetsForHistory": "Hoàn thành một vài hiệp để xem lịch sử bài tập tại đây.",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
   },
-  "completeSetForFirstGraph": "Complete a set to create your first exercise graph.",
+  "completeSetForFirstGraph": "Hoàn thành một hiệp để tạo biểu đồ bài tập đầu tiên.",
   "@completeSetForFirstGraph": {
     "description": "Empty guidance when no exercise graphs exist."
   },
-  "nothingMatchesGraphSearch": "Nothing matches “{query}”. You can create it as a new exercise.",
+  "nothingMatchesGraphSearch": "Không có gì khớp với “{query}”. Bạn có thể tạo nó như một bài tập mới.",
   "@nothingMatchesGraphSearch": {
     "description": "Empty graph search guidance.",
     "placeholders": {
@@ -1512,7 +1512,7 @@
       }
     }
   },
-  "addNamed": "Add “{name}”",
+  "addNamed": "Thêm “{name}”",
   "@addNamed": {
     "description": "Action for adding an item with a typed name.",
     "placeholders": {
@@ -1521,7 +1521,7 @@
       }
     }
   },
-  "deleteGraphRecordsConfirmation": "This will delete {count} records. Are you sure?",
+  "deleteGraphRecordsConfirmation": "Thao tác này sẽ xóa bản ghi {count}. Bạn có chắc không?",
   "@deleteGraphRecordsConfirmation": {
     "description": "Confirmation for deleting records associated with selected graphs.",
     "placeholders": {
@@ -1530,7 +1530,7 @@
       }
     }
   },
-  "shareWorkout": "I just did {summary}",
+  "shareWorkout": "Tôi vừa làm {summary}",
   "@shareWorkout": {
     "description": "Text shared from the workout graph screen.",
     "placeholders": {
@@ -1539,11 +1539,11 @@
       }
     }
   },
-  "updateConflict": "Update conflict",
+  "updateConflict": "Cập nhật xung đột",
   "@updateConflict": {
     "description": "Title for an exercise rename conflict dialog."
   },
-  "updateConflictDescription": "Your new name exists already for {count} records. Are you sure?",
+  "updateConflictDescription": "Tên mới của bạn đã tồn tại trong bản ghi {count}. Bạn có chắc không?",
   "@updateConflictDescription": {
     "description": "Explanation for an exercise rename conflict.",
     "placeholders": {
@@ -1552,11 +1552,11 @@
       }
     }
   },
-  "unitsConflict": "Units conflict",
+  "unitsConflict": "Xung đột đơn vị",
   "@unitsConflict": {
     "description": "Title for an exercise unit conversion conflict dialog."
   },
-  "unitsConflictDescription": "Not all of your records have the same unit. This will convert all units to {unit}. Are you sure?",
+  "unitsConflictDescription": "Không phải tất cả hồ sơ của bạn đều có cùng đơn vị. Điều này sẽ chuyển đổi tất cả các đơn vị thành {unit}. Bạn có chắc không?",
   "@unitsConflictDescription": {
     "description": "Explanation before converting mixed exercise units.",
     "placeholders": {
@@ -1565,43 +1565,43 @@
       }
     }
   },
-  "durationLabel": "Duration",
+  "durationLabel": "Khoảng thời gian",
   "@durationLabel": {
     "description": "Generic duration label."
   },
-  "inclineLabel": "Incline",
+  "inclineLabel": "Nghiêng",
   "@inclineLabel": {
     "description": "Generic incline label."
   },
-  "paceDistanceTime": "Pace (distance / time)",
+  "paceDistanceTime": "Tốc độ (quãng đường/thời gian)",
   "@paceDistanceTime": {
     "description": "Cardio graph metric for distance divided by time."
   },
-  "adjustedPace": "Adjusted pace",
+  "adjustedPace": "Nhịp độ điều chỉnh",
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "One rep max estimates are less accurate for sets of 10+ reps",
+  "oneRepMaxAccuracyWarning": "Ước tính 1RM kém chính xác hơn với các hiệp từ 10 lần lặp trở lên",
   "@oneRepMaxAccuracyWarning": {
     "description": "Warning about one-repetition maximum estimate accuracy."
   },
-  "addPlan": "Add plan",
+  "addPlan": "Thêm kế hoạch",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
   },
-  "planDetails": "Plan details",
+  "planDetails": "Chi tiết kế hoạch",
   "@planDetails": {
     "description": "Heading for editable workout plan details."
   },
-  "exercisesLabel": "Exercises",
+  "exercisesLabel": "Bài tập",
   "@exercisesLabel": {
     "description": "Generic heading for exercises."
   },
-  "addExerciseToPlan": "Add an exercise to this plan.",
+  "addExerciseToPlan": "Thêm một bài tập vào kế hoạch này.",
   "@addExerciseToPlan": {
     "description": "Empty-state guidance for a workout plan with no exercises."
   },
-  "nothingMatchesExerciseSearch": "Nothing matches “{query}”. You can add it as a new exercise.",
+  "nothingMatchesExerciseSearch": "Không có gì khớp với “{query}”. Bạn có thể thêm nó như một bài tập mới.",
   "@nothingMatchesExerciseSearch": {
     "description": "Empty-state guidance when a plan exercise search has no matches.",
     "placeholders": {
@@ -1610,119 +1610,119 @@
       }
     }
   },
-  "selectDays": "Select days",
+  "selectDays": "Chọn ngày",
   "@selectDays": {
     "description": "Validation message requiring at least one workout plan day."
   },
-  "selectExercises": "Select exercises",
+  "selectExercises": "Chọn bài tập",
   "@selectExercises": {
     "description": "Validation message requiring at least one workout plan exercise."
   },
-  "todayLabel": "Today",
+  "todayLabel": "Hôm nay",
   "@todayLabel": {
     "description": "Label indicating the current day."
   },
-  "setDetails": "Set details",
+  "setDetails": "Chi tiết hiệp",
   "@setDetails": {
     "description": "Heading for workout set entry fields."
   },
-  "themeLabel": "Theme",
+  "themeLabel": "chủ đề",
   "@themeLabel": {
     "description": "Label for choosing the application theme."
   },
-  "pureBlackAmoledDescription": "Use pure black colors for AMOLED displays",
+  "pureBlackAmoledDescription": "Sử dụng màu đen tuyền cho màn hình AMOLED",
   "@pureBlackAmoledDescription": {
     "description": "Description of the AMOLED pure-black appearance option."
   },
-  "systemColorScheme": "System color scheme",
+  "systemColorScheme": "Bảng màu hệ thống",
   "@systemColorScheme": {
     "description": "Appearance setting for using system colors."
   },
-  "systemColorSchemeDescription": "Use the primary color of your device for the app",
+  "systemColorSchemeDescription": "Sử dụng màu chính của thiết bị cho ứng dụng",
   "@systemColorSchemeDescription": {
     "description": "Description of the system color scheme setting."
   },
-  "showImagesDescription": "Pick/display images on the history page",
+  "showImagesDescription": "Chọn/hiển thị hình ảnh trên trang lịch sử",
   "@showImagesDescription": {
     "description": "Description of the setting that shows workout images."
   },
-  "showGlobalProgress": "Show global progress",
+  "showGlobalProgress": "Hiển thị tiến bộ toàn cầu",
   "@showGlobalProgress": {
     "description": "Setting that controls the global progress graph."
   },
-  "showGlobalProgressDescription": "Add a graph entry charting your progress by category",
+  "showGlobalProgressDescription": "Thêm mục nhập biểu đồ biểu đồ tiến trình của bạn theo danh mục",
   "@showGlobalProgressDescription": {
     "description": "Description of the global progress setting."
   },
-  "peekGraphDescription": "Show the first line graph on graphs page",
+  "peekGraphDescription": "Hiển thị biểu đồ dòng đầu tiên trên trang biểu đồ",
   "@peekGraphDescription": {
     "description": "Description of the graph preview setting."
   },
-  "inputStyleDescription": "Visual style of text input fields",
+  "inputStyleDescription": "Kiểu trực quan của trường nhập văn bản",
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify will automatically back up your data and images to the selected folder each day.",
+  "automaticBackupNotificationBody": "Flexify sẽ tự động sao lưu dữ liệu và hình ảnh của bạn vào thư mục đã chọn mỗi ngày.",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
-  "backupSettingsChannel": "Backup settings",
+  "backupSettingsChannel": "Cài đặt sao lưu",
   "@backupSettingsChannel": {
     "description": "Notification channel name for backup settings."
   },
-  "backupSettingsChannelDescription": "Notifications explaining automatic backups",
+  "backupSettingsChannelDescription": "Thông báo giải thích sao lưu tự động",
   "@backupSettingsChannelDescription": {
     "description": "Notification channel description for automatic backups."
   },
-  "backupChannelName": "Backup channel",
+  "backupChannelName": "Kênh dự phòng",
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Automatic backups of Flexify data and images",
+  "backupChannelDescription": "Tự động sao lưu dữ liệu và hình ảnh Flexify",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },
-  "backupCompletedTitle": "Backed up data and images",
+  "backupCompletedTitle": "Sao lưu dữ liệu và hình ảnh",
   "@backupCompletedTitle": {
     "description": "Android notification title shown after an automatic backup succeeds."
   },
-  "backupFailurePathNotSet": "Backup failed: backup path not set. Automatic backups disabled.",
+  "backupFailurePathNotSet": "Sao lưu không thành công: đường dẫn sao lưu chưa được đặt. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailurePathNotSet": {
     "description": "Android toast shown when an automatic backup has no destination path."
   },
-  "backupFailureDirectoryUnavailable": "Backup failed: could not access backup directory. Automatic backups disabled.",
+  "backupFailureDirectoryUnavailable": "Sao lưu không thành công: không thể truy cập thư mục sao lưu. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailureDirectoryUnavailable": {
     "description": "Android toast shown when the automatic backup directory cannot be accessed."
   },
-  "backupFailureCreateFile": "Backup failed: could not create backup file. Automatic backups disabled.",
+  "backupFailureCreateFile": "Sao lưu không thành công: không thể tạo tập tin sao lưu. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailureCreateFile": {
     "description": "Android toast shown when an automatic backup archive cannot be created."
   },
-  "backupFailureAppFilesUnavailable": "Backup failed: could not access application files directory. Automatic backups disabled.",
+  "backupFailureAppFilesUnavailable": "Sao lưu không thành công: không thể truy cập thư mục tệp ứng dụng. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailureAppFilesUnavailable": {
     "description": "Android toast shown when app files are unavailable during automatic backup."
   },
-  "backupFailureDatabaseMissing": "Backup failed: database file not found. Automatic backups disabled.",
+  "backupFailureDatabaseMissing": "Sao lưu không thành công: không tìm thấy tệp cơ sở dữ liệu. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailureDatabaseMissing": {
     "description": "Android toast shown when the database is missing during automatic backup."
   },
-  "backupFailureOutputUnavailable": "Backup failed: could not open output stream. Automatic backups disabled.",
+  "backupFailureOutputUnavailable": "Sao lưu không thành công: không thể mở luồng đầu ra. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailureOutputUnavailable": {
     "description": "Android toast shown when the automatic backup destination cannot be opened."
   },
-  "backupFailureUnknown": "Backup failed. Automatic backups disabled.",
+  "backupFailureUnknown": "Sao lưu không thành công. Sao lưu tự động bị vô hiệu hóa.",
   "@backupFailureUnknown": {
     "description": "Android toast shown for an unexpected automatic backup failure."
   },
-  "appPermissionsDescription": "Review access required by your enabled features",
+  "appPermissionsDescription": "Xem lại quyền truy cập mà các tính năng đã bật của bạn yêu cầu",
   "@appPermissionsDescription": {
     "description": "Description for the app permissions settings entry."
   },
-  "longDateFormatDescription": "Used where space is abundant",
+  "longDateFormatDescription": "Được sử dụng ở nơi có nhiều không gian",
   "@longDateFormatDescription": {
     "description": "Description of the long date-format setting."
   },
-  "shortDateFormat": "Short date format ({example})",
+  "shortDateFormat": "Định dạng ngày ngắn ({example})",
   "@shortDateFormat": {
     "description": "Label for short date formatting with an example.",
     "placeholders": {
@@ -1731,251 +1731,251 @@
       }
     }
   },
-  "shortDateFormatDescription": "For where space is cramped (Graph lines)",
+  "shortDateFormatDescription": "Dành cho nơi không gian chật hẹp (Đường biểu đồ)",
   "@shortDateFormatDescription": {
     "description": "Description of the short date-format setting."
   },
-  "warmupSetsDescription": "Warmup sets have no rest timers",
+  "warmupSetsDescription": "Các hiệp khởi động không có bộ hẹn giờ nghỉ",
   "@warmupSetsDescription": {
     "description": "Description of the default warmup sets setting."
   },
-  "setsPerExerciseDescription": "Default # of exercises in a plan",
+  "setsPerExerciseDescription": "Số lượng bài tập mặc định trong một kế hoạch",
   "@setsPerExerciseDescription": {
     "description": "Description of the default sets-per-exercise setting."
   },
-  "planTrailingDisplay": "Plan trailing display",
+  "planTrailingDisplay": "Hiển thị theo dõi kế hoạch",
   "@planTrailingDisplay": {
     "description": "Label for choosing information shown on the right side of plan rows."
   },
-  "planTrailingDisplayDescription": "Right side of list displays in Plans + Plan view",
+  "planTrailingDisplayDescription": "Phía bên phải của danh sách hiển thị trong chế độ xem Kế hoạch + Kế hoạch",
   "@planTrailingDisplayDescription": {
     "description": "Description of the plan trailing display setting."
   },
-  "restTimersDescription": "Alarm that goes off after completing a set",
+  "restTimersDescription": "Báo thức vang lên sau khi hoàn thành một hiệp",
   "@restTimersDescription": {
     "description": "Description of rest timers."
   },
-  "vibrateDescription": "Should rest timers vibrate?",
+  "vibrateDescription": "Có nên hẹn giờ nghỉ ngơi rung?",
   "@vibrateDescription": {
     "description": "Description of timer vibration."
   },
-  "enableSoundDescription": "Should rest timers play a sound?",
+  "enableSoundDescription": "Bộ hẹn giờ nghỉ ngơi có nên phát âm thanh không?",
   "@enableSoundDescription": {
     "description": "Description of timer sound."
   },
-  "keepScreenOnDescription": "Keep the screen on during rest timers",
+  "keepScreenOnDescription": "Giữ màn hình bật trong thời gian nghỉ ngơi",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
   },
-  "restDurationDescription": "How long before rest alarms go off?",
+  "restDurationDescription": "Bao lâu trước khi báo thức nghỉ ngơi vang lên?",
   "@restDurationDescription": {
     "description": "Description of the default rest duration."
   },
-  "globalDefault": "Global default",
+  "globalDefault": "Mặc định toàn cầu",
   "@globalDefault": {
     "description": "Label for a global default setting value."
   },
-  "alarmSoundDescription": "Music to play at the end of a rest timer",
+  "alarmSoundDescription": "Nhạc để phát khi kết thúc thời gian nghỉ ngơi",
   "@alarmSoundDescription": {
     "description": "Description of the timer alarm sound setting."
   },
-  "progressBarPosition": "Progress bar position",
+  "progressBarPosition": "Vị trí thanh tiến trình",
   "@progressBarPosition": {
     "description": "Label for choosing the rest timer progress bar position."
   },
-  "progressBarPositionDescription": "Where should the rest timers progress bar be placed?",
+  "progressBarPositionDescription": "Thanh tiến trình của bộ tính giờ nghỉ ngơi nên được đặt ở đâu?",
   "@progressBarPositionDescription": {
     "description": "Description of the rest timer progress bar position setting."
   },
-  "perExerciseRestTimes": "Per-exercise rest times",
+  "perExerciseRestTimes": "Thời gian nghỉ ngơi mỗi bài tập",
   "@perExerciseRestTimes": {
     "description": "Heading for exercise-specific rest timer durations."
   },
-  "perExerciseRestTimesDescription": "These exercises have custom rest durations",
+  "perExerciseRestTimesDescription": "Những bài tập này có thời gian nghỉ ngơi tùy chỉnh",
   "@perExerciseRestTimesDescription": {
     "description": "Description of exercise-specific rest timer durations."
   },
-  "audioFeaturesUnavailable": "Audio features are not available",
+  "audioFeaturesUnavailable": "Tính năng âm thanh không có sẵn",
   "@audioFeaturesUnavailable": {
     "description": "Message shown when timer audio features cannot be initialized."
   },
-  "groupHistoryDescription": "Combine history entries by day",
+  "groupHistoryDescription": "Tổng hợp các mục lịch sử theo ngày",
   "@groupHistoryDescription": {
     "description": "Description of history grouping."
   },
-  "showUnitsDescription": "Show km/mi,kg/lb for graphs/history/plans",
+  "showUnitsDescription": "Hiển thị km/mi,kg/lb cho biểu đồ/lịch sử/kế hoạch",
   "@showUnitsDescription": {
     "description": "Description of displaying measurement units."
   },
-  "showBodyWeightDescription": "Enable/disable tracking body weight",
+  "showBodyWeightDescription": "Bật/tắt tính năng theo dõi trọng lượng cơ thể",
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "Enable/disable workout categories",
+  "showCategoriesDescription": "Bật/tắt danh mục tập luyện",
   "@showCategoriesDescription": {
     "description": "Description of workout categories."
   },
-  "showNotesDescription": "Record details of your lift in a text area",
+  "showNotesDescription": "Ghi lại chi tiết về thang máy của bạn trong vùng văn bản",
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
-  "positiveNotificationsDescription": "Write nice messages when a new record is hit",
+  "positiveNotificationsDescription": "Viết tin nhắn hay khi đạt kỷ lục mới",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."
   },
-  "positiveMessagesEnabled": "Positive messages appear now like this!",
+  "positiveMessagesEnabled": "Những thông điệp tích cực bây giờ xuất hiện như thế này!",
   "@positiveMessagesEnabled": {
     "description": "Example toast shown when positive messages are enabled."
   },
-  "recordEncouragement01": "Great work! You are incredible.",
+  "recordEncouragement01": "Công việc tuyệt vời! Bạn thật tuyệt vời.",
   "@recordEncouragement01": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement02": "Nice king! Your progress is inspiring.",
+  "recordEncouragement02": "Vua tốt bụng! Sự tiến bộ của bạn thật đáng khích lệ.",
   "@recordEncouragement02": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement03": "I kneel...",
+  "recordEncouragement03": "Tôi quỳ...",
   "@recordEncouragement03": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement04": "What's that? A new record!",
+  "recordEncouragement04": "Đó là cái gì vậy? Một kỷ lục mới!",
   "@recordEncouragement04": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement05": "Incredible stuff! You are an inspiration.",
+  "recordEncouragement05": "Những thứ đáng kinh ngạc! Bạn là một nguồn cảm hứng.",
   "@recordEncouragement05": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement06": "Wow. Nice.",
+  "recordEncouragement06": "Ồ. Đẹp.",
   "@recordEncouragement06": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement07": "Getting strong much?",
+  "recordEncouragement07": "Trở nên mạnh mẽ nhiều?",
   "@recordEncouragement07": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement08": "Yeah. You're a pretty big guy.",
+  "recordEncouragement08": "Vâng. Bạn là một chàng trai khá lớn.",
   "@recordEncouragement08": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement09": "Amazing. Incredible.",
+  "recordEncouragement09": "Tuyệt vời. Đáng kinh ngạc.",
   "@recordEncouragement09": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement10": "Arnie would be proud.",
+  "recordEncouragement10": "Arnie sẽ tự hào.",
   "@recordEncouragement10": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement11": "Ronnie C looks upon you with glee.",
+  "recordEncouragement11": "Ronnie C nhìn bạn với niềm hân hoan.",
   "@recordEncouragement11": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement12": "YEAH! LIGHTWEIGHT BABY!!!!!!!",
+  "recordEncouragement12": "VÂNG! TRỌNG LƯỢNG NHẸ BÉ!!!!!!",
   "@recordEncouragement12": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement13": "Is that a new record? I knew you could do it.",
+  "recordEncouragement13": "Đó có phải là một kỷ lục mới? Tôi biết bạn có thể làm được điều đó.",
   "@recordEncouragement13": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement14": "Great work! I am proud of you.",
+  "recordEncouragement14": "Công việc tuyệt vời! Tôi tự hào về bạn.",
   "@recordEncouragement14": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement15": "Yeah baby! Light weight!",
+  "recordEncouragement15": "Ừ em yêu! Trọng lượng nhẹ!",
   "@recordEncouragement15": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement16": "Keep it up! Great progress.",
+  "recordEncouragement16": "Giữ nó lên! Tiến bộ lớn.",
   "@recordEncouragement16": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement17": "You are doing so well.",
+  "recordEncouragement17": "Bạn đang làm rất tốt.",
   "@recordEncouragement17": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement18": "That's my boy!",
+  "recordEncouragement18": "Đó là chàng trai của tôi!",
   "@recordEncouragement18": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement19": "Keep it up.",
+  "recordEncouragement19": "Giữ nó lên.",
   "@recordEncouragement19": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement20": "You are getting very strong.",
+  "recordEncouragement20": "Bạn đang trở nên rất mạnh mẽ.",
   "@recordEncouragement20": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement21": "Powerful.",
+  "recordEncouragement21": "Mạnh mẽ.",
   "@recordEncouragement21": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement22": "Powerful stuff!",
+  "recordEncouragement22": "Thứ mạnh mẽ!",
   "@recordEncouragement22": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement23": "I am proud of you.",
+  "recordEncouragement23": "Tôi tự hào về bạn.",
   "@recordEncouragement23": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement24": "Keep up the great work.",
+  "recordEncouragement24": "Hãy tiếp tục công việc tuyệt vời này.",
   "@recordEncouragement24": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement25": "Stand tall! You just made a new record.",
+  "recordEncouragement25": "Đứng cao! Bạn vừa lập một kỷ lục mới.",
   "@recordEncouragement25": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement26": "New record! You just pushed further than ever!",
+  "recordEncouragement26": "Kỷ lục mới! Bạn vừa đẩy xa hơn bao giờ hết!",
   "@recordEncouragement26": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement27": "Yep! That's a record.",
+  "recordEncouragement27": "Chuẩn rồi! Đó là một kỷ lục.",
   "@recordEncouragement27": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement28": "Wow! New record!",
+  "recordEncouragement28": "Ồ! Kỷ lục mới!",
   "@recordEncouragement28": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement29": "Very good stuff.",
+  "recordEncouragement29": "Thứ rất tốt.",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
   },
-  "repEstimationDescription": "Try to predict the # of reps you just did",
+  "repEstimationDescription": "Hãy thử dự đoán số lần bạn vừa thực hiện",
   "@repEstimationDescription": {
     "description": "Description of repetition estimation."
   },
-  "durationEstimationDescription": "Try predict the duration of your cardio",
+  "durationEstimationDescription": "Hãy thử dự đoán thời gian tập tim mạch của bạn",
   "@durationEstimationDescription": {
     "description": "Description of cardio duration estimation."
   },
-  "showGraphXAxisToggle": "Show graph X axis toggle",
+  "showGraphXAxisToggle": "Hiển thị chuyển đổi trục X của biểu đồ",
   "@showGraphXAxisToggle": {
     "description": "Setting for showing the graph X-axis mode toggle."
   },
-  "showGraphXAxisToggleDescription": "Show time-based X axis toggle on graphs",
+  "showGraphXAxisToggleDescription": "Hiển thị chuyển đổi trục X dựa trên thời gian trên biểu đồ",
   "@showGraphXAxisToggleDescription": {
     "description": "Description of the graph X-axis toggle setting."
   },
-  "showGraphLimitDescription": "Show the limit slider on graphs",
+  "showGraphLimitDescription": "Hiển thị thanh trượt giới hạn trên biểu đồ",
   "@showGraphLimitDescription": {
     "description": "Description of the graph limit setting."
   },
-  "defaultTimeBasedXAxis": "Default time-based X axis",
+  "defaultTimeBasedXAxis": "Trục X dựa trên thời gian mặc định",
   "@defaultTimeBasedXAxis": {
     "description": "Setting for using time-based graph X axes by default."
   },
-  "defaultTimeBasedXAxisDescription": "Use time-based X axis by default on graphs",
+  "defaultTimeBasedXAxisDescription": "Sử dụng trục X dựa trên thời gian theo mặc định trên biểu đồ",
   "@defaultTimeBasedXAxisDescription": {
     "description": "Description of the default time-based X-axis setting."
   },
-  "createFirstTrainingPlan": "Create your first training plan to get started.",
+  "createFirstTrainingPlan": "Tạo kế hoạch tập luyện đầu tiên của bạn để bắt đầu.",
   "@createFirstTrainingPlan": {
     "description": "Empty-state guidance when no workout plans exist."
   },
-  "nothingMatchesPlanSearch": "Nothing matches “{query}”. You can create it as a new plan.",
+  "nothingMatchesPlanSearch": "Không có gì khớp với “{query}”. Bạn có thể tạo nó như một kế hoạch mới.",
   "@nothingMatchesPlanSearch": {
     "description": "Empty-state guidance when a plan search has no matches.",
     "placeholders": {
@@ -1984,11 +1984,11 @@
       }
     }
   },
-  "createPlan": "Create plan",
+  "createPlan": "Tạo kế hoạch",
   "@createPlan": {
     "description": "Action for creating a workout plan."
   },
-  "createNamedPlan": "Create “{name}”",
+  "createNamedPlan": "Tạo “{name}”",
   "@createNamedPlan": {
     "description": "Action for creating a plan with a typed name.",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "setNumber": "Set {number}",
+  "setNumber": "Hiệp {number}",
   "@setNumber": {
     "description": "Label for a numbered workout set.",
     "placeholders": {
