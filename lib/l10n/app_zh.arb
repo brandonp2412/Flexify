@@ -42,6 +42,10 @@
   "@languageNameUrdu": {
     "description": "Stable native display name for the Urdu locale."
   },
+  "languageNamePersian": "فارسی",
+  "@languageNamePersian": {
+    "description": "Stable native display name for the Persian locale."
+  },
   "navHistory": "历史",
   "navPlans": "计划",
   "navGraphs": "图表",

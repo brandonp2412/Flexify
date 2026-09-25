@@ -62,6 +62,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameVietnamese',
   'languageNameBengali',
   'languageNameUrdu',
+  'languageNamePersian',
   'stoneUnitShort',
 };
 
@@ -151,6 +152,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
   'vi': {'stoneUnit', 'examplePlanExercises'},
   'bn': {},
   'ur': {},
+  'fa': {},
   'zh': {},
   'zh_CN': {},
   'zh_TW': {},
@@ -174,6 +176,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'vi': {'APP_NAME'},
   'bn': {'APP_NAME'},
   'ur': {'APP_NAME'},
+  'fa': {'APP_NAME'},
   'zh-Hans': {},
   'zh-Hant': {},
 };
@@ -229,7 +232,7 @@ const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
 // These locales currently ship in-app; localized store metadata will follow
 // in separate translation slices.
-const _appOnlyLocales = <String>{'ar', 'id', 'vi', 'bn', 'ur'};
+const _appOnlyLocales = <String>{'ar', 'id', 'vi', 'bn', 'ur', 'fa'};
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
 
@@ -785,6 +788,7 @@ void main() {
       'vi',
       'bn',
       'ur',
+      'fa',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');
 
