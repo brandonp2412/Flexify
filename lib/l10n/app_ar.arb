@@ -77,6 +77,10 @@
   "@languageNameArabic": {
     "description": "Stable native display name for the Arabic locale."
   },
+  "languageNameIndonesian": "Bahasa Indonesia",
+  "@languageNameIndonesian": {
+    "description": "Stable native display name for the Indonesian locale."
+  },
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
