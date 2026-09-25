@@ -520,5 +520,6 @@
   "1790159359": "• chore: Turkse Play-schermafbeeldingen toevoegen\n• chore: metadata van de nieuwste release lokaliseren\n• feat: vertalingen voor alle ondersteunde talen voltooien\n• feat: grafiekbediening op desktop beschikbaar maken\n• feat: volledige releasegeschiedenis lokaliseren\n• feat: millisecondenweergave van timer verfijnen\n• fix: geschaalde timertekst binnen de cirkel houden\n• fix: afkappen aan randen van lijngrafiek verzachten\n• test: controles op volledige lokalisatie aanscherpen\n• test: toewijzingen van winkeltalen gesynchroniseerd houden",
   "1790261378": "• README.md bijwerken\n• chore(l10n): vertalingen van de huidige release synchroniseren\n• chore: Turkse Play-schermafbeeldingen toevoegen\n• feat(l10n): Traditioneel-Chinese vertalingen toevoegen\n• feat(l10n): huidige vertaaldekking voltooien (#353)\n• feat: categoriebeheer toevoegen\n• feat: vertalingen voor alle ondersteunde talen voltooien\n• feat: volledige releasegeschiedenis lokaliseren\n• fix: ingebouwde Flutter DevTools herstellen\n• fix: Flutter-debugging in VS Code stabiliseren",
   "1790283564": "• fix(l10n): huidige releasegeschiedenis synchroniseren",
-  "1790291811": "• Russische vertalingen toegevoegd\n• Releasegeschiedenis voor 2.2.22 gesynchroniseerd"
+  "1790291811": "• Russische vertalingen toegevoegd\n• Releasegeschiedenis voor 2.2.22 gesynchroniseerd",
+  "1790306111": "• Hindi-vertalingen toegevoegd"
 }
