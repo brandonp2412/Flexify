@@ -1,0 +1,4 @@
+• संपादित ग्राफ़ नए नाम फ़ील्ड के ऊपर अंतरिक्ष जोड़ें
+• Regenerate pubspec.lock
+• edit set page में errant रिक्ति निकालें
+• docs: align README download Badges

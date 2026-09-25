@@ -519,5 +519,6 @@
   "1790132278": "• fix: imporre una sola app Flexify e una sola chiave di firma",
   "1790159359": "• chore: aggiungere screenshot Play in turco\n• chore: localizzare i metadati dell'ultima versione\n• feat: completare le traduzioni di tutte le lingue supportate\n• feat: rendere disponibili i controlli dei grafici su desktop\n• feat: localizzare l'intera cronologia delle versioni\n• feat: perfezionare la visualizzazione dei millisecondi del timer\n• fix: mantenere il testo ridimensionato del timer all'interno del cerchio\n• fix: attenuare il ritaglio ai bordi del grafico a linee\n• test: rafforzare i controlli di completezza della localizzazione\n• test: mantenere sincronizzate le mappature delle lingue degli store",
   "1790261378": "• Aggiornare README.md\n• chore(l10n): sincronizzare le traduzioni della release corrente\n• chore: aggiungere screenshot Play in turco\n• feat(l10n): aggiungere le traduzioni in cinese tradizionale\n• feat(l10n): completare la copertura attuale delle traduzioni (#353)\n• feat: aggiungere la gestione delle categorie\n• feat: completare le traduzioni di tutte le lingue supportate\n• feat: localizzare l'intera cronologia delle versioni\n• fix: ripristinare Flutter DevTools integrato\n• fix: stabilizzare il debug di Flutter in VS Code",
-  "1790283564": "• fix(l10n): sincronizzare la cronologia della versione corrente"
+  "1790283564": "• fix(l10n): sincronizzare la cronologia della versione corrente",
+  "1790291811": "• Aggiunte le traduzioni in russo\n• Sincronizzata la cronologia della versione 2.2.22"
 }

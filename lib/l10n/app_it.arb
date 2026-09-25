@@ -18,6 +18,10 @@
   "languageNameTraditionalChinese": "繁體中文",
   "languageNameTurkish": "Türkçe",
   "languageNameRussian": "Русский",
+  "languageNameHindi": "हिन्दी",
+  "@languageNameHindi": {
+    "description": "Stable native display name for the Hindi locale."
+  },
   "navHistory": "Cronologia",
   "navPlans": "Schede",
   "navGraphs": "Grafici",

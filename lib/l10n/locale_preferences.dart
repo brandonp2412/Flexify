@@ -21,6 +21,7 @@ const selectableLocales = <Locale>[
   Locale('zh', 'TW'),
   Locale('tr'),
   Locale('ru'),
+  Locale('hi'),
 ];
 
 /// Returns the canonical identifier persisted for a supported [locale].
@@ -62,6 +63,7 @@ String localeDisplayName(AppLocalizations l10n, Locale locale) {
     'zh-TW' => l10n.languageNameTraditionalChinese,
     'tr' => l10n.languageNameTurkish,
     'ru' => l10n.languageNameRussian,
+    'hi' => l10n.languageNameHindi,
     _ => locale.toLanguageTag(),
   };
 }
