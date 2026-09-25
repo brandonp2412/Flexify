@@ -30,6 +30,10 @@
   "@languageNameIndonesian": {
     "description": "Stable native display name for the Indonesian locale."
   },
+  "languageNameVietnamese": "Tiếng Việt",
+  "@languageNameVietnamese": {
+    "description": "Stable native display name for the Vietnamese locale."
+  },
   "navHistory": "Geschiedenis",
   "navPlans": "Schema's",
   "navGraphs": "Grafieken",

@@ -24,6 +24,7 @@ const selectableLocales = <Locale>[
   Locale('hi'),
   Locale('ar'),
   Locale('id'),
+  Locale('vi'),
 ];
 
 /// Returns the canonical identifier persisted for a supported [locale].
@@ -68,6 +69,7 @@ String localeDisplayName(AppLocalizations l10n, Locale locale) {
     'hi' => l10n.languageNameHindi,
     'ar' => l10n.languageNameArabic,
     'id' => l10n.languageNameIndonesian,
+    'vi' => l10n.languageNameVietnamese,
     _ => locale.toLanguageTag(),
   };
 }

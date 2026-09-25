@@ -521,5 +521,6 @@
   "1790261378": "• README.md bijwerken\n• chore(l10n): vertalingen van de huidige release synchroniseren\n• chore: Turkse Play-schermafbeeldingen toevoegen\n• feat(l10n): Traditioneel-Chinese vertalingen toevoegen\n• feat(l10n): huidige vertaaldekking voltooien (#353)\n• feat: categoriebeheer toevoegen\n• feat: vertalingen voor alle ondersteunde talen voltooien\n• feat: volledige releasegeschiedenis lokaliseren\n• fix: ingebouwde Flutter DevTools herstellen\n• fix: Flutter-debugging in VS Code stabiliseren",
   "1790283564": "• fix(l10n): huidige releasegeschiedenis synchroniseren",
   "1790291811": "• Russische vertalingen toegevoegd\n• Releasegeschiedenis voor 2.2.22 gesynchroniseerd",
-  "1790306111": "• feat(l10n): Hindi-vertalingen toevoegen"
+  "1790306111": "• feat(l10n): Hindi-vertalingen toevoegen",
+  "1790335192": "• feat(l10n): Arabische vertalingen toevoegen\n• feat(l10n): Indonesische vertalingen toevoegen"
 }

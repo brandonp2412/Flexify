@@ -521,5 +521,6 @@
   "1790261378": "• README.md dosyasını güncelle\n• chore(l10n): mevcut sürüm çevirilerini senkronize et\n• chore: Türkçe Play ekran görüntüleri ekle\n• feat(l10n): Geleneksel Çince çevirileri ekle\n• feat(l10n): mevcut çeviri kapsamını tamamla (#353)\n• feat: kategori yönetimi ekle\n• feat: desteklenen tüm yerel ayar çevirilerini tamamla\n• feat: tüm sürüm geçmişini yerelleştir\n• fix: gömülü Flutter DevTools'u geri yükle\n• fix: VS Code'da Flutter hata ayıklamasını kararlı hale getir",
   "1790283564": "• fix(l10n): mevcut sürüm geçmişini eşitle",
   "1790291811": "• Rusça çeviriler eklendi\n• 2.2.22 sürüm geçmişi eşitlendi",
-  "1790306111": "• feat(l10n): Hintçe çeviriler ekle"
+  "1790306111": "• feat(l10n): Hintçe çeviriler ekle",
+  "1790335192": "• feat(l10n): Arapça çevirileri ekle\n• feat(l10n): Endonezce çevirileri ekle"
 }

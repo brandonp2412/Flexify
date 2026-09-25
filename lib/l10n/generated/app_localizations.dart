@@ -20,6 +20,7 @@ import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_tr.dart';
+import 'app_localizations_vi.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -124,6 +125,7 @@ abstract class AppLocalizations {
     Locale('pt', 'BR'),
     Locale('ru'),
     Locale('tr'),
+    Locale('vi'),
     Locale('zh'),
     Locale('zh', 'CN'),
     Locale('zh', 'TW'),
@@ -254,6 +256,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bahasa Indonesia'**
   String get languageNameIndonesian;
+
+  /// Stable native display name for the Vietnamese locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiếng Việt'**
+  String get languageNameVietnamese;
 
   /// Navigation label for workout history.
   ///
@@ -2850,6 +2858,7 @@ class _AppLocalizationsDelegate
     'pt',
     'ru',
     'tr',
+    'vi',
     'zh',
   ].contains(locale.languageCode);
 
@@ -2912,6 +2921,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsRu();
     case 'tr':
       return AppLocalizationsTr();
+    case 'vi':
+      return AppLocalizationsVi();
     case 'zh':
       return AppLocalizationsZh();
   }
