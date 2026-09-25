@@ -93,6 +93,10 @@
   "@languageNameUrdu": {
     "description": "Stable native display name for the Urdu locale."
   },
+  "languageNamePersian": "فارسی",
+  "@languageNamePersian": {
+    "description": "Stable native display name for the Persian locale."
+  },
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },

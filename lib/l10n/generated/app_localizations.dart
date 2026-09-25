@@ -10,6 +10,7 @@ import 'app_localizations_bn.dart';
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fa.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_hi.dart';
 import 'app_localizations_id.dart';
@@ -116,6 +117,7 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('en'),
     Locale('es'),
+    Locale('fa'),
     Locale('fr'),
     Locale('hi'),
     Locale('id'),
@@ -278,6 +280,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'اردو'**
   String get languageNameUrdu;
+
+  /// Stable native display name for the Persian locale.
+  ///
+  /// In en, this message translates to:
+  /// **'فارسی'**
+  String get languageNamePersian;
 
   /// Navigation label for workout history.
   ///
@@ -2864,6 +2872,7 @@ class _AppLocalizationsDelegate
     'de',
     'en',
     'es',
+    'fa',
     'fr',
     'hi',
     'id',
@@ -2919,6 +2928,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'es':
       return AppLocalizationsEs();
+    case 'fa':
+      return AppLocalizationsFa();
     case 'fr':
       return AppLocalizationsFr();
     case 'hi':

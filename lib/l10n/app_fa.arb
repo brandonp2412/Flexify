@@ -1,18 +1,18 @@
 {
-  "@@locale": "id",
+  "@@locale": "fa",
   "appTitle": "Flexify",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
-  "settingsLanguage": "Bahasa",
+  "settingsLanguage": "زبان",
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Pilih bahasa yang digunakan Flexify",
+  "settingsLanguageDescription": "زبان مورد استفاده در Flexify را انتخاب کنید",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
-  "languageSystemDefault": "Default sistem",
+  "languageSystemDefault": "پیش‌فرض سیستم",
   "@languageSystemDefault": {
     "description": "Language option that follows the device or operating system locale."
   },
@@ -100,39 +100,39 @@
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
-  "navHistory": "Riwayat",
+  "navHistory": "تاریخچه",
   "@navHistory": {
     "description": "Navigation label for workout history."
   },
-  "navPlans": "Rencana",
+  "navPlans": "برنامه‌ها",
   "@navPlans": {
     "description": "Navigation label for workout plans."
   },
-  "navGraphs": "Grafik",
+  "navGraphs": "نمودارها",
   "@navGraphs": {
     "description": "Navigation label for exercise graphs."
   },
-  "navTimer": "Pewaktu",
+  "navTimer": "تایمر",
   "@navTimer": {
     "description": "Navigation label for the rest timer."
   },
-  "navSettings": "Pengaturan",
+  "navSettings": "تنظیمات",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },
-  "errorLabel": "Galat",
+  "errorLabel": "خطا",
   "@errorLabel": {
     "description": "Generic short error label."
   },
-  "tabContentError": "Konten tab tidak dapat dibuat.",
+  "tabContentError": "محتوای برگه ساخته نشد.",
   "@tabContentError": {
     "description": "Error shown when a configured app tab cannot be rendered."
   },
-  "cannotHideAllTabs": "Tidak bisa menyembunyikan semuanya!",
+  "cannotHideAllTabs": "نمی‌توان همه‌چیز را پنهان کرد!",
   "@cannotHideAllTabs": {
     "description": "Message shown when the user tries to hide the last visible navigation tab."
   },
-  "removeTabQuestion": "Hapus tab {tab}?",
+  "removeTabQuestion": "برگه {tab} حذف شود؟",
   "@removeTabQuestion": {
     "description": "Confirmation title shown before hiding a navigation tab.",
     "placeholders": {
@@ -142,11 +142,11 @@
       }
     }
   },
-  "restoreTabFromSettings": "Anda dapat menambahkannya kembali nanti dari pengaturan.",
+  "restoreTabFromSettings": "بعداً می‌توانید آن را از تنظیمات دوباره اضافه کنید.",
   "@restoreTabFromSettings": {
     "description": "Explanation shown when removing a navigation tab."
   },
-  "removedTab": "Tab {tab} dihapus",
+  "removedTab": "{tab} حذف شد",
   "@removedTab": {
     "description": "Toast shown after a navigation tab has been hidden.",
     "placeholders": {
@@ -156,7 +156,7 @@
       }
     }
   },
-  "newVersion": "Versi baru {version}",
+  "newVersion": "نسخه جدید {version}",
   "@newVersion": {
     "description": "Toast announcing that the installed app version changed.",
     "placeholders": {
@@ -166,23 +166,23 @@
       }
     }
   },
-  "changes": "Perubahan",
+  "changes": "تغییرات",
   "@changes": {
     "description": "Action that opens the app changelog."
   },
-  "searchHint": "Cari...",
+  "searchHint": "جست‌وجو...",
   "@searchHint": {
     "description": "Default hint shown in reusable search fields."
   },
-  "deleteSelected": "Hapus yang dipilih",
+  "deleteSelected": "حذف موارد انتخاب‌شده",
   "@deleteSelected": {
     "description": "Tooltip for deleting the currently selected records."
   },
-  "confirmDelete": "Konfirmasi penghapusan",
+  "confirmDelete": "تأیید حذف",
   "@confirmDelete": {
     "description": "Title for a generic delete confirmation dialog."
   },
-  "deleteRecordsConfirmation": "{count, plural, =1{Anda yakin ingin menghapus 1 catatan? Tindakan ini tidak dapat dibatalkan.} other{Anda yakin ingin menghapus {count} catatan? Tindakan ini tidak dapat dibatalkan.}}",
+  "deleteRecordsConfirmation": "{count, plural, =1{مطمئنید می‌خواهید 1 رکورد را حذف کنید؟ این کار قابل بازگشت نیست.} other{مطمئنید می‌خواهید {count} رکورد را حذف کنید؟ این کار قابل بازگشت نیست.}}",
   "@deleteRecordsConfirmation": {
     "description": "Generic confirmation text for deleting one or more records.",
     "placeholders": {
@@ -192,263 +192,263 @@
       }
     }
   },
-  "actionCancel": "Batal",
+  "actionCancel": "لغو",
   "@actionCancel": {
     "description": "Generic cancel action."
   },
-  "actionDelete": "Hapus",
+  "actionDelete": "حذف",
   "@actionDelete": {
     "description": "Generic delete action."
   },
-  "actionRemove": "Hapus",
+  "actionRemove": "برداشتن",
   "@actionRemove": {
     "description": "Generic remove action."
   },
-  "actionEdit": "Sunting",
+  "actionEdit": "ویرایش",
   "@actionEdit": {
     "description": "Generic edit action."
   },
-  "actionShare": "Bagikan",
+  "actionShare": "اشتراک‌گذاری",
   "@actionShare": {
     "description": "Generic share action."
   },
-  "clearSelection": "Hapus pilihan",
+  "clearSelection": "پاک کردن انتخاب",
   "@clearSelection": {
     "description": "Action or tooltip for clearing selected records."
   },
-  "clearSearch": "Hapus pencarian",
+  "clearSearch": "پاک کردن جست‌وجو",
   "@clearSearch": {
     "description": "Tooltip for clearing the current search query."
   },
-  "showMenu": "Tampilkan menu",
+  "showMenu": "نمایش منو",
   "@showMenu": {
     "description": "Tooltip for opening a contextual actions menu."
   },
-  "selectAll": "Pilih semua",
+  "selectAll": "انتخاب همه",
   "@selectAll": {
     "description": "Action for selecting every visible record."
   },
-  "weightLabel": "Berat",
+  "weightLabel": "وزن",
   "@weightLabel": {
     "description": "Generic label for body or exercise weight."
   },
-  "filter": "Penyaring",
+  "filter": "فیلتر",
   "@filter": {
     "description": "Tooltip for opening filtering controls."
   },
-  "filters": "Penyaring",
+  "filters": "فیلترها",
   "@filters": {
     "description": "Title for a filtering dialog."
   },
-  "categoryLabel": "Kategori",
+  "categoryLabel": "دسته‌بندی",
   "@categoryLabel": {
     "description": "Generic exercise category label."
   },
-  "repsLabel": "Repetisi",
+  "repsLabel": "تکرارها",
   "@repsLabel": {
     "description": "Short label for exercise repetitions."
   },
-  "repsFilter": "Filter repetisi",
+  "repsFilter": "فیلتر تکرارها",
   "@repsFilter": {
     "description": "Title for filtering records by repetition count."
   },
-  "weightFilter": "Filter berat",
+  "weightFilter": "فیلتر وزن",
   "@weightFilter": {
     "description": "Title for filtering records by weight."
   },
-  "greaterThan": "Lebih besar dari",
+  "greaterThan": "بیشتر از",
   "@greaterThan": {
     "description": "Label for a numeric lower-bound filter."
   },
-  "lessThan": "Kurang dari",
+  "lessThan": "کمتر از",
   "@lessThan": {
     "description": "Label for a numeric upper-bound filter."
   },
-  "startDate": "Tanggal mulai",
+  "startDate": "تاریخ شروع",
   "@startDate": {
     "description": "Label for the beginning of a date range."
   },
-  "endDate": "Tanggal akhir",
+  "endDate": "تاریخ پایان",
   "@endDate": {
     "description": "Label for the end of a date range."
   },
-  "actionClear": "Bersihkan",
+  "actionClear": "پاک کردن",
   "@actionClear": {
     "description": "Generic action for clearing a value, selection, or filter."
   },
-  "actionOk": "Oke",
+  "actionOk": "تأیید",
   "@actionOk": {
     "description": "Generic confirmation action."
   },
-  "actionClose": "Tutup",
+  "actionClose": "بستن",
   "@actionClose": {
     "description": "Generic close action."
   },
-  "sortBy": "Urutkan menurut",
+  "sortBy": "مرتب‌سازی بر اساس",
   "@sortBy": {
     "description": "Label for selecting a sort order."
   },
-  "dateNewest": "Tanggal (terbaru)",
+  "dateNewest": "تاریخ (جدیدترین)",
   "@dateNewest": {
     "description": "Sort option that places newest records first."
   },
-  "dateOldest": "Tanggal (tertua)",
+  "dateOldest": "تاریخ (قدیمی‌ترین)",
   "@dateOldest": {
     "description": "Sort option that places oldest records first."
   },
-  "nameLabel": "Nama",
+  "nameLabel": "نام",
   "@nameLabel": {
     "description": "Generic name label and sort option."
   },
-  "missingPermissions": "Izin tidak lengkap",
+  "missingPermissions": "مجوزهای لازم وجود ندارد",
   "@missingPermissions": {
     "description": "Title for the page explaining missing Android permissions."
   },
-  "restTimersPermissionsMissing": "Pewaktu istirahat aktif, tetapi izin yang diperlukan belum diberikan.",
+  "restTimersPermissionsMissing": "تایمرهای استراحت روشن هستند، اما مجوزها وجود ندارند.",
   "@restTimersPermissionsMissing": {
     "description": "Message explaining that enabled rest timers require additional permissions."
   },
-  "restTimersPermissionsOptional": "Jika Anda menonaktifkan pewaktu istirahat, izin ini tidak diperlukan.",
+  "restTimersPermissionsOptional": "اگر تایمرهای استراحت را غیرفعال کنید، دیگر به این مجوزها نیاز نیست.",
   "@restTimersPermissionsOptional": {
     "description": "Explanation that timer permissions are unnecessary when rest timers are disabled."
   },
-  "restTimers": "Pewaktu istirahat",
+  "restTimers": "تایمرهای استراحت",
   "@restTimers": {
     "description": "Label for the rest timer feature."
   },
-  "disableBatteryOptimizations": "Nonaktifkan optimasi baterai",
+  "disableBatteryOptimizations": "غیرفعال کردن بهینه‌سازی باتری",
   "@disableBatteryOptimizations": {
     "description": "Android permission action for excluding Flexify from battery optimizations."
   },
-  "batteryOptimizationWarning": "Kemajuan mungkin akan berhenti jika optimasi baterai tetap berjalan.",
+  "batteryOptimizationWarning": "اگر بهینه‌سازی باتری روشن بماند، ممکن است پیشرفت متوقف شود.",
   "@batteryOptimizationWarning": {
     "description": "Explanation of why battery optimization access is requested."
   },
-  "scheduleExactAlarm": "Jadwalkan alarm tepat waktu",
+  "scheduleExactAlarm": "زمان‌بندی هشدار دقیق",
   "@scheduleExactAlarm": {
     "description": "Android permission action for scheduling exact alarms."
   },
-  "exactAlarmWarning": "Alarm tidak dapat akurat jika ini dinonaktifkan.",
+  "exactAlarmWarning": "اگر این گزینه غیرفعال باشد، هشدارها نمی‌توانند دقیق باشند.",
   "@exactAlarmWarning": {
     "description": "Explanation of why exact alarm access is requested."
   },
-  "postNotifications": "Kirim notifikasi",
+  "postNotifications": "نمایش اعلان‌ها",
   "@postNotifications": {
     "description": "Android permission action for posting notifications."
   },
-  "notificationBarDescription": "Kemajuan pewaktu dikirim ke bilah notifikasi",
+  "notificationBarDescription": "پیشرفت تایمر در نوار اعلان نمایش داده می‌شود",
   "@notificationBarDescription": {
     "description": "Explanation of how rest timer notifications are used."
   },
-  "invalidPermissions": "Izin tidak valid",
+  "invalidPermissions": "مجوزهای نامعتبر",
   "@invalidPermissions": {
     "description": "Title for the warning shown when rest timers lack required permissions."
   },
-  "insufficientTimerPermissionsConfirmation": "Pewaktu istirahat diaktifkan tanpa izin yang memadai. Anda yakin?",
+  "insufficientTimerPermissionsConfirmation": "تایمرهای استراحت بدون مجوزهای کافی فعال هستند. مطمئنید؟",
   "@insufficientTimerPermissionsConfirmation": {
     "description": "Confirmation shown when leaving timer permissions incomplete."
   },
-  "actionConfirm": "Konfirmasi",
+  "actionConfirm": "تأیید",
   "@actionConfirm": {
     "description": "Generic confirmation action."
   },
-  "appAccess": "Akses aplikasi",
+  "appAccess": "دسترسی برنامه",
   "@appAccess": {
     "description": "Title for the Android app access dialog."
   },
-  "appAccessDescription": "Diperlukan untuk pewaktu dan notifikasi yang diaktifkan.",
+  "appAccessDescription": "برای تایمرها و اعلان‌های فعال لازم است.",
   "@appAccessDescription": {
     "description": "Short explanation of why Android app access is requested."
   },
-  "notifications": "Pemberitahuan",
+  "notifications": "اعلان‌ها",
   "@notifications": {
     "description": "Generic label for notifications."
   },
-  "timerProgressAndRestAlerts": "Kemajuan pewaktu dan peringatan istirahat",
+  "timerProgressAndRestAlerts": "پیشرفت تایمر و هشدارهای استراحت",
   "@timerProgressAndRestAlerts": {
     "description": "Description of notifications used when rest timers are enabled."
   },
-  "enabledNotificationsDescription": "Notifikasi yang Anda aktifkan",
+  "enabledNotificationsDescription": "اعلان‌هایی که فعال کرده‌اید",
   "@enabledNotificationsDescription": {
     "description": "Description of notification access when notifications are enabled without rest timers."
   },
-  "backgroundActivity": "Aktivitas latar belakang",
+  "backgroundActivity": "فعالیت پس‌زمینه",
   "@backgroundActivity": {
     "description": "Android app access label for background activity."
   },
-  "backgroundActivityDescription": "Jaga agar pewaktu tetap andal di latar belakang",
+  "backgroundActivityDescription": "تایمرها را در پس‌زمینه قابل اعتماد نگه دارید",
   "@backgroundActivityDescription": {
     "description": "Description of background activity access for timers."
   },
-  "exactAlarms": "Alarm tepat waktu",
+  "exactAlarms": "هشدارهای دقیق",
   "@exactAlarms": {
     "description": "Android app access label for exact alarms."
   },
-  "exactAlarmsDescription": "Beri tahu tepat saat pewaktu istirahat berakhir",
+  "exactAlarmsDescription": "دقیقاً هنگام پایان تایمر استراحت هشدار بده",
   "@exactAlarmsDescription": {
     "description": "Description of exact alarm access for rest timers."
   },
-  "noAdditionalAndroidAccessNeeded": "Tidak diperlukan akses Android tambahan untuk pengaturan Anda saat ini.",
+  "noAdditionalAndroidAccessNeeded": "برای تنظیمات فعلی شما دسترسی اضافی Android لازم نیست.",
   "@noAdditionalAndroidAccessNeeded": {
     "description": "Message shown when current settings need no extra Android permissions."
   },
-  "actionDone": "Selesai",
+  "actionDone": "انجام شد",
   "@actionDone": {
     "description": "Generic action for finishing or dismissing a flow."
   },
-  "allowed": "Diizinkan",
+  "allowed": "مجاز",
   "@allowed": {
     "description": "Status tooltip indicating that an Android permission is granted."
   },
-  "actionAllow": "Izinkan",
+  "actionAllow": "اجازه دادن",
   "@actionAllow": {
     "description": "Generic action for granting requested access."
   },
-  "backupLabel": "Cadangan",
+  "backupLabel": "پشتیبان‌گیری",
   "@backupLabel": {
     "description": "Label for backup import, export, and data-management actions."
   },
-  "databaseLabel": "Basis data",
+  "databaseLabel": "پایگاه داده",
   "@databaseLabel": {
     "description": "Label for database data-management actions."
   },
-  "deleteRecords": "Hapus catatan",
+  "deleteRecords": "حذف رکوردها",
   "@deleteRecords": {
     "description": "Action for opening destructive data deletion options."
   },
-  "deleteAllGraphsConfirmation": "Anda yakin ingin menghapus semua grafik? Tindakan ini tidak dapat dibatalkan.",
+  "deleteAllGraphsConfirmation": "مطمئنید می‌خواهید همه نمودارها را حذف کنید؟ این کار قابل بازگشت نیست.",
   "@deleteAllGraphsConfirmation": {
     "description": "Confirmation text for deleting all graph records."
   },
-  "deleteAllPlansConfirmation": "Anda yakin ingin menghapus semua rencana? Tindakan ini tidak dapat dibatalkan.",
+  "deleteAllPlansConfirmation": "مطمئنید می‌خواهید همه برنامه‌ها را حذف کنید؟ این کار قابل بازگشت نیست.",
   "@deleteAllPlansConfirmation": {
     "description": "Confirmation text for deleting all plans."
   },
-  "deleteDatabaseConfirmation": "Anda yakin ingin menghapus basis data Anda? Tindakan ini tidak dapat dibatalkan dan akan menghapus seluruh data Anda.",
+  "deleteDatabaseConfirmation": "مطمئنید می‌خواهید پایگاه داده خود را حذف کنید؟ این کار قابل بازگشت نیست و همه داده‌های شما را از بین می‌برد.",
   "@deleteDatabaseConfirmation": {
     "description": "Confirmation text for deleting the complete Flexify database."
   },
-  "importData": "Impor data",
+  "importData": "ورود داده‌ها",
   "@importData": {
     "description": "Action for opening data import options."
   },
-  "exportData": "Ekspor data",
+  "exportData": "خروجی گرفتن از داده‌ها",
   "@exportData": {
     "description": "Action for opening data export options."
   },
-  "actionReport": "Laporkan",
+  "actionReport": "گزارش",
   "@actionReport": {
     "description": "Action for reporting an import failure."
   },
-  "graphDataImported": "Data grafik diimpor dengan sukses!",
+  "graphDataImported": "داده‌های نمودار با موفقیت وارد شدند!",
   "@graphDataImported": {
     "description": "Toast shown after graph CSV data is imported."
   },
-  "plansImported": "Rencana diimpor dengan sukses",
+  "plansImported": "برنامه‌ها با موفقیت وارد شدند",
   "@plansImported": {
     "description": "Toast shown after plan CSV data is imported."
   },
-  "failedToImportDatabase": "Gagal mengimpor basis data: {error}",
+  "failedToImportDatabase": "ورود پایگاه داده ناموفق بود: {error}",
   "@failedToImportDatabase": {
     "description": "Toast shown when a database import fails.",
     "placeholders": {
@@ -457,11 +457,11 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "Arsip cadangan tidak berisi basis data Flexify.",
+  "backupArchiveMissingDatabase": "بایگانی پشتیبان شامل پایگاه داده Flexify نیست.",
   "@backupArchiveMissingDatabase": {
     "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
   },
-  "failedToImportGraphs": "Gagal mengimpor grafik: {error}",
+  "failedToImportGraphs": "ورود نمودارها ناموفق بود: {error}",
   "@failedToImportGraphs": {
     "description": "Toast shown when a graph CSV import fails.",
     "placeholders": {
@@ -470,7 +470,7 @@
       }
     }
   },
-  "failedToImportPlans": "Gagal mengimpor rencana: {error}",
+  "failedToImportPlans": "ورود برنامه‌ها ناموفق بود: {error}",
   "@failedToImportPlans": {
     "description": "Toast shown when a plan CSV import fails.",
     "placeholders": {
@@ -479,27 +479,27 @@
       }
     }
   },
-  "selectedFileDoesNotExist": "Berkas yang dipilih tidak ada",
+  "selectedFileDoesNotExist": "فایل انتخاب‌شده وجود ندارد",
   "@selectedFileDoesNotExist": {
     "description": "Validation error when an import file no longer exists."
   },
-  "couldNotReadFileData": "Data berkas tidak dapat dibaca",
+  "couldNotReadFileData": "داده‌های فایل خوانده نشد",
   "@couldNotReadFileData": {
     "description": "Validation error when import file bytes cannot be read."
   },
-  "databaseImportWebUnsupported": "Impor basis data di web memerlukan migrasi data manual. Ekspor data Anda sebagai berkas CSV lalu impor berkas tersebut.",
+  "databaseImportWebUnsupported": "ورود پایگاه داده در وب نیازمند انتقال دستی داده‌ها است. لطفاً داده‌های خود را به صورت فایل‌های CSV خروجی بگیرید و سپس آن‌ها را وارد کنید.",
   "@databaseImportWebUnsupported": {
     "description": "Validation error explaining the supported web data-import workflow."
   },
-  "csvFileEmpty": "Berkas CSV kosong",
+  "csvFileEmpty": "فایل CSV خالی است",
   "@csvFileEmpty": {
     "description": "Validation error for an empty CSV import file."
   },
-  "csvNeedsDataRow": "Berkas CSV harus memuat setidaknya satu baris data",
+  "csvNeedsDataRow": "فایل CSV باید حداقل یک ردیف داده داشته باشد",
   "@csvNeedsDataRow": {
     "description": "Validation error for a CSV containing only headings."
   },
-  "csvRowInsufficientColumns": "Baris {row} tidak memiliki kolom yang cukup: {count}",
+  "csvRowInsufficientColumns": "ردیف {row} ستون‌های کافی ندارد: {count}",
   "@csvRowInsufficientColumns": {
     "description": "Validation error when an imported CSV row has too few columns.",
     "placeholders": {
@@ -511,7 +511,7 @@
       }
     }
   },
-  "invalidCsvValue": "Nilai {field} tidak valid dalam baris {row}: {value}",
+  "invalidCsvValue": "مقدار {field} در ردیف {row} نامعتبر است: {value}",
   "@invalidCsvValue": {
     "description": "Validation error for a malformed value in an imported CSV row.",
     "placeholders": {
@@ -526,7 +526,7 @@
       }
     }
   },
-  "invalidCsvDataType": "Tipe data {field} tidak valid dalam baris {row}: {type}",
+  "invalidCsvDataType": "نوع داده {field} در ردیف {row} نامعتبر است: {type}",
   "@invalidCsvDataType": {
     "description": "Validation error for an unsupported value type in an imported CSV row.",
     "placeholders": {
@@ -541,7 +541,7 @@
       }
     }
   },
-  "expectedIntegerPlanId": "ID rencana harus berupa bilangan bulat, tetapi diperoleh \"{value}\"",
+  "expectedIntegerPlanId": "برای plan id عدد صحیح انتظار می‌رفت، اما \"{value}\" دریافت شد",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
     "placeholders": {
@@ -550,19 +550,19 @@
       }
     }
   },
-  "unitLabel": "Satuan",
+  "unitLabel": "واحد",
   "@unitLabel": {
     "description": "Generic label for measurement units."
   },
-  "kilogramsUnit": "Kilogram (kg)",
+  "kilogramsUnit": "کیلوگرم (kg)",
   "@kilogramsUnit": {
     "description": "Display label for the kilogram unit option."
   },
-  "poundsUnit": "Pon (lb)",
+  "poundsUnit": "پوند (lb)",
   "@poundsUnit": {
     "description": "Display label for the pound unit option."
   },
-  "stoneUnit": "Stone (st)",
+  "stoneUnit": "استون",
   "@stoneUnit": {
     "description": "Display label for the stone weight unit option."
   },
@@ -570,167 +570,167 @@
   "@stoneUnitShort": {
     "description": "Compact stone weight unit shown beside measurement values."
   },
-  "kilometersUnit": "Kilometer (km)",
+  "kilometersUnit": "کیلومتر (km)",
   "@kilometersUnit": {
     "description": "Display label for the kilometer unit option."
   },
-  "milesUnit": "Mil (mi)",
+  "milesUnit": "مایل (mi)",
   "@milesUnit": {
     "description": "Display label for the mile unit option."
   },
-  "metersUnit": "Meter (m)",
+  "metersUnit": "متر (m)",
   "@metersUnit": {
     "description": "Display label for the meter unit option."
   },
-  "kilocaloriesUnit": "Kilokalori (kcal)",
+  "kilocaloriesUnit": "کیلوکالری (kcal)",
   "@kilocaloriesUnit": {
     "description": "Display label for the kilocalorie unit option."
   },
-  "enterWeight": "Masukkan berat",
+  "enterWeight": "وزن را وارد کنید",
   "@enterWeight": {
     "description": "Title for the bodyweight entry page."
   },
-  "requiredField": "Wajib diisi",
+  "requiredField": "الزامی",
   "@requiredField": {
     "description": "Validation message for a required input."
   },
-  "invalidNumber": "Nomor tidak valid",
+  "invalidNumber": "عدد نامعتبر",
   "@invalidNumber": {
     "description": "Validation message for a malformed numeric input."
   },
-  "previousWeight": "Berat sebelumnya",
+  "previousWeight": "وزن قبلی",
   "@previousWeight": {
     "description": "Label for the previously recorded bodyweight."
   },
-  "imageLabel": "Gambar",
+  "imageLabel": "تصویر",
   "@imageLabel": {
     "description": "Generic label for an attached image."
   },
-  "longPressToDelete": "Tekan lama untuk menghapus",
+  "longPressToDelete": "برای حذف نگه دارید",
   "@longPressToDelete": {
     "description": "Tooltip explaining how to remove an attached image."
   },
-  "imageError": "Kesalahan gambar",
+  "imageError": "خطای تصویر",
   "@imageError": {
     "description": "Action label shown when an attached image cannot be rendered."
   },
-  "actionSave": "Simpan",
+  "actionSave": "ذخیره",
   "@actionSave": {
     "description": "Generic save action."
   },
-  "aboutTitle": "Tentang",
+  "aboutTitle": "درباره",
   "@aboutTitle": {
     "description": "Title for the About page."
   },
-  "donate": "Donasi",
+  "donate": "حمایت مالی",
   "@donate": {
     "description": "Action for opening the project donation page."
   },
-  "helpSupportProject": "Bantu mendukung proyek ini",
+  "helpSupportProject": "به پشتیبانی از این پروژه کمک کنید",
   "@helpSupportProject": {
     "description": "Description for the donation action."
   },
-  "whatsNewAbout": "Apa yang baru?",
+  "whatsNewAbout": "چه خبر؟",
   "@whatsNewAbout": {
     "description": "About-page label for opening release notes."
   },
-  "whatsNewTitle": "Apa yang baru?",
+  "whatsNewTitle": "چه چیز جدیدی هست؟",
   "@whatsNewTitle": {
     "description": "Title for the in-app changelog page."
   },
-  "seeReleaseNotes": "Lihat catatan rilis kami",
+  "seeReleaseNotes": "یادداشت‌های انتشار را ببینید",
   "@seeReleaseNotes": {
     "description": "Description for the in-app changelog action."
   },
-  "versionLabel": "Versi",
+  "versionLabel": "نسخه",
   "@versionLabel": {
     "description": "Label for the installed app version."
   },
-  "authorLabel": "Penulis",
+  "authorLabel": "نویسنده",
   "@authorLabel": {
     "description": "Label for the app author."
   },
-  "privacyPolicy": "Kebijakan privasi",
+  "privacyPolicy": "سیاست حفظ حریم خصوصی",
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "Cara Flexify menangani data Anda",
+  "privacyPolicyDescription": "Flexify چگونه با داده‌های شما برخورد می‌کند",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
-  "licenseLabel": "Lisensi",
+  "licenseLabel": "مجوز",
   "@licenseLabel": {
     "description": "Label for opening the software license."
   },
-  "sourceCode": "Kode sumber",
+  "sourceCode": "کد منبع",
   "@sourceCode": {
     "description": "Label for opening the source-code repository."
   },
-  "sourceCodeDescription": "Lihat di GitHub",
+  "sourceCodeDescription": "در GitHub ببینید",
   "@sourceCodeDescription": {
     "description": "Description for the source-code repository action."
   },
-  "leaveReview": "Beri ulasan",
+  "leaveReview": "ثبت نظر",
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Beri nilai Flexify di Play Store",
+  "leaveReviewDescription": "به Flexify در Play Store امتیاز دهید",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
-  "reportBug": "Laporkan bug",
+  "reportBug": "گزارش باگ",
   "@reportBug": {
     "description": "Label for opening the bug-report form."
   },
-  "reportBugDescription": "Buka tiket di GitHub",
+  "reportBugDescription": "در GitHub یک تیکت باز کنید",
   "@reportBugDescription": {
     "description": "Description for the bug-report action."
   },
-  "failedMigrations": "Migrasi gagal",
+  "failedMigrations": "مهاجرت‌های ناموفق",
   "@failedMigrations": {
     "description": "Title for the database migration failure page."
   },
-  "errorMessageLabel": "Pesan galat:",
+  "errorMessageLabel": "پیام خطا:",
   "@errorMessageLabel": {
     "description": "Label preceding a database migration error message."
   },
-  "createIssue": "Buat isu",
+  "createIssue": "ایجاد ایشو",
   "@createIssue": {
     "description": "Action for opening a new issue report."
   },
-  "addExercise": "Tambah latihan",
+  "addExercise": "افزودن تمرین",
   "@addExercise": {
     "description": "Title and action for adding an exercise graph."
   },
-  "cardio": "Kardio",
+  "cardio": "کاردیو",
   "@cardio": {
     "description": "Label for cardiovascular exercises."
   },
-  "strength": "Kekuatan",
+  "strength": "قدرت",
   "@strength": {
     "description": "Label for strength exercises."
   },
-  "options": "Opsi",
+  "options": "گزینه‌ها",
   "@options": {
     "description": "Tooltip for opening view options."
   },
-  "periodDay": "Hari",
+  "periodDay": "روز",
   "@periodDay": {
     "description": "One-day graph period."
   },
-  "periodWeek": "Minggu",
+  "periodWeek": "هفته",
   "@periodWeek": {
     "description": "One-week graph period."
   },
-  "periodMonth": "Bulan",
+  "periodMonth": "ماه",
   "@periodMonth": {
     "description": "One-month graph period."
   },
-  "periodYear": "Tahun",
+  "periodYear": "سال",
   "@periodYear": {
     "description": "One-year graph period."
   },
-  "noDataFor": "Belum ada data untuk {name}",
+  "noDataFor": "هنوز داده‌ای برای {name} وجود ندارد",
   "@noDataFor": {
     "description": "Empty-state message for an exercise without graph data.",
     "placeholders": {
@@ -739,23 +739,23 @@
       }
     }
   },
-  "noDataYet": "Belum ada data",
+  "noDataYet": "هنوز داده‌ای وجود ندارد",
   "@noDataYet": {
     "description": "Generic empty state when a graph has no data."
   },
-  "exerciseNotes": "Catatan latihan",
+  "exerciseNotes": "یادداشت‌های تمرین",
   "@exerciseNotes": {
     "description": "Label and title for notes attached to an exercise."
   },
-  "notesForExercise": "Catatan untuk latihan ini",
+  "notesForExercise": "یادداشت‌های این تمرین",
   "@notesForExercise": {
     "description": "Hint for exercise notes."
   },
-  "useTimeBasedXAxis": "Gunakan sumbu X berbasis waktu",
+  "useTimeBasedXAxis": "استفاده از محور X مبتنی بر زمان",
   "@useTimeBasedXAxis": {
     "description": "Graph option that uses elapsed time on the horizontal axis."
   },
-  "updateAllNamed": "Perbarui semua {name}",
+  "updateAllNamed": "به‌روزرسانی همه {name}",
   "@updateAllNamed": {
     "description": "Title for updating all records for a named exercise.",
     "placeholders": {
@@ -764,31 +764,31 @@
       }
     }
   },
-  "newName": "Nama baru",
+  "newName": "نام جدید",
   "@newName": {
     "description": "Label for renaming an exercise."
   },
-  "restMinutes": "Menit istirahat",
+  "restMinutes": "دقایق استراحت",
   "@restMinutes": {
     "description": "Label for the minutes component of an exercise rest timer."
   },
-  "restSeconds": "Detik istirahat",
+  "restSeconds": "ثانیه‌های استراحت",
   "@restSeconds": {
     "description": "Label for the seconds component of an exercise rest timer."
   },
-  "globalProgress": "Kemajuan global",
+  "globalProgress": "پیشرفت کلی",
   "@globalProgress": {
     "description": "Title for the global progress graph."
   },
-  "curveLineGraphs": "Lengkungkan grafik garis",
+  "curveLineGraphs": "نمودارهای خطی منحنی",
   "@curveLineGraphs": {
     "description": "Setting that renders graph lines as curves."
   },
-  "curveLineGraphsDescription": "Gambar garis grafik sebagai kurva halus",
+  "curveLineGraphsDescription": "خطوط نمودار را به صورت منحنی‌های نرم رسم کنید",
   "@curveLineGraphsDescription": {
     "description": "Description for the curved graph-line setting."
   },
-  "noHistoryFor": "Belum ada riwayat untuk {name}",
+  "noHistoryFor": "هنوز تاریخچه‌ای برای {name} وجود ندارد",
   "@noHistoryFor": {
     "description": "Empty history message for a named exercise.",
     "placeholders": {
@@ -797,147 +797,147 @@
       }
     }
   },
-  "cancelSelection": "Batalkan pilihan",
+  "cancelSelection": "لغو انتخاب",
   "@cancelSelection": {
     "description": "Tooltip for leaving multi-select mode."
   },
-  "editSelected": "Sunting yang dipilih",
+  "editSelected": "ویرایش موارد انتخاب‌شده",
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "Latihan baru",
+  "newExercise": "تمرین جدید",
   "@newExercise": {
     "description": "Action for creating a new exercise graph."
   },
-  "noGraphsFound": "Tidak ada grafik",
+  "noGraphsFound": "نموداری پیدا نشد",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
   },
-  "searchGraphs": "Cari grafik…",
+  "searchGraphs": "جست‌وجوی نمودارها...",
   "@searchGraphs": {
     "description": "Hint for searching exercise graphs."
   },
-  "actionAdd": "Tambah",
+  "actionAdd": "افزودن",
   "@actionAdd": {
     "description": "Generic add action."
   },
-  "actionUpdate": "Perbarui",
+  "actionUpdate": "به‌روزرسانی",
   "@actionUpdate": {
     "description": "Generic update action."
   },
-  "hideGlobalProgress": "Sembunyikan kemajuan global",
+  "hideGlobalProgress": "پنهان کردن پیشرفت کلی",
   "@hideGlobalProgress": {
     "description": "Action for hiding the global progress graph."
   },
-  "chartGroupedByCategory": "Grafik yang dikelompokkan berdasarkan kategori",
+  "chartGroupedByCategory": "نمودار گروه‌بندی‌شده بر اساس دسته‌بندی",
   "@chartGroupedByCategory": {
     "description": "Description of the global progress chart."
   },
-  "noExercisesFound": "Tidak ada latihan",
+  "noExercisesFound": "تمرینی پیدا نشد",
   "@noExercisesFound": {
     "description": "Empty state after searching for exercises."
   },
-  "savePlan": "Simpan rencana",
+  "savePlan": "ذخیره برنامه",
   "@savePlan": {
     "description": "Action for saving a workout plan."
   },
-  "titleOptional": "Judul (opsional)",
+  "titleOptional": "عنوان (اختیاری)",
   "@titleOptional": {
     "description": "Optional plan title field label."
   },
-  "searchExercises": "Cari latihan…",
+  "searchExercises": "جست‌وجوی تمرین‌ها...",
   "@searchExercises": {
     "description": "Hint for searching exercises."
   },
-  "warmupSets": "Set pemanasan",
+  "warmupSets": "ست‌های گرم‌کردن",
   "@warmupSets": {
     "description": "Label for the number of warmup sets."
   },
-  "workingSetsMax": "Set kerja (maks: 20)",
+  "workingSetsMax": "ست‌های اصلی (حداکثر: 20)",
   "@workingSetsMax": {
     "description": "Label for the maximum number of working sets."
   },
-  "actionUndo": "Urungkan",
+  "actionUndo": "واگرد",
   "@actionUndo": {
     "description": "Generic undo action."
   },
-  "actionSwap": "Tukar",
+  "actionSwap": "جابه‌جایی",
   "@actionSwap": {
     "description": "Generic swap action."
   },
-  "daily": "Harian",
+  "daily": "روزانه",
   "@daily": {
     "description": "Daily interval label."
   },
-  "weekly": "Mingguan",
+  "weekly": "هفتگی",
   "@weekly": {
     "description": "Weekly interval label."
   },
-  "monthly": "Bulanan",
+  "monthly": "ماهانه",
   "@monthly": {
     "description": "Monthly interval label."
   },
-  "yearly": "Tahunan",
+  "yearly": "سالانه",
   "@yearly": {
     "description": "Yearly interval label."
   },
-  "unexpectedError": "Terjadi kesalahan. Silakan coba lagi.",
+  "unexpectedError": "مشکلی پیش آمد. دوباره تلاش کنید.",
   "@unexpectedError": {
     "description": "Generic user-facing message for an unexpected runtime or data-loading failure."
   },
-  "loadingExercises": "Memuat latihan…",
+  "loadingExercises": "در حال بارگیری تمرین‌ها...",
   "@loadingExercises": {
     "description": "Progress message while plan exercises load."
   },
-  "noPlansYet": "Belum ada rencana.",
+  "noPlansYet": "هنوز برنامه‌ای وجود ندارد",
   "@noPlansYet": {
     "description": "Empty state when no workout plans exist."
   },
-  "noMatchingPlans": "Tidak ada rencana yang cocok",
+  "noMatchingPlans": "برنامه مطابقی پیدا نشد",
   "@noMatchingPlans": {
     "description": "Empty state when no plans match a search."
   },
-  "newPlan": "Rencana baru",
+  "newPlan": "برنامه جدید",
   "@newPlan": {
     "description": "Action for creating a workout plan."
   },
-  "searchPlans": "Cari rencana…",
+  "searchPlans": "جست‌وجوی برنامه‌ها...",
   "@searchPlans": {
     "description": "Hint for searching workout plans."
   },
-  "noExercisesYet": "Belum ada latihan.",
+  "noExercisesYet": "هنوز تمرینی وجود ندارد",
   "@noExercisesYet": {
     "description": "Empty state for a plan without exercises."
   },
-  "editPlan": "Sunting rencana",
+  "editPlan": "ویرایش برنامه",
   "@editPlan": {
     "description": "Tooltip and action for editing a workout plan."
   },
-  "saveSet": "Simpan set",
+  "saveSet": "ذخیره ست",
   "@saveSet": {
     "description": "Action for saving a workout set."
   },
-  "minutesLabel": "Menit",
+  "minutesLabel": "دقیقه",
   "@minutesLabel": {
     "description": "Label for a duration in minutes."
   },
-  "minutesShort": "mnt",
+  "minutesShort": "دقیقه",
   "@minutesShort": {
     "description": "Compact abbreviation for minutes in pace and duration labels."
   },
-  "secondsLabel": "Detik",
+  "secondsLabel": "ثانیه",
   "@secondsLabel": {
     "description": "Label for a duration in seconds."
   },
-  "distanceLabel": "Jarak",
+  "distanceLabel": "مسافت",
   "@distanceLabel": {
     "description": "Generic distance label."
   },
-  "inclinePercent": "Kemiringan %",
+  "inclinePercent": "شیب %",
   "@inclinePercent": {
     "description": "Label for incline as a percentage."
   },
-  "weightWithUnit": "Berat ({unit})",
+  "weightWithUnit": "وزن ({unit})",
   "@weightWithUnit": {
     "description": "Weight field label including the selected unit.",
     "placeholders": {
@@ -946,39 +946,39 @@
       }
     }
   },
-  "useBodyWeight": "Gunakan berat badan",
+  "useBodyWeight": "استفاده از وزن بدن",
   "@useBodyWeight": {
     "description": "Tooltip for filling a set with the recorded bodyweight."
   },
-  "noWeightEnteredYet": "Belum ada berat yang dimasukkan",
+  "noWeightEnteredYet": "هنوز وزنی وارد نشده",
   "@noWeightEnteredYet": {
     "description": "Message shown when body weight cannot be used because no weight has been recorded."
   },
-  "notesLabel": "Catatan",
+  "notesLabel": "یادداشت‌ها",
   "@notesLabel": {
     "description": "Generic notes field label."
   },
-  "swapWorkout": "Tukar latihan",
+  "swapWorkout": "جابه‌جایی تمرین",
   "@swapWorkout": {
     "description": "Title for replacing an exercise in a workout."
   },
-  "addSet": "Tambah set",
+  "addSet": "افزودن ست",
   "@addSet": {
     "description": "Action and title for adding a workout set."
   },
-  "deleteSet": "Hapus set",
+  "deleteSet": "حذف ست",
   "@deleteSet": {
     "description": "Tooltip for deleting a workout set."
   },
-  "oneRepMaxEstimate": "Maksimum 1 repetisi (perkiraan)",
+  "oneRepMaxEstimate": "حداکثر یک تکرار (تخمین)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
   },
-  "valueLabel": "Nilai",
+  "valueLabel": "مقدار",
   "@valueLabel": {
     "description": "Generic numeric value field label."
   },
-  "amountWithUnit": "Jumlah ({unit})",
+  "amountWithUnit": "مقدار ({unit})",
   "@amountWithUnit": {
     "description": "Amount field label including the selected unit.",
     "placeholders": {
@@ -987,7 +987,7 @@
       }
     }
   },
-  "distanceWithUnit": "Jarak ({unit})",
+  "distanceWithUnit": "مسافت ({unit})",
   "@distanceWithUnit": {
     "description": "Distance field label including the selected unit.",
     "placeholders": {
@@ -996,11 +996,11 @@
       }
     }
   },
-  "bodyWeightLabel": "Berat badan",
+  "bodyWeightLabel": "وزن بدن",
   "@bodyWeightLabel": {
     "description": "Generic bodyweight field label."
   },
-  "bodyWeightWithUnit": "Berat badan ({unit})",
+  "bodyWeightWithUnit": "وزن بدن ({unit})",
   "@bodyWeightWithUnit": {
     "description": "Bodyweight field label including the selected unit.",
     "placeholders": {
@@ -1009,39 +1009,39 @@
       }
     }
   },
-  "categoryHelper": "Pilih kategori yang ada atau ketik yang baru.",
+  "categoryHelper": "یک دسته‌بندی موجود را انتخاب کنید یا دسته‌بندی جدیدی بنویسید.",
   "@categoryHelper": {
     "description": "Helper text explaining the exercise category field."
   },
-  "manageCategories": "Kelola kategori",
+  "manageCategories": "مدیریت دسته‌بندی‌ها",
   "@manageCategories": {
     "description": "Navigation label for the workout category manager."
   },
-  "manageCategoriesDescription": "Buat, ubah nama, gabung atau hapus kategori",
+  "manageCategoriesDescription": "دسته‌بندی‌ها را ایجاد، تغییرنام، ادغام یا حذف کنید",
   "@manageCategoriesDescription": {
     "description": "Description of the category management screen."
   },
-  "newCategory": "Kategori baru",
+  "newCategory": "دسته‌بندی جدید",
   "@newCategory": {
     "description": "Action for creating a workout category."
   },
-  "renameCategory": "Ubah nama kategori",
+  "renameCategory": "تغییر نام دسته‌بندی",
   "@renameCategory": {
     "description": "Action for renaming a workout category."
   },
-  "mergeCategory": "Gabung ke kategori lain",
+  "mergeCategory": "ادغام در دسته‌بندی دیگر",
   "@mergeCategory": {
     "description": "Action for moving a category's workout entries to another category."
   },
-  "noCategories": "Belum ada kategori",
+  "noCategories": "هنوز دسته‌بندی‌ای وجود ندارد",
   "@noCategories": {
     "description": "Empty state for the category manager."
   },
-  "categoryNameRequired": "Masukkan nama kategori",
+  "categoryNameRequired": "نام دسته‌بندی را وارد کنید",
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{Tidak digunakan oleh entri apa pun} =1{Digunakan oleh 1 entri} other{Digunakan oleh {count} entri}}",
+  "categoryUsageCount": "{count, plural, =0{در هیچ ورودی استفاده نشده} =1{در 1 ورودی استفاده شده} other{در {count} ورودی استفاده شده}}",
   "@categoryUsageCount": {
     "description": "Number of workout entries using a category.",
     "placeholders": {
@@ -1051,7 +1051,7 @@
       }
     }
   },
-  "deleteCategoryConfirmation": "{count, plural, =0{Hapus kategori ini?} =1{Hapus kategori ini dan keluarkan dari 1 entri?} other{Hapus kategori ini dan keluarkan dari {count} entri?}}",
+  "deleteCategoryConfirmation": "{count, plural, =0{این دسته‌بندی حذف شود؟} =1{این دسته‌بندی حذف و از 1 ورودی برداشته شود؟} other{این دسته‌بندی حذف و از {count} ورودی برداشته شود؟}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
     "placeholders": {
@@ -1061,11 +1061,11 @@
       }
     }
   },
-  "createdDate": "Tanggal dibuat",
+  "createdDate": "تاریخ ایجاد",
   "@createdDate": {
     "description": "Label for the date a workout record was created."
   },
-  "editSets": "{count, plural, =1{Edit 1 set} other{Edit {count} set}}",
+  "editSets": "{count, plural, =1{ویرایش 1 ست} other{ویرایش {count} ست}}",
   "@editSets": {
     "description": "Title for bulk editing workout sets.",
     "placeholders": {
@@ -1074,15 +1074,15 @@
       }
     }
   },
-  "noEntriesYet": "Belum ada entri",
+  "noEntriesYet": "هنوز ورودی‌ای وجود ندارد",
   "@noEntriesYet": {
     "description": "Empty state when workout history has no entries."
   },
-  "historyEmptyMessage": "Selesaikan satu set atau tambahkan satu secara manual untuk memulai riwayat Anda.",
+  "historyEmptyMessage": "برای شروع تاریخچه یک ست را کامل کنید یا یکی را دستی اضافه کنید.",
   "@historyEmptyMessage": {
     "description": "Explanation shown when workout history has no entries."
   },
-  "deleteSetConfirmation": "Anda yakin ingin menghapus {name}?",
+  "deleteSetConfirmation": "مطمئنید می‌خواهید {name} را حذف کنید؟",
   "@deleteSetConfirmation": {
     "description": "Confirmation shown before deleting one workout set for a named exercise.",
     "placeholders": {
@@ -1091,7 +1091,7 @@
       }
     }
   },
-  "deleteEntriesConfirmation": "{count, plural, =1{Anda yakin ingin menghapus 1 entri?} other{Anda yakin ingin menghapus {count} entri?}}",
+  "deleteEntriesConfirmation": "{count, plural, =1{مطمئنید می‌خواهید 1 ورودی را حذف کنید؟} other{مطمئنید می‌خواهید {count} ورودی را حذف کنید؟}}",
   "@deleteEntriesConfirmation": {
     "description": "Confirmation shown before deleting one or more selected workout history entries.",
     "placeholders": {
@@ -1100,87 +1100,87 @@
       }
     }
   },
-  "searchHistory": "Cari riwayat...",
+  "searchHistory": "جست‌وجوی تاریخچه...",
   "@searchHistory": {
     "description": "Hint for searching workout history."
   },
-  "themeSystem": "Sistem",
+  "themeSystem": "سیستم",
   "@themeSystem": {
     "description": "Theme option that follows the system appearance."
   },
-  "themeDark": "Gelap",
+  "themeDark": "تیره",
   "@themeDark": {
     "description": "Dark theme option."
   },
-  "themeLight": "Terang",
+  "themeLight": "روشن",
   "@themeLight": {
     "description": "Light theme option."
   },
-  "pureBlackAmoled": "Hitam murni (AMOLED)",
+  "pureBlackAmoled": "سیاه خالص (AMOLED)",
   "@pureBlackAmoled": {
     "description": "Appearance setting for pure-black dark surfaces."
   },
-  "showImages": "Tampilkan gambar",
+  "showImages": "نمایش تصاویر",
   "@showImages": {
     "description": "Appearance setting for exercise images."
   },
-  "peekGraph": "Pratinjau grafik",
+  "peekGraph": "پیش‌نمایش نمودار",
   "@peekGraph": {
     "description": "Appearance setting for graph previews."
   },
-  "inputStyleLine": "Baris",
+  "inputStyleLine": "خطی",
   "@inputStyleLine": {
     "description": "Line input-field style."
   },
-  "inputStyleOutlined": "Tergaris",
+  "inputStyleOutlined": "حاشیه‌دار",
   "@inputStyleOutlined": {
     "description": "Outlined input-field style."
   },
-  "inputStyleFilled": "Terisi",
+  "inputStyleFilled": "پُر",
   "@inputStyleFilled": {
     "description": "Filled input-field style."
   },
-  "inputStyle": "Gaya masukan",
+  "inputStyle": "سبک ورودی",
   "@inputStyle": {
     "description": "Label for choosing the text-input style."
   },
-  "appearance": "Tampilan",
+  "appearance": "ظاهر",
   "@appearance": {
     "description": "Title for appearance settings."
   },
-  "automaticBackupsEnabled": "Pencadangan otomatis diaktifkan",
+  "automaticBackupsEnabled": "پشتیبان‌گیری خودکار فعال است",
   "@automaticBackupsEnabled": {
     "description": "Status text confirming automatic backups are enabled."
   },
-  "automaticBackup": "Pencadangan otomatis",
+  "automaticBackup": "پشتیبان‌گیری خودکار",
   "@automaticBackup": {
     "description": "Data setting for automatic backups."
   },
-  "appPermissions": "Izin aplikasi",
+  "appPermissions": "مجوزهای برنامه",
   "@appPermissions": {
     "description": "Data/settings action for app permissions."
   },
-  "shareDatabase": "Bagikan basis data",
+  "shareDatabase": "اشتراک‌گذاری پایگاه داده",
   "@shareDatabase": {
     "description": "Action for sharing the app database file."
   },
-  "dataManagement": "Pengelolaan data",
+  "dataManagement": "مدیریت داده‌ها",
   "@dataManagement": {
     "description": "Title for data-management settings."
   },
-  "strengthUnit": "Satuan kekuatan",
+  "strengthUnit": "واحد قدرت",
   "@strengthUnit": {
     "description": "Label for the default strength measurement unit."
   },
-  "lastEntry": "Entri terakhir",
+  "lastEntry": "آخرین ورودی",
   "@lastEntry": {
     "description": "Option that reuses the unit from the previous entry."
   },
-  "cardioUnit": "Satuan kardio",
+  "cardioUnit": "واحد کاردیو",
   "@cardioUnit": {
     "description": "Label for the default cardio measurement unit."
   },
-  "longDateFormat": "Format tanggal panjang ({format})",
+  "longDateFormat": "قالب تاریخ بلند ({format})",
   "@longDateFormat": {
     "description": "Label for the long date format preview.",
     "placeholders": {
@@ -1189,255 +1189,255 @@
       }
     }
   },
-  "formats": "Format",
+  "formats": "قالب‌ها",
   "@formats": {
     "description": "Title for measurement and date formatting settings."
   },
-  "setsPerExerciseMax": "Set per latihan (maks: 20)",
+  "setsPerExerciseMax": "ست به ازای هر تمرین (حداکثر: 20)",
   "@setsPerExerciseMax": {
     "description": "Plan setting for the maximum working sets per exercise."
   },
-  "countLabel": "Jumlah",
+  "countLabel": "تعداد",
   "@countLabel": {
     "description": "Label for count-based plan distribution."
   },
-  "ratioLabel": "Rasio",
+  "ratioLabel": "نسبت",
   "@ratioLabel": {
     "description": "Label for ratio-based plan distribution."
   },
-  "reorder": "Urutkan ulang",
+  "reorder": "مرتب‌سازی مجدد",
   "@reorder": {
     "description": "Action or option for reordering exercises."
   },
-  "none": "Tidak ada",
+  "none": "هیچ‌کدام",
   "@none": {
     "description": "Generic option indicating no selection."
   },
-  "monday": "Senin",
+  "monday": "دوشنبه",
   "@monday": {
     "description": "Monday weekday label in the plan example."
   },
-  "examplePlanExercises": "Bench press, squat, dan deadlift",
+  "examplePlanExercises": "پرس سینه، اسکوات، ددلیفت",
   "@examplePlanExercises": {
     "description": "Example list of exercises shown in plan settings."
   },
-  "tabs": "Tab",
+  "tabs": "برگه‌ها",
   "@tabs": {
     "description": "Title for navigation tab settings."
   },
-  "swipeBetweenTabs": "Geser antar-tab",
+  "swipeBetweenTabs": "بین برگه‌ها بکشید",
   "@swipeBetweenTabs": {
     "description": "Setting for swipe navigation between tabs."
   },
-  "vibrate": "Getar",
+  "vibrate": "لرزش",
   "@vibrate": {
     "description": "Timer setting for vibration."
   },
-  "enableSound": "Aktifkan suara",
+  "enableSound": "فعال کردن صدا",
   "@enableSound": {
     "description": "Timer setting for alarm sound playback."
   },
-  "keepScreenOn": "Biarkan layar menyala",
+  "keepScreenOn": "روشن نگه داشتن صفحه",
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
-  "alarmSound": "Suara alarm",
+  "alarmSound": "صدای هشدار",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
   },
-  "top": "Atas",
+  "top": "بالا",
   "@top": {
     "description": "Top position option."
   },
-  "bottom": "Bawah",
+  "bottom": "پایین",
   "@bottom": {
     "description": "Bottom position option."
   },
-  "removeCustomTimer": "Hapus pewaktu khusus (gunakan default global)",
+  "removeCustomTimer": "حذف تایمر سفارشی (استفاده از پیش‌فرض کلی)",
   "@removeCustomTimer": {
     "description": "Tooltip for removing an exercise-specific rest timer."
   },
-  "timers": "Pewaktu",
+  "timers": "تایمرها",
   "@timers": {
     "description": "Title for timer settings."
   },
-  "timerSettings": "Pengaturan pewaktu",
+  "timerSettings": "تنظیمات تایمر",
   "@timerSettings": {
     "description": "Heading for timer configuration."
   },
-  "groupHistory": "Kelompokkan riwayat",
+  "groupHistory": "گروه‌بندی تاریخچه",
   "@groupHistory": {
     "description": "Workout setting for grouping history entries."
   },
-  "showUnits": "Tampilkan satuan",
+  "showUnits": "نمایش واحدها",
   "@showUnits": {
     "description": "Workout setting for displaying measurement units."
   },
-  "showBodyWeight": "Tampilkan berat badan",
+  "showBodyWeight": "نمایش وزن بدن",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
   },
-  "showCategories": "Tampilkan kategori",
+  "showCategories": "نمایش دسته‌بندی‌ها",
   "@showCategories": {
     "description": "Workout setting for exercise categories."
   },
-  "showNotes": "Tampilkan catatan",
+  "showNotes": "نمایش یادداشت‌ها",
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "Perkiraan repetisi",
+  "repEstimation": "تخمین تکرار",
   "@repEstimation": {
     "description": "Workout setting for repetition estimation."
   },
-  "durationEstimation": "Perkiraan durasi",
+  "durationEstimation": "تخمین مدت",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
   },
-  "showGraphLimit": "Tampilkan batas grafik",
+  "showGraphLimit": "نمایش محدودیت نمودار",
   "@showGraphLimit": {
     "description": "Workout setting controlling graph-limit display."
   },
-  "defaultGraphMetric": "Metrik grafik default",
+  "defaultGraphMetric": "معیار پیش‌فرض نمودار",
   "@defaultGraphMetric": {
     "description": "Label for choosing the default graph metric."
   },
-  "bestWeight": "Berat terbaik",
+  "bestWeight": "بهترین وزن",
   "@bestWeight": {
     "description": "Graph metric for highest weight."
   },
-  "bestReps": "Repetisi terbaik",
+  "bestReps": "بیشترین تکرار",
   "@bestReps": {
     "description": "Graph metric for highest repetition count."
   },
-  "oneRepMax": "Maksimum 1 repetisi",
+  "oneRepMax": "حداکثر یک تکرار",
   "@oneRepMax": {
     "description": "Graph metric for one-repetition maximum."
   },
-  "volume": "Volume latihan",
+  "volume": "حجم",
   "@volume": {
     "description": "Graph metric for training volume."
   },
-  "paceCardio": "Laju (kardio)",
+  "paceCardio": "سرعت (کاردیو)",
   "@paceCardio": {
     "description": "Cardio graph metric for pace."
   },
-  "distanceCardio": "Jarak (kardio)",
+  "distanceCardio": "مسافت (کاردیو)",
   "@distanceCardio": {
     "description": "Cardio graph metric for distance."
   },
-  "defaultGraphPeriod": "Periode grafik default",
+  "defaultGraphPeriod": "دوره پیش‌فرض نمودار",
   "@defaultGraphPeriod": {
     "description": "Label for choosing the default graph period."
   },
-  "defaultGraphLimit": "Batas grafik default",
+  "defaultGraphLimit": "محدودیت پیش‌فرض نمودار",
   "@defaultGraphLimit": {
     "description": "Label for choosing the default graph record limit."
   },
-  "workouts": "Latihan",
+  "workouts": "تمرین‌ها",
   "@workouts": {
     "description": "Title for workout settings."
   },
-  "actionStop": "Berhenti",
+  "actionStop": "توقف",
   "@actionStop": {
     "description": "Generic stop action."
   },
-  "timerFinishedToast": "Pewaktu selesai!",
+  "timerFinishedToast": "تایمر تمام شد!",
   "@timerFinishedToast": {
     "description": "In-app toast shown when a non-Android timer finishes."
   },
-  "stopTimer": "Hentikan pewaktu",
+  "stopTimer": "توقف تایمر",
   "@stopTimer": {
     "description": "Action for stopping the active timer."
   },
-  "actionPause": "Jeda",
+  "actionPause": "مکث",
   "@actionPause": {
     "description": "Generic pause action."
   },
-  "startStopwatch": "Mulai stopwatch",
+  "startStopwatch": "شروع کرنومتر",
   "@startStopwatch": {
     "description": "Action for starting the stopwatch."
   },
-  "actionStart": "Mulai",
+  "actionStart": "شروع",
   "@actionStart": {
     "description": "Generic start action."
   },
-  "actionRestart": "Mulai ulang",
+  "actionRestart": "شروع دوباره",
   "@actionRestart": {
     "description": "Generic restart action."
   },
-  "addOneMinute": "+1 menit",
+  "addOneMinute": "+1 دقیقه",
   "@addOneMinute": {
     "description": "Timer action that adds one minute."
   },
-  "addOneMinuteNotification": "Tambah 1 menit",
+  "addOneMinuteNotification": "افزودن 1 دقیقه",
   "@addOneMinuteNotification": {
     "description": "Compact Android notification action that adds one minute."
   },
-  "restTimer": "Pewaktu istirahat",
+  "restTimer": "تایمر استراحت",
   "@restTimer": {
     "description": "Generic rest timer title used when restarting a timer from a notification."
   },
-  "timerUp": "Waktu habis",
+  "timerUp": "پایان تایمر",
   "@timerUp": {
     "description": "Default notification title when a timer expires."
   },
-  "openNotification": "Buka notifikasi",
+  "openNotification": "باز کردن اعلان",
   "@openNotification": {
     "description": "Desktop notification action label."
   },
-  "timerChannelName": "Kanal pewaktu",
+  "timerChannelName": "کانال تایمر",
   "@timerChannelName": {
     "description": "Android notification channel name for ongoing timers."
   },
-  "timerChannelDescription": "Menampilkan kemajuan pewaktu istirahat.",
+  "timerChannelDescription": "پیشرفت جاری تایمرهای استراحت.",
   "@timerChannelDescription": {
     "description": "Android notification channel description for ongoing timers."
   },
-  "timerFinishedChannelName": "Kanal pewaktu selesai",
+  "timerFinishedChannelName": "کانال پایان تایمر",
   "@timerFinishedChannelName": {
     "description": "Android notification channel name for completed timers."
   },
-  "timerFinishedChannelDescription": "Memutar alarm saat pewaktu istirahat selesai.",
+  "timerFinishedChannelDescription": "هنگام پایان تایمر استراحت هشدار پخش می‌کند.",
   "@timerFinishedChannelDescription": {
     "description": "Android notification channel description for completed timers."
   },
-  "timerFinished": "Pewaktu selesai",
+  "timerFinished": "تایمر تمام شد",
   "@timerFinished": {
     "description": "Android notification title for a completed timer."
   },
-  "batteryOptimizationRequestUnavailable": "Permintaan untuk mengabaikan pengoptimalan baterai tidak tersedia di perangkat Anda.",
+  "batteryOptimizationRequestUnavailable": "درخواست نادیده گرفتن بهینه‌سازی باتری در دستگاه شما غیرفعال است.",
   "@batteryOptimizationRequestUnavailable": {
     "description": "Android toast shown when the system battery optimization exemption screen is unavailable."
   },
-  "exactAlarmRequestUnavailable": "Permintaan SCHEDULE_EXACT_ALARM ditolak pada perangkat Anda.",
+  "exactAlarmRequestUnavailable": "درخواست SCHEDULE_EXACT_ALARM در دستگاه شما رد شد",
   "@exactAlarmRequestUnavailable": {
     "description": "Android toast shown when the exact alarm permission screen is unavailable."
   },
-  "databaseMigrationFailureDescription": "Terjadi kesalahan saat membuat atau memperbarui basis data. Biasanya hal ini dapat diperbaiki dengan menghapus lalu memulihkan catatan Anda.",
+  "databaseMigrationFailureDescription": "هنگام ساخت یا ارتقای پایگاه داده مشکلی پیش آمد. معمولاً با حذف و ایجاد دوباره رکوردها برطرف می‌شود.",
   "@databaseMigrationFailureDescription": {
     "description": "Explanation shown when a database migration fails."
   },
-  "curveSmoothness": "Kehalusan kurva",
+  "curveSmoothness": "نرمی منحنی",
   "@curveSmoothness": {
     "description": "Label for graph curve smoothness."
   },
-  "actionBack": "Kembali",
+  "actionBack": "بازگشت",
   "@actionBack": {
     "description": "Generic back-navigation tooltip."
   },
-  "atLeastOneTab": "Anda memerlukan setidaknya satu tab",
+  "atLeastOneTab": "حداقل یک برگه لازم است",
   "@atLeastOneTab": {
     "description": "Toast shown when trying to disable the final visible tab."
   },
-  "invalidTabSettings": "Pengaturan tab tidak valid.",
+  "invalidTabSettings": "تنظیمات برگه نامعتبر است.",
   "@invalidTabSettings": {
     "description": "Error shown when a saved tab identifier is unsupported."
   },
-  "noSettingsFound": "Tidak ada pengaturan yang ditemukan",
+  "noSettingsFound": "تنظیمی پیدا نشد",
   "@noSettingsFound": {
     "description": "Empty state when settings search has no matches."
   },
-  "nothingMatchesSearch": "Tidak ada yang cocok dengan \"{query}\".",
+  "nothingMatchesSearch": "چیزی با «{query}» مطابقت ندارد.",
   "@nothingMatchesSearch": {
     "description": "Settings-search empty-state detail.",
     "placeholders": {
@@ -1446,59 +1446,59 @@
       }
     }
   },
-  "appearanceDescription": "Tema, warna, dan tampilan antarmuka",
+  "appearanceDescription": "پوسته، رنگ‌ها و سبک رابط",
   "@appearanceDescription": {
     "description": "Description of appearance settings."
   },
-  "dataManagementDescription": "Impor, ekspor, dan kelola data latihan Anda",
+  "dataManagementDescription": "داده‌های تمرین خود را وارد، صادر و مدیریت کنید",
   "@dataManagementDescription": {
     "description": "Description of data-management settings."
   },
-  "formatsDescription": "Format tanggal, angka, dan pengukuran",
+  "formatsDescription": "قالب‌بندی تاریخ‌ها، اعداد و اندازه‌گیری‌ها",
   "@formatsDescription": {
     "description": "Description of format settings."
   },
-  "plansSettingsDescription": "Default dan perilaku untuk rencana latihan",
+  "plansSettingsDescription": "پیش‌فرض‌ها و رفتار برنامه‌های تمرینی",
   "@plansSettingsDescription": {
     "description": "Description of plan settings."
   },
-  "tabsDescription": "Pilih dan atur tab navigasi utama",
+  "tabsDescription": "برگه‌های اصلی پیمایش را انتخاب و مرتب کنید",
   "@tabsDescription": {
     "description": "Description of tab settings."
   },
-  "timersDescription": "Durasi istirahat, suara, dan perilaku",
+  "timersDescription": "مدت، صدا و رفتار تایمر استراحت",
   "@timersDescription": {
     "description": "Description of timer settings."
   },
-  "workoutsDescription": "Preferensi pelacakan latihan dan gerakan",
+  "workoutsDescription": "ردیابی تمرین و ترجیحات تمرینی",
   "@workoutsDescription": {
     "description": "Description of workout settings."
   },
-  "completeSetForChart": "Selesaikan satu set untuk latihan ini agar grafik dapat dibuat.",
+  "completeSetForChart": "برای ساخت نمودار این تمرین یک ست را کامل کنید.",
   "@completeSetForChart": {
     "description": "Empty graph guidance for a specific exercise."
   },
-  "dateRange": "Rentang tanggal",
+  "dateRange": "بازه تاریخ",
   "@dateRange": {
     "description": "Label for graph date-range controls."
   },
-  "stopDate": "Tanggal akhir",
+  "stopDate": "تاریخ پایان",
   "@stopDate": {
     "description": "Label for the end of a graph date range."
   },
-  "dataPoints": "Titik data",
+  "dataPoints": "نقاط داده",
   "@dataPoints": {
     "description": "Label for the number of graph data points."
   },
-  "completeSetsForProgress": "Selesaikan beberapa set untuk membuat grafik kemajuan Anda.",
+  "completeSetsForProgress": "چند ست را کامل کنید تا نمودار پیشرفت ساخته شود.",
   "@completeSetsForProgress": {
     "description": "Empty guidance for the global progress graph."
   },
-  "relativeStrength": "Kekuatan relatif",
+  "relativeStrength": "قدرت نسبی",
   "@relativeStrength": {
     "description": "Strength graph metric relative to bodyweight."
   },
-  "selectedCount": "{count, plural, =1{1 dipilih} other{{count} dipilih}}",
+  "selectedCount": "{count, plural, =1{1 مورد انتخاب شده} other{{count} مورد انتخاب شده}}",
   "@selectedCount": {
     "description": "Number of currently selected records.",
     "placeholders": {
@@ -1507,15 +1507,15 @@
       }
     }
   },
-  "completeSetsForHistory": "Selesaikan beberapa set untuk melihat riwayat latihan ini di sini.",
+  "completeSetsForHistory": "چند ست را کامل کنید تا تاریخچه این تمرین را اینجا ببینید.",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
   },
-  "completeSetForFirstGraph": "Selesaikan satu set untuk membuat grafik latihan pertama Anda.",
+  "completeSetForFirstGraph": "برای ساخت اولین نمودار تمرین یک ست را کامل کنید.",
   "@completeSetForFirstGraph": {
     "description": "Empty guidance when no exercise graphs exist."
   },
-  "nothingMatchesGraphSearch": "Tidak ada yang cocok dengan “{query}”. Anda dapat membuatnya sebagai latihan baru.",
+  "nothingMatchesGraphSearch": "چیزی با «{query}» مطابقت ندارد. می‌توانید آن را به عنوان تمرین جدید بسازید.",
   "@nothingMatchesGraphSearch": {
     "description": "Empty graph search guidance.",
     "placeholders": {
@@ -1524,7 +1524,7 @@
       }
     }
   },
-  "addNamed": "Tambahkan “{name}”",
+  "addNamed": "افزودن «{name}»",
   "@addNamed": {
     "description": "Action for adding an item with a typed name.",
     "placeholders": {
@@ -1533,7 +1533,7 @@
       }
     }
   },
-  "deleteGraphRecordsConfirmation": "Ini akan menghapus {count} catatan. Anda yakin?",
+  "deleteGraphRecordsConfirmation": "این کار {count} رکورد را حذف می‌کند. مطمئنید؟",
   "@deleteGraphRecordsConfirmation": {
     "description": "Confirmation for deleting records associated with selected graphs.",
     "placeholders": {
@@ -1542,7 +1542,7 @@
       }
     }
   },
-  "shareWorkout": "Saya baru saja melakukan {summary}",
+  "shareWorkout": "من همین الان {summary} انجام دادم",
   "@shareWorkout": {
     "description": "Text shared from the workout graph screen.",
     "placeholders": {
@@ -1551,11 +1551,11 @@
       }
     }
   },
-  "updateConflict": "Konflik pembaruan",
+  "updateConflict": "تعارض به‌روزرسانی",
   "@updateConflict": {
     "description": "Title for an exercise rename conflict dialog."
   },
-  "updateConflictDescription": "Nama baru Anda sudah digunakan oleh {count} catatan. Anda yakin?",
+  "updateConflictDescription": "نام جدید شما از قبل برای {count} رکورد وجود دارد. مطمئنید؟",
   "@updateConflictDescription": {
     "description": "Explanation for an exercise rename conflict.",
     "placeholders": {
@@ -1564,11 +1564,11 @@
       }
     }
   },
-  "unitsConflict": "Konflik satuan",
+  "unitsConflict": "تعارض واحدها",
   "@unitsConflict": {
     "description": "Title for an exercise unit conversion conflict dialog."
   },
-  "unitsConflictDescription": "Tidak semua catatan Anda menggunakan satuan yang sama. Semua satuan akan dikonversi ke {unit}. Anda yakin?",
+  "unitsConflictDescription": "همه رکوردهای شما واحد یکسانی ندارند. این کار همه واحدها را به {unit} تبدیل می‌کند. مطمئنید؟",
   "@unitsConflictDescription": {
     "description": "Explanation before converting mixed exercise units.",
     "placeholders": {
@@ -1577,43 +1577,43 @@
       }
     }
   },
-  "durationLabel": "Durasi",
+  "durationLabel": "مدت",
   "@durationLabel": {
     "description": "Generic duration label."
   },
-  "inclineLabel": "Kemiringan",
+  "inclineLabel": "شیب",
   "@inclineLabel": {
     "description": "Generic incline label."
   },
-  "paceDistanceTime": "Laju (jarak / waktu)",
+  "paceDistanceTime": "سرعت (مسافت / زمان)",
   "@paceDistanceTime": {
     "description": "Cardio graph metric for distance divided by time."
   },
-  "adjustedPace": "Laju yang disesuaikan",
+  "adjustedPace": "سرعت تعدیل‌شده",
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "Perkiraan maksimum 1 repetisi kurang akurat untuk set dengan 10+ repetisi",
+  "oneRepMaxAccuracyWarning": "تخمین حداکثر یک تکرار برای ست‌های 10 تکرار یا بیشتر دقت کمتری دارد",
   "@oneRepMaxAccuracyWarning": {
     "description": "Warning about one-repetition maximum estimate accuracy."
   },
-  "addPlan": "Tambah rencana",
+  "addPlan": "افزودن برنامه",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
   },
-  "planDetails": "Rincian rencana",
+  "planDetails": "جزئیات برنامه",
   "@planDetails": {
     "description": "Heading for editable workout plan details."
   },
-  "exercisesLabel": "Latihan",
+  "exercisesLabel": "تمرین‌ها",
   "@exercisesLabel": {
     "description": "Generic heading for exercises."
   },
-  "addExerciseToPlan": "Tambahkan latihan ke rencana ini.",
+  "addExerciseToPlan": "یک تمرین به این برنامه اضافه کنید.",
   "@addExerciseToPlan": {
     "description": "Empty-state guidance for a workout plan with no exercises."
   },
-  "nothingMatchesExerciseSearch": "Tidak ada yang cocok dengan “{query}”. Anda dapat menambahkannya sebagai latihan baru.",
+  "nothingMatchesExerciseSearch": "چیزی با «{query}» مطابقت ندارد. می‌توانید آن را به عنوان تمرین جدید اضافه کنید.",
   "@nothingMatchesExerciseSearch": {
     "description": "Empty-state guidance when a plan exercise search has no matches.",
     "placeholders": {
@@ -1622,119 +1622,119 @@
       }
     }
   },
-  "selectDays": "Pilih hari",
+  "selectDays": "انتخاب روزها",
   "@selectDays": {
     "description": "Validation message requiring at least one workout plan day."
   },
-  "selectExercises": "Pilih latihan",
+  "selectExercises": "انتخاب تمرین‌ها",
   "@selectExercises": {
     "description": "Validation message requiring at least one workout plan exercise."
   },
-  "todayLabel": "Hari ini",
+  "todayLabel": "امروز",
   "@todayLabel": {
     "description": "Label indicating the current day."
   },
-  "setDetails": "Detail set",
+  "setDetails": "جزئیات ست",
   "@setDetails": {
     "description": "Heading for workout set entry fields."
   },
-  "themeLabel": "Tema",
+  "themeLabel": "پوسته",
   "@themeLabel": {
     "description": "Label for choosing the application theme."
   },
-  "pureBlackAmoledDescription": "Gunakan warna hitam murni untuk layar AMOLED",
+  "pureBlackAmoledDescription": "برای نمایشگرهای AMOLED از رنگ‌های سیاه خالص استفاده کنید",
   "@pureBlackAmoledDescription": {
     "description": "Description of the AMOLED pure-black appearance option."
   },
-  "systemColorScheme": "Skema warna sistem",
+  "systemColorScheme": "طرح رنگ سیستم",
   "@systemColorScheme": {
     "description": "Appearance setting for using system colors."
   },
-  "systemColorSchemeDescription": "Gunakan warna utama perangkat Anda untuk aplikasi",
+  "systemColorSchemeDescription": "از رنگ اصلی دستگاه برای برنامه استفاده کنید",
   "@systemColorSchemeDescription": {
     "description": "Description of the system color scheme setting."
   },
-  "showImagesDescription": "Pilih atau tampilkan gambar di halaman Riwayat",
+  "showImagesDescription": "تصاویر را در صفحه تاریخچه انتخاب یا نمایش دهید",
   "@showImagesDescription": {
     "description": "Description of the setting that shows workout images."
   },
-  "showGlobalProgress": "Tampilkan kemajuan global",
+  "showGlobalProgress": "نمایش پیشرفت کلی",
   "@showGlobalProgress": {
     "description": "Setting that controls the global progress graph."
   },
-  "showGlobalProgressDescription": "Tambahkan entri grafik yang memetakan kemajuan Anda berdasarkan kategori",
+  "showGlobalProgressDescription": "یک ورودی نمودار برای نمایش پیشرفت بر اساس دسته‌بندی اضافه کنید",
   "@showGlobalProgressDescription": {
     "description": "Description of the global progress setting."
   },
-  "peekGraphDescription": "Tampilkan grafik garis pertama di halaman Grafik",
+  "peekGraphDescription": "اولین نمودار خطی را در صفحه نمودارها نمایش دهید",
   "@peekGraphDescription": {
     "description": "Description of the graph preview setting."
   },
-  "inputStyleDescription": "Gaya visual kolom input teks",
+  "inputStyleDescription": "سبک ظاهری فیلدهای ورود متن",
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify akan mencadangkan data dan gambar Anda secara otomatis ke folder yang dipilih setiap hari.",
+  "automaticBackupNotificationBody": "Flexify هر روز به‌طور خودکار از داده‌ها و تصاویر شما در پوشه انتخاب‌شده پشتیبان می‌گیرد.",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
-  "backupSettingsChannel": "Pengaturan cadangan",
+  "backupSettingsChannel": "تنظیمات پشتیبان‌گیری",
   "@backupSettingsChannel": {
     "description": "Notification channel name for backup settings."
   },
-  "backupSettingsChannelDescription": "Notifikasi yang menjelaskan pencadangan otomatis",
+  "backupSettingsChannelDescription": "اعلان‌هایی که پشتیبان‌گیری خودکار را توضیح می‌دهند",
   "@backupSettingsChannelDescription": {
     "description": "Notification channel description for automatic backups."
   },
-  "backupChannelName": "Kanal cadangan",
+  "backupChannelName": "کانال پشتیبان‌گیری",
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Pencadangan otomatis data dan gambar Flexify",
+  "backupChannelDescription": "پشتیبان‌گیری خودکار از داده‌ها و تصاویر Flexify",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },
-  "backupCompletedTitle": "Data dan gambar berhasil dicadangkan",
+  "backupCompletedTitle": "پشتیبان‌گیری از داده‌ها و تصاویر انجام شد",
   "@backupCompletedTitle": {
     "description": "Android notification title shown after an automatic backup succeeds."
   },
-  "backupFailurePathNotSet": "Pencadangan gagal: lokasi cadangan belum diatur. Pencadangan otomatis dinonaktifkan.",
+  "backupFailurePathNotSet": "پشتیبان‌گیری ناموفق بود: مسیر پشتیبان تنظیم نشده است. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailurePathNotSet": {
     "description": "Android toast shown when an automatic backup has no destination path."
   },
-  "backupFailureDirectoryUnavailable": "Pencadangan gagal: direktori cadangan tidak dapat diakses. Pencadangan otomatis dinonaktifkan.",
+  "backupFailureDirectoryUnavailable": "پشتیبان‌گیری ناموفق بود: دسترسی به پوشه پشتیبان ممکن نبود. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailureDirectoryUnavailable": {
     "description": "Android toast shown when the automatic backup directory cannot be accessed."
   },
-  "backupFailureCreateFile": "Pencadangan gagal: berkas cadangan tidak dapat dibuat. Pencadangan otomatis dinonaktifkan.",
+  "backupFailureCreateFile": "پشتیبان‌گیری ناموفق بود: فایل پشتیبان ایجاد نشد. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailureCreateFile": {
     "description": "Android toast shown when an automatic backup archive cannot be created."
   },
-  "backupFailureAppFilesUnavailable": "Pencadangan gagal: direktori berkas aplikasi tidak dapat diakses. Pencadangan otomatis dinonaktifkan.",
+  "backupFailureAppFilesUnavailable": "پشتیبان‌گیری ناموفق بود: دسترسی به پوشه فایل‌های برنامه ممکن نبود. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailureAppFilesUnavailable": {
     "description": "Android toast shown when app files are unavailable during automatic backup."
   },
-  "backupFailureDatabaseMissing": "Pencadangan gagal: berkas basis data tidak ditemukan. Pencadangan otomatis dinonaktifkan.",
+  "backupFailureDatabaseMissing": "پشتیبان‌گیری ناموفق بود: فایل پایگاه داده پیدا نشد. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailureDatabaseMissing": {
     "description": "Android toast shown when the database is missing during automatic backup."
   },
-  "backupFailureOutputUnavailable": "Pencadangan gagal: aliran keluaran tidak dapat dibuka. Pencadangan otomatis dinonaktifkan.",
+  "backupFailureOutputUnavailable": "پشتیبان‌گیری ناموفق بود: جریان خروجی باز نشد. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailureOutputUnavailable": {
     "description": "Android toast shown when the automatic backup destination cannot be opened."
   },
-  "backupFailureUnknown": "Pencadangan gagal. Pencadangan otomatis dinonaktifkan.",
+  "backupFailureUnknown": "پشتیبان‌گیری ناموفق بود. پشتیبان‌گیری خودکار غیرفعال شد.",
   "@backupFailureUnknown": {
     "description": "Android toast shown for an unexpected automatic backup failure."
   },
-  "appPermissionsDescription": "Tinjau akses yang diperlukan oleh fitur yang Anda aktifkan",
+  "appPermissionsDescription": "دسترسی‌های مورد نیاز قابلیت‌های فعال را بررسی کنید",
   "@appPermissionsDescription": {
     "description": "Description for the app permissions settings entry."
   },
-  "longDateFormatDescription": "Digunakan saat ruang tersedia cukup luas",
+  "longDateFormatDescription": "جایی استفاده می‌شود که فضای کافی وجود دارد",
   "@longDateFormatDescription": {
     "description": "Description of the long date-format setting."
   },
-  "shortDateFormat": "Format tanggal pendek ({example})",
+  "shortDateFormat": "قالب تاریخ کوتاه ({example})",
   "@shortDateFormat": {
     "description": "Label for short date formatting with an example.",
     "placeholders": {
@@ -1743,251 +1743,251 @@
       }
     }
   },
-  "shortDateFormatDescription": "Digunakan saat ruang terbatas (garis grafik)",
+  "shortDateFormatDescription": "برای جاهایی که فضا محدود است (خطوط نمودار)",
   "@shortDateFormatDescription": {
     "description": "Description of the short date-format setting."
   },
-  "warmupSetsDescription": "Set pemanasan tidak memiliki pewaktu istirahat",
+  "warmupSetsDescription": "ست‌های گرم‌کردن تایمر استراحت ندارند",
   "@warmupSetsDescription": {
     "description": "Description of the default warmup sets setting."
   },
-  "setsPerExerciseDescription": "Jumlah latihan default dalam sebuah rencana",
+  "setsPerExerciseDescription": "تعداد پیش‌فرض تمرین‌ها در یک برنامه",
   "@setsPerExerciseDescription": {
     "description": "Description of the default sets-per-exercise setting."
   },
-  "planTrailingDisplay": "Tampilan sisi kanan rencana",
+  "planTrailingDisplay": "نمایش انتهای برنامه",
   "@planTrailingDisplay": {
     "description": "Label for choosing information shown on the right side of plan rows."
   },
-  "planTrailingDisplayDescription": "Informasi yang ditampilkan di sisi kanan daftar pada tampilan Rencana dan detail rencana",
+  "planTrailingDisplayDescription": "آنچه در سمت راست فهرست در نمای Plans + Plan نشان داده می‌شود",
   "@planTrailingDisplayDescription": {
     "description": "Description of the plan trailing display setting."
   },
-  "restTimersDescription": "Alarm yang berbunyi setelah menyelesaikan satu set",
+  "restTimersDescription": "هشداری که پس از کامل کردن یک ست اجرا می‌شود",
   "@restTimersDescription": {
     "description": "Description of rest timers."
   },
-  "vibrateDescription": "Apakah pewaktu istirahat harus bergetar?",
+  "vibrateDescription": "آیا تایمرهای استراحت بلرزند؟",
   "@vibrateDescription": {
     "description": "Description of timer vibration."
   },
-  "enableSoundDescription": "Apakah pewaktu istirahat harus memutar suara?",
+  "enableSoundDescription": "آیا تایمرهای استراحت صدا پخش کنند؟",
   "@enableSoundDescription": {
     "description": "Description of timer sound."
   },
-  "keepScreenOnDescription": "Biarkan layar menyala selama pewaktu istirahat",
+  "keepScreenOnDescription": "هنگام تایمرهای استراحت صفحه را روشن نگه دارید",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
   },
-  "restDurationDescription": "Berapa lama sebelum alarm istirahat berbunyi?",
+  "restDurationDescription": "چه مدت تا اجرای هشدار استراحت؟",
   "@restDurationDescription": {
     "description": "Description of the default rest duration."
   },
-  "globalDefault": "Default global",
+  "globalDefault": "پیش‌فرض کلی",
   "@globalDefault": {
     "description": "Label for a global default setting value."
   },
-  "alarmSoundDescription": "Musik yang diputar saat pewaktu istirahat berakhir",
+  "alarmSoundDescription": "موسیقی‌ای که در پایان تایمر استراحت پخش می‌شود",
   "@alarmSoundDescription": {
     "description": "Description of the timer alarm sound setting."
   },
-  "progressBarPosition": "Posisi bilah kemajuan",
+  "progressBarPosition": "محل نوار پیشرفت",
   "@progressBarPosition": {
     "description": "Label for choosing the rest timer progress bar position."
   },
-  "progressBarPositionDescription": "Di mana bilah kemajuan pewaktu istirahat ditempatkan?",
+  "progressBarPositionDescription": "نوار پیشرفت تایمرهای استراحت کجا قرار بگیرد؟",
   "@progressBarPositionDescription": {
     "description": "Description of the rest timer progress bar position setting."
   },
-  "perExerciseRestTimes": "Waktu istirahat per latihan",
+  "perExerciseRestTimes": "زمان استراحت برای هر تمرین",
   "@perExerciseRestTimes": {
     "description": "Heading for exercise-specific rest timer durations."
   },
-  "perExerciseRestTimesDescription": "Latihan ini memiliki durasi istirahat khusus",
+  "perExerciseRestTimesDescription": "این تمرین‌ها مدت استراحت سفارشی دارند",
   "@perExerciseRestTimesDescription": {
     "description": "Description of exercise-specific rest timer durations."
   },
-  "audioFeaturesUnavailable": "Fitur audio tidak tersedia",
+  "audioFeaturesUnavailable": "قابلیت‌های صوتی در دسترس نیستند",
   "@audioFeaturesUnavailable": {
     "description": "Message shown when timer audio features cannot be initialized."
   },
-  "groupHistoryDescription": "Gabungkan entri riwayat berdasarkan hari",
+  "groupHistoryDescription": "ورودی‌های تاریخچه را بر اساس روز ترکیب کنید",
   "@groupHistoryDescription": {
     "description": "Description of history grouping."
   },
-  "showUnitsDescription": "Tampilkan km/mi dan kg/lb pada grafik, riwayat, dan rencana",
+  "showUnitsDescription": "نمایش km/mi و kg/lb در نمودارها/تاریخچه/برنامه‌ها",
   "@showUnitsDescription": {
     "description": "Description of displaying measurement units."
   },
-  "showBodyWeightDescription": "Aktifkan atau nonaktifkan pelacakan berat badan",
+  "showBodyWeightDescription": "فعال/غیرفعال کردن ردیابی وزن بدن",
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "Aktifkan atau nonaktifkan kategori latihan",
+  "showCategoriesDescription": "فعال/غیرفعال کردن دسته‌بندی‌های تمرین",
   "@showCategoriesDescription": {
     "description": "Description of workout categories."
   },
-  "showNotesDescription": "Catat detail angkatan Anda dalam kolom teks",
+  "showNotesDescription": "جزئیات حرکت خود را در یک بخش متنی ثبت کنید",
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
-  "positiveNotificationsDescription": "Tampilkan pesan positif saat rekor baru tercapai",
+  "positiveNotificationsDescription": "هنگام ثبت رکورد جدید پیام‌های تشویقی نمایش دهید",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."
   },
-  "positiveMessagesEnabled": "Pesan positif kini akan tampil seperti ini!",
+  "positiveMessagesEnabled": "پیام‌های مثبت حالا این‌طور نمایش داده می‌شوند!",
   "@positiveMessagesEnabled": {
     "description": "Example toast shown when positive messages are enabled."
   },
-  "recordEncouragement01": "Kerja bagus! Kamu luar biasa.",
+  "recordEncouragement01": "عالی بود! فوق‌العاده‌ای.",
   "@recordEncouragement01": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement02": "Mantap, jagoan! Kemajuanmu menginspirasi.",
+  "recordEncouragement02": "دمت گرم قهرمان! پیشرفتت الهام‌بخش است.",
   "@recordEncouragement02": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement03": "Aku berlutut...",
+  "recordEncouragement03": "تعظیم می‌کنم...",
   "@recordEncouragement03": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement04": "Apa itu? Rekor baru!",
+  "recordEncouragement04": "این چیه؟ یک رکورد جدید!",
   "@recordEncouragement04": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement05": "Luar biasa! Kamu benar-benar menginspirasi.",
+  "recordEncouragement05": "فوق‌العاده بود! واقعاً الهام‌بخشی.",
   "@recordEncouragement05": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement06": "Wow. Mantap.",
+  "recordEncouragement06": "واو. عالی.",
   "@recordEncouragement06": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement07": "Makin kuat, ya?",
+  "recordEncouragement07": "خیلی قوی شدی، نه؟",
   "@recordEncouragement07": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement08": "Ya. Kamu makin besar dan kuat.",
+  "recordEncouragement08": "آره. حسابی بزرگ شدی.",
   "@recordEncouragement08": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement09": "Hebat. Luar biasa.",
+  "recordEncouragement09": "شگفت‌انگیز. فوق‌العاده.",
   "@recordEncouragement09": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement10": "Arnie pasti bangga.",
+  "recordEncouragement10": "آرنی بهت افتخار می‌کرد.",
   "@recordEncouragement10": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement11": "Ronnie C melihatmu dengan bangga.",
+  "recordEncouragement11": "رانی سی با خوشحالی نگاهت می‌کند.",
   "@recordEncouragement11": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement12": "YEAH! RINGAN BANGET, BABY!!!!!!!",
+  "recordEncouragement12": "آره! لایت‌ویت بیبی!!!!!!!",
   "@recordEncouragement12": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement13": "Rekor baru? Sudah kuduga kamu bisa.",
+  "recordEncouragement13": "این یک رکورد جدید بود؟ می‌دانستم می‌توانی.",
   "@recordEncouragement13": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement14": "Kerja bagus! Aku bangga padamu.",
+  "recordEncouragement14": "عالی بود! بهت افتخار می‌کنم.",
   "@recordEncouragement14": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement15": "YEAH BABY! Ringan banget!",
+  "recordEncouragement15": "آره بیبی! لایت‌ویت!",
   "@recordEncouragement15": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement16": "Teruskan! Kemajuanmu hebat.",
+  "recordEncouragement16": "ادامه بده! پیشرفت عالیه.",
   "@recordEncouragement16": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement17": "Kamu melakukannya dengan sangat baik.",
+  "recordEncouragement17": "خیلی خوب داری پیش می‌ری.",
   "@recordEncouragement17": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement18": "Nah, begitu dong!",
+  "recordEncouragement18": "آفرین پسر!",
   "@recordEncouragement18": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement19": "Teruskan.",
+  "recordEncouragement19": "ادامه بده.",
   "@recordEncouragement19": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement20": "Kamu makin kuat.",
+  "recordEncouragement20": "داری خیلی قوی می‌شی.",
   "@recordEncouragement20": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement21": "Kuat.",
+  "recordEncouragement21": "قدرتمند.",
   "@recordEncouragement21": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement22": "Kuat sekali!",
+  "recordEncouragement22": "چه قدرتی!",
   "@recordEncouragement22": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement23": "Aku bangga padamu.",
+  "recordEncouragement23": "بهت افتخار می‌کنم.",
   "@recordEncouragement23": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement24": "Pertahankan kerja hebat ini.",
+  "recordEncouragement24": "همین کار عالی را ادامه بده.",
   "@recordEncouragement24": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement25": "Berdiri tegak! Kamu baru saja mencetak rekor baru.",
+  "recordEncouragement25": "سرت را بالا بگیر! همین الان رکورد جدید زدی.",
   "@recordEncouragement25": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement26": "Rekor baru! Kamu baru saja melampaui pencapaian sebelumnya!",
+  "recordEncouragement26": "رکورد جدید! از همیشه جلوتر رفتی!",
   "@recordEncouragement26": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement27": "Yap! Itu rekor.",
+  "recordEncouragement27": "آره! این رکورده.",
   "@recordEncouragement27": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement28": "Wow! Rekor baru!",
+  "recordEncouragement28": "واو! رکورد جدید!",
   "@recordEncouragement28": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement29": "Bagus sekali.",
+  "recordEncouragement29": "خیلی خوب بود.",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
   },
-  "repEstimationDescription": "Coba perkirakan jumlah repetisi yang baru saja Anda lakukan",
+  "repEstimationDescription": "سعی کنید تعداد تکرارهایی را که همین حالا انجام دادید حدس بزنید",
   "@repEstimationDescription": {
     "description": "Description of repetition estimation."
   },
-  "durationEstimationDescription": "Coba perkirakan durasi kardio Anda",
+  "durationEstimationDescription": "سعی کنید مدت کاردیوی خود را تخمین بزنید",
   "@durationEstimationDescription": {
     "description": "Description of cardio duration estimation."
   },
-  "showGraphXAxisToggle": "Tampilkan tombol sumbu X grafik",
+  "showGraphXAxisToggle": "نمایش کلید محور X نمودار",
   "@showGraphXAxisToggle": {
     "description": "Setting for showing the graph X-axis mode toggle."
   },
-  "showGraphXAxisToggleDescription": "Tampilkan tombol sumbu X berbasis waktu pada grafik",
+  "showGraphXAxisToggleDescription": "کلید محور X مبتنی بر زمان را روی نمودارها نمایش دهید",
   "@showGraphXAxisToggleDescription": {
     "description": "Description of the graph X-axis toggle setting."
   },
-  "showGraphLimitDescription": "Tampilkan penggeser batas pada grafik",
+  "showGraphLimitDescription": "لغزنده محدودیت را روی نمودارها نمایش دهید",
   "@showGraphLimitDescription": {
     "description": "Description of the graph limit setting."
   },
-  "defaultTimeBasedXAxis": "Sumbu X berbasis waktu secara default",
+  "defaultTimeBasedXAxis": "محور X پیش‌فرض مبتنی بر زمان",
   "@defaultTimeBasedXAxis": {
     "description": "Setting for using time-based graph X axes by default."
   },
-  "defaultTimeBasedXAxisDescription": "Gunakan sumbu X berbasis waktu secara default pada grafik",
+  "defaultTimeBasedXAxisDescription": "به‌طور پیش‌فرض در نمودارها از محور X مبتنی بر زمان استفاده کنید",
   "@defaultTimeBasedXAxisDescription": {
     "description": "Description of the default time-based X-axis setting."
   },
-  "createFirstTrainingPlan": "Buat rencana latihan pertama Anda untuk memulai.",
+  "createFirstTrainingPlan": "برای شروع اولین برنامه تمرینی خود را بسازید.",
   "@createFirstTrainingPlan": {
     "description": "Empty-state guidance when no workout plans exist."
   },
-  "nothingMatchesPlanSearch": "Tidak ada yang cocok dengan “{query}”. Anda dapat membuatnya sebagai rencana baru.",
+  "nothingMatchesPlanSearch": "چیزی با «{query}» مطابقت ندارد. می‌توانید آن را به عنوان برنامه جدید بسازید.",
   "@nothingMatchesPlanSearch": {
     "description": "Empty-state guidance when a plan search has no matches.",
     "placeholders": {
@@ -1996,11 +1996,11 @@
       }
     }
   },
-  "createPlan": "Buat rencana",
+  "createPlan": "ایجاد برنامه",
   "@createPlan": {
     "description": "Action for creating a workout plan."
   },
-  "createNamedPlan": "Buat \"{name}\"",
+  "createNamedPlan": "ایجاد «{name}»",
   "@createNamedPlan": {
     "description": "Action for creating a plan with a typed name.",
     "placeholders": {
@@ -2009,7 +2009,7 @@
       }
     }
   },
-  "setNumber": "Set ke-{number}",
+  "setNumber": "ست {number}",
   "@setNumber": {
     "description": "Label for a numbered workout set.",
     "placeholders": {

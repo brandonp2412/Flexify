@@ -82,6 +82,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get languageNameUrdu => 'اردو';
 
   @override
+  String get languageNamePersian => 'فارسی';
+
+  @override
   String get navHistory => '기록';
 
   @override

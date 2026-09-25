@@ -83,6 +83,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get languageNameUrdu => 'اردو';
 
   @override
+  String get languageNamePersian => 'فارسی';
+
+  @override
   String get navHistory => 'تاریخ';
 
   @override
