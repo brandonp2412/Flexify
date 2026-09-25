@@ -85,6 +85,10 @@
   "@languageNameVietnamese": {
     "description": "Stable native display name for the Vietnamese locale."
   },
+  "languageNameBengali": "বাংলা",
+  "@languageNameBengali": {
+    "description": "Stable native display name for the Bengali locale."
+  },
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },

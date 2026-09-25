@@ -34,6 +34,10 @@
   "@languageNameVietnamese": {
     "description": "Stable native display name for the Vietnamese locale."
   },
+  "languageNameBengali": "বাংলা",
+  "@languageNameBengali": {
+    "description": "Stable native display name for the Bengali locale."
+  },
   "navHistory": "歷史",
   "navPlans": "計畫",
   "navGraphs": "圖表",

@@ -77,6 +77,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageNameVietnamese => 'Tiếng Việt';
 
   @override
+  String get languageNameBengali => 'বাংলা';
+
+  @override
   String get navHistory => 'Historique';
 
   @override
