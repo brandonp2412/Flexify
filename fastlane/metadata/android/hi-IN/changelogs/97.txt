@@ -1,0 +1,4 @@
+- "शो रीऑर्डर" और "शो काउंट" सेटिंग को मिलाएं
+- रिफैक्टर योजना
+- अपडेट: Refactor graphs page
+- Refactor gym sets

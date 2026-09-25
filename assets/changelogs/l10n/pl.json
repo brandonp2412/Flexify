@@ -519,5 +519,6 @@
   "1790132278": "• fix: wymusić jedną aplikację Flexify i jeden klucz podpisywania",
   "1790159359": "• chore: dodać tureckie zrzuty ekranu z Google Play\n• chore: zlokalizować metadane najnowszego wydania\n• feat: uzupełnić tłumaczenia wszystkich obsługiwanych języków\n• feat: udostępnić kontrolki wykresów na komputerze\n• feat: zlokalizować pełną historię wydań\n• feat: dopracować wyświetlanie milisekund timera\n• fix: utrzymać skalowany tekst timera wewnątrz okręgu\n• fix: złagodzić przycinanie krawędzi wykresu liniowego\n• test: wzmocnić kontrole kompletności lokalizacji\n• test: utrzymać synchronizację mapowań języków sklepów",
   "1790261378": "• Zaktualizować README.md\n• chore(l10n): zsynchronizować tłumaczenia bieżącego wydania\n• chore: dodać tureckie zrzuty ekranu z Google Play\n• feat(l10n): dodać tłumaczenia na chiński tradycyjny\n• feat(l10n): uzupełnić bieżące pokrycie tłumaczeń (#353)\n• feat: dodać zarządzanie kategoriami\n• feat: uzupełnić tłumaczenia wszystkich obsługiwanych języków\n• feat: zlokalizować pełną historię wydań\n• fix: przywrócić wbudowane Flutter DevTools\n• fix: ustabilizować debugowanie Fluttera w VS Code",
-  "1790283564": "• fix(l10n): zsynchronizować historię bieżącej wersji"
+  "1790283564": "• fix(l10n): zsynchronizować historię bieżącej wersji",
+  "1790291811": "• Dodano tłumaczenie rosyjskie\n• Zsynchronizowano historię wydania 2.2.22"
 }

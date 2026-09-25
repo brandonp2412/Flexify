@@ -63,6 +63,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageNameRussian => 'Русский';
 
   @override
+  String get languageNameHindi => 'हिन्दी';
+
+  @override
   String get navHistory => '历史';
 
   @override
@@ -1521,6 +1524,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get languageNameRussian => 'Русский';
 
   @override
+  String get languageNameHindi => 'हिन्दी';
+
+  @override
   String get navHistory => '历史';
 
   @override
@@ -2977,6 +2983,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get languageNameRussian => 'Русский';
+
+  @override
+  String get languageNameHindi => 'हिन्दी';
 
   @override
   String get navHistory => '歷史';

@@ -104,6 +104,7 @@ const _storeLocaleToAppLocale = <String, String>{
   'de-DE': 'de',
   'es-ES': 'es',
   'fr-FR': 'fr',
+  'hi-IN': 'hi',
   'it-IT': 'it',
   'ja-JP': 'ja',
   'ko-KR': 'ko',

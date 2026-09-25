@@ -56,6 +56,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameTraditionalChinese',
   'languageNameTurkish',
   'languageNameRussian',
+  'languageNameHindi',
   'stoneUnitShort',
 };
 
@@ -139,6 +140,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
   },
   'tr': {'stoneUnit', 'examplePlanExercises'},
   'ru': {},
+  'hi': {},
   'zh': {},
   'zh_CN': {},
   'zh_TW': {},
@@ -156,6 +158,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'pt-BR': {'Zoom'},
   'tr': {},
   'ru': {},
+  'hi': {},
   'zh-Hans': {},
   'zh-Hant': {},
 };
@@ -185,6 +188,7 @@ const _playStoreLocaleByAppLocale = <String, String>{
   'pt_BR': 'pt-BR',
   'tr': 'tr-TR',
   'ru': 'ru-RU',
+  'hi': 'hi-IN',
   'zh_CN': 'zh-CN',
   'zh_TW': 'zh-TW',
 };
@@ -201,6 +205,7 @@ const _appStoreLocaleByAppLocale = <String, String>{
   'pt_BR': 'pt-BR',
   'tr': 'tr',
   'ru': 'ru',
+  'hi': 'hi',
   'zh_CN': 'zh-Hans',
   'zh_TW': 'zh-Hant',
 };
@@ -209,7 +214,9 @@ const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
 
-const _playStoreScreenshotFallbackLocales = <String>{'zh-TW'};
+// Google Play uses default-language graphics when localized graphics are omitted.
+// https://support.google.com/googleplay/android-developer/answer/9844778
+const _playStoreScreenshotFallbackLocales = <String>{'zh-TW', 'hi-IN'};
 
 final _changelogCatalogLocales = _playStoreLocaleByAppLocale.keys.toSet();
 
@@ -753,6 +760,7 @@ void main() {
       'zh-Hant',
       'tr',
       'ru',
+      'hi',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');
 

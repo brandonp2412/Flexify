@@ -1,0 +1,2 @@
+- ऐप बार में संपादन ग्राफ नाम सक्षम करें
+- अपडेट: Navigator.of(context).pop() => Navigator.pop(context)

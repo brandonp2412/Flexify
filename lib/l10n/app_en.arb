@@ -69,6 +69,10 @@
     "description": "Stable native display name for the Turkish locale."
   },
   "languageNameRussian": "Русский",
+  "languageNameHindi": "हिन्दी",
+  "@languageNameHindi": {
+    "description": "Stable native display name for the Hindi locale."
+  },
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },

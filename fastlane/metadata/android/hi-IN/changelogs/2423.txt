@@ -1,0 +1,2 @@
+- अद्यतन pubspec.lock
+- GitHub एक्शन वर्कफ़्लो से MacOS/iOS निर्माण निकालें

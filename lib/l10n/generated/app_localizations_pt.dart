@@ -64,6 +64,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageNameRussian => 'Русский';
 
   @override
+  String get languageNameHindi => 'हिन्दी';
+
+  @override
   String get navHistory => 'Histórico';
 
   @override
@@ -1603,6 +1606,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get languageNameRussian => 'Русский';
+
+  @override
+  String get languageNameHindi => 'हिन्दी';
 
   @override
   String get navHistory => 'Histórico';
