@@ -22,6 +22,10 @@
   "@languageNameHindi": {
     "description": "Stable native display name for the Hindi locale."
   },
+  "languageNameArabic": "العربية",
+  "@languageNameArabic": {
+    "description": "Stable native display name for the Arabic locale."
+  },
   "navHistory": "Cronologia",
   "navPlans": "Schede",
   "navGraphs": "Grafici",
