@@ -86,6 +86,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageNamePersian => 'فارسی';
 
   @override
+  String get languageNameThai => 'ไทย';
+
+  @override
   String get navHistory => 'Histórico';
 
   @override
@@ -1646,6 +1649,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get languageNamePersian => 'فارسی';
+
+  @override
+  String get languageNameThai => 'ไทย';
 
   @override
   String get navHistory => 'Histórico';

@@ -46,6 +46,10 @@
   "@languageNamePersian": {
     "description": "Stable native display name for the Persian locale."
   },
+  "languageNameThai": "ไทย",
+  "@languageNameThai": {
+    "description": "Stable native display name for the Thai locale."
+  },
   "navHistory": "Histórico",
   "navPlans": "Planos",
   "navGraphs": "Gráficos",

@@ -53,6 +53,8 @@ void main() {
       expect(localeOverrideFromIdentifier('UR'), const Locale('ur'));
       expect(localeOverrideFromIdentifier('fa'), const Locale('fa'));
       expect(localeOverrideFromIdentifier('FA'), const Locale('fa'));
+      expect(localeOverrideFromIdentifier('th'), const Locale('th'));
+      expect(localeOverrideFromIdentifier('TH'), const Locale('th'));
       expect(localeOverrideFromIdentifier('zh-CN'), const Locale('zh', 'CN'));
       expect(localeOverrideFromIdentifier('zh_CN'), const Locale('zh', 'CN'));
       expect(localeOverrideFromIdentifier('ZH-cn'), const Locale('zh', 'CN'));
@@ -81,6 +83,7 @@ void main() {
       expect(canonicalLocaleOverride('bn'), 'bn');
       expect(canonicalLocaleOverride('ur'), 'ur');
       expect(canonicalLocaleOverride('fa'), 'fa');
+      expect(canonicalLocaleOverride('th'), 'th');
       expect(canonicalLocaleOverride('zh_CN'), 'zh-CN');
       expect(canonicalLocaleOverride('zh_TW'), 'zh-TW');
       expect(canonicalLocaleOverride('zh'), isNull);
@@ -107,6 +110,7 @@ void main() {
         'bn',
         'ur',
         'fa',
+        'th',
       ]);
     },
   );
@@ -137,6 +141,7 @@ void main() {
       'bn': const Locale('bn'),
       'ur': const Locale('ur'),
       'fa': const Locale('fa'),
+      'th': const Locale('th'),
       'zh-CN': const Locale('zh', 'CN'),
       'zh-TW': const Locale('zh', 'TW'),
     };
