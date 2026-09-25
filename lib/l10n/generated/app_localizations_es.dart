@@ -85,6 +85,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageNamePersian => 'فارسی';
 
   @override
+  String get languageNameThai => 'ไทย';
+
+  @override
   String get navHistory => 'Historial';
 
   @override

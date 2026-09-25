@@ -1,18 +1,18 @@
 {
-  "@@locale": "ar",
+  "@@locale": "th",
   "appTitle": "Flexify",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
-  "settingsLanguage": "اللغة",
+  "settingsLanguage": "ภาษา",
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "اختر اللغة التي يستخدمها Flexify",
+  "settingsLanguageDescription": "เลือกภาษาที่ใช้ใน Flexify",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
-  "languageSystemDefault": "إعداد النظام الافتراضي",
+  "languageSystemDefault": "ค่าเริ่มต้นของระบบ",
   "@languageSystemDefault": {
     "description": "Language option that follows the device or operating system locale."
   },
@@ -104,39 +104,39 @@
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
-  "navHistory": "السجل",
+  "navHistory": "ประวัติ",
   "@navHistory": {
     "description": "Navigation label for workout history."
   },
-  "navPlans": "الخطط",
+  "navPlans": "แผน",
   "@navPlans": {
     "description": "Navigation label for workout plans."
   },
-  "navGraphs": "الرسوم البيانية",
+  "navGraphs": "กราฟ",
   "@navGraphs": {
     "description": "Navigation label for exercise graphs."
   },
-  "navTimer": "المؤقت",
+  "navTimer": "ตัวจับเวลา",
   "@navTimer": {
     "description": "Navigation label for the rest timer."
   },
-  "navSettings": "الإعدادات",
+  "navSettings": "การตั้งค่า",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },
-  "errorLabel": "خطأ",
+  "errorLabel": "ข้อผิดพลาด",
   "@errorLabel": {
     "description": "Generic short error label."
   },
-  "tabContentError": "تعذر إنشاء محتوى علامة التبويب.",
+  "tabContentError": "ไม่สามารถสร้างเนื้อหาแท็บได้",
   "@tabContentError": {
     "description": "Error shown when a configured app tab cannot be rendered."
   },
-  "cannotHideAllTabs": "لا يمكن إخفاء كل شيء!",
+  "cannotHideAllTabs": "ไม่สามารถซ่อนทุกอย่างได้!",
   "@cannotHideAllTabs": {
     "description": "Message shown when the user tries to hide the last visible navigation tab."
   },
-  "removeTabQuestion": "إزالة علامة تبويب {tab}؟",
+  "removeTabQuestion": "ลบแท็บ {tab} หรือไม่?",
   "@removeTabQuestion": {
     "description": "Confirmation title shown before hiding a navigation tab.",
     "placeholders": {
@@ -146,11 +146,11 @@
       }
     }
   },
-  "restoreTabFromSettings": "يمكنك إضافتها مرة أخرى لاحقًا من الإعدادات.",
+  "restoreTabFromSettings": "คุณสามารถเพิ่มกลับได้ภายหลังจากการตั้งค่า",
   "@restoreTabFromSettings": {
     "description": "Explanation shown when removing a navigation tab."
   },
-  "removedTab": "تمت إزالة {tab}",
+  "removedTab": "ลบ {tab} แล้ว",
   "@removedTab": {
     "description": "Toast shown after a navigation tab has been hidden.",
     "placeholders": {
@@ -160,7 +160,7 @@
       }
     }
   },
-  "newVersion": "الإصدار الجديد {version}",
+  "newVersion": "เวอร์ชันใหม่ {version}",
   "@newVersion": {
     "description": "Toast announcing that the installed app version changed.",
     "placeholders": {
@@ -170,23 +170,23 @@
       }
     }
   },
-  "changes": "التغييرات",
+  "changes": "การเปลี่ยนแปลง",
   "@changes": {
     "description": "Action that opens the app changelog."
   },
-  "searchHint": "بحث...",
+  "searchHint": "ค้นหา...",
   "@searchHint": {
     "description": "Default hint shown in reusable search fields."
   },
-  "deleteSelected": "حذف المحدد",
+  "deleteSelected": "ลบที่เลือก",
   "@deleteSelected": {
     "description": "Tooltip for deleting the currently selected records."
   },
-  "confirmDelete": "تأكيد الحذف",
+  "confirmDelete": "ยืนยันการลบ",
   "@confirmDelete": {
     "description": "Title for a generic delete confirmation dialog."
   },
-  "deleteRecordsConfirmation": "{count, plural, =1{هل أنت متأكد من حذف سجل واحد؟ لا يمكن التراجع عن هذا الإجراء.} other{هل أنت متأكد من حذف {count} سجلات؟ لا يمكن التراجع عن هذا الإجراء.}}",
+  "deleteRecordsConfirmation": "{count, plural, =1{คุณแน่ใจหรือไม่ว่าต้องการลบ 1 รายการ? การดำเนินการนี้ย้อนกลับไม่ได้} other{คุณแน่ใจหรือไม่ว่าต้องการลบ {count} รายการ? การดำเนินการนี้ย้อนกลับไม่ได้}}",
   "@deleteRecordsConfirmation": {
     "description": "Generic confirmation text for deleting one or more records.",
     "placeholders": {
@@ -196,263 +196,263 @@
       }
     }
   },
-  "actionCancel": "إلغاء",
+  "actionCancel": "ยกเลิก",
   "@actionCancel": {
     "description": "Generic cancel action."
   },
-  "actionDelete": "حذف",
+  "actionDelete": "ลบ",
   "@actionDelete": {
     "description": "Generic delete action."
   },
-  "actionRemove": "إزالة",
+  "actionRemove": "เอาออก",
   "@actionRemove": {
     "description": "Generic remove action."
   },
-  "actionEdit": "تعديل",
+  "actionEdit": "แก้ไข",
   "@actionEdit": {
     "description": "Generic edit action."
   },
-  "actionShare": "مشاركة",
+  "actionShare": "แชร์",
   "@actionShare": {
     "description": "Generic share action."
   },
-  "clearSelection": "مسح التحديد",
+  "clearSelection": "ล้างการเลือก",
   "@clearSelection": {
     "description": "Action or tooltip for clearing selected records."
   },
-  "clearSearch": "مسح البحث",
+  "clearSearch": "ล้างการค้นหา",
   "@clearSearch": {
     "description": "Tooltip for clearing the current search query."
   },
-  "showMenu": "إظهار القائمة",
+  "showMenu": "แสดงเมนู",
   "@showMenu": {
     "description": "Tooltip for opening a contextual actions menu."
   },
-  "selectAll": "تحديد الكل",
+  "selectAll": "เลือกทั้งหมด",
   "@selectAll": {
     "description": "Action for selecting every visible record."
   },
-  "weightLabel": "الوزن",
+  "weightLabel": "น้ำหนัก",
   "@weightLabel": {
     "description": "Generic label for body or exercise weight."
   },
-  "filter": "تصفية",
+  "filter": "ตัวกรอง",
   "@filter": {
     "description": "Tooltip for opening filtering controls."
   },
-  "filters": "عوامل التصفية",
+  "filters": "ตัวกรอง",
   "@filters": {
     "description": "Title for a filtering dialog."
   },
-  "categoryLabel": "الفئة",
+  "categoryLabel": "หมวดหมู่",
   "@categoryLabel": {
     "description": "Generic exercise category label."
   },
-  "repsLabel": "التكرارات",
+  "repsLabel": "จำนวนครั้ง",
   "@repsLabel": {
     "description": "Short label for exercise repetitions."
   },
-  "repsFilter": "تصفية التكرارات",
+  "repsFilter": "ตัวกรองจำนวนครั้ง",
   "@repsFilter": {
     "description": "Title for filtering records by repetition count."
   },
-  "weightFilter": "تصفية الوزن",
+  "weightFilter": "ตัวกรองน้ำหนัก",
   "@weightFilter": {
     "description": "Title for filtering records by weight."
   },
-  "greaterThan": "أكبر من",
+  "greaterThan": "มากกว่า",
   "@greaterThan": {
     "description": "Label for a numeric lower-bound filter."
   },
-  "lessThan": "أقل من",
+  "lessThan": "น้อยกว่า",
   "@lessThan": {
     "description": "Label for a numeric upper-bound filter."
   },
-  "startDate": "تاريخ البدء",
+  "startDate": "วันที่เริ่มต้น",
   "@startDate": {
     "description": "Label for the beginning of a date range."
   },
-  "endDate": "تاريخ الانتهاء",
+  "endDate": "วันที่สิ้นสุด",
   "@endDate": {
     "description": "Label for the end of a date range."
   },
-  "actionClear": "مسح",
+  "actionClear": "ล้าง",
   "@actionClear": {
     "description": "Generic action for clearing a value, selection, or filter."
   },
-  "actionOk": "موافق",
+  "actionOk": "ตกลง",
   "@actionOk": {
     "description": "Generic confirmation action."
   },
-  "actionClose": "إغلاق",
+  "actionClose": "ปิด",
   "@actionClose": {
     "description": "Generic close action."
   },
-  "sortBy": "الترتيب حسب",
+  "sortBy": "เรียงตาม",
   "@sortBy": {
     "description": "Label for selecting a sort order."
   },
-  "dateNewest": "التاريخ (الأحدث)",
+  "dateNewest": "วันที่ (ใหม่สุด)",
   "@dateNewest": {
     "description": "Sort option that places newest records first."
   },
-  "dateOldest": "التاريخ (الأقدم)",
+  "dateOldest": "วันที่ (เก่าสุด)",
   "@dateOldest": {
     "description": "Sort option that places oldest records first."
   },
-  "nameLabel": "الاسم",
+  "nameLabel": "ชื่อ",
   "@nameLabel": {
     "description": "Generic name label and sort option."
   },
-  "missingPermissions": "أذونات مفقودة",
+  "missingPermissions": "ไม่มีสิทธิ์ที่จำเป็น",
   "@missingPermissions": {
     "description": "Title for the page explaining missing Android permissions."
   },
-  "restTimersPermissionsMissing": "مؤقتات الراحة مفعلة، لكن بعض الأذونات مفقودة.",
+  "restTimersPermissionsMissing": "ตัวจับเวลาพักเปิดอยู่ แต่ไม่มีสิทธิ์ที่จำเป็น",
   "@restTimersPermissionsMissing": {
     "description": "Message explaining that enabled rest timers require additional permissions."
   },
-  "restTimersPermissionsOptional": "إذا عطلت مؤقتات الراحة، فلن تكون هذه الأذونات مطلوبة.",
+  "restTimersPermissionsOptional": "หากปิดตัวจับเวลาพัก ก็ไม่จำเป็นต้องใช้สิทธิ์เหล่านี้",
   "@restTimersPermissionsOptional": {
     "description": "Explanation that timer permissions are unnecessary when rest timers are disabled."
   },
-  "restTimers": "مؤقتات الراحة",
+  "restTimers": "ตัวจับเวลาพัก",
   "@restTimers": {
     "description": "Label for the rest timer feature."
   },
-  "disableBatteryOptimizations": "تعطيل تحسينات البطارية",
+  "disableBatteryOptimizations": "ปิดการเพิ่มประสิทธิภาพแบตเตอรี่",
   "@disableBatteryOptimizations": {
     "description": "Android permission action for excluding Flexify from battery optimizations."
   },
-  "batteryOptimizationWarning": "قد يتوقف التقدم مؤقتًا إذا ظلت تحسينات البطارية مفعلة.",
+  "batteryOptimizationWarning": "ความคืบหน้าอาจหยุดชั่วคราวหากยังเปิดการเพิ่มประสิทธิภาพแบตเตอรี่",
   "@batteryOptimizationWarning": {
     "description": "Explanation of why battery optimization access is requested."
   },
-  "scheduleExactAlarm": "جدولة منبه دقيق",
+  "scheduleExactAlarm": "ตั้งเวลาปลุกแบบแม่นยำ",
   "@scheduleExactAlarm": {
     "description": "Android permission action for scheduling exact alarms."
   },
-  "exactAlarmWarning": "لا يمكن أن تكون المنبهات دقيقة إذا كان هذا الخيار معطلاً.",
+  "exactAlarmWarning": "การปลุกอาจไม่ตรงเวลาหากปิดตัวเลือกนี้",
   "@exactAlarmWarning": {
     "description": "Explanation of why exact alarm access is requested."
   },
-  "postNotifications": "إرسال الإشعارات",
+  "postNotifications": "แสดงการแจ้งเตือน",
   "@postNotifications": {
     "description": "Android permission action for posting notifications."
   },
-  "notificationBarDescription": "يُرسل تقدم المؤقت إلى شريط الإشعارات",
+  "notificationBarDescription": "ความคืบหน้าของตัวจับเวลาจะแสดงในแถบการแจ้งเตือน",
   "@notificationBarDescription": {
     "description": "Explanation of how rest timer notifications are used."
   },
-  "invalidPermissions": "أذونات غير صالحة",
+  "invalidPermissions": "สิทธิ์ไม่ถูกต้อง",
   "@invalidPermissions": {
     "description": "Title for the warning shown when rest timers lack required permissions."
   },
-  "insufficientTimerPermissionsConfirmation": "مؤقتات الراحة مفعلة دون أذونات كافية. هل أنت متأكد؟",
+  "insufficientTimerPermissionsConfirmation": "เปิดตัวจับเวลาพักโดยไม่มีสิทธิ์เพียงพอ คุณแน่ใจหรือไม่?",
   "@insufficientTimerPermissionsConfirmation": {
     "description": "Confirmation shown when leaving timer permissions incomplete."
   },
-  "actionConfirm": "تأكيد",
+  "actionConfirm": "ยืนยัน",
   "@actionConfirm": {
     "description": "Generic confirmation action."
   },
-  "appAccess": "وصول التطبيق",
+  "appAccess": "การเข้าถึงแอป",
   "@appAccess": {
     "description": "Title for the Android app access dialog."
   },
-  "appAccessDescription": "مطلوب للمؤقتات والإشعارات المفعلة.",
+  "appAccessDescription": "จำเป็นสำหรับตัวจับเวลาและการแจ้งเตือนที่เปิดใช้งาน",
   "@appAccessDescription": {
     "description": "Short explanation of why Android app access is requested."
   },
-  "notifications": "الإشعارات",
+  "notifications": "การแจ้งเตือน",
   "@notifications": {
     "description": "Generic label for notifications."
   },
-  "timerProgressAndRestAlerts": "تقدم المؤقت وتنبيهات الراحة",
+  "timerProgressAndRestAlerts": "ความคืบหน้าของตัวจับเวลาและการแจ้งเตือนพัก",
   "@timerProgressAndRestAlerts": {
     "description": "Description of notifications used when rest timers are enabled."
   },
-  "enabledNotificationsDescription": "الإشعارات التي فعّلتها",
+  "enabledNotificationsDescription": "การแจ้งเตือนที่คุณเปิดใช้งาน",
   "@enabledNotificationsDescription": {
     "description": "Description of notification access when notifications are enabled without rest timers."
   },
-  "backgroundActivity": "النشاط في الخلفية",
+  "backgroundActivity": "กิจกรรมเบื้องหลัง",
   "@backgroundActivity": {
     "description": "Android app access label for background activity."
   },
-  "backgroundActivityDescription": "الحفاظ على موثوقية المؤقتات في الخلفية",
+  "backgroundActivityDescription": "ทำให้ตัวจับเวลาทำงานได้อย่างน่าเชื่อถือในเบื้องหลัง",
   "@backgroundActivityDescription": {
     "description": "Description of background activity access for timers."
   },
-  "exactAlarms": "المنبهات الدقيقة",
+  "exactAlarms": "การปลุกแบบแม่นยำ",
   "@exactAlarms": {
     "description": "Android app access label for exact alarms."
   },
-  "exactAlarmsDescription": "التنبيه بالضبط عند انتهاء مؤقت الراحة",
+  "exactAlarmsDescription": "แจ้งเตือนทันทีเมื่อตัวจับเวลาพักสิ้นสุด",
   "@exactAlarmsDescription": {
     "description": "Description of exact alarm access for rest timers."
   },
-  "noAdditionalAndroidAccessNeeded": "لا يلزم وصول إضافي إلى Android لإعداداتك الحالية.",
+  "noAdditionalAndroidAccessNeeded": "ไม่จำเป็นต้องให้สิทธิ์ Android เพิ่มเติมสำหรับการตั้งค่าปัจจุบัน",
   "@noAdditionalAndroidAccessNeeded": {
     "description": "Message shown when current settings need no extra Android permissions."
   },
-  "actionDone": "تم",
+  "actionDone": "เสร็จสิ้น",
   "@actionDone": {
     "description": "Generic action for finishing or dismissing a flow."
   },
-  "allowed": "مسموح",
+  "allowed": "อนุญาตแล้ว",
   "@allowed": {
     "description": "Status tooltip indicating that an Android permission is granted."
   },
-  "actionAllow": "سماح",
+  "actionAllow": "อนุญาต",
   "@actionAllow": {
     "description": "Generic action for granting requested access."
   },
-  "backupLabel": "نسخة احتياطية",
+  "backupLabel": "สำรองข้อมูล",
   "@backupLabel": {
     "description": "Label for backup import, export, and data-management actions."
   },
-  "databaseLabel": "قاعدة البيانات",
+  "databaseLabel": "ฐานข้อมูล",
   "@databaseLabel": {
     "description": "Label for database data-management actions."
   },
-  "deleteRecords": "حذف السجلات",
+  "deleteRecords": "ลบรายการ",
   "@deleteRecords": {
     "description": "Action for opening destructive data deletion options."
   },
-  "deleteAllGraphsConfirmation": "هل أنت متأكد من حذف جميع الرسوم البيانية؟ لا يمكن التراجع عن هذا الإجراء.",
+  "deleteAllGraphsConfirmation": "คุณแน่ใจหรือไม่ว่าต้องการลบกราฟทั้งหมด? การดำเนินการนี้ย้อนกลับไม่ได้",
   "@deleteAllGraphsConfirmation": {
     "description": "Confirmation text for deleting all graph records."
   },
-  "deleteAllPlansConfirmation": "هل أنت متأكد من حذف جميع الخطط؟ لا يمكن التراجع عن هذا الإجراء.",
+  "deleteAllPlansConfirmation": "คุณแน่ใจหรือไม่ว่าต้องการลบแผนทั้งหมด? การดำเนินการนี้ย้อนกลับไม่ได้",
   "@deleteAllPlansConfirmation": {
     "description": "Confirmation text for deleting all plans."
   },
-  "deleteDatabaseConfirmation": "هل أنت متأكد من حذف قاعدة بياناتك؟ لا يمكن التراجع عن هذا الإجراء وسيؤدي إلى حذف جميع بياناتك.",
+  "deleteDatabaseConfirmation": "คุณแน่ใจหรือไม่ว่าต้องการลบฐานข้อมูล? การดำเนินการนี้ย้อนกลับไม่ได้และจะทำลายข้อมูลทั้งหมดของคุณ",
   "@deleteDatabaseConfirmation": {
     "description": "Confirmation text for deleting the complete Flexify database."
   },
-  "importData": "استيراد البيانات",
+  "importData": "นำเข้าข้อมูล",
   "@importData": {
     "description": "Action for opening data import options."
   },
-  "exportData": "تصدير البيانات",
+  "exportData": "ส่งออกข้อมูล",
   "@exportData": {
     "description": "Action for opening data export options."
   },
-  "actionReport": "إبلاغ",
+  "actionReport": "รายงาน",
   "@actionReport": {
     "description": "Action for reporting an import failure."
   },
-  "graphDataImported": "تم استيراد بيانات الرسوم البيانية بنجاح!",
+  "graphDataImported": "นำเข้าข้อมูลกราฟสำเร็จ!",
   "@graphDataImported": {
     "description": "Toast shown after graph CSV data is imported."
   },
-  "plansImported": "تم استيراد الخطط بنجاح",
+  "plansImported": "นำเข้าแผนสำเร็จ",
   "@plansImported": {
     "description": "Toast shown after plan CSV data is imported."
   },
-  "failedToImportDatabase": "فشل استيراد قاعدة البيانات: {error}",
+  "failedToImportDatabase": "ไม่สามารถนำเข้าฐานข้อมูล: {error}",
   "@failedToImportDatabase": {
     "description": "Toast shown when a database import fails.",
     "placeholders": {
@@ -461,11 +461,11 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "لا يحتوي أرشيف النسخة الاحتياطية على قاعدة بيانات Flexify.",
+  "backupArchiveMissingDatabase": "ไฟล์สำรองไม่มีฐานข้อมูล Flexify",
   "@backupArchiveMissingDatabase": {
     "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
   },
-  "failedToImportGraphs": "فشل استيراد الرسوم البيانية: {error}",
+  "failedToImportGraphs": "ไม่สามารถนำเข้ากราฟ: {error}",
   "@failedToImportGraphs": {
     "description": "Toast shown when a graph CSV import fails.",
     "placeholders": {
@@ -474,7 +474,7 @@
       }
     }
   },
-  "failedToImportPlans": "فشل استيراد الخطط: {error}",
+  "failedToImportPlans": "ไม่สามารถนำเข้าแผน: {error}",
   "@failedToImportPlans": {
     "description": "Toast shown when a plan CSV import fails.",
     "placeholders": {
@@ -483,27 +483,27 @@
       }
     }
   },
-  "selectedFileDoesNotExist": "الملف المحدد غير موجود",
+  "selectedFileDoesNotExist": "ไฟล์ที่เลือกไม่มีอยู่",
   "@selectedFileDoesNotExist": {
     "description": "Validation error when an import file no longer exists."
   },
-  "couldNotReadFileData": "تعذرت قراءة بيانات الملف",
+  "couldNotReadFileData": "ไม่สามารถอ่านข้อมูลไฟล์ได้",
   "@couldNotReadFileData": {
     "description": "Validation error when import file bytes cannot be read."
   },
-  "databaseImportWebUnsupported": "يتطلب استيراد قاعدة البيانات على الويب ترحيل البيانات يدويًا. يرجى تصدير بياناتك كملفات CSV واستيرادها بدلاً من ذلك.",
+  "databaseImportWebUnsupported": "การนำเข้าฐานข้อมูลบนเว็บต้องย้ายข้อมูลด้วยตนเอง โปรดส่งออกข้อมูลเป็นไฟล์ CSV แล้วนำเข้าไฟล์เหล่านั้นแทน",
   "@databaseImportWebUnsupported": {
     "description": "Validation error explaining the supported web data-import workflow."
   },
-  "csvFileEmpty": "ملف CSV فارغ",
+  "csvFileEmpty": "ไฟล์ CSV ว่างเปล่า",
   "@csvFileEmpty": {
     "description": "Validation error for an empty CSV import file."
   },
-  "csvNeedsDataRow": "يجب أن يحتوي ملف CSV على صف بيانات واحد على الأقل",
+  "csvNeedsDataRow": "ไฟล์ CSV ต้องมีข้อมูลอย่างน้อยหนึ่งแถว",
   "@csvNeedsDataRow": {
     "description": "Validation error for a CSV containing only headings."
   },
-  "csvRowInsufficientColumns": "يحتوي الصف {row} على عدد غير كافٍ من الأعمدة: {count}",
+  "csvRowInsufficientColumns": "แถว {row} มีคอลัมน์ไม่เพียงพอ: {count}",
   "@csvRowInsufficientColumns": {
     "description": "Validation error when an imported CSV row has too few columns.",
     "placeholders": {
@@ -515,7 +515,7 @@
       }
     }
   },
-  "invalidCsvValue": "قيمة {field} غير صالحة في الصف {row}: {value}",
+  "invalidCsvValue": "ค่า {field} ในแถว {row} ไม่ถูกต้อง: {value}",
   "@invalidCsvValue": {
     "description": "Validation error for a malformed value in an imported CSV row.",
     "placeholders": {
@@ -530,7 +530,7 @@
       }
     }
   },
-  "invalidCsvDataType": "نوع بيانات {field} غير صالح في الصف {row}: {type}",
+  "invalidCsvDataType": "ชนิดข้อมูล {field} ในแถว {row} ไม่ถูกต้อง: {type}",
   "@invalidCsvDataType": {
     "description": "Validation error for an unsupported value type in an imported CSV row.",
     "placeholders": {
@@ -545,7 +545,7 @@
       }
     }
   },
-  "expectedIntegerPlanId": "كان متوقعًا معرّف خطة صحيحًا، لكن تم الحصول على \"{value}\"",
+  "expectedIntegerPlanId": "คาดว่า plan id เป็นจำนวนเต็ม แต่ได้ \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
     "placeholders": {
@@ -554,19 +554,19 @@
       }
     }
   },
-  "unitLabel": "الوحدة",
+  "unitLabel": "หน่วย",
   "@unitLabel": {
     "description": "Generic label for measurement units."
   },
-  "kilogramsUnit": "كيلوغرام (كغ)",
+  "kilogramsUnit": "กิโลกรัม (kg)",
   "@kilogramsUnit": {
     "description": "Display label for the kilogram unit option."
   },
-  "poundsUnit": "رطل (lb)",
+  "poundsUnit": "ปอนด์ (lb)",
   "@poundsUnit": {
     "description": "Display label for the pound unit option."
   },
-  "stoneUnit": "ستون",
+  "stoneUnit": "สโตน",
   "@stoneUnit": {
     "description": "Display label for the stone weight unit option."
   },
@@ -574,167 +574,167 @@
   "@stoneUnitShort": {
     "description": "Compact stone weight unit shown beside measurement values."
   },
-  "kilometersUnit": "كيلومتر (كم)",
+  "kilometersUnit": "กิโลเมตร (km)",
   "@kilometersUnit": {
     "description": "Display label for the kilometer unit option."
   },
-  "milesUnit": "ميل (mi)",
+  "milesUnit": "ไมล์ (mi)",
   "@milesUnit": {
     "description": "Display label for the mile unit option."
   },
-  "metersUnit": "متر (م)",
+  "metersUnit": "เมตร (m)",
   "@metersUnit": {
     "description": "Display label for the meter unit option."
   },
-  "kilocaloriesUnit": "كيلوسعرة (kcal)",
+  "kilocaloriesUnit": "กิโลแคลอรี (kcal)",
   "@kilocaloriesUnit": {
     "description": "Display label for the kilocalorie unit option."
   },
-  "enterWeight": "أدخل الوزن",
+  "enterWeight": "ป้อนน้ำหนัก",
   "@enterWeight": {
     "description": "Title for the bodyweight entry page."
   },
-  "requiredField": "مطلوب",
+  "requiredField": "จำเป็น",
   "@requiredField": {
     "description": "Validation message for a required input."
   },
-  "invalidNumber": "رقم غير صالح",
+  "invalidNumber": "ตัวเลขไม่ถูกต้อง",
   "@invalidNumber": {
     "description": "Validation message for a malformed numeric input."
   },
-  "previousWeight": "الوزن السابق",
+  "previousWeight": "น้ำหนักก่อนหน้า",
   "@previousWeight": {
     "description": "Label for the previously recorded bodyweight."
   },
-  "imageLabel": "الصورة",
+  "imageLabel": "รูปภาพ",
   "@imageLabel": {
     "description": "Generic label for an attached image."
   },
-  "longPressToDelete": "اضغط مطولاً للحذف",
+  "longPressToDelete": "กดค้างเพื่อลบ",
   "@longPressToDelete": {
     "description": "Tooltip explaining how to remove an attached image."
   },
-  "imageError": "خطأ في الصورة",
+  "imageError": "ข้อผิดพลาดของรูปภาพ",
   "@imageError": {
     "description": "Action label shown when an attached image cannot be rendered."
   },
-  "actionSave": "حفظ",
+  "actionSave": "บันทึก",
   "@actionSave": {
     "description": "Generic save action."
   },
-  "aboutTitle": "حول",
+  "aboutTitle": "เกี่ยวกับ",
   "@aboutTitle": {
     "description": "Title for the About page."
   },
-  "donate": "تبرع",
+  "donate": "บริจาค",
   "@donate": {
     "description": "Action for opening the project donation page."
   },
-  "helpSupportProject": "ساعد في دعم هذا المشروع",
+  "helpSupportProject": "ช่วยสนับสนุนโครงการนี้",
   "@helpSupportProject": {
     "description": "Description for the donation action."
   },
-  "whatsNewAbout": "ما الجديد؟",
+  "whatsNewAbout": "มีอะไรใหม่?",
   "@whatsNewAbout": {
     "description": "About-page label for opening release notes."
   },
-  "whatsNewTitle": "ما الجديد؟",
+  "whatsNewTitle": "มีอะไรใหม่?",
   "@whatsNewTitle": {
     "description": "Title for the in-app changelog page."
   },
-  "seeReleaseNotes": "اطّلع على ملاحظات الإصدار",
+  "seeReleaseNotes": "ดูบันทึกประจำรุ่น",
   "@seeReleaseNotes": {
     "description": "Description for the in-app changelog action."
   },
-  "versionLabel": "الإصدار",
+  "versionLabel": "เวอร์ชัน",
   "@versionLabel": {
     "description": "Label for the installed app version."
   },
-  "authorLabel": "المؤلف",
+  "authorLabel": "ผู้เขียน",
   "@authorLabel": {
     "description": "Label for the app author."
   },
-  "privacyPolicy": "سياسة الخصوصية",
+  "privacyPolicy": "นโยบายความเป็นส่วนตัว",
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "كيف يتعامل Flexify مع بياناتك",
+  "privacyPolicyDescription": "Flexify จัดการข้อมูลของคุณอย่างไร",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
-  "licenseLabel": "الترخيص",
+  "licenseLabel": "ใบอนุญาต",
   "@licenseLabel": {
     "description": "Label for opening the software license."
   },
-  "sourceCode": "الشيفرة المصدرية",
+  "sourceCode": "ซอร์สโค้ด",
   "@sourceCode": {
     "description": "Label for opening the source-code repository."
   },
-  "sourceCodeDescription": "اطّلع عليها على GitHub",
+  "sourceCodeDescription": "ดูได้บน GitHub",
   "@sourceCodeDescription": {
     "description": "Description for the source-code repository action."
   },
-  "leaveReview": "اكتب مراجعة",
+  "leaveReview": "เขียนรีวิว",
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "قيّم Flexify على متجر Play",
+  "leaveReviewDescription": "ให้คะแนน Flexify บน Play Store",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
-  "reportBug": "الإبلاغ عن خطأ",
+  "reportBug": "รายงานข้อบกพร่อง",
   "@reportBug": {
     "description": "Label for opening the bug-report form."
   },
-  "reportBugDescription": "افتح تذكرة على GitHub",
+  "reportBugDescription": "เปิดตั๋วบน GitHub",
   "@reportBugDescription": {
     "description": "Description for the bug-report action."
   },
-  "failedMigrations": "عمليات ترحيل فاشلة",
+  "failedMigrations": "การย้ายข้อมูลที่ล้มเหลว",
   "@failedMigrations": {
     "description": "Title for the database migration failure page."
   },
-  "errorMessageLabel": "رسالة الخطأ:",
+  "errorMessageLabel": "ข้อความข้อผิดพลาด:",
   "@errorMessageLabel": {
     "description": "Label preceding a database migration error message."
   },
-  "createIssue": "إنشاء مشكلة",
+  "createIssue": "สร้างอิชชู",
   "@createIssue": {
     "description": "Action for opening a new issue report."
   },
-  "addExercise": "إضافة تمرين",
+  "addExercise": "เพิ่มการออกกำลังกาย",
   "@addExercise": {
     "description": "Title and action for adding an exercise graph."
   },
-  "cardio": "تمارين القلب",
+  "cardio": "คาร์ดิโอ",
   "@cardio": {
     "description": "Label for cardiovascular exercises."
   },
-  "strength": "القوة",
+  "strength": "ความแข็งแรง",
   "@strength": {
     "description": "Label for strength exercises."
   },
-  "options": "الخيارات",
+  "options": "ตัวเลือก",
   "@options": {
     "description": "Tooltip for opening view options."
   },
-  "periodDay": "يوم",
+  "periodDay": "วัน",
   "@periodDay": {
     "description": "One-day graph period."
   },
-  "periodWeek": "أسبوع",
+  "periodWeek": "สัปดาห์",
   "@periodWeek": {
     "description": "One-week graph period."
   },
-  "periodMonth": "شهر",
+  "periodMonth": "เดือน",
   "@periodMonth": {
     "description": "One-month graph period."
   },
-  "periodYear": "سنة",
+  "periodYear": "ปี",
   "@periodYear": {
     "description": "One-year graph period."
   },
-  "noDataFor": "لا توجد بيانات بعد لـ {name}",
+  "noDataFor": "ยังไม่มีข้อมูลสำหรับ {name}",
   "@noDataFor": {
     "description": "Empty-state message for an exercise without graph data.",
     "placeholders": {
@@ -743,23 +743,23 @@
       }
     }
   },
-  "noDataYet": "لا توجد بيانات بعد",
+  "noDataYet": "ยังไม่มีข้อมูล",
   "@noDataYet": {
     "description": "Generic empty state when a graph has no data."
   },
-  "exerciseNotes": "ملاحظات التمرين",
+  "exerciseNotes": "หมายเหตุการออกกำลังกาย",
   "@exerciseNotes": {
     "description": "Label and title for notes attached to an exercise."
   },
-  "notesForExercise": "ملاحظات لهذا التمرين",
+  "notesForExercise": "หมายเหตุสำหรับการออกกำลังกายนี้",
   "@notesForExercise": {
     "description": "Hint for exercise notes."
   },
-  "useTimeBasedXAxis": "استخدام محور X المعتمد على الوقت",
+  "useTimeBasedXAxis": "ใช้แกน X ตามเวลา",
   "@useTimeBasedXAxis": {
     "description": "Graph option that uses elapsed time on the horizontal axis."
   },
-  "updateAllNamed": "تحديث كل {name}",
+  "updateAllNamed": "อัปเดต {name} ทั้งหมด",
   "@updateAllNamed": {
     "description": "Title for updating all records for a named exercise.",
     "placeholders": {
@@ -768,31 +768,31 @@
       }
     }
   },
-  "newName": "اسم جديد",
+  "newName": "ชื่อใหม่",
   "@newName": {
     "description": "Label for renaming an exercise."
   },
-  "restMinutes": "دقائق الراحة",
+  "restMinutes": "นาทีพัก",
   "@restMinutes": {
     "description": "Label for the minutes component of an exercise rest timer."
   },
-  "restSeconds": "ثواني الراحة",
+  "restSeconds": "วินาทีพัก",
   "@restSeconds": {
     "description": "Label for the seconds component of an exercise rest timer."
   },
-  "globalProgress": "التقدم العام",
+  "globalProgress": "ความคืบหน้าโดยรวม",
   "@globalProgress": {
     "description": "Title for the global progress graph."
   },
-  "curveLineGraphs": "رسوم بيانية بخطوط منحنية",
+  "curveLineGraphs": "ทำเส้นกราฟให้โค้ง",
   "@curveLineGraphs": {
     "description": "Setting that renders graph lines as curves."
   },
-  "curveLineGraphsDescription": "رسم خطوط الرسم البياني كمنحنيات سلسة",
+  "curveLineGraphsDescription": "วาดเส้นกราฟเป็นเส้นโค้งเรียบ",
   "@curveLineGraphsDescription": {
     "description": "Description for the curved graph-line setting."
   },
-  "noHistoryFor": "لا يوجد سجل بعد لـ {name}",
+  "noHistoryFor": "ยังไม่มีประวัติสำหรับ {name}",
   "@noHistoryFor": {
     "description": "Empty history message for a named exercise.",
     "placeholders": {
@@ -801,147 +801,147 @@
       }
     }
   },
-  "cancelSelection": "إلغاء التحديد",
+  "cancelSelection": "ยกเลิกการเลือก",
   "@cancelSelection": {
     "description": "Tooltip for leaving multi-select mode."
   },
-  "editSelected": "تعديل المحدد",
+  "editSelected": "แก้ไขที่เลือก",
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "تمرين جديد",
+  "newExercise": "การออกกำลังกายใหม่",
   "@newExercise": {
     "description": "Action for creating a new exercise graph."
   },
-  "noGraphsFound": "لم يتم العثور على رسوم بيانية",
+  "noGraphsFound": "ไม่พบกราฟ",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
   },
-  "searchGraphs": "البحث في الرسوم البيانية...",
+  "searchGraphs": "ค้นหากราฟ...",
   "@searchGraphs": {
     "description": "Hint for searching exercise graphs."
   },
-  "actionAdd": "إضافة",
+  "actionAdd": "เพิ่ม",
   "@actionAdd": {
     "description": "Generic add action."
   },
-  "actionUpdate": "تحديث",
+  "actionUpdate": "อัปเดต",
   "@actionUpdate": {
     "description": "Generic update action."
   },
-  "hideGlobalProgress": "إخفاء التقدم العام",
+  "hideGlobalProgress": "ซ่อนความคืบหน้าโดยรวม",
   "@hideGlobalProgress": {
     "description": "Action for hiding the global progress graph."
   },
-  "chartGroupedByCategory": "مخطط مجمّع حسب الفئة",
+  "chartGroupedByCategory": "แผนภูมิที่จัดกลุ่มตามหมวดหมู่",
   "@chartGroupedByCategory": {
     "description": "Description of the global progress chart."
   },
-  "noExercisesFound": "لم يتم العثور على تمارين",
+  "noExercisesFound": "ไม่พบการออกกำลังกาย",
   "@noExercisesFound": {
     "description": "Empty state after searching for exercises."
   },
-  "savePlan": "حفظ الخطة",
+  "savePlan": "บันทึกแผน",
   "@savePlan": {
     "description": "Action for saving a workout plan."
   },
-  "titleOptional": "العنوان (اختياري)",
+  "titleOptional": "ชื่อเรื่อง (ไม่บังคับ)",
   "@titleOptional": {
     "description": "Optional plan title field label."
   },
-  "searchExercises": "البحث في التمارين...",
+  "searchExercises": "ค้นหาการออกกำลังกาย...",
   "@searchExercises": {
     "description": "Hint for searching exercises."
   },
-  "warmupSets": "مجموعات الإحماء",
+  "warmupSets": "เซ็ตวอร์มอัป",
   "@warmupSets": {
     "description": "Label for the number of warmup sets."
   },
-  "workingSetsMax": "مجموعات العمل (الحد الأقصى: 20)",
+  "workingSetsMax": "เซ็ตหลัก (สูงสุด: 20)",
   "@workingSetsMax": {
     "description": "Label for the maximum number of working sets."
   },
-  "actionUndo": "تراجع",
+  "actionUndo": "เลิกทำ",
   "@actionUndo": {
     "description": "Generic undo action."
   },
-  "actionSwap": "تبديل",
+  "actionSwap": "สลับ",
   "@actionSwap": {
     "description": "Generic swap action."
   },
-  "daily": "يوميًا",
+  "daily": "รายวัน",
   "@daily": {
     "description": "Daily interval label."
   },
-  "weekly": "أسبوعيًا",
+  "weekly": "รายสัปดาห์",
   "@weekly": {
     "description": "Weekly interval label."
   },
-  "monthly": "شهريًا",
+  "monthly": "รายเดือน",
   "@monthly": {
     "description": "Monthly interval label."
   },
-  "yearly": "سنويًا",
+  "yearly": "รายปี",
   "@yearly": {
     "description": "Yearly interval label."
   },
-  "unexpectedError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+  "unexpectedError": "เกิดข้อผิดพลาด โปรดลองอีกครั้ง",
   "@unexpectedError": {
     "description": "Generic user-facing message for an unexpected runtime or data-loading failure."
   },
-  "loadingExercises": "جارٍ تحميل التمارين...",
+  "loadingExercises": "กำลังโหลดการออกกำลังกาย...",
   "@loadingExercises": {
     "description": "Progress message while plan exercises load."
   },
-  "noPlansYet": "لا توجد خطط بعد",
+  "noPlansYet": "ยังไม่มีแผน",
   "@noPlansYet": {
     "description": "Empty state when no workout plans exist."
   },
-  "noMatchingPlans": "لا توجد خطط مطابقة",
+  "noMatchingPlans": "ไม่พบแผนที่ตรงกัน",
   "@noMatchingPlans": {
     "description": "Empty state when no plans match a search."
   },
-  "newPlan": "خطة جديدة",
+  "newPlan": "แผนใหม่",
   "@newPlan": {
     "description": "Action for creating a workout plan."
   },
-  "searchPlans": "البحث في الخطط...",
+  "searchPlans": "ค้นหาแผน...",
   "@searchPlans": {
     "description": "Hint for searching workout plans."
   },
-  "noExercisesYet": "لا توجد تمارين بعد",
+  "noExercisesYet": "ยังไม่มีการออกกำลังกาย",
   "@noExercisesYet": {
     "description": "Empty state for a plan without exercises."
   },
-  "editPlan": "تعديل الخطة",
+  "editPlan": "แก้ไขแผน",
   "@editPlan": {
     "description": "Tooltip and action for editing a workout plan."
   },
-  "saveSet": "حفظ المجموعة",
+  "saveSet": "บันทึกเซ็ต",
   "@saveSet": {
     "description": "Action for saving a workout set."
   },
-  "minutesLabel": "دقائق",
+  "minutesLabel": "นาที",
   "@minutesLabel": {
     "description": "Label for a duration in minutes."
   },
-  "minutesShort": "د",
+  "minutesShort": "นาที",
   "@minutesShort": {
     "description": "Compact abbreviation for minutes in pace and duration labels."
   },
-  "secondsLabel": "ثوانٍ",
+  "secondsLabel": "วินาที",
   "@secondsLabel": {
     "description": "Label for a duration in seconds."
   },
-  "distanceLabel": "المسافة",
+  "distanceLabel": "ระยะทาง",
   "@distanceLabel": {
     "description": "Generic distance label."
   },
-  "inclinePercent": "الميل %",
+  "inclinePercent": "ความชัน %",
   "@inclinePercent": {
     "description": "Label for incline as a percentage."
   },
-  "weightWithUnit": "الوزن ({unit})",
+  "weightWithUnit": "น้ำหนัก ({unit})",
   "@weightWithUnit": {
     "description": "Weight field label including the selected unit.",
     "placeholders": {
@@ -950,39 +950,39 @@
       }
     }
   },
-  "useBodyWeight": "استخدام وزن الجسم",
+  "useBodyWeight": "ใช้น้ำหนักตัว",
   "@useBodyWeight": {
     "description": "Tooltip for filling a set with the recorded bodyweight."
   },
-  "noWeightEnteredYet": "لم يتم إدخال وزن بعد",
+  "noWeightEnteredYet": "ยังไม่ได้ป้อนน้ำหนัก",
   "@noWeightEnteredYet": {
     "description": "Message shown when body weight cannot be used because no weight has been recorded."
   },
-  "notesLabel": "ملاحظات",
+  "notesLabel": "หมายเหตุ",
   "@notesLabel": {
     "description": "Generic notes field label."
   },
-  "swapWorkout": "تبديل التمرين",
+  "swapWorkout": "สลับเวิร์กเอาต์",
   "@swapWorkout": {
     "description": "Title for replacing an exercise in a workout."
   },
-  "addSet": "إضافة مجموعة",
+  "addSet": "เพิ่มเซ็ต",
   "@addSet": {
     "description": "Action and title for adding a workout set."
   },
-  "deleteSet": "حذف المجموعة",
+  "deleteSet": "ลบเซ็ต",
   "@deleteSet": {
     "description": "Tooltip for deleting a workout set."
   },
-  "oneRepMaxEstimate": "الحد الأقصى لتكرار واحد (تقديري)",
+  "oneRepMaxEstimate": "หนึ่งครั้งสูงสุด (ประมาณการ)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
   },
-  "valueLabel": "القيمة",
+  "valueLabel": "ค่า",
   "@valueLabel": {
     "description": "Generic numeric value field label."
   },
-  "amountWithUnit": "الكمية ({unit})",
+  "amountWithUnit": "ปริมาณ ({unit})",
   "@amountWithUnit": {
     "description": "Amount field label including the selected unit.",
     "placeholders": {
@@ -991,7 +991,7 @@
       }
     }
   },
-  "distanceWithUnit": "المسافة ({unit})",
+  "distanceWithUnit": "ระยะทาง ({unit})",
   "@distanceWithUnit": {
     "description": "Distance field label including the selected unit.",
     "placeholders": {
@@ -1000,11 +1000,11 @@
       }
     }
   },
-  "bodyWeightLabel": "وزن الجسم",
+  "bodyWeightLabel": "น้ำหนักตัว",
   "@bodyWeightLabel": {
     "description": "Generic bodyweight field label."
   },
-  "bodyWeightWithUnit": "وزن الجسم ({unit})",
+  "bodyWeightWithUnit": "น้ำหนักตัว ({unit})",
   "@bodyWeightWithUnit": {
     "description": "Bodyweight field label including the selected unit.",
     "placeholders": {
@@ -1013,39 +1013,39 @@
       }
     }
   },
-  "categoryHelper": "اختر فئة موجودة أو اكتب فئة جديدة.",
+  "categoryHelper": "เลือกหมวดหมู่ที่มีอยู่หรือพิมพ์หมวดหมู่ใหม่",
   "@categoryHelper": {
     "description": "Helper text explaining the exercise category field."
   },
-  "manageCategories": "إدارة الفئات",
+  "manageCategories": "จัดการหมวดหมู่",
   "@manageCategories": {
     "description": "Navigation label for the workout category manager."
   },
-  "manageCategoriesDescription": "إنشاء الفئات أو إعادة تسميتها أو دمجها أو إزالتها",
+  "manageCategoriesDescription": "สร้าง เปลี่ยนชื่อ รวม หรือลบหมวดหมู่",
   "@manageCategoriesDescription": {
     "description": "Description of the category management screen."
   },
-  "newCategory": "فئة جديدة",
+  "newCategory": "หมวดหมู่ใหม่",
   "@newCategory": {
     "description": "Action for creating a workout category."
   },
-  "renameCategory": "إعادة تسمية الفئة",
+  "renameCategory": "เปลี่ยนชื่อหมวดหมู่",
   "@renameCategory": {
     "description": "Action for renaming a workout category."
   },
-  "mergeCategory": "دمج في فئة أخرى",
+  "mergeCategory": "รวมเข้ากับหมวดหมู่อื่น",
   "@mergeCategory": {
     "description": "Action for moving a category's workout entries to another category."
   },
-  "noCategories": "لا توجد فئات بعد",
+  "noCategories": "ยังไม่มีหมวดหมู่",
   "@noCategories": {
     "description": "Empty state for the category manager."
   },
-  "categoryNameRequired": "أدخل اسم الفئة",
+  "categoryNameRequired": "ป้อนชื่อหมวดหมู่",
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{غير مستخدمة في أي إدخال} =1{مستخدمة في إدخال واحد} other{مستخدمة في {count} إدخالات}}",
+  "categoryUsageCount": "{count, plural, =0{ไม่ได้ใช้กับรายการใด} =1{ใช้กับ 1 รายการ} other{ใช้กับ {count} รายการ}}",
   "@categoryUsageCount": {
     "description": "Number of workout entries using a category.",
     "placeholders": {
@@ -1055,7 +1055,7 @@
       }
     }
   },
-  "deleteCategoryConfirmation": "{count, plural, =0{حذف هذه الفئة؟} =1{حذف هذه الفئة وإزالتها من إدخال واحد؟} other{حذف هذه الفئة وإزالتها من {count} إدخالات؟}}",
+  "deleteCategoryConfirmation": "{count, plural, =0{ลบหมวดหมู่นี้หรือไม่?} =1{ลบหมวดหมู่นี้และนำออกจาก 1 รายการหรือไม่?} other{ลบหมวดหมู่นี้และนำออกจาก {count} รายการหรือไม่?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
     "placeholders": {
@@ -1065,11 +1065,11 @@
       }
     }
   },
-  "createdDate": "تاريخ الإنشاء",
+  "createdDate": "วันที่สร้าง",
   "@createdDate": {
     "description": "Label for the date a workout record was created."
   },
-  "editSets": "{count, plural, =1{تعديل مجموعة واحدة} other{تعديل {count} مجموعات}}",
+  "editSets": "{count, plural, =1{แก้ไข 1 เซ็ต} other{แก้ไข {count} เซ็ต}}",
   "@editSets": {
     "description": "Title for bulk editing workout sets.",
     "placeholders": {
@@ -1078,15 +1078,15 @@
       }
     }
   },
-  "noEntriesYet": "لا توجد إدخالات بعد",
+  "noEntriesYet": "ยังไม่มีรายการ",
   "@noEntriesYet": {
     "description": "Empty state when workout history has no entries."
   },
-  "historyEmptyMessage": "أكمل مجموعة أو أضف واحدة يدويًا لبدء السجل.",
+  "historyEmptyMessage": "ทำเซ็ตให้เสร็จหรือเพิ่มด้วยตนเองเพื่อเริ่มประวัติของคุณ",
   "@historyEmptyMessage": {
     "description": "Explanation shown when workout history has no entries."
   },
-  "deleteSetConfirmation": "هل أنت متأكد من حذف {name}؟",
+  "deleteSetConfirmation": "คุณแน่ใจหรือไม่ว่าต้องการลบ {name}?",
   "@deleteSetConfirmation": {
     "description": "Confirmation shown before deleting one workout set for a named exercise.",
     "placeholders": {
@@ -1095,7 +1095,7 @@
       }
     }
   },
-  "deleteEntriesConfirmation": "{count, plural, =1{هل أنت متأكد من حذف إدخال واحد؟} other{هل أنت متأكد من حذف {count} إدخالات؟}}",
+  "deleteEntriesConfirmation": "{count, plural, =1{คุณแน่ใจหรือไม่ว่าต้องการลบ 1 รายการ?} other{คุณแน่ใจหรือไม่ว่าต้องการลบ {count} รายการ?}}",
   "@deleteEntriesConfirmation": {
     "description": "Confirmation shown before deleting one or more selected workout history entries.",
     "placeholders": {
@@ -1104,87 +1104,87 @@
       }
     }
   },
-  "searchHistory": "البحث في السجل...",
+  "searchHistory": "ค้นหาประวัติ...",
   "@searchHistory": {
     "description": "Hint for searching workout history."
   },
-  "themeSystem": "النظام",
+  "themeSystem": "ระบบ",
   "@themeSystem": {
     "description": "Theme option that follows the system appearance."
   },
-  "themeDark": "داكن",
+  "themeDark": "มืด",
   "@themeDark": {
     "description": "Dark theme option."
   },
-  "themeLight": "فاتح",
+  "themeLight": "สว่าง",
   "@themeLight": {
     "description": "Light theme option."
   },
-  "pureBlackAmoled": "أسود خالص (AMOLED)",
+  "pureBlackAmoled": "ดำสนิท (AMOLED)",
   "@pureBlackAmoled": {
     "description": "Appearance setting for pure-black dark surfaces."
   },
-  "showImages": "إظهار الصور",
+  "showImages": "แสดงรูปภาพ",
   "@showImages": {
     "description": "Appearance setting for exercise images."
   },
-  "peekGraph": "معاينة الرسم البياني",
+  "peekGraph": "แสดงกราฟตัวอย่าง",
   "@peekGraph": {
     "description": "Appearance setting for graph previews."
   },
-  "inputStyleLine": "خط",
+  "inputStyleLine": "เส้น",
   "@inputStyleLine": {
     "description": "Line input-field style."
   },
-  "inputStyleOutlined": "بإطار",
+  "inputStyleOutlined": "มีเส้นขอบ",
   "@inputStyleOutlined": {
     "description": "Outlined input-field style."
   },
-  "inputStyleFilled": "معبأ",
+  "inputStyleFilled": "เติมพื้น",
   "@inputStyleFilled": {
     "description": "Filled input-field style."
   },
-  "inputStyle": "نمط الإدخال",
+  "inputStyle": "รูปแบบช่องป้อนข้อมูล",
   "@inputStyle": {
     "description": "Label for choosing the text-input style."
   },
-  "appearance": "المظهر",
+  "appearance": "รูปลักษณ์",
   "@appearance": {
     "description": "Title for appearance settings."
   },
-  "automaticBackupsEnabled": "النسخ الاحتياطي التلقائي مفعّل",
+  "automaticBackupsEnabled": "เปิดการสำรองข้อมูลอัตโนมัติ",
   "@automaticBackupsEnabled": {
     "description": "Status text confirming automatic backups are enabled."
   },
-  "automaticBackup": "نسخ احتياطي تلقائي",
+  "automaticBackup": "สำรองข้อมูลอัตโนมัติ",
   "@automaticBackup": {
     "description": "Data setting for automatic backups."
   },
-  "appPermissions": "أذونات التطبيق",
+  "appPermissions": "สิทธิ์ของแอป",
   "@appPermissions": {
     "description": "Data/settings action for app permissions."
   },
-  "shareDatabase": "مشاركة قاعدة البيانات",
+  "shareDatabase": "แชร์ฐานข้อมูล",
   "@shareDatabase": {
     "description": "Action for sharing the app database file."
   },
-  "dataManagement": "إدارة البيانات",
+  "dataManagement": "การจัดการข้อมูล",
   "@dataManagement": {
     "description": "Title for data-management settings."
   },
-  "strengthUnit": "وحدة القوة",
+  "strengthUnit": "หน่วยความแข็งแรง",
   "@strengthUnit": {
     "description": "Label for the default strength measurement unit."
   },
-  "lastEntry": "آخر إدخال",
+  "lastEntry": "รายการล่าสุด",
   "@lastEntry": {
     "description": "Option that reuses the unit from the previous entry."
   },
-  "cardioUnit": "وحدة تمارين القلب",
+  "cardioUnit": "หน่วยคาร์ดิโอ",
   "@cardioUnit": {
     "description": "Label for the default cardio measurement unit."
   },
-  "longDateFormat": "تنسيق التاريخ الطويل ({format})",
+  "longDateFormat": "รูปแบบวันที่แบบยาว ({format})",
   "@longDateFormat": {
     "description": "Label for the long date format preview.",
     "placeholders": {
@@ -1193,255 +1193,255 @@
       }
     }
   },
-  "formats": "التنسيقات",
+  "formats": "รูปแบบ",
   "@formats": {
     "description": "Title for measurement and date formatting settings."
   },
-  "setsPerExerciseMax": "المجموعات لكل تمرين (الحد الأقصى: 20)",
+  "setsPerExerciseMax": "เซ็ตต่อการออกกำลังกาย (สูงสุด: 20)",
   "@setsPerExerciseMax": {
     "description": "Plan setting for the maximum working sets per exercise."
   },
-  "countLabel": "العدد",
+  "countLabel": "จำนวน",
   "@countLabel": {
     "description": "Label for count-based plan distribution."
   },
-  "ratioLabel": "النسبة",
+  "ratioLabel": "อัตราส่วน",
   "@ratioLabel": {
     "description": "Label for ratio-based plan distribution."
   },
-  "reorder": "إعادة الترتيب",
+  "reorder": "จัดเรียงใหม่",
   "@reorder": {
     "description": "Action or option for reordering exercises."
   },
-  "none": "لا شيء",
+  "none": "ไม่มี",
   "@none": {
     "description": "Generic option indicating no selection."
   },
-  "monday": "الاثنين",
+  "monday": "วันจันทร์",
   "@monday": {
     "description": "Monday weekday label in the plan example."
   },
-  "examplePlanExercises": "ضغط الصدر، القرفصاء، الرفعة المميتة",
+  "examplePlanExercises": "เบนช์เพรส, สควอต, เดดลิฟต์",
   "@examplePlanExercises": {
     "description": "Example list of exercises shown in plan settings."
   },
-  "tabs": "علامات التبويب",
+  "tabs": "แท็บ",
   "@tabs": {
     "description": "Title for navigation tab settings."
   },
-  "swipeBetweenTabs": "السحب بين علامات التبويب",
+  "swipeBetweenTabs": "ปัดสลับระหว่างแท็บ",
   "@swipeBetweenTabs": {
     "description": "Setting for swipe navigation between tabs."
   },
-  "vibrate": "اهتزاز",
+  "vibrate": "สั่น",
   "@vibrate": {
     "description": "Timer setting for vibration."
   },
-  "enableSound": "تفعيل الصوت",
+  "enableSound": "เปิดเสียง",
   "@enableSound": {
     "description": "Timer setting for alarm sound playback."
   },
-  "keepScreenOn": "إبقاء الشاشة قيد التشغيل",
+  "keepScreenOn": "เปิดหน้าจอค้างไว้",
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
-  "alarmSound": "صوت المنبه",
+  "alarmSound": "เสียงปลุก",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
   },
-  "top": "أعلى",
+  "top": "ด้านบน",
   "@top": {
     "description": "Top position option."
   },
-  "bottom": "أسفل",
+  "bottom": "ด้านล่าง",
   "@bottom": {
     "description": "Bottom position option."
   },
-  "removeCustomTimer": "إزالة المؤقت المخصص (استخدام الافتراضي العام)",
+  "removeCustomTimer": "ลบตัวจับเวลาแบบกำหนดเอง (ใช้ค่าเริ่มต้นส่วนกลาง)",
   "@removeCustomTimer": {
     "description": "Tooltip for removing an exercise-specific rest timer."
   },
-  "timers": "المؤقتات",
+  "timers": "ตัวจับเวลา",
   "@timers": {
     "description": "Title for timer settings."
   },
-  "timerSettings": "إعدادات المؤقت",
+  "timerSettings": "การตั้งค่าตัวจับเวลา",
   "@timerSettings": {
     "description": "Heading for timer configuration."
   },
-  "groupHistory": "تجميع السجل",
+  "groupHistory": "จัดกลุ่มประวัติ",
   "@groupHistory": {
     "description": "Workout setting for grouping history entries."
   },
-  "showUnits": "إظهار الوحدات",
+  "showUnits": "แสดงหน่วย",
   "@showUnits": {
     "description": "Workout setting for displaying measurement units."
   },
-  "showBodyWeight": "إظهار وزن الجسم",
+  "showBodyWeight": "แสดงน้ำหนักตัว",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
   },
-  "showCategories": "إظهار الفئات",
+  "showCategories": "แสดงหมวดหมู่",
   "@showCategories": {
     "description": "Workout setting for exercise categories."
   },
-  "showNotes": "إظهار الملاحظات",
+  "showNotes": "แสดงหมายเหตุ",
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "تقدير التكرارات",
+  "repEstimation": "การประมาณจำนวนครั้ง",
   "@repEstimation": {
     "description": "Workout setting for repetition estimation."
   },
-  "durationEstimation": "تقدير المدة",
+  "durationEstimation": "การประมาณระยะเวลา",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
   },
-  "showGraphLimit": "إظهار حد الرسم البياني",
+  "showGraphLimit": "แสดงขีดจำกัดกราฟ",
   "@showGraphLimit": {
     "description": "Workout setting controlling graph-limit display."
   },
-  "defaultGraphMetric": "مقياس الرسم البياني الافتراضي",
+  "defaultGraphMetric": "เมตริกกราฟเริ่มต้น",
   "@defaultGraphMetric": {
     "description": "Label for choosing the default graph metric."
   },
-  "bestWeight": "أفضل وزن",
+  "bestWeight": "น้ำหนักสูงสุด",
   "@bestWeight": {
     "description": "Graph metric for highest weight."
   },
-  "bestReps": "أفضل تكرارات",
+  "bestReps": "จำนวนครั้งสูงสุด",
   "@bestReps": {
     "description": "Graph metric for highest repetition count."
   },
-  "oneRepMax": "الحد الأقصى لتكرار واحد",
+  "oneRepMax": "หนึ่งครั้งสูงสุด",
   "@oneRepMax": {
     "description": "Graph metric for one-repetition maximum."
   },
-  "volume": "الحجم",
+  "volume": "ปริมาตร",
   "@volume": {
     "description": "Graph metric for training volume."
   },
-  "paceCardio": "الوتيرة (تمارين القلب)",
+  "paceCardio": "เพซ (คาร์ดิโอ)",
   "@paceCardio": {
     "description": "Cardio graph metric for pace."
   },
-  "distanceCardio": "المسافة (تمارين القلب)",
+  "distanceCardio": "ระยะทาง (คาร์ดิโอ)",
   "@distanceCardio": {
     "description": "Cardio graph metric for distance."
   },
-  "defaultGraphPeriod": "فترة الرسم البياني الافتراضية",
+  "defaultGraphPeriod": "ช่วงเวลากราฟเริ่มต้น",
   "@defaultGraphPeriod": {
     "description": "Label for choosing the default graph period."
   },
-  "defaultGraphLimit": "حد الرسم البياني الافتراضي",
+  "defaultGraphLimit": "ขีดจำกัดกราฟเริ่มต้น",
   "@defaultGraphLimit": {
     "description": "Label for choosing the default graph record limit."
   },
-  "workouts": "التمارين",
+  "workouts": "เวิร์กเอาต์",
   "@workouts": {
     "description": "Title for workout settings."
   },
-  "actionStop": "إيقاف",
+  "actionStop": "หยุด",
   "@actionStop": {
     "description": "Generic stop action."
   },
-  "timerFinishedToast": "انتهى المؤقت!",
+  "timerFinishedToast": "ตัวจับเวลาเสร็จแล้ว!",
   "@timerFinishedToast": {
     "description": "In-app toast shown when a non-Android timer finishes."
   },
-  "stopTimer": "إيقاف المؤقت",
+  "stopTimer": "หยุดตัวจับเวลา",
   "@stopTimer": {
     "description": "Action for stopping the active timer."
   },
-  "actionPause": "إيقاف مؤقت",
+  "actionPause": "หยุดชั่วคราว",
   "@actionPause": {
     "description": "Generic pause action."
   },
-  "startStopwatch": "بدء ساعة الإيقاف",
+  "startStopwatch": "เริ่มนาฬิกาจับเวลา",
   "@startStopwatch": {
     "description": "Action for starting the stopwatch."
   },
-  "actionStart": "بدء",
+  "actionStart": "เริ่ม",
   "@actionStart": {
     "description": "Generic start action."
   },
-  "actionRestart": "إعادة التشغيل",
+  "actionRestart": "เริ่มใหม่",
   "@actionRestart": {
     "description": "Generic restart action."
   },
-  "addOneMinute": "+1 دقيقة",
+  "addOneMinute": "+1 นาที",
   "@addOneMinute": {
     "description": "Timer action that adds one minute."
   },
-  "addOneMinuteNotification": "إضافة دقيقة واحدة",
+  "addOneMinuteNotification": "เพิ่ม 1 นาที",
   "@addOneMinuteNotification": {
     "description": "Compact Android notification action that adds one minute."
   },
-  "restTimer": "مؤقت الراحة",
+  "restTimer": "ตัวจับเวลาพัก",
   "@restTimer": {
     "description": "Generic rest timer title used when restarting a timer from a notification."
   },
-  "timerUp": "انتهى الوقت",
+  "timerUp": "หมดเวลา",
   "@timerUp": {
     "description": "Default notification title when a timer expires."
   },
-  "openNotification": "فتح الإشعار",
+  "openNotification": "เปิดการแจ้งเตือน",
   "@openNotification": {
     "description": "Desktop notification action label."
   },
-  "timerChannelName": "قناة المؤقت",
+  "timerChannelName": "ช่องตัวจับเวลา",
   "@timerChannelName": {
     "description": "Android notification channel name for ongoing timers."
   },
-  "timerChannelDescription": "التقدم المستمر لمؤقتات الراحة.",
+  "timerChannelDescription": "ความคืบหน้าต่อเนื่องของตัวจับเวลาพัก",
   "@timerChannelDescription": {
     "description": "Android notification channel description for ongoing timers."
   },
-  "timerFinishedChannelName": "قناة انتهاء المؤقت",
+  "timerFinishedChannelName": "ช่องตัวจับเวลาเสร็จสิ้น",
   "@timerFinishedChannelName": {
     "description": "Android notification channel name for completed timers."
   },
-  "timerFinishedChannelDescription": "تشغّل منبهًا عند اكتمال مؤقت الراحة.",
+  "timerFinishedChannelDescription": "เล่นเสียงปลุกเมื่อตัวจับเวลาพักสิ้นสุด",
   "@timerFinishedChannelDescription": {
     "description": "Android notification channel description for completed timers."
   },
-  "timerFinished": "انتهى المؤقت",
+  "timerFinished": "ตัวจับเวลาเสร็จแล้ว",
   "@timerFinished": {
     "description": "Android notification title for a completed timer."
   },
-  "batteryOptimizationRequestUnavailable": "طلبات تجاهل تحسينات البطارية معطلة على جهازك.",
+  "batteryOptimizationRequestUnavailable": "อุปกรณ์ของคุณปิดใช้งานคำขอให้ละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่",
   "@batteryOptimizationRequestUnavailable": {
     "description": "Android toast shown when the system battery optimization exemption screen is unavailable."
   },
-  "exactAlarmRequestUnavailable": "تم رفض طلب SCHEDULE_EXACT_ALARM على جهازك",
+  "exactAlarmRequestUnavailable": "อุปกรณ์ของคุณปฏิเสธคำขอ SCHEDULE_EXACT_ALARM",
   "@exactAlarmRequestUnavailable": {
     "description": "Android toast shown when the exact alarm permission screen is unavailable."
   },
-  "databaseMigrationFailureDescription": "حدث خطأ أثناء إنشاء قاعدة البيانات أو ترقيتها. يمكن عادةً إصلاح ذلك بحذف السجلات وإعادة إنشائها.",
+  "databaseMigrationFailureDescription": "เกิดข้อผิดพลาดขณะสร้างหรืออัปเกรดฐานข้อมูล โดยปกติแก้ไขได้โดยลบแล้วสร้างรายการใหม่",
   "@databaseMigrationFailureDescription": {
     "description": "Explanation shown when a database migration fails."
   },
-  "curveSmoothness": "نعومة المنحنى",
+  "curveSmoothness": "ความเรียบของเส้นโค้ง",
   "@curveSmoothness": {
     "description": "Label for graph curve smoothness."
   },
-  "actionBack": "رجوع",
+  "actionBack": "ย้อนกลับ",
   "@actionBack": {
     "description": "Generic back-navigation tooltip."
   },
-  "atLeastOneTab": "تحتاج إلى علامة تبويب واحدة على الأقل",
+  "atLeastOneTab": "คุณต้องมีอย่างน้อยหนึ่งแท็บ",
   "@atLeastOneTab": {
     "description": "Toast shown when trying to disable the final visible tab."
   },
-  "invalidTabSettings": "إعدادات علامات التبويب غير صالحة.",
+  "invalidTabSettings": "การตั้งค่าแท็บไม่ถูกต้อง",
   "@invalidTabSettings": {
     "description": "Error shown when a saved tab identifier is unsupported."
   },
-  "noSettingsFound": "لم يتم العثور على إعدادات",
+  "noSettingsFound": "ไม่พบการตั้งค่า",
   "@noSettingsFound": {
     "description": "Empty state when settings search has no matches."
   },
-  "nothingMatchesSearch": "لا شيء يطابق “{query}”.",
+  "nothingMatchesSearch": "ไม่มีรายการที่ตรงกับ “{query}”",
   "@nothingMatchesSearch": {
     "description": "Settings-search empty-state detail.",
     "placeholders": {
@@ -1450,59 +1450,59 @@
       }
     }
   },
-  "appearanceDescription": "السمة والألوان وتنسيق الواجهة",
+  "appearanceDescription": "ธีม สี และรูปแบบอินเทอร์เฟซ",
   "@appearanceDescription": {
     "description": "Description of appearance settings."
   },
-  "dataManagementDescription": "استيراد بيانات تمارينك وتصديرها وإدارتها",
+  "dataManagementDescription": "นำเข้า ส่งออก และจัดการข้อมูลการออกกำลังกายของคุณ",
   "@dataManagementDescription": {
     "description": "Description of data-management settings."
   },
-  "formatsDescription": "تنسيق التواريخ والأرقام والقياسات",
+  "formatsDescription": "รูปแบบวันที่ ตัวเลข และหน่วยวัด",
   "@formatsDescription": {
     "description": "Description of format settings."
   },
-  "plansSettingsDescription": "الإعدادات الافتراضية وسلوك خطط التمرين",
+  "plansSettingsDescription": "ค่าเริ่มต้นและลักษณะการทำงานของแผนการออกกำลังกาย",
   "@plansSettingsDescription": {
     "description": "Description of plan settings."
   },
-  "tabsDescription": "اختيار علامات تبويب التنقل الرئيسية وترتيبها",
+  "tabsDescription": "เลือกและจัดเรียงแท็บการนำทางหลัก",
   "@tabsDescription": {
     "description": "Description of tab settings."
   },
-  "timersDescription": "مدة مؤقت الراحة والصوت والسلوك",
+  "timersDescription": "ระยะเวลาพัก เสียง และลักษณะการทำงานของตัวจับเวลา",
   "@timersDescription": {
     "description": "Description of timer settings."
   },
-  "workoutsDescription": "تتبع التمارين وتفضيلات التدريب",
+  "workoutsDescription": "การติดตามการออกกำลังกายและการตั้งค่าเวิร์กเอาต์",
   "@workoutsDescription": {
     "description": "Description of workout settings."
   },
-  "completeSetForChart": "أكمل مجموعة لهذا التمرين لإنشاء مخططه.",
+  "completeSetForChart": "ทำหนึ่งเซ็ตของการออกกำลังกายนี้ให้เสร็จเพื่อสร้างกราฟ",
   "@completeSetForChart": {
     "description": "Empty graph guidance for a specific exercise."
   },
-  "dateRange": "نطاق التاريخ",
+  "dateRange": "ช่วงวันที่",
   "@dateRange": {
     "description": "Label for graph date-range controls."
   },
-  "stopDate": "تاريخ التوقف",
+  "stopDate": "วันที่สิ้นสุด",
   "@stopDate": {
     "description": "Label for the end of a graph date range."
   },
-  "dataPoints": "نقاط البيانات",
+  "dataPoints": "จุดข้อมูล",
   "@dataPoints": {
     "description": "Label for the number of graph data points."
   },
-  "completeSetsForProgress": "أكمل بعض المجموعات لإنشاء مخطط تقدمك.",
+  "completeSetsForProgress": "ทำบางเซ็ตให้เสร็จเพื่อสร้างกราฟความคืบหน้าของคุณ",
   "@completeSetsForProgress": {
     "description": "Empty guidance for the global progress graph."
   },
-  "relativeStrength": "القوة النسبية",
+  "relativeStrength": "ความแข็งแรงสัมพัทธ์",
   "@relativeStrength": {
     "description": "Strength graph metric relative to bodyweight."
   },
-  "selectedCount": "{count, plural, =1{تم تحديد عنصر واحد} other{تم تحديد {count}}}",
+  "selectedCount": "{count, plural, =1{เลือก 1 รายการ} other{เลือก {count} รายการ}}",
   "@selectedCount": {
     "description": "Number of currently selected records.",
     "placeholders": {
@@ -1511,15 +1511,15 @@
       }
     }
   },
-  "completeSetsForHistory": "أكمل بعض المجموعات لرؤية سجل هذا التمرين هنا.",
+  "completeSetsForHistory": "ทำบางเซ็ตให้เสร็จเพื่อดูประวัติการออกกำลังกายนี้ที่นี่",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
   },
-  "completeSetForFirstGraph": "أكمل مجموعة لإنشاء أول رسم بياني للتمرين.",
+  "completeSetForFirstGraph": "ทำหนึ่งเซ็ตให้เสร็จเพื่อสร้างกราฟการออกกำลังกายแรกของคุณ",
   "@completeSetForFirstGraph": {
     "description": "Empty guidance when no exercise graphs exist."
   },
-  "nothingMatchesGraphSearch": "لا شيء يطابق “{query}”. يمكنك إنشاؤه كتمرين جديد.",
+  "nothingMatchesGraphSearch": "ไม่มีรายการที่ตรงกับ “{query}” คุณสามารถสร้างเป็นการออกกำลังกายใหม่ได้",
   "@nothingMatchesGraphSearch": {
     "description": "Empty graph search guidance.",
     "placeholders": {
@@ -1528,7 +1528,7 @@
       }
     }
   },
-  "addNamed": "إضافة “{name}”",
+  "addNamed": "เพิ่ม “{name}”",
   "@addNamed": {
     "description": "Action for adding an item with a typed name.",
     "placeholders": {
@@ -1537,7 +1537,7 @@
       }
     }
   },
-  "deleteGraphRecordsConfirmation": "سيؤدي هذا إلى حذف {count} سجلات. هل أنت متأكد؟",
+  "deleteGraphRecordsConfirmation": "การดำเนินการนี้จะลบ {count} รายการ คุณแน่ใจหรือไม่?",
   "@deleteGraphRecordsConfirmation": {
     "description": "Confirmation for deleting records associated with selected graphs.",
     "placeholders": {
@@ -1546,7 +1546,7 @@
       }
     }
   },
-  "shareWorkout": "لقد أنجزت للتو {summary}",
+  "shareWorkout": "ฉันเพิ่งทำ {summary}",
   "@shareWorkout": {
     "description": "Text shared from the workout graph screen.",
     "placeholders": {
@@ -1555,11 +1555,11 @@
       }
     }
   },
-  "updateConflict": "تعارض في التحديث",
+  "updateConflict": "ข้อมูลอัปเดตขัดแย้งกัน",
   "@updateConflict": {
     "description": "Title for an exercise rename conflict dialog."
   },
-  "updateConflictDescription": "اسمك الجديد موجود بالفعل في {count} سجلات. هل أنت متأكد؟",
+  "updateConflictDescription": "ชื่อใหม่ของคุณมีอยู่แล้วใน {count} รายการ คุณแน่ใจหรือไม่?",
   "@updateConflictDescription": {
     "description": "Explanation for an exercise rename conflict.",
     "placeholders": {
@@ -1568,11 +1568,11 @@
       }
     }
   },
-  "unitsConflict": "تعارض الوحدات",
+  "unitsConflict": "หน่วยขัดแย้งกัน",
   "@unitsConflict": {
     "description": "Title for an exercise unit conversion conflict dialog."
   },
-  "unitsConflictDescription": "لا تستخدم جميع سجلاتك الوحدة نفسها. سيحوّل هذا جميع الوحدات إلى {unit}. هل أنت متأكد؟",
+  "unitsConflictDescription": "รายการของคุณไม่ได้ใช้หน่วยเดียวกันทั้งหมด การดำเนินการนี้จะแปลงหน่วยทั้งหมดเป็น {unit} คุณแน่ใจหรือไม่?",
   "@unitsConflictDescription": {
     "description": "Explanation before converting mixed exercise units.",
     "placeholders": {
@@ -1581,43 +1581,43 @@
       }
     }
   },
-  "durationLabel": "المدة",
+  "durationLabel": "ระยะเวลา",
   "@durationLabel": {
     "description": "Generic duration label."
   },
-  "inclineLabel": "الميل",
+  "inclineLabel": "ความชัน",
   "@inclineLabel": {
     "description": "Generic incline label."
   },
-  "paceDistanceTime": "الوتيرة (المسافة / الوقت)",
+  "paceDistanceTime": "เพซ (ระยะทาง / เวลา)",
   "@paceDistanceTime": {
     "description": "Cardio graph metric for distance divided by time."
   },
-  "adjustedPace": "الوتيرة المعدلة",
+  "adjustedPace": "เพซที่ปรับแล้ว",
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "تقديرات الحد الأقصى لتكرار واحد أقل دقة للمجموعات التي تحتوي على 10 تكرارات أو أكثر",
+  "oneRepMaxAccuracyWarning": "การประมาณหนึ่งครั้งสูงสุดจะแม่นยำน้อยลงสำหรับเซ็ตตั้งแต่ 10 ครั้งขึ้นไป",
   "@oneRepMaxAccuracyWarning": {
     "description": "Warning about one-repetition maximum estimate accuracy."
   },
-  "addPlan": "إضافة خطة",
+  "addPlan": "เพิ่มแผน",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
   },
-  "planDetails": "تفاصيل الخطة",
+  "planDetails": "รายละเอียดแผน",
   "@planDetails": {
     "description": "Heading for editable workout plan details."
   },
-  "exercisesLabel": "التمارين",
+  "exercisesLabel": "การออกกำลังกาย",
   "@exercisesLabel": {
     "description": "Generic heading for exercises."
   },
-  "addExerciseToPlan": "أضف تمرينًا إلى هذه الخطة.",
+  "addExerciseToPlan": "เพิ่มการออกกำลังกายลงในแผนนี้",
   "@addExerciseToPlan": {
     "description": "Empty-state guidance for a workout plan with no exercises."
   },
-  "nothingMatchesExerciseSearch": "لا شيء يطابق “{query}”. يمكنك إضافته كتمرين جديد.",
+  "nothingMatchesExerciseSearch": "ไม่มีรายการที่ตรงกับ “{query}” คุณสามารถเพิ่มเป็นการออกกำลังกายใหม่ได้",
   "@nothingMatchesExerciseSearch": {
     "description": "Empty-state guidance when a plan exercise search has no matches.",
     "placeholders": {
@@ -1626,119 +1626,119 @@
       }
     }
   },
-  "selectDays": "اختيار الأيام",
+  "selectDays": "เลือกวัน",
   "@selectDays": {
     "description": "Validation message requiring at least one workout plan day."
   },
-  "selectExercises": "اختيار التمارين",
+  "selectExercises": "เลือกการออกกำลังกาย",
   "@selectExercises": {
     "description": "Validation message requiring at least one workout plan exercise."
   },
-  "todayLabel": "اليوم",
+  "todayLabel": "วันนี้",
   "@todayLabel": {
     "description": "Label indicating the current day."
   },
-  "setDetails": "تفاصيل المجموعة",
+  "setDetails": "รายละเอียดเซ็ต",
   "@setDetails": {
     "description": "Heading for workout set entry fields."
   },
-  "themeLabel": "السمة",
+  "themeLabel": "ธีม",
   "@themeLabel": {
     "description": "Label for choosing the application theme."
   },
-  "pureBlackAmoledDescription": "استخدام ألوان سوداء خالصة لشاشات AMOLED",
+  "pureBlackAmoledDescription": "ใช้สีดำสนิทสำหรับหน้าจอ AMOLED",
   "@pureBlackAmoledDescription": {
     "description": "Description of the AMOLED pure-black appearance option."
   },
-  "systemColorScheme": "نظام ألوان الجهاز",
+  "systemColorScheme": "โทนสีของระบบ",
   "@systemColorScheme": {
     "description": "Appearance setting for using system colors."
   },
-  "systemColorSchemeDescription": "استخدام اللون الأساسي لجهازك في التطبيق",
+  "systemColorSchemeDescription": "ใช้สีหลักของอุปกรณ์เป็นสีหลักของแอป",
   "@systemColorSchemeDescription": {
     "description": "Description of the system color scheme setting."
   },
-  "showImagesDescription": "اختيار/عرض الصور في صفحة السجل",
+  "showImagesDescription": "เลือกและแสดงรูปภาพในหน้าประวัติ",
   "@showImagesDescription": {
     "description": "Description of the setting that shows workout images."
   },
-  "showGlobalProgress": "إظهار التقدم العام",
+  "showGlobalProgress": "แสดงความคืบหน้าโดยรวม",
   "@showGlobalProgress": {
     "description": "Setting that controls the global progress graph."
   },
-  "showGlobalProgressDescription": "إضافة إدخال رسم بياني يعرض تقدمك حسب الفئة",
+  "showGlobalProgressDescription": "เพิ่มรายการกราฟที่แสดงความคืบหน้าของคุณตามหมวดหมู่",
   "@showGlobalProgressDescription": {
     "description": "Description of the global progress setting."
   },
-  "peekGraphDescription": "إظهار أول رسم بياني خطي في صفحة الرسوم البيانية",
+  "peekGraphDescription": "แสดงกราฟเส้นแรกในหน้ากราฟ",
   "@peekGraphDescription": {
     "description": "Description of the graph preview setting."
   },
-  "inputStyleDescription": "النمط المرئي لحقول إدخال النص",
+  "inputStyleDescription": "รูปแบบภาพของช่องป้อนข้อความ",
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "سيقوم Flexify تلقائيًا بنسخ بياناتك وصورك احتياطيًا إلى المجلد المحدد كل يوم.",
+  "automaticBackupNotificationBody": "Flexify จะสำรองข้อมูลและรูปภาพของคุณไปยังโฟลเดอร์ที่เลือกโดยอัตโนมัติทุกวัน",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
-  "backupSettingsChannel": "إعدادات النسخ الاحتياطي",
+  "backupSettingsChannel": "การตั้งค่าการสำรองข้อมูล",
   "@backupSettingsChannel": {
     "description": "Notification channel name for backup settings."
   },
-  "backupSettingsChannelDescription": "إشعارات تشرح النسخ الاحتياطي التلقائي",
+  "backupSettingsChannelDescription": "การแจ้งเตือนที่อธิบายการสำรองข้อมูลอัตโนมัติ",
   "@backupSettingsChannelDescription": {
     "description": "Notification channel description for automatic backups."
   },
-  "backupChannelName": "قناة النسخ الاحتياطي",
+  "backupChannelName": "ช่องการสำรองข้อมูล",
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "نسخ احتياطية تلقائية لبيانات Flexify وصوره",
+  "backupChannelDescription": "การสำรองข้อมูลและรูปภาพของ Flexify โดยอัตโนมัติ",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },
-  "backupCompletedTitle": "تم نسخ البيانات والصور احتياطيًا",
+  "backupCompletedTitle": "สำรองข้อมูลและรูปภาพแล้ว",
   "@backupCompletedTitle": {
     "description": "Android notification title shown after an automatic backup succeeds."
   },
-  "backupFailurePathNotSet": "فشل النسخ الاحتياطي: لم يتم تعيين مسار النسخ الاحتياطي. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailurePathNotSet": "สำรองข้อมูลไม่สำเร็จ: ยังไม่ได้ตั้งค่าตำแหน่งสำรองข้อมูล ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailurePathNotSet": {
     "description": "Android toast shown when an automatic backup has no destination path."
   },
-  "backupFailureDirectoryUnavailable": "فشل النسخ الاحتياطي: تعذر الوصول إلى مجلد النسخ الاحتياطي. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailureDirectoryUnavailable": "สำรองข้อมูลไม่สำเร็จ: ไม่สามารถเข้าถึงโฟลเดอร์สำรองข้อมูลได้ ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailureDirectoryUnavailable": {
     "description": "Android toast shown when the automatic backup directory cannot be accessed."
   },
-  "backupFailureCreateFile": "فشل النسخ الاحتياطي: تعذر إنشاء ملف النسخة الاحتياطية. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailureCreateFile": "สำรองข้อมูลไม่สำเร็จ: ไม่สามารถสร้างไฟล์สำรองข้อมูลได้ ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailureCreateFile": {
     "description": "Android toast shown when an automatic backup archive cannot be created."
   },
-  "backupFailureAppFilesUnavailable": "فشل النسخ الاحتياطي: تعذر الوصول إلى مجلد ملفات التطبيق. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailureAppFilesUnavailable": "สำรองข้อมูลไม่สำเร็จ: ไม่สามารถเข้าถึงโฟลเดอร์ไฟล์ของแอปได้ ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailureAppFilesUnavailable": {
     "description": "Android toast shown when app files are unavailable during automatic backup."
   },
-  "backupFailureDatabaseMissing": "فشل النسخ الاحتياطي: لم يتم العثور على ملف قاعدة البيانات. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailureDatabaseMissing": "สำรองข้อมูลไม่สำเร็จ: ไม่พบไฟล์ฐานข้อมูล ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailureDatabaseMissing": {
     "description": "Android toast shown when the database is missing during automatic backup."
   },
-  "backupFailureOutputUnavailable": "فشل النسخ الاحتياطي: تعذر فتح دفق الإخراج. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailureOutputUnavailable": "สำรองข้อมูลไม่สำเร็จ: ไม่สามารถเปิดสตรีมเอาต์พุตได้ ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailureOutputUnavailable": {
     "description": "Android toast shown when the automatic backup destination cannot be opened."
   },
-  "backupFailureUnknown": "فشل النسخ الاحتياطي. تم تعطيل النسخ الاحتياطي التلقائي.",
+  "backupFailureUnknown": "สำรองข้อมูลไม่สำเร็จ ปิดการสำรองข้อมูลอัตโนมัติแล้ว",
   "@backupFailureUnknown": {
     "description": "Android toast shown for an unexpected automatic backup failure."
   },
-  "appPermissionsDescription": "راجع الوصول المطلوب للميزات التي فعّلتها",
+  "appPermissionsDescription": "ตรวจสอบสิทธิ์การเข้าถึงที่ฟีเจอร์ที่คุณเปิดใช้งานต้องใช้",
   "@appPermissionsDescription": {
     "description": "Description for the app permissions settings entry."
   },
-  "longDateFormatDescription": "يُستخدم عندما تتوفر مساحة كافية",
+  "longDateFormatDescription": "ใช้ในพื้นที่ที่มีเนื้อที่เพียงพอ",
   "@longDateFormatDescription": {
     "description": "Description of the long date-format setting."
   },
-  "shortDateFormat": "تنسيق التاريخ القصير ({example})",
+  "shortDateFormat": "รูปแบบวันที่แบบสั้น ({example})",
   "@shortDateFormat": {
     "description": "Label for short date formatting with an example.",
     "placeholders": {
@@ -1747,251 +1747,251 @@
       }
     }
   },
-  "shortDateFormatDescription": "للأماكن ذات المساحة المحدودة (خطوط الرسم البياني)",
+  "shortDateFormatDescription": "ใช้ในพื้นที่จำกัด (เส้นกราฟ)",
   "@shortDateFormatDescription": {
     "description": "Description of the short date-format setting."
   },
-  "warmupSetsDescription": "مجموعات الإحماء لا تحتوي على مؤقتات راحة",
+  "warmupSetsDescription": "เซ็ตวอร์มอัปจะไม่มีตัวจับเวลาพัก",
   "@warmupSetsDescription": {
     "description": "Description of the default warmup sets setting."
   },
-  "setsPerExerciseDescription": "العدد الافتراضي للمجموعات لكل تمرين في الخطة",
+  "setsPerExerciseDescription": "จำนวนการออกกำลังกายเริ่มต้นในแผน",
   "@setsPerExerciseDescription": {
     "description": "Description of the default sets-per-exercise setting."
   },
-  "planTrailingDisplay": "العرض الجانبي للخطة",
+  "planTrailingDisplay": "ข้อมูลท้ายรายการแผน",
   "@planTrailingDisplay": {
     "description": "Label for choosing information shown on the right side of plan rows."
   },
-  "planTrailingDisplayDescription": "ما يظهر في الجانب الأيمن من القائمة في الخطط وعرض الخطة",
+  "planTrailingDisplayDescription": "ข้อมูลที่แสดงด้านขวาของรายการในหน้าแผนและมุมมองแผน",
   "@planTrailingDisplayDescription": {
     "description": "Description of the plan trailing display setting."
   },
-  "restTimersDescription": "منبه يعمل بعد إكمال مجموعة",
+  "restTimersDescription": "เสียงปลุกที่ดังหลังจากทำเซ็ตเสร็จ",
   "@restTimersDescription": {
     "description": "Description of rest timers."
   },
-  "vibrateDescription": "هل يجب أن تهتز مؤقتات الراحة؟",
+  "vibrateDescription": "ให้ตัวจับเวลาพักสั่นหรือไม่?",
   "@vibrateDescription": {
     "description": "Description of timer vibration."
   },
-  "enableSoundDescription": "هل يجب أن تشغّل مؤقتات الراحة صوتًا؟",
+  "enableSoundDescription": "ให้ตัวจับเวลาพักเล่นเสียงหรือไม่?",
   "@enableSoundDescription": {
     "description": "Description of timer sound."
   },
-  "keepScreenOnDescription": "إبقاء الشاشة قيد التشغيل أثناء مؤقتات الراحة",
+  "keepScreenOnDescription": "เปิดหน้าจอค้างไว้ระหว่างตัวจับเวลาพัก",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
   },
-  "restDurationDescription": "كم من الوقت قبل تشغيل منبهات الراحة؟",
+  "restDurationDescription": "ระยะเวลาก่อนที่เสียงปลุกพักจะดัง",
   "@restDurationDescription": {
     "description": "Description of the default rest duration."
   },
-  "globalDefault": "الافتراضي العام",
+  "globalDefault": "ค่าเริ่มต้นส่วนกลาง",
   "@globalDefault": {
     "description": "Label for a global default setting value."
   },
-  "alarmSoundDescription": "الموسيقى التي تُشغّل عند انتهاء مؤقت الراحة",
+  "alarmSoundDescription": "เพลงที่จะเล่นเมื่อตัวจับเวลาพักสิ้นสุด",
   "@alarmSoundDescription": {
     "description": "Description of the timer alarm sound setting."
   },
-  "progressBarPosition": "موضع شريط التقدم",
+  "progressBarPosition": "ตำแหน่งแถบความคืบหน้า",
   "@progressBarPosition": {
     "description": "Label for choosing the rest timer progress bar position."
   },
-  "progressBarPositionDescription": "أين يجب وضع شريط تقدم مؤقتات الراحة؟",
+  "progressBarPositionDescription": "ควรวางแถบความคืบหน้าของตัวจับเวลาพักไว้ที่ใด?",
   "@progressBarPositionDescription": {
     "description": "Description of the rest timer progress bar position setting."
   },
-  "perExerciseRestTimes": "أوقات الراحة لكل تمرين",
+  "perExerciseRestTimes": "เวลาพักแยกตามการออกกำลังกาย",
   "@perExerciseRestTimes": {
     "description": "Heading for exercise-specific rest timer durations."
   },
-  "perExerciseRestTimesDescription": "لهذه التمارين مدد راحة مخصصة",
+  "perExerciseRestTimesDescription": "การออกกำลังกายเหล่านี้มีระยะเวลาพักที่กำหนดเอง",
   "@perExerciseRestTimesDescription": {
     "description": "Description of exercise-specific rest timer durations."
   },
-  "audioFeaturesUnavailable": "ميزات الصوت غير متاحة",
+  "audioFeaturesUnavailable": "ไม่สามารถใช้ฟีเจอร์เสียงได้",
   "@audioFeaturesUnavailable": {
     "description": "Message shown when timer audio features cannot be initialized."
   },
-  "groupHistoryDescription": "دمج إدخالات السجل حسب اليوم",
+  "groupHistoryDescription": "รวมรายการประวัติตามวัน",
   "@groupHistoryDescription": {
     "description": "Description of history grouping."
   },
-  "showUnitsDescription": "إظهار كم/ميل وكغ/رطل في الرسوم البيانية والسجل والخطط",
+  "showUnitsDescription": "แสดง km/mi, kg/lb สำหรับกราฟ ประวัติ และแผน",
   "@showUnitsDescription": {
     "description": "Description of displaying measurement units."
   },
-  "showBodyWeightDescription": "تفعيل/تعطيل تتبع وزن الجسم",
+  "showBodyWeightDescription": "เปิดหรือปิดการติดตามน้ำหนักตัว",
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "تفعيل/تعطيل فئات التمارين",
+  "showCategoriesDescription": "เปิดหรือปิดหมวดหมู่การออกกำลังกาย",
   "@showCategoriesDescription": {
     "description": "Description of workout categories."
   },
-  "showNotesDescription": "تسجيل تفاصيل رفعتك في منطقة نص",
+  "showNotesDescription": "บันทึกรายละเอียดการยกของคุณในช่องข้อความ",
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
-  "positiveNotificationsDescription": "كتابة رسائل مشجعة عند تسجيل رقم قياسي جديد",
+  "positiveNotificationsDescription": "แสดงข้อความให้กำลังใจเมื่อทำสถิติใหม่",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."
   },
-  "positiveMessagesEnabled": "ستظهر الرسائل الإيجابية الآن هكذا!",
+  "positiveMessagesEnabled": "ตอนนี้ข้อความให้กำลังใจจะแสดงแบบนี้!",
   "@positiveMessagesEnabled": {
     "description": "Example toast shown when positive messages are enabled."
   },
-  "recordEncouragement01": "عمل رائع! أنت مذهل.",
+  "recordEncouragement01": "เยี่ยมมาก! คุณสุดยอดจริง ๆ",
   "@recordEncouragement01": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement02": "أحسنت يا بطل! تقدمك مُلهم.",
+  "recordEncouragement02": "เยี่ยมเลยราชา! ความก้าวหน้าของคุณน่าทึ่งมาก",
   "@recordEncouragement02": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement03": "أنحني لك...",
+  "recordEncouragement03": "ข้าขอคารวะ...",
   "@recordEncouragement03": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement04": "ما هذا؟ رقم قياسي جديد!",
+  "recordEncouragement04": "นั่นอะไรน่ะ? สถิติใหม่!",
   "@recordEncouragement04": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement05": "شيء مذهل! أنت مصدر إلهام.",
+  "recordEncouragement05": "สุดยอดมาก! คุณเป็นแรงบันดาลใจจริง ๆ",
   "@recordEncouragement05": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement06": "واو. رائع.",
+  "recordEncouragement06": "ว้าว เยี่ยมเลย",
   "@recordEncouragement06": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement07": "تزداد قوة، أليس كذلك؟",
+  "recordEncouragement07": "แข็งแรงขึ้นมากเลยใช่ไหม?",
   "@recordEncouragement07": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement08": "نعم. أصبحت قويًا جدًا.",
+  "recordEncouragement08": "ใช่เลย คุณตัวใหญ่ไม่เบานะ",
   "@recordEncouragement08": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement09": "مذهل. لا يُصدق.",
+  "recordEncouragement09": "ยอดเยี่ยม เหลือเชื่อ",
   "@recordEncouragement09": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement10": "كان أرنولد سيفتخر بك.",
+  "recordEncouragement10": "อาร์นี่ต้องภูมิใจแน่",
   "@recordEncouragement10": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement11": "روني كولمان ينظر إليك بسرور.",
+  "recordEncouragement11": "รอนนี่ ซี คงมองคุณด้วยความปลื้มใจ",
   "@recordEncouragement11": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement12": "نعم! وزن خفيف يا بطل!!!!!!!",
+  "recordEncouragement12": "เย้! เบา ๆ เองพวก!!!!!!!",
   "@recordEncouragement12": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement13": "هل هذا رقم قياسي جديد؟ كنت أعلم أنك تستطيع فعلها.",
+  "recordEncouragement13": "นั่นสถิติใหม่หรือเปล่า? รู้อยู่แล้วว่าคุณทำได้",
   "@recordEncouragement13": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement14": "عمل رائع! أنا فخور بك.",
+  "recordEncouragement14": "เยี่ยมมาก! ภูมิใจในตัวคุณนะ",
   "@recordEncouragement14": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement15": "نعم يا بطل! وزن خفيف!",
+  "recordEncouragement15": "เย้! เบา ๆ เอง!",
   "@recordEncouragement15": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement16": "واصل! تقدم رائع.",
+  "recordEncouragement16": "ทำต่อไป! ก้าวหน้าได้ดีมาก",
   "@recordEncouragement16": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement17": "أنت تؤدي بشكل ممتاز.",
+  "recordEncouragement17": "คุณทำได้ดีมากเลย",
   "@recordEncouragement17": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement18": "هذا هو بطلي!",
+  "recordEncouragement18": "นั่นแหละคนเก่ง!",
   "@recordEncouragement18": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement19": "واصل التقدم.",
+  "recordEncouragement19": "ทำต่อไป",
   "@recordEncouragement19": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement20": "أنت تصبح قويًا جدًا.",
+  "recordEncouragement20": "คุณแข็งแรงขึ้นมาก",
   "@recordEncouragement20": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement21": "قوي.",
+  "recordEncouragement21": "ทรงพลัง",
   "@recordEncouragement21": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement22": "أداء قوي!",
+  "recordEncouragement22": "พลังสุดยอด!",
   "@recordEncouragement22": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement23": "أنا فخور بك.",
+  "recordEncouragement23": "ภูมิใจในตัวคุณนะ",
   "@recordEncouragement23": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement24": "واصل هذا العمل الرائع.",
+  "recordEncouragement24": "รักษาผลงานดี ๆ แบบนี้ต่อไป",
   "@recordEncouragement24": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement25": "قف شامخًا! لقد حققت رقمًا قياسيًا جديدًا.",
+  "recordEncouragement25": "ยืดอกไว้! คุณเพิ่งทำสถิติใหม่",
   "@recordEncouragement25": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement26": "رقم قياسي جديد! لقد تجاوزت حدودك أكثر من أي وقت مضى!",
+  "recordEncouragement26": "สถิติใหม่! คุณไปได้ไกลกว่าที่เคย!",
   "@recordEncouragement26": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement27": "نعم! هذا رقم قياسي.",
+  "recordEncouragement27": "ใช่เลย! นั่นคือสถิติใหม่",
   "@recordEncouragement27": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement28": "واو! رقم قياسي جديد!",
+  "recordEncouragement28": "ว้าว! สถิติใหม่!",
   "@recordEncouragement28": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement29": "أداء ممتاز جدًا.",
+  "recordEncouragement29": "ดีมากเลย",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
   },
-  "repEstimationDescription": "حاول توقع عدد التكرارات التي أنجزتها للتو",
+  "repEstimationDescription": "ลองคาดเดาจำนวนครั้งที่คุณเพิ่งทำไป",
   "@repEstimationDescription": {
     "description": "Description of repetition estimation."
   },
-  "durationEstimationDescription": "حاول توقع مدة تمرين القلب",
+  "durationEstimationDescription": "ลองคาดเดาระยะเวลาคาร์ดิโอของคุณ",
   "@durationEstimationDescription": {
     "description": "Description of cardio duration estimation."
   },
-  "showGraphXAxisToggle": "إظهار مفتاح محور X للرسم البياني",
+  "showGraphXAxisToggle": "แสดงสวิตช์แกน X ของกราฟ",
   "@showGraphXAxisToggle": {
     "description": "Setting for showing the graph X-axis mode toggle."
   },
-  "showGraphXAxisToggleDescription": "إظهار مفتاح محور X المعتمد على الوقت في الرسوم البيانية",
+  "showGraphXAxisToggleDescription": "แสดงสวิตช์แกน X แบบอิงเวลาในกราฟ",
   "@showGraphXAxisToggleDescription": {
     "description": "Description of the graph X-axis toggle setting."
   },
-  "showGraphLimitDescription": "إظهار شريط تمرير الحد في الرسوم البيانية",
+  "showGraphLimitDescription": "แสดงแถบเลื่อนขีดจำกัดในกราฟ",
   "@showGraphLimitDescription": {
     "description": "Description of the graph limit setting."
   },
-  "defaultTimeBasedXAxis": "محور X المعتمد على الوقت افتراضيًا",
+  "defaultTimeBasedXAxis": "ใช้แกน X แบบอิงเวลาเป็นค่าเริ่มต้น",
   "@defaultTimeBasedXAxis": {
     "description": "Setting for using time-based graph X axes by default."
   },
-  "defaultTimeBasedXAxisDescription": "استخدام محور X المعتمد على الوقت افتراضيًا في الرسوم البيانية",
+  "defaultTimeBasedXAxisDescription": "ใช้แกน X แบบอิงเวลาเป็นค่าเริ่มต้นในกราฟ",
   "@defaultTimeBasedXAxisDescription": {
     "description": "Description of the default time-based X-axis setting."
   },
-  "createFirstTrainingPlan": "أنشئ أول خطة تدريب لك للبدء.",
+  "createFirstTrainingPlan": "สร้างแผนการฝึกแรกของคุณเพื่อเริ่มต้น",
   "@createFirstTrainingPlan": {
     "description": "Empty-state guidance when no workout plans exist."
   },
-  "nothingMatchesPlanSearch": "لا شيء يطابق “{query}”. يمكنك إنشاؤه كخطة جديدة.",
+  "nothingMatchesPlanSearch": "ไม่มีรายการที่ตรงกับ “{query}” คุณสามารถสร้างเป็นแผนใหม่ได้",
   "@nothingMatchesPlanSearch": {
     "description": "Empty-state guidance when a plan search has no matches.",
     "placeholders": {
@@ -2000,11 +2000,11 @@
       }
     }
   },
-  "createPlan": "إنشاء خطة",
+  "createPlan": "สร้างแผน",
   "@createPlan": {
     "description": "Action for creating a workout plan."
   },
-  "createNamedPlan": "إنشاء “{name}”",
+  "createNamedPlan": "สร้าง “{name}”",
   "@createNamedPlan": {
     "description": "Action for creating a plan with a typed name.",
     "placeholders": {
@@ -2013,7 +2013,7 @@
       }
     }
   },
-  "setNumber": "المجموعة {number}",
+  "setNumber": "เซ็ต {number}",
   "@setNumber": {
     "description": "Label for a numbered workout set.",
     "placeholders": {

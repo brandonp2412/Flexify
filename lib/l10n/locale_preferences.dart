@@ -28,6 +28,7 @@ const selectableLocales = <Locale>[
   Locale('bn'),
   Locale('ur'),
   Locale('fa'),
+  Locale('th'),
 ];
 
 /// Returns the canonical identifier persisted for a supported [locale].
@@ -76,6 +77,7 @@ String localeDisplayName(AppLocalizations l10n, Locale locale) {
     'bn' => l10n.languageNameBengali,
     'ur' => l10n.languageNameUrdu,
     'fa' => l10n.languageNamePersian,
+    'th' => l10n.languageNameThai,
     _ => locale.toLanguageTag(),
   };
 }

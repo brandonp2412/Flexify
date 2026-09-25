@@ -85,6 +85,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageNamePersian => 'فارسی';
 
   @override
+  String get languageNameThai => 'ไทย';
+
+  @override
   String get navHistory => '历史';
 
   @override
@@ -1564,6 +1567,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get languageNamePersian => 'فارسی';
 
   @override
+  String get languageNameThai => 'ไทย';
+
+  @override
   String get navHistory => '历史';
 
   @override
@@ -3041,6 +3047,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get languageNamePersian => 'فارسی';
+
+  @override
+  String get languageNameThai => 'ไทย';
 
   @override
   String get navHistory => '歷史';
