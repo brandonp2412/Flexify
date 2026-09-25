@@ -38,6 +38,10 @@
   "@languageNameBengali": {
     "description": "Stable native display name for the Bengali locale."
   },
+  "languageNameUrdu": "اردو",
+  "@languageNameUrdu": {
+    "description": "Stable native display name for the Urdu locale."
+  },
   "navHistory": "Histórico",
   "navPlans": "Planos",
   "navGraphs": "Gráficos",

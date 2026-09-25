@@ -79,6 +79,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get languageNameBengali => 'বাংলা';
 
   @override
+  String get languageNameUrdu => 'اردو';
+
+  @override
   String get navHistory => '履歴';
 
   @override
