@@ -21,6 +21,7 @@ import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_tr.dart';
+import 'app_localizations_ur.dart';
 import 'app_localizations_vi.dart';
 import 'app_localizations_zh.dart';
 
@@ -127,6 +128,7 @@ abstract class AppLocalizations {
     Locale('pt', 'BR'),
     Locale('ru'),
     Locale('tr'),
+    Locale('ur'),
     Locale('vi'),
     Locale('zh'),
     Locale('zh', 'CN'),
@@ -270,6 +272,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'বাংলা'**
   String get languageNameBengali;
+
+  /// Stable native display name for the Urdu locale.
+  ///
+  /// In en, this message translates to:
+  /// **'اردو'**
+  String get languageNameUrdu;
 
   /// Navigation label for workout history.
   ///
@@ -2867,6 +2875,7 @@ class _AppLocalizationsDelegate
     'pt',
     'ru',
     'tr',
+    'ur',
     'vi',
     'zh',
   ].contains(locale.languageCode);
@@ -2932,6 +2941,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsRu();
     case 'tr':
       return AppLocalizationsTr();
+    case 'ur':
+      return AppLocalizationsUr();
     case 'vi':
       return AppLocalizationsVi();
     case 'zh':

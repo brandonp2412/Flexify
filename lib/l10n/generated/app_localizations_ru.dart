@@ -79,6 +79,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get languageNameBengali => 'বাংলা';
 
   @override
+  String get languageNameUrdu => 'اردو';
+
+  @override
   String get navHistory => 'История';
 
   @override

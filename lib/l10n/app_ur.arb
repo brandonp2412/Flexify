@@ -1,18 +1,18 @@
 {
-  "@@locale": "hi",
+  "@@locale": "ur",
   "appTitle": "Flexify",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
-  "settingsLanguage": "भाषा",
+  "settingsLanguage": "زبان",
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Flexify में इस्तेमाल होने वाली भाषा चुनें",
+  "settingsLanguageDescription": "Flexify میں استعمال ہونے والی زبان منتخب کریں",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
-  "languageSystemDefault": "सिस्टम डिफ़ॉल्ट",
+  "languageSystemDefault": "سسٹم ڈیفالٹ",
   "@languageSystemDefault": {
     "description": "Language option that follows the device or operating system locale."
   },
@@ -96,39 +96,39 @@
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
-  "navHistory": "इतिहास",
+  "navHistory": "تاریخ",
   "@navHistory": {
     "description": "Navigation label for workout history."
   },
-  "navPlans": "प्लान",
+  "navPlans": "منصوبے",
   "@navPlans": {
     "description": "Navigation label for workout plans."
   },
-  "navGraphs": "ग्राफ़",
+  "navGraphs": "گراف",
   "@navGraphs": {
     "description": "Navigation label for exercise graphs."
   },
-  "navTimer": "टाइमर",
+  "navTimer": "ٹائمر",
   "@navTimer": {
     "description": "Navigation label for the rest timer."
   },
-  "navSettings": "सेटिंग्स",
+  "navSettings": "ترتیبات",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },
-  "errorLabel": "त्रुटि",
+  "errorLabel": "خرابی",
   "@errorLabel": {
     "description": "Generic short error label."
   },
-  "tabContentError": "टैब की सामग्री नहीं बनाई जा सकी।",
+  "tabContentError": "ٹیب کا مواد تیار نہیں ہو سکا۔",
   "@tabContentError": {
     "description": "Error shown when a configured app tab cannot be rendered."
   },
-  "cannotHideAllTabs": "सभी टैब छिपाए नहीं जा सकते!",
+  "cannotHideAllTabs": "سب کچھ نہیں چھپایا جا سکتا!",
   "@cannotHideAllTabs": {
     "description": "Message shown when the user tries to hide the last visible navigation tab."
   },
-  "removeTabQuestion": "{tab} टैब हटाएँ?",
+  "removeTabQuestion": "{tab} ٹیب ہٹائیں؟",
   "@removeTabQuestion": {
     "description": "Confirmation title shown before hiding a navigation tab.",
     "placeholders": {
@@ -138,11 +138,11 @@
       }
     }
   },
-  "restoreTabFromSettings": "आप इसे बाद में सेटिंग्स से फिर जोड़ सकते हैं।",
+  "restoreTabFromSettings": "آپ اسے بعد میں ترتیبات سے دوبارہ شامل کر سکتے ہیں۔",
   "@restoreTabFromSettings": {
     "description": "Explanation shown when removing a navigation tab."
   },
-  "removedTab": "{tab} हटाया गया",
+  "removedTab": "{tab} ہٹا دیا گیا",
   "@removedTab": {
     "description": "Toast shown after a navigation tab has been hidden.",
     "placeholders": {
@@ -152,7 +152,7 @@
       }
     }
   },
-  "newVersion": "नया संस्करण {version}",
+  "newVersion": "نیا ورژن {version}",
   "@newVersion": {
     "description": "Toast announcing that the installed app version changed.",
     "placeholders": {
@@ -162,23 +162,23 @@
       }
     }
   },
-  "changes": "बदलाव",
+  "changes": "تبدیلیاں",
   "@changes": {
     "description": "Action that opens the app changelog."
   },
-  "searchHint": "खोजें...",
+  "searchHint": "تلاش کریں...",
   "@searchHint": {
     "description": "Default hint shown in reusable search fields."
   },
-  "deleteSelected": "चुने हुए हटाएँ",
+  "deleteSelected": "منتخب شدہ حذف کریں",
   "@deleteSelected": {
     "description": "Tooltip for deleting the currently selected records."
   },
-  "confirmDelete": "हटाने की पुष्टि करें",
+  "confirmDelete": "حذف کرنے کی تصدیق",
   "@confirmDelete": {
     "description": "Title for a generic delete confirmation dialog."
   },
-  "deleteRecordsConfirmation": "{count, plural, =1{क्या आप वाकई 1 रिकॉर्ड हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।} other{क्या आप वाकई {count} रिकॉर्ड हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।}}",
+  "deleteRecordsConfirmation": "{count, plural, =1{کیا آپ واقعی 1 ریکارڈ حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں لیا جا سکتا۔} other{کیا آپ واقعی {count} ریکارڈ حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں لیا جا سکتا۔}}",
   "@deleteRecordsConfirmation": {
     "description": "Generic confirmation text for deleting one or more records.",
     "placeholders": {
@@ -188,263 +188,263 @@
       }
     }
   },
-  "actionCancel": "रद्द करें",
+  "actionCancel": "منسوخ کریں",
   "@actionCancel": {
     "description": "Generic cancel action."
   },
-  "actionDelete": "हटाएँ",
+  "actionDelete": "حذف کریں",
   "@actionDelete": {
     "description": "Generic delete action."
   },
-  "actionRemove": "निकालें",
+  "actionRemove": "ہٹائیں",
   "@actionRemove": {
     "description": "Generic remove action."
   },
-  "actionEdit": "संपादित करें",
+  "actionEdit": "ترمیم",
   "@actionEdit": {
     "description": "Generic edit action."
   },
-  "actionShare": "साझा करें",
+  "actionShare": "شیئر کریں",
   "@actionShare": {
     "description": "Generic share action."
   },
-  "clearSelection": "चयन साफ़ करें",
+  "clearSelection": "انتخاب صاف کریں",
   "@clearSelection": {
     "description": "Action or tooltip for clearing selected records."
   },
-  "clearSearch": "खोज साफ़ करें",
+  "clearSearch": "تلاش صاف کریں",
   "@clearSearch": {
     "description": "Tooltip for clearing the current search query."
   },
-  "showMenu": "मेनू दिखाएँ",
+  "showMenu": "مینو دکھائیں",
   "@showMenu": {
     "description": "Tooltip for opening a contextual actions menu."
   },
-  "selectAll": "सभी चुनें",
+  "selectAll": "سب منتخب کریں",
   "@selectAll": {
     "description": "Action for selecting every visible record."
   },
-  "weightLabel": "वज़न",
+  "weightLabel": "وزن",
   "@weightLabel": {
     "description": "Generic label for body or exercise weight."
   },
-  "filter": "फ़िल्टर",
+  "filter": "فلٹر",
   "@filter": {
     "description": "Tooltip for opening filtering controls."
   },
-  "filters": "फ़िल्टर",
+  "filters": "فلٹرز",
   "@filters": {
     "description": "Title for a filtering dialog."
   },
-  "categoryLabel": "श्रेणी",
+  "categoryLabel": "زمرہ",
   "@categoryLabel": {
     "description": "Generic exercise category label."
   },
-  "repsLabel": "रेप्स",
+  "repsLabel": "ریپس",
   "@repsLabel": {
     "description": "Short label for exercise repetitions."
   },
-  "repsFilter": "रेप्स फ़िल्टर",
+  "repsFilter": "ریپس فلٹر",
   "@repsFilter": {
     "description": "Title for filtering records by repetition count."
   },
-  "weightFilter": "वज़न फ़िल्टर",
+  "weightFilter": "وزن فلٹر",
   "@weightFilter": {
     "description": "Title for filtering records by weight."
   },
-  "greaterThan": "इससे अधिक",
+  "greaterThan": "سے زیادہ",
   "@greaterThan": {
     "description": "Label for a numeric lower-bound filter."
   },
-  "lessThan": "इससे कम",
+  "lessThan": "سے کم",
   "@lessThan": {
     "description": "Label for a numeric upper-bound filter."
   },
-  "startDate": "शुरू होने की तारीख",
+  "startDate": "شروع کی تاریخ",
   "@startDate": {
     "description": "Label for the beginning of a date range."
   },
-  "endDate": "समाप्ति की तारीख",
+  "endDate": "اختتامی تاریخ",
   "@endDate": {
     "description": "Label for the end of a date range."
   },
-  "actionClear": "साफ़ करें",
+  "actionClear": "صاف کریں",
   "@actionClear": {
     "description": "Generic action for clearing a value, selection, or filter."
   },
-  "actionOk": "ठीक है",
+  "actionOk": "ٹھیک ہے",
   "@actionOk": {
     "description": "Generic confirmation action."
   },
-  "actionClose": "बंद करें",
+  "actionClose": "بند کریں",
   "@actionClose": {
     "description": "Generic close action."
   },
-  "sortBy": "इसके अनुसार क्रमित करें",
+  "sortBy": "ترتیب دیں",
   "@sortBy": {
     "description": "Label for selecting a sort order."
   },
-  "dateNewest": "तारीख (नवीनतम)",
+  "dateNewest": "تاریخ (نئی پہلے)",
   "@dateNewest": {
     "description": "Sort option that places newest records first."
   },
-  "dateOldest": "तारीख (सबसे पुरानी)",
+  "dateOldest": "تاریخ (پرانی پہلے)",
   "@dateOldest": {
     "description": "Sort option that places oldest records first."
   },
-  "nameLabel": "नाम",
+  "nameLabel": "نام",
   "@nameLabel": {
     "description": "Generic name label and sort option."
   },
-  "missingPermissions": "अनुमतियाँ नहीं मिलीं",
+  "missingPermissions": "اجازتیں موجود نہیں",
   "@missingPermissions": {
     "description": "Title for the page explaining missing Android permissions."
   },
-  "restTimersPermissionsMissing": "रेस्ट टाइमर चालू हैं, लेकिन आवश्यक अनुमतियाँ नहीं मिली हैं।",
+  "restTimersPermissionsMissing": "آرام کے ٹائمر فعال ہیں، لیکن اجازتیں موجود نہیں ہیں۔",
   "@restTimersPermissionsMissing": {
     "description": "Message explaining that enabled rest timers require additional permissions."
   },
-  "restTimersPermissionsOptional": "यदि आप रेस्ट टाइमर बंद कर दें, तो इन अनुमतियों की आवश्यकता नहीं होगी।",
+  "restTimersPermissionsOptional": "اگر آپ آرام کے ٹائمر بند کر دیں تو ان اجازتوں کی ضرورت نہیں رہے گی۔",
   "@restTimersPermissionsOptional": {
     "description": "Explanation that timer permissions are unnecessary when rest timers are disabled."
   },
-  "restTimers": "रेस्ट टाइमर",
+  "restTimers": "آرام کے ٹائمر",
   "@restTimers": {
     "description": "Label for the rest timer feature."
   },
-  "disableBatteryOptimizations": "बैटरी ऑप्टिमाइज़ेशन बंद करें",
+  "disableBatteryOptimizations": "بیٹری آپٹیمائزیشن بند کریں",
   "@disableBatteryOptimizations": {
     "description": "Android permission action for excluding Flexify from battery optimizations."
   },
-  "batteryOptimizationWarning": "बैटरी ऑप्टिमाइज़ेशन चालू रहने पर प्रगति रुक सकती है।",
+  "batteryOptimizationWarning": "اگر بیٹری آپٹیمائزیشن فعال رہی تو پیش رفت رک سکتی ہے۔",
   "@batteryOptimizationWarning": {
     "description": "Explanation of why battery optimization access is requested."
   },
-  "scheduleExactAlarm": "सटीक अलार्म शेड्यूल करें",
+  "scheduleExactAlarm": "عین وقت کا الارم شیڈول کریں",
   "@scheduleExactAlarm": {
     "description": "Android permission action for scheduling exact alarms."
   },
-  "exactAlarmWarning": "यह बंद होने पर अलार्म सटीक नहीं हो सकते।",
+  "exactAlarmWarning": "اگر یہ بند ہو تو الارم درست وقت پر نہیں بج سکتے۔",
   "@exactAlarmWarning": {
     "description": "Explanation of why exact alarm access is requested."
   },
-  "postNotifications": "नोटिफ़िकेशन भेजें",
+  "postNotifications": "نوٹیفکیشنز دکھائیں",
   "@postNotifications": {
     "description": "Android permission action for posting notifications."
   },
-  "notificationBarDescription": "टाइमर की प्रगति नोटिफ़िकेशन बार में दिखाई जाती है",
+  "notificationBarDescription": "ٹائمر کی پیش رفت نوٹیفکیشن بار میں دکھائی جاتی ہے",
   "@notificationBarDescription": {
     "description": "Explanation of how rest timer notifications are used."
   },
-  "invalidPermissions": "अमान्य अनुमतियाँ",
+  "invalidPermissions": "غلط اجازتیں",
   "@invalidPermissions": {
     "description": "Title for the warning shown when rest timers lack required permissions."
   },
-  "insufficientTimerPermissionsConfirmation": "पर्याप्त अनुमतियों के बिना रेस्ट टाइमर चालू हैं। क्या आप सुनिश्चित हैं?",
+  "insufficientTimerPermissionsConfirmation": "کافی اجازتوں کے بغیر آرام کے ٹائمر فعال ہیں۔ کیا آپ کو یقین ہے؟",
   "@insufficientTimerPermissionsConfirmation": {
     "description": "Confirmation shown when leaving timer permissions incomplete."
   },
-  "actionConfirm": "पुष्टि करें",
+  "actionConfirm": "تصدیق کریں",
   "@actionConfirm": {
     "description": "Generic confirmation action."
   },
-  "appAccess": "ऐप एक्सेस",
+  "appAccess": "ایپ رسائی",
   "@appAccess": {
     "description": "Title for the Android app access dialog."
   },
-  "appAccessDescription": "चालू टाइमर और नोटिफ़िकेशन के लिए आवश्यक।",
+  "appAccessDescription": "فعال ٹائمرز اور نوٹیفکیشنز کے لیے درکار ہے۔",
   "@appAccessDescription": {
     "description": "Short explanation of why Android app access is requested."
   },
-  "notifications": "नोटिफ़िकेशन",
+  "notifications": "نوٹیفکیشنز",
   "@notifications": {
     "description": "Generic label for notifications."
   },
-  "timerProgressAndRestAlerts": "टाइमर की प्रगति और रेस्ट अलर्ट",
+  "timerProgressAndRestAlerts": "ٹائمر کی پیش رفت اور آرام کے انتباہات",
   "@timerProgressAndRestAlerts": {
     "description": "Description of notifications used when rest timers are enabled."
   },
-  "enabledNotificationsDescription": "आपके द्वारा चालू किए गए नोटिफ़िकेशन",
+  "enabledNotificationsDescription": "وہ نوٹیفکیشنز جو آپ نے فعال کیے ہیں",
   "@enabledNotificationsDescription": {
     "description": "Description of notification access when notifications are enabled without rest timers."
   },
-  "backgroundActivity": "बैकग्राउंड गतिविधि",
+  "backgroundActivity": "پس منظر کی سرگرمی",
   "@backgroundActivity": {
     "description": "Android app access label for background activity."
   },
-  "backgroundActivityDescription": "बैकग्राउंड में टाइमर भरोसेमंद बनाए रखें",
+  "backgroundActivityDescription": "پس منظر میں بھی ٹائمرز کو قابلِ اعتماد رکھیں",
   "@backgroundActivityDescription": {
     "description": "Description of background activity access for timers."
   },
-  "exactAlarms": "सटीक अलार्म",
+  "exactAlarms": "عین وقت کے الارم",
   "@exactAlarms": {
     "description": "Android app access label for exact alarms."
   },
-  "exactAlarmsDescription": "रेस्ट टाइमर समाप्त होते ही ठीक समय पर अलर्ट करें",
+  "exactAlarmsDescription": "آرام کا ٹائمر ختم ہوتے ہی بالکل اسی وقت اطلاع دیں",
   "@exactAlarmsDescription": {
     "description": "Description of exact alarm access for rest timers."
   },
-  "noAdditionalAndroidAccessNeeded": "आपकी मौजूदा सेटिंग्स के लिए किसी अतिरिक्त Android एक्सेस की आवश्यकता नहीं है।",
+  "noAdditionalAndroidAccessNeeded": "آپ کی موجودہ ترتیبات کے لیے کسی اضافی Android رسائی کی ضرورت نہیں۔",
   "@noAdditionalAndroidAccessNeeded": {
     "description": "Message shown when current settings need no extra Android permissions."
   },
-  "actionDone": "हो गया",
+  "actionDone": "مکمل",
   "@actionDone": {
     "description": "Generic action for finishing or dismissing a flow."
   },
-  "allowed": "अनुमति है",
+  "allowed": "اجازت یافتہ",
   "@allowed": {
     "description": "Status tooltip indicating that an Android permission is granted."
   },
-  "actionAllow": "अनुमति दें",
+  "actionAllow": "اجازت دیں",
   "@actionAllow": {
     "description": "Generic action for granting requested access."
   },
-  "backupLabel": "बैकअप",
+  "backupLabel": "بیک اپ",
   "@backupLabel": {
     "description": "Label for backup import, export, and data-management actions."
   },
-  "databaseLabel": "डेटाबेस",
+  "databaseLabel": "ڈیٹابیس",
   "@databaseLabel": {
     "description": "Label for database data-management actions."
   },
-  "deleteRecords": "रिकॉर्ड हटाएँ",
+  "deleteRecords": "ریکارڈز حذف کریں",
   "@deleteRecords": {
     "description": "Action for opening destructive data deletion options."
   },
-  "deleteAllGraphsConfirmation": "क्या आप वाकई सभी ग्राफ़ हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।",
+  "deleteAllGraphsConfirmation": "کیا آپ واقعی تمام گراف حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں لیا جا سکتا۔",
   "@deleteAllGraphsConfirmation": {
     "description": "Confirmation text for deleting all graph records."
   },
-  "deleteAllPlansConfirmation": "क्या आप वाकई सभी प्लान हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।",
+  "deleteAllPlansConfirmation": "کیا آپ واقعی تمام منصوبے حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں لیا جا سکتا۔",
   "@deleteAllPlansConfirmation": {
     "description": "Confirmation text for deleting all plans."
   },
-  "deleteDatabaseConfirmation": "क्या आप वाकई अपना डेटाबेस हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती और आपका सारा डेटा नष्ट हो जाएगा।",
+  "deleteDatabaseConfirmation": "کیا آپ واقعی اپنا ڈیٹابیس حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں لیا جا سکتا اور آپ کا تمام ڈیٹا ضائع ہو جائے گا۔",
   "@deleteDatabaseConfirmation": {
     "description": "Confirmation text for deleting the complete Flexify database."
   },
-  "importData": "डेटा आयात करें",
+  "importData": "ڈیٹا درآمد کریں",
   "@importData": {
     "description": "Action for opening data import options."
   },
-  "exportData": "डेटा निर्यात करें",
+  "exportData": "ڈیٹا برآمد کریں",
   "@exportData": {
     "description": "Action for opening data export options."
   },
-  "actionReport": "रिपोर्ट करें",
+  "actionReport": "رپورٹ کریں",
   "@actionReport": {
     "description": "Action for reporting an import failure."
   },
-  "graphDataImported": "ग्राफ़ डेटा सफलतापूर्वक आयात हो गया!",
+  "graphDataImported": "گراف ڈیٹا کامیابی سے درآمد ہو گیا!",
   "@graphDataImported": {
     "description": "Toast shown after graph CSV data is imported."
   },
-  "plansImported": "प्लान सफलतापूर्वक आयात हो गए",
+  "plansImported": "منصوبے کامیابی سے درآمد ہو گئے",
   "@plansImported": {
     "description": "Toast shown after plan CSV data is imported."
   },
-  "failedToImportDatabase": "डेटाबेस आयात नहीं हो सका: {error}",
+  "failedToImportDatabase": "ڈیٹابیس درآمد نہیں ہو سکا: {error}",
   "@failedToImportDatabase": {
     "description": "Toast shown when a database import fails.",
     "placeholders": {
@@ -453,11 +453,11 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "बैकअप आर्काइव में Flexify डेटाबेस नहीं है।",
+  "backupArchiveMissingDatabase": "بیک اپ آرکائیو میں Flexify ڈیٹابیس موجود نہیں ہے۔",
   "@backupArchiveMissingDatabase": {
     "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
   },
-  "failedToImportGraphs": "ग्राफ़ आयात नहीं हो सके: {error}",
+  "failedToImportGraphs": "گراف درآمد نہیں ہو سکے: {error}",
   "@failedToImportGraphs": {
     "description": "Toast shown when a graph CSV import fails.",
     "placeholders": {
@@ -466,7 +466,7 @@
       }
     }
   },
-  "failedToImportPlans": "प्लान आयात नहीं हो सके: {error}",
+  "failedToImportPlans": "منصوبے درآمد نہیں ہو سکے: {error}",
   "@failedToImportPlans": {
     "description": "Toast shown when a plan CSV import fails.",
     "placeholders": {
@@ -475,27 +475,27 @@
       }
     }
   },
-  "selectedFileDoesNotExist": "चुनी गई फ़ाइल मौजूद नहीं है",
+  "selectedFileDoesNotExist": "منتخب فائل موجود نہیں ہے",
   "@selectedFileDoesNotExist": {
     "description": "Validation error when an import file no longer exists."
   },
-  "couldNotReadFileData": "फ़ाइल का डेटा पढ़ा नहीं जा सका",
+  "couldNotReadFileData": "فائل کا ڈیٹا پڑھا نہیں جا سکا",
   "@couldNotReadFileData": {
     "description": "Validation error when import file bytes cannot be read."
   },
-  "databaseImportWebUnsupported": "वेब पर डेटाबेस आयात के लिए मैन्युअल डेटा माइग्रेशन आवश्यक है। कृपया अपना डेटा CSV फ़ाइलों के रूप में निर्यात करें और उन्हें आयात करें।",
+  "databaseImportWebUnsupported": "ویب پر ڈیٹابیس درآمد کرنے کے لیے ڈیٹا کو دستی طور پر منتقل کرنا ضروری ہے۔ براہِ کرم اپنا ڈیٹا CSV فائلوں کے طور پر برآمد کریں اور پھر انہیں درآمد کریں۔",
   "@databaseImportWebUnsupported": {
     "description": "Validation error explaining the supported web data-import workflow."
   },
-  "csvFileEmpty": "CSV फ़ाइल खाली है",
+  "csvFileEmpty": "CSV فائل خالی ہے",
   "@csvFileEmpty": {
     "description": "Validation error for an empty CSV import file."
   },
-  "csvNeedsDataRow": "CSV फ़ाइल में कम से कम एक डेटा पंक्ति होनी चाहिए",
+  "csvNeedsDataRow": "CSV فائل میں کم از کم ایک ڈیٹا قطار ہونی چاہیے",
   "@csvNeedsDataRow": {
     "description": "Validation error for a CSV containing only headings."
   },
-  "csvRowInsufficientColumns": "पंक्ति {row} में पर्याप्त कॉलम नहीं हैं: {count}",
+  "csvRowInsufficientColumns": "قطار {row} میں کافی کالم نہیں ہیں: {count}",
   "@csvRowInsufficientColumns": {
     "description": "Validation error when an imported CSV row has too few columns.",
     "placeholders": {
@@ -507,7 +507,7 @@
       }
     }
   },
-  "invalidCsvValue": "पंक्ति {row} में अमान्य {field} मान: {value}",
+  "invalidCsvValue": "قطار {row} میں {field} کی قدر غلط ہے: {value}",
   "@invalidCsvValue": {
     "description": "Validation error for a malformed value in an imported CSV row.",
     "placeholders": {
@@ -522,7 +522,7 @@
       }
     }
   },
-  "invalidCsvDataType": "पंक्ति {row} में अमान्य {field} डेटा प्रकार: {type}",
+  "invalidCsvDataType": "قطار {row} میں {field} کا ڈیٹا ٹائپ غلط ہے: {type}",
   "@invalidCsvDataType": {
     "description": "Validation error for an unsupported value type in an imported CSV row.",
     "placeholders": {
@@ -537,7 +537,7 @@
       }
     }
   },
-  "expectedIntegerPlanId": "पूर्णांक प्लान आईडी अपेक्षित थी, मिला \"{value}\"",
+  "expectedIntegerPlanId": "صحیح عدد plan id درکار تھا، ملا \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
     "placeholders": {
@@ -546,19 +546,19 @@
       }
     }
   },
-  "unitLabel": "इकाई",
+  "unitLabel": "اکائی",
   "@unitLabel": {
     "description": "Generic label for measurement units."
   },
-  "kilogramsUnit": "किलोग्राम (kg)",
+  "kilogramsUnit": "کلوگرام (kg)",
   "@kilogramsUnit": {
     "description": "Display label for the kilogram unit option."
   },
-  "poundsUnit": "पाउंड (lb)",
+  "poundsUnit": "پاؤنڈ (lb)",
   "@poundsUnit": {
     "description": "Display label for the pound unit option."
   },
-  "stoneUnit": "स्टोन",
+  "stoneUnit": "اسٹون",
   "@stoneUnit": {
     "description": "Display label for the stone weight unit option."
   },
@@ -566,167 +566,167 @@
   "@stoneUnitShort": {
     "description": "Compact stone weight unit shown beside measurement values."
   },
-  "kilometersUnit": "किलोमीटर (km)",
+  "kilometersUnit": "کلومیٹر (km)",
   "@kilometersUnit": {
     "description": "Display label for the kilometer unit option."
   },
-  "milesUnit": "मील (mi)",
+  "milesUnit": "میل (mi)",
   "@milesUnit": {
     "description": "Display label for the mile unit option."
   },
-  "metersUnit": "मीटर (m)",
+  "metersUnit": "میٹر (m)",
   "@metersUnit": {
     "description": "Display label for the meter unit option."
   },
-  "kilocaloriesUnit": "किलोकैलोरी (kcal)",
+  "kilocaloriesUnit": "کلوکیلوریز (kcal)",
   "@kilocaloriesUnit": {
     "description": "Display label for the kilocalorie unit option."
   },
-  "enterWeight": "वज़न दर्ज करें",
+  "enterWeight": "وزن درج کریں",
   "@enterWeight": {
     "description": "Title for the bodyweight entry page."
   },
-  "requiredField": "आवश्यक",
+  "requiredField": "ضروری",
   "@requiredField": {
     "description": "Validation message for a required input."
   },
-  "invalidNumber": "अमान्य संख्या",
+  "invalidNumber": "غلط عدد",
   "@invalidNumber": {
     "description": "Validation message for a malformed numeric input."
   },
-  "previousWeight": "पिछला वज़न",
+  "previousWeight": "پچھلا وزن",
   "@previousWeight": {
     "description": "Label for the previously recorded bodyweight."
   },
-  "imageLabel": "चित्र",
+  "imageLabel": "تصویر",
   "@imageLabel": {
     "description": "Generic label for an attached image."
   },
-  "longPressToDelete": "हटाने के लिए देर तक दबाएँ",
+  "longPressToDelete": "حذف کرنے کے لیے دیر تک دبائیں",
   "@longPressToDelete": {
     "description": "Tooltip explaining how to remove an attached image."
   },
-  "imageError": "चित्र त्रुटि",
+  "imageError": "تصویر کی خرابی",
   "@imageError": {
     "description": "Action label shown when an attached image cannot be rendered."
   },
-  "actionSave": "सहेजें",
+  "actionSave": "محفوظ کریں",
   "@actionSave": {
     "description": "Generic save action."
   },
-  "aboutTitle": "परिचय",
+  "aboutTitle": "بارے میں",
   "@aboutTitle": {
     "description": "Title for the About page."
   },
-  "donate": "दान करें",
+  "donate": "عطیہ دیں",
   "@donate": {
     "description": "Action for opening the project donation page."
   },
-  "helpSupportProject": "इस प्रोजेक्ट को सहयोग दें",
+  "helpSupportProject": "اس منصوبے کی حمایت کریں",
   "@helpSupportProject": {
     "description": "Description for the donation action."
   },
-  "whatsNewAbout": "नया क्या है?",
+  "whatsNewAbout": "نیا کیا ہے؟",
   "@whatsNewAbout": {
     "description": "About-page label for opening release notes."
   },
-  "whatsNewTitle": "नया क्या है?",
+  "whatsNewTitle": "نیا کیا ہے؟",
   "@whatsNewTitle": {
     "description": "Title for the in-app changelog page."
   },
-  "seeReleaseNotes": "रिलीज़ नोट्स देखें",
+  "seeReleaseNotes": "ہمارے ریلیز نوٹس دیکھیں",
   "@seeReleaseNotes": {
     "description": "Description for the in-app changelog action."
   },
-  "versionLabel": "संस्करण",
+  "versionLabel": "ورژن",
   "@versionLabel": {
     "description": "Label for the installed app version."
   },
-  "authorLabel": "लेखक",
+  "authorLabel": "مصنف",
   "@authorLabel": {
     "description": "Label for the app author."
   },
-  "privacyPolicy": "गोपनीयता नीति",
+  "privacyPolicy": "رازداری کی پالیسی",
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "Flexify आपके डेटा को कैसे संभालता है",
+  "privacyPolicyDescription": "Flexify آپ کے ڈیٹا کو کیسے سنبھالتا ہے",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
-  "licenseLabel": "लाइसेंस",
+  "licenseLabel": "لائسنس",
   "@licenseLabel": {
     "description": "Label for opening the software license."
   },
-  "sourceCode": "स्रोत कोड",
+  "sourceCode": "سورس کوڈ",
   "@sourceCode": {
     "description": "Label for opening the source-code repository."
   },
-  "sourceCodeDescription": "GitHub पर देखें",
+  "sourceCodeDescription": "GitHub پر دیکھیں",
   "@sourceCodeDescription": {
     "description": "Description for the source-code repository action."
   },
-  "leaveReview": "समीक्षा दें",
+  "leaveReview": "جائزہ دیں",
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Play Store पर Flexify को रेट करें",
+  "leaveReviewDescription": "Play Store پر Flexify کی درجہ بندی کریں",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
-  "reportBug": "बग रिपोर्ट करें",
+  "reportBug": "بگ رپورٹ کریں",
   "@reportBug": {
     "description": "Label for opening the bug-report form."
   },
-  "reportBugDescription": "GitHub पर टिकट खोलें",
+  "reportBugDescription": "GitHub پر ٹکٹ کھولیں",
   "@reportBugDescription": {
     "description": "Description for the bug-report action."
   },
-  "failedMigrations": "असफल माइग्रेशन",
+  "failedMigrations": "ناکام مائیگریشنز",
   "@failedMigrations": {
     "description": "Title for the database migration failure page."
   },
-  "errorMessageLabel": "त्रुटि संदेश:",
+  "errorMessageLabel": "خرابی کا پیغام:",
   "@errorMessageLabel": {
     "description": "Label preceding a database migration error message."
   },
-  "createIssue": "इश्यू बनाएँ",
+  "createIssue": "ایشو بنائیں",
   "@createIssue": {
     "description": "Action for opening a new issue report."
   },
-  "addExercise": "व्यायाम जोड़ें",
+  "addExercise": "ورزش شامل کریں",
   "@addExercise": {
     "description": "Title and action for adding an exercise graph."
   },
-  "cardio": "कार्डियो",
+  "cardio": "کارڈیو",
   "@cardio": {
     "description": "Label for cardiovascular exercises."
   },
-  "strength": "स्ट्रेंथ",
+  "strength": "طاقت",
   "@strength": {
     "description": "Label for strength exercises."
   },
-  "options": "विकल्प",
+  "options": "اختیارات",
   "@options": {
     "description": "Tooltip for opening view options."
   },
-  "periodDay": "दिन",
+  "periodDay": "دن",
   "@periodDay": {
     "description": "One-day graph period."
   },
-  "periodWeek": "सप्ताह",
+  "periodWeek": "ہفتہ",
   "@periodWeek": {
     "description": "One-week graph period."
   },
-  "periodMonth": "महीना",
+  "periodMonth": "مہینہ",
   "@periodMonth": {
     "description": "One-month graph period."
   },
-  "periodYear": "वर्ष",
+  "periodYear": "سال",
   "@periodYear": {
     "description": "One-year graph period."
   },
-  "noDataFor": "{name} के लिए अभी कोई डेटा नहीं",
+  "noDataFor": "{name} کے لیے ابھی کوئی ڈیٹا نہیں",
   "@noDataFor": {
     "description": "Empty-state message for an exercise without graph data.",
     "placeholders": {
@@ -735,23 +735,23 @@
       }
     }
   },
-  "noDataYet": "अभी कोई डेटा नहीं",
+  "noDataYet": "ابھی کوئی ڈیٹا نہیں",
   "@noDataYet": {
     "description": "Generic empty state when a graph has no data."
   },
-  "exerciseNotes": "व्यायाम नोट्स",
+  "exerciseNotes": "ورزش کے نوٹس",
   "@exerciseNotes": {
     "description": "Label and title for notes attached to an exercise."
   },
-  "notesForExercise": "इस व्यायाम के लिए नोट्स",
+  "notesForExercise": "اس ورزش کے لیے نوٹس",
   "@notesForExercise": {
     "description": "Hint for exercise notes."
   },
-  "useTimeBasedXAxis": "समय-आधारित X अक्ष का उपयोग करें",
+  "useTimeBasedXAxis": "وقت پر مبنی X محور استعمال کریں",
   "@useTimeBasedXAxis": {
     "description": "Graph option that uses elapsed time on the horizontal axis."
   },
-  "updateAllNamed": "सभी {name} अपडेट करें",
+  "updateAllNamed": "تمام {name} اپ ڈیٹ کریں",
   "@updateAllNamed": {
     "description": "Title for updating all records for a named exercise.",
     "placeholders": {
@@ -760,31 +760,31 @@
       }
     }
   },
-  "newName": "नया नाम",
+  "newName": "نیا نام",
   "@newName": {
     "description": "Label for renaming an exercise."
   },
-  "restMinutes": "रेस्ट मिनट",
+  "restMinutes": "آرام کے منٹ",
   "@restMinutes": {
     "description": "Label for the minutes component of an exercise rest timer."
   },
-  "restSeconds": "रेस्ट सेकंड",
+  "restSeconds": "آرام کے سیکنڈ",
   "@restSeconds": {
     "description": "Label for the seconds component of an exercise rest timer."
   },
-  "globalProgress": "कुल प्रगति",
+  "globalProgress": "مجموعی پیش رفت",
   "@globalProgress": {
     "description": "Title for the global progress graph."
   },
-  "curveLineGraphs": "वक्र रेखा ग्राफ़",
+  "curveLineGraphs": "گراف کی لائنیں خم دار کریں",
   "@curveLineGraphs": {
     "description": "Setting that renders graph lines as curves."
   },
-  "curveLineGraphsDescription": "ग्राफ़ की रेखाएँ चिकने वक्रों के रूप में बनाएँ",
+  "curveLineGraphsDescription": "گراف کی لائنیں ہموار منحنی خطوط کے طور پر بنائیں",
   "@curveLineGraphsDescription": {
     "description": "Description for the curved graph-line setting."
   },
-  "noHistoryFor": "{name} के लिए अभी कोई इतिहास नहीं",
+  "noHistoryFor": "{name} کے لیے ابھی کوئی تاریخچہ نہیں",
   "@noHistoryFor": {
     "description": "Empty history message for a named exercise.",
     "placeholders": {
@@ -793,147 +793,147 @@
       }
     }
   },
-  "cancelSelection": "चयन रद्द करें",
+  "cancelSelection": "انتخاب منسوخ کریں",
   "@cancelSelection": {
     "description": "Tooltip for leaving multi-select mode."
   },
-  "editSelected": "चुने हुए संपादित करें",
+  "editSelected": "منتخب شدہ میں ترمیم کریں",
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "नया व्यायाम",
+  "newExercise": "نئی ورزش",
   "@newExercise": {
     "description": "Action for creating a new exercise graph."
   },
-  "noGraphsFound": "कोई ग्राफ़ नहीं मिला",
+  "noGraphsFound": "کوئی گراف نہیں ملا",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
   },
-  "searchGraphs": "ग्राफ़ खोजें...",
+  "searchGraphs": "گراف تلاش کریں...",
   "@searchGraphs": {
     "description": "Hint for searching exercise graphs."
   },
-  "actionAdd": "जोड़ें",
+  "actionAdd": "شامل کریں",
   "@actionAdd": {
     "description": "Generic add action."
   },
-  "actionUpdate": "अपडेट करें",
+  "actionUpdate": "اپ ڈیٹ کریں",
   "@actionUpdate": {
     "description": "Generic update action."
   },
-  "hideGlobalProgress": "कुल प्रगति छिपाएँ",
+  "hideGlobalProgress": "مجموعی پیش رفت چھپائیں",
   "@hideGlobalProgress": {
     "description": "Action for hiding the global progress graph."
   },
-  "chartGroupedByCategory": "श्रेणी के अनुसार समूहित चार्ट",
+  "chartGroupedByCategory": "زمرے کے لحاظ سے گروپ کیا گیا چارٹ",
   "@chartGroupedByCategory": {
     "description": "Description of the global progress chart."
   },
-  "noExercisesFound": "कोई व्यायाम नहीं मिला",
+  "noExercisesFound": "کوئی ورزش نہیں ملی",
   "@noExercisesFound": {
     "description": "Empty state after searching for exercises."
   },
-  "savePlan": "प्लान सहेजें",
+  "savePlan": "منصوبہ محفوظ کریں",
   "@savePlan": {
     "description": "Action for saving a workout plan."
   },
-  "titleOptional": "शीर्षक (वैकल्पिक)",
+  "titleOptional": "عنوان (اختیاری)",
   "@titleOptional": {
     "description": "Optional plan title field label."
   },
-  "searchExercises": "व्यायाम खोजें...",
+  "searchExercises": "ورزشیں تلاش کریں...",
   "@searchExercises": {
     "description": "Hint for searching exercises."
   },
-  "warmupSets": "वार्मअप सेट",
+  "warmupSets": "وارم اپ سیٹس",
   "@warmupSets": {
     "description": "Label for the number of warmup sets."
   },
-  "workingSetsMax": "वर्किंग सेट (अधिकतम: 20)",
+  "workingSetsMax": "ورکنگ سیٹس (زیادہ سے زیادہ: 20)",
   "@workingSetsMax": {
     "description": "Label for the maximum number of working sets."
   },
-  "actionUndo": "पूर्ववत करें",
+  "actionUndo": "واپس کریں",
   "@actionUndo": {
     "description": "Generic undo action."
   },
-  "actionSwap": "बदलें",
+  "actionSwap": "تبدیل کریں",
   "@actionSwap": {
     "description": "Generic swap action."
   },
-  "daily": "दैनिक",
+  "daily": "روزانہ",
   "@daily": {
     "description": "Daily interval label."
   },
-  "weekly": "साप्ताहिक",
+  "weekly": "ہفتہ وار",
   "@weekly": {
     "description": "Weekly interval label."
   },
-  "monthly": "मासिक",
+  "monthly": "ماہانہ",
   "@monthly": {
     "description": "Monthly interval label."
   },
-  "yearly": "वार्षिक",
+  "yearly": "سالانہ",
   "@yearly": {
     "description": "Yearly interval label."
   },
-  "unexpectedError": "कुछ गलत हो गया। कृपया फिर कोशिश करें।",
+  "unexpectedError": "کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔",
   "@unexpectedError": {
     "description": "Generic user-facing message for an unexpected runtime or data-loading failure."
   },
-  "loadingExercises": "व्यायाम लोड हो रहे हैं...",
+  "loadingExercises": "ورزشیں لوڈ ہو رہی ہیں...",
   "@loadingExercises": {
     "description": "Progress message while plan exercises load."
   },
-  "noPlansYet": "अभी कोई प्लान नहीं",
+  "noPlansYet": "ابھی کوئی منصوبہ نہیں",
   "@noPlansYet": {
     "description": "Empty state when no workout plans exist."
   },
-  "noMatchingPlans": "कोई मेल खाता प्लान नहीं",
+  "noMatchingPlans": "کوئی مماثل منصوبہ نہیں",
   "@noMatchingPlans": {
     "description": "Empty state when no plans match a search."
   },
-  "newPlan": "नया प्लान",
+  "newPlan": "نیا منصوبہ",
   "@newPlan": {
     "description": "Action for creating a workout plan."
   },
-  "searchPlans": "प्लान खोजें...",
+  "searchPlans": "منصوبے تلاش کریں...",
   "@searchPlans": {
     "description": "Hint for searching workout plans."
   },
-  "noExercisesYet": "अभी कोई व्यायाम नहीं",
+  "noExercisesYet": "ابھی کوئی ورزش نہیں",
   "@noExercisesYet": {
     "description": "Empty state for a plan without exercises."
   },
-  "editPlan": "प्लान संपादित करें",
+  "editPlan": "منصوبے میں ترمیم کریں",
   "@editPlan": {
     "description": "Tooltip and action for editing a workout plan."
   },
-  "saveSet": "सेट सहेजें",
+  "saveSet": "سیٹ محفوظ کریں",
   "@saveSet": {
     "description": "Action for saving a workout set."
   },
-  "minutesLabel": "मिनट",
+  "minutesLabel": "منٹ",
   "@minutesLabel": {
     "description": "Label for a duration in minutes."
   },
-  "minutesShort": "मि",
+  "minutesShort": "منٹ",
   "@minutesShort": {
     "description": "Compact abbreviation for minutes in pace and duration labels."
   },
-  "secondsLabel": "सेकंड",
+  "secondsLabel": "سیکنڈ",
   "@secondsLabel": {
     "description": "Label for a duration in seconds."
   },
-  "distanceLabel": "दूरी",
+  "distanceLabel": "فاصلہ",
   "@distanceLabel": {
     "description": "Generic distance label."
   },
-  "inclinePercent": "ढलान %",
+  "inclinePercent": "ڈھلوان %",
   "@inclinePercent": {
     "description": "Label for incline as a percentage."
   },
-  "weightWithUnit": "वज़न ({unit})",
+  "weightWithUnit": "وزن ({unit})",
   "@weightWithUnit": {
     "description": "Weight field label including the selected unit.",
     "placeholders": {
@@ -942,39 +942,39 @@
       }
     }
   },
-  "useBodyWeight": "शरीर का वज़न इस्तेमाल करें",
+  "useBodyWeight": "جسمانی وزن استعمال کریں",
   "@useBodyWeight": {
     "description": "Tooltip for filling a set with the recorded bodyweight."
   },
-  "noWeightEnteredYet": "अभी कोई वज़न दर्ज नहीं किया गया",
+  "noWeightEnteredYet": "ابھی کوئی وزن درج نہیں کیا گیا",
   "@noWeightEnteredYet": {
     "description": "Message shown when body weight cannot be used because no weight has been recorded."
   },
-  "notesLabel": "नोट्स",
+  "notesLabel": "نوٹس",
   "@notesLabel": {
     "description": "Generic notes field label."
   },
-  "swapWorkout": "वर्कआउट बदलें",
+  "swapWorkout": "ورک آؤٹ تبدیل کریں",
   "@swapWorkout": {
     "description": "Title for replacing an exercise in a workout."
   },
-  "addSet": "सेट जोड़ें",
+  "addSet": "سیٹ شامل کریں",
   "@addSet": {
     "description": "Action and title for adding a workout set."
   },
-  "deleteSet": "सेट हटाएँ",
+  "deleteSet": "سیٹ حذف کریں",
   "@deleteSet": {
     "description": "Tooltip for deleting a workout set."
   },
-  "oneRepMaxEstimate": "एक रेप अधिकतम (अनुमान)",
+  "oneRepMaxEstimate": "ایک ریپ زیادہ سے زیادہ (تخمینہ)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
   },
-  "valueLabel": "मान",
+  "valueLabel": "قدر",
   "@valueLabel": {
     "description": "Generic numeric value field label."
   },
-  "amountWithUnit": "मात्रा ({unit})",
+  "amountWithUnit": "مقدار ({unit})",
   "@amountWithUnit": {
     "description": "Amount field label including the selected unit.",
     "placeholders": {
@@ -983,7 +983,7 @@
       }
     }
   },
-  "distanceWithUnit": "दूरी ({unit})",
+  "distanceWithUnit": "فاصلہ ({unit})",
   "@distanceWithUnit": {
     "description": "Distance field label including the selected unit.",
     "placeholders": {
@@ -992,11 +992,11 @@
       }
     }
   },
-  "bodyWeightLabel": "शरीर का वज़न",
+  "bodyWeightLabel": "جسمانی وزن",
   "@bodyWeightLabel": {
     "description": "Generic bodyweight field label."
   },
-  "bodyWeightWithUnit": "शरीर का वज़न ({unit})",
+  "bodyWeightWithUnit": "جسمانی وزن ({unit})",
   "@bodyWeightWithUnit": {
     "description": "Bodyweight field label including the selected unit.",
     "placeholders": {
@@ -1005,39 +1005,39 @@
       }
     }
   },
-  "categoryHelper": "मौजूदा श्रेणी चुनें या नई श्रेणी लिखें।",
+  "categoryHelper": "موجودہ زمرہ منتخب کریں یا نیا لکھیں۔",
   "@categoryHelper": {
     "description": "Helper text explaining the exercise category field."
   },
-  "manageCategories": "श्रेणियाँ प्रबंधित करें",
+  "manageCategories": "زمروں کا انتظام کریں",
   "@manageCategories": {
     "description": "Navigation label for the workout category manager."
   },
-  "manageCategoriesDescription": "श्रेणियाँ बनाएँ, नाम बदलें, मिलाएँ या हटाएँ",
+  "manageCategoriesDescription": "زمرے بنائیں، نام بدلیں، ضم کریں یا ہٹائیں",
   "@manageCategoriesDescription": {
     "description": "Description of the category management screen."
   },
-  "newCategory": "नई श्रेणी",
+  "newCategory": "نیا زمرہ",
   "@newCategory": {
     "description": "Action for creating a workout category."
   },
-  "renameCategory": "श्रेणी का नाम बदलें",
+  "renameCategory": "زمرے کا نام بدلیں",
   "@renameCategory": {
     "description": "Action for renaming a workout category."
   },
-  "mergeCategory": "दूसरी श्रेणी में मिलाएँ",
+  "mergeCategory": "دوسرے زمرے میں ضم کریں",
   "@mergeCategory": {
     "description": "Action for moving a category's workout entries to another category."
   },
-  "noCategories": "अभी कोई श्रेणी नहीं",
+  "noCategories": "ابھی کوئی زمرہ نہیں",
   "@noCategories": {
     "description": "Empty state for the category manager."
   },
-  "categoryNameRequired": "श्रेणी का नाम दर्ज करें",
+  "categoryNameRequired": "زمرے کا نام درج کریں",
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{किसी प्रविष्टि में उपयोग नहीं} =1{1 प्रविष्टि में उपयोग} other{{count} प्रविष्टियों में उपयोग}}",
+  "categoryUsageCount": "{count, plural, =0{کسی اندراج میں استعمال نہیں ہوا} =1{1 اندراج میں استعمال ہوا} other{{count} اندراجات میں استعمال ہوا}}",
   "@categoryUsageCount": {
     "description": "Number of workout entries using a category.",
     "placeholders": {
@@ -1047,7 +1047,7 @@
       }
     }
   },
-  "deleteCategoryConfirmation": "{count, plural, =0{यह श्रेणी हटाएँ?} =1{यह श्रेणी हटाकर इसे 1 प्रविष्टि से भी निकालें?} other{यह श्रेणी हटाकर इसे {count} प्रविष्टियों से भी निकालें?}}",
+  "deleteCategoryConfirmation": "{count, plural, =0{یہ زمرہ حذف کریں؟} =1{یہ زمرہ حذف کر کے اسے 1 اندراج سے ہٹائیں؟} other{یہ زمرہ حذف کر کے اسے {count} اندراجات سے ہٹائیں؟}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
     "placeholders": {
@@ -1057,11 +1057,11 @@
       }
     }
   },
-  "createdDate": "बनाने की तारीख",
+  "createdDate": "تخلیق کی تاریخ",
   "@createdDate": {
     "description": "Label for the date a workout record was created."
   },
-  "editSets": "{count, plural, =1{1 सेट संपादित करें} other{{count} सेट संपादित करें}}",
+  "editSets": "{count, plural, =1{1 سیٹ میں ترمیم کریں} other{{count} سیٹس میں ترمیم کریں}}",
   "@editSets": {
     "description": "Title for bulk editing workout sets.",
     "placeholders": {
@@ -1070,15 +1070,15 @@
       }
     }
   },
-  "noEntriesYet": "अभी कोई प्रविष्टि नहीं",
+  "noEntriesYet": "ابھی کوئی اندراج نہیں",
   "@noEntriesYet": {
     "description": "Empty state when workout history has no entries."
   },
-  "historyEmptyMessage": "अपना इतिहास शुरू करने के लिए कोई सेट पूरा करें या मैन्युअल रूप से जोड़ें।",
+  "historyEmptyMessage": "اپنا تاریخچہ شروع کرنے کے لیے ایک سیٹ مکمل کریں یا دستی طور پر شامل کریں۔",
   "@historyEmptyMessage": {
     "description": "Explanation shown when workout history has no entries."
   },
-  "deleteSetConfirmation": "क्या आप वाकई {name} हटाना चाहते हैं?",
+  "deleteSetConfirmation": "کیا آپ واقعی {name} حذف کرنا چاہتے ہیں؟",
   "@deleteSetConfirmation": {
     "description": "Confirmation shown before deleting one workout set for a named exercise.",
     "placeholders": {
@@ -1087,7 +1087,7 @@
       }
     }
   },
-  "deleteEntriesConfirmation": "{count, plural, =1{क्या आप वाकई 1 प्रविष्टि हटाना चाहते हैं?} other{क्या आप वाकई {count} प्रविष्टियाँ हटाना चाहते हैं?}}",
+  "deleteEntriesConfirmation": "{count, plural, =1{کیا آپ واقعی 1 اندراج حذف کرنا چاہتے ہیں؟} other{کیا آپ واقعی {count} اندراجات حذف کرنا چاہتے ہیں؟}}",
   "@deleteEntriesConfirmation": {
     "description": "Confirmation shown before deleting one or more selected workout history entries.",
     "placeholders": {
@@ -1096,87 +1096,87 @@
       }
     }
   },
-  "searchHistory": "इतिहास खोजें...",
+  "searchHistory": "تاریخچہ تلاش کریں...",
   "@searchHistory": {
     "description": "Hint for searching workout history."
   },
-  "themeSystem": "सिस्टम",
+  "themeSystem": "سسٹم",
   "@themeSystem": {
     "description": "Theme option that follows the system appearance."
   },
-  "themeDark": "गहरा",
+  "themeDark": "ڈارک",
   "@themeDark": {
     "description": "Dark theme option."
   },
-  "themeLight": "हल्का",
+  "themeLight": "لائٹ",
   "@themeLight": {
     "description": "Light theme option."
   },
-  "pureBlackAmoled": "शुद्ध काला (AMOLED)",
+  "pureBlackAmoled": "مکمل سیاہ (AMOLED)",
   "@pureBlackAmoled": {
     "description": "Appearance setting for pure-black dark surfaces."
   },
-  "showImages": "चित्र दिखाएँ",
+  "showImages": "تصاویر دکھائیں",
   "@showImages": {
     "description": "Appearance setting for exercise images."
   },
-  "peekGraph": "ग्राफ़ की झलक",
+  "peekGraph": "گراف کی جھلک دکھائیں",
   "@peekGraph": {
     "description": "Appearance setting for graph previews."
   },
-  "inputStyleLine": "रेखा",
+  "inputStyleLine": "لائن",
   "@inputStyleLine": {
     "description": "Line input-field style."
   },
-  "inputStyleOutlined": "आउटलाइन",
+  "inputStyleOutlined": "آؤٹ لائن",
   "@inputStyleOutlined": {
     "description": "Outlined input-field style."
   },
-  "inputStyleFilled": "भरा हुआ",
+  "inputStyleFilled": "بھرا ہوا",
   "@inputStyleFilled": {
     "description": "Filled input-field style."
   },
-  "inputStyle": "इनपुट शैली",
+  "inputStyle": "ان پٹ اسٹائل",
   "@inputStyle": {
     "description": "Label for choosing the text-input style."
   },
-  "appearance": "रूप-रंग",
+  "appearance": "ظاہری شکل",
   "@appearance": {
     "description": "Title for appearance settings."
   },
-  "automaticBackupsEnabled": "स्वचालित बैकअप चालू",
+  "automaticBackupsEnabled": "خودکار بیک اپ فعال ہیں",
   "@automaticBackupsEnabled": {
     "description": "Status text confirming automatic backups are enabled."
   },
-  "automaticBackup": "स्वचालित बैकअप",
+  "automaticBackup": "خودکار بیک اپ",
   "@automaticBackup": {
     "description": "Data setting for automatic backups."
   },
-  "appPermissions": "ऐप अनुमतियाँ",
+  "appPermissions": "ایپ کی اجازتیں",
   "@appPermissions": {
     "description": "Data/settings action for app permissions."
   },
-  "shareDatabase": "डेटाबेस साझा करें",
+  "shareDatabase": "ڈیٹابیس شیئر کریں",
   "@shareDatabase": {
     "description": "Action for sharing the app database file."
   },
-  "dataManagement": "डेटा प्रबंधन",
+  "dataManagement": "ڈیٹا کا انتظام",
   "@dataManagement": {
     "description": "Title for data-management settings."
   },
-  "strengthUnit": "स्ट्रेंथ इकाई",
+  "strengthUnit": "طاقت کی اکائی",
   "@strengthUnit": {
     "description": "Label for the default strength measurement unit."
   },
-  "lastEntry": "पिछली प्रविष्टि",
+  "lastEntry": "آخری اندراج",
   "@lastEntry": {
     "description": "Option that reuses the unit from the previous entry."
   },
-  "cardioUnit": "कार्डियो इकाई",
+  "cardioUnit": "کارڈیو اکائی",
   "@cardioUnit": {
     "description": "Label for the default cardio measurement unit."
   },
-  "longDateFormat": "लंबा तारीख प्रारूप ({format})",
+  "longDateFormat": "طویل تاریخ کا فارمیٹ ({format})",
   "@longDateFormat": {
     "description": "Label for the long date format preview.",
     "placeholders": {
@@ -1185,255 +1185,255 @@
       }
     }
   },
-  "formats": "प्रारूप",
+  "formats": "فارمیٹس",
   "@formats": {
     "description": "Title for measurement and date formatting settings."
   },
-  "setsPerExerciseMax": "प्रति व्यायाम सेट (अधिकतम: 20)",
+  "setsPerExerciseMax": "فی ورزش سیٹس (زیادہ سے زیادہ: 20)",
   "@setsPerExerciseMax": {
     "description": "Plan setting for the maximum working sets per exercise."
   },
-  "countLabel": "गिनती",
+  "countLabel": "تعداد",
   "@countLabel": {
     "description": "Label for count-based plan distribution."
   },
-  "ratioLabel": "अनुपात",
+  "ratioLabel": "تناسب",
   "@ratioLabel": {
     "description": "Label for ratio-based plan distribution."
   },
-  "reorder": "क्रम बदलें",
+  "reorder": "دوبارہ ترتیب دیں",
   "@reorder": {
     "description": "Action or option for reordering exercises."
   },
-  "none": "कोई नहीं",
+  "none": "کوئی نہیں",
   "@none": {
     "description": "Generic option indicating no selection."
   },
-  "monday": "सोमवार",
+  "monday": "پیر",
   "@monday": {
     "description": "Monday weekday label in the plan example."
   },
-  "examplePlanExercises": "बेंच प्रेस, स्क्वाट, डेडलिफ्ट",
+  "examplePlanExercises": "بینچ پریس، اسکواٹ، ڈیڈ لفٹ",
   "@examplePlanExercises": {
     "description": "Example list of exercises shown in plan settings."
   },
-  "tabs": "टैब",
+  "tabs": "ٹیبز",
   "@tabs": {
     "description": "Title for navigation tab settings."
   },
-  "swipeBetweenTabs": "टैब के बीच स्वाइप करें",
+  "swipeBetweenTabs": "ٹیبز کے درمیان سوائپ کریں",
   "@swipeBetweenTabs": {
     "description": "Setting for swipe navigation between tabs."
   },
-  "vibrate": "कंपन",
+  "vibrate": "وائبریٹ",
   "@vibrate": {
     "description": "Timer setting for vibration."
   },
-  "enableSound": "ध्वनि चालू करें",
+  "enableSound": "آواز فعال کریں",
   "@enableSound": {
     "description": "Timer setting for alarm sound playback."
   },
-  "keepScreenOn": "स्क्रीन चालू रखें",
+  "keepScreenOn": "اسکرین روشن رکھیں",
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
-  "alarmSound": "अलार्म ध्वनि",
+  "alarmSound": "الارم کی آواز",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
   },
-  "top": "ऊपर",
+  "top": "اوپر",
   "@top": {
     "description": "Top position option."
   },
-  "bottom": "नीचे",
+  "bottom": "نیچے",
   "@bottom": {
     "description": "Bottom position option."
   },
-  "removeCustomTimer": "कस्टम टाइमर हटाएँ (कुल डिफ़ॉल्ट इस्तेमाल करें)",
+  "removeCustomTimer": "کسٹم ٹائمر ہٹائیں (عالمی ڈیفالٹ استعمال کریں)",
   "@removeCustomTimer": {
     "description": "Tooltip for removing an exercise-specific rest timer."
   },
-  "timers": "टाइमर",
+  "timers": "ٹائمرز",
   "@timers": {
     "description": "Title for timer settings."
   },
-  "timerSettings": "टाइमर सेटिंग्स",
+  "timerSettings": "ٹائمر کی ترتیبات",
   "@timerSettings": {
     "description": "Heading for timer configuration."
   },
-  "groupHistory": "इतिहास समूहित करें",
+  "groupHistory": "تاریخچہ گروپ کریں",
   "@groupHistory": {
     "description": "Workout setting for grouping history entries."
   },
-  "showUnits": "इकाइयाँ दिखाएँ",
+  "showUnits": "اکائیاں دکھائیں",
   "@showUnits": {
     "description": "Workout setting for displaying measurement units."
   },
-  "showBodyWeight": "शरीर का वज़न दिखाएँ",
+  "showBodyWeight": "جسمانی وزن دکھائیں",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
   },
-  "showCategories": "श्रेणियाँ दिखाएँ",
+  "showCategories": "زمرے دکھائیں",
   "@showCategories": {
     "description": "Workout setting for exercise categories."
   },
-  "showNotes": "नोट्स दिखाएँ",
+  "showNotes": "نوٹس دکھائیں",
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "रेप अनुमान",
+  "repEstimation": "ریپس کا تخمینہ",
   "@repEstimation": {
     "description": "Workout setting for repetition estimation."
   },
-  "durationEstimation": "अवधि अनुमान",
+  "durationEstimation": "دورانیے کا تخمینہ",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
   },
-  "showGraphLimit": "ग्राफ़ सीमा दिखाएँ",
+  "showGraphLimit": "گراف کی حد دکھائیں",
   "@showGraphLimit": {
     "description": "Workout setting controlling graph-limit display."
   },
-  "defaultGraphMetric": "डिफ़ॉल्ट ग्राफ़ मेट्रिक",
+  "defaultGraphMetric": "ڈیفالٹ گراف میٹرک",
   "@defaultGraphMetric": {
     "description": "Label for choosing the default graph metric."
   },
-  "bestWeight": "सर्वश्रेष्ठ वज़न",
+  "bestWeight": "بہترین وزن",
   "@bestWeight": {
     "description": "Graph metric for highest weight."
   },
-  "bestReps": "सर्वश्रेष्ठ रेप्स",
+  "bestReps": "بہترین ریپس",
   "@bestReps": {
     "description": "Graph metric for highest repetition count."
   },
-  "oneRepMax": "एक रेप अधिकतम",
+  "oneRepMax": "ایک ریپ زیادہ سے زیادہ",
   "@oneRepMax": {
     "description": "Graph metric for one-repetition maximum."
   },
-  "volume": "वॉल्यूम",
+  "volume": "حجم",
   "@volume": {
     "description": "Graph metric for training volume."
   },
-  "paceCardio": "गति (कार्डियो)",
+  "paceCardio": "رفتار (کارڈیو)",
   "@paceCardio": {
     "description": "Cardio graph metric for pace."
   },
-  "distanceCardio": "दूरी (कार्डियो)",
+  "distanceCardio": "فاصلہ (کارڈیو)",
   "@distanceCardio": {
     "description": "Cardio graph metric for distance."
   },
-  "defaultGraphPeriod": "डिफ़ॉल्ट ग्राफ़ अवधि",
+  "defaultGraphPeriod": "ڈیفالٹ گراف مدت",
   "@defaultGraphPeriod": {
     "description": "Label for choosing the default graph period."
   },
-  "defaultGraphLimit": "डिफ़ॉल्ट ग्राफ़ सीमा",
+  "defaultGraphLimit": "ڈیفالٹ گراف حد",
   "@defaultGraphLimit": {
     "description": "Label for choosing the default graph record limit."
   },
-  "workouts": "वर्कआउट",
+  "workouts": "ورک آؤٹس",
   "@workouts": {
     "description": "Title for workout settings."
   },
-  "actionStop": "रोकें",
+  "actionStop": "روکیں",
   "@actionStop": {
     "description": "Generic stop action."
   },
-  "timerFinishedToast": "टाइमर समाप्त!",
+  "timerFinishedToast": "ٹائمر ختم ہو گیا!",
   "@timerFinishedToast": {
     "description": "In-app toast shown when a non-Android timer finishes."
   },
-  "stopTimer": "टाइमर रोकें",
+  "stopTimer": "ٹائمر روکیں",
   "@stopTimer": {
     "description": "Action for stopping the active timer."
   },
-  "actionPause": "रोकें",
+  "actionPause": "وقفہ",
   "@actionPause": {
     "description": "Generic pause action."
   },
-  "startStopwatch": "स्टॉपवॉच शुरू करें",
+  "startStopwatch": "اسٹاپ واچ شروع کریں",
   "@startStopwatch": {
     "description": "Action for starting the stopwatch."
   },
-  "actionStart": "शुरू करें",
+  "actionStart": "شروع کریں",
   "@actionStart": {
     "description": "Generic start action."
   },
-  "actionRestart": "फिर शुरू करें",
+  "actionRestart": "دوبارہ شروع کریں",
   "@actionRestart": {
     "description": "Generic restart action."
   },
-  "addOneMinute": "+1 मिनट",
+  "addOneMinute": "+1 منٹ",
   "@addOneMinute": {
     "description": "Timer action that adds one minute."
   },
-  "addOneMinuteNotification": "1 मिनट जोड़ें",
+  "addOneMinuteNotification": "1 منٹ شامل کریں",
   "@addOneMinuteNotification": {
     "description": "Compact Android notification action that adds one minute."
   },
-  "restTimer": "रेस्ट टाइमर",
+  "restTimer": "آرام کا ٹائمر",
   "@restTimer": {
     "description": "Generic rest timer title used when restarting a timer from a notification."
   },
-  "timerUp": "टाइमर पूरा",
+  "timerUp": "ٹائمر ختم",
   "@timerUp": {
     "description": "Default notification title when a timer expires."
   },
-  "openNotification": "नोटिफ़िकेशन खोलें",
+  "openNotification": "نوٹیفکیشن کھولیں",
   "@openNotification": {
     "description": "Desktop notification action label."
   },
-  "timerChannelName": "टाइमर चैनल",
+  "timerChannelName": "ٹائمر چینل",
   "@timerChannelName": {
     "description": "Android notification channel name for ongoing timers."
   },
-  "timerChannelDescription": "रेस्ट टाइमर की जारी प्रगति।",
+  "timerChannelDescription": "آرام کے ٹائمرز کی جاری پیش رفت۔",
   "@timerChannelDescription": {
     "description": "Android notification channel description for ongoing timers."
   },
-  "timerFinishedChannelName": "टाइमर समाप्त चैनल",
+  "timerFinishedChannelName": "ٹائمر اختتام چینل",
   "@timerFinishedChannelName": {
     "description": "Android notification channel name for completed timers."
   },
-  "timerFinishedChannelDescription": "रेस्ट टाइमर पूरा होने पर अलार्म बजाता है।",
+  "timerFinishedChannelDescription": "آرام کا ٹائمر مکمل ہونے پر الارم بجاتا ہے۔",
   "@timerFinishedChannelDescription": {
     "description": "Android notification channel description for completed timers."
   },
-  "timerFinished": "टाइमर समाप्त",
+  "timerFinished": "ٹائمر ختم ہو گیا",
   "@timerFinished": {
     "description": "Android notification title for a completed timer."
   },
-  "batteryOptimizationRequestUnavailable": "आपके डिवाइस पर बैटरी ऑप्टिमाइज़ेशन अनदेखा करने का अनुरोध बंद है।",
+  "batteryOptimizationRequestUnavailable": "آپ کے آلے پر بیٹری آپٹیمائزیشن نظرانداز کرنے کی درخواستیں غیر فعال ہیں۔",
   "@batteryOptimizationRequestUnavailable": {
     "description": "Android toast shown when the system battery optimization exemption screen is unavailable."
   },
-  "exactAlarmRequestUnavailable": "आपके डिवाइस ने SCHEDULE_EXACT_ALARM का अनुरोध अस्वीकार कर दिया",
+  "exactAlarmRequestUnavailable": "آپ کے آلے پر SCHEDULE_EXACT_ALARM کی درخواست مسترد کر دی گئی",
   "@exactAlarmRequestUnavailable": {
     "description": "Android toast shown when the exact alarm permission screen is unavailable."
   },
-  "databaseMigrationFailureDescription": "डेटाबेस बनाते या अपग्रेड करते समय कुछ गलत हो गया। आम तौर पर रिकॉर्ड हटाकर और फिर से बनाकर इसे ठीक किया जा सकता है।",
+  "databaseMigrationFailureDescription": "ڈیٹابیس بناتے یا اپ گریڈ کرتے وقت کچھ غلط ہو گیا۔ عموماً ریکارڈز حذف کر کے دوبارہ بنانے سے یہ ٹھیک ہو جاتا ہے۔",
   "@databaseMigrationFailureDescription": {
     "description": "Explanation shown when a database migration fails."
   },
-  "curveSmoothness": "वक्र की चिकनाई",
+  "curveSmoothness": "منحنی لکیر کی ہمواری",
   "@curveSmoothness": {
     "description": "Label for graph curve smoothness."
   },
-  "actionBack": "वापस",
+  "actionBack": "واپس",
   "@actionBack": {
     "description": "Generic back-navigation tooltip."
   },
-  "atLeastOneTab": "कम से कम एक टैब आवश्यक है",
+  "atLeastOneTab": "کم از کم ایک ٹیب ضروری ہے",
   "@atLeastOneTab": {
     "description": "Toast shown when trying to disable the final visible tab."
   },
-  "invalidTabSettings": "अमान्य टैब सेटिंग्स।",
+  "invalidTabSettings": "ٹیب کی ترتیبات غلط ہیں۔",
   "@invalidTabSettings": {
     "description": "Error shown when a saved tab identifier is unsupported."
   },
-  "noSettingsFound": "कोई सेटिंग नहीं मिली",
+  "noSettingsFound": "کوئی ترتیبات نہیں ملیں",
   "@noSettingsFound": {
     "description": "Empty state when settings search has no matches."
   },
-  "nothingMatchesSearch": "“{query}” से कुछ मेल नहीं खाता।",
+  "nothingMatchesSearch": "“{query}” سے کچھ نہیں ملا۔",
   "@nothingMatchesSearch": {
     "description": "Settings-search empty-state detail.",
     "placeholders": {
@@ -1442,59 +1442,59 @@
       }
     }
   },
-  "appearanceDescription": "थीम, रंग और इंटरफ़ेस शैली",
+  "appearanceDescription": "تھیم، رنگ اور انٹرفیس کا انداز",
   "@appearanceDescription": {
     "description": "Description of appearance settings."
   },
-  "dataManagementDescription": "अपना वर्कआउट डेटा आयात, निर्यात और प्रबंधित करें",
+  "dataManagementDescription": "اپنے ورک آؤٹ ڈیٹا کو درآمد، برآمد اور منظم کریں",
   "@dataManagementDescription": {
     "description": "Description of data-management settings."
   },
-  "formatsDescription": "तारीख, संख्या और माप के प्रारूप",
+  "formatsDescription": "تاریخ، اعداد اور پیمائش کی فارمیٹنگ",
   "@formatsDescription": {
     "description": "Description of format settings."
   },
-  "plansSettingsDescription": "वर्कआउट प्लान के डिफ़ॉल्ट और व्यवहार",
+  "plansSettingsDescription": "ورک آؤٹ منصوبوں کے ڈیفالٹس اور رویہ",
   "@plansSettingsDescription": {
     "description": "Description of plan settings."
   },
-  "tabsDescription": "मुख्य नेविगेशन टैब चुनें और व्यवस्थित करें",
+  "tabsDescription": "بنیادی نیویگیشن ٹیبز منتخب اور ترتیب دیں",
   "@tabsDescription": {
     "description": "Description of tab settings."
   },
-  "timersDescription": "रेस्ट टाइमर की अवधि, ध्वनि और व्यवहार",
+  "timersDescription": "آرام کے ٹائمر کا دورانیہ، آواز اور رویہ",
   "@timersDescription": {
     "description": "Description of timer settings."
   },
-  "workoutsDescription": "व्यायाम ट्रैकिंग और वर्कआउट प्राथमिकताएँ",
+  "workoutsDescription": "ورزش کی ٹریکنگ اور ورک آؤٹ ترجیحات",
   "@workoutsDescription": {
     "description": "Description of workout settings."
   },
-  "completeSetForChart": "चार्ट बनाने के लिए इस व्यायाम का एक सेट पूरा करें।",
+  "completeSetForChart": "اس ورزش کا چارٹ بنانے کے لیے ایک سیٹ مکمل کریں۔",
   "@completeSetForChart": {
     "description": "Empty graph guidance for a specific exercise."
   },
-  "dateRange": "तारीख सीमा",
+  "dateRange": "تاریخ کی حد",
   "@dateRange": {
     "description": "Label for graph date-range controls."
   },
-  "stopDate": "समाप्ति तारीख",
+  "stopDate": "اختتامی تاریخ",
   "@stopDate": {
     "description": "Label for the end of a graph date range."
   },
-  "dataPoints": "डेटा बिंदु",
+  "dataPoints": "ڈیٹا پوائنٹس",
   "@dataPoints": {
     "description": "Label for the number of graph data points."
   },
-  "completeSetsForProgress": "अपना प्रगति चार्ट बनाने के लिए कुछ सेट पूरे करें।",
+  "completeSetsForProgress": "اپنی پیش رفت کا چارٹ بنانے کے لیے کچھ سیٹس مکمل کریں۔",
   "@completeSetsForProgress": {
     "description": "Empty guidance for the global progress graph."
   },
-  "relativeStrength": "सापेक्ष स्ट्रेंथ",
+  "relativeStrength": "نسبتی طاقت",
   "@relativeStrength": {
     "description": "Strength graph metric relative to bodyweight."
   },
-  "selectedCount": "{count, plural, =1{1 चुना गया} other{{count} चुने गए}}",
+  "selectedCount": "{count, plural, =1{1 منتخب} other{{count} منتخب}}",
   "@selectedCount": {
     "description": "Number of currently selected records.",
     "placeholders": {
@@ -1503,15 +1503,15 @@
       }
     }
   },
-  "completeSetsForHistory": "इस व्यायाम का इतिहास देखने के लिए कुछ सेट पूरे करें।",
+  "completeSetsForHistory": "اس ورزش کا تاریخچہ یہاں دیکھنے کے لیے کچھ سیٹس مکمل کریں۔",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
   },
-  "completeSetForFirstGraph": "अपना पहला व्यायाम ग्राफ़ बनाने के लिए एक सेट पूरा करें।",
+  "completeSetForFirstGraph": "اپنا پہلا ورزش گراف بنانے کے لیے ایک سیٹ مکمل کریں۔",
   "@completeSetForFirstGraph": {
     "description": "Empty guidance when no exercise graphs exist."
   },
-  "nothingMatchesGraphSearch": "“{query}” से कुछ मेल नहीं खाता। आप इसे नए व्यायाम के रूप में बना सकते हैं।",
+  "nothingMatchesGraphSearch": "“{query}” سے کچھ نہیں ملا۔ آپ اسے نئی ورزش کے طور پر بنا سکتے ہیں۔",
   "@nothingMatchesGraphSearch": {
     "description": "Empty graph search guidance.",
     "placeholders": {
@@ -1520,7 +1520,7 @@
       }
     }
   },
-  "addNamed": "“{name}” जोड़ें",
+  "addNamed": "“{name}” شامل کریں",
   "@addNamed": {
     "description": "Action for adding an item with a typed name.",
     "placeholders": {
@@ -1529,7 +1529,7 @@
       }
     }
   },
-  "deleteGraphRecordsConfirmation": "इससे {count} रिकॉर्ड हट जाएँगे। क्या आप सुनिश्चित हैं?",
+  "deleteGraphRecordsConfirmation": "اس سے {count} ریکارڈز حذف ہو جائیں گے۔ کیا آپ کو یقین ہے؟",
   "@deleteGraphRecordsConfirmation": {
     "description": "Confirmation for deleting records associated with selected graphs.",
     "placeholders": {
@@ -1538,7 +1538,7 @@
       }
     }
   },
-  "shareWorkout": "मैंने अभी {summary} किया",
+  "shareWorkout": "میں نے ابھی {summary} کیا",
   "@shareWorkout": {
     "description": "Text shared from the workout graph screen.",
     "placeholders": {
@@ -1547,11 +1547,11 @@
       }
     }
   },
-  "updateConflict": "अपडेट टकराव",
+  "updateConflict": "اپ ڈیٹ کا تنازع",
   "@updateConflict": {
     "description": "Title for an exercise rename conflict dialog."
   },
-  "updateConflictDescription": "आपका नया नाम पहले से {count} रिकॉर्ड के लिए मौजूद है। क्या आप सुनिश्चित हैं?",
+  "updateConflictDescription": "آپ کا نیا نام پہلے ہی {count} ریکارڈز میں موجود ہے۔ کیا آپ کو یقین ہے؟",
   "@updateConflictDescription": {
     "description": "Explanation for an exercise rename conflict.",
     "placeholders": {
@@ -1560,11 +1560,11 @@
       }
     }
   },
-  "unitsConflict": "इकाइयों का टकराव",
+  "unitsConflict": "اکائیوں کا تنازع",
   "@unitsConflict": {
     "description": "Title for an exercise unit conversion conflict dialog."
   },
-  "unitsConflictDescription": "आपके सभी रिकॉर्ड की इकाई एक जैसी नहीं है। इससे सभी इकाइयाँ {unit} में बदल जाएँगी। क्या आप सुनिश्चित हैं?",
+  "unitsConflictDescription": "آپ کے تمام ریکارڈز میں ایک ہی اکائی نہیں ہے۔ اس سے تمام اکائیاں {unit} میں تبدیل ہو جائیں گی۔ کیا آپ کو یقین ہے؟",
   "@unitsConflictDescription": {
     "description": "Explanation before converting mixed exercise units.",
     "placeholders": {
@@ -1573,43 +1573,43 @@
       }
     }
   },
-  "durationLabel": "अवधि",
+  "durationLabel": "دورانیہ",
   "@durationLabel": {
     "description": "Generic duration label."
   },
-  "inclineLabel": "ढलान",
+  "inclineLabel": "ڈھلوان",
   "@inclineLabel": {
     "description": "Generic incline label."
   },
-  "paceDistanceTime": "गति (दूरी / समय)",
+  "paceDistanceTime": "رفتار (فاصلہ / وقت)",
   "@paceDistanceTime": {
     "description": "Cardio graph metric for distance divided by time."
   },
-  "adjustedPace": "समायोजित गति",
+  "adjustedPace": "ایڈجسٹ شدہ رفتار",
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "10+ रेप वाले सेट के लिए एक रेप अधिकतम का अनुमान कम सटीक होता है",
+  "oneRepMaxAccuracyWarning": "10 یا اس سے زیادہ ریپس والے سیٹس میں ایک ریپ زیادہ سے زیادہ کا تخمینہ کم درست ہوتا ہے",
   "@oneRepMaxAccuracyWarning": {
     "description": "Warning about one-repetition maximum estimate accuracy."
   },
-  "addPlan": "प्लान जोड़ें",
+  "addPlan": "منصوبہ شامل کریں",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
   },
-  "planDetails": "प्लान विवरण",
+  "planDetails": "منصوبے کی تفصیلات",
   "@planDetails": {
     "description": "Heading for editable workout plan details."
   },
-  "exercisesLabel": "व्यायाम",
+  "exercisesLabel": "ورزشیں",
   "@exercisesLabel": {
     "description": "Generic heading for exercises."
   },
-  "addExerciseToPlan": "इस प्लान में एक व्यायाम जोड़ें।",
+  "addExerciseToPlan": "اس منصوبے میں ایک ورزش شامل کریں۔",
   "@addExerciseToPlan": {
     "description": "Empty-state guidance for a workout plan with no exercises."
   },
-  "nothingMatchesExerciseSearch": "“{query}” से कुछ मेल नहीं खाता। आप इसे नए व्यायाम के रूप में जोड़ सकते हैं।",
+  "nothingMatchesExerciseSearch": "“{query}” سے کچھ نہیں ملا۔ آپ اسے نئی ورزش کے طور پر شامل کر سکتے ہیں۔",
   "@nothingMatchesExerciseSearch": {
     "description": "Empty-state guidance when a plan exercise search has no matches.",
     "placeholders": {
@@ -1618,119 +1618,119 @@
       }
     }
   },
-  "selectDays": "दिन चुनें",
+  "selectDays": "دن منتخب کریں",
   "@selectDays": {
     "description": "Validation message requiring at least one workout plan day."
   },
-  "selectExercises": "व्यायाम चुनें",
+  "selectExercises": "ورزشیں منتخب کریں",
   "@selectExercises": {
     "description": "Validation message requiring at least one workout plan exercise."
   },
-  "todayLabel": "आज",
+  "todayLabel": "آج",
   "@todayLabel": {
     "description": "Label indicating the current day."
   },
-  "setDetails": "सेट विवरण",
+  "setDetails": "سیٹ کی تفصیلات",
   "@setDetails": {
     "description": "Heading for workout set entry fields."
   },
-  "themeLabel": "थीम",
+  "themeLabel": "تھیم",
   "@themeLabel": {
     "description": "Label for choosing the application theme."
   },
-  "pureBlackAmoledDescription": "AMOLED डिस्प्ले के लिए शुद्ध काले रंग इस्तेमाल करें",
+  "pureBlackAmoledDescription": "AMOLED ڈسپلے کے لیے مکمل سیاہ رنگ استعمال کریں",
   "@pureBlackAmoledDescription": {
     "description": "Description of the AMOLED pure-black appearance option."
   },
-  "systemColorScheme": "सिस्टम रंग योजना",
+  "systemColorScheme": "سسٹم رنگ اسکیم",
   "@systemColorScheme": {
     "description": "Appearance setting for using system colors."
   },
-  "systemColorSchemeDescription": "ऐप के लिए अपने डिवाइस का मुख्य रंग इस्तेमाल करें",
+  "systemColorSchemeDescription": "ایپ کے لیے اپنے آلے کا بنیادی رنگ استعمال کریں",
   "@systemColorSchemeDescription": {
     "description": "Description of the system color scheme setting."
   },
-  "showImagesDescription": "इतिहास पेज पर चित्र चुनें/दिखाएँ",
+  "showImagesDescription": "تاریخچے کے صفحے پر تصاویر منتخب یا دکھائیں",
   "@showImagesDescription": {
     "description": "Description of the setting that shows workout images."
   },
-  "showGlobalProgress": "कुल प्रगति दिखाएँ",
+  "showGlobalProgress": "مجموعی پیش رفت دکھائیں",
   "@showGlobalProgress": {
     "description": "Setting that controls the global progress graph."
   },
-  "showGlobalProgressDescription": "श्रेणी के अनुसार आपकी प्रगति का चार्ट दिखाने वाली ग्राफ़ प्रविष्टि जोड़ें",
+  "showGlobalProgressDescription": "زمرے کے لحاظ سے اپنی پیش رفت دکھانے والا گراف اندراج شامل کریں",
   "@showGlobalProgressDescription": {
     "description": "Description of the global progress setting."
   },
-  "peekGraphDescription": "ग्राफ़ पेज पर पहला लाइन ग्राफ़ दिखाएँ",
+  "peekGraphDescription": "گراف کے صفحے پر پہلا لائن گراف دکھائیں",
   "@peekGraphDescription": {
     "description": "Description of the graph preview setting."
   },
-  "inputStyleDescription": "टेक्स्ट इनपुट फ़ील्ड की दृश्य शैली",
+  "inputStyleDescription": "ٹیکسٹ ان پٹ فیلڈز کا بصری انداز",
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify हर दिन चुने हुए फ़ोल्डर में आपके डेटा और चित्रों का स्वचालित बैकअप बनाएगा।",
+  "automaticBackupNotificationBody": "Flexify ہر روز منتخب فولڈر میں آپ کے ڈیٹا اور تصاویر کا خودکار بیک اپ بنائے گا۔",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
-  "backupSettingsChannel": "बैकअप सेटिंग्स",
+  "backupSettingsChannel": "بیک اپ ترتیبات",
   "@backupSettingsChannel": {
     "description": "Notification channel name for backup settings."
   },
-  "backupSettingsChannelDescription": "स्वचालित बैकअप की जानकारी देने वाले नोटिफ़िकेशन",
+  "backupSettingsChannelDescription": "خودکار بیک اپ کی وضاحت کرنے والے نوٹیفکیشنز",
   "@backupSettingsChannelDescription": {
     "description": "Notification channel description for automatic backups."
   },
-  "backupChannelName": "बैकअप चैनल",
+  "backupChannelName": "بیک اپ چینل",
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Flexify डेटा और चित्रों के स्वचालित बैकअप",
+  "backupChannelDescription": "Flexify کے ڈیٹا اور تصاویر کے خودکار بیک اپ",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },
-  "backupCompletedTitle": "डेटा और चित्रों का बैकअप हो गया",
+  "backupCompletedTitle": "ڈیٹا اور تصاویر کا بیک اپ مکمل",
   "@backupCompletedTitle": {
     "description": "Android notification title shown after an automatic backup succeeds."
   },
-  "backupFailurePathNotSet": "बैकअप असफल: बैकअप पथ सेट नहीं है। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailurePathNotSet": "بیک اپ ناکام: بیک اپ راستہ مقرر نہیں ہے۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailurePathNotSet": {
     "description": "Android toast shown when an automatic backup has no destination path."
   },
-  "backupFailureDirectoryUnavailable": "बैकअप असफल: बैकअप डायरेक्टरी तक पहुँच नहीं मिली। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailureDirectoryUnavailable": "بیک اپ ناکام: بیک اپ ڈائریکٹری تک رسائی نہیں ہو سکی۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailureDirectoryUnavailable": {
     "description": "Android toast shown when the automatic backup directory cannot be accessed."
   },
-  "backupFailureCreateFile": "बैकअप असफल: बैकअप फ़ाइल नहीं बनाई जा सकी। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailureCreateFile": "بیک اپ ناکام: بیک اپ فائل نہیں بن سکی۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailureCreateFile": {
     "description": "Android toast shown when an automatic backup archive cannot be created."
   },
-  "backupFailureAppFilesUnavailable": "बैकअप असफल: ऐप फ़ाइल डायरेक्टरी तक पहुँच नहीं मिली। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailureAppFilesUnavailable": "بیک اپ ناکام: ایپلیکیشن فائلز ڈائریکٹری تک رسائی نہیں ہو سکی۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailureAppFilesUnavailable": {
     "description": "Android toast shown when app files are unavailable during automatic backup."
   },
-  "backupFailureDatabaseMissing": "बैकअप असफल: डेटाबेस फ़ाइल नहीं मिली। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailureDatabaseMissing": "بیک اپ ناکام: ڈیٹابیس فائل نہیں ملی۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailureDatabaseMissing": {
     "description": "Android toast shown when the database is missing during automatic backup."
   },
-  "backupFailureOutputUnavailable": "बैकअप असफल: आउटपुट स्ट्रीम नहीं खोली जा सकी। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailureOutputUnavailable": "بیک اپ ناکام: آؤٹ پٹ اسٹریم نہیں کھل سکی۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailureOutputUnavailable": {
     "description": "Android toast shown when the automatic backup destination cannot be opened."
   },
-  "backupFailureUnknown": "बैकअप असफल। स्वचालित बैकअप बंद कर दिए गए।",
+  "backupFailureUnknown": "بیک اپ ناکام۔ خودکار بیک اپ غیر فعال کر دیے گئے۔",
   "@backupFailureUnknown": {
     "description": "Android toast shown for an unexpected automatic backup failure."
   },
-  "appPermissionsDescription": "आपके चालू फ़ीचर्स के लिए आवश्यक एक्सेस की समीक्षा करें",
+  "appPermissionsDescription": "اپنے فعال فیچرز کے لیے درکار رسائی کا جائزہ لیں",
   "@appPermissionsDescription": {
     "description": "Description for the app permissions settings entry."
   },
-  "longDateFormatDescription": "जहाँ पर्याप्त जगह हो वहाँ इस्तेमाल होता है",
+  "longDateFormatDescription": "جہاں کافی جگہ ہو وہاں استعمال ہوتا ہے",
   "@longDateFormatDescription": {
     "description": "Description of the long date-format setting."
   },
-  "shortDateFormat": "छोटा तारीख प्रारूप ({example})",
+  "shortDateFormat": "مختصر تاریخ کا فارمیٹ ({example})",
   "@shortDateFormat": {
     "description": "Label for short date formatting with an example.",
     "placeholders": {
@@ -1739,251 +1739,251 @@
       }
     }
   },
-  "shortDateFormatDescription": "जहाँ जगह कम हो वहाँ (ग्राफ़ रेखाएँ)",
+  "shortDateFormatDescription": "جہاں جگہ کم ہو وہاں کے لیے (گراف لائنیں)",
   "@shortDateFormatDescription": {
     "description": "Description of the short date-format setting."
   },
-  "warmupSetsDescription": "वार्मअप सेट में रेस्ट टाइमर नहीं होते",
+  "warmupSetsDescription": "وارم اپ سیٹس میں آرام کے ٹائمر نہیں ہوتے",
   "@warmupSetsDescription": {
     "description": "Description of the default warmup sets setting."
   },
-  "setsPerExerciseDescription": "प्लान में व्यायामों की डिफ़ॉल्ट संख्या",
+  "setsPerExerciseDescription": "منصوبے میں ورزشوں کی ڈیفالٹ تعداد",
   "@setsPerExerciseDescription": {
     "description": "Description of the default sets-per-exercise setting."
   },
-  "planTrailingDisplay": "प्लान का दायाँ प्रदर्शन",
+  "planTrailingDisplay": "منصوبے کے آخر کی معلومات",
   "@planTrailingDisplay": {
     "description": "Label for choosing information shown on the right side of plan rows."
   },
-  "planTrailingDisplayDescription": "प्लान + प्लान दृश्य में सूची के दाएँ हिस्से में क्या दिखे",
+  "planTrailingDisplayDescription": "Plans + Plan منظر میں فہرست کے دائیں جانب کیا دکھایا جائے",
   "@planTrailingDisplayDescription": {
     "description": "Description of the plan trailing display setting."
   },
-  "restTimersDescription": "सेट पूरा करने के बाद बजने वाला अलार्म",
+  "restTimersDescription": "سیٹ مکمل کرنے کے بعد بجنے والا الارم",
   "@restTimersDescription": {
     "description": "Description of rest timers."
   },
-  "vibrateDescription": "क्या रेस्ट टाइमर में कंपन होना चाहिए?",
+  "vibrateDescription": "کیا آرام کے ٹائمرز وائبریٹ کریں؟",
   "@vibrateDescription": {
     "description": "Description of timer vibration."
   },
-  "enableSoundDescription": "क्या रेस्ट टाइमर में ध्वनि बजनी चाहिए?",
+  "enableSoundDescription": "کیا آرام کے ٹائمرز آواز چلائیں؟",
   "@enableSoundDescription": {
     "description": "Description of timer sound."
   },
-  "keepScreenOnDescription": "रेस्ट टाइमर के दौरान स्क्रीन चालू रखें",
+  "keepScreenOnDescription": "آرام کے ٹائمرز کے دوران اسکرین روشن رکھیں",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
   },
-  "restDurationDescription": "रेस्ट अलार्म बजने में कितना समय लगे?",
+  "restDurationDescription": "آرام کا الارم بجنے میں کتنا وقت لگے؟",
   "@restDurationDescription": {
     "description": "Description of the default rest duration."
   },
-  "globalDefault": "कुल डिफ़ॉल्ट",
+  "globalDefault": "عالمی ڈیفالٹ",
   "@globalDefault": {
     "description": "Label for a global default setting value."
   },
-  "alarmSoundDescription": "रेस्ट टाइमर के अंत में बजने वाला संगीत",
+  "alarmSoundDescription": "آرام کا ٹائمر ختم ہونے پر چلنے والی موسیقی",
   "@alarmSoundDescription": {
     "description": "Description of the timer alarm sound setting."
   },
-  "progressBarPosition": "प्रगति बार की स्थिति",
+  "progressBarPosition": "پروگریس بار کی جگہ",
   "@progressBarPosition": {
     "description": "Label for choosing the rest timer progress bar position."
   },
-  "progressBarPositionDescription": "रेस्ट टाइमर का प्रगति बार कहाँ रखा जाए?",
+  "progressBarPositionDescription": "آرام کے ٹائمرز کی پروگریس بار کہاں رکھی جائے؟",
   "@progressBarPositionDescription": {
     "description": "Description of the rest timer progress bar position setting."
   },
-  "perExerciseRestTimes": "प्रति-व्यायाम रेस्ट समय",
+  "perExerciseRestTimes": "ہر ورزش کے لیے آرام کا وقت",
   "@perExerciseRestTimes": {
     "description": "Heading for exercise-specific rest timer durations."
   },
-  "perExerciseRestTimesDescription": "इन व्यायामों की कस्टम रेस्ट अवधि है",
+  "perExerciseRestTimesDescription": "ان ورزشوں کے لیے حسبِ ضرورت آرام کے دورانیے ہیں",
   "@perExerciseRestTimesDescription": {
     "description": "Description of exercise-specific rest timer durations."
   },
-  "audioFeaturesUnavailable": "ऑडियो फ़ीचर उपलब्ध नहीं हैं",
+  "audioFeaturesUnavailable": "آڈیو فیچرز دستیاب نہیں ہیں",
   "@audioFeaturesUnavailable": {
     "description": "Message shown when timer audio features cannot be initialized."
   },
-  "groupHistoryDescription": "इतिहास प्रविष्टियों को दिन के अनुसार मिलाएँ",
+  "groupHistoryDescription": "تاریخچے کے اندراجات کو دن کے لحاظ سے یکجا کریں",
   "@groupHistoryDescription": {
     "description": "Description of history grouping."
   },
-  "showUnitsDescription": "ग्राफ़/इतिहास/प्लान में km/mi, kg/lb दिखाएँ",
+  "showUnitsDescription": "گراف/تاریخچہ/منصوبوں میں km/mi، kg/lb دکھائیں",
   "@showUnitsDescription": {
     "description": "Description of displaying measurement units."
   },
-  "showBodyWeightDescription": "शरीर के वज़न की ट्रैकिंग चालू/बंद करें",
+  "showBodyWeightDescription": "جسمانی وزن کی ٹریکنگ فعال/غیر فعال کریں",
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "वर्कआउट श्रेणियाँ चालू/बंद करें",
+  "showCategoriesDescription": "ورک آؤٹ زمرے فعال/غیر فعال کریں",
   "@showCategoriesDescription": {
     "description": "Description of workout categories."
   },
-  "showNotesDescription": "अपने लिफ्ट का विवरण टेक्स्ट क्षेत्र में दर्ज करें",
+  "showNotesDescription": "ٹیکسٹ ایریا میں اپنی لفٹ کی تفصیلات درج کریں",
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
-  "positiveNotificationsDescription": "नया रिकॉर्ड बनने पर उत्साहवर्धक संदेश दिखाएँ",
+  "positiveNotificationsDescription": "نیا ریکارڈ بننے پر حوصلہ افزا پیغامات لکھیں",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."
   },
-  "positiveMessagesEnabled": "सकारात्मक संदेश अब ऐसे दिखाई देंगे!",
+  "positiveMessagesEnabled": "مثبت پیغامات اب اس طرح نظر آئیں گے!",
   "@positiveMessagesEnabled": {
     "description": "Example toast shown when positive messages are enabled."
   },
-  "recordEncouragement01": "बहुत बढ़िया! आप कमाल हैं।",
+  "recordEncouragement01": "زبردست کام! آپ کمال ہیں۔",
   "@recordEncouragement01": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement02": "शानदार! आपकी प्रगति प्रेरणादायक है।",
+  "recordEncouragement02": "واہ کنگ! آپ کی پیش رفت متاثر کن ہے۔",
   "@recordEncouragement02": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement03": "मैं नतमस्तक हूँ...",
+  "recordEncouragement03": "میں جھک گیا...",
   "@recordEncouragement03": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement04": "यह क्या? नया रिकॉर्ड!",
+  "recordEncouragement04": "یہ کیا؟ نیا ریکارڈ!",
   "@recordEncouragement04": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement05": "कमाल का काम! आप प्रेरणा हैं।",
+  "recordEncouragement05": "کمال کر دیا! آپ واقعی مثال ہیں۔",
   "@recordEncouragement05": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement06": "वाह। बढ़िया।",
+  "recordEncouragement06": "واہ۔ خوب۔",
   "@recordEncouragement06": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement07": "काफ़ी ताकतवर हो रहे हैं, है ना?",
+  "recordEncouragement07": "کافی طاقتور ہو رہے ہیں، ہے نا؟",
   "@recordEncouragement07": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement08": "हाँ। आप काफ़ी मजबूत हैं।",
+  "recordEncouragement08": "ہاں۔ آپ تو خاصے بڑے ہو گئے ہیں۔",
   "@recordEncouragement08": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement09": "अद्भुत। अविश्वसनीय।",
+  "recordEncouragement09": "شاندار۔ ناقابلِ یقین۔",
   "@recordEncouragement09": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement10": "आर्नी को आप पर गर्व होता।",
+  "recordEncouragement10": "آرنی کو آپ پر فخر ہوتا۔",
   "@recordEncouragement10": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement11": "रॉनी सी आपको खुशी से देख रहे हैं।",
+  "recordEncouragement11": "رونی سی خوشی سے آپ کو دیکھ رہے ہیں۔",
   "@recordEncouragement11": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement12": "हाँ! हल्का वज़न, बेबी!!!!!!!",
+  "recordEncouragement12": "ہاں! لائٹ ویٹ بیبی!!!!!!!",
   "@recordEncouragement12": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement13": "क्या यह नया रिकॉर्ड है? मुझे पता था आप कर सकते हैं।",
+  "recordEncouragement13": "کیا یہ نیا ریکارڈ ہے؟ مجھے معلوم تھا آپ کر سکتے ہیں۔",
   "@recordEncouragement13": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement14": "बहुत बढ़िया! मुझे आप पर गर्व है।",
+  "recordEncouragement14": "زبردست کام! مجھے آپ پر فخر ہے۔",
   "@recordEncouragement14": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement15": "हाँ बेबी! हल्का वज़न!",
+  "recordEncouragement15": "ہاں بیبی! لائٹ ویٹ!",
   "@recordEncouragement15": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement16": "जारी रखें! शानदार प्रगति।",
+  "recordEncouragement16": "جاری رکھیں! شاندار پیش رفت۔",
   "@recordEncouragement16": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement17": "आप बहुत अच्छा कर रहे हैं।",
+  "recordEncouragement17": "آپ بہت اچھا کر رہے ہیں۔",
   "@recordEncouragement17": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement18": "यही बात है!",
+  "recordEncouragement18": "شاباش میرے شیر!",
   "@recordEncouragement18": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement19": "जारी रखें।",
+  "recordEncouragement19": "جاری رکھیں۔",
   "@recordEncouragement19": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement20": "आप बहुत ताकतवर हो रहे हैं।",
+  "recordEncouragement20": "آپ بہت طاقتور ہو رہے ہیں۔",
   "@recordEncouragement20": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement21": "दमदार।",
+  "recordEncouragement21": "طاقتور۔",
   "@recordEncouragement21": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement22": "दमदार काम!",
+  "recordEncouragement22": "زبردست طاقت!",
   "@recordEncouragement22": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement23": "मुझे आप पर गर्व है।",
+  "recordEncouragement23": "مجھے آپ پر فخر ہے۔",
   "@recordEncouragement23": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement24": "शानदार काम जारी रखें।",
+  "recordEncouragement24": "یہ شاندار کام جاری رکھیں۔",
   "@recordEncouragement24": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement25": "सीना तानकर खड़े हों! आपने नया रिकॉर्ड बनाया है।",
+  "recordEncouragement25": "سینہ تان کر کھڑے ہوں! آپ نے نیا ریکارڈ بنایا ہے۔",
   "@recordEncouragement25": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement26": "नया रिकॉर्ड! आपने पहले से भी आगे धकेला!",
+  "recordEncouragement26": "نیا ریکارڈ! آپ پہلے سے بھی آگے نکل گئے!",
   "@recordEncouragement26": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement27": "हाँ! यह रिकॉर्ड है।",
+  "recordEncouragement27": "جی ہاں! یہ ریکارڈ ہے۔",
   "@recordEncouragement27": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement28": "वाह! नया रिकॉर्ड!",
+  "recordEncouragement28": "واہ! نیا ریکارڈ!",
   "@recordEncouragement28": {
     "description": "Positive message shown after a new exercise record."
   },
-  "recordEncouragement29": "बहुत बढ़िया काम।",
+  "recordEncouragement29": "بہت خوب۔",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
   },
-  "repEstimationDescription": "आपने अभी कितने रेप किए, इसका अनुमान लगाने की कोशिश करें",
+  "repEstimationDescription": "اندازہ لگائیں کہ آپ نے ابھی کتنے ریپس کیے",
   "@repEstimationDescription": {
     "description": "Description of repetition estimation."
   },
-  "durationEstimationDescription": "अपने कार्डियो की अवधि का अनुमान लगाने की कोशिश करें",
+  "durationEstimationDescription": "اپنے کارڈیو کے دورانیے کا اندازہ لگائیں",
   "@durationEstimationDescription": {
     "description": "Description of cardio duration estimation."
   },
-  "showGraphXAxisToggle": "ग्राफ़ X अक्ष टॉगल दिखाएँ",
+  "showGraphXAxisToggle": "گراف X محور ٹوگل دکھائیں",
   "@showGraphXAxisToggle": {
     "description": "Setting for showing the graph X-axis mode toggle."
   },
-  "showGraphXAxisToggleDescription": "ग्राफ़ पर समय-आधारित X अक्ष का टॉगल दिखाएँ",
+  "showGraphXAxisToggleDescription": "گراف پر وقت پر مبنی X محور کا ٹوگل دکھائیں",
   "@showGraphXAxisToggleDescription": {
     "description": "Description of the graph X-axis toggle setting."
   },
-  "showGraphLimitDescription": "ग्राफ़ पर सीमा स्लाइडर दिखाएँ",
+  "showGraphLimitDescription": "گراف پر حد کا سلائیڈر دکھائیں",
   "@showGraphLimitDescription": {
     "description": "Description of the graph limit setting."
   },
-  "defaultTimeBasedXAxis": "डिफ़ॉल्ट समय-आधारित X अक्ष",
+  "defaultTimeBasedXAxis": "ڈیفالٹ وقت پر مبنی X محور",
   "@defaultTimeBasedXAxis": {
     "description": "Setting for using time-based graph X axes by default."
   },
-  "defaultTimeBasedXAxisDescription": "ग्राफ़ पर डिफ़ॉल्ट रूप से समय-आधारित X अक्ष इस्तेमाल करें",
+  "defaultTimeBasedXAxisDescription": "گراف پر ڈیفالٹ طور پر وقت پر مبنی X محور استعمال کریں",
   "@defaultTimeBasedXAxisDescription": {
     "description": "Description of the default time-based X-axis setting."
   },
-  "createFirstTrainingPlan": "शुरू करने के लिए अपना पहला ट्रेनिंग प्लान बनाएँ।",
+  "createFirstTrainingPlan": "شروع کرنے کے لیے اپنا پہلا ٹریننگ منصوبہ بنائیں۔",
   "@createFirstTrainingPlan": {
     "description": "Empty-state guidance when no workout plans exist."
   },
-  "nothingMatchesPlanSearch": "“{query}” से कुछ मेल नहीं खाता। आप इसे नए प्लान के रूप में बना सकते हैं।",
+  "nothingMatchesPlanSearch": "“{query}” سے کچھ نہیں ملا۔ آپ اسے نئے منصوبے کے طور پر بنا سکتے ہیں۔",
   "@nothingMatchesPlanSearch": {
     "description": "Empty-state guidance when a plan search has no matches.",
     "placeholders": {
@@ -1992,11 +1992,11 @@
       }
     }
   },
-  "createPlan": "प्लान बनाएँ",
+  "createPlan": "منصوبہ بنائیں",
   "@createPlan": {
     "description": "Action for creating a workout plan."
   },
-  "createNamedPlan": "“{name}” बनाएँ",
+  "createNamedPlan": "“{name}” بنائیں",
   "@createNamedPlan": {
     "description": "Action for creating a plan with a typed name.",
     "placeholders": {
@@ -2005,7 +2005,7 @@
       }
     }
   },
-  "setNumber": "सेट {number}",
+  "setNumber": "سیٹ {number}",
   "@setNumber": {
     "description": "Label for a numbered workout set.",
     "placeholders": {

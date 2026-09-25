@@ -80,6 +80,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageNameBengali => 'বাংলা';
 
   @override
+  String get languageNameUrdu => 'اردو';
+
+  @override
   String get navHistory => 'Histórico';
 
   @override
@@ -1634,6 +1637,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get languageNameBengali => 'বাংলা';
+
+  @override
+  String get languageNameUrdu => 'اردو';
 
   @override
   String get navHistory => 'Histórico';
