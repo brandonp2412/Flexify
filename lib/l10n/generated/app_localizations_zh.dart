@@ -588,9 +588,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editSelected => '编辑所选项';
 
   @override
-  String get newExercise => '新动作';
-
-  @override
   String get noGraphsFound => '未找到图表';
 
   @override
@@ -756,18 +753,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get categoryNameRequired => '请输入分类名称';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 个条目使用此分类',
-      one: '1 个条目使用此分类',
-      zero: '没有条目使用此分类',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -949,9 +934,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showBodyWeight => '显示体重';
 
   @override
-  String get showCategories => '显示类别';
-
-  @override
   String get showNotes => '显示备注';
 
   @override
@@ -1126,9 +1108,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get completeSetsForHistory => '完成几组训练，即可在此查看该动作的历史记录。';
-
-  @override
-  String get completeSetForFirstGraph => '完成一组训练即可创建第一个动作图表。';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1348,9 +1327,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showBodyWeightDescription => '启用或禁用体重记录';
 
   @override
-  String get showCategoriesDescription => '启用或禁用训练类别';
-
-  @override
   String get showNotesDescription => '在文本框中记录训练详情';
 
   @override
@@ -1486,6 +1462,58 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String setNumber(int number) {
     return '第 $number 组';
+  }
+
+  @override
+  String get navCategories => '分类';
+
+  @override
+  String get uncategorized => '未分类';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise 已存在于 $category';
+  }
+
+  @override
+  String get actionOpen => '打开';
+
+  @override
+  String get chooseCategory => '请选择一个分类';
+
+  @override
+  String get copyFromOtherCategory => '已在其他分类中？选择它即可复制其详细信息。';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个动作',
+      zero: '暂无动作',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$category 中还没有动作';
+  }
+
+  @override
+  String get addExerciseToCategory => '添加一个动作，开始在此分类中记录。';
+
+  @override
+  String get addExercisesFromCategories => '记录一组训练，或在“分类”标签页中添加动作。';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }
 
@@ -2073,9 +2101,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get editSelected => '编辑所选项';
 
   @override
-  String get newExercise => '新动作';
-
-  @override
   String get noGraphsFound => '未找到图表';
 
   @override
@@ -2241,18 +2266,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get categoryNameRequired => '请输入分类名称';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 个条目使用此分类',
-      one: '1 个条目使用此分类',
-      zero: '没有条目使用此分类',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -2434,9 +2447,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get showBodyWeight => '显示体重';
 
   @override
-  String get showCategories => '显示类别';
-
-  @override
   String get showNotes => '显示备注';
 
   @override
@@ -2611,9 +2621,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get completeSetsForHistory => '完成几组训练，即可在此查看该动作的历史记录。';
-
-  @override
-  String get completeSetForFirstGraph => '完成一组训练即可创建第一个动作图表。';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -2833,9 +2840,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get showBodyWeightDescription => '启用或禁用体重记录';
 
   @override
-  String get showCategoriesDescription => '启用或禁用训练类别';
-
-  @override
   String get showNotesDescription => '在文本框中记录训练详情';
 
   @override
@@ -2971,6 +2975,58 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String setNumber(int number) {
     return '第 $number 组';
+  }
+
+  @override
+  String get navCategories => '分类';
+
+  @override
+  String get uncategorized => '未分类';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise 已存在于 $category';
+  }
+
+  @override
+  String get actionOpen => '打开';
+
+  @override
+  String get chooseCategory => '请选择一个分类';
+
+  @override
+  String get copyFromOtherCategory => '已在其他分类中？选择它即可复制其详细信息。';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个动作',
+      zero: '暂无动作',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$category 中还没有动作';
+  }
+
+  @override
+  String get addExerciseToCategory => '添加一个动作，开始在此分类中记录。';
+
+  @override
+  String get addExercisesFromCategories => '记录一组训练，或在“分类”标签页中添加动作。';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }
 
@@ -3558,9 +3614,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get editSelected => '編輯所選項';
 
   @override
-  String get newExercise => '新動作';
-
-  @override
   String get noGraphsFound => '未找到圖表';
 
   @override
@@ -3726,18 +3779,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get categoryNameRequired => '請輸入分類名稱';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 個條目使用此分類',
-      one: '1 個條目使用此分類',
-      zero: '沒有條目使用此分類',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -3919,9 +3960,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showBodyWeight => '顯示體重';
 
   @override
-  String get showCategories => '顯示類別';
-
-  @override
   String get showNotes => '顯示備註';
 
   @override
@@ -4096,9 +4134,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get completeSetsForHistory => '完成幾組訓練，即可在此檢視該動作的歷史記錄。';
-
-  @override
-  String get completeSetForFirstGraph => '完成一組訓練即可建立第一個動作圖表。';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -4318,9 +4353,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showBodyWeightDescription => '啟用或停用體重記錄';
 
   @override
-  String get showCategoriesDescription => '啟用或停用訓練類別';
-
-  @override
   String get showNotesDescription => '在文字框中記錄訓練詳情';
 
   @override
@@ -4456,5 +4488,57 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String setNumber(int number) {
     return '第 $number 組';
+  }
+
+  @override
+  String get navCategories => '分類';
+
+  @override
+  String get uncategorized => '未分類';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise 已存在於 $category';
+  }
+
+  @override
+  String get actionOpen => '開啟';
+
+  @override
+  String get chooseCategory => '請選擇一個分類';
+
+  @override
+  String get copyFromOtherCategory => '已在其他分類中？選擇它即可複製其詳細資料。';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 個動作',
+      zero: '尚無動作',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$category 中還沒有動作';
+  }
+
+  @override
+  String get addExerciseToCategory => '新增一個動作，開始在此分類中記錄。';
+
+  @override
+  String get addExercisesFromCategories => '記錄一組訓練，或在「分類」分頁中新增動作。';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

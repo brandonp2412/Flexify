@@ -66,6 +66,8 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameThai',
   'languageNameMalay',
   'stoneUnitShort',
+  'exerciseInCategory',
+  'categoryAndDate',
 };
 
 const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
@@ -196,7 +198,7 @@ const _postWaveReviewedKeys = <String>{
   'mergeCategory',
   'noCategories',
   'categoryNameRequired',
-  'categoryUsageCount',
+  'categoryExerciseCount',
   'deleteCategoryConfirmation',
 };
 

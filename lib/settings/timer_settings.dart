@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/audio/safe_audio_player.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
@@ -408,9 +410,9 @@ class _TimerSettingsState extends State<TimerSettings> {
   );
 
   final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);
-  List<GymSetsCompanion> _exercisesWithCustomTimers = [];
-  final Map<String, TextEditingController> _minuteControllers = {};
-  final Map<String, TextEditingController> _secondControllers = {};
+  List<ExerciseKey> _exercisesWithCustomTimers = [];
+  final Map<ExerciseKey, TextEditingController> _minuteControllers = {};
+  final Map<ExerciseKey, TextEditingController> _secondControllers = {};
 
   @override
   void initState() {
@@ -421,24 +423,26 @@ class _TimerSettingsState extends State<TimerSettings> {
   Future<void> _loadExercisesWithCustomTimers() async {
     final exercises =
         await (db.selectOnly(db.gymSets)
-              ..addColumns([db.gymSets.name, db.gymSets.restMs])
+              ..addColumns([
+                db.gymSets.name,
+                db.gymSets.category,
+                db.gymSets.restMs,
+              ])
               ..where(db.gymSets.restMs.isNotNull())
-              ..groupBy([db.gymSets.name]))
+              ..groupBy([db.gymSets.name, db.gymSets.category]))
             .get();
     if (!mounted) return;
 
+    ExerciseKey keyOf(TypedResult result) => (
+      name: result.read(db.gymSets.name)!,
+      category: result.read(db.gymSets.category),
+    );
+
     setState(() {
-      _exercisesWithCustomTimers = exercises
-          .map(
-            (result) => GymSetsCompanion(
-              name: Value(result.read(db.gymSets.name)!),
-              restMs: Value(result.read(db.gymSets.restMs)),
-            ),
-          )
-          .toList();
+      _exercisesWithCustomTimers = exercises.map(keyOf).toList();
 
       for (final result in exercises) {
-        final exerciseName = result.read(db.gymSets.name)!;
+        final exerciseName = keyOf(result);
         final restMs = result.read(db.gymSets.restMs);
         if (restMs != null) {
           final duration = Duration(milliseconds: restMs);
@@ -454,7 +458,7 @@ class _TimerSettingsState extends State<TimerSettings> {
   }
 
   Future<void> _updateExerciseRestTime(
-    String exerciseName,
+    ExerciseKey exerciseName,
     int? minutes,
     int? seconds,
   ) async {
@@ -466,7 +470,9 @@ class _TimerSettingsState extends State<TimerSettings> {
       duration = Duration(minutes: mins, seconds: secs);
     }
 
-    await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
+    await (db.gymSets.update()..where(
+          (tbl) => isExercise(tbl, exerciseName.name, exerciseName.category),
+        ))
         .write(GymSetsCompanion(restMs: Value(duration?.inMilliseconds)));
 
     if (!mounted) return;
@@ -474,24 +480,22 @@ class _TimerSettingsState extends State<TimerSettings> {
       _minuteControllers.remove(exerciseName)?.dispose();
       _secondControllers.remove(exerciseName)?.dispose();
       setState(() {
-        _exercisesWithCustomTimers.removeWhere(
-          (e) => e.name.value == exerciseName,
-        );
+        _exercisesWithCustomTimers.remove(exerciseName);
       });
     }
   }
 
-  Future<void> _removeCustomTimer(String exerciseName) async {
-    await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
+  Future<void> _removeCustomTimer(ExerciseKey exerciseName) async {
+    await (db.gymSets.update()..where(
+          (tbl) => isExercise(tbl, exerciseName.name, exerciseName.category),
+        ))
         .write(const GymSetsCompanion(restMs: Value(null)));
     if (!mounted) return;
 
     _minuteControllers.remove(exerciseName)?.dispose();
     _secondControllers.remove(exerciseName)?.dispose();
     setState(() {
-      _exercisesWithCustomTimers.removeWhere(
-        (e) => e.name.value == exerciseName,
-      );
+      _exercisesWithCustomTimers.remove(exerciseName);
     });
   }
 
@@ -527,7 +531,7 @@ class _TimerSettingsState extends State<TimerSettings> {
           ),
           const SizedBox(height: 16),
           ..._exercisesWithCustomTimers.map((exercise) {
-            final exerciseName = exercise.name.value;
+            final exerciseName = exercise;
             if (_minuteControllers[exerciseName] == null ||
                 _secondControllers[exerciseName] == null)
               return const SizedBox();
@@ -545,7 +549,11 @@ class _TimerSettingsState extends State<TimerSettings> {
                       children: [
                         Expanded(
                           child: Text(
-                            exerciseName,
+                            exerciseLabel(
+                              context.l10n,
+                              exercise.name,
+                              exercise.category,
+                            ),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
@@ -595,7 +603,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                                   int.tryParse(minController.text) ?? 0;
                               final seconds = int.tryParse(value) ?? 0;
                               _updateExerciseRestTime(
-                                exercise.name.value,
+                                exercise,
                                 minutes,
                                 seconds,
                               );

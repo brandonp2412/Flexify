@@ -3,6 +3,8 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_queries.dart';
@@ -56,10 +58,11 @@ class _StartListState extends State<StartList> {
         lastTap = (index: index, dateTime: DateTime.now());
       });
 
+    final planned = widget.exercises[index];
     final gymSet =
         await (db.gymSets.select()
               ..where(
-                (tbl) => tbl.name.equals(widget.exercises[index].exercise),
+                (tbl) => isExercise(tbl, planned.exercise, planned.category),
               )
               ..orderBy([
                 (u) => OrderingTerm(
@@ -129,7 +132,9 @@ class _StartListState extends State<StartList> {
   ) {
     final exercise = widget.exercises[index];
     final idx = counts.indexWhere(
-      (element) => element.name == exercise.exercise,
+      (element) =>
+          element.name == exercise.exercise &&
+          element.category == exercise.category,
     );
     var count = 0;
     int max = maxSets;
@@ -177,6 +182,14 @@ class _StartListState extends State<StartList> {
 
     final colors = Theme.of(context).colorScheme;
     final selected = index == widget.selected;
+    final categoryText = Text(
+      categoryLabel(context.l10n, exercise.category),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(
+        context,
+      ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
+    );
 
     Future<void> showActions() => showModalBottomSheet<void>(
       useRootNavigator: true,
@@ -185,6 +198,7 @@ class _StartListState extends State<StartList> {
         child: ExerciseModal(
           planId: widget.plan.id,
           exercise: exercise.exercise,
+          category: exercise.category,
           hasData: count > 0,
           onSelect: () => widget.onSelect(index),
         ),
@@ -193,7 +207,7 @@ class _StartListState extends State<StartList> {
 
     final content = desktop
         ? Padding(
-            key: Key(exercise.exercise),
+            key: ValueKey((exercise.exercise, exercise.category)),
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Material(
               color: selected
@@ -224,16 +238,22 @@ class _StartListState extends State<StartList> {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              exercise.exercise,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(
-                                    fontWeight: selected
-                                        ? FontWeight.w700
-                                        : FontWeight.w600,
-                                  ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  exercise.exercise,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        fontWeight: selected
+                                            ? FontWeight.w700
+                                            : FontWeight.w600,
+                                      ),
+                                ),
+                                categoryText,
+                              ],
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -278,7 +298,12 @@ class _StartListState extends State<StartList> {
                       },
                       child: Radio<bool>(value: selected),
                     ),
-                    Flexible(child: Text(exercise.exercise)),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [Text(exercise.exercise), categoryText],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -288,7 +313,7 @@ class _StartListState extends State<StartList> {
 
     if (desktop) return content;
     return GestureDetector(
-      key: Key(exercise.exercise),
+      key: ValueKey((exercise.exercise, exercise.category)),
       onLongPress: showActions,
       child: content,
     );

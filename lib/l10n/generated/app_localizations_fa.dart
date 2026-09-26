@@ -605,9 +605,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get editSelected => 'ویرایش موارد انتخاب‌شده';
 
   @override
-  String get newExercise => 'تمرین جدید';
-
-  @override
   String get noGraphsFound => 'نموداری پیدا نشد';
 
   @override
@@ -775,18 +772,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'نام دسته‌بندی را وارد کنید';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'در $count ورودی استفاده شده',
-      one: 'در 1 ورودی استفاده شده',
-      zero: 'در هیچ ورودی استفاده نشده',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -967,9 +952,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'نمایش وزن بدن';
-
-  @override
-  String get showCategories => 'نمایش دسته‌بندی‌ها';
 
   @override
   String get showNotes => 'نمایش یادداشت‌ها';
@@ -1153,10 +1135,6 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'چند ست را کامل کنید تا تاریخچه این تمرین را اینجا ببینید.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'برای ساخت اولین نمودار تمرین یک ست را کامل کنید.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1405,10 +1383,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showBodyWeightDescription => 'فعال/غیرفعال کردن ردیابی وزن بدن';
 
   @override
-  String get showCategoriesDescription =>
-      'فعال/غیرفعال کردن دسته‌بندی‌های تمرین';
-
-  @override
   String get showNotesDescription =>
       'جزئیات حرکت خود را در یک بخش متنی ثبت کنید';
 
@@ -1555,5 +1529,61 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'ست $number';
+  }
+
+  @override
+  String get navCategories => 'دسته‌بندی‌ها';
+
+  @override
+  String get uncategorized => 'بدون دسته‌بندی';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise از قبل در $category وجود دارد';
+  }
+
+  @override
+  String get actionOpen => 'باز کردن';
+
+  @override
+  String get chooseCategory => 'یک دسته‌بندی انتخاب کنید';
+
+  @override
+  String get copyFromOtherCategory =>
+      'در دسته‌بندی دیگری وجود دارد؟ آن را انتخاب کنید تا جزئیاتش کپی شود.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تمرین',
+      one: '1 تمرین',
+      zero: 'بدون تمرین',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'هنوز تمرینی در $category وجود ندارد';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'یک تمرین اضافه کنید تا پیگیری آن را در این دسته‌بندی شروع کنید.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'یک ست ثبت کنید، یا از زبانهٔ دسته‌بندی‌ها تمرین اضافه کنید.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

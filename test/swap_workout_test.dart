@@ -18,7 +18,11 @@ void main() {
     await harness.pump(
       tester,
       Scaffold(
-        body: SwapWorkout(exercise: original.exercise, planId: plan.id),
+        body: SwapWorkout(
+          exercise: original.exercise,
+          category: original.category,
+          planId: plan.id,
+        ),
       ),
     );
 
@@ -40,6 +44,7 @@ void main() {
       (exercise) => exercise.id == original.id,
     );
     expect(swapped.exercise, 'Arnold press');
+    expect(swapped.category, 'Shoulders');
     expect(swapped.sequence, original.sequence);
     expect(swapped.enabled, original.enabled);
     expect(swapped.timers, original.timers);

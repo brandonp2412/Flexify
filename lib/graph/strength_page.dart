@@ -24,16 +24,18 @@ import 'package:provider/provider.dart';
 
 class StrengthPage extends StatefulWidget {
   final String name;
+  final String? category;
   final String unit;
   final List<StrengthData> data;
-  final TabController tabCtrl;
+  final TabController? tabCtrl;
 
   const StrengthPage({
     super.key,
     required this.name,
+    this.category,
     required this.unit,
     required this.data,
-    required this.tabCtrl,
+    this.tabCtrl,
   });
 
   @override
@@ -44,6 +46,7 @@ class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> data = widget.data;
   late String target = widget.unit;
   late String name = widget.name;
+  late String? category = widget.category;
   late bool useTimeBasedXAxis;
   Timer? _refreshTimer;
   Timer? _notesDebounce;
@@ -70,13 +73,15 @@ class _StrengthPageState extends State<StrengthPage> {
       (p) => p.name == settings.defaultGraphPeriod,
       orElse: () => Period.day,
     );
-    widget.tabCtrl.addListener(_onTabChanged);
+    widget.tabCtrl?.addListener(_onTabChanged);
     _loadPreferences();
   }
 
   Future<void> _loadPreferences() async {
     final pref =
-        await (db.graphPreferences.select()..where((t) => t.name.equals(name)))
+        await (db.graphPreferences.select()..where(
+              (t) => t.name.equals(name) & t.category.equals(category ?? ''),
+            ))
             .getSingleOrNull();
     if (pref == null || !mounted) return;
     setState(() {
@@ -99,6 +104,7 @@ class _StrengthPageState extends State<StrengthPage> {
     await db.graphPreferences.insertOne(
       GraphPreferencesCompanion.insert(
         name: name,
+        category: Value(category ?? ''),
         metric: Value(metric.name),
         period: Value(period.name),
         limit: Value(limit),
@@ -131,13 +137,13 @@ class _StrengthPageState extends State<StrengthPage> {
     _refreshTimer?.cancel();
     _notesDebounce?.cancel();
     _notesCtrl.dispose();
-    widget.tabCtrl.removeListener(_onTabChanged);
+    widget.tabCtrl?.removeListener(_onTabChanged);
     super.dispose();
   }
 
   void _onTabChanged() {
     final settings = context.read<SettingsState>().value;
-    if (widget.tabCtrl.index ==
+    if (widget.tabCtrl?.index ==
         settings.tabs.split(',').indexOf('GraphsPage')) {
       setData();
     }
@@ -243,7 +249,7 @@ class _StrengthPageState extends State<StrengthPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(name),
+        title: Text(exerciseLabel(context.l10n, name, category)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -259,7 +265,7 @@ class _StrengthPageState extends State<StrengthPage> {
                             mode: OrderingMode.desc,
                           ),
                         ])
-                        ..where((tbl) => tbl.name.equals(name))
+                        ..where((tbl) => isExercise(tbl, name, category))
                         ..where((tbl) => tbl.hidden.equals(false))
                         ..limit(20))
                       .get();
@@ -269,6 +275,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 MaterialPageRoute(
                   builder: (context) => GraphHistoryPage(
                     name: name,
+                    category: category,
                     gymSets: gymSets,
                     tabController: widget.tabCtrl,
                   ),
@@ -282,15 +289,18 @@ class _StrengthPageState extends State<StrengthPage> {
           ),
           IconButton(
             onPressed: () async {
-              String? newName = await Navigator.of(context).push(
+              final renamed = await Navigator.of(context).push<ExerciseKey>(
                 MaterialPageRoute(
-                  builder: (context) => EditGraphPage(name: name),
+                  builder: (context) =>
+                      EditGraphPage(name: name, category: category),
                 ),
               );
-              if (mounted && newName != null)
-                setState(() {
-                  name = newName;
-                });
+              if (!mounted || renamed == null) return;
+              setState(() {
+                name = renamed.name;
+                category = renamed.category;
+              });
+              setData();
             },
             icon: const Icon(Icons.edit),
             tooltip: context.l10n.actionEdit,
@@ -549,6 +559,7 @@ class _StrengthPageState extends State<StrengthPage> {
     final strengthData = await getStrengthData(
       target: target,
       name: name,
+      category: category,
       metric: metric,
       period: period,
       start: start,
@@ -627,7 +638,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     (tbl) =>
                         tbl.created.equals(row.created) &
                         ormExpression.equals(row.value) &
-                        tbl.name.equals(name),
+                        isExercise(tbl, name, category),
                   )
                   ..limit(1))
                 .getSingle();
@@ -637,7 +648,8 @@ class _StrengthPageState extends State<StrengthPage> {
             await (db.gymSets.select()
                   ..where(
                     (tbl) =>
-                        tbl.created.equals(row.created) & tbl.name.equals(name),
+                        tbl.created.equals(row.created) &
+                        isExercise(tbl, name, category),
                   )
                   ..limit(1))
                 .getSingle();
@@ -649,7 +661,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     (tbl) =>
                         tbl.created.equals(row.created) &
                         tbl.weight.equals(row.value) &
-                        tbl.name.equals(name),
+                        isExercise(tbl, name, category),
                   )
                   ..limit(1))
                 .getSingle();
@@ -662,7 +674,7 @@ class _StrengthPageState extends State<StrengthPage> {
                         tbl.created.equals(row.created) &
                         ((tbl.weight / tbl.bodyWeight).equals(row.value) |
                             (tbl.weight / tbl.bodyWeight).isNull()) &
-                        tbl.name.equals(name),
+                        isExercise(tbl, name, category),
                   )
                   ..limit(1))
                 .getSingle();
@@ -674,7 +686,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     (tbl) =>
                         tbl.created.equals(row.created) &
                         tbl.reps.equals(row.value) &
-                        tbl.name.equals(name),
+                        isExercise(tbl, name, category),
                   )
                   ..limit(1))
                 .getSingle();

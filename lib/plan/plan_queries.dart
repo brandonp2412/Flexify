@@ -17,6 +17,7 @@ class PlanCount {
 typedef GymCount = ({
   int count,
   String name,
+  String? category,
   int? maxSets,
   int? restMs,
   int? warmupSets,
@@ -35,7 +36,7 @@ Stream<List<PlanCount>> watchPlanCounts() {
         '''
           SELECT id, SUM(max_sets) AS max_sets,
             SUM(todays_count) AS todays_count FROM (
-              SELECT p.id, pe.exercise AS name,
+              SELECT p.id, pe.exercise AS name, pe.category,
                 COALESCE(pe.max_sets, settings.max_sets) AS max_sets,
                 COUNT(
                   CASE WHEN gs.id IS NOT NULL
@@ -49,8 +50,9 @@ Stream<List<PlanCount>> watchPlanCounts() {
                 AND pe.enabled = true
               LEFT JOIN settings
               LEFT JOIN gym_sets gs ON pe.exercise = gs.name
+                AND gs.category IS pe.category
                 AND gs.plan_id = p.id
-              GROUP BY pe.exercise, p.id
+              GROUP BY pe.exercise, pe.category, p.id
             )
           GROUP BY id
         ''',
@@ -89,6 +91,7 @@ Stream<List<GymCount>> watchGymCounts(int planId) {
   final query = db.selectOnly(db.planExercises)
     ..addColumns([
       db.gymSets.name,
+      db.gymSets.category,
       count,
       db.planExercises.maxSets,
       db.gymSets.restMs,
@@ -98,11 +101,12 @@ Stream<List<GymCount>> watchGymCounts(int planId) {
     ..join([
       innerJoin(
         db.gymSets,
-        db.gymSets.name.equalsExp(db.planExercises.exercise),
+        db.gymSets.name.equalsExp(db.planExercises.exercise) &
+            db.gymSets.category.isExp(db.planExercises.category),
       ),
     ])
     ..where(db.planExercises.planId.equals(planId) & db.planExercises.enabled)
-    ..groupBy([db.gymSets.name]);
+    ..groupBy([db.gymSets.name, db.gymSets.category]);
 
   return query.watch().map(
     (rows) => rows
@@ -110,6 +114,7 @@ Stream<List<GymCount>> watchGymCounts(int planId) {
           (row) => (
             count: row.read<int>(count)!,
             name: row.read(db.gymSets.name)!,
+            category: row.read(db.gymSets.category),
             maxSets: row.read(db.planExercises.maxSets),
             restMs: row.read(db.gymSets.restMs),
             warmupSets: row.read(db.planExercises.warmupSets),
@@ -126,13 +131,14 @@ Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
   PlansCompanion plan,
 ) async {
   final query = db.gymSets.selectOnly()
-    ..addColumns([db.gymSets.name])
-    ..groupBy([db.gymSets.name])
+    ..addColumns([db.gymSets.name, db.gymSets.category])
+    ..groupBy([db.gymSets.name, db.gymSets.category])
     ..join([
       leftOuterJoin(
         db.planExercises,
         db.planExercises.planId.equals(plan.id.present ? plan.id.value : 0) &
-            db.planExercises.exercise.equalsExp(db.gymSets.name),
+            db.planExercises.exercise.equalsExp(db.gymSets.name) &
+            db.planExercises.category.isExp(db.gymSets.category),
       ),
     ])
     ..addColumns(db.planExercises.$columns);
@@ -146,6 +152,7 @@ Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
       planId: plan.id,
       id: Value.absentIfNull(row.read(db.planExercises.id)),
       exercise: Value(row.read(db.gymSets.name)!),
+      category: Value(row.read(db.gymSets.category)),
       enabled: Value(row.read(db.planExercises.enabled) ?? false),
       maxSets: Value(row.read(db.planExercises.maxSets)),
       warmupSets: Value(row.read(db.planExercises.warmupSets)),

@@ -612,9 +612,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get editSelected => 'Editar seleccionados';
 
   @override
-  String get newExercise => 'Ejercicio nuevo';
-
-  @override
   String get noGraphsFound => 'No se encontraron gráficos';
 
   @override
@@ -782,18 +779,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Introduce un nombre de categoría';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Se usa en $count entradas',
-      one: 'Se usa en 1 entrada',
-      zero: 'No se usa en ninguna entrada',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -976,9 +961,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'Mostrar peso corporal';
-
-  @override
-  String get showCategories => 'Mostrar categorías';
 
   @override
   String get showNotes => 'Mostrar notas';
@@ -1167,10 +1149,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'Completa algunas series para ver aquí el historial de este ejercicio.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'Completa una serie para crear tu primer gráfico de ejercicio.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1424,10 +1402,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Activar o desactivar el seguimiento del peso corporal';
 
   @override
-  String get showCategoriesDescription =>
-      'Activar o desactivar las categorías de entrenamiento';
-
-  @override
   String get showNotesDescription =>
       'Registrar detalles del levantamiento en un campo de texto';
 
@@ -1576,5 +1550,61 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'Serie $number';
+  }
+
+  @override
+  String get navCategories => 'Categorías';
+
+  @override
+  String get uncategorized => 'Sin categoría';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise ya existe en $category';
+  }
+
+  @override
+  String get actionOpen => 'Abrir';
+
+  @override
+  String get chooseCategory => 'Elige una categoría';
+
+  @override
+  String get copyFromOtherCategory =>
+      '¿Ya está en otra categoría? Selecciónalo para copiar sus datos.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ejercicios',
+      one: '1 ejercicio',
+      zero: 'Sin ejercicios',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'Aún no hay ejercicios en $category';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'Añade un ejercicio para empezar a registrarlo en esta categoría.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'Registra una serie o añade ejercicios desde la pestaña Categorías.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

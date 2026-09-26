@@ -608,9 +608,6 @@ class AppLocalizationsMs extends AppLocalizations {
   String get editSelected => 'Sunting yang dipilih';
 
   @override
-  String get newExercise => 'Senaman baru';
-
-  @override
   String get noGraphsFound => 'Tidak ada graf';
 
   @override
@@ -778,18 +775,6 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Masukkan nama kategori';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Digunakan oleh $count entri',
-      one: 'Digunakan oleh 1 entri',
-      zero: 'Tidak digunakan oleh mana-mana entri',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -971,9 +956,6 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'Tunjukkan berat badan';
-
-  @override
-  String get showCategories => 'Tunjukkan kategori';
 
   @override
   String get showNotes => 'Tunjukkan nota';
@@ -1159,10 +1141,6 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'Selesaikan beberapa set untuk melihat sejarah senaman ini di sini.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'Selesaikan satu set untuk membuat graf senaman pertama Anda.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1414,10 +1392,6 @@ class AppLocalizationsMs extends AppLocalizations {
       'Aktifkan atau lumpuhkan pelacakan berat badan';
 
   @override
-  String get showCategoriesDescription =>
-      'Aktifkan atau lumpuhkan kategori senaman';
-
-  @override
   String get showNotesDescription =>
       'Catat detail angkatan Anda dalam lajur teks';
 
@@ -1565,5 +1539,60 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'Set ke-$number';
+  }
+
+  @override
+  String get navCategories => 'Kategori';
+
+  @override
+  String get uncategorized => 'Tanpa kategori';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise sudah wujud dalam $category';
+  }
+
+  @override
+  String get actionOpen => 'Buka';
+
+  @override
+  String get chooseCategory => 'Pilih kategori';
+
+  @override
+  String get copyFromOtherCategory =>
+      'Sudah ada dalam kategori lain? Pilih untuk menyalin butirannya.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count senaman',
+      zero: 'Tiada senaman',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'Belum ada senaman dalam $category';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'Tambah senaman untuk mula menjejakinya dalam kategori ini.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'Catat satu set, atau tambah senaman dari tab Kategori.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

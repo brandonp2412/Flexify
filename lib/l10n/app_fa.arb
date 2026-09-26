@@ -813,10 +813,6 @@
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "تمرین جدید",
-  "@newExercise": {
-    "description": "Action for creating a new exercise graph."
-  },
   "noGraphsFound": "نموداری پیدا نشد",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
@@ -1049,16 +1045,6 @@
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{در هیچ ورودی استفاده نشده} =1{در 1 ورودی استفاده شده} other{در {count} ورودی استفاده شده}}",
-  "@categoryUsageCount": {
-    "description": "Number of workout entries using a category.",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
   "deleteCategoryConfirmation": "{count, plural, =0{این دسته‌بندی حذف شود؟} =1{این دسته‌بندی حذف و از 1 ورودی برداشته شود؟} other{این دسته‌بندی حذف و از {count} ورودی برداشته شود؟}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
@@ -1284,10 +1270,6 @@
   "showBodyWeight": "نمایش وزن بدن",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
-  },
-  "showCategories": "نمایش دسته‌بندی‌ها",
-  "@showCategories": {
-    "description": "Workout setting for exercise categories."
   },
   "showNotes": "نمایش یادداشت‌ها",
   "@showNotes": {
@@ -1518,10 +1500,6 @@
   "completeSetsForHistory": "چند ست را کامل کنید تا تاریخچه این تمرین را اینجا ببینید.",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
-  },
-  "completeSetForFirstGraph": "برای ساخت اولین نمودار تمرین یک ست را کامل کنید.",
-  "@completeSetForFirstGraph": {
-    "description": "Empty guidance when no exercise graphs exist."
   },
   "nothingMatchesGraphSearch": "چیزی با «{query}» مطابقت ندارد. می‌توانید آن را به عنوان تمرین جدید بسازید.",
   "@nothingMatchesGraphSearch": {
@@ -1831,10 +1809,6 @@
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "فعال/غیرفعال کردن دسته‌بندی‌های تمرین",
-  "@showCategoriesDescription": {
-    "description": "Description of workout categories."
-  },
   "showNotesDescription": "جزئیات حرکت خود را در یک بخش متنی ثبت کنید",
   "@showNotesDescription": {
     "description": "Description of workout notes."
@@ -2025,5 +1999,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "navCategories": "دسته‌بندی‌ها",
+  "uncategorized": "بدون دسته‌بندی",
+  "exerciseExistsInCategory": "{exercise} از قبل در {category} وجود دارد",
+  "actionOpen": "باز کردن",
+  "chooseCategory": "یک دسته‌بندی انتخاب کنید",
+  "copyFromOtherCategory": "در دسته‌بندی دیگری وجود دارد؟ آن را انتخاب کنید تا جزئیاتش کپی شود.",
+  "categoryExerciseCount": "{count, plural, =0{بدون تمرین} =1{1 تمرین} other{{count} تمرین}}",
+  "noExercisesInCategory": "هنوز تمرینی در {category} وجود ندارد",
+  "addExerciseToCategory": "یک تمرین اضافه کنید تا پیگیری آن را در این دسته‌بندی شروع کنید.",
+  "addExercisesFromCategories": "یک ست ثبت کنید، یا از زبانهٔ دسته‌بندی‌ها تمرین اضافه کنید.",
+  "exerciseInCategory": "{exercise} · {category}",
+  "categoryAndDate": "{category} · {date}"
 }

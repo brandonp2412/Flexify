@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-const _allTabs = 'HistoryPage,PlansPage,GraphsPage,TimerPage,SettingsPage';
+const _allTabs =
+    'HistoryPage,CategoriesPage,PlansPage,GraphsPage,TimerPage,SettingsPage';
 
 Future<SettingsState> _pumpIsolatedApp(
   WidgetTester tester, {
@@ -43,7 +44,6 @@ Future<SettingsState> _pumpIsolatedApp(
       notifications: Value(false),
       groupHistory: Value(false),
       showBodyWeight: Value(true),
-      showCategories: Value(true),
       showNotes: Value(true),
       showUnits: Value(true),
       scrollableTabs: Value(true),
@@ -111,6 +111,7 @@ void main() {
 
     for (final tab in const [
       'HistoryPage',
+      'CategoriesPage',
       'PlansPage',
       'GraphsPage',
       'TimerPage',
@@ -126,13 +127,13 @@ void main() {
     await _pumpIsolatedApp(tester);
     final tabs = find.byType(TabBarView);
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 5; i++) {
       await tester.drag(tabs, const Offset(-700, 0));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     }
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 5; i++) {
       await tester.drag(tabs, const Offset(700, 0));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
@@ -320,6 +321,7 @@ void main() {
       await tester.pumpAndSettle();
       for (final tab in const [
         'HistoryPage',
+        'CategoriesPage',
         'PlansPage',
         'GraphsPage',
         'TimerPage',
@@ -746,6 +748,7 @@ void main() {
 
     for (final tab in const [
       'HistoryPage',
+      'CategoriesPage',
       'PlansPage',
       'GraphsPage',
       'TimerPage',
@@ -1056,11 +1059,24 @@ void main() {
 
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
+    final firstTile = find.byKey(
+      ValueKey<(String, String?)>((originalFirst, exercises.first.category)),
+    );
+    final secondTile = find.byKey(
+      ValueKey<(String, String?)>((originalSecond, exercises[1].category)),
+    );
     final firstHandle = find.descendant(
-      of: find.byKey(Key(originalFirst)),
+      of: firstTile,
       matching: find.byIcon(Icons.drag_handle),
     );
-    await tester.drag(firstHandle, const Offset(0, 120));
+    final rowSpacing =
+        tester.getCenter(secondTile).dy - tester.getCenter(firstTile).dy;
+    final gesture = await tester.startGesture(tester.getCenter(firstHandle));
+    for (var step = 0; step < 12; step++) {
+      await gesture.moveBy(Offset(0, rowSpacing / 10));
+      await tester.pump();
+    }
+    await gesture.up();
     await tester.pumpAndSettle();
 
     exercises =
@@ -1187,20 +1203,18 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Graph no-result flow creates a strength exercise', (
-    tester,
-  ) async {
+  testWidgets('Category page creates a strength exercise', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await _tapTab(tester, 'GraphsPage');
-    final search = find.byType(SearchBar);
-
-    await tester.enterText(search, 'Linux E2E new strength graph');
+    await _tapTab(tester, 'CategoriesPage');
+    await tester.tap(find.text('Back'));
     await tester.pumpAndSettle();
-    expect(find.text('No graphs found'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ListTile, 'No graphs found'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Add exercise'));
     await tester.pumpAndSettle();
-    expect(find.text('Add exercise'), findsOneWidget);
     expect(find.bySemanticsLabel('Name'), findsOneWidget);
+    await tester.enterText(
+      find.bySemanticsLabel('Name'),
+      'Linux E2E new strength graph',
+    );
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
@@ -1211,22 +1225,24 @@ void main() {
     expect(template.hidden, isTrue);
     expect(template.cardio, isFalse);
     expect(template.unit, 'kg');
+    expect(template.category, 'Back');
+    expect(find.text('Linux E2E new strength graph'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Graph no-result flow creates a distance-cardio exercise', (
+  testWidgets('Category page creates a distance-cardio exercise', (
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await _tapTab(tester, 'GraphsPage');
+    await _tapTab(tester, 'CategoriesPage');
+    await tester.tap(find.text('Quads'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Add exercise'));
+    await tester.pumpAndSettle();
     await tester.enterText(
-      find.byType(SearchBar),
+      find.bySemanticsLabel('Name'),
       'Linux E2E new cardio graph',
     );
-    await tester.pumpAndSettle();
-    expect(find.text('No graphs found'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ListTile, 'No graphs found'));
-    await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Strength'));
     await tester.pumpAndSettle();
     await tester.tap(_dropdownWithLabel('Unit'));
@@ -2117,7 +2133,7 @@ void main() {
           .getSingleOrNull(),
       isNotNull,
     );
-    expect(find.text('Linux E2E cardio renamed'), findsOneWidget);
+    expect(find.textContaining('Linux E2E cardio renamed'), findsOneWidget);
     expect(find.text('Linux E2E cardio old'), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -2130,7 +2146,11 @@ void main() {
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
 
-    await tester.longPress(find.byKey(const Key('Barbell bench press')));
+    await tester.longPress(
+      find.byKey(
+        const ValueKey<(String, String?)>(('Barbell bench press', 'Chest')),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Settings'));
     await tester.pumpAndSettle();
@@ -2157,7 +2177,9 @@ void main() {
     expect(planExercise.maxSets, 2);
     expect(planExercise.timers, isFalse);
 
-    await tester.longPress(find.byKey(const Key('Squat')));
+    await tester.longPress(
+      find.byKey(const ValueKey<(String, String?)>(('Squat', 'Quads'))),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Swap'));
     await tester.pumpAndSettle();
@@ -2449,7 +2471,6 @@ void main() {
       'Group history',
       'Show units',
       'Show body weight',
-      'Show categories',
       'Show notes',
       'Notifications',
       'Rep estimation',
@@ -2482,7 +2503,6 @@ void main() {
     expect(settings.groupHistory, !initial.groupHistory);
     expect(settings.showUnits, !initial.showUnits);
     expect(settings.showBodyWeight, !initial.showBodyWeight);
-    expect(settings.showCategories, !initial.showCategories);
     expect(settings.showNotes, !initial.showNotes);
     expect(settings.notifications, !initial.notifications);
     expect(settings.repEstimation, !initial.repEstimation);

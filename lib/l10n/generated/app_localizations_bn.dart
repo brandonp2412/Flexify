@@ -608,9 +608,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get editSelected => 'নির্বাচিতগুলো সম্পাদনা করুন';
 
   @override
-  String get newExercise => 'নতুন ব্যায়াম';
-
-  @override
   String get noGraphsFound => 'কোনো গ্রাফ পাওয়া যায়নি';
 
   @override
@@ -777,18 +774,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'একটি বিভাগের নাম লিখুন';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$countটি এন্ট্রিতে ব্যবহৃত',
-      one: '১টি এন্ট্রিতে ব্যবহৃত',
-      zero: 'কোনো এন্ট্রিতে ব্যবহৃত নয়',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -972,9 +957,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showBodyWeight => 'শরীরের ওজন দেখান';
 
   @override
-  String get showCategories => 'বিভাগ দেখান';
-
-  @override
   String get showNotes => 'নোট দেখান';
 
   @override
@@ -1156,10 +1138,6 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'এই ব্যায়ামের ইতিহাস এখানে দেখতে কয়েকটি সেট সম্পন্ন করুন।';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'প্রথম ব্যায়াম গ্রাফ তৈরি করতে একটি সেট সম্পন্ন করুন।';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1404,9 +1382,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showBodyWeightDescription => 'শরীরের ওজন ট্র্যাকিং চালু/বন্ধ করুন';
 
   @override
-  String get showCategoriesDescription => 'ওয়ার্কআউট বিভাগ চালু/বন্ধ করুন';
-
-  @override
   String get showNotesDescription => 'টেক্সট বক্সে আপনার লিফটের বিবরণ লিখুন';
 
   @override
@@ -1551,5 +1526,61 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'সেট $number';
+  }
+
+  @override
+  String get navCategories => 'বিভাগসমূহ';
+
+  @override
+  String get uncategorized => 'বিভাগহীন';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise ইতিমধ্যে $category-এ আছে';
+  }
+
+  @override
+  String get actionOpen => 'খুলুন';
+
+  @override
+  String get chooseCategory => 'একটি বিভাগ বেছে নিন';
+
+  @override
+  String get copyFromOtherCategory =>
+      'অন্য বিভাগে আগে থেকেই আছে? এর বিবরণ কপি করতে এটি বেছে নিন।';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি ব্যায়াম',
+      one: '১টি ব্যায়াম',
+      zero: 'কোনো ব্যায়াম নেই',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$category-এ এখনো কোনো ব্যায়াম নেই';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'এই বিভাগে ট্র্যাক করা শুরু করতে একটি ব্যায়াম যোগ করুন।';
+
+  @override
+  String get addExercisesFromCategories =>
+      'একটি সেট লিখুন, অথবা বিভাগসমূহ ট্যাব থেকে ব্যায়াম যোগ করুন।';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

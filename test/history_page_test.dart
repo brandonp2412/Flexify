@@ -61,6 +61,7 @@ void main() {
         weight: 30,
         cardio: true,
         duration: 10,
+        category: 'Quads',
       ),
     );
     await harness.database.settings.update().write(
@@ -68,7 +69,7 @@ void main() {
     );
 
     await pumpHistoryPage(tester, harness);
-    await tester.tap(find.text('Sled push (1)'));
+    await tester.tap(find.text('Sled push · Quads (1)'));
     await tester.pumpAndSettle();
 
     expect(find.text('30 kg / 10:00 '), findsOne);

@@ -80,6 +80,12 @@ class AppDatabase extends _$AppDatabase {
         );
 
         await batch((batch) {
+          batch.insertAll(
+            categories,
+            defaultCategories.map(
+              (name) => CategoriesCompanion.insert(name: name),
+            ),
+          );
           batch.insertAll(gymSets, defaultSets);
           batch.insertAll(plans, defaultPlans);
           batch.insertAll(planExercises, defaultPlanExercises);
@@ -571,10 +577,108 @@ class AppDatabase extends _$AppDatabase {
             WHERE category IS NOT NULL AND TRIM(category) != ''
           ''');
         },
+        from58To59: (Migrator m, Schema59 schema) async {
+          // Exercises are now identified by name and category. Blank
+          // categories become NULL so "uncategorized" has one representation.
+          await m.database.customStatement('''
+            UPDATE gym_sets SET category = NULLIF(TRIM(category), '')
+            WHERE category IS NOT NULL
+          ''');
+          await m.database.customStatement('''
+            INSERT OR IGNORE INTO categories (name)
+            SELECT DISTINCT category FROM gym_sets WHERE category IS NOT NULL
+          ''');
+          // Sets logged before a category was chosen belong to that category
+          // when the exercise name was only ever used with one category.
+          await m.database.customStatement('''
+            UPDATE gym_sets SET category = (
+              SELECT MIN(named.category) FROM gym_sets named
+              WHERE named.name = gym_sets.name AND named.category IS NOT NULL
+            )
+            WHERE category IS NULL AND name IN (
+              SELECT name FROM gym_sets WHERE category IS NOT NULL
+              GROUP BY name HAVING COUNT(DISTINCT category) = 1
+            )
+          ''');
+
+          await m.addColumn(
+            schema.planExercises,
+            schema.planExercises.category,
+          );
+          await m.database.customStatement('''
+            UPDATE plan_exercises SET category = (
+              SELECT gs.category FROM gym_sets gs
+              WHERE gs.name = plan_exercises.exercise
+                AND gs.category IS NOT NULL
+              ORDER BY gs.plan_id IS plan_exercises.plan_id DESC,
+                gs.hidden ASC, gs.created DESC
+              LIMIT 1
+            )
+          ''');
+
+          await m.alterTable(
+            TableMigration(
+              schema.graphPreferences,
+              newColumns: [schema.graphPreferences.category],
+              columnTransformer: {
+                schema.graphPreferences.category:
+                    const CustomExpression<String>('''
+                  COALESCE((
+                    SELECT gs.category FROM gym_sets gs
+                    WHERE gs.name = graph_preferences.name
+                      AND gs.category IS NOT NULL
+                    ORDER BY gs.hidden ASC, gs.created DESC
+                    LIMIT 1
+                  ), '')
+                '''),
+              },
+            ),
+          );
+
+          for (final name in const [
+            'Chest',
+            'Back',
+            'Shoulders',
+            'Biceps',
+            'Triceps',
+            'Forearms',
+            'Abs',
+            'Quads',
+            'Hamstrings',
+            'Glutes',
+            'Calves',
+          ]) {
+            await m.database.customStatement(
+              'INSERT OR IGNORE INTO categories (name) VALUES (?)',
+              [name],
+            );
+          }
+
+          final rows = await m.database
+              .customSelect('SELECT id, tabs FROM settings')
+              .get();
+          for (final row in rows) {
+            final tabs = row.read<String>('tabs').split(',');
+            if (tabs.contains('CategoriesPage')) continue;
+            final history = tabs.indexOf('HistoryPage');
+            final settings = tabs.indexOf('SettingsPage');
+            if (history >= 0) {
+              tabs.insert(history + 1, 'CategoriesPage');
+            } else if (settings >= 0) {
+              tabs.insert(settings, 'CategoriesPage');
+            } else {
+              tabs.add('CategoriesPage');
+            }
+            await m.database.customStatement(
+              'UPDATE settings SET tabs = ? WHERE id = ?',
+              [tabs.join(','), row.read<int>('id')],
+            );
+          }
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 58;
+  int get schemaVersion => 59;
 }

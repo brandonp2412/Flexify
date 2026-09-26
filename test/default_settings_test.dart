@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/database/defaults.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_app.dart';
@@ -10,7 +11,6 @@ void main() {
 
     expect(settings.showUnits, isFalse);
     expect(settings.showBodyWeight, isFalse);
-    expect(settings.showCategories, isFalse);
     expect(settings.showImages, isFalse);
     expect(settings.showGlobalProgress, isFalse);
     expect(settings.notifications, isFalse);
@@ -19,4 +19,22 @@ void main() {
     expect(settings.showNotes, isFalse);
     expect(settings.restTimers, isFalse);
   });
+
+  test(
+    'new installs start with muscle categories and a Categories tab',
+    () async {
+      final harness = await FlexifyTestHarness.create();
+      final settings = await harness.database.settings.select().getSingle();
+      final categories = await harness.database.categories.select().get();
+
+      expect(
+        settings.tabs,
+        'HistoryPage,CategoriesPage,PlansPage,GraphsPage,TimerPage',
+      );
+      expect(
+        categories.map((category) => category.name),
+        unorderedEquals(defaultCategories),
+      );
+    },
+  );
 }

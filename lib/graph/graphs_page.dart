@@ -1,13 +1,11 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/empty_state.dart';
-import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
@@ -38,7 +36,7 @@ class GraphsPageState extends State<GraphsPage>
     with AutomaticKeepAliveClientMixin {
   late final Stream<List<GymSetsCompanion>> _stream = watchGraphs();
 
-  final _selection = SelectionController<String>();
+  final _selection = SelectionController<ExerciseKey>();
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   String _search = '';
   String? _category;
@@ -83,11 +81,28 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
 
-    await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(copy))).go();
-    await (db.delete(
-      db.planExercises,
-    )..where((x) => x.exercise.isIn(copy))).go();
+    await db.transaction(() async {
+      for (final exercise in copy) {
+        await (db.delete(db.gymSets)..where(
+              (tbl) => isExercise(tbl, exercise.name, exercise.category),
+            ))
+            .go();
+        await (db.delete(db.planExercises)..where(
+              (tbl) => isPlannedExercise(tbl, exercise.name, exercise.category),
+            ))
+            .go();
+        await (db.delete(db.graphPreferences)..where(
+              (tbl) =>
+                  tbl.name.equals(exercise.name) &
+                  tbl.category.equals(exercise.category ?? ''),
+            ))
+            .go();
+      }
+    });
   }
+
+  ExerciseKey _keyOf(GymSetsCompanion gymSet) =>
+      (name: gymSet.name.value, category: gymSet.category.value);
 
   LineTouchTooltipData tooltipData(
     List<dynamic> data,
@@ -154,25 +169,7 @@ class GraphsPageState extends State<GraphsPage>
     final desktop = isDesktopLayout(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: desktop
-          ? AppBar(
-              title: Text(context.l10n.navGraphs),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: FilledButton.icon(
-                    onPressed: () => navKey.currentState!.push(
-                      MaterialPageRoute(
-                        builder: (context) => const AddExercisePage(),
-                      ),
-                    ),
-                    icon: const Icon(Icons.add_rounded),
-                    label: Text(context.l10n.newExercise),
-                  ),
-                ),
-              ],
-            )
-          : null,
+      appBar: desktop ? AppBar(title: Text(context.l10n.navGraphs)) : null,
       body: StreamBuilder(
         stream: _stream,
         builder: (context, snapshot) {
@@ -194,7 +191,9 @@ class GraphsPageState extends State<GraphsPage>
 
           for (final term in terms) {
             stream = stream.where(
-              (gymSet) => gymSet.name.value.toLowerCase().contains(term),
+              (gymSet) =>
+                  gymSet.name.value.toLowerCase().contains(term) ||
+                  gymSet.category.value?.toLowerCase().contains(term) == true,
             );
           }
 
@@ -213,11 +212,15 @@ class GraphsPageState extends State<GraphsPage>
               break;
 
             case GraphSort.name:
-              gymSets.sort(
-                (a, b) => a.name.value.toLowerCase().compareTo(
+              gymSets.sort((a, b) {
+                final byName = a.name.value.toLowerCase().compareTo(
                   b.name.value.toLowerCase(),
-                ),
-              );
+                );
+                if (byName != 0) return byName;
+                return (a.category.value ?? '').compareTo(
+                  b.category.value ?? '',
+                );
+              });
               break;
           }
           return Stack(
@@ -244,21 +247,13 @@ class GraphsPageState extends State<GraphsPage>
                                     icon: Icons.search_off_rounded,
                                     title: context.l10n.noGraphsFound,
                                     message: _search.trim().isEmpty
-                                        ? context.l10n.completeSetForFirstGraph
+                                        ? context
+                                              .l10n
+                                              .addExercisesFromCategories
                                         : context.l10n
                                               .nothingMatchesGraphSearch(
                                                 _search.trim(),
                                               ),
-                                    actionLabel: _search.trim().isEmpty
-                                        ? context.l10n.addExercise
-                                        : context.l10n.addNamed(_search.trim()),
-                                    actionIcon: Icons.add_rounded,
-                                    onAction: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AddExercisePage(name: _search),
-                                      ),
-                                    ),
                                   ),
                                 )
                               : graphList(gymSets, showGlobal),
@@ -297,14 +292,14 @@ class GraphsPageState extends State<GraphsPage>
                   },
                   onDelete: () async => onDelete(),
                   onSelectAll: () => setState(() {
-                    _selection.setAll(
-                      gymSets.map((gymSet) => gymSet.name.value),
-                    );
+                    _selection.setAll(gymSets.map(_keyOf));
                   }),
                   onEdit: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          EditGraphPage(name: _selection.first),
+                      builder: (context) => EditGraphPage(
+                        name: _selection.first.name,
+                        category: _selection.first.category,
+                      ),
                     ),
                   ),
                   confirmText: context.l10n.deleteGraphRecordsConfirmation(
@@ -316,18 +311,6 @@ class GraphsPageState extends State<GraphsPage>
           );
         },
       ),
-      floatingActionButton: desktop
-          ? null
-          : AnimatedFab(
-              onPressed: () => navKey.currentState!.push(
-                MaterialPageRoute(
-                  builder: (context) => const AddExercisePage(),
-                ),
-              ),
-              label: Text(context.l10n.actionAdd),
-              scroll: _scroll,
-              icon: const Icon(Icons.add),
-            ),
     );
   }
 
@@ -338,12 +321,12 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
     final sets = (await _stream.first)
-        .where((gymSet) => copy.contains(gymSet.name.value))
+        .where((gymSet) => copy.contains(_keyOf(gymSet)))
         .toList();
     final text = sets
         .map(
           (gymSet) =>
-              "${formatDisplayNumber(context, gymSet.reps.value)}×${formatDisplayNumber(context, gymSet.weight.value)}${displayMeasurementUnit(l10n, gymSet.unit.value)} ${gymSet.name.value}",
+              "${formatDisplayNumber(context, gymSet.reps.value)}×${formatDisplayNumber(context, gymSet.weight.value)}${displayMeasurementUnit(l10n, gymSet.unit.value)} ${exerciseLabel(l10n, gymSet.name.value, gymSet.category.value)}",
         )
         .join(', ');
     await SharePlus.instance.share(ShareParams(text: l10n.shareWorkout(text)));
@@ -478,6 +461,7 @@ class GraphsPageState extends State<GraphsPage>
                     future: gymSets.first.cardio.value
                         ? getCardioData(
                             name: gymSets.first.name.value,
+                            category: gymSets.first.category.value,
                             target: gymSets.first.unit.value,
                             metric: _isWeightUnit(gymSets.first.unit.value)
                                 ? CardioMetric.weight
@@ -486,6 +470,7 @@ class GraphsPageState extends State<GraphsPage>
                         : getStrengthData(
                             target: gymSets.first.unit.value,
                             name: gymSets.first.name.value,
+                            category: gymSets.first.category.value,
                             metric: StrengthMetric.bestWeight,
                             period: Period.day,
                             start: null,
@@ -511,18 +496,33 @@ class GraphsPageState extends State<GraphsPage>
           child: GraphTile(
             selected: _selection.selected,
             gymSet: gymSet,
-            onSelect: (name) async {
+            onSelect: (exercise) async {
               setState(() {
-                _selection.toggle(name);
+                _selection.toggle(exercise);
               });
-              final result =
-                  await (db.gymSets.selectOnly()
-                        ..addColumns([db.gymSets.name.count()])
-                        ..where(db.gymSets.name.isIn(_selection.selected)))
-                      .getSingle();
+              final selected = _selection.toList();
+              var total = 0;
+              if (selected.isNotEmpty) {
+                final result =
+                    await (db.gymSets.selectOnly()
+                          ..addColumns([db.gymSets.name.count()])
+                          ..where(
+                            Expression.or(
+                              selected.map(
+                                (key) => isExercise(
+                                  db.gymSets,
+                                  key.name,
+                                  key.category,
+                                ),
+                              ),
+                            ),
+                          ))
+                        .getSingle();
+                total = result.read(db.gymSets.name.count()) ?? 0;
+              }
               if (!mounted) return;
               setState(() {
-                _total = result.read(db.gymSets.name.count()) ?? 0;
+                _total = total;
               });
             },
             tabCtrl: widget.tabController,

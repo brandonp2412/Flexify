@@ -17,7 +17,10 @@ void main() {
           .getSingle();
       expect(settings.restTimers, false);
 
-      await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
+      await harness.pump(
+        tester,
+        EditSetPage(gymSet: gymSetModelFixture(category: 'Chest')),
+      );
 
       await tester.enterText(find.bySemanticsLabel('Reps'), '10');
       await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
@@ -85,7 +88,10 @@ void main() {
           .getSingle();
       expect(settings.restTimers, true);
 
-      await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
+      await harness.pump(
+        tester,
+        EditSetPage(gymSet: gymSetModelFixture(category: 'Chest')),
+      );
 
       await tester.enterText(find.bySemanticsLabel('Reps'), '10');
       await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');

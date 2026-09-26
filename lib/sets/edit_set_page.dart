@@ -4,14 +4,15 @@ import 'dart:math';
 import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/category/categories_page.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/exercise_options_view.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -45,7 +46,7 @@ class _EditSetPageState extends State<EditSetPage> {
   var _categoryCtrl = TextEditingController();
   DateTime _created = DateTime.now().toLocal();
   TextEditingController? _nameCtrl;
-  List<String> _options = [];
+  List<ExerciseKey> _options = [];
   int? restMs;
   String? _image;
   String? _category;
@@ -54,11 +55,13 @@ class _EditSetPageState extends State<EditSetPage> {
   late bool _cardio;
   late String _name;
 
-  void onSelected(String option, bool showBodyWeight) async {
+  void onSelected(ExerciseKey option, bool showBodyWeight) async {
     final last =
         await (db.gymSets.select()
               ..where(
-                (tbl) => tbl.name.equals(option) & tbl.hidden.equals(false),
+                (tbl) =>
+                    isExercise(tbl, option.name, option.category) &
+                    tbl.hidden.equals(false),
               )
               ..orderBy([
                 (u) => OrderingTerm(
@@ -71,18 +74,18 @@ class _EditSetPageState extends State<EditSetPage> {
     if (last == null) {
       final template =
           await (db.gymSets.select()
-                ..where((tbl) => tbl.name.equals(option))
+                ..where((tbl) => isExercise(tbl, option.name, option.category))
                 ..limit(1))
               .getSingleOrNull();
       if (!mounted) return;
       return setState(() {
-        _name = option;
+        _name = option.name;
+        _category = option.category;
+        _categoryCtrl.text = option.category ?? '';
+        _notes.text = '';
         if (template != null) {
           _cardio = template.cardio;
           _unit = template.unit;
-          _category = template.category;
-          if (template.category != null && template.category!.isNotEmpty)
-            _categoryCtrl.text = template.category!;
         }
       });
     }
@@ -173,7 +176,6 @@ class _EditSetPageState extends State<EditSetPage> {
           builder: (context, settingsState, child) {
             final settings = settingsState.value;
             final showUnits = settings.showUnits;
-            final showCategories = settings.showCategories;
             final showNotes = settings.showNotes;
             final showImages = settings.showImages;
 
@@ -191,9 +193,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   unitSelector(),
                   const SizedBox(height: 12.0),
                 ],
-                if (showCategories && _name != 'Weight') ...[
-                  categorySelector(),
-                ],
+                if (_name != bodyWeightExercise) ...[categorySelector()],
                 if (showNotes) ...[notesField(), const SizedBox(height: 12.0)],
                 dateSelector(),
                 ListTile(
@@ -370,67 +370,61 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget categorySelector() {
-    return Selector<SettingsState, bool>(
-      selector: (context, settings) => settings.value.showCategories,
-      builder: (context, showCategories, child) {
-        if (!showCategories || _name == 'Weight') {
-          return const SizedBox();
-        }
-
-        return StreamBuilder(
-          stream: getCategoriesStream(),
-          builder: (context, snapshot) {
-            return Autocomplete<String>(
-              initialValue: TextEditingValue(
-                text: widget.gymSet.category ?? "",
-              ),
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (snapshot.data == null) return [];
-                if (textEditingValue.text == '') {
-                  return snapshot.data!;
-                }
-                return snapshot.data!.where((String option) {
-                  return option.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  );
-                });
-              },
-              onSelected: (String selection) {
-                setState(() {
-                  _category = selection;
-                });
-              },
-              fieldViewBuilder:
-                  (
-                    BuildContext context,
-                    TextEditingController textEditingController,
-                    FocusNode focusNode,
-                    VoidCallback onFieldSubmitted,
-                  ) {
-                    _categoryCtrl = textEditingController;
-                    return TextFormField(
-                      controller: textEditingController,
-                      focusNode: focusNode,
-                      decoration: InputDecoration(
-                        labelText: context.l10n.categoryLabel,
-                        helperText: context.l10n.categoryHelper,
-                        suffixIcon: IconButton(
-                          tooltip: context.l10n.manageCategories,
-                          icon: const Icon(Icons.settings),
-                          onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const CategoryManagementPage(),
-                            ),
-                          ),
+    return StreamBuilder(
+      stream: getCategoriesStream(),
+      builder: (context, snapshot) {
+        return Autocomplete<String>(
+          initialValue: TextEditingValue(text: widget.gymSet.category ?? ""),
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (snapshot.data == null) return [];
+            if (textEditingValue.text == '') {
+              return snapshot.data!;
+            }
+            return snapshot.data!.where((String option) {
+              return option.toLowerCase().contains(
+                textEditingValue.text.toLowerCase(),
+              );
+            });
+          },
+          onSelected: (String selection) {
+            setState(() {
+              _category = selection;
+            });
+          },
+          fieldViewBuilder:
+              (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                _categoryCtrl = textEditingController;
+                return TextFormField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.categoryLabel,
+                    helperText: context.l10n.categoryHelper,
+                    suffixIcon: IconButton(
+                      tooltip: context.l10n.manageCategories,
+                      icon: const Icon(Icons.settings),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const CategoriesPage(),
                         ),
                       ),
-                      onChanged: (value) => setState(() {
-                        _category = value.isNotEmpty ? value : null;
-                      }),
-                    );
-                  },
-            );
-          },
+                    ),
+                  ),
+                  onChanged: (value) => setState(() {
+                    _category = normalizeCategory(value);
+                  }),
+                  validator: (value) =>
+                      _name == bodyWeightExercise ||
+                          normalizeCategory(value) != null
+                      ? null
+                      : context.l10n.chooseCategory,
+                );
+              },
         );
       },
     );
@@ -557,20 +551,13 @@ class _EditSetPageState extends State<EditSetPage> {
     );
   }
 
-  Autocomplete<String> autocomplete(bool showBodyWeight) {
-    return Autocomplete<String>(
-      optionsBuilder: (textEditingValue) {
-        final searchTerms = textEditingValue.text
-            .toLowerCase()
-            .split(" ")
-            .where((term) => term.isNotEmpty);
-        Iterable<String> opts = _options;
-
-        for (final term in searchTerms) {
-          opts = opts.where((option) => option.toLowerCase().contains(term));
-        }
-        return opts;
-      },
+  Autocomplete<ExerciseKey> autocomplete(bool showBodyWeight) {
+    return Autocomplete<ExerciseKey>(
+      displayStringForOption: (option) => option.name,
+      optionsBuilder: (textEditingValue) =>
+          filterExerciseOptions(_options, textEditingValue.text),
+      optionsViewBuilder: (context, onSelected, options) =>
+          ExerciseOptionsView(options: options, onSelected: onSelected),
       onSelected: (option) => onSelected(option, showBodyWeight),
       initialValue: TextEditingValue(text: _name),
       fieldViewBuilder:
@@ -637,14 +624,22 @@ class _EditSetPageState extends State<EditSetPage> {
       _created = widget.gymSet.created;
     });
 
-    (db.gymSets.selectOnly(
-      distinct: true,
-    )..addColumns([db.gymSets.name])).get().then((results) {
-      final names = results.map((result) => result.read(db.gymSets.name)!);
-      setState(() {
-        _options = names.toList();
-      });
-    });
+    (db.gymSets.selectOnly(distinct: true)
+          ..addColumns([db.gymSets.name, db.gymSets.category]))
+        .get()
+        .then((results) {
+          if (!mounted) return;
+          setState(() {
+            _options = results
+                .map(
+                  (result) => (
+                    name: result.read(db.gymSets.name)!,
+                    category: result.read(db.gymSets.category),
+                  ),
+                )
+                .toList();
+          });
+        });
   }
 
   void pick() async {
@@ -659,8 +654,9 @@ class _EditSetPageState extends State<EditSetPage> {
   Future<void> save() async {
     if (!_key.currentState!.validate()) return;
 
-    _category = _category?.trim();
-    if (_category?.isEmpty ?? false) _category = null;
+    _category = _name == bodyWeightExercise
+        ? null
+        : normalizeCategory(_category);
 
     final gymSet = widget.gymSet.copyWith(
       name: _name,
@@ -690,9 +686,8 @@ class _EditSetPageState extends State<EditSetPage> {
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
       if (_image != null)
-        (db.update(db.gymSets)..where((u) => u.name.equals(_name))).write(
-          GymSetsCompanion(image: Value(_image)),
-        );
+        (db.update(db.gymSets)..where((u) => isExercise(u, _name, _category)))
+            .write(GymSetsCompanion(image: Value(_image)));
       if (!mounted) return;
       talker.info('Updated workout set');
       return Navigator.of(context).pop();
@@ -795,8 +790,7 @@ class _EditSetPageState extends State<EditSetPage> {
     if (gymSet.distance != 0) _distance.text = toString(gymSet.distance);
     if (gymSet.incline != null && gymSet.incline != 0)
       _incline.text = gymSet.incline.toString();
-    if (gymSet.category != null && gymSet.category!.isNotEmpty)
-      _categoryCtrl.text = gymSet.category!;
+    _categoryCtrl.text = gymSet.category ?? '';
     _notes.text = gymSet.notes ?? '';
   }
 

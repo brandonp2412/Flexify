@@ -1,7 +1,29 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/defaults.dart';
 
 final graphFixtureNow = DateTime(2026, 1, 15, 12);
+
+/// Category the fixture data files [exercise] under: the starter category for
+/// built-in exercises, or a matching muscle group for the extra ones.
+String fixtureCategory(String exercise) {
+  for (final (name, category) in defaultExercises) {
+    if (name == exercise) return category;
+  }
+  return switch (exercise) {
+    'Dumbbell bicep curls' => 'Biceps',
+    'Dumbbell chest press' => 'Chest',
+    _ => 'Shoulders',
+  };
+}
+
+PlanExercisesCompanion _planExercise(int planId, String exercise) =>
+    PlanExercisesCompanion.insert(
+      planId: planId,
+      enabled: true,
+      exercise: exercise,
+      category: Value(fixtureCategory(exercise)),
+    );
 
 const exercisesToPopulateTestDb = <String, double>{
   'Barbell bench press': 90,
@@ -48,66 +70,22 @@ final graphData = <GraphSetInfo>[
 ];
 
 final screenshotPlanExercises = <PlanExercisesCompanion>[
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Triceps dip',
-  ),
+  _planExercise(1, 'Triceps dip'),
   PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Squat'),
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Standing calf raise',
-  ),
+  _planExercise(1, 'Standing calf raise'),
   PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Pull-up'),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell bench press',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell bent-over row',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Dumbbell lateral raise',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell biceps curl',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Barbell shoulder press',
-  ),
+  _planExercise(2, 'Barbell bench press'),
+  _planExercise(2, 'Barbell bent-over row'),
+  _planExercise(2, 'Dumbbell lateral raise'),
+  _planExercise(2, 'Barbell biceps curl'),
+  _planExercise(3, 'Barbell shoulder press'),
   PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Crunch'),
   PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Chin-up'),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Romanian deadlift',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Barbell shoulder press',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Neck curl',
-  ),
+  _planExercise(3, 'Romanian deadlift'),
+  _planExercise(4, 'Barbell shoulder press'),
+  _planExercise(4, 'Neck curl'),
   PlanExercisesCompanion.insert(planId: 4, enabled: true, exercise: 'Chin-up'),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Romanian deadlift',
-  ),
+  _planExercise(4, 'Romanian deadlift'),
 ];
 
 final screenshotPlans = <PlansCompanion>[
@@ -148,7 +126,7 @@ GymSetsCompanion graphGymSet(
     weight: weight,
     unit: 'kg',
     created: date ?? graphFixtureNow,
-    category: const Value('Arms'),
+    category: Value(fixtureCategory(exercise)),
     planId: Value.absentIfNull(planId),
   );
 }

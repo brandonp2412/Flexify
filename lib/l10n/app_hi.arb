@@ -813,10 +813,6 @@
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "नया व्यायाम",
-  "@newExercise": {
-    "description": "Action for creating a new exercise graph."
-  },
   "noGraphsFound": "कोई ग्राफ़ नहीं मिला",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
@@ -1049,16 +1045,6 @@
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{किसी प्रविष्टि में उपयोग नहीं} =1{1 प्रविष्टि में उपयोग} other{{count} प्रविष्टियों में उपयोग}}",
-  "@categoryUsageCount": {
-    "description": "Number of workout entries using a category.",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
   "deleteCategoryConfirmation": "{count, plural, =0{यह श्रेणी हटाएँ?} =1{यह श्रेणी हटाकर इसे 1 प्रविष्टि से भी निकालें?} other{यह श्रेणी हटाकर इसे {count} प्रविष्टियों से भी निकालें?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
@@ -1284,10 +1270,6 @@
   "showBodyWeight": "शरीर का वज़न दिखाएँ",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
-  },
-  "showCategories": "श्रेणियाँ दिखाएँ",
-  "@showCategories": {
-    "description": "Workout setting for exercise categories."
   },
   "showNotes": "नोट्स दिखाएँ",
   "@showNotes": {
@@ -1518,10 +1500,6 @@
   "completeSetsForHistory": "इस व्यायाम का इतिहास देखने के लिए कुछ सेट पूरे करें।",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
-  },
-  "completeSetForFirstGraph": "अपना पहला व्यायाम ग्राफ़ बनाने के लिए एक सेट पूरा करें।",
-  "@completeSetForFirstGraph": {
-    "description": "Empty guidance when no exercise graphs exist."
   },
   "nothingMatchesGraphSearch": "“{query}” से कुछ मेल नहीं खाता। आप इसे नए व्यायाम के रूप में बना सकते हैं।",
   "@nothingMatchesGraphSearch": {
@@ -1831,10 +1809,6 @@
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "वर्कआउट श्रेणियाँ चालू/बंद करें",
-  "@showCategoriesDescription": {
-    "description": "Description of workout categories."
-  },
   "showNotesDescription": "अपने लिफ्ट का विवरण टेक्स्ट क्षेत्र में दर्ज करें",
   "@showNotesDescription": {
     "description": "Description of workout notes."
@@ -2025,5 +1999,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "navCategories": "श्रेणियाँ",
+  "uncategorized": "बिना श्रेणी",
+  "exerciseExistsInCategory": "{exercise} पहले से {category} में मौजूद है",
+  "actionOpen": "खोलें",
+  "chooseCategory": "एक श्रेणी चुनें",
+  "copyFromOtherCategory": "किसी दूसरी श्रेणी में पहले से है? उसका विवरण कॉपी करने के लिए उसे चुनें।",
+  "categoryExerciseCount": "{count, plural, =0{कोई व्यायाम नहीं} =1{1 व्यायाम} other{{count} व्यायाम}}",
+  "noExercisesInCategory": "{category} में अभी कोई व्यायाम नहीं",
+  "addExerciseToCategory": "इस श्रेणी में ट्रैक करना शुरू करने के लिए एक व्यायाम जोड़ें।",
+  "addExercisesFromCategories": "एक सेट दर्ज करें, या श्रेणियाँ टैब से व्यायाम जोड़ें।",
+  "exerciseInCategory": "{exercise} · {category}",
+  "categoryAndDate": "{category} · {date}"
 }

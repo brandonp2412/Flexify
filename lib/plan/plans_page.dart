@@ -239,7 +239,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                                     ]))
                                   .get();
                           final exerciseSummary = planExercises
-                              .map((exercise) => '- ${exercise.exercise}')
+                              .map(
+                                (exercise) =>
+                                    '- ${exerciseLabel(l10n, exercise.exercise, exercise.category)}',
+                              )
                               .join('\n');
                           return '$days:\n$exerciseSummary';
                         }),

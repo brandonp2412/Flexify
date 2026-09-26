@@ -42,18 +42,34 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
     if (gymSet == null || !mounted) return;
 
+    final name = gymSet.name.value;
+    final category = gymSet.category.present ? gymSet.category.value : null;
     setState(() {
-      _exercises.add(
-        PlanExercisesCompanion(
-          exercise: Value(gymSet.name.value),
-          enabled: const Value(true),
-        ),
+      final existing = _exercises.indexWhere(
+        (exercise) =>
+            exercise.exercise.value == name &&
+            exercise.category.value == category,
       );
+      if (existing >= 0) {
+        _exercises[existing] = _exercises[existing].copyWith(
+          enabled: const Value(true),
+        );
+      } else {
+        _exercises.add(
+          PlanExercisesCompanion(
+            exercise: Value(name),
+            category: Value(category),
+            enabled: const Value(true),
+          ),
+        );
+      }
       _exercises.sort((a, b) {
         if (a.enabled.value != b.enabled.value) {
           return b.enabled.value ? 1 : -1;
         }
-        return a.exercise.value.compareTo(b.exercise.value);
+        final byName = a.exercise.value.compareTo(b.exercise.value);
+        if (byName != 0) return byName;
+        return (a.category.value ?? '').compareTo(b.category.value ?? '');
       });
       _search = '';
     });
@@ -61,8 +77,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
   }
 
   Iterable<Widget> get tiles {
+    final search = _search.toLowerCase();
     final match = _exercises.where(
-      (pe) => pe.exercise.value.toLowerCase().contains(_search.toLowerCase()),
+      (pe) =>
+          pe.exercise.value.toLowerCase().contains(search) ||
+          pe.category.value?.toLowerCase().contains(search) == true,
     );
 
     if (match.isEmpty)
@@ -89,7 +108,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
         planExercise: pe,
         onChange: (value) {
           final id = _exercises.indexWhere(
-            (exercise) => exercise.exercise == pe.exercise,
+            (exercise) =>
+                exercise.exercise == pe.exercise &&
+                exercise.category == pe.category,
           );
           if (id == -1) return;
           setState(() {

@@ -181,13 +181,17 @@ class _HistoryListState extends State<HistoryList> {
                   builder: (context, dateFormat, child) => Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
-                      dateFormat == 'timeago'
-                          ? formatRelativeTime(context, gymSet.created)
-                          : formatDisplayDate(
-                              context,
-                              gymSet.created,
-                              dateFormat,
-                            ),
+                      _subtitle(
+                        context,
+                        gymSet,
+                        dateFormat == 'timeago'
+                            ? formatRelativeTime(context, gymSet.created)
+                            : formatDisplayDate(
+                                context,
+                                gymSet.created,
+                                dateFormat,
+                              ),
+                      ),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: colors.onSurfaceVariant,
                       ),
@@ -227,6 +231,14 @@ class _HistoryListState extends State<HistoryList> {
           },
         ),
       ],
+    );
+  }
+
+  String _subtitle(BuildContext context, GymSet gymSet, String date) {
+    if (gymSet.name == bodyWeightExercise) return date;
+    return context.l10n.categoryAndDate(
+      categoryLabel(context.l10n, gymSet.category),
+      date,
     );
   }
 
