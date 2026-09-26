@@ -1,0 +1,17 @@
+Registe os seus treinos no ginásio, acompanhe a evolução da sua força e mantenha os seus dados de treino privados.
+
+O Flexify é um diário de treino rápido e offline para treino de força e cardio. Registe séries, repetições e pesos, use temporizadores de descanso para manter o ritmo e consulte gráficos claros de progresso após cada sessão.
+
+CRIE UM DIÁRIO DE TREINO MELHOR
+
+• Registe treinos de força, exercícios, séries, repetições e peso
+• Registe sessões e tipos de cardio
+• Use temporizadores de descanso e alarmes entre séries
+• Consulte o histórico de treinos e a evolução da força através de gráficos
+• Ajuste as funcionalidades, definições e o tema claro ou escuro à sua rotina
+
+PRIVADO, RÁPIDO E OFFLINE
+
+O Flexify não exige uma conta nem ligação à internet. Os seus dados de treino ficam no seu dispositivo, para que possa treinar e registar sessões em qualquer lugar. A aplicação é de código aberto e não contém publicidade nem rastreio.
+
+Quer esteja a começar uma rotina no ginásio ou a aperfeiçoar um programa já estabelecido, o Flexify oferece-lhe um diário de treino focado e sem distrações.
