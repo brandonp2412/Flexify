@@ -236,8 +236,8 @@ const _appStoreLocaleByAppLocale = <String, String>{
 
 const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
-// These locales currently ship in-app; localized store metadata will follow
-// in separate translation slices.
+// These locales currently ship in-app but do not yet have the complete
+// historical store assets required by the full store-localization checks.
 const _appOnlyLocales = <String>{
   'ar',
   'id',
@@ -247,6 +247,25 @@ const _appOnlyLocales = <String>{
   'fa',
   'th',
   'ms',
+};
+
+const _playListingLocaleByAppLocale = <String, String>{
+  'ar': 'ar',
+  'id': 'id-ID',
+  'vi': 'vi-VN',
+  'bn': 'bn-BD',
+  'ur': 'ur-PK',
+  'fa': 'fa',
+  'th': 'th',
+  'ms': 'ms-MY',
+};
+
+const _appStoreListingLocaleByAppLocale = <String, String>{
+  'ar': 'ar-SA',
+  'id': 'id',
+  'vi': 'vi',
+  'th': 'th',
+  'ms': 'ms',
 };
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
@@ -414,6 +433,97 @@ void main() {
       reason:
           'Every shipped translated app locale must map to App Store metadata.',
     );
+  });
+
+  test('listing-only locale store copy is localized and release-ready', () {
+    const playListingFiles = <String, int>{
+      'title.txt': 30,
+      'short_description.txt': 80,
+      'full_description.txt': 4000,
+    };
+    for (final entry in _playListingLocaleByAppLocale.entries) {
+      final directory = Directory('fastlane/metadata/android/${entry.value}');
+      for (final fileEntry in playListingFiles.entries) {
+        final localized = File('${directory.path}/${fileEntry.key}');
+        final english = File(
+          'fastlane/metadata/android/en-US/${fileEntry.key}',
+        ).readAsStringSync().trim();
+        expect(
+          localized.existsSync(),
+          isTrue,
+          reason: '${entry.value} must provide ${fileEntry.key}.',
+        );
+        final value = localized.readAsStringSync().trim();
+        expect(value, allOf(isNotEmpty, isNot(equals(english))));
+        expect(
+          value.runes.length,
+          lessThanOrEqualTo(fileEntry.value),
+          reason: '${entry.value}/${fileEntry.key} exceeds the store limit.',
+        );
+      }
+
+      final releaseNotes = File('${directory.path}/changelogs/4393.txt');
+      expect(
+        releaseNotes.existsSync(),
+        isTrue,
+        reason: '${entry.value} must localize the current Play release notes.',
+      );
+      expect(
+        releaseNotes.readAsStringSync().trim(),
+        isNot(
+          equals(
+            File(
+              'fastlane/metadata/android/en-US/changelogs/4393.txt',
+            ).readAsStringSync().trim(),
+          ),
+        ),
+      );
+    }
+
+    for (final entry in _appStoreListingLocaleByAppLocale.entries) {
+      final directory = Directory('fastlane/metadata/${entry.value}');
+      for (final filename in const [
+        'name.txt',
+        'keywords.txt',
+        'description.txt',
+        'release_notes.txt',
+        'support_url.txt',
+        'marketing_url.txt',
+        'privacy_url.txt',
+      ]) {
+        final file = File('${directory.path}/$filename');
+        expect(
+          file.existsSync(),
+          isTrue,
+          reason: '${entry.value} must provide $filename.',
+        );
+        expect(
+          file.readAsStringSync().trim(),
+          isNotEmpty,
+          reason: '${entry.value}/$filename must not be empty.',
+        );
+      }
+      expect(
+        File('${directory.path}/description.txt').readAsStringSync().trim(),
+        isNot(
+          equals(
+            File(
+              'fastlane/metadata/en-AU/description.txt',
+            ).readAsStringSync().trim(),
+          ),
+        ),
+      );
+      expect(
+        File('${directory.path}/release_notes.txt').readAsStringSync().trim(),
+        isNot(
+          equals(
+            File(
+              'fastlane/metadata/en-AU/release_notes.txt',
+            ).readAsStringSync().trim(),
+          ),
+        ),
+      );
+    }
   });
 
   test('Play Store metadata covers every shipped non-English locale', () {
