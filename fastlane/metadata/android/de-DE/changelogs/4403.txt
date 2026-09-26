@@ -1,0 +1,2 @@
+• feat(l10n): Store-Metadaten für europäisches Portugiesisch hinzufügen
+• feat(l10n): Store-Metadaten für lateinamerikanisches Spanisch hinzufügen

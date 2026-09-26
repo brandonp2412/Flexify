@@ -525,5 +525,6 @@
   "1790335192": "• feat(l10n): Fügen Sie arabische Übersetzungen hinzu\n• feat(l10n): Fügen Sie indonesische Übersetzungen hinzu",
   "1790341336": "• feat(l10n): Vietnamesische Übersetzungen hinzufügen",
   "1790370250": "• feat(l10n): Bengali-Übersetzungen hinzufügen\n• feat(l10n): Malaiische Übersetzungen hinzufügen\n• feat(l10n): Persische Übersetzungen hinzufügen\n• feat(l10n): Thailändische Übersetzungen hinzufügen\n• feat(l10n): Urdu-Übersetzungen hinzufügen",
-  "1790385053": "• feat(l10n): weitere Store-Sprachmetadaten hinzufügen\n• feat(l10n): Store-Metadaten für neue Sprachen hinzufügen\n• fix(l10n): Release Notes für 2.2.27 synchronisieren"
+  "1790385053": "• feat(l10n): weitere Store-Sprachmetadaten hinzufügen\n• feat(l10n): Store-Metadaten für neue Sprachen hinzufügen\n• fix(l10n): Release Notes für 2.2.27 synchronisieren",
+  "1790392395": "• feat(l10n): Store-Metadaten für europäisches Portugiesisch hinzufügen\n• feat(l10n): Store-Metadaten für lateinamerikanisches Spanisch hinzufügen"
 }

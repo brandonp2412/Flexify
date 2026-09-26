@@ -1,0 +1,2 @@
+• feat(l10n): dodać metadane sklepu dla europejskiego portugalskiego
+• feat(l10n): dodać metadane sklepu dla latynoamerykańskiego hiszpańskiego

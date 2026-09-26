@@ -525,5 +525,6 @@
   "1790335192": "• feat(l10n): adicionar traduções para o árabe\n• feat(l10n): adicionar traduções em indonésio",
   "1790341336": "• feat(l10n): adicionar traduções em vietnamita",
   "1790370250": "• feat(l10n): adicionar traduções em bengali\n• feat(l10n): adicionar traduções em malaio\n• feat(l10n): adicionar traduções em persa\n• feat(l10n): adicionar traduções em tailandês\n• feat(l10n): adicionar traduções em urdu",
-  "1790385053": "• feat(l10n): adicionar mais metadados de idiomas da loja\n• feat(l10n): adicionar metadados da loja para idiomas recentes\n• fix(l10n): sincronizar as notas da versão 2.2.27"
+  "1790385053": "• feat(l10n): adicionar mais metadados de idiomas da loja\n• feat(l10n): adicionar metadados da loja para idiomas recentes\n• fix(l10n): sincronizar as notas da versão 2.2.27",
+  "1790392395": "• feat(l10n): adicionar metadados da loja para português europeu\n• feat(l10n): adicionar metadados da loja para espanhol latino-americano"
 }

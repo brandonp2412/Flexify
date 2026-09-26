@@ -1,0 +1,2 @@
+• feat(l10n): aggiungere i metadati dello store per il portoghese europeo
+• feat(l10n): aggiungere i metadati dello store per lo spagnolo latinoamericano

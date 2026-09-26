@@ -251,10 +251,10 @@ const _appOnlyLocales = <String>{
 
 const _playListingLocaleByAppLocale = <String, String>{
   'ar': 'ar',
-  'id': 'id-ID',
-  'vi': 'vi-VN',
+  'id': 'id',
+  'vi': 'vi',
   'bn': 'bn-BD',
-  'ur': 'ur-PK',
+  'ur': 'ur',
   'fa': 'fa',
   'th': 'th',
   'ms': 'ms-MY',
