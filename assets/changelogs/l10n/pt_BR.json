@@ -528,5 +528,6 @@
   "1790385053": "• feat(l10n): adicionar mais metadados de idiomas da loja\n• feat(l10n): adicionar metadados da loja para idiomas recentes\n• fix(l10n): sincronizar as notas da versão 2.2.27",
   "1790392395": "• feat(l10n): adicionar metadados da loja para português europeu\n• feat(l10n): adicionar metadados da loja para espanhol latino-americano",
   "1790394970": "• fix(l10n): usar localidades válidas na ficha da Play Store",
-  "1790404468": "• Usar Brandon Dick nas referências do app\n• fix(l10n): sincronizar as notas de versão traduzidas mais recentes"
+  "1790404468": "• Usar Brandon Dick nas referências do app\n• fix(l10n): sincronizar as notas de versão traduzidas mais recentes",
+  "1790414297": "• fix(l10n): traduzir as notas de versão mais recentes"
 }
