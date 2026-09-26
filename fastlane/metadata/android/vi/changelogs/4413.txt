@@ -1,0 +1,1 @@
+• fix(l10n): dùng ngôn ngữ hợp lệ cho trang thông tin Play

@@ -1,0 +1,1 @@
+• fix(l10n): gültige Play-Listing-Sprachversionen verwenden

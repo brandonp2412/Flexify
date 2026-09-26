@@ -1,0 +1,1 @@
+• fix(l10n): geldige landinstellingen voor de Play-vermelding gebruiken

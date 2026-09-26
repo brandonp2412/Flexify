@@ -1,0 +1,2 @@
+• feat(l10n): thêm siêu dữ liệu cửa hàng cho tiếng Bồ Đào Nha châu Âu
+• feat(l10n): thêm siêu dữ liệu cửa hàng cho tiếng Tây Ban Nha Mỹ Latinh

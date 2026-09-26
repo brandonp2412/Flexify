@@ -1,0 +1,1 @@
+• fix(l10n) : utiliser des paramètres régionaux valides pour la fiche Play

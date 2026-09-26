@@ -1,0 +1,1 @@
+• fix(l10n): usar configuraciones regionales válidas para la ficha de Play
