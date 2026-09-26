@@ -1,0 +1,17 @@
+Registra tus entrenamientos de gimnasio, sigue tu progreso de fuerza y mantén tus datos de entrenamiento privados.
+
+Flexify es un registro de entrenamiento rápido y sin conexión para fuerza y cardio. Guarda series, repeticiones y pesos, usa temporizadores de descanso para mantener el ritmo y revisa gráficos claros de progreso después de cada sesión.
+
+CREA UN MEJOR REGISTRO DE ENTRENAMIENTO
+
+• Registra entrenamientos de fuerza, ejercicios, series, repeticiones y peso
+• Guarda sesiones y tipos de cardio
+• Usa temporizadores de descanso y alarmas entre series
+• Revisa tu historial de entrenamientos y tu progreso de fuerza con gráficos
+• Adapta las funciones, la configuración y el tema claro u oscuro a tu rutina
+
+PRIVADO, RÁPIDO Y SIN CONEXIÓN
+
+Flexify no requiere una cuenta ni conexión a internet. Tus datos de entrenamiento permanecen en tu dispositivo, para que puedas entrenar y registrar sesiones en cualquier lugar. La aplicación es de código abierto y no incluye publicidad ni seguimiento.
+
+Ya sea que estés empezando una rutina de gimnasio o perfeccionando un programa de entrenamiento, Flexify te ofrece un diario de entrenamiento enfocado y sin distracciones.
