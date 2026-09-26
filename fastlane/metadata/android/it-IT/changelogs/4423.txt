@@ -1,0 +1,2 @@
+• Usare Brandon Dick nei riferimenti dell’app
+• fix(l10n): sincronizzare le note di rilascio tradotte più recenti

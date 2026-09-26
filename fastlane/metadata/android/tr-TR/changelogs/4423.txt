@@ -1,0 +1,2 @@
+• Uygulama referanslarında Brandon Dick kullan
+• fix(l10n): en son çevrilmiş sürüm notlarını eşitle

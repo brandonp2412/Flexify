@@ -1,0 +1,2 @@
+• Gunakan Brandon Dick pada referensi aplikasi
+• fix(l10n): sinkronkan catatan rilis terjemahan terbaru

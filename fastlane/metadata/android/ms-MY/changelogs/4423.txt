@@ -1,0 +1,2 @@
+• Gunakan Brandon Dick dalam rujukan aplikasi
+• fix(l10n): segerakkan nota keluaran terjemahan terkini

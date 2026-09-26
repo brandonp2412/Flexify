@@ -527,5 +527,6 @@
   "1790370250": "• feat(l10n): Bengalce çeviriler ekle\n• feat(l10n): Malayca çeviriler ekle\n• feat(l10n): Farsça çeviriler ekle\n• feat(l10n): Tayca çeviriler ekle\n• feat(l10n): Urduca çeviriler ekle",
   "1790385053": "• feat(l10n): mağazaya daha fazla dil meta verisi ekle\n• feat(l10n): yeni eklenen diller için mağaza meta verisi ekle\n• fix(l10n): 2.2.27 sürüm notlarını eşitle",
   "1790392395": "• feat(l10n): Avrupa Portekizcesi için mağaza meta verisi ekle\n• feat(l10n): Latin Amerika İspanyolcası için mağaza meta verisi ekle",
-  "1790394970": "• fix(l10n): Play mağaza girişi için geçerli yerel ayarları kullan"
+  "1790394970": "• fix(l10n): Play mağaza girişi için geçerli yerel ayarları kullan",
+  "1790404468": "• Uygulama referanslarında Brandon Dick kullan\n• fix(l10n): en son çevrilmiş sürüm notlarını eşitle"
 }

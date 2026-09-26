@@ -1,0 +1,2 @@
+• Użyj Brandon Dick w odwołaniach w aplikacji
+• fix(l10n): zsynchronizuj najnowsze przetłumaczone informacje o wydaniu

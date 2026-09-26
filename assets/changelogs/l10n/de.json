@@ -527,5 +527,6 @@
   "1790370250": "• feat(l10n): Bengali-Übersetzungen hinzufügen\n• feat(l10n): Malaiische Übersetzungen hinzufügen\n• feat(l10n): Persische Übersetzungen hinzufügen\n• feat(l10n): Thailändische Übersetzungen hinzufügen\n• feat(l10n): Urdu-Übersetzungen hinzufügen",
   "1790385053": "• feat(l10n): weitere Store-Sprachmetadaten hinzufügen\n• feat(l10n): Store-Metadaten für neue Sprachen hinzufügen\n• fix(l10n): Release Notes für 2.2.27 synchronisieren",
   "1790392395": "• feat(l10n): Store-Metadaten für europäisches Portugiesisch hinzufügen\n• feat(l10n): Store-Metadaten für lateinamerikanisches Spanisch hinzufügen",
-  "1790394970": "• fix(l10n): gültige Play-Listing-Sprachversionen verwenden"
+  "1790394970": "• fix(l10n): gültige Play-Listing-Sprachversionen verwenden",
+  "1790404468": "• Brandon Dick in App-Verweisen verwenden\n• fix(l10n): neueste übersetzte Versionshinweise synchronisieren"
 }
