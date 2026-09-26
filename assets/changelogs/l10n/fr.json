@@ -528,5 +528,6 @@
   "1790385053": "• feat(l10n) : ajouter davantage de métadonnées de langues de la boutique\n• feat(l10n) : ajouter les métadonnées de boutique des langues récentes\n• fix(l10n) : synchroniser les notes de version 2.2.27",
   "1790392395": "• feat(l10n) : ajouter les métadonnées de boutique pour le portugais européen\n• feat(l10n) : ajouter les métadonnées de boutique pour l’espagnol latino-américain",
   "1790394970": "• fix(l10n) : utiliser des paramètres régionaux valides pour la fiche Play",
-  "1790404468": "• Utiliser Brandon Dick dans les références de l’application\n• fix(l10n) : synchroniser les dernières notes de version traduites"
+  "1790404468": "• Utiliser Brandon Dick dans les références de l’application\n• fix(l10n) : synchroniser les dernières notes de version traduites",
+  "1790414297": "• fix(l10n) : traduire les dernières notes de version"
 }
