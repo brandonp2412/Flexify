@@ -603,9 +603,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get editSelected => 'แก้ไขที่เลือก';
 
   @override
-  String get newExercise => 'การออกกำลังกายใหม่';
-
-  @override
   String get noGraphsFound => 'ไม่พบกราฟ';
 
   @override
@@ -772,18 +769,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'ป้อนชื่อหมวดหมู่';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'ใช้กับ $count รายการ',
-      one: 'ใช้กับ 1 รายการ',
-      zero: 'ไม่ได้ใช้กับรายการใด',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -965,9 +950,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'แสดงน้ำหนักตัว';
-
-  @override
-  String get showCategories => 'แสดงหมวดหมู่';
 
   @override
   String get showNotes => 'แสดงหมายเหตุ';
@@ -1154,10 +1136,6 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'ทำบางเซ็ตให้เสร็จเพื่อดูประวัติการออกกำลังกายนี้ที่นี่';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'ทำหนึ่งเซ็ตให้เสร็จเพื่อสร้างกราฟการออกกำลังกายแรกของคุณ';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1395,9 +1373,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get showBodyWeightDescription => 'เปิดหรือปิดการติดตามน้ำหนักตัว';
 
   @override
-  String get showCategoriesDescription => 'เปิดหรือปิดหมวดหมู่การออกกำลังกาย';
-
-  @override
   String get showNotesDescription => 'บันทึกรายละเอียดการยกของคุณในช่องข้อความ';
 
   @override
@@ -1538,5 +1513,60 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'เซ็ต $number';
+  }
+
+  @override
+  String get navCategories => 'หมวดหมู่';
+
+  @override
+  String get uncategorized => 'ไม่มีหมวดหมู่';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return 'มี$exerciseอยู่แล้วใน$category';
+  }
+
+  @override
+  String get actionOpen => 'เปิด';
+
+  @override
+  String get chooseCategory => 'เลือกหมวดหมู่';
+
+  @override
+  String get copyFromOtherCategory =>
+      'มีอยู่ในหมวดหมู่อื่นแล้วใช่ไหม เลือกเพื่อคัดลอกรายละเอียด';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count การออกกำลังกาย',
+      zero: 'ไม่มีการออกกำลังกาย',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'ยังไม่มีการออกกำลังกายใน$category';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'เพิ่มการออกกำลังกายเพื่อเริ่มติดตามในหมวดหมู่นี้';
+
+  @override
+  String get addExercisesFromCategories =>
+      'บันทึกหนึ่งเซ็ต หรือเพิ่มการออกกำลังกายจากแท็บหมวดหมู่';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

@@ -24,16 +24,18 @@ import 'package:provider/provider.dart';
 
 class CardioPage extends StatefulWidget {
   final String name;
+  final String? category;
   final String unit;
   final List<CardioData> data;
-  final TabController tabCtrl;
+  final TabController? tabCtrl;
 
   const CardioPage({
     super.key,
     required this.name,
+    this.category,
     required this.unit,
     required this.data,
-    required this.tabCtrl,
+    this.tabCtrl,
   });
 
   @override
@@ -44,6 +46,7 @@ class _CardioPageState extends State<CardioPage> {
   late List<CardioData> data = widget.data;
   late String target = widget.unit;
   late String name = widget.name;
+  late String? category = widget.category;
   late int limit;
   late CardioMetric metric;
   late Period period;
@@ -72,13 +75,15 @@ class _CardioPageState extends State<CardioPage> {
       (p) => p.name == settings.defaultGraphPeriod,
       orElse: () => Period.day,
     );
-    widget.tabCtrl.addListener(_onTabChanged);
+    widget.tabCtrl?.addListener(_onTabChanged);
     _loadPreferences();
   }
 
   Future<void> _loadPreferences() async {
     final pref =
-        await (db.graphPreferences.select()..where((t) => t.name.equals(name)))
+        await (db.graphPreferences.select()..where(
+              (t) => t.name.equals(name) & t.category.equals(category ?? ''),
+            ))
             .getSingleOrNull();
     if (pref == null || !mounted) return;
     setState(() {
@@ -110,6 +115,7 @@ class _CardioPageState extends State<CardioPage> {
     await db.graphPreferences.insertOne(
       GraphPreferencesCompanion.insert(
         name: name,
+        category: Value(category ?? ''),
         metric: Value(metric.name),
         period: Value(period.name),
         limit: Value(limit),
@@ -142,13 +148,13 @@ class _CardioPageState extends State<CardioPage> {
     _refreshTimer?.cancel();
     _notesDebounce?.cancel();
     _notesCtrl.dispose();
-    widget.tabCtrl.removeListener(_onTabChanged);
+    widget.tabCtrl?.removeListener(_onTabChanged);
     super.dispose();
   }
 
   void _onTabChanged() {
     final settings = context.read<SettingsState>().value;
-    if (widget.tabCtrl.index ==
+    if (widget.tabCtrl?.index ==
         settings.tabs.split(',').indexOf('GraphsPage')) {
       setData();
     }
@@ -218,7 +224,8 @@ class _CardioPageState extends State<CardioPage> {
         await (db.gymSets.select()
               ..where(
                 (tbl) =>
-                    tbl.created.equals(row.created) & tbl.name.equals(name),
+                    tbl.created.equals(row.created) &
+                    isExercise(tbl, name, category),
               )
               ..limit(1))
             .getSingle();
@@ -332,7 +339,7 @@ class _CardioPageState extends State<CardioPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(name),
+        title: Text(exerciseLabel(context.l10n, name, category)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -348,7 +355,7 @@ class _CardioPageState extends State<CardioPage> {
                             mode: OrderingMode.desc,
                           ),
                         ])
-                        ..where((tbl) => tbl.name.equals(name))
+                        ..where((tbl) => isExercise(tbl, name, category))
                         ..where((tbl) => tbl.hidden.equals(false))
                         ..limit(20))
                       .get();
@@ -358,6 +365,7 @@ class _CardioPageState extends State<CardioPage> {
                 MaterialPageRoute(
                   builder: (context) => GraphHistoryPage(
                     name: name,
+                    category: category,
                     gymSets: gymSets,
                     tabController: widget.tabCtrl,
                   ),
@@ -371,20 +379,25 @@ class _CardioPageState extends State<CardioPage> {
           ),
           IconButton(
             onPressed: () async {
-              final newName = await Navigator.of(context).push<String>(
+              final renamed = await Navigator.of(context).push<ExerciseKey>(
                 MaterialPageRoute(
-                  builder: (context) => EditGraphPage(name: name),
+                  builder: (context) =>
+                      EditGraphPage(name: name, category: category),
                 ),
               );
-              if (mounted && newName != null) {
+              if (mounted && renamed != null) {
                 final updated =
                     await (db.gymSets.select()
-                          ..where((tbl) => tbl.name.equals(newName))
+                          ..where(
+                            (tbl) =>
+                                isExercise(tbl, renamed.name, renamed.category),
+                          )
                           ..limit(1))
                         .getSingleOrNull();
                 if (!mounted) return;
                 setState(() {
-                  name = newName;
+                  name = renamed.name;
+                  category = renamed.category;
                   if (updated != null) target = updated.unit;
                   if (_isWeightUnit(target) &&
                       !{
@@ -627,6 +640,7 @@ class _CardioPageState extends State<CardioPage> {
       period: period,
       metric: metric,
       name: name,
+      category: category,
       start: start,
       target: target,
       limit: limit,

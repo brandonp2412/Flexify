@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/defaults.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 
@@ -34,6 +35,7 @@ GymSetsCompanion gymSetFixture(
 GymSet gymSetModelFixture({
   int id = 0,
   String name = 'Bench press',
+  String? category,
   double reps = 2,
   double weight = 3,
   String unit = 'kg',
@@ -56,6 +58,7 @@ GymSet gymSetModelFixture({
     duration: duration,
     distance: distance,
     cardio: cardio,
+    category: category,
   );
 }
 
@@ -73,15 +76,27 @@ PlansCompanion planFixture({
   );
 }
 
+/// The starter category of a built-in exercise, or null for other names.
+String? starterCategory(String exercise) {
+  for (final (name, category) in defaultExercises) {
+    if (name == exercise) return category;
+  }
+  return null;
+}
+
+/// A plan entry for [exercise] within [category]; null leaves it
+/// uncategorized, like [gymSetFixture].
 PlanExercisesCompanion planExerciseFixture({
   required int planId,
   required String exercise,
+  String? category,
   bool enabled = true,
   int? sequence,
 }) {
   return PlanExercisesCompanion.insert(
     planId: planId,
     exercise: exercise,
+    category: Value(category),
     enabled: enabled,
     sequence: sequence == null ? const Value.absent() : Value(sequence),
   );

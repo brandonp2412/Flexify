@@ -1,11 +1,27 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 
+/// Muscle-group categories every install starts with. People can add, rename,
+/// merge, or delete categories afterwards.
+const defaultCategories = [
+  'Chest',
+  'Back',
+  'Shoulders',
+  'Biceps',
+  'Triceps',
+  'Forearms',
+  'Abs',
+  'Quads',
+  'Hamstrings',
+  'Glutes',
+  'Calves',
+];
+
 const defaultExercises = [
   ('Arnold press', 'Shoulders'),
   ('Back extension', 'Back'),
   ('Barbell bench press', 'Chest'),
-  ('Barbell biceps curl', 'Arms'),
+  ('Barbell biceps curl', 'Biceps'),
   ('Barbell bent-over row', 'Back'),
   ('Barbell shoulder press', 'Shoulders'),
   ('Barbell shrug', 'Shoulders'),
@@ -15,49 +31,49 @@ const defaultExercises = [
   ('Chest fly', 'Chest'),
   ('Chin-up', 'Back'),
   ('Close-grip pull-up', 'Back'),
-  ('Crunch', 'Core'),
+  ('Crunch', 'Abs'),
   ('Deadlift', 'Back'),
   ('Decline bench press', 'Chest'),
   ('Diamond push-up', 'Chest'),
   ('Dumbbell bench press', 'Chest'),
-  ('Dumbbell biceps curl', 'Arms'),
+  ('Dumbbell biceps curl', 'Biceps'),
   ('Dumbbell bent-over row', 'Back'),
   ('Dumbbell fly', 'Chest'),
   ('Dumbbell lateral raise', 'Shoulders'),
   ('Dumbbell shoulder press', 'Shoulders'),
   ('Dumbbell shrug', 'Shoulders'),
-  ('Good morning', 'Back'),
-  ('Hanging leg raise', 'Core'),
+  ('Good morning', 'Hamstrings'),
+  ('Hanging leg raise', 'Abs'),
   ('Hyperextension', 'Back'),
   ('Incline bench press', 'Chest'),
   ('Lat pull-down', 'Back'),
-  ('Leg curl', 'Legs'),
-  ('Leg extension', 'Legs'),
-  ('Leg press', 'Legs'),
-  ('Leg raise', 'Core'),
-  ('Lunge', 'Legs'),
-  ('Narrow-grip push-up', 'Chest'),
+  ('Leg curl', 'Hamstrings'),
+  ('Leg extension', 'Quads'),
+  ('Leg press', 'Quads'),
+  ('Leg raise', 'Abs'),
+  ('Lunge', 'Quads'),
+  ('Narrow-grip push-up', 'Triceps'),
   ('Neck curl', 'Shoulders'),
-  ('Overhead triceps extension', 'Arms'),
-  ('Preacher curl', 'Arms'),
+  ('Overhead triceps extension', 'Triceps'),
+  ('Preacher curl', 'Biceps'),
   ('Pull-down', 'Back'),
   ('Pull-up', 'Back'),
   ('Push-up', 'Chest'),
   ('Reverse grip pull-down', 'Back'),
-  ('Reverse grip pushdown', 'Arms'),
-  ('Roman chair leg raise', 'Core'),
-  ('Romanian deadlift', 'Back'),
-  ('Russian twist', 'Core'),
+  ('Reverse grip pushdown', 'Triceps'),
+  ('Roman chair leg raise', 'Abs'),
+  ('Romanian deadlift', 'Hamstrings'),
+  ('Russian twist', 'Abs'),
   ('Seated calf raise', 'Calves'),
   ('Shoulder shrug', 'Shoulders'),
-  ('Squat', 'Legs'),
+  ('Squat', 'Quads'),
   ('Standing calf raise', 'Calves'),
   ('T-bar row', 'Back'),
-  ('Triceps dip', 'Arms'),
-  ('Triceps extension', 'Arms'),
-  ('Triceps pushdown', 'Arms'),
+  ('Triceps dip', 'Triceps'),
+  ('Triceps extension', 'Triceps'),
+  ('Triceps pushdown', 'Triceps'),
   ('Upright row', 'Shoulders'),
-  ('Weighted Russian twist', 'Core'),
+  ('Weighted Russian twist', 'Abs'),
   ('Wide-grip pull-up', 'Back'),
   ('Wide-grip push-up', 'Chest'),
 ];
@@ -69,21 +85,35 @@ const defaultPlans = [
 ];
 
 final defaultPlanExercises = [
-  ...['Barbell bench press', 'Squat', 'Lat pull-down', 'Leg press'].map(
-    (e) => PlanExercisesCompanion.insert(planId: 1, exercise: e, enabled: true),
-  ),
+  ...[
+    'Barbell bench press',
+    'Squat',
+    'Lat pull-down',
+    'Leg press',
+  ].map((name) => _defaultPlanExercise(1, name)),
   ...[
     'Deadlift',
     'Overhead triceps extension',
     'Dumbbell biceps curl',
     'Barbell bent-over row',
-  ].map(
-    (e) => PlanExercisesCompanion.insert(planId: 2, exercise: e, enabled: true),
-  ),
-  ...['Leg press', 'Pull-up', 'Push-up', 'Crunch'].map(
-    (e) => PlanExercisesCompanion.insert(planId: 3, exercise: e, enabled: true),
-  ),
+  ].map((name) => _defaultPlanExercise(2, name)),
+  ...[
+    'Leg press',
+    'Pull-up',
+    'Push-up',
+    'Crunch',
+  ].map((name) => _defaultPlanExercise(3, name)),
 ];
+
+PlanExercisesCompanion _defaultPlanExercise(int planId, String name) =>
+    PlanExercisesCompanion.insert(
+      planId: planId,
+      exercise: name,
+      category: Value(
+        defaultExercises.firstWhere((exercise) => exercise.$1 == name).$2,
+      ),
+      enabled: true,
+    );
 
 final defaultSets = defaultExercises.map(
   (exercise) => GymSetsCompanion(

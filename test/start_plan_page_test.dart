@@ -338,7 +338,9 @@ void main() {
       '50',
     );
 
-    await tester.longPress(find.byKey(const Key(originalExercise)));
+    await tester.longPress(
+      find.byKey(const ValueKey<(String, String?)>((originalExercise, null))),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Swap'));
     await tester.pumpAndSettle();
@@ -642,6 +644,7 @@ void main() {
       final initial = await getStartPlanPrefill(
         database,
         exercise,
+        null,
         currentPlanId,
       );
       expect(initial == null, false);
@@ -669,6 +672,7 @@ void main() {
       final planned = await getStartPlanPrefill(
         database,
         exercise,
+        null,
         currentPlanId,
       );
       expect(planned == null, false);
@@ -716,6 +720,7 @@ void main() {
     final first = await getFirstOfLastPlanSession(
       database,
       'Bench press',
+      null,
       currentPlanId,
     );
 

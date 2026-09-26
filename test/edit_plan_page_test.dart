@@ -29,9 +29,21 @@ void main() {
     await database.planExercises.deleteAll();
     await database.plans.insertOne(plan);
     await database.planExercises.insertAll([
-      planExerciseFixture(planId: 1, exercise: 'Arnold press'),
-      planExerciseFixture(planId: 1, exercise: 'Back extension'),
-      planExerciseFixture(planId: 1, exercise: 'Barbell bench press'),
+      planExerciseFixture(
+        planId: 1,
+        exercise: 'Arnold press',
+        category: starterCategory('Arnold press'),
+      ),
+      planExerciseFixture(
+        planId: 1,
+        exercise: 'Back extension',
+        category: starterCategory('Back extension'),
+      ),
+      planExerciseFixture(
+        planId: 1,
+        exercise: 'Barbell bench press',
+        category: starterCategory('Barbell bench press'),
+      ),
     ]);
 
     await harness.pump(tester, EditPlanPage(plan: plan));
@@ -46,6 +58,16 @@ void main() {
     await tester.tap(find.text('Thu'));
     await scrollTo(tester, find.text('Arnold press'));
     await tester.tap(find.text('Arnold press'));
+    await tester.scrollUntilVisible(
+      find.text('Barbell biceps curl'),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
     await tester.tap(find.text('Barbell biceps curl'));
 
     await tester.tap(find.text('Save'));
@@ -67,9 +89,21 @@ void main() {
     await database.plans.deleteAll();
     await database.plans.insertOne(plan);
     await database.planExercises.insertAll([
-      planExerciseFixture(planId: 1, exercise: 'Arnold press'),
-      planExerciseFixture(planId: 1, exercise: 'Back extension'),
-      planExerciseFixture(planId: 1, exercise: 'Barbell bench press'),
+      planExerciseFixture(
+        planId: 1,
+        exercise: 'Arnold press',
+        category: starterCategory('Arnold press'),
+      ),
+      planExerciseFixture(
+        planId: 1,
+        exercise: 'Back extension',
+        category: starterCategory('Back extension'),
+      ),
+      planExerciseFixture(
+        planId: 1,
+        exercise: 'Barbell bench press',
+        category: starterCategory('Barbell bench press'),
+      ),
     ]);
 
     await harness.pump(tester, EditPlanPage(plan: plan));

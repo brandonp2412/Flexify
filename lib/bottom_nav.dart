@@ -123,6 +123,8 @@ class BottomNav extends StatelessWidget {
     switch (tab) {
       case 'HistoryPage':
         return Icons.history_rounded;
+      case 'CategoriesPage':
+        return Icons.category_rounded;
       case 'PlansPage':
         return Icons.calendar_today_outlined;
       case 'GraphsPage':
@@ -141,6 +143,8 @@ class BottomNav extends StatelessWidget {
     switch (tab) {
       case 'HistoryPage':
         return l10n.navHistory;
+      case 'CategoriesPage':
+        return l10n.navCategories;
       case 'PlansPage':
         return l10n.navPlans;
       case 'GraphsPage':

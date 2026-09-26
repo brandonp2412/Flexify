@@ -3,43 +3,103 @@ import 'dart:io';
 import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/exercise_options_view.dart';
+import 'package:flexify/graph/graph_tile.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Creates an exercise inside a category.
+///
+/// Typing a name that already exists in another category offers to copy that
+/// exercise's details. Saving a name that already exists in the chosen
+/// category is refused with a link to the existing exercise instead.
 class AddExercisePage extends StatefulWidget {
   final String? name;
+  final String? category;
+  final TabController? tabController;
 
-  const AddExercisePage({super.key, this.name});
+  const AddExercisePage({
+    super.key,
+    this.name,
+    this.category,
+    this.tabController,
+  });
 
   @override
   createState() => _AddExercisePageState();
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  final TextEditingController _nameCtrl = TextEditingController();
+  TextEditingController? _nameCtrl;
   bool _cardio = false;
-
-  late var settings = context.watch<SettingsState>();
-  late String _unit = settings.value.strengthUnit == 'last-entry'
-      ? 'kg'
-      : settings.value.strengthUnit;
+  late String? _category = normalizeCategory(widget.category);
+  late String _unit = _defaultUnit(context.read<SettingsState>().value);
   String? _image;
+  int? _restMs;
+  List<ExerciseKey> _existing = [];
   final _key = GlobalKey<FormState>();
+
+  static String _defaultUnit(Setting settings) =>
+      settings.strengthUnit == 'last-entry' ? 'kg' : settings.strengthUnit;
 
   @override
   void initState() {
     super.initState();
-    if (widget.name != null) _nameCtrl.text = widget.name!;
+    (db.gymSets.selectOnly(distinct: true)
+          ..addColumns([db.gymSets.name, db.gymSets.category])
+          ..where(db.gymSets.name.isNotValue(bodyWeightExercise)))
+        .get()
+        .then((rows) {
+          if (!mounted) return;
+          setState(() {
+            _existing = rows
+                .map(
+                  (row) => (
+                    name: row.read(db.gymSets.name)!,
+                    category: row.read(db.gymSets.category),
+                  ),
+                )
+                .toList();
+          });
+        });
+  }
+
+  Future<void> _copyFrom(ExerciseKey exercise) async {
+    final source =
+        await (db.gymSets.select()
+              ..where(
+                (tbl) => isExercise(tbl, exercise.name, exercise.category),
+              )
+              ..orderBy([
+                (tbl) => OrderingTerm(
+                  expression: tbl.created,
+                  mode: OrderingMode.desc,
+                ),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+    if (source == null || !mounted) return;
+    setState(() {
+      _cardio = source.cardio;
+      _unit = source.unit;
+      _image = source.image;
+      _restMs = source.restMs;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>();
+    final showImages = context.select<SettingsState, bool>(
+      (settings) => settings.value.showImages,
+    );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -51,40 +111,73 @@ class _AddExercisePageState extends State<AddExercisePage> {
           child: ListView(
             padding: const EdgeInsets.only(bottom: 116),
             children: [
-              TextFormField(
-                controller: _nameCtrl,
-                decoration: InputDecoration(labelText: context.l10n.nameLabel),
-                textCapitalization: TextCapitalization.sentences,
-                autofocus: true,
-                validator: (value) => value?.isNotEmpty == true
-                    ? null
-                    : context.l10n.requiredField,
+              StreamBuilder<List<String>>(
+                stream: getCategoriesStream(),
+                builder: (context, snapshot) {
+                  final categories = {...?snapshot.data, ?_category}.toList();
+                  return DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: context.l10n.categoryLabel,
+                    ),
+                    initialValue: _category,
+                    items: categories
+                        .map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category),
+                          ),
+                        )
+                        .toList(),
+                    validator: (value) =>
+                        value == null ? context.l10n.chooseCategory : null,
+                    onChanged: (value) => setState(() => _category = value),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
+              Autocomplete<ExerciseKey>(
+                initialValue: TextEditingValue(text: widget.name ?? ''),
+                displayStringForOption: (option) => option.name,
+                optionsBuilder: (value) {
+                  if (value.text.trim().isEmpty) return const [];
+                  return filterExerciseOptions(
+                    _existing.where((option) => option.category != _category),
+                    value.text,
+                  );
+                },
+                optionsViewBuilder: (context, onSelected, options) =>
+                    ExerciseOptionsView(
+                      options: options,
+                      onSelected: onSelected,
+                    ),
+                onSelected: _copyFrom,
+                fieldViewBuilder: (context, controller, focusNode, onSubmit) {
+                  _nameCtrl = controller;
+                  return TextFormField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.nameLabel,
+                      helperText: context.l10n.copyFromOtherCategory,
+                      helperMaxLines: 2,
+                    ),
+                    textCapitalization: TextCapitalization.sentences,
+                    autofocus: true,
+                    onFieldSubmitted: (_) => onSubmit(),
+                    validator: (value) => value?.trim().isNotEmpty == true
+                        ? null
+                        : context.l10n.requiredField,
+                  );
+                },
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
+                key: ValueKey(_unit),
                 decoration: InputDecoration(labelText: context.l10n.unitLabel),
                 initialValue: _unit,
                 items: [
-                  DropdownMenuItem(
-                    value: 'kg',
-                    child: Text(context.l10n.kilogramsUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'lb',
-                    child: Text(context.l10n.poundsUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'stone',
-                    child: Text(context.l10n.stoneUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'km',
-                    child: Text(context.l10n.kilometersUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'mi',
-                    child: Text(context.l10n.milesUnit),
-                  ),
+                  ...strengthUnitMenuItems(context.l10n),
+                  if (_cardio) ...cardioUnitMenuItems(context.l10n),
                 ],
                 onChanged: (String? newValue) {
                   setState(() {
@@ -104,7 +197,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                 trailing: Switch(value: _cardio, onChanged: _setCardio),
               ),
               Visibility(
-                visible: settings.value.showImages,
+                visible: showImages,
                 child: Column(
                   children: [
                     Row(
@@ -148,17 +241,11 @@ class _AddExercisePageState extends State<AddExercisePage> {
         ),
       ),
       floatingActionButton: AnimatedFab(
-        onPressed: () => save(_unit),
+        onPressed: save,
         label: Text(context.l10n.actionSave),
         icon: const Icon(Icons.save),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    super.dispose();
   }
 
   void _setCardio(bool value) {
@@ -180,23 +267,58 @@ class _AddExercisePageState extends State<AddExercisePage> {
     });
   }
 
-  Future<void> save(String unit) async {
-    if (!_key.currentState!.validate()) return;
+  /// Tells the user [existing] is already in the chosen category and offers
+  /// to open it instead of creating a duplicate.
+  void _showExisting(GymSet existing) {
+    final navigator = Navigator.of(context);
+    toast(
+      context.l10n.exerciseExistsInCategory(existing.name, existing.category!),
+      action: SnackBarAction(
+        label: context.l10n.actionOpen,
+        onPressed: () {
+          if (!mounted) return;
+          navigator.pop();
+          openExerciseGraph(
+            navigator,
+            name: existing.name,
+            category: existing.category,
+            unit: existing.unit,
+            cardio: existing.cardio,
+            tabCtrl: widget.tabController,
+          );
+        },
+      ),
+    );
+  }
 
-    if (settings.value.strengthUnit != 'last-entry' && !_cardio)
-      _unit = settings.value.strengthUnit;
-    else if (settings.value.cardioUnit != 'last-entry' && _cardio)
-      _unit = settings.value.cardioUnit;
+  Future<void> save() async {
+    if (!_key.currentState!.validate()) return;
+    final name = _nameCtrl!.text.trim();
+    final category = _category!;
+
+    final existing =
+        await (db.gymSets.select()
+              ..where(
+                (tbl) =>
+                    tbl.name.lower().equals(name.toLowerCase()) &
+                    tbl.category.equals(category),
+              )
+              ..limit(1))
+            .getSingleOrNull();
+    if (!mounted) return;
+    if (existing != null) return _showExisting(existing);
 
     final insert = GymSetsCompanion.insert(
       created: DateTime.now().toLocal(),
       reps: 0,
       weight: 0,
-      name: _nameCtrl.text,
+      name: name,
       unit: _unit,
       cardio: Value(_cardio),
       hidden: const Value(true),
       image: Value(_image),
+      category: Value(category),
+      restMs: Value(_restMs),
     );
     await db.gymSets.insertOne(insert);
     talker.info('Created exercise template');

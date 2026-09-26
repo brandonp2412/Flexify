@@ -3900,6 +3900,17 @@ class $PlanExercisesTable extends PlanExercises
       'REFERENCES gym_sets (name)',
     ),
   );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -3964,6 +3975,7 @@ class $PlanExercisesTable extends PlanExercises
     enabled,
     timers,
     exercise,
+    category,
     id,
     maxSets,
     planId,
@@ -4003,6 +4015,12 @@ class $PlanExercisesTable extends PlanExercises
       );
     } else if (isInserting) {
       context.missing(_exerciseMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -4054,6 +4072,10 @@ class $PlanExercisesTable extends PlanExercises
         DriftSqlType.string,
         data['${effectivePrefix}exercise'],
       )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -4087,6 +4109,9 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
   final bool enabled;
   final bool timers;
   final String exercise;
+
+  /// Category of the planned exercise variant; null means uncategorized.
+  final String? category;
   final int id;
   final int? maxSets;
   final int planId;
@@ -4096,6 +4121,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     required this.enabled,
     required this.timers,
     required this.exercise,
+    this.category,
     required this.id,
     this.maxSets,
     required this.planId,
@@ -4108,6 +4134,9 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     map['enabled'] = Variable<bool>(enabled);
     map['timers'] = Variable<bool>(timers);
     map['exercise'] = Variable<String>(exercise);
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || maxSets != null) {
       map['max_sets'] = Variable<int>(maxSets);
@@ -4125,6 +4154,9 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
       enabled: Value(enabled),
       timers: Value(timers),
       exercise: Value(exercise),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
       id: Value(id),
       maxSets: maxSets == null && nullToAbsent
           ? const Value.absent()
@@ -4146,6 +4178,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
       enabled: serializer.fromJson<bool>(json['enabled']),
       timers: serializer.fromJson<bool>(json['timers']),
       exercise: serializer.fromJson<String>(json['exercise']),
+      category: serializer.fromJson<String?>(json['category']),
       id: serializer.fromJson<int>(json['id']),
       maxSets: serializer.fromJson<int?>(json['maxSets']),
       planId: serializer.fromJson<int>(json['planId']),
@@ -4160,6 +4193,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
       'enabled': serializer.toJson<bool>(enabled),
       'timers': serializer.toJson<bool>(timers),
       'exercise': serializer.toJson<String>(exercise),
+      'category': serializer.toJson<String?>(category),
       'id': serializer.toJson<int>(id),
       'maxSets': serializer.toJson<int?>(maxSets),
       'planId': serializer.toJson<int>(planId),
@@ -4172,6 +4206,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     bool? enabled,
     bool? timers,
     String? exercise,
+    Value<String?> category = const Value.absent(),
     int? id,
     Value<int?> maxSets = const Value.absent(),
     int? planId,
@@ -4181,6 +4216,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     enabled: enabled ?? this.enabled,
     timers: timers ?? this.timers,
     exercise: exercise ?? this.exercise,
+    category: category.present ? category.value : this.category,
     id: id ?? this.id,
     maxSets: maxSets.present ? maxSets.value : this.maxSets,
     planId: planId ?? this.planId,
@@ -4192,6 +4228,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
       enabled: data.enabled.present ? data.enabled.value : this.enabled,
       timers: data.timers.present ? data.timers.value : this.timers,
       exercise: data.exercise.present ? data.exercise.value : this.exercise,
+      category: data.category.present ? data.category.value : this.category,
       id: data.id.present ? data.id.value : this.id,
       maxSets: data.maxSets.present ? data.maxSets.value : this.maxSets,
       planId: data.planId.present ? data.planId.value : this.planId,
@@ -4208,6 +4245,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
           ..write('enabled: $enabled, ')
           ..write('timers: $timers, ')
           ..write('exercise: $exercise, ')
+          ..write('category: $category, ')
           ..write('id: $id, ')
           ..write('maxSets: $maxSets, ')
           ..write('planId: $planId, ')
@@ -4222,6 +4260,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
     enabled,
     timers,
     exercise,
+    category,
     id,
     maxSets,
     planId,
@@ -4235,6 +4274,7 @@ class PlanExercise extends DataClass implements Insertable<PlanExercise> {
           other.enabled == this.enabled &&
           other.timers == this.timers &&
           other.exercise == this.exercise &&
+          other.category == this.category &&
           other.id == this.id &&
           other.maxSets == this.maxSets &&
           other.planId == this.planId &&
@@ -4246,6 +4286,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
   final Value<bool> enabled;
   final Value<bool> timers;
   final Value<String> exercise;
+  final Value<String?> category;
   final Value<int> id;
   final Value<int?> maxSets;
   final Value<int> planId;
@@ -4255,6 +4296,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     this.enabled = const Value.absent(),
     this.timers = const Value.absent(),
     this.exercise = const Value.absent(),
+    this.category = const Value.absent(),
     this.id = const Value.absent(),
     this.maxSets = const Value.absent(),
     this.planId = const Value.absent(),
@@ -4265,6 +4307,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     required bool enabled,
     this.timers = const Value.absent(),
     required String exercise,
+    this.category = const Value.absent(),
     this.id = const Value.absent(),
     this.maxSets = const Value.absent(),
     required int planId,
@@ -4277,6 +4320,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     Expression<bool>? enabled,
     Expression<bool>? timers,
     Expression<String>? exercise,
+    Expression<String>? category,
     Expression<int>? id,
     Expression<int>? maxSets,
     Expression<int>? planId,
@@ -4287,6 +4331,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
       if (enabled != null) 'enabled': enabled,
       if (timers != null) 'timers': timers,
       if (exercise != null) 'exercise': exercise,
+      if (category != null) 'category': category,
       if (id != null) 'id': id,
       if (maxSets != null) 'max_sets': maxSets,
       if (planId != null) 'plan_id': planId,
@@ -4299,6 +4344,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     Value<bool>? enabled,
     Value<bool>? timers,
     Value<String>? exercise,
+    Value<String?>? category,
     Value<int>? id,
     Value<int?>? maxSets,
     Value<int>? planId,
@@ -4309,6 +4355,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
       enabled: enabled ?? this.enabled,
       timers: timers ?? this.timers,
       exercise: exercise ?? this.exercise,
+      category: category ?? this.category,
       id: id ?? this.id,
       maxSets: maxSets ?? this.maxSets,
       planId: planId ?? this.planId,
@@ -4328,6 +4375,9 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
     }
     if (exercise.present) {
       map['exercise'] = Variable<String>(exercise.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -4353,6 +4403,7 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercise> {
           ..write('enabled: $enabled, ')
           ..write('timers: $timers, ')
           ..write('exercise: $exercise, ')
+          ..write('category: $category, ')
           ..write('id: $id, ')
           ..write('maxSets: $maxSets, ')
           ..write('planId: $planId, ')
@@ -4549,6 +4600,18 @@ class $GraphPreferencesTable extends GraphPreferences
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   static const VerificationMeta _metricMeta = const VerificationMeta('metric');
   @override
   late final GeneratedColumn<String> metric = GeneratedColumn<String>(
@@ -4606,6 +4669,7 @@ class $GraphPreferencesTable extends GraphPreferences
   @override
   List<GeneratedColumn> get $columns => [
     name,
+    category,
     metric,
     period,
     limit,
@@ -4631,6 +4695,12 @@ class $GraphPreferencesTable extends GraphPreferences
       );
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
     }
     if (data.containsKey('metric')) {
       context.handle(
@@ -4669,7 +4739,7 @@ class $GraphPreferencesTable extends GraphPreferences
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {name};
+  Set<GeneratedColumn> get $primaryKey => {name, category};
   @override
   GraphPreference map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -4677,6 +4747,10 @@ class $GraphPreferencesTable extends GraphPreferences
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
       )!,
       metric: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -4709,6 +4783,7 @@ class $GraphPreferencesTable extends GraphPreferences
 
 class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   final String name;
+  final String category;
   final String metric;
   final String period;
   final int limit;
@@ -4716,6 +4791,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   final String? notes;
   const GraphPreference({
     required this.name,
+    required this.category,
     required this.metric,
     required this.period,
     required this.limit,
@@ -4726,6 +4802,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['name'] = Variable<String>(name);
+    map['category'] = Variable<String>(category);
     map['metric'] = Variable<String>(metric);
     map['period'] = Variable<String>(period);
     map['limit'] = Variable<int>(limit);
@@ -4739,6 +4816,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   GraphPreferencesCompanion toCompanion(bool nullToAbsent) {
     return GraphPreferencesCompanion(
       name: Value(name),
+      category: Value(category),
       metric: Value(metric),
       period: Value(period),
       limit: Value(limit),
@@ -4756,6 +4834,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GraphPreference(
       name: serializer.fromJson<String>(json['name']),
+      category: serializer.fromJson<String>(json['category']),
       metric: serializer.fromJson<String>(json['metric']),
       period: serializer.fromJson<String>(json['period']),
       limit: serializer.fromJson<int>(json['limit']),
@@ -4768,6 +4847,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'name': serializer.toJson<String>(name),
+      'category': serializer.toJson<String>(category),
       'metric': serializer.toJson<String>(metric),
       'period': serializer.toJson<String>(period),
       'limit': serializer.toJson<int>(limit),
@@ -4778,6 +4858,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
 
   GraphPreference copyWith({
     String? name,
+    String? category,
     String? metric,
     String? period,
     int? limit,
@@ -4785,6 +4866,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
     Value<String?> notes = const Value.absent(),
   }) => GraphPreference(
     name: name ?? this.name,
+    category: category ?? this.category,
     metric: metric ?? this.metric,
     period: period ?? this.period,
     limit: limit ?? this.limit,
@@ -4794,6 +4876,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   GraphPreference copyWithCompanion(GraphPreferencesCompanion data) {
     return GraphPreference(
       name: data.name.present ? data.name.value : this.name,
+      category: data.category.present ? data.category.value : this.category,
       metric: data.metric.present ? data.metric.value : this.metric,
       period: data.period.present ? data.period.value : this.period,
       limit: data.limit.present ? data.limit.value : this.limit,
@@ -4808,6 +4891,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
   String toString() {
     return (StringBuffer('GraphPreference(')
           ..write('name: $name, ')
+          ..write('category: $category, ')
           ..write('metric: $metric, ')
           ..write('period: $period, ')
           ..write('limit: $limit, ')
@@ -4819,12 +4903,13 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
 
   @override
   int get hashCode =>
-      Object.hash(name, metric, period, limit, timeBasedXAxis, notes);
+      Object.hash(name, category, metric, period, limit, timeBasedXAxis, notes);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is GraphPreference &&
           other.name == this.name &&
+          other.category == this.category &&
           other.metric == this.metric &&
           other.period == this.period &&
           other.limit == this.limit &&
@@ -4834,6 +4919,7 @@ class GraphPreference extends DataClass implements Insertable<GraphPreference> {
 
 class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   final Value<String> name;
+  final Value<String> category;
   final Value<String> metric;
   final Value<String> period;
   final Value<int> limit;
@@ -4842,6 +4928,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   final Value<int> rowid;
   const GraphPreferencesCompanion({
     this.name = const Value.absent(),
+    this.category = const Value.absent(),
     this.metric = const Value.absent(),
     this.period = const Value.absent(),
     this.limit = const Value.absent(),
@@ -4851,6 +4938,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   });
   GraphPreferencesCompanion.insert({
     required String name,
+    this.category = const Value.absent(),
     this.metric = const Value.absent(),
     this.period = const Value.absent(),
     this.limit = const Value.absent(),
@@ -4860,6 +4948,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   }) : name = Value(name);
   static Insertable<GraphPreference> custom({
     Expression<String>? name,
+    Expression<String>? category,
     Expression<String>? metric,
     Expression<String>? period,
     Expression<int>? limit,
@@ -4869,6 +4958,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   }) {
     return RawValuesInsertable({
       if (name != null) 'name': name,
+      if (category != null) 'category': category,
       if (metric != null) 'metric': metric,
       if (period != null) 'period': period,
       if (limit != null) 'limit': limit,
@@ -4880,6 +4970,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
 
   GraphPreferencesCompanion copyWith({
     Value<String>? name,
+    Value<String>? category,
     Value<String>? metric,
     Value<String>? period,
     Value<int>? limit,
@@ -4889,6 +4980,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   }) {
     return GraphPreferencesCompanion(
       name: name ?? this.name,
+      category: category ?? this.category,
       metric: metric ?? this.metric,
       period: period ?? this.period,
       limit: limit ?? this.limit,
@@ -4903,6 +4995,9 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
     final map = <String, Expression>{};
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
     if (metric.present) {
       map['metric'] = Variable<String>(metric.value);
@@ -4929,6 +5024,7 @@ class GraphPreferencesCompanion extends UpdateCompanion<GraphPreference> {
   String toString() {
     return (StringBuffer('GraphPreferencesCompanion(')
           ..write('name: $name, ')
+          ..write('category: $category, ')
           ..write('metric: $metric, ')
           ..write('period: $period, ')
           ..write('limit: $limit, ')
@@ -6892,6 +6988,7 @@ typedef $$PlanExercisesTableCreateCompanionBuilder =
       required bool enabled,
       Value<bool> timers,
       required String exercise,
+      Value<String?> category,
       Value<int> id,
       Value<int?> maxSets,
       required int planId,
@@ -6903,6 +7000,7 @@ typedef $$PlanExercisesTableUpdateCompanionBuilder =
       Value<bool> enabled,
       Value<bool> timers,
       Value<String> exercise,
+      Value<String?> category,
       Value<int> id,
       Value<int?> maxSets,
       Value<int> planId,
@@ -6969,6 +7067,11 @@ class $$PlanExercisesTableFilterComposer
 
   ColumnFilters<bool> get timers => $composableBuilder(
     column: $table.timers,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7058,6 +7161,11 @@ class $$PlanExercisesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -7139,6 +7247,9 @@ class $$PlanExercisesTableAnnotationComposer
 
   GeneratedColumn<bool> get timers =>
       $composableBuilder(column: $table.timers, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
 
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
@@ -7232,6 +7343,7 @@ class $$PlanExercisesTableTableManager
                 Value<bool> enabled = const Value.absent(),
                 Value<bool> timers = const Value.absent(),
                 Value<String> exercise = const Value.absent(),
+                Value<String?> category = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<int?> maxSets = const Value.absent(),
                 Value<int> planId = const Value.absent(),
@@ -7241,6 +7353,7 @@ class $$PlanExercisesTableTableManager
                 enabled: enabled,
                 timers: timers,
                 exercise: exercise,
+                category: category,
                 id: id,
                 maxSets: maxSets,
                 planId: planId,
@@ -7252,6 +7365,7 @@ class $$PlanExercisesTableTableManager
                 required bool enabled,
                 Value<bool> timers = const Value.absent(),
                 required String exercise,
+                Value<String?> category = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<int?> maxSets = const Value.absent(),
                 required int planId,
@@ -7261,6 +7375,7 @@ class $$PlanExercisesTableTableManager
                 enabled: enabled,
                 timers: timers,
                 exercise: exercise,
+                category: category,
                 id: id,
                 maxSets: maxSets,
                 planId: planId,
@@ -7467,6 +7582,7 @@ typedef $$MetadataTableProcessedTableManager =
 typedef $$GraphPreferencesTableCreateCompanionBuilder =
     GraphPreferencesCompanion Function({
       required String name,
+      Value<String> category,
       Value<String> metric,
       Value<String> period,
       Value<int> limit,
@@ -7477,6 +7593,7 @@ typedef $$GraphPreferencesTableCreateCompanionBuilder =
 typedef $$GraphPreferencesTableUpdateCompanionBuilder =
     GraphPreferencesCompanion Function({
       Value<String> name,
+      Value<String> category,
       Value<String> metric,
       Value<String> period,
       Value<int> limit,
@@ -7496,6 +7613,11 @@ class $$GraphPreferencesTableFilterComposer
   });
   ColumnFilters<String> get name => $composableBuilder(
     column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7539,6 +7661,11 @@ class $$GraphPreferencesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get metric => $composableBuilder(
     column: $table.metric,
     builder: (column) => ColumnOrderings(column),
@@ -7576,6 +7703,9 @@ class $$GraphPreferencesTableAnnotationComposer
   });
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
 
   GeneratedColumn<String> get metric =>
       $composableBuilder(column: $table.metric, builder: (column) => column);
@@ -7633,6 +7763,7 @@ class $$GraphPreferencesTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> name = const Value.absent(),
+                Value<String> category = const Value.absent(),
                 Value<String> metric = const Value.absent(),
                 Value<String> period = const Value.absent(),
                 Value<int> limit = const Value.absent(),
@@ -7641,6 +7772,7 @@ class $$GraphPreferencesTableTableManager
                 Value<int> rowid = const Value.absent(),
               }) => GraphPreferencesCompanion(
                 name: name,
+                category: category,
                 metric: metric,
                 period: period,
                 limit: limit,
@@ -7651,6 +7783,7 @@ class $$GraphPreferencesTableTableManager
           createCompanionCallback:
               ({
                 required String name,
+                Value<String> category = const Value.absent(),
                 Value<String> metric = const Value.absent(),
                 Value<String> period = const Value.absent(),
                 Value<int> limit = const Value.absent(),
@@ -7659,6 +7792,7 @@ class $$GraphPreferencesTableTableManager
                 Value<int> rowid = const Value.absent(),
               }) => GraphPreferencesCompanion.insert(
                 name: name,
+                category: category,
                 metric: metric,
                 period: period,
                 limit: limit,

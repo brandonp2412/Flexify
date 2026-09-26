@@ -606,9 +606,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get editSelected => 'Seçilenleri Düzenle';
 
   @override
-  String get newExercise => 'Yeni Egzersiz';
-
-  @override
   String get noGraphsFound => 'Grafik bulunamadı';
 
   @override
@@ -776,18 +773,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Bir kategori adı girin';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count kayıtta kullanılıyor',
-      one: '1 kayıtta kullanılıyor',
-      zero: 'Hiçbir kayıtta kullanılmıyor',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -969,9 +954,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'Vücut Ağırlığını Göster';
-
-  @override
-  String get showCategories => 'Kategorileri Göster';
 
   @override
   String get showNotes => 'Notları Göster';
@@ -1158,10 +1140,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'Bu egzersiz geçmişini görmek için birkaç seti tamamla.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'İlk egzersiz grafiğini oluşturmak için bir seti tamamla.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1411,10 +1389,6 @@ class AppLocalizationsTr extends AppLocalizations {
       'Vücut ağırlığı takibini etkinleştir/devre dışı bırak';
 
   @override
-  String get showCategoriesDescription =>
-      'Antrenman kategorilerini etkinleştir/devre dışı bırak';
-
-  @override
   String get showNotesDescription =>
       'Kaldırışının detaylarını bir metin alanına kaydet';
 
@@ -1570,5 +1544,61 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String setNumber(int number) {
     return '$number. Set';
+  }
+
+  @override
+  String get navCategories => 'Kategoriler';
+
+  @override
+  String get uncategorized => 'Kategorisiz';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise zaten $category kategorisinde var';
+  }
+
+  @override
+  String get actionOpen => 'Aç';
+
+  @override
+  String get chooseCategory => 'Bir kategori seç';
+
+  @override
+  String get copyFromOtherCategory =>
+      'Başka bir kategoride mi var? Ayrıntılarını kopyalamak için onu seç.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count egzersiz',
+      one: '1 egzersiz',
+      zero: 'Egzersiz yok',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$category kategorisinde henüz egzersiz yok';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'Bu kategoride takip etmeye başlamak için bir egzersiz ekle.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'Bir set kaydet veya Kategoriler sekmesinden egzersiz ekle.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

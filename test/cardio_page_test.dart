@@ -34,10 +34,12 @@ Future<void> pumpCardioPage(
       child: CardioPage(
         tabCtrl: MockTabController(),
         name: 'Run',
+        category: fixtureCategory('Run'),
         unit: 'km',
         data: await getCardioData(
           target: 'km',
           name: 'Run',
+          category: fixtureCategory('Run'),
           metric: CardioMetric.pace,
           period: Period.day,
           start: null,
@@ -55,7 +57,7 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     await pumpCardioPage(tester, harness);
 
-    expect(find.text('Run'), findsOne);
+    expect(find.text('Run · Shoulders'), findsOne);
     expect(find.text('Pace (distance / time)'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
 

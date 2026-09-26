@@ -1,13 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/category/categories_page.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/database/categories.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -309,50 +309,43 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 selector: (context, settings) => settings.value.showUnits,
               ),
               const SizedBox(height: 12),
-              Selector<SettingsState, bool>(
-                selector: (context, settings) => settings.value.showCategories,
-                builder: (context, showCategories, child) => Visibility(
-                  visible: showCategories,
-                  child: StreamBuilder<List<String>>(
-                    stream: getCategoriesStream(),
-                    builder: (context, snapshot) => Autocomplete<String>(
-                      initialValue: TextEditingValue(text: _category ?? ''),
-                      optionsBuilder: (value) =>
-                          snapshot.data
-                              ?.where(
-                                (category) => category.toLowerCase().contains(
-                                  value.text.toLowerCase(),
-                                ),
-                              )
-                              .toList() ??
-                          [],
-                      onSelected: (category) =>
-                          setState(() => _category = category),
-                      fieldViewBuilder: (context, controller, focusNode, _) =>
-                          TextFormField(
-                            controller: controller,
-                            focusNode: focusNode,
-                            decoration: InputDecoration(
-                              labelText: l10n.categoryLabel,
-                              hintText: _oldCat,
-                              helperText: l10n.categoryHelper,
-                              suffixIcon: IconButton(
-                                tooltip: l10n.manageCategories,
-                                icon: const Icon(Icons.settings),
-                                onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        const CategoryManagementPage(),
-                                  ),
-                                ),
+              StreamBuilder<List<String>>(
+                stream: getCategoriesStream(),
+                builder: (context, snapshot) => Autocomplete<String>(
+                  initialValue: TextEditingValue(text: _category ?? ''),
+                  optionsBuilder: (value) =>
+                      snapshot.data
+                          ?.where(
+                            (category) => category.toLowerCase().contains(
+                              value.text.toLowerCase(),
+                            ),
+                          )
+                          .toList() ??
+                      [],
+                  onSelected: (category) =>
+                      setState(() => _category = category),
+                  fieldViewBuilder: (context, controller, focusNode, _) =>
+                      TextFormField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          labelText: l10n.categoryLabel,
+                          hintText: _oldCat,
+                          helperText: l10n.categoryHelper,
+                          suffixIcon: IconButton(
+                            tooltip: l10n.manageCategories,
+                            icon: const Icon(Icons.settings),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const CategoriesPage(),
                               ),
                             ),
-                            onChanged: (value) => setState(
-                              () => _category = value.isEmpty ? null : value,
-                            ),
                           ),
-                    ),
-                  ),
+                        ),
+                        onChanged: (value) => setState(
+                          () => _category = normalizeCategory(value),
+                        ),
+                      ),
                 ),
               ),
               Selector<SettingsState, String>(

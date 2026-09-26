@@ -76,7 +76,7 @@ class _GroupHistoryState extends State<GroupHistory> {
     return [
       ExpansionTile(
         title: Text(
-          "${history.name} (${formatDisplayNumber(context, history.gymSets.length, maximumFractionDigits: 0)})",
+          "${exerciseLabel(context.l10n, history.name, history.category)} (${formatDisplayNumber(context, history.gymSets.length, maximumFractionDigits: 0)})",
         ),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.shortDateFormat,

@@ -606,9 +606,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get editSelected => 'चुने हुए संपादित करें';
 
   @override
-  String get newExercise => 'नया व्यायाम';
-
-  @override
   String get noGraphsFound => 'कोई ग्राफ़ नहीं मिला';
 
   @override
@@ -775,18 +772,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'श्रेणी का नाम दर्ज करें';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count प्रविष्टियों में उपयोग',
-      one: '1 प्रविष्टि में उपयोग',
-      zero: 'किसी प्रविष्टि में उपयोग नहीं',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -970,9 +955,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get showBodyWeight => 'शरीर का वज़न दिखाएँ';
 
   @override
-  String get showCategories => 'श्रेणियाँ दिखाएँ';
-
-  @override
   String get showNotes => 'नोट्स दिखाएँ';
 
   @override
@@ -1154,10 +1136,6 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'इस व्यायाम का इतिहास देखने के लिए कुछ सेट पूरे करें।';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'अपना पहला व्यायाम ग्राफ़ बनाने के लिए एक सेट पूरा करें।';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1402,9 +1380,6 @@ class AppLocalizationsHi extends AppLocalizations {
       'शरीर के वज़न की ट्रैकिंग चालू/बंद करें';
 
   @override
-  String get showCategoriesDescription => 'वर्कआउट श्रेणियाँ चालू/बंद करें';
-
-  @override
   String get showNotesDescription =>
       'अपने लिफ्ट का विवरण टेक्स्ट क्षेत्र में दर्ज करें';
 
@@ -1549,5 +1524,61 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'सेट $number';
+  }
+
+  @override
+  String get navCategories => 'श्रेणियाँ';
+
+  @override
+  String get uncategorized => 'बिना श्रेणी';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise पहले से $category में मौजूद है';
+  }
+
+  @override
+  String get actionOpen => 'खोलें';
+
+  @override
+  String get chooseCategory => 'एक श्रेणी चुनें';
+
+  @override
+  String get copyFromOtherCategory =>
+      'किसी दूसरी श्रेणी में पहले से है? उसका विवरण कॉपी करने के लिए उसे चुनें।';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count व्यायाम',
+      one: '1 व्यायाम',
+      zero: 'कोई व्यायाम नहीं',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$category में अभी कोई व्यायाम नहीं';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'इस श्रेणी में ट्रैक करना शुरू करने के लिए एक व्यायाम जोड़ें।';
+
+  @override
+  String get addExercisesFromCategories =>
+      'एक सेट दर्ज करें, या श्रेणियाँ टैब से व्यायाम जोड़ें।';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

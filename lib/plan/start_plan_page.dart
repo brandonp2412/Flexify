@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 Future<GymSet?> _getFirstOfLastSession(
   AppDatabase database,
   String exercise,
+  String? category,
   int? planId,
 ) async {
   final mostRecent =
@@ -35,7 +36,7 @@ Future<GymSet?> _getFirstOfLastSession(
               final planScope = planId == null
                   ? tbl.planId.isNull()
                   : tbl.planId.equals(planId);
-              return tbl.name.equals(exercise) &
+              return isExercise(tbl, exercise, category) &
                   planScope &
                   tbl.hidden.equals(false);
             })
@@ -56,7 +57,7 @@ Future<GymSet?> _getFirstOfLastSession(
           final planScope = planId == null
               ? tbl.planId.isNull()
               : tbl.planId.equals(planId);
-          return tbl.name.equals(exercise) &
+          return isExercise(tbl, exercise, category) &
               planScope &
               tbl.hidden.equals(false) &
               tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
@@ -69,12 +70,14 @@ Future<GymSet?> _getFirstOfLastSession(
       .getSingleOrNull();
 }
 
-/// Returns the first set from the most recent session for [exercise] in [planId].
+/// Returns the first set from the most recent session for [exercise] within
+/// [category] in [planId].
 Future<GymSet?> getFirstOfLastPlanSession(
   AppDatabase database,
   String exercise,
+  String? category,
   int planId,
-) => _getFirstOfLastSession(database, exercise, planId);
+) => _getFirstOfLastSession(database, exercise, category, planId);
 
 /// Returns the best StartPlan prefill without borrowing another plan's targets.
 ///
@@ -83,10 +86,11 @@ Future<GymSet?> getFirstOfLastPlanSession(
 Future<GymSet?> getStartPlanPrefill(
   AppDatabase database,
   String exercise,
+  String? category,
   int planId,
 ) async =>
-    await getFirstOfLastPlanSession(database, exercise, planId) ??
-    await _getFirstOfLastSession(database, exercise, null);
+    await getFirstOfLastPlanSession(database, exercise, category, planId) ??
+    await _getFirstOfLastSession(database, exercise, category, null);
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
@@ -119,7 +123,6 @@ class _StartPlanPageState extends State<StartPlanPage>
   bool _cardio = false;
   DateTime? _lastSaved;
   List<Rpm>? _rpms;
-  String? _category;
   String? _image;
 
   late Stream<List<PlanExercise>> _stream;
@@ -227,7 +230,15 @@ class _StartPlanPageState extends State<StartPlanPage>
                                         snapshot.data!.isNotEmpty &&
                                                 _selected <
                                                     snapshot.data!.length
-                                            ? snapshot.data![_selected].exercise
+                                            ? exerciseLabel(
+                                                context.l10n,
+                                                snapshot
+                                                    .data![_selected]
+                                                    .exercise,
+                                                snapshot
+                                                    .data![_selected]
+                                                    .category,
+                                              )
                                             : context.l10n.setDetails,
                                         style: Theme.of(context)
                                             .textTheme
@@ -251,6 +262,9 @@ class _StartPlanPageState extends State<StartPlanPage>
                                           exercise: snapshot
                                               .data![_selected]
                                               .exercise,
+                                          category: snapshot
+                                              .data![_selected]
+                                              .category,
                                           planId: widget.plan.id,
                                         ),
                                       ],
@@ -303,6 +317,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                             child: SessionSets(
                               key: const Key('start-plan-set-preview'),
                               exercise: snapshot.data![_selected].exercise,
+                              category: snapshot.data![_selected].category,
                               planId: widget.plan.id,
                               compact: true,
                             ),
@@ -587,8 +602,11 @@ class _StartPlanPageState extends State<StartPlanPage>
       if (parsedWeight == null) return;
       _stream.first.then((planExercises) {
         if (!mounted) return;
+        final selected = planExercises[_selected];
         final matches = _rpms!.where(
-          (rpm) => rpm.name == planExercises[_selected].exercise,
+          (rpm) =>
+              rpm.name == selected.exercise &&
+              rpm.category == selected.category,
         );
         if (matches.isEmpty) return;
 
@@ -640,9 +658,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.dispose();
   }
 
-  Future<GymSet?> getLast(String exercise) async {
+  Future<GymSet?> getLast(String exercise, String? category) async {
     return (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(exercise))
+          ..where((tbl) => isExercise(tbl, exercise, category))
           ..orderBy([
             (u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc),
           ])
@@ -650,18 +668,20 @@ class _StartPlanPageState extends State<StartPlanPage>
         .getSingleOrNull();
   }
 
-  /// Returns the first set from the most recent training session for [exercise].
+  /// Returns the first set from the most recent training session for
+  /// [exercise] within [category].
   ///
   /// "Most recent session" = the calendar day of the latest recorded set.
   /// Showing the first set (rather than the last) gives a better baseline for
   /// progressive overload when weights decrease across sets.
-  Future<GymSet?> getFirstOfLastSession(String exercise) =>
-      getStartPlanPrefill(db, exercise, widget.plan.id);
+  Future<GymSet?> getFirstOfLastSession(String exercise, String? category) =>
+      getStartPlanPrefill(db, exercise, category, widget.plan.id);
 
-  Future<GymSet?> getExerciseTemplate(String exercise) =>
+  Future<GymSet?> getExerciseTemplate(String exercise, String? category) =>
       (db.gymSets.select()
             ..where(
-              (tbl) => tbl.name.equals(exercise) & tbl.hidden.equals(true),
+              (tbl) =>
+                  isExercise(tbl, exercise, category) & tbl.hidden.equals(true),
             )
             ..orderBy([
               (u) =>
@@ -763,7 +783,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     _seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
     _incline.text = gymSet.incline?.toString() ?? "";
     _cardio = gymSet.cardio;
-    _category = gymSet.category;
     _image = gymSet.image;
     _notes.text = gymSet.notes ?? "";
   }
@@ -778,7 +797,9 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     if (!mounted) return;
 
-    final exercise = snapshot.data![_selected].exercise;
+    final planExercise = snapshot.data![_selected];
+    final exercise = planExercise.exercise;
+    final category = planExercise.category;
     double? bodyWeight;
     final settings = context.read<SettingsState>().value;
     final timerState = context.read<TimerState>();
@@ -786,7 +807,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       bodyWeight = (await getBodyWeight())?.weight;
     }
     if (settings.showBodyWeight && bodyWeight == null) {
-      final lastSet = await getLast(exercise);
+      final lastSet = await getLast(exercise, category);
       bodyWeight = lastSet?.bodyWeight;
     }
 
@@ -805,7 +826,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     if (!mounted) return;
-    final index = counts.indexWhere((element) => element.name == exercise);
+    final index = counts.indexWhere(
+      (element) => element.name == exercise && element.category == category,
+    );
 
     int? max;
     double? restMs;
@@ -830,7 +853,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       bodyWeight: Value.absentIfNull(bodyWeight),
       restMs: Value(restMs?.toInt()),
       planId: Value(widget.plan.id),
-      category: Value(_category),
+      category: Value(category),
       image: Value(_image),
       reps: parseDisplayNumber(context, _reps.text) ?? 0,
       weight: parseDisplayNumber(context, _weight.text) ?? 0,
@@ -900,8 +923,11 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     final selected = index.clamp(0, exercises.length - 1);
     final exercise = exercises[selected].exercise;
-    final last = await getFirstOfLastSession(exercise);
-    final template = last == null ? await getExerciseTemplate(exercise) : null;
+    final category = exercises[selected].category;
+    final last = await getFirstOfLastSession(exercise, category);
+    final template = last == null
+        ? await getExerciseTemplate(exercise, category)
+        : null;
     if (!mounted) return;
 
     setState(() {
@@ -928,7 +954,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     _seconds.text = '0';
     _incline.text = '';
     _cardio = false;
-    _category = null;
     _image = null;
     _notes.text = '';
   }

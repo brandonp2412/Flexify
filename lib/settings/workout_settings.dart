@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/category/categories_page.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -76,33 +76,14 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if (matches([l10n.showCategories, l10n.showCategoriesDescription]))
-      Tooltip(
-        message: l10n.showCategoriesDescription,
-        child: ListTile(
-          title: Text(l10n.showCategories, textAlign: TextAlign.center),
-          leading: settings.showCategories
-              ? const Icon(Icons.category)
-              : const Icon(Icons.category_outlined),
-          onTap: () => db.settings.update().write(
-            SettingsCompanion(showCategories: Value(!settings.showCategories)),
-          ),
-          trailing: Switch(
-            value: settings.showCategories,
-            onChanged: (value) => db.settings.update().write(
-              SettingsCompanion(showCategories: Value(value)),
-            ),
-          ),
-        ),
-      ),
     if (matches([l10n.manageCategories, l10n.manageCategoriesDescription]))
       ListTile(
         leading: const Icon(Icons.category),
         title: Text(l10n.manageCategories, textAlign: TextAlign.center),
         subtitle: Text(l10n.manageCategoriesDescription),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const CategoryManagementPage()),
-        ),
+        onTap: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const CategoriesPage())),
       ),
     if (matches([l10n.showNotes, l10n.showNotesDescription]))
       Tooltip(

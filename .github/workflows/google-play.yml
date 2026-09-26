@@ -18,6 +18,8 @@ concurrency:
 
 jobs:
   deploy-google-play:
+    # Publishing needs the upstream Play Console credentials.
+    if: github.repository == 'brandonp2412/Flexify'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

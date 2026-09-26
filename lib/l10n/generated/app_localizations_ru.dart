@@ -612,9 +612,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editSelected => 'Избранный редактор';
 
   @override
-  String get newExercise => 'Новое упражнение';
-
-  @override
   String get noGraphsFound => 'Графики не найдены';
 
   @override
@@ -783,20 +780,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Введите название категории';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Используется в $count записях',
-      many: 'Используется в $count записях',
-      few: 'Используется в $count записях',
-      one: 'Используется в $count записи',
-      zero: 'Не используется ни в одной записи',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -987,9 +970,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showBodyWeight => 'Показать вес тела';
 
   @override
-  String get showCategories => 'Показать категории';
-
-  @override
   String get showNotes => 'Показать ноты';
 
   @override
@@ -1176,10 +1156,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'Заполните некоторые наборы, чтобы увидеть эту историю упражнений здесь.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'Заполните набор, чтобы создать свой первый график упражнений.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1428,10 +1404,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Включить/отключить отслеживание массы тела';
 
   @override
-  String get showCategoriesDescription =>
-      'Категории включения/отключения тренировки';
-
-  @override
   String get showNotesDescription =>
       'Запись деталей вашего лифта в текстовой области';
 
@@ -1580,5 +1552,63 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'Подход $number';
+  }
+
+  @override
+  String get navCategories => 'Категории';
+
+  @override
+  String get uncategorized => 'Без категории';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise уже есть в категории $category';
+  }
+
+  @override
+  String get actionOpen => 'Открыть';
+
+  @override
+  String get chooseCategory => 'Выберите категорию';
+
+  @override
+  String get copyFromOtherCategory =>
+      'Уже есть в другой категории? Выберите его, чтобы скопировать данные.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count упражнения',
+      many: '$count упражнений',
+      few: '$count упражнения',
+      one: '$count упражнение',
+      zero: 'Нет упражнений',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'В категории $category пока нет упражнений';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'Добавьте упражнение, чтобы отслеживать его в этой категории.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'Запишите подход или добавьте упражнения на вкладке «Категории».';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

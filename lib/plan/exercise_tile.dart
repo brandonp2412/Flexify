@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' hide Column;
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -50,7 +51,13 @@ class _ExerciseTileState extends State<ExerciseTile> {
                   : true;
 
               return AlertDialog.adaptive(
-                title: Text(widget.planExercise.exercise.value),
+                title: Text(
+                  exerciseLabel(
+                    context.l10n,
+                    widget.planExercise.exercise.value,
+                    widget.planExercise.category.value,
+                  ),
+                ),
                 content: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -139,6 +146,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
         },
       ),
       title: Text(widget.planExercise.exercise.value),
+      subtitle: Text(
+        categoryLabel(context.l10n, widget.planExercise.category.value),
+      ),
       trailing: Switch(
         value: widget.planExercise.enabled.value,
         onChanged: (value) {

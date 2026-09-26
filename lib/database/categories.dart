@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 
@@ -8,12 +9,18 @@ class Categories extends Table {
   TextColumn get name => text().unique()();
 }
 
-/// A category and the number of workout entries currently using it.
+/// A category with the number of workout entries and distinct exercises
+/// currently using it.
 class CategorySummary {
-  const CategorySummary({required this.category, required this.usageCount});
+  const CategorySummary({
+    required this.category,
+    required this.usageCount,
+    required this.exerciseCount,
+  });
 
   final Category category;
   final int usageCount;
+  final int exerciseCount;
 }
 
 /// Adds [name] if it is not already available.
@@ -26,24 +33,43 @@ Future<void> createCategory(String name) {
       );
 }
 
-/// Removes [category] and clears it from every workout entry using it.
+/// Moves every set, plan entry, and graph preference in category [from] to
+/// category [to], where a null [to] leaves them uncategorized.
+///
+/// Exercises are identified by name and category, so this can merge two
+/// exercises that share a name. Their sets combine; the graph preferences
+/// already stored for the destination exercise win.
+Future<void> _moveCategoryUsage(String from, String? to) async {
+  await (db.gymSets.update()..where((set) => set.category.equals(from))).write(
+    GymSetsCompanion(category: Value(to)),
+  );
+  await (db.planExercises.update()
+        ..where((exercise) => exercise.category.equals(from)))
+      .write(PlanExercisesCompanion(category: Value(to)));
+  await db.customUpdate(
+    'UPDATE OR IGNORE graph_preferences SET category = ? WHERE category = ?',
+    variables: [Variable(to ?? ''), Variable(from)],
+    updates: {db.graphPreferences},
+  );
+  await (db.graphPreferences.delete()
+        ..where((preference) => preference.category.equals(from)))
+      .go();
+}
+
+/// Removes [category]; exercises in it become uncategorized.
 Future<void> deleteCategory(Category category) {
   return db.transaction(() async {
-    await (db.gymSets.update()
-          ..where((set) => set.category.equals(category.name)))
-        .write(const GymSetsCompanion(category: Value(null)));
+    await _moveCategoryUsage(category.name, null);
     await (db.categories.delete()
           ..where((entry) => entry.id.equals(category.id)))
         .go();
   });
 }
 
-/// Moves entries using [source] to [target], then removes [source].
+/// Moves exercises in [source] to [target], then removes [source].
 Future<void> mergeCategory(Category source, Category target) {
   return db.transaction(() async {
-    await (db.gymSets.update()
-          ..where((set) => set.category.equals(source.name)))
-        .write(GymSetsCompanion(category: Value(target.name)));
+    await _moveCategoryUsage(source.name, target.name);
     await (db.categories.delete()..where((entry) => entry.id.equals(source.id)))
         .go();
   });
@@ -55,9 +81,7 @@ Future<void> renameCategory(Category category, String name) {
   if (trimmedName == category.name) return Future.value();
 
   return db.transaction(() async {
-    await (db.gymSets.update()
-          ..where((set) => set.category.equals(category.name)))
-        .write(GymSetsCompanion(category: Value(trimmedName)));
+    await _moveCategoryUsage(category.name, trimmedName);
     await (db.categories.update()
           ..where((entry) => entry.id.equals(category.id)))
         .write(CategoriesCompanion(name: Value(trimmedName)));
@@ -69,7 +93,9 @@ Stream<List<CategorySummary>> watchCategorySummaries() {
   return db
       .customSelect(
         '''
-          SELECT categories.id, categories.name, COUNT(gym_sets.id) AS usage_count
+          SELECT categories.id, categories.name,
+            COUNT(gym_sets.id) AS usage_count,
+            COUNT(DISTINCT gym_sets.name) AS exercise_count
           FROM categories
           LEFT JOIN gym_sets ON gym_sets.category = categories.name
           GROUP BY categories.id, categories.name
@@ -87,8 +113,25 @@ Stream<List<CategorySummary>> watchCategorySummaries() {
                   name: row.read<String>('name'),
                 ),
                 usageCount: row.read<int>('usage_count'),
+                exerciseCount: row.read<int>('exercise_count'),
               ),
             )
             .toList(),
       );
+}
+
+/// Watches how many distinct exercises have no category, not counting the
+/// body weight log.
+Stream<int> watchUncategorizedExerciseCount() {
+  return db
+      .customSelect(
+        '''
+          SELECT COUNT(DISTINCT name) AS exercise_count FROM gym_sets
+          WHERE category IS NULL AND name != ?
+        ''',
+        variables: [const Variable(bodyWeightExercise)],
+        readsFrom: {db.gymSets},
+      )
+      .watchSingle()
+      .map((row) => row.read<int>('exercise_count'));
 }

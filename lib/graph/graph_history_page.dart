@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -12,14 +14,16 @@ import 'package:provider/provider.dart';
 
 class GraphHistoryPage extends StatefulWidget {
   final String name;
+  final String? category;
   final List<GymSet> gymSets;
-  final TabController tabController;
+  final TabController? tabController;
 
   const GraphHistoryPage({
     super.key,
     required this.name,
+    this.category,
     required this.gymSets,
-    required this.tabController,
+    this.tabController,
   });
 
   @override
@@ -31,7 +35,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   final _selection = SelectionController<int>();
   int limit = 20;
   final scroll = ScrollController();
-  late final TabController ctrl = widget.tabController;
+  late final TabController? ctrl = widget.tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +77,11 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   AppBar _buildAppBar() {
-    if (_selection.isEmpty) return AppBar(title: Text(widget.name));
+    if (_selection.isEmpty) {
+      return AppBar(
+        title: Text(exerciseLabel(context.l10n, widget.name, widget.category)),
+      );
+    }
 
     return AppBar(
       leading: IconButton(
@@ -151,7 +159,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
 
   @override
   void dispose() {
-    ctrl.removeListener(tabListener);
+    ctrl?.removeListener(tabListener);
     scroll.dispose();
     super.dispose();
   }
@@ -159,7 +167,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   @override
   void initState() {
     super.initState();
-    ctrl.addListener(tabListener);
+    ctrl?.addListener(tabListener);
   }
 
   Future<void> setSets() async {
@@ -171,7 +179,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
                   mode: OrderingMode.desc,
                 ),
               ])
-              ..where((tbl) => tbl.name.equals(widget.name))
+              ..where((tbl) => isExercise(tbl, widget.name, widget.category))
               ..where((tbl) => tbl.hidden.equals(false))
               ..limit(limit))
             .get();
@@ -184,8 +192,8 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   void tabListener() {
     final settings = context.read<SettingsState>().value;
     final index = settings.tabs.split(',').indexOf('GraphsPage');
-    if (ctrl.indexIsChanging == true) return;
-    if (ctrl.index != index) return;
+    if (ctrl?.indexIsChanging == true) return;
+    if (ctrl?.index != index) return;
     setSets();
   }
 }

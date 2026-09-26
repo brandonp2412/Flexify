@@ -54,6 +54,13 @@ enum StrengthMetric {
 
 enum GraphSort { dateDesc, dateAsc, name }
 
+/// Name of the entry Flexify uses to log body weight. It is not an exercise,
+/// so it never belongs to a category.
+const bodyWeightExercise = 'Weight';
+
+/// Tabs shown on a fresh install, in order.
+const defaultTabs = 'HistoryPage,CategoriesPage,PlansPage,GraphsPage,TimerPage';
+
 final defaultSettings = SettingsCompanion.insert(
   themeMode: ThemeMode.system.toString(),
   planTrailing: PlanTrailing.reorder.toString(),
@@ -76,8 +83,8 @@ final defaultSettings = SettingsCompanion.insert(
   showGlobalProgress: const Value(false),
   strengthUnit: 'last-entry',
   systemColors: false,
-  showCategories: const Value(false),
   keepScreenOn: const Value(false),
+  tabs: const Value(defaultTabs),
   showNotes: const Value(false),
 );
 
@@ -104,6 +111,17 @@ List<DropdownMenuItem<String>> cardioUnitMenuItems(AppLocalizations l10n) => [
 
 String displayMeasurementUnit(AppLocalizations l10n, String unit) =>
     unit == 'stone' ? l10n.stoneUnitShort : unit;
+
+/// Names an exercise together with its category, so exercises that share a
+/// name in different categories can be told apart.
+String exerciseLabel(AppLocalizations l10n, String name, String? category) {
+  if (name == bodyWeightExercise) return name;
+  return l10n.exerciseInCategory(name, category ?? l10n.uncategorized);
+}
+
+/// The display name of [category], where null means uncategorized.
+String categoryLabel(AppLocalizations l10n, String? category) =>
+    category ?? l10n.uncategorized;
 
 List<String> positiveReinforcementMessages(AppLocalizations l10n) => [
   l10n.recordEncouragement01,

@@ -813,10 +813,6 @@
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "New exercise",
-  "@newExercise": {
-    "description": "Action for creating a new exercise graph."
-  },
   "noGraphsFound": "No graphs found",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
@@ -1049,16 +1045,6 @@
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{Not used by any entries} =1{Used by 1 entry} other{Used by {count} entries}}",
-  "@categoryUsageCount": {
-    "description": "Number of workout entries using a category.",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
   "deleteCategoryConfirmation": "{count, plural, =0{Delete this category?} =1{Delete this category and remove it from 1 entry?} other{Delete this category and remove it from {count} entries?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
@@ -1284,10 +1270,6 @@
   "showBodyWeight": "Show body weight",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
-  },
-  "showCategories": "Show categories",
-  "@showCategories": {
-    "description": "Workout setting for exercise categories."
   },
   "showNotes": "Show notes",
   "@showNotes": {
@@ -1518,10 +1500,6 @@
   "completeSetsForHistory": "Complete some sets to see this exercise history here.",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
-  },
-  "completeSetForFirstGraph": "Complete a set to create your first exercise graph.",
-  "@completeSetForFirstGraph": {
-    "description": "Empty guidance when no exercise graphs exist."
   },
   "nothingMatchesGraphSearch": "Nothing matches “{query}”. You can create it as a new exercise.",
   "@nothingMatchesGraphSearch": {
@@ -1831,10 +1809,6 @@
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "Enable/disable workout categories",
-  "@showCategoriesDescription": {
-    "description": "Description of workout categories."
-  },
   "showNotesDescription": "Record details of your lift in a text area",
   "@showNotesDescription": {
     "description": "Description of workout notes."
@@ -2023,6 +1997,96 @@
     "placeholders": {
       "number": {
         "type": "int"
+      }
+    }
+  },
+  "navCategories": "Categories",
+  "@navCategories": {
+    "description": "Navigation label for the tab that lists exercise categories."
+  },
+  "uncategorized": "Uncategorized",
+  "@uncategorized": {
+    "description": "Label for exercises that do not belong to any category."
+  },
+  "exerciseInCategory": "{exercise} · {category}",
+  "@exerciseInCategory": {
+    "description": "Exercise name followed by the category it belongs to, used where two exercises can share a name.",
+    "placeholders": {
+      "exercise": {
+        "type": "String",
+        "example": "Reverse fly"
+      },
+      "category": {
+        "type": "String",
+        "example": "Back"
+      }
+    }
+  },
+  "exerciseExistsInCategory": "{exercise} already exists in {category}",
+  "@exerciseExistsInCategory": {
+    "description": "Shown when trying to add an exercise that is already in the chosen category.",
+    "placeholders": {
+      "exercise": {
+        "type": "String",
+        "example": "Reverse fly"
+      },
+      "category": {
+        "type": "String",
+        "example": "Back"
+      }
+    }
+  },
+  "actionOpen": "Open",
+  "@actionOpen": {
+    "description": "Action that opens an existing item."
+  },
+  "chooseCategory": "Choose a category",
+  "@chooseCategory": {
+    "description": "Validation message when an exercise has no category selected."
+  },
+  "copyFromOtherCategory": "Already in another category? Pick it to copy its details.",
+  "@copyFromOtherCategory": {
+    "description": "Helper text explaining that typing an existing exercise name offers to copy it from another category."
+  },
+  "categoryExerciseCount": "{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}",
+  "@categoryExerciseCount": {
+    "description": "Number of exercises in a category.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "noExercisesInCategory": "No exercises in {category} yet",
+  "@noExercisesInCategory": {
+    "description": "Empty state title for a category without exercises.",
+    "placeholders": {
+      "category": {
+        "type": "String",
+        "example": "Back"
+      }
+    }
+  },
+  "addExerciseToCategory": "Add an exercise to start tracking it in this category.",
+  "@addExerciseToCategory": {
+    "description": "Empty state message for a category without exercises."
+  },
+  "addExercisesFromCategories": "Log a set, or add exercises from the Categories tab.",
+  "@addExercisesFromCategories": {
+    "description": "Empty state message on the graphs tab explaining where new exercises are created."
+  },
+  "categoryAndDate": "{category} · {date}",
+  "@categoryAndDate": {
+    "description": "History entry subtitle showing the exercise category followed by when the set was logged.",
+    "placeholders": {
+      "category": {
+        "type": "String",
+        "example": "Back"
+      },
+      "date": {
+        "type": "String",
+        "example": "5 minutes ago"
       }
     }
   }

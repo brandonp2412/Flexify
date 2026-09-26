@@ -1227,12 +1227,6 @@ abstract class AppLocalizations {
   /// **'Edit selected'**
   String get editSelected;
 
-  /// Action for creating a new exercise graph.
-  ///
-  /// In en, this message translates to:
-  /// **'New exercise'**
-  String get newExercise;
-
   /// Empty state after graph search or filtering.
   ///
   /// In en, this message translates to:
@@ -1551,12 +1545,6 @@ abstract class AppLocalizations {
   /// **'Enter a category name'**
   String get categoryNameRequired;
 
-  /// Number of workout entries using a category.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{Not used by any entries} =1{Used by 1 entry} other{Used by {count} entries}}'**
-  String categoryUsageCount(int count);
-
   /// Confirmation shown before removing a category and clearing it from workout entries.
   ///
   /// In en, this message translates to:
@@ -1856,12 +1844,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show body weight'**
   String get showBodyWeight;
-
-  /// Workout setting for exercise categories.
-  ///
-  /// In en, this message translates to:
-  /// **'Show categories'**
-  String get showCategories;
 
   /// Workout setting for exercise notes.
   ///
@@ -2192,12 +2174,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete some sets to see this exercise history here.'**
   String get completeSetsForHistory;
-
-  /// Empty guidance when no exercise graphs exist.
-  ///
-  /// In en, this message translates to:
-  /// **'Complete a set to create your first exercise graph.'**
-  String get completeSetForFirstGraph;
 
   /// Empty graph search guidance.
   ///
@@ -2601,12 +2577,6 @@ abstract class AppLocalizations {
   /// **'Enable/disable tracking body weight'**
   String get showBodyWeightDescription;
 
-  /// Description of workout categories.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable/disable workout categories'**
-  String get showCategoriesDescription;
-
   /// Description of workout notes.
   ///
   /// In en, this message translates to:
@@ -2870,6 +2840,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {number}'**
   String setNumber(int number);
+
+  /// Navigation label for the tab that lists exercise categories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get navCategories;
+
+  /// Label for exercises that do not belong to any category.
+  ///
+  /// In en, this message translates to:
+  /// **'Uncategorized'**
+  String get uncategorized;
+
+  /// Exercise name followed by the category it belongs to, used where two exercises can share a name.
+  ///
+  /// In en, this message translates to:
+  /// **'{exercise} · {category}'**
+  String exerciseInCategory(String exercise, String category);
+
+  /// Shown when trying to add an exercise that is already in the chosen category.
+  ///
+  /// In en, this message translates to:
+  /// **'{exercise} already exists in {category}'**
+  String exerciseExistsInCategory(String exercise, String category);
+
+  /// Action that opens an existing item.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get actionOpen;
+
+  /// Validation message when an exercise has no category selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get chooseCategory;
+
+  /// Helper text explaining that typing an existing exercise name offers to copy it from another category.
+  ///
+  /// In en, this message translates to:
+  /// **'Already in another category? Pick it to copy its details.'**
+  String get copyFromOtherCategory;
+
+  /// Number of exercises in a category.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}'**
+  String categoryExerciseCount(int count);
+
+  /// Empty state title for a category without exercises.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises in {category} yet'**
+  String noExercisesInCategory(String category);
+
+  /// Empty state message for a category without exercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an exercise to start tracking it in this category.'**
+  String get addExerciseToCategory;
+
+  /// Empty state message on the graphs tab explaining where new exercises are created.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a set, or add exercises from the Categories tab.'**
+  String get addExercisesFromCategories;
+
+  /// History entry subtitle showing the exercise category followed by when the set was logged.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} · {date}'**
+  String categoryAndDate(String category, String date);
 }
 
 class _AppLocalizationsDelegate

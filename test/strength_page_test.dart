@@ -26,10 +26,12 @@ Future<void> pumpStrengthPage(
       child: StrengthPage(
         tabCtrl: MockTabController(),
         name: screenshotExercise,
+        category: fixtureCategory(screenshotExercise),
         unit: 'kg',
         data: await getStrengthData(
           target: 'kg',
           name: screenshotExercise,
+          category: fixtureCategory(screenshotExercise),
           metric: StrengthMetric.bestWeight,
           period: Period.day,
           start: null,
@@ -49,7 +51,7 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     await pumpStrengthPage(tester, harness);
 
-    expect(find.text(screenshotExercise), findsOne);
+    expect(find.text('$screenshotExercise · Shoulders'), findsOne);
     expect(find.text('Best weight'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
   });
