@@ -1,1 +1,5 @@
-• feat(l10n): dodać tłumaczenia wietnamskie
+• feat(l10n): dodać tłumaczenia bengalskie
+• feat(l10n): dodać tłumaczenia malajskie
+• feat(l10n): dodać tłumaczenia perskie
+• feat(l10n): dodać tłumaczenia tajskie
+• feat(l10n): dodać tłumaczenia urdu

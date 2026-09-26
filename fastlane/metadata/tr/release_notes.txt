@@ -1,1 +1,5 @@
-• feat(l10n): Vietnamca çeviriler ekle
+• feat(l10n): Bengalce çeviriler ekle
+• feat(l10n): Malayca çeviriler ekle
+• feat(l10n): Farsça çeviriler ekle
+• feat(l10n): Tayca çeviriler ekle
+• feat(l10n): Urduca çeviriler ekle

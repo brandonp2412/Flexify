@@ -1,1 +1,5 @@
-• feat(l10n) : ajouter les traductions vietnamiennes
+• feat(l10n) : ajouter les traductions bengalies
+• feat(l10n) : ajouter les traductions malaises
+• feat(l10n) : ajouter les traductions persanes
+• feat(l10n) : ajouter les traductions thaïlandaises
+• feat(l10n) : ajouter les traductions ourdoues

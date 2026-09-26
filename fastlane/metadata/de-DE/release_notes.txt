@@ -1,1 +1,5 @@
-• feat(l10n): Vietnamesische Übersetzungen hinzufügen
+• feat(l10n): Bengali-Übersetzungen hinzufügen
+• feat(l10n): Malaiische Übersetzungen hinzufügen
+• feat(l10n): Persische Übersetzungen hinzufügen
+• feat(l10n): Thailändische Übersetzungen hinzufügen
+• feat(l10n): Urdu-Übersetzungen hinzufügen
