@@ -1,0 +1,2 @@
+• feat(l10n): Avrupa Portekizcesi için mağaza meta verisi ekle
+• feat(l10n): Latin Amerika İspanyolcası için mağaza meta verisi ekle

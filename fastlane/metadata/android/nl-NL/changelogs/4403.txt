@@ -1,0 +1,2 @@
+• feat(l10n): storemetadata voor Europees Portugees toevoegen
+• feat(l10n): storemetadata voor Latijns-Amerikaans Spaans toevoegen
