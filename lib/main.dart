@@ -190,6 +190,7 @@ class App extends StatelessWidget {
           scaffoldMessengerKey: rootScaffoldMessenger,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          localeListResolutionCallback: resolveSystemLocale,
           locale: localeOverrideFromIdentifier(localeOverride),
           builder: (context, child) {
             _syncBackupLocalizations(context.l10n);

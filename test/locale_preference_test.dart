@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +119,35 @@ void main() {
       ]);
     },
   );
+
+  test('system locale resolution prefers a supported system language', () {
+    expect(
+      resolveSystemLocale(const [
+        Locale('tr', 'TR'),
+      ], AppLocalizations.supportedLocales),
+      const Locale('tr'),
+    );
+    expect(
+      resolveSystemLocale(const [
+        Locale('sv', 'SE'),
+        Locale('de', 'DE'),
+      ], AppLocalizations.supportedLocales),
+      const Locale('de'),
+    );
+  });
+
+  test('system locale resolution falls back to English', () {
+    expect(
+      resolveSystemLocale(const [
+        Locale('sv', 'SE'),
+      ], AppLocalizations.supportedLocales),
+      const Locale('en'),
+    );
+    expect(
+      resolveSystemLocale(const [], AppLocalizations.supportedLocales),
+      const Locale('en'),
+    );
+  });
 
   testWidgets('all translated locale choices survive app provider restart', (
     tester,
