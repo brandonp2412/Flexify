@@ -603,9 +603,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editSelected => 'تعديل المحدد';
 
   @override
-  String get newExercise => 'تمرين جديد';
-
-  @override
   String get noGraphsFound => 'لم يتم العثور على رسوم بيانية';
 
   @override
@@ -772,18 +769,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'أدخل اسم الفئة';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'مستخدمة في $count إدخالات',
-      one: 'مستخدمة في إدخال واحد',
-      zero: 'غير مستخدمة في أي إدخال',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -967,9 +952,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showBodyWeight => 'إظهار وزن الجسم';
 
   @override
-  String get showCategories => 'إظهار الفئات';
-
-  @override
   String get showNotes => 'إظهار الملاحظات';
 
   @override
@@ -1150,10 +1132,6 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'أكمل بعض المجموعات لرؤية سجل هذا التمرين هنا.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'أكمل مجموعة لإنشاء أول رسم بياني للتمرين.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1397,9 +1375,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showBodyWeightDescription => 'تفعيل/تعطيل تتبع وزن الجسم';
 
   @override
-  String get showCategoriesDescription => 'تفعيل/تعطيل فئات التمارين';
-
-  @override
   String get showNotesDescription => 'تسجيل تفاصيل رفعتك في منطقة نص';
 
   @override
@@ -1543,5 +1518,62 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'المجموعة $number';
+  }
+
+  @override
+  String get navCategories => 'الفئات';
+
+  @override
+  String get uncategorized => 'بدون فئة';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise موجود بالفعل في $category';
+  }
+
+  @override
+  String get actionOpen => 'فتح';
+
+  @override
+  String get chooseCategory => 'اختر فئة';
+
+  @override
+  String get copyFromOtherCategory => 'موجود في فئة أخرى؟ اختره لنسخ تفاصيله.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تمرين',
+      many: '$count تمرينًا',
+      few: '$count تمارين',
+      two: 'تمرينان',
+      one: 'تمرين واحد',
+      zero: 'لا توجد تمارين',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'لا توجد تمارين في $category بعد';
+  }
+
+  @override
+  String get addExerciseToCategory => 'أضف تمرينًا لبدء تتبعه في هذه الفئة.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'سجّل مجموعة، أو أضف تمارين من علامة تبويب الفئات.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

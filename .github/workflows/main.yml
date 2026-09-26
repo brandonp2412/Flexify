@@ -41,8 +41,13 @@ jobs:
       - name: Check
         run: ./scripts/check.sh
 
+  # Store screenshots and the release pipeline below need the upstream
+  # signing key and store credentials, so forks only run quality checks.
   generate-screenshots:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    if: >-
+      github.repository == 'brandonp2412/Flexify' &&
+      (github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
@@ -121,7 +126,7 @@ jobs:
           retention-days: 7
 
   version-bump:
-    if: github.event_name == 'push'
+    if: github.repository == 'brandonp2412/Flexify' && github.event_name == 'push'
     needs: [quality-checks, generate-screenshots]
     runs-on: ubuntu-latest
     permissions:

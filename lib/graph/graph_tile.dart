@@ -14,10 +14,9 @@ import 'package:provider/provider.dart';
 
 class GraphTile extends StatelessWidget {
   final GymSetsCompanion gymSet;
-  final Set<String> selected;
-  final Function(String) onSelect;
+  final Set<ExerciseKey> selected;
+  final Function(ExerciseKey) onSelect;
   final TabController tabCtrl;
-  final bool timeBasedXAxis; // new flag to control x-axis behaviour
 
   const GraphTile({
     super.key,
@@ -25,8 +24,10 @@ class GraphTile extends StatelessWidget {
     required this.onSelect,
     required this.gymSet,
     required this.tabCtrl,
-    this.timeBasedXAxis = false,
   });
+
+  ExerciseKey get _exercise =>
+      (name: gymSet.name.value, category: gymSet.category.value);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class GraphTile extends StatelessWidget {
 
     if (showImages && gymSet.image.value?.isNotEmpty == true) {
       leading = GestureDetector(
-        onTap: () => onSelect(gymSet.name.value),
+        onTap: () => onSelect(_exercise),
         child: Image.file(
           File(gymSet.image.value!),
           cacheWidth: 64,
@@ -65,7 +66,7 @@ class GraphTile extends StatelessWidget {
       );
     } else if (showImages) {
       leading = GestureDetector(
-        onTap: () => onSelect(gymSet.name.value),
+        onTap: () => onSelect(_exercise),
         child: Container(
           width: 24,
           height: 24,
@@ -93,7 +94,7 @@ class GraphTile extends StatelessWidget {
     final desktop = isDesktopLayout(context);
     final colors = Theme.of(context).colorScheme;
     final tile = Material(
-      color: selected.contains(gymSet.name.value)
+      color: selected.contains(_exercise)
           ? colors.primary.withValues(alpha: .18)
           : desktop
           ? colors.surfaceContainerLow
@@ -118,13 +119,16 @@ class GraphTile extends StatelessWidget {
           builder: (context, dateFormat, child) => Padding(
             padding: const EdgeInsets.only(top: 3),
             child: Text(
-              dateFormat == 'timeago'
-                  ? formatRelativeTime(context, gymSet.created.value)
-                  : formatDisplayDate(
-                      context,
-                      gymSet.created.value,
-                      dateFormat,
-                    ),
+              context.l10n.categoryAndDate(
+                categoryLabel(context.l10n, gymSet.category.value),
+                dateFormat == 'timeago'
+                    ? formatRelativeTime(context, gymSet.created.value)
+                    : formatDisplayDate(
+                        context,
+                        gymSet.created.value,
+                        dateFormat,
+                      ),
+              ),
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
@@ -140,59 +144,21 @@ class GraphTile extends StatelessWidget {
         ),
         onTap: () async {
           if (selected.isNotEmpty) {
-            onSelect(gymSet.name.value);
+            onSelect(_exercise);
             return;
           }
 
-          if (gymSet.cardio.value) {
-            final data = await getCardioData(
-              target: gymSet.unit.value,
-              name: gymSet.name.value,
-              metric: _isWeightUnit(gymSet.unit.value)
-                  ? CardioMetric.weight
-                  : CardioMetric.pace,
-              period: Period.day,
-              start: null,
-              end: null,
-            );
-            if (!context.mounted) return;
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CardioPage(
-                  tabCtrl: tabCtrl,
-                  name: gymSet.name.value,
-                  unit: gymSet.unit.value,
-                  data: data,
-                ),
-              ),
-            );
-            return;
-          }
-
-          final data = await getStrengthData(
-            target: gymSet.unit.value,
+          await openExerciseGraph(
+            Navigator.of(context),
             name: gymSet.name.value,
-            metric: StrengthMetric.bestWeight,
-            period: Period.day,
-            start: null,
-            end: null,
-            limit: 20,
-          );
-          if (!context.mounted) return;
-
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => StrengthPage(
-                name: gymSet.name.value,
-                unit: gymSet.unit.value,
-                data: data,
-                tabCtrl: tabCtrl,
-              ),
-            ),
+            category: gymSet.category.value,
+            unit: gymSet.unit.value,
+            cardio: gymSet.cardio.value,
+            tabCtrl: tabCtrl,
           );
         },
         onLongPress: () {
-          onSelect(gymSet.name.value);
+          onSelect(_exercise);
         },
       ),
     );
@@ -206,4 +172,62 @@ class GraphTile extends StatelessWidget {
 
   bool _isWeightUnit(String unit) =>
       unit == 'kg' || unit == 'lb' || unit == 'stone';
+}
+
+/// Opens the progress graph for the exercise [name] within [category] on
+/// [navigator].
+Future<void> openExerciseGraph(
+  NavigatorState navigator, {
+  required String name,
+  required String? category,
+  required String unit,
+  required bool cardio,
+  TabController? tabCtrl,
+}) async {
+  if (cardio) {
+    final weighted = unit == 'kg' || unit == 'lb' || unit == 'stone';
+    final data = await getCardioData(
+      target: unit,
+      name: name,
+      category: category,
+      metric: weighted ? CardioMetric.weight : CardioMetric.pace,
+      period: Period.day,
+      start: null,
+      end: null,
+    );
+    await navigator.push(
+      MaterialPageRoute(
+        builder: (context) => CardioPage(
+          tabCtrl: tabCtrl,
+          name: name,
+          category: category,
+          unit: unit,
+          data: data,
+        ),
+      ),
+    );
+    return;
+  }
+
+  final data = await getStrengthData(
+    target: unit,
+    name: name,
+    category: category,
+    metric: StrengthMetric.bestWeight,
+    period: Period.day,
+    start: null,
+    end: null,
+    limit: 20,
+  );
+  await navigator.push(
+    MaterialPageRoute(
+      builder: (context) => StrengthPage(
+        name: name,
+        category: category,
+        unit: unit,
+        data: data,
+        tabCtrl: tabCtrl,
+      ),
+    ),
+  );
 }

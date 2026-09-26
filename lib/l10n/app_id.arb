@@ -813,10 +813,6 @@
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "Latihan baru",
-  "@newExercise": {
-    "description": "Action for creating a new exercise graph."
-  },
   "noGraphsFound": "Tidak ada grafik",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
@@ -1049,16 +1045,6 @@
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{Tidak digunakan oleh entri apa pun} =1{Digunakan oleh 1 entri} other{Digunakan oleh {count} entri}}",
-  "@categoryUsageCount": {
-    "description": "Number of workout entries using a category.",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
   "deleteCategoryConfirmation": "{count, plural, =0{Hapus kategori ini?} =1{Hapus kategori ini dan keluarkan dari 1 entri?} other{Hapus kategori ini dan keluarkan dari {count} entri?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
@@ -1284,10 +1270,6 @@
   "showBodyWeight": "Tampilkan berat badan",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
-  },
-  "showCategories": "Tampilkan kategori",
-  "@showCategories": {
-    "description": "Workout setting for exercise categories."
   },
   "showNotes": "Tampilkan catatan",
   "@showNotes": {
@@ -1518,10 +1500,6 @@
   "completeSetsForHistory": "Selesaikan beberapa set untuk melihat riwayat latihan ini di sini.",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
-  },
-  "completeSetForFirstGraph": "Selesaikan satu set untuk membuat grafik latihan pertama Anda.",
-  "@completeSetForFirstGraph": {
-    "description": "Empty guidance when no exercise graphs exist."
   },
   "nothingMatchesGraphSearch": "Tidak ada yang cocok dengan “{query}”. Anda dapat membuatnya sebagai latihan baru.",
   "@nothingMatchesGraphSearch": {
@@ -1831,10 +1809,6 @@
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "Aktifkan atau nonaktifkan kategori latihan",
-  "@showCategoriesDescription": {
-    "description": "Description of workout categories."
-  },
   "showNotesDescription": "Catat detail angkatan Anda dalam kolom teks",
   "@showNotesDescription": {
     "description": "Description of workout notes."
@@ -2025,5 +1999,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "navCategories": "Kategori",
+  "uncategorized": "Tanpa kategori",
+  "exerciseExistsInCategory": "{exercise} sudah ada di {category}",
+  "actionOpen": "Buka",
+  "chooseCategory": "Pilih kategori",
+  "copyFromOtherCategory": "Sudah ada di kategori lain? Pilih untuk menyalin detailnya.",
+  "categoryExerciseCount": "{count, plural, =0{Tidak ada latihan} other{{count} latihan}}",
+  "noExercisesInCategory": "Belum ada latihan di {category}",
+  "addExerciseToCategory": "Tambahkan latihan untuk mulai mencatatnya di kategori ini.",
+  "addExercisesFromCategories": "Catat satu set, atau tambahkan latihan dari tab Kategori.",
+  "exerciseInCategory": "{exercise} · {category}",
+  "categoryAndDate": "{category} · {date}"
 }

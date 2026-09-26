@@ -605,9 +605,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editSelected => 'Edit selected';
 
   @override
-  String get newExercise => 'New exercise';
-
-  @override
   String get noGraphsFound => 'No graphs found';
 
   @override
@@ -774,18 +771,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Enter a category name';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Used by $count entries',
-      one: 'Used by 1 entry',
-      zero: 'Not used by any entries',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -966,9 +951,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'Show body weight';
-
-  @override
-  String get showCategories => 'Show categories';
 
   @override
   String get showNotes => 'Show notes';
@@ -1153,10 +1135,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'Complete some sets to see this exercise history here.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'Complete a set to create your first exercise graph.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1398,9 +1376,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showBodyWeightDescription => 'Enable/disable tracking body weight';
 
   @override
-  String get showCategoriesDescription => 'Enable/disable workout categories';
-
-  @override
   String get showNotesDescription =>
       'Record details of your lift in a text area';
 
@@ -1547,5 +1522,61 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'Set $number';
+  }
+
+  @override
+  String get navCategories => 'Categories';
+
+  @override
+  String get uncategorized => 'Uncategorized';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise already exists in $category';
+  }
+
+  @override
+  String get actionOpen => 'Open';
+
+  @override
+  String get chooseCategory => 'Choose a category';
+
+  @override
+  String get copyFromOtherCategory =>
+      'Already in another category? Pick it to copy its details.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count exercises',
+      one: '1 exercise',
+      zero: 'No exercises',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'No exercises in $category yet';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'Add an exercise to start tracking it in this category.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'Log a set, or add exercises from the Categories tab.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

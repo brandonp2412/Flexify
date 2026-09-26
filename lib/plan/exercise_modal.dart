@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
+import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/swap_workout.dart';
@@ -12,6 +14,7 @@ import 'package:provider/provider.dart';
 
 class ExerciseModal extends StatefulWidget {
   final String exercise;
+  final String? category;
   final bool hasData;
   final Function() onSelect;
   final int planId;
@@ -19,6 +22,7 @@ class ExerciseModal extends StatefulWidget {
   const ExerciseModal({
     super.key,
     required this.exercise,
+    this.category,
     required this.hasData,
     required this.onSelect,
     required this.planId,
@@ -48,7 +52,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
           ..where(
             (u) =>
                 u.planId.equals(widget.planId) &
-                u.exercise.equals(widget.exercise),
+                isPlannedExercise(u, widget.exercise, widget.category),
           )
           ..limit(1))
         .getSingle()
@@ -84,7 +88,13 @@ class _ExerciseModalState extends State<ExerciseModal> {
               context: rootContext,
               builder: (dialogContext) {
                 return AlertDialog.adaptive(
-                  title: Text(widget.exercise),
+                  title: Text(
+                    exerciseLabel(
+                      dialogContext.l10n,
+                      widget.exercise,
+                      widget.category,
+                    ),
+                  ),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -163,7 +173,10 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final gymSet =
                   await (db.select(db.gymSets)
-                        ..where((r) => db.gymSets.name.equals(widget.exercise))
+                        ..where(
+                          (r) =>
+                              isExercise(r, widget.exercise, widget.category),
+                        )
                         ..orderBy([
                           (u) => OrderingTerm(
                             expression: u.created,
@@ -190,7 +203,10 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final gymSet =
                   await (db.select(db.gymSets)
-                        ..where((r) => db.gymSets.name.equals(widget.exercise))
+                        ..where(
+                          (r) =>
+                              isExercise(r, widget.exercise, widget.category),
+                        )
                         ..orderBy([
                           (u) => OrderingTerm(
                             expression: u.created,
@@ -217,6 +233,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                 MaterialPageRoute(
                   builder: (context) => SwapWorkout(
                     exercise: widget.exercise,
+                    category: widget.category,
                     planId: widget.planId,
                   ),
                 ),
@@ -234,7 +251,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
     (db.planExercises.update()..where(
           (u) =>
               u.planId.equals(widget.planId) &
-              u.exercise.equals(widget.exercise),
+              isPlannedExercise(u, widget.exercise, widget.category),
         ))
         .write(PlanExercisesCompanion(timers: Value(value)));
   }
@@ -243,7 +260,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
     (db.planExercises.update()..where(
           (u) =>
               u.planId.equals(widget.planId) &
-              u.exercise.equals(widget.exercise),
+              isPlannedExercise(u, widget.exercise, widget.category),
         ))
         .write(PlanExercisesCompanion(maxSets: Value(int.tryParse(value))));
   }
@@ -252,7 +269,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
     (db.planExercises.update()..where(
           (u) =>
               u.planId.equals(widget.planId) &
-              u.exercise.equals(widget.exercise),
+              isPlannedExercise(u, widget.exercise, widget.category),
         ))
         .write(PlanExercisesCompanion(warmupSets: Value(int.tryParse(value))));
   }

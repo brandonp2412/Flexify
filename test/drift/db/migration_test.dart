@@ -15,6 +15,7 @@ import 'generated/schema_v4.dart' as v4;
 import 'generated/schema_v47.dart' as v47;
 import 'generated/schema_v5.dart' as v5;
 import 'generated/schema_v53.dart' as v53;
+import 'generated/schema_v58.dart' as v58;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -616,9 +617,11 @@ void main() {
       validateItems: (newDb) async {
         final settings = await newDb.select(newDb.settings).get();
         expect(settings.length, 1);
+        // The tested database opens at the latest schema, which also adds
+        // the Categories tab next to History (v59).
         expect(
           settings.first.tabs,
-          'HistoryPage,PlansPage,GraphsPage,TimerPage',
+          'HistoryPage,CategoriesPage,PlansPage,GraphsPage,TimerPage',
         );
       },
     );
@@ -664,4 +667,129 @@ void main() {
       },
     );
   });
+
+  test(
+    'migration from v58 to v59 keys exercises by name and category',
+    () async {
+      final created = DateTime(2026, 1, 1).millisecondsSinceEpoch ~/ 1000;
+      v58.GymSetsCompanion gymSet(
+        String name,
+        String? category, {
+        int? planId,
+        int offset = 0,
+      }) => v58.GymSetsCompanion.insert(
+        name: name,
+        reps: 8,
+        weight: 20,
+        unit: 'kg',
+        created: created + offset,
+        category: Value(category),
+        planId: Value(planId),
+      );
+
+      await verifier.testWithDataIntegrity(
+        oldVersion: 58,
+        newVersion: 59,
+        createOld: v58.DatabaseAtV58.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.gymSets, [
+            gymSet('Reverse fly', null),
+            gymSet('Reverse fly', 'Back', planId: 1, offset: 1),
+            gymSet('Lateral raise', '  '),
+            gymSet('Curl', 'Arms'),
+            gymSet('Curl', 'Biceps', offset: 1),
+            gymSet('Curl', null, offset: 2),
+            gymSet('Face pull', ' Back '),
+          ]);
+          batch.insertAll(oldDb.categories, [
+            v58.CategoriesCompanion.insert(name: 'Back'),
+            v58.CategoriesCompanion.insert(name: 'Arms'),
+          ]);
+          batch.insertAll(oldDb.planExercises, [
+            v58.PlanExercisesCompanion.insert(
+              enabled: 1,
+              exercise: 'Reverse fly',
+              planId: 1,
+            ),
+            v58.PlanExercisesCompanion.insert(
+              enabled: 1,
+              exercise: 'Lateral raise',
+              planId: 1,
+            ),
+          ]);
+          batch.insertAll(oldDb.graphPreferences, [
+            v58.GraphPreferencesCompanion.insert(
+              name: 'Reverse fly',
+              notes: const Value('Squeeze the rear delts'),
+            ),
+          ]);
+          batch.insertAll(oldDb.settings, [
+            v58.SettingsCompanion.insert(
+              alarmSound: '',
+              cardioUnit: 'last-entry',
+              curveLines: 1,
+              explainedPermissions: 0,
+              groupHistory: 0,
+              longDateFormat: 'timeago',
+              maxSets: 3,
+              planTrailing: 'PlanTrailing.reorder',
+              restTimers: 0,
+              shortDateFormat: 'd/M/yy',
+              showUnits: 1,
+              strengthUnit: 'last-entry',
+              systemColors: 0,
+              tabs: const Value('GraphsPage,SettingsPage'),
+              themeMode: 'ThemeMode.system',
+              timerDuration: 210000,
+              vibrate: 1,
+            ),
+          ]);
+        },
+        validateItems: (newDb) async {
+          final sets = await newDb.select(newDb.gymSets).get();
+          List<String?> categoriesOf(String name) => sets
+              .where((set) => set.name == name)
+              .map((set) => set.category)
+              .toList();
+
+          expect(
+            categoriesOf('Reverse fly'),
+            ['Back', 'Back'],
+            reason: 'Uncategorized sets join the only category the name used.',
+          );
+          expect(categoriesOf('Lateral raise'), [null]);
+          expect(categoriesOf('Curl'), [
+            'Arms',
+            'Biceps',
+            null,
+          ], reason: 'Ambiguous names keep uncategorized sets separate.');
+          expect(categoriesOf('Face pull'), ['Back']);
+
+          final planExercises = await newDb.select(newDb.planExercises).get();
+          expect(
+            {for (final pe in planExercises) pe.exercise: pe.category},
+            {'Reverse fly': 'Back', 'Lateral raise': null},
+          );
+
+          final preference = await newDb
+              .select(newDb.graphPreferences)
+              .getSingle();
+          expect(preference.name, 'Reverse fly');
+          expect(preference.category, 'Back');
+          expect(preference.notes, 'Squeeze the rear delts');
+
+          final categories = await newDb.select(newDb.categories).get();
+          expect(
+            categories.map((category) => category.name),
+            containsAll(['Arms', 'Back', 'Biceps', 'Triceps', 'Quads']),
+          );
+
+          final settings = await newDb.select(newDb.settings).getSingle();
+          expect(settings.tabs, 'GraphsPage,CategoriesPage,SettingsPage');
+        },
+      );
+    },
+  );
 }

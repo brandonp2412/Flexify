@@ -27,7 +27,12 @@ permissions:
 
 jobs:
   build-apk:
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.user.login == github.repository_owner && github.event.pull_request.head.repo.full_name == github.repository)
+    # Forks publish their own APKs through apk-release.yml instead.
+    if: >-
+      github.repository == 'brandonp2412/Flexify' &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.user.login == github.repository_owner &&
+      github.event.pull_request.head.repo.full_name == github.repository))
     runs-on: ubuntu-latest
     steps:
       - name: Validate manual PR source

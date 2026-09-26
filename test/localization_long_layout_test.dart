@@ -163,12 +163,14 @@ void main() {
     final l10n = lookupAppLocalizations(locale);
     final harness = await FlexifyTestHarness.create();
     const exercise = 'User entered press';
+    const category = 'User entered category';
     final now = DateTime.now().toLocal();
 
     await harness.pump(
       tester,
       StrengthPage(
         name: exercise,
+        category: category,
         unit: 'kg',
         data: [
           StrengthData(
@@ -187,7 +189,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text(exercise), findsWidgets);
+    expect(find.textContaining(exercise), findsWidgets);
+    expect(find.textContaining(category), findsWidgets);
     expect(find.text(l10n.bestWeight), findsWidgets);
     expect(tester.takeException(), isNull);
   });

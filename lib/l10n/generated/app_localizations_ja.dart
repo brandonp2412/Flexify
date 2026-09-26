@@ -590,9 +590,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get editSelected => '選択項目を編集';
 
   @override
-  String get newExercise => '新しい種目';
-
-  @override
   String get noGraphsFound => 'グラフが見つかりません';
 
   @override
@@ -758,18 +755,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'カテゴリ名を入力してください';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count件の項目で使用中',
-      one: '1件の項目で使用中',
-      zero: '使用している項目はありません',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -951,9 +936,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showBodyWeight => '体重を表示';
 
   @override
-  String get showCategories => 'カテゴリーを表示';
-
-  @override
   String get showNotes => 'メモを表示';
 
   @override
@@ -1130,9 +1112,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get completeSetsForHistory => 'いくつかのセットを完了すると、この種目の履歴をここで確認できます。';
-
-  @override
-  String get completeSetForFirstGraph => 'セットを完了すると最初の種目グラフを作成できます。';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1359,9 +1338,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showBodyWeightDescription => '体重の記録を有効または無効にします';
 
   @override
-  String get showCategoriesDescription => 'トレーニングカテゴリーを有効または無効にします';
-
-  @override
   String get showNotesDescription => 'トレーニングの詳細をテキスト欄に記録します';
 
   @override
@@ -1497,5 +1473,57 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'セット $number';
+  }
+
+  @override
+  String get navCategories => 'カテゴリー';
+
+  @override
+  String get uncategorized => '未分類';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exerciseは$categoryにすでにあります';
+  }
+
+  @override
+  String get actionOpen => '開く';
+
+  @override
+  String get chooseCategory => 'カテゴリーを選択してください';
+
+  @override
+  String get copyFromOtherCategory => '別のカテゴリーにある種目ですか？選ぶと詳細をコピーできます。';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count種目',
+      zero: '種目なし',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return '$categoryには種目がまだありません';
+  }
+
+  @override
+  String get addExerciseToCategory => '種目を追加すると、このカテゴリーで記録を始められます。';
+
+  @override
+  String get addExercisesFromCategories => 'セットを記録するか、カテゴリータブから種目を追加してください。';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

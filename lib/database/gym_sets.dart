@@ -5,6 +5,36 @@ import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
 
+/// Identifies one exercise. The same name in two categories is tracked as two
+/// separate exercises, so both parts are needed wherever sets are matched.
+typedef ExerciseKey = ({String name, String? category});
+
+/// Returns [category] without surrounding whitespace, or null when blank.
+///
+/// Null means "uncategorized" wherever exercises are matched or stored.
+String? normalizeCategory(String? category) {
+  final trimmed = category?.trim();
+  return trimmed == null || trimmed.isEmpty ? null : trimmed;
+}
+
+/// Matches the gym sets in [table] logged for [name] within [category].
+Expression<bool> isExercise(
+  $GymSetsTable table,
+  String name,
+  String? category,
+) =>
+    table.name.equals(name) &
+    table.category.equalsNullable(normalizeCategory(category));
+
+/// Matches the plan entries in [table] for [name] within [category].
+Expression<bool> isPlannedExercise(
+  $PlanExercisesTable table,
+  String name,
+  String? category,
+) =>
+    table.exercise.equals(name) &
+    table.category.equalsNullable(normalizeCategory(category));
+
 const inclineAdjustedPace = CustomExpression<double>(
   "SUM(distance) * POW(1.1, AVG(incline)) / SUM(duration)",
 );
@@ -37,6 +67,7 @@ double getCardio(TypedResult row, CardioMetric metric) {
 Future<List<CardioData>> getCardioData({
   Period period = Period.day,
   String name = "",
+  String? category,
   CardioMetric metric = CardioMetric.pace,
   String target = "km",
   DateTime? start,
@@ -57,7 +88,7 @@ Future<List<CardioData>> getCardioData({
               db.gymSets.created,
               db.gymSets.unit,
             ])
-            ..where(db.gymSets.name.equals(name))
+            ..where(isExercise(db.gymSets, name, category))
             ..where(db.gymSets.hidden.equals(false))
             ..where(
               db.gymSets.created.isBiggerOrEqualValue(start ?? DateTime(0)),
@@ -144,8 +175,9 @@ Future<List<Rpm>> getRpms() async {
     WITH time_diffs AS (
       SELECT
         name,
+        category,
         reps,
-        ((created - LAG(created) OVER (PARTITION BY name ORDER BY created)) / 60.0) as time_diff,
+        ((created - LAG(created) OVER (PARTITION BY name, category ORDER BY created)) / 60.0) as time_diff,
         weight
       FROM gym_sets
       WHERE created >= strftime('%s', 'now') - 60*60*24*30
@@ -154,6 +186,7 @@ Future<List<Rpm>> getRpms() async {
     reps_per_min AS (
       SELECT
         name,
+        category,
         (reps / time_diff) as rpm,
         weight
       FROM time_diffs
@@ -162,17 +195,19 @@ Future<List<Rpm>> getRpms() async {
     )
     SELECT
       name,
+      category,
       AVG(rpm) as rpm,
       weight
     FROM reps_per_min
     WHERE rpm IS NOT NULL
       AND rpm BETWEEN 0.1 AND 10
-    GROUP BY name, weight;
+    GROUP BY name, category, weight;
   """).get();
   return results
       .map(
         (result) => (
           name: result.read<String>('name'),
+          category: result.read<String?>('category'),
           rpm: result.read<double>('rpm'),
           weight: result.read<double>('weight'),
         ),
@@ -200,7 +235,7 @@ Stream<List<GymSetsCompanion>> watchGraphs() {
             mode: OrderingMode.desc,
           ),
         ])
-        ..groupBy([db.gymSets.name]))
+        ..groupBy([db.gymSets.name, db.gymSets.category]))
       .watch()
       .map(
         (results) => results
@@ -244,6 +279,7 @@ double getStrength(TypedResult row, StrengthMetric metric) {
 Future<List<StrengthData>> getStrengthData({
   required String target,
   required String name,
+  String? category,
   required StrengthMetric metric,
   required Period period,
   required DateTime? start,
@@ -263,7 +299,7 @@ Future<List<StrengthData>> getStrengthData({
       db.gymSets.unit,
       relativeCol,
     ])
-    ..where(db.gymSets.name.equals(name))
+    ..where(isExercise(db.gymSets, name, category))
     ..where(db.gymSets.hidden.equals(false))
     ..orderBy([OrderingTerm(expression: col, mode: OrderingMode.desc)])
     ..limit(limit)
@@ -381,7 +417,7 @@ Future<bool> isBest(GymSet gymSet) async {
     final result =
         await (db.selectOnly(db.gymSets)
               ..addColumns([db.gymSets.weight, db.gymSets.duration])
-              ..where(db.gymSets.name.equals(gymSet.name))
+              ..where(isExercise(db.gymSets, gymSet.name, gymSet.category))
               ..where(db.gymSets.id.isNotValue(gymSet.id))
               ..where(db.gymSets.hidden.equals(false))
               ..orderBy([
@@ -410,7 +446,7 @@ Future<bool> isBest(GymSet gymSet) async {
     final best =
         await (db.selectOnly(db.gymSets)
               ..addColumns([paceExpr])
-              ..where(db.gymSets.name.equals(gymSet.name))
+              ..where(isExercise(db.gymSets, gymSet.name, gymSet.category))
               ..where(db.gymSets.id.isNotValue(gymSet.id))
               ..where(db.gymSets.hidden.equals(false))
               ..where(db.gymSets.duration.isBiggerThanValue(0))
@@ -427,7 +463,7 @@ Future<bool> isBest(GymSet gymSet) async {
   final result =
       await (db.selectOnly(db.gymSets)
             ..addColumns([db.gymSets.weight, db.gymSets.reps])
-            ..where(db.gymSets.name.equals(gymSet.name))
+            ..where(isExercise(db.gymSets, gymSet.name, gymSet.category))
             ..where(db.gymSets.id.isNotValue(gymSet.id))
             ..where(db.gymSets.hidden.equals(false))
             ..orderBy([
@@ -453,7 +489,7 @@ Future<bool> isBest(GymSet gymSet) async {
 bool _isWeightUnit(String unit) =>
     unit == 'kg' || unit == 'lb' || unit == 'stone';
 
-typedef Rpm = ({String name, double rpm, double weight});
+typedef Rpm = ({String name, String? category, double rpm, double weight});
 
 class GymSets extends Table {
   RealColumn get bodyWeight => real().withDefault(const Constant(0.0))();

@@ -813,10 +813,6 @@
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "নতুন ব্যায়াম",
-  "@newExercise": {
-    "description": "Action for creating a new exercise graph."
-  },
   "noGraphsFound": "কোনো গ্রাফ পাওয়া যায়নি",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
@@ -1049,16 +1045,6 @@
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{কোনো এন্ট্রিতে ব্যবহৃত নয়} =1{১টি এন্ট্রিতে ব্যবহৃত} other{{count}টি এন্ট্রিতে ব্যবহৃত}}",
-  "@categoryUsageCount": {
-    "description": "Number of workout entries using a category.",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
   "deleteCategoryConfirmation": "{count, plural, =0{এই বিভাগটি মুছবেন?} =1{এই বিভাগটি মুছে ১টি এন্ট্রি থেকে সরাবেন?} other{এই বিভাগটি মুছে {count}টি এন্ট্রি থেকে সরাবেন?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
@@ -1284,10 +1270,6 @@
   "showBodyWeight": "শরীরের ওজন দেখান",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
-  },
-  "showCategories": "বিভাগ দেখান",
-  "@showCategories": {
-    "description": "Workout setting for exercise categories."
   },
   "showNotes": "নোট দেখান",
   "@showNotes": {
@@ -1518,10 +1500,6 @@
   "completeSetsForHistory": "এই ব্যায়ামের ইতিহাস এখানে দেখতে কয়েকটি সেট সম্পন্ন করুন।",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
-  },
-  "completeSetForFirstGraph": "প্রথম ব্যায়াম গ্রাফ তৈরি করতে একটি সেট সম্পন্ন করুন।",
-  "@completeSetForFirstGraph": {
-    "description": "Empty guidance when no exercise graphs exist."
   },
   "nothingMatchesGraphSearch": "“{query}”-এর সঙ্গে কিছুই মেলেনি। এটিকে নতুন ব্যায়াম হিসেবে তৈরি করতে পারেন।",
   "@nothingMatchesGraphSearch": {
@@ -1831,10 +1809,6 @@
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "ওয়ার্কআউট বিভাগ চালু/বন্ধ করুন",
-  "@showCategoriesDescription": {
-    "description": "Description of workout categories."
-  },
   "showNotesDescription": "টেক্সট বক্সে আপনার লিফটের বিবরণ লিখুন",
   "@showNotesDescription": {
     "description": "Description of workout notes."
@@ -2025,5 +1999,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "navCategories": "বিভাগসমূহ",
+  "uncategorized": "বিভাগহীন",
+  "exerciseExistsInCategory": "{exercise} ইতিমধ্যে {category}-এ আছে",
+  "actionOpen": "খুলুন",
+  "chooseCategory": "একটি বিভাগ বেছে নিন",
+  "copyFromOtherCategory": "অন্য বিভাগে আগে থেকেই আছে? এর বিবরণ কপি করতে এটি বেছে নিন।",
+  "categoryExerciseCount": "{count, plural, =0{কোনো ব্যায়াম নেই} =1{১টি ব্যায়াম} other{{count}টি ব্যায়াম}}",
+  "noExercisesInCategory": "{category}-এ এখনো কোনো ব্যায়াম নেই",
+  "addExerciseToCategory": "এই বিভাগে ট্র্যাক করা শুরু করতে একটি ব্যায়াম যোগ করুন।",
+  "addExercisesFromCategories": "একটি সেট লিখুন, অথবা বিভাগসমূহ ট্যাব থেকে ব্যায়াম যোগ করুন।",
+  "exerciseInCategory": "{exercise} · {category}",
+  "categoryAndDate": "{category} · {date}"
 }

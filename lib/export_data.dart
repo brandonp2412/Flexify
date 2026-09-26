@@ -53,6 +53,7 @@ class _ExportDataState extends State<ExportData> {
                           'cardio',
                           'hidden',
                           'incline',
+                          'category',
                         ],
                       ];
                       for (var gymSet in gymSets) {
@@ -69,6 +70,7 @@ class _ExportDataState extends State<ExportData> {
                           gymSet.cardio,
                           gymSet.hidden,
                           gymSet.incline,
+                          gymSet.category ?? '',
                         ]);
                       }
                       final csv = CsvEncoder(lineDelimiter: "\n").convert(data);
@@ -89,7 +91,14 @@ class _ExportDataState extends State<ExportData> {
                       Navigator.pop(context);
                       final plans = await db.plans.select().get();
                       final List<List<dynamic>> data = [
-                        ['id', 'days', 'title', 'sequence', 'exercises'],
+                        [
+                          'id',
+                          'days',
+                          'title',
+                          'sequence',
+                          'exercises',
+                          'categories',
+                        ],
                       ];
                       for (var plan in plans) {
                         final planExercises =
@@ -103,6 +112,7 @@ class _ExportDataState extends State<ExportData> {
                           plan.title ?? '',
                           plan.sequence ?? '',
                           planExercises.map((e) => e.exercise).join(';'),
+                          planExercises.map((e) => e.category ?? '').join(';'),
                         ]);
                       }
 

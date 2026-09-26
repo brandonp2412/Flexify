@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/category/categories_page.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -221,6 +222,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             if (tab == 'HistoryPage') {
               return HistoryPage(tabController: _controller);
             }
+            if (tab == 'CategoriesPage')
+              return CategoriesPage(tabController: _controller);
             if (tab == 'PlansPage')
               return PlansPage(key: _plansPageKey, tabController: _controller);
             if (tab == 'GraphsPage') {

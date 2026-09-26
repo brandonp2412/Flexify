@@ -21,10 +21,16 @@ import 'package:share_plus/share_plus.dart';
 
 class HistoryDay {
   final String name;
+  final String? category;
   final List<GymSet> gymSets;
   final DateTime day;
 
-  HistoryDay({required this.name, required this.gymSets, required this.day});
+  HistoryDay({
+    required this.name,
+    required this.category,
+    required this.gymSets,
+    required this.day,
+  });
 }
 
 class HistoryPage extends StatefulWidget {
@@ -238,7 +244,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     final summaries = gymSets
                         .map(
                           (gymSet) =>
-                              "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(context.l10n, gymSet.unit)} ${gymSet.name}",
+                              "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(context.l10n, gymSet.unit)} ${exerciseLabel(context.l10n, gymSet.name, gymSet.category)}",
                         )
                         .join(', ');
                     await SharePlus.instance.share(
@@ -333,10 +339,16 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     final list = <HistoryDay>[];
     for (final gymSet in gymSets) {
       final day = DateUtils.dateOnly(gymSet.created);
-      final key = '${gymSet.name}|${day.millisecondsSinceEpoch}';
+      final key =
+          '${gymSet.name}|${gymSet.category}|${day.millisecondsSinceEpoch}';
       final existing = map[key];
       if (existing == null) {
-        final hd = HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day);
+        final hd = HistoryDay(
+          name: gymSet.name,
+          category: gymSet.category,
+          gymSets: [gymSet],
+          day: day,
+        );
         map[key] = hd;
         list.add(hd);
       } else {
@@ -377,7 +389,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     if (rowLimit != null) query.limit(rowLimit);
 
     for (final term in terms) {
-      query.where((tbl) => tbl.name.contains(term));
+      query.where(
+        (tbl) => tbl.name.contains(term) | tbl.category.contains(term),
+      );
     }
 
     if (category != null) query.where((tbl) => tbl.category.equals(category!));

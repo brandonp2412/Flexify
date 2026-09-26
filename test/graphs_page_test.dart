@@ -170,7 +170,11 @@ void main() {
 
     final planId = await harness.database.plans.insertOne(planFixture());
     await harness.database.planExercises.insertOne(
-      planExerciseFixture(planId: planId, exercise: 'Zz unique test exercise'),
+      planExerciseFixture(
+        planId: planId,
+        exercise: 'Zz unique test exercise',
+        category: 'Chest',
+      ),
     );
 
     await pumpGraphsPage(tester, harness);

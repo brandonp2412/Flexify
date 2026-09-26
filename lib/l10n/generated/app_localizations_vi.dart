@@ -604,9 +604,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get editSelected => 'Đã chọn chỉnh sửa';
 
   @override
-  String get newExercise => 'Bài tập mới';
-
-  @override
   String get noGraphsFound => 'Không tìm thấy biểu đồ nào';
 
   @override
@@ -774,18 +771,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get categoryNameRequired => 'Nhập tên danh mục';
-
-  @override
-  String categoryUsageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Được $count mục sử dụng',
-      one: 'Được 1 mục sử dụng',
-      zero: 'Không được mục nào sử dụng',
-    );
-    return '$_temp0';
-  }
 
   @override
   String deleteCategoryConfirmation(int count) {
@@ -967,9 +952,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get showBodyWeight => 'Hiển thị trọng lượng cơ thể';
-
-  @override
-  String get showCategories => 'Hiển thị danh mục';
 
   @override
   String get showNotes => 'Hiển thị ghi chú';
@@ -1156,10 +1138,6 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get completeSetsForHistory =>
       'Hoàn thành một vài hiệp để xem lịch sử bài tập tại đây.';
-
-  @override
-  String get completeSetForFirstGraph =>
-      'Hoàn thành một hiệp để tạo biểu đồ bài tập đầu tiên.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1410,9 +1388,6 @@ class AppLocalizationsVi extends AppLocalizations {
       'Bật/tắt tính năng theo dõi trọng lượng cơ thể';
 
   @override
-  String get showCategoriesDescription => 'Bật/tắt danh mục tập luyện';
-
-  @override
   String get showNotesDescription =>
       'Ghi lại chi tiết về thang máy của bạn trong vùng văn bản';
 
@@ -1562,5 +1537,60 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String setNumber(int number) {
     return 'Hiệp $number';
+  }
+
+  @override
+  String get navCategories => 'Danh mục';
+
+  @override
+  String get uncategorized => 'Chưa phân loại';
+
+  @override
+  String exerciseInCategory(String exercise, String category) {
+    return '$exercise · $category';
+  }
+
+  @override
+  String exerciseExistsInCategory(String exercise, String category) {
+    return '$exercise đã có trong $category';
+  }
+
+  @override
+  String get actionOpen => 'Mở';
+
+  @override
+  String get chooseCategory => 'Chọn một danh mục';
+
+  @override
+  String get copyFromOtherCategory =>
+      'Đã có trong danh mục khác? Chọn để sao chép thông tin chi tiết.';
+
+  @override
+  String categoryExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bài tập',
+      zero: 'Chưa có bài tập',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String noExercisesInCategory(String category) {
+    return 'Chưa có bài tập nào trong $category';
+  }
+
+  @override
+  String get addExerciseToCategory =>
+      'Thêm một bài tập để bắt đầu theo dõi trong danh mục này.';
+
+  @override
+  String get addExercisesFromCategories =>
+      'Ghi một hiệp, hoặc thêm bài tập từ thẻ Danh mục.';
+
+  @override
+  String categoryAndDate(String category, String date) {
+    return '$category · $date';
   }
 }

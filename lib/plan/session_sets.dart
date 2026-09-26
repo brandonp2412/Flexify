@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
@@ -16,12 +17,14 @@ import 'package:flutter/material.dart';
 /// reactively as sets are saved or edited.
 class SessionSets extends StatefulWidget {
   final String exercise;
+  final String? category;
   final int planId;
   final bool compact;
 
   const SessionSets({
     super.key,
     required this.exercise,
+    this.category,
     required this.planId,
     this.compact = false,
   });
@@ -45,6 +48,7 @@ class _SessionSetsState extends State<SessionSets> {
   void didUpdateWidget(SessionSets oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.exercise != widget.exercise ||
+        oldWidget.category != widget.category ||
         oldWidget.planId != widget.planId) {
       _lastSetCount = 0;
       _watch();
@@ -63,7 +67,7 @@ class _SessionSetsState extends State<SessionSets> {
         (db.gymSets.select()
               ..where(
                 (tbl) =>
-                    tbl.name.equals(widget.exercise) &
+                    isExercise(tbl, widget.exercise, widget.category) &
                     tbl.planId.equals(widget.planId) &
                     tbl.hidden.equals(false) &
                     tbl.created.isBiggerOrEqualValue(cutoff),

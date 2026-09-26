@@ -268,6 +268,7 @@ void main() {
             final data = await getStrengthData(
               target: 'kg',
               name: screenshotExercise,
+              category: fixtureCategory(screenshotExercise),
               metric: StrengthMetric.bestWeight,
               period: Period.day,
               start: null,
@@ -280,6 +281,7 @@ void main() {
               page: StrengthPage(
                 tabCtrl: MockTabController(),
                 name: 'Shoulder press',
+                category: fixtureCategory(screenshotExercise),
                 unit: 'kg',
                 data: data,
               ),

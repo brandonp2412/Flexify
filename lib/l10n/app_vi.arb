@@ -813,10 +813,6 @@
   "@editSelected": {
     "description": "Tooltip for editing selected records."
   },
-  "newExercise": "Bài tập mới",
-  "@newExercise": {
-    "description": "Action for creating a new exercise graph."
-  },
   "noGraphsFound": "Không tìm thấy biểu đồ nào",
   "@noGraphsFound": {
     "description": "Empty state after graph search or filtering."
@@ -1049,16 +1045,6 @@
   "@categoryNameRequired": {
     "description": "Validation error for an empty category name."
   },
-  "categoryUsageCount": "{count, plural, =0{Không được mục nào sử dụng} =1{Được 1 mục sử dụng} other{Được {count} mục sử dụng}}",
-  "@categoryUsageCount": {
-    "description": "Number of workout entries using a category.",
-    "placeholders": {
-      "count": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
   "deleteCategoryConfirmation": "{count, plural, =0{Xóa danh mục này?} =1{Xóa danh mục này và xóa nó khỏi 1 mục?} other{Xóa danh mục này và xóa nó khỏi {count} mục?}}",
   "@deleteCategoryConfirmation": {
     "description": "Confirmation shown before removing a category and clearing it from workout entries.",
@@ -1284,10 +1270,6 @@
   "showBodyWeight": "Hiển thị trọng lượng cơ thể",
   "@showBodyWeight": {
     "description": "Workout setting for displaying bodyweight input."
-  },
-  "showCategories": "Hiển thị danh mục",
-  "@showCategories": {
-    "description": "Workout setting for exercise categories."
   },
   "showNotes": "Hiển thị ghi chú",
   "@showNotes": {
@@ -1518,10 +1500,6 @@
   "completeSetsForHistory": "Hoàn thành một vài hiệp để xem lịch sử bài tập tại đây.",
   "@completeSetsForHistory": {
     "description": "Empty guidance for exercise history."
-  },
-  "completeSetForFirstGraph": "Hoàn thành một hiệp để tạo biểu đồ bài tập đầu tiên.",
-  "@completeSetForFirstGraph": {
-    "description": "Empty guidance when no exercise graphs exist."
   },
   "nothingMatchesGraphSearch": "Không có gì khớp với “{query}”. Bạn có thể tạo nó như một bài tập mới.",
   "@nothingMatchesGraphSearch": {
@@ -1831,10 +1809,6 @@
   "@showBodyWeightDescription": {
     "description": "Description of bodyweight tracking."
   },
-  "showCategoriesDescription": "Bật/tắt danh mục tập luyện",
-  "@showCategoriesDescription": {
-    "description": "Description of workout categories."
-  },
   "showNotesDescription": "Ghi lại chi tiết về thang máy của bạn trong vùng văn bản",
   "@showNotesDescription": {
     "description": "Description of workout notes."
@@ -2025,5 +1999,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "navCategories": "Danh mục",
+  "uncategorized": "Chưa phân loại",
+  "exerciseExistsInCategory": "{exercise} đã có trong {category}",
+  "actionOpen": "Mở",
+  "chooseCategory": "Chọn một danh mục",
+  "copyFromOtherCategory": "Đã có trong danh mục khác? Chọn để sao chép thông tin chi tiết.",
+  "categoryExerciseCount": "{count, plural, =0{Chưa có bài tập} other{{count} bài tập}}",
+  "noExercisesInCategory": "Chưa có bài tập nào trong {category}",
+  "addExerciseToCategory": "Thêm một bài tập để bắt đầu theo dõi trong danh mục này.",
+  "addExercisesFromCategories": "Ghi một hiệp, hoặc thêm bài tập từ thẻ Danh mục.",
+  "exerciseInCategory": "{exercise} · {category}",
+  "categoryAndDate": "{category} · {date}"
 }

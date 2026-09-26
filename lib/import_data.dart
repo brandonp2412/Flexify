@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -314,6 +315,9 @@ $version
           incline: columns.elementAtOrNull(11) == 'incline'
               ? Value(int.tryParse(row[11]?.toString() ?? ''))
               : const Value(null),
+          category: columns.elementAtOrNull(12) == 'category'
+              ? Value(normalizeCategory(row.elementAtOrNull(12)?.toString()))
+              : const Value.absent(),
         );
       });
 
@@ -406,6 +410,8 @@ $version
 
       final plansToInsert = <PlansCompanion>[];
       final planExercisesToInsert = <PlanExercisesCompanion>[];
+      final hasCategories = csvList.first.elementAtOrNull(5) == 'categories';
+      final knownCategories = await _knownCategoriesByExercise();
 
       for (final row in csvList.skip(1)) {
         final idStr = row[0].toString().trim();
@@ -423,16 +429,27 @@ $version
         );
 
         final exerciseNames = row[4].toString().trim().split(';');
-        planExercisesToInsert.addAll(
-          exerciseNames.map((exerciseName) {
-            return PlanExercisesCompanion.insert(
+        final categories = hasCategories
+            ? (row.elementAtOrNull(5)?.toString() ?? '').split(';')
+            : const <String>[];
+        for (final (index, exerciseName) in exerciseNames.indexed) {
+          final name = exerciseName.trim();
+          final known = knownCategories[name];
+          final category = hasCategories
+              ? normalizeCategory(categories.elementAtOrNull(index))
+              : known?.length == 1
+              ? known!.single
+              : null;
+          planExercisesToInsert.add(
+            PlanExercisesCompanion.insert(
               planId: id,
-              exercise: exerciseName.trim(),
+              exercise: name,
+              category: Value(category),
               enabled: true,
               timers: const Value(true),
-            );
-          }),
-        );
+            ),
+          );
+        }
       }
 
       await db.plans.deleteAll();
@@ -496,6 +513,21 @@ $version
         ),
       );
     }
+  }
+
+  /// Maps each exercise name to the categories it is logged under, so plans
+  /// exported before categories existed can still find their exercise.
+  Future<Map<String, Set<String?>>> _knownCategoriesByExercise() async {
+    final rows = await (db.gymSets.selectOnly(
+      distinct: true,
+    )..addColumns([db.gymSets.name, db.gymSets.category])).get();
+    final known = <String, Set<String?>>{};
+    for (final row in rows) {
+      known
+          .putIfAbsent(row.read(db.gymSets.name)!, () => {})
+          .add(row.read(db.gymSets.category));
+    }
+    return known;
   }
 
   bool parseBool(dynamic value) {
