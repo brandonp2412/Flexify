@@ -1,0 +1,2 @@
+• feat(l10n): tambahkan metadata toko untuk bahasa Portugis Eropa
+• feat(l10n): tambahkan metadata toko untuk bahasa Spanyol Amerika Latin

@@ -1,0 +1,2 @@
+• feat(l10n): tambah metadata kedai untuk bahasa Portugis Eropah
+• feat(l10n): tambah metadata kedai untuk bahasa Sepanyol Amerika Latin

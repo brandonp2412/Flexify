@@ -1,0 +1,1 @@
+• fix(l10n): Play mağaza girişi için geçerli yerel ayarları kullan

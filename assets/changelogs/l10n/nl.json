@@ -526,5 +526,6 @@
   "1790341336": "• feat(l10n): Vietnamese vertalingen toevoegen",
   "1790370250": "• feat(l10n): Bengaalse vertalingen toevoegen\n• feat(l10n): Maleise vertalingen toevoegen\n• feat(l10n): Perzische vertalingen toevoegen\n• feat(l10n): Thaise vertalingen toevoegen\n• feat(l10n): Urdu-vertalingen toevoegen",
   "1790385053": "• feat(l10n): meer taalmetadata voor de store toevoegen\n• feat(l10n): storemetadata voor recent toegevoegde talen toevoegen\n• fix(l10n): release-opmerkingen van 2.2.27 synchroniseren",
-  "1790392395": "• feat(l10n): storemetadata voor Europees Portugees toevoegen\n• feat(l10n): storemetadata voor Latijns-Amerikaans Spaans toevoegen"
+  "1790392395": "• feat(l10n): storemetadata voor Europees Portugees toevoegen\n• feat(l10n): storemetadata voor Latijns-Amerikaans Spaans toevoegen",
+  "1790394970": "• fix(l10n): geldige landinstellingen voor de Play-vermelding gebruiken"
 }
