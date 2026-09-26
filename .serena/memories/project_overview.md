@@ -2,7 +2,7 @@
 
 **Flexify** is an offline-first gym/workout tracker built with **Flutter** (Dart SDK `>=3.2.6 <4.0.0`).
 
-- Package name: `flexify`, app id `com.presley.flexify`. Author: Brandon Presley / Frisbee Software.
+- Package name: `flexify`, app id `com.presley.flexify`. Author: Brandon Dick / Frisbee Software.
 - Tagline: "Track gym progress, visualize graphs, enjoy offline support & timers."
 - **No internet usage at all** — fully offline. All data is local (SQLite via Drift).
 - Distributed on Google Play, F-Droid, and Microsoft Store.

@@ -62,7 +62,7 @@ class AboutPage extends StatelessWidget {
             leading: const Icon(Icons.person),
             subtitle: FutureBuilder(
               future: info,
-              builder: (context, snapshot) => const Text("Brandon Presley"),
+              builder: (context, snapshot) => const Text("Brandon Dick"),
             ),
             onTap: () async {
               const url = 'https://github.com/brandonp2412';

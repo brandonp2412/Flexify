@@ -36,7 +36,7 @@ final _androidNativeLiteralPatterns = <RegExp>[
 final _placeholderPattern = RegExp(r'\{([A-Za-z][A-Za-z0-9_]*)\s*(?:,|\})');
 
 const _allowedLiteralUiText = <String>{
-  'lib/about_page.dart:Brandon Presley',
+  'lib/about_page.dart:Brandon Dick',
   'lib/about_page.dart:MIT',
 };
 
