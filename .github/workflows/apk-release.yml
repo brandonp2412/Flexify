@@ -1,0 +1,128 @@
+name: APK release
+
+# Builds a signed Android APK for every push to this fork and publishes it as
+# a GitHub Release, one rolling release per branch (tag `apk-<branch>`).
+# Signing uses the fork's own key from repository secrets; its certificate
+# must match android/signing-policy.properties or the build refuses to run.
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+concurrency:
+  group: apk-release-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  PUB_SUMMARY_ONLY: true
+
+jobs:
+  build-apk:
+    # Upstream Flexify publishes through main.yml with its own release key.
+    if: github.repository != 'brandonp2412/Flexify'
+    runs-on: ubuntu-latest
+    steps:
+      # The Flutter submodule is cloned in full below: a shallow submodule has
+      # no tags, so Flutter would report version 0.0.0-unknown.
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - name: Check signing secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          missing=()
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_STORE_PASSWORD \
+            ANDROID_KEY_PASSWORD ANDROID_KEY_ALIAS; do
+            [[ -n "${!name}" ]] || missing+=("$name")
+          done
+          if (( ${#missing[@]} )); then
+            echo "::error::Add these repository secrets to sign the APK: ${missing[*]}"
+            exit 1
+          fi
+
+      - name: Setup Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: "zulu"
+          java-version: "21"
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
+          flutter/bin/flutter --version
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Tune Gradle for CI runner memory
+        run: |
+          sed -i \
+            -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
+            -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
+            android/gradle.properties
+
+      - name: Configure signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+          {
+            echo "storePassword=$ANDROID_STORE_PASSWORD"
+            echo "keyPassword=$ANDROID_KEY_PASSWORD"
+            echo "keyAlias=$ANDROID_KEY_ALIAS"
+            echo "storeFile=keystore.jks"
+          } > android/key.properties
+
+      - name: Build APK
+        run: |
+          slug="${GITHUB_REF_NAME//\//-}"
+          apk="flexify-${slug}-${GITHUB_SHA::7}.apk"
+          flutter build apk --release
+          mv build/app/outputs/flutter-apk/app-release.apk "$apk"
+          ./scripts/verify-android-release-signing.sh "$apk"
+          echo "APK=$apk" >> "$GITHUB_ENV"
+          echo "TAG=apk-$slug" >> "$GITHUB_ENV"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(sed -n 's/^version: //p' pubspec.yaml)
+          app_id=$(sed -n 's/^productionApplicationId=//p' android/signing-policy.properties)
+          notes=$(cat <<EOF
+          Flexify ${version} built from \`${GITHUB_REF_NAME}\` at ${GITHUB_SHA}.
+
+          Installs as \`${app_id}\`, separately from the Play Store/F-Droid Flexify app.
+          To move your data, use Settings → Data management → Export data → Backup in the
+          old app, then Import data → Backup here.
+          EOF
+          )
+          flags=(--prerelease)
+          [[ "$GITHUB_REF_NAME" == "${{ github.event.repository.default_branch }}" ]] && flags=(--latest)
+          gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes 2>/dev/null || true
+          gh release create "$TAG" "$APK" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Flexify APK · ${GITHUB_REF_NAME} (${GITHUB_SHA::7})" \
+            --notes "$notes" \
+            "${flags[@]}"
+          url=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url --jq .url)
+          echo "### 📱 APK published" >> "$GITHUB_STEP_SUMMARY"
+          echo "[${APK}](${url})" >> "$GITHUB_STEP_SUMMARY"
