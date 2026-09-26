@@ -1,0 +1,2 @@
+• Dùng Brandon Dick trong các tham chiếu của ứng dụng
+• fix(l10n): đồng bộ ghi chú phát hành đã dịch mới nhất

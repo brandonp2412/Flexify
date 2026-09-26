@@ -527,5 +527,6 @@
   "1790370250": "• feat(l10n): aggiungere traduzioni bengalesi\n• feat(l10n): aggiungere traduzioni malesi\n• feat(l10n): aggiungere traduzioni persiane\n• feat(l10n): aggiungere traduzioni thailandesi\n• feat(l10n): aggiungere traduzioni urdu",
   "1790385053": "• feat(l10n): aggiungere altri metadati delle lingue dello store\n• feat(l10n): aggiungere i metadati dello store per le lingue recenti\n• fix(l10n): sincronizzare le note di rilascio 2.2.27",
   "1790392395": "• feat(l10n): aggiungere i metadati dello store per il portoghese europeo\n• feat(l10n): aggiungere i metadati dello store per lo spagnolo latinoamericano",
-  "1790394970": "• fix(l10n): usare impostazioni locali valide per la scheda Play"
+  "1790394970": "• fix(l10n): usare impostazioni locali valide per la scheda Play",
+  "1790404468": "• Usare Brandon Dick nei riferimenti dell’app\n• fix(l10n): sincronizzare le note di rilascio tradotte più recenti"
 }
