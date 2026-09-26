@@ -1,0 +1,1 @@
+• feat(l10n): aggiungere traduzioni vietnamite
