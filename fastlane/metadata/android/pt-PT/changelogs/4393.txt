@@ -1,0 +1,3 @@
+• feat(l10n): adicionar mais metadados de idiomas da loja
+• feat(l10n): adicionar metadados da loja para idiomas recentes
+• fix(l10n): sincronizar as notas da versão 2.2.27
