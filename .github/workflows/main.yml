@@ -7,6 +7,10 @@ on:
       - "pubspec.yaml"
   pull_request:
     branches: [main]
+  # GitHub cron cannot express a true fortnightly interval. Run weekly,
+  # then release only when the previous published release is at least 14 days old.
+  schedule:
+    - cron: "0 2 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -21,6 +25,57 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  release-gate:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      should_release: ${{ steps.cadence.outputs.should_release }}
+    steps:
+      - name: Check release cadence and changes
+        id: cadence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          release_json="$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" 2>/dev/null || true)"
+          if [[ -z "$release_json" ]]; then
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          latest_tag="$(jq -r '.tag_name // empty' <<<"$release_json")"
+          published_at="$(jq -r '.published_at // empty' <<<"$release_json")"
+          if [[ -z "$latest_tag" || -z "$published_at" ]]; then
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          ahead="$(gh api "repos/$GITHUB_REPOSITORY/compare/$latest_tag...$GITHUB_SHA" --jq '.ahead_by' 2>/dev/null || echo 1)"
+          if [[ "$ahead" == "0" ]]; then
+            echo "No commits since $latest_tag; skipping scheduled release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          published_epoch="$(date -u -d "$published_at" +%s)"
+          now_epoch="$(date -u +%s)"
+          if (( now_epoch - published_epoch < 1209600 )); then
+            echo "Latest release is less than 14 days old; skipping scheduled release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+
   quality-checks:
     runs-on: ubuntu-latest
     steps:
@@ -121,8 +176,8 @@ jobs:
           retention-days: 7
 
   version-bump:
-    if: github.event_name == 'push'
-    needs: [quality-checks, generate-screenshots]
+    if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.release-gate.outputs.should_release == 'true' }}
+    needs: [release-gate, quality-checks, generate-screenshots]
     runs-on: ubuntu-latest
     permissions:
       contents: write
