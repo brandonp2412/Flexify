@@ -1,0 +1,10 @@
+● إضافة رسالة للخطة الفارغة
+• Make keep screen on off by default and move toggle in settings
+• feat: add keep screen on setting for rest timers
+• feat: replace theme dropdown with Segmentedbutton + AMOLED toggle
+• fix: guard against empty exercise list in StartPlanPage save and select
+• fix: prevent Segmented ملف تعريف "بوتون" بتصحيح الرصيف
+• fix: reduce tracking text size from 16 to 14 in history and graph lists
+• fix: release wake lock when timer expires or is not running
+• fix: show in-app snackbar and fix notification when timer expires with screen on
+• fix: psychiatric and mute tracking text in history and graph list tiles

@@ -1,0 +1,6 @@
+• صنف النصوص من الكتاب المناسب
+• Fix google play deployments
+● نقل الأشعة المقطعية ١ إلى أسفل
+• Remove table from get it on X readme [skip ci]
+• Re-order features in README [skip ci]
+• الفضاء خارج الشارات [skip ci]

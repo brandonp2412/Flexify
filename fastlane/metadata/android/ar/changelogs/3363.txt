@@ -1,0 +1,8 @@
+• Add temp sorting to graph page
+• Fix categories not updating after imports
+• Fix last tooltip on graphs
+• Fix system ui obscuring about page
+• Fix system ui obscuring elements on settings page
+● الملفات الاحتياطية الآلية
+● إزالة الصور من قائمة التاريخ
+● إزالة منطق الانقسام من صفحة الرسوم البيانية

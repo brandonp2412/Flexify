@@ -1,0 +1,10 @@
+• Add serena
+• Change width of skeleton set card in start plan
+● بيانات رسم الخرائط بحيث لا تطفأ الخطوط
+• Delete waydroid screenshots action
+• Fix GitHub Actions runtime compatibility
+• Fix pre-push hook
+• Fix pre-push hooks
+• Fix spacing between cardio and distance field on edit history
+• Hide global progress on screenshots
+• Hide images on screenshot tests

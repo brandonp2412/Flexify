@@ -1,0 +1,4 @@
+• Add settings to show/hide limit and x axis on graphs
+● البدء دائما بتوقيت تنفيذ الخطط
+• Fix new cardio types not working
+• Long press x axis / limit slipr to hide

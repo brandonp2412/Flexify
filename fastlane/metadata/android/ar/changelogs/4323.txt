@@ -1,0 +1,10 @@
+• Update README.md
+• chore(l10n): تزامن الترجمة التحريرية الحالية
+• chore: add Turkish Play screenshots
+• feat(l10n): add Traditional Chinese translations
+• feat(l10n): complete current translation coverage (#353)
+• feat: add category management
+• feat: complete supported locale translations
+• feat: localize complete release history
+• fix: restore embedded Flutter DevTools
+• fix: stabilization Flutter debugging in VS Code

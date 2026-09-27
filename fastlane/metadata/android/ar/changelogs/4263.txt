@@ -1,0 +1,10 @@
+● تغطية الأفضليات المحلية التركية
+• Revert temporary icon redesign assets
+• chore(l10n): Added languageNameTurkish
+• chore: address Turkish localization review
+• feat(l10n): Added Turkish Localization
+• feat: add flexing bicep icon concepts
+• feat: add icon 7 and 8 refinement sets
+• fix(l10n): Removed duentries
+• fix(tests): add.gitignore to exclude test bundle.dart
+• fix(tests): add tr language to the locale preference test

@@ -1,0 +1,10 @@
+• Add flutter submodule to analysis ignore list
+• Add missing spacing to add exercise page.dart
+• Fix cardio fields spacing
+• Fix dropdown error in weight page.dart
+• Fix getSingle error in exercise modal.dart
+• Fix western context error in main.dart
+• Format
+● جعل الزر يتوهج بصورة أقل بقليل في صفحة التوقيت
+● إزالة مجموعة التفتيش الرئيسية عن تاريخ المجموعة
+• Remove unused import

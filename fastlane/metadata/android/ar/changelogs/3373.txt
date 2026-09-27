@@ -1,0 +1,3 @@
+● مؤشرات اختيار التغيير
+• Fix deleting exercises not clean up plan exercises
+• Fix graphs not updating

@@ -1,0 +1,9 @@
+• Add cardio/strength icon indicators to the toggles in edit set/sets
+• Add settings for progress bar position
+● السماح بتوضيح الفئة
+• Change plans icon in bottom nav
+• Fix appearance system ui obscuring graph
+• Fix automatic reserves sometimes corrupting database
+• Fix unit tests
+• Instantly update tab settings &quot; remove save blue
+● منع إبطال النص التلميحي على الفئات أو العناوين عندما تكون مجموعات التحرير المتعددة

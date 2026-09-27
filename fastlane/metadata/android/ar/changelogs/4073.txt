@@ -1,0 +1,10 @@
+• Flatten settings audio initialization
+• Flatten tab content selection
+● نظام احتياطي محمول من شركة فيت بوك
+• Prefer labeled Flexify action selectors
+• Prefer labeled graph action selectors
+• Prefer visible tab selector
+● تبسيط تدفق التحكم في العودة المبكرة
+• fix: bound Android CI test runtime
+• fix: enable supports after folder selection
+• refactor: prefer user-visible controls in Linux E2E

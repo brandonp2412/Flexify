@@ -1,0 +1,4 @@
+• Fix padding on graph pages
+• Fixخبs never dismissing
+• Fix tooltips on graphs
+● المحافظة على النظام عند تبادل التمرينات

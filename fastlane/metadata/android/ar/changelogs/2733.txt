@@ -1,0 +1,7 @@
+• Add github pages hosting for Flexify web
+• Add missing changelogs
+● السماح للمستخدم بتنظيف مجموعات الحد الأقصى
+● تحذف النصوص غير المستخدمة
+● تثبيت ما هو النسخ الجديدة
+• Only back up to a single file every time
+• Remove reps from strength graph

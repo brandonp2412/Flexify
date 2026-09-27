@@ -1,0 +1,10 @@
+• Add mild outline to timer cycle
+• Fix +1 minute on linux
+• Fix changelogs
+• Fix github readme styling [skip ci]
+• Fix mstore width card [skip ci]
+• Limit frequency of google play deployments [skip ci]
+● جعل الشارات أكبر ]ملح سكيب[
+• جعل الشارات متسقة [skip ci]
+• Revert "Fix mstore width card [skip ci]
+• Use github release instead of artifact [skip ci]

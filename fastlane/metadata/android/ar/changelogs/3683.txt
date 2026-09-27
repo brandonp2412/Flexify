@@ -1,0 +1,10 @@
+• Add serena config
+● ست خبز دائمة إلى الأبد
+● تحسين المشاهد المرئية للخادم
+● جعل التحرير يُعد صفحة أكثر اتساقاً مع الرصيف
+• Remove duplicated labels for input fashion
+● تبسيط ميدان الخطوة
+• Update screenshots
+• Upgrade flutter to 3.44.1
+• Upgrade kotlin version
+• feat: add +/- steppers to reps and weight fields

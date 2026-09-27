@@ -1,0 +1,4 @@
+• Add dotted trend line to graphs
+● إضافة زر صغير إلى نهاية دائرة التوقيت
+• Remove diffing from migrate.sh
+● تحديد الفئة عندما تختار ممارسة

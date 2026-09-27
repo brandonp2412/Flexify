@@ -201,6 +201,7 @@ const _postWaveReviewedKeys = <String>{
 };
 
 const _playStoreLocaleByAppLocale = <String, String>{
+  'ar': 'ar',
   'de': 'de-DE',
   'es': 'es-ES',
   'fr': 'fr-FR',
@@ -218,6 +219,7 @@ const _playStoreLocaleByAppLocale = <String, String>{
 };
 
 const _appStoreLocaleByAppLocale = <String, String>{
+  'ar': 'ar-SA',
   'de': 'de-DE',
   'es': 'es-ES',
   'fr': 'fr-FR',
@@ -238,16 +240,7 @@ const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
 // These locales currently ship in-app but do not yet have the complete
 // historical store assets required by the full store-localization checks.
-const _appOnlyLocales = <String>{
-  'ar',
-  'id',
-  'vi',
-  'bn',
-  'ur',
-  'fa',
-  'th',
-  'ms',
-};
+const _appOnlyLocales = <String>{'id', 'vi', 'bn', 'ur', 'fa', 'th', 'ms'};
 
 const _playListingLocaleByAppLocale = <String, String>{
   'ar': 'ar',
@@ -272,7 +265,7 @@ final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
 
 // Google Play uses default-language graphics when localized graphics are omitted.
 // https://support.google.com/googleplay/android-developer/answer/9844778
-const _playStoreScreenshotFallbackLocales = <String>{'zh-TW', 'hi-IN'};
+const _playStoreScreenshotFallbackLocales = <String>{'ar', 'zh-TW', 'hi-IN'};
 
 final _changelogCatalogLocales = _playStoreLocaleByAppLocale.keys.toSet();
 

@@ -1,0 +1,4 @@
+• Fix reps changing by default
+• Lighten the end of timer blue
+• الارتقاء بمستوى المعالين
+• Upgrade flutter to 3.32.8

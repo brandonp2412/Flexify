@@ -1,0 +1,3 @@
+• Fix timer page screenshot
+● اختبارات شاشات الشاشة في ست صفحات
+• Hide changelog notification for screenshots

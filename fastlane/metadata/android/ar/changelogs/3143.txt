@@ -1,0 +1,4 @@
+● السماح لجميع أنواع الوحدات بمسح القلب
+● تغيير أسلوب إعداد المقالات
+• Fix add a cardio exercise from the Graphs page
+• Prevent saying the changelog on first install

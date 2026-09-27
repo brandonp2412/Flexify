@@ -1,0 +1,2 @@
+● الأطباء: تبسيط إعداد القراءة
+• test: improve screenshot sample states

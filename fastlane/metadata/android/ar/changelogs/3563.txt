@@ -1,0 +1,3 @@
+• الرجوع إلى "ci: استبدال إعداد الوحدة الفرعية للرفرفة بـ subosito/flutter-action"
+• التراجع عن إزالة .gitmodules عن طريق الخطأ
+• ci: استبدل إعداد الوحدة الفرعية للرفرفة بـ subosito/flutter-action

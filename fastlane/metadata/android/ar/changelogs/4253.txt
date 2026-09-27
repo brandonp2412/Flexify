@@ -1,0 +1,4 @@
+• WIP: transfer Flexify checklist work from Nox
+• chore: refresh Serena project config
+• test: cover opt-in defaults
+● الاختبار: إزالة أداة تكامل الدوريات

@@ -1,0 +1,3 @@
+• Fix fresh installs not asking for notification
+• Fix unit test
+● اطفاء الملاحظات من أجل تركيبات جديدة

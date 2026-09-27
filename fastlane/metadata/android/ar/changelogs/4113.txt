@@ -1,0 +1,2 @@
+● اختبارات دورية هاردن ضد التوقيت
+• fix: stabilization Android folder picker check

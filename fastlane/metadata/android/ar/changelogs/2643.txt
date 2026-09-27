@@ -1,0 +1,10 @@
+• Add env for web screenshots
+● تحذف مدونات التغيير المزدوجة
+• Fix buildConfig issues
+• Fix chromedriver port
+• Fix chromedriver setup
+• Fix emulator name in Android screenshots
+• Git add entire fastlane dir for work flow
+• Install &quot; start chromedriver in workflows
+● التأكد من أن طلقات الشاشة في الخط
+● منع الازدواجية في نسخ المتغيرات

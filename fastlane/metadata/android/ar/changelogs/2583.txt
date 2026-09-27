@@ -1,0 +1,9 @@
+● إضافة الأخطاء في معالجة البيانات المستوردة
+● إضافة المزيد من اختبارات نقل البيانات
+● تحذف التعليقات
+• Enable build config in Android/app/build.gradle
+• Fix linting issue in edit set page
+• Remove underscore prefixes in some methods of start plan page
+• Remove unit selector and fix tests
+● اختصار جميع الأسماء المتغيرة
+• Split out everything in edit set page more

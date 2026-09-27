@@ -1,0 +1,2 @@
+● تحسين كل شيء
+• chore: auto-fix formatting/lint/generated client [pre-push]

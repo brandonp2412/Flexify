@@ -1,0 +1,4 @@
+● تُظهر دائماً عناوين تاب
+• Fix not being able to scroll global graphs
+● فئات التحديث الستة
+• Reduce global graph clutter on tooltip

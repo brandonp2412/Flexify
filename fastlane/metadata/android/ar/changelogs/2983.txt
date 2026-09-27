@@ -1,0 +1,10 @@
+• Add horizontal padding to the bottom progress indicator
+• Add missing reorder blue for Android on the Plans page
+● الانزلاق بين المقذوفات
+● تغيير المؤشر المختار
+• Default rest timers to false
+• Fix bottom sheets going behind nav
+• Fix deploy.sh when phone is connected
+• Fix lag flick between tabs after changing them
+• Fixving sets
+● زيادة الرعي فوق صفحة التاريخ المنهارة

@@ -1,0 +1,6 @@
+• Add aful of bottom nav variants
+• Add script for when running linux fails
+• Delete nav variants
+• Update bottom nav to be a pill design
+• fix: remove hardcoded local JDK path from gradle. الممتلكات
+• fix: silence MSVC coroutine deprecation error breaking Windows CI build

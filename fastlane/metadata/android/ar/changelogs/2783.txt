@@ -1,0 +1,4 @@
+● إضافة عملية تبادل للخطط
+• Add search for swapping workout
+• Add unit test for swap workout widget
+• Fix importing database on officetop

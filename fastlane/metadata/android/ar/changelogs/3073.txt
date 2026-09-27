@@ -1,0 +1,2 @@
+● تمهيد التوازن حول التقدم العالمي
+• Fix deployment.sh [skip ci]

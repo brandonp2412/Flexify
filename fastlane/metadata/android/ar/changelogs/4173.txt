@@ -1,0 +1,3 @@
+• إضافة سير عمل توقيع Kite Android (#347)
+• إصلاح بحث Kitesigner Android SDK (#348)
+• إصلاح بيئة NDK الخاصة بـ Kitesigner (#349)

@@ -1,0 +1,2 @@
+● استكمال ست عمليات بعد التحرير من الخطط
+• Fix tooltip on first/last data points

@@ -1,0 +1,9 @@
+• Fix error importing data
+● تحديد استيراد البيانات عن طريق إدراج سجلات المخططات وخطط تحديثها. استخدام المشغل الذي يُعرف باللا أمان
+• fix issue #206 by updating the way exercises are stored and splitted
+• Fix loaders flicking into view
+• Fix migration breaking plan exercises
+● تعديل منطق إدراج التمرينات في خطة ما من خلال وضع سجلات لممارسات مختارة فقط وعدم تخزينها في الخطة. عمود التمارين
+• Pause work for trip
+• Perform data migration for existing data such that only those exercises are removed from the plan for which PlanExercises. مُمَكَّن = كاذب
+● تحديث ملفات الاختبار للتأكد من أن جميع الاختبارات تمر

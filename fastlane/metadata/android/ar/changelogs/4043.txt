@@ -1,0 +1,6 @@
+• Fix Microsoft Store rollout finalization checks
+• Parse multiline Store rollout responses
+● الولايات الفارغة البولندية
+• Target published Store submissions
+• ci: retry transient Android picker failure
+• test: align graph history empty state

@@ -1,0 +1,10 @@
+• Add reusable app permissions checklist
+• Center appearance labels and reflect toggle state in icons
+● وضع خطط مركزية
+● تحديد توقيت المركز واستخدام الرموز النشطة المملوءة
+● وضع بطاقات تشغيل مركزية واستخدام أجهزة اتصال مشغلة
+• Expose app permissions checklist in settings
+• Fix CI lockfile and timer analyzer error
+• Fix one-time notification permission request
+• Fix permissions analyzer error
+● السماح بالإخطار الوطني فوراً لمرة واحدة

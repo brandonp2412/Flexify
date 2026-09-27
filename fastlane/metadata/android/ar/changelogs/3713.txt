@@ -1,0 +1,1 @@
+• استخدم adb المثبت مسبقًا بدلاً من setup-android في سير عمل Waydroid

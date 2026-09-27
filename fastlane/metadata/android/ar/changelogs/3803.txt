@@ -1,0 +1,10 @@
+• Add test to dart analyze
+• Allow exercise list to scroll past the nav bar when completing a plan
+● تغيير أسلوب القوة
+• Conistently use bottomNavHeight
+• Fix bottom altitude
+• Fix graphs spacing notes if setting is off
+• Fix unit tests for search bar
+● تحسين أسلوب الرسوم البيانية
+● جعل رقائق الخطة متسقة
+• Match fashion in cardio page

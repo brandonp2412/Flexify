@@ -1,0 +1,6 @@
+• انخفاض مستوى التوازي بالنسبة للدرجات بناء على عمل الغيثوب
+• Update screenshots
+• feat: clarify category field is for gang tagging
+• fix: apply seeded category when logging an exercise for the first time
+• fix: only tag releases after all platform builds succeeded
+• fix: bin release builds and tag to an exact commit SHA

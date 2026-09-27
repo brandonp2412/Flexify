@@ -1,0 +1,2 @@
+- يُمكن تحرير أسماء الرسوم البيانية في حانة التطبيق
+- Navigator.of (context).poplock =) Navigator.pop(context)

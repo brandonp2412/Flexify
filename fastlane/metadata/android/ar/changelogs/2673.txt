@@ -1,0 +1,3 @@
+• Fix working directory of java stage
+● التأكد من أن سلاتر بن قابلة للتنفيذ دائما
+• Transport java setup

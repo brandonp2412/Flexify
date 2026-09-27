@@ -1,0 +1,4 @@
+• Fix automatic screenshots
+• Fix spacing issues on edit set page
+• Make default history ungrouped
+• سحب قبل الدفع النهائي

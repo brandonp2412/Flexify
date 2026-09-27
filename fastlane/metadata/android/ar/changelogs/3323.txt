@@ -1,0 +1,6 @@
+● إضافة نماذج تاريخية جديدة )مثلا للألمانية(
+• Add time based x-axis option for graph
+• Fix out of memory issues
+• Fix plan tracking ratio &apos; count
+● دع المستعملين يقررون رسملة عناوين الخطة
+● نقل زر التاريخ إلى حانة الملاحة البحرية
