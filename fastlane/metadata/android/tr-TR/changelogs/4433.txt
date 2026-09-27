@@ -1,0 +1,1 @@
+• fix(l10n): en son sürüm notlarını yerelleştir

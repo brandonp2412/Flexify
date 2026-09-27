@@ -1,0 +1,1 @@
+• fix(l10n): zlokalizować najnowsze informacje o wydaniu
