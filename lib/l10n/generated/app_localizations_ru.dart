@@ -99,19 +99,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navGraphs => 'Графики';
 
   @override
-  String get navTimer => 'таймер';
+  String get navTimer => 'Таймер';
 
   @override
   String get navSettings => 'Настройки';
 
   @override
-  String get errorLabel => 'ошибка';
+  String get errorLabel => 'Ошибка';
 
   @override
-  String get tabContentError => 'Не смог создать содержимое вкладки.';
+  String get tabContentError => 'Не удалось создать содержимое вкладки.';
 
   @override
-  String get cannotHideAllTabs => 'Не могу все скрыть!';
+  String get cannotHideAllTabs => 'Нельзя скрыть все вкладки!';
 
   @override
   String removeTabQuestion(String tab) {
@@ -120,7 +120,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get restoreTabFromSettings =>
-      'Вы можете добавить его позже из настроек.';
+      'Вы сможете добавить её позже в настройках.';
 
   @override
   String removedTab(String tab) {
@@ -139,7 +139,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get searchHint => 'Поиск...';
 
   @override
-  String get deleteSelected => 'Выбранное исключение';
+  String get deleteSelected => 'Удалить выбранное';
 
   @override
   String get confirmDelete => 'Подтвердить удаление';
@@ -162,10 +162,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get actionCancel => 'отменить';
+  String get actionCancel => 'Отмена';
 
   @override
-  String get actionDelete => 'Исключить';
+  String get actionDelete => 'Удалить';
 
   @override
   String get actionRemove => 'Удалить';
@@ -174,25 +174,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get actionEdit => 'Редактировать';
 
   @override
-  String get actionShare => 'Доля';
+  String get actionShare => 'Поделиться';
 
   @override
-  String get clearSelection => 'Ясный выбор';
+  String get clearSelection => 'Снять выделение';
 
   @override
-  String get clearSearch => 'Четкий поиск';
+  String get clearSearch => 'Очистить поиск';
 
   @override
   String get showMenu => 'Показать меню';
 
   @override
-  String get selectAll => 'Выберите все';
+  String get selectAll => 'Выбрать всё';
 
   @override
-  String get weightLabel => 'вес';
+  String get weightLabel => 'Вес';
 
   @override
-  String get filter => 'фильтр';
+  String get filter => 'Фильтр';
 
   @override
   String get filters => 'Фильтры';
@@ -201,19 +201,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get categoryLabel => 'Категория';
 
   @override
-  String get repsLabel => 'Ответы';
+  String get repsLabel => 'Повторения';
 
   @override
   String get repsFilter => 'Фильтр повторений';
 
   @override
-  String get weightFilter => 'Весовой фильтр';
+  String get weightFilter => 'Фильтр по весу';
 
   @override
   String get greaterThan => 'Больше, чем';
 
   @override
-  String get lessThan => 'меньше чем';
+  String get lessThan => 'Меньше чем';
 
   @override
   String get startDate => 'Дата начала';
@@ -222,7 +222,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get endDate => 'Дата окончания';
 
   @override
-  String get actionClear => 'Чисто.';
+  String get actionClear => 'Очистить';
 
   @override
   String get actionOk => 'ОК';
@@ -243,11 +243,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get nameLabel => 'Имя';
 
   @override
-  String get missingPermissions => 'Пропущенные разрешения';
+  String get missingPermissions => 'Отсутствуют разрешения';
 
   @override
   String get restTimersPermissionsMissing =>
-      'Время отдыха включено, но разрешения отсутствуют.';
+      'Таймеры отдыха включены, но необходимые разрешения отсутствуют.';
 
   @override
   String get restTimersPermissionsOptional =>
@@ -264,28 +264,28 @@ class AppLocalizationsRu extends AppLocalizations {
       'Прогресс может приостановиться, если оптимизация батареи будет продолжаться.';
 
   @override
-  String get scheduleExactAlarm => 'Расписание точной тревоги';
+  String get scheduleExactAlarm => 'Точные будильники';
 
   @override
   String get exactAlarmWarning =>
-      'Сигнал тревоги не может быть точным, если он отключен.';
+      'Без этого разрешения таймер отдыха может срабатывать неточно.';
 
   @override
-  String get postNotifications => 'Пост уведомления';
+  String get postNotifications => 'Уведомления';
 
   @override
   String get notificationBarDescription =>
       'Прогресс таймера отображается в панели уведомлений';
 
   @override
-  String get invalidPermissions => 'Недействительные разрешения';
+  String get invalidPermissions => 'Недостаточно разрешений';
 
   @override
   String get insufficientTimerPermissionsConfirmation =>
-      'Время отдыха включено без достаточных разрешений. Ты уверен?';
+      'Таймеры отдыха включены без всех необходимых разрешений. Продолжить?';
 
   @override
-  String get actionConfirm => 'Подтвердите';
+  String get actionConfirm => 'Подтвердить';
 
   @override
   String get appAccess => 'Доступ к приложению';
@@ -306,14 +306,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Уведомления, которые вы включили';
 
   @override
-  String get backgroundActivity => 'Справочная деятельность';
+  String get backgroundActivity => 'Работа в фоне';
 
   @override
   String get backgroundActivityDescription =>
-      'Держите таймеры надежными в фоновом режиме';
+      'Обеспечивает надёжную работу таймеров в фоновом режиме';
 
   @override
-  String get exactAlarms => 'Точная тревога';
+  String get exactAlarms => 'Точные будильники';
 
   @override
   String get exactAlarmsDescription =>
@@ -327,7 +327,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get actionDone => 'Сделано';
 
   @override
-  String get allowed => 'допускается';
+  String get allowed => 'Разрешено';
 
   @override
   String get actionAllow => 'Разрешить';
@@ -339,34 +339,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get databaseLabel => 'База данных';
 
   @override
-  String get deleteRecords => 'Исключить записи';
+  String get deleteRecords => 'Удалить записи';
 
   @override
   String get deleteAllGraphsConfirmation =>
-      'Вы уверены, что хотите удалить все графы? Это действие не обратимо.';
+      'Вы уверены, что хотите удалить все графики? Это действие нельзя отменить.';
 
   @override
   String get deleteAllPlansConfirmation =>
-      'Вы уверены, что хотите удалить все планы? Это действие не обратимо.';
+      'Вы уверены, что хотите удалить все планы? Это действие нельзя отменить.';
 
   @override
   String get deleteDatabaseConfirmation =>
-      'Вы уверены, что хотите удалить свою базу данных? Это действие не является обратимым и уничтожит все ваши данные.';
+      'Вы уверены, что хотите удалить базу данных? Это действие нельзя отменить и приведёт к удалению всех данных.';
 
   @override
-  String get importData => 'Данные импорта';
+  String get importData => 'Импорт данных';
 
   @override
-  String get exportData => 'Экспортные данные';
+  String get exportData => 'Экспорт данных';
 
   @override
-  String get actionReport => 'Доклад';
+  String get actionReport => 'Сообщить';
 
   @override
-  String get graphDataImported => 'Графические данные успешно импортированы!';
+  String get graphDataImported => 'Данные графиков успешно импортированы!';
 
   @override
-  String get plansImported => 'Планы импорта успешно';
+  String get plansImported => 'Планы успешно импортированы!';
 
   @override
   String failedToImportDatabase(String error) {
@@ -391,7 +391,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectedFileDoesNotExist => 'Выбранного файла не существует';
 
   @override
-  String get couldNotReadFileData => 'Не читать файловые данные';
+  String get couldNotReadFileData => 'Не удалось прочитать данные файла';
 
   @override
   String get databaseImportWebUnsupported =>
@@ -425,7 +425,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get unitLabel => 'Подразделение';
+  String get unitLabel => 'Единица';
 
   @override
   String get kilogramsUnit => 'Килограммы (кг)';
@@ -434,16 +434,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get poundsUnit => 'Фунты (lb)';
 
   @override
-  String get stoneUnit => 'Камень';
+  String get stoneUnit => 'Стоуны';
 
   @override
-  String get stoneUnitShort => 'ствол';
+  String get stoneUnitShort => 'ст';
 
   @override
   String get kilometersUnit => 'Километры (км)';
 
   @override
-  String get milesUnit => 'Майлз (ми)';
+  String get milesUnit => 'Мили (ми)';
 
   @override
   String get metersUnit => 'Метры (м)';
@@ -455,10 +455,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get enterWeight => 'Введите вес';
 
   @override
-  String get requiredField => 'требуемый';
+  String get requiredField => 'Обязательное поле';
 
   @override
-  String get invalidNumber => 'Недействительное число';
+  String get invalidNumber => 'Недопустимое число';
 
   @override
   String get previousWeight => 'Предыдущий вес';
@@ -473,13 +473,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get imageError => 'Ошибка изображения';
 
   @override
-  String get actionSave => 'Спасти';
+  String get actionSave => 'Сохранить';
 
   @override
   String get aboutTitle => 'О нас';
 
   @override
-  String get donate => 'Пожертвование';
+  String get donate => 'Пожертвовать';
 
   @override
   String get helpSupportProject => 'Помогите поддержать этот проект';
@@ -491,7 +491,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get whatsNewTitle => 'Что нового?';
 
   @override
-  String get seeReleaseNotes => 'См. наши выпускные заметки';
+  String get seeReleaseNotes => 'Посмотреть примечания к выпуску';
 
   @override
   String get versionLabel => 'Версия';
@@ -527,13 +527,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reportBugDescription => 'Создать обращение на GitHub';
 
   @override
-  String get failedMigrations => 'Неудачные миграции';
+  String get failedMigrations => 'Ошибки миграции';
 
   @override
   String get errorMessageLabel => 'Сообщение об ошибке:';
 
   @override
-  String get createIssue => 'Создать проблему';
+  String get createIssue => 'Создать обращение';
 
   @override
   String get addExercise => 'Добавить упражнение';
@@ -542,7 +542,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get cardio => 'Кардио';
 
   @override
-  String get strength => 'Сила';
+  String get strength => 'Силовые';
 
   @override
   String get options => 'Варианты';
@@ -554,7 +554,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get periodWeek => 'Неделя';
 
   @override
-  String get periodMonth => 'месяц';
+  String get periodMonth => 'Месяц';
 
   @override
   String get periodYear => 'Год';
@@ -568,7 +568,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noDataYet => 'Нет данных пока';
 
   @override
-  String get exerciseNotes => 'Записи упражнений';
+  String get exerciseNotes => 'Заметки к упражнению';
 
   @override
   String get notesForExercise => 'Примечания к этому упражнению';
@@ -594,11 +594,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get globalProgress => 'Глобальный прогресс';
 
   @override
-  String get curveLineGraphs => 'Графики кривых линий';
+  String get curveLineGraphs => 'Сглаживать линии графиков';
 
   @override
   String get curveLineGraphsDescription =>
-      'Нарисуйте графовые линии как плавные кривые';
+      'Отображать линии графиков плавными кривыми';
 
   @override
   String noHistoryFor(String name) {
@@ -609,7 +609,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get cancelSelection => 'Отменить выбор';
 
   @override
-  String get editSelected => 'Избранный редактор';
+  String get editSelected => 'Редактировать выбранное';
 
   @override
   String get newExercise => 'Новое упражнение';
@@ -618,13 +618,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noGraphsFound => 'Графики не найдены';
 
   @override
-  String get searchGraphs => 'Поисковые графы...';
+  String get searchGraphs => 'Поиск графиков...';
 
   @override
   String get actionAdd => 'Добавить';
 
   @override
-  String get actionUpdate => 'обновление';
+  String get actionUpdate => 'Обновить';
 
   @override
   String get hideGlobalProgress => 'Скрыть глобальный прогресс';
@@ -636,25 +636,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noExercisesFound => 'Никаких упражнений не найдено';
 
   @override
-  String get savePlan => 'План спасения';
+  String get savePlan => 'Сохранить план';
 
   @override
-  String get titleOptional => 'Название (факультативно)';
+  String get titleOptional => 'Название (необязательно)';
 
   @override
-  String get searchExercises => 'Поисковые упражнения...';
+  String get searchExercises => 'Поиск упражнений...';
 
   @override
   String get warmupSets => 'Разминочные подходы';
 
   @override
-  String get workingSetsMax => 'Рабочие наборы (максимум: 20)';
+  String get workingSetsMax => 'Рабочие подходы (максимум: 20)';
 
   @override
-  String get actionUndo => 'Снять';
+  String get actionUndo => 'Отменить';
 
   @override
-  String get actionSwap => 'Своп';
+  String get actionSwap => 'Заменить';
 
   @override
   String get daily => 'ежедневно';
@@ -673,28 +673,28 @@ class AppLocalizationsRu extends AppLocalizations {
       'Что-то пошло не так. Пожалуйста, попробуйте еще раз.';
 
   @override
-  String get loadingExercises => 'Загрузочные упражнения...';
+  String get loadingExercises => 'Загрузка упражнений...';
 
   @override
-  String get noPlansYet => 'Никаких планов пока';
+  String get noPlansYet => 'Планов пока нет';
 
   @override
-  String get noMatchingPlans => 'Никаких планов соответствия';
+  String get noMatchingPlans => 'Подходящих планов нет';
 
   @override
   String get newPlan => 'Новый план';
 
   @override
-  String get searchPlans => 'Планы поиска...';
+  String get searchPlans => 'Поиск планов...';
 
   @override
-  String get noExercisesYet => 'Никаких упражнений пока';
+  String get noExercisesYet => 'Упражнений пока нет';
 
   @override
   String get editPlan => 'Редактировать план';
 
   @override
-  String get saveSet => 'Сохранить';
+  String get saveSet => 'Сохранить подход';
 
   @override
   String get minutesLabel => 'Минуты';
@@ -703,10 +703,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get minutesShort => 'мин.';
 
   @override
-  String get secondsLabel => 'секунды';
+  String get secondsLabel => 'Секунды';
 
   @override
-  String get distanceLabel => 'расстояние';
+  String get distanceLabel => 'Расстояние';
 
   @override
   String get inclinePercent => 'Наклон %';
@@ -717,28 +717,28 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get useBodyWeight => 'Используйте вес тела';
+  String get useBodyWeight => 'Использовать вес тела';
 
   @override
-  String get noWeightEnteredYet => 'Веса еще не было';
+  String get noWeightEnteredYet => 'Вес ещё не указан';
 
   @override
   String get notesLabel => 'Заметки';
 
   @override
-  String get swapWorkout => 'Тренировка по свопу';
+  String get swapWorkout => 'Заменить тренировку';
 
   @override
-  String get addSet => 'Добавить';
+  String get addSet => 'Добавить подход';
 
   @override
-  String get deleteSet => 'Удалить набор';
+  String get deleteSet => 'Удалить подход';
 
   @override
   String get oneRepMaxEstimate => 'Максимум на одно повторение (оценка)';
 
   @override
-  String get valueLabel => 'ценность';
+  String get valueLabel => 'Значение';
 
   @override
   String amountWithUnit(String unit) {
@@ -773,10 +773,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get newCategory => 'Новая категория';
 
   @override
-  String get renameCategory => 'Категория имен';
+  String get renameCategory => 'Переименовать категорию';
 
   @override
-  String get mergeCategory => 'Слиться в другую категорию';
+  String get mergeCategory => 'Объединить с другой категорией';
 
   @override
   String get noCategories => 'Пока нет категорий';
@@ -813,7 +813,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get createdDate => 'Созданная дата';
+  String get createdDate => 'Дата создания';
 
   @override
   String editSets(int count) {
@@ -833,11 +833,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get historyEmptyMessage =>
-      'Заполните набор или добавьте его вручную, чтобы начать свою историю.';
+      'Завершите подход или добавьте его вручную, чтобы начать вести историю.';
 
   @override
   String deleteSetConfirmation(String name) {
-    return 'Хотите удалить $name?';
+    return 'Вы уверены, что хотите удалить $name?';
   }
 
   @override
@@ -860,10 +860,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get themeSystem => 'Система';
 
   @override
-  String get themeDark => 'темный';
+  String get themeDark => 'Тёмная';
 
   @override
-  String get themeLight => 'Свет';
+  String get themeLight => 'Светлая';
 
   @override
   String get pureBlackAmoled => 'Чистый черный (AMOLED)';
@@ -872,22 +872,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showImages => 'Показать изображения';
 
   @override
-  String get peekGraph => 'Пик-граф';
+  String get peekGraph => 'Предпросмотр графика';
 
   @override
-  String get inputStyleLine => 'линия';
+  String get inputStyleLine => 'Линия';
 
   @override
-  String get inputStyleOutlined => 'изложенный';
+  String get inputStyleOutlined => 'Контур';
 
   @override
-  String get inputStyleFilled => 'заполненный';
+  String get inputStyleFilled => 'Заливка';
 
   @override
   String get inputStyle => 'Стиль ввода';
 
   @override
-  String get appearance => 'внешний вид';
+  String get appearance => 'Оформление';
 
   @override
   String get automaticBackupsEnabled =>
@@ -906,13 +906,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dataManagement => 'Управление данными';
 
   @override
-  String get strengthUnit => 'Силовой блок';
+  String get strengthUnit => 'Единица веса';
 
   @override
   String get lastEntry => 'Последняя запись';
 
   @override
-  String get cardioUnit => 'Кардиосистема';
+  String get cardioUnit => 'Единица кардио';
 
   @override
   String longDateFormat(String format) {
@@ -923,19 +923,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get formats => 'Форматы';
 
   @override
-  String get setsPerExerciseMax => 'Наборы за упражнение (максимум: 20)';
+  String get setsPerExerciseMax => 'Подходов на упражнение (максимум: 20)';
 
   @override
-  String get countLabel => 'граф';
+  String get countLabel => 'Количество';
 
   @override
   String get ratioLabel => 'Соотношение';
 
   @override
-  String get reorder => 'порядок';
+  String get reorder => 'Изменить порядок';
 
   @override
-  String get none => 'Никто';
+  String get none => 'Нет';
 
   @override
   String get monday => 'понедельник';
@@ -944,10 +944,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get examplePlanExercises => 'Жим лёжа, приседания, становая тяга';
 
   @override
-  String get tabs => 'Закладки';
+  String get tabs => 'Вкладки';
 
   @override
-  String get swipeBetweenTabs => 'Прокрутка между вкладками';
+  String get swipeBetweenTabs => 'Переключение вкладок свайпом';
 
   @override
   String get vibrate => 'Вибрировать';
@@ -956,29 +956,29 @@ class AppLocalizationsRu extends AppLocalizations {
   String get enableSound => 'Включить звук';
 
   @override
-  String get keepScreenOn => 'Держите экран';
+  String get keepScreenOn => 'Не выключать экран';
 
   @override
-  String get alarmSound => 'Тревожный звук';
+  String get alarmSound => 'Звук таймера';
 
   @override
   String get top => 'Топ';
 
   @override
-  String get bottom => 'нижняя часть';
+  String get bottom => 'Снизу';
 
   @override
   String get removeCustomTimer =>
-      'Удалить пользовательский таймер (использовать глобальный дефолт)';
+      'Удалить пользовательский таймер (использовать глобальный)';
 
   @override
-  String get timers => 'Тимерс';
+  String get timers => 'Таймеры';
 
   @override
   String get timerSettings => 'Настройки таймера';
 
   @override
-  String get groupHistory => 'История группы';
+  String get groupHistory => 'Группировать историю';
 
   @override
   String get showUnits => 'Показать единицы';
@@ -990,7 +990,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showCategories => 'Показать категории';
 
   @override
-  String get showNotes => 'Показать ноты';
+  String get showNotes => 'Показывать заметки';
 
   @override
   String get repEstimation => 'Оценка';
@@ -999,16 +999,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get durationEstimation => 'Оценка продолжительности';
 
   @override
-  String get showGraphLimit => 'Показать лимит графа';
+  String get showGraphLimit => 'Показывать лимит графика';
 
   @override
-  String get defaultGraphMetric => 'Метрика графа по умолчанию';
+  String get defaultGraphMetric => 'Метрика графика по умолчанию';
 
   @override
   String get bestWeight => 'Лучший вес';
 
   @override
-  String get bestReps => 'Лучшие реплики';
+  String get bestReps => 'Лучшие повторения';
 
   @override
   String get oneRepMax => 'Максимум на одно повторение';
@@ -1023,19 +1023,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get distanceCardio => 'Расстояние (кардио)';
 
   @override
-  String get defaultGraphPeriod => 'Период графа по умолчанию';
+  String get defaultGraphPeriod => 'Период графика по умолчанию';
 
   @override
-  String get defaultGraphLimit => 'Предел графа по умолчанию';
+  String get defaultGraphLimit => 'Лимит графика по умолчанию';
 
   @override
-  String get workouts => 'тренировки';
+  String get workouts => 'Тренировки';
 
   @override
-  String get actionStop => 'Стоп!';
+  String get actionStop => 'Стоп';
 
   @override
-  String get timerFinishedToast => 'Таймер закончил!';
+  String get timerFinishedToast => 'Таймер завершён!';
 
   @override
   String get stopTimer => 'Остановить таймер';
@@ -1047,7 +1047,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get startStopwatch => 'Запустить секундомер';
 
   @override
-  String get actionStart => 'Начинать';
+  String get actionStart => 'Старт';
 
   @override
   String get actionRestart => 'Перезапустить';
@@ -1062,10 +1062,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get restTimer => 'Время отдыха';
 
   @override
-  String get timerUp => 'Время';
+  String get timerUp => 'Время вышло';
 
   @override
-  String get openNotification => 'Открытое уведомление';
+  String get openNotification => 'Открыть уведомление';
 
   @override
   String get timerChannelName => 'Таймер';
@@ -1081,7 +1081,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Воспроизводит сигнал после завершения таймера отдыха.';
 
   @override
-  String get timerFinished => 'Таймер закончил';
+  String get timerFinished => 'Таймер завершён';
 
   @override
   String get batteryOptimizationRequestUnavailable =>
@@ -1096,7 +1096,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Что-то пошло не так при создании или обновлении базы данных. Обычно это может быть исправлено путем удаления и повторного создания ваших записей.';
 
   @override
-  String get curveSmoothness => 'гладкость кривой';
+  String get curveSmoothness => 'Плавность кривой';
 
   @override
   String get actionBack => 'Назад';
@@ -1120,42 +1120,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dataManagementDescription =>
-      'Импорт, экспорт и управление данными тренировки';
+      'Импорт, экспорт и управление данными тренировок';
 
   @override
   String get formatsDescription => 'Даты, цифры и форматирование измерений';
 
   @override
   String get plansSettingsDescription =>
-      'Дефолты и поведение для планов тренировок';
+      'Настройки по умолчанию и поведение планов тренировок';
 
   @override
-  String get tabsDescription =>
-      'Выберите и устройте основные навигационные вкладки';
+  String get tabsDescription => 'Выбор и порядок основных вкладок навигации';
 
   @override
   String get timersDescription => 'Продолжительность отдыха, звук и поведение';
 
   @override
   String get workoutsDescription =>
-      'Отслеживание упражнений и предпочтения в тренировках';
+      'Параметры отслеживания упражнений и тренировок';
 
   @override
   String get completeSetForChart =>
-      'Заполните набор для этого упражнения, чтобы построить свою диаграмму.';
+      'Завершите подход в этом упражнении, чтобы построить график.';
 
   @override
-  String get dateRange => 'диапазон дат';
+  String get dateRange => 'Диапазон дат';
 
   @override
-  String get stopDate => 'Остановить дату';
+  String get stopDate => 'Дата окончания';
 
   @override
-  String get dataPoints => 'Пункты данных';
+  String get dataPoints => 'Точки данных';
 
   @override
   String get completeSetsForProgress =>
-      'Заполните несколько наборов, чтобы построить свою диаграмму прогресса.';
+      'Завершите несколько подходов, чтобы построить график прогресса.';
 
   @override
   String get relativeStrength => 'Относительная сила';
@@ -1175,11 +1174,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get completeSetsForHistory =>
-      'Заполните некоторые наборы, чтобы увидеть эту историю упражнений здесь.';
+      'Завершите несколько подходов, чтобы увидеть здесь историю упражнения.';
 
   @override
   String get completeSetForFirstGraph =>
-      'Заполните набор, чтобы создать свой первый график упражнений.';
+      'Завершите подход, чтобы создать первый график упражнения.';
 
   @override
   String nothingMatchesGraphSearch(String query) {
@@ -1193,7 +1192,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String deleteGraphRecordsConfirmation(int count) {
-    return 'Это позволит удалить записи $count. Ты уверен?';
+    return 'Будет удалено записей: $count. Продолжить?';
   }
 
   @override
@@ -1202,19 +1201,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get updateConflict => 'Обновление конфликта';
+  String get updateConflict => 'Конфликт обновления';
 
   @override
   String updateConflictDescription(int count) {
-    return 'Ваше новое имя уже существует для записей $count. Ты уверен?';
+    return 'Новое имя уже используется в $count записях. Продолжить?';
   }
 
   @override
-  String get unitsConflict => 'Единицы конфликта';
+  String get unitsConflict => 'Конфликт единиц измерения';
 
   @override
   String unitsConflictDescription(String unit) {
-    return 'Не все ваши записи имеют одинаковую единицу. Это позволит конвертировать все агрегаты в $unit. Ты уверен?';
+    return 'Не все записи используют одну единицу измерения. Все значения будут преобразованы в $unit. Продолжить?';
   }
 
   @override
@@ -1231,7 +1230,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get oneRepMaxAccuracyWarning =>
-      'Оценки максимума одного повторения менее точны для наборов 10+ повторений';
+      'Оценка максимума на одно повторение менее точна для подходов из 10 и более повторений';
 
   @override
   String get addPlan => 'Добавить план';
@@ -1240,7 +1239,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get planDetails => 'Подробности плана';
 
   @override
-  String get exercisesLabel => 'упражнения';
+  String get exercisesLabel => 'Упражнения';
 
   @override
   String get addExerciseToPlan => 'Добавьте упражнение к этому плану.';
@@ -1260,7 +1259,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get todayLabel => 'Сегодня';
 
   @override
-  String get setDetails => 'Установить детали';
+  String get setDetails => 'Параметры подхода';
 
   @override
   String get themeLabel => 'Тема';
@@ -1278,25 +1277,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get showImagesDescription =>
-      'Выберите / отобразите изображения на странице истории';
+      'Выбирать и отображать изображения на странице истории';
 
   @override
   String get showGlobalProgress => 'Показать глобальный прогресс';
 
   @override
   String get showGlobalProgressDescription =>
-      'Добавьте запись графа, отображающую ваш прогресс по категориям';
+      'Добавлять на график запись с прогрессом по категориям';
 
   @override
   String get peekGraphDescription =>
-      'Показать первую строку графа на странице графов';
+      'Показывать первую строку графика на странице графиков';
 
   @override
   String get inputStyleDescription => 'Визуальный стиль текстовых полей ввода';
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify будет автоматически копировать ваши данные и изображения в выбранную папку каждый день.';
+      'Flexify будет ежедневно автоматически создавать резервную копию данных и изображений в выбранной папке.';
 
   @override
   String get backupSettingsChannel => 'Настройки резервного копирования';
@@ -1306,7 +1305,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Уведомления, объясняющие автоматическое резервное копирование';
 
   @override
-  String get backupChannelName => 'Резервный канал';
+  String get backupChannelName => 'Резервное копирование';
 
   @override
   String get backupChannelDescription =>
@@ -1314,7 +1313,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backupCompletedTitle =>
-      'Резервное копирование данных и изображений';
+      'Резервное копирование данных и изображений завершено';
 
   @override
   String get backupFailurePathNotSet =>
@@ -1342,11 +1341,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backupFailureUnknown =>
-      'Резервное копирование провалилось. Автоматическое резервное копирование отключено.';
+      'Не удалось создать резервную копию. Автоматическое резервное копирование отключено.';
 
   @override
   String get appPermissionsDescription =>
-      'Доступ к обзору, требуемый вашими включенными функциями';
+      'Обзор доступа, необходимого для включённых функций';
 
   @override
   String get longDateFormatDescription => 'Используется там, где много места';
@@ -1358,14 +1357,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get shortDateFormatDescription =>
-      'Для того, где пространство ограничено (линии Графа)';
+      'Используется там, где мало места (например, на линиях графика)';
 
   @override
   String get warmupSetsDescription =>
       'Разминочные подходы не запускают таймер отдыха';
 
   @override
-  String get setsPerExerciseDescription => 'Дефолт #упражнения в плане';
+  String get setsPerExerciseDescription =>
+      'Количество подходов по умолчанию для упражнения в плане';
 
   @override
   String get planTrailingDisplay => 'Дополнительная информация плана';
@@ -1376,7 +1376,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get restTimersDescription =>
-      'Тревога, которая срабатывает после завершения набора';
+      'Сигнал, который срабатывает после завершения подхода';
 
   @override
   String get vibrateDescription => 'Должны ли таймеры отдыха вибрировать?';
@@ -1394,20 +1394,21 @@ class AppLocalizationsRu extends AppLocalizations {
       'Как долго, прежде чем сработает сигнализация?';
 
   @override
-  String get globalDefault => 'Глобальный дефолт';
+  String get globalDefault => 'Глобальное значение по умолчанию';
 
   @override
-  String get alarmSoundDescription => 'Музыка для игры в конце таймера отдыха';
+  String get alarmSoundDescription =>
+      'Звук, воспроизводимый после завершения таймера отдыха';
 
   @override
-  String get progressBarPosition => 'Прогресс бар позиции';
+  String get progressBarPosition => 'Положение индикатора прогресса';
 
   @override
   String get progressBarPositionDescription =>
-      'Где должны быть размещены таймеры прогресса?';
+      'Где отображать прогресс таймера?';
 
   @override
-  String get perExerciseRestTimes => 'Время отдыха на тренировках';
+  String get perExerciseRestTimes => 'Время отдыха по упражнениям';
 
   @override
   String get perExerciseRestTimesDescription =>
@@ -1429,15 +1430,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get showCategoriesDescription =>
-      'Категории включения/отключения тренировки';
+      'Включить или отключить категории тренировок';
 
   @override
   String get showNotesDescription =>
-      'Запись деталей вашего лифта в текстовой области';
+      'Записывать подробности подхода в текстовом поле';
 
   @override
   String get positiveNotificationsDescription =>
-      'Пишите хорошие сообщения, когда побит новый рекорд';
+      'Показывать позитивные сообщения при новом рекорде';
 
   @override
   String get positiveMessagesEnabled =>
@@ -1515,15 +1516,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recordEncouragement23 => 'Я горжусь тобой.';
 
   @override
-  String get recordEncouragement24 => 'Продолжайте большую работу.';
+  String get recordEncouragement24 => 'Продолжай в том же духе.';
 
   @override
   String get recordEncouragement25 =>
-      'Стоять высоко! Вы только что сделали новый рекорд.';
+      'Выше голову! Ты только что установил новый рекорд.';
 
   @override
   String get recordEncouragement26 =>
-      'Новый рекорд! Вы просто продвинулись дальше, чем когда-либо!';
+      'Новый рекорд! Ты превзошёл свой прежний результат!';
 
   @override
   String get recordEncouragement27 => 'Ага! Это рекорд.';
@@ -1532,11 +1533,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recordEncouragement28 => 'Вау! Новый рекорд!';
 
   @override
-  String get recordEncouragement29 => 'Очень хорошие вещи.';
+  String get recordEncouragement29 => 'Очень хороший результат.';
 
   @override
   String get repEstimationDescription =>
-      'Попробуйте предсказать # повторений, которые вы только что сделали';
+      'Попробовать предсказать количество только что выполненных повторений';
 
   @override
   String get durationEstimationDescription =>
@@ -1551,7 +1552,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get showGraphLimitDescription =>
-      'Показать лимитный ползунок на графиках';
+      'Показывать ползунок лимита на графиках';
 
   @override
   String get defaultTimeBasedXAxis => 'Временная ось X по умолчанию';
@@ -1562,7 +1563,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get createFirstTrainingPlan =>
-      'Создайте свой первый учебный план, чтобы начать.';
+      'Создайте свой первый план тренировок, чтобы начать.';
 
   @override
   String nothingMatchesPlanSearch(String query) {
@@ -1574,7 +1575,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String createNamedPlan(String name) {
-    return 'Создание «$name»';
+    return 'Создать «$name»';
   }
 
   @override
