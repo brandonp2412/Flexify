@@ -529,5 +529,6 @@
   "1790392395": "• feat(l10n): Avrupa Portekizcesi için mağaza meta verisi ekle\n• feat(l10n): Latin Amerika İspanyolcası için mağaza meta verisi ekle",
   "1790394970": "• fix(l10n): Play mağaza girişi için geçerli yerel ayarları kullan",
   "1790404468": "• Uygulama referanslarında Brandon Dick kullan\n• fix(l10n): en son çevrilmiş sürüm notlarını eşitle",
-  "1790414297": "• fix(l10n): en son sürüm notlarını yerelleştir"
+  "1790414297": "• fix(l10n): en son sürüm notlarını yerelleştir",
+  "1790477503": "• fix(ci): yerelleştirilmiş sürüm notu geçmişini tamamla\n• fix(l10n): Brezilya Portekizcesi sürüm meta verilerini tamamla\n• fix(l10n): Fransızca sürüm meta verilerini tamamla\n• fix(l10n): Almanca sürüm meta verilerini tamamla\n• fix(l10n): Japonca sürüm meta verilerini tamamla\n• fix(l10n): İspanyolca sürüm meta verilerini eşitle\n• fix: dambıl uygulama simgesini geri yükle"
 }
